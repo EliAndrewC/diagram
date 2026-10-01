@@ -67,12 +67,12 @@ jitter are GUESSES. The furrow kind's modal (written from fields/180) is likely 
 - No premodern Japanese source on row direction was found (kotobank and jawiki 畝, Nogyo Zensho summaries); the
   modern gardening advice (north-south for sun, along the contour on slopes) is present-day and not cited. Nogyo Zensho
   itself is on the NDL digital collection (not text-searchable here); a later pass could read its dry-field chapter.
-- No correction is owed to a section another feature owns. ways/020 (265's) says the field track "simply stops at the
+- No correction is owed to a section another feature owns. 0081 (265's) says the field track "simply stops at the
   hem's edge" where dry plots block the way; fields/290 is about the paddy and does not contradict it, but 265 may
   want to point at fields/290 for the paddy case.
 - `make test-file` on the four record tests: 255 passed, 2 failed, both on water.html notes 44 and 46 - the W1
   session's uncommitted water work (water 070/290 fragments and registry 10490-10630, glossary 10240/10250), present
-  in the tree before this session started; `check-question-size.py` also flags water/070 and water/270 (W1's). None
+  in the tree before this session started; `check-question-size.py` also flags water/070 and 0035 (W1's). None
   touched here. The derived shared files committed with F2 (SOURCES.html, glossary.json, glossary.js,
   glossary-variants.txt) necessarily carry W1's uncommitted edits too; W1's own
   fragments, water.html and citations/water.* stay uncommitted for that session to commit.

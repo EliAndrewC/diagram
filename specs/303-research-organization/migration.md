@@ -525,3 +525,9139 @@ because it is the mapping from them. The same data is `research/moved-303.json`,
 | `vegetation/` | `vegetation` |
 | `water/` | `water` |
 | `ways/` | `ways` |
+
+## The pointer sweep's review list (number forms, ranges, and pointers it could not place)
+
+- .claude/skills/diagram/dev/bypass-log/20260927T124406562132-147126.json: `research/homesteads 214` -> `research/questions/0044-baths-on-the-farm-furo.html`
+- .claude/skills/diagram/dev/bypass-log/20260928T173406063031-495643.json: `homesteads 500` -> `0016`
+- .claude/skills/diagram/dev/bypass-log/20260928T191745Z-c5d352.json: `fields/020` -> `0005`
+- .claude/skills/diagram/dev/bypass-log/20260928T191745Z-c5d352.json: `towns/120` -> `0123`
+- .claude/skills/diagram/dev/bypass-log/20260928T191817Z-3ff246.json: `fields/020` -> `0005`
+- .claude/skills/diagram/dev/bypass-log/20260928T191817Z-3ff246.json: `towns/120` -> `0123`
+- .claude/skills/diagram/dev/bypass-log/20260928T192137Z-53b37d.json: `fields/020` -> `0005`
+- .claude/skills/diagram/dev/bypass-log/20260928T192137Z-53b37d.json: `towns/120` -> `0123`
+- .claude/skills/diagram/dev/bypass-log/20260930T031302549362-4081907.json: `ways/020` -> `0081`
+- .claude/skills/diagram/future-work/cities.md: `research/presentation 070` -> `research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html`
+- .claude/skills/diagram/future-work/closed.md: `research/archetypes 220` -> `research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`
+- .claude/skills/diagram/future-work/compounds.md: `buildings 270` -> `0239`
+- .claude/skills/diagram/future-work/farming-communities.md: `religion-and-death 210` -> `0226`
+- .claude/skills/diagram/future-work/farming-communities.md: `religion-and-death 280` -> `0236`
+- .claude/skills/diagram/future-work/farming-communities.md: `research/homesteads 110` -> `research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html`
+- .claude/skills/diagram/future-work/farming-communities.md: `religion-and-death 530` -> `0238`
+- .claude/skills/diagram/future-work/farming-communities.md: `research/vegetation 120` -> `research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html`
+- .claude/skills/diagram/future-work/farming-communities.md: `homesteads/211` -> `0042`
+- .claude/skills/diagram/future-work/farming-communities.md: `homesteads/215` -> `0045`
+- .claude/skills/diagram/future-work/farming-communities.md: `homesteads/218` -> `0046`
+- .claude/skills/diagram/future-work/farming-communities.md: `archetypes/140` -> `0018`
+- .claude/skills/diagram/future-work/farming-communities.md: `research/fields/010` -> `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html`
+- .claude/skills/diagram/future-work/farming-communities.md: `religion-and-death 210` -> `0226`
+- .claude/skills/diagram/future-work/farming-communities.md: `homesteads/440` -> `0052`
+- .claude/skills/diagram/future-work/farming-communities.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/future-work/towns.md: `research/towns 120` -> `research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html`
+- .claude/skills/diagram/future-work/towns.md: `research/rendering/towns 230` -> `research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.drawing.html`
+- .claude/skills/diagram/future-work/towns.md: `research/rendering/ways 160` -> `research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 300` -> `0104`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 340` -> `0106`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 480` -> `0093`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 400` -> `0109`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 090` -> `0099`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 340` -> `0106`
+- .claude/skills/diagram/l7r/diagram/compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound_model.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/l7r/diagram/compound_model.py: `buildings 480` -> `0093`
+- .claude/skills/diagram/l7r/diagram/compound_model.py: `buildings 300` -> `0104`
+- .claude/skills/diagram/l7r/diagram/compound_parts.py: `buildings 220` -> `0101`
+- .claude/skills/diagram/l7r/diagram/compound_parts.py: `buildings 320` -> `0105`
+- .claude/skills/diagram/l7r/diagram/compound_parts.py: `buildings 220` -> `0101`
+- .claude/skills/diagram/l7r/diagram/compound_parts.py: `buildings 220` -> `0101`
+- .claude/skills/diagram/l7r/diagram/compound_parts.py: `buildings 300` -> `0104`
+- .claude/skills/diagram/l7r/diagram/hamletgen/burial.py: `research/religion-and-death/280` -> `research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/burial.py: `research/religion-and-death/280` -> `research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/cluster.py: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/cluster.py: `rendering/water/270` -> `0035`
+- .claude/skills/diagram/l7r/diagram/hamletgen/consts.py: `research/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/consts.py: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/consts.py: `research/homesteads/155` -> `research/questions/0033-row-villages-resson.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/frame.py: `ways/030` -> `0084`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `vegetation/220` -> `0077`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `rendering/vegetation/220` -> `0077`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/CLAUDE.md: `settlements/035` -> `0004`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/212` -> `research/questions/0043-firewood-stacks-and-sheds-kigoya.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/215` -> `research/questions/0045-chickens-and-chicken-coops.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/218` -> `research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/215` -> `research/questions/0045-chickens-and-chicken-coops.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py: `research/homesteads/218` -> `research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/retirement.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/retirement.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/retirement.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/retirement.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/retirement.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py: `research/homesteads/155` -> `research/questions/0033-row-villages-resson.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py: `homesteads/155` -> `0033`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py: `homesteads/155` -> `0033`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py: `homesteads/155` -> `0033`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py: `research/homesteads/400` -> `research/questions/0029-farmhouses-minka.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py: `research/homesteads/150` -> `research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py: `research/homesteads/155` -> `research/questions/0033-row-villages-resson.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py: `research/homesteads/155` -> `research/questions/0033-row-villages-resson.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py: `research/archetypes/210` -> `research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py: `fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py: `ways/030` -> `0084`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/CLAUDE.md: `rendering/ways/020` -> `0081`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py: `research/homesteads/155` -> `research/questions/0033-row-villages-resson.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py: `research/homesteads/155` -> `research/questions/0033-row-villages-resson.html`
+- .claude/skills/diagram/l7r/diagram/interactive/page.py: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- .claude/skills/diagram/l7r/diagram/labels/hand_sheet.py: `buildings 090` -> `0099`
+- .claude/skills/diagram/l7r/diagram/labels/obstacles.py: `research/presentation 070` -> `research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/_knobs.py: `research/homesteads/460` -> `research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/_knobs.py: `rendering/homesteads/460` -> `0048`
+- .claude/skills/diagram/l7r/diagram/settlement/city/bridges.py: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- .claude/skills/diagram/l7r/diagram/settlement/city/bridges.py: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- .claude/skills/diagram/l7r/diagram/settlement/city/bridges.py: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- .claude/skills/diagram/l7r/diagram/settlement/civic_grounds/edge_seat.py: `research/religion-and-death/160` -> `research/questions/0235-village-burial-grounds-bochi.html`
+- .claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py: `research/religion-and-death/530` -> `research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html`
+- .claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py: `research/religion-and-death/530` -> `research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html`
+- .claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py: `religion-and-death 160` -> `0235`
+- .claude/skills/diagram/l7r/diagram/settlement/core.py: `vegetation/060` -> `0080`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/homesteads/212` -> `research/questions/0043-firewood-stacks-and-sheds-kigoya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/homesteads/218` -> `research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/homesteads/440` -> `research/questions/0052-farm-sheds-and-barns-naya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/homesteads/440` -> `research/questions/0052-farm-sheds-and-barns-naya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/archetypes/210` -> `research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html`
+- .claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/CLAUDE.md: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/comb.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/110` -> `0017`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/030` -> `0009`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/030` -> `0009`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/030` -> `0009`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/030` -> `0009`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/110` -> `0017`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/grain.py: `fields/030` -> `0009`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- .claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py: `fields/250` -> `0013`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/belt_law.py: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/belt_law.py: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/belt_law.py: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py: `research/homesteads/020` -> `research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html`
+- .claude/skills/diagram/l7r/diagram/settlement/houses.py: `research/homesteads/440` -> `research/questions/0052-farm-sheds-and-barns-naya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/houses.py: `research/homesteads/400` -> `research/questions/0029-farmhouses-minka.html`
+- .claude/skills/diagram/l7r/diagram/settlement/land/cover.py: `vegetation/060` -> `0080`
+- .claude/skills/diagram/l7r/diagram/settlement/land/tiles.py: `research/vegetation 120` -> `research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html`
+- .claude/skills/diagram/l7r/diagram/settlement/rolling/bearing.py: `homesteads/400` -> `0029`
+- .claude/skills/diagram/l7r/diagram/settlement/rolling/bearing.py: `homesteads/400` -> `0029`
+- .claude/skills/diagram/l7r/diagram/settlement/rolling/bearing.py: `homesteads/400` -> `0029`
+- .claude/skills/diagram/l7r/diagram/settlement/rolling/lot.py: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- .claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py: `religion-and-death 530` -> `0238`
+- .claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py: `research/religion-and-death/160` -> `research/questions/0235-village-burial-grounds-bochi.html`
+- .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py: `research/homesteads/460` -> `research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py: `research/homesteads/460` -> `research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py: `research/homesteads/460` -> `research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html`
+- .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/shrines.py: `research/religion-and-death/130` -> `research/questions/0224-ground-swept-clear-around-shrines-and-graves.html`
+- .claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- .claude/skills/diagram/l7r/diagram/tools/notes_census.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/program_rules.py: `buildings 220` -> `0101`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/program_rules.py: `buildings 220` -> `0101`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/program_rules.py: `buildings 160` -> `0100`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/program_rules.py: `buildings 180` -> `0116`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/roads.py: `buildings 480` -> `0093`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/sun.py: `homesteads 040` -> `0038`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/sun.py: `homesteads 040` -> `0038`
+- .claude/skills/diagram/l7r/diagram/tools/pack_audit/sun.py: `homesteads 040` -> `0038`
+- .claude/skills/diagram/l7r/diagram/waterfields/carve.py: `rendering/fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/waterfields/furrows.py: `rendering/fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/waterfields/furrows.py: `rendering/fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/waterfields/hem.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/waterfields/hem.py: `fields/160` -> `0006`
+- .claude/skills/diagram/l7r/diagram/waterfields/hem.py: `fields/165` -> `0011`
+- .claude/skills/diagram/l7r/diagram/waterfields/hem.py: `fields/165` -> `0011`
+- .claude/skills/diagram/legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.notes.md: `religion-and-death 520` -> `0217`
+- .claude/skills/diagram/migration-plan.md: `research/homesteads 110` -> `research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html`
+- .claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md: `research vegetation 'Did a village keep a meadow for fodder and green manure?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md: `research homesteads 'What lay in the work yard at
+harvest?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md: `research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md: `homesteads/212` -> `0043`
+- .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md: `homesteads/020` -> `0037`
+- .claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `research homesteads 'What lay in the work yard at
+harvest?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `homesteads/212` -> `0043`
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `homesteads/020` -> `0037`
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `homesteads/155` -> `0033`
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `vegetation/030` -> `0072`
+- .claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: `research/archetypes/210` -> `research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html`
+- .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: `homesteads/212` -> `0043`
+- .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: `homesteads/020` -> `0037`
+- .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `research homesteads 'What lay in the work yard at
+harvest?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `research homesteads 'Did a village
+put its drying racks by the houses by custom, or because of its weather?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `homesteads/212` -> `0043`
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `homesteads/020` -> `0037`
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `homesteads/155` -> `0033`
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `vegetation/030` -> `0072`
+- .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md: `research homesteads 'What lay in the work yard at harvest?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md: `research homesteads 'Did a village put its drying racks by the houses by custom, or because
+of its weather?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md: `homesteads/212` -> `0043`
+- .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md: `homesteads/020` -> `0037`
+- .claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md: `homesteads/120` -> `0040`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 240` -> `0102`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 220` -> `0101`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 380` -> `0091`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 480` -> `0093`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 340` -> `0106`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 400` -> `0109`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 620` -> `0117`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 320` -> `0105`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 220` -> `0101`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 220` -> `0101`
+- .claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md: `buildings 380` -> `0091`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md: `buildings 400` -> `0109`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 400` -> `0109`
+- .claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md: `buildings 400` -> `0109`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md: `buildings 400` -> `0109`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md: `buildings 610` -> `0094`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 270` -> `0239`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg: `buildings 400` -> `0109`
+- .claude/skills/diagram/research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: `settlements 010` -> `0001`
+- .claude/skills/diagram/research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: `settlements 010` -> `0001`
+- .claude/skills/diagram/research/questions/0003-village-names-that-describe-the-site-chimei.drawing.html: `homesteads 190` -> `0003`
+- .claude/skills/diagram/research/questions/0003-village-names-that-describe-the-site-chimei.html: `homesteads 190` -> `0003`
+- .claude/skills/diagram/research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: `settlements 035` -> `0004`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: `fields 020` -> `0005`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.notes.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.notes.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.html: `fields 020` -> `0005`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0005-rice-paddies-and-their-plots-suiden.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: `fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: `rendering/fields 020` -> `0005`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: `rendering/fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.drawing.notes.html: `fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.html: `fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.html: `fields 170` -> `0012`
+- .claude/skills/diagram/research/questions/0006-dry-fields-and-their-crops-hatake.notes.html: `fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: `fields 190` -> `0007`
+- .claude/skills/diagram/research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.notes.html: `fields 190` -> `0007`
+- .claude/skills/diagram/research/questions/0007-wet-paddies-that-never-drain-shitsuden.html: `fields 190` -> `0007`
+- .claude/skills/diagram/research/questions/0007-wet-paddies-that-never-drain-shitsuden.html: `fields 020` -> `0005`
+- .claude/skills/diagram/research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: `fields 010` -> `0008`
+- .claude/skills/diagram/research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: `religion-and-death 280` -> `0236`
+- .claude/skills/diagram/research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: `fields 010` -> `0008`
+- .claude/skills/diagram/research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: `fields 030` -> `0009`
+- .claude/skills/diagram/research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html: `fields 030` -> `0009`
+- .claude/skills/diagram/research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0010-farmland-around-towns-and-cities.drawing.html: `fields 130` -> `0010`
+- .claude/skills/diagram/research/questions/0010-farmland-around-towns-and-cities.html: `fields 130` -> `0010`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: `rendering/fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.notes.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.notes.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html: `fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html: `fields 170` -> `0012`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html: `rendering/fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html: `rendering/fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.notes.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.notes.html: `fields 165` -> `0011`
+- .claude/skills/diagram/research/questions/0012-rice-planted-in-rows-seijoue.html: `fields 160` -> `0006`
+- .claude/skills/diagram/research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: `fields 250` -> `0013`
+- .claude/skills/diagram/research/questions/0013-paddies-left-to-rest-kataarashi.html: `fields 250` -> `0013`
+- .claude/skills/diagram/research/questions/0014-bunds-between-the-paddies-aze.drawing.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0014-bunds-between-the-paddies-aze.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0014-bunds-between-the-paddies-aze.html: `fields 020` -> `0005`
+- .claude/skills/diagram/research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.drawing.html: `fields 410` -> `0015`
+- .claude/skills/diagram/research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.drawing.notes.html: `fields 410` -> `0015`
+- .claude/skills/diagram/research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.html: `fields 410` -> `0015`
+- .claude/skills/diagram/research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.notes.html: `fields 410` -> `0015`
+- .claude/skills/diagram/research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.notes.html: `fields 410` -> `0015`
+- .claude/skills/diagram/research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: `homesteads 500` -> `0016`
+- .claude/skills/diagram/research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.notes.html: `homesteads 500` -> `0016`
+- .claude/skills/diagram/research/questions/0016-rice-drying-racks-hasa-hasagi.html: `homesteads 500` -> `0016`
+- .claude/skills/diagram/research/questions/0016-rice-drying-racks-hasa-hasagi.notes.html: `homesteads 500` -> `0016`
+- .claude/skills/diagram/research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: `rendering/water 280` -> `0061`
+- .claude/skills/diagram/research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html: `fields 020` -> `0005`
+- .claude/skills/diagram/research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html: `rendering/water 280` -> `0061`
+- .claude/skills/diagram/research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: `archetypes 140` -> `0018`
+- .claude/skills/diagram/research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: `archetypes 160` -> `0019`
+- .claude/skills/diagram/research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: `water 190` -> `0054`
+- .claude/skills/diagram/research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: `archetypes 030` -> `0020`
+- .claude/skills/diagram/research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: `archetypes 040` -> `0021`
+- .claude/skills/diagram/research/questions/0021-terraced-and-valley-paddies-tanada-yachida.notes.html: `fields/020` -> `0005`
+- .claude/skills/diagram/research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `archetypes 050` -> `0022`
+- .claude/skills/diagram/research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html: `archetypes 050` -> `0022`
+- .claude/skills/diagram/research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html: `rendering/archetypes 160` -> `0019`
+- .claude/skills/diagram/research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html: `archetypes 030` -> `0020`
+- .claude/skills/diagram/research/questions/0022-parcels-and-bunds-inside-a-polder-aze.notes.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html: `archetypes 170` -> `0023`
+- .claude/skills/diagram/research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html: `archetypes 170` -> `0023`
+- .claude/skills/diagram/research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: `archetypes 172` -> `0024`
+- .claude/skills/diagram/research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html: `archetypes 172` -> `0024`
+- .claude/skills/diagram/research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: `archetypes 210` -> `0025`
+- .claude/skills/diagram/research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: `archetypes 210` -> `0025`
+- .claude/skills/diagram/research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: `archetypes 140` -> `0018`
+- .claude/skills/diagram/research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: `archetypes 220` -> `0026`
+- .claude/skills/diagram/research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html: `archetypes 140` -> `0018`
+- .claude/skills/diagram/research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: `archetypes 330` -> `0027`
+- .claude/skills/diagram/research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html: `archetypes 330` -> `0027`
+- .claude/skills/diagram/research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html: `archetypes 030` -> `0020`
+- .claude/skills/diagram/research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: `homesteads 140` -> `0028`
+- .claude/skills/diagram/research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: `homesteads 260` -> `0047`
+- .claude/skills/diagram/research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: `homesteads 440` -> `0052`
+- .claude/skills/diagram/research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html: `homesteads 212-218` -> `0043, 0044, 0045, 0046, 0219`
+- .claude/skills/diagram/research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html: `homesteads 140` -> `0028`
+- .claude/skills/diagram/research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html: `homesteads 260` -> `0047`
+- .claude/skills/diagram/research/questions/0029-farmhouses-minka.drawing.html: `homesteads 400` -> `0029`
+- .claude/skills/diagram/research/questions/0029-farmhouses-minka.drawing.notes.html: `homesteads 400` -> `0029`
+- .claude/skills/diagram/research/questions/0029-farmhouses-minka.html: `homesteads 400` -> `0029`
+- .claude/skills/diagram/research/questions/0029-farmhouses-minka.html: `fields 260` -> `0014`
+- .claude/skills/diagram/research/questions/0029-farmhouses-minka.notes.html: `homesteads 400` -> `0029`
+- .claude/skills/diagram/research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: `homesteads 110` -> `0030`
+- .claude/skills/diagram/research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.notes.html: `homesteads 110` -> `0030`
+- .claude/skills/diagram/research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html: `homesteads 110` -> `0030`
+- .claude/skills/diagram/research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.notes.html: `homesteads 110` -> `0030`
+- .claude/skills/diagram/research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: `homesteads 150` -> `0031`
+- .claude/skills/diagram/research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.notes.html: `homesteads 150` -> `0031`
+- .claude/skills/diagram/research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html: `homesteads 150` -> `0031`
+- .claude/skills/diagram/research/questions/0033-row-villages-resson.drawing.html: `homesteads 155` -> `0033`
+- .claude/skills/diagram/research/questions/0033-row-villages-resson.html: `homesteads 155` -> `0033`
+- .claude/skills/diagram/research/questions/0034-landless-and-tenant-households-mizunomi-nago.drawing.html: `homesteads 540` -> `0034`
+- .claude/skills/diagram/research/questions/0034-landless-and-tenant-households-mizunomi-nago.html: `homesteads 540` -> `0034`
+- .claude/skills/diagram/research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `water 270` -> `0035`
+- .claude/skills/diagram/research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: `water 270` -> `0035`
+- .claude/skills/diagram/research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: `homesteads/010` -> `0036`
+- .claude/skills/diagram/research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: `homesteads 020` -> `0037`
+- .claude/skills/diagram/research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `homesteads 040` -> `0038`
+- .claude/skills/diagram/research/questions/0038-sunlight-and-shade-on-the-farm.html: `homesteads 040` -> `0038`
+- .claude/skills/diagram/research/questions/0038-sunlight-and-shade-on-the-farm.html: `homesteads 010` -> `0036`
+- .claude/skills/diagram/research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: `homesteads 050` -> `0039`
+- .claude/skills/diagram/research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.notes.html: `homesteads 050` -> `0039`
+- .claude/skills/diagram/research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: `homesteads 050` -> `0039`
+- .claude/skills/diagram/research/questions/0040-farm-storehouses-kura.drawing.html: `homesteads 120` -> `0040`
+- .claude/skills/diagram/research/questions/0040-farm-storehouses-kura.html: `homesteads 120` -> `0040`
+- .claude/skills/diagram/research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html: `homesteads 180` -> `0041`
+- .claude/skills/diagram/research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.html: `homesteads 180` -> `0041`
+- .claude/skills/diagram/research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: `homesteads 211` -> `0042`
+- .claude/skills/diagram/research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: `rendering/homesteads 260` -> `0047`
+- .claude/skills/diagram/research/questions/0042-manure-heaps-and-compost-kyuhi.html: `homesteads 211` -> `0042`
+- .claude/skills/diagram/research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: `homesteads 212` -> `0043`
+- .claude/skills/diagram/research/questions/0043-firewood-stacks-and-sheds-kigoya.html: `homesteads 212` -> `0043`
+- .claude/skills/diagram/research/questions/0044-baths-on-the-farm-furo.drawing.html: `homesteads 214` -> `0044`
+- .claude/skills/diagram/research/questions/0044-baths-on-the-farm-furo.html: `homesteads 214` -> `0044`
+- .claude/skills/diagram/research/questions/0045-chickens-and-chicken-coops.drawing.html: `homesteads 215` -> `0045`
+- .claude/skills/diagram/research/questions/0045-chickens-and-chicken-coops.drawing.html: `homesteads 215` -> `0045`
+- .claude/skills/diagram/research/questions/0045-chickens-and-chicken-coops.drawing.html: `homesteads 215` -> `0045`
+- .claude/skills/diagram/research/questions/0045-chickens-and-chicken-coops.drawing.notes.html: `homesteads 215` -> `0045`
+- .claude/skills/diagram/research/questions/0045-chickens-and-chicken-coops.html: `homesteads 215` -> `0045`
+- .claude/skills/diagram/research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: `homesteads 218` -> `0046`
+- .claude/skills/diagram/research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.notes.html: `homesteads 218` -> `0046`
+- .claude/skills/diagram/research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.notes.html: `homesteads 218` -> `0046`
+- .claude/skills/diagram/research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: `homesteads 218` -> `0046`
+- .claude/skills/diagram/research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.notes.html: `homesteads 218` -> `0046`
+- .claude/skills/diagram/research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: `homesteads 260` -> `0047`
+- .claude/skills/diagram/research/questions/0047-farm-privies-and-their-night-soil-benjo.html: `homesteads 260` -> `0047`
+- .claude/skills/diagram/research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `homesteads 460` -> `0048`
+- .claude/skills/diagram/research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: `homesteads 460` -> `0048`
+- .claude/skills/diagram/research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: `homesteads 470` -> `0049`
+- .claude/skills/diagram/research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html: `homesteads 470` -> `0049`
+- .claude/skills/diagram/research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html: `homesteads 215` -> `0045`
+- .claude/skills/diagram/research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html: `archetypes 210` -> `0025`
+- .claude/skills/diagram/research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: `homesteads 570` -> `0050`
+- .claude/skills/diagram/research/questions/0050-ancestral-halls-in-south-china-villages-citang.html: `homesteads 570` -> `0050`
+- .claude/skills/diagram/research/questions/0051-village-granaries-gogura.drawing.html: `urban-features 460` -> `0051`
+- .claude/skills/diagram/research/questions/0051-village-granaries-gogura.html: `urban-features 460` -> `0051`
+- .claude/skills/diagram/research/questions/0051-village-granaries-gogura.html: `buildings 080` -> `0098`
+- .claude/skills/diagram/research/questions/0052-farm-sheds-and-barns-naya.html: `homesteads 440` -> `0052`
+- .claude/skills/diagram/research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: `water 260` -> `0060`
+- .claude/skills/diagram/research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: `water 400` -> `0062`
+- .claude/skills/diagram/research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: `water 190` -> `0054`
+- .claude/skills/diagram/research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.notes.html: `water 190` -> `0054`
+- .claude/skills/diagram/research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: `water 190` -> `0054`
+- .claude/skills/diagram/research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.notes.html: `water 190` -> `0054`
+- .claude/skills/diagram/research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: `water 030` -> `0055`
+- .claude/skills/diagram/research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html: `water 030` -> `0055`
+- .claude/skills/diagram/research/questions/0056-river-names-one-river-many-names.drawing.html: `water 130` -> `0056`
+- .claude/skills/diagram/research/questions/0056-river-names-one-river-many-names.html: `water 130` -> `0056`
+- .claude/skills/diagram/research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: `water 140` -> `0057`
+- .claude/skills/diagram/research/questions/0057-marshes-and-wetlands-shitchi.html: `water 140` -> `0057`
+- .claude/skills/diagram/research/questions/0058-ground-too-wet-to-build-on.drawing.html: `water 160` -> `0058`
+- .claude/skills/diagram/research/questions/0058-ground-too-wet-to-build-on.html: `water 160` -> `0058`
+- .claude/skills/diagram/research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `water 250` -> `0059`
+- .claude/skills/diagram/research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `rendering/water 190` -> `0054`
+- .claude/skills/diagram/research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: `water 250` -> `0059`
+- .claude/skills/diagram/research/questions/0060-field-drains-akusuiro.drawing.html: `water 260` -> `0060`
+- .claude/skills/diagram/research/questions/0060-field-drains-akusuiro.html: `water 260` -> `0060`
+- .claude/skills/diagram/research/questions/0061-reservoir-ponds-tameike.drawing.html: `water 280` -> `0061`
+- .claude/skills/diagram/research/questions/0061-reservoir-ponds-tameike.drawing.html: `rendering/fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0061-reservoir-ponds-tameike.drawing.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0061-reservoir-ponds-tameike.html: `water 280` -> `0061`
+- .claude/skills/diagram/research/questions/0061-reservoir-ponds-tameike.html: `fields 110` -> `0017`
+- .claude/skills/diagram/research/questions/0062-sharing-water-between-villages-bunsui.drawing.html: `water 400` -> `0062`
+- .claude/skills/diagram/research/questions/0062-sharing-water-between-villages-bunsui.html: `water 400` -> `0062`
+- .claude/skills/diagram/research/questions/0062-sharing-water-between-villages-bunsui.html: `water 400` -> `0062`
+- .claude/skills/diagram/research/questions/0062-sharing-water-between-villages-bunsui.html: `water 005` -> `0053`
+- .claude/skills/diagram/research/questions/0062-sharing-water-between-villages-bunsui.html: `water 400` -> `0062`
+- .claude/skills/diagram/research/questions/0062-sharing-water-between-villages-bunsui.html: `water 400` -> `0062`
+- .claude/skills/diagram/research/questions/0063-lifting-water-onto-fields-treadle-wheels-fumiguruma-and-chain-pumps.drawing.html: `water 410` -> `0063`
+- .claude/skills/diagram/research/questions/0063-lifting-water-onto-fields-treadle-wheels-fumiguruma-and-chain-pumps.html: `water 410` -> `0063`
+- .claude/skills/diagram/research/questions/0063-lifting-water-onto-fields-treadle-wheels-fumiguruma-and-chain-pumps.html: `water 410` -> `0063`
+- .claude/skills/diagram/research/questions/0064-water-mills-suisha.drawing.html: `water 420` -> `0064`
+- .claude/skills/diagram/research/questions/0064-water-mills-suisha.html: `water 420` -> `0064`
+- .claude/skills/diagram/research/questions/0064-water-mills-suisha.html: `urban-features 520` -> `0208`
+- .claude/skills/diagram/research/questions/0064-water-mills-suisha.html: `water 420` -> `0064`
+- .claude/skills/diagram/research/questions/0065-washing-places-at-the-waters-edge.drawing.html: `water 430` -> `0065`
+- .claude/skills/diagram/research/questions/0065-washing-places-at-the-waters-edge.html: `water 430` -> `0065`
+- .claude/skills/diagram/research/questions/0065-washing-places-at-the-waters-edge.html: `water 430` -> `0065`
+- .claude/skills/diagram/research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.drawing.html: `water 440` -> `0066`
+- .claude/skills/diagram/research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.html: `water 440` -> `0066`
+- .claude/skills/diagram/research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.html: `water 440` -> `0066`
+- .claude/skills/diagram/research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: `water 010` -> `0068`
+- .claude/skills/diagram/research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: `water 010` -> `0068`
+- .claude/skills/diagram/research/questions/0070-sloping-ground-and-hillsides.drawing.html: `vegetation 160` -> `0070`
+- .claude/skills/diagram/research/questions/0070-sloping-ground-and-hillsides.drawing.notes.html: `vegetation 160` -> `0070`
+- .claude/skills/diagram/research/questions/0070-sloping-ground-and-hillsides.drawing.notes.html: `vegetation 160` -> `0070`
+- .claude/skills/diagram/research/questions/0070-sloping-ground-and-hillsides.html: `vegetation 160` -> `0070`
+- .claude/skills/diagram/research/questions/0070-sloping-ground-and-hillsides.notes.html: `vegetation 160` -> `0070`
+- .claude/skills/diagram/research/questions/0070-sloping-ground-and-hillsides.notes.html: `vegetation 160` -> `0070`
+- .claude/skills/diagram/research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: `vegetation 020` -> `0071`
+- .claude/skills/diagram/research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: `vegetation 020` -> `0071`
+- .claude/skills/diagram/research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: `vegetation 020` -> `0071`
+- .claude/skills/diagram/research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: `vegetation 030` -> `0072`
+- .claude/skills/diagram/research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.notes.html: `vegetation 030` -> `0072`
+- .claude/skills/diagram/research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: `vegetation 030` -> `0072`
+- .claude/skills/diagram/research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: `vegetation 030` -> `0072`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html: `rendering/vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html: `vegetation 090` -> `0073`
+- .claude/skills/diagram/research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: `vegetation 120` -> `0074`
+- .claude/skills/diagram/research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html: `vegetation 120` -> `0074`
+- .claude/skills/diagram/research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html: `rendering/vegetation 120` -> `0074`
+- .claude/skills/diagram/research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.notes.html: `vegetation 120` -> `0074`
+- .claude/skills/diagram/research/questions/0075-bamboo-groves-chikurin.drawing.html: `vegetation 150` -> `0075`
+- .claude/skills/diagram/research/questions/0075-bamboo-groves-chikurin.html: `vegetation 150` -> `0075`
+- .claude/skills/diagram/research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.drawing.html: `vegetation 170` -> `0076`
+- .claude/skills/diagram/research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.html: `vegetation 170` -> `0076`
+- .claude/skills/diagram/research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.html: `rendering/vegetation 170` -> `0076`
+- .claude/skills/diagram/research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: `vegetation 220` -> `0077`
+- .claude/skills/diagram/research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: `vegetation 220` -> `0077`
+- .claude/skills/diagram/research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: `rendering/vegetation 220` -> `0077`
+- .claude/skills/diagram/research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: `vegetation 340` -> `0079`
+- .claude/skills/diagram/research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: `vegetation 310` -> `0078`
+- .claude/skills/diagram/research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html: `vegetation 310` -> `0078`
+- .claude/skills/diagram/research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html: `rendering/vegetation 310` -> `0078`
+- .claude/skills/diagram/research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html: `towns 410` -> `0128`
+- .claude/skills/diagram/research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.notes.html: `rendering/vegetation 310` -> `0078`
+- .claude/skills/diagram/research/questions/0079-charcoal-kilns-in-the-hills-sumigama.drawing.html: `vegetation 340` -> `0079`
+- .claude/skills/diagram/research/questions/0079-charcoal-kilns-in-the-hills-sumigama.html: `vegetation 340` -> `0079`
+- .claude/skills/diagram/research/questions/0079-charcoal-kilns-in-the-hills-sumigama.html: `rendering/vegetation 340` -> `0079`
+- .claude/skills/diagram/research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: `vegetation 060` -> `0080`
+- .claude/skills/diagram/research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: `vegetation 060` -> `0080`
+- .claude/skills/diagram/research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: `vegetation 060` -> `0080`
+- .claude/skills/diagram/research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: `rendering/vegetation 060` -> `0080`
+- .claude/skills/diagram/research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: `rendering/vegetation 060` -> `0080`
+- .claude/skills/diagram/research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: `rendering/vegetation 060` -> `0080`
+- .claude/skills/diagram/research/questions/0081-village-lanes.drawing.html: `ways 020` -> `0081`
+- .claude/skills/diagram/research/questions/0081-village-lanes.html: `ways 020` -> `0081`
+- .claude/skills/diagram/research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: `ways 060` -> `0082`
+- .claude/skills/diagram/research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.notes.html: `ways 060` -> `0082`
+- .claude/skills/diagram/research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html: `ways 060` -> `0082`
+- .claude/skills/diagram/research/questions/0083-clan-borders-and-their-markers.drawing.html: `urban-features 170` -> `0083`
+- .claude/skills/diagram/research/questions/0083-clan-borders-and-their-markers.html: `urban-features 170` -> `0083`
+- .claude/skills/diagram/research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: `ways 030` -> `0084`
+- .claude/skills/diagram/research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html: `ways 030` -> `0084`
+- .claude/skills/diagram/research/questions/0085-village-boundaries-and-their-markers-murazakai.drawing.html: `ways 110` -> `0085`
+- .claude/skills/diagram/research/questions/0085-village-boundaries-and-their-markers-murazakai.drawing.html: `ways 110` -> `0085`
+- .claude/skills/diagram/research/questions/0085-village-boundaries-and-their-markers-murazakai.html: `ways 110` -> `0085`
+- .claude/skills/diagram/research/questions/0085-village-boundaries-and-their-markers-murazakai.html: `towns/200` -> `0120`
+- .claude/skills/diagram/research/questions/0086-ferries-and-fords-watashi.drawing.html: `ways 140` -> `0086`
+- .claude/skills/diagram/research/questions/0086-ferries-and-fords-watashi.drawing.html: `ways 140` -> `0086`
+- .claude/skills/diagram/research/questions/0086-ferries-and-fords-watashi.drawing.notes.html: `ways 140` -> `0086`
+- .claude/skills/diagram/research/questions/0086-ferries-and-fords-watashi.html: `ways 140` -> `0086`
+- .claude/skills/diagram/research/questions/0086-ferries-and-fords-watashi.notes.html: `ways 140` -> `0086`
+- .claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: `ways 200` -> `0087`
+- .claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.notes.html: `ways 200` -> `0087`
+- .claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html: `ways 200` -> `0087`
+- .claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.notes.html: `ways 200` -> `0087`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: `ways 210` -> `0088`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.drawing.notes.html: `ways 210` -> `0088`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.drawing.notes.html: `cities/fabric 040` -> `0158`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.html: `towns 320-360` -> `0185, 0186, 0188`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.html: `ways 210` -> `0088`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.html: `cities/hinterland 040` -> `0171`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.html: `cities/fabric 040` -> `0158`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.html: `ways 110` -> `0085`
+- .claude/skills/diagram/research/questions/0088-highways-and-what-lines-them-kaido.notes.html: `ways 210` -> `0088`
+- .claude/skills/diagram/research/questions/0089-towpaths-along-a-river-qiandao.drawing.html: `cities/capitals 130` -> `0089`
+- .claude/skills/diagram/research/questions/0089-towpaths-along-a-river-qiandao.html: `cities/capitals 130` -> `0089`
+- .claude/skills/diagram/research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: `buildings 010` -> `0090`
+- .claude/skills/diagram/research/questions/0090-magistrates-compounds-jinya-and-yamen.html: `buildings 010` -> `0090`
+- .claude/skills/diagram/research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: `buildings 380` -> `0091`
+- .claude/skills/diagram/research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: `buildings 380` -> `0091`
+- .claude/skills/diagram/research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: `buildings 070` -> `0092`
+- .claude/skills/diagram/research/questions/0092-compound-walls-neribei-and-tsuijibei.html: `buildings 070` -> `0092`
+- .claude/skills/diagram/research/questions/0092-compound-walls-neribei-and-tsuijibei.html: `buildings 480` -> `0093`
+- .claude/skills/diagram/research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: `buildings 480` -> `0093`
+- .claude/skills/diagram/research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: `buildings 480` -> `0093`
+- .claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.drawing.html: `buildings 610` -> `0094`
+- .claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.drawing.html: `urban-features 170` -> `0083`
+- .claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.drawing.html: `buildings 610` -> `0094`
+- .claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.html: `buildings 570` -> `0110`
+- .claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.html: `urban-features 170` -> `0083`
+- .claude/skills/diagram/research/questions/0095-samurai-country-manors-bushi-yakata.drawing.html: `buildings 770` -> `0095`
+- .claude/skills/diagram/research/questions/0095-samurai-country-manors-bushi-yakata.html: `cities/hinterland 010` -> `0173`
+- .claude/skills/diagram/research/questions/0095-samurai-country-manors-bushi-yakata.html: `buildings 380` -> `0091`
+- .claude/skills/diagram/research/questions/0096-holding-cells-agariya-and-roya.drawing.html: `buildings 040` -> `0096`
+- .claude/skills/diagram/research/questions/0096-holding-cells-agariya-and-roya.html: `buildings 040` -> `0096`
+- .claude/skills/diagram/research/questions/0096-holding-cells-agariya-and-roya.notes.html: `buildings 040` -> `0096`
+- .claude/skills/diagram/research/questions/0096-holding-cells-agariya-and-roya.notes.html: `buildings 040` -> `0096`
+- .claude/skills/diagram/research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: `cities/government 080-110` -> `0115`
+- .claude/skills/diagram/research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: `buildings 060` -> `0097`
+- .claude/skills/diagram/research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: `buildings 480` -> `0093`
+- .claude/skills/diagram/research/questions/0098-storehouses-for-the-tax-rice.drawing.html: `buildings 080` -> `0098`
+- .claude/skills/diagram/research/questions/0098-storehouses-for-the-tax-rice.html: `buildings 080` -> `0098`
+- .claude/skills/diagram/research/questions/0098-storehouses-for-the-tax-rice.html: `urban-features 460` -> `0051`
+- .claude/skills/diagram/research/questions/0099-the-hearing-court-shirasu.drawing.html: `buildings 090` -> `0099`
+- .claude/skills/diagram/research/questions/0099-the-hearing-court-shirasu.html: `buildings 090` -> `0099`
+- .claude/skills/diagram/research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html: `buildings 160` -> `0100`
+- .claude/skills/diagram/research/questions/0101-privies-setchin.drawing.html: `buildings 220` -> `0101`
+- .claude/skills/diagram/research/questions/0101-privies-setchin.html: `buildings 220` -> `0101`
+- .claude/skills/diagram/research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: `buildings 240` -> `0102`
+- .claude/skills/diagram/research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html: `buildings 240` -> `0102`
+- .claude/skills/diagram/research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html: `buildings 290` -> `0103`
+- .claude/skills/diagram/research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: `buildings 290` -> `0103`
+- .claude/skills/diagram/research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: `vegetation 170` -> `0076`
+- .claude/skills/diagram/research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: `buildings 300` -> `0104`
+- .claude/skills/diagram/research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: `buildings 300` -> `0104`
+- .claude/skills/diagram/research/questions/0105-baths-furo.drawing.html: `buildings 320` -> `0105`
+- .claude/skills/diagram/research/questions/0105-baths-furo.drawing.html: `buildings 380` -> `0091`
+- .claude/skills/diagram/research/questions/0105-baths-furo.html: `buildings 320` -> `0105`
+- .claude/skills/diagram/research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: `buildings 340` -> `0106`
+- .claude/skills/diagram/research/questions/0106-the-chief-retainers-house-karo-yashiki.html: `buildings 340` -> `0106`
+- .claude/skills/diagram/research/questions/0107-kitchens-daidokoro.drawing.html: `buildings 360` -> `0107`
+- .claude/skills/diagram/research/questions/0107-kitchens-daidokoro.html: `buildings 360` -> `0107`
+- .claude/skills/diagram/research/questions/0108-stables-umaya.drawing.html: `buildings 390` -> `0108`
+- .claude/skills/diagram/research/questions/0108-stables-umaya.html: `buildings 390` -> `0108`
+- .claude/skills/diagram/research/questions/0108-stables-umaya.html: `urban-features 080` -> `0195`
+- .claude/skills/diagram/research/questions/0108-stables-umaya.html: `rendering/buildings 180` -> `0116`
+- .claude/skills/diagram/research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: `buildings 400` -> `0109`
+- .claude/skills/diagram/research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html: `buildings 400` -> `0109`
+- .claude/skills/diagram/research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.drawing.html: `buildings 570` -> `0110`
+- .claude/skills/diagram/research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html: `cities/defenses 250` -> `0133`
+- .claude/skills/diagram/research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html: `urban-features 170` -> `0083`
+- .claude/skills/diagram/research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html: `buildings 590` -> `0111`
+- .claude/skills/diagram/research/questions/0111-hunting-dogs-and-kennels-inugoya.html: `buildings 590` -> `0111`
+- .claude/skills/diagram/research/questions/0112-detached-studies-shosai.drawing.html: `buildings 600` -> `0112`
+- .claude/skills/diagram/research/questions/0112-detached-studies-shosai.html: `buildings 600` -> `0112`
+- .claude/skills/diagram/research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: `buildings 710` -> `0113`
+- .claude/skills/diagram/research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.notes.html: `buildings 710` -> `0113`
+- .claude/skills/diagram/research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.notes.html: `buildings 090` -> `0099`
+- .claude/skills/diagram/research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: `buildings 710` -> `0113`
+- .claude/skills/diagram/research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: `buildings 090` -> `0099`
+- .claude/skills/diagram/research/questions/0113-the-office-hall-and-its-clerks-goyakusho.notes.html: `buildings 710` -> `0113`
+- .claude/skills/diagram/research/questions/0114-the-imperial-magistrates-compound-in-a-capital.drawing.html: `cities/capitals 400` -> `0114`
+- .claude/skills/diagram/research/questions/0114-the-imperial-magistrates-compound-in-a-capital.html: `cities/capitals 400` -> `0114`
+- .claude/skills/diagram/research/questions/0114-the-imperial-magistrates-compound-in-a-capital.html: `cities/capitals 090` -> `0142`
+- .claude/skills/diagram/research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: `cities/government 080` -> `0115`
+- .claude/skills/diagram/research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: `cities/government 080` -> `0115`
+- .claude/skills/diagram/research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: `buildings 180` -> `0116`
+- .claude/skills/diagram/research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: `buildings 180` -> `0116`
+- .claude/skills/diagram/research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: `buildings 180` -> `0116`
+- .claude/skills/diagram/research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: `buildings 390` -> `0108`
+- .claude/skills/diagram/research/questions/0117-doorways-and-doors-to.drawing.html: `buildings 620` -> `0117`
+- .claude/skills/diagram/research/questions/0117-doorways-and-doors-to.drawing.html: `rendering/buildings 010` -> `0090`
+- .claude/skills/diagram/research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html: `cities/government 280` -> `0118`
+- .claude/skills/diagram/research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html: `rendering/cities/government 030` -> `0161`
+- .claude/skills/diagram/research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html: `cities/government 280` -> `0118`
+- .claude/skills/diagram/research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.drawing.html: `towns 030` -> `0119`
+- .claude/skills/diagram/research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: `towns 030` -> `0119`
+- .claude/skills/diagram/research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: `towns 260` -> `0135`
+- .claude/skills/diagram/research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: `towns 030` -> `0119`
+- .claude/skills/diagram/research/questions/0120-towns-the-county-seat-and-the-post-town-and-who-lives-in-them-machi.drawing.html: `towns 200` -> `0120`
+- .claude/skills/diagram/research/questions/0120-towns-the-county-seat-and-the-post-town-and-who-lives-in-them-machi.html: `towns 200` -> `0120`
+- .claude/skills/diagram/research/questions/0120-towns-the-county-seat-and-the-post-town-and-who-lives-in-them-machi.notes.html: `towns 200` -> `0120`
+- .claude/skills/diagram/research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.drawing.html: `towns 230` -> `0121`
+- .claude/skills/diagram/research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.html: `towns 230` -> `0121`
+- .claude/skills/diagram/research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.notes.html: `towns 230` -> `0121`
+- .claude/skills/diagram/research/questions/0122-gate-markets-outside-a-town-guanxiang.drawing.html: `towns 080` -> `0122`
+- .claude/skills/diagram/research/questions/0122-gate-markets-outside-a-town-guanxiang.html: `towns 080` -> `0122`
+- .claude/skills/diagram/research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: `towns 120` -> `0123`
+- .claude/skills/diagram/research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.notes.html: `towns 120` -> `0123`
+- .claude/skills/diagram/research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: `towns 120` -> `0123`
+- .claude/skills/diagram/research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.notes.html: `towns 120` -> `0123`
+- .claude/skills/diagram/research/questions/0124-farmsteads-at-a-town.drawing.html: `towns 130` -> `0124`
+- .claude/skills/diagram/research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: `towns 240` -> `0125`
+- .claude/skills/diagram/research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html: `towns 240` -> `0125`
+- .claude/skills/diagram/research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.notes.html: `towns 240` -> `0125`
+- .claude/skills/diagram/research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.notes.html: `towns 240` -> `0125`
+- .claude/skills/diagram/research/questions/0126-laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house.drawing.html: `towns 290` -> `0126`
+- .claude/skills/diagram/research/questions/0126-laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house.drawing.html: `cities/fabric 080` -> `0159`
+- .claude/skills/diagram/research/questions/0126-laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house.html: `towns 290` -> `0126`
+- .claude/skills/diagram/research/questions/0128-fodder-grounds-and-hay-stores-for-a-towns-horses-magusaba.drawing.html: `towns 410` -> `0128`
+- .claude/skills/diagram/research/questions/0128-fodder-grounds-and-hay-stores-for-a-towns-horses-magusaba.html: `towns 410` -> `0128`
+- .claude/skills/diagram/research/questions/0129-woods-and-grass-at-a-towns-edge-zokibayashi.drawing.html: `towns 420` -> `0129`
+- .claude/skills/diagram/research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: `towns 440` -> `0130`
+- .claude/skills/diagram/research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: `towns 080` -> `0122`
+- .claude/skills/diagram/research/questions/0130-market-days-and-the-market-ground-ichi.html: `towns 440` -> `0130`
+- .claude/skills/diagram/research/questions/0130-market-days-and-the-market-ground-ichi.html: `towns 330` -> `0188`
+- .claude/skills/diagram/research/questions/0130-market-days-and-the-market-ground-ichi.html: `towns 080` -> `0122`
+- .claude/skills/diagram/research/questions/0130-market-days-and-the-market-ground-ichi.notes.html: `towns 440` -> `0130`
+- .claude/skills/diagram/research/questions/0131-a-towns-privies-and-the-night-soil-trade-setchin-shimogoe.drawing.html: `towns 480` -> `0131`
+- .claude/skills/diagram/research/questions/0131-a-towns-privies-and-the-night-soil-trade-setchin-shimogoe.html: `towns 480` -> `0131`
+- .claude/skills/diagram/research/questions/0132-gardens-behind-a-town-house-tsubo-niwa.drawing.html: `towns 490` -> `0132`
+- .claude/skills/diagram/research/questions/0132-gardens-behind-a-town-house-tsubo-niwa.html: `towns 490` -> `0132`
+- .claude/skills/diagram/research/questions/0133-barriers-and-inspection-posts-at-a-towns-entrance-bansho.html: `cities/defenses 250` -> `0133`
+- .claude/skills/diagram/research/questions/0134-the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends.drawing.html: `towns 210` -> `0134`
+- .claude/skills/diagram/research/questions/0134-the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends.drawing.html: `towns/080` -> `0122`
+- .claude/skills/diagram/research/questions/0134-the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends.html: `towns 210` -> `0134`
+- .claude/skills/diagram/research/questions/0134-the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends.html: `towns 200` -> `0120`
+- .claude/skills/diagram/research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: `towns 260` -> `0135`
+- .claude/skills/diagram/research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.html: `towns 260` -> `0135`
+- .claude/skills/diagram/research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.html: `towns 260` -> `0135`
+- .claude/skills/diagram/research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: `ways 160` -> `0136`
+- .claude/skills/diagram/research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: `rendering/towns 230` -> `0121`
+- .claude/skills/diagram/research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.notes.html: `ways 160` -> `0136`
+- .claude/skills/diagram/research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.html: `ways 160` -> `0136`
+- .claude/skills/diagram/research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.html: `cities/fabric 080` -> `0159`
+- .claude/skills/diagram/research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.notes.html: `ways 160` -> `0136`
+- .claude/skills/diagram/research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html: `cities/capitals 010` -> `0137`
+- .claude/skills/diagram/research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.html: `cities/capitals 010` -> `0137`
+- .claude/skills/diagram/research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html: `cities/capitals 390` -> `0138`
+- .claude/skills/diagram/research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html: `rendering/religion-and-death 410` -> `0237`
+- .claude/skills/diagram/research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.html: `cities/capitals 390` -> `0138`
+- .claude/skills/diagram/research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.html: `religion-and-death 550` -> `0230`
+- .claude/skills/diagram/research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: `cities/capitals 020` -> `0139`
+- .claude/skills/diagram/research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: `rendering/cities/capitals 010` -> `0137`
+- .claude/skills/diagram/research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html: `cities/capitals 020` -> `0139`
+- .claude/skills/diagram/research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html: `cities/capitals 070` -> `0140`
+- .claude/skills/diagram/research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: `cities/capitals 070` -> `0140`
+- .claude/skills/diagram/research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: `cities/capitals 390` -> `0138`
+- .claude/skills/diagram/research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.notes.html: `cities/capitals 070` -> `0140`
+- .claude/skills/diagram/research/questions/0141-the-capitals-aqueduct-josui.drawing.html: `cities/capitals 080` -> `0141`
+- .claude/skills/diagram/research/questions/0141-the-capitals-aqueduct-josui.html: `cities/capitals 080` -> `0141`
+- .claude/skills/diagram/research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.drawing.html: `cities/capitals 090` -> `0142`
+- .claude/skills/diagram/research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html: `cities/capitals 090` -> `0142`
+- .claude/skills/diagram/research/questions/0143-inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru.drawing.html: `cities/capitals 360` -> `0143`
+- .claude/skills/diagram/research/questions/0143-inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru.html: `cities/capitals 360` -> `0143`
+- .claude/skills/diagram/research/questions/0144-time-bells-in-castle-towns-and-capitals-toki-no-kane.drawing.html: `cities/capitals 470` -> `0144`
+- .claude/skills/diagram/research/questions/0144-time-bells-in-castle-towns-and-capitals-toki-no-kane.html: `cities/capitals 470` -> `0144`
+- .claude/skills/diagram/research/questions/0145-city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang.drawing.html: `rendering/cities/capitals 020` -> `0139`
+- .claude/skills/diagram/research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: `water 100` -> `0146`
+- .claude/skills/diagram/research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.html: `water 100` -> `0146`
+- .claude/skills/diagram/research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.html: `water 100` -> `0146`
+- .claude/skills/diagram/research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.html: `water 100` -> `0146`
+- .claude/skills/diagram/research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: `cities/defenses 040` -> `0147`
+- .claude/skills/diagram/research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: `cities/defenses 250` -> `0133`
+- .claude/skills/diagram/research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.html: `cities/defenses 040` -> `0147`
+- .claude/skills/diagram/research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: `cities/defenses 060` -> `0148`
+- .claude/skills/diagram/research/questions/0148-towers-along-the-city-wall-mamian.html: `cities/defenses 060` -> `0148`
+- .claude/skills/diagram/research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.drawing.html: `cities/defenses 080` -> `0149`
+- .claude/skills/diagram/research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.html: `cities/defenses 080` -> `0149`
+- .claude/skills/diagram/research/questions/0150-barbicans-wengcheng-masugata.drawing.html: `cities/defenses 220` -> `0150`
+- .claude/skills/diagram/research/questions/0150-barbicans-wengcheng-masugata.html: `cities/defenses 220` -> `0150`
+- .claude/skills/diagram/research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: `cities/defenses 100` -> `0151`
+- .claude/skills/diagram/research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html: `cities/defenses 100` -> `0151`
+- .claude/skills/diagram/research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html: `cities/fabric 010` -> `0152`
+- .claude/skills/diagram/research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.html: `cities/fabric 010` -> `0152`
+- .claude/skills/diagram/research/questions/0153-chinese-courtyard-houses-siheyuan.drawing.html: `buildings 760` -> `0153`
+- .claude/skills/diagram/research/questions/0153-chinese-courtyard-houses-siheyuan.html: `buildings 760` -> `0153`
+- .claude/skills/diagram/research/questions/0153-chinese-courtyard-houses-siheyuan.html: `buildings 790` -> `0154`
+- .claude/skills/diagram/research/questions/0154-merchants-townhouses-machiya.drawing.html: `buildings 790` -> `0154`
+- .claude/skills/diagram/research/questions/0154-merchants-townhouses-machiya.html: `buildings 790` -> `0154`
+- .claude/skills/diagram/research/questions/0154-merchants-townhouses-machiya.html: `buildings 760` -> `0153`
+- .claude/skills/diagram/research/questions/0154-merchants-townhouses-machiya.html: `towns/260` -> `0135`
+- .claude/skills/diagram/research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: `cities/fabric 090` -> `0155`
+- .claude/skills/diagram/research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: `cities/fabric 090` -> `0155`
+- .claude/skills/diagram/research/questions/0156-burakumin-quarters-and-caste-zoning.drawing.html: `urban-features 130` -> `0156`
+- .claude/skills/diagram/research/questions/0156-burakumin-quarters-and-caste-zoning.drawing.html: `rendering/urban-features 060` -> `0193`
+- .claude/skills/diagram/research/questions/0156-burakumin-quarters-and-caste-zoning.html: `urban-features 130` -> `0156`
+- .claude/skills/diagram/research/questions/0158-the-imperial-road-through-a-city-and-the-shops-that-line-it.drawing.html: `cities/fabric 040` -> `0158`
+- .claude/skills/diagram/research/questions/0158-the-imperial-road-through-a-city-and-the-shops-that-line-it.html: `cities/fabric 040` -> `0158`
+- .claude/skills/diagram/research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: `cities/fabric 080` -> `0159`
+- .claude/skills/diagram/research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.html: `cities/fabric 080` -> `0159`
+- .claude/skills/diagram/research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.html: `towns 030` -> `0119`
+- .claude/skills/diagram/research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: `cities/fabric 210` -> `0160`
+- .claude/skills/diagram/research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html: `cities/fabric 210` -> `0160`
+- .claude/skills/diagram/research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.notes.html: `cities/fabric 210` -> `0160`
+- .claude/skills/diagram/research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html: `cities/government 030` -> `0161`
+- .claude/skills/diagram/research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.html: `cities/government 030` -> `0161`
+- .claude/skills/diagram/research/questions/0162-city-streets-and-blocks-the-grid-the-block-and-how-wide-the-streets-are-machiwari.drawing.html: `cities/fabric 070` -> `0162`
+- .claude/skills/diagram/research/questions/0162-city-streets-and-blocks-the-grid-the-block-and-how-wide-the-streets-are-machiwari.html: `cities/fabric 070` -> `0162`
+- .claude/skills/diagram/research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: `cities/government 010` -> `0163`
+- .claude/skills/diagram/research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.notes.html: `rendering/cities/defenses 010` -> `0145`
+- .claude/skills/diagram/research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html: `cities/government 010` -> `0163`
+- .claude/skills/diagram/research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.notes.html: `cities/defenses 010` -> `0145`
+- .claude/skills/diagram/research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.drawing.html: `cities/government 320` -> `0164`
+- .claude/skills/diagram/research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: `cities/government 320` -> `0164`
+- .claude/skills/diagram/research/questions/0165-martial-training-grounds-and-dojo.drawing.html: `buildings 210` -> `0165`
+- .claude/skills/diagram/research/questions/0165-martial-training-grounds-and-dojo.drawing.html: `buildings 210` -> `0165`
+- .claude/skills/diagram/research/questions/0165-martial-training-grounds-and-dojo.html: `cities/government 320` -> `0164`
+- .claude/skills/diagram/research/questions/0166-domain-schools-hanko.drawing.html: `cities/capitals 190` -> `0166`
+- .claude/skills/diagram/research/questions/0166-domain-schools-hanko.html: `cities/capitals 190` -> `0166`
+- .claude/skills/diagram/research/questions/0167-offices-of-the-six-ministries-liubu.drawing.html: `cities/government 230` -> `0167`
+- .claude/skills/diagram/research/questions/0167-offices-of-the-six-ministries-liubu.html: `cities/government 230` -> `0167`
+- .claude/skills/diagram/research/questions/0168-the-city-jail-roya.drawing.html: `cities/government 240` -> `0168`
+- .claude/skills/diagram/research/questions/0168-the-city-jail-roya.drawing.notes.html: `cities/government 240` -> `0168`
+- .claude/skills/diagram/research/questions/0168-the-city-jail-roya.html: `cities/government 240` -> `0168`
+- .claude/skills/diagram/research/questions/0168-the-city-jail-roya.html: `buildings 040` -> `0096`
+- .claude/skills/diagram/research/questions/0168-the-city-jail-roya.html: `cities/government 250` -> `0169`
+- .claude/skills/diagram/research/questions/0169-the-town-magistracy-and-its-constables-machi-bugyo-doshin.drawing.html: `cities/government 250` -> `0169`
+- .claude/skills/diagram/research/questions/0169-the-town-magistracy-and-its-constables-machi-bugyo-doshin.html: `cities/government 250` -> `0169`
+- .claude/skills/diagram/research/questions/0169-the-town-magistracy-and-its-constables-machi-bugyo-doshin.html: `cities/capitals 400` -> `0114`
+- .claude/skills/diagram/research/questions/0169-the-town-magistracy-and-its-constables-machi-bugyo-doshin.html: `cities/capitals 400` -> `0114`
+- .claude/skills/diagram/research/questions/0170-a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory.drawing.html: `cities/government 310` -> `0170`
+- .claude/skills/diagram/research/questions/0170-a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory.html: `cities/government 310` -> `0170`
+- .claude/skills/diagram/research/questions/0171-the-ground-outside-a-city-gate-gate-suburbs-guanxiang-tile-kilns-and-the-built-up-land-a-city-took-in.drawing.html: `cities/hinterland 040` -> `0171`
+- .claude/skills/diagram/research/questions/0171-the-ground-outside-a-city-gate-gate-suburbs-guanxiang-tile-kilns-and-the-built-up-land-a-city-took-in.html: `cities/hinterland 040` -> `0171`
+- .claude/skills/diagram/research/questions/0172-a-lords-retreat-just-outside-town-shimoyashiki.html: `cities/hinterland 060` -> `0172`
+- .claude/skills/diagram/research/questions/0173-country-estates-of-the-gentry-and-samurai-around-a-city.drawing.html: `cities/hinterland 060` -> `0172`
+- .claude/skills/diagram/research/questions/0173-country-estates-of-the-gentry-and-samurai-around-a-city.html: `cities/hinterland 010` -> `0173`
+- .claude/skills/diagram/research/questions/0174-fields-and-gardens-inside-a-citys-wall.drawing.html: `cities/hinterland 050` -> `0174`
+- .claude/skills/diagram/research/questions/0174-fields-and-gardens-inside-a-citys-wall.html: `cities/hinterland 050` -> `0174`
+- .claude/skills/diagram/research/questions/0174-fields-and-gardens-inside-a-citys-wall.html: `towns 400` -> `0127`
+- .claude/skills/diagram/research/questions/0175-cities-on-rivers.drawing.html: `cities/river-cities 010` -> `0175`
+- .claude/skills/diagram/research/questions/0175-cities-on-rivers.html: `cities/river-cities 010` -> `0175`
+- .claude/skills/diagram/research/questions/0175-cities-on-rivers.html: `religion-and-death 160` -> `0235`
+- .claude/skills/diagram/research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: `cities/river-cities 040` -> `0176`
+- .claude/skills/diagram/research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html: `cities/river-cities 040` -> `0176`
+- .claude/skills/diagram/research/questions/0177-the-river-watch-post-at-a-landing-funabansho.drawing.html: `cities/river-cities 050` -> `0177`
+- .claude/skills/diagram/research/questions/0177-the-river-watch-post-at-a-landing-funabansho.html: `cities/river-cities 050` -> `0177`
+- .claude/skills/diagram/research/questions/0178-city-canals-horikawa.drawing.html: `cities/river-cities 100` -> `0178`
+- .claude/skills/diagram/research/questions/0178-city-canals-horikawa.html: `cities/river-cities 100` -> `0178`
+- .claude/skills/diagram/research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: `cities/river-cities 110` -> `0179`
+- .claude/skills/diagram/research/questions/0179-water-gates-and-sluices-shuimen.html: `cities/river-cities 110` -> `0179`
+- .claude/skills/diagram/research/questions/0179-water-gates-and-sluices-shuimen.html: `cities/capitals 090` -> `0142`
+- .claude/skills/diagram/research/questions/0180-fish-and-produce-markets-at-the-landing-uoichiba.drawing.html: `cities/river-cities 130` -> `0180`
+- .claude/skills/diagram/research/questions/0180-fish-and-produce-markets-at-the-landing-uoichiba.html: `cities/river-cities 130` -> `0180`
+- .claude/skills/diagram/research/questions/0181-how-big-a-citys-wall-is-for-its-population-and-how-many-live-outside-it.drawing.html: `cities/sizing 010` -> `0181`
+- .claude/skills/diagram/research/questions/0181-how-big-a-citys-wall-is-for-its-population-and-how-many-live-outside-it.html: `cities/sizing 010` -> `0181`
+- .claude/skills/diagram/research/questions/0182-how-densely-a-city-is-built-and-what-counts-as-empty-ground.drawing.html: `cities/sizing 020` -> `0182`
+- .claude/skills/diagram/research/questions/0182-how-densely-a-city-is-built-and-what-counts-as-empty-ground.html: `cities/sizing 020` -> `0182`
+- .claude/skills/diagram/research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: `urban-features 310` -> `0183`
+- .claude/skills/diagram/research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.notes.html: `urban-features 310` -> `0183`
+- .claude/skills/diagram/research/questions/0183-shops-and-trades-in-towns-and-villages.html: `urban-features 310` -> `0183`
+- .claude/skills/diagram/research/questions/0183-shops-and-trades-in-towns-and-villages.notes.html: `urban-features 310` -> `0183`
+- .claude/skills/diagram/research/questions/0184-inns-hatago-and-carters-inns.drawing.html: `buildings 800` -> `0184`
+- .claude/skills/diagram/research/questions/0184-inns-hatago-and-carters-inns.html: `buildings 800` -> `0184`
+- .claude/skills/diagram/research/questions/0184-inns-hatago-and-carters-inns.html: `towns/320` -> `0185`
+- .claude/skills/diagram/research/questions/0184-inns-hatago-and-carters-inns.html: `towns/360` -> `0186`
+- .claude/skills/diagram/research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: `towns 320` -> `0185`
+- .claude/skills/diagram/research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html: `towns 320` -> `0185`
+- .claude/skills/diagram/research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html: `buildings 800` -> `0184`
+- .claude/skills/diagram/research/questions/0186-lodgings-for-lords-and-officials-on-the-road-honjin.drawing.html: `towns 360` -> `0186`
+- .claude/skills/diagram/research/questions/0186-lodgings-for-lords-and-officials-on-the-road-honjin.html: `towns 360` -> `0186`
+- .claude/skills/diagram/research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.html: `towns 060` -> `0187`
+- .claude/skills/diagram/research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.notes.html: `towns 060` -> `0187`
+- .claude/skills/diagram/research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.html: `towns 060` -> `0187`
+- .claude/skills/diagram/research/questions/0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.drawing.html: `towns 330` -> `0188`
+- .claude/skills/diagram/research/questions/0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.html: `towns 330` -> `0188`
+- .claude/skills/diagram/research/questions/0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.html: `towns 440` -> `0130`
+- .claude/skills/diagram/research/questions/0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.notes.html: `towns 440` -> `0130`
+- .claude/skills/diagram/research/questions/0189-the-townsmens-own-office-and-guild-halls-machi-kaisho-huiguan.drawing.html: `towns 470` -> `0189`
+- .claude/skills/diagram/research/questions/0189-the-townsmens-own-office-and-guild-halls-machi-kaisho-huiguan.html: `towns 470` -> `0189`
+- .claude/skills/diagram/research/questions/0190-notice-boards-kosatsuba.drawing.html: `urban-features 010` -> `0190`
+- .claude/skills/diagram/research/questions/0190-notice-boards-kosatsuba.html: `urban-features 010` -> `0190`
+- .claude/skills/diagram/research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: `urban-features 020` -> `0191`
+- .claude/skills/diagram/research/questions/0191-execution-and-punishment-grounds-keijo.html: `urban-features 020` -> `0191`
+- .claude/skills/diagram/research/questions/0191-execution-and-punishment-grounds-keijo.notes.html: `urban-features 020` -> `0191`
+- .claude/skills/diagram/research/questions/0192-pottery-kilns-noborigama.drawing.html: `urban-features 050` -> `0192`
+- .claude/skills/diagram/research/questions/0192-pottery-kilns-noborigama.html: `urban-features 050` -> `0192`
+- .claude/skills/diagram/research/questions/0193-tanning-yards.drawing.html: `urban-features 060` -> `0193`
+- .claude/skills/diagram/research/questions/0193-tanning-yards.drawing.notes.html: `urban-features 060` -> `0193`
+- .claude/skills/diagram/research/questions/0193-tanning-yards.drawing.notes.html: `urban-features 060` -> `0193`
+- .claude/skills/diagram/research/questions/0193-tanning-yards.html: `urban-features 060` -> `0193`
+- .claude/skills/diagram/research/questions/0193-tanning-yards.notes.html: `urban-features 060` -> `0193`
+- .claude/skills/diagram/research/questions/0194-the-bell-and-drum-tower-zhonggulou.drawing.html: `urban-features 070` -> `0194`
+- .claude/skills/diagram/research/questions/0194-the-bell-and-drum-tower-zhonggulou.drawing.notes.html: `urban-features 070` -> `0194`
+- .claude/skills/diagram/research/questions/0194-the-bell-and-drum-tower-zhonggulou.html: `urban-features 070` -> `0194`
+- .claude/skills/diagram/research/questions/0195-stable-yards-and-watering-troughs.drawing.html: `urban-features 080` -> `0195`
+- .claude/skills/diagram/research/questions/0195-stable-yards-and-watering-troughs.html: `urban-features 080` -> `0195`
+- .claude/skills/diagram/research/questions/0196-communal-wells-ido.drawing.html: `urban-features 090` -> `0196`
+- .claude/skills/diagram/research/questions/0196-communal-wells-ido.html: `urban-features 090` -> `0196`
+- .claude/skills/diagram/research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: `urban-features 150` -> `0197`
+- .claude/skills/diagram/research/questions/0197-charcoal-yards-and-charcoal-stores.html: `urban-features 150` -> `0197`
+- .claude/skills/diagram/research/questions/0198-iron-refining-forges-chao.drawing.html: `urban-features 160` -> `0198`
+- .claude/skills/diagram/research/questions/0198-iron-refining-forges-chao.html: `urban-features 160` -> `0198`
+- .claude/skills/diagram/research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html: `urban-features 190` -> `0199`
+- .claude/skills/diagram/research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.html: `urban-features 190` -> `0199`
+- .claude/skills/diagram/research/questions/0200-oil-pressers-aburaya.drawing.html: `urban-features 330` -> `0200`
+- .claude/skills/diagram/research/questions/0200-oil-pressers-aburaya.html: `urban-features 330` -> `0200`
+- .claude/skills/diagram/research/questions/0201-pawnshops-shichiya.drawing.html: `urban-features 340` -> `0201`
+- .claude/skills/diagram/research/questions/0201-pawnshops-shichiya.html: `urban-features 340` -> `0201`
+- .claude/skills/diagram/research/questions/0202-public-bathhouses-sento.drawing.html: `urban-features 350` -> `0202`
+- .claude/skills/diagram/research/questions/0202-public-bathhouses-sento.html: `urban-features 350` -> `0202`
+- .claude/skills/diagram/research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html: `urban-features 390` -> `0203`
+- .claude/skills/diagram/research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html: `urban-features 390` -> `0203`
+- .claude/skills/diagram/research/questions/0204-night-watch-and-ward-gates-kido.drawing.html: `urban-features 410` -> `0204`
+- .claude/skills/diagram/research/questions/0204-night-watch-and-ward-gates-kido.html: `urban-features 410` -> `0204`
+- .claude/skills/diagram/research/questions/0205-smiths-and-farriers-kajiya.drawing.html: `urban-features 430` -> `0205`
+- .claude/skills/diagram/research/questions/0205-smiths-and-farriers-kajiya.drawing.html: `urban-features 430` -> `0205`
+- .claude/skills/diagram/research/questions/0205-smiths-and-farriers-kajiya.html: `urban-features 430` -> `0205`
+- .claude/skills/diagram/research/questions/0206-writing-schools-terakoya.drawing.html: `urban-features 470` -> `0206`
+- .claude/skills/diagram/research/questions/0206-writing-schools-terakoya.html: `urban-features 470` -> `0206`
+- .claude/skills/diagram/research/questions/0207-sake-breweries-sakagura.drawing.html: `urban-features 510` -> `0207`
+- .claude/skills/diagram/research/questions/0207-sake-breweries-sakagura.html: `urban-features 510` -> `0207`
+- .claude/skills/diagram/research/questions/0208-rice-hulling-and-polishing-tsukigomeya.drawing.html: `urban-features 520` -> `0208`
+- .claude/skills/diagram/research/questions/0208-rice-hulling-and-polishing-tsukigomeya.html: `urban-features 520` -> `0208`
+- .claude/skills/diagram/research/questions/0209-dyers-weavers-and-papermakers-konya.drawing.html: `urban-features 530` -> `0209`
+- .claude/skills/diagram/research/questions/0209-dyers-weavers-and-papermakers-konya.html: `urban-features 530` -> `0209`
+- .claude/skills/diagram/research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: `urban-features 540` -> `0210`
+- .claude/skills/diagram/research/questions/0210-timber-yards-and-log-booms-kiba.drawing.notes.html: `urban-features 540` -> `0210`
+- .claude/skills/diagram/research/questions/0210-timber-yards-and-log-booms-kiba.html: `urban-features 540` -> `0210`
+- .claude/skills/diagram/research/questions/0210-timber-yards-and-log-booms-kiba.notes.html: `urban-features 540` -> `0210`
+- .claude/skills/diagram/research/questions/0211-teahouses-eating-houses-and-drinking-houses-chaya.drawing.html: `urban-features 560` -> `0211`
+- .claude/skills/diagram/research/questions/0211-teahouses-eating-houses-and-drinking-houses-chaya.drawing.html: `religion-and-death 050` -> `0233`
+- .claude/skills/diagram/research/questions/0211-teahouses-eating-houses-and-drinking-houses-chaya.html: `urban-features 560` -> `0211`
+- .claude/skills/diagram/research/questions/0211-teahouses-eating-houses-and-drinking-houses-chaya.html: `religion-and-death 050` -> `0233`
+- .claude/skills/diagram/research/questions/0212-pleasure-quarters-and-inn-serving-women-yukaku.drawing.html: `urban-features 590` -> `0212`
+- .claude/skills/diagram/research/questions/0212-pleasure-quarters-and-inn-serving-women-yukaku.html: `urban-features 590` -> `0212`
+- .claude/skills/diagram/research/questions/0213-almshouses-and-infirmaries-for-the-sick-and-poor.drawing.html: `urban-features 610` -> `0213`
+- .claude/skills/diagram/research/questions/0213-almshouses-and-infirmaries-for-the-sick-and-poor.html: `urban-features 610` -> `0213`
+- .claude/skills/diagram/research/questions/0214-roofed-playhouses-shibai-goya.drawing.html: `urban-features 620` -> `0214`
+- .claude/skills/diagram/research/questions/0214-roofed-playhouses-shibai-goya.drawing.html: `towns 060` -> `0187`
+- .claude/skills/diagram/research/questions/0214-roofed-playhouses-shibai-goya.html: `urban-features 620` -> `0214`
+- .claude/skills/diagram/research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: `religion-and-death 100` -> `0215`
+- .claude/skills/diagram/research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html: `religion-and-death 100` -> `0215`
+- .claude/skills/diagram/research/questions/0216-shrines-in-towns-and-cities.drawing.html: `religion-and-death 470` -> `0216`
+- .claude/skills/diagram/research/questions/0216-shrines-in-towns-and-cities.html: `religion-and-death 470` -> `0216`
+- .claude/skills/diagram/research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: `religion-and-death 520` -> `0217`
+- .claude/skills/diagram/research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: `religion-and-death 520` -> `0217`
+- .claude/skills/diagram/research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: `ways 110` -> `0085`
+- .claude/skills/diagram/research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: `buildings 030` -> `0218`
+- .claude/skills/diagram/research/questions/0218-the-compounds-own-shrine-yashikigami.html: `buildings 030` -> `0218`
+- .claude/skills/diagram/research/questions/0219-household-shrines-yashikigami.drawing.html: `homesteads 216` -> `0219`
+- .claude/skills/diagram/research/questions/0219-household-shrines-yashikigami.html: `homesteads 216` -> `0219`
+- .claude/skills/diagram/research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: `religion-and-death 080` -> `0220`
+- .claude/skills/diagram/research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: `religion-and-death 080` -> `0220`
+- .claude/skills/diagram/research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: `religion-and-death 110` -> `0221`
+- .claude/skills/diagram/research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: `religion-and-death 110` -> `0221`
+- .claude/skills/diagram/research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: `religion-and-death 120` -> `0222`
+- .claude/skills/diagram/research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: `religion-and-death 120` -> `0222`
+- .claude/skills/diagram/research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: `religion-and-death 122` -> `0223`
+- .claude/skills/diagram/research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: `religion-and-death 130` -> `0224`
+- .claude/skills/diagram/research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.notes.html: `religion-and-death 130` -> `0224`
+- .claude/skills/diagram/research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: `religion-and-death 130` -> `0224`
+- .claude/skills/diagram/research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.drawing.html: `cities/river-cities 060` -> `0225`
+- .claude/skills/diagram/research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.html: `cities/river-cities 060` -> `0225`
+- .claude/skills/diagram/research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: `religion-and-death 210` -> `0226`
+- .claude/skills/diagram/research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: `religion-and-death 560` -> `0227`
+- .claude/skills/diagram/research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.html: `religion-and-death 560` -> `0227`
+- .claude/skills/diagram/research/questions/0228-town-monasteries.drawing.html: `religion-and-death 450` -> `0228`
+- .claude/skills/diagram/research/questions/0228-town-monasteries.html: `religion-and-death 450` -> `0228`
+- .claude/skills/diagram/research/questions/0229-village-temples-tera.drawing.html: `religion-and-death 500` -> `0229`
+- .claude/skills/diagram/research/questions/0229-village-temples-tera.html: `religion-and-death 500` -> `0229`
+- .claude/skills/diagram/research/questions/0230-temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao.drawing.html: `religion-and-death 550` -> `0230`
+- .claude/skills/diagram/research/questions/0230-temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao.html: `religion-and-death 550` -> `0230`
+- .claude/skills/diagram/research/questions/0230-temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao.notes.html: `religion-and-death 550` -> `0230`
+- .claude/skills/diagram/research/questions/0231-temple-fields-jochi.drawing.html: `fields 150` -> `0231`
+- .claude/skills/diagram/research/questions/0231-temple-fields-jochi.drawing.notes.html: `fields 150` -> `0231`
+- .claude/skills/diagram/research/questions/0231-temple-fields-jochi.html: `fields 150` -> `0231`
+- .claude/skills/diagram/research/questions/0231-temple-fields-jochi.notes.html: `fields 150` -> `0231`
+- .claude/skills/diagram/research/questions/0233-houses-and-shops-at-a-temples-gate-monzenmachi.drawing.html: `religion-and-death 050` -> `0233`
+- .claude/skills/diagram/research/questions/0233-houses-and-shops-at-a-temples-gate-monzenmachi.html: `religion-and-death 050` -> `0233`
+- .claude/skills/diagram/research/questions/0234-how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi.drawing.html: `religion-and-death 020` -> `0234`
+- .claude/skills/diagram/research/questions/0234-how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi.html: `religion-and-death 020` -> `0234`
+- .claude/skills/diagram/research/questions/0234-how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi.notes.html: `religion-and-death 020` -> `0234`
+- .claude/skills/diagram/research/questions/0235-village-burial-grounds-bochi.drawing.html: `religion-and-death 160` -> `0235`
+- .claude/skills/diagram/research/questions/0235-village-burial-grounds-bochi.drawing.html: `religion-and-death 160` -> `0235`
+- .claude/skills/diagram/research/questions/0235-village-burial-grounds-bochi.html: `religion-and-death 160` -> `0235`
+- .claude/skills/diagram/research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: `religion-and-death 280` -> `0236`
+- .claude/skills/diagram/research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: `fields 010` -> `0008`
+- .claude/skills/diagram/research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: `religion-and-death 280` -> `0236`
+- .claude/skills/diagram/research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: `rendering/religion-and-death 160` -> `0235`
+- .claude/skills/diagram/research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: `religion-and-death 410` -> `0237`
+- .claude/skills/diagram/research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.html: `religion-and-death 410` -> `0237`
+- .claude/skills/diagram/research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: `religion-and-death 530` -> `0238`
+- .claude/skills/diagram/research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html: `religion-and-death 530` -> `0238`
+- .claude/skills/diagram/research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html: `buildings 270` -> `0239`
+- .claude/skills/diagram/research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html: `buildings 270` -> `0239`
+- .claude/skills/diagram/research/questions/0240-salt-heaps-at-doorways-morijio.drawing.html: `religion-and-death 240` -> `0240`
+- .claude/skills/diagram/research/questions/0240-salt-heaps-at-doorways-morijio.drawing.notes.html: `religion-and-death 240` -> `0240`
+- .claude/skills/diagram/research/questions/0240-salt-heaps-at-doorways-morijio.drawing.notes.html: `religion-and-death 240` -> `0240`
+- .claude/skills/diagram/research/questions/0240-salt-heaps-at-doorways-morijio.html: `religion-and-death 240` -> `0240`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-lodging-no-door-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-scale-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-no-title-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-privy-detached-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-stub-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-road-wider-than-gate-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-outsize-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `research buildings 'The shady rear is the service strip'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 480` -> `0093`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ochiba-stables-painted-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 270` -> `0239`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 360` -> `0107`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 320` -> `0105`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 300` -> `0104`
+- .claude/skills/diagram/tests/fixtures/ubame-kitchen-one-tub-red.svg: `buildings 400` -> `0109`
+- .claude/skills/diagram/tests/gate/test_review_rules_294.py: `homesteads/212` -> `0043`
+- .claude/skills/diagram/tests/hamletgen/homesteads/test_retirement.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/tests/hamletgen/test_burial.py: `research/religion-and-death/280` -> `research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html`
+- .claude/skills/diagram/tests/hamletgen/test_burial.py: `research/religion-and-death/160` -> `research/questions/0235-village-burial-grounds-bochi.html`
+- .claude/skills/diagram/tests/hamletgen/test_homesteads.py: `homesteads/155` -> `0033`
+- .claude/skills/diagram/tests/hamletgen/test_homesteads.py: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- .claude/skills/diagram/tests/hamletgen/test_homesteads.py: `research/homesteads/020` -> `research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html`
+- .claude/skills/diagram/tests/hamletgen/test_homesteads.py: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- .claude/skills/diagram/tests/hamletgen/test_plan.py: `research/archetypes/160` -> `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html`
+- .claude/skills/diagram/tests/hamletgen/test_pool_storehouses.py: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- .claude/skills/diagram/tests/hamletgen/test_pool_wind.py: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- .claude/skills/diagram/tests/hamletgen/test_woodland_siting.py: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- .claude/skills/diagram/tests/hamletgen/ways/test_bund.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/tests/hamletgen/ways/test_law.py: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- .claude/skills/diagram/tests/hamletgen/ways/test_sweeps.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/tests/interactive/test_classes.py: `settlements/035` -> `0004`
+- .claude/skills/diagram/tests/interactive/test_classes.py: `rendering/homesteads 120` -> `0040`
+- .claude/skills/diagram/tests/interactive/test_classes.py: `fields/260` -> `0014`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `homesteads/155` -> `0033`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `fields/250` -> `0013`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `fields/260` -> `0014`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `homesteads/214` -> `0044`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `ways/030` -> `0084`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `rendering/ways/020` -> `0081`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `archetypes/210` -> `0025`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `homesteads/260` -> `0047`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `homesteads/212` -> `0043`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `homesteads 050` -> `0039`
+- .claude/skills/diagram/tests/interactive/test_classes_docstrings.py: `rendering/homesteads 120` -> `0040`
+- .claude/skills/diagram/tests/interactive/test_page.py: `fields/250` -> `0013`
+- .claude/skills/diagram/tests/interactive/test_page.py: `fields/250` -> `0013`
+- .claude/skills/diagram/tests/labels/test_placer.py: `research/presentation 070` -> `research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html`
+- .claude/skills/diagram/tests/settlement/test_bearing.py: `research/homesteads/400` -> `research/questions/0029-farmhouses-minka.html`
+- .claude/skills/diagram/tests/settlement/test_bearing.py: `research/homesteads/400` -> `research/questions/0029-farmhouses-minka.html`
+- .claude/skills/diagram/tests/settlement/test_bearing.py: `homesteads/400` -> `0029`
+- .claude/skills/diagram/tests/settlement/test_bearing.py: `research/rendering/ways/020` -> `research/questions/0081-village-lanes.drawing.html`
+- .claude/skills/diagram/tests/settlement/test_city.py: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- .claude/skills/diagram/tests/settlement/test_farm_fixtures.py: `research/homesteads/212` -> `research/questions/0043-firewood-stacks-and-sheds-kigoya.html`
+- .claude/skills/diagram/tests/settlement/test_farm_fixtures.py: `research/homesteads/440` -> `research/questions/0052-farm-sheds-and-barns-naya.html`
+- .claude/skills/diagram/tests/settlement/test_fields.py: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- .claude/skills/diagram/tests/settlement/test_fixture_seats.py: `research/homesteads/212` -> `research/questions/0043-firewood-stacks-and-sheds-kigoya.html`
+- .claude/skills/diagram/tests/settlement/test_grain.py: `fields/165` -> `0011`
+- .claude/skills/diagram/tests/settlement/test_homestead_woods.py: `rendering/homesteads/010` -> `0036`
+- .claude/skills/diagram/tests/settlement/test_lot.py: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- .claude/skills/diagram/tests/settlement/test_shrines_wells.py: `research/homesteads/460` -> `research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html`
+- .claude/skills/diagram/tests/settlement/test_trades.py: `research/urban-features/150` -> `research/questions/0197-charcoal-yards-and-charcoal-stores.html`
+- .claude/skills/diagram/tests/test_compound.py: `buildings 380` -> `0091`
+- .claude/skills/diagram/tests/tier_city/settlement/test_civic_grounds.py: `research/religion-and-death/530` -> `research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `vegetation 170-200` -> `0076`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `religion-and-death 220-260` -> `0240`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `buildings 010` -> `0090`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `urban-features 010` -> `0190`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `ways 020` -> `0081`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `vegetation 170-200` -> `0076`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `religion-and-death 220-260` -> `0240`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `homesteads 250-360` -> `0047`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `water 290-360` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `vegetation 210-290` -> `0077`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `religion-and-death 270-330` -> `0236`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `cities/defenses 100-140` -> `0151`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `vegetation 170-200` -> `0076`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `religion-and-death 220-260` -> `0240`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `buildings 010` -> `0090`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `urban-features 010` -> `0190`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `ways 020` -> `0081`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/s-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/s-write.md: `religion-and-death 220-260` -> `0240`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `vegetation 170-200` -> `0076`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `religion-and-death 220-260` -> `0240`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `buildings 010` -> `0090`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `urban-features 010` -> `0190`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `ways 020` -> `0081`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `vegetation/150` -> `0075`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `vegetation 170-200` -> `0076`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `religion-and-death 220-260` -> `0240`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `buildings 010` -> `0090`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `urban-features 010` -> `0190`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `ways 020` -> `0081`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `towns/120` -> `0123`
+- .claude/skills/diagram/tests/tooling/test_brief_load.py: `religion-and-death/090-128` -> `0215, 0221, 0222, 0223`
+- .claude/skills/diagram/tests/tooling/test_brief_load.py: `fields/010` -> `0008`
+- .claude/skills/diagram/tests/tooling/test_check_bundle.py: `ways/020` -> `0081`
+- .claude/skills/diagram/tests/tooling/test_check_bundle.py: `ways/020` -> `0081`
+- .claude/skills/diagram/tests/tooling/test_open_questions.py: `research homesteads 'How long was a rice-drying rack?'` - no question titled so; pointed at its section
+- .claude/skills/diagram/tests/tooling/test_open_questions.py: `homesteads 500` -> `0016`
+- .claude/skills/diagram/tests/tooling/test_page_session.py: `fields 010-900` -> `0005, 0006, 0007, 0008, 0009, 0010, 0011, 0012, 0013, 0014, 0015, 0017, 0231`
+- .claude/skills/diagram/tests/tooling/test_question_size.py: `cities/government 080` -> `0115`
+- .claude/skills/diagram/tests/tooling/test_record_prepass_and_size_table.py: `ways 200` -> `0087`
+- .claude/skills/diagram/tests/tooling/test_record_prepass_and_size_table.py: `ways 200` -> `0087`
+- .claude/skills/diagram/tests/tooling/test_source_pages.py: `fields/020` -> `0005`
+- .claude/skills/diagram/tests/tooling/test_source_pages.py: `fields/030` -> `0009`
+- .claude/skills/diagram/tests/tooling/test_source_pages.py: `fields/030` -> `0009`
+- .claude/skills/diagram/tests/tooling/test_sources.py: `homesteads/500` -> `0016`
+- .claude/skills/diagram/tests/tooling/test_sources.py: `homesteads/500` -> `0016`
+- .claude/skills/diagram/tests/tooling/test_sources.py: `fields/020` -> `0005`
+- .claude/skills/diagram/tests/tooling/test_sources.py: `fields/020` -> `0005`
+- .claude/skills/diagram/tests/tools/test_pack_audit_sun.py: `homesteads 040` -> `0038`
+- docs/review-ledger.md: `vegetation/120` -> `0074`
+- docs/review-ledger.md: `homesteads 120` -> `0040`
+- docs/review-ledger.md: `rendering/vegetation 120` -> `0074`
+- docs/review-ledger.md: `rendering/vegetation 120` -> `0074`
+- docs/review-ledger.md: `rendering/vegetation 120` -> `0074`
+- docs/review-ledger.md: `water 670` -> `0067`
+- scripts/_pointer_sweep.py: `research/water.html#reservoir-ponds-tameike.` - no id `reservoir-ponds-tameike.` in the record; pointed at its section
+- scripts/_pointer_sweep.py: `research/water.html#inner` - no id `inner` in the record; pointed at its section
+- scripts/_pointer_sweep.py: `research/water.html#gone` - no id `gone` in the record; pointed at its section
+- scripts/_pointer_sweep.py: `research/water.html#missing` - no id `missing` in the record; pointed at its section
+- scripts/_pointer_sweep.py: `research/water.html#missing` - no id `missing` in the record; pointed at its section
+- scripts/_quote_verbatim.py: `religion-and-death 550` -> `0230`
+- scripts/check-research-pointers.py: `research/water.html#x` - no id `x` in the record; pointed at its section
+- scripts/check-research-pointers.py: `research/water.html#x` - no id `x` in the record; pointed at its section
+- specs/250-close-the-record-checks/measure/tokens-archetypes-5642c14b.json: `archetypes 140` -> `0018`
+- specs/250-close-the-record-checks/measure/tokens-archetypes-5642c14b.json: `archetypes 140` -> `0018`
+- specs/250-close-the-record-checks/measure/tokens-archetypes-fa50220c.json: `archetypes 170` -> `0023`
+- specs/250-close-the-record-checks/measure/tokens-archetypes-fa50220c.json: `archetypes 170` -> `0023`
+- specs/250-close-the-record-checks/measure/tokens-fields-dca13d4f.json: `fields 160` -> `0006`
+- specs/250-close-the-record-checks/measure/tokens-fields-dca13d4f.json: `fields 160` -> `0006`
+- specs/250-close-the-record-checks/measure/tokens-fields-dca13d4f.json: `fields 110` -> `0017`
+- specs/250-close-the-record-checks/measure/tokens-fields-dca13d4f.json: `fields 110` -> `0017`
+- specs/250-close-the-record-checks/measure/tokens-fields-dca13d4f.json: `fields 110` -> `0017`
+- specs/250-close-the-record-checks/measure/tokens-fields-dca13d4f.json: `fields 160` -> `0006`
+- specs/250-close-the-record-checks/measure/tokens-hinterland-da680d15.json: `cities/hinterland 010` -> `0173`
+- specs/250-close-the-record-checks/measure/tokens-hinterland-da680d15.json: `cities/hinterland 010` -> `0173`
+- specs/250-close-the-record-checks/measure/tokens-hinterland-fad4f56b.json: `cities/hinterland 050` -> `0174`
+- specs/250-close-the-record-checks/measure/tokens-hinterland-fad4f56b.json: `cities/hinterland 050` -> `0174`
+- specs/250-close-the-record-checks/measure/tokens-homesteads.json: `homesteads 040` -> `0038`
+- specs/250-close-the-record-checks/measure/tokens-homesteads.json: `homesteads 040` -> `0038`
+- specs/250-close-the-record-checks/measure/tokens-homesteads.json: `homesteads 040` -> `0038`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 090` -> `0073`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 150` -> `0075`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 020` -> `0071`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 090` -> `0073`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 150` -> `0075`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 060` -> `0080`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 020` -> `0071`
+- specs/250-close-the-record-checks/measure/tokens-vegetation-b6a795e4.json: `vegetation 060` -> `0080`
+- specs/250-close-the-record-checks/measure/tokens-water-111c668d.json: `water 010` -> `0068`
+- specs/250-close-the-record-checks/measure/tokens-water-111c668d.json: `water 010` -> `0068`
+- specs/250-close-the-record-checks/measure/tokens-water-111c668d.json: `water 010` -> `0068`
+- specs/250-close-the-record-checks/measure/tokens-water-ed6cd9c8.json: `water 130` -> `0056`
+- specs/250-close-the-record-checks/measure/tokens-water-ed6cd9c8.json: `water 130` -> `0056`
+- specs/250-close-the-record-checks/owed-verdicts.md: `water/400` -> `0062`
+- specs/250-close-the-record-checks/plan-review.json: `cities/government 080` -> `0115`
+- specs/250-close-the-record-checks/plan-review.json: `vegetation 150` -> `0075`
+- specs/250-close-the-record-checks/plan-review.json: `research/towns/030` -> `research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html`
+- specs/250-close-the-record-checks/plan.md: `homesteads 040` -> `0038`
+- specs/250-close-the-record-checks/plan.md: `vegetation 150` -> `0075`
+- specs/250-close-the-record-checks/tasks.md: `cities/defenses 040` -> `0147`
+- specs/250-close-the-record-checks/tasks.md: `homesteads 040` -> `0038`
+- specs/250-close-the-record-checks/tasks.md: `vegetation 150` -> `0075`
+- specs/261-northwest-wind-by-default/measurements.json: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/measurements.json: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- specs/261-northwest-wind-by-default/measurements.json: `research/vegetation 030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/plan-review.json: `vegetation/030` -> `0072`
+- specs/261-northwest-wind-by-default/plan-review.json: `vegetation/030` -> `0072`
+- specs/261-northwest-wind-by-default/plan-review.json: `water/270` -> `0035`
+- specs/261-northwest-wind-by-default/plan-review.json: `ways/030` -> `0084`
+- specs/261-northwest-wind-by-default/plan.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/plan.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/plan.md: `vegetation/030` -> `0072`
+- specs/261-northwest-wind-by-default/plan.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/plan.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/plan.md: `water/270` -> `0035`
+- specs/261-northwest-wind-by-default/plan.md: `vegetation/020` -> `0071`
+- specs/261-northwest-wind-by-default/plan.md: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- specs/261-northwest-wind-by-default/plan.md: `ways/030` -> `0084`
+- specs/261-northwest-wind-by-default/research.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/spec.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/spec.md: `vegetation/020` -> `0071`
+- specs/261-northwest-wind-by-default/tasks.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/tasks.md: `vegetation/030` -> `0072`
+- specs/261-northwest-wind-by-default/tasks.md: `research/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
+- specs/261-northwest-wind-by-default/tasks.md: `vegetation/030` -> `0072`
+- specs/261-northwest-wind-by-default/tasks.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/261-northwest-wind-by-default/tasks.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/264-nested-features-own-kinds/coverage.md: `homesteads/180` -> `0041`
+- specs/264-nested-features-own-kinds/coverage.md: `homesteads/040` -> `0038`
+- specs/264-nested-features-own-kinds/coverage.md: `water/250` -> `0059`
+- specs/264-nested-features-own-kinds/coverage.md: `homesteads/140` -> `0028`
+- specs/264-nested-features-own-kinds/coverage.md: `urban-features/020` -> `0191`
+- specs/266-label-placement-standard/spec.md: `research/presentation 070` -> `research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html`
+- specs/267-compound-research-owed/briefs/g1-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1-checks.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g1-checks.md: `buildings/270` -> `0239`
+- specs/267-compound-research-owed/briefs/g1-checks.md: `buildings/290` -> `0103`
+- specs/267-compound-research-owed/briefs/g1-checks.md: `buildings/270` -> `0239`
+- specs/267-compound-research-owed/briefs/g1-handoff.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g1-handoff.md: `buildings/270` -> `0239`
+- specs/267-compound-research-owed/briefs/g1-handoff.md: `buildings/290` -> `0103`
+- specs/267-compound-research-owed/briefs/g1-write.md: `buildings 240-290` -> `0102, 0103, 0239`
+- specs/267-compound-research-owed/briefs/g1-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g1b-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1b-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1b-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1b-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1b-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1b-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1b-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1b-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1b-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1b-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1b-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1b-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1b-checks.md: `buildings/300` -> `0104`
+- specs/267-compound-research-owed/briefs/g1b-checks.md: `buildings/320` -> `0105`
+- specs/267-compound-research-owed/briefs/g1b-checks.md: `buildings/340` -> `0106`
+- specs/267-compound-research-owed/briefs/g1b-checks.md: `buildings/300` -> `0104`
+- specs/267-compound-research-owed/briefs/g1b-checks.md: `buildings/300` -> `0104`
+- specs/267-compound-research-owed/briefs/g1b-handoff.md: `buildings/300` -> `0104`
+- specs/267-compound-research-owed/briefs/g1b-handoff.md: `buildings/320` -> `0105`
+- specs/267-compound-research-owed/briefs/g1b-handoff.md: `buildings/340` -> `0106`
+- specs/267-compound-research-owed/briefs/g1b-handoff.md: `buildings/220` -> `0101`
+- specs/267-compound-research-owed/briefs/g1b-handoff.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1b-handoff.md: `buildings/300` -> `0104`
+- specs/267-compound-research-owed/briefs/g1b-write.md: `buildings 300-350` -> `0104, 0105, 0106`
+- specs/267-compound-research-owed/briefs/g1b-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g1b-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g1b-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g1b-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g1b-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g2-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g2-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g2-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g2-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g2-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g2-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g2-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g2-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g2-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g2-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g2-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g2-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g2-check-d.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g2-check-d.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g2-check-d.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g2-check-d.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g2-checks.md: `buildings/360` -> `0107`
+- specs/267-compound-research-owed/briefs/g2-checks.md: `buildings/380` -> `0091`
+- specs/267-compound-research-owed/briefs/g2-checks.md: `buildings/390` -> `0108`
+- specs/267-compound-research-owed/briefs/g2-checks.md: `buildings/400` -> `0109`
+- specs/267-compound-research-owed/briefs/g2-checks.md: `buildings/180` -> `0116`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings/360` -> `0107`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings/380` -> `0091`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings/390` -> `0108`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings/400` -> `0109`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings/180` -> `0116`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings/180` -> `0116`
+- specs/267-compound-research-owed/briefs/g2-handoff.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g2-write.md: `buildings 360-420` -> `0091, 0107, 0108, 0109`
+- specs/267-compound-research-owed/briefs/g2-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g2-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g2-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g2-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g2-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g3-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3-write.md: `buildings 430-470` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/g3-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g3b-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3b-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3b-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3b-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3b-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3b-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3b-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3b-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3b-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3b-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3b-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3b-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3b-check-d.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3b-check-d.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3b-check-d.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3b-check-d.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3b-checks.md: `buildings/480` -> `0093`
+- specs/267-compound-research-owed/briefs/g3b-checks.md: `buildings/030` -> `0218`
+- specs/267-compound-research-owed/briefs/g3b-handoff.md: `buildings/480` -> `0093`
+- specs/267-compound-research-owed/briefs/g3b-handoff.md: `buildings/030` -> `0218`
+- specs/267-compound-research-owed/briefs/g3b-handoff.md: `buildings 480` -> `0093`
+- specs/267-compound-research-owed/briefs/g3b-handoff.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/briefs/g3b-handoff.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/briefs/g3b-handoff.md: `buildings 030` -> `0218`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `buildings 480-520` -> `0093`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/briefs/g3b-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g4-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g4-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g4-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g4-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g4-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g4-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g4-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g4-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g4-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g4-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g4-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g4-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g4-checks.md: `buildings/570` -> `0110`
+- specs/267-compound-research-owed/briefs/g4-checks.md: `vegetation/170` -> `0076`
+- specs/267-compound-research-owed/briefs/g4-handoff.md: `buildings/570` -> `0110`
+- specs/267-compound-research-owed/briefs/g4-handoff.md: `vegetation/170` -> `0076`
+- specs/267-compound-research-owed/briefs/g4-handoff.md: `buildings 570` -> `0110`
+- specs/267-compound-research-owed/briefs/g4-handoff.md: `buildings 210` -> `0165`
+- specs/267-compound-research-owed/briefs/g4-write.md: `buildings 530-580` -> `0110`
+- specs/267-compound-research-owed/briefs/g4-write.md: `vegetation 170-200` -> `0076`
+- specs/267-compound-research-owed/briefs/g4-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g4-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g4-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g4-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g4-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g5-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g5-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g5-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g5-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g5-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g5-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g5-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g5-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g5-checks.md: `religion-and-death 240` -> `0240`
+- specs/267-compound-research-owed/briefs/g5-checks.md: `homesteads 216` -> `0219`
+- specs/267-compound-research-owed/briefs/g5-handoff.md: `religion-and-death/240` -> `0240`
+- specs/267-compound-research-owed/briefs/g5-write.md: `religion-and-death 220-260` -> `0240`
+- specs/267-compound-research-owed/briefs/g5-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g5-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g5-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g5-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g5-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g6-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g6-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g6-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g6-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g6-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g6-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g6-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-check-c.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g6-check-c.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g6-check-c.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g6-check-c.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-check-d.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g6-check-d.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g6-check-d.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g6-check-d.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-check-e.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g6-check-e.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g6-check-e.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g6-check-e.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-checks.md: `cities/river-cities 050` -> `0177`
+- specs/267-compound-research-owed/briefs/g6-checks.md: `cities/river-cities 060` -> `0225`
+- specs/267-compound-research-owed/briefs/g6-checks.md: `urban-features 190` -> `0199`
+- specs/267-compound-research-owed/briefs/g6-checks.md: `urban-features 150` -> `0197`
+- specs/267-compound-research-owed/briefs/g6-checks.md: `ways 060` -> `0082`
+- specs/267-compound-research-owed/briefs/g6-checks.md: `ways 060` -> `0082`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `cities/river-cities/050` -> `0177`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `cities/river-cities/060` -> `0225`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `urban-features/190` -> `0199`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `urban-features/150` -> `0197`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `ways/060` -> `0082`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `urban-features 150` -> `0197`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `urban-features 150` -> `0197`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `ways 060` -> `0082`
+- specs/267-compound-research-owed/briefs/g6-handoff.md: `ways 060` -> `0082`
+- specs/267-compound-research-owed/briefs/g6-write.md: `cities/river-cities 050-080` -> `0177, 0225`
+- specs/267-compound-research-owed/briefs/g6-write.md: `urban-features 190-220` -> `0199`
+- specs/267-compound-research-owed/briefs/g6-write.md: `ways 060-090` -> `0082`
+- specs/267-compound-research-owed/briefs/g6-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g6-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g6-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g6-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g6-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g7-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g7-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g7-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g7-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g7-check-b.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g7-check-b.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g7-check-b.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g7-check-b.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g7-checks.md: `buildings/590` -> `0111`
+- specs/267-compound-research-owed/briefs/g7-checks.md: `buildings/600` -> `0112`
+- specs/267-compound-research-owed/briefs/g7-checks.md: `buildings/610` -> `0094`
+- specs/267-compound-research-owed/briefs/g7-checks.md: `buildings/620` -> `0117`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/590` -> `0111`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/600` -> `0112`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/610` -> `0094`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/620` -> `0117`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/590` -> `0111`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/600` -> `0112`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/610` -> `0094`
+- specs/267-compound-research-owed/briefs/g7-handoff.md: `buildings/620` -> `0117`
+- specs/267-compound-research-owed/briefs/g7-write.md: `buildings 590-640` -> `0094, 0111, 0112, 0117`
+- specs/267-compound-research-owed/briefs/g7-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g7-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g7-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g7-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g7-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/g8-check-a.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g8-check-a.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g8-check-a.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g8-check-a.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g8-checks.md: `fields 010` -> `0008`
+- specs/267-compound-research-owed/briefs/g8-handoff.md: `fields/010` -> `0008`
+- specs/267-compound-research-owed/briefs/g8-handoff.md: `fields/010` -> `0008`
+- specs/267-compound-research-owed/briefs/g8-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/g8-write.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/g8-write.md: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/g8-write.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/g8-write.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/g8-write.md: `research/fields/010` -> `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html`
+- specs/267-compound-research-owed/briefs/g8-write.md: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 240-290` -> `0102, 0103, 0239`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 300-350` -> `0104, 0105, 0106`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 360-420` -> `0091, 0107, 0108, 0109`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 430-470` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 480-520` -> `0093`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 530-580` -> `0110`
+- specs/267-compound-research-owed/briefs/gen.py: `vegetation 170-200` -> `0076`
+- specs/267-compound-research-owed/briefs/gen.py: `religion-and-death 220-260` -> `0240`
+- specs/267-compound-research-owed/briefs/gen.py: `cities/river-cities 050-080` -> `0177, 0225`
+- specs/267-compound-research-owed/briefs/gen.py: `urban-features 190-220` -> `0199`
+- specs/267-compound-research-owed/briefs/gen.py: `ways 060-090` -> `0082`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 590-640` -> `0094, 0111, 0112, 0117`
+- specs/267-compound-research-owed/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/briefs/gen.py: `cities/river-cities 010` -> `0175`
+- specs/267-compound-research-owed/briefs/gen.py: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/briefs/gen.py: `ways 020` -> `0081`
+- specs/267-compound-research-owed/briefs/gen.py: `buildings/240` -> `0102`
+- specs/267-compound-research-owed/inventory.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/inventory.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/inventory.md: `research/fields/010` -> `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html`
+- specs/267-compound-research-owed/outcomes.md: `buildings 030` -> `0218`
+- specs/267-compound-research-owed/outcomes.md: `buildings/220` -> `0101`
+- specs/267-compound-research-owed/outcomes.md: `buildings/180` -> `0116`
+- specs/267-compound-research-owed/outcomes.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/outcomes.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/outcomes.md: `buildings 030` -> `0218`
+- specs/267-compound-research-owed/outcomes.md: `buildings 570` -> `0110`
+- specs/267-compound-research-owed/outcomes.md: `urban-features 150` -> `0197`
+- specs/267-compound-research-owed/outcomes.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/outcomes.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/outcomes.md: `buildings/590` -> `0111`
+- specs/267-compound-research-owed/outcomes.md: `buildings/600` -> `0112`
+- specs/267-compound-research-owed/outcomes.md: `buildings/610` -> `0094`
+- specs/267-compound-research-owed/outcomes.md: `buildings/620` -> `0117`
+- specs/267-compound-research-owed/outcomes.md: `buildings 270` -> `0239`
+- specs/267-compound-research-owed/plan-review.json: `buildings 380` -> `0091`
+- specs/267-compound-research-owed/plan.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/plan.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/spec.md: `buildings 010` -> `0090`
+- specs/267-compound-research-owed/spec.md: `urban-features 010` -> `0190`
+- specs/267-compound-research-owed/spec.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/spec.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/spec.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/tasks.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/tasks.md: `ways 020` -> `0081`
+- specs/267-compound-research-owed/tasks.md: `buildings 070` -> `0092`
+- specs/267-compound-research-owed/tasks.md: `ways 020` -> `0081`
+- specs/268-shrine-grounds-researched/tasks.md: `religion-and-death 122` -> `0223`
+- specs/269-research-backfill/briefs/a1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a1-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a1-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a1-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a1-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a1-check-e.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a1-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a1-check-e.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a1-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a1-check-e.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a1-check-e.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a1-check-e.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a1-checks.md: `archetypes 210` -> `0025`
+- specs/269-research-backfill/briefs/a1-checks.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/briefs/a1-checks.md: `archetypes/140` -> `0018`
+- specs/269-research-backfill/briefs/a1-checks.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/briefs/a1-checks.md: `archetypes/172` -> `0024`
+- specs/269-research-backfill/briefs/a1-handoff.md: `archetypes/210` -> `0025`
+- specs/269-research-backfill/briefs/a1-handoff.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/briefs/a1-handoff.md: `archetypes/140` -> `0018`
+- specs/269-research-backfill/briefs/a1-handoff.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/briefs/a1-handoff.md: `archetypes/172` -> `0024`
+- specs/269-research-backfill/briefs/a1-handoff.md: `vegetation 120` -> `0074`
+- specs/269-research-backfill/briefs/a1-handoff.md: `water 270` -> `0035`
+- specs/269-research-backfill/briefs/a1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a1-write.md: `archetypes 200-240` -> `0025, 0026`
+- specs/269-research-backfill/briefs/a1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a1-write.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/briefs/a1-write.md: `archetypes/140` -> `0018`
+- specs/269-research-backfill/briefs/a2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a2-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a2-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a2-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a2-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a2-checks.md: `archetypes 040` -> `0021`
+- specs/269-research-backfill/briefs/a2-checks.md: `water 260` -> `0060`
+- specs/269-research-backfill/briefs/a2-handoff.md: `archetypes 300-350` -> `0027`
+- specs/269-research-backfill/briefs/a2-handoff.md: `archetypes/040` -> `0021`
+- specs/269-research-backfill/briefs/a2-handoff.md: `fields 260` -> `0014`
+- specs/269-research-backfill/briefs/a2-handoff.md: `fields 260` -> `0014`
+- specs/269-research-backfill/briefs/a2-handoff.md: `vegetation 120` -> `0074`
+- specs/269-research-backfill/briefs/a2-handoff.md: `water 270` -> `0035`
+- specs/269-research-backfill/briefs/a2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/a2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/a2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/a2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/a2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/a2-write.md: `archetypes 250-270` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/a2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/a2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/a2-write.md: `archetypes/040` -> `0021`
+- specs/269-research-backfill/briefs/c1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c1-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c1-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c1-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c1-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c1-check-e.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c1-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c1-check-e.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c1-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c1-check-e.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c1-check-e.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c1-check-e.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c1-checks.md: `cities/defenses 100` -> `0151`
+- specs/269-research-backfill/briefs/c1-checks.md: `cities/defenses 040` -> `0147`
+- specs/269-research-backfill/briefs/c1-checks.md: `cities/defenses 060` -> `0148`
+- specs/269-research-backfill/briefs/c1-checks.md: `cities/defenses 080` -> `0149`
+- specs/269-research-backfill/briefs/c1-handoff.md: `cities/defenses/100` -> `0151`
+- specs/269-research-backfill/briefs/c1-handoff.md: `cities/defenses/040` -> `0147`
+- specs/269-research-backfill/briefs/c1-handoff.md: `cities/defenses/060` -> `0148`
+- specs/269-research-backfill/briefs/c1-handoff.md: `cities/defenses/080` -> `0149`
+- specs/269-research-backfill/briefs/c1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/269-research-backfill/briefs/c1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c2-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c2-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c2-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c2-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c2-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c2-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c2-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c2-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c2-checks.md: `cities/government 030` -> `0161`
+- specs/269-research-backfill/briefs/c2-checks.md: `cities/government 080` -> `0115`
+- specs/269-research-backfill/briefs/c2-handoff.md: `cities/government/030` -> `0161`
+- specs/269-research-backfill/briefs/c2-handoff.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/briefs/c2-handoff.md: `cities/government 280` -> `0118`
+- specs/269-research-backfill/briefs/c2-handoff.md: `buildings 210` -> `0165`
+- specs/269-research-backfill/briefs/c2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c2-write.md: `cities/government/030` -> `0161`
+- specs/269-research-backfill/briefs/c3-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c3-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c3-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c3-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c3-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c3-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c3-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c3-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c3-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c3-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c3-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c3-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c3-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c3-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c3-checks.md: `cities/fabric 070` -> `0162`
+- specs/269-research-backfill/briefs/c3-checks.md: `cities/fabric 080` -> `0159`
+- specs/269-research-backfill/briefs/c3-handoff.md: `cities/fabric/070` -> `0162`
+- specs/269-research-backfill/briefs/c3-handoff.md: `cities/fabric/080` -> `0159`
+- specs/269-research-backfill/briefs/c3-handoff.md: `religion-and-death 160` -> `0235`
+- specs/269-research-backfill/briefs/c3-handoff.md: `vegetation 120` -> `0074`
+- specs/269-research-backfill/briefs/c3-handoff.md: `water 270` -> `0035`
+- specs/269-research-backfill/briefs/c3-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c3-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c3-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c3-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/269-research-backfill/briefs/c4-write.md: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4a-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4a-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4a-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4a-checks.md: `cities/hinterland/060` -> `0172`
+- specs/269-research-backfill/briefs/c4a-checks.md: `cities/hinterland/010` -> `0173`
+- specs/269-research-backfill/briefs/c4a-checks.md: `cities/hinterland 040` -> `0171`
+- specs/269-research-backfill/briefs/c4a-handoff.md: `cities/hinterland/060` -> `0172`
+- specs/269-research-backfill/briefs/c4a-handoff.md: `cities/hinterland/010` -> `0173`
+- specs/269-research-backfill/briefs/c4a-handoff.md: `cities/hinterland/040` -> `0171`
+- specs/269-research-backfill/briefs/c4a-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4a-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4a-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4a-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4a-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4a-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/269-research-backfill/briefs/c4a-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4a-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4a-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4a-write.md: `cities/hinterland/010` -> `0173`
+- specs/269-research-backfill/briefs/c4a-write.md: `cities/hinterland/040` -> `0171`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4b-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4b-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4b-checks.md: `cities/sizing 010` -> `0181`
+- specs/269-research-backfill/briefs/c4b-handoff.md: `cities/sizing/010` -> `0181`
+- specs/269-research-backfill/briefs/c4b-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/c4b-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/c4b-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/c4b-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/c4b-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4b-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/c4b-write.md: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4b-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/c4b-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/c4b-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/c4b-write.md: `cities/sizing/010` -> `0181`
+- specs/269-research-backfill/briefs/engine/e5.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/engine/e9.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/briefs/engine/e9.md: `archetypes/210` -> `0025`
+- specs/269-research-backfill/briefs/engine/e9.md: `religion-and-death/210` -> `0226`
+- specs/269-research-backfill/briefs/engine/e9.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/briefs/engine/k1.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/engine/k1.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/engine/k1.md: `fields/260` -> `0014`
+- specs/269-research-backfill/briefs/engine/k1.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/engine/k2.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/briefs/engine/k2.md: `homesteads/215` -> `0045`
+- specs/269-research-backfill/briefs/engine/k2.md: `homesteads/218` -> `0046`
+- specs/269-research-backfill/briefs/engine/k2.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/briefs/engine/k3.md: `vegetation 150` -> `0075`
+- specs/269-research-backfill/briefs/engine/k3.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/engine/k3.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/engine/k3.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/engine/k4.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/engine/k4.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/engine/k4.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/engine/k5.md: `archetypes/140` -> `0018`
+- specs/269-research-backfill/briefs/engine/k5.md: `archetypes/172` -> `0024`
+- specs/269-research-backfill/briefs/engine/k5.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/briefs/engine/k5.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/engine/k5.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/engine/k5.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/engine/k5.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/engine/k5.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/briefs/engine/k5.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/briefs/engine/k5.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/briefs/engine/k5.md: `archetypes/210` -> `0025`
+- specs/269-research-backfill/briefs/engine/land.md: `religion-and-death 210` -> `0226`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/260` -> `0047`
+- specs/269-research-backfill/briefs/engine/log.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/engine/log.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/engine/log.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/engine/log.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/engine/log.md: `vegetation/220` -> `0077`
+- specs/269-research-backfill/briefs/engine/log.md: `settlements/035` -> `0004`
+- specs/269-research-backfill/briefs/engine/log.md: `settlements/035` -> `0004`
+- specs/269-research-backfill/briefs/engine/log.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/briefs/engine/log.md: `religion-and-death/210` -> `0226`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/briefs/engine/log.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/engine/log.md: `fields/260` -> `0014`
+- specs/269-research-backfill/briefs/engine/log.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/260` -> `0047`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/260` -> `0047`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/215` -> `0045`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/218` -> `0046`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/briefs/engine/log.md: `vegetation/220` -> `0077`
+- specs/269-research-backfill/briefs/engine/log.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/engine/log.md: `water 280` -> `0061`
+- specs/269-research-backfill/briefs/engine/log.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/engine/log.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/engine/log.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/engine/log.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/engine/log.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/briefs/engine/log.md: `archetypes/210` -> `0025`
+- specs/269-research-backfill/briefs/engine/log.md: `homesteads/260` -> `0047`
+- specs/269-research-backfill/briefs/engine/log.md: `archetypes/210` -> `0025`
+- specs/269-research-backfill/briefs/engine/log.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/engine/log.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/engine/sp3.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/extra/r1-amend-160.md: `religion-and-death 160` -> `0235`
+- specs/269-research-backfill/briefs/f1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f1-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f1-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f1-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f1-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields/260` -> `0014`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields 020` -> `0005`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields/030` -> `0009`
+- specs/269-research-backfill/briefs/f1-checks.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/f1-checks.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/260` -> `0014`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/030` -> `0009`
+- specs/269-research-backfill/briefs/f1-handoff.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/250` -> `0013`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/260` -> `0014`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/f1-handoff.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/030` -> `0009`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/f1-handoff.md: `fields/030` -> `0009`
+- specs/269-research-backfill/briefs/f1-handoff.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/f1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f1-write.md: `fields 250-280` -> `0013, 0014`
+- specs/269-research-backfill/briefs/f1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f1-write.md: `fields/020` -> `0005`
+- specs/269-research-backfill/briefs/f1-write.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/f1-write.md: `fields/030` -> `0009`
+- specs/269-research-backfill/briefs/f2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f2-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f2-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f2-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f2-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f2-handoff.md: `ways/020` -> `0081`
+- specs/269-research-backfill/briefs/f2-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/f2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f2-write.md: `fields 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f3-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f3-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f3-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f3-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f3-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f3-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f3-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f3-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f3-checks.md: `fields/110` -> `0017`
+- specs/269-research-backfill/briefs/f3-checks.md: `fields/150` -> `0231`
+- specs/269-research-backfill/briefs/f3-checks.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/f3-checks.md: `fields/150` -> `0231`
+- specs/269-research-backfill/briefs/f3-checks.md: `fields/110` -> `0017`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/110` -> `0017`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/150` -> `0231`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/150` -> `0231`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/110` -> `0017`
+- specs/269-research-backfill/briefs/f3-handoff.md: `fields/150` -> `0231`
+- specs/269-research-backfill/briefs/f3-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/f3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/f3-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/f3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/f3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/f3-write.md: `fields 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/f3-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/f3-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/f3-write.md: `fields/160` -> `0006`
+- specs/269-research-backfill/briefs/f3-write.md: `fields/150` -> `0231`
+- specs/269-research-backfill/briefs/f3-write.md: `fields/110` -> `0017`
+- specs/269-research-backfill/briefs/fin-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-check-e.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-e.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-e.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-e.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-e.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-check-f.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-f.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-f.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-f.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-f.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-f.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-f.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-f.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-f.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-check-g.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fin-check-g.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fin-check-g.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fin-check-g.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fin-check-g.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-g.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fin-check-g.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fin-check-g.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fin-check-g.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fin-checks.md: `religion-and-death 280` -> `0236`
+- specs/269-research-backfill/briefs/fin-checks.md: `vegetation 090` -> `0073`
+- specs/269-research-backfill/briefs/fin-checks.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/fin-checks.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/fin-checks.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/fin-handoff.md: `religion-and-death/280` -> `0236`
+- specs/269-research-backfill/briefs/fin-handoff.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/fin-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/fin-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/fin-handoff.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx1-checks.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/briefs/fx1-handoff.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/briefs/fx1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx1-write.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx2-checks.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/briefs/fx2-handoff.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/briefs/fx2-handoff.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/briefs/fx2-handoff.md: `fields/030` -> `0009`
+- specs/269-research-backfill/briefs/fx2-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/fx2-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/fx2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx2-write.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx3-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx3-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx3-handoff.md: `towns 120` -> `0123`
+- specs/269-research-backfill/briefs/fx3-handoff.md: `towns 120` -> `0123`
+- specs/269-research-backfill/briefs/fx3-handoff.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx3-handoff.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx3-handoff.md: `religion-and-death 520` -> `0217`
+- specs/269-research-backfill/briefs/fx3-handoff.md: `towns 120` -> `0123`
+- specs/269-research-backfill/briefs/fx3-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx3-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx3-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx3-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx3-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx3-write.md: `towns 120` -> `0123`
+- specs/269-research-backfill/briefs/fx3-write.md: `ways/020` -> `0081`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx4-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx4-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx4-checks.md: `cities/government 080` -> `0115`
+- specs/269-research-backfill/briefs/fx4-handoff.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/briefs/fx4-handoff.md: `cities/government 080` -> `0115`
+- specs/269-research-backfill/briefs/fx4-handoff.md: `homesteads 110` -> `0030`
+- specs/269-research-backfill/briefs/fx4-handoff.md: `vegetation 120` -> `0074`
+- specs/269-research-backfill/briefs/fx4-handoff.md: `water 270` -> `0035`
+- specs/269-research-backfill/briefs/fx4-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/fx4-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/fx4-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/fx4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/fx4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx4-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/fx4-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/fx4-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/fx4-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/fx4-write.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/briefs/gen.py: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/gen.py: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/gen.py: `fields 250-280` -> `0013, 0014`
+- specs/269-research-backfill/briefs/gen.py: `fields 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `fields 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/269-research-backfill/briefs/gen.py: `homesteads 250-290` -> `0047`
+- specs/269-research-backfill/briefs/gen.py: `homesteads 300-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `homesteads 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `water 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `water 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `vegetation 210-250` -> `0077`
+- specs/269-research-backfill/briefs/gen.py: `vegetation 260-290` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `archetypes 200-240` -> `0025, 0026`
+- specs/269-research-backfill/briefs/gen.py: `archetypes 250-270` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 270-300` -> `0236`
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/defenses 100-140` -> `0151`
+- specs/269-research-backfill/briefs/gen.py: `cities/government 100-140` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/hinterland 060-090` -> `0172`
+- specs/269-research-backfill/briefs/gen.py: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/hinterland 060-090` -> `0172`
+- specs/269-research-backfill/briefs/gen.py: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `settlements 090-110` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/gen.py: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/gen.py: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/gen.py: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/gen.py: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/gen.py: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h1-checks.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/briefs/h1-checks.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/briefs/h1-checks.md: `homesteads/215` -> `0045`
+- specs/269-research-backfill/briefs/h1-checks.md: `homesteads/218` -> `0046`
+- specs/269-research-backfill/briefs/h1-checks.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/briefs/h1-handoff.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/briefs/h1-handoff.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/briefs/h1-handoff.md: `homesteads/215` -> `0045`
+- specs/269-research-backfill/briefs/h1-handoff.md: `homesteads/218` -> `0046`
+- specs/269-research-backfill/briefs/h1-handoff.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/briefs/h1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h1-write.md: `homesteads/210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/269-research-backfill/briefs/h1-write.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/269-research-backfill/briefs/h1-write.md: `homesteads 250-290` -> `0047`
+- specs/269-research-backfill/briefs/h1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h2-write.md: `homesteads 300-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h3-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h3-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h3-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h3-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h3-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h3-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h3-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h3-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h3-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h3-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h3-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h3-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h3-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h3-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h3-checks.md: `homesteads/050` -> `0039`
+- specs/269-research-backfill/briefs/h3-checks.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/briefs/h3-checks.md: `homesteads/190` -> `0003`
+- specs/269-research-backfill/briefs/h3-checks.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/briefs/h3-checks.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/briefs/h3-handoff.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h3-handoff.md: `homesteads/050` -> `0039`
+- specs/269-research-backfill/briefs/h3-handoff.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/briefs/h3-handoff.md: `homesteads/190` -> `0003`
+- specs/269-research-backfill/briefs/h3-handoff.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/briefs/h3-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/h3-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/h3-handoff.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/briefs/h3-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/h3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/h3-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/h3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/h3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/h3-write.md: `homesteads 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/h3-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/h3-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/h3-write.md: `homesteads/050` -> `0039`
+- specs/269-research-backfill/briefs/h3-write.md: `homesteads/140` -> `0028`
+- specs/269-research-backfill/briefs/r1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/r1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/r1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/r1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/r1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/r1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/r1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/r1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/r1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/r1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/r1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/r1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/r1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/r1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/r1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/r1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/r1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/r1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/r1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/r1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/r1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/r1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/r1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/r1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/r1-checks.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/briefs/r1-checks.md: `religion-and-death/280` -> `0236`
+- specs/269-research-backfill/briefs/r1-handoff.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/briefs/r1-handoff.md: `religion-and-death/280` -> `0236`
+- specs/269-research-backfill/briefs/r1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/r1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/r1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/r1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/r1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/r1-write.md: `religion-and-death 270-300` -> `0236`
+- specs/269-research-backfill/briefs/r1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/r1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/r1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/r1-write.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/briefs/s1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/s1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/s1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/s1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/s1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/s1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/s1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/s1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/s1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/s1-handoff.md: `religion-and-death 160` -> `0235`
+- specs/269-research-backfill/briefs/s1-handoff.md: `vegetation 120` -> `0074`
+- specs/269-research-backfill/briefs/s1-handoff.md: `water 270` -> `0035`
+- specs/269-research-backfill/briefs/s1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/s1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/s1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/s1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/s1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/s1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/s1-write.md: `settlements 090-110` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/s1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/s1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/s1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp1-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp1-check-e.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-f.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp1-check-f.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp1-checks.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/sp1-checks.md: `homesteads/211` -> `0042`
+- specs/269-research-backfill/briefs/sp1-checks.md: `religion-and-death 160` -> `0235`
+- specs/269-research-backfill/briefs/sp1-checks.md: `religion-and-death 280` -> `0236`
+- specs/269-research-backfill/briefs/sp1-handoff.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/sp1-handoff.md: `homesteads/211` -> `0042`
+- specs/269-research-backfill/briefs/sp1-handoff.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/briefs/sp1-handoff.md: `religion-and-death/280` -> `0236`
+- specs/269-research-backfill/briefs/sp1-write.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/sp1-write.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp2-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/sp2-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/sp2-checks.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/sp2-checks.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/sp2-checks.md: `ways 030` -> `0084`
+- specs/269-research-backfill/briefs/sp2-checks.md: `ways 030` -> `0084`
+- specs/269-research-backfill/briefs/sp2-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/sp2-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/sp2-handoff.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/sp2-write.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/sp2-write.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/sp3-handoff.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/v1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v1-checks.md: `vegetation/220` -> `0077`
+- specs/269-research-backfill/briefs/v1-checks.md: `homesteads 020` -> `0037`
+- specs/269-research-backfill/briefs/v1-checks.md: `vegetation/060` -> `0080`
+- specs/269-research-backfill/briefs/v1-handoff.md: `vegetation/220` -> `0077`
+- specs/269-research-backfill/briefs/v1-handoff.md: `vegetation/060` -> `0080`
+- specs/269-research-backfill/briefs/v1-handoff.md: `vegetation/060` -> `0080`
+- specs/269-research-backfill/briefs/v1-handoff.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/briefs/v1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v1-write.md: `vegetation 210-250` -> `0077`
+- specs/269-research-backfill/briefs/v1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v1-write.md: `vegetation/060` -> `0080`
+- specs/269-research-backfill/briefs/v2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-check-d.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-check-d.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-check-d.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-check-d.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-check-e.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-check-e.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-check-e.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-check-e.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-check-e.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-check-f.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-check-f.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-check-f.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-check-f.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-check-f.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-f.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-check-f.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-check-f.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-check-f.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-checks.md: `vegetation/030` -> `0072`
+- specs/269-research-backfill/briefs/v2-checks.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/v2-checks.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/v2-checks.md: `vegetation 120` -> `0074`
+- specs/269-research-backfill/briefs/v2-checks.md: `vegetation/150` -> `0075`
+- specs/269-research-backfill/briefs/v2-handoff.md: `vegetation/030` -> `0072`
+- specs/269-research-backfill/briefs/v2-handoff.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/briefs/v2-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/v2-handoff.md: `vegetation/150` -> `0075`
+- specs/269-research-backfill/briefs/v2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/v2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/v2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/v2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/v2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/v2-write.md: `vegetation 260-290` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/v2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/v2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/v2-write.md: `vegetation/150` -> `0075`
+- specs/269-research-backfill/briefs/w1-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w1-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w1-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w1-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w1-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w1-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w1-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w1-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w1-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w1-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w1-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w1-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w1-checks.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/w1-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/w1-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/w1-handoff.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/w1-handoff.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/w1-handoff.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/w1-handoff.md: `ways/030` -> `0084`
+- specs/269-research-backfill/briefs/w1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w1-write.md: `water 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w1-write.md: `water/250` -> `0059`
+- specs/269-research-backfill/briefs/w1-write.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/w2-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w2-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w2-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w2-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w2-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w2-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w2-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w2-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w2-check-c.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w2-check-c.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w2-check-c.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w2-check-c.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w2-checks.md: `water/100` -> `0146`
+- specs/269-research-backfill/briefs/w2-checks.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w2-checks.md: `water/160` -> `0058`
+- specs/269-research-backfill/briefs/w2-checks.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/100` -> `0146`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/160` -> `0058`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/100` -> `0146`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/160` -> `0058`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/100` -> `0146`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/100` -> `0146`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/w2-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/w2-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/w2-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/w2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/w2-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/w2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/w2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/w2-write.md: `water 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/w2-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/w2-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/w2-write.md: `water/280` -> `0061`
+- specs/269-research-backfill/briefs/w2-write.md: `water/100` -> `0146`
+- specs/269-research-backfill/briefs/w2-write.md: `water/160` -> `0058`
+- specs/269-research-backfill/briefs/x1-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1-write.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1a-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1a-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1a-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1a-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1a-checks.md: `towns 120` -> `0123`
+- specs/269-research-backfill/briefs/x1a-handoff.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/x1a-handoff.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/x1a-handoff.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/x1a-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1a-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1a-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1a-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1a-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1a-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1a-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1a-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1a-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1a-write.md: `towns/120` -> `0123`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1b-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1b-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1b-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1b-check-b.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1b-checks.md: `cities/capitals/390` -> `0138`
+- specs/269-research-backfill/briefs/x1b-handoff.md: `cities/capitals/390` -> `0138`
+- specs/269-research-backfill/briefs/x1b-handoff.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/briefs/x1b-handoff.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/briefs/x1b-handoff.md: `water/270` -> `0035`
+- specs/269-research-backfill/briefs/x1b-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1b-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1b-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1b-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1b-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1b-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1b-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1b-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1b-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1b-write.md: `cities/capitals/390` -> `0138`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1c-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1c-check-a.md: `ways 020` -> `0081`
+- specs/269-research-backfill/briefs/x1c-handoff.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1c-handoff.md: `ways/140` -> `0086`
+- specs/269-research-backfill/briefs/x1c-handoff.md: `ways/140` -> `0086`
+- specs/269-research-backfill/briefs/x1c-write.md: `cities/river-cities 010-040` -> `0175, 0176`
+- specs/269-research-backfill/briefs/x1c-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/briefs/x1c-write.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/briefs/x1c-write.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/briefs/x1c-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1c-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/269-research-backfill/briefs/x1c-write.md: `buildings 010` -> `0090`
+- specs/269-research-backfill/briefs/x1c-write.md: `urban-features 010` -> `0190`
+- specs/269-research-backfill/briefs/x1c-write.md: `ways 020` -> `0081`
+- specs/269-research-backfill/inventory.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/269-research-backfill/inventory.md: `vegetation 170-200` -> `0076`
+- specs/269-research-backfill/inventory.md: `religion-and-death 220-260` -> `0240`
+- specs/269-research-backfill/inventory.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `cities/river-cities 050-080` -> `0177, 0225`
+- specs/269-research-backfill/inventory.md: `urban-features 190-220` -> `0199`
+- specs/269-research-backfill/inventory.md: `ways 060-090` -> `0082`
+- specs/269-research-backfill/inventory.md: `presentation/010-070` -> `0241, 0242, 0243`
+- specs/269-research-backfill/inventory.md: `fields 250-280` -> `0013, 0014`
+- specs/269-research-backfill/inventory.md: `fields 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `homesteads 250-290` -> `0047`
+- specs/269-research-backfill/inventory.md: `homesteads/210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/269-research-backfill/inventory.md: `homesteads 300-330` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `water 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `vegetation 210-250` -> `0077`
+- specs/269-research-backfill/inventory.md: `vegetation 260-290` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `archetypes 200-240` -> `0025, 0026`
+- specs/269-research-backfill/inventory.md: `religion-and-death 270-300` -> `0236`
+- specs/269-research-backfill/inventory.md: `religion-and-death 160-206` -> `0235`
+- specs/269-research-backfill/inventory.md: `religion-and-death 080` -> `0220`
+- specs/269-research-backfill/inventory.md: `cities/fabric 070` -> `0162`
+- specs/269-research-backfill/inventory.md: `cities/government 030` -> `0161`
+- specs/269-research-backfill/inventory.md: `fields/020` -> `0005`
+- specs/269-research-backfill/inventory.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/inventory.md: `fields/030` -> `0009`
+- specs/269-research-backfill/inventory.md: `fields/160` -> `0006`
+- specs/269-research-backfill/inventory.md: `fields/150` -> `0231`
+- specs/269-research-backfill/inventory.md: `fields/110` -> `0017`
+- specs/269-research-backfill/inventory.md: `homesteads/050` -> `0039`
+- specs/269-research-backfill/inventory.md: `homesteads/140` -> `0028`
+- specs/269-research-backfill/inventory.md: `water/250` -> `0059`
+- specs/269-research-backfill/inventory.md: `water/270` -> `0035`
+- specs/269-research-backfill/inventory.md: `water/280` -> `0061`
+- specs/269-research-backfill/inventory.md: `water/100` -> `0146`
+- specs/269-research-backfill/inventory.md: `water/160` -> `0058`
+- specs/269-research-backfill/inventory.md: `vegetation/060` -> `0080`
+- specs/269-research-backfill/inventory.md: `vegetation/150` -> `0075`
+- specs/269-research-backfill/inventory.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/inventory.md: `archetypes/140` -> `0018`
+- specs/269-research-backfill/inventory.md: `archetypes/040` -> `0021`
+- specs/269-research-backfill/inventory.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/inventory.md: `cities/government/030` -> `0161`
+- specs/269-research-backfill/inventory.md: `towns/120` -> `0123`
+- specs/269-research-backfill/inventory.md: `cities/hinterland/010` -> `0173`
+- specs/269-research-backfill/inventory.md: `cities/hinterland/040` -> `0171`
+- specs/269-research-backfill/inventory.md: `cities/sizing/010` -> `0181`
+- specs/269-research-backfill/inventory.md: `towns/120` -> `0123`
+- specs/269-research-backfill/inventory.md: `cities/capitals/390` -> `0138`
+- specs/269-research-backfill/inventory.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/inventory.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/inventory.md: `towns 120` -> `0123`
+- specs/269-research-backfill/inventory.md: `ways/020` -> `0081`
+- specs/269-research-backfill/inventory.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/inventory.md: `archetypes 140` -> `0018`
+- specs/269-research-backfill/outcomes.md: `fields/250` -> `0013`
+- specs/269-research-backfill/outcomes.md: `fields/260` -> `0014`
+- specs/269-research-backfill/outcomes.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/outcomes.md: `fields/160` -> `0006`
+- specs/269-research-backfill/outcomes.md: `fields/110` -> `0017`
+- specs/269-research-backfill/outcomes.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/outcomes.md: `homesteads/215` -> `0045`
+- specs/269-research-backfill/outcomes.md: `homesteads/218` -> `0046`
+- specs/269-research-backfill/outcomes.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/outcomes.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/outcomes.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/outcomes.md: `water/250` -> `0059`
+- specs/269-research-backfill/outcomes.md: `water/270` -> `0035`
+- specs/269-research-backfill/outcomes.md: `vegetation/220` -> `0077`
+- specs/269-research-backfill/outcomes.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/outcomes.md: `archetypes/040` -> `0021`
+- specs/269-research-backfill/outcomes.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/outcomes.md: `cities/defenses/100` -> `0151`
+- specs/269-research-backfill/outcomes.md: `cities/government/030` -> `0161`
+- specs/269-research-backfill/outcomes.md: `cities/fabric/070` -> `0162`
+- specs/269-research-backfill/outcomes.md: `cities/hinterland/060` -> `0172`
+- specs/269-research-backfill/outcomes.md: `cities/hinterland/010` -> `0173`
+- specs/269-research-backfill/outcomes.md: `cities/hinterland/040` -> `0171`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `cities/capitals/390` -> `0138`
+- specs/269-research-backfill/outcomes.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/outcomes.md: `water/250` -> `0059`
+- specs/269-research-backfill/outcomes.md: `fields/250` -> `0013`
+- specs/269-research-backfill/outcomes.md: `fields/260` -> `0014`
+- specs/269-research-backfill/outcomes.md: `fields/030` -> `0009`
+- specs/269-research-backfill/outcomes.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/outcomes.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/outcomes.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/outcomes.md: `cities/hinterland/060` -> `0172`
+- specs/269-research-backfill/outcomes.md: `cities/hinterland/010` -> `0173`
+- specs/269-research-backfill/outcomes.md: `cities/capitals/390` -> `0138`
+- specs/269-research-backfill/outcomes.md: `water/270` -> `0035`
+- specs/269-research-backfill/outcomes.md: `fields/250` -> `0013`
+- specs/269-research-backfill/outcomes.md: `fields/020` -> `0005`
+- specs/269-research-backfill/outcomes.md: `fields/260` -> `0014`
+- specs/269-research-backfill/outcomes.md: `fields/160` -> `0006`
+- specs/269-research-backfill/outcomes.md: `homesteads/214` -> `0044`
+- specs/269-research-backfill/outcomes.md: `homesteads/215` -> `0045`
+- specs/269-research-backfill/outcomes.md: `homesteads/218` -> `0046`
+- specs/269-research-backfill/outcomes.md: `homesteads/212` -> `0043`
+- specs/269-research-backfill/outcomes.md: `vegetation 150` -> `0075`
+- specs/269-research-backfill/outcomes.md: `vegetation/090` -> `0073`
+- specs/269-research-backfill/outcomes.md: `water/280` -> `0061`
+- specs/269-research-backfill/outcomes.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/outcomes.md: `water/250` -> `0059`
+- specs/269-research-backfill/outcomes.md: `water/250` -> `0059`
+- specs/269-research-backfill/outcomes.md: `ways/030` -> `0084`
+- specs/269-research-backfill/outcomes.md: `archetypes/140` -> `0018`
+- specs/269-research-backfill/outcomes.md: `archetypes/172` -> `0024`
+- specs/269-research-backfill/outcomes.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/outcomes.md: `cities/government/080` -> `0115`
+- specs/269-research-backfill/outcomes.md: `fields/020` -> `0005`
+- specs/269-research-backfill/outcomes.md: `water/270` -> `0035`
+- specs/269-research-backfill/outcomes.md: `homesteads/180` -> `0041`
+- specs/269-research-backfill/outcomes.md: `religion-and-death/280` -> `0236`
+- specs/269-research-backfill/outcomes.md: `towns/120` -> `0123`
+- specs/269-research-backfill/outcomes.md: `ways/020` -> `0081`
+- specs/269-research-backfill/outcomes.md: `vegetation/020` -> `0071`
+- specs/269-research-backfill/outcomes.md: `water/250` -> `0059`
+- specs/269-research-backfill/outcomes.md: `religion-and-death/160` -> `0235`
+- specs/269-research-backfill/outcomes.md: `vegetation/120` -> `0074`
+- specs/269-research-backfill/outcomes.md: `water/270` -> `0035`
+- specs/269-research-backfill/outcomes.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/outcomes.md: `water/100` -> `0146`
+- specs/269-research-backfill/plan-review.json: `archetypes/170` -> `0023`
+- specs/269-research-backfill/plan.md: `religion-and-death 160-206` -> `0235`
+- specs/269-research-backfill/plan.md: `archetypes 140` -> `0018`
+- specs/269-research-backfill/plan.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/plan.md: `archetypes/170` -> `0023`
+- specs/269-research-backfill/rulings-2026-09-28.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/rulings-2026-09-28.md: `archetypes/220` -> `0026`
+- specs/269-research-backfill/rulings-2026-09-28.md: `religion-and-death/210` -> `0226`
+- specs/269-research-backfill/rulings-2026-09-28.md: `archetypes/210` -> `0025`
+- specs/269-research-backfill/rulings-2026-09-28.md: `homesteads/110` -> `0030`
+- specs/269-research-backfill/spec.md: `research/fields 250` -> `research/questions/0013-paddies-left-to-rest-kataarashi.html`
+- specs/269-research-backfill/spec.md: `fields 160` -> `0006`
+- specs/269-research-backfill/spec.md: `homesteads 260` -> `0047`
+- specs/269-research-backfill/spec.md: `homesteads 260` -> `0047`
+- specs/269-research-backfill/spec.md: `homesteads 214` -> `0044`
+- specs/269-research-backfill/spec.md: `homesteads 215` -> `0045`
+- specs/269-research-backfill/spec.md: `homesteads 218` -> `0046`
+- specs/269-research-backfill/spec.md: `homesteads 212` -> `0043`
+- specs/269-research-backfill/spec.md: `archetypes 210` -> `0025`
+- specs/269-research-backfill/spec.md: `settlements 035` -> `0004`
+- specs/269-research-backfill/tasks.md: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/270-shrine-hall-sized-closed-canopy/spec.md: `religion-and-death 120` -> `0222`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death 080-128` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/audit-buildings.md: `presentation/010-070` -> `0241, 0242, 0243`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/090` -> `0099`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/090` -> `0099`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/390` -> `0108`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/360` -> `0107`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/380` -> `0091`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/240` -> `0102`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/270` -> `0239`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/300` -> `0104`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/320` -> `0105`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/340` -> `0106`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/480` -> `0093`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/070` -> `0092`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/030` -> `0218`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/240` -> `0240`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/290` -> `0103`
+- specs/271-research-coverage-audit/audit-buildings.md: `vegetation/170` -> `0076`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/400` -> `0109`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/590` -> `0111`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/river-cities/050` -> `0177`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/150` -> `0197`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/190` -> `0199`
+- specs/271-research-coverage-audit/audit-buildings.md: `ways/060` -> `0082`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/620` -> `0117`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/570` -> `0110`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/170` -> `0083`
+- specs/271-research-coverage-audit/audit-buildings.md: `towns/120` -> `0123`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/110` -> `0221`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/120` -> `0222`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/120` -> `0222`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/120` -> `0222`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/122` -> `0223`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/100` -> `0215`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/080` -> `0220`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-buildings.md: `homesteads/216` -> `0219`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/020` -> `0234`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/020` -> `0234`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/040` -> `0232`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/020` -> `0234`
+- specs/271-research-coverage-audit/audit-buildings.md: `towns/060` -> `0187`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/160` -> `0235`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/130` -> `0224`
+- specs/271-research-coverage-audit/audit-buildings.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/audit-buildings.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/audit-buildings.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/audit-buildings.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/audit-buildings.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/audit-buildings.md: `towns/130` -> `0124`
+- specs/271-research-coverage-audit/audit-buildings.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/fabric/090` -> `0155`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/government/030` -> `0161`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/380` -> `0091`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/government/080` -> `0115`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/hinterland/010` -> `0173`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/audit-buildings.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/audit-buildings.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/audit-buildings.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/audit-buildings.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/audit-buildings.md: `fields/150` -> `0231`
+- specs/271-research-coverage-audit/audit-buildings.md: `presentation/010` -> `0241`
+- specs/271-research-coverage-audit/audit-buildings.md: `presentation/040` -> `0242`
+- specs/271-research-coverage-audit/audit-buildings.md: `presentation/070` -> `0243`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/010-230` -> `0090, 0092, 0096, 0097, 0098, 0099, 0100, 0101, 0116, 0165, 0218`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/defenses/010` -> `0145`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/defenses/060` -> `0148`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/sizing/010` -> `0181`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/defenses/060` -> `0148`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/defenses/040` -> `0147`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/defenses/080` -> `0149`
+- specs/271-research-coverage-audit/audit-cities.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/audit-cities.md: `water/100` -> `0146`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/080` -> `0141`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/020` -> `0191`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/360` -> `0143`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/170` -> `0083`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/020` -> `0139`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/080` -> `0141`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/390` -> `0138`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/government/030` -> `0161`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/government/080` -> `0115`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/070` -> `0140`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/hinterland/010` -> `0173`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/fabric/090` -> `0155`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/fabric/080` -> `0159`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/fabric/070` -> `0162`
+- specs/271-research-coverage-audit/audit-cities.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/fabric/040` -> `0158`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/hinterland/040` -> `0171`
+- specs/271-research-coverage-audit/audit-cities.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/audit-cities.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/050` -> `0192`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/060` -> `0193`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/160` -> `0198`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/160` -> `0198`
+- specs/271-research-coverage-audit/audit-cities.md: `urban-features/150` -> `0197`
+- specs/271-research-coverage-audit/audit-cities.md: `towns/060` -> `0187`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/audit-cities.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/audit-cities.md: `religion-and-death/020` -> `0234`
+- specs/271-research-coverage-audit/audit-cities.md: `religion-and-death/040` -> `0232`
+- specs/271-research-coverage-audit/audit-cities.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/audit-cities.md: `religion-and-death/080` -> `0220`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/river-cities/010` -> `0175`
+- specs/271-research-coverage-audit/audit-cities.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/river-cities/040` -> `0176`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/capitals/130` -> `0089`
+- specs/271-research-coverage-audit/audit-cities.md: `water/130` -> `0056`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/audit-cities.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/audit-cities.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/audit-farming.md: `settlements/010` -> `0001`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/020` -> `0005`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/110` -> `0017`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/110` -> `0017`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/030` -> `0009`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/190` -> `0007`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/040` -> `0021`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/160` -> `0006`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/170` -> `0012`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/160` -> `0006`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/150` -> `0231`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/030` -> `0020`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/050` -> `0022`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/130` -> `0010`
+- specs/271-research-coverage-audit/audit-farming.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/audit-farming.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/audit-farming.md: `water/250` -> `0059`
+- specs/271-research-coverage-audit/audit-farming.md: `water/250` -> `0059`
+- specs/271-research-coverage-audit/audit-farming.md: `water/250` -> `0059`
+- specs/271-research-coverage-audit/audit-farming.md: `water/030` -> `0055`
+- specs/271-research-coverage-audit/audit-farming.md: `water/260` -> `0060`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/110` -> `0017`
+- specs/271-research-coverage-audit/audit-farming.md: `water/280` -> `0061`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/120` -> `0074`
+- specs/271-research-coverage-audit/audit-farming.md: `ways/030` -> `0084`
+- specs/271-research-coverage-audit/audit-farming.md: `water/270` -> `0035`
+- specs/271-research-coverage-audit/audit-farming.md: `water/140` -> `0057`
+- specs/271-research-coverage-audit/audit-farming.md: `water/160` -> `0058`
+- specs/271-research-coverage-audit/audit-farming.md: `water/190` -> `0054`
+- specs/271-research-coverage-audit/audit-farming.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/audit-farming.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/140` -> `0018`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/140` -> `0018`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/172` -> `0024`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/170` -> `0023`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/050` -> `0022`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/audit-farming.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/020` -> `0037`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/050` -> `0039`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/040` -> `0038`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/214` -> `0044`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/215` -> `0045`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/216` -> `0219`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/218` -> `0046`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/212` -> `0043`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/010` -> `0036`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/150` -> `0075`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/150` -> `0031`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/190` -> `0003`
+- specs/271-research-coverage-audit/audit-farming.md: `settlements/010` -> `0001`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/020` -> `0071`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/030` -> `0072`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/030` -> `0072`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/020` -> `0071`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/060` -> `0080`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/090` -> `0073`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/120` -> `0074`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/150` -> `0075`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/060` -> `0080`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation/160` -> `0070`
+- specs/271-research-coverage-audit/audit-farming.md: `vegetation 220` -> `0077`
+- specs/271-research-coverage-audit/audit-farming.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/audit-farming.md: `water/130` -> `0056`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-farming.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/audit-farming.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/100` -> `0215`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/120` -> `0222`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/110` -> `0221`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/122` -> `0223`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/080` -> `0220`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/130` -> `0224`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/160` -> `0235`
+- specs/271-research-coverage-audit/audit-farming.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-farming.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/audit-farming.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/audit-farming.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/audit-farming.md: `homesteads/020` -> `0037`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/defenses/010-040` -> `0145, 0147`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/100-126` -> `0215, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/hinterland/040` -> `0171`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/170` -> `0083`
+- specs/271-research-coverage-audit/audit-towns.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/fabric/080` -> `0159`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/fabric/040` -> `0158`
+- specs/271-research-coverage-audit/audit-towns.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/fabric/090` -> `0155`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/government/030` -> `0161`
+- specs/271-research-coverage-audit/audit-towns.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/050` -> `0192`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/150` -> `0197`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/160` -> `0198`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/060` -> `0193`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/audit-towns.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/120` -> `0123`
+- specs/271-research-coverage-audit/audit-towns.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/audit-towns.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/020` -> `0191`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/audit-towns.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/audit-towns.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/040` -> `0232`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/060` -> `0187`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/080` -> `0220`
+- specs/271-research-coverage-audit/audit-towns.md: `religion-and-death/160` -> `0235`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/audit-towns.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/audit-towns.md: `towns/130` -> `0124`
+- specs/271-research-coverage-audit/audit-towns.md: `fields/130` -> `0010`
+- specs/271-research-coverage-audit/audit-towns.md: `fields/150` -> `0231`
+- specs/271-research-coverage-audit/audit-towns.md: `homesteads/020` -> `0037`
+- specs/271-research-coverage-audit/audit-towns.md: `cities/river-cities/040` -> `0176`
+- specs/271-research-coverage-audit/audit-towns.md: `vegetation/030` -> `0072`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings/710` -> `0113`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings 080` -> `0098`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings/090` -> `0099`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings 090` -> `0099`
+- specs/271-research-coverage-audit/briefs/g1-checks.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings/710` -> `0113`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings/090` -> `0099`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `cities/capitals/360` -> `0143`
+- specs/271-research-coverage-audit/briefs/g1-handoff.md: `buildings 390` -> `0108`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings 700-750` -> `0113`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings/090` -> `0099`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g1-write.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/760` -> `0153`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/770` -> `0095`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/790` -> `0154`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/800` -> `0184`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings 800` -> `0184`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings 010` -> `0090`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `towns 030` -> `0119`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings/800` -> `0184`
+- specs/271-research-coverage-audit/briefs/g2-checks.md: `buildings 770` -> `0095`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/760` -> `0153`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/770` -> `0095`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/790` -> `0154`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/800` -> `0184`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `towns/260` -> `0135`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/briefs/g2-handoff.md: `buildings 320` -> `0105`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `buildings 760-810` -> `0095, 0153, 0154, 0184`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/briefs/g2-write.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/briefs/gen.py: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/gen.py: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/gen.py: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/gen.py: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/gen.py: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/gen.py: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/gen.py: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/gen.py: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/gen.py: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-checks.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-checks.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-checks.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-handoff.md: `cities/fabric/210` -> `0160`
+- specs/271-research-coverage-audit/briefs/k1-handoff.md: `cities/fabric/090` -> `0155`
+- specs/271-research-coverage-audit/briefs/k1-handoff.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/briefs/k1-handoff.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-handoff.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/fabric 200-250` -> `0160`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/fabric/090` -> `0155`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k2-checks.md: `cities/government 230` -> `0167`
+- specs/271-research-coverage-audit/briefs/k2-checks.md: `cities/government 240` -> `0168`
+- specs/271-research-coverage-audit/briefs/k2-checks.md: `cities/government 250` -> `0169`
+- specs/271-research-coverage-audit/briefs/k2-checks.md: `cities/government 010` -> `0163`
+- specs/271-research-coverage-audit/briefs/k2-checks.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/briefs/k2-checks.md: `buildings 040` -> `0096`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `cities/government/230` -> `0167`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `cities/government/240` -> `0168`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `cities/government/250` -> `0169`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/briefs/k2-handoff.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `buildings/010-230` -> `0090, 0092, 0096, 0097, 0098, 0099, 0100, 0101, 0116, 0165, 0218`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/government 200-270` -> `0167, 0168, 0169`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-checks.md: `cities/government 280` -> `0118`
+- specs/271-research-coverage-audit/briefs/k3-checks.md: `cities/government 310` -> `0170`
+- specs/271-research-coverage-audit/briefs/k3-checks.md: `cities/government 320` -> `0164`
+- specs/271-research-coverage-audit/briefs/k3-checks.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/briefs/k3-checks.md: `cities/sizing 020` -> `0182`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `cities/government/280` -> `0118`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `cities/government/310` -> `0170`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `cities/government/320` -> `0164`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `cities/government/030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `cities/capitals/360` -> `0143`
+- specs/271-research-coverage-audit/briefs/k3-handoff.md: `buildings 320` -> `0105`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/government 280-340` -> `0118, 0164, 0170`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `buildings/380` -> `0091`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/capitals/360` -> `0143`
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `cities/defenses 220` -> `0150`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `cities/defenses 250` -> `0133`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `cities/defenses 220` -> `0150`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `towns 240` -> `0125`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `towns 080` -> `0122`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `cities/defenses 250` -> `0133`
+- specs/271-research-coverage-audit/briefs/k4-checks.md: `cities/defenses 250` -> `0133`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `ways 160-230` -> `0087, 0088, 0136`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `cities/defenses/220` -> `0150`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `cities/defenses/250` -> `0133`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `cities/defenses/220` -> `0150`
+- specs/271-research-coverage-audit/briefs/k4-handoff.md: `cities/defenses/040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/defenses 200-250` -> `0133, 0150`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/defenses/060` -> `0148`
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k5-checks.md: `cities/capitals 360` -> `0143`
+- specs/271-research-coverage-audit/briefs/k5-checks.md: `cities/capitals 400` -> `0114`
+- specs/271-research-coverage-audit/briefs/k5-handoff.md: `cities/capitals/360` -> `0143`
+- specs/271-research-coverage-audit/briefs/k5-handoff.md: `cities/capitals/400` -> `0114`
+- specs/271-research-coverage-audit/briefs/k5-handoff.md: `cities/capitals 360` -> `0143`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/capitals 400-450` -> `0114`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k6-checks.md: `cities/capitals 470` -> `0144`
+- specs/271-research-coverage-audit/briefs/k6-checks.md: `cities/capitals 190` -> `0166`
+- specs/271-research-coverage-audit/briefs/k6-handoff.md: `cities/capitals/470` -> `0144`
+- specs/271-research-coverage-audit/briefs/k6-handoff.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/briefs/k6-handoff.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/capitals 460-500` -> `0144`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/briefs/k6-write.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k7-checks.md: `water 010` -> `0068`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `cities/river-cities/100` -> `0178`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `cities/river-cities/110` -> `0179`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `cities/river-cities/130` -> `0180`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `cities/river-cities/040` -> `0176`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `cities/capitals/080` -> `0141`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/briefs/k7-handoff.md: `cities/capitals/080` -> `0141`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/river-cities 100-140` -> `0178, 0179, 0180`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/capitals/080` -> `0141`
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/river-cities/040` -> `0176`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `religion-and-death 160` -> `0235`
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `religion-and-death 160` -> `0235`
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `religion-and-death 160` -> `0235`
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-checks.md: `religion-and-death 130` -> `0224`
+- specs/271-research-coverage-audit/briefs/r1-checks.md: `religion-and-death 410` -> `0237`
+- specs/271-research-coverage-audit/briefs/r1-checks.md: `religion-and-death 130` -> `0224`
+- specs/271-research-coverage-audit/briefs/r1-handoff.md: `religion-and-death/130` -> `0224`
+- specs/271-research-coverage-audit/briefs/r1-handoff.md: `religion-and-death/410` -> `0237`
+- specs/271-research-coverage-audit/briefs/r1-handoff.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-handoff.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-handoff.md: `religion-and-death 280` -> `0236`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 400-440` -> `0237`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 160` -> `0235`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/briefs/r1-write.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `towns/200` -> `0120`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `towns/210` -> `0134`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `towns/230` -> `0121`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/t1-checks.md: `towns/230` -> `0121`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns 320-370` -> `0185, 0186, 0188`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/200` -> `0120`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/210` -> `0134`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/230` -> `0121`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/200` -> `0120`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/210` -> `0134`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/230` -> `0121`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/240` -> `0125`
+- specs/271-research-coverage-audit/briefs/t1-handoff.md: `towns/120` -> `0123`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `towns 200-250` -> `0120, 0121, 0125, 0134`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t2-checks.md: `towns/260` -> `0135`
+- specs/271-research-coverage-audit/briefs/t2-checks.md: `towns/290` -> `0126`
+- specs/271-research-coverage-audit/briefs/t2-checks.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/briefs/t2-checks.md: `towns/290` -> `0126`
+- specs/271-research-coverage-audit/briefs/t2-handoff.md: `towns/260` -> `0135`
+- specs/271-research-coverage-audit/briefs/t2-handoff.md: `towns/290` -> `0126`
+- specs/271-research-coverage-audit/briefs/t2-handoff.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/briefs/t2-handoff.md: `cities/fabric 010` -> `0152`
+- specs/271-research-coverage-audit/briefs/t2-handoff.md: `towns/290` -> `0126`
+- specs/271-research-coverage-audit/briefs/t2-handoff.md: `towns/260` -> `0135`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `towns 260-310` -> `0126, 0135`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t3-checks.md: `towns/320` -> `0185`
+- specs/271-research-coverage-audit/briefs/t3-checks.md: `towns/330` -> `0188`
+- specs/271-research-coverage-audit/briefs/t3-checks.md: `towns/360` -> `0186`
+- specs/271-research-coverage-audit/briefs/t3-checks.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/briefs/t3-checks.md: `towns/320` -> `0185`
+- specs/271-research-coverage-audit/briefs/t3-checks.md: `towns/330` -> `0188`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/320` -> `0185`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/330` -> `0188`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/360` -> `0186`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/320` -> `0185`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/330` -> `0188`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/360` -> `0186`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/360` -> `0186`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/360` -> `0186`
+- specs/271-research-coverage-audit/briefs/t3-handoff.md: `towns/320` -> `0185`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `towns 320-370` -> `0185, 0186, 0188`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/briefs/t3-write.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `towns 400` -> `0127`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `cities/hinterland 010` -> `0173`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `towns 410` -> `0128`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `towns 420` -> `0129`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `towns/420` -> `0129`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `towns 080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `cities/hinterland 050` -> `0174`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `towns 420` -> `0129`
+- specs/271-research-coverage-audit/briefs/t4-checks.md: `urban-features 080` -> `0195`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/400` -> `0127`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/410` -> `0128`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/420` -> `0129`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `cities/hinterland/040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/400` -> `0127`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/410` -> `0128`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/420` -> `0129`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/200` -> `0120`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/200` -> `0120`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/410` -> `0128`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `towns/420` -> `0129`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `vegetation/030` -> `0072`
+- specs/271-research-coverage-audit/briefs/t4-handoff.md: `cities/hinterland 010` -> `0173`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `towns 380-430` -> `0127, 0128, 0129`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/hinterland/040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `vegetation/030` -> `0072`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `towns 440-490` -> `0130, 0131, 0132, 0189`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `towns/440` -> `0130`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `towns/470` -> `0189`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `towns/480` -> `0131`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `towns/490` -> `0132`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t5-checks.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/440` -> `0130`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/470` -> `0189`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/480` -> `0131`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/490` -> `0132`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/440` -> `0130`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/470` -> `0189`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/480` -> `0131`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/490` -> `0132`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/490` -> `0132`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/480` -> `0131`
+- specs/271-research-coverage-audit/briefs/t5-handoff.md: `towns/440` -> `0130`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `towns 440-490` -> `0130, 0131, 0132, 0189`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/briefs/t5-write.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u1-checks.md: `urban-features 010` -> `0190`
+- specs/271-research-coverage-audit/briefs/u1-checks.md: `urban-features 090` -> `0196`
+- specs/271-research-coverage-audit/briefs/u1-handoff.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/briefs/u1-handoff.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/briefs/u1-handoff.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `urban-features 250-300` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/briefs/u1-write.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u2-checks.md: `urban-features 310` -> `0183`
+- specs/271-research-coverage-audit/briefs/u2-checks.md: `urban-features 330` -> `0200`
+- specs/271-research-coverage-audit/briefs/u2-checks.md: `urban-features 340` -> `0201`
+- specs/271-research-coverage-audit/briefs/u2-checks.md: `urban-features 350` -> `0202`
+- specs/271-research-coverage-audit/briefs/u2-handoff.md: `urban-features/310` -> `0183`
+- specs/271-research-coverage-audit/briefs/u2-handoff.md: `urban-features/330` -> `0200`
+- specs/271-research-coverage-audit/briefs/u2-handoff.md: `urban-features/340` -> `0201`
+- specs/271-research-coverage-audit/briefs/u2-handoff.md: `urban-features/350` -> `0202`
+- specs/271-research-coverage-audit/briefs/u2-handoff.md: `urban-features/310` -> `0183`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u2-write.md: `urban-features 310-360` -> `0183, 0200, 0201, 0202`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u3-checks.md: `urban-features 390` -> `0203`
+- specs/271-research-coverage-audit/briefs/u3-checks.md: `urban-features 410` -> `0204`
+- specs/271-research-coverage-audit/briefs/u3-handoff.md: `urban-features/390` -> `0203`
+- specs/271-research-coverage-audit/briefs/u3-handoff.md: `urban-features/410` -> `0204`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `urban-features 370-420` -> `0157, 0203, 0204`
+- specs/271-research-coverage-audit/briefs/u3-write.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u4-checks.md: `urban-features 430` -> `0205`
+- specs/271-research-coverage-audit/briefs/u4-checks.md: `urban-features 460` -> `0051`
+- specs/271-research-coverage-audit/briefs/u4-checks.md: `urban-features 470` -> `0206`
+- specs/271-research-coverage-audit/briefs/u4-checks.md: `religion-and-death 500` -> `0229`
+- specs/271-research-coverage-audit/briefs/u4-checks.md: `urban-features 460` -> `0051`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `urban-features 310-420` -> `0157, 0183, 0200, 0201, 0202, 0203, 0204`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `urban-features/430` -> `0205`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `urban-features/460` -> `0051`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `urban-features/470` -> `0206`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `buildings 080` -> `0098`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `religion-and-death 500` -> `0229`
+- specs/271-research-coverage-audit/briefs/u4-handoff.md: `cities/capitals 190` -> `0166`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `urban-features 430-490` -> `0051, 0205, 0206`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `urban-features/160` -> `0198`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u5-checks.md: `urban-features 510` -> `0207`
+- specs/271-research-coverage-audit/briefs/u5-checks.md: `urban-features 520` -> `0208`
+- specs/271-research-coverage-audit/briefs/u5-checks.md: `urban-features 530` -> `0209`
+- specs/271-research-coverage-audit/briefs/u5-checks.md: `urban-features 540` -> `0210`
+- specs/271-research-coverage-audit/briefs/u5-checks.md: `urban-features 560` -> `0211`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/510` -> `0207`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/520` -> `0208`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/530` -> `0209`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/540` -> `0210`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/560` -> `0211`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/510` -> `0207`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/530` -> `0209`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/520` -> `0208`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/540` -> `0210`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `urban-features/560` -> `0211`
+- specs/271-research-coverage-audit/briefs/u5-handoff.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `urban-features 500-570` -> `0207, 0208, 0209, 0210, 0211`
+- specs/271-research-coverage-audit/briefs/u5-write.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u6-checks.md: `urban-features 590` -> `0212`
+- specs/271-research-coverage-audit/briefs/u6-checks.md: `urban-features 610` -> `0213`
+- specs/271-research-coverage-audit/briefs/u6-checks.md: `urban-features 620` -> `0214`
+- specs/271-research-coverage-audit/briefs/u6-checks.md: `cities/capitals 090` -> `0142`
+- specs/271-research-coverage-audit/briefs/u6-checks.md: `urban-features 620` -> `0214`
+- specs/271-research-coverage-audit/briefs/u6-handoff.md: `urban-features/590` -> `0212`
+- specs/271-research-coverage-audit/briefs/u6-handoff.md: `urban-features/610` -> `0213`
+- specs/271-research-coverage-audit/briefs/u6-handoff.md: `urban-features/620` -> `0214`
+- specs/271-research-coverage-audit/briefs/u6-handoff.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/briefs/u6-handoff.md: `urban-features 620` -> `0214`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `urban-features 580-620` -> `0212, 0213, 0214`
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v1-checks.md: `homesteads/400` -> `0029`
+- specs/271-research-coverage-audit/briefs/v1-checks.md: `homesteads 400` -> `0029`
+- specs/271-research-coverage-audit/briefs/v1-checks.md: `homesteads 400` -> `0029`
+- specs/271-research-coverage-audit/briefs/v1-checks.md: `homesteads/440` -> `0052`
+- specs/271-research-coverage-audit/briefs/v1-checks.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/briefs/v1-handoff.md: `homesteads/400` -> `0029`
+- specs/271-research-coverage-audit/briefs/v1-handoff.md: `homesteads/440` -> `0052`
+- specs/271-research-coverage-audit/briefs/v1-handoff.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/briefs/v1-handoff.md: `homesteads/400` -> `0029`
+- specs/271-research-coverage-audit/briefs/v1-handoff.md: `homesteads/440` -> `0052`
+- specs/271-research-coverage-audit/briefs/v1-handoff.md: `homesteads 140` -> `0028`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `homesteads 400-450` -> `0029, 0052`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/briefs/v1-write.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `archetypes 170-171` -> `0023`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `archetypes 170-171` -> `0023`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `homesteads 460` -> `0048`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `homesteads 460` -> `0048`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `homesteads 470` -> `0049`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `archetypes 210` -> `0025`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `homesteads 470` -> `0049`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `homesteads 500` -> `0016`
+- specs/271-research-coverage-audit/briefs/v2-checks.md: `homesteads 500` -> `0016`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `archetypes/170-171` -> `0023`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads/460` -> `0048`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads/470` -> `0049`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads/500` -> `0016`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads 500` -> `0016`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads 470` -> `0049`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads 460` -> `0048`
+- specs/271-research-coverage-audit/briefs/v2-handoff.md: `homesteads/020` -> `0037`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `homesteads 460-510` -> `0016, 0048, 0049`
+- specs/271-research-coverage-audit/briefs/v2-write.md: `homesteads/020` -> `0037`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v3-checks.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/briefs/v3-checks.md: `homesteads 180` -> `0041`
+- specs/271-research-coverage-audit/briefs/v3-checks.md: `fields 020` -> `0005`
+- specs/271-research-coverage-audit/briefs/v3-checks.md: `fields/160` -> `0006`
+- specs/271-research-coverage-audit/briefs/v3-checks.md: `fields/410` -> `0015`
+- specs/271-research-coverage-audit/briefs/v3-handoff.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/briefs/v3-handoff.md: `fields/410` -> `0015`
+- specs/271-research-coverage-audit/briefs/v3-handoff.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/briefs/v3-handoff.md: `fields/410` -> `0015`
+- specs/271-research-coverage-audit/briefs/v3-handoff.md: `fields/020` -> `0005`
+- specs/271-research-coverage-audit/briefs/v3-handoff.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `fields 400-450` -> `0015`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `fields/160` -> `0006`
+- specs/271-research-coverage-audit/briefs/v3-write.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/410` -> `0063`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/420` -> `0064`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/430` -> `0065`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/440` -> `0066`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/440` -> `0066`
+- specs/271-research-coverage-audit/briefs/v4-checks.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/410` -> `0063`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/420` -> `0064`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/430` -> `0065`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/440` -> `0066`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/410` -> `0063`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/420` -> `0064`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/430` -> `0065`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/440` -> `0066`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/420` -> `0064`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/430` -> `0065`
+- specs/271-research-coverage-audit/briefs/v4-handoff.md: `water/400` -> `0062`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v4-write.md: `water 400-450` -> `0062, 0063, 0064, 0065, 0066`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v5-checks.md: `archetypes/330` -> `0027`
+- specs/271-research-coverage-audit/briefs/v5-checks.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/briefs/v5-checks.md: `archetypes/330` -> `0027`
+- specs/271-research-coverage-audit/briefs/v5-handoff.md: `archetypes/330` -> `0027`
+- specs/271-research-coverage-audit/briefs/v5-handoff.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/briefs/v5-handoff.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/briefs/v5-handoff.md: `archetypes/040` -> `0021`
+- specs/271-research-coverage-audit/briefs/v5-handoff.md: `archetypes/050` -> `0022`
+- specs/271-research-coverage-audit/briefs/v5-handoff.md: `archetypes/030` -> `0020`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `archetypes 300-350` -> `0027`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `archetypes/040` -> `0021`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `archetypes/050` -> `0022`
+- specs/271-research-coverage-audit/briefs/v5-write.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `homesteads 218` -> `0046`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `homesteads 218` -> `0046`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `homesteads 218` -> `0046`
+- specs/271-research-coverage-audit/briefs/v6-checks.md: `homesteads 218` -> `0046`
+- specs/271-research-coverage-audit/briefs/v6-checks.md: `vegetation 310` -> `0078`
+- specs/271-research-coverage-audit/briefs/v6-checks.md: `vegetation 340` -> `0079`
+- specs/271-research-coverage-audit/briefs/v6-checks.md: `vegetation 310` -> `0078`
+- specs/271-research-coverage-audit/briefs/v6-handoff.md: `vegetation/310` -> `0078`
+- specs/271-research-coverage-audit/briefs/v6-handoff.md: `vegetation/340` -> `0079`
+- specs/271-research-coverage-audit/briefs/v6-handoff.md: `vegetation 340` -> `0079`
+- specs/271-research-coverage-audit/briefs/v6-handoff.md: `vegetation 220` -> `0077`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `vegetation 300-340` -> `0078, 0079`
+- specs/271-research-coverage-audit/briefs/v6-write.md: `vegetation 220` -> `0077`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v7-checks.md: `homesteads 540` -> `0034`
+- specs/271-research-coverage-audit/briefs/v7-checks.md: `homesteads 540` -> `0034`
+- specs/271-research-coverage-audit/briefs/v7-checks.md: `homesteads 570` -> `0050`
+- specs/271-research-coverage-audit/briefs/v7-checks.md: `homesteads 180` -> `0041`
+- specs/271-research-coverage-audit/briefs/v7-checks.md: `homesteads 180` -> `0041`
+- specs/271-research-coverage-audit/briefs/v7-checks.md: `homesteads 570` -> `0050`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/540` -> `0034`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/570` -> `0050`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/540` -> `0034`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/400` -> `0029`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/570` -> `0050`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/briefs/v7-handoff.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `homesteads 520-580` -> `0034, 0050`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/briefs/v7-write.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w1-checks.md: `ways/110` -> `0085`
+- specs/271-research-coverage-audit/briefs/w1-checks.md: `ways/140` -> `0086`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `ways/110` -> `0085`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `ways/140` -> `0086`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `ways/110` -> `0085`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `ways/110` -> `0085`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `towns/200` -> `0120`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `water/130` -> `0056`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/briefs/w1-handoff.md: `ways/140` -> `0086`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `ways 100-150` -> `0085, 0086`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/briefs/w1-write.md: `water/130` -> `0056`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/160` -> `0136`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/200` -> `0087`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/210` -> `0088`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/200` -> `0087`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/200` -> `0087`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/210` -> `0088`
+- specs/271-research-coverage-audit/briefs/w2-checks.md: `ways/210` -> `0088`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/160` -> `0136`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/200` -> `0087`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/210` -> `0088`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/160` -> `0136`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `cities/fabric/040` -> `0158`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/200` -> `0087`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/210` -> `0088`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `ways/210` -> `0088`
+- specs/271-research-coverage-audit/briefs/w2-handoff.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `homesteads 250-360` -> `0047`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `ways 160-230` -> `0087, 0088, 0136`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/fabric/080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/fabric/040` -> `0158`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/inventory.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/271-research-coverage-audit/inventory.md: `vegetation 170-200` -> `0076`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 220-260` -> `0240`
+- specs/271-research-coverage-audit/inventory.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `cities/river-cities 050-080` -> `0177, 0225`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 190-220` -> `0199`
+- specs/271-research-coverage-audit/inventory.md: `ways 060-090` -> `0082`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 080-126` -> `0215, 0220, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/inventory.md: `fields 250-360` -> `0013, 0014`
+- specs/271-research-coverage-audit/inventory.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `vegetation 210-290` -> `0077`
+- specs/271-research-coverage-audit/inventory.md: `archetypes 200-270` -> `0025, 0026`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 270-330` -> `0236`
+- specs/271-research-coverage-audit/inventory.md: `cities/defenses 100-140` -> `0151`
+- specs/271-research-coverage-audit/inventory.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland 060-090` -> `0172`
+- specs/271-research-coverage-audit/inventory.md: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `presentation/010-070` -> `0241, 0242, 0243`
+- specs/271-research-coverage-audit/inventory.md: `homesteads 400-450` -> `0029, 0052`
+- specs/271-research-coverage-audit/inventory.md: `homesteads 460-510` -> `0016, 0048, 0049`
+- specs/271-research-coverage-audit/inventory.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `fields 400-450` -> `0015`
+- specs/271-research-coverage-audit/inventory.md: `water 400-450` -> `0062, 0063, 0064, 0065, 0066`
+- specs/271-research-coverage-audit/inventory.md: `archetypes 300-350` -> `0027`
+- specs/271-research-coverage-audit/inventory.md: `vegetation 300-340` -> `0078, 0079`
+- specs/271-research-coverage-audit/inventory.md: `homesteads 520-580` -> `0034, 0050`
+- specs/271-research-coverage-audit/inventory.md: `ways 100-150` -> `0085, 0086`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 250-300` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 400-440` -> `0237`
+- specs/271-research-coverage-audit/inventory.md: `towns 200-250` -> `0120, 0121, 0125, 0134`
+- specs/271-research-coverage-audit/inventory.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/inventory.md: `towns 260-310` -> `0126, 0135`
+- specs/271-research-coverage-audit/inventory.md: `towns 320-370` -> `0185, 0186, 0188`
+- specs/271-research-coverage-audit/inventory.md: `towns 380-430` -> `0127, 0128, 0129`
+- specs/271-research-coverage-audit/inventory.md: `ways 160-230` -> `0087, 0088, 0136`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 310-360` -> `0183, 0200, 0201, 0202`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 370-420` -> `0157, 0203, 0204`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 450-490` -> `0216, 0228`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/100-126` -> `0215, 0221, 0222, 0223`
+- specs/271-research-coverage-audit/inventory.md: `buildings 700-750` -> `0113`
+- specs/271-research-coverage-audit/inventory.md: `buildings 760-810` -> `0095, 0153, 0154, 0184`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric 200-250` -> `0160`
+- specs/271-research-coverage-audit/inventory.md: `cities/government 200-270` -> `0167, 0168, 0169`
+- specs/271-research-coverage-audit/inventory.md: `buildings/010-230` -> `0090, 0092, 0096, 0097, 0098, 0099, 0100, 0101, 0116, 0165, 0218`
+- specs/271-research-coverage-audit/inventory.md: `cities/government 280-340` -> `0118, 0164, 0170`
+- specs/271-research-coverage-audit/inventory.md: `cities/defenses 200-250` -> `0133, 0150`
+- specs/271-research-coverage-audit/inventory.md: `cities/defenses 020-090` -> `0147, 0148, 0149`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals 400-450` -> `0114`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals 460-500` -> `0144`
+- specs/271-research-coverage-audit/inventory.md: `cities/river-cities 100-140` -> `0178, 0179, 0180`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 430-490` -> `0051, 0205, 0206`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 500-540` -> `0217, 0229, 0238`
+- specs/271-research-coverage-audit/inventory.md: `towns 440-490` -> `0130, 0131, 0132, 0189`
+- specs/271-research-coverage-audit/inventory.md: `homesteads 210-218` -> `0042, 0043, 0044, 0045, 0046, 0219`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 500-570` -> `0207, 0208, 0209, 0210, 0211`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 550-590` -> `0227, 0230`
+- specs/271-research-coverage-audit/inventory.md: `urban-features 580-620` -> `0212, 0213, 0214`
+- specs/271-research-coverage-audit/inventory.md: `archetypes/040` -> `0021`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/inventory.md: `vegetation 220` -> `0077`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/140` -> `0028`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/020` -> `0037`
+- specs/271-research-coverage-audit/inventory.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/inventory.md: `fields/160` -> `0006`
+- specs/271-research-coverage-audit/inventory.md: `fields/010` -> `0008`
+- specs/271-research-coverage-audit/inventory.md: `archetypes/040` -> `0021`
+- specs/271-research-coverage-audit/inventory.md: `archetypes/050` -> `0022`
+- specs/271-research-coverage-audit/inventory.md: `archetypes/160` -> `0019`
+- specs/271-research-coverage-audit/inventory.md: `homesteads 218` -> `0046`
+- specs/271-research-coverage-audit/inventory.md: `vegetation 220` -> `0077`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/110` -> `0030`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/120` -> `0040`
+- specs/271-research-coverage-audit/inventory.md: `homesteads/180` -> `0041`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `water/130` -> `0056`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/010` -> `0190`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/090` -> `0196`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 160` -> `0235`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric/010` -> `0152`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/080` -> `0195`
+- specs/271-research-coverage-audit/inventory.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland/040` -> `0171`
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/inventory.md: `vegetation/030` -> `0072`
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/inventory.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric/080` -> `0159`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric 080` -> `0159`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric/040` -> `0158`
+- specs/271-research-coverage-audit/inventory.md: `ways/020` -> `0081`
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland 040` -> `0171`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/130` -> `0156`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/040` -> `0232`
+- specs/271-research-coverage-audit/inventory.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/inventory.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/inventory.md: `buildings 180` -> `0116`
+- specs/271-research-coverage-audit/inventory.md: `buildings/090` -> `0099`
+- specs/271-research-coverage-audit/inventory.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/inventory.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/inventory.md: `buildings/060` -> `0097`
+- specs/271-research-coverage-audit/inventory.md: `buildings 060` -> `0097`
+- specs/271-research-coverage-audit/inventory.md: `buildings/010` -> `0090`
+- specs/271-research-coverage-audit/inventory.md: `buildings/210` -> `0165`
+- specs/271-research-coverage-audit/inventory.md: `towns/030` -> `0119`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric 070` -> `0162`
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric/090` -> `0155`
+- specs/271-research-coverage-audit/inventory.md: `buildings/160` -> `0100`
+- specs/271-research-coverage-audit/inventory.md: `cities/hinterland/050` -> `0174`
+- specs/271-research-coverage-audit/inventory.md: `cities/sizing 010` -> `0181`
+- specs/271-research-coverage-audit/inventory.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/inventory.md: `buildings/040` -> `0096`
+- specs/271-research-coverage-audit/inventory.md: `cities/government/010` -> `0163`
+- specs/271-research-coverage-audit/inventory.md: `buildings/180` -> `0116`
+- specs/271-research-coverage-audit/inventory.md: `buildings/380` -> `0091`
+- specs/271-research-coverage-audit/inventory.md: `cities/government 030` -> `0161`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals/360` -> `0143`
+- specs/271-research-coverage-audit/inventory.md: `cities/sizing/020` -> `0182`
+- specs/271-research-coverage-audit/inventory.md: `cities/defenses/060` -> `0148`
+- specs/271-research-coverage-audit/inventory.md: `cities/defenses 040` -> `0147`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/inventory.md: `water/010` -> `0068`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals/080` -> `0141`
+- specs/271-research-coverage-audit/inventory.md: `cities/river-cities/040` -> `0176`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/160` -> `0198`
+- specs/271-research-coverage-audit/inventory.md: `buildings/080` -> `0098`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals/190` -> `0166`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/210` -> `0226`
+- specs/271-research-coverage-audit/inventory.md: `towns/080` -> `0122`
+- specs/271-research-coverage-audit/inventory.md: `buildings/220` -> `0101`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/050` -> `0233`
+- specs/271-research-coverage-audit/inventory.md: `urban-features/070` -> `0194`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death/020` -> `0234`
+- specs/271-research-coverage-audit/inventory.md: `cities/capitals/090` -> `0142`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 450` -> `0228`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 500` -> `0229`
+- specs/271-research-coverage-audit/inventory.md: `religion-and-death 550` -> `0230`
+- specs/271-research-coverage-audit/research.md: `homesteads 520-580` -> `0034, 0050`
+- specs/271-research-coverage-audit/research.md: `towns 320-370` -> `0185, 0186, 0188`
+- specs/271-research-coverage-audit/research.md: `buildings 760-810` -> `0095, 0153, 0154, 0184`
+- specs/271-research-coverage-audit/research.md: `cities/government 200-270` -> `0167, 0168, 0169`
+- specs/271-research-coverage-audit/research.md: `urban-features 430-490` -> `0051, 0205, 0206`
+- specs/271-research-coverage-audit/research.md: `urban-features 060-068` -> `0193`
+- specs/271-research-coverage-audit/research.md: `towns 380-430` -> `0127, 0128, 0129`
+- specs/271-research-coverage-audit/research.md: `religion-and-death 120` -> `0222`
+- specs/272-temples-and-shrines-researched/briefs/b37-check-a.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/b37-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/b37-check-b.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/b37-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/b37-check-c.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/b37-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/b37-handoff.md: `religion-and-death/050` -> `0233`
+- specs/272-temples-and-shrines-researched/briefs/b37-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/b37-write.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/b37-write.md: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 450-490` -> `0216, 0228`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 550-570` -> `0227, 0230`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 500-540` -> `0217, 0229, 0238`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 160-206` -> `0235`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 580-590` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death/040` -> `0232`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `urban-features/070` -> `0194`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death/020` -> `0234`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r2-check-a.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r2-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r2-check-b.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r2-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r2-check-c.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r2-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r2-checks.md: `religion-and-death/450` -> `0228`
+- specs/272-temples-and-shrines-researched/briefs/r2-checks.md: `religion-and-death/040` -> `0232`
+- specs/272-temples-and-shrines-researched/briefs/r2-checks.md: `religion-and-death/470` -> `0216`
+- specs/272-temples-and-shrines-researched/briefs/r2-checks.md: `religion-and-death/040` -> `0232`
+- specs/272-temples-and-shrines-researched/briefs/r2-checks.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r2-handoff.md: `religion-and-death/450` -> `0228`
+- specs/272-temples-and-shrines-researched/briefs/r2-handoff.md: `religion-and-death/470` -> `0216`
+- specs/272-temples-and-shrines-researched/briefs/r2-handoff.md: `religion-and-death/040` -> `0232`
+- specs/272-temples-and-shrines-researched/briefs/r2-handoff.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r2-handoff.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r2-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r2-write.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r2-write.md: `religion-and-death 450-490` -> `0216, 0228`
+- specs/272-temples-and-shrines-researched/briefs/r2-write.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r2-write.md: `religion-and-death/040` -> `0232`
+- specs/272-temples-and-shrines-researched/briefs/r3-check-a.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r3-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r3-check-b.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r3-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r3-check-c.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r3-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r3-handoff.md: `religion-and-death/500` -> `0229`
+- specs/272-temples-and-shrines-researched/briefs/r3-handoff.md: `religion-and-death/520` -> `0217`
+- specs/272-temples-and-shrines-researched/briefs/r3-handoff.md: `religion-and-death/530` -> `0238`
+- specs/272-temples-and-shrines-researched/briefs/r3-handoff.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death 160-206` -> `0235`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death 500-540` -> `0217, 0229, 0238`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death/210` -> `0226`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death 160` -> `0235`
+- specs/272-temples-and-shrines-researched/briefs/r3-write.md: `religion-and-death 160` -> `0235`
+- specs/272-temples-and-shrines-researched/briefs/r4-check-a.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r4-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r4-check-b.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r4-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r4-check-c.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r4-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r4-checks.md: `urban-features 070` -> `0194`
+- specs/272-temples-and-shrines-researched/briefs/r4-handoff.md: `religion-and-death 130-300` -> `0224, 0226, 0235, 0236, 0240`
+- specs/272-temples-and-shrines-researched/briefs/r4-handoff.md: `religion-and-death/020` -> `0234`
+- specs/272-temples-and-shrines-researched/briefs/r4-handoff.md: `religion-and-death/550` -> `0230`
+- specs/272-temples-and-shrines-researched/briefs/r4-handoff.md: `religion-and-death/560` -> `0227`
+- specs/272-temples-and-shrines-researched/briefs/r4-handoff.md: `urban-features/070` -> `0194`
+- specs/272-temples-and-shrines-researched/briefs/r4-handoff.md: `religion-and-death 550` -> `0230`
+- specs/272-temples-and-shrines-researched/briefs/r4-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/r4-write.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/r4-write.md: `religion-and-death 550-570` -> `0227, 0230`
+- specs/272-temples-and-shrines-researched/briefs/r4-write.md: `urban-features/070` -> `0194`
+- specs/272-temples-and-shrines-researched/briefs/r4-write.md: `religion-and-death/020` -> `0234`
+- specs/272-temples-and-shrines-researched/briefs/s-check-a.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-check-b.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-check-c.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-check-d.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-d.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-check-e.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-e.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-check-f.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-f.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-check-g.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-check-g.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/s-checks.md: `religion-and-death 100` -> `0215`
+- specs/272-temples-and-shrines-researched/briefs/s-checks.md: `religion-and-death 110` -> `0221`
+- specs/272-temples-and-shrines-researched/briefs/s-checks.md: `religion-and-death 120` -> `0222`
+- specs/272-temples-and-shrines-researched/briefs/s-checks.md: `religion-and-death 122` -> `0223`
+- specs/272-temples-and-shrines-researched/briefs/s-checks.md: `religion-and-death 110` -> `0221`
+- specs/272-temples-and-shrines-researched/briefs/s-handoff.md: `religion-and-death/100` -> `0215`
+- specs/272-temples-and-shrines-researched/briefs/s-handoff.md: `religion-and-death/110` -> `0221`
+- specs/272-temples-and-shrines-researched/briefs/s-handoff.md: `religion-and-death/120` -> `0222`
+- specs/272-temples-and-shrines-researched/briefs/s-handoff.md: `religion-and-death/122` -> `0223`
+- specs/272-temples-and-shrines-researched/briefs/s-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/s-write.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/t-check-a.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/t-check-a.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/t-check-b.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/t-check-b.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/t-check-c.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/t-check-c.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/t-checks.md: `religion-and-death 020` -> `0234`
+- specs/272-temples-and-shrines-researched/briefs/t-handoff.md: `religion-and-death/020` -> `0234`
+- specs/272-temples-and-shrines-researched/briefs/t-handoff.md: `religion-and-death 040` -> `0232`
+- specs/272-temples-and-shrines-researched/briefs/t-handoff.md: `religion-and-death 560` -> `0227`
+- specs/272-temples-and-shrines-researched/briefs/t-write.md: `religion-and-death 130-206` -> `0224, 0235`
+- specs/272-temples-and-shrines-researched/briefs/t-write.md: `religion-and-death 220-260` -> `0240`
+- specs/272-temples-and-shrines-researched/briefs/t-write.md: `religion-and-death 580-590` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/gm-items.md: `religion-and-death 520` -> `0217`
+- specs/272-temples-and-shrines-researched/readers/272-shrine-absences.md: `religion-and-death 090-128` -> `0215, 0221, 0222, 0223`
+- specs/272-temples-and-shrines-researched/readers/272-temple-absences.md: `religion-and-death 010-070` -> `0232, 0233, 0234`
+- specs/272-temples-and-shrines-researched/spec.md: `religion-and-death 090-128` -> `0215, 0221, 0222, 0223`
+- specs/272-temples-and-shrines-researched/spec.md: `religion-and-death 010-128` -> `0215, 0220, 0221, 0222, 0223, 0232, 0233, 0234`
+- specs/272-temples-and-shrines-researched/tasks.md: `religion-and-death 450` -> `0228`
+- specs/272-temples-and-shrines-researched/tasks.md: `religion-and-death 550` -> `0230`
+- specs/272-temples-and-shrines-researched/tasks.md: `religion-and-death 500` -> `0229`
+- specs/273-hamlet-graveyards/spec.md: `religion-and-death 530` -> `0238`
+- specs/273-hamlet-graveyards/spec.md: `religion-and-death 530` -> `0238`
+- specs/273-hamlet-graveyards/spec.md: `religion-and-death 530` -> `0238`
+- specs/277-country-shrine-pages/spec.md: `religion-and-death 090-128` -> `0215, 0221, 0222, 0223`
+- specs/279-shrine-grove-shape/spec.md: `vegetation 010-050` -> `0071, 0072`
+- specs/280-modern-only-sweep/briefs/a1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-checks.md: `archetypes/030` -> `0020`
+- specs/280-modern-only-sweep/briefs/a1-handoff.md: `archetypes/030` -> `0020`
+- specs/280-modern-only-sweep/briefs/a1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-write.md: `archetypes/030` -> `0020`
+- specs/280-modern-only-sweep/briefs/a1-write.md: `archetypes/030` -> `0020`
+- specs/280-modern-only-sweep/briefs/a2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-checks.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/a2-handoff.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/a2-handoff.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/a2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-write.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/a2-write.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/a3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-checks.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/briefs/a3-checks.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/briefs/a3-handoff.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/briefs/a3-handoff.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/briefs/a3-handoff.md: `archetypes 140` -> `0018`
+- specs/280-modern-only-sweep/briefs/a3-handoff.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/briefs/a3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-write.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/briefs/a3-write.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/briefs/a3-write.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/briefs/a3-write.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/briefs/a4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-checks.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/briefs/a4-handoff.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/briefs/a4-handoff.md: `archetypes/210` -> `0025`
+- specs/280-modern-only-sweep/briefs/a4-handoff.md: `archetypes/210` -> `0025`
+- specs/280-modern-only-sweep/briefs/a4-handoff.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/briefs/a4-handoff.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/briefs/a4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-write.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/briefs/a4-write.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/briefs/b1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-checks.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/briefs/b1-checks.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/briefs/b1-checks.md: `buildings 380` -> `0091`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/briefs/b1-handoff.md: `buildings 220` -> `0101`
+- specs/280-modern-only-sweep/briefs/b1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/briefs/b2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-checks.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/briefs/b2-checks.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/briefs/b2-handoff.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/briefs/b2-handoff.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/briefs/b2-handoff.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/briefs/b2-handoff.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/briefs/b2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-write.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-write.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/briefs/b2-write.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/briefs/b2-write.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/briefs/b2-write.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/briefs/b3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-checks.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/briefs/b3-checks.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/briefs/b3-handoff.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/briefs/b3-handoff.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/briefs/b3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-write.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-write.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/briefs/b3-write.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/briefs/c1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-handoff.md: `archetypes 050` -> `0022`
+- specs/280-modern-only-sweep/briefs/c1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-write.md: `cities/capitals 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-checks.md: `cities/river-cities 060` -> `0225`
+- specs/280-modern-only-sweep/briefs/c2-handoff.md: `cities/river-cities/060` -> `0225`
+- specs/280-modern-only-sweep/briefs/c2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-write.md: `cities/river-cities 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-write.md: `cities/river-cities/060` -> `0225`
+- specs/280-modern-only-sweep/briefs/c2-write.md: `cities/river-cities/060` -> `0225`
+- specs/280-modern-only-sweep/briefs/c3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-checks.md: `cities/government 280` -> `0118`
+- specs/280-modern-only-sweep/briefs/c3-checks.md: `cities/government 280` -> `0118`
+- specs/280-modern-only-sweep/briefs/c3-handoff.md: `cities/government/280` -> `0118`
+- specs/280-modern-only-sweep/briefs/c3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-write.md: `cities/fabric 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-write.md: `cities/government/280` -> `0118`
+- specs/280-modern-only-sweep/briefs/c3-write.md: `cities/government/280` -> `0118`
+- specs/280-modern-only-sweep/briefs/c5-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c5-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c5-checks.md: `cities/hinterland 050` -> `0174`
+- specs/280-modern-only-sweep/briefs/c5-checks.md: `cities/defenses 100` -> `0151`
+- specs/280-modern-only-sweep/briefs/c5-handoff.md: `cities/hinterland/050` -> `0174`
+- specs/280-modern-only-sweep/briefs/c5-handoff.md: `cities/defenses/100` -> `0151`
+- specs/280-modern-only-sweep/briefs/c5-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c5-write.md: `cities/hinterland/050` -> `0174`
+- specs/280-modern-only-sweep/briefs/c5-write.md: `cities/defenses/100` -> `0151`
+- specs/280-modern-only-sweep/briefs/c5-write.md: `cities/hinterland/050` -> `0174`
+- specs/280-modern-only-sweep/briefs/c5-write.md: `cities/defenses/100` -> `0151`
+- specs/280-modern-only-sweep/briefs/f1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-checks.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/briefs/f2-checks.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/briefs/f2-handoff.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/briefs/f2-handoff.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/briefs/f2-handoff.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/briefs/f2-handoff.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/briefs/f2-handoff.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/briefs/f2-handoff.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/briefs/f2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-write.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/briefs/f2-write.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/briefs/f2-write.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/briefs/f2-write.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/briefs/f3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f3-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `fields/260` -> `0014`
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `fields/030` -> `0009`
+- specs/280-modern-only-sweep/briefs/f4-handoff.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/briefs/f4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields/030` -> `0009`
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields/030` -> `0009`
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/briefs/gen.py: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-checks.md: `homesteads/010` -> `0036`
+- specs/280-modern-only-sweep/briefs/h1-checks.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/briefs/h1-handoff.md: `homesteads/010` -> `0036`
+- specs/280-modern-only-sweep/briefs/h1-handoff.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/briefs/h1-handoff.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/briefs/h1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-write.md: `homesteads/010` -> `0036`
+- specs/280-modern-only-sweep/briefs/h1-write.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/briefs/h1-write.md: `homesteads/010` -> `0036`
+- specs/280-modern-only-sweep/briefs/h1-write.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/briefs/h2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-checks.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/briefs/h2-checks.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/briefs/h2-checks.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/briefs/h2-handoff.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/briefs/h2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/briefs/h3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-checks.md: `homesteads/120` -> `0040`
+- specs/280-modern-only-sweep/briefs/h3-checks.md: `homesteads/140` -> `0028`
+- specs/280-modern-only-sweep/briefs/h3-checks.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/briefs/h3-handoff.md: `homesteads 120` -> `0040`
+- specs/280-modern-only-sweep/briefs/h3-handoff.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/briefs/h3-handoff.md: `homesteads/120` -> `0040`
+- specs/280-modern-only-sweep/briefs/h3-handoff.md: `homesteads/140` -> `0028`
+- specs/280-modern-only-sweep/briefs/h3-handoff.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/briefs/h3-handoff.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/140` -> `0028`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/120` -> `0040`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/140` -> `0028`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/120` -> `0040`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/briefs/h4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-handoff.md: `homesteads/214` -> `0044`
+- specs/280-modern-only-sweep/briefs/h4-handoff.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/briefs/h4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-write.md: `homesteads/214` -> `0044`
+- specs/280-modern-only-sweep/briefs/h4-write.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/briefs/h4-write.md: `homesteads/214` -> `0044`
+- specs/280-modern-only-sweep/briefs/h4-write.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/briefs/h5-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-d.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-checks.md: `homesteads/215` -> `0045`
+- specs/280-modern-only-sweep/briefs/h5-checks.md: `homesteads/218` -> `0046`
+- specs/280-modern-only-sweep/briefs/h5-handoff.md: `homesteads/215` -> `0045`
+- specs/280-modern-only-sweep/briefs/h5-handoff.md: `homesteads/218` -> `0046`
+- specs/280-modern-only-sweep/briefs/h5-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-write.md: `homesteads/215` -> `0045`
+- specs/280-modern-only-sweep/briefs/h5-write.md: `homesteads/218` -> `0046`
+- specs/280-modern-only-sweep/briefs/h5-write.md: `homesteads/215` -> `0045`
+- specs/280-modern-only-sweep/briefs/h5-write.md: `homesteads/218` -> `0046`
+- specs/280-modern-only-sweep/briefs/r1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-d.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-checks.md: `religion-and-death/122` -> `0223`
+- specs/280-modern-only-sweep/briefs/r1-checks.md: `religion-and-death/130` -> `0224`
+- specs/280-modern-only-sweep/briefs/r1-checks.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/briefs/r1-handoff.md: `religion-and-death/122` -> `0223`
+- specs/280-modern-only-sweep/briefs/r1-handoff.md: `religion-and-death/130` -> `0224`
+- specs/280-modern-only-sweep/briefs/r1-handoff.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death/122` -> `0223`
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death/130` -> `0224`
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death/122` -> `0223`
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death/130` -> `0224`
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/briefs/r2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r2-handoff.md: `religion-and-death/530` -> `0238`
+- specs/280-modern-only-sweep/briefs/r2-handoff.md: `religion-and-death/530` -> `0238`
+- specs/280-modern-only-sweep/briefs/r2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r2-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r2-write.md: `religion-and-death/530` -> `0238`
+- specs/280-modern-only-sweep/briefs/r2-write.md: `religion-and-death/530` -> `0238`
+- specs/280-modern-only-sweep/briefs/r3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-handoff.md: `religion-and-death/040` -> `0232`
+- specs/280-modern-only-sweep/briefs/r3-handoff.md: `religion-and-death 040` -> `0232`
+- specs/280-modern-only-sweep/briefs/r3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-write.md: `religion-and-death/040` -> `0232`
+- specs/280-modern-only-sweep/briefs/r3-write.md: `religion-and-death/040` -> `0232`
+- specs/280-modern-only-sweep/briefs/r4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-checks.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/briefs/r4-handoff.md: `religion-and-death 160` -> `0235`
+- specs/280-modern-only-sweep/briefs/r4-handoff.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/briefs/r4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-write.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/briefs/r4-write.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/briefs/r5-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r5-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r5-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/recheck-merge.md: `homesteads 212` -> `0043`
+- specs/280-modern-only-sweep/briefs/t1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-checks.md: `towns/210-220` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-checks.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-checks.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/briefs/t2-checks.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-checks.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/briefs/t2-handoff.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-handoff.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/briefs/t2-handoff.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-handoff.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/briefs/t2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-write.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-write.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/briefs/t2-write.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/briefs/t2-write.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/briefs/t3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-checks.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-checks.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/briefs/t3-checks.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-checks.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-checks.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/briefs/t3-handoff.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-handoff.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/briefs/t3-handoff.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-handoff.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/briefs/t3-handoff.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-handoff.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-write.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-write.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/briefs/t3-write.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/briefs/t3-write.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/briefs/t4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-checks.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/briefs/t4-checks.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/briefs/t4-handoff.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/briefs/t4-handoff.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/briefs/t4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-write.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/briefs/t4-write.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/briefs/u1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-checks.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/briefs/u1-handoff.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/briefs/u1-handoff.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/briefs/u1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-write.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/briefs/u1-write.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/briefs/u2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-checks.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/briefs/u2-handoff.md: `urban-features/340` -> `0201`
+- specs/280-modern-only-sweep/briefs/u2-handoff.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/briefs/u2-handoff.md: `urban-features/510` -> `0207`
+- specs/280-modern-only-sweep/briefs/u2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-write.md: `urban-features/340` -> `0201`
+- specs/280-modern-only-sweep/briefs/u2-write.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/briefs/u2-write.md: `urban-features/340` -> `0201`
+- specs/280-modern-only-sweep/briefs/u2-write.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/briefs/u3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-checks.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/briefs/u3-checks.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/briefs/u3-checks.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/briefs/u3-handoff.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/briefs/u3-handoff.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/briefs/u3-handoff.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/briefs/u3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/briefs/u4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u4-handoff.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/briefs/u4-handoff.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/briefs/u4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u4-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u4-write.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/briefs/u4-write.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/briefs/v1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-d.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-checks.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/briefs/v1-checks.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/briefs/v1-handoff.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/briefs/v1-handoff.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/briefs/v1-handoff.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/briefs/v1-handoff.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/briefs/v1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-write.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-write.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/briefs/v1-write.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/briefs/v1-write.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/briefs/v1-write.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/briefs/v2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-checks.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/briefs/v2-handoff.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/briefs/v2-handoff.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/briefs/v2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-write.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-write.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/briefs/v2-write.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/briefs/v3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-checks.md: `vegetation/090` -> `0073`
+- specs/280-modern-only-sweep/briefs/v3-checks.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/briefs/v3-checks.md: `homesteads 040` -> `0038`
+- specs/280-modern-only-sweep/briefs/v3-handoff.md: `vegetation/090` -> `0073`
+- specs/280-modern-only-sweep/briefs/v3-handoff.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/briefs/v3-handoff.md: `vegetation 090` -> `0073`
+- specs/280-modern-only-sweep/briefs/v3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-write.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-write.md: `vegetation/090` -> `0073`
+- specs/280-modern-only-sweep/briefs/v3-write.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/briefs/v3-write.md: `vegetation/090` -> `0073`
+- specs/280-modern-only-sweep/briefs/v3-write.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/briefs/w1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-checks.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/briefs/w1-checks.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/briefs/w1-checks.md: `water/400` -> `0062`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `fields/260` -> `0014`
+- specs/280-modern-only-sweep/briefs/w1-handoff.md: `water/400` -> `0062`
+- specs/280-modern-only-sweep/briefs/w1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-write.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/briefs/w1-write.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/briefs/w1-write.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/briefs/w1-write.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/briefs/w1-write.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/briefs/w2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-checks.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/briefs/w2-checks.md: `water/260` -> `0060`
+- specs/280-modern-only-sweep/briefs/w2-handoff.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/briefs/w2-handoff.md: `water/260` -> `0060`
+- specs/280-modern-only-sweep/briefs/w2-handoff.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/briefs/w2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-write.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/briefs/w2-write.md: `water/260` -> `0060`
+- specs/280-modern-only-sweep/briefs/w2-write.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/briefs/w2-write.md: `water/260` -> `0060`
+- specs/280-modern-only-sweep/briefs/w2-write.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/briefs/w3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w3-write.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/briefs/w4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w4-handoff.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/briefs/w4-handoff.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/briefs/w4-handoff.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/briefs/w4-handoff.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/briefs/w4-handoff.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/briefs/w4-handoff.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/briefs/w4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w4-write.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/briefs/w4-write.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/briefs/w4-write.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/briefs/w4-write.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/briefs/w4-write.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/briefs/y1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/y1-checks.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/briefs/y1-handoff.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/briefs/y1-handoff.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/briefs/y1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/y1-write.md: `ways 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/y1-write.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/briefs/y1-write.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/inventory.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/inventory.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/inventory.md: `water 600-690` -> `0067`
+- specs/280-modern-only-sweep/inventory.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `ways 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `cities/capitals 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `cities/river-cities 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `cities/fabric 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/inventory.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/inventory.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/inventory.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/inventory.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/inventory.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/inventory.md: `fields/030` -> `0009`
+- specs/280-modern-only-sweep/inventory.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/inventory.md: `fields/020` -> `0005`
+- specs/280-modern-only-sweep/inventory.md: `fields/030` -> `0009`
+- specs/280-modern-only-sweep/inventory.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/010` -> `0036`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/010` -> `0036`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/140` -> `0028`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/120` -> `0040`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/140` -> `0028`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/120` -> `0040`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/214` -> `0044`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/214` -> `0044`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/215` -> `0045`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/218` -> `0046`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/215` -> `0045`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/218` -> `0046`
+- specs/280-modern-only-sweep/inventory.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/inventory.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/inventory.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/inventory.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/inventory.md: `water/260` -> `0060`
+- specs/280-modern-only-sweep/inventory.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/inventory.md: `water/260` -> `0060`
+- specs/280-modern-only-sweep/inventory.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/inventory.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/inventory.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/inventory.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/inventory.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/020` -> `0071`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/090` -> `0073`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/090` -> `0073`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/030` -> `0020`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/030` -> `0020`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/122` -> `0223`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/130` -> `0224`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/122` -> `0223`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/130` -> `0224`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/530` -> `0238`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/530` -> `0238`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/040` -> `0232`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/040` -> `0232`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/inventory.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/inventory.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/inventory.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/inventory.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/inventory.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/inventory.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/inventory.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/inventory.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/inventory.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/inventory.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/inventory.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/inventory.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/340` -> `0201`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/340` -> `0201`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/inventory.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/inventory.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/inventory.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/inventory.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/inventory.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/inventory.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/inventory.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/inventory.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/inventory.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/inventory.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/inventory.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/inventory.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/inventory.md: `cities/river-cities/060` -> `0225`
+- specs/280-modern-only-sweep/inventory.md: `cities/river-cities/060` -> `0225`
+- specs/280-modern-only-sweep/inventory.md: `cities/government/280` -> `0118`
+- specs/280-modern-only-sweep/inventory.md: `cities/government/280` -> `0118`
+- specs/280-modern-only-sweep/inventory.md: `cities/hinterland/050` -> `0174`
+- specs/280-modern-only-sweep/inventory.md: `cities/defenses/100` -> `0151`
+- specs/280-modern-only-sweep/inventory.md: `cities/hinterland/050` -> `0174`
+- specs/280-modern-only-sweep/inventory.md: `cities/defenses/100` -> `0151`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/210` -> `0025`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/170` -> `0023`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/220` -> `0026`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/140` -> `0018`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/210` -> `0226`
+- specs/280-modern-only-sweep/inventory.md: `homesteads/216` -> `0219`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 160` -> `0235`
+- specs/280-modern-only-sweep/inventory.md: `settlements/035` -> `0004`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/390` -> `0203`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/210` -> `0226`
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death/520` -> `0217`
+- specs/280-modern-only-sweep/inventory.md: `ways/020` -> `0081`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/150` -> `0075`
+- specs/280-modern-only-sweep/inventory.md: `archetypes/210` -> `0025`
+- specs/280-modern-only-sweep/inventory.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/inventory.md: `vegetation/030` -> `0072`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/outcomes.md: `religion-and-death 520` -> `0217`
+- specs/280-modern-only-sweep/outcomes.md: `fields/170` -> `0012`
+- specs/280-modern-only-sweep/outcomes.md: `fields/410` -> `0015`
+- specs/280-modern-only-sweep/outcomes.md: `fields/260` -> `0014`
+- specs/280-modern-only-sweep/outcomes.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/040` -> `0038`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/020` -> `0037`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/440` -> `0052`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/470` -> `0049`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/212` -> `0043`
+- specs/280-modern-only-sweep/outcomes.md: `water/010` -> `0068`
+- specs/280-modern-only-sweep/outcomes.md: `water/030` -> `0055`
+- specs/280-modern-only-sweep/outcomes.md: `water/190` -> `0054`
+- specs/280-modern-only-sweep/outcomes.md: `water/280` -> `0061`
+- specs/280-modern-only-sweep/outcomes.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/outcomes.md: `water/160` -> `0058`
+- specs/280-modern-only-sweep/outcomes.md: `vegetation/060` -> `0080`
+- specs/280-modern-only-sweep/outcomes.md: `archetypes/050` -> `0022`
+- specs/280-modern-only-sweep/outcomes.md: `archetypes/172` -> `0024`
+- specs/280-modern-only-sweep/outcomes.md: `archetypes/210` -> `0025`
+- specs/280-modern-only-sweep/outcomes.md: `archetypes/210` -> `0025`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/260` -> `0047`
+- specs/280-modern-only-sweep/outcomes.md: `homesteads/211` -> `0042`
+- specs/280-modern-only-sweep/outcomes.md: `religion-and-death/240` -> `0240`
+- specs/280-modern-only-sweep/outcomes.md: `religion-and-death/040` -> `0232`
+- specs/280-modern-only-sweep/outcomes.md: `religion-and-death/160` -> `0235`
+- specs/280-modern-only-sweep/outcomes.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/outcomes.md: `ways/030` -> `0084`
+- specs/280-modern-only-sweep/outcomes.md: `towns/210` -> `0134`
+- specs/280-modern-only-sweep/outcomes.md: `towns/440` -> `0130`
+- specs/280-modern-only-sweep/outcomes.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/outcomes.md: `towns/420` -> `0129`
+- specs/280-modern-only-sweep/outcomes.md: `towns/410` -> `0128`
+- specs/280-modern-only-sweep/outcomes.md: `towns/130` -> `0124`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/090` -> `0196`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/340` -> `0201`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/430` -> `0205`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/150` -> `0197`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/190` -> `0199`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/520` -> `0208`
+- specs/280-modern-only-sweep/outcomes.md: `urban-features/130` -> `0156`
+- specs/280-modern-only-sweep/outcomes.md: `buildings/220` -> `0101`
+- specs/280-modern-only-sweep/outcomes.md: `buildings/360` -> `0107`
+- specs/280-modern-only-sweep/outcomes.md: `buildings/380` -> `0091`
+- specs/280-modern-only-sweep/outcomes.md: `buildings/290` -> `0103`
+- specs/280-modern-only-sweep/outcomes.md: `buildings/620` -> `0117`
+- specs/280-modern-only-sweep/outcomes.md: `buildings/800` -> `0184`
+- specs/280-modern-only-sweep/outcomes.md: `cities/river-cities/060` -> `0225`
+- specs/280-modern-only-sweep/outcomes.md: `cities/defenses/100` -> `0151`
+- specs/280-modern-only-sweep/plan-review.json: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/plan.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/spec.md: `fields/110` -> `0017`
+- specs/280-modern-only-sweep/spec.md: `water/160` -> `0058`
+- specs/282-threshing-yard-layout/spec.md: `homesteads 020` -> `0037`
+- specs/283-garden-sun-check/plan.md: `buildings 400` -> `0109`
+- specs/283-garden-sun-check/plan.md: `buildings 400` -> `0109`
+- specs/283-garden-sun-check/plan.md: `buildings 400` -> `0109`
+- specs/283-garden-sun-check/spec.md: `buildings 400` -> `0109`
+- specs/283-garden-sun-check/spec.md: `buildings 400` -> `0109`
+- specs/283-garden-sun-check/spec.md: `buildings 400` -> `0109`
+- specs/285-open-research-questions/plan.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/research.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/spec.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/spec.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/spec.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/spec.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/spec.md: `homesteads 500` -> `0016`
+- specs/285-open-research-questions/spec.md: `homesteads 500` -> `0016`
+- specs/286-hand-sheet-labels-placed/plan-review.json: `presentation 040` -> `0242`
+- specs/286-hand-sheet-labels-placed/plan-review.json: `presentation 040` -> `0242`
+- specs/286-hand-sheet-labels-placed/plan.md: `presentation 040` -> `0242`
+- specs/286-hand-sheet-labels-placed/tasks.md: `presentation 040` -> `0242`
+- specs/287-placer-guarantees/census-raw.txt: `ways/030` -> `0084`
+- specs/287-placer-guarantees/census.json: `ways/030` -> `0084`
+- specs/287-placer-guarantees/census.json: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- specs/287-placer-guarantees/design/design-homes.json: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- specs/287-placer-guarantees/design/design-water.json: `fields/160` -> `0006`
+- specs/287-placer-guarantees/design/design-ways.json: `ways/030` -> `0084`
+- specs/287-placer-guarantees/design/design-woods.json: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- specs/287-placer-guarantees/design/design-woods.json: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- specs/287-placer-guarantees/plan-review.json: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- specs/287-placer-guarantees/plan.md: `research/vegetation/220` -> `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html`
+- specs/287-placer-guarantees/research.md: `research/vegetation/020` -> `research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`
+- specs/287-placer-guarantees/research.md: `ways/030` -> `0084`
+- specs/287-placer-guarantees/research.md: `research/fields/165` -> `research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html`
+- specs/287-placer-guarantees/research.md: `research/fields/110` -> `research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html`
+- specs/287-placer-guarantees/research.md: `research/fields/110` -> `research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html`
+- specs/287-placer-guarantees/tasks.md: `research/fields/165` -> `research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html`
+- specs/289-adjacent-before-diagonal/plan.md: `research/presentation/040` -> `research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html`
+- specs/289-adjacent-before-diagonal/tasks.md: `research/presentation 040` -> `research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html`
+- specs/290-perceptual-label-order/tasks.md: `research/presentation 040` -> `research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html`
+- specs/291-homestead-grove-sides/briefs/r1-checks.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-handoff.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-handoff.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r1-handoff.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `homesteads 010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r1-write.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r10-check.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-checks.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-checks.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-checks.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-checks.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-handoff.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-handoff.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-handoff.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-write.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-write.md: `ways/020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r10-write.md: `ways 020` -> `0081`
+- specs/291-homestead-grove-sides/briefs/r13-check.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-check.md: `homesteads 155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-checks.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-handoff.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-write.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-write.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-write.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r13-write.md: `homesteads 155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r2-checks.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r2-handoff.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r2-handoff.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r2-handoff.md: `vegetation 030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r2-write.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r2-write.md: `vegetation 030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r3-check-a.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-checks.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-handoff.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-handoff.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r3-handoff.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-write.md: `homesteads 010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r3-write.md: `homesteads/010` -> `0036`
+- specs/291-homestead-grove-sides/briefs/r4-checks.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r4-split.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r4-split.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/briefs/r5-check-b.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r5-checks.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r5-handoff.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r5-write.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r6-checks.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r6-checks.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r6-handoff.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r6-handoff.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r6-handoff.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r6-write.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r6-write.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/briefs/r7-checks.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r7-write.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/briefs/r7-write.md: `homesteads 155` -> `0033`
+- specs/291-homestead-grove-sides/measurements.json: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/measurements.json: `vegetation/020` -> `0071`
+- specs/291-homestead-grove-sides/plan-review.json: `homesteads 010` -> `0036`
+- specs/291-homestead-grove-sides/plan-review.json: `vegetation 030` -> `0072`
+- specs/291-homestead-grove-sides/plan.md: `homesteads 010` -> `0036`
+- specs/291-homestead-grove-sides/plan.md: `vegetation 030` -> `0072`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/spec.md: `vegetation/030` -> `0072`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/155` -> `0033`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/spec.md: `homesteads/150` -> `0031`
+- specs/291-homestead-grove-sides/tasks.md: `homesteads 010` -> `0036`
+- specs/291-homestead-grove-sides/tasks.md: `vegetation 030` -> `0072`
+- specs/292-research-presentation-style/confusables.md: `urban-features 080` -> `0195`
+- specs/292-research-presentation-style/confusables.md: `cities/government 080` -> `0115`
+- specs/292-research-presentation-style/confusables.md: `cities/defenses 250` -> `0133`
+- specs/292-research-presentation-style/confusables.md: `urban-features 170` -> `0083`
+- specs/292-research-presentation-style/confusables.md: `cities/hinterland 010` -> `0173`
+- specs/292-research-presentation-style/sweep/archetypes-G03-handoff.md: `water 190` -> `0054`
+- specs/292-research-presentation-style/sweep/archetypes-G04-handoff.md: `archetypes/050` -> `0022`
+- specs/292-research-presentation-style/sweep/archetypes-G04-handoff.md: `fields 260` -> `0014`
+- specs/292-research-presentation-style/sweep/archetypes-G06-handoff.md: `archetypes 030` -> `0020`
+- specs/292-research-presentation-style/sweep/archetypes-G08-handoff.md: `archetypes 140` -> `0018`
+- specs/292-research-presentation-style/sweep/archetypes-G10-handoff.md: `homesteads/470` -> `0049`
+- specs/292-research-presentation-style/sweep/archetypes-checks.md: `archetypes 030` -> `0020`
+- specs/292-research-presentation-style/sweep/archetypes-checks.md: `archetypes 160` -> `0019`
+- specs/292-research-presentation-style/sweep/archetypes-checks.md: `archetypes 220` -> `0026`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G01-write.md: `buildings/010` -> `0090`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G02-write.md: `buildings/180` -> `0116`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G03-write.md: `buildings/070` -> `0092`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G03-write.md: `buildings/480` -> `0093`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G04-write.md: `buildings/300` -> `0104`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G05-write.md: `buildings/710` -> `0113`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G06-write.md: `buildings/090` -> `0099`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G07-write.md: `buildings/040` -> `0096`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G08-write.md: `urban-features/460` -> `0051`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G08-write.md: `buildings/080` -> `0098`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G09-write.md: `buildings/160` -> `0100`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G10-write.md: `homesteads/216` -> `0219`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G10-write.md: `buildings/030` -> `0218`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G11-write.md: `cities/government/280-290` -> `0118`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G11-write.md: `buildings/380` -> `0091`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G12-write.md: `buildings/270` -> `0239`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G13-write.md: `buildings/240` -> `0102`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G13-write.md: `buildings/360` -> `0107`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G14-write.md: `urban-features/350-360` -> `0202`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G14-write.md: `homesteads/260` -> `0047`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G14-write.md: `towns/480` -> `0131`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G14-write.md: `homesteads/214` -> `0044`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G14-write.md: `buildings/220` -> `0101`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G14-write.md: `buildings/320` -> `0105`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G15-write.md: `vegetation/170` -> `0076`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G15-write.md: `buildings/290` -> `0103`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G16-write.md: `buildings/400` -> `0109`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G16-write.md: `buildings/600` -> `0112`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G16-write.md: `buildings/340` -> `0106`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G17-write.md: `cities/government/080-110` -> `0115`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G17-write.md: `urban-features/080` -> `0195`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G17-write.md: `buildings/060` -> `0097`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G17-write.md: `buildings/390` -> `0108`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G18-write.md: `buildings/590` -> `0111`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G18-write.md: `buildings/210` -> `0165`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G19-write.md: `cities/defenses/250` -> `0133`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G19-write.md: `cities/hinterland/010` -> `0173`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G19-write.md: `buildings/570` -> `0110`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G19-write.md: `buildings/610` -> `0094`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G19-write.md: `buildings/620` -> `0117`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G19-write.md: `buildings/770` -> `0095`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G20-write.md: `towns/260` -> `0135`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G20-write.md: `towns/320` -> `0185`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G20-write.md: `towns/360` -> `0186`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G20-write.md: `buildings/790` -> `0154`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G20-write.md: `buildings/760` -> `0153`
+- specs/292-research-presentation-style/sweep/briefs/buildings-G20-write.md: `buildings/800` -> `0184`
+- specs/292-research-presentation-style/sweep/buildings-G01-handoff.md: `buildings 760` -> `0153`
+- specs/292-research-presentation-style/sweep/buildings-G01-handoff.md: `buildings 030` -> `0218`
+- specs/292-research-presentation-style/sweep/buildings-G02-handoff.md: `buildings 390` -> `0108`
+- specs/292-research-presentation-style/sweep/buildings-G02-handoff.md: `cities/sizing 020` -> `0182`
+- specs/292-research-presentation-style/sweep/buildings-G03-handoff.md: `buildings 070` -> `0092`
+- specs/292-research-presentation-style/sweep/buildings-G03-handoff.md: `buildings 480` -> `0093`
+- specs/292-research-presentation-style/sweep/buildings-G04-handoff.md: `buildings 480` -> `0093`
+- specs/292-research-presentation-style/sweep/buildings-G04-handoff.md: `buildings 010` -> `0090`
+- specs/292-research-presentation-style/sweep/buildings-G04-handoff.md: `buildings 070` -> `0092`
+- specs/292-research-presentation-style/sweep/buildings-G04-handoff.md: `rendering/buildings 070` -> `0092`
+- specs/292-research-presentation-style/sweep/buildings-G06-handoff.md: `buildings 090` -> `0099`
+- specs/292-research-presentation-style/sweep/buildings-G06-handoff.md: `buildings 090` -> `0099`
+- specs/292-research-presentation-style/sweep/buildings-G08-handoff.md: `cities/government 240` -> `0168`
+- specs/292-research-presentation-style/sweep/buildings-G09-handoff.md: `buildings 180` -> `0116`
+- specs/292-research-presentation-style/sweep/buildings-G09-handoff.md: `urban-features 460` -> `0051`
+- specs/292-research-presentation-style/sweep/buildings-G09-handoff.md: `buildings 180` -> `0116`
+- specs/292-research-presentation-style/sweep/buildings-G12-handoff.md: `buildings/180` -> `0116`
+- specs/292-research-presentation-style/sweep/buildings-G12-handoff.md: `buildings/400` -> `0109`
+- specs/292-research-presentation-style/sweep/buildings-G12-handoff.md: `cities/government 280` -> `0118`
+- specs/292-research-presentation-style/sweep/buildings-G15-handoff.md: `buildings 220` -> `0101`
+- specs/292-research-presentation-style/sweep/buildings-G16-handoff.md: `buildings 290` -> `0103`
+- specs/292-research-presentation-style/sweep/buildings-G16-handoff.md: `vegetation 170` -> `0076`
+- specs/292-research-presentation-style/sweep/buildings-G18-handoff.md: `cities/government 080` -> `0115`
+- specs/292-research-presentation-style/sweep/buildings-G20-handoff.md: `cities/government 320` -> `0164`
+- specs/292-research-presentation-style/sweep/buildings-G21-handoff.md: `cities/defenses 250` -> `0133`
+- specs/292-research-presentation-style/sweep/buildings-G21-handoff.md: `urban-features 170` -> `0083`
+- specs/292-research-presentation-style/sweep/buildings-G21-handoff.md: `rendering/buildings 010` -> `0090`
+- specs/292-research-presentation-style/sweep/buildings-G21-handoff.md: `cities/hinterland 010` -> `0173`
+- specs/292-research-presentation-style/sweep/buildings-G22-handoff.md: `buildings 800` -> `0184`
+- specs/292-research-presentation-style/sweep/buildings-G22-handoff.md: `towns/030` -> `0119`
+- specs/292-research-presentation-style/sweep/buildings-G22-handoff.md: `rendering/buildings/010` -> `0090`
+- specs/292-research-presentation-style/sweep/buildings-G22-handoff.md: `towns/360` -> `0186`
+- specs/292-research-presentation-style/sweep/buildings-checks.md: `buildings 480` -> `0093`
+- specs/292-research-presentation-style/sweep/buildings-checks.md: `buildings 480` -> `0093`
+- specs/292-research-presentation-style/sweep/buildings-checks.md: `towns/260` -> `0135`
+- specs/292-research-presentation-style/sweep/buildings-checks.md: `towns/260` -> `0135`
+- specs/292-research-presentation-style/sweep/buildings-checks.md: `towns/320` -> `0185`
+- specs/292-research-presentation-style/sweep/cities/capitals-G02-handoff.md: `religion-and-death 550` -> `0230`
+- specs/292-research-presentation-style/sweep/cities/capitals-G02-handoff.md: `rendering/religion-and-death 410` -> `0237`
+- specs/292-research-presentation-style/sweep/cities/capitals-G04-handoff.md: `rendering/cities/capitals 020` -> `0139`
+- specs/292-research-presentation-style/sweep/cities/capitals-G06-handoff.md: `urban-features 470` -> `0206`
+- specs/292-research-presentation-style/sweep/cities/capitals-G06-handoff.md: `religion-and-death 550` -> `0230`
+- specs/292-research-presentation-style/sweep/cities/defenses-G02-handoff.md: `towns 240` -> `0125`
+- specs/292-research-presentation-style/sweep/cities/defenses-G06-handoff.md: `towns 240` -> `0125`
+- specs/292-research-presentation-style/sweep/cities/defenses-G06-handoff.md: `cities/defenses 060` -> `0148`
+- specs/292-research-presentation-style/sweep/cities/fabric-G01-handoff.md: `ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/cities/fabric-G01-handoff.md: `cities/fabric 210` -> `0160`
+- specs/292-research-presentation-style/sweep/cities/fabric-G01-handoff.md: `rendering/cities/capitals 010` -> `0137`
+- specs/292-research-presentation-style/sweep/cities/fabric-G01-handoff.md: `ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/cities/fabric-G03-handoff.md: `towns 030` -> `0119`
+- specs/292-research-presentation-style/sweep/cities/fabric-G03-handoff.md: `cities/fabric 070` -> `0162`
+- specs/292-research-presentation-style/sweep/cities/fabric-G03-handoff.md: `towns 290` -> `0126`
+- specs/292-research-presentation-style/sweep/cities/fabric-G04-handoff.md: `cities/fabric 070` -> `0162`
+- specs/292-research-presentation-style/sweep/cities/fabric-G04-handoff.md: `urban-features 410` -> `0204`
+- specs/292-research-presentation-style/sweep/cities/fabric-G05-handoff.md: `urban-features 560` -> `0211`
+- specs/292-research-presentation-style/sweep/cities/government-G01-handoff.md: `cities/government 230` -> `0167`
+- specs/292-research-presentation-style/sweep/cities/government-G02-handoff.md: `rendering/cities/capitals 400` -> `0114`
+- specs/292-research-presentation-style/sweep/cities/government-G03-handoff.md: `rendering/cities/government 240` -> `0168`
+- specs/292-research-presentation-style/sweep/cities/government-G03-handoff.md: `buildings 040` -> `0096`
+- specs/292-research-presentation-style/sweep/cities/government-G03-handoff.md: `buildings 040` -> `0096`
+- specs/292-research-presentation-style/sweep/cities/government-G04-handoff.md: `rendering/cities/government 030` -> `0161`
+- specs/292-research-presentation-style/sweep/cities/government-G04-handoff.md: `cities/capitals 070` -> `0140`
+- specs/292-research-presentation-style/sweep/cities/government-G04-handoff.md: `cities/government 030` -> `0161`
+- specs/292-research-presentation-style/sweep/cities/government-G04-handoff.md: `rendering/cities/government 030` -> `0161`
+- specs/292-research-presentation-style/sweep/cities/government-G06-handoff.md: `buildings/210` -> `0165`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G01-handoff.md: `cities/hinterland 040` -> `0171`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G01-handoff.md: `ways 210` -> `0088`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G01-handoff.md: `cities/government 010` -> `0163`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G01-handoff.md: `rendering/cities/government 010` -> `0163`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G01-handoff.md: `cities/hinterland 050` -> `0174`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G01-handoff.md: `urban-features 050` -> `0192`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G02-handoff.md: `fields 130` -> `0010`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G02-handoff.md: `towns 400` -> `0127`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G02-handoff.md: `fields 130` -> `0010`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G02-handoff.md: `towns 400` -> `0127`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G03-handoff.md: `cities/hinterland 010` -> `0173`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G03-handoff.md: `cities/hinterland 040` -> `0171`
+- specs/292-research-presentation-style/sweep/cities/hinterland-G03-handoff.md: `towns 400` -> `0127`
+- specs/292-research-presentation-style/sweep/cities/river-cities-G01-handoff.md: `water/190` -> `0054`
+- specs/292-research-presentation-style/sweep/cities/river-cities-G01-handoff.md: `cities/river-cities 110` -> `0179`
+- specs/292-research-presentation-style/sweep/cities/river-cities-G01-handoff.md: `water 010` -> `0068`
+- specs/292-research-presentation-style/sweep/cities/river-cities-G02-handoff.md: `cities/capitals 090` -> `0142`
+- specs/292-research-presentation-style/sweep/cities/river-cities-checks.md: `religion-and-death 160` -> `0235`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `cities/sizing 010` -> `0181`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `rendering/cities/government 030` -> `0161`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `cities/hinterland 040` -> `0171`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `cities/fabric 070` -> `0162`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `rendering/cities/fabric 040` -> `0158`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `rendering/cities/government 320` -> `0164`
+- specs/292-research-presentation-style/sweep/cities/sizing-G01-handoff.md: `ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/government 030` -> `0161`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/capitals 390` -> `0138`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `cities/defenses 010` -> `0145`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `cities/government 010` -> `0163`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/defenses 010` -> `0145`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/government 010` -> `0163`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/capitals 400` -> `0114`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/government 320` -> `0164`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/buildings 210` -> `0165`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/cities/capitals 010` -> `0137`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `cities/government 230` -> `0167`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `cities/government 080` -> `0115`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/urban-features 010` -> `0190`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/homesteads 460` -> `0048`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `homesteads 050` -> `0039`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/ways 210` -> `0088`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `buildings 180` -> `0116`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/buildings 090` -> `0099`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/towns 320` -> `0185`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `towns 080` -> `0122`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `towns 440` -> `0130`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `towns 330` -> `0188`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/fields 160` -> `0006`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/fields 020` -> `0005`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `fields 170` -> `0012`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `water 190` -> `0054`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/towns 230` -> `0121`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `towns 260` -> `0135`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `towns 260` -> `0135`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/homesteads 150` -> `0031`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `buildings 080` -> `0098`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `urban-features 190` -> `0199`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `buildings 180` -> `0116`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `urban-features 460` -> `0051`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `rendering/religion-and-death 280` -> `0236`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `towns 470` -> `0189`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `buildings 080` -> `0098`
+- specs/292-research-presentation-style/sweep/closing-checks.md: `homesteads 400` -> `0029`
+- specs/292-research-presentation-style/sweep/closing/C1.md: `cities/capitals 010` -> `0137`
+- specs/292-research-presentation-style/sweep/fields-A01-handoff.md: `fields 160` -> `0006`
+- specs/292-research-presentation-style/sweep/fields-A01-handoff.md: `fields 170` -> `0012`
+- specs/292-research-presentation-style/sweep/fields-A01-handoff.md: `fields 160` -> `0006`
+- specs/292-research-presentation-style/sweep/fields-A01-handoff.md: `fields 030` -> `0009`
+- specs/292-research-presentation-style/sweep/fields-A01-handoff.md: `fields/030` -> `0009`
+- specs/292-research-presentation-style/sweep/fields-G01-handoff.md: `fields/110` -> `0017`
+- specs/292-research-presentation-style/sweep/fields-G01-handoff.md: `fields/260` -> `0014`
+- specs/292-research-presentation-style/sweep/fields-G01-handoff.md: `fields/260` -> `0014`
+- specs/292-research-presentation-style/sweep/fields-G02-handoff.md: `research/rendering/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.drawing.html`
+- specs/292-research-presentation-style/sweep/fields-G03-handoff.md: `homesteads 500` -> `0016`
+- specs/292-research-presentation-style/sweep/fields-G04-handoff.md: `homesteads 180` -> `0041`
+- specs/292-research-presentation-style/sweep/fields-G05-handoff.md: `fields 020` -> `0005`
+- specs/292-research-presentation-style/sweep/fields-G06-handoff.md: `towns/400` -> `0127`
+- specs/292-research-presentation-style/sweep/fields-G06-handoff.md: `fields 160` -> `0006`
+- specs/292-research-presentation-style/sweep/fields-G07-handoff.md: `fields/150` -> `0231`
+- specs/292-research-presentation-style/sweep/fields-G07-handoff.md: `religion-and-death/110` -> `0221`
+- specs/292-research-presentation-style/sweep/fields-G07-handoff.md: `fields/410` -> `0015`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `fields 260` -> `0014`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `fields 020` -> `0005`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `fields 170` -> `0012`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `fields 170` -> `0012`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `fields 110` -> `0017`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `rendering/fields 165` -> `0011`
+- specs/292-research-presentation-style/sweep/fields-checks.md: `fields 165` -> `0011`
+- specs/292-research-presentation-style/sweep/homesteads-G01-handoff.md: `vegetation/020` -> `0071`
+- specs/292-research-presentation-style/sweep/homesteads-G01-handoff.md: `rendering/homesteads/010` -> `0036`
+- specs/292-research-presentation-style/sweep/homesteads-G02-handoff.md: `homesteads/260` -> `0047`
+- specs/292-research-presentation-style/sweep/homesteads-G02-handoff.md: `towns/130` -> `0124`
+- specs/292-research-presentation-style/sweep/homesteads-G02-handoff.md: `settlements/035` -> `0004`
+- specs/292-research-presentation-style/sweep/homesteads-G04-handoff.md: `rendering/homesteads/140` -> `0028`
+- specs/292-research-presentation-style/sweep/homesteads-G04-handoff.md: `towns/490` -> `0132`
+- specs/292-research-presentation-style/sweep/homesteads-G04-handoff.md: `fields/160` -> `0006`
+- specs/292-research-presentation-style/sweep/homesteads-G04-handoff.md: `cities/fabric/090` -> `0155`
+- specs/292-research-presentation-style/sweep/homesteads-G04-handoff.md: `rendering/homesteads/400` -> `0029`
+- specs/292-research-presentation-style/sweep/homesteads-G05-handoff.md: `rendering/homesteads/140` -> `0028`
+- specs/292-research-presentation-style/sweep/homesteads-G05-handoff.md: `homesteads/460` -> `0048`
+- specs/292-research-presentation-style/sweep/homesteads-G05-handoff.md: `rendering/homesteads/460` -> `0048`
+- specs/292-research-presentation-style/sweep/homesteads-G06-handoff.md: `buildings 220` -> `0101`
+- specs/292-research-presentation-style/sweep/homesteads-G06-handoff.md: `towns 480` -> `0131`
+- specs/292-research-presentation-style/sweep/homesteads-G06-handoff.md: `archetypes 170` -> `0023`
+- specs/292-research-presentation-style/sweep/homesteads-G06-handoff.md: `homesteads 140` -> `0028`
+- specs/292-research-presentation-style/sweep/homesteads-G09-handoff.md: `homesteads 218` -> `0046`
+- specs/292-research-presentation-style/sweep/homesteads-G11-handoff.md: `homesteads 155` -> `0033`
+- specs/292-research-presentation-style/sweep/homesteads-G12-handoff.md: `homesteads/155` -> `0033`
+- specs/292-research-presentation-style/sweep/homesteads-G13-handoff.md: `homesteads 190` -> `0003`
+- specs/292-research-presentation-style/sweep/homesteads-G15-handoff.md: `rendering/fields 010` -> `0008`
+- specs/292-research-presentation-style/sweep/homesteads-G15-handoff.md: `homesteads 110` -> `0030`
+- specs/292-research-presentation-style/sweep/homesteads-G16-handoff.md: `homesteads 470` -> `0049`
+- specs/292-research-presentation-style/sweep/homesteads-G16-handoff.md: `archetypes 210` -> `0025`
+- specs/292-research-presentation-style/sweep/homesteads-G16-handoff.md: `rendering/archetypes 210` -> `0025`
+- specs/292-research-presentation-style/sweep/homesteads-G16-handoff.md: `homesteads 180` -> `0041`
+- specs/292-research-presentation-style/sweep/homesteads-G16-handoff.md: `homesteads 215` -> `0045`
+- specs/292-research-presentation-style/sweep/homesteads-checks.md: `homesteads 440` -> `0052`
+- specs/292-research-presentation-style/sweep/homesteads-checks.md: `homesteads 260` -> `0047`
+- specs/292-research-presentation-style/sweep/homesteads-checks.md: `fields/260` -> `0014`
+- specs/292-research-presentation-style/sweep/homesteads-checks.md: `rendering/urban-features 090` -> `0196`
+- specs/292-research-presentation-style/sweep/plan-additions-fields.md: `fields/160` -> `0006`
+- specs/292-research-presentation-style/sweep/plan-additions-fields.md: `fields/030` -> `0009`
+- specs/292-research-presentation-style/sweep/plan-additions-fields.md: `fields/030` -> `0009`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `fields/260` -> `0014`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `homesteads/211` -> `0042`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `homesteads/470` -> `0049`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `homesteads/150` -> `0031`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `vegetation/030` -> `0072`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `homesteads/470` -> `0049`
+- specs/292-research-presentation-style/sweep/plan-archetypes.md: `homesteads/211` -> `0042`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `cities/government/280-290` -> `0118`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/350-360` -> `0202`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `cities/government/080-110` -> `0115`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/350-360` -> `0202`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/460` -> `0051`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `homesteads/216` -> `0219`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `homesteads/260` -> `0047`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `towns/480` -> `0131`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `homesteads/214` -> `0044`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `vegetation/170` -> `0076`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/080` -> `0195`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `cities/defenses/250` -> `0133`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `cities/hinterland/010` -> `0173`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `towns/260` -> `0135`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `towns/320` -> `0185`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `towns/360` -> `0186`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/010` -> `0190`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `homesteads/050` -> `0039`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `homesteads/216` -> `0219`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `cities/defenses/250` -> `0133`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/460` -> `0051`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `urban-features/080` -> `0195`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `homesteads/214` -> `0044`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `towns/360` -> `0186`
+- specs/292-research-presentation-style/sweep/plan-buildings.md: `cities/hinterland/010` -> `0173`
+- specs/292-research-presentation-style/sweep/plan-cities-government.md: `buildings/210` -> `0165`
+- specs/292-research-presentation-style/sweep/plan-cities-river-cities.md: `water/190` -> `0054`
+- specs/292-research-presentation-style/sweep/plan-fields.md: `fields/110` -> `0017`
+- specs/292-research-presentation-style/sweep/plan-fields.md: `towns/400` -> `0127`
+- specs/292-research-presentation-style/sweep/plan-fields.md: `cities/hinterland/010` -> `0173`
+- specs/292-research-presentation-style/sweep/plan-fields.md: `towns/400` -> `0127`
+- specs/292-research-presentation-style/sweep/plan-fields.md: `homesteads/180` -> `0041`
+- specs/292-research-presentation-style/sweep/plan-homesteads.md: `vegetation/020` -> `0071`
+- specs/292-research-presentation-style/sweep/plan-homesteads.md: `towns/480` -> `0131`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `urban-features/020-024` -> `0191`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `buildings/030` -> `0218`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `ways/110` -> `0085`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `buildings/070` -> `0092`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `cities/capitals/190` -> `0166`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `vegetation/020` -> `0071`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `urban-features/070` -> `0194`
+- specs/292-research-presentation-style/sweep/plan-religion-and-death.md: `cities/capitals/470` -> `0144`
+- specs/292-research-presentation-style/sweep/plan-settlements.md: `homesteads/140` -> `0028`
+- specs/292-research-presentation-style/sweep/plan-settlements.md: `homesteads/540` -> `0034`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/sizing/020` -> `0182`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/fabric/080` -> `0159`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/fabric/010` -> `0152`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/fabric/080` -> `0159`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `homesteads/050` -> `0039`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `homesteads/260` -> `0047`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/fabric/210` -> `0160`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/hinterland/040` -> `0171`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `fields/130` -> `0010`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `vegetation/220` -> `0077`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `vegetation/030` -> `0072`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `homesteads/010` -> `0036`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `fields/020` -> `0005`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `fields/110` -> `0017`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `cities/hinterland/040` -> `0171`
+- specs/292-research-presentation-style/sweep/plan-towns.md: `homesteads/540` -> `0034`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/fabric/140-146` - a range covering no question; left as written
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `water/410` -> `0063`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `homesteads/214` -> `0044`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `buildings/320` -> `0105`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/government/240` -> `0168`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `buildings/570` -> `0110`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `buildings/610` -> `0094`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `towns/030` -> `0119`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/fabric/080` -> `0159`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/government/010` -> `0163`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `towns/080` -> `0122`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/hinterland/040` -> `0171`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `vegetation/340` -> `0079`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `buildings/080` -> `0098`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/capitals/190` -> `0166`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `towns/060` -> `0187`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `buildings/390` -> `0108`
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/government/240` -> `0168`
+- specs/292-research-presentation-style/sweep/plan-vegetation.md: `homesteads/218` -> `0046`
+- specs/292-research-presentation-style/sweep/plan-vegetation.md: `ways/210` -> `0088`
+- specs/292-research-presentation-style/sweep/plan-water.md: `cities/river-cities/010-030` -> `0175`
+- specs/292-research-presentation-style/sweep/plan-water.md: `fields/110` -> `0017`
+- specs/292-research-presentation-style/sweep/plan-water.md: `fields/010` -> `0008`
+- specs/292-research-presentation-style/sweep/plan-water.md: `vegetation/120` -> `0074`
+- specs/292-research-presentation-style/sweep/plan-water.md: `cities/defenses/100` -> `0151`
+- specs/292-research-presentation-style/sweep/plan-water.md: `homesteads/180` -> `0041`
+- specs/292-research-presentation-style/sweep/plan-ways.md: `religion-and-death/520` -> `0217`
+- specs/292-research-presentation-style/sweep/plan-ways.md: `cities/fabric/040` -> `0158`
+- specs/292-research-presentation-style/sweep/plan-ways.md: `cities/fabric/070` -> `0162`
+- specs/292-research-presentation-style/sweep/plan-ways.md: `towns/230` -> `0121`
+- specs/292-research-presentation-style/sweep/religion-and-death-G02-handoff.md: `religion-and-death 210` -> `0226`
+- specs/292-research-presentation-style/sweep/religion-and-death-G03-handoff.md: `buildings/030` -> `0218`
+- specs/292-research-presentation-style/sweep/religion-and-death-G07-handoff.md: `ways/110` -> `0085`
+- specs/292-research-presentation-style/sweep/religion-and-death-G07-handoff.md: `religion-and-death 550` -> `0230`
+- specs/292-research-presentation-style/sweep/religion-and-death-G08-handoff.md: `religion-and-death 210` -> `0226`
+- specs/292-research-presentation-style/sweep/religion-and-death-G08-handoff.md: `urban-features 470` -> `0206`
+- specs/292-research-presentation-style/sweep/religion-and-death-G09-handoff.md: `religion-and-death 500` -> `0229`
+- specs/292-research-presentation-style/sweep/religion-and-death-G10-handoff.md: `religion-and-death 450` -> `0228`
+- specs/292-research-presentation-style/sweep/religion-and-death-G13-handoff.md: `urban-features 560` -> `0211`
+- specs/292-research-presentation-style/sweep/religion-and-death-G15-handoff.md: `religion-and-death 160` -> `0235`
+- specs/292-research-presentation-style/sweep/religion-and-death-G15-handoff.md: `fields 010` -> `0008`
+- specs/292-research-presentation-style/sweep/religion-and-death-G16-handoff.md: `cities/river-cities 010` -> `0175`
+- specs/292-research-presentation-style/sweep/religion-and-death-G17-handoff.md: `rendering/religion-and-death 210` -> `0226`
+- specs/292-research-presentation-style/sweep/settlements-G01-handoff.md: `settlements 035` -> `0004`
+- specs/292-research-presentation-style/sweep/settlements-G02-handoff.md: `homesteads/140` -> `0028`
+- specs/292-research-presentation-style/sweep/settlements-G02-handoff.md: `rendering/religion-and-death/160` -> `0235`
+- specs/292-research-presentation-style/sweep/towns-G01-handoff.md: `towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G01-handoff.md: `towns 240` -> `0125`
+- specs/292-research-presentation-style/sweep/towns-G01-handoff.md: `towns 120` -> `0123`
+- specs/292-research-presentation-style/sweep/towns-G03-handoff.md: `towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G03-handoff.md: `towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G04-handoff.md: `towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G04-handoff.md: `rendering/towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G04-handoff.md: `cities/defenses 010` -> `0145`
+- specs/292-research-presentation-style/sweep/towns-G04-handoff.md: `rendering/towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G05-handoff.md: `towns 120` -> `0123`
+- specs/292-research-presentation-style/sweep/towns-G05-handoff.md: `towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G05-handoff.md: `rendering/towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-G06-handoff.md: `towns 260` -> `0135`
+- specs/292-research-presentation-style/sweep/towns-G06-handoff.md: `cities/sizing/020` -> `0182`
+- specs/292-research-presentation-style/sweep/towns-G06-handoff.md: `towns/490` -> `0132`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `towns 260` -> `0135`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `cities/fabric 010` -> `0152`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `buildings 790` -> `0154`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `towns 030` -> `0119`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `rendering/buildings 760` -> `0153`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `towns 030` -> `0119`
+- specs/292-research-presentation-style/sweep/towns-G07-handoff.md: `rendering/urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/towns-G08-handoff.md: `towns 290` -> `0126`
+- specs/292-research-presentation-style/sweep/towns-G08-handoff.md: `towns 030` -> `0119`
+- specs/292-research-presentation-style/sweep/towns-G08-handoff.md: `cities/fabric 010` -> `0152`
+- specs/292-research-presentation-style/sweep/towns-G08-handoff.md: `cities/fabric 080` -> `0159`
+- specs/292-research-presentation-style/sweep/towns-G08-handoff.md: `buildings 220` -> `0101`
+- specs/292-research-presentation-style/sweep/towns-G08-handoff.md: `homesteads 050` -> `0039`
+- specs/292-research-presentation-style/sweep/towns-G09-handoff.md: `towns/470` -> `0189`
+- specs/292-research-presentation-style/sweep/towns-G09-handoff.md: `cities/fabric 210` -> `0160`
+- specs/292-research-presentation-style/sweep/towns-G09-handoff.md: `cities/fabric 210` -> `0160`
+- specs/292-research-presentation-style/sweep/towns-G09-handoff.md: `towns 120` -> `0123`
+- specs/292-research-presentation-style/sweep/towns-G11-handoff.md: `ways 210` -> `0088`
+- specs/292-research-presentation-style/sweep/towns-G11-handoff.md: `rendering/towns 210` -> `0134`
+- specs/292-research-presentation-style/sweep/towns-G11-handoff.md: `towns 440` -> `0130`
+- specs/292-research-presentation-style/sweep/towns-G11-handoff.md: `towns 440` -> `0130`
+- specs/292-research-presentation-style/sweep/towns-G11-handoff.md: `rendering/towns 440` -> `0130`
+- specs/292-research-presentation-style/sweep/towns-G11-handoff.md: `rendering/urban-features 620` -> `0214`
+- specs/292-research-presentation-style/sweep/towns-G12-handoff.md: `rendering/towns 080` -> `0122`
+- specs/292-research-presentation-style/sweep/towns-G12-handoff.md: `buildings 800` -> `0184`
+- specs/292-research-presentation-style/sweep/towns-G12-handoff.md: `towns 080` -> `0122`
+- specs/292-research-presentation-style/sweep/towns-G12-handoff.md: `towns 440` -> `0130`
+- specs/292-research-presentation-style/sweep/towns-G12-handoff.md: `urban-features 130` -> `0156`
+- specs/292-research-presentation-style/sweep/towns-G13-handoff.md: `urban-features 080` -> `0195`
+- specs/292-research-presentation-style/sweep/towns-G13-handoff.md: `buildings 800` -> `0184`
+- specs/292-research-presentation-style/sweep/towns-G13-handoff.md: `towns 320` -> `0185`
+- specs/292-research-presentation-style/sweep/towns-G13-handoff.md: `towns 320` -> `0185`
+- specs/292-research-presentation-style/sweep/towns-G13-handoff.md: `urban-features 080` -> `0195`
+- specs/292-research-presentation-style/sweep/towns-G14-handoff.md: `vegetation 030` -> `0072`
+- specs/292-research-presentation-style/sweep/towns-G14-handoff.md: `cities/hinterland 040` -> `0171`
+- specs/292-research-presentation-style/sweep/towns-G15-handoff.md: `towns 410` -> `0128`
+- specs/292-research-presentation-style/sweep/towns-G15-handoff.md: `towns 420` -> `0129`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `rendering/towns 200` -> `0120`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `rendering/towns 230` -> `0121`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `towns 080` -> `0122`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `buildings 800` -> `0184`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `towns 320` -> `0185`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `towns 320` -> `0185`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `urban-features 080` -> `0195`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `towns 420` -> `0129`
+- specs/292-research-presentation-style/sweep/towns-checks.md: `vegetation 310` -> `0078`
+- specs/292-research-presentation-style/sweep/urban-features-G01-handoff.md: `urban-features 010` -> `0190`
+- specs/292-research-presentation-style/sweep/urban-features-G02-handoff.md: `water/410` -> `0063`
+- specs/292-research-presentation-style/sweep/urban-features-G03-handoff.md: `urban-features 390` -> `0203`
+- specs/292-research-presentation-style/sweep/urban-features-G04-handoff.md: `rendering/buildings 160` -> `0100`
+- specs/292-research-presentation-style/sweep/urban-features-G04-handoff.md: `urban-features 410` -> `0204`
+- specs/292-research-presentation-style/sweep/urban-features-G05-handoff.md: `religion-and-death 550` -> `0230`
+- specs/292-research-presentation-style/sweep/urban-features-G05-handoff.md: `cities/capitals 470` -> `0144`
+- specs/292-research-presentation-style/sweep/urban-features-G06-handoff.md: `urban-features 510` -> `0207`
+- specs/292-research-presentation-style/sweep/urban-features-G07-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G08-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G08-handoff.md: `buildings 320` -> `0105`
+- specs/292-research-presentation-style/sweep/urban-features-G09-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G09-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G10-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G10-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G10-handoff.md: `religion-and-death 050` -> `0233`
+- specs/292-research-presentation-style/sweep/urban-features-G15-handoff.md: `urban-features 310` -> `0183`
+- specs/292-research-presentation-style/sweep/urban-features-G16-handoff.md: `urban-features 060` -> `0193`
+- specs/292-research-presentation-style/sweep/urban-features-G17-handoff.md: `cities/government 240` -> `0168`
+- specs/292-research-presentation-style/sweep/urban-features-G18-handoff.md: `cities/capitals 090` -> `0142`
+- specs/292-research-presentation-style/sweep/urban-features-G18-handoff.md: `towns 060` -> `0187`
+- specs/292-research-presentation-style/sweep/urban-features-G19-handoff.md: `urban-features 170` -> `0083`
+- specs/292-research-presentation-style/sweep/urban-features-checks.md: `water 410` -> `0063`
+- specs/292-research-presentation-style/sweep/urban-features-checks.md: `buildings 160` -> `0100`
+- specs/292-research-presentation-style/sweep/vegetation-G01-handoff.md: `vegetation 030` -> `0072`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `vegetation 030` -> `0072`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `vegetation 020` -> `0071`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `towns 130` -> `0124`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `homesteads 010` -> `0036`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `vegetation 020` -> `0071`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `homesteads 150` -> `0031`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `towns 130` -> `0124`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `vegetation/030` -> `0072`
+- specs/292-research-presentation-style/sweep/vegetation-G02-handoff.md: `homesteads 212` -> `0043`
+- specs/292-research-presentation-style/sweep/vegetation-G04-handoff.md: `vegetation 060` -> `0080`
+- specs/292-research-presentation-style/sweep/vegetation-G04-handoff.md: `towns 420` -> `0129`
+- specs/292-research-presentation-style/sweep/vegetation-G04-handoff.md: `vegetation/220` -> `0077`
+- specs/292-research-presentation-style/sweep/vegetation-G05-handoff.md: `vegetation 020` -> `0071`
+- specs/292-research-presentation-style/sweep/vegetation-G05-handoff.md: `vegetation 020` -> `0071`
+- specs/292-research-presentation-style/sweep/vegetation-G05-handoff.md: `rendering/homesteads 010` -> `0036`
+- specs/292-research-presentation-style/sweep/vegetation-G05-handoff.md: `rendering/vegetation 030` -> `0072`
+- specs/292-research-presentation-style/sweep/vegetation-G05-handoff.md: `towns 420` -> `0129`
+- specs/292-research-presentation-style/sweep/vegetation-G06-handoff.md: `vegetation 220` -> `0077`
+- specs/292-research-presentation-style/sweep/vegetation-G06-handoff.md: `vegetation 340` -> `0079`
+- specs/292-research-presentation-style/sweep/vegetation-G06-handoff.md: `towns 410` -> `0128`
+- specs/292-research-presentation-style/sweep/vegetation-G06-handoff.md: `towns 410` -> `0128`
+- specs/292-research-presentation-style/sweep/vegetation-G07-handoff.md: `vegetation 090` -> `0073`
+- specs/292-research-presentation-style/sweep/vegetation-G07-handoff.md: `water 030` -> `0055`
+- specs/292-research-presentation-style/sweep/vegetation-G08-handoff.md: `water 280` -> `0061`
+- specs/292-research-presentation-style/sweep/vegetation-G09-handoff.md: `vegetation 160` -> `0070`
+- specs/292-research-presentation-style/sweep/water-G01-handoff.md: `water/400` -> `0062`
+- specs/292-research-presentation-style/sweep/water-G01-handoff.md: `water/260` -> `0060`
+- specs/292-research-presentation-style/sweep/water-G03-handoff.md: `fields 110` -> `0017`
+- specs/292-research-presentation-style/sweep/water-G03-handoff.md: `rendering/fields 110` -> `0017`
+- specs/292-research-presentation-style/sweep/water-G03-handoff.md: `fields 010` -> `0008`
+- specs/292-research-presentation-style/sweep/water-G03-handoff.md: `water 005` -> `0053`
+- specs/292-research-presentation-style/sweep/water-G04-handoff.md: `water 010` -> `0068`
+- specs/292-research-presentation-style/sweep/water-G04-handoff.md: `water 030` -> `0055`
+- specs/292-research-presentation-style/sweep/water-G04-handoff.md: `rendering/water 005` -> `0053`
+- specs/292-research-presentation-style/sweep/water-G05-handoff.md: `water/100` -> `0146`
+- specs/292-research-presentation-style/sweep/water-G05-handoff.md: `rendering/water/250` -> `0059`
+- specs/292-research-presentation-style/sweep/water-G06-handoff.md: `rendering/water 010` -> `0068`
+- specs/292-research-presentation-style/sweep/water-G06-handoff.md: `rendering/fields 160` -> `0006`
+- specs/292-research-presentation-style/sweep/water-G07-handoff.md: `rendering/fields/260` -> `0014`
+- specs/292-research-presentation-style/sweep/water-G07-handoff.md: `rendering/water/250` -> `0059`
+- specs/292-research-presentation-style/sweep/water-G07-handoff.md: `water 005` -> `0053`
+- specs/292-research-presentation-style/sweep/water-G08-handoff.md: `water/005` -> `0053`
+- specs/292-research-presentation-style/sweep/water-G08-handoff.md: `water 400` -> `0062`
+- specs/292-research-presentation-style/sweep/water-G08-handoff.md: `water/005` -> `0053`
+- specs/292-research-presentation-style/sweep/water-G08-handoff.md: `urban-features 520` -> `0208`
+- specs/292-research-presentation-style/sweep/water-G09-handoff.md: `water 430` -> `0065`
+- specs/292-research-presentation-style/sweep/water-G09-handoff.md: `water 270` -> `0035`
+- specs/292-research-presentation-style/sweep/water-G10-handoff.md: `water/440` -> `0066`
+- specs/292-research-presentation-style/sweep/water-G11-handoff.md: `fields/190` -> `0007`
+- specs/292-research-presentation-style/sweep/water-G11-handoff.md: `water/160` -> `0058`
+- specs/292-research-presentation-style/sweep/water-G11-handoff.md: `water/190` -> `0054`
+- specs/292-research-presentation-style/sweep/water-G11-handoff.md: `towns/420` -> `0129`
+- specs/292-research-presentation-style/sweep/water-G11-handoff.md: `water/280` -> `0061`
+- specs/292-research-presentation-style/sweep/water-G11-handoff.md: `vegetation/120` -> `0074`
+- specs/292-research-presentation-style/sweep/water-G13-handoff.md: `towns 240` -> `0125`
+- specs/292-research-presentation-style/sweep/water-G13-handoff.md: `towns 400` -> `0127`
+- specs/292-research-presentation-style/sweep/water-G14-handoff.md: `water/130` -> `0056`
+- specs/292-research-presentation-style/sweep/ways-G01-handoff.md: `ways 060` -> `0082`
+- specs/292-research-presentation-style/sweep/ways-G01-handoff.md: `rendering/ways/020` -> `0081`
+- specs/292-research-presentation-style/sweep/ways-G02-handoff.md: `ways 030` -> `0084`
+- specs/292-research-presentation-style/sweep/ways-G02-handoff.md: `ways 200` -> `0087`
+- specs/292-research-presentation-style/sweep/ways-G02-handoff.md: `ways 200` -> `0087`
+- specs/292-research-presentation-style/sweep/ways-G02-handoff.md: `rendering/water 270` -> `0035`
+- specs/292-research-presentation-style/sweep/ways-G02-handoff.md: `rendering/water 010` -> `0068`
+- specs/292-research-presentation-style/sweep/ways-G03-handoff.md: `ways 110` -> `0085`
+- specs/292-research-presentation-style/sweep/ways-G03-handoff.md: `religion-and-death 520` -> `0217`
+- specs/292-research-presentation-style/sweep/ways-G03-handoff.md: `vegetation 020` -> `0071`
+- specs/292-research-presentation-style/sweep/ways-G04-handoff.md: `rendering/cities/river-cities 100` -> `0178`
+- specs/292-research-presentation-style/sweep/ways-G04-handoff.md: `ways 020` -> `0081`
+- specs/292-research-presentation-style/sweep/ways-G04-handoff.md: `cities/river-cities 040` -> `0176`
+- specs/292-research-presentation-style/sweep/ways-G04-handoff.md: `rendering/cities/river-cities 100` -> `0178`
+- specs/292-research-presentation-style/sweep/ways-G05-handoff.md: `ways 210` -> `0088`
+- specs/292-research-presentation-style/sweep/ways-G05-handoff.md: `rendering/ways/060` -> `0082`
+- specs/292-research-presentation-style/sweep/ways-G05-handoff.md: `rendering/ways/060` -> `0082`
+- specs/292-research-presentation-style/sweep/ways-G05-handoff.md: `cities/fabric/040` -> `0158`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `rendering/ways/060` -> `0082`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `rendering/towns/230` -> `0121`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `ways/210` -> `0088`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `cities/fabric/070` -> `0162`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `towns/230` -> `0121`
+- specs/292-research-presentation-style/sweep/ways-G06-handoff.md: `rendering/towns/230` -> `0121`
+- specs/292-research-presentation-style/sweep/ways-G07-handoff.md: `ways 200` -> `0087`
+- specs/292-research-presentation-style/sweep/ways-G07-handoff.md: `ways 140` -> `0086`
+- specs/292-research-presentation-style/sweep/ways-G07-handoff.md: `ways 200` -> `0087`
+- specs/292-research-presentation-style/sweep/ways-G07-handoff.md: `ways 200` -> `0087`
+- specs/292-research-presentation-style/sweep/ways-G07-handoff.md: `ways 140` -> `0086`
+- specs/292-research-presentation-style/sweep/ways-checks.md: `fields 260` -> `0014`
+- specs/292-research-presentation-style/sweep/ways-checks.md: `vegetation 020` -> `0071`
+- specs/292-research-presentation-style/sweep/ways-checks.md: `ways 160` -> `0136`
+- specs/292-research-presentation-style/sweep/ways-checks.md: `rendering/towns 230` -> `0121`
+- specs/292-research-presentation-style/tasks.md: `homesteads 020` -> `0037`
+- specs/292-research-presentation-style/tasks.md: `homesteads 040` -> `0038`
+- specs/292-research-presentation-style/tasks.md: `cities/capitals 010` -> `0137`
+- specs/292-research-presentation-style/tasks.md: `presentation 010` -> `0241`
+- specs/292-research-presentation-style/tasks.md: `rendering/towns 230` -> `0121`
+- specs/292-research-presentation-style/tasks.md: `towns 080` -> `0122`
+- specs/292-research-presentation-style/tasks.md: `rendering/cities/government 030` -> `0161`
+- specs/293-effort-level-experiment/measurements.json: `homesteads/120` -> `0040`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `homesteads 120` -> `0040`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `homesteads/120` -> `0040`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `homesteads 120` -> `0040`
+- specs/293-effort-level-experiment/outputs/I-port-handoff.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/outputs/R-checks.md: `urban-features/560` -> `0211`
+- specs/293-effort-level-experiment/report.md: `homesteads 120` -> `0040`
+- specs/293-effort-level-experiment/report.md: `homesteads/440` -> `0052`
+- specs/293-effort-level-experiment/report.md: `homesteads/120` -> `0040`
+- specs/293-effort-level-experiment/tasks.md: `research/homesteads 120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/293-effort-level-experiment/tasks.md: `homesteads 120` -> `0040`
+- specs/294-settlement-review-rethink/plan.md: `buildings/220` -> `0101`
+- specs/294-settlement-review-rethink/plan.md: `buildings/180` -> `0116`
+- specs/294-settlement-review-rethink/plan.md: `buildings/480` -> `0093`
+- specs/294-settlement-review-rethink/research.md: `research/homesteads/260` -> `research/questions/0047-farm-privies-and-their-night-soil-benjo.html`
+- specs/294-settlement-review-rethink/rules-recon.md: `research/homesteads/212` -> `research/questions/0043-firewood-stacks-and-sheds-kigoya.html`
+- specs/294-settlement-review-rethink/rules-recon.md: `buildings/220` -> `0101`
+- specs/294-settlement-review-rethink/rules-recon.md: `buildings/180` -> `0116`
+- specs/294-settlement-review-rethink/rules-recon.md: `buildings/480` -> `0093`
+- specs/294-settlement-review-rethink/tasks.md: `water/030` -> `0055`
+- specs/294-settlement-review-rethink/tasks.md: `research/water/670` -> `research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html`
+- specs/299-natural-marsh-edges/research.md: `research/vegetation 120` -> `research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html`
+- specs/299-natural-marsh-edges/spec.md: `research/vegetation 120` -> `research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html`
+- specs/300-reeds-to-the-bank/spec.md: `research/water 280` -> `research/questions/0061-reservoir-ponds-tameike.html`
+- specs/301-record-site/pointer-review.md: `research/water.html#...` - no id `...` in the record; pointed at its section
+- specs/301-record-site/pointer-review.md: `research/rendering/water/010` -> `research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/010` -> `research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/water/010` -> `research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/005` -> `research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/water/270` -> `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`
+- specs/301-record-site/pointer-review.md: `research/water/250` -> `research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html`
+- specs/301-record-site/pointer-review.md: `research/water/250` -> `research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/190` -> `research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/190` -> `research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/140` -> `research/questions/0057-marshes-and-wetlands-shitchi.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/140` -> `research/questions/0057-marshes-and-wetlands-shitchi.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/140` -> `research/questions/0057-marshes-and-wetlands-shitchi.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/water/160` -> `research/questions/0058-ground-too-wet-to-build-on.html`
+- specs/301-record-site/pointer-review.md: `research/water/280` -> `research/questions/0061-reservoir-ponds-tameike.html`
+- specs/301-record-site/pointer-review.md: `research/vegetation/060` -> `research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/480` -> `research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/480` -> `research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/090` -> `research/questions/0099-the-hearing-court-shirasu.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/040` -> `research/questions/0096-holding-cells-agariya-and-roya.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/080` -> `research/questions/0098-storehouses-for-the-tax-rice.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/380` -> `research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/300` -> `research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/320` -> `research/questions/0105-baths-furo.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/buildings/380` -> `research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/buildings/300` -> `research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/buildings/210` -> `research/questions/0165-martial-training-grounds-and-dojo.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/fields/160` -> `research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/fields/160` -> `research/questions/0006-dry-fields-and-their-crops-hatake.html`
+- specs/301-record-site/pointer-review.md: `research/fields/160` -> `research/questions/0006-dry-fields-and-their-crops-hatake.html`
+- specs/301-record-site/pointer-review.md: `research/fields/010` -> `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html`
+- specs/301-record-site/pointer-review.md: `research/fields/110` -> `research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html`
+- specs/301-record-site/pointer-review.md: `research/fields/110` -> `research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html`
+- specs/301-record-site/pointer-review.md: `research/fields/130` -> `research/questions/0010-farmland-around-towns-and-cities.html`
+- specs/301-record-site/pointer-review.md: `research/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/homesteads/040` -> `research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/homesteads/040` -> `research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/030` -> `research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/160` -> `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/160` -> `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/170` -> `research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/settlements/010` -> `research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/settlements/010` -> `research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/urban-features/310` -> `research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/buildings/040` -> `research/questions/0096-holding-cells-agariya-and-roya.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/vegetation/090` -> `research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/vegetation/090` -> `research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/vegetation/030` -> `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/towns/320` -> `research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html`
+- specs/301-record-site/pointer-review.md: `research/urban-features/130` -> `research/questions/0156-burakumin-quarters-and-caste-zoning.html`
+- specs/301-record-site/pointer-review.md: `research/fields/260` -> `research/questions/0014-bunds-between-the-paddies-aze.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/fields/020` -> `research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/fields/190` -> `research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/fields/190` -> `research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/fields/190` -> `research/questions/0007-wet-paddies-that-never-drain-shitsuden.html`
+- specs/301-record-site/pointer-review.md: `research/fields/010` -> `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/fields/160` -> `research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/homesteads/120` -> `research/questions/0040-farm-storehouses-kura.html`
+- specs/301-record-site/pointer-review.md: `research/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html`
+- specs/301-record-site/pointer-review.md: `research/homesteads/010` -> `research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html`
+- specs/301-record-site/pointer-review.md: `research/ways/020` -> `research/questions/0081-village-lanes.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/050` -> `research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- specs/301-record-site/pointer-review.md: `research/archetypes/140` -> `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/030` -> `research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/archetypes/170` -> `research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/140` -> `research/questions/0057-marshes-and-wetlands-shitchi.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/water/010` -> `research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/ways/030` -> `research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html`
+- specs/301-record-site/pointer-review.md: `research/rendering/ways/200` -> `research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html`
+- specs/301-record-site/pointer-review.md: `research/settlements/010` -> `research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html`
+- specs/303-research-organization/plan.md: `buildings 240-640` -> `0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239`
+- specs/303-research-organization/plan.md: `homesteads 440` -> `0052`
+- specs/303-research-organization/research.md: `settlements/010` -> `0001`
+- specs/303-research-organization/research.md: `water/010` -> `0068`
+- specs/303-research-organization/research.md: `homesteads/150` -> `0031`
+- specs/303-research-organization/research.md: `fields/170` -> `0012`
+- specs/303-research-organization/research.md: `homesteads/440` -> `0052`
+- specs/303-research-organization/research.md: `towns/400` -> `0127`
+- specs/303-research-organization/research.md: `water/670` -> `0067`
+- specs/303-research-organization/research.md: `cities/defenses/250` -> `0133`
+- specs/303-research-organization/research.md: `cities/hinterland/060` -> `0172`
+- specs/303-research-organization/spec.md: `settlements 010` -> `0001`
+- specs/303-research-organization/spec.md: `water 010` -> `0068`
+- specs/303-research-organization/spec.md: `homesteads 150` -> `0031`
+- specs/303-research-organization/spec.md: `fields 170` -> `0012`
+- specs/303-research-organization/spec.md: `homesteads 440` -> `0052`
+- specs/303-research-organization/spec.md: `towns 400` -> `0127`
+- specs/303-research-organization/spec.md: `water 670` -> `0067`
+- specs/303-research-organization/spec.md: `cities/defenses 250` -> `0133`
+- specs/303-research-organization/spec.md: `cities/hinterland 060` -> `0172`
+
+## The pointer sweep's review list - second pass (a page name and number naming a drawing page) (number forms, ranges, and pointers it could not place)
+
+- .claude/skills/diagram/research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: `settlements 020` -> `0002`
+- .claude/skills/diagram/research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: `settlements 020` -> `0002`
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/c1-write.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `water 290-360` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/g1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/h1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/v2-write.md: `fields 220-240` - a range covering no question; left as written
+- .claude/skills/diagram/tests/tooling/fixtures/brief_load/x1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/g3-write.md: `buildings 430-470` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/g8-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/gen.py: `buildings 430-470` - a range covering no question; left as written
+- specs/267-compound-research-owed/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/a2-write.md: `archetypes 250-270` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4-write.md: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4a-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4b-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4b-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/c4b-write.md: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f2-write.md: `fields 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/f3-write.md: `fields 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-f.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fin-check-g.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/fx4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `fields 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `fields 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `homesteads 300-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `homesteads 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `water 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `water 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `vegetation 260-290` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `archetypes 250-270` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/government 100-140` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `settlements 090-110` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h2-write.md: `homesteads 300-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/h3-write.md: `homesteads 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/r1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/s1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/s1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/s1-write.md: `settlements 090-110` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp1-check-f.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/sp2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-check-f.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/v2-write.md: `vegetation 260-290` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w1-write.md: `water 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/w2-write.md: `water 340-360` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1a-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1a-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1a-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1b-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1b-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1b-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1c-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/briefs/x1c-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `fields 220-240` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `fields 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `homesteads 300-330` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `water 290-330` - a range covering no question; left as written
+- specs/269-research-backfill/inventory.md: `vegetation 260-290` - a range covering no question; left as written
+- specs/269-research-backfill/tasks.md: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/271-research-coverage-audit/audit-farming.md: `settlements/020` -> `0002`
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/g2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/gen.py: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k6-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/k7-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/r1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/t5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u1-write.md: `urban-features 250-300` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/u6-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-a.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-b.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-check-c.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v2-write.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v3-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v4-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-check-e.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v5-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v6-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/v7-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w1-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-a.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-b.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-c.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-check-d.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/briefs/w2-write.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `fields 220-240` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `water 290-360` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `cities/government 100-140` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `cities/fabric 160-190` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `cities/sizing 030-050` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `fields 290-310` - a range covering no question; left as written
+- specs/271-research-coverage-audit/inventory.md: `urban-features 250-300` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/b37-write.md: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 310-330` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/gen.py: `religion-and-death 580-590` - a range covering no question; left as written
+- specs/272-temples-and-shrines-researched/briefs/t-write.md: `religion-and-death 580-590` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a1-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a2-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a3-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/a4-write.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b1-write.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b2-write.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/b3-write.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c1-write.md: `cities/capitals 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c2-write.md: `cities/river-cities 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c3-write.md: `cities/fabric 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c5-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c5-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/c5-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f1-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f2-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f3-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/f4-write.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/gen.py: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h1-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h2-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h3-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h4-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-check-d.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/h5-write.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-check-d.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r1-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r2-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r3-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r4-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r5-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r5-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/r5-write.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t1-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t2-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t3-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/t4-write.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u1-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u2-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u3-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/u4-write.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-check-d.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v1-write.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v2-write.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/v3-write.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-check-b.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-check-c.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w2-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w3-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w3-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w4-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/w4-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/y1-check-a.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/y1-write.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/briefs/y1-write.md: `ways 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `fields 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `homesteads 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `vegetation 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `archetypes 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `religion-and-death 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `ways 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `towns 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `urban-features 700-790` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `buildings 900-990` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `cities/capitals 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `cities/river-cities 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/inventory.md: `cities/fabric 600-690` - a range covering no question; left as written
+- specs/280-modern-only-sweep/plan-review.json: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/280-modern-only-sweep/plan.md: `religion-and-death 124-129` - a range covering no question; left as written
+- specs/292-research-presentation-style/sweep/plan-urban-features.md: `cities/fabric/140-146` - a range covering no question; left as written
+- specs/303-research-organization/research.md: `settlements/020` -> `0002`
+- specs/303-research-organization/research.md: `water/015` -> `0069`
+- specs/303-research-organization/research.md: `homesteads/152` -> `0032`
+- specs/303-research-organization/spec.md: `settlements 020` -> `0002`
+- specs/303-research-organization/spec.md: `water 015` -> `0069`
+- specs/303-research-organization/spec.md: `homesteads 152` -> `0032`

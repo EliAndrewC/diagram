@@ -1,7 +1,7 @@
 # Handoff - feature 269, group C4B (cities/sizing), session 1: research and write
 
 - SECTION=cities/sizing/030
-- SECTION=cities/sizing/010
+- SECTION=0181
 - KEY=satsuma-gaijo-datamax
 - KEY=reimeikan-satsuma-gaijo
 - KEY=sendai-castles-jawiki

@@ -1,4 +1,4 @@
-# Audit: the city tier - `settlements/cities.md`, `settlements/cities/*.md`, `settlements/capitals.md` against `research/cities/*.html`
+# Audit: the city tier - `settlements/cities.md`, `settlements/cities/*.md`, `settlements/capitals.md` against `research/contents.json#cities*.html`
 
 Independent Opus reader, 2026-09-12. Section granularity. Class E here means SETTING-CANON.
 
@@ -23,7 +23,7 @@ Shares: F ~42%, D ~33%, C ~13%, E ~10%, B ~4%, A 0%.
 
 ## cities/sizing.md (22.3 KB, NO research counterpart)
 
-Grounding: partly `research/cities/fabric/`; the budget model, density calibration and tolerances only in `specs/009-city-area-budget/research.md` (pre-HTML, no footnotes). `citybudget.py:109` points back at `sizing.md`.
+Grounding: partly `research/contents.json#urban-fabric`; the budget model, density calibration and tolerances only in `specs/009-city-area-budget/research.md` (pre-HTML, no footnotes). `citybudget.py:109` points back at `sizing.md`.
 
 | Section | Class | Engine |
 |---|---|---|

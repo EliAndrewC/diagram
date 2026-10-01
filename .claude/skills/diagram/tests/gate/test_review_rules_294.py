@@ -9,7 +9,7 @@ every shipped hamlet (the `test_*_pool` cases). The predicates are module-level 
 Thresholds and their sources (plan D11): footbridges 60 ft apart (GUESS; the placer spaces them 300 ft); house bearings
 within +-33.75 deg of the common bearing (research homesteads/240: 87% of houses within the commonest compass point and the
 two either side) with no pile-up at the limit; the brook crosses the view in one piece (map drawing convention); the wood shed
-nearer its own house than any other building and turned with it (research homesteads/212 and 720; "nearest its own" a GUESS).
+nearer its own house than any other building and turned with it (research 0043 and 720; "nearest its own" a GUESS).
 """
 
 from __future__ import annotations

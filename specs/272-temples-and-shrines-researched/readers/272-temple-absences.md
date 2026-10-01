@@ -1,4 +1,4 @@
-# The absence notes and labeled guesses in religion-and-death 010-070 and 210 (feature 272)
+# The absence notes and labeled guesses in 0232, 0233, 0234 and 210 (feature 272)
 
 - [010 / city-temple-size---the-deliberate-l7r-liberty] no publicly readable source (searched 2026-08-28: for a count of Edo-period parish temples. The Japanese encyclopedia article on the temple-registration system gives a different figure and not this one, so the number stands as an order of magnitude rather than a count)
 

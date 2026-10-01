@@ -1,6 +1,6 @@
 """Feature 209 (GM 2026-09-07): the research record is written for its READER - the mechanical half.
 
-The GM read the first entry of `research/homesteads.html` as a reader would and ruled, for every entry: a term a
+The GM read the first entry of `research/contents.json#homesteads` as a reader would and ruled, for every entry: a term a
 casual reader would not know is a hover tooltip, as on the map (*"apply the same kind of tooltip rules to our
 research sections that we have in our diagram HTML pages"*); a note for a session - `Grounds:`, `Evidence:`, a
 spec-kit feature, a task id - is an HTML comment (*"anything which is a note for you ... should be hidden in HTML
@@ -20,8 +20,9 @@ import re
 import pytest
 
 from l7r.diagram.interactive.glossary import GLOSSARY, record_glossary_js
+from l7r.diagram.interactive.record import site_pages
 from l7r.diagram.interactive.sources import RESEARCH_DIR
-from tests._record_pages import all_pages
+from tests._record_pages import all_pages, notes_text
 
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _TAG = re.compile(r"<[^>]+>")
@@ -71,13 +72,15 @@ def offenses(text: str) -> list[str]:
     return out
 
 
-@pytest.mark.parametrize("page", _all_pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
-def test_every_record_page_loads_the_glossary_before_the_record_script(page: pathlib.Path) -> None:
-    text = page.read_text(encoding="utf-8")
-    prefix = "../" * len(page.relative_to(RESEARCH_DIR).parts[:-1]) + "assets/"
+@pytest.mark.parametrize("here", ["index.html", "q/x.html", "research/fields.html", "sources/k.html", "all.html"])
+def test_every_site_page_loads_the_glossary_before_the_record_script(here: str) -> None:
+    """Every page of the site is written by one shell (`record/site_pages.py`, feature 303), so the shell is what holds
+    the order: the glossary asset is loaded, and before record.js (both deferred, so document order is run order)."""
+    text = site_pages.shell("T", here, "", "<p>x</p>")
+    prefix = "../" * here.count("/") + "assets/"
     g = text.find(f'<script src="{prefix}glossary.js" defer></script>')
     r = text.find(f'<script src="{prefix}record.js" defer></script>')
-    assert 0 <= g < r, f"{page.name}: the glossary asset is loaded, and before record.js (both deferred, so document order is run order)"
+    assert 0 <= g < r, here
 
 
 def test_the_glossary_asset_is_derived_from_the_glossary() -> None:
@@ -332,7 +335,7 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
     from l7r.diagram.interactive.page import explanations, glossary_for
 
     in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))} | {g["term"] for g in glossary_for(explanations(set(COMPOUND_CLASSES), registry=COMPOUND_CLASSES))}
-    record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8"), flags=re.S))) for p in _all_pages()).lower()
+    record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8") + notes_text(p), flags=re.S))) for p in _all_pages()).lower()
     words = bounded_word_starts(record)  # built once: a one-word variant is a set lookup, not a search of the whole record (FR-002)
     in_record = {term for term, (variants, _) in GLOSSARY.items() if any(stands_in(v.lower(), record, words) for v in variants)}
     unused = set(GLOSSARY) - in_modals - in_record
@@ -343,11 +346,14 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
 @pytest.mark.parametrize("page", _finding_files(), ids=lambda p: p.name)
 def test_the_fields_for_a_session_are_comments(page: pathlib.Path) -> None:
     text = page.read_text(encoding="utf-8")
-    sections = len(re.findall(r"<h2 ", text))
-    grounds = len(re.findall(r"<!-- Grounds:", text))
-    evidence = len(re.findall(r"<!-- Evidence:", text))
-    assert grounds and evidence, f"{page.name}: the Grounds and Evidence fields are kept, as comments (non-vacuity: {sections} sections)"
     assert not re.search(r"\b(?:Grounds|Evidence):", visible_text(text)), f"{page.name}: a field for a session is visible"
+
+
+def test_the_fields_for_a_session_are_kept_as_comments() -> None:
+    """Non-vacuity for the test above, over the whole record (feature 303: a page is one question, and not every
+    question carries both fields): the Grounds and Evidence fields are kept, as comments."""
+    text = "".join(p.read_text(encoding="utf-8") for p in _finding_files())
+    assert text.count("<!-- Grounds:") > 100 and text.count("<!-- Evidence:") > 100
 
 
 @pytest.mark.parametrize("page", _all_pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))

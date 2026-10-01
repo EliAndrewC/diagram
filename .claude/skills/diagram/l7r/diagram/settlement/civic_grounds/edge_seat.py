@@ -5,9 +5,9 @@ feature 280 (M68) found it attested only in twentieth-century records. A ground 
 the houses and wells by its own distance, out of the water by the caller's bank margin (feature 280 M75: the scaled
 set-backs from water once drawn are attested in no period), as near the houses as those allow and, among equally near
 seats, nearest the fall line - a drawing order among seats that clear, not a custom (the downstream side is attested in
-today's villages only, research/religion-and-death/160). The machinery is shared so the two cannot drift
-(the tiers' rule: MOVE, never copy). Research: research/religion-and-death/280-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/religion-and-death/530-cremation-grounds-and-bone-mounds-kasoba.html, research/religion-and-death/160-village-burial-grounds-bochi.html; the map's rules at
-research/rendering/religion-and-death/160-how-our-maps-draw-village-burial-grounds.html, research/rendering/religion-and-death/530-how-our-maps-draw-cremation-grounds-and-bone-mounds.html.
+today's villages only, research/questions/0235-village-burial-grounds-bochi.html). The machinery is shared so the two cannot drift
+(the tiers' rule: MOVE, never copy). Research: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html, research/questions/0235-village-burial-grounds-bochi.html; the map's rules at
+research/questions/0235-village-burial-grounds-bochi.drawing.html, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html.
 
 NEAREST FIRST, NOT FALL LINE FIRST. A scan that followed the fall line out to its reach before turning put a hamlet's
 ground across its paddies from its houses, 700 ft off, where a side bearing had room 200 ft away (found by the

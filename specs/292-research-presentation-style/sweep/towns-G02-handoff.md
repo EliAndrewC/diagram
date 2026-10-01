@@ -2,7 +2,7 @@
 
 - SECTION=towns/the-town-plan-a-street-town-or-a-grid-and-the-gate-to-yamen-axis-gaison
 - RENDERING=rendering/towns/how-our-maps-lay-out-a-towns-streets
-- OLD=research/towns/ research/towns/ research/towns/
+- OLD=research/contents.json#towns research/contents.json#towns research/contents.json#towns
 - MODALS=ApproachRoad
 - BASE=48e27cfec
 

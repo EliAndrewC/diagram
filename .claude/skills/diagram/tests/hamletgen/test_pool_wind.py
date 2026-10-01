@@ -36,7 +36,7 @@ def _manifest(gen: str) -> dict:
 
 def _belted(gen: str) -> dict:
     """The manifest of a map that draws a village belt: a nucleated one. Where every farm carries its own grove - the
-    dispersed and linear forms (feature 291) - the grove IS the shelter and no village belt is drawn (research/vegetation/020,
+    dispersed and linear forms (feature 291) - the grove IS the shelter and no village belt is drawn (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html,
     "The per-farmstead belt is the DISPERSED settlement's answer"; `hinterland/belt.belt_polygon`)."""
     m = _manifest(gen)
     if m["meta"].get("settlement_form", "nucleated") != "nucleated":

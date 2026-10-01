@@ -4,19 +4,19 @@
 
 - SECTION=settlements/the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital
 - RENDERING=rendering/settlements/how-our-maps-draw-and-state-each-size-of-settlement
-- OLD=research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/archetypes/
+- OLD=research/contents.json#tiers research/contents.json#tiers research/contents.json#tiers research/contents.json#tiers research/contents.json#tiers research/contents.json#tiers research/contents.json#tiers research/contents.json#field-archetypes
 - MODALS=
 - BASE=0a655a7f7
 
 Nothing was left out: no claim held any of the eight sections in progress. The rendering section is the first on a new
-page, `research/rendering/settlements/` (its `_front`, `_tail` and `_citations-*` fragments copied from
+page, `research/contents.json#tiers` (its `_front`, `_tail` and `_citations-*` fragments copied from
 rendering/religion-and-death; `tests/interactive/test_citations.py` now counts 23 pages). No class's `Entry:` named a
 folded section, but the place card's `"entry"` in `l7r/diagram/interactive/assets/place.json` named archetypes 190 and
 now names both new titles - the card is written from it, so an `entry-drift`-style look at the card's `basis` sentence
 against the rendering section's card bullets is owed. Cut, with REMOVED comments: the GM's inciting question from 190,
 190's "came back mostly NEGATIVE" framing, 190's note `l7r-median-domain-3` (its two passages are `l7r-median-domain-8`
 and `-2`), and the five `Sources:` rosters. Keys renamed: 190's `l7r-median-domain`, `-2`, `-4` are `-23`, `-24`, `-25`
-on the research page (`-20` was taken by settlements 035); the rendering page cites `l7r-median-domain-23` for the same
+on the research page (`-20` was taken by 0004); the rendering page cites `l7r-median-domain-23` for the same
 table rows. Two canon statements still carry no footnote, as in the old sections: the provincial city's caste shares
 (40/20/25/10/5) and that it counts no farmers (both from the setting's budget tables, `budgets.md` - lines 87 and
 252-284 hold them, readable through `make canon`), and the hamlet's "one to three small fields". The absence note on a

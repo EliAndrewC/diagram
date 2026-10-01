@@ -31,14 +31,14 @@ The rest were deduplicated across the four domains and packed into 33 write grou
 
 | the GM's example | row | group | state (2026-09-27) |
 |---|---|---|---|
-| how much larger is the village headman's house | A74 D95 | V7 (homesteads 520-580) | written, in its checks |
-| the real size of a country shrine where a country monk lives | - | feature 270 (Diagram shrines) | 270's, from religion-and-death 120's bands |
-| inns | B67 B68 C110 D135 | T3 (towns 320-370) | written and checked |
-| dojos | C141 D143 | G2 (buildings 760-810) | queued after G1 |
-| governor's mansions | C27 D125, C28 D126 | K2 (cities/government 200-270) | todo |
-| smiths | A149 B48 C129 | U4 (urban-features 430-490) | todo |
-| tanneries | B58 C126, C127 | covered by feature 265 (urban-features 060-068); the direction out of town (B59 C127) is in U1, now in its checks | in progress |
-| gate markets | B11, C175 | T4 (towns 380-430); the city side is 269's hinterland 040 | written and checked |
+| how much larger is the village headman's house | A74 D95 | V7 (0034, 0050) | written, in its checks |
+| the real size of a country shrine where a country monk lives | - | feature 270 (Diagram shrines) | 270's, from 0222's bands |
+| inns | B67 B68 C110 D135 | T3 (0185, 0186, 0188) | written and checked |
+| dojos | C141 D143 | G2 (0095, 0153, 0154, 0184) | queued after G1 |
+| governor's mansions | C27 D125, C28 D126 | K2 (0167, 0168, 0169) | todo |
+| smiths | A149 B48 C129 | U4 (0051, 0205, 0206) | todo |
+| tanneries | B58 C126, C127 | covered by feature 265 (0193); the direction out of town (B59 C127) is in U1, now in its checks | in progress |
+| gate markets | B11, C175 | T4 (0127, 0128, 0129); the city side is 269's hinterland 040 | written and checked |
 
 The State table in `inventory.md` is where each group stands; it is updated at each hourly wake.
 

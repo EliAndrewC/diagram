@@ -61,9 +61,9 @@ def test_the_owed_modal_brief_of_six_sections_runs_on_its_declared_kind() -> Non
 
 
 def test_one_line_spanning_six_sections_counts_six_and_a_range_expands_on_disk() -> None:
-    six = "## Your items\n\n- A1 one line: `fields/010`, `020`, `030`, `040`, `050`, `060`. M.\n\n## Next\n- Z9 not assigned\n"
+    six = "## Your items\n\n- A1 one line: `0008`, `020`, `030`, `040`, `050`, `060`. M.\n\n## Next\n- Z9 not assigned\n"
     assert bl.load(six, RECORD)[1] == 6
-    ranged = "## Your items\n- R1 absences in `religion-and-death/090-128`, and `scripts/x.py:195-304` is code\n"
+    ranged = "## Your items\n- R1 absences in `0215, 0221, 0222, 0223`, and `scripts/x.py:195-304` is code\n"
     assert bl.load(ranged, RECORD)[2] == [f"religion-and-death/{s}" for s in ("090", "100", "110", "128")]
     code = "## Your items\n- C7 the parser at `scripts/x.py:195-304`\n- no id here at all\n"
     assert bl.load(code, RECORD)[2] == ["C7", "no"], "a code reference is not a section; an item with no id counts one"

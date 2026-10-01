@@ -7,10 +7,10 @@ Written 2026-09-27. No item was claimed by another session. The saved pages are 
 ## Sections
 
 - SECTION=vegetation/210
-- SECTION=vegetation/220
+- SECTION=0077
 - SECTION=vegetation/230
 - SECTION=vegetation/140
-- SECTION=vegetation/060
+- SECTION=0080
 - SECTION=vegetation/070
 
 ## New registry keys
@@ -35,11 +35,11 @@ B26 ACCURATE - the trees among a village's houses were each homestead's own wood
 
 B27 CONTRADICTION-RESOLVED (siting) and SILENT (the boundary features) - the village is houses, then fields, then hill land (kotobank-murazakai), the satoyama is the nearest, lowest slopes around the settlement (satoyama-jawiki), and the fuel wood stood on the outer edge beyond the fields (Miura 2019 quoting a 1910 account), while low grass and riverbank land was the other, grass commons (iriaichi-jawiki); hill-land boundaries were vague for the terrain and, when ruled, were drawn lines that bent, marked with rocks and sealed at their ends and bends; that they followed ridge, stream and path is on no page read and is now labeled a GUESS with an absence note - Kashikawa's two parcels (505 and 887 ft downslope, one 75 ft from the reed marsh) contradict the record: a woodland parcel should be seated beyond the fields and on ground higher than the fields it adjoins (the scorer's upslope term must bind, not be outbid by nearness), low wet ground left to grass and reeds; the square-parcel item (A) is unaffected - the irregular outline stays ACCURATE, the ridge/stream/path bounding a GUESS. vegetation/140's heading text changed (its anchor kept).
 
-B28 CONTRADICTION-RESOLVED (stocking) and SILENT (crown size) - a worked fuel wood was thin, low, many-stemmed trees cut every 15-30 years, a cut konara stump sending up ~33 shoots (~14 after three years), holding ~100 m3/ha at 20 years against 265 uncut; the one stems-per-hectare figure read for konara of about coppice age is 1,700/ha at 29 years (one per ~63 sq ft, ~8 ft centers), two to three times the unread 500-800 band, which vegetation/060 now labels a GUESS; no page gives a crown width for any coppice tree - the woodland commons should be stocked at ~1,700 crowns/ha on ~8 ft centers with crowns ~8-9 ft across (the width a GUESS sized so neighbors meet), which is farming-communities.md item F's "stocked like parkland" answered with a number; the belt and other woods keep 060's figures (CANOPY_R_FT and CANOPY_SPACING_FT for them stay guesses), so the one-constant finding in vegetation/070 would split if the commons takes its own crown.
+B28 CONTRADICTION-RESOLVED (stocking) and SILENT (crown size) - a worked fuel wood was thin, low, many-stemmed trees cut every 15-30 years, a cut konara stump sending up ~33 shoots (~14 after three years), holding ~100 m3/ha at 20 years against 265 uncut; the one stems-per-hectare figure read for konara of about coppice age is 1,700/ha at 29 years (one per ~63 sq ft, ~8 ft centers), two to three times the unread 500-800 band, which 0080 now labels a GUESS; no page gives a crown width for any coppice tree - the woodland commons should be stocked at ~1,700 crowns/ha on ~8 ft centers with crowns ~8-9 ft across (the width a GUESS sized so neighbors meet), which is farming-communities.md item F's "stocked like parkland" answered with a number; the belt and other woods keep 060's figures (CANOPY_R_FT and CANOPY_SPACING_FT for them stay guesses), so the one-constant finding in vegetation/070 would split if the commons takes its own crown.
 
 ## Left open, and owed elsewhere
 
-- vegetation/020 (the three groves) describes the dooryard copse as spread through the open gaps among the houses; vegetation/210 finds it is the homesteads' own woods. 020 should point to 210 and drop "throughout the gaps" as the sizing rule. Not in a range this group owns, so not edited.
+- 0071 (the three groves) describes the dooryard copse as spread through the open gaps among the houses; vegetation/210 finds it is the homesteads' own woods. 020 should point to 210 and drop "throughout the gaps" as the sizing rule. Not in a range this group owns, so not edited.
 - vegetation/154 (did every farmstead keep bamboo; group V2's B29): the 1910 account quoted in 210's notes puts a bamboo wood among the woods round the farmhouses on the Musashino upland (`miura-2019-yashikiyama`, note `miura-2019-yashikiyama-2`) - usable evidence for V2.
 - The engine repeats "bounded by ridge, stream and path" in `hamletgen/hinterland.py`'s comment; it is now a labeled guess in the record, and the comment should say so when the generator is next touched.
 - `scripts/check-question-size.py` reports homesteads/210 (the farmstead fixtures, group H1's) at 20,060 bytes, over the cap; not touched here.

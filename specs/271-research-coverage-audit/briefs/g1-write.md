@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-4`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -27,22 +27,22 @@ in progress; edit only that line.
 Each is a research QUESTION the record owes: never researched, labeled a guess, or thinly sourced. The kinds named are
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
-Also edits buildings/060, 080, 090, 160 (NOT 180 - 267's, still open).
+Also edits 0097, 080, 090, 160 (NOT 180 - 267's, still open).
 - D04 **Building hierarchy**: do the compound's buildings rank in size (office hall, residence, barracks, stable), and
-  is there a readable source for it? (buildings/180, 1 cited, 5 absence). M. P1.
-  > COORDINATION (D04): 267 edited buildings 180 (the hierarchy; Matsue's 67 tsubo for 500-1,000 koku, Matsushiro 150 koku ~49 tsubo - R15; stalls R16) and is still open - write D04 as a NEW question citing 180 and do not edit 180
+  is there a readable source for it? (0116, 1 cited, 5 absence). M. P1.
+  > COORDINATION (D04): 267 edited 0116 (the hierarchy; Matsue's 67 tsubo for 500-1,000 koku, Matsushiro 150 koku ~49 tsubo - R15; stalls R16) and is still open - write D04 as a NEW question citing 180 and do not edit 180
 - D05 **Office hall size**: how long and deep was a county office hall (the 80-150 by 20-45 ft band is the project's
-  reading)? (buildings/090, 180). M. P1.
+  reading)? (0099, 180). M. P1.
   > COORDINATION (D05): not answered by 267; cite its R20/R21 (the clerks' room and seats in the hall)
 - D11 **Tax archive**: how big was a records kura or strongroom at an office (the 32-36 ft is the vocabulary's)?
-  (buildings/160). S. P1.
+  (0100). S. P1.
 - D13 B82 C47 **Tax-rice granary**: how big was an office's grain kura (drawn 43-50 by 25-27 ft) and how many per
   posting; where does a county seat keep its tax rice (in the compound, or a storehouse row in a rice-transit town);
   and how big is a provincial city's granary, how many buildings, and where (the governor's compound, the wharf, a
-  gate)? (buildings/080, 150; towns/110; cities/capitals/090, 360). M. P1.
+  gate)? (0098, 150; towns/110; 0142, 360). M. P1.
   > COORDINATION (D13): 267's R18 is a KNOB on the raised grain-kura floor and silent on size - the size is ours; cite R18
-- D15 **Barracks size**: how big was the working platoon's nagaya (the band is a guess)? (buildings/060). S. P1.
-  > COORDINATION (D15): keep to the magistracy platoon's nagaya on buildings 060; the CITY servant nagaya is 269's B39 (cities/government) - do not write it
+- D15 **Barracks size**: how big was the working platoon's nagaya (the band is a guess)? (0097). S. P1.
+  > COORDINATION (D15): keep to the magistracy platoon's nagaya on 0097; the CITY servant nagaya is 269's B39 (cities/government) - do not write it
 
 ## The procedure (session 1: research and write)
 
@@ -62,7 +62,7 @@ Also edits buildings/060, 080, 090, 160 (NOT 180 - 267's, still open).
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on buildings 700-750, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0113, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

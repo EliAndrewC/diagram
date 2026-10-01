@@ -5,18 +5,18 @@ Written 2026-09-27 in clone diagram-research-5. One source-reader pass over 27 c
 
 ## Sections
 
-- SECTION=towns/440
+- SECTION=0130
 - SECTION=towns/450
 - SECTION=towns/460
-- SECTION=towns/470
-- SECTION=towns/480
-- SECTION=towns/490
+- SECTION=0189
+- SECTION=0131
+- SECTION=0132
 - SECTION=towns/040
-- SECTION=towns/080
-- SECTION=buildings/220
+- SECTION=0122
+- SECTION=0101
 - SECTION=cities/fabric/110
 
-towns/040, towns/080, buildings/220 and cities/fabric/110 changed by ONE pointer sentence each (to 440, 450, 480, 480);
+towns/040, 0122, 0101 and cities/fabric/110 changed by ONE pointer sentence each (to 440, 450, 480, 480);
 no finding in them moved. If `_entry_owed.py` names a modal for them, the answer is
 `ENTRY_DRIFT_OK="a pointer sentence to a new towns question was added; no finding changed"`.
 
@@ -50,7 +50,7 @@ shimogoe-jawiki, kyomachiya-jawiki, siheyuan-zhwiki, l7r-castes.
 - B92 ACCURATE (+ DEVIATION) - the six-day market (every five days, day pairs like 1/6) and the three-day market
   before it, staggered against the region's central market; the Chinese market every few days or three in ten; the
   setting's weekly market day is canon, a deviation in count only; the walk-in reach is Skinner's ~4.5 km for China,
-  and SILENT for Japan (towns/440) - nothing drawn changes; towns/040's catchment sentence now points at 440.
+  and SILENT for Japan (0130) - nothing drawn changes; towns/040's catchment sentence now points at 440.
 - B93 B94 C106 KNOB - a town's periodic market meets either along its main street (the Kanto market ground: a strip
   1-2 ken, ~6-12 ft, between street and house fronts, stalls there and out in the street; a round market-god stone
   at the market's edge, a crossroads or a bridge foot) or before its temple's or shrine's gate (the medieval
@@ -58,7 +58,7 @@ shimogoe-jawiki, kyomachiya-jawiki, siheyuan-zhwiki, l7r-castes.
   draws none; SILENT on a county seat's walled market and on stall construction (towns/450) - the town generator
   should roll the market's place per town from the seed; on the street form, set the house fronts on the market
   stretch back 6-12 ft and place a small round market-god stone (size a guess); on the gate form, keep the ground
-  before the temple/shrine gate open; draw no stalls. The gate market of towns/080 is unchanged (a different thing;
+  before the temple/shrine gate open; draw no stalls. The gate market of 0122 is unchanged (a different thing;
   080 now points at 450).
 - B95 ACCURATE (+ SILENT) - a festival's ground is the shrine's, the temple's and the street's (the otabisho as a
   small shrine, a temporary altar or a representative's house; the market god's festival at the first market; the
@@ -67,18 +67,18 @@ shimogoe-jawiki, kyomachiya-jawiki, siheyuan-zhwiki, l7r-castes.
 - B87 ACCURATE (+ SILENT) - a ward office (machi-kaisho) belonged to the self-governing commercial cities; castle towns
   mostly kept none (officials at the town magistrate's office, or the headman's/elders' own house on the main
   street), post towns rarely; the Chinese huiguan is a Ming-Qing association's hall; no size or street position read
-  (towns/470) - a town map draws no separate commoners' hall.
+  (0189) - a town map draws no separate commoners' hall.
 - B40 C100 B64 ACCURATE (+ DEVIATION, + one GUESS) - a street-front town house's privy is inside its footprint at the
   back where the through-passage reaches the back yard; back tenements share one or two privy sheds per block, at
   the alley's far end beside the well; nearby farmers emptied them, later contract dealers, the landlord owning the
   tenement's night soil; Beijing's night-soil men had fixed routes and yards; the setting's owaiya (burakumin) are a
-  deviation (towns/480) - a tenement block (town and city) draws one shared privy shed, two in a long block, at the
+  deviation (0131) - a tenement block (town and city) draws one shared privy shed, two in a long block, at the
   alley's far end beside the well, ~6 x 9 ft (a guess); a street-front house draws no privy outside its footprint.
-  The farmstead privy stays 269's homesteads/210 (linked, not repeated); buildings/220 and cities/fabric/110 point here.
+  The farmstead privy stays 269's homesteads/210 (linked, not repeated); 0101 and cities/fabric/110 point here.
 - B39 ACCURATE (+ SILENT) - a merchant's town house kept a tsubo-niwa of ~1-2 tsubo (6x6 to 6x12 ft) near the back of
   its plan and often a planted back garden (Kyoto); a farming household's lot ends in a vegetable garden (towns/310);
   a tenement none; a Chinese courtyard is planted with jujube, persimmon and flowering trees; SILENT on how common
-  the tsubo-niwa was in a provincial town (towns/490) - a merchant house shows a small open court in its footprint
+  the tsubo-niwa was in a provincial town (0132) - a merchant house shows a small open court in its footprint
   near the back, and its back plot is drawn planted (shrubs, a tree) rather than as vegetable beds (carried over from
   Kyoto - a guess for a provincial town); farming households keep the vegetable plot of towns/310.
 
@@ -88,7 +88,7 @@ shimogoe-jawiki, kyomachiya-jawiki, siheyuan-zhwiki, l7r-castes.
   crowd and the festival are under towns/460 ("What does a town keep for the market crowd and the festival?"); the
   city keeps no festival ground of its own either. Not edited here to avoid a conflict with K1's unlanded edit.
 - towns/310 (landed, 265): its rule "behind it lies its own garden plot" should say a merchant house's plot is a
-  planted garden and a farming household's a vegetable one, pointing at towns/490.
+  planted garden and a farming household's a vegetable one, pointing at 0132.
 - towns/270 (landed, 265): where a town's market meets on the street (towns/450's street form), the house fronts on
   that stretch stand back 6-12 ft; 270's street-front rule should point at 450.
 - Nothing owed to 267, 268, 269 or 270's sections.
@@ -100,9 +100,9 @@ shimogoe-jawiki, kyomachiya-jawiki, siheyuan-zhwiki, l7r-castes.
   cited: the record's canon rule (`interactive/sources.py` `_CANON_FILE`) recognizes only `l7r.md` and `budgets.md`,
   so a registry entry for castes.md failed `test_footnotes`. Whether gm-assistant's setting files count as canon is
   a question for the orchestrator (widening `_CANON_FILE` is an engine-code change); the note sits as an HTML comment
-  in towns/480.
+  in 0131.
 - skinner-2002-etudes-rurales: OpenEdition now serves a bot filter (Anubis) to this session's fetcher; the quote in
-  towns/440 is the one fields/120 carries, already quote-checked there. A quote-check reading the page may see the
+  0130 is the one fields/120 carries, already quote-checked there. A quote-check reading the page may see the
   filter rather than the text.
 - okamura-1999-ichimachi is a scanned PDF with an OCR layer that prints 聞 for 間; the note quotes the printed 間
   (the source-reader confirmed the reading). `make quote-verbatim` may flag that one character.

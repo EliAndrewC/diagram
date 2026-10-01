@@ -51,7 +51,7 @@ def test_tanning_yard_stream_variant_draws_staking_frames():
 
 # ---- feature 016: the charcoal district's trade works -------------------------------------------
 def test_charcoal_yard_records_its_sheds_and_no_cooling_apron():
-    """Feature 280 M104 (research/urban-features/150): charcoal was cooled at the kiln before it reached a town, so the yard
+    """Feature 280 M104 (research/questions/0197-charcoal-yards-and-charcoal-stores.html): charcoal was cooled at the kiln before it reached a town, so the yard
     draws no cooling apron. `sheds` floors at one - a yard with no roof over its stock is not a charcoal yard."""
     s = _town()
     s.charcoal_yard(400, 400, rot=-17, sheds=2)
@@ -64,7 +64,7 @@ def test_charcoal_yard_records_its_sheds_and_no_cooling_apron():
 
 def test_kiln_cottage_count_is_clamped_to_the_one_to_three_band():
     """Two or three households is the works we draw; a real kiln district could be a dozen, and
-    that liberty is recorded in research/urban-features.html rather than taken silently here."""
+    that liberty is recorded in research/contents.json#trades-and-services rather than taken silently here."""
     s = _town()
     s.kiln(300, 300, cottages=0)
     s.kiln(700, 300, cottages=9)

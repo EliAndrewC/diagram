@@ -127,7 +127,7 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
 
 #: How far a farmhouse may stand from the field it works, in feet (feature 287, homes H03). The record gives a 6 ft MINIMUM
 #: and no maximum; it gives as a TOLERANCE a back-row house about 700 ft from the crops as "the honest back of a compact
-#: village" (research/rendering/homesteads/400-how-our-maps-draw-farmhouses-minka.html). 700 is therefore the reach every
+#: village" (research/questions/0029-farmhouses-minka.drawing.html). 700 is therefore the reach every
 #: seat is held to while a hamlet's site boundary is installed, and the exhaustive seat pass scans: a map drawing
 #: convention whose figure is the record's own tolerance, not a pick.
 FIELD_REACH_FT = 700.0
@@ -168,7 +168,7 @@ class BundleFitMixin:
         THE NUMBER IS ARBITRARY AND THAT IS ALL RIGHT, as long as nobody reads it as a historical claim
         (GM 2026-09-13, asking exactly that question of this line). The record gives a 6 ft MINIMUM - bund
         plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
-        MAXIMUM at all (`research/rendering/homesteads/400-how-our-maps-draw-farmhouses-minka.html`; the
+        MAXIMUM at all (`research/questions/0029-farmhouses-minka.drawing.html`; the
         retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
         TOLERANCE in the other direction: a back-row house about 700 ft from the crops "reads as the honest
         back of a compact village", and a hamlet "is legitimately loose and is not held to" the village
@@ -657,7 +657,7 @@ class BundleFitMixin:
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?
 
-        THE RULE (GM 2026-08-13, researched in research/rendering/homesteads/020-how-our-maps-draw-threshing-and-drying-yards-niwa.html):
+        THE RULE (GM 2026-08-13, researched in research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html):
         rice is dried on the niwa, so a yard needs clear ground to its SOUTH. A thatched roof is
         pitched 45 deg or steeper, which puts our 46x28 ft minka's ridge ~20 ft up; at 38N in the
         10th month that throws 21 ft of shadow at noon and 39 ft by 9am. So a farmhouse standing
@@ -707,7 +707,7 @@ class BundleFitMixin:
             # for the garden - the same one-obstacle shape the yard rule itself was missed by - and
             # on the reference hamlet 7 of 16 gardens had a neighbor's wall 4-38 ft to their south.
             # A kitchen garden's binding season is the same shoulder month (autumn greens, daikon)
-            # as the drying yard's, so it takes the SAME corridor; research/homesteads/.
+            # as the drying yard's, so it takes the SAME corridor; research/contents.json#homesteads.
             for tg in part_box(g, "gardens") or ():
                 if abs(tg[0] - hx) < (tg[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (tg[1] + tg[3] / 2) < reach:
                     return False
@@ -749,7 +749,7 @@ class BundleFitMixin:
         and SOUTHWEST of every threshing yard and garden bed - the afternoon sun. Off by default; a
         generator opts in, exactly as with `sun_corridor` (feature 133 T10, GM 2026-08-25: "the
         windbreak forest ... is so close to the gardens ... that I do not believe that those gardens
-        would get sufficient sunlight"). The number's derivation is in research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html."""
+        would get sufficient sunlight"). The number's derivation is in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html."""
         self._west_sun_ft = float(feet)
 
     def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
@@ -802,7 +802,7 @@ class BundleFitMixin:
 
     def _garden_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A dooryard garden takes its MORNING sun from the east, so no grove band may stand hard against a garden's east
-        across its height - within the reach `_east_trees` reads (research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html). Tests the candidate's grove against every placed garden and the candidate's garden
+        across its height - within the reach `_east_trees` reads (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). Tests the candidate's grove against every placed garden and the candidate's garden
         against every placed grove, as `_yard_sun_conflict` does for the yard's southern strip.
 
         WHY AT THE SEAT (feature 291). The rule was `gardens_unshaded_from_east`, a check of the retired battery, and

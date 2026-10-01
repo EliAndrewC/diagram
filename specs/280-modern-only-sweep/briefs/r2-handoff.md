@@ -7,7 +7,7 @@
 - KEY=nagoya-museum-edo-boseki
 - KEY=kasoba-jawiki (changed: Used for, and new note kasoba-jawiki-9 on 202)
 
-Held sections (researched, NOT edited; text owed below): religion-and-death/155 (exists only in 269's clone, rewritten there by 302d52860 and feb358db6), religion-and-death/190 (269's log names it - a merge commit only, and `git diff origin/main HEAD` in 269's clone is empty for it, but the brief's rule is any output), religion-and-death/530 (269's merge 4952597a3 relinked one sentence of it).
+Held sections (researched, NOT edited; text owed below): religion-and-death/155 (exists only in 269's clone, rewritten there by 302d52860 and feb358db6), religion-and-death/190 (269's log names it - a merge commit only, and `git diff origin/main HEAD` in 269's clone is empty for it, but the brief's rule is any output), 0238 (269's merge 4952597a3 relinked one sentence of it).
 
 ## Outcomes
 
@@ -45,7 +45,7 @@ In the spec, replace "The crematory stands at least about 390 ft from the trunk 
 
 (Check the next free kasoba-jawiki and 190 absence-note suffixes after 269 lands; 202 took kasoba-jawiki-9 in this clone.)
 
-### OWED-TO 269: religion-and-death/530 (M71)
+### OWED-TO 269: 0238 (M71)
 
 Replace the "What stood at it." paragraph's first sentence "One Takamatsu settlement's cremation ground kept six jizo, which the page that describes it says were always set at a cremation ground.<sup class="fn" data-note="higashiueta-sanmai"></sup>" with:
 

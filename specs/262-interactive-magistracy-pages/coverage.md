@@ -14,7 +14,7 @@ noted), and a proposed label under the rule the brief set:
 Where the facts split one kind across two labels, the row gives the main label and names the part
 that takes the other.
 
-**How it was measured.** All 23 `research/buildings/` fragments were read in full. Every other page
+**How it was measured.** All 23 `research/contents.json#compounds` fragments were read in full. Every other page
 directory (archetypes, cities/*, fields, homesteads, presentation, religion-and-death, settlements,
 towns, urban-features, vegetation, water, ways; 265 fragments) was searched for the kinds' keywords
 (kosatsu/notice board, chinju/grove, bath, kennel/dog, stable, weigh, tally, boundary stone,

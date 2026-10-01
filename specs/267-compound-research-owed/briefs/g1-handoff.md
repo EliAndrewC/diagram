@@ -1,11 +1,11 @@
 # G1 handoff - the residence's rooms (session 1: research and write)
 
-- SECTION=buildings/240
+- SECTION=0102
 - SECTION=buildings/250
 - SECTION=buildings/260
-- SECTION=buildings/270
+- SECTION=0239
 - SECTION=buildings/280
-- SECTION=buildings/290
+- SECTION=0103
 - KEY=engawa-kotobank
 - KEY=irikawa-kotobank
 - KEY=shoinzukuri-kotobank

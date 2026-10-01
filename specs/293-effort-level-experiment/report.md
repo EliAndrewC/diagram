@@ -96,7 +96,7 @@ made moot:
 
 - **Ported:** the storehouse dealt by size (on 287's lots the size is known before the seat, so e7's hold-and-hand-back machinery was not
   needed), the storehouse's shape held to 18-27 ft at 1.5-1.8 to one, the bamboo thicket's fix, three lane-web repairs, the research
-  (homesteads 120 and 430).
+  (0040 and 430).
 - **Dropped as moot on main:** the entrance framing, the joint zigzag re-route, the spur sweep, a coverage lift, a Kuwabata outlier.
 - **Found at the landing:** a 32 ft dead-end lane stub at Inashiro's entrance (fixed); Sawada's shared ox sheds, two of four now past the
   120 ft reach where main had one (deferred to future-work with a sketch: lay each pocket during the seating).
@@ -104,7 +104,7 @@ made moot:
   feature 291 (`outputs/I-port-handoff.md` records how it resolved).
 
 **Filed for later (future-work):** the record classes the storehouse annex two ways - as the farm shed (naya, feature 280 M18,
-homesteads/440) and as the kura (homesteads/120, 430) - so research is owed on which it is, and its size follows; the port kept 280's
+0052) and as the kura (0040, 430) - so research is owed on which it is, and its size follows; the port kept 280's
 band. Sawada's sheds point at the existing entry that would retire the shared byre altogether (269 B16).
 
 ## A tooling finding

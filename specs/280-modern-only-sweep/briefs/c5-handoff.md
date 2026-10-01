@@ -3,9 +3,9 @@
 ## Sections
 
 - SECTION=cities/fabric/030
-- SECTION=cities/hinterland/050
+- SECTION=0174
 - SECTION=cities/hinterland/600
-- SECTION=cities/defenses/100
+- SECTION=0151
 
 ## New registry keys
 

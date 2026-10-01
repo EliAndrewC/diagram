@@ -15,4 +15,4 @@ Commit `8e8d70f79` in this clone. Re-check: one quote-check on the four moved no
 - The kochi notes' vertical punctuation (︑︒) is the text layer's and was checked against page images only; `quote-verbatim` cannot check a PDF.
 - The `batten ceiling` glossary definition is the checker's own (trimmed to the term's meaning), not drawn from the record's text.
 - Not cited, a pointer: Bunka Isan Online gives the Shibata row as 43.6 by 7.3 m (about 24 by 4 ken) against the page's 3.5 ken deep; no finding rests on the depth.
-- 910 sits at 19,998 bytes after trimming its session comments; a further note would push it over. `urban-features/560` (20,273) is over the cap too - not this brief's.
+- 910 sits at 19,998 bytes after trimming its session comments; a further note would push it over. `0211` (20,273) is over the cap too - not this brief's.

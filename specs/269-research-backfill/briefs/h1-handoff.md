@@ -5,10 +5,10 @@ Written 2026-09-27. Nothing of H1 had been claimed by another session (`/diagram
 ## Sections
 
 - SECTION=homesteads/210
-- SECTION=homesteads/212
-- SECTION=homesteads/214
-- SECTION=homesteads/215
-- SECTION=homesteads/218
+- SECTION=0043
+- SECTION=0044
+- SECTION=0045
+- SECTION=0046
 - SECTION=homesteads/250
 
 ## New registry keys
@@ -54,7 +54,7 @@ The modals that quote a share: `Bathhouse` ("about three farms in ten" - Sugiura
 
 ## Left open
 
-- The `Bathhouse` modal says where the shed stood "was found nowhere" - now drifted from homesteads/214 (entry-drift owed); `Woodpile`, `HenCoop`, `Persimmon` and `ManureHeap` may drift the same way once their sections are checked.
+- The `Bathhouse` modal says where the shed stood "was found nowhere" - now drifted from 0044 (entry-drift owed); `Woodpile`, `HenCoop`, `Persimmon` and `ManureHeap` may drift the same way once their sections are checked.
 - Buck's page numbers: the Internet Archive OCR garbles the page markers; the two sentences sit on or near pp. 219-221, so the note gives no page.
 - The PDF sources (Suzuki 1959, Sugiura 1973 and 1977, Sato 1962) were read from text layers extracted with pypdf, saved at `/tmp/l7r-check/269-h1-pages/30-33-*.pdf.txt`; `make source-pages` cannot read a PDF, so `make quote-verbatim` may report these notes as unverifiable against the fetched page - the check session should use those saved texts.
 - No correction is owed to another feature's sections.

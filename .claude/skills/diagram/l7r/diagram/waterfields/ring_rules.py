@@ -12,7 +12,7 @@ EACH BODY IS THE TEST BODY IT REPLACES, thresholds and all (the retired `tests/g
 yet - the arrowhead (W25) and the grave island (W28) - are written from the water design's mechanism.
 
 TWO RULES ARE WRITTEN DOWN AND NOT ENFORCED: the working width (W26) and the dart (W27). Their research pass (feature
-287, T13, 2026-09-29) read `research/fields/` and found the record CONTRADICTS both rather than being silent - see
+287, T13, 2026-09-29) read `research/contents.json#fields` and found the record CONTRADICTS both rather than being silent - see
 `BASIN_MIN_WIDTH_FT` and `DART_MIN_APEX` for the passages. A rule the research contradicts is recorded, not enforced
 (the lead's ruling for T13), so `ring_violations` does not ask `narrow` or `dart`; each stays a named predicate here,
 tested, so the measurement is one call away if the GM rules otherwise.
@@ -80,7 +80,7 @@ recorded here, in `ring_violations` and in the feature's report). The number is 
 Kashikawa (future-work 'the paddy area floor cannot see WIDTH') put a line 'somewhere in the 12-16 ft band' after a 5.9 ft
 basin drew as a doubled bund, and 12 ft is that band's lower edge.
 
-THE RESEARCH PASS (T13, 2026-09-29) searched `research/fields/` for a stated basin width. It found no width floor, and two
+THE RESEARCH PASS (T13, 2026-09-29) searched `research/contents.json#fields` for a stated basin width. It found no width floor, and two
 entries that argue against one: fields/023 ('A basin never tapers to a point') - "So the rule is deliberately NOT a minimum
 plot width - that would have been the obvious rule and it would have been wrong", on the strength of Shiroyone Senmaida's
 basins (about 18 m2 each, the smallest half a meter square) and terrace beds "usually 2-6 m in width" - and fields/024

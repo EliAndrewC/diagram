@@ -35,7 +35,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
 
 - M123 **Moat offtake angles**: the moat's river junctions, with the outlet swept about 22 degrees downstream and the inlet about 10 degrees upstream of square. The directions rest wholly on modern hydraulic engineering: watersa-junction-angle (a 2016 numerical model), ignou-silt-control, ahmed-soliman-2022 (a laboratory flume), cementconcrete-headworks, and "general hydraulic reading, for which no source is cited". The angles are labeled a guess. The hamlet offtake is M33 (cities/river-cities/020) - kinds: none (the offtake code); maps: minami, nagahara (the code also serves tango, hoshizora, ubame, hirameki). M.
 - M124 **Private landings**: the merchant's back-gate private landing, which the official's landing is set against. The section says "The landings that survive on the Kyobashi River, the back-gate kind among them, were almost all built by private owners from the Meiji period on ... that the merchant's back gate was already the Edo town's form is this project's reading of those later landings" (gangi-hiroshima-jawiki). The Dock kind's caveat repeats it (cities/river-cities/070) - kinds: Dock (`particulars.py:279`); maps: hayakawa, legacy minami, nagahara, hirameki. S.
-- M125 **The boatmen's water-god shrine**: a Suitengu shrine at the head of a landing, one arm of a knob. That arm rests only on katsushika-suijin ("a modern local history published by the ward"), whose night-soil boatmen's festivals are undated, in a trade that ran into Showa. The funadama arm is period (cities/river-cities/060) - kinds: none (the boatmen's altar); maps: hayakawa. L.
+- M125 **The boatmen's water-god shrine**: a Suitengu shrine at the head of a landing, one arm of a knob. That arm rests only on katsushika-suijin ("a modern local history published by the ward"), whose night-soil boatmen's festivals are undated, in a trade that ran into Showa. The funadama arm is period (0225) - kinds: none (the boatmen's altar); maps: hayakawa. L.
 
 ## The procedure (session 1: research and write)
 
@@ -66,7 +66,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on cities/river-cities/020, cities/river-cities/070, cities/river-cities/060, and cities/river-cities 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on cities/river-cities/020, cities/river-cities/070, 0225, and cities/river-cities 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

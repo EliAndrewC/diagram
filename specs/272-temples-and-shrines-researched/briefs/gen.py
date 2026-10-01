@@ -42,10 +42,10 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
     ),
     "R2": (
         "town monasteries and town and city shrines",
-        "religion-and-death 450-490 (new), and edits to 040 and 210",
+        "0216, 0228 (new), and edits to 040 and 210",
         ["272-reader-R2a.md", "272-reader-R2b.md", "272-reader-T.md", "272-temple-absences.md"],
         """- B96 D66 **Town monastery count**: how many monasteries does a county seat keep (canon: one per patron Fortune -
-  `make canon`), against real county towns, and who lives in one? (religion-and-death/210, 020). M. P1.
+  `make canon`), against real county towns, and who lives in one? (0226, 020). M. P1.
 - B97 B98 D65 **Town monastery size and layout**: how big is a town monastery's precinct and hall, walled or fenced,
   what stands in it (gate, main hall, bell, priests' quarters, graveyard), and where it stands in the town (the temple
   quarter at the edge)? (religion-and-death/010, 040, 170 - 170 is 269's: cite it, do not edit). M. P1.
@@ -53,18 +53,18 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
   village's (the 1897 rank floors: 300/500/600 tsubo), and does a city keep a principal shrine (the castle town's
   sōchinju; the Chinese city-god temple, chenghuang miao), how big and where? (100-126 are the village's - cite
   them). M. P1.
-- C147 D70 **Clergy housing**: who lives inside a city temple's walls and who outside? (religion-and-death/040, 1
+- C147 D70 **Clergy housing**: who lives inside a city temple's walls and who outside? (0232, 1
   note). S. P1. The 040 absence note (in `readers/272-temple-absences.md`) is yours; its second search is part C of
   the T reader's report (named below).
 - You are the ONLY group that edits 040. You edit 210 FIRST; group R3 edits it after you, in this clone.""",
     ),
     "R4": (
         "the state cult and temple plans",
-        "religion-and-death 550-570 (new) - NOT 580-590, which are group T's",
+        "0227, 0230 (new) - NOT 580-590, which are group T's",
         ["272-reader-R4.md"],
         """- B91 D78 **State cult buildings**: does a county seat or a city carry the Chinese state cult's buildings (the
   Confucian temple, wen miao; the City God temple; the altars of soil and grain), their setting analogue, where and
-  how big? (urban-features/070 is not ours: say in the handoff what it owes; religion-and-death/020 - you edit 020
+  how big? (0194 is not ours: say in the handoff what it owes; 0234 - you edit 020
   FIRST, group T after you in this clone). M. P3.
 - C144 **Provincial academies**: did a provincial city keep a Confucian academy or school-temple (shuyuan, wenmiao,
   a domain school), and how big? M. P4.
@@ -87,17 +87,17 @@ GROUPS: dict[str, tuple[str, str, list[str], str]] = {
     ),
     "R3": (
         "the village temple and wayside shrines",
-        "religion-and-death 500-540 (new), and edits to 210",
+        "0217, 0229, 0238 (new), and edits to 210",
         ["272-reader-R3.md", "272-reader-T.md", "272-temple-absences.md"],
         """- A138 D64 **Village temple**: did a village of 40-100 households keep a parish temple (danna-dera) of its own,
   beside or instead of its shrine, and how many villages shared one? Research FOR the GM's ruling - the canon gives a
-  village a country monk (`make canon`). (religion-and-death/210). M. P2.
+  village a country monk (`make canon`). (0226). M. P2.
 - A139 **Village temple precinct**: how big, what stands in it (hall, priest's quarters, bell), and where it sits
   against the houses and the graves. M. P2.
 - A140 D61 B103 **Wayside shrines**: jizō, dōsojin, a stone kami, a street-side Inari - how many does a village or a
-  town's streets carry, how big, at which thresholds (entrance, crossroads, bridge foot)? (religion-and-death/210, 1
+  town's streets carry, how big, at which thresholds (entrance, crossroads, bridge foot)? (0226, 1
   note). M. P2.
-- A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (religion-and-death 160-206, new 270-300,
+- A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (0235, new 270-300,
   in `/diagram/.clones/diagram-supplemental`) leaves open - read R1's sections first and cite them. M. P2.
 - FR-001 **The 210 absence note** (in `readers/272-temple-absences.md`; its second search is part C of
   the T reader's report (named below)). Group R2 edited 210 before you in this clone; build on its text.""",
@@ -127,8 +127,8 @@ above all (it auto-loads when you read a research file).
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** religion-and-death 130-206 and new 270-300 (feature 269's
-burial group R1, in `/diagram/.clones/diagram-supplemental`); religion-and-death 220-260 (feature 267); every page
+**Do not edit these sections - other sessions own them:** 0224, 0235 and new 270-300 (feature 269's
+burial group R1, in `/diagram/.clones/diagram-supplemental`); 0240 (feature 267); every page
 other than religion-and-death. Where a finding OWES one of those a correction, say exactly what in the handoff; the
 orchestrator sends it to the owner. Other groups of THIS feature run beside you in sibling clones: stay inside your
 own sections and range.
@@ -172,7 +172,7 @@ blocked sources is where your TO-DOWNLOAD entries start - first try each once mo
    and when, both searches where there were two; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). The GM's canon governs the setting: report the
    history against it, never override it.
-5. **Write** on {pages}. A new question is a fragment `research/religion-and-death/NNN-<heading id>.html` at a free
+5. **Write** on {pages}. A new question is a fragment `research/contents.json#religion-and-the-deadNNN-<heading id>.html` at a free
    prefix in your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words, labeled (accurate, deviation, convention, guess). Footnotes: `<sup class="fn" data-note="<key>"></sup>`

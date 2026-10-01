@@ -4,21 +4,21 @@
 
 - SECTION=buildings/vegetable-gardens-at-a-samurai-residence-saien
 - RENDERING=rendering/buildings/how-our-maps-place-the-vegetable-garden-in-the-sun
-- OLD=research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds
 - MODALS=VegetableGarden Storehouse
 
 ## Detached studies (shosai)
 
 - SECTION=buildings/detached-studies-shosai
 - RENDERING=rendering/buildings/how-our-maps-draw-a-detached-study
-- OLD=research/buildings/
+- OLD=research/contents.json#compounds
 - MODALS=WritingPavilion
 
 ## The chief retainer's house (karō yashiki)
 
 - SECTION=buildings/the-chief-retainers-house-karo-yashiki
 - RENDERING=rendering/buildings/how-our-maps-house-the-chief-retainer
-- OLD=research/buildings/
+- OLD=research/contents.json#compounds
 - MODALS=KarosHouse
 
 - BASE=953f7d5ad

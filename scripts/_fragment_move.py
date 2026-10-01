@@ -179,7 +179,7 @@ def selftest() -> int:
         subprocess.run(["git", "-C", td, "init", "-q"], check=True)
         subprocess.run(["git", "-C", td, "add", "-A"], check=True)
         for bad, why in ((("research/water/999-gone.html", "research/water/130-x.html"), "not a question"),
-                         (("research/water/120-ponds.html", "research/water/ponds.html"), "is named"),
+                         (("research/water/120-ponds.html", "research/contents.json#waterponds.html"), "is named"),
                          (("research/water/120-ponds.html", "research/fields/010-x.html"), "already exists"),
                          (("research/water/120-ponds.html", "research/nowhere/010-x.html"), "not a page")):
             try:

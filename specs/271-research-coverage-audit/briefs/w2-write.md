@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-5`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -28,23 +28,23 @@ Each is a research QUESTION the record owes: never researched, labeled a guess, 
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
 - B14 C89 **Street widths**: how wide is a town's and a provincial city's main street, side street and lane, and the
-  Imperial or trunk road where it runs through? (ways/020 village; cities/capitals/210 capital; towns/090). M. P1.
+  Imperial or trunk road where it runs through? (0081 village; cities/capitals/210 capital; towns/090). M. P1.
   > COORDINATION (C89): town street widths only; city street widths are 269's cities/fabric 030/070 (B40) - cite them
 - B15 C101 **Street surface and drains**: beaten earth, gravel or stone (China), and did town and city streets carry
-  drains or gutters (dobu), how wide? (cities/fabric/080 says unpaved on general reading; 269 B40 owns 080 - cite it).
+  drains or gutters (dobu), how wide? (0159 says unpaved on general reading; 269 B40 owns 080 - cite it).
   M. P1.
   > COORDINATION (B15): take the TOWN side; cite 269's cities/fabric 030/070/080 (B40) for the city side
-  > COORDINATION (C101): town side only; the city street surface is 269's cities/fabric 080 (B40) - cite it
+  > COORDINATION (C101): town side only; the city street surface is 269's 0159 (B40) - cite it
 - B16 **Cross streets**: how many cross streets does a town have, in what pattern - T junctions, a defensive crank
   (masugata) at the town's ends? (none). M. P1.
 - B18 C86 **Back paths**: how is a packed commoner quarter crossed - trodden footpaths or alleys, how wide, and why is
   the path not a street? (urban-features/110, no source cited). S. P1.
-- B19 **The Imperial road in a town**: what lines it, and is it labeled? (cities/fabric/040, 050, city). S. P1.
+- B19 **The Imperial road in a town**: what lines it, and is it labeled? (0158, 050, city). S. P1.
 - B20 C167 **Town and city bridges**: how many bridges does a town or city carry over its river and canals, of what
   type (plank, earth-decked, arched timber, stone), how wide and how long? (ways/010, 030, village). M. P1.
 - C175 **Approach roads**: how wide are the roads into a city, and what lines them past the gate market (a tree
-  avenue, milestones, shrines)? (ways/020; 267's R47 is a compound's gate). M. P1.
-  > COORDINATION (C175): town approach roads only; the city strip outside a gate is 269's cities/hinterland 040 (B41) - cite it
+  avenue, milestones, shrines)? (0081; 267's R47 is a compound's gate). M. P1.
+  > COORDINATION (C175): town approach roads only; the city strip outside a gate is 269's 0171 (B41) - cite it
 
 ## The procedure (session 1: research and write)
 
@@ -64,7 +64,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on ways 160-230, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0087, 0088, 0136, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

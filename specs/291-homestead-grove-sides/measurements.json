@@ -85,7 +85,7 @@
   "unit": "clumps",
   "observed": "2026-09-29",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves",
-  "method": "0 village_groves (main: a 193-clump windbreak belt and a 185-clump copse); the GM's ruling of 2026-09-29 recorded in research vegetation/030: the belt stands on one or two windward sides of a nucleated settlement and is not drawn where the farms carry their own groves"
+  "method": "0 village_groves (main: a 193-clump windbreak belt and a 185-clump copse); the GM's ruling of 2026-09-29 recorded in research 0072: the belt stands on one or two windward sides of a nucleated settlement and is not drawn where the farms carry their own groves"
  },
  "kashikawa-crowns-off-treads": {
   "verifies": "F8",
@@ -195,7 +195,7 @@
   "unit": "village_groves records",
   "observed": "2026-09-30",
   "source": "pool/hamlets/kashikawa/kashikawa.json village_groves",
-  "method": "0 records; belt_polygon returns none on a non-nucleated map (vegetation/020) and the copse is filled to what the farm groves leave, here nothing"
+  "method": "0 records; belt_polygon returns none on a non-nucleated map (0071) and the copse is filled to what the farm groves leave, here nothing"
  },
  "kashikawa-r2-f8": {
   "verifies": "F8",
@@ -524,7 +524,7 @@
   "value": 0,
   "unit": "stale sentences",
   "observed": "2026-09-30",
-  "source": ".claude/skills/diagram/research/homesteads/",
+  "source": ".claude/skills/diagram/research/contents.json#homesteads",
   "method": "grep: 'the record rules only on the dispersed farm' 0 hits; the summary under 'Along what a row ran' now reads 'on a natural levee or a dike the ground did and the houses followed its line. A fan's foot carries a row of villages' (R13, merged from the research clone)"
  },
  "kuwabata-r8-f1": {

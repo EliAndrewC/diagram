@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/shrine-gateways-and-the-approach-to-the-hall-torii-sando
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-torii-and-the-shrine-approach
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=ShrineApproach Torii WoodKamiAltar
 - BASE=637788a7a
 

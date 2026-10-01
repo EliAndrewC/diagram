@@ -62,7 +62,7 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
         "l7r/diagram/interactive/classes/homestead.py",
         f"{PACKAGE}/test_synthetic.py",
         f"{PACKAGE}/conftest.py",
-        "research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html",  # a question's fragment (feature 301)
+        "research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html",  # a question's fragment (feature 301)
     ):
         assert base + want in files, want
     assert not [f for f in files if f.startswith(base + "l7r/diagram/settlement/")], "no engine module outside interactive/"
@@ -100,7 +100,7 @@ def repo(tmp_path: pathlib.Path) -> pathlib.Path:
         "l7r/diagram/interactive/assets/page.css": "body{}\n",
         "l7r/diagram/interactive/assets/page.js": "1;\n",
         f"{PACKAGE}/test_synthetic.py": "def test_x(): pass\n",
-        "research/fields.html": "<h2>Why</h2>\n",
+        "research/contents.json#fields": "<h2>Why</h2>\n",
         "l7r/diagram/settlement/houses.py": "x = 1\n",
     }.items():
         p = skill / rel
@@ -136,7 +136,7 @@ def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(repo: pathli
         "l7r/diagram/interactive/assets/page.css",
         "l7r/diagram/interactive/page.py",
         f"{PACKAGE}/test_synthetic.py",
-        "research/fields.html",
+        "research/contents.json#fields",
     ):
         with open(skill / rel, "a") as fh:
             fh.write("# touched\n" if rel.endswith(".py") else "\n")
@@ -160,7 +160,7 @@ def test_check_never_demands_a_browser_stamp(repo: pathlib.Path) -> None:
     test edit owes no gate at push, feature 132 FR-024)."""
     gs = _gate_stamp()
     skill = repo / ".claude/skills/diagram"
-    with open(skill / "research/fields.html", "a") as fh:
+    with open(skill / "research/contents.json#fields", "a") as fh:
         fh.write("<h2>More</h2>\n")
     with open(skill / f"{PACKAGE}/test_synthetic.py", "a") as fh:
         fh.write("def test_y(): pass\n")

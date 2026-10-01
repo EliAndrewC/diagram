@@ -36,7 +36,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: guess
     Sources: cambridge-poultry, qimin-yaoshu
-    Entry: research/homesteads/215-chickens-and-chicken-coops.html
+    Entry: research/questions/0045-chickens-and-chicken-coops.html
     """
 
     key = "hen coop"

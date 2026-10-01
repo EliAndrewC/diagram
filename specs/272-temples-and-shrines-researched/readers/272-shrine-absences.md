@@ -1,4 +1,4 @@
-# The absence notes and labeled guesses in religion-and-death 090-128 (feature 272, FR-001)
+# The absence notes and labeled guesses in 0215, 0221, 0222, 0223 (feature 272, FR-001)
 
 - [090 / torii-spacing---two-regimes-and-nothing-in-between] no publicly readable source (searched 2026-09-14: ja.wikipedia 鳥居 and 伏見稲荷大社 and en.wikipedia Torii attest the donation row and the ranked gates and give no spacing figure; searched 2026-09-27: en.wikipedia Sandō, the Association of Shinto Shrines' and nippon.com's explainers of the approach attest the donation row and the ranked gates and give no spacing figure; searches for a shrine carpenter's rule for spacing arches, and for a cultural-property listing of a row rather than a single arch, found none; that the two regimes exhaust the cases is this page's synthesis)
 

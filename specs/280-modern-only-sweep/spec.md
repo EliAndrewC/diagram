@@ -144,7 +144,7 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
   observed 2026-09-29 (method: read from the regenerated manifest):
 - **M09 - Bund cross-section** (historically accurate): the Bund modal: a few inches high, today's standard a foot; Sources kotobank-azebiki, hattori-site-yayoiken
 - **M10 - Water depth** (historically accurate): the Paddy modal: the drained stages are premodern (Qimin yaoshu, Chen Fu), the depths modern
-- **M12 - Pond sized by command area** (guess): the m3/ha rule gone from fields/110; the scripted tameike is sized from Ikegami by households, noted as held below Chen Fu's measure (a guess)
+- **M12 - Pond sized by command area** (guess): the m3/ha rule gone from 0017; the scripted tameike is sized from Ikegami by households, noted as held below Chen Fu's measure (a guess)
 - **M16 - Work-yard median** (guess): YARD_MEDIAN_TSUBO 18 -> 25 (the IRRI spreading depth retired; undated-custom calibration)
 - **M18 - Farm-shed size** (historically accurate): the storehouse annex drawn about 1.67 times as long as deep, inside the Edo sheds' 18-27 ft; the Meiji-Taisho barns not drawn
 - **M20 - Outbuildings, the storehouse share and the heap rate** (guess): the storehouse annex on ~1 farm in 8 (KURA_SHARE 0.125, headman always); the heap's 40-70% stays a guess
@@ -155,7 +155,7 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
 - **M32 - The separated net** (historically accurate): the DrainageDitch modal: the separated net is the Minuma layout, not modern consolidation
 - **M34 - The wet toe along the collector** (historically accurate): the modern MAFF grounding of the reed edge removed (water/600, the Marsh modal); the engine reads the fan's toe, never the drain - no geometry change; reported to the GM (ruled in 2026-08-26 unknowingly)
 - **M36 - The stake-and-reed weir** (historically accurate): the weir fence woven with brushwood, not reed (the Weir modal, brook.py)
-- **M39 - Too wet to build on** (historically accurate): the well keep-out re-grounded as this project's decision (water/160, 660); the two modern well manuals marked Not cited
+- **M39 - Too wet to build on** (historically accurate): the well keep-out re-grounded as this project's decision (0058, 660); the two modern well manuals marked Not cited
 - **M49 - The take-yabu** (historically accurate): the take-yabu thicket seated at the settlement's edge behind its back row, not the field margin
 - **M54 - The polder parcel** (historically accurate): the rice polder's cell 110 -> 190 ft (three mu, the 1897 fish-scale register); no pool map rolls it
 - **M55 - Dike planting rows** (historically accurate): the dikes.py comment re-pointed at Pan Jixun; no geometry

@@ -1,4 +1,4 @@
-# Audit: `settlements.md` (44.1 KB, the Mode B index), `SKILL.md`, `buildings.md` + `buildings/programs.md` against `research/buildings/`
+# Audit: `settlements.md` (44.1 KB, the Mode B index), `SKILL.md`, `buildings.md` + `buildings/programs.md` against `research/contents.json#compounds`
 
 Independent Opus reader, 2026-09-12.
 
@@ -17,7 +17,7 @@ Independent Opus reader, 2026-09-12.
 | Scale and density 100-158 | B + D | population model, tier numbers, three GM rulings | below |
 | The validator 159-201 | A + F | matrix paragraphs restate live code; check lists and four-leg suite describe deleted things | `overlap/taxonomy.py:305-320`, `matrix.py:27` |
 | WAIVE the rule in writing 202-229 | D + F | rulings live; mechanism (`meta(waivers=)`, `waivers_are_live`) dead; pointer to skill CLAUDE.md "a map may override a rule in writing" is a dead link | |
-| Historical grounding 230-238 | A | one entry, "the older inline form" | `research/buildings/` scale entry |
+| Historical grounding 230-238 | A | one entry, "the older inline form" | `research/contents.json#compounds` scale entry |
 
 Shares: A ~27%, B ~23%, C ~2%, D ~13%, E ~2%, F ~29% outright (~33% with dead knob rows and the waiver mechanism). F block measured 11,693 bytes + ~1,800 dead knob rows + ~700 waiver mechanism.
 
@@ -27,7 +27,7 @@ Shares: A ~27%, B ~23%, C ~2%, D ~13%, E ~2%, F ~29% outright (~33% with dead kn
 3. **The Hirameki waiver** (GM 2026-07-27): walled in haste in the Lion/Crane war; intramural chrysanthemum field; no burakumin quarter; waives the housing check on that ground.
 4. **Reach for a waiver only when the PREMISE conflicts**: Minami priced honestly by the budget instead (a bigger wall).
 5. **Lock the rules in against ORDINARY settlements first**: Tango and Hirameki both atypical and drawn early; the most portable paragraph in the file.
-6. **The scale ladder** (GM 2026-07): hamlet/town 1 ft/px, village 2, city 3; town fields had run 4-8x under real area; constants in real feet; linework floors at 4 px true-or-floored. Duplicated on `research/buildings/`; the 4 px floor and ftpx thresholds only here.
+6. **The scale ladder** (GM 2026-07): hamlet/town 1 ft/px, village 2, city 3; town fields had run 4-8x under real area; constants in real feet; linework floors at 4 px true-or-floored. Duplicated on `research/contents.json#compounds`; the 4 px floor and ftpx thresholds only here.
 
 ### B items - encoded
 `windward` default NW (`groves.py:33`); `grove_prevalence=1.0` (`:47`); `inwall_groves=False` (`farmsteads.py:227`); `households` (`place.py:191`, `driver.py:354`, `wells.py:20`); `ftpx`/`bscale` (`core.py:404-417`; `roll.py:253`); hamlet band 10-20 (`consts.py:456` `HOUSEHOLD_BAND`, cited back to "Scale and density" at :453); population = dwellings x 5, `DWELLING_KINDS` ten kinds match (`dwellings.py:20-35`, `HOUSEHOLD = 5`); overlap classes and permission sets (`taxonomy.py:315+`, `matrix.py:27`).
@@ -50,7 +50,7 @@ Two documents in one: a live index (load table; the section-name forwarding tabl
 ## SKILL.md
 Fresher than settlements.md: step 5 already says no check battery; References already point hamlet work at `hamletgen.md`. One stale sentence at L79: "Built by a parametric generator with an automated validator gate" with a legacy village as its example - the reason a session lands in settlements.md expecting a validator. The References entry for `overlap/` is the model framing.
 
-## buildings.md + programs.md vs research/buildings/
+## buildings.md + programs.md vs research/contents.json#compounds
 
 | Section | Class | Note |
 |---|---|---|
@@ -66,7 +66,7 @@ Fresher than settlements.md: step 5 already says no check battery; References al
 
 Shares: E ~72%, C ~20%, D ~5%, A ~3%, F ~1%. **Not meaningfully duplicated**: numbers agree everywhere checked (37-42% coverage band, 90-135 sqft per drilling samurai, 8-12 tubs, remand, 3 px = 1 ft).
 
-### D items missing from research/buildings/
+### D items missing from research/contents.json#compounds
 1. **~2x point-glyph doctrine RETIRED** (GM 2026-07-21): true size for everything, point glyphs included; two limits (a stroke floor is linear; buildings are not glyphs); two sanctioned markers (wells; salt wards - "do NOT call r2.5 true size").
 2. **Threshold stones OUTSIDE the passage** (GM 2026-07-25): a stone above ground is something a cart rolls over; Ochiba's pair inside a 13.3 ft gate, second round of the same defect.
 3. **Fire-water tub OUTSIDE its building, no overlap** (GM 2026-07-25, tightened 2026-07-26): downspout and bucket line; `fire_water_adrift` vs `tubs_in_buildings`; fixtures `tests/fixtures/ubame-tubs-inside-red.svg`, `ubame-tub-straddle-red.svg`; "a center test has a blind band exactly the width of the glyph's radius".
@@ -77,4 +77,4 @@ Near-miss: the opening's INK width (`stroke-linecap="square"` inks half a stroke
 `tools/pack_audit.py` is a package `l7r/diagram/tools/pack_audit/` - named as a file in eight places (checks live: `fire_water_adrift` `checks.py:63`, `tubs_in_buildings` `:90`, `passage_blockers` `:292`, `structures_on_walls` `:449`); `buildings.md` L134 sends Mode B work to the deleted validator; `programs.md` L11 points at a "Historical grounding section below" that does not exist.
 
 ### Verdict
-`buildings.md` and `research/buildings/` should both stay; the split is the worked example. The five conventions above belong on the page as convention entries; the eight paths and two pointers need fixing.
+`buildings.md` and `research/contents.json#compounds` should both stay; the split is the worked example. The five conventions above belong on the page as convention entries; the eight paths and two pointers need fixing.

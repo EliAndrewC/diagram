@@ -15,7 +15,7 @@ from .geom import Poly, Pt, bbox, centroid, inside, poly_gap, poly_seg_gap, seg_
 from .standard import WAY_NOTCH, WEIGHT_WAY
 
 CIVIC_GROUPS = frozenset({"ministry", "governor", "temple"})
-"""The civic groups (research/presentation 070, the city rule, GM 2026-07-21): "a named civic building's caption ...
+"""The civic groups (research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html, the city rule, GM 2026-07-21): "a named civic building's caption ...
 additionally may not touch any other named civic building", because the group rule alone "would permit one ministry's
 name to sit on the next ministry". So when a caption's SUBJECT is a named civic building, every other NAMED civic
 building keeps its full weight; a caption whose subject is not - a district's, even a "temple neighborhood" - is waived

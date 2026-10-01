@@ -4,7 +4,7 @@
 
 - SECTION=buildings/hunting-dogs-and-kennels-inugoya
 - RENDERING=rendering/buildings/how-our-maps-draw-a-kennel
-- OLD=research/buildings/ research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds
 - MODALS=Kennel
 - BASE=ec3512d2a
 

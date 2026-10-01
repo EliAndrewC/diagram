@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-capitals-rice-storehouses-and-brokers-row-kura-fudasashi
-- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
+- OLD=research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals
 - MODALS=
 
 - BASE=ca5ebb8cf

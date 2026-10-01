@@ -41,7 +41,7 @@ rotating a footprint must never buy ground the square could not have had."""
 _COMMONS_FLOOR_FT = 120.0
 """The smallest square a woodland COMMONS may be drawn as, in feet.
 
-Not a historical minimum - `research/fields/` is clear that coppice lots were "whatever odd corner
+Not a historical minimum - `research/contents.json#fields` is clear that coppice lots were "whatever odd corner
 the village spared", and there is no attested floor. This is a LEGIBILITY floor, and it exists
 because the size-variance machinery above can compound its way under one: a per-map ladder scale
 times a per-parcel band multiplier took Kashikawa to 103 ft. The number is our own recorded
@@ -170,7 +170,7 @@ def field_height_near(p: Pt, fall: Pt, grid: PointGrid) -> float:
 
 
 def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> int:
-    """Where the record puts a village's fuel wood, as a rank (269 B27, research/vegetation/220): 0 - higher than the field
+    """Where the record puts a village's fuel wood, as a rank (269 B27, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): 0 - higher than the field
     it adjoins and not below the lowest house (the nearest hill ground beyond the fields); 1 - not below the houses but
     not above that field (the level beside the fields, the record's fallback); 2 - downslope of every house, where the
     record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall."""
@@ -445,13 +445,13 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                         # PREFER THE NEAREST QUALIFYING GROUND. The first version of this maximized distance from
                         # the crop instead, which drove every patch to the canvas's far upslope margin and the crop
                         # then cut three of four off the sheet. A settlement's coppice is walked to daily for fuel and
-                        # fodder: the satoyama is the NEAREST hill ground (research/vegetation/220), so within the
+                        # fodder: the satoyama is the NEAREST hill ground (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html), so within the
                         # ground the height rule below admits, nearer wins outright. The keep-outs above are what make
                         # it far ENOUGH. Height is no longer a term in this score (269 B27): it is `woodland_tier`.
                         scored.append((-math.hypot(x - ccx, y - ccy), x, y))
                     x += step
                 y += step
-            # THE WOOD STANDS BEYOND THE FIELDS, ON GROUND HIGHER THAN THE FIELDS IT ADJOINS (269 B27; research/vegetation/220,
+            # THE WOOD STANDS BEYOND THE FIELDS, ON GROUND HIGHER THAN THE FIELDS IT ADJOINS (269 B27; research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html,
             # "Village fuel woods and their coppice (satoyama)" - houses, then fields, then the hill and wild land beyond; the
             # nearest hill slope round the settlement; the Musashino upland's groves, fields, then the konara wood on the
             # outer edge). The scorer used to ADD `0.35 * upslope` to nearness, and nearness outbid it: a 90 px step toward
@@ -523,7 +523,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 jy = y + (s._hjit(x, y, 72.0) - 0.5) * step
                 # ...and the size roll is wider than it was, for the reason recorded at `_ladder`:
                 # +/-15% of a shared rung left two maps' stands 1.8% apart. This is a DEGREE on a
-                # continuum (calibrated liberty), not a knob - `research/vegetation/220-village-fuel-woods-and-their-coppice-satoyama.html` treats a lot's size as whatever ground the village spared, not
+                # continuum (calibrated liberty), not a knob - `research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html` treats a lot's size as whatever ground the village spared, not
                 # a surveyed figure, so a narrow roll was narrower than our own doctrine.
                 # TRY THE MIRRORED SIZE BEFORE FALLING BACK TO THE RUNG. Widening the roll upward
                 # made it WORSE at first, in a way only the artifact showed: a grown parcel often
@@ -579,7 +579,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 #
                 # The record is decisive rather than two-sided, so this is calibrated liberty and not
                 # a knob between forms: an *iriai* wood's edge was a line the villages agreed or were
-                # given, and it bent (research/vegetation/220: a 1612 ruling map sealed along the line at
+                # given, and it bent (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a 1612 ruling map sealed along the line at
                 # its ends and bends); that it ran by ridge, stream and path is a GUESS - no page read
                 # says so (269 B27; the Yamaguni study cited for it says nothing of boundaries), and satoyama
                 # coppice sits on the slope break - there is no attested rectilinear woodlot. Aspect and bearing therefore roll per parcel from its
@@ -654,7 +654,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     continue
                 _hw, _hh = half_used * math.sqrt(_asp), half_used / math.sqrt(_asp)
                 _ring = _parcel_outline(s, x, y, _hw, _hh, _bc, _bs)
-                # ...AND ITS LINE FOLLOWS WHAT BOUNDS IT (feature 287, woods W26 - a GUESS, research/vegetation/220: no page
+                # ...AND ITS LINE FOLLOWS WHAT BOUNDS IT (feature 287, woods W26 - a GUESS, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: no page
                 # read says a lot's line followed stream, path or field): within `LOT_BOUND_REACH` of a brook, a lane or the
                 # field edge the ring is cut to run parallel to it (`follow_the_bounds`, pulled in only, so every keep-out
                 # above still holds) and asked `lot_follows_its_bounds`; the rules below are then asked of the cut ring. A cut
@@ -698,20 +698,20 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     Patches. basically it looked like little squares ... I want to make sure that that is intentional
     and based on research rather than just happenstance"*). It was happenstance. The 2026-08-18
     review pass had already found the record decisive - *iriai* commons boundaries were customary (it
-    said "described by ridge, stream and path", which is a GUESS: research/vegetation/220 finds a line
+    said "described by ridge, stream and path", which is a GUESS: research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html finds a line
     the villages agreed or were given, bent to the ground, and no page on what it followed), satoyama coppice sits on the slope break, and there is no
     attested rectilinear woodlot - and implemented it as a ROTATED RECTANGLE with the plain square as
     the fallback for a tight seat. A rotated rectangle is still rectilinear, and on Inashiro all three
     parcels took the fallback: `rot 0`, `w == h`, twelve of twelve across the pool before that. So the
     outline is now what the ruling says: a ring that follows no page axis, its radius wandering the
-    way a boundary bent to the ground does (whether by ridge, stream and path is a GUESS - vegetation/220).
+    way a boundary bent to the ground does (whether by ridge, stream and path is a GUESS - 0077).
 
     Built INSIDE the tested reach, on purpose. Every keep-out test in `open_ground_patches` was made
     at the ellipse's circumscribing half, so a vertex that never leaves the ellipse can never buy
     ground the square could not have had. The radius runs 0.80-1.00 of the ellipse's, on two low
     harmonics seeded from the parcel's own position (`_hjit`), so the ring is smooth rather than
     spiky - a wood's edge wanders, it does not serrate - and the AREA comes out at ~85% of the
-    ellipse's: the size rules above still bound it, from above. Recorded in research/vegetation/220-village-fuel-woods-and-their-coppice-satoyama.html, with the one form deliberately NOT drawn here: the strip
+    ellipse's: the size rules above still bound it, from above. Recorded in research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html, with the one form deliberately NOT drawn here: the strip
     holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob."""
     p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)
     ring: Poly = []
@@ -725,7 +725,7 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
 
 
 # ---- woods W26: a lot's line follows what bounds it on the ground ---------------------------------------------------
-# GUESS (research/vegetation/220, rendering/vegetation/220): a wood's edge was a line the villages agreed or were
+# GUESS (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html, 0077): a wood's edge was a line the villages agreed or were
 # given, and it bent; "whether it followed ridges, streams and paths is a GUESS: no page read says so." This builds that
 # working answer: where a lot's outline comes within a small reach of a brook, a lane or a field's edge, its line keeps off
 # that feature and runs parallel to it, rather than wandering near it or across it as a stamped disc would. The one form
@@ -736,7 +736,7 @@ STREAM_LOT_LINE = 60.0  # px from a brook's centerline: the scan's own stream ke
 LOT_BOUND_REACH = 45.0
 """How near (px, 1 ft at the hamlet scale) a lot's outline must come to a feature's line before the line bounds it.
 
-GUESS, a calibrated degree (research/vegetation/220 is silent on any distance): half the scan's 90 px lattice step, so a
+GUESS, a calibrated degree (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html is silent on any distance): half the scan's 90 px lattice step, so a
 seat the lattice put within one half-step of a keep-out has its facing side drawn along that keep-out, while a lot a whole
 step or more away keeps its free wandering edge. A larger reach would bound more lots and cut more of their ground."""
 
@@ -772,7 +772,7 @@ def _follows(p: Pt, bounds: Sequence[Bound], reach: float, tol: float = 1.0) -> 
 
 
 def lot_follows_its_bounds(ring: Sequence[Pt], bounds: Sequence[Bound], reach: float = LOT_BOUND_REACH) -> bool:
-    """THE ONE PREDICATE (feature 287, woods W26 - GUESS, research/vegetation/220): does a coppice lot's line follow what
+    """THE ONE PREDICATE (feature 287, woods W26 - GUESS, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): does a coppice lot's line follow what
     bounds it? Where a vertex comes within `reach` of a brook's, a lane's or a field's line it lies on that line or keeps
     off it by the reach - a ragged wander near a feature, or a vertex over its line, is refused; and no edge of the lot
     crosses a feature. `open_ground_patches` draws only rings this admits, cut by `follow_the_bounds`."""
@@ -801,7 +801,7 @@ def bounds_near(bounds: Sequence[Bound], center: Pt, radius: float) -> list[Boun
 
 
 def follow_the_bounds(ring: Sequence[Pt], center: Pt, bounds: Sequence[Bound], reach: float = LOT_BOUND_REACH) -> Poly:
-    """The lot's line cut to follow its bounds (woods W26 - GUESS, research/vegetation/220): each vertex that
+    """The lot's line cut to follow its bounds (woods W26 - GUESS, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): each vertex that
     `lot_follows_its_bounds` would refuse is pulled in along its ray toward the lot's own `center` until it keeps off
     every bound by that bound's line plus the reach - so the lot's facing side runs parallel to the brook, lane or field
     edge. Only ever pulled IN: the ring stays inside the reach the scan tested, so no keep-out can be crossed by the cut.

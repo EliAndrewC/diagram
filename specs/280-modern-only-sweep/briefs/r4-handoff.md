@@ -1,9 +1,9 @@
 # Feature 280 group R4 - handoff (session 1: research and write, 2026-09-29)
 
-None of R4's sections was held: 269 has no unlanded commits touching religion-and-death 160, 180, 206 or 270, and none
+None of R4's sections was held: 269 has no unlanded commits touching 0235, 180, 206 or 270, and none
 of them falls in 279's 124-129.
 
-- SECTION=religion-and-death/160
+- SECTION=0235
 - SECTION=religion-and-death/180
 - SECTION=religion-and-death/206
 - SECTION=religion-and-death/270

@@ -111,7 +111,7 @@ def test_a_commons_form_or_a_dispersed_seating_lays_no_byre_in_a_bundle() -> Non
 
 
 def test_the_storehouse_goes_to_the_largest_houses_first() -> None:
-    """Feature 293 (research/homesteads/120): the kura count is the quota's, and the houses that carry it are exactly the
+    """Feature 293 (research/questions/0040-farm-storehouses-kura.html): the kura count is the quota's, and the houses that carry it are exactly the
     largest by the main house's footprint, on every seed and count."""
     for seed in range(30):
         for n in range(5, 25):

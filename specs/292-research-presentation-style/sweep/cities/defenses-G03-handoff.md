@@ -4,7 +4,7 @@
 
 - SECTION=cities/defenses/city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-citys-gates-chengmen
-- OLD=research/cities/defenses/ research/cities/defenses/ research/cities/defenses/ research/cities/defenses/
+- OLD=research/contents.json#city-defenses research/contents.json#city-defenses research/contents.json#city-defenses research/contents.json#city-defenses
 - MODALS=
 - BASE=b13a28443
 

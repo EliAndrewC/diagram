@@ -124,32 +124,3 @@ def merge(per_question: list[tuple[str, dict[str, str]]]) -> dict[str, str]:
                 raise NoteError(f"`{key}` is defined in {seen[key]} and again in {where} - a note key is unique within its page, because the reference names it and nothing else")
             out[key], seen[key] = body, where
     return out
-
-
-def _kebab(slug: str) -> str:
-    """A question's heading id, reduced to what a key may contain.
-
-    A heading id is the record's ANCHOR and may carry anything a heading carries - one of them ends
-    `---一河围田`, the Chinese name of the form it describes. A key is matched by pattern in two files
-    and typed by hand in a third, so it stays lower-case ASCII, and a slug that reduces to nothing
-    falls back to `note`.
-    """
-    out = re.sub(r"-{2,}", "-", re.sub(r"[^a-z0-9]+", "-", slug.lower())).strip("-")
-    return out or "note"
-
-
-def derive_key(source_key: str | None, question_slug: str, taken: set[str]) -> str:
-    """The key the SPLITTER gives a note that has only ever had a number.
-
-    From the note's own leading source key where it has one - 1,524 of 1,850 do (R5) - with an ordinal
-    where a page cites the same work more than once, which 635 notes do. A note that leads with no
-    source key takes its question's slug and an ordinal: an absence note, a note reasoning from several
-    works, a note quoting the GM.
-    """
-    stem = source_key or _kebab(question_slug)
-    if stem not in taken:
-        return stem
-    n = 2
-    while f"{stem}-{n}" in taken:
-        n += 1
-    return f"{stem}-{n}"

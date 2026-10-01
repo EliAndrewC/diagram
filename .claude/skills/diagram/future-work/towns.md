@@ -44,7 +44,7 @@ fix wants its own pass with its own sweep rather than riding along.
 
 Measurement: the town tier seats the magistrate's compound at the town's edge on every map. The record
 (research/towns 250) puts a Chinese-model town's yamen on the main avenue; the Japanese form keeps the edge
-(research/towns 120). Mechanism: one seat rule for both models. Sketch: the scripted town generator reads the
+(research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html). Mechanism: one seat rule for both models. Sketch: the scripted town generator reads the
 settlement's model and seats the compound on the main avenue for the Chinese model, at the edge for the Japanese.
 
 ## OWED AT CONVERSION (feature 292 closing pass C4, 2026-10-01): the T plan and the crank at a town's ends
@@ -52,8 +52,8 @@ settlement's model and seats the compound on the main avenue for the Chinese mod
 Measurement: a grep of `l7r/` (2026-10-01) finds no street-form knob and no bend in a town's road; the only masugata
 drawn is the castle's gate box (`settlement/castle_civic.py`). The record states both as the rule: the town plan is a
 knob of five forms, four street-town forms (both sides, one-sided, back streets, and the T of Zhouzhuang) and the walled
-town's planned avenue (research/rendering/towns 230), and the road bends twice at right angles at each end of the built
-street, as at a post town (research/rendering/ways 160). Mechanism: the town tier is unscripted, so nothing rolls either.
+town's planned avenue (research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.drawing.html), and the road bends twice at right angles at each end of the built
+street, as at a post town (research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html). Mechanism: the town tier is unscripted, so nothing rolls either.
 Sketch: the scripted town generator rolls the plan from the seed (the T laying a second main street off the first at its
 middle), and lays the road through the town with a two-turn crank just outside each end of the built street before the
 lots are placed, so the street front follows the bent road.

@@ -48,7 +48,7 @@ slack check (claimed-open + unclaimed <= ~15% of interior) is an EARLY reconcili
 - run it, and re-derive the wall, BEFORE any fine iteration. Fine adjustments are downstream
 of the wall; the wall must never be adjusted after them. Implement as
 `capital_interior_slack_in_band` beside the packed-split check, and write the ordering into
-the capital-build sequence recorded on `research/cities/capitals/`. (This is also the strongest single
+the capital-build sequence recorded on `research/contents.json#capitals`. (This is also the strongest single
 argument for the fabric-first ordering in #2: a wall wrapped around a grown fabric has the
 right slack by construction.)
 
@@ -154,7 +154,7 @@ seat. **When a tier is scripted**, each of its captions names its SUBJECT instea
 `place_caption(text, box, rot=...)` for a feature beside which it stands, an area subject for a name that lies on its
 building or district (`Subject("area", ...)` through `_draw_seated_caption`), and a civic building's own caption with
 `Subject(civic=True)` so it keeps off the other named civic buildings (spec FR-014). Delete the row from
-`D8_HAND_SEATS` as each goes. The town and city cover rule (research/presentation 070) is already in the weights.
+`D8_HAND_SEATS` as each goes. The town and city cover rule (research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html) is already in the weights.
 
 
 ## OWED AT CONVERSION (269's research, 2026-09-28): what the scripted city generator must draw differently

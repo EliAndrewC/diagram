@@ -26,7 +26,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **What lines the Imperial road** - *"What lines the Imperial road"* — **"A provincial city's merchant and artisan households are about a quarter of the total, the highest commercial share of any tier in the setting."** Same shape: canon, unfootnoted.  _(from `qc-fabric-government-hinterland-ways.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/cities/fabric/*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#urban-fabric*.html` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 
@@ -36,7 +36,7 @@ fragment the grep did not name.
 
 ## The procedure (session 1: locate, read, write)
 
-1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/cities/fabric/`; note the fragment and
+1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/contents.json#urban-fabric`; note the fragment and
    sentence.
 2. **Read the sources.** Save candidate pages with `make source-pages OUT=/tmp/l7r-check/cities-fabric-pages URLS="<u1>
    <u2>"`, grep them yourself, then dispatch ONE `source-reader` over every item at once, handing it the saved

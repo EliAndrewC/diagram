@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-1`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -34,8 +34,8 @@ the map features whose write-ups will be rewritten from what you find (by the or
 - A71 **Farmhouse plan form by region**: the straight minka, the L-shaped magariya, the south-China three-sided
   courtyard house - which regions, and which should the maps draw? (homesteads/145, homesteads/130). M. P1.
 - A78 **Farm storehouse size and siting**: how big is a farm kura, what is it built of, and where on the plot does it
-  stand? (homesteads/120, homesteads/140). S. P1.
-- A79 **Farm shed (naya) size**: how big is a farm shed, and where on the plot? (homesteads/140). S. P1.
+  stand? (0040, 0028). S. P1.
+- A79 **Farm shed (naya) size**: how big is a farm shed, and where on the plot? (0028). S. P1.
 
 ## The procedure (session 1: research and write)
 
@@ -55,7 +55,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on homesteads 400-450, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0029, 0052, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

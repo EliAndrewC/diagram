@@ -6,7 +6,7 @@
 
 The GM, 2026-10-01: *"the obvious solution is to not link to the generated HTML page, but to link to the source which
 is fed into and used to generate that HTML page, because that is the canonical location of the research"*. The pages
-are built and no longer committed, so `research/water.html "Reservoir ponds (tameike)"` points at nothing in the
+are built and no longer committed, so `research/contents.json#water "Reservoir ponds (tameike)"` points at nothing in the
 repository; `research/water/120-reservoir-ponds-tameike.html` points at the research itself.
 
 What it rewrites, and how:
@@ -336,39 +336,39 @@ def selftest() -> None:
         (rec_dir / "sources" / "010-works-cited" / "0010-fei-1939.html").write_text('<h3 id="fei-1939"><code>fei-1939</code></h3>')
         rec = Record(rec_dir)
         cases = {
-            "see research/water.html#reservoir-ponds-tameike.": "see research/water/120-reservoir-ponds-tameike.html.",
-            "research/water.html#inner": "research/water/120-reservoir-ponds-tameike.html#inner",
-            "Entry: research/water.html - 'Reservoir ponds (tameike)', \"A reservoir's shore is reeded\"": "Entry: research/water/120-reservoir-ponds-tameike.html, research/water/130-a-reservoirs-shore-is-reeded.html",
-            'research/water.html "Reservoir ponds" says': "research/water/120-reservoir-ponds-tameike.html says",
-            "the water page (research/water.html) holds it": "the water page (research/water/) holds it",
+            "see research/contents.json#water": "see research/water/120-reservoir-ponds-tameike.html.",
+            "research/contents.json#water": "research/water/120-reservoir-ponds-tameike.html#inner",
+            "Entry: research/contents.json#water - 'Reservoir ponds (tameike)', \"A reservoir's shore is reeded\"": "Entry: research/water/120-reservoir-ponds-tameike.html, research/water/130-a-reservoirs-shore-is-reeded.html",
+            'research/contents.json#water "Reservoir ponds" says': "research/water/120-reservoir-ponds-tameike.html says",
+            "the water page (research/contents.json#water) holds it": "the water page (research/contents.json#water) holds it",
             "`fei-1939` in research/SOURCES.html#fei-1939": "`fei-1939` in research/sources/010-works-cited/0010-fei-1939.html",
             "SOURCES.html#fei-1939 too": "research/sources/010-works-cited/0010-fei-1939.html too",
-            "research/citations/water.html": "research/water/",
-            "is `research/water.html`, 'Reservoir ponds (tameike)'.": "is `research/water/120-reservoir-ponds-tameike.html`.",
-            "see `research/water.html` for it": "see `research/water/` for it",
-            "`research/water.html`'s rules. Then 'x'": "`research/water/`'s rules. Then 'x'",
-            "research/water.html ('Reservoir ponds (tameike)') says": "research/water/120-reservoir-ponds-tameike.html says",
-            "# see research/water.html 'Reservoir\n    # ponds (tameike)' for it": "# see research/water/120-reservoir-ponds-tameike.html for it",
-            "../../research/water.html#reservoir-ponds-tameike": "../../research/water/120-reservoir-ponds-tameike.html",
+            "research/contents.json#water": "research/contents.json#water",
+            "is `research/contents.json#water`, 'Reservoir ponds (tameike)'.": "is `research/water/120-reservoir-ponds-tameike.html`.",
+            "see `research/contents.json#water` for it": "see `research/contents.json#water` for it",
+            "`research/contents.json#water`'s rules. Then 'x'": "`research/contents.json#water`'s rules. Then 'x'",
+            "research/contents.json#water ('Reservoir ponds (tameike)') says": "research/water/120-reservoir-ponds-tameike.html says",
+            "# see research/contents.json#water 'Reservoir\n    # ponds (tameike)' for it": "# see research/water/120-reservoir-ponds-tameike.html for it",
+            "../../research/questions/0061-reservoir-ponds-tameike.html": "../../research/water/120-reservoir-ponds-tameike.html",
             "research/nowhere.html": "research/nowhere.html",
-            "read `/x/.claude/skills/diagram/research/water.html`": "read `/x/.claude/skills/diagram/research/water/`",
-            "[w](../.claude/skills/diagram/research/water.html#reservoir-ponds-tameike)": "[w](../.claude/skills/diagram/research/water/120-reservoir-ponds-tameike.html)",
+            "read `/x/.claude/skills/diagram/research/contents.json#water`": "read `/x/.claude/skills/diagram/research/contents.json#water`",
+            "[w](../.claude/skills/diagram/research/questions/0061-reservoir-ponds-tameike.html)": "[w](../.claude/skills/diagram/research/water/120-reservoir-ponds-tameike.html)",
             "the 229-rule-files-into-research/plan.md": "the 229-rule-files-into-research/plan.md",
         }
         for before, after in cases.items():
             got, review = rewrite(before, rec)
             assert got == after, (before, got)
             assert not review, (before, review)
-        got, review = rewrite("research/water.html 'No such heading'", rec)
-        assert got == "research/water.html 'No such heading'" and review, "an unmatched heading is left and listed"
-        got, review = rewrite("research/water.html 'No such heading'", rec, history=True)
-        assert got == "research/water/ 'No such heading'" and not review, "in a landed spec, the page directory and the words kept"
-        assert rewrite("research/water.html#gone", rec, history=True) == ("research/water/", [])
-        assert rewrite("research/water/090-merged-away.html", rec, history=True) == ("research/water/", []), "a stale fragment in a landed spec"
+        got, review = rewrite("research/contents.json#water 'No such heading'", rec)
+        assert got == "research/contents.json#water 'No such heading'" and review, "an unmatched heading is left and listed"
+        got, review = rewrite("research/contents.json#water 'No such heading'", rec, history=True)
+        assert got == "research/contents.json#water 'No such heading'" and not review, "in a landed spec, the page directory and the words kept"
+        assert rewrite("research/contents.json#water", rec, history=True) == ("research/contents.json#water", [])
+        assert rewrite("research/water/090-merged-away.html", rec, history=True) == ("research/contents.json#water", []), "a stale fragment in a landed spec"
         assert rewrite("research/water/090-merged-away.html", rec)[1], "...and listed for review anywhere else"
-        got, review = rewrite("research/water.html#missing", rec)
-        assert got == "research/water.html#missing" and review
-        block = "<!-- SOURCE: GM NOTES - DO NOT MODIFY -->research/water.html<!-- /SOURCE -->"
+        got, review = rewrite("research/contents.json#water", rec)
+        assert got == "research/contents.json#water" and review
+        block = "<!-- SOURCE: GM NOTES - DO NOT MODIFY -->research/contents.json#water<!-- /SOURCE -->"
         assert rewrite(block, rec)[0] == block, "a SOURCE block is the GM's"
     assert in_scope("specs/233-x/spec.md") and not in_scope("specs/301-record-site/plan.md") and not in_scope("specs/233-x/request.md")
     assert not in_scope(REL_RECORD + "/water/120-x.html") and in_scope(REL_RECORD + "/CLAUDE.md")

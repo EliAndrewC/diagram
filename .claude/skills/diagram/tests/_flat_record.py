@@ -21,12 +21,26 @@ TAGS = {
 }
 CONTENTS = {
     "sections": [
-        {"id": "countryside", "title": "The countryside", "description": "<p><em>The land.</em></p>", "drawing_description": "<p><em>Drawn land.</em></p>", "takes": [], "sections": [
-            {"id": "ways", "title": "Ways", "description": "<p><em>Roads.</em></p>", "drawing_description": "", "takes": [{"primary": "ways"}], "sections": []},
-        ]},
-        {"id": "cities", "title": "Cities", "description": "", "drawing_description": "", "takes": [], "sections": [
-            {"id": "fabric", "title": "Urban fabric", "description": "", "drawing_description": "", "takes": [{"primary": "fabric"}], "sections": []},
-        ]},
+        {
+            "id": "countryside",
+            "title": "The countryside",
+            "description": "<p><em>The land.</em></p>",
+            "drawing_description": "<p><em>Drawn land.</em></p>",
+            "takes": [],
+            "sections": [
+                {"id": "ways", "title": "Ways", "description": "<p><em>Roads.</em></p>", "drawing_description": "", "takes": [{"primary": "ways"}], "sections": []},
+            ],
+        },
+        {
+            "id": "cities",
+            "title": "Cities",
+            "description": "",
+            "drawing_description": "",
+            "takes": [],
+            "sections": [
+                {"id": "fabric", "title": "Urban fabric", "description": "", "drawing_description": "", "takes": [{"primary": "fabric"}], "sections": []},
+            ],
+        },
     ]
 }
 TAIL = "</main>\n</body>\n</html>\n"
@@ -46,10 +60,7 @@ QUESTIONS = {
         ' <a href="#span">here</a> <a href="../SOURCES.html#alpha">a source</a> <img src="../assets/x.png"></p>\n'
     ),
     "0002-bridges.notes.html": '<li data-note="beta"><a href="../SOURCES.html#beta"><code>beta</code></a> - 「r」</li>\n',
-    "0003-rows.html": (
-        '<h2 id="rows">Rows</h2>\n<!-- tags: subject=fabric,samurai; setting=city; level=foundational -->\n'
-        '<p>Shops in a row. <a href="0002-bridges.html">b</a></p>\n'
-    ),
+    "0003-rows.html": ('<h2 id="rows">Rows</h2>\n<!-- tags: subject=fabric,samurai; setting=city; level=foundational -->\n<p>Shops in a row. <a href="0002-bridges.html">b</a></p>\n'),
     "0004-wide-lanes.drawing.html": '<h2 id="wide-lanes">How our maps draw a wide lane</h2>\n<!-- about: 0001-lanes -->\n<p>Wider.</p>\n',
 }
 

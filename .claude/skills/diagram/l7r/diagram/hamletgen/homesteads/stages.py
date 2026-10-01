@@ -74,7 +74,7 @@ def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_la
 
 
 def face_the_houses(s: Settlement, plan: SitePlan) -> None:
-    """Which way this hamlet's farmhouses face (269 B18, research/homesteads/400), set before the first house is seated.
+    """Which way this hamlet's farmhouses face (269 B18, research/questions/0029-farmhouses-minka.html), set before the first house is seated.
 
     The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
     along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
@@ -148,7 +148,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     rectangles, part layouts, the front row's share and the rounds - so the search is measured, never assumed.
 
     `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
-    depicts essentially every household (research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html) -
+    depicts essentially every household (research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html) -
     and the stage aims at one apiece: EVERY declared household is seated, or the site is refused (feature 287, homes
     H14 and plan D2; `seat_every_household`) - the exhaustive pass over the ground within reach, then the next margin,
     never a shortfall shipped and never a whole-map re-roll.
@@ -175,7 +175,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.cluster_seeds
         l7r.diagram.settlement.Settlement.farmsteads
     """
-    # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
+    # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
     # opts in - the hand-authored maps keep their packing until they are converted.
     s.sun_corridor(SUN_CORRIDOR_FT)
@@ -302,7 +302,7 @@ def drawn_in_band(s: Settlement, plan: SitePlan) -> bool:
     """Does this seating draw a shape's band - or is it a row village, which is no cluster and takes no band?
 
     A ROW VILLAGE IS A ROW (the GM, 2026-10-01, tripwire seed 33): its farms stand one frontage apart along their street,
-    54 to 240 ft on the measured planned rows (research/homesteads/155-row-villages-resson.html), so ten farms run 490 to
+    54 to 240 ft on the measured planned rows (research/questions/0033-row-villages-resson.html), so ten farms run 490 to
     2,160 ft - 5:1 to 22:1 against one homestead's depth - and the 12:1 ceiling, a CLUSTER's (`CLUSTER_DRAWN_ASPECT`),
     refused every margin of a ten-farm row. The linear form's row is held by `row_rules` (each farm on its street, none
     behind another); the band holds the forms that draw a cluster."""
@@ -501,7 +501,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         Ways cross the brook at a ford now and `bridges()` decks the crossing, so a hamlet may stand astride its own
         small channel, as the record has it (Harie, specs/230 R6); a house the web still cannot reach is caught by the
         reach check and re-rolled, as any stranded house is. Both forms are attested at a stream's size (269 B23;
-        research/water/270: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
+        research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
         each farmstead stays whole on one bank, which the same entry records as a guess."""
         s._seat_search["candidates"] += 1
         region = getattr(s, "_seat_region", None)
@@ -641,7 +641,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # aspect is read on the house centers' own axis, so a block of L by N/L houses reads about half of L*L/N - seven
     # in Inashiro's row drew 1.66 on a rolled crescent (1.9-4.2), six in Kuwabata's 1.71 on a round (1.0-2.0).
     front_cap = min(plan.spec.households, max(6, round(math.sqrt(plan.spec.households * (_lo_a + _hi_a)))))
-    # ...BUT A ROW VILLAGE IS ONE ROW (feature 291; research/homesteads/150, "LINEAR": farmsteads strung along the way, each
+    # ...BUT A ROW VILLAGE IS ONE ROW (feature 291; research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, "LINEAR": farmsteads strung along the way, each
     # holding behind its house). The cap above exists to make a nucleated cluster stand in ranks; applied to the linear form
     # it did the same, and since feature 126 every linear roll drew a block (settlement-review 2026-09-29: Mizuguchi 611 x
     # 715 ft with 1 of 12 houses on its track, Kashikawa 2 of 20). The frontage pass below could not help: it fronts the
@@ -709,7 +709,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
         # across the water - the push is the course's reach past the box's near edge, by its own clearance. A row across
         # its brook from its field is one of the two forms the record gives a hamlet at a stream's size (269 B23,
-        # research/water/270), not an exception to it.
+        # research/questions/0035-villages-beside-their-stream-one-bank-or-both.html), not an exception to it.
         wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
         by_water = wet > push
         push = max(push, wet)
@@ -742,7 +742,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         _bb = _g0["bbox"]
         _reach = (_bb[0] - _bb[2] / 2, _bb[1] - _bb[3] / 2, _bb[0] + _bb[2] / 2, _bb[1] + _bb[3] / 2)
         _row_kw = {"pitch": min(max(_bb[2], _bb[3]), s.px(ROW_FRONTAGE_MAX_FT)), "reach": float("inf")}  # never past a lot's frontage (`rows.py`)
-    # A ROW VILLAGE'S FARMS STAND IN ROWS ALONG THEIR STREETS (feature 291 amendment 3, `rows.py`; research/homesteads/155
+    # A ROW VILLAGE'S FARMS STAND IN ROWS ALONG THEIR STREETS (feature 291 amendment 3, `rows.py`; research/questions/0033-row-villages-resson.html
     # and 156): the row takes every household it can, and no front-row, frontage or rank pass takes the rest. Where its
     # streets cannot hold every farm, `seat_every_household` takes them back and seats the next margin, and past the last
     # the site is refused (feature 287 plan D2 - the GM's choice of 2026-09-30, over the unseated remainder 291 reported).
@@ -808,7 +808,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # a future tightening belongs, since it is the pass now doing the seating.
     # THE CONNECTOR-FRONTAGE PASS IS RETIRED (feature 291 amendment 3): it seated a linear hamlet along the connector, which
     # does not exist when the homesteads are seated, so it placed nothing; a row village's farms now stand along the
-    # streets its row planned (`rows.py`, research/homesteads/155), and a linear hamlet takes no other pass.
+    # streets its row planned (`rows.py`, research/questions/0033-row-villages-resson.html), and a linear hamlet takes no other pass.
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
     _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0

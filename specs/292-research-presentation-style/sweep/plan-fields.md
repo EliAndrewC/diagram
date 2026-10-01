@@ -11,7 +11,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: fields/020-paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic.html, fields/040-nitrogen---a-flooded-paddy-makes-its-own.html, fields/610-was-an-edo-new-field-a-grid-of-big-paddies-it-was-planned-in-equal-strips---but-no-paddy-grid-is-found-and-parcels-of-a-few-se-were-ordinary.html, fields/024-minimum-basin-size---there-is-no-absolute-floor-and-the-real-floor-is-a-ratio.html, fields/023-a-basin-never-tapers-to-a-point---the-fan-toe-truncates.html, fields/025-the-arrowhead-a-chevron-is-pointed-and-notched-and-neither-half-alone-can-see-one.html, towns/150-how-big-is-a-towns-paddy-plot.html
 - rendering: How our maps draw paddy plots
 - modals: Paddy, BundBeans
-- note: 020 leads (the irregular patchwork; the grid dated to Meiji); 040 is what a paddy is as a system; 610 is the before-1868 check on plot form. 023, 024 and 025 are GM rulings on the generator's basin shapes - mostly rendering, but 024's evidence that real paddies can be tiny (senmaida) stays in the research section. 020's cross-section of the bund goes to T2. fields/110's plot-size paragraph (~0.05 ac, scattered holdings) moves here from T8. towns/150 ("How big is a town's paddy plot?") is the same subject - the towns planner may fold it here. Cross-page: towns/150 (a town's paddy plot) folds here.
+- note: 020 leads (the irregular patchwork; the grid dated to Meiji); 040 is what a paddy is as a system; 610 is the before-1868 check on plot form. 023, 024 and 025 are GM rulings on the generator's basin shapes - mostly rendering, but 024's evidence that real paddies can be tiny (senmaida) stays in the research section. 020's cross-section of the bund goes to T2. 0017's plot-size paragraph (~0.05 ac, scattered holdings) moves here from T8. towns/150 ("How big is a town's paddy plot?") is the same subject - the towns planner may fold it here. Cross-page: towns/150 (a town's paddy plot) folds here.
 - size: 33660
 
 ## T2 Bunds between the paddies (aze)
@@ -67,7 +67,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: fields/130-what-is-the-farmland-around-a-town-or-a-city-made-of.html, cities/hinterland/020-why-is-a-city-ringed-by-farmland-on-every-side.html
 - rendering: How our maps draw the farmland around a town or a city
 - modals: -
-- note: the project's measurements of its drawn town and city maps are rendering. cities/hinterland/020 ("Why is a city ringed by farmland on every side?") is the same subject and towns/400 (the town's night-soil vegetable edge) is close - those planners may fold them here. fields/140 (the samurai estates in the near ring) folds to cities. Cross-page from the cities collection: cities/hinterland/020-why-is folds here.
+- note: the project's measurements of its drawn town and city maps are rendering. cities/hinterland/020 ("Why is a city ringed by farmland on every side?") is the same subject and 0127 (the town's night-soil vegetable edge) is close - those planners may fold them here. fields/140 (the samurai estates in the near ring) folds to cities. Cross-page from the cities collection: cities/hinterland/020-why-is folds here.
 - size: 6017
 
 ## T10 Temple fields (jochi)
@@ -101,13 +101,13 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fields/080-how-wide-is-a-drain-where-it-starts---as-narrow-as-the-ditches-that-feed-it.html (4721) -> water T7 "Field drains (akusuiro)"
 - fields/210-free-lore-hooks-and-the-sources.html (2359) -> water T8 "Sharing water between villages (bunsui)"
 - fields/220-are-there-really-graves-out-in-the-middle-of-the-fields.html (4531; GraveIsland) -> religion-and-death T16 "Where a village buries its dead: its own ground, the temple yard, the fields or the home plot" (the candidate that planner offered; it is the fields form of that choice, beside 155's "in China the graves stood in the fields"). T16 gains the modal GraveIsland.
-- fields/140-where-do-the-samurai-estates-sit-when-the-paddy-has-the-near-ring.html (3454) -> cities/hinterland topic on samurai country estates (the one absorbing cities/hinterland/010 "Gentry estates are DISPERSED" and 015 "How many country estates does a city map draw")
-- Candidates in (other planners decide): towns/150 -> T1; cities/hinterland/020 and towns/400 -> T9.
+- fields/140-where-do-the-samurai-estates-sit-when-the-paddy-has-the-near-ring.html (3454) -> cities/hinterland topic on samurai country estates (the one absorbing 0173 "Gentry estates are DISPERSED" and 015 "How many country estates does a city map draw")
+- Candidates in (other planners decide): towns/150 -> T1; cities/hinterland/020 and 0127 -> T9.
 
 ## Confusable pairs
 - "Wet paddies that never drain (shitsuden)" / water "Marshes and wetlands (shitchi)": a named class of cropped paddy too wet ever to dry vs uncropped reed ground.
 - "Wet paddies that never drain (shitsuden)" / "Paddies left to rest (kataarashi)": a paddy always under water vs a paddy out of crop for a year.
 - "Bunds between the paddies (aze)" / archetypes/080 and 330 (a polder's dike): a foot-and-a-half ridge between two paddies vs the embankment that encloses a reclaimed polder.
 - "Bunds between the paddies (aze)" / water "Reservoir ponds (tameike)" (285's embankment): the paddy's low ridge vs a pond's dam.
-- "Ponds, rocks and graves in the middle of the fields" / archetypes' fish ponds (the dike-pond, 140-172) and homesteads/180 (the crescent pond before a village): an irrigation pond in the fields vs a fish pond and a village's half-moon pond.
+- "Ponds, rocks and graves in the middle of the fields" / archetypes' fish ponds (the dike-pond, 140-172) and 0041 (the crescent pond before a village): an irrigation pond in the fields vs a fish pond and a village's half-moon pond.
 - "Temple fields (jochi)" / religion-and-death/128 (the land a country shrine stands on): a temple's tax-free cropland vs a shrine's own precinct ground.

@@ -1,7 +1,7 @@
 # Handoff - feature 280, group C2 (cities/river-cities), session 1: research and write
 
 - SECTION=cities/river-cities/020
-- SECTION=cities/river-cities/060
+- SECTION=0225
 - SECTION=cities/river-cities/070
 - SECTION=cities/river-cities/600
 - KEY=hamura-tamagawa-josui

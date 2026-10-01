@@ -26,7 +26,7 @@ SPEC_CLASSES = [
     "farmhouse",
     "storage shed",
     "byre",
-    "retirement house",  # 269 B42 (settlements/035)
+    "retirement house",  # 269 B42 (0004)
     "threshing yard",
     "garden",
     "privy",
@@ -134,7 +134,7 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     # drawn, so each reads as a mat rather than the floor as a texture.
     # `storage shed` joined them on 2026-10-01 (feature 292, closing pass C3): the storehouse is drawn as an annex on a
     # fixed wall at a farm shed's size, where the storehouses recorded stood free of the house and were smaller - the
-    # rendering section's own label for the annex (rendering/homesteads 120).
+    # rendering section's own label for the annex (0040).
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == [
         "bund beans",
         "homestead bamboo",
@@ -272,7 +272,7 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     # reservoir above the fields" and then "on this map the pond is the field's drainage sink", on every map. Rewritten
     # to cover both parts a pond plays, it now discloses that a pond at the field's foot is the map's declared sink with
     # no surveyed bank or outlet behind it.
-    # `bund` LEFT the list on 2026-09-28 (feature 269 K1): fields/260 reads the dividing bund's one to two shaku, and
+    # `bund` LEFT the list on 2026-09-28 (feature 269 K1): 0014 reads the dividing bund's one to two shaku, and
     # the walking bund's two to five feet is now disclosed as a GUESS held between that and the one-ken farm road.
     # `windbreak` and `marsh` LEFT the list on 2026-09-28 (feature 269 K3): the windbreak discloses that its
     # conifer-led form is drawn at village scale from farmstead surveys and that the odds, the rows' spacing and the

@@ -6,7 +6,7 @@ Written 2026-09-28. Claims: no other session held homesteads 060, 130, 180 or 24
 
 - SECTION=homesteads/060
 - SECTION=homesteads/240
-- SECTION=homesteads/180
+- SECTION=0041
 - SECTION=homesteads/185
 - SECTION=homesteads/130
 

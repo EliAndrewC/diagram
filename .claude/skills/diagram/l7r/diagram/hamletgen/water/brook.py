@@ -56,8 +56,8 @@ from .brook_rules import (
     turn_deg,
 )
 
-# THE WEIR'S FORM (269 B22; research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
-# fence is in the Man'yoshu, the reed weave only in a present-day weir - research/water/250-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html), a frame of stakes and logs packed
+# THE WEIR'S FORM (269 B22; research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
+# fence is in the Man'yoshu, the reed weave only in a present-day weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html), a frame of stakes and logs packed
 # with clay, a crib of timber packed with stone, or a course of stone-filled baskets, each drawn at its own thickness
 # (`WEIR_THICK_FT`). "The rule the map follows: a weir hamlet's weir takes one of four forms, rolled per settlement
 # with an even chance" - the EVEN chance a GUESS, no source counting them. `crib` is the default because it is the
@@ -210,7 +210,7 @@ def finished_course(course: Sequence[Pt], w: float, taps: Sequence[Pt] = ()) -> 
     """The brook's course AS DRAWN: `course` with its bends rounded at `BROOK_BEND_WIDTHS` of its width `w`, each vertex
     within a foot of a tap in `taps` held where it is (feature 287, M2 - lifted out of `Settlement.round_stream`).
 
-    A natural brook turns on a curve like every earthen channel (`fillet_polyline`; research/rendering/water/190-how-our-maps-draw-bends-junctions-and-the-run-of-the-water.html; settlement-review of Sawada, feature 261: mitred corners of 27-47 degrees). A held vertex
+    A natural brook turns on a curve like every earthen channel (`fillet_polyline`; research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html; settlement-review of Sawada, feature 261: mitred corners of 27-47 degrees). A held vertex
     splits the course and each stretch is rounded between its own ends, so the head race still leaves the course at the
     tap where its offtake angle is measured. A function of the course, its width and the taps only, so the placer that
     judges a brook and the stage that draws it read ONE geometry; a course of two points has no corner and comes back
@@ -353,7 +353,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     """The brook's course BELOW the intake: past the cultivated ground on one flank, then off the frame.
 
     A stream is tapped, not consumed - the intake takes what the field needs and the brook carries the rest
-    on down (research/water/250-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html). So the
+    on down (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html). So the
     course below the intake has one job: pass the crop without touching it, and be a stream while it does.
 
     It is built in the fall's own frame - `u` along the fall, `v` across it on the chosen flank - by walking
@@ -837,10 +837,10 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     """What stands where the head race leaves the brook - a WEIR, or nothing at all.
 
     The record attests both and gives no proportion, so `plan.intake` is rolled per map
-    (research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html). On an `open`
+    (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html). On an `open`
     hamlet the point is marked by the junction itself: the brook runs straight on and the race opens out of its
     bank at an acute angle (`open_race_mouth`), which is a fork a reader can see - no gate or boards, none being
-    recorded at a village intake (research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html). On a `weir` hamlet a bar crosses the brook, set OBLIQUE -
+    recorded at a village intake (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html). On a `weir` hamlet a bar crosses the brook, set OBLIQUE -
     the old weirs ran diagonally upstream from the intake mouth, damming the shallow riffle and standing clear of
     the flood's fastest water - built in one of four forms rolled per hamlet (`WEIR_FORM`).
 
@@ -912,7 +912,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
 
 
 def open_race_mouth(s: Settlement, sluice: Pt) -> None:
-    """The head race OPENS OUT OF THE BROOK'S BANK (269 B22; research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html).
+    """The head race OPENS OUT OF THE BROOK'S BANK (269 B22; research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html).
 
     The attested bare intake is an opening: "water can easily be taken just by providing an entrance for it", a
     damless intake "opening a mouth at the concave side". So the ditch begins at the bank's edge, and nothing of it is
@@ -944,7 +944,7 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
 
 
 def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: float, half_t: float) -> str:
-    """The SVG of a weir bar by its FORM (269 B22, research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html), inside the bar's own `poly`.
+    """The SVG of a weir bar by its FORM (269 B22, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html), inside the bar's own `poly`.
 
     A WEIR IS NOT A BRIDGE, and it was drawn as one: the same brown oblique bar as the nine footbridges on the reference
     hamlet's own sheet, which `settlement-review` read as "the crossing" - actively misleading, since it is the only bar

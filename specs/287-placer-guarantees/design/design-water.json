@@ -582,7 +582,7 @@
     "R3 future-work 'OPEN 2026-09-28 (269 B07): a wild fan middle leaves a hamlet almost no dry field'"
    ],
    "owner": "l7r/diagram/waterfields/comb.py:_comb_dry_and_beans (after fan_toe_hem, the dry-band placer) - R3 owner correct",
-   "mechanism": "After fan_toe_hem trims to the toe, compare dry acreage to the sizing rule's target (a shared function beside net_acres, read by the unit test); lay the shortfall on the named ground. WHERE is research owed first (the R3 entry says so; feedback 'where is research, not a question'): the catena research (fields/160) is read for where a wild-middle fan's dry crops stood - likely the toe's flanks and the ground below the collector. Candidates are laid by _dry_fields on that ground, deepening the toe band up to the target.",
+   "mechanism": "After fan_toe_hem trims to the toe, compare dry acreage to the sizing rule's target (a shared function beside net_acres, read by the unit test); lay the shortfall on the named ground. WHERE is research owed first (the R3 entry says so; feedback 'where is research, not a question'): the catena research (0006) is read for where a wild-middle fan's dry crops stood - likely the toe's flanks and the ground below the collector. Candidates are laid by _dry_fields on that ground, deepening the toe band up to the target.",
    "fallback": "If the named ground cannot hold the target inside the canvas, the canvas grows (plan_site), as W59 does for paddy.",
    "later_stages": "_comb_draw_hem drops hem plots under the brook's band after this; the target must be met after that drop - run the top-up after the brook is known (stage_field has plan.brook before draw_comb_field) or re-top-up there.",
    "unit_test": "A wild-middle fan whose toe hem gives 0.4 acre against a 2.5 acre target: assert the output dry acreage is within the sizing band.",
@@ -625,7 +625,7 @@
   },
   {
    "id": "W39",
-   "rule": "A shipped scripted map's typical paddy cell stays in the 0.030-0.072 acre band (polder and dike-pond maps exempt by rule). Stated: tests/full/test_villages.py::test_village_passes_gate; research/fields/110-how-much-farmland-a-settlement-works-and-in-what-tracts.html.",
+   "rule": "A shipped scripted map's typical paddy cell stays in the 0.030-0.072 acre band (polder and dike-pond maps exempt by rule). Stated: tests/full/test_villages.py::test_village_passes_gate; research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html.",
    "rows": [
     "R1 tests/full/test_villages.py::test_village_passes_gate (cell-size part)"
    ],

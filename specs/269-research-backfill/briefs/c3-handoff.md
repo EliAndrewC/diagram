@@ -1,8 +1,8 @@
 # 269 C3 handoff - cities/fabric (B40)
 
 - SECTION=cities/fabric/030
-- SECTION=cities/fabric/070
-- SECTION=cities/fabric/080
+- SECTION=0162
+- SECTION=0159
 - SECTION=cities/fabric/120
 - SECTION=cities/fabric/160
 - KEY=kotobank-machiwari
@@ -43,4 +43,4 @@ B40 SILENT, partly re-sourced (street-share anchors, 030) - Pingyao's four main 
   quarters (J-STAGE PDF, no text layer here), for street widths and any road-area ratio.
 - **Not owed to another owner.** No finding here corrects a section that 265, 267 or 268 owns.
 - **Pre-existing.** `check-question-size.py` reports five questions over 20,000 bytes: homesteads 210,
-  religion-and-death 160, vegetation 120, water 070 and water 270. None is on cities/fabric or was touched here.
+  0235, 0074, water 070 and 0035. None is on cities/fabric or was touched here.

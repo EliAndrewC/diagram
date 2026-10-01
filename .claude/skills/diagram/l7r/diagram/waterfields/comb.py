@@ -626,7 +626,7 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
     # By default the field grows downhill until the threads leave the map (fills the frame to the low
     # corner, then spills off it). `field_fall` CAPS the downhill depth instead, so the field is sized
     # to the population and BOUNDED within the frame - leaving a low-side margin for the drain's outfall
-    # + brook to discharge into open land (see research/fields/130-farmland-around-towns-and-cities.html). None = the old fill-to-edge.
+    # + brook to discharge into open land (see research/questions/0010-farmland-around-towns-and-cities.html). None = the old fill-to-edge.
     f_stop = max(F.to_uf(0, 0)[1], F.to_uf(W, 0)[1], F.to_uf(0, H)[1], F.to_uf(W, H)[1]) + 300
     if field_fall is not None:
         f_stop = min(f_stop, f + field_fall)

@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/temple-clergy-their-families-and-how-a-temple-earned-its-keep
 - RENDERING=rendering/religion-and-death/how-our-maps-house-a-temples-clergy
-- OLD=research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=
 - BASE=61fac50cd
 

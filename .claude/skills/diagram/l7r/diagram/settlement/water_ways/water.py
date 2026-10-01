@@ -29,7 +29,7 @@ SUPPLY_HUE = "#6C9CBE"
 #: against the tan hinterland and the brown bund it hems for its whole length it read as a second boundary line
 #: rather than as water. Kashikawa is where that cost something: its confluence is the pool's one map of a drain
 #: RETURNING to its brook, and the junction read as the field's edge touching a stream - which leaves the GM's own
-#: "water just flows" ruling (research/rendering/water/190-how-our-maps-draw-bends-junctions-and-the-run-of-the-water.html) intact
+#: "water just flows" ruling (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html) intact
 #: in mechanism and gone in effect.
 #: So the separation the middle hue bought is KEPT on lightness and saturation and GIVEN BACK on hue: 203 degrees,
 #: value 0.53 against the supply's 0.75. It stands 76 RGB units from the supply (the rejected first hue stood 21),
@@ -41,7 +41,7 @@ DRAINAGE_DITCH = "drainage ditch"
 #: A DIKE-POND'S CANALS ARE NEITHER (settlement-review, feature 230 pass 10). On Kuwabata 25 of the 26 pond DRAIN sluices open
 #: onto the six laterals that also carry 22 FEED sluices, and a reader hovering one was told it "brings water TO the paddies".
 #: The record already says what they are: "the channels do not irrigate the ponds paddy-style; they are the
-#: conveyance-and-drainage network the ponds exchange water with" (research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html). So on that archetype every non-drain ditch is one class; the ring drain stays a drainage ditch, and
+#: conveyance-and-drainage network the ponds exchange water with" (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html). So on that archetype every non-drain ditch is one class; the ring drain stays a drainage ditch, and
 #: a rice polder's laterals, which do only supply, stay irrigation ditches.
 POND_CANAL = "pond canal"
 DIKE_POND_ARCHETYPE = "mulberry_dike_fishpond"
@@ -131,7 +131,7 @@ class WaterBodiesMixin:
         together (settlement-review of Sawada, feature 261). The rounding itself is the generator's: a hamlet's brook is
         rounded by `hamletgen.water.brook.finished_course`, which the brook's placer and this redraw share (feature 287).
 
-        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/rendering/water/190-how-our-maps-draw-bends-junctions-and-the-run-of-the-water.html). ROUNDING IT AT `stream` MOVED EVERY WAY the brook's corners had shaped, and each re-rolled web
+        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html). ROUNDING IT AT `stream` MOVED EVERY WAY the brook's corners had shaped, and each re-rolled web
         found a new way to fail; so the hamlet generator rounds it once the water is laid (the end of `stage_sink`, feature
         287 - before that, in `stage_crossings`) and its ways keep routing against the course as first drawn
         (`ways.checks.stream_segs` reads the `stations`). The water block is not emitted until `finish`, so the bed and sheen
@@ -166,7 +166,7 @@ class WaterBodiesMixin:
     def river(self: Settlement, pts: Any, width: float | None = None, flow: str = "forward") -> float:  # type: ignore[misc]
         """A RIVER - the trunk waterway a river-bank city sits on (most provincial cities do;
         the moat taps it upstream and returns downstream, and the river itself serves as the
-        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/cities/river-cities/010-cities-on-rivers.html).
+        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/questions/0175-cities-on-rivers.html).
         Drawn as a wide stream (off-map to off-map) and recorded in M['river'] so the checks
         that compare watercourse weights know this one legitimately outweighs the dug moat."""
         if width is None:
@@ -180,7 +180,7 @@ class WaterBodiesMixin:
         """frm/to are anchor dicts: {'kind':'pond'|'offmap'|'field','name':...}. `width` is the drawn
         bed: a field-level irrigation ditch is the THINNEST line on the map (in reality ~0.3 m, ~1/300
         of the 1-cho paddy it feeds), so it sits at the legibility floor (~2.5 px) - a hairline, clearly
-        finer than any natural watercourse. See the water-width ladder in research/water/010-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html, historical
+        finer than any natural watercourse. See the water-width ladder in research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html, historical
         grounding. `pts` (optional): an explicit polyline used verbatim instead of the auto-winding -
         for culverts routed by hand (a drain outfall reaching its stream confluence, a field-to-field
         cascade connector) whose waypoints are load-bearing; drawing through THIS method (not a flat

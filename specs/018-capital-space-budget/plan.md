@@ -53,7 +53,7 @@ This feature draws nothing. It adds a tier nothing yet uses, and the pool must c
 
 This feature does change what a generator asserts about the world - it asserts how much ground a domain capital covers and what institutions occupy it - so the principle applies.
 
-**Opening gate: PASS.** The research was done BEFORE this spec was written and is recorded in [`research/cities/capitals.md`](../../.claude/skills/diagram/research/cities/capitals.md), with [`research.md`](research.md) here summarizing what each budget number rests on. For every element: what the historical reality was (China-first where China has something to say, Japan leading at this tier by a *disclosed and justified* inversion), whether the design matches, and **what determines the element in reality**. Two designs were changed at this gate rather than implemented and revisited, which is the gate working:
+**Opening gate: PASS.** The research was done BEFORE this spec was written and is recorded in [`research/contents.json#citiescapitals.md`](../../.claude/skills/diagram/research/contents.json#citiescapitals.md), with [`research.md`](research.md) here summarizing what each budget number rests on. For every element: what the historical reality was (China-first where China has something to say, Japan leading at this tier by a *disclosed and justified* inversion), whether the design matches, and **what determines the element in reality**. Two designs were changed at this gate rather than implemented and revisited, which is the gate working:
 
 - an "ashigaru terrace" line was **dropped** - Rokugani ashigaru are peasants living in villages, so the institution does not exist here - and replaced with a retainer terrace for junior samurai;
 - and the same correction reversed its **quantity**, because the capital's rank mix is 70% senior against a provincial city's 27%.
@@ -92,7 +92,7 @@ specs/018-capital-space-budget/
 ├── test_citybudget.py       # EXTENDED: the capital budget's tests
 ├── test_checks.py           # EXTENDED: the two new checks' tests + fixtures
 ├── settlements/capitals.md  # UPDATED: point the tier doc at the shipped surface
-└── research/cities/capitals.md  # UPDATED: mark the constants as shipped
+└── research/contents.json#citiescapitals.md  # UPDATED: mark the constants as shipped
 ```
 
 **Structure Decision**: the feature extends two existing modules in place rather than adding a new one. `citybudget.py` is already the single home of budget-first sizing and its docstring says so; splitting the capital into a sibling module would put two halves of one concept in two files and duplicate `derive_wall`, `BudgetLine` and the serializer. The pure-logic/validator split already in place is the right seam and is preserved.

@@ -1,10 +1,10 @@
 # Handoff - feature 269 group C4A (cities/hinterland, B41a)
 
-- SECTION=cities/hinterland/060
-- SECTION=cities/hinterland/010
+- SECTION=0172
+- SECTION=0173
 - SECTION=cities/hinterland/015
 - SECTION=cities/hinterland/030
-- SECTION=cities/hinterland/040
+- SECTION=0171
 - KEY=liuyuan-zhwiki
 - KEY=nanguanxiang-haining-zhwiki
 - KEY=masuami-yosui-ueda

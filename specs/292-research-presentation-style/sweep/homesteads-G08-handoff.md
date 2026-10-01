@@ -4,14 +4,14 @@
 
 - SECTION=homesteads/bath-sheds-on-the-farm-furo
 - RENDERING=rendering/homesteads/how-our-maps-draw-bath-sheds-furo
-- OLD=research/homesteads/ research/homesteads/
+- OLD=research/contents.json#homesteads research/contents.json#homesteads
 - MODALS=BathRoom
 
 ## Household shrines (yashikigami)
 
 - SECTION=homesteads/household-shrines-yashikigami
 - RENDERING=rendering/homesteads/how-our-maps-place-the-household-shrine-yashikigami
-- OLD=research/homesteads/
+- OLD=research/contents.json#homesteads
 - MODALS=HouseholdShrine WoodKamiAltar
 
 - BASE=96560b687

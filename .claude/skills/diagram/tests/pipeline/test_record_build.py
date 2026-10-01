@@ -17,15 +17,14 @@ SKILL = os.path.dirname(RESEARCH_DIR)
 def _skill(tmp_path: pathlib.Path) -> pathlib.Path:
     """A skill with a small record: a fragment, an asset, built outputs of both eras, prose, and two engine modules."""
     rec = tmp_path / "research"
-    for d in ("water", "assets", "site", "citations", "cities", "cities/fabric", ".site-abc"):
+    for d in ("questions", "assets", "site", "citations", ".site-abc"):
         (rec / d).mkdir(parents=True, exist_ok=True)
-    (rec / "water" / "_front.html").write_text("<main>", encoding="utf-8")
-    (rec / "water" / "010-ponds.html").write_text('<h2 id="ponds">Ponds</h2>', encoding="utf-8")
-    (rec / "cities" / "fabric" / "010-rows.html").write_text('<h2 id="rows">Rows</h2>', encoding="utf-8")
+    (rec / "questions" / "0001-ponds.html").write_text('<h2 id="ponds">Ponds</h2>', encoding="utf-8")
+    (rec / "questions" / "0001-ponds.notes.html").write_text("", encoding="utf-8")
     (rec / "assets" / "record.css").write_text("css", encoding="utf-8")
     (rec / "assets" / "glossary.js").write_text("built", encoding="utf-8")
     (rec / "confusables.json").write_text("[]", encoding="utf-8")
-    for built in ("water.html", "SOURCES.html", "cities/fabric.html", "citations/water.html", "site/index.html", ".site-abc/x.html"):
+    for built in ("water.html", "SOURCES.html", "citations/water.html", "site/index.html", ".site-abc/x.html"):
         (rec / built).write_text("built", encoding="utf-8")
     (rec / "CLAUDE.md").write_text("prose", encoding="utf-8")
     (tmp_path / "l7r" / "diagram" / "interactive" / "assets").mkdir(parents=True)
@@ -36,21 +35,9 @@ def _skill(tmp_path: pathlib.Path) -> pathlib.Path:
 
 
 def test_the_inputs_are_the_fragments_the_assets_and_the_data_and_nothing_built() -> None:
-    assert rb.is_input("water/010-ponds.html") and rb.is_input("water/010-ponds.notes.html") and rb.is_input("water/_front.html")
-    assert rb.is_input("cities/fabric/010-rows.html") and rb.is_input("assets/site.js") and rb.is_input("confusables.json")
-    for built in (
-        "water.html",
-        "SOURCES.html",
-        "cities/fabric.html",
-        "rendering/water.html",
-        "rendering/cities/sizing.html",
-        "citations/water.html",
-        "citations/water.js",
-        "site/index.html",
-        ".site-x/a.html",
-        "assets/glossary.js",
-        "CLAUDE.md",
-    ):
+    assert rb.is_input("questions/0001-ponds.html") and rb.is_input("questions/0001-ponds.notes.html") and rb.is_input("sources/_front.html")
+    assert rb.is_input("assets/site.js") and rb.is_input("confusables.json") and rb.is_input("contents.json") and rb.is_input("tags.json")
+    for built in ("water.html", "SOURCES.html", "citations/water.html", "citations/water.js", "site/index.html", ".site-x/a.html", "assets/glossary.js", "CLAUDE.md"):
         assert not rb.is_input(built), built
 
 
@@ -58,10 +45,9 @@ def test_the_record_s_files_are_walked_and_the_built_ones_left_out(tmp_path: pat
     skill = _skill(tmp_path)
     assert rb.record_files(str(skill / "research")) == [
         "assets/record.css",
-        "cities/fabric/010-rows.html",
         "confusables.json",
-        "water/010-ponds.html",
-        "water/_front.html",
+        "questions/0001-ponds.html",
+        "questions/0001-ponds.notes.html",
     ]
 
 
@@ -91,7 +77,7 @@ def test_the_site_is_built_when_an_input_moves_and_only_then(tmp_path: pathlib.P
     (skill / "research" / "CLAUDE.md").write_text("more prose", encoding="utf-8")
     (skill / "research" / "water.html").write_text("a stale built page", encoding="utf-8")
     assert rb.rebuild_if_stale(str(skill), build=build, modules=mods) is False, "nothing the record is built from moved"
-    (skill / "research" / "water" / "010-ponds.html").write_text('<h2 id="ponds">Ponds, dug</h2>', encoding="utf-8")
+    (skill / "research" / "questions" / "0001-ponds.html").write_text('<h2 id="ponds">Ponds, dug</h2>', encoding="utf-8")
     assert rb.rebuild_if_stale(str(skill), build=build, modules=mods) is True, "a fragment moved"
     (skill / "l7r" / "site.py").write_text("# the build changed", encoding="utf-8")
     assert rb.rebuild_if_stale(str(skill), build=build, modules=mods) is True, "the build's code moved"

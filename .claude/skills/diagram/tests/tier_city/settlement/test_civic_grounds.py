@@ -39,7 +39,7 @@ def test_granary_append_records_a_list_for_a_capital_with_two_granaries():
 
 
 def test_a_cremation_ground_is_sized_by_TIER_not_by_a_fixed_pixel_glyph() -> None:
-    """GM 2026-07-19, anchors in research/religion-and-death.html, the funerary-size entry: a sanmai's cleared working core is 30-80 real ft for
+    """GM 2026-07-19, anchors in research/contents.json#religion-and-the-dead, the funerary-size entry: a sanmai's cleared working core is 30-80 real ft for
     a village or town and ~80-160 ft for a provincial city - even metropolitan Edo's Yoyogi crematory
     was only ~180 ft square. The old glyph was FIXED-PIXEL (116x80 px) and silently TRIPLED at city
     scale, which is the defect this branch exists to prevent.
@@ -120,7 +120,7 @@ def test_a_wall_running_ALONG_a_ward_fence_is_re_stamped_over_it() -> None:
 
 
 def test_a_burial_ground_DERIVES_its_shape_from_whether_it_is_a_parish_plot() -> None:
-    """Researched 2026-07-23, written up in research/religion-and-death.html 'Village burial grounds (bochi)' ('shape of the common ground'.
+    """Researched 2026-07-23, written up in research/contents.json#religion-and-the-dead 'Village burial grounds (bochi)' ('shape of the common ground'.
 
     Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed temple
     yards - were unplotted and TERRAIN-FOLLOWING, never surveyed. Song China's state pauper
@@ -200,7 +200,7 @@ def test_a_cremation_ground_draws_its_six_jizo_only_when_asked() -> None:
 
 
 def test_a_cremation_ground_is_open_air_on_most_seats_and_draws_no_pyre_platform_or_hut() -> None:
-    """Feature 280 M70 (research/religion-and-death/530 'Cremation grounds and bone mounds (kasoba)'): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
+    """Feature 280 M70 (research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html 'Cremation grounds and bone mounds (kasoba)'): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
     minority; no raised pyre platform or officiants' hut is attested, so neither is drawn."""
     from l7r.diagram.settlement.civic_grounds.funerary import ROOFED_SHARE
 

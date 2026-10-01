@@ -15,10 +15,10 @@ otherwise. The record is `.claude/skills/diagram/research/` (written `research/`
 ## R2 - how research and drawing pair
 
 Each of the 234 drawing pages carries exactly one `<!-- about: <page>.html#<id> -->`. 231 name the research question
-of the same part and number. Three name a different number of the same part: `settlements/020` -> `settlements/010`,
-`water/015` -> `water/010`, `homesteads/152` -> `homesteads/150` - second drawing pages of one research question.
-Six research questions have no drawing page: `fields/170`, `homesteads/440`, `towns/400`, `water/670`,
-`cities/defenses/250`, `cities/hinterland/060`. Plus the three `presentation/` questions, drawing conventions filed as
+of the same part and number. Three name a different number of the same part: `0002` -> `0001`,
+`0069` -> `0068`, `0032` -> `0031` - second drawing pages of one research question.
+Six research questions have no drawing page: `0012`, `0052`, `0127`, `0067`,
+`0133`, `0172`. Plus the three `presentation/` questions, drawing conventions filed as
 research (spec FR-008a).
 
 ## R3 - the notes' scope

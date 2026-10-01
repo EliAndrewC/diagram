@@ -28,5 +28,5 @@ def test_every_named_question_of_every_modal_exists() -> None:
 
 
 def test_the_check_sees_a_stale_question() -> None:
-    entry = "research/homesteads/010-groves-of-trees-around-farmhouses-yashikirin.html, research/homesteads/999-not-there.html"
+    entry = "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/homesteads/999-not-there.html"
     assert stale_titles(entry) == ["homesteads/999-not-there.html"]

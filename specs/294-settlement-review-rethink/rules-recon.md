@@ -73,7 +73,7 @@ assertion over `farm_fixtures` (`kind == "woodpile"`, `of` = own house centre). 
 `tests/hamletgen/test_fixtures_287.py::test_a_bath_room_is_drawn_at_its_laid_size_with_its_wall_and_a_flank_seat_along_its_flank`.
 **Predicate**: distance to own house < distance to any other house/retirement house/shed/byre; |rot - house rot| mod 90 <= 2 deg.
 **Measured**: 32 sheds across five maps, gap to own wall 9.4-16.8 ft, never nearer a neighbour, skew 0.0 deg. PASSES.
-**Seed**: move one shed's `of` to a neighbour, or rotate it 90. **Norm**: research/homesteads/212 and 720 (the shed); the
+**Seed**: move one shed's `of` to a neighbor, or rotate it 90. **Norm**: research/questions/0043-firewood-stacks-and-sheds-kigoya.html and 720 (the shed); the
 "nearer its own house" rule is a GUESS. **Effort**: S.
 
 ## 4. Parallel twin watercourses 12-32 ft apart
@@ -394,7 +394,7 @@ The two generated sheets were emitted into `scratchpad/modeA/` by calling `compo
   - (b) at least 1 latrine per court;
   - (c) the total is at least 3.
 - **Norm:**
-  - Research `buildings/220` (privy built into the house) and `buildings/310`.
+  - Research `0101` (privy built into the house) and `buildings/310`.
   - "~one per functional zone, ~3-4 for 40-60 persons" is the `buildings.md` vocabulary (lines 100-104 and 177). Its class is unstated, so treat the count as a GUESS until it is checked against the research.
 - **Seeded fault:** move Ochiba's `latrine data-part-of="residence"` group 30 ft into the inner court.
 - **Pool:** FAILS on 1 of 6. `ochiba-roundtrip-test` has only 2 latrines, beside the stables and the servants' quarters, and none on the residence, so it fails (a) and (c). The other 5 pass:
@@ -430,7 +430,7 @@ The two generated sheets were emitted into `scratchpad/modeA/` by calling `compo
   - cell < barracks
   - Hoshigaoka: sanctuary < hall
   - A pair is skipped when either kind is absent.
-- **Norm:** research `buildings/180` ("the compound has a size HIERARCHY"). This is the page's own reading and is labeled as such. The pair list itself is from `buildings.md` line 172.
+- **Norm:** research `0116` ("the compound has a size HIERARCHY"). This is the page's own reading and is labeled as such. The pair list itself is from `buildings.md` line 172.
 - **Seeded fault:** widen Ochiba's stables to 40x30 ft (1,200 sq ft against barracks 1,022).
 - **Pool:** PASSES on all 6.
   - Closest pair: county tax archive 1,156 against residence 1,344.
@@ -489,7 +489,7 @@ The two generated sheets were emitted into `scratchpad/modeA/` by calling `compo
 - **Data:** road ends as in item 23, matched to the nearest `wall_openings` entry or `main_gate_passage_ft`.
 - **Predicate:** road width is no more than the opening width plus 1 ft (the tolerance is a GUESS: a 3 px authoring grain). It is one-sided: a 2 ft footpath to an 8 ft river door is fine.
 - **Norm:**
-  - research `buildings/480` ("How wide was the main gate of a magistrate's post?");
+  - research `0093` ("How wide was the main gate of a magistrate's post?");
   - the feature 267 pass 2 rulings recorded in the Hayakawa and Ubame svg comments ("12 ft, matching the passage through the gate range it meets", "9 ft, matching the narrowed cart gate").
 - **Pool:** FAILS on Ochiba. Its approach road is 13.3 ft (40 px) and its main-gate passage 8.0 ft. Feature 267 narrowed the roads on Hayakawa and Ubame and missed Ochiba's. This is the recorded case and needs no seeding: a fixture is the current Ochiba svg.
   - Hayakawa: main 12/12, east postern 10.0 against lane 10.7.

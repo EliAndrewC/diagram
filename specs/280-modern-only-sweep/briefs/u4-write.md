@@ -33,7 +33,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M107 **Flophouse siting**: the flophouse sited in a humble laborers' quarter. The section says "the poor-quarter flophouse is the Meiji one, after the post stations ended, read back into our towns" (kichinyado-jawiki). This conflicts with the towns page, which sites the flophouse at the gate market or on the road (see M86) (urban-features/130) - kinds: none (flophouse siting); maps: the six legacy towns and cities. S.
+- M107 **Flophouse siting**: the flophouse sited in a humble laborers' quarter. The section says "the poor-quarter flophouse is the Meiji one, after the post stations ended, read back into our towns" (kichinyado-jawiki). This conflicts with the towns page, which sites the flophouse at the gate market or on the road (see M86) (0156) - kinds: none (flophouse siting); maps: the six legacy towns and cities. S.
 - M108 **The farrier**: nailed iron horseshoes are Meiji in Japan. The record holds shoeing as a GM deliberate deviation (2026-07-25), resting on the English Wikipedia farrier and horseshoe pages. Check the China attestation the deviation leans on, and report whether the ruling of 2026-09-28 reaches it (the handoff says whether the GM ruled it in knowingly). The page auditor passed the section as a ruled deviation; auditor 7 raised it (urban-features/032) - kinds: none (`settlement/trades.py:234` "farrier"); maps: minami, nagahara, tango, hoshizora. L.
 
 ## The procedure (session 1: research and write)
@@ -65,7 +65,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on urban-features/130, urban-features/032, and urban-features 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0156, urban-features/032, and urban-features 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

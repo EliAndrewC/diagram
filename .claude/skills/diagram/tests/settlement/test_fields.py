@@ -308,7 +308,7 @@ def test_paddy_features_cover_every_archetype_branch():
 
 
 def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_its_corner():
-    """Feature 267 (research/fields.html 'Are there really graves out in the middle of the fields?'): an island inside
+    """Feature 267 (research/contents.json#fields 'Are there really graves out in the middle of the fields?'): an island inside
     a plot (the Chinese form) or a grave in a plot's corner (the Japanese form), rolled per hamlet on its own stream."""
     from l7r.diagram.settlement.fields.features import corner_seat, grave_form
 
@@ -459,7 +459,7 @@ def test_comb_base_fill_noops_on_an_empty_net():
 
 
 def test_a_fry_village_takes_the_smallest_ponds_up_to_its_share_and_no_pond_is_sluiced():
-    """Feature 280 M57/M60 (research/archetypes/140, 200): a fry village's fry ponds are its smallest, their area within
+    """Feature 280 M57/M60 (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, 200): a fry village's fry ponds are its smallest, their area within
     seven tenths of the block's ponds; an ordinary hamlet has none; and no pond is cut by a sluice of its own."""
     from l7r.diagram.settlement.fields.landuse import FRY_VILLAGE_SHARE, fry_pond_ids
 

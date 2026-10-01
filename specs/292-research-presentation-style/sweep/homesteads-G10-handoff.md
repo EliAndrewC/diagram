@@ -4,14 +4,14 @@
 
 - SECTION=homesteads/chickens-and-chicken-coops
 - RENDERING=rendering/homesteads/how-our-maps-draw-chicken-coops
-- OLD=research/homesteads/ research/homesteads/
+- OLD=research/contents.json#homesteads research/contents.json#homesteads
 - MODALS=HenCoop
 
 ## Rice-drying racks (hasa, hasagi)
 
 - SECTION=homesteads/rice-drying-racks-hasa-hasagi
 - RENDERING=rendering/homesteads/how-our-maps-draw-rice-drying-racks-hasa-hasagi
-- OLD=research/homesteads/ research/homesteads/
+- OLD=research/contents.json#homesteads research/contents.json#homesteads
 - MODALS=ThreshingYard
 
 - BASE=6ab2b77ba

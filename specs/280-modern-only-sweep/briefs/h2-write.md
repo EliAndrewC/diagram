@@ -33,10 +33,10 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M16 **Work-yard median**: the wet-rice yard median of 18 tsubo (YARD_MEDIAN_TSUBO). It is derived from "mats at the International Rice Research Institute (IRRI)'s 2.5 cm spread", and irri-drying-floor is "modern extension advice for today's farmers and varieties, written in the tropics". The dry-field 25 tsubo (Kitamoto) is clean (homesteads/020) - kinds: ThreshingYard (`homestead.py:98`); `settlement/homestead_parts/yards.py`; maps: all scripted hamlets. M.
+- M16 **Work-yard median**: the wet-rice yard median of 18 tsubo (YARD_MEDIAN_TSUBO). It is derived from "mats at the International Rice Research Institute (IRRI)'s 2.5 cm spread", and irri-drying-floor is "modern extension advice for today's farmers and varieties, written in the tropics". The dry-field 25 tsubo (Kitamoto) is clean (0037) - kinds: ThreshingYard (`homestead.py:98`); `settlement/homestead_parts/yards.py`; maps: all scripted hamlets. M.
 - M17 **Byre size**: a byre of about 16 x 11 ft. The section says "the only figures available are modern housing standards" (fao-farm-structures-cattle, tnau-cattle-housing), which give "the room a keeper today is told to provide for a modern beast" (homesteads/070) - kinds: Byre (`homestead.py:68`); `settlement/shrines_wells/byres.py`; maps: the scripted hamlets that roll a byre, and the legacy villages. S.
-- M18 **Farm-shed size**: a naya 23-38 ft long, 1.8 to 2.4 times as long as it is deep. The sources are three registered barns of the 1910s and 1920s, a Meiji barn and a barn of 1907. The evidence comment says the size is "silent for an ordinary Edo farm's shed" (homesteads/440) - kinds: StorageShed (farm_sheds); maps: all scripted hamlets. M.
-- M19 **Pig-sty share**: pigs kept on most rice farms. The section says "A survey of 2,866 Chinese farms in the 1920s found hogs on 45 per cent ... That is a count from after the empire, read back" (buck-1930-farm-economy). The duck half is excluded (269) (homesteads/470) - kinds: PigSty (`dikepond.py:249`; STY_SHARE in `hamletgen/pondstock.py`); maps: kuwabata, and any plain paddy hamlet that draws a sty. M.
+- M18 **Farm-shed size**: a naya 23-38 ft long, 1.8 to 2.4 times as long as it is deep. The sources are three registered barns of the 1910s and 1920s, a Meiji barn and a barn of 1907. The evidence comment says the size is "silent for an ordinary Edo farm's shed" (0052) - kinds: StorageShed (farm_sheds); maps: all scripted hamlets. M.
+- M19 **Pig-sty share**: pigs kept on most rice farms. The section says "A survey of 2,866 Chinese farms in the 1920s found hogs on 45 per cent ... That is a count from after the empire, read back" (buck-1930-farm-economy). The duck half is excluded (269) (0049) - kinds: PigSty (`dikepond.py:249`; STY_SHARE in `hamletgen/pondstock.py`); maps: kuwabata, and any plain paddy hamlet that draws a sty. M.
 
 ## The procedure (session 1: research and write)
 
@@ -67,7 +67,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on homesteads/020, homesteads/070, homesteads/440, homesteads/470, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0037, homesteads/070, 0052, 0049, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

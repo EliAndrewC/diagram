@@ -6,11 +6,11 @@ PDF's text was added there by hand from `pdftotext`, two columns interleaved).
 
 ## Sections
 
-- SECTION=religion-and-death/450
+- SECTION=0228
 - SECTION=religion-and-death/460
-- SECTION=religion-and-death/470
-- SECTION=religion-and-death/040
-- SECTION=religion-and-death/210
+- SECTION=0216
+- SECTION=0232
+- SECTION=0226
 
 ## New registry keys
 
@@ -50,7 +50,7 @@ pingyao-chenghuangmiao-2, sano-shrine-gazetteer-5. New glossary terms: gōsha, s
 ## Owed to other owners
 
 - religion-and-death/170 (feature 269, `/diagram/.clones/diagram-supplemental`): the Hiki register enters Kinsenji's graveyard (4 se 10 bu, about 130 tsubo) among the land held OUTSIDE its precinct, at another named place (立山) of its village from the temple (大堂); 170's rule puts a town monastery's graveyard in its precinct. Cite `ranzan-kinsenji` (see 460's note `ranzan-kinsenji-3`) and consider a knob (in the precinct / held apart) or a disclosed deviation.
-- religion-and-death/210 is edited here (pointers to 450-470 in its town sentence, and the sentence that neither tier has a shrine of its own); group R3 edits it next.
+- 0226 is edited here (pointers to 450-470 in its town sentence, and the sentence that neither tier has a shrine of its own); group R3 edits it next.
 - Group R3 (the village temple): the Hiki temple register (`ranzan-temple-register` and the per-temple keys) is a village-temple source; cite it rather than re-reading.
 
 ## TO-DOWNLOAD

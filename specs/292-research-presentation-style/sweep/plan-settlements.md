@@ -15,7 +15,7 @@ about how the maps draw or state a settlement, so they become T1's rendering sec
 - fold: settlements/035-how-many-lived-in-one-farmhouse-and-under-how-many-roofs.html, settlements/020-how-many-inhabitants-does-a-maps-house-count-stand-for.html, settlements/030-is-every-household-in-a-hamlet-actually-drawn.html
 - rendering: How our maps count and draw households
 - modals: RetirementHouse
-- note: 035 leads (five to a household, the stem family, the retirement house); 020's "dwellings times five, never buildings" and 030's drawn-house measurement over the seventeen shipped maps are rendering. The retirement house (inkyoya) is also a farmstead building - homesteads/140 and 720 (the farmstead inventory) should link here rather than restate it.
+- note: 035 leads (five to a household, the stem family, the retirement house); 020's "dwellings times five, never buildings" and 030's drawn-house measurement over the seventeen shipped maps are rendering. The retirement house (inkyoya) is also a farmstead building - 0028 and 720 (the farmstead inventory) should link here rather than restate it.
 - size: 13183
 
 ## Groups
@@ -25,5 +25,5 @@ about how the maps draw or state a settlement, so they become T1's rendering sec
 - none
 
 ## Confusable pairs
-- "Households: how many live in a house, and under how many roofs (ie)" / homesteads/540 "Where did landless and tenant households live, and in what?": the counting unit of a settlement (a household, whatever its roofs) vs the housing of the poorest households.
+- "Households: how many live in a house, and under how many roofs (ie)" / 0034 "Where did landless and tenant households live, and in what?": the counting unit of a settlement (a household, whatever its roofs) vs the housing of the poorest households.
 - "The five sizes of settlement" / archetypes/190 "What a settlement IS": the tier ladder (size and institutions) vs a settlement's form and what its card may claim - overlapping on the place card only.

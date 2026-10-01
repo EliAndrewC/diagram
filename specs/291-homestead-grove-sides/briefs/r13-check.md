@@ -5,10 +5,10 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 (`/diagram/.clones/diagram-readability-2`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all.
 
-**What moved.** Session 1 corrected three sentences the settlement-reviews found saying more than the record supports (homesteads/155's summary on the fan's foot, the fields-section water paragraph on a dispersed farm's own water, and the spelling resson). Its handoff is
+**What moved.** Session 1 corrected three sentences the settlement-reviews found saying more than the record supports (0033's summary on the fan's foot, the fields-section water paragraph on a dispersed farm's own water, and the spelling resson). Its handoff is
 `specs/291-homestead-grove-sides/briefs/r13-handoff.md`.
 
-**Your questions:** the questions the handoff names (homesteads 155, the homesteads fields-section question it edited, towns 390)
+**Your questions:** the questions the handoff names (0033, the homesteads fields-section question it edited, towns 390)
 **Your registry keys:** any the handoff names as new
 
 ## The procedure (check, apply)

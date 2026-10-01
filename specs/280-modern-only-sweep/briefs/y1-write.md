@@ -34,7 +34,7 @@ Each names the section that makes the claim, the drawn form, why the audit think
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
 - M82 **Bridge landing**: every bridge deck runs 10 ft past the water on each side. The only sources are modern US engineering standards: ritter-timber-bridges (bearing lengths "under highway loading") and nrcs-ts14q-abutments. The section says "That distance is a GUESS" (ways/010) - kinds: none (the bridge-deck solver in `settlement/_geom/ways.py`, and the hamlet footbridges); maps: every map with a deck. M.
-- M83 **The plank bridge**: the plank (itabashi) laid where a bund path meets a farm ditch. The section calls it "a GUESS, since no readable page describes it", and the searches "found bund-board products and modern channel works but no board laid over a paddy ditch". Itabashi itself is a period word (ways/030) - kinds: Footbridge (`water_and_ways.py:285`, whose Entry is on the water page); maps: the pool hamlets. L.
+- M83 **The plank bridge**: the plank (itabashi) laid where a bund path meets a farm ditch. The section calls it "a GUESS, since no readable page describes it", and the searches "found bund-board products and modern channel works but no board laid over a paddy ditch". Itabashi itself is a period word (0084) - kinds: Footbridge (`water_and_ways.py:285`, whose Entry is on the water page); maps: the pool hamlets. L.
 
 ## The procedure (session 1: research and write)
 
@@ -65,7 +65,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on ways/010, ways/030, and ways 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on ways/010, 0084, and ways 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

@@ -1,6 +1,6 @@
 # Quote check — feature 242 footnotes
 
-Scope: `research/buildings/` fn-81–93 and fn-95–113 (notes on `research/buildings/`); `research/vegetation/` fn-98–107 and fn-109–126 (notes on `research/vegetation/`). 60 notes: 37 citations, 23 absence notes. Every footnote URL fetched once by address.
+Scope: `research/contents.json#compounds` fn-81–93 and fn-95–113 (notes on `research/contents.json#compounds`); `research/contents.json#vegetation` fn-98–107 and fn-109–126 (notes on `research/contents.json#vegetation`). 60 notes: 37 citations, 23 absence notes. Every footnote URL fetched once by address.
 
 ## NOT-READABLE
 
@@ -201,4 +201,4 @@ Skipped as owing nothing: the GM's 2026-08-29 rulings and the two-form/knob deci
 
 Seven passages are verbatim **substrings truncated without an ellipsis**, four of them cutting mid-sentence or mid-word: buildings fn-112 (Neixiang, before 隐约暗示…) and fn-108; vegetation fn-102 (before もの), fn-106 (before "of iriai lands"), fn-117 (before "for irrigation"), fn-114, fn-99. Each reads as a complete statement and none changes the sense; listed so the session can decide whether the anchor should carry the full sentence.
 
-Files: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/buildings/`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/vegetation/`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/buildings/`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/vegetation/`.
+Files: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#compounds`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#vegetation`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#compounds`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#vegetation`.

@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-1`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -27,19 +27,19 @@ in progress; edit only that line.
 Each is a research QUESTION the record owes: never researched, labeled a guess, or thinly sourced. The kinds named are
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
-Also edits homesteads/180.
+Also edits 0041.
 - A74 D95 **Headman's house as a building**: what did a headman's (shoya, nanushi) homestead carry that others did
   not - a gate (nagaya-mon), a genkan, an office room, a wall or hedge (against the GM's no-wall ruling), how many
-  kura - and how big was its plot? (homesteads/110 is 269 B19's; cite it; homesteads/145). M. P1.
+  kura - and how big was its plot? (0030 is 269 B19's; cite it; homesteads/145). M. P1.
 - A75 **Headman's house siting**: the center, the oldest spot, by the shrine, on the road? (none). S. P1.
 - A76 D97 **Poor and tenant houses**: were landless and tenant households (mizunomi) housed in smaller huts, how
   small, and where in the village? (none). M. P2.
 - D96 **Wealthy farmer's house**: how did a well-off farmer's or landlord's (gōnō) house differ from a plain farmhouse
-  in size and outbuildings? (homesteads/120, kura only). M. P2.
+  in size and outbuildings? (0040, kura only). M. P2.
 - A146 **Village meeting place**: where did a village meet (yoriai) - the headman's house, the shrine, a hall of its
   own - and how big and where was it? (none; D104 asks it with the granary, which is U4's). M. P2.
 - A147 **Lineage ancestral hall**: did a south-China village's lineage hall (citang) front the crescent pond, and how
-  big was it? (homesteads/180, no footnotes; 269 B19 owns 180's packing claims, so this is a new question). M. P2.
+  big was it? (0041, no footnotes; 269 B19 owns 180's packing claims, so this is a new question). M. P2.
 
 ## The procedure (session 1: research and write)
 
@@ -59,7 +59,7 @@ Also edits homesteads/180.
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on homesteads 520-580, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0034, 0050, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

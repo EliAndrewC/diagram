@@ -24,15 +24,15 @@ SLUG = FEATURE.name
 
 #: group -> (the record page(s) its questions go on, the free prefix range each page takes)
 GROUPS = {
-    "G1": ("the residence's rooms", "buildings 240-290"),
-    "G1B": ("the residence's entry and outbuildings", "buildings 300-350"),
-    "G2": ("service buildings", "buildings 360-420"),
+    "G1": ("the residence's rooms", "0102, 0103, 0239"),
+    "G1B": ("the residence's entry and outbuildings", "0104, 0105, 0106"),
+    "G2": ("service buildings", "0091, 0107, 0108, 0109"),
     "G3": ("the office and the court", "buildings 430-470"),
-    "G3B": ("the gate, the walls and two unreadable sources", "buildings 480-520"),
-    "G4": ("the grounds", "buildings 530-580, or vegetation 170-200 for a planting question"),
-    "G5": ("the shrine", "religion-and-death 220-260"),
-    "G6": ("river, trade and roads", "cities/river-cities 050-080, urban-features 190-220, ways 060-090"),
-    "G7": ("the map-story kinds", "buildings 590-640"),
+    "G3B": ("the gate, the walls and two unreadable sources", "0093"),
+    "G4": ("the grounds", "0110, or 0076 for a planting question"),
+    "G5": ("the shrine", "0240"),
+    "G6": ("river, trade and roads", "0177, 0225, 0199, 0082"),
+    "G7": ("the map-story kinds", "0094, 0111, 0112, 0117"),
     "G8": ("the in-field grave island", "fields 220-240, or the existing fields question 010 on in-field features"),
 }
 
@@ -45,8 +45,8 @@ turn. Work in this clone (`{clone}`); the project's CLAUDE.md files apply to you
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections** - feature 265, in another session, is working them: buildings 010, 070, 150, 170, 210;
-cities/river-cities 010, 020, 030, 040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040,
+**Do not edit these sections** - feature 265, in another session, is working them: 0090, 070, 150, 170, 210;
+0175, 020, 030, 040; 0190, 020, 030, 050, 060, 070, 080, 160; 0081; towns 040,
 080, 090, 100, 130; cities/capitals 040. Write the finding in a question of your own; where it OWES one of those
 sections a correction, say exactly what in the handoff (the orchestrator makes it once 265 is done with the page).
 """
@@ -91,7 +91,7 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    tests/interactive/test_sources.py tests/interactive/test_record_format.py"`, and `python3 scripts/check-question-size.py`
    from the clone root (a question and its notes stay under 20,000 bytes - split one along its topics).
 6. **Hand off.** Write `specs/{slug}/briefs/{low}-handoff.md`: one line per new or changed question - a corrected
-   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=buildings/240`), one per new registry key as `- KEY=<key>`, and one line
+   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=0102`), one per new registry key as `- KEY=<key>`, and one line
    per item: `R<nn> <OUTCOME> - <one sentence of what the record now says> - <what it means for the kinds and sheets
    named>`. Then anything left open and why. Commit (a message naming the group). Do NOT run the record checks, do NOT
    push - the check sessions do that in fresh contexts. Your last message is one paragraph saying what you wrote.

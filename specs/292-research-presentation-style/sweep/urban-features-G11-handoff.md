@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/stable-yards-and-watering-troughs
 - RENDERING=rendering/urban-features/how-our-maps-draw-stable-yards-and-their-troughs
-- OLD=research/urban-features/ research/urban-features/ research/urban-features/
+- OLD=research/contents.json#trades-and-services research/contents.json#trades-and-services research/contents.json#trades-and-services
 - MODALS=stables
 - BASE=02bd38e9d
 

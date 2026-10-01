@@ -34,7 +34,7 @@ Each names the section that makes the claim, the drawn form, why the audit think
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
 - M72 **The town monastery**: a town monastery precinct of 10,000-69,000 sq ft (default 16,400) with a hall of 24-63 ft. The bands come from "registers of the Meiji era, after temple land was confiscated" (ranzan-temple-register and others, in a prefectural register of 1963 read as the Meiji era's), and the section calls them "a guess in degree". Only the Aichi hall (1697) is Edo (religion-and-death/460) - kinds: none (the town monastery in the settlement engine); maps: legacy towns. M.
-- M73 **Clergy families' homes**: 2-3 homes (5-9 for hereditary clergy) within about 500 ft of a temple. The section says "the family is attested only from that period" (the Meiji registers), and kamigamo-shake-plan is a 1988 preservation plan. The count is the GM's ruling, and the Edo exemption for Jodo Shinshu supports married clergy (religion-and-death/040) - kinds: none (temple neighborhoods); maps: legacy provincial cities and capitals. L.
+- M73 **Clergy families' homes**: 2-3 homes (5-9 for hereditary clergy) within about 500 ft of a temple. The section says "the family is attested only from that period" (the Meiji registers), and kamigamo-shake-plan is a 1988 preservation plan. The count is the GM's ruling, and the Edo exemption for Jodo Shinshu supports married clergy (0232) - kinds: none (temple neighborhoods); maps: legacy provincial cities and capitals. L.
 
 ## The procedure (session 1: research and write)
 
@@ -65,7 +65,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on religion-and-death/460, religion-and-death/040, and religion-and-death 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on religion-and-death/460, 0232, and religion-and-death 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

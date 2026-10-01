@@ -29,7 +29,7 @@
     "value": 1,
     "unit": "sentences",
     "observed": "2026-09-30",
-    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md, the last paragraph: 'The annex's size is a deliberate deviation (research homesteads/120 and 430)'",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md, the last paragraph: 'The annex's size is a deliberate deviation (research 0040 and 430)'",
     "method": "grep over the notes file"
   },
   "mizuguchi-r1-F1-notes": {

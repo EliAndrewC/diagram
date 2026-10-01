@@ -5,11 +5,11 @@ session on these items.
 
 ## Sections
 
-- SECTION=urban-features/310
+- SECTION=0183
 - SECTION=urban-features/320
-- SECTION=urban-features/330
-- SECTION=urban-features/340
-- SECTION=urban-features/350
+- SECTION=0200
+- SECTION=0201
+- SECTION=0202
 - SECTION=urban-features/360
 - SECTION=urban-features/030
 
@@ -41,7 +41,7 @@ Existing keys newly quoted on urban-features: `machiya-shoka-jawiki` (-2..-4), `
 ## Owed to other owners
 
 - **towns/020 (feature 269, its thin section)**: the sentence "Shops are business premises counted separately from the merchant dwellings: they house nobody, so adding one perturbs no population figure", and the rule's "shops are extra and count against no household", are contradicted by urban-features/320: a shop is the street front of its keeper's house (`machiya-shoka-jawiki`: 「町人の住む店舗併設の住居形態」), and country trades were kept by farming households (`yashio-noma-yogyo`). The correction: a shop is a room of a household's house, counted among the households, not an empty extra building.
-- **cities/fabric/050** (no owner named in the brief; not edited here): "about one storefront per 25 to 30 inhabitants, an estimate of its own" may point at urban-features/310, where the one census read runs one trading household per 13 (market village) to 23 (district) inhabitants.
+- **cities/fabric/050** (no owner named in the brief; not edited here): "about one storefront per 25 to 30 inhabitants, an estimate of its own" may point at 0183, where the one census read runs one trading household per 13 (market village) to 23 (district) inhabitants.
 
 ## Left open
 

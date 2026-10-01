@@ -5,8 +5,8 @@ Sugiura 1973 counted 4.4 roofed outbuildings per Tōhoku farm household and the 
 kura) - the T52 pass listed the rest, and the GM chose these. Every one is drawn at TRUE size
 (feedback: to-scale modes never inflate); the only legibility liberty is a bold stroke, and the
 persimmon's fruit dots and the shrine's vermilion are RENDERING conventions, recorded as such in
-research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html. Research and sources:
-research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
+research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html. Research and sources:
+research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
 `farmstead_fixtures`); this mixin only draws and records.
 """
 
@@ -19,14 +19,14 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 # Real feet (w along the house wall, h out from it). privy: the one-ken default here; the placer rolls each homestead's from
-# the sixteen of the Kakimochi table (research/homesteads/260, feature 280) and passes it as `size_ft`. woodpile: the WOOD
-# SHED, 4 x 2 ken, the common size in the Kakimochi count (research/homesteads/212 and 720; the open stack under the eaves and
+# the sixteen of the Kakimochi table (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, feature 280) and passes it as `size_ft`. woodpile: the WOOD
+# SHED, 4 x 2 ken, the common size in the Kakimochi count (research/questions/0043-firewood-stacks-and-sheds-kigoya.html and 720; the open stack under the eaves and
 # the kizuma along the windbreak are modern-only and not drawn - feature 280). manure: a heap by the privy/stable (size
 # GUESS). bath: a ROOM joined to the house, 6 ft out and 6-12 ft along it (research/homesteads/740, feature 280 M22 - the
 # bath shed standing on its own is found only in the twentieth century); the placer passes its length. coop: a ground-level enclosure (Qimin Yaoshu 養雞), square in the
 # Ming find (size GUESS). shrine: the one measured hokora is a 40 cm stone (READ); at 3 ft the GM could
 # not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
-# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/homesteads/).
+# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/contents.json#homesteads).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure heap", "bath": "bath room", "coop": "hen coop", "shrine": "household shrine"}
@@ -46,7 +46,7 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
     "coop": (5.0, 5.0),
     "shrine": (6.0, 6.0),  # DRAWN at the small-shed module, not the ~1.3 ft stone: a glyph convention (GM 2026-08-27, T62)
 }
-# radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/homesteads/218, pfaf-kaki;
+# radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, pfaf-kaki;
 # 269 B14) - the full-grown size, which fits the "old giant persimmon in the dooryard" the record remembers. It was 9.0.
 PERSIMMON_CROWN_FT = 11.5
 
@@ -54,14 +54,14 @@ FIXTURE_KINDS = tuple(FIXTURE_FT)
 
 #: THE STOREHOUSE ANNEX'S FOOTPRINT in its house's frame, as factors of the house's (w, h): (x, y, width, height). NORTH, a
 #: wide block on the shaded back wall - 0.46 of the house's length by 0.45 of its depth, 1.67 to one, the Edo-period sheds'
-#: proportion (feature 280 M18, research/homesteads/440), overlapping the back wall by 0.05 h so it reads as joined; WEST, a
+#: proportion (feature 280 M18, research/questions/0052-farm-sheds-and-barns-naya.html), overlapping the back wall by 0.05 h so it reads as joined; WEST, a
 #: tall block on the west wall (the dispersed farms). THE ONE TABLE the drawing (`Settlement.house`), the bundle's
 #: reservation, the flush's side choice and the fixtures' wall list read: it was written out in four places, and feature
 #: 280's new proportion reached two of them.
 KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0.46, 0.45), "W": (-0.64, 0.0, 0.32, 0.56)}
 
 
-#: THE NORTH ANNEX'S BAND (feature 280 M18, research/homesteads/440): the farm sheds dated to the end of the Edo period run
+#: THE NORTH ANNEX'S BAND (feature 280 M18, research/questions/0052-farm-sheds-and-barns-naya.html): the farm sheds dated to the end of the Edo period run
 #: about 18 to 27 ft long and 1.5 to 1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m); the 1.8 to 2.4 of
 #: the Meiji-Taisho barns is not drawn.
 ANNEX_LENGTH_FT = (18.0, 27.0)
@@ -83,7 +83,7 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
     so the bundle's reserved box moves only by the turn of its corner. Where the band cannot be met - a house under about
     22 ft deep - the 1.8 wins.
 
-    THE SIZE IS A DELIBERATE DEVIATION: the record reads the annex as the kura (research/homesteads/120), and the kura read
+    THE SIZE IS A DELIBERATE DEVIATION: the record reads the annex as the kura (research/questions/0040-farm-storehouses-kura.html), and the kura read
     were about 15 by 18 ft, Kakimochi's two 12 by 18 - so the band's longer annexes are longer than a kura was. Kept: sizing
     it to the kura re-seats every scripted hamlet's houses, in a task that asked only which houses carry it; that resize is
     priced for the GM (specs/293-effort-level-experiment/outputs/I-port-handoff.md)."""
@@ -193,8 +193,8 @@ class FarmFixturesMixin:
 STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
-# herded in the rice fields, not penned at the fish ponds (research/archetypes/210).
-# NO PER-POND SLUICE (feature 280 M57, research/archetypes/140): a sluice through EACH pond's dike is defined only by the
+# herded in the rice fields, not penned at the fish ponds (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html).
+# NO PER-POND SLUICE (feature 280 M57, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html): a sluice through EACH pond's dike is defined only by the
 # FAO training manual, so it is not drawn - and the sty's keep-clear of it (feature 233) went with it. The polder's own
 # gates (the dou) stay.
 

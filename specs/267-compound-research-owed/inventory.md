@@ -2,7 +2,7 @@
 
 Read from `future-work/compounds.md` "Research owed" (features 262, 264 and their reviews). Each item: the question,
 the kinds and sheets it bears on (O Ochiba, H Hayakawa, U Ubame, P the placer's program), and the group - one write
-session each - it is researched in. Groups G1-G3 belong on `research/buildings/`, G4 on `buildings/` or `vegetation/`,
+session each - it is researched in. Groups G1-G3 belong on `research/contents.json#compounds`, G4 on `buildings/` or `vegetation/`,
 G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and `ways/`, G7 on `buildings/`.
 
 ## G1 - the residence (research/buildings)
@@ -46,7 +46,7 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 ## G3B - the compound's gate and walls, and two unreadable sources (research/buildings)
 
 - R26 **the main gate's width** - between a samurai residence gate (9-12 ft) and a yamen gatehouse (18-24 ft). `main gate`. O H U P.
-- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Researched in its own question; the correction to buildings 070 is made in T17 (FR-006).
+- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (0092, the scale entry). `compound wall`. Researched in its own question; the correction to 0092 is made in T17 (FR-006).
 - R28 **the staged arrival** - gate, court or garden, genkan: a readable source ('Guest doors feed courts', 120). `genkan`, `residence`, `garden`.
 - R29 **the branch office with two shrines** - a readable source for the excavation plan. `compound shrine`.
 
@@ -66,7 +66,7 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 - R38 **one torii for two shrines**. `torii`. H.
 - R39 **salt wards (morijio)** at a compound's doors. `salt wards`. H.
 
-## G6 - river, trade and roads (research/cities/river-cities, research/urban-features, research/ways)
+## G6 - river, trade and roads (research/contents.json#citiesriver-cities, research/urban-features, research/ways)
 
 - R40 **a river guard post** (kawa-bansho) at a landing. `river watch`. H.
 - R41 **a boatmen's altar** (funadama, a landing shrine). `boatmen's altar`. H.
@@ -86,7 +86,7 @@ G5 on `religion-and-death/`, G6 on `cities/river-cities/`, `urban-features/` and
 
 ## G8 - the in-field grave island (research/fields; `future-work/farming-communities.md`)
 
-- R52 **the in-field grave island** - did Japanese or rice-south Chinese villages put graves among the working paddy, and how often? The one quote cited (`ryobosei-jawiki`) puts burials beside the bunds; the 0.3 rate (`settlement/fields/features.py` `_paddy_features`) was a session's choice; the GM kept the island and its deviation label on 2026-09-26 pending this pass. If attested: the label moves to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a sourced statement of what the record puts in its place. `GraveIsland` (hamlet kind), `research/fields/010-*`. Hamlet maps.
+- R52 **the in-field grave island** - did Japanese or rice-south Chinese villages put graves among the working paddy, and how often? The one quote cited (`ryobosei-jawiki`) puts burials beside the bunds; the 0.3 rate (`settlement/fields/features.py` `_paddy_features`) was a session's choice; the GM kept the island and its deviation label on 2026-09-26 pending this pass. If attested: the label moves to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a sourced statement of what the record puts in its place. `GraveIsland` (hamlet kind), `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html-*`. Hamlet maps.
 
 ## For the GM (canon or a ruling, not research)
 

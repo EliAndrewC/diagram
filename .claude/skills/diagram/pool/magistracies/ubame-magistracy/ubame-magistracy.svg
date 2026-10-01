@@ -143,7 +143,7 @@
   <!-- Internal divider wall between outer (south) and inner (north) courts. Two openings (feature 267 pass 3,
        building-review round 2): the MIDDLE GATE (nakamon), 8 ft, at the head of the east walk (x 690..714, the alley
        between the office hall and hearing court and the garrison range) - the guest's route is main gate, forecourt,
-       east walk, middle gate, then a short walled roji to the reception (the Koseki form, research buildings 300:
+       east walk, middle gate, then a short walled roji to the reception (the Koseki form, research 0104:
        "from a middle gate a guest passes through the roji"). Until pass 3 the middle gate stood at x 513..537 behind
        the office hall, reached only by ~150 ft of back alley past the garrison. That old opening stays, narrowed to a
        6 ft household door: the house's own way to the office hall's back, and the main gate stays the widest. -->
@@ -228,7 +228,7 @@
     <rect data-id="clerks-room-1" x="360" y="478" width="120" height="50" fill="#DDB87A" data-kind="clerks' room"/>
     <rect data-id="day-office-1" x="480" y="478" width="105" height="50" fill="#DDB87A" data-kind="day office"/>
     <rect data-id="official-study-1" x="585" y="478" width="105" height="50" fill="#DDB87A" data-kind="official study"/>
-    <!-- No genkan (feature 267 pass 2, R07, buildings 300): the one on this hall's west end faced a strip the granary
+    <!-- No genkan (feature 267 pass 2, R07, 0104): the one on this hall's west end faced a strip the granary
          closes, and no face of the hall fronts open ground reached from the forecourt, so Ubame takes the attested
          other form - the middle gate and a stepping-stone path (roji) across the inner garden to the reception. -->
     <rect x="360" y="478" width="330" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
@@ -582,7 +582,7 @@
     <rect data-id="residence-5" x="532" y="238" width="306" height="76" fill="#DDB87A"/>
     <!-- the later hall (the lineage's house grew hall by hall - an echelon joined by a corridor reads as accretion,
          feature 267 R02, buildings 250): Koharu's rooms at the corridor, the guest room, and the reception deepest at
-         the east END with the lineage alcove beside it (R03 buildings 260, R05 buildings 270 - the reception stood
+         the east END with the lineage alcove beside it (R03 buildings 260, R05 0239 - the reception stood
          between the inner rooms and Koharu's, and the alcove among the private rooms, until 2026-09-27) -->
     <rect data-id="lord-s-quarters-1" x="532" y="238" width="102" height="76" fill="#DDB87A" data-kind="lord's quarters"/>
     <rect data-id="guest-quarters-1" x="634" y="238" width="102" height="76" fill="#DDB87A" data-kind="guest quarters"/>
@@ -616,12 +616,12 @@
   <g data-kind="kitchen">
     <rect x="214" y="330" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- the doma: an earth-floored patch inside the kitchen, 24 x 18 ft, the service door opening onto it (feature
-         267 pass 2, R13, buildings 360; the sheet's knob is "on a small doma" and no doma was drawn) -->
+         267 pass 2, R13, 0107; the sheet's knob is "on a small doma" and no doma was drawn) -->
     <rect data-id="kitchen-1" x="216" y="332" width="72" height="54" fill="#B8A07A"/>
     <!-- the kitchen door (katteguchi) on the north face, into the service alley the postern opens onto - the house's
          service door (buildings 370); moved west onto the doma, clear of the corridor (feature 267 pass 2) -->
     <rect x="256" y="324" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <!-- the hearth is a kamado range, ~6 x 2.7 ft with two fire mouths, on the doma (feature 267 R13, buildings 360:
+    <!-- the hearth is a kamado range, ~6 x 2.7 ft with two fire mouths, on the doma (feature 267 R13, 0107:
          a samurai kitchen cooked on a kamado; pass 2 halved the 10 x 4.3 ft range, twice a two-mouth kamado) -->
     <g data-kind="hearth">
       <!-- a path, not a rect: at its true 18 x 8 px a dark rect is read by pack_audit as a door glyph
@@ -638,12 +638,12 @@
   </g>
 
   <!-- The kitchen joins the house: a short covered corridor, 4 ft wide, across the ~9 ft service alley (feature 267
-       pass 2, buildings 360/370: the kitchen is part of the house, its door the house's service door). Pass 3: an L
+       pass 2, 0107/370: the kitchen is part of the house, its door the house's service door). Pass 3: an L
        from the north end of the kitchen's east wall to the family quarters' veranda (x 346..358) - it landed at
        x 320..332 on the shuttered wing's veranda, the closed rooms, and the bath moved south to free its way. -->
   <path d="M 334 332 H 346 V 302 H 358 V 344 H 334 Z" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.5" data-kind="residence corridor" data-part-of="residence"/>
 
-  <!-- Bath: a small addition on the kitchen range's east wall, 10 x 11 ft (feature 267 R09, buildings 320: a room of
+  <!-- Bath: a small addition on the kitchen range's east wall, 10 x 11 ft (feature 267 R09, 0105: a room of
        the residence or a small addition to it - the Takayama residence's with its well and kitchen - never a building
        of its own; it was a pavilion in the yard). Pass 2 trimmed it from 13 x 10 ft; pass 3 moved it south of the
        kitchen corridor, 4 ft clear of the karo's house (moved 4 ft east for it). The family reaches it through the
@@ -686,7 +686,7 @@
       <text font-size="8" font-style="italic" fill="#5C4830">dry garden</text>
 
     </g>
-    <!-- The guest's way in (feature 267 pass 2, R07, buildings 300: the Koseki house's form, as Hayakawa): no genkan -
+    <!-- The guest's way in (feature 267 pass 2, R07, 0104: the Koseki house's form, as Hayakawa): no genkan -
          from the middle gate a stepping-stone path (roji) to a stone at the middle of the reception's veranda.
          Pass 3: the middle gate moved to the head of the east walk, so the roji is SHORT - north from the gate, then
          east along the veranda, west and north of the dry garden's gravel, never across it; the stones at a stride,
@@ -724,7 +724,7 @@
       <ellipse cx="784.5" cy="332.5" rx="2.2" ry="1.7"/>
       <rect x="781" y="323" width="12" height="5"/>
     </g>
-    <!-- The roji is WALLED (research buildings 300: "a walled garden path"; at Koseki "the earthen wall encloses the
+    <!-- The roji is WALLED (research 0104: "a walled garden path"; at Koseki "the earthen wall encloses the
          roji in an L"): a low earthen wall, 1 ft, continuing the middle gate's posts north - the west wall to the
          guest room's veranda, the east wall turning east short of the dry garden, an L that closes the roji off from
          the rest of the inner garden and leaves the reception's view of the gravel open. The form of the low wall
@@ -740,7 +740,7 @@
        Koharu's veranda (feature 283, research buildings 405: the seat is a knob and the sun decides it). The rear
        strip it stood in had no hour of sun in the shoulder month, in the shadow of the house; the west and the rear
        are all shaded here, and this is the only open ground inside the walls with its six hours, so the bed takes
-       the size knob's low end, a soup-greens plot of about 1,065 sq ft (research buildings 400), where the rear
+       the size knob's low end, a soup-greens plot of about 1,065 sq ft (research 0109), where the rear
        strip held about 2,100. -->
   <g data-kind="vegetable garden">
     <rect x="582" y="330" width="102" height="94" fill="url(#vegetable-rows)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>

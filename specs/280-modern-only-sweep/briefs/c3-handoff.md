@@ -1,6 +1,6 @@
 # Feature 280 group C3 - handoff (session 1: research and write, 2026-09-29)
 
-- SECTION=cities/government/280
+- SECTION=0118
 - SECTION=cities/government/600
 - SECTION=cities/fabric/230
 - KEY=anju-osaka-fires

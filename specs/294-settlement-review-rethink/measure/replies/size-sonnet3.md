@@ -1,7 +1,7 @@
 UNIT: size-audit--latrine   KIND: latrine   SHEET: hoshigaoka-shrine
 
 - The sheet has one latrine, the monk's household privy. It is drawn at 14 x 14 ft (196 sq ft).
-- Anchor: the research record for the Tenmachō agariya cells says each had "a privy about half a ken (~3 ft) across" (`research/buildings/`, fn-45). That is a known dimension from a period record, with the feet converted by this project.
+- Anchor: the research record for the Tenmachō agariya cells says each had "a privy about half a ken (~3 ft) across" (`research/contents.json#compounds`, fn-45). That is a known dimension from a period record, with the feet converted by this project.
 - A one-ken (~6 ft) square covers a two-stall privy.
 - The honest size is about 3-6 ft wide, up to roughly 6 x 9 ft.
 - Ratio drawn/real is about 2.3x linear, which is about 5x by area against a 6 x 6 ft privy. **OVERSIZED**, close to WRONG.

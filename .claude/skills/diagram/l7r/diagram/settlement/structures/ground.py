@@ -31,7 +31,7 @@ class GroundMixin:
         width was standardized at 5 ken in 1604 ("街道の幅員を5間とし", ja.wikipedia 東海道 -
         `tokaido-jawiki` in research/sources/), 5 ken = 29.5 ft; drawn at the round 30 the
         GM asked for. The earlier 26 ft ("the Tokaido's own width") and the "~18-24 ft" this
-        docstring once claimed were both unsourced - research/rendering/cities/capitals/010-how-our-maps-size-and-lay-out-a-domain-capital.html carries the read and the correction.
+        docstring once claimed were both unsourced - research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html carries the read and the correction.
         label_xy overrides the label anchor (default: the polyline midpoint). For a city the
         midpoint is the city CENTER, but the road label names the *Imperial* road, which is an
         Imperial responsibility only OUTSIDE the walls - inside, the same roadway is a city

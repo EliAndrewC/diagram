@@ -96,7 +96,7 @@ class LodgingMixin:
 
         ITS FORM IS A KNOB, `caravan_inn_form`, with two values drawn from two attested analogues that
         disagree on the one thing a map can show (feature 244). `wagon` is the north-Chinese wagon inn,
-        whose yard buildings are described as uniformly SINGLE-STORY (research/towns/ fn-25).
+        whose yard buildings are described as uniformly SINGLE-STORY (research/contents.json#towns fn-25).
         `hatago` is the Japanese post-station inn - the preserved Okabe-juku hatago of c. 1836 is TWO
         stories, its upper floor the guest rooms (fn-26). The GM ruled on 2026-09-12 that a second
         story contradicted by the one attested analogue was a mistake, and on 2026-09-13, told of the
@@ -185,7 +185,7 @@ class LodgingMixin:
             # way and footprint it can SEE, but a stables placed early could not see the streets
             # drawn after it - so a heap landed on a later street (Nagahara wharf yard). Yards now
             # draw at crop time (flush_stable_yards, auto-run by crop_city), when the map is
-            # complete - the same-data-as-the-checks doctrine (research/rendering/ways/030-how-our-maps-draw-plank-bridges.html).
+            # complete - the same-data-as-the-checks doctrine (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html).
             self._pending_yards.append((x, y, w, h, 72.0, None))
 
     def animal_ground(self: Settlement, cx: float, cy: float, r: float = 68.0, label: Any = None) -> None:  # type: ignore[misc]

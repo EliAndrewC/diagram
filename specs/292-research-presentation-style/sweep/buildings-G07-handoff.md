@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-hearing-court-shirasu
 - RENDERING=rendering/buildings/how-our-maps-draw-the-hearing-court-shirasu
-- OLD=research/buildings/ research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds
 - MODALS=ClerksSeats DayOffice HearingCourt KneelingPositions LordsQuarters MagistratesDais OfficeHall OfficialStudy
 - BASE=9c5659018
 

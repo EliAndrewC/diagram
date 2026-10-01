@@ -4,14 +4,14 @@
 
 - SECTION=cities/capitals/where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki
 - RENDERING=rendering/cities/capitals/how-our-maps-house-a-capitals-samurai
-- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
+- OLD=research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals
 - MODALS=
 
 ## The Imperial Magistrate's compound in a capital
 
 - SECTION=cities/capitals/the-imperial-magistrates-compound-in-a-capital
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-the-imperial-magistrates-compound
-- OLD=research/cities/capitals/
+- OLD=research/contents.json#capitals
 - MODALS=
 
 - BASE=c7e953ddc

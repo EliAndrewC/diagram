@@ -53,7 +53,7 @@ def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
 
 
 def test_the_woodpile_is_a_wood_shed_and_a_rolled_size_draws_at_its_own_feet():
-    """Feature 280 M21 (research/homesteads/212, 720): the firewood is drawn in its wood shed, 24 x 12 ft, a roof with its band
+    """Feature 280 M21 (research/questions/0043-firewood-stacks-and-sheds-kigoya.html, 720): the firewood is drawn in its wood shed, 24 x 12 ft, a roof with its band
     of log ends - the open stack and the kizuma, modern-only, have no form left. A privy or bath room drawn at a size the
     placer rolled records that size (research/homesteads/750, 740)."""
     s = Settlement(W=400, H=400, seed=1)
@@ -79,7 +79,7 @@ def test_a_privy_carries_its_jar_so_a_large_one_is_not_read_as_a_wood_shed():
 
 def test_the_north_annex_is_held_inside_the_edo_sheds_band():
     """Feature 293: dealt to the largest houses, the annex drawn as shares of its house ran past 27 ft and past 1.8 to one;
-    research/homesteads/440's band is 18-27 ft and 1.5-1.8 to one. The west annex is the shares alone."""
+    research/questions/0052-farm-sheds-and-barns-naya.html's band is 18-27 ft and 1.5-1.8 to one. The west annex is the shares alone."""
     from l7r.diagram.settlement.farm_fixtures import kura_rect
 
     assert kura_rect(46.0, 28.0, "N", 1.0) == pytest.approx((0.0, -0.675 * 28.0, 0.46 * 46.0, 0.45 * 28.0)), "an ordinary minka: inside the band, unchanged"

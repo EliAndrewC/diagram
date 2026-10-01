@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/rich-merchants-walled-houses-and-their-fireproof-storehouses-kura
 - RENDERING=rendering/cities/fabric/how-our-maps-draw-a-merchants-walled-compound
-- OLD=research/cities/fabric/ research/cities/fabric/ research/cities/fabric/ research/cities/fabric/
+- OLD=research/contents.json#urban-fabric research/contents.json#urban-fabric research/contents.json#urban-fabric research/contents.json#urban-fabric
 - MODALS=
 - BASE=284803ee0
 

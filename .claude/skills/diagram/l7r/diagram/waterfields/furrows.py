@@ -5,7 +5,7 @@ import random
 from collections.abc import Sequence
 from typing import Any
 
-# HOW A TRACT IS DRAWN (269 B06, rendering/fields/160). The record gives the shape - tracts of neighboring plots, one direction
+# HOW A TRACT IS DRAWN (269 B06, 0006). The record gives the shape - tracts of neighboring plots, one direction
 # each, a change of up to a right angle at the seam - and leaves the sizes open, so every figure here is a GUESS
 # except where it says otherwise:
 #   TRACT_COLUMNS         how many hem columns (each a strip of plots from the canal upslope) one tract holds.
@@ -19,7 +19,7 @@ TRACT_LEAN_RAD = 0.30
 TRACT_SEAM_MIN_RAD = 0.35
 # Below this spread the hem is steep ground whose rows all converge on the contour (`furrows_vary`, comb.py): every tract
 # runs the contour, turned no further than the spread allows, and no seam is required. Steep or terraced rows on the
-# contour is the record's own inference, a GUESS (rendering/fields/160).
+# contour is the record's own inference, a GUESS (0006).
 STEEP_SPREAD_RAD = 0.3
 
 

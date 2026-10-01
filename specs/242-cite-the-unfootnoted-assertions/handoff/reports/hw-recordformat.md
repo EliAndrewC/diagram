@@ -1,12 +1,12 @@
 ## Scope read
 
-`/diagram/.clones/diagram-research/.claude/skills/diagram/research/homesteads/` (1,046 lines, 23 `<h2>` + 3 `<h3>`), `research/water/` (1,088 lines, 28 `<h2>`), `research/homesteads/` (fn-94 to fn-153), `research/water/` (fn-131 to fn-185), and the 47 `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` registry entries in `research/sources/` (lines 1340-1599, plus `osaka-castle-jawiki` L2851 and `dozo-jawiki` L3832, which are older entries and carry both write-ups in the older phrasing). Glossary read: `l7r/diagram/interactive/assets/glossary.json` (all keys and variants).
+`/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#homesteads` (1,046 lines, 23 `<h2>` + 3 `<h3>`), `research/contents.json#water` (1,088 lines, 28 `<h2>`), `research/contents.json#homesteads` (fn-94 to fn-153), `research/contents.json#water` (fn-131 to fn-185), and the 47 `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` registry entries in `research/sources/` (lines 1340-1599, plus `osaka-castle-jawiki` L2851 and `dozo-jawiki` L3832, which are older entries and carry both write-ups in the older phrasing). Glossary read: `l7r/diagram/interactive/assets/glossary.json` (all keys and variants).
 
 Sections not named below came back with nothing in any class.
 
 ---
 
-# A. `research/homesteads/`
+# A. `research/contents.json#homesteads`
 
 ## Homestead groves (yashikirin) - the real scale and prevalence
 
@@ -112,7 +112,7 @@ Sections not named below came back with nothing in any class.
 
 ---
 
-# B. `research/water/`
+# B. `research/contents.json#water`
 
 ## Water-width ladder - the real-world tiers
 
@@ -198,7 +198,7 @@ Nothing beyond the floor-value defect above (L211).
 
 ---
 
-# C. `research/homesteads/` (fn-94 to fn-153)
+# C. `research/contents.json#homesteads` (fn-94 to fn-153)
 
 **DEFECT (duplicated search date, 15 notes)** - "no publicly readable source (**searched 2026-09-14: searched 2026-09-14:** …)" in fn-101, 102, 106, 110, 112, 123, 130, 132, 138, 141, 142, 144, 146, 150, 153. (The derived `citations/homesteads.js` carries the same 15.)
 
@@ -214,7 +214,7 @@ Nothing beyond the floor-value defect above (L211).
 
 ---
 
-# D. `research/water/` (fn-131 to fn-185)
+# D. `research/contents.json#water` (fn-131 to fn-185)
 
 **DEFECT (duplicate id, L484 and L541)** - two different notes both carry `<li id="fn-75">`: the `maff-toshuko-history` half-river-closure passage and the `conghua-2026-design` canal-width table. The research page references `fn-75` from the water-width ladder (L38, the ~1 m distribution lateral) and from the brook entry (L1007, L1012), so at least one reference shows the wrong note on hover and in the page anchor.
 
@@ -252,10 +252,10 @@ No HISTORY and no other session-speak in the new entries; the registry is exempt
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECT |
 |---|---|---|---|---|---|
-| `research/homesteads/` | 23 `<h2>` + 3 `<h3>` | 5 (gassho, king post, 農業全書, the frame, clump) | 8 | 2 | 16 |
-| `research/water/` | 28 `<h2>` | 3 (fit zoom, 圩田/围田 reading, backwater) | 8 | 5 | 7 |
-| `research/homesteads/` (fn-94→153) | 1 notes list | 1 (burgage plot) | 4 families (15 + 2 + 1 + 11 notes) | none | 15 |
-| `research/water/` (fn-131→185) | 1 notes list | 3 (superelevates, normal depth, backwater) | 3 families (19 + 2 + 8 notes) | none | 21 (incl. the duplicate `fn-75` id and its ordering) |
+| `research/contents.json#homesteads` | 23 `<h2>` + 3 `<h3>` | 5 (gassho, king post, 農業全書, the frame, clump) | 8 | 2 | 16 |
+| `research/contents.json#water` | 28 `<h2>` | 3 (fit zoom, 圩田/围田 reading, backwater) | 8 | 5 | 7 |
+| `research/contents.json#homesteads` (fn-94→153) | 1 notes list | 1 (burgage plot) | 4 families (15 + 2 + 1 + 11 notes) | none | 15 |
+| `research/contents.json#water` (fn-131→185) | 1 notes list | 3 (superelevates, normal depth, backwater) | 3 families (19 + 2 + 8 notes) | none | 21 (incl. the duplicate `fn-75` id and its ordering) |
 | `SOURCES.html` (47 new entries) | 47 entries | 2 (abreuvoir, Khitan) | 1 | none | none |
 
 ## Glossary terms to add (`l7r/diagram/interactive/assets/glossary.json`)

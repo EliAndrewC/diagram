@@ -8,7 +8,7 @@
 Every threshing yard on a settlement map is drawn the same way (`settlement/homestead_parts/yards.py`,
 `_draw_threshing_yard`): a tamped floor rolled to the household's size, ONE straw mat of a fixed 14 x 9 ft at its
 center, and a rack as wide as the yard along its SOUTH edge (observed 2026-09-28; method: read from the code at
-c13a6ebe6; research.md R1). The yard's size is researched (homesteads 020, 030);
+c13a6ebe6; research.md R1). The yard's size is researched (0037, 030);
 its interior is not, and its modal calls it accurate. The record already contradicts it: the yard-size source says
 mats were spread over the whole yard at harvest, 40 to 60 of them, each 3 by 6 ft (Kitamoto; Imaishi); entry 500
 says racks stood mainly on the paddies and only in some regions, as tall racks, by the house; and a rack on the

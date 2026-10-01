@@ -122,11 +122,11 @@ and reword or delete every comment that names `settlements/<topic>.md` or `settl
 ## A new page
 
 `ways.html`, `presentation.html`, `settlements.html` and `cities/sizing.html` do not exist. A new page copies
-`research/towns/`'s `<head>` exactly (charset, viewport, title, `assets/record.css`, `assets/glossary.js`,
+`research/contents.json#towns`'s `<head>` exactly (charset, viewport, title, `assets/record.css`, `assets/glossary.js`,
 `citations/<name>.js`, `assets/record.js`; from `cities/` the asset paths start `../`), one `<main>` with an
 `<h1>` whose id is the anchor of its text, the opening line above, an `<hr>`, the entries, and the closing
 `<section class="citations">` line linking to its citations page. Its citations page copies
-`research/towns/`'s head and `<h1>`, the intro paragraph, an EMPTY works section between the two
+`research/contents.json#towns`'s head and `<h1>`, the intro paragraph, an EMPTY works section between the two
 markers exactly as they appear in that file (`<!-- works-cited: DERIVED by ... -->` and `<!-- /works-cited -->`),
 and an empty `<section class="footnotes"><ol></ol></section>`. The session runs `make citations`, which writes the
 `.js`; you do not.

@@ -3,7 +3,7 @@
 The GM: *"adopt this standard into our project, after looking up the details enough to be able to implement it
 faithfully."* Every constant here is either the standard's own - with the page it is read from - or a calibration
 this project chose where the standard names a rule and leaves its number to the mapmaker; each says which. The
-finding is research/presentation/040-labels-on-maps-cartographic-label-placement.html; the evidence is specs/266-*/research.md R1.
+finding is research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html; the evidence is specs/266-*/research.md R1.
 """
 
 from __future__ import annotations

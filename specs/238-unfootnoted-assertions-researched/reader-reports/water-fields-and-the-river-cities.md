@@ -8,7 +8,7 @@
 
 I read all five pages in full (water.html 1,055 lines; fields.html 812; river-cities.html 99; hinterland.html 76; sizing.html 56) and went section by section. Below is every sentence I judged to assert something about the real world and to carry no footnote. Drawing conventions, project decisions, calibrations against our own maps, physical necessities and labeled guesses are excluded (noted where the call was close).
 
-Files: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/water/`, `.../fields.html`, `.../cities/river-cities.html`, `.../cities/hinterland.html`, `.../cities/sizing.html`
+Files: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#water`, `.../fields.html`, `.../cities/river-cities.html`, `.../cities/hinterland.html`, `.../cities/sizing.html`
 
 ---
 

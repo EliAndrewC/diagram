@@ -33,8 +33,8 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M13 **Grove size**: about 30-40 trees for each homestead, and the size-adaptive L-belt. The section says "The best hard data is a 1987 survey of Kashima" (kashima-kainyo-1987), which counted the groves standing then and does not date them (homesteads/010) - kinds: Windbreak, Copse (`greenery.py`), `groves_on_windward_side`; maps: the scripted hamlets with a windbreak. M.
-- M14 **Sun lane from belt height**: the 50 ft sun lane (WEST_SUN_FT in `hamletgen/consts.py`), set from a working belt height of about 10 m. The heights come from present-day surveys of surviving igune: kurita-2019-igune, minami-2022-igune (a 2022 CFD model of a drone-surveyed grove), minami-2024-igune and sendai-igune-list (homesteads/040) - kinds: Windbreak, Garden, ThreshingYard; maps: the scripted hamlets with a village belt. M.
+- M13 **Grove size**: about 30-40 trees for each homestead, and the size-adaptive L-belt. The section says "The best hard data is a 1987 survey of Kashima" (kashima-kainyo-1987), which counted the groves standing then and does not date them (0036) - kinds: Windbreak, Copse (`greenery.py`), `groves_on_windward_side`; maps: the scripted hamlets with a windbreak. M.
+- M14 **Sun lane from belt height**: the 50 ft sun lane (WEST_SUN_FT in `hamletgen/consts.py`), set from a working belt height of about 10 m. The heights come from present-day surveys of surviving igune: kurita-2019-igune, minami-2022-igune (a 2022 CFD model of a drone-surveyed grove), minami-2024-igune and sendai-igune-list (0038) - kinds: Windbreak, Garden, ThreshingYard; maps: the scripted hamlets with a village belt. M.
 - M15 **The Tonami model homestead**: the persimmon at the center of the east work yard, and the north and west bamboo strip given to the kitchen drain and the service sheds. The section says "A model homestead the Tonami research institute drew up in 1996, whose text is on no page read, is carried here". 269's B29 touched the bamboo sides in code, not this section (homesteads/046) - kinds: Persimmon, HomesteadBamboo (`hamletgen/homesteads/bamboo.py`), the siting of Garden and ThreshingYard; maps: all scripted hamlets. S.
 
 ## The procedure (session 1: research and write)
@@ -66,7 +66,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on homesteads/010, homesteads/040, homesteads/046, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0036, 0038, homesteads/046, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

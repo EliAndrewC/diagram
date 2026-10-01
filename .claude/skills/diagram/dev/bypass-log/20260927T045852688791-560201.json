@@ -3,5 +3,5 @@
   "target": "review-accept",
   "commit": "0768dc93",
   "outcome": "permitted",
-  "why": "review-accept kashikawa F2: the record attests the bath shed's use and not its placement (research/homesteads.html), so no norm sets its side of the house; the reviewer found none"
+  "why": "review-accept kashikawa F2: the record attests the bath shed's use and not its placement (research/contents.json#homesteads), so no norm sets its side of the house; the reviewer found none"
 }

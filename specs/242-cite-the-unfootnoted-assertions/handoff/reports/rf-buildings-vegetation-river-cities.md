@@ -1,12 +1,12 @@
 # `record-format` report
 
-**Read:** `/diagram/.clones/diagram-research/.claude/skills/diagram/research/buildings/` (158 ll.), `research/vegetation/` (564 ll.), `research/cities/river-cities/` (98 ll.); their citations pages `research/buildings/` (295 ll.), `research/vegetation/`, `research/cities/river-cities/` (170 ll.); the glossary `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (476 terms); and the `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` band of `research/sources/` (250 entries, ll. 411-1656, sampled + pattern-scanned end to end).
+**Read:** `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#compounds` (158 ll.), `research/contents.json#vegetation` (564 ll.), `research/contents.json#river-cities` (98 ll.); their citations pages `research/contents.json#compounds` (295 ll.), `research/contents.json#vegetation`, `research/contents.json#river-cities` (170 ll.); the glossary `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (476 terms); and the `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` band of `research/sources/` (250 entries, ll. 411-1656, sampled + pattern-scanned end to end).
 
 Two structural notes before the sections. (1) The 2026-09-14 READ markers are themselves already HTML comments at the head of each citation line - nothing to report about them. (2) `research/assets/record.js` builds its glossary regex with flags `giu` (line 58), so **every match is case-insensitive**; that is load-bearing for one defect below.
 
 ---
 
-# 1. `research/buildings/`
+# 1. `research/contents.json#compounds`
 
 ## Page head - title, `<h1>`, lead (ll. 6, 14, 15)
 
@@ -239,7 +239,7 @@ The hidden comment on the same line confirms it ("the prior guidance said exactl
 
 ---
 
-# 2. `research/vegetation/`
+# 2. `research/contents.json#vegetation`
 
 ## Page head and lead (ll. 14-15)
 
@@ -427,7 +427,7 @@ Useful and kept: the finding (south side, with the storehouses and fruit trees; 
 
 ---
 
-# 3. `research/cities/river-cities/`
+# 3. `research/contents.json#river-cities`
 
 ## Page head and lead (ll. 14-15)
 
@@ -484,7 +484,7 @@ Useful and kept: the reason - two mouths side by side spoil each other's reading
 
 ---
 
-# 4. `research/buildings/`
+# 4. `research/contents.json#compounds`
 
 The works section (ll. 15-175, derived by `make citations`) and the notes (ll. 177-291).
 
@@ -535,7 +535,7 @@ Useful and kept: that the staged arrival is what the drawn guest doors rest on. 
 
 ---
 
-# 5. `research/vegetation/`
+# 5. `research/contents.json#vegetation`
 
 ## The works section (ll. 15-~200)
 
@@ -566,7 +566,7 @@ The correct byline is already in the note's own key link and in the works entry 
 
 ---
 
-# 6. `research/cities/river-cities/`
+# 6. `research/contents.json#river-cities`
 
 ## The works section (ll. 15-123)
 
@@ -613,7 +613,7 @@ The markers run every five lines from l. 411 to l. 1656 (250 entries: `<h3>` key
 
 # Summary tables
 
-### `research/buildings/` (24 sections)
+### `research/contents.json#compounds` (24 sections)
 
 | section (line) | VOCAB | SESSION | HISTORY | DEFECT |
 |---|---|---|---|---|
@@ -644,7 +644,7 @@ The markers run every five lines from l. 411 to l. 1656 (250 entries: `<h3>` key
 | **file-wide** | - | - | - | 3 (roster run-on ×7; footnote order; raw CJK ×13) |
 | **totals** | **6** | **2** | **3** | **15 + 3 file-wide** |
 
-### `research/vegetation/` (17 sections)
+### `research/contents.json#vegetation` (17 sections)
 
 | section (line) | VOCAB | SESSION | HISTORY | DEFECT |
 |---|---|---|---|---|
@@ -667,7 +667,7 @@ The markers run every five lines from l. 411 to l. 1656 (250 entries: `<h3>` key
 | Flat map / slope (527) | 0 | 0 | 0 | 0 |
 | **totals** | **6** | **14** | **6** | **6** |
 
-### `research/cities/river-cities/` (5 sections)
+### `research/contents.json#river-cities` (5 sections)
 
 | section (line) | VOCAB | SESSION | HISTORY | DEFECT |
 |---|---|---|---|---|

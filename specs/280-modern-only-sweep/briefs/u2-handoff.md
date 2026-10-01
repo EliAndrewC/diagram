@@ -1,8 +1,8 @@
 # Handoff - feature 280, group U2 (urban-features: brewery, pawnshop, smithy), session 1
 
 - SECTION=urban-features/030
-- SECTION=urban-features/340
-- SECTION=urban-features/430
+- SECTION=0201
+- SECTION=0205
 - SECTION=urban-features/440
 - SECTION=urban-features/710
 - KEY=itami-okada-sakagura
@@ -24,7 +24,7 @@ M102 MIXED - 440 now cites the Sakai gunsmith Inoue's house (on its site by 1689
 
 ## Left open
 
-- urban-features/510's spec still says "larger halls are in Trade works"; they are now in 710 (030 points there). 510 was outside this group's write list; a one-line pointer fix is owed.
+- 0207's spec still says "larger halls are in Trade works"; they are now in 710 (030 points there). 510 was outside this group's write list; a one-line pointer fix is owed.
 - The Qinxiang source is a blog repeating a Wuxi Daily article (wxrb.com/doc/2022/04/17/162476.shtml) and the Jiangsu gazetteer office's copy (jssdfz.jiangsu.gov.cn/n97/20220420/i18067.html); neither original would load in the container (SSL errors). The check session may try them.
 - Moving the brewery evidence from 030 to 710 changes the section `s.brewery`'s modal was written from; entry-drift owes a pass.
 - Pre-existing and not this group's: towns.html [^99] fails test_footnotes (from T2); urban-features/082 is over the size cap (U1).

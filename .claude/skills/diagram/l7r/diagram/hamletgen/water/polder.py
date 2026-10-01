@@ -216,7 +216,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # THE DIKE-POND SYSTEM (桑基魚塘): convert (almost) every cell to a fish pond rimmed by a
     # mulberry dike. `eligible="all"` is the archetype's named opt-out of the topographic filter -
     # this map IS the wholesale-conversion end state, the rare case where a whole district went
-    # over to ponds and bought its grain in (research/archetypes/030-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html).
+    # over to ponds and bought its grain in (research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html).
     # Applied right after the grid is drawn and BEFORE the perimeter dike, so the ponds' banks and
     # the repainted leftovers are field ground the dike band and the houses draw over. Its RNG is
     # positional (`knob_rng`), so adding it re-rolls nothing else on the map.
@@ -445,7 +445,7 @@ def polder_flanks(plan: SitePlan) -> dict[str, str]:
 def waterward_flanks(plan: SitePlan) -> list[str]:
     """Which flanks of the dike face the fluctuating water it was reclaimed from.
 
-    research/archetypes/160-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: outside the dike is the lake, creek, reed marsh or
+    research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: outside the dike is the lake, creek, reed marsh or
     mudflat the block was dug out of - EXCEPT on the landward flank where the polder abuts the
     natural shore, which is where the village stands (nobody lives on a flood-fighting earthwork
     when dry ground is a few steps away), and the head flank, where the header reservoir already
@@ -589,7 +589,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
 
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
-    """Where plank crossings go on a polder's ring canal (research 2026-07-22, research/archetypes/160-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html): people cross to the fields where they LIVE and then walk the bund network,
+    """Where plank crossings go on a polder's ring canal (research 2026-07-22, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html): people cross to the fields where they LIVE and then walk the bund network,
     so crossings CLUSTER on the settlement-side toe collector, are sparse on the interior laterals,
     and there are NONE on the unsettled feeder, the far toe or the drain. `build_polder` names the
     +cross collector `e_toe` and the other `w_toe`; which is the settlement side is read off the
@@ -609,7 +609,7 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     if f["cluster"] == f["head"]:
         return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
     # ...EXCEPT THAT A DRAIN TAKES NO PLANK (feature 287, ways W14 and the WAYS law's `plank_on_supply`: a footplank stands on
-    # a supply ditch - research ways/030, archetypes/110). The village at the FOOT abuts the drain, which the law refuses a
+    # a supply ditch - research 0084, archetypes/110). The village at the FOOT abuts the drain, which the law refuses a
     # plank, so its crossings go on the supply ditches that reach it - the two toe collectors (role `lateral`) run down to
     # the foot, two a side - and none is asked of the drain that `channel_footbridges` would refuse.
     return {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}

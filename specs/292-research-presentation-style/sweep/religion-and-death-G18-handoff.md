@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-burial-grounds-in-towns-and-cities
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/cities/capitals/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#capitals
 - MODALS=
 - BASE=590cbd130
 

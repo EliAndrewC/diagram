@@ -8,76 +8,76 @@ two or more outcome words. Pool counts are read from `pool/hamlets/*/*.json` on 
 
 | item | outcome | sections | what the record now says |
 |---|---|---|---|
-| B01 | KNOB | fields/250 | Early paddy rested whole plots (kataarashi), scattered, grazed; settled (no rest) vs unsettled paddy; canon sides with settled |
-| B02 | mixed: ACCURATE (dividing bund) / SILENT (walking bund) | fields/260, 020; vegetation/090; homesteads/100 | Dividing bund 1-2 shaku (2 shaku at Inazato 1869); azenuri cited; walking bund's 2-5 ft stays a guess |
+| B01 | KNOB | 0013 | Early paddy rested whole plots (kataarashi), scattered, grazed; settled (no rest) vs unsettled paddy; canon sides with settled |
+| B02 | mixed: ACCURATE (dividing bund) / SILENT (walking bund) | 0014, 020; 0073; homesteads/100 | Dividing bund 1-2 shaku (2 shaku at Inazato 1869); azenuri cited; walking bund's 2-5 ft stays a guess |
 | B03 | ACCURATE | fields/270, 030 | Mid-season drain (doyoboshi) in Edo farm books, where water was plentiful; maps show a flooded moment |
 | B04 | ACCURATE | fields/290 | The way to the paddy reaches its bank and goes on as the bund (azemichi); no walkers' gap read |
 | B05 | mixed: KNOB (winter crop) / ACCURATE (rick) | fields/300, 310; homesteads/210 | Rice-barley double cropping from Heian, dry paddies only; ricks on reaped paddy or bund, straw kept into the next year |
 | B06 | CONTRADICTION-RESOLVED | fields/180 | Row direction set by the land tract by tract (Zuo Zhuan), one of two ways a right angle apart; per-plot variation now inference |
-| B07 | ACCURATE | fields/160 | Catena cited: levee and terrace dry fields, backswamp paddy; fan middle coppice or wild until late Edo |
+| B07 | ACCURATE | 0006 | Catena cited: levee and terrace dry fields, backswamp paddy; fan middle coppice or wild until late Edo |
 | B08 | ACCURATE (estate a labeled DEVIATION) | fields/140, 150 | Edo samurai lived in castle towns; setting's estate is the medieval residence with gate paddy (kadota); warichi and jochi cited |
-| B09 | ACCURATE (bracketed) | fields/110 | Coarse-grain third sits between a paddy district's 1-in-5 barley and an Ina village's 40% rice |
+| B09 | ACCURATE (bracketed) | 0017 | Coarse-grain third sits between a paddy district's 1-in-5 barley and an Ina village's 40% rice |
 | B10 | KNOB | homesteads/210, 250 | Outdoor privy on 90%+ of households (1959); four attested seats; size a guess |
 | B11 | mixed: KNOB (night-soil pit) / SILENT (heap) | homesteads/250, 210 | Pit beside the privy or a field pit by fields/road (2 of 83 to 15 of 18); the heap's seat found nowhere |
-| B12 | KNOB | homesteads/214 | Bath shed in the front yard or corridor-linked; share 0-80% by village; back wall a guess |
-| B13 | CONTRADICTION-RESOLVED | homesteads/215 | Buck: chickens on 82% of farms, above the drawn 50-80%; size and seat guesses |
-| B14 | KNOB | homesteads/218 | Persimmon in front (likelier) or behind the house; crown ~23 ft (12 x 7 m), not 18 ft |
-| B15 | KNOB | homesteads/212 | Woodshed, kizuma stack under the windbreak's NW side, or eaves stack (the last unread) |
+| B12 | KNOB | 0044 | Bath shed in the front yard or corridor-linked; share 0-80% by village; back wall a guess |
+| B13 | CONTRADICTION-RESOLVED | 0045 | Buck: chickens on 82% of farms, above the drawn 50-80%; size and seat guesses |
+| B14 | KNOB | 0046 | Persimmon in front (likelier) or behind the house; crown ~23 ft (12 x 7 m), not 18 ft |
+| B15 | KNOB | 0043 | Woodshed, kizuma stack under the windbreak's NW side, or eaves stack (the last unread) |
 | B16 | SILENT | homesteads/300 | No shared commons byre or edge byre read; the beast lived with its keeper, in or against the house, owned or lent |
 | B17 | SILENT | homesteads/310 | No page says how far a lane runs past its last house; rule: end at the last dooryard or run on to something visible |
 | B18 | CONTRADICTION-RESOLVED | homesteads/240 | 87% of main houses within three of 16 bearings (~67 deg span), ~11% a quarter turn right (slope villages) |
-| B19 | KNOB | homesteads/110, 160, 170, 190 | Tax rice in a village gogura or the headman's kura; no density threshold, 200 m convention; forms and names cited. homesteads/180 NOT done (claimed by 271 V7) |
+| B19 | KNOB | 0030, 160, 170, 190 | Tax rice in a village gogura or the headman's kura; no density threshold, 200 m convention; forms and names cited. 0041 NOT done (claimed by 271 V7) |
 | B20 | mixed: ACCURATE (entrance stone) / SILENT (garden area) | homesteads/145, 050 | Dosojin at a village's entrances; the 10-140 sq m garden band stays a guess |
 | B21 | KNOB | water/290, 070 | Single log/board, earth over logs, planked deck; bridging width and spacing SILENT |
-| B22 | KNOB | water/300, 310 | Four weir forms (grass fence, stake-clay, weighted frame, gabion); village intake is "an entrance" in the bank, no gate. water/250 NOT edited (size cap) |
-| B23 | KNOB | water/270 | At stream scale both forms: astride (Xidi, Likeng) and beside (Hongcun, Chengkan) |
+| B22 | KNOB | water/300, 310 | Four weir forms (grass fence, stake-clay, weighted frame, gabion); village intake is "an entrance" in the bank, no gate. 0059 NOT edited (size cap) |
+| B23 | KNOB | 0035 | At stream scale both forms: astride (Xidi, Likeng) and beside (Hongcun, Chengkan) |
 | B24 | SILENT | water/340 (split from 280) | No reed harvest at a tameike read; banks mown, kaibori mud to the fields |
 | B25 | ACCURATE (two labeled guesses kept) | water/090, 100, 160; fields/090 | Drains to a river cited; moat fed and stepped; "a square tap silts" stays a guess |
 | B26 | ACCURATE | vegetation/210 | Village copse = each homestead's own wood; 1684 register ~6,100-27,800 sq ft per household |
-| B27 | mixed: CONTRADICTION-RESOLVED (siting) / SILENT (boundaries) | vegetation/220, 140 | Fuel wood beyond the fields on the hill ground; ridge/stream/path bounding now a guess |
+| B27 | mixed: CONTRADICTION-RESOLVED (siting) / SILENT (boundaries) | 0077, 140 | Fuel wood beyond the fields on the hill ground; ridge/stream/path bounding now a guess |
 | B28 | mixed: CONTRADICTION-RESOLVED (stocking) / SILENT (crowns) | vegetation/230, 060, 070 | Worked konara ~1,700 stems/ha near cutting age (~8 ft centers); 500-800/ha a guess; crown width unread |
 | B29 | mixed: ACCURATE / SILENT (share) | vegetation/260, 150, 154 | Bamboo mixed low in the farmstead grove on its windward side (Tonami, Sendai); share a guess |
 | B30 | KNOB (with a correction) | vegetation/270 | Windbreak led by one planted tree but 9-18 species; village belt conifer-led or mixed broadleaf |
 | B31 | mixed | vegetation/290, 050, 090, 110, 280, 030 | Water-mouth grove SILENT; stripped hills ACCURATE; crop margin flat-ground only; bank margin SILENT; reed cut yearly ACCURATE; belt gap SILENT (convention) |
 | B32 | mixed: KNOB (fry) / ACCURATE+SILENT (sty) / CONTRADICTION-RESOLVED (ducks) | archetypes/200, 210, 170, 171, 172 | Fry reared only at Jiujiang (70% nursery); pigs the district's stock, share unread; ducks herded in rice fields, no pond pen |
-| B33 | mixed: ACCURATE (density) / SILENT (crown) | archetypes/220, 140 | Spacing a continuum by training height; drawn ~23 sq ft/bush at the one dated premodern figure. GM's decision |
+| B33 | mixed: ACCURATE (density) / SILENT (crown) | 0026, 140 | Spacing a continuum by training height; drawn ~23 sq ft/bush at the one dated premodern figure. GM's decision |
 | B34 | CONTRADICTION-RESOLVED | archetypes/230, 173 | Fruit dike (lychee, longan, citrus) older than mulberry; cane one undated listing; no banana or vegetable dike; tea attested. GM's decision |
-| B35 | mixed | archetypes/040, 060, 070, 190, 250, 260 | Terrace and valley paddy cited; dividing ridge cited, walking bund a guess; 070's word fixed; clustered village general (250); hamlet shrine a KNOB (260) |
-| B36 | mixed: CONTRADICTION-RESOLVED (size) / ACCURATE (distance, side) / KNOB (temple yard or apart); generator HANDED to 273 | religion-and-death/160, 170, 180, 206, 270, 280 | Buck 2.6% graves; ~370 m, always downstream; forms side by side; amended 160: village ground P x 7.5-18 sq ft |
+| B35 | mixed | 0021, 060, 070, 190, 250, 260 | Terrace and valley paddy cited; dividing ridge cited, walking bund a guess; 070's word fixed; clustered village general (250); hamlet shrine a KNOB (260) |
+| B36 | mixed: CONTRADICTION-RESOLVED (size) / ACCURATE (distance, side) / KNOB (temple yard or apart); generator HANDED to 273 | 0235, 170, 180, 206, 270, 280 | Buck 2.6% graves; ~370 m, always downstream; forms side by side; amended 160: village ground P x 7.5-18 sq ft |
 | B37 | HANDED | religion-and-death/310, 320, 330 (272) | Done by feature 272, 2026-09-27; outcome recorded there |
-| B38 | mixed | cities/defenses/100, 110, 120, 020, 040, 050, 060, 080, 090 | Moat by rank + broad form (KNOB); towers ACCURATE; posts SILENT; facing guard ACCURATE; ranges read; patrol road exists; fence-to-rampart a guess vs Tang |
-| B39 | mixed | cities/government/030, 050, 070, 080, 085, 100, 110 | In-city unwalled samurai house a DEVIATION; kido cited; machi-dojo nationwide; 4 of 6 nagaya guesses cited; ashigaru in row-houses (setting: peasants) |
-| B40 | mixed: KNOB (grid) / ACCURATE (alley, lodging site) / SILENT (lodging count, street share) | cities/fabric/070, 160, 080, 120, 030 | Grid blocks ~390 ft, square-open-core or rectangle; alley = earth with a center drain-board line |
-| B41a-1 | KNOB | cities/hinterland/060, 010, 015 | Near-city retreat (lower mansion) or a street of lower mansions at the outer town |
-| B41a-2 | SILENT | cities/hinterland/010, 060 | No distance to a retreat or estate read beyond Ningbo's 10 km |
+| B38 | mixed | 0151, 110, 120, 020, 040, 050, 060, 080, 090 | Moat by rank + broad form (KNOB); towers ACCURATE; posts SILENT; facing guard ACCURATE; ranges read; patrol road exists; fence-to-rampart a guess vs Tang |
+| B39 | mixed | 0161, 050, 070, 080, 085, 100, 110 | In-city unwalled samurai house a DEVIATION; kido cited; machi-dojo nationwide; 4 of 6 nagaya guesses cited; ashigaru in row-houses (setting: peasants) |
+| B40 | mixed: KNOB (grid) / ACCURATE (alley, lodging site) / SILENT (lodging count, street share) | 0162, 160, 080, 120, 030 | Grid blocks ~390 ft, square-open-core or rectangle; alley = earth with a center drain-board line |
+| B41a-1 | KNOB | 0172, 010, 015 | Near-city retreat (lower mansion) or a street of lower mansions at the outer town |
+| B41a-2 | SILENT | 0173, 060 | No distance to a retreat or estate read beyond Ningbo's 10 km |
 | B41a-3 | ACCURATE | cities/hinterland/030 | Moat as storm drain and reservoir cited; moat water reached fields |
-| B41a-4 | ACCURATE | cities/hinterland/040 | Gate strip bracketed (Odawara 124 houses; Nanguanxiang 350 x 50 m); 10-40 structures on the low side |
+| B41a-4 | ACCURATE | 0171 | Gate strip bracketed (Odawara 124 houses; Nanguanxiang 350 x 50 m); 10-40 structures on the low side |
 | B41b | SILENT | cities/sizing/030, 010 | No in-enclosure share read; the history leans toward more samurai inside, not fewer |
 | B42 | KNOB | settlements/030, 035 | Household of five cited; one roof vs farmhouse plus retirement house (inkyoya), rolled per settlement |
 | B43 towns/020 | ACCURATE | towns/020 | Census footnoted to canon; live-in apprentices and komono corroborated |
-| B43 towns/120 | CONTRADICTION-RESOLVED | towns/120 | Edge siting holds for the Japanese model only; a Chinese yamen stands mid-town on the main street |
+| B43 0123 | CONTRADICTION-RESOLVED | 0123 | Edge siting holds for the Japanese model only; a Chinese yamen stands mid-town on the main street |
 | B43 towns/140 | ACCURATE | towns/140 | Across-the-wind bearing cited; groves described by side |
 | B43 towns/150 | mixed: SILENT (size) / ACCURATE (shape) | towns/150 | Plots irregular and narrow; 1869 standard one tan; 0.08 acre a calibration |
 | B44 towns/110 | CONTRADICTION-RESOLVED | towns/110 | Box kept as the GM's 2026-07-27 convention; granary-inside now historical; "not even rectangular" dropped |
 | B44 buildings/110 | CONTRADICTION-RESOLVED | buildings/110 | "Surcharge never covered expenses" replaced (kuchimai to 1725); shabby look stays a guess |
 | B45 capitals/380 | ACCURATE | cities/capitals/380 | Rests on the GM's 2026-08-08 ruling plus shared castle-town zoning; canon gives no clan its own layout |
-| B45 capitals/390 | ACCURATE | cities/capitals/390 | Four inversions cited; in-wall farmland ban a project decision; multiplying counts a guess |
+| B45 capitals/390 | ACCURATE | 0138 | Four inversions cited; in-wall farmland ban a project decision; multiplying counts a guess |
 | B46 river-cities/030 | KNOB | cities/river-cities/030 | Canal reaches the river via moat and water gate (Suzhou) or by its own mouth (Osaka) |
 | B46 ways/050 | mixed: ACCURATE / SILENT (inside-ring deck) | ways/050 | Many bridges cited (359 on the Pingjiang tu); inside-wall deck at a water gate unread |
 
 **Counts** (56 rows): ACCURATE 13, KNOB 13, SILENT 5, CONTRADICTION-RESOLVED 7, HANDED 1, mixed 17.
 
-**Gaps.** No item lacks a handoff line. Two items are partly unworked: B19 (homesteads/180, held by 271 V7) and B22
-(water/250, over the size cap: owes a split and pointers to 300 and 310). No X1 section was moved to the passed-over
+**Gaps.** No item lacks a handoff line. Two items are partly unworked: B19 (0041, held by 271 V7) and B22
+(0059, over the size cap: owes a split and pointers to 300 and 310). No X1 section was moved to the passed-over
 list: towns/110 and capitals/380 rest on GM rulings but now also cite real-world content.
 
-**Open PARTIALs** (left PARTIAL at the last check, each labeled in its note): fields/250 (1102 Oyama framing), fields/260
-(smtrc "Edo-period"), fields/030 (keihan-8, carried by aze-jawiki), homesteads/100 (fengshui-zhwiki), homesteads/212
-("in Iwate"; sugiura-1973-9 column), homesteads/214 (sugiura-1973-11 table image), homesteads/300 (okayama in-house
-reading), religion-and-death/160 (demographic-transition-enwiki), cities/government/110 (nando-jawiki), cities/hinterland/060
-(Sumoto), cities/hinterland/010 (guanxiang-zdic-2), cities/capitals/390 (l7r-budgets, canon). Fixed after the last
+**Open PARTIALs** (left PARTIAL at the last check, each labeled in its note): 0013 (1102 Oyama framing), 0014
+(smtrc "Edo-period"), 0009 (keihan-8, carried by aze-jawiki), homesteads/100 (fengshui-zhwiki), 0043
+("in Iwate"; sugiura-1973-9 column), 0044 (sugiura-1973-11 table image), homesteads/300 (okayama in-house
+reading), 0235 (demographic-transition-enwiki), cities/government/110 (nando-jawiki), 0172
+(Sumoto), 0173 (guanxiang-zdic-2), 0138 (l7r-budgets, canon). Fixed after the last
 re-check and not re-checked: homesteads/160, 170; religion-and-death/206, 270, 280; vegetation/010, 050, 090, 120, 290;
-water/270, 280; fields/090; cities/sizing/030.
+0035, 280; fields/090; cities/sizing/030.
 
 ## 2. Kinds (T20)
 
@@ -86,48 +86,48 @@ stated in the Note. "Drift" = an `entry-drift` check owed because the named sect
 
 | kind | file | current Entry | label | change |
 |---|---|---|---|---|
-| Fallow | classes/fields.py | none ("recorded as silent") | guess | Entry fields/250; label accurate (form), share and placement guesses in Note; rewrite: whole resting basins, scattered, grass not blight |
-| Paddy | classes/fields.py | fields/020, 110, 030 + 1 | accurate | Add fields/270 (midsummer drain); drift on 110 (020/030 done in F1 check-c) |
-| Bund | classes/fields.py | fields "Bunds are SHARED", "A bund runs on" | accurate | Add fields/260: dividing bund 1-2 shaku accurate, walking bund a guess |
-| Millet, Buckwheat, Barley, Soy (4) | classes/fields.py | fields/160, 050 | accurate | Add fields/180 (row direction shared per tract); drift on 160 (fan middle not dry-farmed before late Edo) |
+| Fallow | classes/fields.py | none ("recorded as silent") | guess | Entry 0013; label accurate (form), share and placement guesses in Note; rewrite: whole resting basins, scattered, grass not blight |
+| Paddy | classes/fields.py | 0005, 110, 030 + 1 | accurate | Add fields/270 (midsummer drain); drift on 110 (020/030 done in F1 check-c) |
+| Bund | classes/fields.py | fields "Bunds are SHARED", "A bund runs on" | accurate | Add 0014: dividing bund 1-2 shaku accurate, walking bund a guess |
+| Millet, Buckwheat, Barley, Soy (4) | classes/fields.py | 0006, 050 | accurate | Add fields/180 (row direction shared per tract); drift on 160 (fan middle not dry-farmed before late Edo) |
 | Farmhouse | classes/homestead.py | homesteads "What stood...", 100, lane | accurate | Add homesteads/240 once the rake moves (spread to ~30 deg, a tenth quarter-turned) |
 | Byre | classes/homestead.py | homesteads/060, "What stood..." | accurate | Add 300; commons form labeled guess in Note; after 060 is rewritten, drift |
 | Privy | classes/homestead.py | homesteads/210 | accurate | Add 250; Note: four attested seats, size a guess |
 | ManureHeap | classes/homestead.py | homesteads/210 | guess | Add 250; Note: pit beside the privy or at a field edge (knob); heap's seat stays guess |
-| Bathhouse | classes/homestead.py | homesteads/214, 210 | guess | Label accurate (front yard, corridor form); drop "found nowhere"; share "three in ten" vs 0-80% |
-| HenCoop | classes/homestead.py | homesteads/215, 210 | guess | Label accurate for presence (~82%); size and seat guesses in Note |
-| Persimmon | classes/homestead.py | homesteads/218, 210 | guess | Label accurate (front or behind, ~23 ft crown) once re-seated; until then the flank a guess |
-| Woodpile | classes/homestead.py | homesteads/212, 210 | guess | Note: three forms (woodshed, kizuma under the windbreak, eaves stack a guess) |
+| Bathhouse | classes/homestead.py | 0044, 210 | guess | Label accurate (front yard, corridor form); drop "found nowhere"; share "three in ten" vs 0-80% |
+| HenCoop | classes/homestead.py | 0045, 210 | guess | Label accurate for presence (~82%); size and seat guesses in Note |
+| Persimmon | classes/homestead.py | 0046, 210 | guess | Label accurate (front or behind, ~23 ft crown) once re-seated; until then the flank a guess |
+| Woodpile | classes/homestead.py | 0043, 210 | guess | Note: three forms (woodshed, kizuma under the windbreak, eaves stack a guess) |
 | BurialGround | classes/homestead.py | "Where do a hamlet's dead lie?", 160 | accurate | Drift on 160 (amended P x 7.5-18 sq ft); add 270/280 for the village clauses |
-| HomesteadBamboo | classes/greenery.py | vegetation 150 by an old heading (no longer resolves) | convention | Re-aim at "Bamboo: how common, and where it stood" + 154 + 260; windward side read |
+| HomesteadBamboo | classes/greenery.py | 0075 by an old heading (no longer resolves) | convention | Re-aim at "Bamboo: how common, and where it stood" + 154 + 260; windward side read |
 | SharedBambooGrove | classes/greenery.py | same broken heading | convention | Re-aim the Entry heading |
 | Windbreak | classes/greenery.py | vegetation/010; homesteads garden | accurate | Add 270 (conifer-led or mixed, knob) and 260 (bamboo low in the grove) |
 | Copse | classes/greenery.py | vegetation/010, 020 | accurate | Add 210: the homesteads' own woods, 6,000-28,000 sq ft each |
 | WoodlandCommons | classes/greenery.py | vegetation/140, scrub, 060 | accurate | Add 220 (beyond fields, upslope) and 230 (~1,700/ha); ridge/stream/path bounding a guess |
-| ScrubAndRoughGrazing | classes/greenery.py | vegetation/090, 100, 110 | accurate | Drift on 090 (6 ft is a flat-ground figure; terrace riser wider) and 110 |
-| Marsh | classes/greenery.py | water/280 + 2; vegetation/120 | accurate | Drift (280 split to 340; 120 points at 280); add vegetation/280 (reed cut yearly) |
-| IrrigationDitch | classes/water_and_ways.py | water/250 + 3; fields | accurate | Add water/310: the intake an opening in the bank, no gate |
+| ScrubAndRoughGrazing | classes/greenery.py | 0073, 100, 110 | accurate | Drift on 090 (6 ft is a flat-ground figure; terrace riser wider) and 110 |
+| Marsh | classes/greenery.py | 0061 + 2; 0074 | accurate | Drift (280 split to 340; 120 points at 280); add vegetation/280 (reed cut yearly) |
+| IrrigationDitch | classes/water_and_ways.py | 0059 + 3; fields | accurate | Add water/310: the intake an opening in the bank, no gate |
 | DrainageDitch | classes/water_and_ways.py | water/090 by an old heading; fields | accurate | Drift on water/090 and fields/090 |
-| Weir | classes/water_and_ways.py | water/250 | convention | Add 300 and 310; Note: four forms rolled (fence 1.5 ft a convention, gabion 2 ft read, frame 5 ft guess) |
+| Weir | classes/water_and_ways.py | 0059 | convention | Add 300 and 310; Note: four forms rolled (fence 1.5 ft a convention, gabion 2 ft read, frame 5 ft guess) |
 | VillageLane | classes/water_and_ways.py | homesteads lane form, lane bend | accurate | Add homesteads/310 (run-out rule, distance a guess) and fields/290 (field path ends on the bund) |
-| Footbridge | classes/water_and_ways.py | water/070 | guess | Entry 290 + 070; label accurate for the forms (knob, evenness a guess); width the GM's 2 ft ruling; pointer from ways/030 |
-| MulberryDike | classes/dikepond.py | archetypes/140 + 1 | accurate | Add 220 (density continuum; crown width silent) |
+| Footbridge | classes/water_and_ways.py | water/070 | guess | Entry 290 + 070; label accurate for the forms (knob, evenness a guess); width the GM's 2 ft ruling; pointer from 0084 |
+| MulberryDike | classes/dikepond.py | 0018 + 1 | accurate | Add 220 (density continuum; crown width silent) |
 | FruitDike | classes/dikepond.py | archetypes/173, 170 | accurate | Note is wrong: the oldest dike planting read, lychee above all; add 230 |
 | SugarcaneDike | classes/dikepond.py | archetypes/173, 170 | accurate | One undated secondary listing: relabel per the GM's B34 ruling |
 | BananaDike | classes/dikepond.py | archetypes/173, 170 | accurate | No premodern attestation: relabel per the GM's B34 ruling |
 | VegetableGround | classes/dikepond.py | archetypes/173, 170 | accurate | No premodern vegetable dike: relabel per the GM's B34 ruling |
 | PigSty | classes/dikepond.py | archetypes/180, 171 | guess | Label accurate (the sty), STY_SHARE a guess in Note; add 210; Sources add pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41 |
 | DuckPen | classes/dikepond.py | archetypes/180, 171 | guess | Add 210; a modern form: keep, relabel deviation, or move (GM, B32) |
-| FryPond | classes/dikepond.py | archetypes/172, 170 | guess | Add 200; drop "century not read" (Hongzhi) and the manual share; knob grow-out/fry village (GM) |
-| ManurePit | classes/dikepond.py | archetypes/170 | accurate | Add homesteads/250 (the pit forms) |
+| FryPond | classes/dikepond.py | 0024, 170 | guess | Add 200; drop "century not read" (Hongzhi) and the manual share; knob grow-out/fry village (GM) |
+| ManurePit | classes/dikepond.py | 0023 | accurate | Add homesteads/250 (the pit forms) |
 | Granary | compound_kinds/office.py | buildings x3; towns/110 | accurate | Drift on towns/110 (granary-inside now historical) |
-| MainGate | compound_kinds/grounds.py | buildings x3; towns/120; religion | accurate | Drift on towns/120 (edge rule is the Japanese model's only) |
-| ApproachRoad | compound_kinds/grounds.py | ways x3; towns/120 | accurate | Drift on towns/120 |
+| MainGate | compound_kinds/grounds.py | buildings x3; 0123; religion | accurate | Drift on 0123 (edge rule is the Japanese model's only) |
+| ApproachRoad | compound_kinds/grounds.py | ways x3; 0123 | accurate | Drift on 0123 |
 | PracticeGround | compound_kinds/grounds.py | buildings dojo; cities/government/070 | accurate | Drift on 070 (machi-dojo nationwide, late); the "dojo" word an Edo anachronism (keikoba) |
-| RetainersQuarters | compound_kinds/household.py | buildings; cities/government/080 | accurate | Drift on 080 (range at the front, roof continuous with the gate); add 110 |
-| ServantsQuarters | compound_kinds/household.py | cities/government/080; buildings | accurate | Drift on 080; add 110 |
+| RetainersQuarters | compound_kinds/household.py | buildings; 0115 | accurate | Drift on 080 (range at the front, roof continuous with the gate); add 110 |
+| ServantsQuarters | compound_kinds/household.py | 0115; buildings | accurate | Drift on 080; add 110 |
 
-**43 kinds.** Checked IN-STEP already, no change: BundBeans (fields/020), ScrubAndRoughGrazing on F1's 090 edit (re-owed
+**43 kinds.** Checked IN-STEP already, no change: BundBeans (0005), ScrubAndRoughGrazing on F1's 090 edit (re-owed
 by V2's). City-tier findings (moat, gate tower, guard post, patrol road, ward fence, alley, grid) have no interactive
 class: the city tier has no interactive page.
 
@@ -162,7 +162,7 @@ there), GM (waits on a ruling), deferred (a GM deferral stands).
 | B21 | settlement/city/bridges.py `channel_footbridges` | plank glyph | form rolled per settlement: single log / earth-decked log / plank | all 5 | M | 269 |
 | B22 | hamletgen/consts.py `WEIR_THICK_FT`; weir glyph | one bar, 5.0 ft | four forms rolled, each its own thickness (1.5 / 2 / 5 ft) | Inashiro, Kashikawa, Mizuguchi | M | 269 |
 | B22 | hamletgen/water/brook.py head race | race ends in a rounded cap on the stream | race opens out of the brook's bank; no gate | intake maps (Inashiro, Kashikawa, Mizuguchi, Sawada) | M | 269 |
-| B23 | hamletgen/cluster.py `seat_cluster`; homesteads/stages.py `_far_bank` | one bank, comments call the other form unattested | comments cite water/270 now; bank knob once lanes cross a brook | none now | S (L later) | 269 (comment); deferred (fc:2342) |
+| B23 | hamletgen/cluster.py `seat_cluster`; homesteads/stages.py `_far_bank` | one bank, comments call the other form unattested | comments cite 0035 now; bank knob once lanes cross a brook | none now | S (L later) | 269 (comment); deferred (fc:2342) |
 | B26 | homestead_parts/groves.py; hamletgen/homesteads/stages.py copse | copse floor from leftover gaps | per homestead that keeps a wood, 6,000-28,000 sq ft (windward grove + copse share) | all 5 (Inashiro, Mizuguchi worst) | M | 269 |
 | B27 | hamletgen/hinterland/parcels.py scorer | nearness can outbid upslope | parcel beyond the fields, higher than the fields it adjoins; low wet ground left to grass | Mizuguchi, Sawada (Kashikawa has no woodland today) | M | 269 |
 | B27 | hamletgen/hinterland comment | "bounded by ridge, stream and path" | say it is a guess | none | S | 269 |
@@ -199,14 +199,14 @@ inside the read range), B03, B08 glebe, B09, B20 garden, B24, B25, B31, B44, B45
 | to | what |
 |---|---|
 | 271 (diagram-research-3) | `shuson-jawiki` What-it-is (two replacement sentences, h3-checks) and its (homesteads) Used-for; `kotobank-jokamachi` Used-for gains government |
-| 271 V7 (diagram-research-1) | homesteads/180 (B19's remaining section) |
+| 271 V7 (diagram-research-1) | 0041 (B19's remaining section) |
 | 271 V1 owner of homesteads/130 | Plain farmhouse drawn 46 x 28 ft, about twice the 1885 usual 18 tsubo (weak, one district) |
 | 267 | `gogura-kotobank` siting quote for any village storehouse program; `kotobank-umaya` for homesteads/300 once landed; government 080 pointers to buildings 750/340 |
-| 272 | religion-and-death/280 knob before the village-temple graveyard; 190 (unclaimed): cremation ground at the settlement edge, downstream, ~370 m; `matsumoto-dosojin` for homesteads/145 |
-| owner of towns/250 | Point "where the Japanese compound stands is a guess" at towns/120 |
-| 265 (optional) | ways/020 may point at fields/290 for the paddy case |
+| 272 | 0236 knob before the village-temple graveyard; 190 (unclaimed): cremation ground at the settlement edge, downstream, ~370 m; `matsumoto-dosojin` for homesteads/145 |
+| owner of towns/250 | Point "where the Japanese compound stands is a guess" at 0123 |
+| 265 (optional) | 0081 may point at fields/290 for the paddy case |
 | 274 | `reserve-prefix.py` imports `_escape_log` (runs only with `PYTHONPATH=/diagram/scripts`) |
-| 269's own record | homesteads/060 rewrite (shared-byre sentence -> 300); homesteads/240 heading ("a little off due south"); vegetation/020 -> 210; water/250 split + two pointers; cities/government/050 gains 2-2.5 ken (12-15 ft); vegetation/230 hedge (1,700/ha is an overgrown stand); fields/270 heading; size cap: homesteads/210, religion-and-death/160, vegetation/120, water/070, water/270 |
+| 269's own record | homesteads/060 rewrite (shared-byre sentence -> 300); homesteads/240 heading ("a little off due south"); 0071 -> 210; 0059 split + two pointers; cities/government/050 gains 2-2.5 ken (12-15 ft); vegetation/230 hedge (1,700/ha is an overgrown stand); fields/270 heading; size cap: homesteads/210, 0235, 0074, water/070, 0035 |
 | tooling | `make quote-verbatim` pairs only the first `original:` of a multi-passage note and skips a note's third passage; glossary matcher gives "Qi" the fengshui tooltip |
 
 **For the GM, through `escalation-check`:**
@@ -218,7 +218,7 @@ inside the read range), B03, B08 glebe, B09, B20 garden, B24, B25, B31, B44, B45
 | B32 | Fry pond: grow-out hamlet (no fry) or fry village (~70% nursery); duck pen is a modern form (ducks herded in the coastal rice fields) - keep, relabel, or move |
 | B35 | Should a hamlet roll a small shrine of its own (Tanba: 14 section shrines for ~180 households)? Canon silent |
 | B18 | A tenth of houses quarter-turned: does the yard turn with it? |
-| B19 | Headman's house 92 x 56 ft is 4x a farmhouse; record says 2-2.5x (~65-75 x 40 ft); homesteads/110: the one headman's plot read has a nagayamon, the map draws no gate (deviation vs the 2026-07-21 ruling) |
+| B19 | Headman's house 92 x 56 ft is 4x a farmhouse; record says 2-2.5x (~65-75 x 40 ft); 0030: the one headman's plot read has a nagayamon, the map draws no gate (deviation vs the 2026-07-21 ruling) |
 | B08 | A samurai estate may rightly have paddy at its gate (kadota); estate placement is canon-led |
 | B38 | Ward fence: Tang wards never met the rampart (a road between); today's rule is the 2026-07-27 ruling. Guard posts 105-135 ft inside vs Hakone's 59 ft |
 | B41 | Gate-belt ceiling; in-wall samurai share 2/3 reads low |
@@ -226,7 +226,7 @@ inside the read range), B03, B08 glebe, B09, B20 garden, B24, B25, B31, B44, B45
 | C3 | cities/fabric/030: lower the 25-30% reserve band for a county seat? |
 | downloads | TO-DOWNLOAD entries 254 (Narumi), 270 (Kiyose), 275 (Mazumder Fig. 1 angle), 278 (Abe and Shinohara), 279 (Nishizawa) |
 
-**Not resolved by a handoff:** Mazumder's 120-degree direction (water/100 stays a guess); Pingyao towers 60 vs 50 m and
+**Not resolved by a handoff:** Mazumder's 120-degree direction (0146 stays a guess); Pingyao towers 60 vs 50 m and
 Xi'an's moat 20 x 10 vs 18 x 6 m (both given); fields/300's "no barley on a wet paddy" rests on one uncited sentence;
 homesteads/240's foot-of-hill villages spread wider (72% on three bearings) than the slope figure used; the kimura-2 dash;
 the two 1725 kuchimai reasons (both stated).

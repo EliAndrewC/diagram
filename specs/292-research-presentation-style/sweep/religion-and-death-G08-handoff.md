@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/village-temples-tera
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-village-temple
-- OLD=research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=
 
 - BASE=fde4ed06c
@@ -17,6 +17,6 @@ second opening paragraph, as the brief asked, with the campaign-notes passages i
 footnote because the campaign notes have no registry key, the same as the old section. Three book titles in the notes
 (`ndl-crd-fukudanka`, `kofukuroman-sanmai-5`, `onga-choshi-jiin-7`) now carry the prepass's `(romaji, "meaning")`
 gloss. The meaning of 太宰管内誌 ("Gazetteer of the lands under the Dazaifu") is new, so it is owed to
-translation-check. Links from religion-and-death 210 and 540, rendering 210 and urban-features 470 and 480 now point
+translation-check. Links from 0226 and 540, rendering 210 and 0206 and 480 now point
 at the new sections. Rendering 210's "how a hamlet is served" goes to the rendering section. No modal's `Entry:`
 named a folded section.

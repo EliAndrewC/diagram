@@ -8,11 +8,11 @@ the notes and the registry entries.
 
 ## Sections
 
-- SECTION=religion-and-death/500
+- SECTION=0229
 - SECTION=religion-and-death/510
-- SECTION=religion-and-death/520
-- SECTION=religion-and-death/530
-- SECTION=religion-and-death/210
+- SECTION=0217
+- SECTION=0238
+- SECTION=0226
 - SECTION=religion-and-death/190
 
 ## New registry keys

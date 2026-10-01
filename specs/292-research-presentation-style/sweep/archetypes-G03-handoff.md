@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/polders-fields-diked-against-the-fluctuating-water-weitian-waju
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-polder-and-its-water
-- OLD=research/archetypes/ research/archetypes/ research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=PerimeterDike SluiceGate
 - BASE=28c428d04
 
@@ -17,7 +17,7 @@ and the pond-digging phrase; 130's "So rectangular ponds are correct". Two figur
 source behind them: ten to twenty households behind a dike about 1.5 m high (330 still says it "remains unsourced"),
 and the polder community keeping its own dike. The weinei-he-summary note's own gloss now glosses 月状 and 弓状 for the
 kanji prepass. The 110 sub-forms (一河围田, crescent and bow) carry the absence note -8. archetypes 120 (no crossings)
-is linked at water 190. The dike-pond link points at T6's current anchor #the-64-water-to-dike-ratio-and-coppiced-mulberry,
+is linked at 0054. The dike-pond link points at T6's current anchor #the-64-water-to-dike-ratio-and-coppiced-mulberry,
 for T6's group to re-aim. Links re-aimed: archetypes 150 and 330; code comments in hamletgen/water/polder.py (two,
 one of them naming the older heading 'Polder ring canal'), waterfields/polder.py (two), settlement/land/wet.py,
 settlement/land/dikes.py, hamletgen/plan.py (a ValueError message, now the rendering title), hamletgen/consts.py,

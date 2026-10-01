@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/farmhouses-minka
 - RENDERING=rendering/homesteads/how-our-maps-draw-farmhouses---size-plan-roof-bearing-and-setback
-- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
+- OLD=research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads
 - MODALS=Farmhouse
 - BASE=5d812b0b9
 

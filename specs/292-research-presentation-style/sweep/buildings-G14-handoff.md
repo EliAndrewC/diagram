@@ -4,14 +4,14 @@
 
 - SECTION=buildings/verandas-and-storm-shutters-engawa-and-amado
 - RENDERING=rendering/buildings/how-our-maps-draw-verandas-and-shuttered-wings
-- OLD=research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds
 - MODALS=Engawa ShutteredWing
 
 ## Kitchens (daidokoro)
 
 - SECTION=buildings/kitchens-daidokoro
 - RENDERING=rendering/buildings/how-our-maps-draw-the-kitchen
-- OLD=research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds
 - MODALS=Kitchen Hearth Door
 
 - BASE=fec99b7dd

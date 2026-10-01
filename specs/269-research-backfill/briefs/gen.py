@@ -22,28 +22,28 @@ CLONE = FEATURE.parents[1]
 SLUG = FEATURE.name
 RESERVE = "/diagram/.clones/.tools/reserve-prefix.py"
 
-#: group -> (title, where its questions go). The ranges avoid 267's (buildings 240-640, vegetation 170-200,
-#: religion-and-death 220-260, fields 220-240) and 268's (religion-and-death 080-126).
+#: group -> (title, where its questions go). The ranges avoid 267's (0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+#: 0240, fields 220-240) and 268's (0215, 0220, 0221, 0222, 0223).
 GROUPS = {
-    "F1": ("fields: paddy kinds", "fields 250-280, and the existing sections the items name"),
+    "F1": ("fields: paddy kinds", "0013, 0014, and the existing sections the items name"),
     "F2": ("fields: ways and seasons", "fields 290-330, and the existing sections the items name"),
     "F3": ("fields: thin sections", "the existing sections the items name; a new question only if one outgrows the cap, at fields 340-360"),
-    "H1": ("homesteads: farmstead fixtures", "the existing homesteads 210-218, and homesteads 250-290 for a new question"),
+    "H1": ("homesteads: farmstead fixtures", "the existing 0042, 0043, 0044, 0045, 0046, 0219, and 0047 for a new question"),
     "H2": ("homesteads: siting", "homesteads 300-330, and the existing sections the items name"),
     "H3": ("homesteads: thin sections", "the existing sections the items name; homesteads 340-360 for a split"),
     "W1": ("water: kinds", "water 290-330, and the existing sections the items name"),
     "W2": ("water: thin sections", "the existing sections the items name; water 340-360 for a split"),
-    "V1": ("vegetation: woods", "vegetation 210-250, and the existing sections the items name"),
+    "V1": ("vegetation: woods", "0077, and the existing sections the items name"),
     "V2": ("vegetation: groves and margins", "vegetation 260-290, and the existing sections the items name"),
-    "A1": ("archetypes: dike-pond", "archetypes 200-240, and the existing sections the items name"),
+    "A1": ("archetypes: dike-pond", "0025, 0026, and the existing sections the items name"),
     "A2": ("archetypes: thin sections", "the existing sections the items name; archetypes 250-270 for a split"),
-    "R1": ("religion-and-death: burial", "religion-and-death 270-300, and the existing sections the items name"),
+    "R1": ("religion-and-death: burial", "0236, and the existing sections the items name"),
     "R2": ("religion-and-death: city temples", "religion-and-death 310-330, and the existing sections the items name"),
-    "C1": ("cities/defenses", "cities/defenses 100-140, and the existing sections the items name"),
+    "C1": ("cities/defenses", "0151, and the existing sections the items name"),
     "C2": ("cities/government", "cities/government 100-140, and the existing sections the items name"),
     "C3": ("cities/fabric", "cities/fabric 160-190, and the existing sections the items name"),
-    "C4": ("cities/hinterland and sizing", "cities/hinterland 060-090, cities/sizing 030-050, and the existing sections the items name"),
-    "C4A": ("cities/hinterland", "cities/hinterland 060-090, and the existing sections the items name"),
+    "C4": ("cities/hinterland and sizing", "0172, cities/sizing 030-050, and the existing sections the items name"),
+    "C4A": ("cities/hinterland", "0172, and the existing sections the items name"),
     "C4B": ("cities/sizing", "cities/sizing 030-050, and the existing sections the items name"),
     "X1A": ("towns (265's pages, part a)", "the existing sections the items name (265 has landed; they are free)"),
     "X1B": ("towns, buildings and capitals (part b)", "the existing sections the items name"),
@@ -68,10 +68,10 @@ turn. Work in this clone (`{clone}`); the project's CLAUDE.md files apply to you
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 265: buildings 010, 070, 150, 170, 210;
-cities/river-cities 010-040; urban-features 010, 012, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040, 080,
-090, 100, 130; cities/capitals 040, 150, 155, 330-336. Feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240. Feature 268: religion-and-death 080-126. Where a finding OWES one of those
+**Do not edit these sections - other sessions own them:** feature 265: 0090, 070, 150, 170, 210;
+0175, 0176; 0190, 012, 020, 030, 050, 060, 070, 080, 160; 0081; towns 040, 080,
+090, 100, 130; cities/capitals 040, 150, 155, 330-336. Feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240. Feature 268: 0215, 0220, 0221, 0222, 0223. Where a finding OWES one of those
 a correction, say exactly what in the handoff; the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
 `.claude/skills/diagram`); a write session's eleventh registry key is refused - then follow its message (write the

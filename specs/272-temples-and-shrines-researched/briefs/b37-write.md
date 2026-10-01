@@ -7,8 +7,8 @@ above all (it auto-loads when you read a research file).
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** religion-and-death 130-206 and new 270-300 (feature 269's
-burial group R1, in `/diagram/.clones/diagram-supplemental`); religion-and-death 220-260 (feature 267); every page
+**Do not edit these sections - other sessions own them:** 0224, 0235 and new 270-300 (feature 269's
+burial group R1, in `/diagram/.clones/diagram-supplemental`); 0240 (feature 267); every page
 other than religion-and-death. Where a finding OWES one of those a correction, say exactly what in the handoff; the
 orchestrator sends it to the owner. Other groups of THIS feature run beside you in sibling clones: stay inside your
 own sections and range.
@@ -56,7 +56,7 @@ blocked sources is where your TO-DOWNLOAD entries start - first try each once mo
    and when, both searches where there were two; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). The GM's canon governs the setting: report the
    history against it, never override it.
-5. **Write** on religion-and-death 310-330 (new), and edits to 010, 050 and 070. A new question is a fragment `research/religion-and-death/NNN-<heading id>.html` at a free
+5. **Write** on religion-and-death 310-330 (new), and edits to 010, 050 and 070. A new question is a fragment `research/contents.json#religion-and-the-deadNNN-<heading id>.html` at a free
    prefix in your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words, labeled (accurate, deviation, convention, guess). Footnotes: `<sup class="fn" data-note="<key>"></sup>`

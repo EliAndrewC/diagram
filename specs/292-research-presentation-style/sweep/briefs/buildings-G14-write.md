@@ -14,8 +14,8 @@ RENDERING section. Three pilot topics were written that way and the GM accepted 
 2026-09-30. You are applying the same process to the topics below.
 
 **The model to copy.** The third pilot is the closest model of a finished topic: the research section
-`research/homesteads/040-sunlight-and-shade-on-the-farm.html` (with its `.notes.html`) and its rendering section
-`research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html`. Read those two fragments
+`research/questions/0038-sunlight-and-shade-on-the-farm.html` (with its `.notes.html`) and its rendering section
+`research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`. Read those two fragments
 and the style guide before you write.
 
 ## Your items
@@ -23,31 +23,31 @@ and the style guide before you write.
 - **Privies (setchin)** - fold `buildings/220-privies-attach-to-the-house-night-soil-drives-their-placement.html`, `buildings/310-where-does-a-residence-put-its-guests-privy.html`
   - rendering section: How our maps place privies
   - modals whose `Entry:` names a folded section: Latrine, SideGate
-  - note: 220's farm case and night-soil trade overlap homesteads/260 and towns/480 - keep the residence's privies here and point there for the farm's and the town house's; the bath is T17, not here.
+  - note: 220's farm case and night-soil trade overlap 0047 and 0131 - keep the residence's privies here and point there for the farm's and the town house's; the bath is T17, not here.
 - **Baths (furo)** - fold `buildings/320-did-a-residence-have-its-own-bath-and-was-it-a-building-apart.html`
   - rendering section: How our maps draw the bath
   - modals whose `Entry:` names a folded section: Bath
-  - note: the public bathhouse is urban-features/350-360 and the farm bath shed homesteads/214 (confusable pairs).
+  - note: the public bathhouse is 0202 and the farm bath shed 0044 (confusable pairs).
 
 ## The procedure (session 1: write)
 
 1. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="buildings"` (in `.claude/skills/diagram`);
    a section another feature holds IN PROGRESS today is not edited - leave it out of your fold, and say so in the
-   handoff. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg (diagram-reorg) | 292 | sweep buildings G14 in progress (buildings/220 buildings/310 buildings/320) | 2026-09-30"`.
+   handoff. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg (diagram-reorg) | 292 | sweep buildings G14 in progress (0101 buildings/310 0105) | 2026-09-30"`.
 2. **Read, all in one message:** `research/STYLE.md`; the two model fragments named above; every fragment your
    topics fold and its `.notes.html` (not its `.originals.html` - the originals are stored apart and `make record`
    puts them back; you copy their lines, below, without needing to read them). Note the commit you start from
    (`git -C /diagram/.clones/diagram-reorg rev-parse --short HEAD`) - the handoff names it as BASE.
 3. **Write each topic** as a research fragment and, where the folded sections say anything about how our maps draw
    the thing, a rendering fragment:
-   - **The research fragment** is `research/buildings/<NNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
+   - **The research fragment** is `research/contents.json#compounds<NNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
      `<id>` the title's anchor (lowercase; letters, digits and spaces kept; spaces to hyphens: "Threshing and drying
      yards at farmhouses (niwa)" is `threshing-and-drying-yards-at-farmhouses-niwa`). It opens with
      `<h2 id="<id>"><title></h2>`, then the comments: `<!-- feature 292 sweep, 2026-09-30: folded from <the old ids> -->`,
      the folded sections' `Grounds:` and `Evidence:` fields merged into one of each, and a `REMOVED` comment for any
      claim you cut under STYLE.md section 4 (what it said and why it went). Then the opening paragraphs, then the
      bullets, as the model does.
-   - **The rendering fragment** is `research/rendering/buildings/<NNN>-<rid>.html`, titled to mirror the research title
+   - **The rendering fragment** is `research/contents.json#compounds<NNN>-<rid>.html`, titled to mirror the research title
      ("How our maps draw ..."), its second line `<!-- about: buildings.html#<id> -->` - `make record` then links the two
      both ways; never type a link between them. It follows the style guide too, and cites the research it rests on.
      The map's rules, the sizes chosen, conventions, knobs, what the generator places where, and why, go here, and
@@ -73,8 +73,8 @@ and the style guide before you write.
      under `.claude/skills/diagram/l7r/` and `.claude/skills/diagram/tests/fixtures/classes_before_189.json`. A link
      goes to the new research section, or to the rendering section where it pointed at a map rule (from another page:
      `rendering/buildings.html#<rid>`; from a rendering page: `../buildings.html#<id>`). A modal's `Entry:` names the new
-     titles - the research title under `research/buildings/ - '<title>'` and the rendering title under
-     `research/rendering/buildings/ - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
+     titles - the research title under `research/contents.json#compounds - '<title>'` and the rendering title under
+     `research/contents.json#compounds - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
      string. A code comment that named an old heading names the new one.
    - **Confusable pairs** you meet (two things a reader could mistake for each other): `make append
      FILE=/diagram/.clones/diagram-reorg/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.

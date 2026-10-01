@@ -117,7 +117,7 @@ A paddy plot drawn with the FLOODED fill (`#93B7AC`) carries `wet paddy`, not `p
 2026-08-29: *"that is its own type of thing, and it deserves its own explanation."* It is the
 **shitsuden** - ground too poorly drained to dry out, which holds water even out of season, takes no
 winter crop and yields unreliably - against the **kanden**, the paddy that empties to a dry field.
-The research is `research/fields/190-wet-paddies-that-never-drain-shitsuden.html`.
+The research is `research/questions/0007-wet-paddies-that-never-drain-shitsuden.html`.
 
 Decided at ONE emit site, `settlement/fields/comb.py` `_comb_draw_paddies`, from the fill about to be
 drawn, so the class and the color cannot disagree. Every field engine reaches that site, so every

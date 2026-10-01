@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-formal-entrance-and-a-guests-arrival-genkan
 - RENDERING=rendering/buildings/how-our-maps-route-a-guest-from-the-gate-to-the-entrance
-- OLD=research/buildings/ research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds
 - MODALS=BorderCourt CompoundGarden Door GardenPond Genkan GuestQuarters Kitchen MainGate Residence SideGate
 - BASE=f3b30e41b
 

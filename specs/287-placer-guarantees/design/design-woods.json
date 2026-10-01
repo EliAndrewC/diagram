@@ -50,7 +50,7 @@
   },
   {
    "id": "W03",
-   "rule": "No copse clump's center stands inside a marsh. test_pool_261.py::test_no_copse_clump_is_based_in_the_marsh; research/vegetation/ (woody cover on the dry ground above the marsh).",
+   "rule": "No copse clump's center stands inside a marsh. test_pool_261.py::test_no_copse_clump_is_based_in_the_marsh; research/contents.json#vegetation (woody cover on the dry ground above the marsh).",
    "rows": ["R1 test_no_copse_clump_is_based_in_the_marsh"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (GroveBlocks dikes, stands.py:263-264) / grove_blocks.py:GroveBlocks.hard. Census owner correct.",
    "mechanism": "Every marsh ring is a `dikes` ring for role == 'copse', so hard() refuses a seat inside it on every copse seat path (_seat 398, _reseat 379). Two tightenings: decide on the rounded seat (the record's grain; the census notes a seat within 0.05 px of the edge can read inside), and read the marsh through marsh_ground(M) (S3/W08) so the placer and the test read one outline.",
@@ -74,7 +74,7 @@
   },
   {
    "id": "W05",
-   "rule": "Every windbreak clump inside a toe or waterside marsh is drawn as alder, and the grove's recorded alder count equals its ON-PAGE clumps in the marsh. test_pool_261.py::test_a_belt_tree_in_the_marsh_is_alder; research/vegetation/ (the marsh margin: alder or willow).",
+   "rule": "Every windbreak clump inside a toe or waterside marsh is drawn as alder, and the grove's recorded alder count equals its ON-PAGE clumps in the marsh. test_pool_261.py::test_a_belt_tree_in_the_marsh_is_alder; research/contents.json#vegetation (the marsh margin: alder or willow).",
    "rows": ["R1 test_a_belt_tree_in_the_marsh_is_alder"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (the draw, 621-643) and settlement/core.py:_partition_grove_clumps (the count). Census owner correct.",
    "mechanism": "The drawing is by construction (every seated clump in a wet ring is inked alder). The count breaks at set_view: `alder` counts every seated clump, the partition then moves off-page ones out of `clumps`. Record the alder clumps themselves (`alder_clumps`: the rounded seats drawn as alder) and have _partition_grove_clumps recompute g['alder'] = number of on-page clumps in alder_clumps. Decide wetness on the rounded seat so the record and the ink agree at a marsh edge. One predicate in_reed_margin(x, y, M) (role toe/waterside over marsh_ground(M), W08) read by the draw and the test.",
@@ -86,7 +86,7 @@
   },
   {
    "id": "W06",
-   "rule": "No belt, copse or parcel crown is based in the marsh beyond its margin: woody cover stands on the dry ground above the marsh, the reed margin carries alder (research/vegetation/, the marsh margin).",
+   "rule": "No belt, copse or parcel crown is based in the marsh beyond its margin: woody cover stands on the dry ground above the marsh, the reed margin carries alder (research/contents.json#vegetation, the marsh margin).",
    "rows": ["R3 future-work/farming-communities.md 'The toe marsh's recorded outline is not the drawn marsh' (68 of 179 Sawada belt crowns inside it) - its second half, 'give the belt the copse's keep-out'"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (GroveBlocks built with the marsh for every role, not only copse) and hamletgen/hinterland/belt.py:belt_polygon (_in_marsh, which already moves a column's band back out of the marsh only when past_the_lanes pushed it).",
    "mechanism": "Once W08 makes the recorded ring the drawn marsh, GroveBlocks takes, for every role, the marsh ring INSET by the margin band (MARSH_FEATHER_BS * bscale, the reeds' own feather in wet.py) as a hard ring: a clump based deeper than the margin is refused; one in the margin is seated and drawn alder (W05). The copse keeps the whole ring (W03). belt_polygon's `fouled` also counts a band vertex deeper than the margin, so the ladder stands the band back off the marsh as it does off the crop.",
@@ -206,7 +206,7 @@
   },
   {
    "id": "W16",
-   "rule": "No judged 40 ft stretch of the windbreak is shallower than 30 ft along the wind (a stretch the page edge cuts, a way or the brook parts, or a tip is not judged). tests/hamletgen/test_pool_wind.py::test_every_pool_belt_keeps_its_depth_across_its_windward_face; research/vegetation/020 (a belt under ~30 ft reads as a row of blobs).",
+   "rule": "No judged 40 ft stretch of the windbreak is shallower than 30 ft along the wind (a stretch the page edge cuts, a way or the brook parts, or a tip is not judged). tests/hamletgen/test_pool_wind.py::test_every_pool_belt_keeps_its_depth_across_its_windward_face; research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html (a belt under ~30 ft reads as a row of blobs).",
    "rows": ["R1 test_every_pool_belt_keeps_its_depth_across_its_windward_face", "R3 future-work/farming-communities.md T91 tripwire seed 33 ('village_grove thins around a plot inside the band')"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (the drawn depth) with hamletgen/hinterland/belt.py:belt_polygon (the band). Census owner correct.",
    "mechanism": "Lift belt_depths (test_pool_wind.py:85-158) into belt.py as the one predicate, taking the view from plan.view (S2) and the lanes/brook as they stand (S1). village_grove(role='windbreak') gets a depth pass after the gap fill: for each bin reading < 30 ft, offer that column the gap fill's depth search (the band's own depth at the column, middle outward, static_clear and near_seats) until the bin reaches 30 ft. Where the column's plantable depth inside the band is under 30 ft (a plot, a sun lane or a crop inside the band), the band is pushed back for that column: belt_polygon takes a per-column `back` (it already has a global one, belt.py:334) and stage_windbreak re-lays that stretch of the band and re-seats it, up to the ladder's 60 ft.",
@@ -348,7 +348,7 @@
   },
   {
    "rule": "R3 'Two checks that pass VACUOUSLY - woodland': every roll draws at least one woodland parcel (Sawada and Kashikawa roll zero)",
-   "reason": "The scan already relaxes set-back, size and aspect before dropping; what is left on those maps is that no legal ground lies inside the tight frame (the GM's frame rule: the commons never set it). A village's wood on the nearest hill beyond the fields (research/vegetation/220) can lie off the sheet; guaranteeing one ON it means letting a parcel set the frame or drawing it under the floor or on the crop's set-back - a change to what the feature is. For review: record meta.woodland_offsheet with a bearing, or let one parcel set the frame (GM-QUESTION: distinct forms, research silent on whether the sheet must show it)."
+   "reason": "The scan already relaxes set-back, size and aspect before dropping; what is left on those maps is that no legal ground lies inside the tight frame (the GM's frame rule: the commons never set it). A village's wood on the nearest hill beyond the fields (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html) can lie off the sheet; guaranteeing one ON it means letting a parcel set the frame or drawing it under the floor or on the crop's set-back - a change to what the feature is. For review: record meta.woodland_offsheet with a bearing, or let one parcel set the frame (GM-QUESTION: distinct forms, research silent on whether the sheet must show it)."
   },
   {
    "rule": "W16/W17 - the belt deep and continuous where the ground ahead of a column is field, water or the page",

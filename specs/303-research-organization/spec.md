@@ -140,9 +140,9 @@ build places it. Forgetting the tags fails the build, naming the question.
 
 - **Research and drawing do not pair one to one.** Measured 2026-10-01 against the `<!-- about: -->` declaration each
   drawing page carries (one each, 234): 231 drawing pages are about the research question of the same part and
-  number. Three are SECOND drawing pages of a research question - settlements 020 (about settlements 010), water 015
-  (about water 010), homesteads 152 (about homesteads 150). Six research questions have no drawing page - fields 170,
-  homesteads 440, towns 400, water 670, cities/defenses 250, cities/hinterland 060. So a stem holds a research page
+  number. Three are SECOND drawing pages of a research question - 0002 (about 0001), 0069
+  (about 0068), 0032 (about 0031). Six research questions have no drawing page - 0012,
+  0052, 0127, 0067, 0133, 0172. So a stem holds a research page
   and at most one drawing page; a further drawing page is its own stem that declares the research stem it is about and
   inherits that stem's tags; a research question with no drawing page appears only in the research half. The plan
   re-measures this exhaustively before migrating.

@@ -56,7 +56,7 @@ def test_row_seats_step_one_frame_along_on_one_side_or_both() -> None:
 
 
 def test_a_row_steps_no_wider_than_a_lots_frontage() -> None:
-    """The GM, 2026-10-01: the spacing capped at 240 ft, the widest frontage measured on a planned row (research/homesteads/
+    """The GM, 2026-10-01: the spacing capped at 240 ft, the widest frontage measured on a planned row (research/contents.json#homesteads
     155-row-villages-resson.html). A 261 ft frame steps at 240; a frame narrower than the lot keeps its own width."""
     line = [((float(x), 0.0), (0.0, -1.0)) for x in range(0, 2001, 8)]
     wide = sorted(c[0] for c, *_r in row_seats(line, (0.0, 0.0, 261.0, 167.0), "one", 20.0, ROW_FRONTAGE_MAX_FT))

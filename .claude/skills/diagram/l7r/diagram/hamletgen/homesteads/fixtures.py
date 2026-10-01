@@ -57,16 +57,16 @@ from .bamboo import Footing, _strip_blocked
 from .holds import release_held
 from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 
-# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads/215-chickens-and-chicken-coops.html). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
+# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/questions/0045-chickens-and-chicken-coops.html). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
 # two hamlets differ honestly where the record gives a range), and the seats tried in the house's
 # local frame (+y = the sunny front where the yard is, -y = the back wall, -x = the kura side). The
 # first seat is rolled where the record shows two forms; the rest are fallbacks. Every number is
 # labeled in the research entry:
 #   privy    READ  an independent outbuilding was "普通" (Nipponica) - near-universal; FOUR attested seats
-#                  (research/homesteads/260, 269 B10): under the eaves by the stable, a separate outhouse in
+#                  (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, 269 B10): under the eaves by the stable, a separate outhouse in
 #                  the yard, the front yard, inside the barn - rolled per house, the weights per hamlet; its size
-#                  one of the Kakimochi table's sixteen (research/homesteads/260, feature 280)
-#   woodpile READ  a WOOD SHED of its own (research/homesteads/212 and 720, feature 280 M21): Hasuda 1824 ("many"
+#                  one of the Kakimochi table's sixteen (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, feature 280)
+#   woodpile READ  a WOOD SHED of its own (research/questions/0043-firewood-stacks-and-sheds-kigoya.html and 720, feature 280 M21): Hasuda 1824 ("many"
 #                  houses), Kakimochi 6 of 16 households, commonly 4 x 2 ken - so about four farmsteads in ten, the
 #                  larger houses first, 24 x 12 ft. The open stack under the eaves (a present-day page only) and the
 #                  kizuma along the windbreak (undated modern pages only) are MODERN-ONLY and are not drawn
@@ -74,7 +74,7 @@ from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 #   manure   READ  in Han China the latrine stood over the pigsty (AIC) - muck and privy are one
 #                  cluster; in Japan the pit stood "near the stable, under the eaves" (SUMMARY-ONLY);
 #                  so the heap is seated beyond the privy; the share is a GUESS (Sugiura: a SHED on 0.24).
-#                  The PIT form (night soil) has two attested seats (research/homesteads/260, 269 B11): beside
+#                  The PIT form (night soil) has two attested seats (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, 269 B11): beside
 #                  the privy, or a field pit at a field edge or roadside - the field share rolled per hamlet
 #   bath     READ  a ROOM JOINED TO THE MAIN HOUSE, not a shed (research/homesteads/740, feature 280 M22): the Nikko
 #                  house-plan registers put a bath of 1-2 tsubo in 2-3 houses in 10 by 1824 and 1842, beside the main
@@ -84,7 +84,7 @@ from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 #   coop     READ  "farmers in most regions of China managed to keep a pig and some chickens in their
 #                  yard" (Animals through Chinese History); a ground-level enclosure (Qimin Yaoshu);
 #                  Buck 1921-25 counts chickens on 82% of 2,866 farms, so the band is centered there
-#                  (research/homesteads/215, 269 B13); its width is calibrated liberty
+#                  (research/questions/0045-chickens-and-chicken-coops.html, 269 B13); its width is calibrated liberty
 #   shrine   READ  two patterns - every house, or only certain old families (Tokushima; ja.wikipedia);
 #                  the GM chose the rare pattern (T58); Sugiura's shrine column is 0.01 per household over all
 #                  houses and empty among the pre-1944 ones (feature 211 re-read the table: the 0.03 once cited
@@ -92,7 +92,7 @@ from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 #                  figure; corner NE (kimon, READ), NW
 #                  (17 of 37, SUMMARY-ONLY), SW (Tokushima, READ) - rolled
 #   persimmon READ "どこの庭先にも柿の木が植えてある" and Miyazaki Yasusada urged planting them round the
-#                  homestead; two sides attested (research/homesteads/218, 269 B14): the dooryard in front, at the
+#                  homestead; two sides attested (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, 269 B14): the dooryard in front, at the
 #                  work yard's edge (the edge a GUESS), most often, or behind the house - rolled per house against a
 #                  per-hamlet front share (`PERSIMMON_FRONT_BAND`); the flank, attested nowhere, is no longer a seat
 #
@@ -106,11 +106,11 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
     "woodpile": (0.35, 0.45),  # a wood shed on about four farmsteads in ten (Kakimochi 6 of 16; research/homesteads/720)
     "manure": (0.40, 0.70),
     "bath": (0.20, 0.30),  # two or three houses in ten, 1824 and 1842 (research/homesteads/740); the old 0-0.80 was the twentieth century's sheds
-    "coop": (0.72, 0.92),  # centered on Buck's 82% (research/homesteads/215); +/-0.10 is calibrated liberty, a GUESS
+    "coop": (0.72, 0.92),  # centered on Buck's 82% (research/questions/0045-chickens-and-chicken-coops.html); +/-0.10 is calibrated liberty, a GUESS
     "shrine": (0.03, 0.08),
     "persimmon": (0.80, 0.95),
 }
-# THE FOUR ATTESTED PRIVY SEATS (269 B10, research/homesteads/260 "Farm privies and their night soil (benjo)"): under the eaves by the
+# THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern
 # Miyagi, "usually"), and inside the barn (Suzuki 1959, "several farms"). The record says how often each is drawn is a
 # GUESS, so these base weights are one, and each hamlet re-weights them (`privy_seat_weights`) - a degree along a
@@ -119,7 +119,7 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 # drawn as the privy glyph against the barn's outer wall - a MAP DRAWING CONVENTION.
 _PRIVY_SEATS = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
 _PRIVY_WEIGHT_SPREAD = (0.5, 1.5)  # each base weight scaled by a factor in this range per hamlet, then renormalized (calibrated liberty)
-# THE NIGHT-SOIL PIT AT THE FIELDS (269 B11, research/homesteads/260): Suzuki 1959 found the pit "beside the privy, or in
+# THE NIGHT-SOIL PIT AT THE FIELDS (269 B11, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): Suzuki 1959 found the pit "beside the privy, or in
 # a field pit (nodame) away from the house" near the household's fields or the roadside, in 2 of 83 households (Saitama),
 # 19 of 53 (Tokyo), 15 of 18 (Miyagi) - so the field share is rolled per hamlet across that span.
 PIT_FIELD_SHARE_BAND = (0.02, 0.85)
@@ -132,7 +132,7 @@ _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
 # houses, most of them headmen's", is the last wall offered (the headman keeps no lot of fixtures, feature 287). The odds are
 # a GUESS. The room abuts the wall: joined, not beside (`fixture_seats.bath_room_seats`, `joined_to_house`).
 BATH_SEATS = ("main_door", "stable_end")
-# THE PERSIMMON'S SIDE (269 B14, research/homesteads/218): "the dooryard in front of the house, most often, and behind it" -
+# THE PERSIMMON'S SIDE (269 B14, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html): "the dooryard in front of the house, most often, and behind it" -
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)
 
@@ -406,7 +406,7 @@ def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
 
 def across_a_lane(lanes: Sequence[tuple[Poly, float]], house: Pt, seat: Pt) -> bool:
     """Would a lane run between this fixture and the house it serves (settlement-review of Mizuguchi, feature 261)? A
-    shrine stands "in a corner of the house plot" and a coop in the yard (research/homesteads/), and a shared lane
+    shrine stands "in a corner of the house plot" and a coop in the yard (research/contents.json#homesteads), and a shared lane
     between the house and the seat puts the seat outside the plot. The same line test as `across_the_brook`, against the
     lanes' centerlines - the predicate the web asks of a run between a house and its own fixtures (homes H32)."""
     return any(segments_cross(house, seat, pts[k], pts[k + 1]) for pts, _half in lanes for k in range(len(pts) - 1))

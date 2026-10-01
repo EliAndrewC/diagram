@@ -7,10 +7,10 @@ The rule in one line: **edit the fragment, run `make record`, never open the ass
 | you want | do this |
 |---|---|
 | a source by its key | `ls research/sources/*/*fei-1939*` |
-| a question, by something it says | `grep -rl "dike-pond" research/water/` |
-| a question, by its heading | `ls research/water/ \| grep -i weir` |
+| a question, by something it says | `grep -rl "dike-pond" research/contents.json#water` |
+| a question, by its heading | `ls research/contents.json#water \| grep -i weir` |
 | the notes for a question | the `.notes.html` file beside it, same prefix and slug |
-| what a page's questions are, in order | `ls research/water/` |
+| what a page's questions are, in order | `ls research/contents.json#water` |
 
 There is no index to consult and none to keep in step. Do not `ls research/sources/` bare - it is 920
 entries; glob for the key you want.

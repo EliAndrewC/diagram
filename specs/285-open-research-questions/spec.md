@@ -20,7 +20,7 @@ record that make it open. Nothing in the list is typed by hand: it is read from 
 
 **Why this priority**: it is the whole request.
 
-**Independent Test**: run the target on the current record; the rack length per household (homesteads 500)
+**Independent Test**: run the target on the current record; the rack length per household (0016)
 appears, under its question, with its sentence.
 
 **Acceptance Scenarios**:
@@ -39,7 +39,7 @@ shapes what a map draws from one that does not. A question reaches a map feature
 the repository already records (research.md R2): a modal class's `Entry:` names it; a question a class names links to
 it; or the engine's code cites it (its heading or its anchor in a comment or docstring, with file and line).
 
-**Independent Test**: the rack-length item (homesteads 500, which no class's `Entry:` names) names the `threshing
+**Independent Test**: the rack-length item (0016, which no class's `Entry:` names) names the `threshing
 yard` class, reached through 505 - which the class names and which links to 500 - and names any engine file that
 cites 500. A question none of the three reaches says so: no map feature was found depending on it.
 
@@ -98,7 +98,7 @@ so no marked guess is missed.
 - **FR-006**: Tested: the collector is unit tested on plain inputs (a guess in text, one in a comment, an absence
   note, a settled one, a grounds note, a convention label, a class naming a question, a question linked from it,
   an engine file quoting a heading, a GUESS in a tracked file outside the record), and one test runs it on the real
-  record and finds the homesteads 500 rack-length guess reached through 505 and the `compound.py` postern guess.
+  record and finds the 0016 rack-length guess reached through 505 and the `compound.py` postern guess.
 
 ### Key Entities
 
@@ -111,13 +111,13 @@ so no marked guess is missed.
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001, FR-002, FR-004, FR-005): On the current record, the target lists the homesteads 500 rack-length guess, and every visible GUESS
+- **SC-001** (FR-001, FR-002, FR-004, FR-005): On the current record, the target lists the 0016 rack-length guess, and every visible GUESS
   label in the question fragments (`149` on 2026-09-28, research.md R1) falls in a listed guess item - the items being
   sentences, one sentence may carry two (research.md R3); the counts print first and a settled absence is marked.
 - **SC-002**: Replacing a guess in a fragment and re-running removes exactly that item (a unit test; FR-001, FR-006).
 - **SC-003**: The target finishes in under `10 s` on the whole record (FR-001).
 - **SC-004** (FR-003, FR-007): On the current tree, the target lists the `compound.py` kitchen-postern GUESS with its file and line, and
-  names the `threshing yard` class for the homesteads 500 rack-length item.
+  names the `threshing yard` class for the 0016 rack-length item.
 
 ## Decisions Recorded
 
@@ -143,7 +143,7 @@ A tooling feature: it draws and states nothing on a map, so there is no renderin
   `l7r/**/*.py`, observed 2026-09-28: 90 lines; `compound.py:505`, the kitchen postern's `6 ft` passage, has no GUESS in
   the record; `buildings.md` and pool notes carry the word too): measure it in research.md, and either list the guesses
   outside the record or put their exclusion to MODE 1; (2) US2's Independent Test misstates the fact - the rack-length
-  GUESS is in homesteads 500, which no class's `Entry:` names; the threshing yard names 505 - so FR-003's `Entry:`-only
+  GUESS is in 0016, which no class's `Entry:` names; the threshing yard names 505 - so FR-003's `Entry:`-only
   mechanism reports "no modal" for the motivating item, which the map draws: correct the test and make FR-003 find the
   map feature that depends on the question; (3) US3 and FR-004's page and kind filters are UNREQUESTED: cut them.
 - Round 2 (spec-fidelity VERIFY, 2026-09-28): CHANGES REQUIRED - round 1's (2) and (3) RESOLVED (505 links to 500

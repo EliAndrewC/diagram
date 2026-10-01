@@ -19,7 +19,7 @@ nothing physical behind it (the GM's own words in `request.md`).
 - [x] T04 the record (FR-004): the research convention paragraph and the modal Note; `make page-check`
       green with no entry-drift pair open
       research: rendering
-      verify: DONE. research/fields/ convention paragraph and the BundBeans Note each say a stretch of bund that carries beads shows at least two, because one does not read as a row; make page-check green (778 passed, no modal's research section moved against origin/main); make glossary CHECK=1 and make citations CHECK=1 report nothing stale
+      verify: DONE. research/contents.json#fields convention paragraph and the BundBeans Note each say a stretch of bund that carries beads shows at least two, because one does not read as a row; make page-check green (778 passed, no modal's research section moved against origin/main); make glossary CHECK=1 and make citations CHECK=1 report nothing stale
 - [x] T05 the maps: `make map` on Inashiro, `make maps` over the pool, R1's script counting zero
       single-bead runs (SC-001), `make verify` green with the settlement-review beside it; land GATED
       research: rendering

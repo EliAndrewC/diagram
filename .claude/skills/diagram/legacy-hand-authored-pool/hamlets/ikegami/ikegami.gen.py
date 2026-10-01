@@ -163,7 +163,7 @@ s.lane([(CX + 4, CY - 10), ((CX + _fp[0]) / 2 + 8, (CY - 10 + _fp[1]) / 2 - 4), 
 # rule that paths don't pass through marshland"). This route was briefly turned west out of the
 # frame, when the toe marsh was still drawn edge to edge across the canvas and there was no dry
 # southern ground to leave by. The band is now as wide as the ground the fan WATERS (researched:
-# an alluvial fan's spring line follows the fan's toe, not the valley's width - research/water.html),
+# an alluvial fan's spring line follows the fan's toe, not the valley's width - research/contents.json#water),
 # so the toe ends at x=402 and the original route down the west flank is dry the whole way - it clears
 # the reeds by 222-274 ft. NOT the "water-mouth" route, though: this map's water leaves SE, at the
 # drain outfall into the tameike (1395,1669), and the track leaves SW about 1,200 ft away. It is the
@@ -233,7 +233,7 @@ print(f"footbridges: {n_bridges}")
 # CROP to the placed content (the commons bleeds off-frame; the hard features fit with a margin)
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
+# peasantry through this board via the settlement's literate reader; see research/contents.json#trades-and-services 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=30)

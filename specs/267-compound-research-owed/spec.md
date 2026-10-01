@@ -53,10 +53,10 @@ bundles (`make check-bundle`) and whose findings are applied with `make apply-ed
 ## Edge Cases
 
 - **Feature 265 is open on the same pages.** Its sections, derived by its own method (`brief.py` `item_questions` and
-  `fr006_questions` over each of its six pages, 2026-09-27): buildings 010, 070, 150, 170, 210; cities/river-cities
-  010-040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040, 080, 090, 100, 130;
+  `fr006_questions` over each of its six pages, 2026-09-27): 0090, 070, 150, 170, 210; cities/river-cities
+  010-040; 0190, 020, 030, 050, 060, 070, 080, 160; 0081; towns 040, 080, 090, 100, 130;
   cities/capitals 040. This feature's research writes its findings in its own questions; an edit a finding OWES one of
-  those sections (R27 in buildings 070, R42 in river-cities 040, R46 in ways 020) waits until 265's task for that page is
+  those sections (R27 in 0092, R42 in river-cities 040, R46 in 0081) waits until 265's task for that page is
   ticked and is then MADE here, as its own task - a link alone does not resolve a contradiction.
 - An item that is a question of the SETTING (canon) is for the GM, not research (inventory, "For the GM").
 - A finding that changes what a sheet draws is a drawing change: the sheet is redrawn, measured (picture and pack

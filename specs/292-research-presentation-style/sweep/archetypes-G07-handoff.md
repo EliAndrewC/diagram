@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/the-dike-pond-hamlet-what-stands-there-that-a-rice-hamlet-lacks
 - RENDERING=rendering/archetypes/how-our-maps-furnish-a-dike-pond-hamlet
-- OLD=research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=FruitDike FryPond ManurePit PigSty
 - BASE=f164fa1db
 

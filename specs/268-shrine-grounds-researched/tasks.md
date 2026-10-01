@@ -5,7 +5,7 @@ pass, D1-D7 its decisions; D8-D9 in the plan). Every prose or code task: America
 
 ## Phase 1 - the record (FR-001 to FR-003)
 
-- [x] T01 `research/religion-and-death/`: three new questions after entry 120 - "Was a village shrine
+- [x] T01 `research/contents.json#religion-and-the-dead`: three new questions after entry 120 - "Was a village shrine
       walled or fenced?" (R1), "How large was a village shrine's precinct, and how much of it was built
       on?" (R2), "What else stood in a village shrine's precinct?" (R4) - and entry 090 rewritten to R3
       and the GM's ruling of 2026-09-27; entry 120's fence and precinct-size sentences and every other
@@ -15,7 +15,7 @@ pass, D1-D7 its decisions; D8-D9 in the plan). Every prose or code task: America
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       measure: `make quote-verbatim PAGE=religion-and-death` before quote-check; `make record-prepass PAGE=religion-and-death` before record-format
-      verify: DONE. DONE. religion-and-death 122, 124, 126, 128 (128 split from 120 by the size cap), 090 rewritten, 120 and 100 brought to it; 27 registry entries; 7+6 glossary terms; make record/citations/glossary current; record tests 1128 green. Boxes: research pass = the four reader reports; source-reader 81 claims READ, 2 CONTRADICTED applied (Bishamon temple, Kanzaki registers); quote-check two passes, every finding applied, one NOT-ON-PAGE (Hakusan 09jin11, a malformed byte; read with curl); source-applicability 26 keys, 14 write-ups given their limits
+      verify: DONE. DONE. 0223, 124, 126, 128 (128 split from 120 by the size cap), 090 rewritten, 120 and 100 brought to it; 27 registry entries; 7+6 glossary terms; make record/citations/glossary current; record tests 1128 green. Boxes: research pass = the four reader reports; source-reader 81 claims READ, 2 CONTRADICTED applied (Bishamon temple, Kanzaki registers); quote-check two passes, every finding applied, one NOT-ON-PAGE (Hakusan 09jin11, a malformed byte; read with curl); source-applicability 26 keys, 14 write-ups given their limits
 - [x] T02 The record's checks, in the background, from bundles (`make check-bundle`): `source-reader`,
       `quote-check`, `record-format`, `source-applicability` on the new and changed entries and keys;
       then `entry-drift` on every pair `scripts/_entry_owed.py` names (the torii and country-shrine

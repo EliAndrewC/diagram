@@ -12,7 +12,7 @@ before arguing with a rule. The entry format and the evidence classes are in [`R
 | a source's registry entry | `research/sources/010-works-cited/NNNN-<key>.html` |
 | a question | `research/<page>/NNN-<heading id>.html` |
 | that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
-| a `cities/` page | `research/cities/<page>/...`, the same shape one level down |
+| a `cities/` page | `research/contents.json#cities<page>/...`, the same shape one level down |
 | the page a reader opens | `research/site/<page>/<heading id>.html` (a question), `research/site/all.html` (the whole record) - BUILT by `make record` (feature 301), never committed, never hand-edited |
 | a pointer to a question | `research/<page>/NNN-<heading id>.html` - the FRAGMENT, never a built page (`scripts/check-research-pointers.py`); a whole page is `research/<page>/` |
 | a glossary term | `l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one file per term (feature 259) |

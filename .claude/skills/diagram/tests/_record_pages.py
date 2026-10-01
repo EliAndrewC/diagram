@@ -1,10 +1,11 @@
-"""The record's pages as the tests read them - assembled in memory, never from a file (feature 301).
+"""The record's pages as the tests read them - read from the fragments, never from a built file (features 301, 303).
 
-The pages are built (`make record`, `record/site.py`) and no longer committed, so a test that opened
-`research/<page>.html` would read nothing in a fresh clone, or a stale copy in an old one. Every test over the record
-reads it here instead, through `sources.record_text` - the same in-memory assembly the engine reads. `RecordPath` is a
-path to where a page WOULD be, so a test keeps its path arithmetic (`relative_to`, `.name`, `/`); only its contents
-come from the fragments.
+The site is built (`make record`) and not committed, so a test that opened a built page would read nothing in a fresh
+clone, or a stale copy in an old one. Every test over the record reads it here instead, through `sources.record_text`
+- the same reading the engine does. `RecordPath` is a path to where a page IS (`research/questions/<file>`, or the
+registry's `research/SOURCES.html`), so a test keeps its path arithmetic (`relative_to`, `.name`, `/`); its text is a
+question page as its reader sees it - with its cross-link and its *Not to be confused with:* list - and `numbered`
+gives the same page with its references numbered from 1 and its notes by number, as its small page carries them.
 """
 
 from __future__ import annotations
@@ -12,13 +13,12 @@ from __future__ import annotations
 import os
 import pathlib
 
-from l7r.diagram.interactive.citations import citations_page
-from l7r.diagram.interactive.record.store import record_pages
+from l7r.diagram.interactive.record import site_notes, store
 from l7r.diagram.interactive.sources import RESEARCH_DIR, record_text
 
 
 class RecordPath(pathlib.PosixPath):
-    """A page of the record (or a citations page) by its path; its text is the in-memory assembly."""
+    """A page of the record by its path; its text is read from its fragments."""
 
     def _rel(self) -> str:
         return os.path.relpath(self, RESEARCH_DIR).replace(os.sep, "/")
@@ -31,21 +31,29 @@ class RecordPath(pathlib.PosixPath):
 
 
 def page(rel: str) -> RecordPath:
-    """`fields.html`, `cities/fabric.html`, `SOURCES.html`, `citations/fields.html`."""
+    """`questions/<file>` or `SOURCES.html`."""
     return RecordPath(RESEARCH_DIR, rel)
 
 
-def research_pages() -> list[RecordPath]:
-    """Every research page (the registry excepted), in the record's order."""
-    return [page(p) for p in record_pages() if p != "SOURCES.html"]
+def question_pages() -> list[RecordPath]:
+    """Every question page of both halves, in number order."""
+    return [page(f"questions/{p.file}") for p in store.load(RESEARCH_DIR).pages()]
 
 
 def all_pages() -> list[RecordPath]:
-    """Every page a reader of the per-page record would open: the registry, the research pages, their citations pages."""
-    research = research_pages()
-    return [page("SOURCES.html"), *research, *(citations_of(p) for p in research)]
+    """Every page a reader opens: the registry and every question page."""
+    return [page("SOURCES.html"), *question_pages()]
 
 
-def citations_of(path: pathlib.Path) -> RecordPath:
-    """The citations page of a research page."""
-    return page(citations_page(os.path.relpath(path, RESEARCH_DIR).replace(os.sep, "/")))
+def numbered(path: pathlib.Path) -> tuple[str, dict[str, str]]:
+    """A question page with its references numbered from 1, as its small page carries them, and {number: note body}."""
+    body, placed = site_notes.small_page(path.read_text(encoding="utf-8"), store.page_notes(path.name), str(path.name))
+    return body, {str(p.number): p.body for p in placed}
+
+
+def notes_text(path: pathlib.Path) -> str:
+    """A question page's notes as its reader sees them - originals put back - one `<li>` each; empty for the registry
+    and for a page with no notes."""
+    if path.name == "SOURCES.html":
+        return ""
+    return "".join(f"<li>{body}</li>\n" for body in store.page_notes(path.name).values())

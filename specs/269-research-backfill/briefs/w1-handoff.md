@@ -3,7 +3,7 @@
 - SECTION=water/290
 - SECTION=water/300
 - SECTION=water/310
-- SECTION=water/270
+- SECTION=0035
 - SECTION=water/070
 - KEY=kotobank-marukibashi
 - KEY=kotobank-ipponbashi
@@ -36,13 +36,13 @@ B22 KNOB - two sections.
   - No gate is drawn.
   - The weir class's `Entry:` should add water/300 and the intake's should add water/310.
 
-B23 KNOB - at a stream's scale both forms are attested. Xidi (UNESCO) and Likeng (a travel diary, the weakest source) are built along both banks, joined by bridges. Hongcun (UNESCO, zhwiki) and Chengkan (zhwiki) stand beside theirs, and Hongcun also has a dug channel through it, the way Harie does. So water/270's "the record shows the opposite at this scale" is now "the record supports either", and the one-bank rule is labeled a guess because the maps fix one form of a knob. The generator draws nothing differently until lanes can cross a brook. When they can, the bank is rolled per hamlet (beside it or astride it), and an astride hamlet needs bridges linking its two banks. `seat_cluster` / `_far_bank`'s reasoning comments should cite 270's new wording.
+B23 KNOB - at a stream's scale both forms are attested. Xidi (UNESCO) and Likeng (a travel diary, the weakest source) are built along both banks, joined by bridges. Hongcun (UNESCO, zhwiki) and Chengkan (zhwiki) stand beside theirs, and Hongcun also has a dug channel through it, the way Harie does. So 0035's "the record shows the opposite at this scale" is now "the record supports either", and the one-bank rule is labeled a guess because the maps fix one form of a knob. The generator draws nothing differently until lanes can cross a brook. When they can, the bank is rolled per hamlet (beside it or astride it), and an astride hamlet needs bridges linking its two banks. `seat_cluster` / `_far_bank`'s reasoning comments should cite 270's new wording.
 
 ## Left open, and why
 
-- **water/250 was NOT edited**, though B22 names it. It is 39.7 kB with its notes, twice the 20,000-byte cap, so touching it obliges a split along its topics. That is a larger job than this group's items, and it would move another feature's footnotes. 300 and 310 point at it; it does not yet point back. Whoever next works water/250 splits it and adds the two pointers: at "each hamlet rolls one or the other with an even chance" -> 310, and at "its thickness is drawn at five feet, a guess" -> 300. 250's own statements are still true as written.
+- **0059 was NOT edited**, though B22 names it. It is 39.7 kB with its notes, twice the 20,000-byte cap, so touching it obliges a split along its topics. That is a larger job than this group's items, and it would move another feature's footnotes. 300 and 310 point at it; it does not yet point back. Whoever next works 0059 splits it and adds the two pointers: at "each hamlet rolls one or the other with an even chance" -> 310, and at "its thickness is drawn at five feet, a guess" -> 300. 250's own statements are still true as written.
 - The 290 knob and the 300 knob each rest on an even roll, which is a guess. The class labels are in the text.
 - `check-question-size.py` still reports `homesteads/210` at 20,060 bytes. That is not W1's section (group H3 / F-groups of this feature), it was over before this session, and it is recorded here only so the next gate run is not a surprise.
-- Nothing in this group owes a correction to 265, 267 or 268. `ways/030` ("What is a plank bridge") is not in 265's list. It still names the crossing an itabashi without the other two forms, and whoever rewrites the `Footbridge` modal should add a pointer from ways/030 to water/290.
+- Nothing in this group owes a correction to 265, 267 or 268. `0084` ("What is a plank bridge") is not in 265's list. It still names the crossing an itabashi without the other two forms, and whoever rewrites the `Footbridge` modal should add a pointer from 0084 to water/290.
 - No claims by other sessions touched B21-B23 (RESEARCH-CLAIMS.md read 2026-09-27).
 - Nothing was added to TO-DOWNLOAD.md. The one PDF that might give a crib frame's size, the Kanto office's Hamura weir leaflet (ktr.mlit.go.jp .../000099135.pdf), has no text layer here. It is river-scale in any case.

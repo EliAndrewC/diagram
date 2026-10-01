@@ -28,7 +28,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **the take-yabu (bamboo thicket) as its own stand at the village edge, harvested like a coppice** - *"the take-yabu (bamboo thicket) as its own stand at the village edge, harvested like a coppice"* ("Bamboo") — no footnote.  _(from `qc-buildings-vegetation.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/vegetation/*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#vegetation*.html` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 
@@ -36,7 +36,7 @@ fragment the grep did not name.
 
 ## The procedure (session 1: locate, read, write)
 
-1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/vegetation/`; note the fragment and
+1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/contents.json#vegetation`; note the fragment and
    sentence.
 2. **Read the sources.** Save candidate pages with `make source-pages OUT=/tmp/l7r-check/vegetation-pages URLS="<u1>
    <u2>"`, grep them yourself, then dispatch ONE `source-reader` over every item at once, handing it the saved

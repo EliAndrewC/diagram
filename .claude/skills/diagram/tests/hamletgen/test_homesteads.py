@@ -183,7 +183,7 @@ def test_strip_blocked_excuses_its_own_farmhouse_and_the_skipped_bundle_boxes_an
 
 
 def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -> None:
-    """Feature 291 amendment 3 (research homesteads/155): a linear hamlet's farms stand in rows along the streets
+    """Feature 291 amendment 3 (research 0033): a linear hamlet's farms stand in rows along the streets
     its row planned - `seat_rows` - and it takes no rank round; a nucleated hamlet on the same ground is seated by its front
     row and ranks as before. The row seats every household (feature 287 plan D2). (The connector-frontage pass this test used
     to hold is retired: the connector does not exist when the homesteads are seated.)
@@ -191,7 +191,7 @@ def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -
     THE NUCLEATED CONTROL PLANS NO ROW, AND SEATS EVERY HOUSEHOLD OR IS REFUSED BY NAME (feature 293 on 291). This square
     test field gives the nucleated seat one margin and no ladder, and its band holds about ten households: measured on main
     (291), 10 of 10 seated, then 10 of 11, 8 of 12 and 6 of 13; with the storehouse on the largest house (feature 293,
-    research/homesteads/120) 9 of 10, 6 of 11, 11 of 12 and 6 of 13 - where the site is refused, as plan D2 asks (the refusal
+    research/questions/0040-farm-storehouses-kura.html) 9 of 10, 6 of 11, 11 of 12 and 6 of 13 - where the site is refused, as plan D2 asks (the refusal
     is the next test's subject). The count it seats is the fixture's edge, not the form's; the pool and the cohort hold it."""
     from l7r.diagram.hamletgen.homesteads import capacity, stage_homesteads  # through the MODULE: a stage is not package surface
 
@@ -611,13 +611,13 @@ def _no_tree(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def _small_yards(monkeypatch: pytest.MonkeyPatch) -> None:
     """The toy field's front chain seats six homesteads at the 18-tsubo yard median these loop tests were written against;
-    at the 25 tsubo feature 280 set (research/homesteads/020) it seats five, below the row's share. The tests are about the
+    at the 25 tsubo feature 280 set (research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html) it seats five, below the row's share. The tests are about the
     loop stopping at its share, not the calibration, so they keep the smaller yards."""
     monkeypatch.setattr(Settlement, "YARD_MEDIAN_TSUBO", 18.0)
 
 
 def test_the_privy_seat_weights_are_rolled_per_hamlet_over_the_four_attested_seats() -> None:
-    """269 B10 (research/homesteads/260): four attested seats, the weights re-rolled per hamlet from the seed and summing to one."""
+    """269 B10 (research/questions/0047-farm-privies-and-their-night-soil-benjo.html): four attested seats, the weights re-rolled per hamlet from the seed and summing to one."""
     from l7r.diagram.hamletgen.homesteads.fixtures import _PRIVY_SEATS, privy_seat_weights
 
     a, b = privy_seat_weights(3), privy_seat_weights(4)

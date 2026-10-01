@@ -10,9 +10,10 @@ import html
 import pathlib
 import re
 
-from l7r.diagram.interactive.citations import citations_page
-from l7r.diagram.interactive.citations import research_pages as _record_pages
+from l7r.diagram.interactive.record import store
 from l7r.diagram.interactive.sources import (
+    QUESTION_PAGES,
+    RESEARCH_DIR,
     SITE_PAGES,
     citation_lines,
     entry_fragments,
@@ -28,13 +29,14 @@ from l7r.diagram.interactive.sources import (
 )
 
 
-def test_an_entry_may_name_a_question_one_directory_down() -> None:
-    """Feature 180, spec FR-012a - a latent defect the spec review noticed, fixed under Principle XIV: an entry naming a
-    `cities/` page resolved to nothing, silently. Since feature 301 an entry names the question's FRAGMENT, and its link
-    is the question's small page in the record's site."""
-    entry = "research/cities/fabric/010-the-citys-street-front-continuous-rows-of-shophouses-machiya.html"
+def test_an_entry_names_a_question_page_and_links_its_small_page() -> None:
+    """Feature 180, spec FR-012a, and since feature 303 the flat layout: an entry names the question's FILE, and its
+    link is the question's small page in the record's site, whatever section the question sits in."""
+    record = store.load(RESEARCH_DIR)
+    page = next(p for p in record.pages("research") if p.heading_id == "the-citys-street-front-continuous-rows-of-shophouses-machiya")
+    entry = f"research/questions/{page.file}"
     qs = research_questions(entry)
-    assert len(qs) == 1 and qs[0]["url"] == SITE_PAGES + "cities/fabric/the-citys-street-front-continuous-rows-of-shophouses-machiya.html", qs
+    assert len(qs) == 1 and qs[0]["url"] == SITE_PAGES + QUESTION_PAGES + page.heading_id + ".html", qs
     assert research_sources(entry), "and its sources resolve too"
 
 
@@ -46,11 +48,11 @@ def test_a_heading_inside_a_code_sample_is_escaped_text_not_a_section() -> None:
 
 
 def test_an_entry_names_its_questions_in_order_once_each_however_they_are_joined() -> None:
-    """Feature 301: an `Entry:` is a list of fragment paths, joined by `, ` or `; ` (one research page's questions,
-    then its rendering page's), read in the author's order - the primary question first (spec 180 D4) - once each."""
-    entry = "research/water/430-a.html, research/water/280-b.html; research/rendering/water/430-c.html, research/water/430-a.html"
-    assert entry_fragments(entry) == [("water", "430-a.html"), ("water", "280-b.html"), ("rendering/water", "430-c.html")]
-    assert entry_fragments("research/water/ (the page)") == [], "a page directory names no question"
+    """Feature 301: an `Entry:` is a list of fragment paths, joined by `, ` or `; ` (a question's research page, then its
+    drawing page), read in the author's order - the primary question first (spec 180 D4) - once each."""
+    entry = "research/questions/0430-a.html, research/questions/0280-b.html; research/questions/0430-a.drawing.html, research/questions/0430-a.html"
+    assert entry_fragments(entry) == ["0430-a.html", "0280-b.html", "0430-a.drawing.html"]
+    assert entry_fragments("research/contents.json#water (the section)") == [], "a section names no question"
 
 
 def test_a_sources_roster_is_read_whole_and_deduplicated() -> None:
@@ -74,14 +76,15 @@ _BARE = re.compile(r'(?<!">)<code>([a-z0-9][a-z0-9-]*)</code>')
 
 
 def research_pages() -> list[tuple[str, str]]:
-    """(page, the prefix that reaches research/ from it) for every page a key may be cited on: the research pages and,
-    since feature 211, their citations pages - where the footnotes are, and the derived works section. Read in memory
-    (feature 301)."""
+    """(text, where) for everything a key may be cited in: every question page as its reader sees it, and every notes
+    file, where the footnotes are. Both are written in `questions/`, so a link to the registry is `../SOURCES.html`."""
     out = []
-    for rel in _record_pages():
-        out.append((rel, "../" * rel.count("/")))
-        crel = citations_page(rel)
-        out.append((crel, "../" * crel.count("/")))
+    root = pathlib.Path(RESEARCH_DIR) / "questions"
+    for page in store.load(RESEARCH_DIR).pages():
+        out.append((record_text(f"questions/{page.file}"), page.file))
+        notes = root / page.notes_file
+        if notes.is_file():
+            out.append((notes.read_text(encoding="utf-8"), page.notes_file))
     return out
 
 
@@ -103,8 +106,7 @@ def test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_targ
     assert len(cites) > 300, "the registry parsed"
     bare, wrong = [], []
     checked = 0
-    for name, rel in research_pages():
-        text = record_text(name)
+    for text, name in research_pages():
         for m in _BARE.finditer(text):
             if m.group(1) in cites:
                 bare.append(f"{name}: <code>{m.group(1)}</code>")
@@ -112,7 +114,7 @@ def test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_targ
             target, key = html.unescape(m.group(1)), m.group(2)
             if key in cites:
                 checked += 1
-                want = link_target(key, cites[key], rel)
+                want = link_target(key, cites[key], "../")
                 if target != want:
                     wrong.append(f"{name}: {key} -> {target} (want {want})")
     assert checked > 1000, "the record's citations were found - the rosters, the notes and the works sections (non-vacuity)"
@@ -166,20 +168,21 @@ def test_the_marker_case_rule_fires() -> None:
 def test_a_section_with_no_roster_takes_its_sources_from_its_footnotes(tmp_path: pathlib.Path) -> None:
     """Feature 292 FR-004: a restyled section carries no `Sources:` roster, so the references behind a modal are read
     from the keys its footnotes cite - in order of first citation, once each, a key-less (absence) note contributing
-    nothing - and a section that still has a roster is read from the roster, as before. A note may be written beside
-    another question of its page (where it was first cited), so it is looked up in the page's notes."""
-    page = tmp_path / "p"
-    page.mkdir()
-    (page / "_front.html").write_text("<main>", encoding="utf-8")
+    nothing - and a section that still has a roster is read from the roster, as before. Since feature 303 a page's
+    notes are its own."""
+    q = tmp_path / "questions"
+    q.mkdir()
     ref = '<sup class="fn" data-note="{0}"></sup>'
-    (page / "010-t.html").write_text(f'<h2 id="t">Topic</h2>\n<p>one{ref.format("b-2")} two{ref.format("absent")} three{ref.format("a-1")}</p>\n', encoding="utf-8")
-    (page / "010-t.notes.html").write_text(
+    (q / "0010-t.html").write_text(f'<h2 id="t">Topic</h2>\n<p>one{ref.format("b-2")} two{ref.format("absent")} three{ref.format("a-1")}</p>\n', encoding="utf-8")
+    (q / "0010-t.notes.html").write_text(
         '<li data-note="b-2"><a href="https://x"><code>b-2</code></a> - 「q」</li>\n<li data-note="absent">no publicly readable source<!-- searched 2026-09-29: x --> nothing</li>\n'
         '<li data-note="a-1"><a href="https://y"><code>a-1</code></a> - 「r」; <a href="https://x"><code>b-2</code></a> - 「s」</li>\n',
         encoding="utf-8",
     )
-    (page / "020-r.html").write_text(f'<h2 id="r">Rostered</h2>\n<p><strong>Sources:</strong> <a href="https://z"><code>c-3</code></a></p><p>x{ref.format("b-2")}</p>\n', encoding="utf-8")
-    assert research_sources("research/p/010-t.html", str(tmp_path)) == ["b-2", "a-1"]
-    assert research_sources("research/p/020-r.html", str(tmp_path)) == ["c-3"]
-    assert footnote_sources("<p>no references</p>", "p.html", str(tmp_path)) == []
-    assert research_sources("research/p/030-gone.html", str(tmp_path)) == [], "a question that is not there yields nothing"
+    (q / "0020-r.html").write_text(f'<h2 id="r">Rostered</h2>\n<p><strong>Sources:</strong> <a href="https://z"><code>c-3</code></a></p><p>x{ref.format("b-2")}</p>\n', encoding="utf-8")
+    assert research_sources("research/questions/0010-t.html", str(tmp_path)) == ["b-2", "a-1"]
+    assert research_sources("research/questions/0020-r.html", str(tmp_path)) == ["c-3"]
+    assert footnote_sources("<p>no references</p>", "0010-t.html", str(tmp_path)) == []
+    assert research_sources("research/questions/0030-gone.html", str(tmp_path)) == [], "a question that is not there yields nothing"
+    assert research_questions("research/questions/0030-gone.html", str(tmp_path)) == []
+    assert record_text("questions/0099-none.html", str(tmp_path)) == "" and record_text("SOURCES.html", str(tmp_path)) == ""

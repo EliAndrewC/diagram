@@ -12,7 +12,7 @@ Confidence key: **HIGH** = a plain factual claim about the real world with nothi
 
 ---
 
-# 1. `/diagram/.clones/diagram-research/.claude/skills/diagram/research/religion-and-death/`
+# 1. `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#religion-and-the-dead`
 
 ## §"City temple size - the deliberate L7R liberty"
 
@@ -174,7 +174,7 @@ No unfootnoted items. The tier ladder is explicitly the GM's tier rule and the c
 
 ---
 
-# 2. `/diagram/.clones/diagram-research/.claude/skills/diagram/research/vegetation/`
+# 2. `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#vegetation`
 
 ## §"The fengshui forest - real scale, and why ours is honest"
 No items. Every figure in this section is footnoted, labeled GUESS with a footnote, or is arithmetic on this project's own drawings.
@@ -303,7 +303,7 @@ Marker: none. Kind: a claim about historical cartographic practice. **MEDIUM** -
 
 ---
 
-# 3. `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features/`
+# 3. `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#trades-and-services`
 
 ## §"The notice board (kosatsuba) - siting is a TRAFFIC decision"
 
@@ -687,6 +687,6 @@ Three things worth the caller's attention beyond the raw list:
 3. **Four uncited direct quotations**: R20 ("at times tightly packed and at times irregularly spaced and several yards apart"), U1 ("in a prominent position alongside the main highway"), U101 ("had to do with rainfall or natural underground sources"), and V24's Fukugi quotation continuing past its footnote. The first two carry `(unsourced)`; the third carries a disowning note; the fourth carries nothing.
 
 Files read (nothing written):
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/religion-and-death/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/vegetation/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#religion-and-the-dead`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#vegetation`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#trades-and-services`

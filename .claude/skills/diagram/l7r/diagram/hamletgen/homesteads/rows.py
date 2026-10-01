@@ -1,4 +1,4 @@
-"""THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155) - a linear hamlet's farms in rows along
+"""THE ROW VILLAGE (feature 291 amendment 3; research/questions/0033-row-villages-resson.html) - a linear hamlet's farms in rows along
 their streets, never in ranks behind a row.
 
 The record gives a row two lines, and both are drawn (`ROW_LINES`): a STREET LAID FIRST, straight as a surveyed road -
@@ -7,7 +7,7 @@ for which the field's margin stands here (this project's reading), the row curvi
 of the street, the field across it, or on BOTH (`ROW_SIDES`), one FRAME apart - the grove farm's own ground and grove
 and the lane's room between two groves (homesteads/715), a physical necessity, since a grove farm cannot stand on a
 narrower lot. A row the line cannot hold grows another street parallel to the first, one row set further out, as a
-planned colony grew more roads (homesteads/155) - how many farms a line holds before the next street is the ground's.
+planned colony grew more roads (0033) - how many farms a line holds before the next street is the ground's.
 
 This module is pure geometry and one seating loop: `row_streets` gives the lines, `row_seats` the frame centers along
 them, `seat_rows` asks the placer for each. The streets it planned are kept on the settlement for the web
@@ -36,7 +36,7 @@ STREET_HALF_FT = 3.0
 
 ROW_FRONTAGE_MAX_FT = 240.0
 """The widest a farm's lot fronts its street (the GM, 2026-10-01: "we do want the spacing capped at 240 feet"): Santome's
-40 ken, the widest frontage on the planned rows measured (research/homesteads/155-row-villages-resson.html, "How wide was a
+40 ken, the widest frontage on the planned rows measured (research/questions/0033-row-villages-resson.html, "How wide was a
 farm's frontage on a planned row?" - 54 to 240 ft). Neighbors stood one frontage apart, lot against lot (the same entry), so
 the row steps at its farm's frame or at this, whichever is narrower: a frame wider than the lot (a three- or four-sided
 grove, 261 ft with the lane's room) keeps its grove and gives up part of the lane's room between two neighbors' groves."""
@@ -168,9 +168,9 @@ def row_seats(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str,
 
 HOLDING_DEPTH_FRAMES = {"street": 3.0, "edge": 1.0}
 """A far-row farm's holding behind its lot, in frame depths (feature 291 plan D16): on a street laid first a STRIP (the
-planned row's order, house lot then field then woodland, homesteads/155 - its depth there 375 ken, a dry-field colony's;
+planned row's order, house lot then field then woodland, 0033 - its depth there 375 ken, a dry-field colony's;
 three frames here is a GUESS, a paddy row borrowing the form, not the size); on the dry edge one frame, compact and near
-the house (a dike row's holding, homesteads/155, accurate for a dike row, carried to a levee or fan foot as this
+the house (a dike row's holding, 0033, accurate for a dike row, carried to a levee or fan foot as this
 project's reading)."""
 
 HOLDING_CELL_FT = 150.0

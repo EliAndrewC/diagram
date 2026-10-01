@@ -21,7 +21,7 @@ class WaterfrontMixin:
 
         WHY THIS AND NOT MORE PIERS (GM 2026-08-11, asking whether three piers was the right
         number for six granaries: "is there some sort of dock that is not a boardwalk... I don't
-        know how this would have worked"). Research is in research/cities/river-cities/, and it
+        know how this would have worked"). Research is in research/contents.json#river-cities, and it
         inverts what a modern marina suggests. **A river's level moves by many feet across the
         year**, so a fixed-height deck is at the right height for a few weeks and wrong the rest -
         unreachable in the dry season, awash in the wet. A flight of steps down a faced bank is
@@ -91,7 +91,7 @@ class WaterfrontMixin:
         """The capital's water-supply channel: intake works on the river, an OPEN cut at grade
         outside the wall, terminating at a city gate - and buried beyond it.
 
-        THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/cities/capitals/080-the-capitals-aqueduct-josui.html; the map's rules at research/rendering/cities/capitals/). The East
+        THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/questions/0141-the-capitals-aqueduct-josui.html; the map's rules at research/contents.json#capitals). The East
         Asian vocabulary is Edo's Kanda and Tamagawa josui and Odawara's sosui: a gravity canal
         in a plain earth cut (the Kanda ran 43 km at grade), a buried pipe inside the town, and -
         only where water must CROSS water - a kakehi flume carried over on a bridge (Edo's
@@ -192,8 +192,8 @@ class WaterfrontMixin:
 
         WHY IT IS A PEN AGAINST THE BANK, NOT A LINE IN THE STREAM (GM 2026-08-02, "it just looks
         like a bunch of logs in the middle of the river"; the research is in
-        research/urban-features/540-timber-yards-and-log-booms-kiba.html,
-        and its map rules at research/rendering/urban-features/540-how-our-maps-draw-timber-yards-and-log-booms-kiba.html). A boom is a floating FENCE - anchored to
+        research/questions/0210-timber-yards-and-log-booms-kiba.html,
+        and its map rules at research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html). A boom is a floating FENCE - anchored to
         nothing it holds nothing. Attested booms anchor to fixed ground (bank abutments, stone-
         filled cribs, driven piles) and run ALONG a navigated river, the pen between chain and
         shore, with the fairway kept clear by law; only a loose-log CATCH boom on an unnavigated

@@ -1,7 +1,7 @@
 # Research - feature 282
 
-The research itself is on the record: `research/homesteads/`
-and `research/homesteads/`
+The research itself is on the record: `research/contents.json#homesteads`
+and `research/contents.json#homesteads`
 (their sources, checks and reader reports as run 2026-09-28). This file holds only what the spec measures.
 
 ## R1 - the yard glyph as drawn before this feature

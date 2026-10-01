@@ -37,7 +37,7 @@ def _world(tmp: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
 
 
 def _run(a: pathlib.Path) -> subprocess.CompletedProcess:
-    env = {**os.environ, "PULL_QUEUE_REBUILD": "echo rebuilt > research/fields.html"}
+    env = {**os.environ, "PULL_QUEUE_REBUILD": "echo rebuilt > research/contents.json#fields"}
     return subprocess.run([str(SCRIPT), "1"], cwd=a, capture_output=True, text=True, env=env, check=False)
 
 

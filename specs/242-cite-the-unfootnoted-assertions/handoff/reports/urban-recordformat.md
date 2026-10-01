@@ -1,10 +1,10 @@
 # `record-format` report - feature 242 research pass, 2026-09-14
 
-Scope read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features/` (all 384 lines, as a reader meets it), `.../research/urban-features/` (works section + notes fn-87 to fn-195), `.../research/sources/` (the feature-242 entries; **judged only on the two visible write-ups**, since `research/CLAUDE.md` holds the registry out of rules 2 and 3 but requires the write-ups themselves to be "written for the reader"), `.../research/cities/capitals/` (the five named windows) and `.../research/cities/capitals/` fn-235 to fn-240. Glossary read: `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (every key and variant). Nothing was edited.
+Scope read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#trades-and-services` (all 384 lines, as a reader meets it), `.../research/contents.json#trades-and-services` (works section + notes fn-87 to fn-195), `.../research/sources/` (the feature-242 entries; **judged only on the two visible write-ups**, since `research/CLAUDE.md` holds the registry out of rules 2 and 3 but requires the write-ups themselves to be "written for the reader"), `.../research/contents.json#capitals` (the five named windows) and `.../research/contents.json#capitals` fn-235 to fn-240. Glossary read: `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (every key and variant). Nothing was edited.
 
 ---
 
-# FILE 1 - `research/urban-features/`
+# FILE 1 - `research/contents.json#trades-and-services`
 
 ## Page head (lines 14-19)
 
@@ -222,7 +222,7 @@ A statement of the record's authoring format, addressed to whoever writes an ent
 
 ---
 
-# FILE 2 - `research/urban-features/`
+# FILE 2 - `research/contents.json#trades-and-services`
 
 The works section at the top (lines 15 onward) is derived from `SOURCES.html`; it is judged under File 3.
 
@@ -278,7 +278,7 @@ Judged on the two visible write-ups per entry (`What it is:` / `Why it applies, 
 
 ---
 
-# FILE 4 - `research/cities/capitals/` (the five named windows) and its citations
+# FILE 4 - `research/contents.json#capitals` (the five named windows) and its citations
 
 ## Lines 205-215 (the capital's ground costs)
 
@@ -348,11 +348,11 @@ USEFUL: that the figure is unsupported. HISTORY that goes: *"carried before the 
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECT |
 |---|---|---|---|---|---|
-| `research/urban-features/` | 18 `<h2>` + head | 17 | 15 | 10 | 13 |
-| `research/urban-features/` | works + notes fn-87 to fn-195 | 9 | 3 classes (20 + ~15 + 1 notes) | none | 1 |
+| `research/contents.json#trades-and-services` | 18 `<h2>` + head | 17 | 15 | 10 | 13 |
+| `research/contents.json#trades-and-services` | works + notes fn-87 to fn-195 | 9 | 3 classes (20 + ~15 + 1 notes) | none | 1 |
 | `research/sources/` (73 feature-242 write-ups) | all entries listed | 6 | none | none | none |
-| `research/cities/capitals/` (5 windows) | 5 | 2 | 1 | 2 | 1 |
-| `research/cities/capitals/` fn-235 to fn-240 | 6 notes | none | 1 | 1 | 1 (2 notes) |
+| `research/contents.json#capitals` (5 windows) | 5 | 2 | 1 | 2 | 1 |
+| `research/contents.json#capitals` fn-235 to fn-240 | 6 notes | none | 1 | 1 | 1 (2 notes) |
 
 ## Glossary terms to add (`l7r/diagram/interactive/assets/glossary.json`)
 

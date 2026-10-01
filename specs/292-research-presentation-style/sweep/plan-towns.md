@@ -27,7 +27,7 @@ rendering section titled "How our maps draw <topic>".
 - fold: towns/210-how-long-and-how-deep-is-a-towns-built-core.html, towns/220-how-densely-is-a-towns-built-core-packed.html, towns/390-where-does-a-towns-built-edge-stop-and-does-a-ribbon-of-houses-run-on-along-the-road.html
 - rendering: How our maps size a town's built core and its ragged ends
 - modals: -
-- note: 390 (the ribbon of houses running on along the road; the Japanese ressen, the strip settlement) is where the core stops, told last. cities/sizing/020 (how densely a city quarter is built) is the city's parallel - link.
+- note: 390 (the ribbon of houses running on along the road; the Japanese ressen, the strip settlement) is where the core stops, told last. 0182 (how densely a city quarter is built) is the city's parallel - link.
 - size: 14774
 
 ## T4 Town walls, and which county seats had one (chengqiang)
@@ -48,42 +48,42 @@ rendering section titled "How our maps draw <topic>".
 - fold: towns/030-how-is-a-town-zoned---what-fronts-the-street-and-what-sits-behind-it.html, urban-features/100-commercial-frontage-and-wealth-stratified-housing.html, towns/310-which-way-does-a-town-houses-door-face-and-how-deep-do-the-rows-stack.html
 - rendering: How our maps zone a town's lots
 - modals: -
-- note: FROM ANOTHER PAGE: urban-features/100 (commercial frontage and wealth-stratified housing) folds in here - its frontage-and-wealth half overlaps T7's 260, so tell the zoning here and the widths by wealth in T7. 030's distances are calibrated against the three drawn towns - rendering. 310 (the door faces the street; how deep the rows stack) parallels cities/fabric/110, and cities/fabric/080 is the city's zoning - link both.
+- note: FROM ANOTHER PAGE: urban-features/100 (commercial frontage and wealth-stratified housing) folds in here - its frontage-and-wealth half overlaps T7's 260, so tell the zoning here and the widths by wealth in T7. 030's distances are calibrated against the three drawn towns - rendering. 310 (the door faces the street; how deep the rows stack) parallels cities/fabric/110, and 0159 is the city's zoning - link both.
 - size: 9264
 
 ## T7 The town's street front: shophouse widths, party walls and roofs (machinami)
 - fold: towns/260-how-wide-is-a-merchants-shophouse-and-how-does-wealth-change-it.html, towns/270-does-a-towns-street-front-stand-wall-to-wall-or-house-by-house.html, towns/280-one-story-or-two-and-thatch-board-or-tile---what-does-a-towns-street-front-look-like-from-above.html
 - rendering: How our maps draw a town's street front from above
 - modals: -
-- note: frontage by wealth (260), then wall to wall or house by house (270), then height and roofing seen from above (280, whose "from above" is largely rendering). cities/fabric/010 and 020 (continuous street walls in a city) are the city's parallel - link. Confusable with buildings T30 (see below).
+- note: frontage by wealth (260), then wall to wall or house by house (270), then height and roofing seen from above (280, whose "from above" is largely rendering). 0152 and 020 (continuous street walls in a city) are the city's parallel - link. Confusable with buildings T30 (see below).
 - size: 15481
 
 ## T8 Laborers' housing: back-lot tenements and the master laborer's house (uradana)
 - fold: towns/290-where-does-a-laborer-live-and-how-big-is-a-laborers-house.html, towns/300-what-is-the-large-laborers-house-and-how-big-was-it.html
 - rendering: How our maps house a town's laborers
 - modals: -
-- note: 300's master laborer is the setting's canon (l7r-budgets), with the hiring broker's boarding house as the historical analogue - say which is which. cities/fabric/080 (where a city's poor housing goes) - link. Confusable with buildings T22 (see below).
+- note: 300's master laborer is the setting's canon (l7r-budgets), with the hiring broker's boarding house as the historical analogue - say which is which. 0159 (where a city's poor housing goes) - link. Confusable with buildings T22 (see below).
 - size: 8132
 
 ## T9 Gardens behind a town house (tsubo-niwa)
 - fold: towns/490-did-a-town-house-keep-a-garden-and-how-big-was-it.html
 - rendering: none
 - modals: -
-- note: a merchant's small court garden and the Chinese courtyard's planting. Confusable with homesteads/050 (the farm's dooryard garden) and buildings T18 (a residence's ornamental garden) - link.
+- note: a merchant's small court garden and the Chinese courtyard's planting. Confusable with 0039 (the farm's dooryard garden) and buildings T18 (a residence's ornamental garden) - link.
 - size: 4378
 
 ## T10 Privies in a town house, and who carries off the night soil (setchin, shimogoe)
 - fold: towns/480-where-is-a-town-houses-privy-and-who-carries-off-the-night-soil.html
 - rendering: none
 - modals: -
-- note: the night-soil trade is told once, here; T19 (the town's edge vegetable gardens it fed) points back to it rather than repeating the dealers and contracts. buildings T16 (a residence's privies) and homesteads/260 (the farm's privy) are those pages' - link.
+- note: the night-soil trade is told once, here; T19 (the town's edge vegetable gardens it fed) points back to it rather than repeating the dealers and contracts. buildings T16 (a residence's privies) and 0047 (the farm's privy) are those pages' - link.
 - size: 6231
 
 ## T11 The townsmen's own office and guild halls (machi-kaisho, huiguan)
 - fold: towns/470-did-a-towns-commoners-keep-an-office-of-their-own-and-where-did-it-stand.html
 - rendering: none
 - modals: -
-- note: cities/fabric/210 (what a ward is and who runs it) is the city's parallel - link.
+- note: 0160 (what a ward is and who runs it) is the city's parallel - link.
 - size: 4135
 
 ## T12 Market days and the market ground (ichi)
@@ -97,7 +97,7 @@ rendering section titled "How our maps draw <topic>".
 - fold: towns/080-the-gate-market-exists-for-traffic-not-taxes.html, towns/380-what-is-in-a-towns-gate-market-and-how-far-out-along-the-road-does-it-run.html
 - rendering: How our maps draw a town's gate market
 - modals: -
-- note: why the market is there (080: traffic, not taxes - the tariffs are the setting's canon) before what is in it and how far out it runs (380). The city's strip is cities/hinterland/040 ("What stands outside a city gate?") - link; urban-features/140 (folded to cities/government) cross-links here for the gate tariff.
+- note: why the market is there (080: traffic, not taxes - the tariffs are the setting's canon) before what is in it and how far out it runs (380). The city's strip is 0171 ("What stands outside a city gate?") - link; urban-features/140 (folded to cities/government) cross-links here for the gate tariff.
 - size: 7883
 
 ## T14 Theater stages on shrine ground (miyaji shibai)
@@ -139,14 +139,14 @@ rendering section titled "How our maps draw <topic>".
 - fold: towns/400-did-a-towns-edge-grow-vegetables-for-the-town-fed-by-its-night-soil.html
 - rendering: none
 - modals: -
-- note: the night-soil trade is T10's - point there. fields/130 ("What is the farmland around a town or a city made of?") is the fields page's - link.
+- note: the night-soil trade is T10's - point there. 0010 ("What is the farmland around a town or a city made of?") is the fields page's - link.
 - size: 5575
 
 ## T20 Woods and grass at a town's edge (zōkibayashi)
 - fold: towns/420-why-is-a-towns-edge-wooded-or-grassed-rather-than-bare-and-with-what.html
 - rendering: How our maps fill a town's edge with wood and grass
 - modals: -
-- note: the title asks why the edge is wooded or grassed "rather than bare" - that choice is rendering. vegetation/220 and 230 (a village's fuel wood and its coppice) are the vegetation page's - link.
+- note: the title asks why the edge is wooded or grassed "rather than bare" - that choice is rendering. 0077 and 230 (a village's fuel wood and its coppice) are the vegetation page's - link.
 - size: 6426
 
 ## T21 Hayfields and hay barns at a town's edge
@@ -167,9 +167,9 @@ rendering section titled "How our maps draw <topic>".
 ## Cross-page folds
 - In: urban-features/100 (2746) -> T6 "How a town is zoned: shops on the street, housing behind" (decided by the urban-features planner).
 - towns/070-does-a-town-keep-a-fire-watch-tower.html (3923) -> urban-features T4 "Fire watch towers and firefighting gear (hinomi yagura)" (whether a town keeps one; the walled-only scoping is the GM's ruling of 2026-07-24; the urban-features planner invited it)
-- towns/140-which-way-does-a-shelter-belt-lie-and-does-its-compass-bearing-matter.html (7972) -> vegetation topic on the village shelter belt (the one that absorbs vegetation/030 "Does a shelter belt wrap the settlement?"); its homestead-grove sides cross-link homesteads/010
-- towns/150-how-big-is-a-towns-paddy-plot.html (6994) -> fields topic on paddy plots and their size (the one that absorbs fields/020 "Paddy plots - irregular patchwork" and fields/110 "Plot sizes")
-- towns/430-what-else-stood-just-outside-a-city-kilns-lime-works-and-the-villages-it-swallowed.html (4964) -> cities topic on what stands outside a city (the one that absorbs cities/hinterland/040 "What stands outside a city gate?"); the whole section is about a city's surroundings (Edo's Imado tile kilns, a capital's tile works, a city's lime); urban-features T21 (pottery kilns) cross-links
+- towns/140-which-way-does-a-shelter-belt-lie-and-does-its-compass-bearing-matter.html (7972) -> vegetation topic on the village shelter belt (the one that absorbs 0072 "Does a shelter belt wrap the settlement?"); its homestead-grove sides cross-link 0036
+- towns/150-how-big-is-a-towns-paddy-plot.html (6994) -> fields topic on paddy plots and their size (the one that absorbs 0005 "Paddy plots - irregular patchwork" and 0017 "Plot sizes")
+- towns/430-what-else-stood-just-outside-a-city-kilns-lime-works-and-the-villages-it-swallowed.html (4964) -> cities topic on what stands outside a city (the one that absorbs 0171 "What stands outside a city gate?"); the whole section is about a city's surroundings (Edo's Imado tile kilns, a capital's tile works, a city's lime); urban-features T21 (pottery kilns) cross-links
 
 ## Confusable pairs
 - "The town's street front: shophouse widths, party walls and roofs (machinami)" / buildings T30 "Merchants' townhouses (machiya)": the row of shop fronts seen from the street and from above vs one house's plan from shop front to back of lot.
@@ -178,7 +178,7 @@ rendering section titled "How our maps draw <topic>".
 - "Relay stations (umaya, toiyaba)" / buildings T23 "Stables (umaya)": umaya names both the ancient relay station (駅家) and a stable (厩); the waystation and its relay stable vs a samurai's own stable.
 - "Relay stations" / urban-features T17 "Stable yards and watering troughs": the waystation's stable and yard vs a town's or gate's shared animal yard.
 - "The magistrate's manor in a town (jin'ya and yamen)" / buildings T1 "Magistrates' compounds (jin'ya and yamen)": where the compound stands in the town and how the settlement map boxes it vs what is inside it on a building plan.
-- "Laborers' housing: back-lot tenements (uradana)" / buildings T22 "Staff rowhouses and barracks (nagaya)": both are nagaya rows - a townsman's rented back-lot tenement vs an office's staff lodging. Also vs homesteads/540 (landless households in a village).
+- "Laborers' housing: back-lot tenements (uradana)" / buildings T22 "Staff rowhouses and barracks (nagaya)": both are nagaya rows - a townsman's rented back-lot tenement vs an office's staff lodging. Also vs 0034 (landless households in a village).
 - "Theater stages on shrine ground (miyaji shibai)" / urban-features T28 "Roofed playhouses (shibai goya)": an open stage on a shrine's ground in a provincial town vs a permanent roofed theater in a great city.
 - "Market days and the market ground (ichi)" / "Gate markets outside a town (guanxiang)": the periodic market the villagers come to vs the everyday traffic strip outside the gate.
 - "Gardens behind a town house (tsubo-niwa)" / "Vegetable gardens at a town's edge": a merchant's small court garden to look at vs the market gardens that fed the town.

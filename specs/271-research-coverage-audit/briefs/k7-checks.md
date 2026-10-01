@@ -20,4 +20,4 @@
 - KEY=kotobank-zakoba: APPLICABLE-WITH-LIMITS, limits MISSING two -> only the fish sites placed on water (produce market by district only); Kotobank shows part of the entry.
 - KEY=tenma-aomono-jawiki: APPLICABLE-WITH-LIMITS, one claim INACCURATE, limits MISSING -> not "beside the fish market" (Zakoba was on the Hyakkenbori, in the west); no references; a great city's monopoly market.
 - KEY=kotobank-uogashi: APPLICABLE-WITH-LIMITS, limits MISSING one -> a 2019 present-tense definition, a hint the form was widespread, not evidence of it; Used-for made present tense to match.
-- Open: none of check-e's. Pre-existing and not K7's: water 010's owed pair (Stream) still listed by _entry_owed.py though check-d recorded it IN-STEP. No NOT-APPLICABLE key.
+- Open: none of check-e's. Pre-existing and not K7's: 0068's owed pair (Stream) still listed by _entry_owed.py though check-d recorded it IN-STEP. No NOT-APPLICABLE key.

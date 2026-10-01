@@ -63,7 +63,7 @@ it goes to a rendering section titled "How our maps draw <topic>".
 
 ## Cross-page folds
 - In: capitals/280, 310 -> T3; capitals/300 -> T4 (decided in plan-cities-capitals.md).
-- cities/river-cities/020-which-way-does-an-offtake-leave-a-river-and-why.html -> water T5 "Which way water flows, and how channels bend and join" (offered by the water planner; which way an offtake leaves a river is water/190 "an offtake leaves pointing downstream"; its GM ruling of 2026-07-24 goes to that topic's rendering section)
+- cities/river-cities/020-which-way-does-an-offtake-leave-a-river-and-why.html -> water T5 "Which way water flows, and how channels bend and join" (offered by the water planner; which way an offtake leaves a river is 0054 "an offtake leaves pointing downstream"; its GM ruling of 2026-07-24 goes to that topic's rendering section)
 - cities/river-cities/600-before-modern-engineering-did-anyone-set-the-angle-at-which-a-channel-leaves-a-river.html -> water T5 "Which way water flows, and how channels bend and join" (the before-modern check on 020 goes with it; carries the GM's ruling of 2026-09-28)
 
 ## Confusable pairs

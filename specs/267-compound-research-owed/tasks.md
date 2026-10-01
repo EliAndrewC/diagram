@@ -43,11 +43,11 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. G8 researched in fresh page sessions (source-reader in the write session; quote-check 8 VERBATIM plus fixes and a re-check; source-applicability on each source, limits added); fields 220 records the knob; GraveIsland and features.grave_form follow (commit 4214f9360); tests in tests/settlement/test_fields.py
-- [x] T17 The edits owed to feature 265's sections (R27 buildings 070, R42 river-cities 040, R46 ways 020, and any a
+- [x] T17 The edits owed to feature 265's sections (R27 0092, R42 river-cities 040, R46 0081, and any a
       handoff names), made once 265's task for each page is ticked, and checked (FR-006)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
-      verify: DONE. buildings 070 points at 490, ways 020 the hand-cart spread (kotobank-daihachiguruma-5/-6), river-cities 040 the compound landing (commit 4214f9360); sources checked in the G6 round (quote-check, source-applicability APPLICABLE-WITH-LIMITS with limits added, source-reader in the write session); record-format applied
+      verify: DONE. 0092 points at 490, 0081 the hand-cart spread (kotobank-daihachiguruma-5/-6), river-cities 040 the compound landing (commit 4214f9360); sources checked in the G6 round (quote-check, source-applicability APPLICABLE-WITH-LIMITS with limits added, source-reader in the write session); record-format applied
 - [x] T10 `outcomes.md`: every item's outcome and question, from the handoffs (D5)
       research: rendering
       verify: DONE. outcomes.md: 53 items from the handoffs verbatim, the three owed record edits, the open leads

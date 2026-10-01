@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-6`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -29,17 +29,17 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - C27 D125 **Governor's compound size**: how big is a provincial governor's compound in absolute terms (acres,
   frontage, depth; "a whole city block" is the page's reading) - a Chinese prefectural yamen against a domain jin'ya
-  or castle-town office? (cities/government/010). M. P1.
+  or castle-town office? (0163). M. P1.
 - C28 D126 **Inside the governor's compound**: gate, office halls, courtroom, residence, treasury, granary, jail,
-  shrine - in what order and at what sizes, and how does it scale from the county magistracy? (buildings/010-230, a
+  shrine - in what order and at what sizes, and how does it scale from the county magistracy? (0090, 0092, 0096, 0097, 0098, 0099, 0100, 0101, 0116, 0165, 0218, a
   county compound). L. P1.
 - C29 **Governor's compound facing**: which way does it face, and is there a gate-to-yamen avenue in a city?
   (towns/010, cities/capitals/140). S. P1.
 - C30 D128 **Ministry offices**: how big is a ministry office, are the six equal, and what does one hold inside
   (rooms, archive, staff)? (cities/capitals/290, 1 note). M. P1.
 - C38 **The gate watch**: where does it stand? (cities/government/060, 1 note). S. P1.
-- C33 **City jail**: inside the governor's compound or a separate prison, how big and where? (buildings/040,
-  cities/government/010). M. P4.
+- C33 **City jail**: inside the governor's compound or a separate prison, how big and where? (0096,
+  0163). M. P4.
 - C34 D45 **Urban magistracies**: did a city keep a separate town magistrate's office (machi-bugyōsho) and constables'
   quarters, and how do the capital-stationed Imperial, Clan and Family magistrates' urban compounds differ from a
   county one (yoriki rooms, staff living out) in size and program? (none; programs.md knob 1). M. P4.
@@ -62,7 +62,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on cities/government 200-270, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0167, 0168, 0169, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

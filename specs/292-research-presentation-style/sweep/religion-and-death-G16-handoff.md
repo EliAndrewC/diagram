@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/village-burial-grounds-bochi
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-village-burial-grounds
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=BurialGround
 - BASE=50fe3ef84
 
@@ -18,6 +18,6 @@ section's id. 200's reason for drawing a funerary feature at its real size is re
 (first bullet), since 200 moves to buildings. water/660 was not folded (the water planner decides). The BurialGround
 modal's prose was not rewritten, only its Entry: it says a hamlet's dead lie in the village's ground and the size
 band as before; an entry-drift check is owed. The glossary gained "bochi"; "yizhong" is now used for the Qing
-charity graveyards. The cities/river-cities 010 links to "how far a burial ground keeps from open water" now point at
+charity graveyards. The 0175 links to "how far a burial ground keeps from open water" now point at
 the rendering section, whose rule is that no set-back is drawn; that 010 sentence still speaks of "the moat's water
 set-back" and may want a reword by whoever sweeps cities.

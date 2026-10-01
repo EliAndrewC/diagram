@@ -2,7 +2,7 @@
 
 - SECTION=cities/defenses/city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-citys-wall-chengqiang
-- OLD=research/cities/defenses/ research/cities/capitals/ research/cities/capitals/
+- OLD=research/contents.json#city-defenses research/contents.json#capitals research/contents.json#capitals
 - MODALS=
 - BASE=659ec490f
 

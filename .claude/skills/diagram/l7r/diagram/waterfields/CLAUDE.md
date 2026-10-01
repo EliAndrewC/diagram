@@ -8,7 +8,7 @@ mechanism, plus an aliased block for the externally-consumed underscore names; g
 `tests/waterfields/test_surface.py`) - never add logic to the `__init__`.
 
 The engine's doctrine (THE INVERSION - fields grow around the water network; the warp-thread
-march; slope as a knob) lives in the `__init__.py` docstring and `research/water/005-irrigation-canals-and-how-they-are-laid-out-yosuiro.html` (and its rules at research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html). The split changed no behavior: every manifest was byte-identical
+march; slope as a knob) lives in the `__init__.py` docstring and `research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html` (and its rules at research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html). The split changed no behavior: every manifest was byte-identical
 before and after (the feature's oracle).
 
 ## Look here when

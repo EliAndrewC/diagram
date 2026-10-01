@@ -362,7 +362,7 @@ def test_near_ring_paddy_skips_cells_over_the_orientation_cap():
 
 def test_settlement_form_dike_top_is_low_ground_gated():
     # dike_top stands ON a polder's perimeter dike, so the form needs the polder terrain (low reclaimed
-    # ground); anywhere else the typing rule rejects it (research/archetypes.html 'Polder waterward fringe + dike-top housing').
+    # ground); anywhere else the typing rule rejects it (research/contents.json#field-archetypes 'Polder waterward fringe + dike-top housing').
     dry = Settlement(1200, 1200, seed=1)
     dry.meta(name="Sd", scale="village", terrain="hill")
     dry.pin_knob("settlement_form", "dike_top")
@@ -585,7 +585,7 @@ def test_sluice_gate_label_names_the_black_bar():
 
 
 def test_a_homestead_may_not_stand_in_a_neighbours_drying_sun():
-    """THE RATCHET for the sun corridor (GM 2026-08-13, researched in research/homesteads.html).
+    """THE RATCHET for the sun corridor (GM 2026-08-13, researched in research/contents.json#homesteads).
 
     A minka's ~20 ft ridge throws 39 ft of shadow by 9am in the threshing month, so a farmhouse
     that close south of a yard takes its drying day. Three things are pinned: the rule is OFF by

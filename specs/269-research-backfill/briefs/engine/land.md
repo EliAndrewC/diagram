@@ -20,7 +20,7 @@ Your job is 269's tasks T19-T25 (`specs/269-research-backfill/tasks.md`) and the
      censuses.
    Then run `make quick` in the foreground until green, and commit the merge. Do this before anything else below.
 1. **Relinks.** `grep -rn "RELINK 269\|RELINK 273" .claude/skills/diagram/research`. Each comment names the section and
-   the anchor to link: 272's religion-and-death 210/510/530 point to 270 and 280, and 160 points to 273's 540. Turn
+   the anchor to link: 272's 0226/510/530 point to 270 and 280, and 160 points to 273's 540. Turn
    each plain title back into a link to that anchor, and delete the comment.
 2. **274's T12.** In `specs/274-leaner-research-sessions/tasks.md`, turn T12's OPEN post-landing note into a done note:
    "Diagram supplemental told Diagram research, Diagram shrines and Diagram buildings on 2026-09-28 after 825925e73

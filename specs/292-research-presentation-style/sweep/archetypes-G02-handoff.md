@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/terraced-and-valley-paddies-tanada-yachida
 - RENDERING=rendering/archetypes/how-our-maps-draw-rice-land-on-a-slope
-- OLD=research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=
 - BASE=9d698048e
 

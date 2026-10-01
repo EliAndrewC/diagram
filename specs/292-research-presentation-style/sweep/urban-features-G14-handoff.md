@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/timber-yards-and-log-booms-kiba
 - RENDERING=rendering/urban-features/how-our-maps-draw-timber-yards-and-log-booms
-- OLD=research/urban-features/ research/urban-features/ research/urban-features/
+- OLD=research/contents.json#trades-and-services research/contents.json#trades-and-services research/contents.json#trades-and-services
 - MODALS=
 
 - BASE=04853d27c

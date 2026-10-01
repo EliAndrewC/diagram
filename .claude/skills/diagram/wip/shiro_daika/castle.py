@@ -22,7 +22,7 @@ from .frame import CX, CY, MOAT, NRING, RX, RY, s
 # TWO GATES (GM 2026-08-09, researched): the ote-mon fronts south onto the ceremonial
 # approach; the karamete-mon - the rear gate every castle kept, the sortie gate - opens north,
 # its approach road bridging the castle's own moat to join the Imperial road's run to the
-# city's north gate. research/rendering/cities/capitals/020-how-our-maps-draw-the-castle-in-a-capital.html.
+# city's north gate. research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html.
 s.castle(
     1400, 880, 850, 700, label="Shiro Daika", gate_dir="south", karamete_dir="north"
 )  # the castle keeps ITS axis (x=1400) - the resized wall re-centered SW, and the honmaru sits NE-of-center (the castle-at-the-back pattern); everything castle-anchored (ote-suji, ministries, karamete) reads from this axis, not from CX
@@ -54,7 +54,7 @@ s.sluice_gate(
 s.moat_flow(MOAT[4], MOAT[8])
 
 # ---- THE AQUEDUCT (feature 020; rebuilt to the researched josui form, GM 2026-08-09). What
-# the research says a josui IS (research/cities/capitals/080-the-capitals-aqueduct-josui.html): an
+# the research says a josui IS (research/questions/0141-the-capitals-aqueduct-josui.html): an
 # intake WEIR on the river peeling off at a SHALLOW DOWNSTREAM angle (Hamura's nagewatashi
 # weir); an OPEN earth cut - open-topped, hence water-blue between spoil banks - falling
 # gently and continuously (Tamagawa: 92 m over 43 km, never a climb); a terminus at the city
@@ -127,7 +127,7 @@ s.bridges()
 # files of three, the House Chancellery and the domain school continuing the same axis south of
 # the kagi-no-te bend. Both anchor traditions converge on exactly this form - Beijing's Six
 # Ministries lined the Corridor of a Thousand Steps outside Chengtianmen, and a jokamachi's
-# offices spilled out of the ninomaru into the town (research/rendering/cities/capitals/010-how-our-maps-size-and-lay-out-a-domain-capital.html). Default ministry compound: 224x148 ft, the researched provincial size - a domain
+# offices spilled out of the ninomaru into the town (research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html). Default ministry compound: 224x148 ft, the researched provincial size - a domain
 # ministry is the same bureau of clerks and archives at a bigger desk.
 # the files sit a ~21 ft setback off the avenue's edge - corridor frontage, not detached
 # blocks; captions ON the glyphs (the estate rule applied to state offices, GM 2026-08-09 -
@@ -149,7 +149,7 @@ s.hanko(1482, 1658)  # ~1 ha compound (size audit 2026-08-09) - shifted east so 
 # state violet, so it reads as not-of-the-domain; gate west, facing the government ward it works
 # beside.
 # captioned as the INSTITUTION, not the officeholder (settlement-review 2026-08-09; Ubame's
-# sibling is "Magistrate's Manor" and research/cities/capitals/ says "the Imperial Magistrate's compound")
+# sibling is "Magistrate's Manor" and research/contents.json#capitals says "the Imperial Magistrate's compound")
 # "Imperial Magistracy" - the institution, shortened so the caption fits INSIDE the court
 s.manor(1720, 1445, 100, 75, "Imperial Magistracy", gate_dir="west", ink="#274D3D", label_inside=True)
 
@@ -185,7 +185,7 @@ lineage_manor(1660, 385, 70, 54, "seki", "south")
 # abbots - the head houses of domain-wide orders, dedicated to the Scorpion patrons Benten and
 # Jurojin - stand in the fabric; the remaining temples BELT the inner face of the rampart as the
 # teramachi rim, part of the defenses, rather than gathering in one quarter
-# (research/rendering/cities/capitals/390-how-our-maps-draw-a-capital-differently-from-a-provincial-city.html).
+# (research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html).
 # Benten, the PRIMARY sovereign temple, is pinned to the full 7-arch avenue (torii_count=7,
 # Nagahara's donation-row stride): the per-temple roll gave the primary a 3-arch stub while its
 # co-sovereign rolled 7, which read the declared hierarchy inverted (settlement-review 2026-08-09).
@@ -195,7 +195,7 @@ s.shrine_hall(1850, 1620, "Temple of Benten", w=s.px(150), h=s.px(100), kind="te
 s.shrine_hall(950, 1620, "Temple of Jurojin", w=s.px(150), h=s.px(100), kind="temple", torii=[(950, 1583), (950, 1547)])
 # THE PRECINCT IS RESERVED EVEN THOUGH ONLY THE HALL IS DRAWN (settlement-review 2026-08-09): a
 # sovereign temple is a HEAD HOUSE - abbot's residence, order administration, library, the monks
-# living inside the precinct (research/rendering/cities/capitals/390-how-our-maps-draw-a-capital-differently-from-a-provincial-city.html) - and
+# living inside the precinct (research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html) - and
 # this is the ground-reserving feature, so the complex's ~390x300 ft ground is held NOW and
 # feature 021 draws it. Both registries, like the castle: block_polys is center-tested by the
 # packs, placed is distance-tested and stops a wide building overhanging the precinct.

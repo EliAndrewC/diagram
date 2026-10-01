@@ -37,13 +37,13 @@
   },
   {
    "id": "D5-popup",
-   "summary": "windbreak_default(meta) states the belt's side and whether the wind is regional or declared; class What drops 'high side'; Entry names vegetation/030.",
+   "summary": "windbreak_default(meta) states the belt's side and whether the wind is regional or declared; class What drops 'high side'; Entry names 0072.",
    "class": "within",
    "why": "Unchanged. FR-008, US3."
   },
   {
    "id": "D6-record-and-docs",
-   "summary": "vegetation/030 rewritten to the rule as built with re-measured arcs; gloss corrected; hamletgen.md, indexes, five notes files.",
+   "summary": "0072 rewritten to the rule as built with re-measured arcs; gloss corrected; hamletgen.md, indexes, five notes files.",
    "class": "within",
    "why": "Unchanged. FR-009, US4."
   },
@@ -67,7 +67,7 @@
   },
   {
    "id": "D9b-crossing-priced",
-   "summary": "The route lattice charges BROOK_CROSSING_COST_FT (150 ft, a guess recorded in water/270) for entering the brook's band, and the string-pull may not undo a crossing the lattice avoided (Kashikawa's lane crossed and recrossed to reach a house on its own bank). The band is kept as brook points in a 20 px bucket grid.",
+   "summary": "The route lattice charges BROOK_CROSSING_COST_FT (150 ft, a guess recorded in 0035) for entering the brook's band, and the string-pull may not undo a crossing the lattice avoided (Kashikawa's lane crossed and recrossed to reach a house on its own bank). The band is kept as brook points in a 20 px bucket grid.",
    "class": "within",
    "why": "FR-011 says a way MUST be able to cross 'where the layout needs it'. A price keeps crossings available and takes away only the needless ones, like R9's cross-and-back lane. Nothing is refused: a way that has to cross still crosses when every other route costs more. No household, field path or seat loses anything FR-012 guarantees. It is a defect fix on the maps this feature re-rolled (US6, constitution XIV). The 150 ft is a guess, and the plan says so."
   },
@@ -208,7 +208,7 @@
    "id": "D18d-channel-crossings-squared",
    "summary": "A lane crossing any drawn channel is squared like a brook crossing; a lane elbow inside the brook's half-width is dropped before squaring.",
    "class": "within",
-   "why": "Extends FR-011's 'crosses it squarely' to the plank the research says crosses its ditch square (ways/030); a fix, not a narrowing."
+   "why": "Extends FR-011's 'crosses it squarely' to the plank the research says crosses its ditch square (0084); a fix, not a narrowing."
   },
   {
    "id": "D18e-rolls-clean-their-stage-and-review-prereq-rounds",

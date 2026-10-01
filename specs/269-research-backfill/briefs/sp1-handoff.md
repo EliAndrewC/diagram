@@ -1,11 +1,11 @@
-- SECTION=water/250
+- SECTION=0059
 - SECTION=water/253
 - SECTION=water/256
 - SECTION=water/300
 - SECTION=water/310
 - SECTION=homesteads/210
-- SECTION=homesteads/211
+- SECTION=0042
 - SECTION=religion-and-death/155
-- SECTION=religion-and-death/160
-- SECTION=religion-and-death/280
+- SECTION=0235
+- SECTION=0236
 - SECTION=religion-and-death/400

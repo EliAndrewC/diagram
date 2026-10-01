@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/the-citys-street-front-continuous-rows-of-shophouses-machiya
 - RENDERING=rendering/cities/fabric/how-our-maps-draw-a-citys-street-front
-- OLD=research/cities/fabric/ research/cities/fabric/
+- OLD=research/contents.json#urban-fabric research/contents.json#urban-fabric
 - MODALS=
 - BASE=50f1af527
 

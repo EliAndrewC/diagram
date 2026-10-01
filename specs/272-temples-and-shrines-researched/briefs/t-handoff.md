@@ -5,7 +5,7 @@
 - SECTION=religion-and-death/580
 - SECTION=religion-and-death/590
 - SECTION=religion-and-death/595
-- SECTION=religion-and-death/020
+- SECTION=0234
 - SECTION=religion-and-death/030
 
 595 is new: 590 went over the 20,000-byte cap and was split along its topics (temples / the small shrine); the two point at each other.
@@ -60,8 +60,8 @@ reserved and not used (its sentence has the treasuries both destroyed and spared
 
 ## Owed to other owners
 
-- religion-and-death 040 (R2): its absence note (the same text as 030's note 4, "no page read says a clergy household's dwelling was built like a commoner's") is answered by kamigamo-plan-kyoto and kamigamo-shake-okeihan: Kamigamo's priest-family houses were one-story, gabled and tiled, walled with a gate, unlike the town houses beside them; 040 should cite them and relabel the identical house a deviation, as 030 now does.
-- religion-and-death 560 (R4, this clone): the ~73,000 sq ft great complex is now called a deviation in 580; 560's decision line could point at 580.
+- 0232 (R2): its absence note (the same text as 030's note 4, "no page read says a clergy household's dwelling was built like a commoner's") is answered by kamigamo-plan-kyoto and kamigamo-shake-okeihan: Kamigamo's priest-family houses were one-story, gabled and tiled, walled with a gate, unlike the town houses beside them; 040 should cite them and relabel the identical house a deviation, as 030 now does.
+- 0227 (R4, this clone): the ~73,000 sq ft great complex is now called a deviation in 580; 560's decision line could point at 580.
 - religion-and-death 010 (B37): `daxiangguo-zhwiki` now carries the 540 mu / 64 cloisters / several thousand monks passage in Chinese, beside 010's `daxiangguo-enwiki`.
 
 ## Left open

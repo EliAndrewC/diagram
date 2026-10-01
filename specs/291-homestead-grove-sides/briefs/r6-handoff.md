@@ -1,8 +1,8 @@
 # Handoff - feature 291, group R6 (how a row village was laid out), session 1: write
 
-- SECTION=homesteads/155 (new: "How was a row village laid out?" - what a row follows, one side or both)
+- SECTION=0033 (new: "How was a row village laid out?" - what a row follows, one side or both)
 - SECTION=homesteads/156 (new, split from 155 for the 20,000-byte cap: "How wide was a farm in a row, how long was the row, and where did its field and grove lie?")
-- SECTION=homesteads/150 (LINEAR section: points at 155 and 156; the "thin" limitation rewritten - the Japanese row is attested, but its measured layouts are planned new-field colonies, so the linear form stays drawn less often than the dispersed one)
+- SECTION=0031 (LINEAR section: points at 155 and 156; the "thin" limitation rewritten - the Japanese row is attested, but its measured layouts are planned new-field colonies, so the linear form stays drawn less often than the dispersed one)
 
 New keys (6): kotobank-santome-shinden, saitama-santome-history, kawashima-1986-santome, miyoshi-santome-shinden, ehime-kenshi-shuso-shuraku, ome-shinmachi-machinami.
 Existing keys newly cited here: sonraku-jawiki, kotobank-ressen, ndl-yajima-shuraku, shinden-shuraku-kotobank, ishizue-musashino, shizen-teibo-jawiki, wang-2023-sw-zhejiang.
@@ -20,4 +20,4 @@ FORMS:
 
 Checks run this session: source-reader on 155 (14 of 14 READ; the sonraku quote split in two, the fan-head alternative and the Zhejiang clusters restored) and on 156 (18 READ, 1 CONTRADICTED - the grove-covered homestead wrongly dated to the 1980s - rewritten, and four wording notes applied); source-applicability on all six new keys, every one APPLICABLE-WITH-LIMITS, the missing limits written in (chiefly: Santome's 40 by 375 ken is a dry-field colony's 5-cho strip, so a paddy row borrows its form, not its size).
 
-Checks owed: quote-check and record-format on 155, 156 and 150 (the check sessions); entry-drift if a modal was written from homesteads/150's LINEAR section.
+Checks owed: quote-check and record-format on 155, 156 and 150 (the check sessions); entry-drift if a modal was written from 0031's LINEAR section.

@@ -240,7 +240,7 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     bakufu set kosatsuba *"at points of heavy passage: barriers and ports, the foot of large bridges,
     and the entrances and centers of towns and villages"*; in farming villages *"at the village center,
     the shrine precinct, or the place where villagers assembled"*; also *"at bridgeheads and before the
-    gate of the village officials' houses"* (`research/urban-features/`, four sources READ 2026-08-26
+    gate of the village officials' houses"* (`research/contents.json#trades-and-services`, four sources READ 2026-08-26
     under feature 133 T13). The doc's own settlement-scale sentence narrows it: the board stood *"where
     the settlement's one lane carries everyone - by the headman's frontage or the lane junction /
     entrance"*.
@@ -274,8 +274,8 @@ register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage"], default
 register_knob(Knob("cluster_position", ["high_margin", "flank", "mid_margin", "valley_mouth", "valley_head", "on_rise"], default="high_margin"))
 register_knob(Knob("cluster_shape", ["round", "elongated", "crescent", "split"], default="round", typing_rule=_cluster_shape_ok))
 register_knob(Knob("lane_web", list(LANE_WEBS), default="alleys"))
-# BAMBOO (feature 133 T47, GM 2026-08-27; research/vegetation/150-bamboo-groves-chikurin.html;
-# research/rendering/vegetation/150-how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see.html): below the frost line a village has bamboo as a matter of course - a stand,
+# BAMBOO (feature 133 T47, GM 2026-08-27; research/questions/0075-bamboo-groves-chikurin.html;
+# research/questions/0075-bamboo-groves-chikurin.drawing.html): below the frost line a village has bamboo as a matter of course - a stand,
 # not a seasoning - and above it none. Two attested forms of WHERE: bamboo on the homestead (which side a GUESS -
 # feature 280 M15: the damp N/W side rests on no record before 1868) and a take-yabu thicket at the settlement's edge
 # (feature 280 M49: not at the field margin, which rested on a present-day page); a hamlet may have either, both, or (cold
@@ -308,7 +308,7 @@ register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # deg
 # Rolled per settlement from the map's own seed like every other knob. `draft_byres` reads it;
 # `byres_stand_in_their_declared_form` gates the declaration and the courtyard form's geometry.
 #
-# RE-READ BY 269 B16 (research/homesteads/460, "Draft oxen and horses and their byres (umaya)"). The record found the
+# RE-READ BY 269 B16 (research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, "Draft oxen and horses and their byres (umaya)"). The record found the
 # beast living WITH ITS HOUSEHOLD - owned or on loan - and no page read describes a shed several households
 # kept in common, nor one at the village edge. It attests two household forms: the INNER stable, a corner of
 # the house's earth floor, "widespread across the country" (kotobank-umaya), and the OUTER stable, a shed of
@@ -317,13 +317,13 @@ register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # deg
 # a small shed standing on its own in the homestead near the house (269 B16, new); `detached_commons` stays
 # only as a RARE, labeled GUESS until the record finds it or rules it out. The default is the inner stable,
 # the form the record calls widespread. The weights: inner the more common roll, "how much more is calibrated
-# liberty, since no page read counts them" (rendering/homesteads/460) - 0.6 / 0.3 / 0.1 is that liberty, a GUESS.
+# liberty, since no page read counts them" (0048) - 0.6 / 0.3 / 0.1 is that liberty, a GUESS.
 register_knob(Knob("byre_form", ["courtyard", "yard_shed", "detached_commons"], default="courtyard", weights={"courtyard": 0.6, "yard_shed": 0.3, "detached_commons": 0.1}))
 
 # THE CARAVAN INN HAS TWO ATTESTED FORMS, OPPOSITE ON THE ONE QUESTION A MAP CAN SHOW - so it is a knob
 # rather than a ruling (Principle XII again; feature 244). `wagon` is the north-Chinese wagon inn, the
 # dachedian: a cart yard behind, a long stable with one feeding trough, a grooms' lean-to, and the
-# buildings in its yard uniformly SINGLE-STORY (research/towns/ fn-25). `hatago` is the Japanese
+# buildings in its yard uniformly SINGLE-STORY (research/contents.json#towns fn-25). `hatago` is the Japanese
 # post-station inn: the preserved Okabe-juku hatago of c. 1836 is TWO stories, its upper floor the
 # guest rooms (fn-26). The GM ruled twice, a day apart, and the second ruling is the reason this row
 # exists: 2026-09-12, on one source, "if the record draws it as two story, then that is simply a
@@ -420,10 +420,10 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
 TORII_WEIGHTS = {
     # TORII COUNT DISTRIBUTIONS (GM 2026-07-21): counts are NUMEROLOGICAL - 1, 3, or 7 only (7 is even
     # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
-    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death/080-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html
+    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html
     # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
     # need - no capital-city maps exist yet. A row of arches at an ordinary shrine is a DELIBERATE DEVIATION
-    # (GM 2026-09-29; research/rendering/religion-and-death/080-how-our-maps-draw-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html).
+    # (GM 2026-09-29; research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html).
     "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
     "town": ((1, 0.30), (3, 0.60), (7, 0.10)),
     "city": ((1, 0.30), (3, 0.40), (7, 0.30)),
@@ -483,7 +483,7 @@ def roll_merchant_estate_count(scale: str, rng: random.Random) -> int:
 # runs the sparser Xi'an spacing. Each tier maps to (effective arrow range in FEET, minimum towers that
 # must cover every wall point within that range). The historical grounding (侧射 flanking fire; Shen Kuo's
 # 11th-c. 矢石相及; Xi'an 120 m / Pingyao ~55 m mamian spacing at a ~60 m aimed-lethal bowshot) is in
-# research/cities/defenses/060-towers-along-the-city-wall-mamian.html and research/rendering/cities/defenses/060-how-our-maps-space-and-draw-wall-towers.html. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
+# research/questions/0148-towers-along-the-city-wall-mamian.html and research/questions/0148-towers-along-the-city-wall-mamian.drawing.html. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
 WALL_DEFENSE = {
     # tier          (arrow_range_ft, min_towers)  placement spacing = range if min==2 else 2*range
     "siege": (197.0, 2),  # border / besieged city: aimed-lethal bowshot (60 m), >=2 towers EVERYWHERE (Pingyao-dense)
@@ -516,7 +516,7 @@ CITY_TIER_SCALES = ("city", "capital")
 
 def execution_ground_ft(scale: str) -> tuple[float, float]:
     """Tier footprint of an execution ground in REAL FEET, scaled down from the Suzugamori anchor
-    (74 x 16.2 m serving Edo) by execution volume - see research/rendering/urban-features/020-how-our-maps-site-and-draw-execution-and-punishment-grounds.html.
+    (74 x 16.2 m serving Edo) by execution volume - see research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html.
 
     SHARED DATA, deliberately: Settlement.execution_ground draws from this, and site_justice.py
     sizes its trial placements from it, so a tool proposing a seat can never disagree with the
@@ -568,7 +568,7 @@ EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
 # which, at the coarsest grain we draw (3 ft/px, so 133 px), the two grounds are unmistakably two
 # places. The automated check proved internal consistency and the number was still wrong; only
 # looking at the artifact could show that.
-# WHY (full): research/rendering/urban-features/020-how-our-maps-site-and-draw-execution-and-punishment-grounds.html.
+# WHY (full): research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html.
 
 KIDO_TOWER_KEEPCLEAR = 62.0
 # px of rampart kept tower-free around a `tower_skip` spot - where a ward FENCE meets the city wall

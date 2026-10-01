@@ -13,7 +13,7 @@ country shrine applied to its sheet and map.
 
 ## Technical context
 
-- **Surface**: `research/religion-and-death/` fragments and notes, `research/sources/` registry entries, the
+- **Surface**: `research/contents.json#religion-and-the-dead` fragments and notes, `research/sources/` registry entries, the
   glossary, the assembled pages (`make record`, `make citations`); `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`
   (appended, never git); the claims file and the two inventories. The Hoshigaoka sheet and frozen map only if a
   finding contradicts them (FR-007).

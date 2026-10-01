@@ -107,7 +107,7 @@ class HouseholdLots:
     def __init__(self, seed: int, n: int, byre_share: float = 0.0, fixture_shares: Mapping[str, float] | None = None) -> None:
         self.n = n
         self.sizes = size_ladder(seed, n)
-        # THE STOREHOUSE GOES TO THE LARGER HOUSES FIRST (feature 293, research/homesteads/120): the count is the quota's,
+        # THE STOREHOUSE GOES TO THE LARGER HOUSES FIRST (feature 293, research/questions/0040-farm-storehouses-kura.html): the count is the quota's,
         # dealt down the size ladder by the main house's footprint - the carriers are exactly the largest houses. The record's
         # one village put its two with its 2nd- and 3rd-largest houses and its largest had none, so the strict cut is a
         # DELIBERATE DEVIATION (the weighted draw was priced and not taken); a tie goes by the seed-shuffled order, a GUESS the

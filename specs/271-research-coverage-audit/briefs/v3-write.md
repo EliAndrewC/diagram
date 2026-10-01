@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-2`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -27,13 +27,13 @@ in progress; edit only that line.
 Each is a research QUESTION the record owes: never researched, labeled a guess, or thinly sourced. The kinds named are
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
-Also edits fields/010, 022, 050, 100.
+Also edits 0008, 022, 050, 100.
 - A05 **Bund course**: does a bund run on or turn, never stepping sideways and carrying on? (fields/022, no
   footnotes). S. P1.
 - A07 **Lowest bund**: is the lowest bund of a paddy laid with the drain or across it? (fields/100, no footnotes). S. P1.
 - A15 **Dry crops from above**: what do millet, buckwheat, barley and soy look like from above in season (rows, color,
-  height)? (fields/050, fields/160; 269 B07 owns 160's placement). M. P1.
-- A18 **In-field ponds and rocks, the rates**: how often a flooded paddy keeps an in-field pond or rock (fields/010,
+  height)? (fields/050, 0006; 269 B07 owns 160's placement). M. P1.
+- A18 **In-field ponds and rocks, the rates**: how often a flooded paddy keeps an in-field pond or rock (0008,
   thin on rates). S. P1.
 - A27 B125 **Flower field**: what is the Imperial chrysanthemum field on Hirameki, and did a town's ring grow flowers
   for the market or the shrine, in plots of what size? (none; settlements/080 names it). S-M. P1.
@@ -56,7 +56,7 @@ Also edits fields/010, 022, 050, 100.
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on fields 400-450, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0015, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

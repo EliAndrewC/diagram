@@ -4,10 +4,10 @@ Written 2026-09-27/28 by the K6 write session (clone diagram-research-2). No ite
 none skipped.
 
 - SECTION=cities/capitals/460
-- SECTION=cities/capitals/470
+- SECTION=0144
 - SECTION=cities/capitals/480
 - SECTION=cities/capitals/490
-- SECTION=cities/capitals/190
+- SECTION=0166
 - SECTION=cities/capitals/200
 - SECTION=cities/capitals/333
 - SECTION=cities/capitals/160
@@ -66,7 +66,7 @@ none skipped.
   480 says so and points to 040; whoever owns 040 should weigh the allowance.
 - capitals/200's heading still says "belt the wall"; the body now says the belt is more than the history shows.
   Renaming it owes the inbound `Entry:` links, so it is left for the orchestrator to decide.
-- urban-features/070 was not edited: it sits at ~19.9 KB, and even a one-line pointer to 470 put it over the 20,000
+- 0194 was not edited: it sits at ~19.9 KB, and even a one-line pointer to 470 put it over the 20,000
   byte cap. 470 links to 070; a reverse pointer needs 070 split first.
 - mano-2016-takada-teramachi was read from the PDF's page images (no text layer): quote-check must read the images.
 - The GM question on siting (a hanko or lineage compound inside the castle's outer bailey vs the blank castle) is

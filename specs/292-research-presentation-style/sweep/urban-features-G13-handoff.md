@@ -4,21 +4,21 @@
 
 - SECTION=urban-features/straw-bales-of-rice-and-charcoal-tawara
 - RENDERING=rendering/urban-features/how-our-maps-draw-straw-bales-of-rice-and-charcoal-tawara
-- OLD=research/urban-features/
+- OLD=research/contents.json#trades-and-services
 - MODALS=TaxBarge CharcoalBales
 
 ## Iron refining forges (chao)
 
 - SECTION=urban-features/iron-refining-forges-chao
 - RENDERING=rendering/urban-features/how-our-maps-draw-iron-refining-forges-chao
-- OLD=research/urban-features/
+- OLD=research/contents.json#trades-and-services
 - MODALS=
 
 ## Pottery kilns (noborigama)
 
 - SECTION=urban-features/pottery-kilns-noborigama
 - RENDERING=rendering/urban-features/how-our-maps-draw-kiln-works
-- OLD=research/urban-features/ research/urban-features/
+- OLD=research/contents.json#trades-and-services research/contents.json#trades-and-services
 - MODALS=
 
 - BASE=8f75f8d49

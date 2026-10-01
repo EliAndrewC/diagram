@@ -7,7 +7,7 @@
 C=/diagram/.clones/diagram-supplemental
 D=$(dirname "$0")
 M=$C/.git/page-sessions/w1-finish-queued
-if [ ! -e "$M" ] && git -C $C status --porcelain -- .claude/skills/diagram/research/sources/010-works-cited/ .claude/skills/diagram/research/water/ | grep -q '10[4-6][0-9]0-\|water/'; then
+if [ ! -e "$M" ] && git -C $C status --porcelain -- .claude/skills/diagram/research/sources/010-works-cited/ .claude/skills/diagram/research/contents.json#water | grep -q '10[4-6][0-9]0-\|water/'; then
   touch "$M"; echo "$D/w1-finish.md"; exit 0
 fi
 queued=0

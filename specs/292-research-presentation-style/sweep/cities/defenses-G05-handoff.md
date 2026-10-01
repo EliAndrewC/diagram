@@ -4,7 +4,7 @@
 
 - SECTION=cities/defenses/towers-along-the-city-wall-mamian
 - RENDERING=rendering/cities/defenses/how-our-maps-space-and-draw-wall-towers
-- OLD=research/cities/defenses/ research/cities/defenses/ research/cities/defenses/ research/cities/defenses/
+- OLD=research/contents.json#city-defenses research/contents.json#city-defenses research/contents.json#city-defenses research/contents.json#city-defenses
 - MODALS=
 
 - BASE=327bb1ad6

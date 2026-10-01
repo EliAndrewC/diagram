@@ -5,7 +5,7 @@ into a gate is no wider than the gate it feeds.
   road - never a stub stopping short in the open (buildings/programs.md and the building-review checklist: the approach
   runs "OFF the viewBox edge ... not a stub stopping short"; a MAP DRAWING CONVENTION).
 - `gate_feeds_its_road` (B23): a road ending at a wall opening or the main gate's passage is no wider than that
-  opening plus ROAD_GATE_TOL_FT (research buildings 480 'The main gate and its gatekeepers (nagaya-mon)'; the feature 267
+  opening plus ROAD_GATE_TOL_FT (research 0093 'The main gate and its gatekeepers (nagaya-mon)'; the feature 267
   pass 2 rulings recorded on the Hayakawa and Ubame sheets: "12 ft, matching the passage through the gate range it
   meets", "9 ft, matching the narrowed cart gate"). One-sided: a 2 ft footpath to an 8 ft river door is fine.
 

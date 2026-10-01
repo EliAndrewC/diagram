@@ -1093,7 +1093,7 @@
   "where": "hamletgen/homesteads/stages.py:stage_homesteads:441-520 (rescue rounds 5-7, then the shortfall)",
   "what": "After four lattice rounds, the rescue offers along-the-field ends and a wider random cloud. If the quota is still short after round 7, the map ships with fewer households and plan.placed records the shortfall, with no refusal or re-roll",
   "compromise": "breaks-rule",
-  "rule": "households_consistent: occupied farmhouses must be 0.85-1.05x the declared households (stages.py:131, research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html, tests/gate/test_generator_contracts.py:test_every_declared_household_is_seated). Only the gate's rolled seeds hold it",
+  "rule": "households_consistent: occupied farmhouses must be 0.85-1.05x the declared households (stages.py:131, research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, tests/gate/test_generator_contracts.py:test_every_declared_household_is_seated). Only the gate's rolled seeds hold it",
   "reachable": "rare (a short or boxed margin band. Cohort seed 25 was 19 of 20 before the rescue took the ends, and Inashiro was 13 of 15)",
   "sketch": "Size the band from the household count before seating (as roll.py sizes need = households x pitch^2) and widen or re-seat until the floor is met. Otherwise refuse the roll (re-roll it, as the stranding re-roll does) when placed < 0.85 x households",
   "group": 4
@@ -1120,7 +1120,7 @@
   "where": "hamletgen/homesteads/fixtures.py:seat_farm_fixtures:653-660 (the unseated shortfall)",
   "what": "A fixture no house had room for is not drawn, and the miss is recorded in meta.farm_fixtures_unseated",
   "compromise": "breaks-rule",
-  "rule": "The per-hamlet PREVALENCE BAND rolled from the seed (fixtures.py:18-30, research/homesteads/215-chickens-and-chicken-coops.html. For example, the privy is near-universal, 'a separate outbuilding was the norm'). The drawing departs from its own rolled count, which the comment admits ('a drawing that departs from its own declared count'). Recording the miss is not the rule",
+  "rule": "The per-hamlet PREVALENCE BAND rolled from the seed (fixtures.py:18-30, research/questions/0045-chickens-and-chicken-coops.html. For example, the privy is near-universal, 'a separate outbuilding was the norm'). The drawing departs from its own rolled count, which the comment admits ('a drawing that departs from its own declared count'). Recording the miss is not the rule",
   "reachable": "rare (a boxed-in homestead. The tests at test_homesteads.py:383 and :511 build it)",
   "sketch": "Constrain: reserve each rolled fixture's seat inside the homestead envelope when the house is seated (envelope-first, feature 227), so a seated house has its fixtures by construction. Otherwise refuse the house seat that leaves no room",
   "group": 4

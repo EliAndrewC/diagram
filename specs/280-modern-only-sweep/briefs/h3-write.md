@@ -33,8 +33,8 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M20 **Outbuildings, the storehouse share and the heap rate**: the number of StorageSheds per household, the storehouse share (about 30%) and the manure-heap band. All three come from "a July 1972 survey of all 87 households" (sugiura-1973-fuzoku). The inventory section says "Every number above is measured for 1972 Miyagi", and the storehouse share sits "just above the counted 0.24 - old farmhouses in one Miyagi town, counted in 1972". The heap rate comes from the same count. The 269 hold on the inventory section is probable (269's B20 names it; its outcomes list the neighboring section); the hold on the heap section is certain (homesteads/140, homesteads/120, homesteads/211) - kinds: StorageShed, Farmhouse (the kura annex), ManureHeap; maps: all scripted hamlets. M.
-- M21 **The firewood stack**: an open stack 10 x 3.5 ft and head-high. The section says "the 1.5 m height is modern stacking practice (326-woods, a modern page ...)", and the search for eave stacks found only modern wood-stove pages. The height does not show in plan (homesteads/212) - kinds: Woodpile (`homestead.py:182`); maps: all scripted hamlets. L.
+- M20 **Outbuildings, the storehouse share and the heap rate**: the number of StorageSheds per household, the storehouse share (about 30%) and the manure-heap band. All three come from "a July 1972 survey of all 87 households" (sugiura-1973-fuzoku). The inventory section says "Every number above is measured for 1972 Miyagi", and the storehouse share sits "just above the counted 0.24 - old farmhouses in one Miyagi town, counted in 1972". The heap rate comes from the same count. The 269 hold on the inventory section is probable (269's B20 names it; its outcomes list the neighboring section); the hold on the heap section is certain (0028, 0040, 0042) - kinds: StorageShed, Farmhouse (the kura annex), ManureHeap; maps: all scripted hamlets. M.
+- M21 **The firewood stack**: an open stack 10 x 3.5 ft and head-high. The section says "the 1.5 m height is modern stacking practice (326-woods, a modern page ...)", and the search for eave stacks found only modern wood-stove pages. The height does not show in plan (0043) - kinds: Woodpile (`homestead.py:182`); maps: all scripted hamlets. L.
 
 ## The procedure (session 1: research and write)
 
@@ -65,7 +65,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on homesteads/140, homesteads/120, homesteads/211, homesteads/212, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0028, 0040, 0042, 0043, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

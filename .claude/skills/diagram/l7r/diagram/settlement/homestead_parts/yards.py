@@ -528,7 +528,7 @@ class ThreshingYardsMixin:
         return True
 
     # THE WORK YARD IS ROLLED FROM A LOGNORMAL, CORRELATED WITH THE HOUSEHOLD (GM 2026-08-28, feature
-    # 134 T49; research/homesteads/020-threshing-and-drying-yards-at-farmhouses-niwa.html).
+    # 134 T49; research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html).
     #
     # The record, in one line: Kitamoto's households stated their yard in straw mats - 40-60 mats
     # usually, over 100 for a few, two mats to the tsubo - so 20-30 tsubo (66-99 sq m) ordinarily and
@@ -552,14 +552,14 @@ class ThreshingYardsMixin:
     # (59.5 sq m) for a rice hamlet until feature 280 retired its modern spreading depth (below); Kitamoto's 25 tsubo is
     # YARD_MEDIAN_TSUBO_DRYFIELD, and a rice hamlet now takes the same median. The SHAPE - lognormal, sigma 0.40 - is Kitamoto's
     # and Kamikanai's and applies to both.
-    # FEATURE 280 M16 (research/homesteads/020): the crop derivation behind 18 tsubo spread the momi at IRRI's 2.5 cm, modern
+    # FEATURE 280 M16 (research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html): the crop derivation behind 18 tsubo spread the momi at IRRI's 2.5 cm, modern
     # tropical extension advice and the only depth found, so it is retired; the one rice-district figure is the Okayama museum's
     # ~50 mats a farm for sun-drying momi, about 25 tsubo, the middle of Kitamoto's band - so a rice hamlet's yards are centered
     # at 25 like the dry-field yard. Both are undated records of remembered practice, a calibration the GM may re-sort.
     YARD_MEDIAN_TSUBO = 25.0  # wet rice as the dry field: the Okayama ~50 mats; the map's `yard_sizes` knob may name the dry-field figure instead
     YARD_SIGMA_LN = 0.40  # Kamikanai 0.46; Kitamoto's band-and-tail 0.35-0.45
     YARD_MEDIAN_TSUBO_DRYFIELD = 25.0  # Kitamoto's 50 mats - a barley/wheat household spreads the whole crop
-    YARD_MIN_TSUBO = 8.0  # nobody is yardless - this project's choice, so every farm can thresh; no source gives the smallest yard (research/rendering/homesteads/020-how-our-maps-draw-threshing-and-drying-yards-niwa.html; the old reason, "by Genroku every peasant held a homestead", rests on no source read)
+    YARD_MIN_TSUBO = 8.0  # nobody is yardless - this project's choice, so every farm can thresh; no source gives the smallest yard (research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html; the old reason, "by Genroku every peasant held a homestead", rests on no source read)
     YARD_HOUSE_BETA = 2.2  # how much of the household's own deviation the yard inherits (the drawn house varies only ~+-15% about the ordinary minka, so the household needs this much amplification to dominate the roll - measured on Inashiro: r = 0.17 at 0.55, r = 0.6-0.7 here, which is the GM's "overwhelmingly likely" without making it a rigid ratio)
     YARD_ASPECT = 1.45  # a work apron is near-square, a little wider than deep (the drawn ratio, unchanged)
     TSUBO_FT2 = 35.583  # 1 tsubo = 3.306 sq m

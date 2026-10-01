@@ -34,7 +34,7 @@ def _garden(x: float = 400, y: float = 400, w: float = 60, h: float = 60, extra:
 
 
 def test_the_sun_is_the_records_sun() -> None:
-    """At 38N in the shoulder month the 3pm sun stands about 27-28 deg high at azimuth ~232 (homesteads 040), noon due south."""
+    """At 38N in the shoulder month the 3pm sun stands about 27-28 deg high at azimuth ~232 (0038), noon due south."""
     el, az = S.sun_at(15.0)
     assert 26.0 <= el <= 29.0 and 229.0 <= az <= 235.0
     el12, az12 = S.sun_at(12.0)

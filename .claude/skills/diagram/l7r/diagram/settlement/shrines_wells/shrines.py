@@ -213,7 +213,7 @@ class ShrineHallsMixin:
                 bm: float = self.px(28) + 4.0
                 self.block_polys.append([(tx - s2 - bm, ty - s2 * 0.5 - bm), (tx + s2 + bm, ty - s2 * 0.5 - bm), (tx + s2 + bm, ty + s2 + bm), (tx - s2 - bm, ty + s2 + bm)])
                 self._torii(tx, ty)
-                # NO SWEPT COLLAR UNDER THE ARCH (feature 280 M66, research/religion-and-death/130): no page read gives swept
+                # NO SWEPT COLLAR UNDER THE ARCH (feature 280 M66, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html): no page read gives swept
                 # ground round a shrine's arches before modern times; the arch clears only its own footing
                 self._clear_ground(tx, ty + 2, max(2 * s2 + 4, 10), max(s2 * 1.3, 8), 0)
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="3" fill="#C9876C" stroke="{edge}" stroke-width="2"/>')

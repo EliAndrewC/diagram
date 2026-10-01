@@ -5,7 +5,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
 ## Decisions
 
 - **D1 - read the fragments, and only the fragments** (FR-001, FR-002). The record is written per entry (feature 258): a
-  question is `research/<page>/NNN-<id>.html` (or `research/cities/<page>/...`), its notes the `.notes.html` beside it.
+  question is `research/<page>/NNN-<id>.html` (or `research/contents.json#cities<page>/...`), its notes the `.notes.html` beside it.
   The assembled pages and the citations pages repeat those fragments, so reading them would count each item twice.
   The page's name is the fragment's directory, the question's heading and anchor are the fragment's `<h2 id="...">`.
 - **D2 - what an item is** (FR-002, FR-005). HTML comments are stripped first (a session note is not a claim).
@@ -39,7 +39,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   `test_record_prepass_and_size_table.py` loads its siblings: a fixture record in `tmp_path` (a guess in text, one in a
   comment, a lower-case guess, an absence note with its claim, a settled one, a grounds note, a convention label, two
   labels in one sentence), a class naming a question, a question linked from a class's, an engine file quoting a heading, a tracked file outside the record with a GUESS, the counts; the item gone after the fixture's guess
-  is rewritten; and one test on the real record: it finds the homesteads 500 rack-length guess with the `threshing yard` class (through 505) and the `compound.py`
+  is rewritten; and one test on the real record: it finds the 0016 rack-length guess with the `threshing yard` class (through 505) and the `compound.py`
   postern guess, and its guess count equals a plain count of visible `GUESS` sentences. The tooling tree runs at the gate (tests/CLAUDE.md).
 - **D6 - speed** (SC-003). One pass over the question fragments and their notes (`573` and `544` files, research.md R1), the tracked text files, and one import of the class registry; a whole-text search before a file's line walk in the code route - `2.0 s`, research.md R4.
 

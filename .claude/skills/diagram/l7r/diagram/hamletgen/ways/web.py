@@ -414,7 +414,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     WHY IT EXISTS. The record is decisive that a house in a nucleated cluster is reached by a way:
     "every house in the nucleated village is accessible via the interconnected system of narrow lanes
-    and alleys" (research/homesteads/). The skeleton alone does not deliver that - it is sized on
+    and alleys" (research/contents.json#homesteads). The skeleton alone does not deliver that - it is sized on
     the seat band while the houses spread wider - and before this stage a third of the pool's
     farmhouses stood more than 100 ft from any way, with a whole block of Sawada touched by nothing.
 
@@ -447,7 +447,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # the connector out to the road, which `stage_track` has already drawn, and what joins them to
     # each other is the field baulks they walk on. Drawing a web here would erase the one thing that
     # makes the form legible at a glance. The two access checks are conditioned on the form to
-    # match - see `research/rendering/homesteads/150-how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson.html`.
+    # match - see `research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html`.
     if plan.settlement_form == "dispersed":
         s.M["meta"]["lane_skeleton"] = "none"
         return

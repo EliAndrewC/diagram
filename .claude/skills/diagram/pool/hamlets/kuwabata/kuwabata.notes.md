@@ -4,13 +4,13 @@
 `hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
 comments) are in git history with that script; what they recorded that still holds is carried here.*
 
-**Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`.
+**Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`.
 
 **Subject**: 16 households on polder geometry carried to the dike-pond system's rare
 **wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
 every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
 around it. The END STATE is deliberately the exception; the scattered overlay is the norm
-(research/rendering/archetypes/030-how-our-maps-lay-cash-crops-over-a-villages-rice-land.html). Reading this map as typical would be the
+(research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html). Reading this map as typical would be the
 mistake it is here to make visible.
 
 ## Map notes
@@ -74,7 +74,7 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
 
 ## What the GM's audit added (feature 150 T40-T48, 2026-08-28)
 
-See `research/rendering/archetypes/170-how-our-maps-furnish-a-dike-pond-hamlet.html` and
+See `research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html` and
 `specs/150-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
 (forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
@@ -233,7 +233,7 @@ none is drawn. Drawn at 1 ft/px.
   empty bin, and a notch bin holds 14 outline points (the ring's cut ends fill it), so it fired 0 times
   on all four flanks. The lesson is the standing one - a rule that cannot fire looks exactly like a
   rule that passes - and the guard is now a unit test that steps a notch whose bin is FULL.
-- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/water/280-reservoir-ponds-tameike.html). The half that is settled: the
+- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/questions/0061-reservoir-ponds-tameike.html). The half that is settled: the
   reviewer's "berm on a diked margin" read is CORRECT for the embankment itself and for the reason
   the reviewer guessed - a tameike's 堤 is mown and burned and may not be cultivated, **to keep the
   bank strong**, and the plants recorded on it are dry-grassland herbs. That is an independent
@@ -579,7 +579,7 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   parcel with the pond painted over it; on the vector page the pond hid the disk, but raster mode (the opening
   view) draws the lit class as a wash over the image, so the lit disk tinted all 26 dike groups' ponds gold.
   The bank is now the ring between its outer edge and the water's outline, under the even-odd rule - the
-  perimeter dike's own band form (research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html). Nothing placed moves: the
+  perimeter dike's own band form (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html). Nothing placed moves: the
   manifest is byte-identical (the two outlines come from the same draws in the same order), the crowns and the
   earth mottle still clip to the bank outline, so the few that lean over the water's rim still light with the
   dike, and the ring's inner stroke lies under the pond's own wider stroke. Measured on the page in raster mode
@@ -705,7 +705,7 @@ crowns like the woods around it, with no conifer. The belt's record counts 389 b
 ## 2026-09-28 (feature 269 E9): no duck pens, and the leftover re-rolled to pond
 
 By the GM's ruling of 2026-09-28 a form attested only in modern sources is not drawn. The duck pens are retired (269 B32;
-research/archetypes/210 - the delta's ducks were herded in the fields, not penned at the fish ponds), so this map draws
+research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html - the delta's ducks were herded in the fields, not penned at the fish ponds), so this map draws
 its seven pig sties and no pen. The dike-crop knob now rolls mulberry, fruit or tea (269 B34, archetypes/230); this map
 stays pinned to mulberry. The leftover knob lost its vegetable-ground form, and seed 21 now rolls `pond`: the whole block
 is dug, 29 ponds with no leftover parcel, where the three unconverted parcels drew as tilled rows before. The "What the
@@ -756,14 +756,14 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
   the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's rolled
   seat main_door (tried first, then the stable end, then the floored rooms; the seat each bath took is in the measured line below).
-- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
+- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, 0043 and 720:
   Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
   (undated modern pages only) are no longer drawn.
 - **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
 - **The storehouse against the farmhouse** on about one farm in eight, dealt to the LARGEST farmhouses (feature 293,
-  homesteads/120), its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (M18, M20: Kakimochi's 2 storehouses
+  0040), its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (M18, M20: Kakimochi's 2 storehouses
   in 16 households, with its 2nd- and 3rd-largest main houses; the ~30% it was drawn at was the 1972 count's).
-- **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
+- **The work yard's median is 25 tsubo** (M16, 0037: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
   depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).
 - **No farmhouse is turned a quarter away** (M26, homesteads/780): the right-turned tenth rests only on the 1974-1984 count; each
   house still turns a little with its lane, inside the survey's three compass points.
@@ -804,8 +804,8 @@ streets and door paths held to the lane law as tree lanes. Measured on this roll
 
 ## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses - the layout moved
 
-The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 9th and 16th (the smallest) of 16 farmhouses and now stand on the 1st and 2nd, drawn 24.0 x 13.3 and 23.1 x 12.8 ft. The re-pack kept 5 of the 16 house centers.
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research 0040) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 9th and 16th (the smallest) of 16 farmhouses and now stand on the 1st and 2nd, drawn 24.0 x 13.3 and 23.1 x 12.8 ft. The re-pack kept 5 of the 16 house centers.
 
 What else the re-pack moved: the notice board stands 72 ft from main's seat, at (3444.1, 1679.4); two of the three shared wells moved with their houses, to (3545, 1656) and (3765, 1590); 12 lanes where main drew 15, the web settled in 6 rounds, and main's 66 ft skeleton stub is gone; the cluster now draws a crescent, 2.13 to one, where main's drew round at 1.88 (`declare_cluster_shape`), and 2 pond sties stand where main drew 1. The fixture counts are main's: bath rooms 2, wood sheds 6, privies 11, coops 11, manure heaps 5.
 
-The annex's size is a deliberate deviation (research homesteads/120 and 430): the storehouses the record reads were about 15 by 18 ft, free-standing; the map draws them against the back wall, in the farm sheds' band.
+The annex's size is a deliberate deviation (research 0040 and 430): the storehouses the record reads were about 15 by 18 ft, free-standing; the map draws them against the back wall, in the farm sheds' band.

@@ -35,8 +35,8 @@ the same way FR-002 and FR-003 derive theirs: every disagreement the seven audit
 "Disagreements" and "inbound and disagreements" sections and the disagreement notes in their unit tables - is
 transcribed into `research.md` R1 before any migration lands, each row an explicit task with the truth it
 resolves to and its owner, and a disagreement first found during the sweep is added to the same table. The items
-named here are EXAMPLES of the rows, not the boundary: the head-race width (`research/water/` says 5.0 ft; the engine has 6.0 with the reason);
-the bell-and-drum tower (`research/urban-features/` states the retired 70 ft / 60 ft decision beside the
+named here are EXAMPLES of the rows, not the boundary: the head-race width (`research/contents.json#water` says 5.0 ft; the engine has 6.0 with the reason);
+the bell-and-drum tower (`research/contents.json#trades-and-services` states the retired 70 ft / 60 ft decision beside the
 corrected 36 ft / 30 ft finding); the mulberry bush density (labeled attested in `archetypes.md`, a GUESS on the
 page - the page's label is the one that moves); the Shunde township figure (struck on the page, still cited in
 `archetypes.md` as evidence for a live design decision - the argument is re-based on what the page supports);
@@ -118,10 +118,10 @@ cited from memory and nothing is quoted that was not fetched.
 
 **FR-006 - Pages that have no research counterpart get one.** `ways.md`, `presentation.md`, `cities/sizing.md`
 and the tier-level content of `settlements.md` and `cities.md` have no page today. This feature adds
-`research/ways/` (roads, lanes, bridges and planks), `research/presentation/` (the map's drawing
+`research/contents.json#ways` (roads, lanes, bridges and planks), `research/contents.json#map-conventions` (the map's drawing
 conventions - labels, captions, framing and cropping; conventions are a first-class label under constitution
 XII, and the page says plainly that most of what it holds is convention with no historical finding behind it),
-`research/cities/sizing/` (the space budget and the population rule) and `research/settlements/` (the
+`research/contents.json#city-sizing` (the space budget and the population rule) and `research/contents.json#tiers` (the
 tiers: what a hamlet, village, town, provincial city and capital are, the population canon, what a settlement's
 page states, the waiver doctrine and the "lock the rules in against ordinary settlements" lesson). Each new page
 has its citations page and its derived script, and is listed wherever the record's pages are enumerated.
@@ -165,12 +165,12 @@ offered correction); then FR-007's one addition, the pre-189 fixture. Any other 
 `settlements.md`, `settlements/<name>.md` or `settlements/cities/<name>.md` fails the gate; the rule matches the path forms and the bare basenames alike, resolving a bare basename from
 the containing file's directory so that `future-work/towns.md` and `future-work/cities.md` stay legitimate
 targets. The new pages are covered by every existing record test (they glob `research/*.html` and
-`research/cities/*.html`). `tests/tooling/test_docs_match_the_mechanism.py`'s operative list drops
+`research/contents.json#cities*.html`). `tests/tooling/test_docs_match_the_mechanism.py`'s operative list drops
 `settlements/fields.md` and `settlements.md`.
 
 **FR-009 - `buildings.md` stays operative and out of the retirement.** Mode A plans are hand-authored by
 design, so `buildings.md` and `buildings/programs.md` remain the documents a session draws from; this feature
-does not retire them and does not add to `research/buildings/` (the four GM rulings the audit found only in
+does not retire them and does not add to `research/contents.json#compounds` (the four GM rulings the audit found only in
 `buildings.md` are at no risk while the file stays, and whether they belong on the record as well is a separate
 question for the GM, listed in the closing report). What this feature does to the Mode A pair is FR-007's
 re-pointing of their references to retired rule files, and - under constitution XIV, defects found while doing
@@ -218,7 +218,7 @@ derives from the delta.
 | D3 A hamlet rule already in the engine with its comment is not duplicated onto the page | session, under D1 | the engine is the operative document for a scripted tier; a second copy is what this feature exists to remove | FR-004 |
 | D4 Four new pages: `settlements`, `ways`, `presentation`, `cities/sizing` | session | the content has no page to land on; `presentation` is a page of conventions and says so | FR-006 |
 | D5 The guard replay corpus and the frozen class fixture keep their stale pointers; the frozen exhibits' prose is re-pointed | session | the corpus is a census of commands actually run (`test_record.py` exempts it on that ground); the fixture is a pre-189 snapshot by definition; the exhibits' write-once rule covers their renders, not a comment | FR-007, FR-008 |
-| D6 `buildings.md` stays operative; nothing is added to `research/buildings/` | session (D6 reviewed FAITHFUL to the GM's "settlement types") | Mode A is hand-authored by design; a copy of an operative document's rulings on the page is the duplication this feature removes | FR-009 |
+| D6 `buildings.md` stays operative; nothing is added to `research/contents.json#compounds` | session (D6 reviewed FAITHFUL to the GM's "settlement types") | Mode A is hand-authored by design; a copy of an operative document's rulings on the page is the duplication this feature removes | FR-009 |
 | D7 Numbers on the page are in real feet with the pixel figure in a comment | session, from the record's reader rule | the reader meets feet on the map's scale bar; the pixel figure is a session's | FR-003 |
 | D8 A physical claim that moves without a footnote goes through the research pass, and its label follows what was found | constitution XII | nothing is asserted as a finding that the record cannot support | FR-005 |
 | D9 `research/README.md` is not edited; the correction is offered to the GM with the replacement text | constitution XVII | a README is the GM's to write and the exception is theirs to make; the GM's words did not name it | FR-007, the closing report |

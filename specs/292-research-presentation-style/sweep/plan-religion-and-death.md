@@ -21,7 +21,7 @@ folded. 68 numbered sections in: 66 fold into 21 topics here, 2 fold to other pa
 - fold: religion-and-death/120-how-big-is-a-country-shrine-and-what-stands-in-its-precinct.html, religion-and-death/126-what-else-stood-in-a-village-shrines-precinct.html, religion-and-death/127-what-did-a-parish-give-its-shrine-as-it-grew-richer.html, religion-and-death/770-did-a-village-shrines-basin-stand-in-the-open-before-modern-times.html, religion-and-death/220-when-one-shrine-hall-serves-several-kami-does-each-have-its-own-altar.html
 - rendering: How our maps draw a village shrine's halls and furnishings
 - modals: BellTower, CompoundShrine, FarmersStage, GuardianFigures, HallAndDwelling, SacredTree, Sanctuary, ShrineAltar, ShrineApproach, ShrineBasin, ShrineGrove, StoneLanterns, StrengthStones, SumoRing, Torii
-- note: 120's size of the hall-and-dwelling overlaps T6 (the monk's dwelling inside it) - keep the hall here, the dwelling there; 220's modals (CompoundShrine) are the magistracy's own shrine on the buildings page (buildings/030), so its rendering paragraph points there.
+- note: 120's size of the hall-and-dwelling overlaps T6 (the monk's dwelling inside it) - keep the hall here, the dwelling there; 220's modals (CompoundShrine) are the magistracy's own shrine on the buildings page (0218), so its rendering paragraph points there.
 - size: 26728
 
 ## T4 Shrine gateways and the approach to the hall (torii, sando)
@@ -49,7 +49,7 @@ folded. 68 numbered sections in: 66 fold into 21 topics here, 2 fold to other pa
 - fold: religion-and-death/520-how-many-wayside-shrines-does-a-village-or-a-towns-streets-carry-how-big-are-they-and-where-do-they-stand.html
 - rendering: How our maps place wayside shrines
 - modals: -
-- note: overlaps ways/110 (the boundary god where each road meets the houses) and vegetation/330 (the enoki beside the boundary shrine) - those pages' planners decide whether they fold here; the six jizo at a graveyard's gate are in T17, not here.
+- note: overlaps 0085 (the boundary god where each road meets the houses) and vegetation/330 (the enoki beside the boundary shrine) - those pages' planners decide whether they fold here; the six jizo at a graveyard's gate are in T17, not here.
 - size: 7010
 
 ## T8 Shrines in towns and cities
@@ -162,16 +162,16 @@ folded. 68 numbered sections in: 66 fold into 21 topics here, 2 fold to other pa
 - G9: T18, T19 (36967)
 
 ## Cross-page folds
-- religion-and-death/200-how-large-are-the-gates-walls-and-funerary-features-drawn.html (4803) -> buildings topic on compound walls and gates (buildings/070 "A compound wall is a building", 480 "How wide was the main gate of a magistrate's post?", 490 "How thick was a compound's earth wall?"): it measures the earth wall and the gate of every walled compound; its one funerary point (a funerary feature is drawn at its real size) is restated in T17's and T18's rendering sections.
-- religion-and-death/555-did-a-provincial-city-keep-a-confucian-school-or-academy-and-how-big-was-it.html (5261) -> cities/capitals topic on the domain school (hanko) (cities/capitals/190 "The domain school is the hanko", 460 "How big is a domain school's ground"): the domain school is a school, not a religious or funerary feature; T15 keeps the Confucian temple and points there.
+- religion-and-death/200-how-large-are-the-gates-walls-and-funerary-features-drawn.html (4803) -> buildings topic on compound walls and gates (0092 "A compound wall is a building", 480 "How wide was the main gate of a magistrate's post?", 490 "How thick was a compound's earth wall?"): it measures the earth wall and the gate of every walled compound; its one funerary point (a funerary feature is drawn at its real size) is restated in T17's and T18's rendering sections.
+- religion-and-death/555-did-a-provincial-city-keep-a-confucian-school-or-academy-and-how-big-was-it.html (5261) -> cities/capitals topic on the domain school (hanko) (0166 "The domain school is the hanko", 460 "How big is a domain school's ground"): the domain school is a school, not a religious or funerary feature; T15 keeps the Confucian temple and points there.
 
 ## Confusable pairs
 - "Shrine woods and fences (chinju no mori, tamagaki)" / homesteads "Groves of trees around farmhouses (yashikirin)": the shrine's sacred wood around a precinct vs a farm's own grove around a house.
-- "Shrine woods and fences (chinju no mori, tamagaki)" / vegetation/020 and 290 (the village's water-mouth grove, the fengshui forest): the kami's wood at the shrine vs the village's own siting grove, though a Chinese earth-god shrine may stand in the latter (T2).
+- "Shrine woods and fences (chinju no mori, tamagaki)" / 0071 and 290 (the village's water-mouth grove, the fengshui forest): the kami's wood at the shrine vs the village's own siting grove, though a Chinese earth-god shrine may stand in the latter (T2).
 - "Village shrines: where they stand, and how big their grounds are" / "Wayside shrines and stone figures (dosojin, jizo)": the parish's shrine with a precinct and a keeper vs a stone or a tiny hall at a threshold with neither.
 - "The country monk who keeps a village shrine, and their dwelling (kuri)" / "Temple clergy, their families, and how a temple earned its keep": one monk living at a village shrine vs a city temple's hereditary, married clergy.
 - "Village temples (tera)" / "Town monasteries": a parish temple a village may or may not have vs the town's Order monastery with its preceptor.
 - "Village burial grounds (bochi)" / "Cremation grounds and bone mounds (kasoba)": both can be called sanmai; one holds graves, the other is where the dead were burned.
 - "Shrines in towns and cities" / "Temples of the state cult: the City God and Confucius (chenghuang miao, wenmiao)": the City God temple acts as a seat's principal shrine but is the state's building, with its own rank.
-- "City temples: the precinct, its halls, bell tower and pagoda (garan)" / urban-features/070 "The bell-and-drum tower - one per walled seat" and cities/capitals/470 (time bells): a temple's own bell tower vs the seat's civic bell tower and the time bells hung at temples.
-- "Burial grounds of towns and cities, and paupers' grounds (yizhong)" / urban-features/020-024 (the execution ground): the Edo execution ground also buried its dead (204's kozukappara), but it is a justice work, not a burial ground.
+- "City temples: the precinct, its halls, bell tower and pagoda (garan)" / 0194 "The bell-and-drum tower - one per walled seat" and 0144 (time bells): a temple's own bell tower vs the seat's civic bell tower and the time bells hung at temples.
+- "Burial grounds of towns and cities, and paupers' grounds (yizhong)" / 0191 (the execution ground): the Edo execution ground also buried its dead (204's kozukappara), but it is a justice work, not a burial ground.

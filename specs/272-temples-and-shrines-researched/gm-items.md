@@ -8,7 +8,7 @@
    with six stone jizo, downstream of the houses. If your villages instead send their dead to a town's burakumin,
    the ground comes off every village map.
 2. **Wayside stones - done.** Hoshigaoka now draws three wayside stones where its one lane leaves the village
-   (religion-and-death 520: one to three stones at each road entrance).
+   (0217: one to three stones at each road entrance).
 
 (The Hoshigaoka edit is under settlement-review as this is written; its result is in tasks.md T08.)
 Cut: the historical village temple against the canon's country monk - the record already follows the canon as a

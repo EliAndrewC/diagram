@@ -24,7 +24,7 @@ def test_village_passes_gate(gen):
     # spans plot_texture's small_irregular->large_block knobs (~0.036-0.0675) plus slop and, above all,
     # catches a regression back to the old hand-set ~0.13 ac (or the old field-wide terrace/ribbon bands).
     # The polder / dike-pond archetypes are DELIBERATELY larger (Buck's ~1 mu parcels, 0.4-0.6 ha ponds -
-    # true-scale per research/settlements.html, the scale entry), so they are excluded, not held to the leveled-cell target.
+    # true-scale per research/contents.json#tiers, the scale entry), so they are excluded, not held to the leveled-cell target.
     # KEPT through feature 287 as the village and city tier's guard: the band is that tier's calibration, a RECORDED DROP on
     # the hamlet path (the hamlet keeps the GM's pixel grain - specs/287-placer-guarantees/research.md R7, water W39), and it
     # becomes a placer guarantee when the village tier converts to scripted generation. It judges no map the pool ships
@@ -37,5 +37,5 @@ def test_village_passes_gate(gen):
     if _valley or _hill_rice:
         cell = _typical_cell_acres(svg, meta.get("ftpx") or 2)
         assert cell is not None and 0.030 <= cell <= 0.072, (
-            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see research/rendering/fields.html 'How our maps draw rice paddies and their plots (suiden)')"
+            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see research/contents.json#fields 'How our maps draw rice paddies and their plots (suiden)')"
         )

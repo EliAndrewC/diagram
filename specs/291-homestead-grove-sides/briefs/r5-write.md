@@ -32,7 +32,7 @@ each is a GUESS and says why:
   band as it stands.
 - **vegetation/620** ("How did a lane get through a belt?"): the same way-in figure, "about 12 ft" to about 36 ft, the
   reason in a clause, pointing at homesteads/715.
-- **homesteads/150** ("Does a hamlet have to be nucleated at all?"): one or two sentences - where the farms carry their
+- **0031** ("Does a hamlet have to be nucleated at all?"): one or two sentences - where the farms carry their
   own groves (the dispersed and linear forms) no village belt is drawn, pointing at the vegetation page's "Does a shelter belt wrap the settlement?"; and in the LINEAR
   section, that the farms front a street laid along the road, the row as long as its households (the drawn length a
   GUESS).

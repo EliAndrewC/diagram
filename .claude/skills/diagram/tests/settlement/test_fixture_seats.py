@@ -83,7 +83,7 @@ def test_the_bath_is_a_room_joined_to_the_house_on_an_attested_wall_or_refused()
 
 
 def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_steading_or_is_refused() -> None:
-    """Feature 280 M21 (research/homesteads/212, 720; settlement-reviews of Inashiro and Kuwabata, sheds 25-37 ft out): the
+    """Feature 280 M21 (research/questions/0043-firewood-stacks-and-sheds-kigoya.html, 720; settlement-reviews of Inashiro and Kuwabata, sheds 25-37 ft out): the
     wood shed a ken off its wall, a building of its own - offered every place a ken off the steading's walls, the byre's
     included - never walked out across the dooryard; a steading with no such place refuses it by name."""
     byre = (-(HW / 2 + 3.0 + 5.5), 0.0, 11.0, 16.0)

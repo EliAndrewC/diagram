@@ -30,15 +30,15 @@ from ...interactive.sheet import element_kinds
 from .grids import FTPX
 from .parse import ParsedPlan, Rect
 
-LAT_DEG: float = 38.0  # the record's latitude for every shadow it casts (research homesteads 040)
-DECL_DEG: float = -8.5  # the shoulder month: at 38N it gives the record's 3pm sun, 27-28 deg high at azimuth ~232 (homesteads 040)
+LAT_DEG: float = 38.0  # the record's latitude for every shadow it casts (research 0038)
+DECL_DEG: float = -8.5  # the shoulder month: at 38N it gives the record's 3pm sun, 27-28 deg high at azimuth ~232 (0038)
 STEP_H: float = 0.5  # the day walked in half hours
 LIT_SHARE: float = 0.5  # a half hour is lit when at least half the bed is out of shadow (homesteads 044, a guess)
 SUN_BED_H: float = 6.0  # sun crops - daikon, eggplant, cucumber, beans - want about 6 hours or more (homesteads 044)
 HALF_SHADE_BED_H: float = 3.0  # half-shade crops do with 3 to 4 (homesteads 044)
 BUILDING_FT: float = 20.0  # the farmhouse ridge the record casts a building's shadow from (homesteads 043) - a least height
 WALL_FT: float = 1.6 / 0.3048  # the surviving earth wall's 1.6 m (buildings 490)
-TREE_FT: float = 10.0 / 0.3048  # a working, pruned belt's 10 m (homesteads 040); an untended stand is 15-25 m
+TREE_FT: float = 10.0 / 0.3048  # a working, pruned belt's 10 m (0038); an untended stand is 15-25 m
 SMALL_BUILDING_FT: float = 6.0  # a roofed thing under SMALL_BUILDING_SQFT - a privy, a hokora, a covered way - at the least height a person stands under (a guess)
 SMALL_BUILDING_SQFT: float = 100.0
 # What a sheet draws that does not stand up to cast a garden's shadow: ground and water features, a building's own parts (under

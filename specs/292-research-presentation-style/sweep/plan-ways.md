@@ -24,7 +24,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: ways/110-where-does-a-village-begin-and-what-marks-it-a-boundary-god-where-each-road-meets-the-houses.html, ways/120-where-does-one-village-end-and-the-next-begin-a-line-on-the-survey-seldom-marked-on-the-ground.html, vegetation/330-did-a-village-keep-a-great-old-tree-at-its-entrance-an-enoki-beside-the-boundary-shrine-and-one-on-each-highway-milestone-mound.html
 - rendering: How our maps mark where a village begins
 - modals: -
-- note: two edges, one topic: the entrance a traveler meets (the boundary god, dosojin) and the territorial line between villages. vegetation/330 (the great tree beside the boundary shrine) and religion-and-death/520 (wayside shrines) are cross-links. Cross-page: vegetation/330 (the great old tree at a village's entrance) folds here.
+- note: two edges, one topic: the entrance a traveler meets (the boundary god, dosojin) and the territorial line between villages. vegetation/330 (the great tree beside the boundary shrine) and 0217 (wayside shrines) are cross-links. Cross-page: vegetation/330 (the great old tree at a village's entrance) folds here.
 - size: 10630
 
 ## T4 Moving goods: carts, packhorses and river landings (kashi)
@@ -38,14 +38,14 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: ways/210-what-lines-the-road-into-a-town-an-avenue-of-trees-milestone-mounds.html, ways/070-how-wide-is-the-road-at-a-compounds-gate.html, ways/190-what-lines-the-imperial-road-through-a-town-and-is-it-labeled-there.html, ways/130-what-does-a-village-on-a-highway-put-on-the-road-teahouses-at-the-ends-of-its-street-and-no-inn.html
 - rendering: How our maps draw and label the highway
 - modals: ApproachRoad
-- note: width and avenue first (210, 070), then what the road passes through: a town (190) and a village (130). 190's "is it labeled there" and 070's approach-road width are rendering. cities/fabric/040 and 050 (the Imperial road through a city) are the fabric page's.
+- note: width and avenue first (210, 070), then what the road passes through: a town (190) and a village (130). 190's "is it labeled there" and 070's approach-road width are rendering. 0158 and 050 (the Imperial road through a city) are the fabric page's.
 - size: 16250
 
 ## T6 Town streets, side lanes and back alleys (roji)
 - fold: ways/160-how-wide-is-a-towns-street-its-side-lane-and-its-back-alley.html, ways/170-what-is-a-town-street-made-of-and-does-it-carry-a-drain.html, ways/180-how-many-cross-streets-does-a-town-have-and-how-does-its-road-come-in.html, urban-features/110-how-do-you-get-through-a-packed-commoner-quarter---and-why-is-the-path-not-a-street.html
 - rendering: How our maps draw town streets and alleys
 - modals: -
-- note: FROM ANOTHER PAGE: urban-features/110 folds in here (the alley through a packed quarter); its "this project's own measurement of the drawn maps" and the no-warren-without-a-lane rule are rendering. cities/fabric/160 (the back alley underfoot), cities/fabric/070 (a city's grid), towns/090 and towns/230 are those pages'.
+- note: FROM ANOTHER PAGE: urban-features/110 folds in here (the alley through a packed quarter); its "this project's own measurement of the drawn maps" and the no-warren-without-a-lane rule are rendering. cities/fabric/160 (the back alley underfoot), 0162 (a city's grid), towns/090 and 0121 are those pages'.
 - size: 19051
 
 ## T7 Road bridges over rivers and canals (hashi)

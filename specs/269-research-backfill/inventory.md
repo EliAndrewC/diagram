@@ -15,9 +15,9 @@ in the section that makes the claim).
   cities/defenses, fabric and government; they are unpushed until 265 closes. So the groups that EDIT existing
   fragments run after the new-question groups, and the queue syncs from main between sessions.
 - **Feature 267** (diagram-buildings): `future-work/compounds.md` "Research owed" R01-R53 and the in-field grave island
-  (R52). Its reserved ranges: buildings 240-640, vegetation 170-200, religion-and-death 220-260, fields 220-240,
-  cities/river-cities 050-080, urban-features 190-220, ways 060-090.
-- **Feature 268** (Diagram shrines): religion-and-death 080, 090, 100, 110, 120 and the new 122, 124, 126; the
+  (R52). Its reserved ranges: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076, 0240, fields 220-240,
+  0177, 0225, 0199, 0082.
+- **Feature 268** (Diagram shrines): 0220, 090, 100, 110, 120 and the new 122, 124, 126; the
   country-shrine program in `buildings/programs.md`.
 - The thin sections on 265's pages are NOT excluded. None is in 265's specs or marks files (searched 2026-09-27), and
   265's session confirmed it, 2026-09-27: "None of those sections are 265's, so take them into 269's last group." They
@@ -26,23 +26,23 @@ in the section that makes the claim).
 
 ## Footnote-less sections passed over, and why (every fragment with no notes, 2026-09-27)
 
-Each section with no footnotes is either an item (fields 140/150 -> B08; homesteads 170/190 -> B19; cities/fabric 070
--> B40; cities/government 030 -> B39; settlements 030 -> B42; towns 020/110/150, buildings 110, cities/capitals
+Each section with no footnotes is either an item (fields 140/150 -> B08; homesteads 170/190 -> B19; 0162
+-> B40; 0161 -> B39; settlements 030 -> B42; towns 020/110/150, buildings 110, cities/capitals
 380/390 -> X1), or is not a real-world claim:
-- `presentation/010-070`: map drawing conventions (legend, framing, captions), which are the GM's rulings.
+- `0241, 0242, 0243`: map drawing conventions (legend, framing, captions), which are the GM's rulings.
 - `settlements/060` (the scale ladder, a GM ruling) and `settlements/080` (when a rule may break: process).
 - `buildings/200`: how layout is checked by the tooling.
 - `fields/025` (the arrowhead glyph), `vegetation/040` (the belt at the sheet edge), `vegetation/100` (scrub off drawn
   water), `water/060` (a delivery never wider than its feed), `water/200` (drawing a junction): drawing conventions.
 
-## F1 - fields: paddy kinds (new: fields 250-280)
+## F1 - fields: paddy kinds (new: 0013, 0014)
 
 - B01 **Fallow patch**: was fallow ground kept within a hamlet's paddy, and where? `l7r/diagram/interactive/classes/fields.py:250`
   labels it guess, with "no dedicated entry - recorded as silent". Never researched. Kind `FallowPatch`, all hamlets. M.
 - B02 **Bund and walking-bund width**: the 2-5 ft azemichi and ~3 ft levee are guesses; also azenuri (bund
-  re-plastering). Edits `fields/020`, `vegetation/090`, `homesteads/100` (the 6 ft farmhouse setback rests on it).
+  re-plastering). Edits `0005`, `0073`, `homesteads/100` (the 6 ft farmhouse setback rests on it).
   All hamlets. S-M.
-- B03 **Mid-season drainage** (nakaboshi): was a premodern paddy drained mid-season? `fields/030` calls it a guess.
+- B03 **Mid-season drainage** (nakaboshi): was a premodern paddy drained mid-season? `0009` calls it a guess.
   Until a period source says so. S.
 
 ## F2 - fields: ways and seasons (new: fields 290-330)
@@ -56,13 +56,13 @@ Each section with no footnotes is either an item (fields 140/150 -> B08; homeste
 
 ## F3 - fields: thin sections (edits existing)
 
-- B07 Dry-field (hatake) crop placement, `fields/160` ("no source read places them"). S-M.
-- B08 Samurai estates and temple glebe, `fields/140` and `fields/150` (no footnotes). S-M.
-- B09 The grain-share guess, `fields/110`. S.
+- B07 Dry-field (hatake) crop placement, `0006` ("no source read places them"). S-M.
+- B08 Samurai estates and temple glebe, `fields/140` and `0231` (no footnotes). S-M.
+- B09 The grain-share guess, `0017`. S.
 
-## H1 - homesteads: farmstead fixtures (edits 210-218; new: homesteads 250-290)
+## H1 - homesteads: farmstead fixtures (edits 210-218; new: 0047)
 
-- B10 **Privy**: where it sat relative to the house and the manure heap, and its size. `homesteads/210-218`,
+- B10 **Privy**: where it sat relative to the house and the manure heap, and its size. `0042, 0043, 0044, 0045, 0046, 0219`,
   `classes/homestead.py:195-304`. All live hamlets. M.
 - B11 **Manure heap**: its place in the dooryard. M.
 - B12 **Bath shed** (furoba): detached or not, and where. M.
@@ -81,7 +81,7 @@ Each section with no footnotes is either an item (fields 140/150 -> B08; homeste
 
 - B19 Village packing and village form: `homesteads/170` (512 words, no footnotes), `190` (none), and `110`, `160`,
   `180` (no source cited). M.
-- B20 Dooryard garden area (`homesteads/050`, guess) and the village-entrance stone (`homesteads/140`, guess; 140
+- B20 Dooryard garden area (`0039`, guess) and the village-entrance stone (`0028`, guess; 140
   was split by 265 into 140 + 145, so work on whatever holds the claim after sync). S.
 
 ## W1 - water: kinds (new: water 290-330)
@@ -89,49 +89,49 @@ Each section with no footnotes is either an item (fields 140/150 -> B08; homeste
 - B21 **Plank footbridges over ditches**: the `Footbridge` kind is a guess (`classes/water_and_ways.py:297`,
   `water/070`). S.
 - B22 **Intake mouth**: what an intake mouth looked like (`fc:2371`); the weir's thickness (`hamletgen/consts.py:586`);
-  the even 50/50 roll between the two intake forms (`consts.py:515`, `water/250`). M.
-- B23 **A hamlet split by its water**: labeled a guess, `water/270`. S.
+  the even 50/50 roll between the two intake forms (`consts.py:515`, `0059`). M.
+- B23 **A hamlet split by its water**: labeled a guess, `0035`. S.
 
 ## W2 - water: thin sections (edits existing)
 
-- B24 Reed economy on tameike margins, searched and not found (`water/280`). S.
-- B25 `water/090`, `water/100` and `fields/090` each carry one footnote over 500+ words; `water/160` two. M.
+- B24 Reed economy on tameike margins, searched and not found (`0061`). S.
+- B25 `water/090`, `0146` and `fields/090` each carry one footnote over 500+ words; `0058` two. M.
 
-## V1 - vegetation: woods (new: vegetation 210-250)
+## V1 - vegetation: woods (new: 0077)
 
 - B26 **Copse size**: how big a village copse was, and how many clumps. `fc:83-127` ("Do NOT pick one by eye").
   Mizuguchi, Inashiro. M.
 - B27 **Woodland-commons shape, iriai boundaries, upslope siting**: "bounded by ridge, stream and path" has unknown
   provenance (`vegetation/140`). `fc:1200`, `fc:1223` (Kashikawa's woodland sits downslope). M.
 - B28 **Coppice stocking and crown size**: the 500-800 stems/ha and 5-8 m crowns come from papers that could not be
-  read (`vegetation/060`, `070`, `fc:1279`). M.
+  read (`0080`, `070`, `fc:1279`). M.
 
 ## V2 - vegetation: groves and margins (new: vegetation 260-290; edits existing)
 
-- B29 **Bamboo in a farmstead grove** (yashikirin): whether it was there, and its share. `fc:2113`, `vegetation/150`, `154`,
+- B29 **Bamboo in a farmstead grove** (yashikirin): whether it was there, and its share. `fc:2113`, `0075`, `154`,
   `hamletgen/homesteads/bamboo.py:21`. S-M.
 - B30 **Windbreak belt vs copse**: was the belt a single ranked species? `fc:1397`. S.
 - B31 Guessed sizes and margins: the water-mouth grove size and how far the hillside was stripped (`vegetation/010`,
   `050`); crop and bank margins (`090`, `110`); reed mowing (`120`); the width of a gap in the belt (`030`). M.
 
-## A1 - archetypes: dike-pond (new: archetypes 200-240)
+## A1 - archetypes: dike-pond (new: 0025, 0026)
 
 - B32 **Dike-pond livestock and ponds**: the pig sty, duck pen and fry pond shares are guesses (`classes/dikepond.py:276/305/330`,
-  `hamletgen/pondstock.py`, `archetypes/170`, `171`, `180`). M.
+  `hamletgen/pondstock.py`, `0023`, `171`, `180`). M.
 - B33 **Mulberry density and crown width**: tighten the one modern figure for the GM's open decision (`fc:10`,
-  `archetypes/140`). Research as support. The ruling stays the GM's. S.
+  `0018`). Research as support. The ruling stays the GM's. S.
 - B34 **Fruit, cane and vegetable dikes**: any premodern attestation? For the GM's open decision (`fc:25`,
   `archetypes/173`). S.
 
 ## A2 - archetypes: thin sections (edits existing)
 
-- B35 Hand-piled bunds and parcel edges: `archetypes/040`, `060` and `070` cite no source. The record has no national
+- B35 Hand-piled bunds and parcel edges: `0021`, `060` and `070` cite no source. The record has no national
   share of settlement forms, and nothing on whether a branch hamlet had its own chinju (`190`). M.
 
-## R1 - religion-and-death: burial (new: religion-and-death 270-300; edits 160-206)
+## R1 - religion-and-death: burial (new: 0236; edits 160-206)
 
 - B36 **Burial grounds**: their size, distance from water, and whether a graveyard stands beside its temple
-  (`religion-and-death/160`, `170`, `180`, `206`: "no source found" or the project's own arithmetic). The 2% graves
+  (`0235`, `170`, `180`, `206`: "no source found" or the project's own arithmetic). The 2% graves
   figure rests on an unread Buck survey. M.
 
 **B36's GENERATOR part HANDED to feature 273** (Diagram shrines, hamlet-graveyards; confirmed 2026-09-27: "269's
@@ -160,7 +160,7 @@ searched twice; 190 and 204 done by 272's R3.
 ## C2 - cities/government (edits existing; new 100-140)
 
 - B39 Servant nagaya (6 guesses), martial training, ashigaru plots, the samurai count, ward gates
-  (`cities/government/030` no footnotes, `050`, `070`, `080`, `085`). L. Check 267 G1B's handoff first (servant
+  (`0161` no footnotes, `050`, `070`, `080`, `085`). L. Check 267 G1B's handoff first (servant
   buildings) so the city question cites, not repeats, the compound one.
 
 ## C3 - cities/fabric (edits existing; new 160-190)
@@ -185,7 +185,7 @@ label) owes no source. Say so in the handoff and leave it.
 
 
 - B43 `towns/020` (who lives in a town, and in how many houses) and `towns/150` (a town's paddy plot): no footnotes.
-  `towns/120`, `towns/140`: thin. M.
+  `0123`, `towns/140`: thin. M.
 - B44 `towns/110` (the magistrate's manor drawn as a plain walled box) and `buildings/110` (poverty texture): no
   footnotes. S.
 - B45 `cities/capitals/380` (Scorpion vs Crane capital: canon first, by `make canon`) and `390` (which provincial
@@ -198,23 +198,23 @@ C4 and X1 each assign more than four questions, so they run as parts (feature 27
 
 ## C4A - cities/hinterland (edits existing; new hinterland 060-090)
 
-- B41a Near-city retreats and how far an estate reached (`cities/hinterland/010`, `cities/hinterland/015`); the moat and
-  fields (`cities/hinterland/030`); the size of the strip outside a gate (`cities/hinterland/040`). M.
+- B41a Near-city retreats and how far an estate reached (`0173`, `cities/hinterland/015`); the moat and
+  fields (`cities/hinterland/030`); the size of the strip outside a gate (`0171`). M.
 
 ## C4B - cities/sizing (edits existing; new sizing 030-050)
 
-- B41b The population split (`cities/sizing/010`). S.
+- B41b The population split (`0181`). S.
 
 ## X1A - towns (edits existing; held until 265 lands, which it has)
 
 - B43 Who lives in a town and in how many houses (`towns/020`), a town's paddy plot (`towns/150`), and the thin
-  `towns/120` and `towns/140`. M.
+  `0123` and `towns/140`. M.
 
 ## X1B - towns, buildings and capitals (edits existing)
 
 - B44 The magistrate's manor drawn as a plain walled box (`towns/110`) and poverty texture (`buildings/110`). S.
 - B45 Scorpion against Crane capital (`cities/capitals/380`, canon first by `make canon`) and which provincial rules
-  invert in a capital (`cities/capitals/390`). M.
+  invert in a capital (`0138`). M.
 
 ## X1C - river cities and ways (edits existing)
 
@@ -229,34 +229,34 @@ The sections owed a correction by another feature's findings are edited here bec
 
 - F01 `homesteads/060`: the shared-byre sentence points to the stable question (homesteads 300) (B16's finding: the beast lived in the house).
 - F02 `homesteads/240`: the heading says what the section finds ("a little off due south").
-- F03 `homesteads/180`: B19's remaining village-form claims (it was held by 271 V7, now closed).
+- F03 `0041`: B19's remaining village-form claims (it was held by 271 V7, now closed).
 - F04 `homesteads/130`: the plain farmhouse drawn 46 x 28 ft is about twice the 1885 usual 18 tsubo (weak: one district); say so, cited.
 
 ## FX2 - vegetation, fields and government fixes (edits existing)
 
-- F05 `vegetation/020`: point to the copse question (vegetation 210).
+- F05 `0071`: point to the copse question (vegetation 210).
 - F06 `vegetation/230`: the hedge's 1,700 a hectare is an overgrown stand; say so.
 - F07 `fields/270`: the heading says what the section finds.
 - F08 `cities/government/050`: a samurai house's frontage of 2-2.5 ken (12-15 ft), cited from the handoff's source.
 
 ## FX3 - corrections owed to other sections (edits existing)
 
-- F09 `towns/250`: "where the Japanese compound stands is a guess" points at the magistrate's-compound question (towns 120).
-- F10 `ways/020`: point at the field-path question (fields 290) for the paddy case.
+- F09 `towns/250`: "where the Japanese compound stands is a guess" points at the magistrate's-compound question (0123).
+- F10 `0081`: point at the field-path question (fields 290) for the paddy case.
 - F11 `homesteads/145`: cite `matsumoto-dosojin` (already in the registry).
 - F12 the stable question, `homesteads/300`: cite `kotobank-umaya`.
 
 ## FX4 - registry and government pointers (edits existing)
 
-- F13 `cities/government/080`: pointers to buildings 750 and 340.
+- F13 `0115`: pointers to buildings 750 and 340.
 - F14 registry `shuson-jawiki`: the What-it-is replacement sentences and its (homesteads) Used-for, from `h3-checks.md`.
 - F15 registry `kotobank-jokamachi`: Used-for gains government.
 - F16 registry `gogura-kotobank`: its siting quote noted for a village storehouse (Used-for).
 
 ## Queue order
 
-New-question groups first. A1 and R1 are NOT such groups, though this order ran them as ones: A1 edits archetypes 140
-and 170-173 and R1 religion-and-death 160-206, so each belonged after 265's landing (plan D2 records the early run and
+New-question groups first. A1 and R1 are NOT such groups, though this order ran them as ones: A1 edits 0018
+and 170-173 and R1 0235, so each belonged after 265's landing (plan D2 records the early run and
 the check that nothing of main's was dropped). The audit's priority runs:
 H1 (five guess kinds on every live hamlet), V1 (blocks a placer fix), H2 (knob candidates with measured defects
 waiting), F1, W1. Then F2, V2, A1, R1. Then the edit-existing groups, after a sync from main and 265's landing: H3, F3, W2,

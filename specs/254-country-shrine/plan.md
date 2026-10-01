@@ -205,7 +205,7 @@ delta carries engine code, so the route is GATED.
 .claude/agents/building-review.md, size-audit.md   # the program named by type (FR-006)
 ├── pool/country-shrines/hoshigaoka-shrine/   # NEW tier: .svg, .gen.py, .notes.md
 ├── pool/magistracies/*/*.svg         # id="precinct" on the interior rect
-├── research/religion-and-death/  # two sections, one revised; citations/ and SOURCES.html
+├── research/contents.json#religion-and-the-dead  # two sections, one revised; citations/ and SOURCES.html
 ├── tests/fixtures/*-red.svg          # one per registered check
 ├── tests/gate/test_mode_a_sheets.py  # NEW: the sweep
 ├── tests/test_building_types.py      # NEW: census, ignore rule, declaration shape

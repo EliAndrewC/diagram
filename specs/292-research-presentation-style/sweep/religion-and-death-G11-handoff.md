@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan
 - RENDERING=rendering/religion-and-death/how-our-maps-size-and-draw-a-citys-temples
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=
 - BASE=c312aa887
 

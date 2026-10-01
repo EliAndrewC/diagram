@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-4`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -31,12 +31,12 @@ the map features whose write-ups will be rewritten from what you find (by the or
   a city, Japan against China (Kyoto's 2-3 by 10-12 ken is a city's; the 48 x 32 ft glyph)? (cities/fabric/020,
   urban-features/100). M. P1.
 - B29 **Party walls in a town**: does a county seat build its street front in continuous party-wall rows, or as
-  detached houses with gaps? (cities/fabric/010, city). S. P1.
+  detached houses with gaps? (0152, city). S. P1.
 - B30 D113 D114 **Stories and roofs**: one story or two, and thatch, board-and-stone or tile - what did a town's and a
   city's street front look like from above (machiya, inn, merchant kura), and did fire law shape it? (towns/050, the
   inn only). M. P1.
 - B33 C85 **Laborer dwelling**: what does a laborer live in - a detached hut, a nagaya row unit, a back tenement
-  (uranagaya) - and how big is a unit and its block, per household, in a town and a city? (cities/fabric/010,
+  (uranagaya) - and how big is a unit and its block, per household, in a town and a city? (0152,
   cities/capitals/100). M. P1.
 - B34 **Large laborer house**: what is the drawn "large laborer" house - a labor boss's (oyakata) house, a porters'
   boarding house - and its size? (none). S. P1.
@@ -61,7 +61,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on towns 260-310, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0126, 0135, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

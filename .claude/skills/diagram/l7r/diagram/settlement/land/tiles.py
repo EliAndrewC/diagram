@@ -234,7 +234,7 @@ def grass_overlay_tile(bs: float) -> str:
 
 #: THE FRINGE (feature 299, the GM 2026-10-01: "a more gradual transition ... between the two"): where scrub meets marsh, a band
 #: `FRINGE_FT` wide straddling the boundary is drawn with a tile of both - grass tufts and reed tufts at about half their own
-#: densities, with a little of the wet tint - so the change is a grading, as the margin itself grades (research/vegetation 120:
+#: densities, with a little of the wet tint - so the change is a grading, as the margin itself grades (research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html:
 #: reed, then sedge and grass, then dry ground). A MAP DRAWING CONVENTION; the width is calibrated by eye.
 FRINGE_FT = 30.0
 

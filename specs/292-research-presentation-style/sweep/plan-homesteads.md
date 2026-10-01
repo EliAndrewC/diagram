@@ -13,7 +13,7 @@ writer takes it from the entry, never invents one (kanji triangle).
 - fold: vegetation/210-how-big-was-the-villages-dooryard-copse-it-was-the-homesteads-own-woods---about-6000-to-28000-sq-ft-each-in-a-1684-register.html
 - rendering: How our maps draw groves of trees around farmhouses (the pilot's existing rendering section; add to it only)
 - modals: Copse
-- note: FROM THE VEGETATION PAGE: vegetation/210 answers "how big was the village's dooryard copse" by finding that it WAS the homesteads' own woods, sized from a 1684 register (6,000-28,000 sq ft each) - add it to the pilot's scale-and-prevalence subsection and bring its Copse modal; the pilot text is otherwise left as accepted. vegetation/020's dooryard copse, and T12's fruit trees in the grove, link here.
+- note: FROM THE VEGETATION PAGE: vegetation/210 answers "how big was the village's dooryard copse" by finding that it WAS the homesteads' own woods, sized from a 1684 register (6,000-28,000 sq ft each) - add it to the pilot's scale-and-prevalence subsection and bring its Copse modal; the pilot text is otherwise left as accepted. 0071's dooryard copse, and T12's fruit trees in the grove, link here.
 - size: 4586
 
 ## T1 The farmstead and what stood on it (yashiki)
@@ -62,7 +62,7 @@ writer takes it from the entry, never invents one (kanji triangle).
 - fold: homesteads/260-where-did-the-privy-stand-and-where-was-its-night-soil-kept.html, homesteads/220-the-outhouse-faces-the-sun-not-away-from-the-wind---and-727-of-them-do.html, homesteads/750-before-1868-was-a-farms-privy-a-building-of-its-own.html
 - rendering: How our maps place privies
 - modals: ManureHeap, ManurePit, Privy
-- note: the native term is the one the entries give (kotobank-benjo is cited) - the writer adds it. 260 leads (a building set apart, and where the night soil was kept), then 220 (it faces the SUN, 72.7% in Wang and Ochiai's survey - the Sawada upwind finding and the fix are rendering; the sun links the pilot "Sunlight and shade on the farm"), then 750 (before 1868, was it a building of its own). The residence's privies (buildings T16) and the town house's (towns/480, the night-soil trade) are those pages' - link.
+- note: the native term is the one the entries give (kotobank-benjo is cited) - the writer adds it. 260 leads (a building set apart, and where the night soil was kept), then 220 (it faces the SUN, 72.7% in Wang and Ochiai's survey - the Sawada upwind finding and the fix are rendering; the sun links the pilot "Sunlight and shade on the farm"), then 750 (before 1868, was it a building of its own). The residence's privies (buildings T16) and the town house's (0131, the night-soil trade) are those pages' - link.
 - size: 16668
 
 ## T8 Manure heaps and compost

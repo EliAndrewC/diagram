@@ -159,19 +159,19 @@ def test_earlier_reads_are_printed_before_the_fetch_and_a_saved_page_is_ledgered
     """SC-001: an earlier line for the page, written under another spelling, is printed BEFORE the page is fetched; the
     save appends a `pending` line with its question; a page that could not be saved gets none."""
     where, ctx = _where(), {"feature": "271", "clone": "other", "session": "s-earlier"}
-    sp.src.append(where, [sp.src.line(ctx, "http://www.ok.example/a/", "rejected: no widths", ["fields/020"])])
+    sp.src.append(where, [sp.src.line(ctx, "http://www.ok.example/a/", "rejected: no widths", ["0005"])])
 
     def opener(req, timeout: int = 0):  # noqa: ANN001, ANN202
         print(f"FETCHING {req.full_url}")
         return _opener(req, timeout)
 
-    ledger = {"where": where, "ctx": {"feature": "288", "clone": "c", "session": "s-now"}, "questions": ["fields/030"]}
+    ledger = {"where": where, "ctx": {"feature": "288", "clone": "c", "session": "s-now"}, "questions": ["0009"]}
     sp.save(["https://ok.example/a", "https://refuses.example/b"], tmp_path / "o", sp.qv.Pages(opener=opener), ledger=ledger)
     out = capsys.readouterr().out
     assert out.index("sources-consulted: https://ok.example/a - read 1 time(s) before:") < out.index("rejected: no widths") < out.index("FETCHING https://ok.example/a")
     assert "sources-consulted: https://refuses.example/b - no earlier read on the ledger" in out
     rows = sp.src.read(where)
-    assert [(r["url"], r["outcome"], r["questions"], r["feature"]) for r in rows[1:]] == [("ok.example/a", "pending", ["fields/030"], "288")]
+    assert [(r["url"], r["outcome"], r["questions"], r["feature"]) for r in rows[1:]] == [("ok.example/a", "pending", ["0009"], "288")]
 
 
 def test_a_second_save_is_served_from_the_cache_until_refresh(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001

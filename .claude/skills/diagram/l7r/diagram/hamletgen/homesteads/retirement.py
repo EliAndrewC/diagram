@@ -1,11 +1,11 @@
 """The retirement house (inkyoya) - a second, smaller roof of one family in its own homestead (269 B42).
 
-research/settlements/035-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: a farm family took one
+research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: a farm family took one
 of two attested forms - the generations under one roof, or a farmhouse with a small retirement house in the same yard, with an
 entrance of its own. A choice between forms, so the `family_form` knob rolls it per settlement from the map's seed and
 declares it as `meta.family_form`. A retirement house belongs to its farmhouse's household - one family living as two
 households - so it is recorded under its own key, `retirement_houses`, never in `houses`: it counts neither toward the
-households nor against the band of occupied farmhouses (research/rendering/settlements/035-how-our-maps-count-and-draw-households.html).
+households nor against the band of occupied farmhouses (research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html).
 """
 
 from __future__ import annotations
@@ -23,30 +23,30 @@ if TYPE_CHECKING:
 
     from ..plan import SitePlan
 
-# THE TWO FAMILY FORMS (settlements/035). The record reads both and weighs neither against the other ("how the two forms
+# THE TWO FAMILY FORMS (0004). The record reads both and weighs neither against the other ("how the two forms
 # are weighted against each other in the roll" is a GUESS), so the roll is even. `one_roof` is the default: it is the
 # no-pin, no-roll fallback and what every map drew before the knob.
 FAMILY_FORMS = ("one_roof", "retirement_house")
 FAMILY_FORM = register_knob(Knob("family_form", list(FAMILY_FORMS), default="one_roof"))
 
-# HOW MANY OF A SETTLEMENT'S HOMESTEADS KEEP ONE, where the custom is kept (settlements/035): "where the custom was kept
+# HOW MANY OF A SETTLEMENT'S HOMESTEADS KEEP ONE, where the custom is kept (0004): "where the custom was kept
 # thoroughly, every house had one", and no page read gives a share (the entry's absence note). A degree, so a band rolled
 # per settlement: the top stops short of every house because a household holds a retired couple for only part of its
 # cycle, and the bottom keeps the form legible on the sheet - both ends a GUESS.
 RETIREMENT_SHARE = (0.30, 0.70)
 
-# ITS SIZE (settlements/035 says "a small retirement house" and gives no dimension; no page read does). Three ken by two
+# ITS SIZE (0004 says "a small retirement house" and gives no dimension; no page read does). Three ken by two
 # and a half, about eight tsubo - a room or two and an earth-floored entry, well under the farmhouse's 1,000-1,700 sq ft
 # and a size apart from the 16 x 11 ft byre and the kura: a GUESS.
 RETIREMENT_FT = (18.0, 15.0)
 
-# WHERE IN THE YARD (settlements/035: "most retirement houses stood inside the family's house plot, with an entrance of
+# WHERE IN THE YARD (0004: "most retirement houses stood inside the family's house plot, with an entrance of
 # their own"). How far from the farmhouse no page gives: one ken off the back wall or a flank, a second ken out when that
 # is taken - the eaves drip and a path between the two roofs - is a GUESS. The front is the work yard and garden's.
 RETIREMENT_GAP_FT = (6.0, 12.0)
 
 # WHICH SIDE is a GUESS, rolled per homestead among the back wall and the two flanks. The record holds one lead
-# (research/homesteads/260, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
+# (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
 # 11 retirement houses, 63.6% were located in a westerly direction", standing with the storage buildings as "wind fences"
 # for the ground before the entrance. TRIED AND REVERTED (269 E8, settlement-review F1, 2026-09-28): the windward side first
 # in 7 of 11 homesteads (the settlement's `SitePlan.wind`) seated 17 of 22 pool retirement houses to windward and every

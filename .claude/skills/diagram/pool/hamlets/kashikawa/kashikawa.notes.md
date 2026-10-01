@@ -40,7 +40,7 @@ beyond the frame.
   copy of Inashiro's - both fixed the same day.
 
 - 2026-08-16 (the fork draws both arms - engine change, this map re-rolled): the GM's Inashiro
-  question settled in research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html;
+  question settled in research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html;
   every `OFFTAKE_LADDER` row now draws canal B, gated by `comb_supply_commands_both_flanks`.
   This map re-rolled three times as review fallout was fixed at the engine (canal-B thread
   tails via interpolated piece boundaries, minimax worst-served well placement, the notice
@@ -168,7 +168,7 @@ The house itself did not move; the settlement grew toward it.
 
 **The way-access is ACCEPTED, deliberately.** It still stands 385 ft from any lane against 41-70 ft
 for its neighbors, and that is correct rather than an oversight: a lane must NOT run through the
-flooded paddy (`research/ways/`), and people cross into the fields on foot **along the bunds**.
+flooded paddy (`research/contents.json#ways`), and people cross into the fields on foot **along the bunds**.
 An edge farmstead standing at the paddy margin is reached the same way every field worker reaches
 the same ground. Drawing a lane out to it would put a no-build corridor across the crop to serve one
 household - the opposite of the rule.
@@ -286,7 +286,7 @@ thinner; it is a target now. Parcels under the 120 ft legibility floor are DROPP
 drawn small.
 
 OPEN, wanting a one-line ruling rather than a fix: the maximin spread put a byre 38 ft from a
-communal wellhead (the other three are 168-317 ft from any well). Nothing governs it - `research/homesteads/`
+communal wellhead (the other three are 168-317 ft from any well). Nothing governs it - `research/contents.json#homesteads`
 puts byres and wells in the same interstitial courtyard ground, so the adjacency is structural. The
 reading I would take is "the beasts are watered at the well, that is where a byre goes". Recording
 the decision matters more than which way it goes, because the next re-pack will produce it again.
@@ -308,7 +308,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html`.
+why the gate could not sit at 0.15: `research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html`.
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 827 -> 814 basins; smallest
 surviving basin 0.254 of the design cell; acreage, 20 of 20 households and the field outline all
@@ -340,7 +340,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `research/presentation/` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/contents.json#map-conventions` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -586,7 +586,7 @@ first version of this entry invented.
 
 **OPEN QUESTION this raises, for a research pass rather than a ruling: should a 4 ft planning margin
 bind inside a 10.7 ft interstice between two homesteads?** The gap sits between one house's garden and
-another's threshing yard - the interstitial courtyard ground `research/homesteads/` already
+another's threshing yard - the interstitial courtyard ground `research/contents.json#homesteads` already
 describes as shared, where byres and wells stand. A 3 ft footpath passing ~3.9 ft from a garden bed
 and ~3.9 ft from a work yard is not obviously a violation of anything physical; it is the ENGINE's
 margin that refuses it. What the record would have to show is attested in-cluster path widths and the
@@ -697,7 +697,7 @@ shape-aware keep-out has to rotate the box first.
 **And a research question the reviewer raised that would settle which:** was a village's planted
 windbreak cleared around a notice board at all? The expectation is that it was not - the board stood
 at the wood's EDGE, not in a glade - which would argue for option 2 with a much tighter figure, and
-would resolve this as a side effect. Nothing in `research/urban-features/` speaks to it.
+would resolve this as a side effect. Nothing in `research/contents.json#trades-and-services` speaks to it.
 
 
 ### CLOSED the same day, by the GM's reorder rather than by either option priced above
@@ -969,7 +969,7 @@ reach on its own bank. The entrance board stands 26 ft from where the connector 
 ground, passed by all 20 households' ways out. The rolled `elongated` shape is not what this seat draws - the houses
 gather as a round cloud, a drawn aspect of 1.61 - and the manifest records it as unhonored rather than claiming it.
 The plot a household works by its own house is its kitchen garden; no grain plot is laid beside a house (a research
-pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields/160-dry-fields-and-their-crops-hatake.html), so the dry crops stand in the hem along the supply canal.
+pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/questions/0006-dry-fields-and-their-crops-hatake.html), so the dry crops stand in the hem along the supply canal.
 Known open (settlement-review, 2026-09-28): the field path's tip turns back 126 degrees over its last 27 ft, a J-hook in
 the grass 17-43 ft off the paddy, left where a later pass dropped the field spur (`meta.field_spur_swept`).
 CLOSED 2026-09-28 (feature 269 landing): the current manifest carries no `meta.field_spur_swept` - this roll's field
@@ -1007,9 +1007,9 @@ instead (`house_quarter_turns`).
 ## 2026-09-28 (feature 282): the harvest yard drawn as a floor of mats; nothing placed moved
 
 Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft over the whole floor, each with a
-little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at
+little bare ground around it, most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline leaves no room (a drawing convention - the real yard was covered, research/contents.json#homesteads 'What lay in the work yard at
 harvest?'). The old fixed center mat and the rack along each yard's south edge are gone. This map declares no harvest
-weather, so it takes the regional default, settled, and draws no rack by the houses (research homesteads 'Did a village
+weather, so it takes the regional default, settled, and draws no rack by the houses (research/contents.json#homesteads 'Did a village
 put its drying racks by the houses by custom, or because of its weather?'). The weather is a fact of the country, set by a map's declaration or else the regional default, and never rolled: the
 manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved).
 
@@ -1026,13 +1026,13 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
   the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's rolled
   seat stable_end (tried first, then the stable end, then the floored rooms; the seat each bath took is in the measured line below).
-- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
+- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, 0043 and 720:
   Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
   (undated modern pages only) are no longer drawn.
 - **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
 - **The storehouse against the farmhouse** on about one farm in eight, at the Edo sheds' proportion, about 1.67
   to one (M18, M20: Kakimochi's 2 storehouses in 16 households; the ~30% it was drawn at was the 1972 count's).
-- **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
+- **The work yard's median is 25 tsubo** (M16, 0037: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
   depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).
 - **No farmhouse is turned a quarter away** (M26, homesteads/780): the right-turned tenth rests only on the 1974-1984 count; each
   house still turns a little with its lane, inside the survey's three compass points.
@@ -1048,7 +1048,7 @@ Measured on this roll (2026-09-29, the nucleated roll this map had before featur
 The GM's ruling of 2026-09-29 made the homestead grove's sides a knob (two sides 5 in 10, three 3 in 10, a ring 2 in 10;
 flood ground rolls the ring at 4 in 10) and put the dispersed and linear forms back into the roll (5:3:2 nucleated,
 dispersed, linear). Kashikawa's seed rolls **linear**, so this map is now a row village, drawn from the record's row
-forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro) is pinned nucleated and did not move.
+forms (0033 and 156, feature 291 amendment 3); the reference (Inashiro) is pinned nucleated and did not move.
 
 - **The row**: its seed rolled a **street laid first** (drawn straight, the planned row's form a paddy row may borrow)
   with farms on **both sides** - the near row between the street and the field, the far row beyond it - one farmstead
@@ -1056,7 +1056,7 @@ forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro
 - **The far row's holdings**: a strip of dry field behind each far farm, one lot wide and three lots deep, in plots
   (homesteads/156: the planned row's order - house lot, field, woodland; the depth and crop a GUESS).
 - **Every farm carries its own grove** on three sides - the deep stand on the windward north and west, a thinner band
-  on the east - and no village belt or copse is drawn (vegetation/030); the household bamboo is carried in the grove of
+  on the east - and no village belt or copse is drawn (0072); the household bamboo is carried in the grove of
   the farms that rolled a stand, and only theirs (vegetation/154).
 - **The row's water** rolled **shared**: wells beside the street, every farm within the watering reach of one.
 - **A service strip** stands between each house and its windward stand, for the wood shed and the bath room.
@@ -1074,4 +1074,4 @@ streets and door paths held to the lane law as tree lanes. Measured on this roll
 
 ## 2026-09-30 (feature 293, on 291's roll): the storehouses held to the Edo sheds' band
 
-The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Kashikawa's three (20 farmhouses; the quota rounds a half up) already stood on its three largest houses on main's row-village roll, so only the band moved them: the annexes draw 24.2 x 13.4, 24.6 x 13.7 and 24.4 x 13.5 ft. One lane went: an 88 ft join-orphans remnant that started 8 ft off the door path of the farm at (3136, 2789) and ran 106 ft within 30 ft of it, the two diverging at 22 degrees from one corner toward one street - a doubled band the settle now takes away where the web keeps without it (`settle_shadows`); 25 lanes where main drew 26, the web settled in 3 rounds. Every house center, well, the notice board at (3694.8, 1440.8) and the take-yabu, wholly on the sheet at about (3416, 1583), are main's. Feature 293's thicket search (behind the back row, inside the page as it stands, wells kept by their radius) was written against the nucleated roll, where main's thicket stood 5 of 12 outline points off the sheet; on this roll it seats the same stand main did.
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research 0040) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Kashikawa's three (20 farmhouses; the quota rounds a half up) already stood on its three largest houses on main's row-village roll, so only the band moved them: the annexes draw 24.2 x 13.4, 24.6 x 13.7 and 24.4 x 13.5 ft. One lane went: an 88 ft join-orphans remnant that started 8 ft off the door path of the farm at (3136, 2789) and ran 106 ft within 30 ft of it, the two diverging at 22 degrees from one corner toward one street - a doubled band the settle now takes away where the web keeps without it (`settle_shadows`); 25 lanes where main drew 26, the web settled in 3 rounds. Every house center, well, the notice board at (3694.8, 1440.8) and the take-yabu, wholly on the sheet at about (3416, 1583), are main's. Feature 293's thicket search (behind the back row, inside the page as it stands, wells kept by their radius) was written against the nucleated roll, where main's thicket stood 5 of 12 outline points off the sheet; on this roll it seats the same stand main did.

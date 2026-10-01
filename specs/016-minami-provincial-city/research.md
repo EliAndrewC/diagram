@@ -100,7 +100,7 @@ Entries below follow the `research/README.md` four-field format and are destined
 
 **Evidence:** setting-canon
 
-**Sources:** `l7r.md` clan population table; `budgets.md` provincial-city tier; `research/cities/defenses.md` (tier definitions, prior pass)
+**Sources:** `l7r.md` clan population table; `budgets.md` provincial-city tier; `research/contents.json#citiesdefenses.md` (tier definitions, prior pass)
 
 *The arithmetic.* `l7r.md` gives the Fox 150,000 humans in one domain over four provinces = ~37,500 per province, against the median province's ~42,000; `budgets.md` puts a provincial city at 2,000-4,000, average ~3,000. Scaling gives ~2,700; 2,600 is taken as the round figure inside the band. **No historical research is involved** - this is setting arithmetic, and is classed `setting-canon` rather than dressed up as a finding.
 

@@ -4,12 +4,12 @@ Written 2026-09-27 by the H3 write session. The record checks are owed (not run 
 
 ## Sections
 
-- SECTION=homesteads/050
-- SECTION=homesteads/110
+- SECTION=0039
+- SECTION=0030
 - SECTION=homesteads/145
 - SECTION=homesteads/160
 - SECTION=homesteads/170
-- SECTION=homesteads/190
+- SECTION=0003
 
 ## New registry keys
 
@@ -70,13 +70,13 @@ the absence note is updated with the 2026-09-27 searches, and the 10-140 sq m ba
 
 ## Left open, and why
 
-- **homesteads/180 was NOT done.** `RESEARCH-CLAIMS.md` shows 271 V7 (clone diagram-research-1) claiming "edit 180".
+- **0041 was NOT done.** `RESEARCH-CLAIMS.md` shows 271 V7 (clone diagram-research-1) claiming "edit 180".
   It stays thin (no source cited) until V7's work lands or V7 hands it back.
 - **The plain farmhouse's size.** The same 1885 table (`oamishirasato-kaoku`) gives about 18 tsubo (about 60 sq m) as
   the usual main house. The drawn plain farmhouse is 46 by 28 ft, about 120 sq m, twice that. Its home is
   homesteads/130, which 271 V1 checked. For that owner: the drawn house is about double the one usual size read.
   This is one Kazusa district in 1885, so it is weak evidence.
-- **The gogura knob is not encoded.** If a village storehouse program exists under buildings 240-640 (feature 267),
+- **The gogura knob is not encoded.** If a village storehouse program exists under 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239 (feature 267),
   its owner may want the siting quote in `gogura-kotobank` (the 地方凡例録 of 1794).
 - **A second dosojin source.** `matsumoto-dosojin` is being defined, uncommitted, in `/diagram/.clones/diagram-shrines-2`
   (feature 272). It says "most dosojin are enshrined at a settlement's entrance". 145 could cite it once it lands. I
@@ -85,8 +85,8 @@ the absence note is updated with the 2026-09-27 searches, and the 10-140 sq m ba
   and kitchen gardens) is entry 270 at the end of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`. It could settle
   050's area and 170's plot size.
 - **Over the question-size cap (not touched here, all 269's).** After the sync-in merge, `scripts/check-question-size.py`
-  reports homesteads/210 (20,107 bytes), vegetation/120 (20,095), water/070 (20,442) and water/270 (21,396). Each
+  reports homesteads/210 (20,107 bytes), 0074 (20,095), water/070 (20,442) and 0035 (21,396). Each
   needs a split by the session that owns it.
-- **The sync-in merge (110004e5).** It resolved conflicts in `_check_bundle.py` and its test, archetypes/170 (269 A1's
+- **The sync-in merge (110004e5).** It resolved conflicts in `_check_bundle.py` and its test, 0023 (269 A1's
   checked line kept), and the glossary. Aizu, Fuyu and Diospyros kaki were renumbered to 12080-12100 under the lock.
   The Kanto and hydrosere duplicates were merged into main's files. 269's GM duplicate was dropped in favor of main's.

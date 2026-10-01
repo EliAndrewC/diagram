@@ -1,11 +1,11 @@
 # 269 A2 handoff - archetypes: thin sections (B35)
 
 Written 2026-09-27 by the A2 write session. Claims file checked first: nothing of B35 was claimed by another
-session. (271 V5 owns archetypes 300-350 and edits 020, 080, 150, 160, 340; none of those were touched.)
+session. (271 V5 owns 0027 and edits 020, 080, 150, 160, 340; none of those were touched.)
 
 ## Questions new or changed
 
-- SECTION=archetypes/040
+- SECTION=0021
 - SECTION=archetypes/060
 - SECTION=archetypes/070
 - SECTION=archetypes/190
@@ -38,7 +38,7 @@ These existing entries got a longer "Used for" line only: `kato-1999-ittanbu-kuk
   the two spec rules stand as written.
 - B35 (060) ACCURATE for the ridge, SILENT for the walking bund - the dividing ridge is cited (two shaku in the 1869
   Inazato replanning; half a meter or less in Yayoi-Kofun small-plot paddies); a bund's extra width where it carries
-  the path is still unread, so the walking bund's three feet stays a labeled GUESS, pointed at fields 260. The Song
+  the path is still unread, so the walking bund's three feet stays a labeled GUESS, pointed at 0014. The Song
   Taiping memorial on polder ridges (three to four chi high, four to five chi at the base) was found only in a search
   summary; its page timed out twice. - Nothing changes on the map.
 - B35 (070) ACCURATE for the result, SILENT for the mechanics; CONTRADICTION-RESOLVED on one word - the record now
@@ -46,7 +46,7 @@ These existing entries got a longer "Used for" line only: `kato-1999-ittanbu-kuk
   that fields were shaped to the slope until postwar consolidation, and that bunds were re-plastered every year and
   set on the owners' boundary. Why a mud corner rounds and a run wanders (slump, walking, re-cutting) and the junction
   as the most worked point stay open absence notes. 070 called the 1.5 ft bund "an ordinary walking bund", which
-  clashed with 060's three-foot walking bund; it is the DIVIDING bund (fields 260 draws `AZE_FT = 1.5` as that), and
+  clashed with 060's three-foot walking bund; it is the DIVIDING bund (0014 draws `AZE_FT = 1.5` as that), and
   070 now says so. - Nothing changes in the geometry; only the wording.
 - B35 (190 -> new 250) ACCURATE, share SILENT - the clustered village was the general form in Japan (dense in the
   Kinai and Setouchi, loose with wide lots and groves in the Kanto and Tohoku); the block village is the most general
@@ -80,5 +80,5 @@ These existing entries got a longer "Used for" line only: `kato-1999-ittanbu-kuk
   timed out on `make source-pages` and on WebFetch. It is a candidate for a later pass. It is a public page, so it
   was not put on TO-DOWNLOAD.
 - `scripts/check-question-size.py` reports four questions over the cap that this group did not touch: homesteads
-  210, vegetation 120, water 070 and water 270.
+  210, 0074, water 070 and 0035.
 - No corrections are owed to sections owned by 265, 267 or 268.

@@ -45,7 +45,7 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
 
 ## Phase 2 - the record
 
-- [x] T07 `research/archetypes/`: extend 'What stands on a dike-pond hamlet that a paddy hamlet
+- [x] T07 `research/contents.json#field-archetypes`: extend 'What stands on a dike-pond hamlet that a paddy hamlet
       lacks?' with findings 1, 2, 5 and 7, and FIX its stale close - "neither is drawn" plus the
       resolved CANDIDATE comment, both contradicting the map since feature 150. (FR-005, FR-007, FR-011)
       research: physical
@@ -64,7 +64,7 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       - [x] recorded and cited
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
-- [x] T09 `research/archetypes/`: the footnotes for every new assertion, each quoting
+- [x] T09 `research/contents.json#field-archetypes`: the footnotes for every new assertion, each quoting
       the passage it rests on and linking a public page where the quote can be read; every new
       registry key gets its What-it-is / Why-it-applies write-ups in `SOURCES.html`. (FR-005, FR-009)
       research: physical

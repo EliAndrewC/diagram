@@ -34,8 +34,8 @@ Each names the section that makes the claim, the drawn form, why the audit think
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
 - M99 **The brewery's vat hall**: the vat hall drawn at 96 ft. The figure matches "about 96-103 by 36-39 ft (Meiji, Wakayama)" (bunka-hatsuzakura-shikomigura: "of the Meiji era ... when brewing had grown"). The Edo halls read are about 60 x 30 ft and 62 x 23 ft (urban-features/030) - kinds: none (`s.brewery`); maps: minami, nagahara, tango. M.
-- M100 **The Chinese pawnshop**: a larger storied building on the street. The only source is dangye-zhwiki, whose building sentence "rests on a single footnote to the Macau Museum's page on the Tak Seng On pawnshop (opened 1917)" and "cannot carry the form of a Song, Yuan or Ming pawnshop" (urban-features/340) - kinds: none (`s.pawnshop`, the Chinese form of the knob); maps: minami, nagahara, tango. S.
-- M101 **The village smithy**: about 21 x 18 ft, gabled and tiled, with its work floor inside. Its size and plan come from "the model at the Boso no Mura museum" (boso-no-mura-kajiya: "one modern reconstruction, undated beyond 'once'", with a fitting that came in only in Meiji). The order of the fittings comes from nabunken-kajiya-kikiude, whose smiths are modern (urban-features/430) - kinds: none (the future village generator); maps: none. M.
+- M100 **The Chinese pawnshop**: a larger storied building on the street. The only source is dangye-zhwiki, whose building sentence "rests on a single footnote to the Macau Museum's page on the Tak Seng On pawnshop (opened 1917)" and "cannot carry the form of a Song, Yuan or Ming pawnshop" (0201) - kinds: none (`s.pawnshop`, the Chinese form of the knob); maps: minami, nagahara, tango. S.
+- M101 **The village smithy**: about 21 x 18 ft, gabled and tiled, with its work floor inside. Its size and plan come from "the model at the Boso no Mura museum" (boso-no-mura-kajiya: "one modern reconstruction, undated beyond 'once'", with a fitting that came in only in Meiji). The order of the fittings comes from nabunken-kajiya-kikiude, whose smiths are modern (0205) - kinds: none (the future village generator); maps: none. M.
 - M102 **The town smithy**: a town smithy about 21 ft wide and 18 ft deep on the shop rows. The section carries the village reconstruction's size onto a town street ("a guess"). The Gujo house widths of 1692 are period (urban-features/440) - kinds: none (the town smithy, unscripted); maps: none. M.
 
 ## The procedure (session 1: research and write)
@@ -67,7 +67,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on urban-features/030, urban-features/340, urban-features/430, urban-features/440, and urban-features 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on urban-features/030, 0201, 0205, urban-features/440, and urban-features 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

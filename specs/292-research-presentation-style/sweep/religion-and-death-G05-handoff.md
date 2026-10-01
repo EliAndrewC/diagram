@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/shrine-woods-and-fences-chinju-no-mori-tamagaki
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-shrines-wood-and-what-bounds-its-precinct
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=ShrineGrove
 - BASE=ce382a2c1
 

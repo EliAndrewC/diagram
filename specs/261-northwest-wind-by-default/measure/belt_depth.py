@@ -1,6 +1,6 @@
 """The windbreak band's depth ACROSS itself on the page, sampled every 5 ft along its near face: the distance from each
 sample to the far face, where the nearest stretch of far face is not clamped to the canvas edge (there the page cuts the
-band). Prints the thinnest, the median and the share over 120 ft (the record's 80-120, research/vegetation/), now and
+band). Prints the thinnest, the median and the share over 120 ft (the record's 80-120, research/contents.json#vegetation), now and
 at the commit the working tree came from. Where the near face ends is the engine's `meta.belt_near_vertices`."""
 import json, math, os, statistics, subprocess, sys
 POOL = "pool/hamlets" if os.path.isdir("pool/hamlets") else ".claude/skills/diagram/pool/hamlets"

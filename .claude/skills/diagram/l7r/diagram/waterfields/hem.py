@@ -2,7 +2,7 @@
 
 `_comb_dry_and_beans` lays the hem of dry fields above the supply canal and the bund beans; `fan_toe_hem` keeps a wild
 fan's hem on the toe; `middle_reserve` offers the whole wild middle, cleared deep and nearest the toe first, for the
-coarse-grain top-up the draw makes (`settlement/fields/grain.py`, research/fields/ fields/165).
+coarse-grain top-up the draw makes (`settlement/fields/grain.py`, research/contents.json#fields 0011).
 """
 
 import math
@@ -34,7 +34,7 @@ def _comb_dry_and_beans(
     fork: Pt,
 ) -> tuple[list[dict[str, Any]], float, list[Poly], list[dict[str, Any]]]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields/260-bunds-between-the-paddies-aze.html."""
+    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/questions/0014-bunds-between-the-paddies-aze.html."""
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
@@ -83,12 +83,12 @@ def _comb_dry_and_beans(
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels), reserve
 
 
-# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields/160-dry-fields-and-their-crops-hatake.html,
-# fields/160). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
+# WHERE A FAN'S DRY BAND LIES (269 B07; research/questions/0006-dry-fields-and-their-crops-hatake.html,
+# 0006). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
 # often left as coppice or wild ground until late in the early modern period, while the spring-fed toe was settled early
 # with paddy beside it. The record calls that a tendency, not a rule - in old heartlands fans were cleared from early
 # times - so it is a KNOB, `fan_middle` (hamletgen/water/fit.py): "wild" draws the hem only on the toe's stretch of the fan's edge and
-# holds the middle's in reserve for the coarse-grain top-up (`middle_reserve`, fields/165), "cleared" hems the whole canal. The comb IS
+# holds the middle's in reserve for the coarse-grain top-up (`middle_reserve`, 0011), "cleared" hems the whole canal. The comb IS
 # the fan (apex the division point, toe the collector), so the stretch is read along the fall from the fork to the lowest paddy; the fork-triangle
 # band is the fan's HEAD and stays. FAN_TOE_FROM: where the toe begins, a share of that fall - the record gives no proportions, equal thirds is a GUESS.
 FAN_TOE_FROM = 2.0 / 3.0
@@ -144,7 +144,7 @@ def middle_reserve(
     supply: Sequence[dict[str, Any]],
     tract0: int,
 ) -> list[dict[str, Any]]:
-    """THE WHOLE WILD MIDDLE, as dry plots the coarse-grain top-up may clear (feature 287, W36; fields/165): the hem's
+    """THE WHOLE WILD MIDDLE, as dry plots the coarse-grain top-up may clear (feature 287, W36; 0011): the hem's
     columns along the canal's run above the toe, laid out to the canvas edge, less any plot on the fan's own paddy or on a
     dry plot already drawn - ordered nearest the toe first (down the fall first), the top-up's order, a GUESS."""
     cut = toe_cut(F, fork, paddies)

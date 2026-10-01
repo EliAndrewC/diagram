@@ -6,10 +6,10 @@ of fruit trees per farmstead), 0 CONTRADICTED. No item was claimed by another se
 ## Sections
 
 - SECTION=vegetation/300
-- SECTION=vegetation/310
+- SECTION=0078
 - SECTION=vegetation/320
 - SECTION=vegetation/330
-- SECTION=vegetation/340
+- SECTION=0079
 
 ## Keys
 
@@ -77,8 +77,8 @@ keihan-cha (bund tea); enoki's definition extended to the entrance and milestone
 
 - **For the GM (via escalation-check):** the notes make charcoal burners hinin; whether farmers ALSO burn
   charcoal in the slack season (the Edo practice) is not in the notes. The record states the deviation and leaves
-  the question open (vegetation 340, "In this setting").
-- **Feature 269 (vegetation 220, fuel-wood siting):** 310 and 340 point at it in plain words with an HTML comment
+  the question open (0079, "In this setting").
+- **Feature 269 (0077, fuel-wood siting):** 310 and 340 point at it in plain words with an HTML comment
   instead of a link, because 220 is not on main yet; when 269 lands, turn both into links to
   `#where-did-a-village-keep-its-fuel-wood-beyond-its-fields-on-the-hill-ground-around-it---not-below-the-houses`.
 - **Feature 269 (vegetation 050, the open hillside past the grove):** 310's grass-mountain finding (hills kept

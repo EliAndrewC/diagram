@@ -1,4 +1,4 @@
-"""`hamletgen/homesteads/retirement.py` on stub settlements - the retirement house and its knob (269 E8, B42; settlements/035)."""
+"""`hamletgen/homesteads/retirement.py` on stub settlements - the retirement house and its knob (269 E8, B42; 0004)."""
 
 from __future__ import annotations
 

@@ -3,7 +3,7 @@
 - SECTION=towns/110
 - SECTION=buildings/110
 - SECTION=cities/capitals/380
-- SECTION=cities/capitals/390
+- SECTION=0138
 - KEY=kotobank-kuchimai
 - KEY=kuchimai-jawiki
 - KEY=bushijyoshi-daikan-jinya
@@ -18,5 +18,5 @@ Glossary terms added: kuchimai (15750), hikioi (15760).
 - The nine-in-ten figure and the Takayama letter rest on a blog; Nishizawa's 『代官の日常生活』 is entry 279 at the end of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`. Its edition year (the blog says 2014) was not checked.
 - The kotobank 口米 page's two Heibonsha entries give different reasons for the 1725 change (misuse of funds against costs below the surcharge); the record states both. The kotobank 代官 entry dates the order October 1725 against the Nihon Kokugo Daijiten's 9th month (probably lunar); the record gives only the year.
 - Entry-drift is owed on any class whose `Entry:` names these four sections (their bodies changed).
-- `scripts/check-question-size.py` flags five questions over 20,000 bytes, none of them this group's: homesteads/210, religion-and-death/160, vegetation/120, water/070, water/270.
+- `scripts/check-question-size.py` flags five questions over 20,000 bytes, none of them this group's: homesteads/210, 0235, 0074, water/070, 0035.
 - Nothing owed to another feature's sections.

@@ -5,7 +5,7 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 (`/diagram/.clones/diagram-readability-2`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all.
 
-**What moved.** Session 1 reconciled ways/020 and ways/100 on a field road's width (the 3-shaku figure attributed to Ieyasu's testament, and its standing) and said how the map's 3 and 5 ft widths stand beside it. Its handoff is
+**What moved.** Session 1 reconciled 0081 and ways/100 on a field road's width (the 3-shaku figure attributed to Ieyasu's testament, and its standing) and said how the map's 3 and 5 ft widths stand beside it. Its handoff is
 `specs/291-homestead-grove-sides/briefs/r10-handoff.md`.
 
 **Your questions:** PAGE=ways SECTION=020; PAGE=ways SECTION=100

@@ -30,10 +30,10 @@ frozen and keep 324 of 1,126 (re-measured).
 |---|---|---|
 | The storehouse dealt to the largest houses, the count `round(0.125 x seated)` (`storehouses.py` `deal_storehouses`, `storehouse_count`) | **changed** | main's lots carry the kura before the seat, so the deal is `larger_first(seed, "kura", sizes, KURA_SHARE)`; the count is the lots' quota, `floor(n/8 + 0.5)` of the DECLARED households (half up, not half to even: Kashikawa 3, not 2). A carrier lot that failed to seat would lower the count, never put the annex on a smaller house |
 | Holding the annex's room during seating and handing it back (`Settlement._kura_room`, `hold_storehouse_room`, `hand_back`, `meta.storehouse_room_held`) | **dropped** | not needed: the size and the kura are the lot's before the seat is sought, so only the carriers ever reserve the annex |
-| The tie rule: a positional roll (`_hjit`, salt 3.0), a guess | **changed** | positions are not known when the lot is dealt; a tie goes by the seed-shuffled quota order `larger_first` already uses - still a guess, labeled in research/homesteads/120 and at `HouseholdLots.kura`; the ladder's rungs are distinct, so it practically never binds |
+| The tie rule: a positional roll (`_hjit`, salt 3.0), a guess | **changed** | positions are not known when the lot is dealt; a tie goes by the seed-shuffled quota order `larger_first` already uses - still a guess, labeled in research/questions/0040-farm-storehouses-kura.html and at `HouseholdLots.kura`; the ladder's rungs are distinct, so it practically never binds |
 | The annex's length held to 18-27 ft and 1.5-1.8 to one (`rolling/bundle.py` `north_annex`) | **changed** | the same band, in main's one table `kura_rect` (drawing, bundle reservation, flush side choice, fixture walls all read it); `steading_rects` and every caller pass the scale. Its docstring carries the tried-and-reverted deepening and the deviation label |
 | `farmstead_fixtures`'s woodpile seat beside the back kura (`homesteads/fixtures.py`) | **dropped** | main's fixtures are laid in the bundle by `homestead_parts/fixture_seats.py`, which reads `kura_rect` through `steading_rects` - so it gets the band with no edit |
-| Research homesteads 120 (the new paragraph, notes -12, -13, -2, -3) and 430 | **ported, changed** | applied whole, then corrected for main: 11 of 82 and "three on twenty", the tie keyed to the map's seed, the code pointers. quote-check and record-format clean (the ledger's last row) |
+| Research 0040 (the new paragraph, notes -12, -13, -2, -3) and 430 | **ported, changed** | applied whole, then corrected for main: 11 of 82 and "three on twenty", the tie keyed to the map's seed, the code pointers. quote-check and record-format clean (the ledger's last row) |
 | The farmhouse / storage-shed sibling text (the retired 4.4 outbuildings) and its snapshot | **ported** | still on main; now also true ("the larger farms have") |
 | `tools/CLAUDE.md`'s retired `crop_map` row | **ported** | still on main |
 | A doubled-ink sweep once more after `split_at_crossings` (`ways/web.py`) | **ported** | the same pass order stands on main; unit test ported. Moved no pool map |
@@ -59,13 +59,13 @@ connector at the entrance and "reached" the exit strip's end at the same junctio
 
 | decision | class | where |
 |---|---|---|
-| The storehouse goes to the larger houses first, by the main house's footprint | historically accurate (the direction; Kakimochi's historian and table) | research/homesteads/120 notes -12, -13; `HouseholdLots.kura` |
-| Strictly the largest houses | deliberate deviation (Kakimochi's largest had none; the weighted draw priced, not taken) | research/homesteads/120; `HouseholdLots.kura` |
+| The storehouse goes to the larger houses first, by the main house's footprint | historically accurate (the direction; Kakimochi's historian and table) | research/questions/0040-farm-storehouses-kura.html notes -12, -13; `HouseholdLots.kura` |
+| Strictly the largest houses | deliberate deviation (Kakimochi's largest had none; the weighted draw priced, not taken) | research/questions/0040-farm-storehouses-kura.html; `HouseholdLots.kura` |
 | One farm in eight | historically accurate as a calibration (Kakimochi's 2 of 16; feature 280 M20) | `KURA_SHARE` |
 | The count the lots' quota, rounded half up, of the declared households | map drawing convention (287's quota, unchanged) | `quota_carriers`, `larger_first` |
-| A tie by the seed-shuffled order | guess (searched 2026-09-30; absence note -3) | research/homesteads/120; `HouseholdLots.kura` |
-| The annex's length in the Edo sheds' band, 18-27 ft, 1.5-1.8 to one, the depth a share | deliberate deviation (the kura read were 15 x 18 and 12 x 18 ft) | research/homesteads/120, 430; `kura_rect` |
-| The annex on a fixed wall | map drawing convention contradicting the record (unchanged) | research/homesteads/120, 430 |
+| A tie by the seed-shuffled order | guess (searched 2026-09-30; absence note -3) | research/questions/0040-farm-storehouses-kura.html; `HouseholdLots.kura` |
+| The annex's length in the Edo sheds' band, 18-27 ft, 1.5-1.8 to one, the depth a share | deliberate deviation (the kura read were 15 x 18 and 12 x 18 ft) | research/questions/0040-farm-storehouses-kura.html, 430; `kura_rect` |
+| The annex on a fixed wall | map drawing convention contradicting the record (unchanged) | research/questions/0040-farm-storehouses-kura.html, 430 |
 | A thicket stands behind the back row and on the page; wells kept by radius | historically accurate as the record had it (the settlement's edge, behind its houses); the page and the keep-out are map drawing conventions | `hinterland/bamboo.py` |
 | `THICKET_REACH_FT` = 220 ft before the whole-page search | guess (the literal predates this; no distance in the record) | `hinterland/bamboo.py` |
 | A lane end reaches a way only where it came toward it | map drawing convention (a lane-law repair) | `ways/law.py` `_walked_to` |
@@ -76,7 +76,7 @@ connector at the entrance and "reached" the exit strip's end at the same junctio
 - **Port the hold-and-hand-back machinery?** No: on 287's lots the size is known before the seat, so the literal ask
   ("the houses that carry the annex are the largest ones") is met by dealing the existing quota by size.
 - **Round half to even (the earlier pass) or half up (main's quota)?** Main's, as the brief makes 287 authoritative;
-  Kashikawa carries three. Recorded in homesteads/120.
+  Kashikawa carries three. Recorded in 0040.
 - **Fix the shared byres Sawada's review found?** Deferred - see item 3 below.
 
 ## Verification
@@ -99,7 +99,7 @@ connector at the entrance and "reached" the exit strip's end at the same junctio
   each shown red there, and were not re-shown red on main.
 - **Reviews:** settlement-review round 1 on all five (two pass, three needs-work), round 2 on the three (all pass); every
   finding fixed with a verifying record (`specs/293-effort-level-experiment/measurements.json`) or accepted with
-  `make review-accept`; quote-check and record-format clean on homesteads 120 and 430; the GM list below filtered by
+  `make review-accept`; quote-check and record-format clean on 0040 and 430; the GM list below filtered by
   escalation-check. Every pass is a row in `docs/review-ledger.md`.
 
 ## For the GM (filtered by `escalation-check`)
@@ -109,7 +109,7 @@ connector at the entrance and "reached" the exit strip's end at the same junctio
    on the 8th and 12th of 15 (Inashiro), the 9th and 16th of 16 (Kuwabata), the 1st and 11th of 12 (Mizuguchi) and the 5th
    and 14th of 19 (Sawada); Kashikawa's were already its three largest. Kakimochi, the one village read, put its two with its
    2nd- and 3rd-largest houses and its largest had none, so the strict cut is labeled a deliberate deviation in
-   research/homesteads/120.
+   research/questions/0040-farm-storehouses-kura.html.
 2. **Decision: the storehouse annex's size.** It draws 20.6-24.8 ft by 11.4-13.8 ft, in the Edo farm sheds' band (18-27 ft
    long, 1.5-1.8 to one); the record reads the annex as the kura, and the kura read were about 15 by 18 ft (the commonest
    in a new-field village west of Edo) and 12 by 18 ft (Kakimochi's). Labeled a deliberate deviation. The priced
@@ -142,7 +142,7 @@ the five hamlets' manifests and notes, and the assembled homesteads pages.
   junction-end skip, which sits beside 291's `carry_on` unchanged).
 - `tests/hamletgen/test_hinterland.py`: both features' tests kept.
 - The manifests took main's side and were regenerated (Inashiro first); each notes file kept main's text, with 293's entry
-  rewritten as measured on the regenerated map against main's 291 roll. `research/homesteads/` and
+  rewritten as measured on the regenerated map against main's 291 roll. `research/contents.json#homesteads` and
   `research/citations/homesteads.*` were re-assembled by `make record` and `make citations` (both then `CHECK=1` in sync).
 
 **What the merge broke, measured, and fixed.** After the merge the gate failed three tests and the cohort fell to 50/54

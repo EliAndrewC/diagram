@@ -129,7 +129,7 @@ all five maps (R5).
 
 The GM's ruling (2026-09-27): *"if we find instead that our placement algorithm ends up not making it possible to lay
 out a known-to-be-valid settlement configuration then we should fix the placement algorithm instead."* The record
-attests a hamlet astride its own small channel (`research/water/270`, Harie), so the refusals R4 measured were the
+attests a hamlet astride its own small channel (`research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`, Harie), so the refusals R4 measured were the
 engine's, not the record's. Built (plan D9): fords every 160 ft (`m:ford-spacing`) where the brook bends under 20 degrees, a 30 ft gap
 in its no-route corridor at each, the spur routed through one when its line would cross the water, every crossing
 decked by `bridges()`; the strike-out, its re-roll and the far-bank refusal deleted.

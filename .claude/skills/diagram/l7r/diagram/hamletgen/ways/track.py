@@ -599,7 +599,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
-    # ...AND ITS TIP IS SET ON THE BUND (269 B04, research/rendering/fields/260: the path "runs from the hamlet to the paddy's outer bund
+    # ...AND ITS TIP IS SET ON THE BUND (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path "runs from the hamlet to the paddy's outer bund
     # and joins it ... it never ends in open ground short of the bund"). The clip leaves it 12 ft off the hem and the set-back
     # 17 ft off an outline vertex - short of the bund - and where the rice stands proud of the outline it could stop in the
     # rice (Sawada: 4 ft in). Carried on to the worked ground's edge, or pulled back out of it.
@@ -607,7 +607,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     _spur_ft = sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) if len(_spur_pts) >= 2 else 0.0
     # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230): a spur that fails the floor below vanished in
     # silence, and a reviewer asking what the nearest way to the paddy was is how the reference hamlet turned out to have
-    # none. Where a field path ends was the open question this measured for; research/rendering/fields/260 answers it (on the bund).
+    # none. Where a field path ends was the open question this measured for; research/questions/0014-bunds-between-the-paddies-aze.drawing.html answers it (on the bund).
     s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
     # ...AND A SPUR THAT NO LONGER REACHES THE WEB IS NOT DRAWN. The clip takes the spur out of the crop and off
     # the marsh from BOTH ends, so what survives can be a length of path in the middle of open ground: on the
@@ -646,7 +646,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # gateway is a point in the seat frame, so on a cluster that sits against a concave stretch of
     # the fan it can land INSIDE the field envelope - and the connector then starts in the rice and
     # crosses the outline twice on its way out (Inashiro, GM 2026-08-12).
-    # A ROW VILLAGE'S ROAD IS ITS STREET (feature 291 plan D17; research/homesteads/155: the road village's farms stand
+    # A ROW VILLAGE'S ROAD IS ITS STREET (feature 291 plan D17; research/questions/0033-row-villages-resson.html: the road village's farms stand
     # along the road): the connector carries the first planned street on out of the frame along its own line, from
     # whichever end is nearer the sheet's edge. Laid from the gateway, it ran straight across the far row's holdings.
     # ...FROM THE STREET AS IT WILL BE DRAWN, its farms' span (`street.drawn_span`), not the whole planned line: run out from

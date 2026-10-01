@@ -4,7 +4,7 @@
 
 - SECTION=water/where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki
 - RENDERING=rendering/water/how-our-maps-draw-the-intake-and-its-weir
-- OLD=research/water/ research/water/ research/water/ research/water/ research/water/ research/water/
+- OLD=research/contents.json#water research/contents.json#water research/contents.json#water research/contents.json#water research/contents.json#water research/contents.json#water
 - MODALS=IrrigationDitch Weir
 - BASE=484b7eb0c
 

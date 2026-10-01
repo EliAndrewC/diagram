@@ -30,7 +30,7 @@ reading.
 
 **Acceptance Scenarios**:
 
-1. **Given** religion-and-death 530 and the tier table 210, **When** read, **Then** the town's and the village's
+1. **Given** 0238 and the tier table 210, **When** read, **Then** the town's and the village's
    cremation grounds, the hamlet's lack of one, the monk's rites in countryside and city, and the country monk's seat in
    the main village serving its district are stated as the GM's ruling of 2026-09-27.
 
@@ -49,7 +49,7 @@ what the maps do about it: one rule where the history agrees, a per-hamlet knob 
 ### User Story 3 - The generator draws it (Priority: P1)
 
 A generated hamlet draws a graveyard of its own, or none, as the rule or its rolled knob says; a generated village draws
-its cremation ground (religion-and-death 530) and its burial ground seated as 269's research says (280: in the shrine or
+its cremation ground (0238) and its burial ground seated as 269's research says (280: in the shrine or
 temple yard or apart; 270: a ground apart downstream, beyond the last house) - with the ruling that a hamlet draws no
 cremation ground and no shrine.
 
@@ -73,7 +73,7 @@ cremation ground and no shrine.
 
 ### Functional Requirements
 
-- **FR-001**: religion-and-death 530 and 210 MUST state the GM's ruling of 2026-09-27 in full: monks perform the funerary
+- **FR-001**: 0238 and 210 MUST state the GM's ruling of 2026-09-27 in full: monks perform the funerary
   rites in the countryside and much of them in the cities; a town and a village each have a cremation ground and a
   hamlet has none; the country monk lives in the main village and serves its whole district, the village and its
   hamlets (usually about half a dozen); within its district, the village alone keeps the shrine, the headman's house and the cremation ground; its

@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-5`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -28,18 +28,18 @@ Each is a research QUESTION the record owes: never researched, labeled a guess, 
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
 - B11 **Gate market size**: how many buildings and which trades make up a county town's gate market, and how far does
-  it run out the road? (towns/080; the city strip is 269 B41's, cities/hinterland/040; cite it). M. P1.
-  > COORDINATION (B11): the CITY gate market is 269's cities/hinterland 040 (B41) - take the town side and point to it for cities
+  it run out the road? (0122; the city strip is 269 B41's, 0171; cite it). M. P1.
+  > COORDINATION (B11): the CITY gate market is 269's 0171 (B41) - take the town side and point to it for cities
 - B41 **Town barns**: what are the barns of a town's hayfield (Hoshizora's five) - hay barns, ox sheds - and their
   size? (none). S. P1.
 - B132 **Edge woods**: why is a town's margin clothed and not left bare, and with what? (water/170,
-  vegetation/030). S. P1.
+  0072). S. P1.
 - B129 **Suburb along the road**: where does a town's built edge stop - does a ribbon of houses run out along the
   road past the last block (machi-hazure)? (none). S. P3.
-  > COORDINATION (B129): 269's cities/hinterland 040 (B41) covers the city strip outside a gate - take the town suburb, point to it
+  > COORDINATION (B129): 269's 0171 (B41) covers the city strip outside a gate - take the town suburb, point to it
 - B128 C174 **Market gardens and the suburban belt**: did a town's or city's edge carry vegetable plots supplying it,
   fed by its night soil, and what else stood in a city's near hinterland (suburban villages, tile and lime works), how
-  far out? (cities/hinterland/050; the retreats are 269 B41's). M. P3.
+  far out? (0174; the retreats are 269 B41's). M. P3.
   > COORDINATION (B128): 269's cities/hinterland 030 and 010/015 (B41) cover the city side - take the town side, point to them
 
 ## The procedure (session 1: research and write)
@@ -60,7 +60,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on towns 380-430, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0127, 0128, 0129, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

@@ -101,7 +101,7 @@ BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
 # THE BAND'S DEPTH BEFORE THE RAG, near face to far, and the rag on each face. The near face is roughened along its length
 # and pushed only OUT of the band, 0-`BELT_NEAR_RAG_FT`; the far face moves up to `BELT_FAR_RAG_FT` either way. A band
 # laid 100 ft deep so draws 90-115 ft where the fringe lies square to the wind - inside the record's 80-120 ft
-# (research/rendering/vegetation/020-how-our-maps-draw-a-villages-groves-the-back-grove-the-water-mouth-grove-and-the-dooryard-copse.html). The old rag moved both faces up to 13 ft either way
+# (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html). The old rag moved both faces up to 13 ft either way
 # about a 110 ft band (84-136): the near face moving in with the far took the band to 72.7 ft at Sawada's bend. Moving
 # both faces only outward about 110 drew a median band of 118-122 ft, over half of two maps' faces past 120. A 100 ft band
 # once left Kashikawa's belt in two pieces where its westernmost garden's afternoon-sun lane crossed the band, and 105
@@ -193,7 +193,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     houses = s.M.get("houses", [])
     if len(houses) < 3:
         return []
-    # NO VILLAGE BELT WHERE EVERY FARM CARRIES ITS OWN GROVE (feature 291; research/vegetation/020, "Why one communal grove
+    # NO VILLAGE BELT WHERE EVERY FARM CARRIES ITS OWN GROVE (feature 291; research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, "Why one communal grove
     # and not a grove per house": "The per-farmstead belt is the DISPERSED settlement's answer; a nucleated cluster shelters
     # itself ... so its windbreak is a single village-scale wood"). The two are one answer or the other, never both; once
     # the dispersed and linear forms rolled again, Kashikawa drew 60 farm grove bands AND a 369-clump village belt behind
@@ -320,7 +320,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         # have its DRAWN clumps average back onto the cluster's own line, which is what
         # `village_windbreak_on_windward_side` measures (Kashikawa: polygon centroid +137, drawn
         # centroid -5). The extra 12 px comes out of the 150 px embrace budget and leaves plenty.
-        # The band is the belt's 80-120 ft depth (`BELT_DEPTH_FT` with the rag's outward push; research/rendering/vegetation/
+        # The band is the belt's 80-120 ft depth (`BELT_DEPTH_FT` with the rag's outward push; research/contents.json#vegetation
         # "How our maps draw a village's groves" - a belt reads as a wall of trees only at that depth).
         _near_n[0] = len(cols)
         near = [rag((ccx + wx * (u + BELT_NEAR_FT + _sun_off + back) + px * v, ccy + wy * (u + BELT_NEAR_FT + _sun_off + back) + py * v), -1.0) for v, u in cols]

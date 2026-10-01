@@ -23,7 +23,7 @@ about the town and city forms, which have no diagram yet, is written down for th
 
 ### User Story 1 - The country shrine's open questions are closed or honestly open (Priority: P1)
 
-Every absence note and every labeled guess in the country-shrine questions (religion-and-death 090-128) gets a
+Every absence note and every labeled guess in the country-shrine questions (0215, 0221, 0222, 0223) gets a
 second search with other tools and other queries; where a readable source answers, the claim is cited; where only
 a human could fetch it (a bot-blocked page, a paywall-free scan behind a captcha), the source goes on the GM's
 download list; where nothing answers, the absence note says what was searched twice.
@@ -78,7 +78,7 @@ both.)
 
 ### Functional Requirements
 
-- **FR-001**: Every absence note and labeled guess in religion-and-death 010-128 and in the shrine and temple parts
+- **FR-001**: Every absence note and labeled guess in 0215, 0220, 0221, 0222, 0223, 0232, 0233, 0234 and in the shrine and temple parts
   of 210 MUST get a second search (other
   tools and queries than the first, recorded in an HTML comment) and end as a citation, a download-list entry, or an
   absence note naming both searches. Sections another feature owns (burial and swept ground, 130-206, 269's group

@@ -43,7 +43,7 @@ not touched.
   Kitamoto passage gives two mats to the tsubo, and its Nishidani passage gives the mat as 3 by 6
   shaku (90 x 180 cm); two of those side by side are one ken square, about 3.3 sq m - which is the
   59.5 sq m the yard explanation quotes for 18 tsubo. Historically accurate; the pointer is
-  `research/homesteads/`, "How big was the work yard, and how did the sizes spread?", footnotes 12
+  `research/contents.json#homesteads`, "How big was the work yard, and how did the sizes spread?", footnotes 12
   and 15.
 - **D2 - one variant.** "tsubo" is used as its own plural in the prose and in the sources' English, so
   no `tsubos` variant is listed. The compound `tsuke-tsubo` (the night-soil contract) appears only in

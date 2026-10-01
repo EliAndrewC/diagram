@@ -1,8 +1,8 @@
 # Handoff - feature 280, group V3 (vegetation: kept-cut margins and bamboo), session 1: research and write
 
-- SECTION=vegetation/090
+- SECTION=0073
 - SECTION=vegetation/110
-- SECTION=vegetation/150
+- SECTION=0075
 - SECTION=vegetation/152
 - SECTION=vegetation/630
 - SECTION=vegetation/640
@@ -12,7 +12,7 @@
 - KEY=ogura-kyoto-ezu-shokusei
 - KEY=goto-meiji40-chizukigo
 
-No section was held (vegetation 090's 269 line is landed: `git log origin/main..HEAD` in diagram-supplemental printed nothing for vegetation/).
+No section was held (0073's 269 line is landed: `git log origin/main..HEAD` in diagram-supplemental printed nothing for vegetation/).
 Existing keys newly cited here: kotobank-karishiki (vegetation/630, three new notes from the Yamakawa and Heibonsha entries on the same page), kotobank-azebiki (vegetation/630), qimin-yaoshu-zhongzhu (vegetation/640, its bamboo chapter), hiroshima-keihan-manual (vegetation/630).
 
 ## Items

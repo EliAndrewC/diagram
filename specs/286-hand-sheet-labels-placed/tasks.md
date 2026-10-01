@@ -19,7 +19,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D9).
       verify: DONE. removed: the caption gate test and ledger, make seat-label, overlapping_labels, dark_on_dark_labels, orphan_group_labels, the label halves of occluded_foreground and trees_overlap, building-review's caption-seat step; the pack audit pairs by data-kind; make quick ALL=1 3,865 passed
 - [x] T06 The docs and contracts (D8; FR-006)
       research: rendering
-      verify: DONE. buildings.md, SKILL.md, research presentation 040 (make record), labels/tools/engine CLAUDE indexes, pack_audit CLAUDE, the building-review and size-audit contracts, future-work/compounds.md, make docs
+      verify: DONE. buildings.md, SKILL.md, research 0242 (make record), labels/tools/engine CLAUDE indexes, pack_audit CLAUDE, the building-review and size-audit contracts, future-work/compounds.md, make docs
 - [x] T07 The after measurement, make done, push (D9; SC-001 to SC-004)
       research: rendering
       verify: DONE. SC-002 met in full context (sc002_ctx.py, the round-4 reviewer's): 0 captions worse on the four sheets, m:sc002-placed-worse; placed seats covering any ink 6/0/10/5 against the hand's 17/11/22/5 (sc002.json); scripted maps byte-identical; plan review round 5 CLEAR (28 decisions); make done green 2026-09-29 (109 s)

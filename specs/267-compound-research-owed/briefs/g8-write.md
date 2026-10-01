@@ -7,8 +7,8 @@ turn. Work in this clone (`/diagram/.clones/diagram-buildings`); the project's C
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections** - feature 265, in another session, is working them: buildings 010, 070, 150, 170, 210;
-cities/river-cities 010, 020, 030, 040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040,
+**Do not edit these sections** - feature 265, in another session, is working them: 0090, 070, 150, 170, 210;
+0175, 020, 030, 040; 0190, 020, 030, 050, 060, 070, 080, 160; 0081; towns 040,
 080, 090, 100, 130; cities/capitals 040. Write the finding in a question of your own; where it OWES one of those
 sections a correction, say exactly what in the handoff (the orchestrator makes it once 265 is done with the page).
 
@@ -17,7 +17,7 @@ sections a correction, say exactly what in the handoff (the orchestrator makes i
 Each is a research QUESTION the record owes. The kinds named are the map features whose write-ups will be rewritten
 from what you find (by the orchestrating session, NOT by you); O, H, U are the Ochiba, Hayakawa and Ubame sheets.
 
-- R52 **the in-field grave island** - did Japanese or rice-south Chinese villages put graves among the working paddy, and how often? The one quote cited (`ryobosei-jawiki`) puts burials beside the bunds; the 0.3 rate (`settlement/fields/features.py` `_paddy_features`) was a session's choice; the GM kept the island and its deviation label on 2026-09-26 pending this pass. If attested: the label moves to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a sourced statement of what the record puts in its place. `GraveIsland` (hamlet kind), `research/fields/010-*`. Hamlet maps.
+- R52 **the in-field grave island** - did Japanese or rice-south Chinese villages put graves among the working paddy, and how often? The one quote cited (`ryobosei-jawiki`) puts burials beside the bunds; the 0.3 rate (`settlement/fields/features.py` `_paddy_features`) was a session's choice; the GM kept the island and its deviation label on 2026-09-26 pending this pass. If attested: the label moves to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a sourced statement of what the record puts in its place. `GraveIsland` (hamlet kind), `research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html-*`. Hamlet maps.
 
 ## The procedure (session 1: research and write)
 
@@ -51,7 +51,7 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    tests/interactive/test_sources.py tests/interactive/test_record_format.py"`, and `python3 scripts/check-question-size.py`
    from the clone root (a question and its notes stay under 20,000 bytes - split one along its topics).
 6. **Hand off.** Write `specs/267-compound-research-owed/briefs/g8-handoff.md`: one line per new or changed question - a corrected
-   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=buildings/240`), one per new registry key as `- KEY=<key>`, and one line
+   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=0102`), one per new registry key as `- KEY=<key>`, and one line
    per item: `R<nn> <OUTCOME> - <one sentence of what the record now says> - <what it means for the kinds and sheets
    named>`. Then anything left open and why. Commit (a message naming the group). Do NOT run the record checks, do NOT
    push - the check sessions do that in fresh contexts. Your last message is one paragraph saying what you wrote.

@@ -251,7 +251,7 @@ def test_a_plank_crosses_a_supply_ditch_and_never_the_drain() -> None:
     assert law.plank_faults(M) == ([(50, 100)], [(50, 201, "drain")])
     assert law.plank_faults({"bridges": [{"x": 0.0, "y": 0.0, "foot": True}]}) == ([(0, 0)], [])
     # feature 287: a LATERAL is a supply ditch - a polder's ring canal and its field ditches record that role (Kuwabata's
-    # six planks, which the comb-only reading named as laid on a drain; research/ways/030, archetypes/110)
+    # six planks, which the comb-only reading named as laid on a drain; research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html, archetypes/110)
     polder = {"field_ditches": [{"poly": [[0.0, 0.0], [100.0, 0.0]], "role": "lateral", "seg": "e_toe"}], "bridges": [{"x": 50.0, "y": 1.0, "foot": True}]}
     assert law.plank_faults(polder) == ([], [])
 

@@ -5,14 +5,14 @@ PDF's text, extracted with pdftotext because the saver reads no PDF text layer; 
 
 ## Sections
 
-- SECTION=cities/defenses/100
+- SECTION=0151
 - SECTION=cities/defenses/110
 - SECTION=cities/defenses/120
 - SECTION=cities/defenses/020
-- SECTION=cities/defenses/040
+- SECTION=0147
 - SECTION=cities/defenses/050
-- SECTION=cities/defenses/060
-- SECTION=cities/defenses/080
+- SECTION=0148
+- SECTION=0149
 - SECTION=cities/defenses/090
 
 ## Keys

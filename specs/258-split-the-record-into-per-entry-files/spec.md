@@ -46,7 +46,7 @@ is checked at the gate and at the push.
 
 ### User Story 1 - A checking agent reads the entry it checks, and nothing else (Priority: P1)
 
-A session changes one question on `research/water/` and dispatches `record-format` and `quote-check`
+A session changes one question on `research/contents.json#water` and dispatches `record-format` and `quote-check`
 over it. Today each agent reads the whole 163,008-byte page to check a section of 5,777 bytes on average (R1). After
 this feature the agent's contract names the fragment, and the dispatch hands it one file.
 
@@ -116,7 +116,7 @@ one, on both pages and in the script, with no hand edit.
 
 ### User Story 4 - The reader's pages are unchanged (Priority: P1)
 
-The reader opens `research/water/` from disk exactly as before, with the same anchors, the same
+The reader opens `research/contents.json#water` from disk exactly as before, with the same anchors, the same
 links from every map modal, and the same hover notes.
 
 **Why this priority**: the record is read by the GM and by players, and the split is an authoring change.

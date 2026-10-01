@@ -10,6 +10,7 @@ import pytest
 
 from l7r.diagram.interactive.record import originals, store
 from l7r.diagram.tools import record_asset
+from tests import _flat_record as fr
 
 NOTE = (
     '<li data-note="k">「A」 (translated from the Japanese by this project; original: 「甲「乙」丙」)</li>\n'
@@ -52,47 +53,43 @@ def test_a_placeholder_with_no_stored_original_refuses() -> None:
 
 
 def _page(tmp: pathlib.Path, notes: str, originals_file: str | None = None) -> pathlib.Path:
-    (tmp / "p").mkdir()
-    (tmp / "p.html").write_text("", encoding="utf-8")
-    (tmp / "p" / "_front.html").write_text("<main>\n", encoding="utf-8")
-    (tmp / "p" / "_tail.html").write_text("</main>\n", encoding="utf-8")
-    (tmp / "p" / "010-q.html").write_text('<h2 id="q">Q</h2>\n<p>x<sup class="fn" data-note="k"></sup></p>\n', encoding="utf-8")
-    (tmp / "p" / "010-q.notes.html").write_text(notes, encoding="utf-8")
+    q = tmp / "questions"
+    q.mkdir()
+    (q / "0010-q.html").write_text('<h2 id="q">Q</h2>\n<p>x<sup class="fn" data-note="k"></sup></p>\n', encoding="utf-8")
+    (q / "0010-q.notes.html").write_text(notes, encoding="utf-8")
     if originals_file is not None:
-        (tmp / "p" / "010-q.originals.html").write_text(originals_file, encoding="utf-8")
+        (q / "0010-q.originals.html").write_text(originals_file, encoding="utf-8")
     return tmp
 
 
 def test_make_record_moves_an_inline_original_and_the_check_names_it(tmp_path: pathlib.Path) -> None:
     rec = _page(tmp_path, '<li data-note="k">「A」 (translated from the Japanese by this project; original: 「甲」)</li>\n')
-    assert store.split_originals(str(rec), write=False) == ["p/010-q.notes.html"]
-    assert "original: 「甲」" in (rec / "p" / "010-q.notes.html").read_text(encoding="utf-8"), "a check writes nothing"
-    assert store.split_originals(str(rec)) == ["p/010-q.notes.html"]
-    assert (rec / "p" / "010-q.originals.html").read_text(encoding="utf-8") == '<li data-orig="k#1">original: 「甲」</li>\n'
+    assert store.split_originals(str(rec), write=False) == ["questions/0010-q.notes.html"]
+    assert "original: 「甲」" in (rec / "questions" / "0010-q.notes.html").read_text(encoding="utf-8"), "a check writes nothing"
+    assert store.split_originals(str(rec)) == ["questions/0010-q.notes.html"]
+    assert (rec / "questions" / "0010-q.originals.html").read_text(encoding="utf-8") == '<li data-orig="k#1">original: 「甲」</li>\n'
     assert store.split_originals(str(rec)) == [], "moved once"
-    (rec / "nofragments.html").write_text("", encoding="utf-8")
-    assert store.split_originals(str(rec)) == [], "a page with no fragment directory is passed over"
-    assert '<span class="orig">original: 「甲」</span>' in store.read_notes("p.html", str(rec))["k"]
+    assert store.split_originals(str(tmp_path / "no-record")) == [], "a record with no questions directory has nothing to move"
+    assert '<span class="orig">original: 「甲」</span>' in store.page_notes("0010-q.html", str(rec))["k"]
 
 
 def test_a_placeholder_without_its_originals_file_or_its_entry_refuses_the_assembly(tmp_path: pathlib.Path) -> None:
     held = '<li data-note="k">「A」 (translated from the Japanese by this project; <span class="orig" data-orig="k#1"></span>)</li>\n'
     rec = _page(tmp_path, held)
-    with pytest.raises(store.RecordError, match="010-q.originals.html is missing"):
-        store.read_notes("p.html", str(rec))
-    (rec / "p" / "010-q.originals.html").write_text("", encoding="utf-8")
+    with pytest.raises(store.RecordError, match="0010-q.originals.html is missing"):
+        store.page_notes("0010-q.html", str(rec))
+    (rec / "questions" / "0010-q.originals.html").write_text("", encoding="utf-8")
     with pytest.raises(store.RecordError, match="no original stored for `k#1`"):
-        store.read_notes("p.html", str(rec))
+        store.page_notes("0010-q.html", str(rec))
 
 
 def test_the_record_tool_moves_originals_before_it_writes_and_its_check_reports_one_inline(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
-    rec = _page(tmp_path, '<li data-note="k">「A」 (translated from the Japanese by this project; original: 「甲」)</li>\n')
-    (rec / "p" / "_front.html").write_text('<main>\n<h1 id="p">P</h1>\n', encoding="utf-8")  # a part has its title (feature 301)
-    (rec / "p" / "_tail.html").write_text("</main>\n</body>\n</html>\n", encoding="utf-8")
-    (rec / "assets").mkdir()
-    for name in ("record.css", "record.js", "site.css", "site.js"):
-        (rec / "assets" / name).write_text("", encoding="utf-8")
+    rec = fr.write(tmp_path)
+    (rec / "questions" / "0001-lanes.notes.html").write_text('<li data-note="alpha">「A」 (translated; original: 「甲」)</li>\n', encoding="utf-8")
     assert record_asset._build(str(rec), str(rec / "site"), check=True) == 1
     assert "an original is still inline" in capsys.readouterr().err
     assert record_asset._build(str(rec), str(rec / "site"), check=False) == 0
     assert "moved the originals of 1 notes file(s)" in capsys.readouterr().out
+    assert record_asset.main(["--check", "--research-dir", str(rec)]) == 0 and "builds cleanly" in capsys.readouterr().out
+    (rec / "tags.json").unlink()
+    assert record_asset.main(["--check", "--research-dir", str(rec)]) == 1 and "tags.json: missing" in capsys.readouterr().err

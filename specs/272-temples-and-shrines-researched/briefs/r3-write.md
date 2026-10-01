@@ -7,8 +7,8 @@ above all (it auto-loads when you read a research file).
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** religion-and-death 130-206 (EXCEPT 190 and 204, yours - see A144) and new 270-300 (feature 269's
-burial group R1, in `/diagram/.clones/diagram-supplemental`); religion-and-death 220-260 (feature 267); every page
+**Do not edit these sections - other sessions own them:** 0224, 0235 (EXCEPT 190 and 204, yours - see A144) and new 270-300 (feature 269's
+burial group R1, in `/diagram/.clones/diagram-supplemental`); 0240 (feature 267); every page
 other than religion-and-death. Where a finding OWES one of those a correction, say exactly what in the handoff; the
 orchestrator sends it to the owner. Other groups of THIS feature run beside you in sibling clones: stay inside your
 own sections and range.
@@ -27,19 +27,19 @@ stub's path; fill it in. It refuses a key another clone already holds - then use
 
 - A138 D64 **Village temple**: did a village of 40-100 households keep a parish temple (danna-dera) of its own,
   beside or instead of its shrine, and how many villages shared one? Research FOR the GM's ruling - the canon gives a
-  village a country monk (`make canon`). (religion-and-death/210). M. P2.
+  village a country monk (`make canon`). (0226). M. P2.
 - A139 **Village temple precinct**: how big, what stands in it (hall, priest's quarters, bell), and where it sits
   against the houses and the graves. M. P2.
 - A140 D61 B103 **Wayside shrines**: jizō, dōsojin, a stone kami, a street-side Inari - how many does a village or a
-  town's streets carry, how big, at which thresholds (entrance, crossroads, bridge foot)? (religion-and-death/210, 1
+  town's streets carry, how big, at which thresholds (entrance, crossroads, bridge foot)? (0226, 1
   note). M. P2.
-- A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (religion-and-death 160-206, new 270-300,
+- A144 **Village cremation and ossuary**: ONLY what 269's burial group R1 (0235, new 270-300,
   in `/diagram/.clones/diagram-supplemental`) leaves open - read R1's sections first and cite them. M. P2.
   If `/diagram/.clones/diagram-supplemental/specs/269-research-backfill/briefs/r1-handoff.md` does NOT exist yet when you
-  start, write only the crematory's own questions, and leave pointers to religion-and-death 160, 170, 180, 206 and
+  start, write only the crematory's own questions, and leave pointers to 0235, 170, 180, 206 and
   270-300 for your check pass (agreed with "Diagram supplemental", 2026-09-27).
   UPDATE 13:22 UTC: 269's R1 handoff IS written (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/briefs/r1-handoff.md`);
-  read religion-and-death 160, 170, 180, 206, 270, 280 in THAT clone (their checks may still be running) and cite them.
+  read 0235, 170, 180, 206, 270, 280 in THAT clone (their checks may still be running) and cite them.
   Its points for you: 280 is a KNOB - a village's one burial ground lies in the shrine or temple yard or apart from
   it (a hilltop shrine always apart); 270 - a ground apart lies downstream and beyond the last house, within ~650 ft.
   Build A138/A139's village-temple graveyard on 280.
@@ -80,7 +80,7 @@ blocked sources is where your TO-DOWNLOAD entries start - first try each once mo
    and when, both searches where there were two; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). The GM's canon governs the setting: report the
    history against it, never override it.
-5. **Write** on religion-and-death 500-540 (new), and edits to 210. A new question is a fragment `research/religion-and-death/NNN-<heading id>.html` at a free
+5. **Write** on 0217, 0229, 0238 (new), and edits to 210. A new question is a fragment `research/contents.json#religion-and-the-deadNNN-<heading id>.html` at a free
    prefix in your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words, labeled (accurate, deviation, convention, guess). Footnotes: `<sup class="fn" data-note="<key>"></sup>`

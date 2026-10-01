@@ -74,7 +74,7 @@ read today. The monograph is not the carrier of anything in the entry; it is the
 reference [1].
 
 **Who carries what.** All five footnote texts below are read from
-`research/archetypes/` as they stand:
+`research/contents.json#field-archetypes` as they stand:
 
 | figure in the entry | footnote | source | the quoted passage |
 |---|---|---|---|

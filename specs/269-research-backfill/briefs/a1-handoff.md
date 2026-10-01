@@ -6,13 +6,13 @@ duck, fish pond, sugar cane) says nothing beyond silk and mulberry in general, s
 ## Questions new or changed
 
 - SECTION=archetypes/200
-- SECTION=archetypes/210
-- SECTION=archetypes/220
+- SECTION=0025
+- SECTION=0026
 - SECTION=archetypes/230
-- SECTION=archetypes/140
-- SECTION=archetypes/170
+- SECTION=0018
+- SECTION=0023
 - SECTION=archetypes/171
-- SECTION=archetypes/172
+- SECTION=0024
 - SECTION=archetypes/173
 
 (140, 170 and 171 changed only by a pointer sentence or a bullet; 172 dropped the unreadable Miles 2003 note and the
@@ -44,4 +44,4 @@ nursery-share sentence, which moved to 200; 173's closing claim was corrected.)
 - Nothing A1 found owes a correction to 265, 267 or 268.
 - Archetypes 180 (sty against the sluice) needed no change: nothing read speaks to the sluice.
 - Crown width of a mulberry bush: two searches, nothing. Zhong Gongfu's 1980 paper (Acta Geographica Sinica) and Ruddle & Zhong 1988 remain the likely sources; the progressingeography.com PDF of a paper on the delta's mulberry-dike fishponds would not decode in the container.
-- `make test-file` over the four record tests: 255 passed, 2 failed, both on `water.html` (an absence note with a link, a grounds note with a non-list reason) - another session's uncommitted W1 check-c work in this clone, not A1's. `check-question-size.py` flags homesteads 210, vegetation 120, water 070 and water 270; no archetypes question is over the cap.
+- `make test-file` over the four record tests: 255 passed, 2 failed, both on `water.html` (an absence note with a link, a grounds note with a non-list reason) - another session's uncommitted W1 check-c work in this clone, not A1's. `check-question-size.py` flags homesteads 210, 0074, water 070 and 0035; no archetypes question is over the cap.

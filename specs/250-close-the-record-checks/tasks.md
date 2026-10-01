@@ -138,7 +138,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [x] T40 FR-002 and FR-006 for `cities/defenses`, in a write session and check sessions of two (D12)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
-      verify: DONE. cities/defenses 040 and 060 checked and applied (group 2 of 2): quote-check x3 rounds on 060, x2 on 040, record-format x1 each; 040 - one-character DIFFERS fixed (and in the xian-wall-zhwiki registry), the mamian gloss cited (ditai-zhwiki-3), gatepost figure labeled GUESS; 060 - xian-wall-zhwiki-5 DIFFERS fixed, jah-2 retranslated, first sentence reworded onto xian-wall-zhwiki-7, gate and water-gate stretches cited (panmen-zhwiki, a second absence note), tower-count tie labeled GUESS, one HISTORY sentence commented, the stale Pingyao clause cut; 5 glossary terms added, 2 mamian variants; no modal owed; FR-006 worklist 17 bare items: 15 FOOTNOTED, 1 LOCATED (010), 1 NOT-LOCATED (040, now an HTML comment); open: the two jah-song-military-cities quotes are unverified in-container (the PDF has no readable text layer here)
+      verify: DONE. 0147 and 060 checked and applied (group 2 of 2): quote-check x3 rounds on 060, x2 on 040, record-format x1 each; 040 - one-character DIFFERS fixed (and in the xian-wall-zhwiki registry), the mamian gloss cited (ditai-zhwiki-3), gatepost figure labeled GUESS; 060 - xian-wall-zhwiki-5 DIFFERS fixed, jah-2 retranslated, first sentence reworded onto xian-wall-zhwiki-7, gate and water-gate stretches cited (panmen-zhwiki, a second absence note), tower-count tie labeled GUESS, one HISTORY sentence commented, the stale Pingyao clause cut; 5 glossary terms added, 2 mamian variants; no modal owed; FR-006 worklist 17 bare items: 15 FOOTNOTED, 1 LOCATED (010), 1 NOT-LOCATED (040, now an HTML comment); open: the two jah-song-military-cities quotes are unverified in-container (the PDF has no readable text layer here)
 - [x] T41 **The comparison the GM asked for** (D12): T40 measured against R1 to R3, recorded as R4 with the next
       recommendations
       research: rendering
@@ -173,7 +173,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       both research docs
       research: rendering
       verify: DONE. built in a10cb973; verified in the recovery session: the government check sessions dispatched FOR= bundles, check-question-size clean over the record's touched questions (18 untouched over the cap), the four split sessions reviewed (ids kept, every note moved unchanged to one part, joins point and do not restate)
-- [x] T49 The splits this feature owes: `cities/government` 080 by hand; homesteads 040 and 210, vegetation 150,
+- [x] T49 The splits this feature owes: `cities/government` 080 by hand; 0038 and 210, 0075,
       religion-and-death 200 by split sessions; each judged for lost context
       research: rendering
       verify: DONE. built in a10cb973; verified in the recovery session: the government check sessions dispatched FOR= bundles, check-question-size clean over the record's touched questions (18 untouched over the cap), the four split sessions reviewed (ids kept, every note moved unchanged to one part, joins point and do not restate); the six modals written from homesteads 210/040 re-pointed to the parts holding their text (entry-drift answers stay with T23); the clone guard now lets a page session through as its dispatcher's child (L7R_DISPATCHER, 1fee77a3)

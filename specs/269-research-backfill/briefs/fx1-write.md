@@ -7,10 +7,10 @@ turn. Work in this clone (`/diagram/.clones/diagram-supplemental`); the project'
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 265: buildings 010, 070, 150, 170, 210;
-cities/river-cities 010-040; urban-features 010, 012, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040, 080,
-090, 100, 130; cities/capitals 040, 150, 155, 330-336. Feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240. Feature 268: religion-and-death 080-126. Where a finding OWES one of those
+**Do not edit these sections - other sessions own them:** feature 265: 0090, 070, 150, 170, 210;
+0175, 0176; 0190, 012, 020, 030, 050, 060, 070, 080, 160; 0081; towns 040, 080,
+090, 100, 130; cities/capitals 040, 150, 155, 330-336. Feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240. Feature 268: 0215, 0220, 0221, 0222, 0223. Where a finding OWES one of those
 a correction, say exactly what in the handoff; the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
 `.claude/skills/diagram`); a write session's eleventh registry key is refused - then follow its message (write the
@@ -29,7 +29,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - F01 `homesteads/060`: the shared-byre sentence points to the stable question (homesteads 300) (B16's finding: the beast lived in the house).
 - F02 `homesteads/240`: the heading says what the section finds ("a little off due south").
-- F03 `homesteads/180`: B19's remaining village-form claims (it was held by 271 V7, now closed).
+- F03 `0041`: B19's remaining village-form claims (it was held by 271 V7, now closed).
 - F04 `homesteads/130`: the plain farmhouse drawn 46 x 28 ft is about twice the 1885 usual 18 tsubo (weak: one district); say so, cited.
 
 ## The procedure (session 1: research and write)

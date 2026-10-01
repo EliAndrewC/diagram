@@ -109,6 +109,8 @@ def site_file(loc: Loc) -> str:
 
 def site_href(loc: Loc, here: str) -> str:
     """The link from the site file `here` (relative to the site root) to `loc` on the multi-page site."""
+    if loc.anchor and site_file(loc) == here:
+        return f"#{loc.anchor}"
     rel = posixpath.relpath(site_file(loc), posixpath.dirname(here) or ".")
     return rel + (f"#{loc.anchor}" if loc.anchor else "")
 

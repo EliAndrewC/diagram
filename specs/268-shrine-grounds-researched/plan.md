@@ -125,7 +125,7 @@ more:
 ```text
 specs/268-shrine-grounds-researched/   spec, plan, research, request, reader-reports/, tasks
 .claude/skills/diagram/
-  research/religion-and-death/         new NNN-*.html + .notes.html; 090 and 120 revised
+  research/contents.json#religion-and-the-dead         new NNN-*.html + .notes.html; 090 and 120 revised
   research/sources/010-works-cited/    new NNNN-<key>.html per source
   buildings/programs.md, buildings.md  the program and the vocabulary
   l7r/diagram/buildings/types.json     the declaration

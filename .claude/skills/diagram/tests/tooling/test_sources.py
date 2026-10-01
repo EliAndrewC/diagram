@@ -114,12 +114,12 @@ def test_a_line_is_appended_and_read_back_and_a_torn_line_is_skipped() -> None:
     where = _home()
     src.append(where, [])
     assert not (where / src.LEDGER).exists(), "nothing to write writes nothing"
-    src.append(where, [src.line(CTX, "https://www.example.org/p", "pending", ["homesteads/500"])])
+    src.append(where, [src.line(CTX, "https://www.example.org/p", "pending", ["0016"])])
     with open(where / src.LEDGER, "a", encoding="utf-8") as f:
         f.write("{torn\n")
     rows = src.read(where)
     assert len(rows) == 1
-    assert rows[0] | {"utc": ""} == {"url": "example.org/p", "raw": "https://www.example.org/p", "utc": "", **CTX, "questions": ["homesteads/500"], "outcome": "pending"}
+    assert rows[0] | {"utc": ""} == {"url": "example.org/p", "raw": "https://www.example.org/p", "utc": "", **CTX, "questions": ["0016"], "outcome": "pending"}
     assert src.read(where / "nowhere") == []
 
 
@@ -367,11 +367,11 @@ def test_the_import_keeps_the_newest_whole_save_of_each_page(tmp_path: pathlib.P
 def test_the_outcome_command_records_and_refuses(capsys: pytest.CaptureFixture[str]) -> None:
     assert src.main(["outcome", "https://example.org/p", "maybe"]) == 2
     assert "is not one of" in capsys.readouterr().err
-    assert src.main(["outcome", "https://example.org/p", "rejected: only prices", "--question", "fields/020"]) == 0
+    assert src.main(["outcome", "https://example.org/p", "rejected: only prices", "--question", "0005"]) == 0
     assert "recorded" in capsys.readouterr().out
     assert src.main(["outcome", "https://example.org/q", "nothing-found"]) == 0
     rows = src.read(_home())
-    assert rows[0]["outcome"] == "rejected: only prices" and rows[0]["questions"] == ["fields/020"] and rows[1]["questions"] == []
+    assert rows[0]["outcome"] == "rejected: only prices" and rows[0]["questions"] == ["0005"] and rows[1]["questions"] == []
 
 
 def test_the_lookup_command(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

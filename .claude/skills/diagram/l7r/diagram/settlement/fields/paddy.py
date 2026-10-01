@@ -54,8 +54,8 @@ def _uf_xy(u: float, f: float) -> Pt:
     return (_UF_RT * (u + f), _UF_RT * (f - u))
 
 
-# IS ANY PADDY LEFT TO REST? (269 B01; research/fields/250-paddies-left-to-rest-kataarashi.html and
-# research/rendering/fields/250-how-our-maps-place-paddies-left-to-rest-kataarashi.html, fields/250). The record attests
+# IS ANY PADDY LEFT TO REST? (269 B01; research/questions/0013-paddies-left-to-rest-kataarashi.html and
+# research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html, 0013). The record attests
 # two forms of a village's paddy, so it is a KNOB rolled per settlement:
 #   settled    - cropped every year, no plot rests: the nucleated village on stable ground, and the setting's canon (a
 #                paddy once made crops for centuries, and what limits rice is hands, not soil) sides with it.
@@ -132,7 +132,7 @@ class PaddyMixin:
         inside the real 130-600 m2 basin band, and the default (46 -> ~785 m2 at 2 ft/px) is within
         the real parcel range (mean ~1 mu = ~600 m2, merged holdings larger) - no legibility
         inflation is in play, and the houses are true-scale too. The bund stroke draws at near-true
-        aze width for the map scale. See research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html."""
+        aze width for the map scale. See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html."""
         from l7r.diagram.waterfields import AZE, aze_w
 
         bund = aze_w(self.ftpx)  # near-true-scale aze stroke (~1.5 real ft; the why lives at waterfields.AZE)
@@ -158,7 +158,7 @@ class PaddyMixin:
         # together by piecemeal reclamation and inheritance - NOT the regular grid of modern (Meiji/Showa)
         # land consolidation. Build it by recursively splitting the field with straight, slightly-angled aze
         # (bund) lines that cut the LONG axis of each plot at a jittered fraction, down to the target grain
-        # (with size variation), so bunds meet at T-junctions like real cadastral paddy. See research/fields/260-bunds-between-the-paddies-aze.html.
+        # (with size variation), so bunds meet at T-junctions like real cadastral paddy. See research/questions/0014-bunds-between-the-paddies-aze.html.
         _fillstate = random.getstate()  # ISOLATE the paddy fill RNG: the patchwork, crop
         random.seed(int(abs(x0) * 7 + abs(y0) * 13 + abs(x1) * 3 + len(name)))  # roll, growth stage and mottle
         plots = self._paddy_plots((ex0, ey0, ex1, ey1), plot)  # are decorative and must NOT shift
@@ -172,7 +172,7 @@ class PaddyMixin:
             cy = sum(q[1] for q in poly) / len(poly)
             # CROP MIX: an irrigated valley exists to grow RICE (~85% of the watered common). Dry upland crops
             # (barley/veg, soy) cluster on the MARGINS - the higher, harder-to-water rim - while the well-watered
-            # interior is all paddy. So dry/soy probability rises toward the field edge. See research/rendering/fields/030-how-our-maps-show-the-paddy-through-the-rice-year.html ('Crop mix'.
+            # interior is all paddy. So dry/soy probability rises toward the field edge. See research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html ('Crop mix'.
             edge = max(0.0, 1.0 - edge_dist(cx, cy, smoothed) / (2.4 * plot))  # 1 at the rim, 0 deep interior
             r = random.random()
             dry_p, soy_p = 0.05 + 0.24 * edge, 0.03 + 0.11 * edge
@@ -180,7 +180,7 @@ class PaddyMixin:
             if crop == 'rice':
                 # a district transplants within a short window set by the crop before the rice, so its paddies are largely
                 # ONE stage - here high-summer green - with only minor spread (early/late rice varieties, the odd
-                # low flooded plot); NOT a rainbow of stages. See research/rendering/fields/030-how-our-maps-show-the-paddy-through-the-rice-year.html.
+                # low flooded plot); NOT a rainbow of stages. See research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html.
                 st = random.random()
                 if st < 0.06:
                     fill, flooded = random.choice(FLOODED_SHADES), True
@@ -300,7 +300,7 @@ class PaddyMixin:
         """A WET paddy: a flooded, mottled sheet (irregular hand-transplanted shoots, plus a faint water sheen
         for a freshly-flooded plot) - NOT ruled rows. Premodern rice was transplanted irregularly; crisp
         checkrow planting (seijoue) is a Meiji improvement, so ruled rows on a paddy read as modern (the same
-        era-tell as the consolidation grid). See research/rendering/fields/030-how-our-maps-show-the-paddy-through-the-rice-year.html.
+        era-tell as the consolidation grid). See research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html.
 
         Two mottle modes. Default (pitch=None): the sparse random scatter every comb map has always drawn
         (byte-stable). `pitch` (GM 2026-07-23, the polder-leftover repaint): a JITTERED GRID - dot centers
@@ -408,7 +408,7 @@ class PaddyMixin:
         FOLLOWS the water (rice hugging the ditches, dry upland crops where the network doesn't reach - wide-
         strip middles and the margins); the paddy is ~ONE green (a rice field, not a color mix). Records a
         feed channel (pond->field) and a drain channel (field->drain) so the checks see the supply. See
-        research/water/005-irrigation-canals-and-how-they-are-laid-out-yosuiro.html."""
+        research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html."""
         if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
             bbox = tuple(shape)
             outline = organic_bbox(bbox, amp)

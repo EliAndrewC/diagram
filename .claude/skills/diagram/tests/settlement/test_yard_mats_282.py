@@ -1,7 +1,7 @@
 """The threshing yard as the harvest leaves it (feature 282): a floor of straw mats, thinned so each reads, and a rack by
 the house only where the harvest weather is changeable - never in the yard's map-south half.
 
-research/homesteads.html 'What lay in the work yard at harvest?' and 'Did a village put its drying racks by the houses
+research/contents.json#homesteads 'What lay in the work yard at harvest?' and 'Did a village put its drying racks by the houses
 by custom, or because of its weather?'.
 """
 

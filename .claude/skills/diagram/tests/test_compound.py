@@ -547,7 +547,7 @@ def test_the_county_example_sets_the_garden_before_the_house_and_the_court_on_th
     assert court.w_ft <= hall.spec.w_ft and abs((court.x_ft + court.x2) / 2 - (hall.x_ft + hall.x2) / 2) < 1.0
     kitchen = by["kitchen"]
     assert kitchen.x2 <= res.x_ft and (kitchen.spec.w_ft, kitchen.spec.h_ft) == (20.0, 18.0)  # the ell at the west end
-    # the whole house - residence, kitchen, bath - at research buildings 380's 49-tsubo house, ~1,740 sq ft (pass 6)
+    # the whole house - residence, kitchen, bath - at research 0091's 49-tsubo house, ~1,740 sq ft (pass 6)
     house = res.spec.w_ft * res.spec.h_ft + kitchen.spec.w_ft * kitchen.spec.h_ft + cp.BATH_W_FT * cp.BATH_H_FT
     assert 1_650 <= house <= 1_850
 
@@ -666,7 +666,7 @@ def _home(court: str, wall: str, **kw: object) -> c.Placed:
 
 
 def test_the_family_privy_is_attached_to_the_house_at_its_rear_corner() -> None:
-    """Pass 7 (research buildings 'Privies (setchin)': "in a corner of the corridor"): the family's privy is a part of the house, at the
+    """Pass 7 (research/questions/0101-privies-setchin.html 'Privies (setchin)': "in a corner of the corridor"): the family's privy is a part of the house, at the
     rear corner by the family's rooms - not flush to the wall across the alley, ~140 ft outdoors round the house."""
     _prog_, result, svg = _county()
     home = next(p for p in result.placed if p.spec.name == "residence")

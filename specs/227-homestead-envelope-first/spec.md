@@ -315,7 +315,7 @@ the feature's last task after rounds of feedback in the clone.
   nearest field edge, main -> this feature, kuwabata 63/159 ft min/median with 11 of 16 within 200 ft ->
   **135/422 ft with 3 of 16**; sawada 42/146, 15/19 -> 60/225, 7/19; mizuguchi 27/70, 12/12 -> 37/140, 8/12;
   inashiro 41/129, 13/15 -> 44/182, 11/15; kashikawa 36/106, 17/20 -> 47/135, 15/20. The norm it runs against
-  is directional rather than numeric - `research/homesteads/`, "the nucleated cluster stands on the field
+  is directional rather than numeric - `research/contents.json#homesteads`, "the nucleated cluster stands on the field
   margin with its face to the water" - and NO CHECK IS RED, because no maximum house-to-field distance exists
   anywhere in the engine or the record (the only coded rule is a 6 ft minimum). It was raised as a regression
   under XIII's "a measured rate that went down", with both exits priced: fix it by admitting the dike heads as

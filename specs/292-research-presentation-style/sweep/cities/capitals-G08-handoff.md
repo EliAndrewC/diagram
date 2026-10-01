@@ -4,14 +4,14 @@
 
 - SECTION=cities/capitals/the-capitals-aqueduct-josui
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-capitals-aqueduct-josui
-- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
+- OLD=research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals
 - MODALS=
 
 ## Towpaths along a river (qiandao)
 
 - SECTION=cities/capitals/towpaths-along-a-river-qiandao
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-towpath-along-a-river-qiandao
-- OLD=research/cities/capitals/
+- OLD=research/contents.json#capitals
 - MODALS=
 
 - BASE=b4403460a

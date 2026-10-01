@@ -100,7 +100,7 @@ matching surface still matches. This is exactly the reasoning FR-006 and
 its own other half.
 
 **FR-008** A deliberately silent entry MUST stay legal in the form `fallow` already uses -
-`research/fields/ (no dedicated entry - recorded as silent)` - and MUST be recognized EXPLICITLY
+`research/contents.json#fields (no dedicated entry - recorded as silent)` - and MUST be recognized EXPLICITLY
 rather than by the absence of a match, so a broken heading and a declared silence cannot be confused.
 
 **FR-009** FR-007 is PROPHYLACTIC and the spec records it as such: measured 2026-09-12, **0 of 51**

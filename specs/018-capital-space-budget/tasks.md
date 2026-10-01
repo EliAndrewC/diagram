@@ -15,7 +15,7 @@
 ## Phase 1: Setup
 
 - [x] T001 Confirm the working base: `git -C . log --oneline -1` shows the spec/plan commit, and `git status --porcelain` is clean, in the session clone `.clones/diagram-city`
-- [x] T002 Re-read the two settled decision docs so no number is re-derived from memory: `.claude/skills/diagram/settlements/capitals.md` and `.claude/skills/diagram/research/cities/capitals.md`
+- [x] T002 Re-read the two settled decision docs so no number is re-derived from memory: `.claude/skills/diagram/settlements/capitals.md` and `.claude/skills/diagram/research/contents.json#citiescapitals.md`
 
 ---
 
@@ -91,7 +91,7 @@
 ## Phase 6: Polish, docs and verification
 
 - [x] T030 [P] Update `.claude/skills/diagram/settlements/capitals.md`: drop the blanket "NOT YET IMPLEMENTED" for the parts this feature ships, point the budget, knobs and ground-cost sections at the shipped surface, and keep the banner ONLY for the still-undrawn glyph work
-- [x] T031 [P] Update `.claude/skills/diagram/research/cities/capitals.md`: mark `C_YASHIKI` / `C_TERRACE` / the castle line as shipped, and keep the note that both constants are provisional pending re-derivation against the first drawn capital
+- [x] T031 [P] Update `.claude/skills/diagram/research/contents.json#citiescapitals.md`: mark `C_YASHIKI` / `C_TERRACE` / the castle line as shipped, and keep the note that both constants are provisional pending re-derivation against the first drawn capital
 - [x] T032 [P] Add the capital tier to the load table in `.claude/skills/diagram/settlements.md` if its description still implies the tier is undesigned
 - [x] T033 Run the cheap linters from `.claude/skills/diagram/`: `python3 -m ruff format . && python3 -m ruff check . && python3 -m mypy` - all clean before any gate run
 - [x] T034 Run the WHOLE affected test files from `.claude/skills/diagram/`: `python3 -m pytest test_citybudget.py test_checks.py -q -n auto --no-cov`. NEVER a `-k` subset - a hook enforces this, and the one time it was skipped a same-file test the filter missed cost a full gate cycle

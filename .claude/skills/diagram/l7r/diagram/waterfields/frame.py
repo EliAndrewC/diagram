@@ -18,7 +18,7 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # They are now TRUE WIDTHS IN FEET, converted to pixels by `chan_px`, so the comb net is to scale
 # like everything else on a to-scale sheet. The research, the two independent derivations behind
 # each figure, and the disclosed departures are in
-# `../../../research/rendering/water/010-how-our-maps-draw-channel-widths.html`.
+# `../../../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`.
 #
 # Sized from the ATTESTED tier ladder (a field ditch watering one paddy ~0.3 m; a distribution
 # lateral ~1 m; a district main/yosui ~5 m) placed by COMMAND AREA, with a Manning/Lacey check on a
@@ -65,7 +65,7 @@ SUB_PARENT_FRAC = 0.75
 # terminal tier is 0.4 px, i.e. not a line at all. So a stroke is drawn at its true width or this
 # floor, whichever is larger - the coarser the sheet, the more of the ladder collapses onto it,
 # which is the honest form of the "minimum-visibility floor" the stroke convention in
-# `../../../research/rendering/water/010-how-our-maps-draw-channel-widths.html` already sanctions.
+# `../../../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html` already sanctions.
 #
 # 1.5, AND 1.2 WAS TRIED AND REVERTED (2026-08-17) - the number is load-bearing on the carve, not
 # just on legibility. `settlement-review` noted that 1.5 COLLIDES with `aze_w`, which at hamlet grain
@@ -111,7 +111,7 @@ CANAL_BERM_FT = 5.0
 # asked why the delivery ditches had no planks; the research pass found the traditional 小用水路 at
 # 2 shaku and the record SILENT on whether a ditch of that width was planked or stepped, so the GM
 # ruled on the map: they are not too narrow. At 2.0 the standard farm ditch earns a board and only
-# the ~1.2-1.5 ft tails are stepped over. Full record: research/ways/030-plank-bridges-over-farm-ditches-itabashi.html.
+# the ~1.2-1.5 ft tails are stepped over. Full record: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html.
 FOOTPLANK_MIN_FT = 2.0
 
 
@@ -151,12 +151,12 @@ def taper_w(w0: float, w1: float, t: float) -> float:
 
     THE WIDTH SQUARED IS WHAT RUNS LINEARLY, not the width - because a channel's width goes as the
     SQUARE ROOT of the discharge it carries, and the discharge is what changes linearly along one of
-    these runs. (why: `../../../research/water/010-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html`)
+    these runs. (why: `../../../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html`)
 
     Both halves of that are load-bearing, so neither is a free choice:
 
       - *Width goes as sqrt(Q).* This is the regime relation the water-width ladder in
-        `../../../research/water/` has always asserted ("channel width scales with the square-root of
+        `../../../research/contents.json#water` has always asserted ("channel width scales with the square-root of
         the command-area flow it carries"), and it is Lacey's canal result, P = 4.75 * sqrt(Q) - the
         standard design equation for exactly this kind of unlined earthen channel.
       - *Q runs linearly.* A delivery ditch sheds its water through a `mizuguchi` per plot into a row
@@ -175,7 +175,7 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     0.93 before), so the shape below is correct and unreadable at once. The GM asked directly, was
     given x1.5 and x2 legibility multipliers with the gradients priced, and chose true size
     (2026-08-17). Do NOT widen these strokes to make the taper show - the numbers and the reasoning
-    are in `../../../research/rendering/water/015-how-our-maps-draw-a-channel-narrowing-along-its-run.html`.
+    are in `../../../research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html`.
 
     **THE WORKED EXAMPLE LIVES IN A TEST, NOT HERE** -
     `test_the_delivery_taper_holds_then_dwindles` asserts the SHAPE this paragraph promises (wider

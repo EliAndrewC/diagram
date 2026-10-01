@@ -12,7 +12,7 @@ history at the commit before this one; `kuwabata.notes.md` carries the design re
 THE ARCHETYPE: polder GEOMETRY (build_polder - the wei-tian 圩田 polders of the lower-Yangtze lake
 plains) carried to the dike-pond system's rare WHOLESALE-CONVERSION end state (桑基魚塘,
 `apply_land_use(eligible="all")`): (almost) every former paddy cell dug into a fish pond and the
-spoil piled into a mulberry-planted dike around it. See research/rendering/archetypes/030-how-our-maps-lay-cash-crops-over-a-villages-rice-land.html for why the end state is the exception and the scattered overlay the norm.
+spoil piled into a mulberry-planted dike around it. See research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html for why the end state is the exception and the scattered overlay the norm.
 
 ECONOMY (GM-confirmed 2026-07-24): a cash-crop settlement, not a subsistence one - the rice-farmer's
 analog of the tobacco/indigo switch. Stocked carp ponds; the loop is mulberry leaf -> silkworm ->

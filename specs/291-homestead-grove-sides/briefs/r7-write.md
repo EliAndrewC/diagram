@@ -36,7 +36,7 @@ draws (feature 291; `hamletgen/homesteads/rows.py`, `ways/street.py`, `homestead
 
 ## Your items (three questions; no new registry key)
 
-- homesteads/155: in its map section, the line: set by the ground where the generator knows it (flood-prone ground takes
+- 0033: in its map section, the line: set by the ground where the generator knows it (flood-prone ground takes
   the dike), otherwise the two attested lines rolled at even odds (a GUESS); the sides at even odds (a GUESS).
 - homesteads/156: in its map section, the drawn values above - spacing, street offset and tread, the road it runs out on,
   the further streets and their cap, the far row's holding in each line's form with its depth and plots, the row's water
@@ -47,7 +47,7 @@ Keep every entry under the 20,000-byte question cap (split by topic if one would
 
 ## The procedure (session 1: write)
 
-1. Claims: `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="homesteads"`, then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram readability (diagram-readability-2) | 291 | group R7 in progress (homesteads 155 156 200) | 2026-09-29"`.
+1. Claims: `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="homesteads"`, then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram readability (diagram-readability-2) | 291 | group R7 in progress (0033 156 200) | 2026-09-29"`.
 2. Read the three fragments and their notes in one message; edit the fragments (never the assembled pages).
 3. In `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`; `python3 scripts/check-question-size.py` from the clone root.
 4. Write `specs/291-homestead-grove-sides/briefs/r7-handoff.md` (one `- SECTION=<page>/<id>` line per entry and a

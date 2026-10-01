@@ -4,7 +4,7 @@
 The GM, 2026-10-01: keep the requirement that a rendering decision points at its research, but *"not link to the
 generated HTML page, but to link to the source which is fed into and used to generate that HTML page, because that is
 the canonical location of the research"*. The pages are built and no longer committed, so a pointer of the old form -
-`research/water.html "Reservoir ponds (tameike)"` - points at nothing in the repository. This holds the new form:
+`research/contents.json#water "Reservoir ponds (tameike)"` - points at nothing in the repository. This holds the new form:
 
   - a pointer to a question, `research/<page dir>/<prefix>-<heading id>.html`, names a file that exists;
   - a pointer to a page, `research/<page dir>/`, names a fragment directory that exists;
@@ -120,13 +120,13 @@ def selftest() -> int:
         (record / "water" / "120-reservoir-ponds-tameike.html").write_text("x", encoding="utf-8")
         (record / "cities" / "fabric").mkdir(parents=True)
         assert problems("see research/water/120-reservoir-ponds-tameike.html.", record, old_form_banned=True) == []
-        assert problems("the page, research/water/ and research/cities/fabric/", record, old_form_banned=True) == []
+        assert problems("the page, research/contents.json#water and research/contents.json#urban-fabric", record, old_form_banned=True) == []
         assert problems("research/water/130-gone.html", record, old_form_banned=True), "a missing fragment is named"
         assert problems("research/nowhere/", record, old_form_banned=True), "a missing directory is named"
-        assert problems("research/water.html#x", record, old_form_banned=True), "a built page is refused"
-        assert problems("research/citations/water.html", record, old_form_banned=True)
-        assert problems("research/cities/fabric.html 'H'", record, old_form_banned=True)
-        assert problems("research/water.html#x", record, old_form_banned=False) == [], "an exempt file may name it"
+        assert problems("research/contents.json#water", record, old_form_banned=True), "a built page is refused"
+        assert problems("research/contents.json#water", record, old_form_banned=True)
+        assert problems("research/contents.json#urban-fabric 'H'", record, old_form_banned=True)
+        assert problems("research/contents.json#water", record, old_form_banned=False) == [], "an exempt file may name it"
         assert problems("research/site/water/x.html and research/assets/record.css", record, old_form_banned=True) == [], "the built site and the assets are not pointers"
         assert problems("research/<page>/NNN-<heading id>.html", record, old_form_banned=True) == [], "a placeholder is not a pointer"
         assert problems("specs/229-rule-files-into-research/audit/x.md", record, old_form_banned=True) == [], "a word ending in -research is not the record"

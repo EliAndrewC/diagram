@@ -12,10 +12,10 @@ overwritten by 砂利道).
 ## Sections
 
 - SECTION=ways/100
-- SECTION=ways/110
+- SECTION=0085
 - SECTION=ways/120
 - SECTION=ways/130
-- SECTION=ways/140
+- SECTION=0086
 
 ## Keys
 
@@ -52,7 +52,7 @@ refused too (diagram-buildings holds it for a DIFFERENT page, 3-6.htm), hence th
 for 3-2.htm.
 Glossary: new tateba (variants rest stop/s), watashiba (ferry landing/s), bojikui (boundary post/s), kanjo-nawa
 (kanjo-tsuri), michikiri, ai-no-shuku, gaison (street village), murakiri; dosojin's definition extended to the
-village's edge. `mitsuke` is diagram-research-4's (T1, 11030, not yet on main) - ways/110 writes the word and
+village's edge. `mitsuke` is diagram-research-4's (T1, 11030, not yet on main) - 0085 writes the word and
 takes that tooltip when T1 lands.
 Also fixed (constitution XIV): mokutan-jawiki's write-up (V6, this clone) carried an unmarked Japanese title that
 failed test_a_foreign_language_quote_is_a_marked_translation on citations/vegetation.html and SOURCES.html; the
@@ -74,8 +74,8 @@ title is now given in English.
   village (shares a GUESS), and give a town on the Imperial road its paired gate-mounds, crank and post at both ends.
   OWED to 269 (B20, homesteads/145): 145 says "a village-ENTRANCE stone is a guess, with no readable page behind
   it" - the entrance stone is now attested (kotobank-murazakai: 「また道祖神もたいていここにまつられている」, the
-  point where the road enters the settlement; ways/110); 145 should point there and drop the guess label. The
-  towns side (towns/200, T1, diagram-research-4) carries the same mitsuke from kotobank-shukubamachi - no conflict;
+  point where the road enters the settlement; 0085); 145 should point there and drop the guess label. The
+  towns side (0120, T1, diagram-research-4) carries the same mitsuke from kotobank-shukubamachi - no conflict;
   110's measurements add to it.
 - A129 ACCURATE - the outer line was fixed on the survey by the early-Edo village partition (with water and commons
   weighed) and seldom marked on the ground, except by a tall wooden boundary post where a highway crossed it; a
@@ -95,7 +95,7 @@ title is now given in English.
   ferries were kept by a post town, a village or farmers under contract; 4 of Kanagawa's 65 Tokaido settlements held
   a landing; canon counts ferry stations among the Imperial road's structures - the generator should roll ferry/ford
   for a road meeting a wide river (never a ford on the Imperial road), draw a landing on each bank with the office,
-  notice board and hut on one, and 2-3 boats for a village ferry (a GUESS; boat count SILENT). water/130 needed no
+  notice board and hut on one, and 2-3 boats for a village ferry (a GUESS; boat count SILENT). 0056 needed no
   change (its "ferry crossing" is a river-name etymology).
 
 ## Left open
@@ -103,11 +103,11 @@ title is now given in English.
 - Chinese practice was not searched for any W1 item (village gate/paifang at the village mouth, ferry landings
   dukou, road surfaces); the record's W1 findings are Japanese. A later pass could add the Chinese forms as further
   knob values.
-- ways/020 says "no numeric village-lane width found in any language"; ways/100 now cites a traditional 3-shaku
+- 0081 says "no numeric village-lane width found in any language"; ways/100 now cites a traditional 3-shaku
   (about 3 ft) width for the field road (mlit-tokaido-michi, from the "Ieyasu hundred articles", a text of doubtful
   authorship). 020 is outside W1's named sections and was not edited; the check session or the orchestrator may
   want 020 to point at it.
-- The religion-and-death/210 entrance lines were not edited: its wayside-shrine threshold sentence is already cited
+- The 0226 entrance lines were not edited: its wayside-shrine threshold sentence is already cited
   (dosojin-jawiki) and its shrine parts are 272's.
-- 267 R40-R42 (river-city landing features) are not on main in this clone, so ways/140 names them only in a session
+- 267 R40-R42 (river-city landing features) are not on main in this clone, so 0086 names them only in a session
   comment; link them when they land.

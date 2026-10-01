@@ -27,8 +27,8 @@ from ..plan import SitePlan, _roll
 
 # ---- STAGE 2: the field the water shapes --------------------------------------------------------
 
-# THE FAN'S MIDDLE, WILD OR CLEARED (269 B07; research/fields/160-dry-fields-and-their-crops-hatake.html,
-# fields/160): a fan's dry middle was often left coppice or wild ground until late, which is a tendency, not a rule - old
+# THE FAN'S MIDDLE, WILD OR CLEARED (269 B07; research/questions/0006-dry-fields-and-their-crops-hatake.html,
+# 0006): a fan's dry middle was often left coppice or wild ground until late, which is a tendency, not a rule - old
 # heartlands cleared their fans early. Two attested forms, so a knob; "wild" keeps the dry band on the toe (`fan_toe_hem`,
 # waterfields/comb.py). The record calls wild ground the usual case without a figure, so the 3:1 weighting is a GUESS.
 FAN_MIDDLE = register_knob(Knob("fan_middle", ["wild", "cleared"], default="wild", weights={"wild": 0.75, "cleared": 0.25}))

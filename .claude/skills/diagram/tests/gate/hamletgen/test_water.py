@@ -31,7 +31,7 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
     assert M.get("dikeponds"), "the ponds are recorded as dike-ponds"
-    # THE FRY FORM (feature 280 M60, research/rendering/archetypes.html "How our maps draw a dike-pond village's fry ponds"): an ordinary hamlet keeps no nursery ponds; a fry village's
+    # THE FRY FORM (feature 280 M60, research/contents.json#field-archetypes "How our maps draw a dike-pond village's fry ponds"): an ordinary hamlet keeps no nursery ponds; a fry village's
     # smallest ponds are nursery water, up to seven tenths of the pond area
     fry = [d for d in M["dikeponds"] if d.get("kind") == "fry"]
     if m.get("fry_form") == "fry_village":

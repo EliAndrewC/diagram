@@ -4,11 +4,11 @@
 
 - SECTION=archetypes/mulberry-and-other-crops-on-pond-dikes-sangji-guoji
 - RENDERING=rendering/archetypes/how-our-maps-draw-the-planted-pond-dikes
-- OLD=research/archetypes/ research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=MulberryDike FruitDike TeaDike
 - BASE=07e27b320
 
-No section was left out (no other feature holds 220, 173 or 230 in progress). The coppiced-mulberry half of archetypes 140
+No section was left out (no other feature holds 220, 173 or 230 in progress). The coppiced-mulberry half of 0018
 (T6) moved here too: 140 lost its two-bullet block on the dike's mulberry (now a one-line pointer) with the notes
 kuwa-jawiki-2, morus-enwiki, pwsannong-sangji-yutang-2 and its absence notes -4 and -5 (here -2 and -3); 140 keeps
 pwsannong-sangji-yutang for its opening, copied here as pwsannong-sangji-yutang-4, which also replaces 220's

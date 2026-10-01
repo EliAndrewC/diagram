@@ -78,7 +78,7 @@ def test_a_question_bundle_on_the_real_record(tmp_path: pathlib.Path) -> None:
     assert "sources/ritter-timber-bridges.html" in names, "non-vacuity: the entry cites a registered work"
     assert "WORDS TO RULE ON" in (out / "prepass.txt").read_text(encoding="utf-8")
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert ".claude/skills/diagram/research/ways/200-road-bridges-over-rivers-and-canals-hashi.html" in manifest, "the origin is named"
+    assert ".claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html" in manifest, "the origin is named"
     assert "counts on the first line" in manifest
 
 
@@ -227,11 +227,11 @@ def test_the_whole_bundle_prints_and_ledgers_and_the_excerpt_does_not(tmp_path: 
     url = cb.url_of(cb.registry_entry(REPO, "edo-enwiki").read_text(encoding="utf-8"))
     src.put(where, url, "Edo was the seat of the shogunate. It grew large.")
     src.append(where, [src.line({"feature": "250", "clone": "x", "session": "s"}, url, "nothing-found", ["ways/010"])])
-    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/020", "--out", str(tmp_path / "w"), "--root", str(REPO)]) == 0
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "0081", "--out", str(tmp_path / "w"), "--root", str(REPO)]) == 0
     out = capsys.readouterr().out
     assert "read 1 time(s) before:" in out and "nothing-found  q: ways/010" in out
     assert "from the page cache" in (tmp_path / "w" / "pages" / "MANIFEST.txt").read_text(encoding="utf-8")
-    assert [(r["outcome"], r["questions"]) for r in src.read(where)][1:] == [("pending", ["ways/020"])]
+    assert [(r["outcome"], r["questions"]) for r in src.read(where)][1:] == [("pending", ["0081"])]
     assert cb.main(["--key", "edo-enwiki", "--out", str(tmp_path / "e"), "--root", str(REPO)]) == 0
     assert "sources-consulted:" not in capsys.readouterr().out
     assert len(src.read(where)) == 2, "the excerpt bundle wrote no ledger line"

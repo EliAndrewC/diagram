@@ -2,14 +2,14 @@
 
 ## Sections new or changed
 
-- SECTION=cities/river-cities/100
-- SECTION=cities/river-cities/110
+- SECTION=0178
+- SECTION=0179
 - SECTION=cities/river-cities/120
-- SECTION=cities/river-cities/130
-- SECTION=cities/river-cities/040
+- SECTION=0180
+- SECTION=0176
 - SECTION=cities/capitals/300
-- SECTION=cities/capitals/080
-- SECTION=water/010
+- SECTION=0141
+- SECTION=0068
 - SECTION=ways/040
 
 ## New registry keys
@@ -35,14 +35,14 @@ corrected), `kashi-jawiki`, `panmen-zhwiki`, `suzhou-panmen-gov`, `zhouzhuang-zh
 
 ## Items
 
-- C161 KNOB - a city canal runs from about 8 m (Kyoto's Takase, 1614) to about 36-62 m (Osaka's Dotonbori, 20-34 ken in 1787), a width set by what it carries (calibrated liberty); both banks stone-faced (Suzhou), the castle's side walled where it runs past a castle (Edo's outer moat); what lines a reach is a knob between house backs with stepped water landings (Suzhou) and an open landing with storehouses behind (the kashi) - the generator should draw a city canal 25-200 ft wide by its job, a stone band on both banks, and roll the bank frontage per settlement; side loading basins are optional (the Takase had seven to nine). water/010 now carries a city-canal row (~8-62 m, ~25-200x a field ditch).
+- C161 KNOB - a city canal runs from about 8 m (Kyoto's Takase, 1614) to about 36-62 m (Osaka's Dotonbori, 20-34 ken in 1787), a width set by what it carries (calibrated liberty); both banks stone-faced (Suzhou), the castle's side walled where it runs past a castle (Edo's outer moat); what lines a reach is a knob between house backs with stepped water landings (Suzhou) and an open landing with storehouses behind (the kashi) - the generator should draw a city canal 25-200 ft wide by its job, a stone band on both banks, and roll the bank frontage per settlement; side loading basins are optional (the Takase had seven to nine). 0068 now carries a city-canal row (~8-62 m, ~25-200x a field ditch).
 - C18 KNOB - a water gate is a passage through the wall's thickness, doubled like Pan Gate's (two gates 4.6 m apart, 24.5 m deep, sluice and wooden palisade front and back, the channel between faced in stone), closed at night by a grille let down to the water (Kaifeng); a river crossing is a row of arches (Nanjing, 11 per tier); the count is a knob between every land gate paired with a water gate (Suzhou's plan, five pairs) and one water gate per watercourse, beside a land gate or alone (Kaifeng, six by this page's count) - the generator should draw a grille at the outer and inner faces and a stone-faced channel, a row of arches where a river crosses, and roll the count pattern; the passage's width in meters and any boom or chain are ABSENCE notes, so width = the canal's width is a labeled guess. Cites river-cities/030 (269's B46) for the one-mouth rule; no correction owed to it.
 - B130 ACCURATE - a town on navigable water keeps a landing, and in Japan the kashi often made the town: sited at river junctions, highway crossings, castle and temple towns; administratively a town or village; moorings and unloading ground run by a landing wholesaler, storehouses, a market, boatmen and laborers, tea houses and inns; a Chinese water town keeps stone landing steps (Zhouzhuang) - the generator should give a river town a short faced bank with one or two step flights and mooring posts, an unloading ground, the wholesaler's house and a few storehouses at its head, and a tea house or inn, placed where the highway or main street meets the water; the faced length is a labeled guess (absence note). ways/040 and river-cities/040 now point at it.
 - C107 ACCURATE - a city kept its fresh-food markets at its landings: Edo's fish market on the Nihonbashi river's north-bank landing (1842 plan: 12 piers, back and front sheds 50, 25 wells, 126 street stalls and shopfronts, 3-shaku stalls, ita-bune boards 70 x 150 cm), Osaka's Zakoba on a canal bank near the river mouth meeting three times a day, its Tenma produce market on the riverbank as a separate site, and fish-market landings "found all over the country" (Nipponica) - the generator should add a fish market at a river city's landing (piers, bankside sheds, selling sheds and stalls facing the street, a well) and a separate produce market on another stretch of bank; its size at a provincial city is a labeled guess (absence note on the layout of a smaller city's market).
 
 Also, CONTRADICTION-RESOLVED on cities/capitals/300: "Edo dug nine funairi-bori" stood on an absence note;
 the record now says Edo dug ten in the second castle-building campaign (c. 1612-15) to land the castle's stone
-(`guidetokyo-edo-horiwari`). And cities/capitals/080 gains the Chinese precedent for an aqueduct entering the
+(`guidetokyo-edo-horiwari`). And 0141 gains the Chinese precedent for an aqueduct entering the
 wall: Kaifeng's Jinshui carried over the Bian on a wooden trough and in through the Northwest Water Gate.
 
 ## Left open, and why

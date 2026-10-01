@@ -128,8 +128,8 @@ per-house groves pass every check a grove answers to.
 **The row village** (amendment 3)
 
 - **FR-013**: A LINEAR hamlet's farms MUST stand in a row along one line, never in ranks behind the row. The record
-  (homesteads/155) gives two lines, and both MUST be drawn: a STREET LAID FIRST, the farms fronting it (the planned
-  row's form, which a paddy row may borrow - the `kotobank-santome-shinden` write-up - and homesteads/150's linear
+  (0033) gives two lines, and both MUST be drawn: a STREET LAID FIRST, the farms fronting it (the planned
+  row's form, which a paddy row may borrow - the `kotobank-santome-shinden` write-up - and 0031's linear
   hamlet whose farms front a street along the road), drawn straight, as a surveyed road is; or the DRY EDGE THE GROUND
   GIVES - a levee, a dike, a fan's foot - which the field's margin stands for on these maps (this project's reading),
   the row curving with it. Where the site decides it the site's line is taken: flood-prone ground (FR-006) takes the
@@ -141,7 +141,7 @@ per-house groves pass every check a grove answers to.
   40 ken is a dry-field colony's figure and is not carried over as a paddy row's.
 - **FR-015**: Which side of its street a row stands on MUST be a per-settlement knob, pinnable, otherwise rolled at even
   odds: ONE side, the street between the row and its field (farmland across the road, Shimotome), or BOTH sides, each
-  farm's holding behind it (Santome, Nobidome); the odds a GUESS (homesteads/155: no count of which was commoner).
+  farm's holding behind it (Santome, Nobidome); the odds a GUESS (0033: no count of which was commoner).
   Recorded on the map. On BOTH, the far row's holding MUST be drawn behind it in the form the record gives its line: on
   a street laid first, a strip behind the farm (the planned row's form, which a paddy row may borrow; its crop dry field
   and its depth a GUESS); on the dry edge, compact and near the house (accurate for a dike row, homesteads/156; carried to a levee
@@ -213,7 +213,7 @@ per-house groves pass every check a grove answers to.
 - **The front is the open side of three**: Tonami's east front had little grove.
 - **The 2026-08-29 hook ruling is reversed for the farmstead grove** (the GM approved "This reverses the GM's
   2026-08-29 hook ruling"); both rulings are recorded. **The village belt is not this knob**: it stays on one or two
-  windward sides on `vegetation/030`'s own evidence, and the GM approved "the homestead grove only".
+  windward sides on `0072`'s own evidence, and the GM approved "the homestead grove only".
 - **Flood-prone ground is the polder site** (FR-006): the Izumo ring stood on a flood plain behind an earth bank; the
   engine's diked low ground is the polder archetypes and the dike-top line. Reading it from those is this project's
   decision (a GUESS as to where else floods threatened farms), and a map may pin it either way.
@@ -225,7 +225,7 @@ per-house groves pass every check a grove answers to.
   and Kashikawa take their linear roll.
 
 - **Both lines, the site's where it decides** (FR-013): a street laid first and the dry edge are both attested
-  (homesteads/155), and a paddy row may borrow the planned row's street; flood-prone ground takes the dike; elsewhere
+  (0033), and a paddy row may borrow the planned row's street; flood-prone ground takes the dike; elsewhere
   even odds, a GUESS. The field's margin standing for a levee, dike or fan foot is this project's reading.
 - **One frame apart** (FR-014): a physical necessity of FR-010, the grove plus the lane's room between two groves (homesteads/715);
   its width a GUESS at or just past the top of the record's 9-40 ken range. The 9 ken row is not this form's value because a 9 ken
@@ -270,19 +270,19 @@ what a row village of such farms should look like, the GM answered: *"what it sh
 research and not just something that you ask me ... find out from our research what types of settlement layouts
 existed, and then have our settlements reflect the range of settlement layouts that we are able to find. And then, if
 our research is thin and we are straightforwardly unable to come up with an answer, then we make a tunable knob for the various possibilities which all seem reasonable by virtue of being in line with our other research and not contradicting anything that our research has already established."* The
-research is homesteads/155 and 156 (R6, checked). FR-018 and FR-019 carry the reviews' other findings (no wells; bamboo drawn on
+research is 0033 and 156 (R6, checked). FR-018 and FR-019 carry the reviews' other findings (no wells; bamboo drawn on
 farms that rolled none; a door no way reached), each decided by the record.
 
 **Amendment 3, round 1** (spec-fidelity-verify, MODE 3, 2026-09-29): CHANGES - both attested lines to be drawn (a paddy row may borrow the street laid first), the frame by FR-010's necessity with its width a GUESS, the lane's room in the frame, the far row's holding drawn, own wells for the dispersed form only and a row's water a knob, the converted feet removed. **Round 2**: CHANGES - the compact holding cited to homesteads/156 and labeled; plan D9's id. **Round 3**: FAITHFUL. Amendment 3 is accepted.
 
 **Amendment 4** (2026-09-29, the record's own finding): FR-019's door clause and SC-008's door check scoped to the LINEAR
 row. As written they held every grove farm, and the first cohort with the check found every dispersed farm failing it -
-a dispersed hamlet lays no lanes at all, by homesteads/150's finding ("a dispersed hamlet has no interconnected lane
+a dispersed hamlet lays no lanes at all, by 0031's finding ("a dispersed hamlet has no interconnected lane
 network to be reached by. The rule in the entry above is a rule about nucleated settlements"). The row farm's door
 remains held (FR-017, FR-019).
 
 **Amendment 4, round 1** (spec-fidelity-verify, MODE 3, 2026-09-29): the narrowing FAITHFUL - the GM never asked for the
-door clause, and homesteads/150 says a dispersed hamlet has no network to be reached by; one plan line (D19) to bring into
+door clause, and 0031 says a dispersed hamlet has no network to be reached by; one plan line (D19) to bring into
 line, done. Amendment 4 is accepted.
 
 **Amendment 5** (2026-09-30, the record's own finding): FR-018 and SC-008 - a dispersed farm's own water is a knob. The R7

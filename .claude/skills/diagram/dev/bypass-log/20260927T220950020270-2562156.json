@@ -3,5 +3,5 @@
   "target": "review-accept",
   "commit": "881679390",
   "outcome": "permitted",
-  "why": "review-accept kuwabata F2: no norm assigns a persimmon a side (research/homesteads.html calls it a GUESS); its crown clears the lane"
+  "why": "review-accept kuwabata F2: no norm assigns a persimmon a side (research/contents.json#homesteads calls it a GUESS); its crown clears the lane"
 }

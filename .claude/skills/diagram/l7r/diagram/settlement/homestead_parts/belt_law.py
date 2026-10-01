@@ -4,7 +4,7 @@ THE ONE PREDICATE of each rule lives here, and both the placer (`village_grove`,
 finished-map tests read it, so the two cannot disagree:
 
 - W16, the belt's DEPTH (`BeltReading.depths`): no judged 40 ft stretch across the wind is shallower than 30 ft along it
-  (research/vegetation/020: a belt under about 30 ft reads as a row of blobs). The body is the one
+  (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a belt under about 30 ft reads as a row of blobs). The body is the one
   `test_every_pool_belt_keeps_its_depth_across_its_windward_face` measured with (`belt_depths`), lifted unchanged but for
   the run break below.
 - W17, the belt's CONTINUITY (`BeltReading.holes`): no opening across the wind wider than `_BELT_GAP_FT` between two
@@ -38,7 +38,9 @@ from ._helpers import _BELT_GAP_FT
 Pt = tuple[float, float]
 View = tuple[float, float, float, float]
 
-MIN_BELT_DEPTH_FT = 30.0  # research/vegetation/020: a belt 'shallower than about 30 ft reads as a row of blobs'
+MIN_BELT_DEPTH_FT = (
+    30.0  # research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a belt 'shallower than about 30 ft reads as a row of blobs'
+)
 DEPTH_BIN_FT = 40.0  # the stretch across the wind a depth is read over - about a crown and a half
 BELT_PUSH_BACK_FT = 60.0  # how far past the band's far face a thin column may be planted: `belt_polygon`'s own ladder tops out at 60 ft back
 SETTLE_ROUNDS = 12  # rounds that may add seats before the removing phase; each round re-reads the page the belt sets
@@ -119,7 +121,7 @@ class BeltReading:
         page |= {b for b in range(max(self.bins) + 1) if self._band_leaves_the_page(b)}
         self.page = page
         # ...and the TIPS: a bin at the end of a run of crowned bins is where a belt tapers - it is deepest in the middle
-        # (research/vegetation/020) - and one crown there is the taper, not the one-row arm this measures
+        # (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html) - and one crown there is the taper, not the one-row arm this measures
         self.tips = {b for b in self.bins if not self.bins.get(b - 1) or not self.bins.get(b + 1)}
         self.ways = [self.uv(x, y) for x, y in way_samples(ways)]
         self.parted = self._parted()

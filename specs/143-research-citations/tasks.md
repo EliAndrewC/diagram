@@ -18,22 +18,22 @@ _Method per batch is plan.md "Method, per batch": (1) diff the operative doc's i
 - [x] T03 [US2][US3] **`research/buildings.md`** - 9 open rows; grounds `buildings.md + buildings/programs.md (Mode A)`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T04 [US2][US3] **`research/cities/capitals.md`** - 20 open rows; grounds `settlements/capitals.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T04 [US2][US3] **`research/contents.json#citiescapitals.md`** - 20 open rows; grounds `settlements/capitals.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T05 [US2][US3] **`research/cities/defenses.md`** - 2 open rows; grounds `settlements/cities/defenses.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T05 [US2][US3] **`research/contents.json#citiesdefenses.md`** - 2 open rows; grounds `settlements/cities/defenses.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T06 [US2][US3] **`research/cities/fabric.md`** - 2 open rows; grounds `settlements/cities/fabric.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T06 [US2][US3] **`research/contents.json#citiesfabric.md`** - 2 open rows; grounds `settlements/cities/fabric.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T07 [US2][US3] **`research/cities/government.md`** - 1 open rows; grounds `settlements/cities/government.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T07 [US2][US3] **`research/contents.json#citiesgovernment.md`** - 1 open rows; grounds `settlements/cities/government.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T08 [US2][US3] **`research/cities/hinterland.md`** - 1 open rows; grounds `settlements/cities/hinterland.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T08 [US2][US3] **`research/contents.json#citieshinterland.md`** - 1 open rows; grounds `settlements/cities/hinterland.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T09 [US2][US3] **`research/cities/river-cities.md`** - 2 open rows; grounds `settlements/cities/river-cities.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T09 [US2][US3] **`research/contents.json#citiesriver-cities.md`** - 2 open rows; grounds `settlements/cities/river-cities.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
 - [x] T10 [US2][US3] **`research/fields.md`** - 6 open rows; grounds `settlements/fields.md`; inline grounding in that operative doc inventoried first (ledger C).

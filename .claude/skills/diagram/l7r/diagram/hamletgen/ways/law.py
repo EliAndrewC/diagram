@@ -516,7 +516,7 @@ def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> lis
     """(lane index, end, house index) for every free lane end (the connector's aside; an end within `JOIN_TOL` of another
     way is a junction) that stands within `WAY_END_REACH_FT` of a farmhouse, BEHIND the nearest such house - past its back
     wall, abreast of it (`behind_house`) - and at no house's dooryard (`reaches_dooryard`), nor on the bund (water W57; 269
-    B17, research/rendering/ways/020: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
+    B17, research/questions/0081-village-lanes.drawing.html: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
     wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard)."""
     ways = _ways(M)
     houses = M.get("houses") or []
@@ -790,7 +790,7 @@ def plank_faults(M: Mapping[str, Any]) -> tuple[list[tuple[int, int]], list[tupl
 
     THE LATERAL IS A SUPPLY DITCH (feature 287; Kuwabata's six planks). The test this was lifted from read the comb's two roles
     only, and so named every plank on a polder's laterals and settlement-side ring canal - which record the role `lateral` -
-    as laid on a drain. The record answers it: a plank is laid where a bund path meets an IRRIGATION ditch (research/ways/030),
+    as laid on a drain. The record answers it: a plank is laid where a bund path meets an IRRIGATION ditch (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html),
     and the polder's inner ring canal and its field ditches are its distribution water (research/archetypes/110)."""
     ditches = M.get("field_ditches") or []
     stranded, on_drain = [], []

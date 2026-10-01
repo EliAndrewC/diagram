@@ -33,9 +33,9 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M47 **The crop margin**: a 6 ft kept-cut margin between crop and scrub. The section says "Today the levee grass is CUT several times a season ... this record guesses it was as often as today". The cutting figure is a survey of 2007-08 (hiroshima-keihan-manual), plus pmc7538448-levee (a modern ecology paper). The 6 ft is "a figure this record chose" (vegetation/090) - kinds: ScrubAndRoughGrazing; `homestead_parts/keepouts.py`; maps: all scripted hamlets. M.
+- M47 **The crop margin**: a 6 ft kept-cut margin between crop and scrub. The section says "Today the levee grass is CUT several times a season ... this record guesses it was as often as today". The cutting figure is a survey of 2007-08 (hiroshima-keihan-manual), plus pmc7538448-levee (a modern ecology paper). The 6 ft is "a figure this record chose" (0073) - kinds: ScrubAndRoughGrazing; `homestead_parts/keepouts.py`; maps: all scripted hamlets. M.
 - M48 **The cut bank**: a 6 ft scrub margin off every irrigation channel. "The 6 ft is the crop margin's figure reused", so it inherits M47's modern reasoning (vegetation/110) - kinds: ScrubAndRoughGrazing; `keepouts.py`; maps: all scripted hamlets. L.
-- M49 **The take-yabu**: the communal bamboo thicket at the village edge or field margin. It rests on "the take-yabu ... as its own stand at the village edge, where the plain meets the worked hills (a page's present-day observation)" (chikurin-jawiki). The kind's own Note says "the page placing the thicket at the plain's edge describes the present day" (vegetation/150) - kinds: SharedBambooGrove (`greenery.py:42`); HomesteadBamboo shares the entry; maps: kashikawa and mizuguchi (the thicket), and legacy maps with bamboo. M.
+- M49 **The take-yabu**: the communal bamboo thicket at the village edge or field margin. It rests on "the take-yabu ... as its own stand at the village edge, where the plain meets the worked hills (a page's present-day observation)" (chikurin-jawiki). The kind's own Note says "the page placing the thicket at the plain's edge describes the present day" (0075) - kinds: SharedBambooGrove (`greenery.py:42`); HomesteadBamboo shares the entry; maps: kashikawa and mizuguchi (the thicket), and legacy maps with bamboo. M.
 - M50 **The bamboo glyph**: the bamboo-stand glyph is borrowed from the modern GSI topographic legend (ridgelineimages-gsi). It is a drawing convention, flagged for completeness (vegetation/152) - kinds: SharedBambooGrove, HomesteadBamboo; maps: the scripted hamlets with bamboo. L.
 
 ## The procedure (session 1: research and write)
@@ -67,7 +67,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on vegetation/090, vegetation/110, vegetation/150, vegetation/152, and vegetation 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0073, vegetation/110, 0075, vegetation/152, and vegetation 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

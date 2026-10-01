@@ -8,11 +8,11 @@ source-applicability over the new keys, entry-drift for any class whose Entry na
 - SECTION=urban-features/250
 - SECTION=urban-features/260
 - SECTION=urban-features/270
-- SECTION=urban-features/010
+- SECTION=0190
 - SECTION=urban-features/015
 - SECTION=urban-features/052
 - SECTION=urban-features/068
-- SECTION=urban-features/090
+- SECTION=0196
 - SECTION=urban-features/120
 
 ## New registry keys
@@ -56,6 +56,6 @@ B59 C127 ACCURATE - 068: the history gives an EDGE, not a compass point: the Sen
 
 - 267 (buildings 470): 250 links `buildings.html#did-the-magistrate-post-notices-at-the-offices-own-gate-or-on-the-towns-notice-board`, which exists only in the diagram-buildings clone until 267 lands; the link resolves once it does. No correction owed to 470 - it and 250 agree.
 - 269 (homesteads/145, not edited here): A51 names it. If 145 places a farmstead's or a village's well out on open ground or asserts a well house as usual, it owes the correction that 260 records both as SILENT, and the two attested forms (lane side; a cluster of houses) - cite `kotobank-tsujiido` and `seiyo-karihama-ido`.
-- For cities/fabric or urban-features/130 (caste geography, not edited): the outcaste QUARTER's own siting at a town edge where a road leaves and the river runs (Takada, Edo, the Heibonsha passage) is now in 068; whoever owns the quarter's placement may want it as a preference.
+- For cities/fabric or 0156 (caste geography, not edited): the outcaste QUARTER's own siting at a town edge where a road leaves and the river runs (Takada, Edo, the Heibonsha passage) is now in 068; whoever owns the quarter's placement may want it as a preference.
 - Osaka's Watanabe village position in the city (southwest) was not read on any saved page; not used.
 - Not readable: the Fussa city museum's well survey (scanned PDF, no text layer), zh.wikipedia (every fetch refused), Baidu Baike (no text), the J-STAGE castle-town papers and the Sukeno paper (PDFs, no text layer here). None is a GM download - the claims stand on what was read.

@@ -1,7 +1,7 @@
 # Research - feature 299, natural marsh edges
 
 Rendering measurements and calibrations on the engine's own output; no physical research (the margin's grading - reed, then
-sedge and grass, then dry ground - is research/vegetation 120, already recorded).
+sedge and grass, then dry ground - is research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html, already recorded).
 
 ## R1. The figures, calibrated by eye on Inashiro (observed 2026-10-01, method: `make map` of Inashiro and its PNG read at half and full size after each change)
 

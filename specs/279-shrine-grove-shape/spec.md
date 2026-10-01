@@ -116,7 +116,7 @@ the research supports no knob; the village conversion's owed list (`future-work/
 
 ## Assumptions
 
-- The research is Japan-first; Chinese village woods are already on the record (vegetation 010-050) and are
+- The research is Japan-first; Chinese village woods are already on the record (0071, 0072) and are
   cited for comparison only where they bear on a shrine's grove.
 - The sweep of scrub around the grove is redrawn only where the wood's new extent requires it.
 

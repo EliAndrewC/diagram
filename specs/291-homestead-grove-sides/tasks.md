@@ -38,7 +38,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D13).
 - [x] T07 The forms back on; the cohort green with every side count present (D10; FR-011; SC-005)
       research: rendering
       verify: DONE. forms rolled: dispersed 9, linear 10, nucleated 11; sides 2/3/4 all present; cohort 30/30
-- [x] T08 The record, group R1 (homesteads 010, 710, 480): write, check and apply (D12; FR-001, FR-002; SC-001)
+- [x] T08 The record, group R1 (0036, 710, 480): write, check and apply (D12; FR-001, FR-002; SC-001)
       research: physical
       - [x] research pass
       - [x] source-reader confirmed
@@ -46,7 +46,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D13).
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
       verify: DONE. R1 written and checked (quote-check, record-format, source-applicability)
-- [x] T09 The record, group R2 (vegetation 030, 620): write, check and apply (D12; FR-001, FR-003; SC-001)
+- [x] T09 The record, group R2 (0072, 620): write, check and apply (D12; FR-001, FR-003; SC-001)
       research: physical
       - [x] research pass
       - [x] source-reader confirmed

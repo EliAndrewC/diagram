@@ -335,7 +335,7 @@ HIT_WIDEN: dict[str, tuple[float, float, float]] = {
 #: given "bund". A box may beat empty ground; it may not beat another feature's drawn ink.
 #:
 #: EMPTY SINCE FEATURE 280 (M57): the one class it was built for, the pond sluice, is retired - a sluice through each
-#: pond's dike is a modern manual's form (research/archetypes/140) - so no mark is lifted today. The mechanism stays,
+#: pond's dike is a modern manual's form (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html) - so no mark is lifted today. The mechanism stays,
 #: tested on a stand-in, for the next mark that cannot be hit any other way.
 HIT_ON_TOP: frozenset[str] = frozenset()
 #: Among the lifted ones, hardest-to-hit last (it wins). One member today; the order is here so the

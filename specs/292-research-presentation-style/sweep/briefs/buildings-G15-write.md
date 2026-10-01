@@ -14,8 +14,8 @@ RENDERING section. Three pilot topics were written that way and the GM accepted 
 2026-09-30. You are applying the same process to the topics below.
 
 **The model to copy.** The third pilot is the closest model of a finished topic: the research section
-`research/homesteads/040-sunlight-and-shade-on-the-farm.html` (with its `.notes.html`) and its rendering section
-`research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html`. Read those two fragments
+`research/questions/0038-sunlight-and-shade-on-the-farm.html` (with its `.notes.html`) and its rendering section
+`research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`. Read those two fragments
 and the style guide before you write.
 
 ## Your items
@@ -23,27 +23,27 @@ and the style guide before you write.
 - **Ornamental gardens, ponds and stone lanterns (teien)** - fold `buildings/290-did-the-private-rooms-of-an-ordinary-posting-have-a-garden-of-their-own.html`, `buildings/530-did-a-residence-garden-have-a-pond-and-did-a-county-post-keep-one.html`, `buildings/540-where-did-a-stone-lantern-stand---in-the-garden-or-in-a-court-where-guests-were-received.html`
   - rendering section: How our maps draw compound gardens, ponds and lanterns
   - modals whose `Entry:` names a folded section: CompoundGarden, GardenPond, StoneLantern
-  - note: 290 and 530 both rest on Takayama's one garden (oniwa-takayama-jinya) - one account; the pines of such a garden are vegetation/170 (stays there).
+  - note: 290 and 530 both rest on Takayama's one garden (oniwa-takayama-jinya) - one account; the pines of such a garden are 0076 (stays there).
 
 ## The procedure (session 1: write)
 
 1. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="buildings"` (in `.claude/skills/diagram`);
    a section another feature holds IN PROGRESS today is not edited - leave it out of your fold, and say so in the
-   handoff. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg (diagram-reorg) | 292 | sweep buildings G15 in progress (buildings/290 buildings/530 buildings/540) | 2026-09-30"`.
+   handoff. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg (diagram-reorg) | 292 | sweep buildings G15 in progress (0103 buildings/530 buildings/540) | 2026-09-30"`.
 2. **Read, all in one message:** `research/STYLE.md`; the two model fragments named above; every fragment your
    topics fold and its `.notes.html` (not its `.originals.html` - the originals are stored apart and `make record`
    puts them back; you copy their lines, below, without needing to read them). Note the commit you start from
    (`git -C /diagram/.clones/diagram-reorg rev-parse --short HEAD`) - the handoff names it as BASE.
 3. **Write each topic** as a research fragment and, where the folded sections say anything about how our maps draw
    the thing, a rendering fragment:
-   - **The research fragment** is `research/buildings/<NNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
+   - **The research fragment** is `research/contents.json#compounds<NNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
      `<id>` the title's anchor (lowercase; letters, digits and spaces kept; spaces to hyphens: "Threshing and drying
      yards at farmhouses (niwa)" is `threshing-and-drying-yards-at-farmhouses-niwa`). It opens with
      `<h2 id="<id>"><title></h2>`, then the comments: `<!-- feature 292 sweep, 2026-09-30: folded from <the old ids> -->`,
      the folded sections' `Grounds:` and `Evidence:` fields merged into one of each, and a `REMOVED` comment for any
      claim you cut under STYLE.md section 4 (what it said and why it went). Then the opening paragraphs, then the
      bullets, as the model does.
-   - **The rendering fragment** is `research/rendering/buildings/<NNN>-<rid>.html`, titled to mirror the research title
+   - **The rendering fragment** is `research/contents.json#compounds<NNN>-<rid>.html`, titled to mirror the research title
      ("How our maps draw ..."), its second line `<!-- about: buildings.html#<id> -->` - `make record` then links the two
      both ways; never type a link between them. It follows the style guide too, and cites the research it rests on.
      The map's rules, the sizes chosen, conventions, knobs, what the generator places where, and why, go here, and
@@ -69,8 +69,8 @@ and the style guide before you write.
      under `.claude/skills/diagram/l7r/` and `.claude/skills/diagram/tests/fixtures/classes_before_189.json`. A link
      goes to the new research section, or to the rendering section where it pointed at a map rule (from another page:
      `rendering/buildings.html#<rid>`; from a rendering page: `../buildings.html#<id>`). A modal's `Entry:` names the new
-     titles - the research title under `research/buildings/ - '<title>'` and the rendering title under
-     `research/rendering/buildings/ - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
+     titles - the research title under `research/contents.json#compounds - '<title>'` and the rendering title under
+     `research/contents.json#compounds - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
      string. A code comment that named an old heading names the new one.
    - **Confusable pairs** you meet (two things a reader could mistake for each other): `make append
      FILE=/diagram/.clones/diagram-reorg/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.

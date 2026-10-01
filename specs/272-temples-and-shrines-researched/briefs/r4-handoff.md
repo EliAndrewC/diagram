@@ -4,10 +4,10 @@ Written 2026-09-27. Commit `64b6c8b8` holds the record; this file and the TO-DOW
 
 ## Sections
 
-- SECTION=religion-and-death/020 (one sentence added: a pointer to 550; no evidence changed)
-- SECTION=religion-and-death/550
+- SECTION=0234 (one sentence added: a pointer to 550; no evidence changed)
+- SECTION=0230
 - SECTION=religion-and-death/555
-- SECTION=religion-and-death/560
+- SECTION=0227
 - SECTION=religion-and-death/570
 
 ## New registry keys
@@ -90,11 +90,11 @@ Their "Used for" lines were not updated.
 
 ## Corrections owed to sections this group does not own
 
-- urban-features/070 ("The bell-and-drum tower - one per walled seat"): nothing in it is contradicted. It could cite
+- 0194 ("The bell-and-drum tower - one per walled seat"): nothing in it is contradicted. It could cite
   `zhifangdian-yanzhou-altars` for the City God temple standing west or northwest of the yamen (it now rests that on
-  its own reading), and point to religion-and-death 550 and 570 - 570 records that a Chinese city temple could keep
+  its own reading), and point to 0230 and 570 - 570 records that a Chinese city temple could keep
   its own bell and drum towers apart from the civic one.
-- religion-and-death 130-300 (features 267 and 269): none.
+- 0224, 0226, 0235, 0236, 0240 (features 267 and 269): none.
 
 ## TO-DOWNLOAD entries appended
 

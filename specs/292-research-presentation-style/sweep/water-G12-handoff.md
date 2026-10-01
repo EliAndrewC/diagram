@@ -4,7 +4,7 @@
 
 - SECTION=water/ground-too-wet-to-build-on
 - RENDERING=rendering/water/how-our-maps-keep-buildings-off-wet-ground
-- OLD=research/water/ research/water/
+- OLD=research/contents.json#water research/contents.json#water
 - MODALS=
 - BASE=951c8a590
 

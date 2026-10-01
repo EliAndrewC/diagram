@@ -48,9 +48,9 @@
   },
   {
    "id": "D8",
-   "summary": "SKILL.md Mode A usage, buildings.md, research presentation 040's note that names make seat-label, and the building-review and size-audit contracts: a sheet declares text and subject, the pipeline places it, and the contracts judge wording, not position.",
+   "summary": "SKILL.md Mode A usage, buildings.md, research 0242's note that names make seat-label, and the building-review and size-audit contracts: a sheet declares text and subject, the pipeline places it, and the contracts judge wording, not position.",
    "class": "within",
-   "why": "FR-006. The round 1 aside (presentation 040 names make seat-label) is now in the list. docs/make-targets.html also lists make seat-label, but that page is generated from the Makefile and make-docs.py --check gates it, so removing the target under D6 removes its row as well. Round 4: unchanged. Round 5: unchanged."
+   "why": "FR-006. The round 1 aside (0242 names make seat-label) is now in the list. docs/make-targets.html also lists make seat-label, but that page is generated from the Makefile and make-docs.py --check gates it, so removing the target under D6 removes its row as well. Round 4: unchanged. Round 5: unchanged."
   },
   {
    "id": "D9",

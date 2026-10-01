@@ -219,7 +219,7 @@ WHOLE-SHEET on a new sheet: B30 coherence.
    `structures_stay_on_their_side_of_a_border`. The border rule has no home, because the taxonomy says a border blocks
    nothing. The table also cites `town_margins_clothed`, which survives only as a comment.
 3. FR-003 class 9 (a privy seated without the wind): the privy seat is rolled per hamlet over four attested seats
-   (research/homesteads/260, `test_homesteads.py::test_the_privy_seat_weights_are_rolled_per_hamlet_over_the_four_attested_seats`),
+   (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, `test_homesteads.py::test_the_privy_seat_weights_are_rolled_per_hamlet_over_the_four_attested_seats`),
    and that roll has no wind term. Making wind a rule needs a research pass first. It may come back through the audit as a
    recorded decision or a knob.
 4. R0's "never fired" list leaves out two items: spelling on a drawn sheet (all ~5 spelling finds were in code or notes) and

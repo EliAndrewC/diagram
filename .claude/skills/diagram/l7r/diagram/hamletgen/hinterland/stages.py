@@ -54,7 +54,7 @@ _COMPASS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
 def woodland_offsheet(plan: SitePlan) -> dict[str, Any]:
     """The record a roll carries when its worked wood stands OFF the sheet (feature 287, plan D11 - a DEPARTURE, raised with
     the GM): the wood's bearing from the settlement - up the fall, the nearest hill beyond the fields where
-    research/vegetation/220 puts a village's fuel wood ("houses, then fields, then the hill and wild land beyond") - as a
+    research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html puts a village's fuel wood ("houses, then fields, then the hill and wild land beyond") - as a
     compass point and in degrees, and the parcels rolled.
 
     WHY A RECORD AND NOT A PARCEL. Where no legal ground for a parcel lies inside the sheet (Sawada and Kashikawa rolled
@@ -200,7 +200,7 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
     Managed coppice on ground nothing else wanted, drawn on the parcels the previous stage scanned - so the
     scrub has already kept out of them. Each parcel is an irregular ring inside the reach its keep-outs were
     tested at, never a rectangle (T36): an iriai wood's edge was a line the villages agreed or were given, bent to
-    the ground, and the wood was governed by rules rather than parcel lines (research/vegetation/220). That the line
+    the ground, and the wood was governed by rules rather than parcel lines (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html). That the line
     followed ridge, stream and path is a GUESS - no page read says so.
 
     A few managed-woodland patches on the high, far ground - the green EXCEPTION to the scrub.
@@ -314,7 +314,7 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
     # belt's position is its meaning; only its leaves needed containing.
     # The frame ITSELF, with no inset: `village_grove` skips only a clump lying WHOLLY outside it, so
     # the belt still clips at the page edge the way every other soft cover does (and the way
-    # `research/presentation/` requires) and only ink nobody can see is dropped. An inset was
+    # `research/contents.json#map-conventions` requires) and only ink nobody can see is dropped. An inset was
     # tried first and cost Sawada 46% of its canopy - see the comment at the skip.
     # ...AND THE WINDWARD EDGE FOLLOWS THE BELT'S OWN FACE (GM 2026-08-26, feature 133 T10). The
     # frame now includes the belt's inner face plus CROP_MARGIN (`crop_boxes`, "windbreak face"),
@@ -416,7 +416,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     _dooryard = _copse_near  # a household's reserved seat is its dooryard's on either siting (woods W25), asked of it as planted
     # the belt's own footprint and its lee anchors, where the copse is sited against the belt (`copse_seat`)
     _box, _copse_near = copse_seat(plan.copse_siting, _dented, s.M.get("village_groves") or [], plan.wind, s.px(COPSE_BELT_REACH_FT) / 2.0, _box, _copse_near, _brook)
-    # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/rendering/homesteads/010): each homestead's wood - its
+    # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html): each homestead's wood - its
     # windward grove and its share of the copse together, which the record knows as one - is rolled within the 1684
     # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's
     # gaps gave: 750-1,700 sq ft a homestead beside a belt share of 3,700-9,200, so four of five maps drew less wood
@@ -493,7 +493,7 @@ def wood_canopy(s: Settlement, roles: Sequence[str]) -> float:
 
 
 def homestead_wood_drawn(s: Settlement) -> float:
-    """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/rendering/homesteads/010): the wood each
+    """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html): the wood each
     homestead keeps, in sq ft - the belt, the copse and each farm's own grove (feature 291) together, shared among the
     houses - which the register puts at no less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it."""
     houses = s.M.get("houses") or []

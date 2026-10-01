@@ -120,7 +120,7 @@ no count; the closing report prints the script's.
 sentence lives in: `section_of` returns the last `###` heading of the inventory REPORT above the item.
 Measured by the plan review, 2026-09-21: on `cities/sizing` three of the six items carry a heading from
 another page or the other entry, and on `fields` a NOT-LOCATED item carries an empty label and three
-carry a heading no fragment of `research/fields/` has. So the label is a hint and nothing more. Each
+carry a heading no fragment of `research/contents.json#fields` has. So the label is a hint and nothing more. Each
 NOT-LOCATED, TOO-SHORT or AMBIGUOUS item is found by grepping its distinctive words - a figure, a proper
 noun, a term - over `research/<page>/*.html`, and the fragment the grep names is the one opened. An item
 whose words no fragment carries is recorded as such, with the words tried, and is then searched by its
@@ -312,7 +312,7 @@ more round on one more page, and then do another set of measurements."*
    (13,400; bytes with notes, observed 2026-09-26, method: `wc -c` of each part and its notes file; session 1 of
    the page then moved 080's hiring finding into 081, leaving 080 at 15,587) - and the review of it found two bridging sentences that restated the other parts' evidence, a claim
    without a footnote to a check reading one part alone; both now only point. The four other questions this feature
-   touched and left over the cap (homesteads 040 and 210, vegetation 150, religion-and-death 200) are split by fresh
+   touched and left over the cap (0038 and 210, 0075, religion-and-death 200) are split by fresh
    sessions from a split brief, each reporting what every part relies on from the others, and the session that
    dispatched them judges each split for lost context before it lands.
 4. **The measured page** is `cities/government` - three FR-002 items, one of them in 080 - worked as the last two

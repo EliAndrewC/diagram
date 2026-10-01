@@ -4,11 +4,11 @@ Written 2026-09-27 in clone diagram-research-1. No item was claimed by another s
 
 ## Sections
 
-- SECTION=homesteads/460
-- SECTION=homesteads/470
+- SECTION=0048
+- SECTION=0049
 - SECTION=homesteads/480
 - SECTION=homesteads/490
-- SECTION=homesteads/500
+- SECTION=0016
 - SECTION=homesteads/070
 
 ## Keys
@@ -41,14 +41,14 @@ unless 269's checks change it first - then take 269's version. Its `Used for:` l
 
 ## Owed to other owners (the orchestrator sends these)
 
-- 269, homesteads/145 (its drying-rack clause): it says the hasa stands in the fields after harvest; it now owes the knob - stakes along the bunds, racks on the paddy, multi-tier racks sometimes around the dwelling (`kotobank-hasa-nipponica`) - or a pointer to homesteads 500 in place of the clause.
-- 269, archetypes/170-171 and 210: the plain paddy hamlet keeps pigs too (Buck: nearly two-thirds of rice-country farms), so "the sty is drawn only on dike-pond hamlets" is no longer the record's position; a pointer to homesteads 470 is owed. The ducks finding agrees with 210 (herded in the fields).
-- 269, homesteads/300: a pointer to homesteads 460 for which beast; 460 carries an HTML comment to link 300 (and 470 to link 215/archetypes 210, 480 to link vegetation 270, 490 and 500 to link fields 310) once 269 lands.
+- 269, homesteads/145 (its drying-rack clause): it says the hasa stands in the fields after harvest; it now owes the knob - stakes along the bunds, racks on the paddy, multi-tier racks sometimes around the dwelling (`kotobank-hasa-nipponica`) - or a pointer to 0016 in place of the clause.
+- 269, 0023 and 210: the plain paddy hamlet keeps pigs too (Buck: nearly two-thirds of rice-country farms), so "the sty is drawn only on dike-pond hamlets" is no longer the record's position; a pointer to 0049 is owed. The ducks finding agrees with 210 (herded in the fields).
+- 269, homesteads/300: a pointer to 0048 for which beast; 460 carries an HTML comment to link 300 (and 470 to link 215/archetypes 210, 480 to link vegetation 270, 490 and 500 to link fields 310) once 269 lands.
 - 269, `buck-1930-farm-economy` registry entry: `Used for:` owes "the share of farms keeping hogs, where ducks fed, and oxen against water buffaloes by region (homesteads)"; its limits already cover the 1920s date and the OCR.
 
 ## Left open
 
-- homesteads/020 (named for A148) is NOT edited: it sizes the Japanese farm yard and is already over the 20,000-byte question size with its notes (10,164 + 11,513 bytes), so a split is owed before anything is added; 490 points at it.
+- 0037 (named for A148) is NOT edited: it sizes the Japanese farm yard and is already over the 20,000-byte question size with its notes (10,164 + 11,513 bytes), so a split is owed before anything is added; 490 points at it.
 - No glossary terms were added (hasa, igune, tsuijimatsu, Hakka and lineage exist); the check session may want terms for kune, weilongwu or heping if record-format asks.
 - Unused finding for whoever owns the Okinawan plot: `okinawastory-kominka-jiten` also names the fūru, a pigsty that served as the privy.
 - The saved pages are in /tmp/l7r-check/271-v2-pages (Nakanishi's PDF with its text extraction among them).

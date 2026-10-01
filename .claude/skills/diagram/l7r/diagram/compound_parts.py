@@ -156,7 +156,7 @@ def _rear_band(p: Placed) -> tuple[float, float, float, float]:
 def _hatch(env: Envelope, box: Box) -> Box | None:
     """The collection hatch through the compound wall behind a privy standing against it (within 2.5 ft of the wall's
     inner face): a 2 ft opening across the wall's ink, level with the privy's middle, the night-soil carter's way
-    in from outside (the kumitori-guchi form - research buildings 220 has the pits emptied by outside carters toward a
+    in from outside (the kumitori-guchi form - research 0101 has the pits emptied by outside carters toward a
     service wall; the hatch itself is a GUESS). None where the privy stands off every wall."""
     x, y, x2, y2 = box
     cx, cy, half = (x + x2) / 2, (y + y2) / 2, WALL_INK_FT / 2
@@ -459,7 +459,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # wells next. A well stands BESIDE a door, never before it (pass 6, building-review round 5: the stables' well stood
     # 5 ft in front of the stable door and wider than it) - the fracs off the middle first, the middle last - and 9 ft
     # out before 6: a kitchen well may stand as far as 20 ft out, past the bath that abuts the kitchen, serving both,
-    # as the Takayama residence's bath stood with its well and kitchen (research buildings 320)
+    # as the Takayama residence's bath stood with its well and kitchen (research 0105)
     for p in result.placed:
         if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
             wells.append(w)
@@ -474,7 +474,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         # THE PROGRAM'S WELL IS DRAWN OR THE DRAFT IS REFUSED (homes H29b; plan D7): a magistracy's program requires one
         # (`buildings/types.json`), and a draft with none fails `program_complete` - never a sheet drawn without it
         raise ValueError(f"{program.title}: no seat for a well - the kitchen's and the stables' faces and the garden are all taken; change the program")
-    # THE PRIVIES (feature 267, research buildings 220 'Privies attach to the house; night-soil drives their placement':
+    # THE PRIVIES (feature 267, research 0101 'Privies attach to the house; night-soil drives their placement':
     # "privy count scales with occupancy (~1 per functional zone, ~3-4 at a county manor), the residence privy attaches
     # to the house with its cesspit to the rear/service wall, and servants'/outer privies line service walls near a
     # gate"; a well-appointed house had a guests' privy at the rear of the guest parlor besides). Never on a spine
@@ -488,7 +488,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     homes = sorted((p for p in result.placed if p.spec.feature == "residence"), key=lambda p: -p.spec.w_ft * p.spec.h_ft)
     if homes:
         home = by_name.get("residence", homes[0])
-        # the family's: IN THE HOUSE, attached at its rear corner by the family's rooms (research buildings 220: "within
+        # the family's: IN THE HOUSE, attached at its rear corner by the family's rooms (research 0101: "within
         # the residence the privy came to be built in a corner of the corridor"), its cesspit toward the rear wall. Pass
         # 7 (building-review round 6): pass 6 had stood it flush to the rear wall for a hatch, ~140 ft outdoors round
         # the house from the inner entrance; the hatch was a guess and is dropped for it - the 10 ft alley keeps 5 ft.
@@ -585,7 +585,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
 
 
 def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box], rect: Callable[..., str], parts: list[str], ox: float, oy: float) -> None:
-    """The guest's way (R07's no-genkan form, research buildings 300): from the middle gate a stepping-stone path, the
+    """The guest's way (R07's no-genkan form, research 0104): from the middle gate a stepping-stone path, the
     roji, straight to a shoe stone at the reception room's veranda - drawn where the program has a middle gate and a
     building with a `reception room` and an engawa. The stones are a part of the garden they cross (Hayakawa's form)."""
     env = program.envelope

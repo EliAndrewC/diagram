@@ -2,11 +2,11 @@
 
 Written 2026-09-27/28 in clone diagram-research-4. Record checks NOT run (the check sessions own them).
 
-- SECTION=urban-features/430
+- SECTION=0205
 - SECTION=urban-features/440
 - SECTION=urban-features/450
-- SECTION=urban-features/460
-- SECTION=urban-features/470
+- SECTION=0051
+- SECTION=0206
 - SECTION=urban-features/480
 - SECTION=urban-features/490
 - SECTION=urban-features/032 (one sentence: the village smith has a small workshop of his own, linked to 430, where it said "no dedicated premises")
@@ -38,7 +38,7 @@ Written 2026-09-27/28 in clone diagram-research-4. Record checks NOT run (the ch
 Glossary terms new: terakoya, nokaji, bangi, kajimachi, sishu (14930-14970). Shared with clone diagram-research-1
 (reserved there, copied here byte-identical so the merge is clean): registry `15130-yashio-noma-yogyo.html` and
 glossary `14050-banta.json`. Cited here as `yashio-noma-yogyo-20..23` and `hinomi-yagura-kotobank-10` - high
-suffixes because research-1's urban-features 310-420 already use yashio -1..-13 and hinomi base/-2 on the same page.
+suffixes because research-1's 0157, 0183, 0200, 0201, 0202, 0203, 0204 already use yashio -1..-13 and hinomi base/-2 on the same page.
 
 ## Items
 
@@ -46,9 +46,9 @@ A149 (B48 C129) KNOB - a village either keeps one part-time licensed smith (noka
 
 A150 ACCURATE (calibrated) - an Edo village's households in a trade ran 4%-41%, about a quarter on average (Yashio 1829, 19 villages), kept by farming households: sake shop that is also the store, tavern, carpenter, cooper, smith; pawnshop, barber rarer; remote villages could have none (Ehime); the headman-as-brewer and the village oil presser are SILENT (absence note) - the generator adds no buildings; it rolls a trade share per village along the Yashio range and marks trades on farmhouses (the marker a convention). Overlaps research-1's U2 (310 shops of a county seat, 330 oil press) only at the town end; no link yet because those sections are not on main.
 
-A145 (D104) KNOB - the gogura was one village storehouse for tax rice and reserve grain; three forms attested: its own, shared with neighboring villages, or the headman's storehouse; one per hamlet section in some domains; sited within the houses on dry-field ground (Jikata hanreiroku 1794), one standing alone with its door to the road; relief granaries (shaso, Kurobane's) were more village storehouses, not a second building; China: village shecang, county-seat changping granary - the generator rolls own / shared / headman's (1/2, 1/4, 1/4, guesses), and an own storehouse draws 21x21 to 37x20 ft (buildings 730's measured village storehouses) free among houses on dry ground, door to the lane; hamlets none. COORDINATION: 267's R18 (buildings 410, raised granary floor, in clone diagram-buildings) is named in 460 in prose and in an HTML comment; once 267 lands, 460's last paragraph should LINK buildings.html#did-a-granary-stand-on-posts-and-why-raise-its-floor-away-from-a-river (not linkable now - test_record fails on an unresolved anchor). cities/fabric 143 ("one to a village or to several") and buildings 080 stay correct; no edit owed.
+A145 (D104) KNOB - the gogura was one village storehouse for tax rice and reserve grain; three forms attested: its own, shared with neighboring villages, or the headman's storehouse; one per hamlet section in some domains; sited within the houses on dry-field ground (Jikata hanreiroku 1794), one standing alone with its door to the road; relief granaries (shaso, Kurobane's) were more village storehouses, not a second building; China: village shecang, county-seat changping granary - the generator rolls own / shared / headman's (1/2, 1/4, 1/4, guesses), and an own storehouse draws 21x21 to 37x20 ft (buildings 730's measured village storehouses) free among houses on dry ground, door to the lane; hamlets none. COORDINATION: 267's R18 (buildings 410, raised granary floor, in clone diagram-buildings) is named in 460 in prose and in an HTML comment; once 267 lands, 460's last paragraph should LINK buildings.html#did-a-granary-stand-on-posts-and-why-raise-its-floor-away-from-a-river (not linkable now - test_record fails on an unresolved anchor). cities/fabric 143 ("one to a village or to several") and 0098 stay correct; no edit owed.
 
-A151 (D145 B88 C143) KNOB - a terakoya needed only a master and a room, in the headman's, a doctor's, an official's house or the temple (Bingo example; the name from temples); villages typically one, some two (Hannan); national count 15,560 or 16,560 from one survey that missed regions; Edo 1,000-1,300; a provincial city's count SILENT; China: lineage-hall sishu, county charity schools - the generator draws NO school building anywhere below the capital; a village rolls whether it keeps a school (3 in 4, guess) and its seat (headman's house / temple / other house), which changes only the chosen building's description. Links religion-and-death 500 and 510 (village temple) and cities/capitals 190 (domain school).
+A151 (D145 B88 C143) KNOB - a terakoya needed only a master and a room, in the headman's, a doctor's, an official's house or the temple (Bingo example; the name from temples); villages typically one, some two (Hannan); national count 15,560 or 16,560 from one survey that missed regions; Edo 1,000-1,300; a provincial city's count SILENT; China: lineage-hall sishu, county charity schools - the generator draws NO school building anywhere below the capital; a village rolls whether it keeps a school (3 in 4, guess) and its seat (headman's house / temple / other house), which changes only the chosen building's description. Links 0229 and 510 (village temple) and 0166 (domain school).
 
 A152 SILENT - the alarm bell (hansho) spread with the towns' fire brigades, on a ladder before a tower; villages fought fire with the young men's association and five-household groups; standing towers are 1945-1974 iron; no Edo village fire ladder, hut or pond found (absence note) - the generator draws no fire tower, ladder or pond in a village or hamlet (a guess); towns/070 and research-1's U3 390/400 keep the town apparatus.
 

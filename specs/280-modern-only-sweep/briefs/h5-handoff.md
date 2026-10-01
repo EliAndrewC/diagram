@@ -3,8 +3,8 @@
 - SECTION=homesteads/760
 - SECTION=homesteads/770
 - SECTION=homesteads/780
-- SECTION=homesteads/215 OWED-TO 269
-- SECTION=homesteads/218 OWED-TO 269
+- SECTION=0045 OWED-TO 269
+- SECTION=0046 OWED-TO 269
 - SECTION=homesteads/240 OWED-TO 269
 - SECTION=homesteads/170 OWED-TO 269
 - KEY=smith-1899-village-life

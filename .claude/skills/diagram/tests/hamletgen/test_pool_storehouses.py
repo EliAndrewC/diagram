@@ -1,4 +1,4 @@
-"""The storehouse annex on the pool's scripted hamlets (feature 293; research/homesteads/120 and 720): the houses that carry
+"""The storehouse annex on the pool's scripted hamlets (feature 293; research/questions/0040-farm-storehouses-kura.html and 720): the houses that carry
 it are the largest ones, as many as the lots' quota gives, each drawn against its own house and inside the Edo sheds' band.
 
 These read the SHIPPED manifests: the deal is unit-tested in `settlement/test_lot.py` and the band in

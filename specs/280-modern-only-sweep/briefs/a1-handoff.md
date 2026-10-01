@@ -1,7 +1,7 @@
 # Handoff - feature 280, group A1 (the lotus overlay), session 1: research and write
 
 - SECTION=archetypes/020
-- SECTION=archetypes/030
+- SECTION=0020
 - SECTION=archetypes/310
 - SECTION=archetypes/600
 - KEY=kadoma-rekishi

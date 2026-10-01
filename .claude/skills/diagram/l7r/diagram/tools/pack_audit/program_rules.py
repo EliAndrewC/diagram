@@ -110,13 +110,13 @@ COURT_KINDS: tuple[str, ...] = ("inner court", "outer court")
 #: A privy within this of a residence block is attached to the house (0.5 ft: flush, with integer-emit rounding).
 ATTACHED_PX: float = 0.5 * FTPX
 #: At least this many privies on a county manor: the low end of buildings/programs.md's "one per functional zone, about
-#: three or four" (research buildings 220 'Privies (setchin)'). The record itself calls that count "this project's guess
+#: three or four" (research 0101 'Privies (setchin)'). The record itself calls that count "this project's guess
 #: rather than a finding", so the 3 is a GUESS (plan D11).
 PRIVY_MIN: int = 3
 
 
 def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
-    """(a) a privy is the residence's own - tagged a part of it, or attached to one of its blocks (research buildings 220:
+    """(a) a privy is the residence's own - tagged a part of it, or attached to one of its blocks (research 0101:
     the privy built into the samurai house); (b) every court the sheet tags has a privy; (c) at least `minimum` in all."""
     ms = marks(svg)
     privies = [m for m in ms if m.tag == "rect" and m.belongs_to("latrine") and m.fill == PRIVY_FILL]
@@ -141,7 +141,7 @@ def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
 #: and for the shrine "a tub at the hall's corners") and the generator seats one at (`compound_parts._point_features`):
 #: the office hall, the residence, the barracks, the gatehouse, the compound shrine, the stables, the servants' row, the
 #: kitchen; the shrine's hall-and-dwelling. Guest quarters, the karo's house and the retainers' quarters are NOT on the
-#: list: the record names them nowhere for a tub (research buildings 160 reads only the townspeople's habit and a town
+#: list: the record names them nowhere for a tub (research 0100 reads only the townspeople's habit and a town
 #: order, "not a rule for every building"), and holding them to one would fail Ochiba (karo's house 0, retainers' 0) and
 #: Ubame (guest 0) on a rule no source gives. "A tub at every wooden building, as a rule" is the record's reading (GUESS).
 TUB_KINDS: tuple[str, ...] = (
@@ -190,7 +190,7 @@ def fire_water_distribution(svg: str, plan: ParsedPlan) -> list[str]:
 
 #: (smaller, larger): the compound's size HIERARCHY, the pair list of the building-review checklist. Each pair's class:
 #: - the house out-measures its kitchen, its document storehouse and storehouse, and its shrine: buildings/programs.md
-#:   (the residence row) calls that "this project's own reading of the compound"; research buildings 180 reads only
+#:   (the residence row) calls that "this project's own reading of the compound"; research 0116 reads only
 #:   Takayama's order (office > residence > rowhouse > storehouses) - the tax archive pair rests on its 450 sq ft book
 #:   storehouse against a 6,400 sq ft residence (READ), the rest is the record's own reading (GUESS);
 #: - the stables and the cell under the barracks: no page read ranks them (GUESS);

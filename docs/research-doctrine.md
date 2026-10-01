@@ -114,7 +114,7 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   them. So write down **what was accepted, what it costs in observable terms, which alternatives were
   priced, and who chose** - the rejected options matter as much as the chosen one, because they are
   what stops the question being reopened from scratch. Worked example:
-  [`research/rendering/water/`](../.claude/skills/diagram/research/rendering/water/010-how-our-maps-draw-channel-widths.html)
+  [`research/contents.json#water`](../.claude/skills/diagram/research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html)
   "How our maps draw channel widths" - the GM asked why a channel did not visibly narrow, the
   honest answer was that at true scale it cannot, two legibility multipliers were priced against
   keeping true size, and the ruling plus both declined numbers are recorded where the next reader

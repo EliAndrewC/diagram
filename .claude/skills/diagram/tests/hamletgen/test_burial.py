@@ -1,4 +1,4 @@
-"""Where a hamlet's dead lie (feature 273; feature 280 M68, research/religion-and-death/280), and the shared EDGE SEAT the
+"""Where a hamlet's dead lie (feature 273; feature 280 M68, research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html), and the shared EDGE SEAT the
 village's cremation ground stands on (`settlement/civic_grounds/edge_seat.py`).
 
 The edge seat is asked with hand-built settlements - a cluster of houses on an open canvas - so each rule is proved by the
@@ -71,7 +71,7 @@ def test_the_edge_seat_turns_aside_where_the_fall_line_is_a_paddy() -> None:
 
 
 def test_the_edge_seat_keeps_off_the_water_by_its_bank_margin_only() -> None:
-    """Feature 280 M75 (research/religion-and-death/160): no set-back that scales with a watercourse is attested; a ground
+    """Feature 280 M75 (research/questions/0235-village-burial-grounds-bochi.html): no set-back that scales with a watercourse is attested; a ground
     only keeps out of the water, by the bank margin - 20 px off a stream's bank is clear, a ground over the bank is not."""
     s = _hamlet()
     s.M["streams"] = [{"poly": [(100.0, 1100.0), (1300.0, 1100.0)], "w": 7}]

@@ -7,8 +7,8 @@ turn. Work in this clone (`/diagram/.clones/diagram-buildings`); the project's C
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections** - feature 265, in another session, is working them: buildings 010, 070, 150, 170, 210;
-cities/river-cities 010, 020, 030, 040; urban-features 010, 020, 030, 050, 060, 070, 080, 160; ways 020; towns 040,
+**Do not edit these sections** - feature 265, in another session, is working them: 0090, 070, 150, 170, 210;
+0175, 020, 030, 040; 0190, 020, 030, 050, 060, 070, 080, 160; 0081; towns 040,
 080, 090, 100, 130; cities/capitals 040. Write the finding in a question of your own; where it OWES one of those
 sections a correction, say exactly what in the handoff (the orchestrator makes it once 265 is done with the page).
 
@@ -18,7 +18,7 @@ Each is a research QUESTION the record owes. The kinds named are the map feature
 from what you find (by the orchestrating session, NOT by you); O, H, U are the Ochiba, Hayakawa and Ubame sheets.
 
 - R26 **the main gate's width** - between a samurai residence gate (9-12 ft) and a yamen gatehouse (18-24 ft). `main gate`. O H U P.
-- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (buildings 070, the scale entry). `compound wall`. Researched in its own question; the correction to buildings 070 is made in T17 (FR-006).
+- R27 **wall thickness** - 1.5-2 ft (religion-and-death gates entry) vs 3 ft (0092, the scale entry). `compound wall`. Researched in its own question; the correction to 0092 is made in T17 (FR-006).
 - R28 **the staged arrival** - gate, court or garden, genkan: a readable source ('Guest doors feed courts', 120). `genkan`, `residence`, `garden`.
 - R29 **the branch office with two shrines** - a readable source for the excavation plan. `compound shrine`.
 
@@ -41,7 +41,7 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    done until the wrong section is CORRECTED, cited, in this session - on any page, whatever its prefix - unless it is
    on the do-not-edit list above, in which case the handoff says exactly what the correction is. A search that finds
    nothing is an outcome, not a failure: record it and move on.
-5. **Write.** Each item (or a few closely joined ones) is a question on buildings 480-520: a new fragment
+5. **Write.** Each item (or a few closely joined ones) is a question on 0093: a new fragment
    `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with `<h2 id="...">` whose text is
    the question a reader would ask from the map; a `<p><strong>Sources:</strong> ...</p>` roster; the finding; and
    where it drives what a plan draws, the decision in plain words. Footnotes: `<sup class="fn" data-note="<key>"></sup>`
@@ -54,7 +54,7 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    tests/interactive/test_sources.py tests/interactive/test_record_format.py"`, and `python3 scripts/check-question-size.py`
    from the clone root (a question and its notes stay under 20,000 bytes - split one along its topics).
 6. **Hand off.** Write `specs/267-compound-research-owed/briefs/g3b-handoff.md`: one line per new or changed question - a corrected
-   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=buildings/240`), one per new registry key as `- KEY=<key>`, and one line
+   existing section included, so the checks read it - as `- SECTION=<page>/<NNN>` (e.g. `- SECTION=0102`), one per new registry key as `- KEY=<key>`, and one line
    per item: `R<nn> <OUTCOME> - <one sentence of what the record now says> - <what it means for the kinds and sheets
    named>`. Then anything left open and why. Commit (a message naming the group). Do NOT run the record checks, do NOT
    push - the check sessions do that in fresh contexts. Your last message is one paragraph saying what you wrote.

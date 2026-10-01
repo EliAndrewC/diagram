@@ -1,9 +1,9 @@
 # Handoff - feature 280, group U3 (urban-features: the boom, the charcoal yard, the bales and the huller), session 1
 
 - SECTION=urban-features/040
-- SECTION=urban-features/150
-- SECTION=urban-features/190
-- SECTION=urban-features/520
+- SECTION=0197
+- SECTION=0199
+- SECTION=0208
 - SECTION=urban-features/720
 - KEY=tsunaba-nikkoku
 - KEY=aba-jawiki

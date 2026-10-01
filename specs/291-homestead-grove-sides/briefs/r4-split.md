@@ -1,11 +1,11 @@
 <!-- page-load: kind=split -->
-# Brief - feature 291 (how many sides a homestead grove takes), group R4: vegetation/030 back under the size cap
+# Brief - feature 291 (how many sides a homestead grove takes), group R4: 0072 back under the size cap
 
 You are a FRESH session for one part of feature 291. This brief is the whole of what you need. Work in this clone
 (`/diagram/.clones/diagram-readability-2`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all ("A question has a size").
 
-**What is wrong.** `vegetation/030` ("Does a shelter belt wrap the settlement? No - it stands on one or two windward
+**What is wrong.** `0072` ("Does a shelter belt wrap the settlement? No - it stands on one or two windward
 sides") is 20,226 bytes with its notes, over the 20,000 cap, since this feature added the GM's 2026-09-29 ruling to it
 (the farmstead's own grove now rolls its sides; the village belt stays on one or two windward sides). `make quick`
 fails on it.

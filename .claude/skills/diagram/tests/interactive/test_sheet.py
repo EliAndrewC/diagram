@@ -28,7 +28,7 @@ def _fc(key: str) -> FeatureClass:
         label="accurate",
         label_note="Read.",
         sources=("not recorded",),
-        entry="research/buildings.html (no dedicated entry - recorded as silent)",
+        entry="research/contents.json#compounds (no dedicated entry - recorded as silent)",
     )
 
 

@@ -170,7 +170,7 @@ _rng = _random.Random(SEED + 1)
 # THE TRACK WINDS S DOWN THE DRY FAR-WEST BACK-SLOPE, past the toe (GM 2026-08-12). It was briefly
 # turned west out of the frame, when the toe marsh was still drawn edge to edge across the canvas
 # and half this route lay in it. The band is now as wide as the ground the fan WATERS (researched:
-# research/water.html), so the toe ends at x=407 and this back-slope route is dry for its whole
+# research/contents.json#water), so the toe ends at x=407 and this back-slope route is dry for its whole
 # length - which is where a dispersed hamlet's thread through its strewn farms belongs.
 # ...and it WINDS, which the comment above has always claimed and the polyline never did
 # (settlement-review 2026-08-12: 123 px of drift over 2,440 px, a ~3 degree lean with no reversal,
@@ -293,7 +293,7 @@ print(f"footbridges: {n_bridges}")
 # CROP to the placed content (the commons bleeds off-frame; the hard features fit with a margin)
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
+# peasantry through this board via the settlement's literate reader; see research/contents.json#trades-and-services 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=48)   # a touch wider so the strewn ring's edge wells sit inside the frame (and more red-clay margin shows)

@@ -4,7 +4,7 @@
 
 - SECTION=cities/government/servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin
 - RENDERING=rendering/cities/government/how-our-maps-draw-servants-quarters-in-the-samurai-ward
-- OLD=research/cities/government/ research/cities/government/ research/cities/government/ research/cities/government/
+- OLD=research/contents.json#government research/contents.json#government research/contents.json#government research/contents.json#government
 - MODALS=Door FamilyQuarters InnerRooms LordsQuarters ReceptionRoom RetainersQuarters ServantsQuarters
 - BASE=08d1a0e19
 

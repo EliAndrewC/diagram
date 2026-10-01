@@ -1,10 +1,10 @@
 # Quote check — feature 242's footnotes on four research pages
 
 Files read:
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#urban-fabric` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#urban-fabric`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#government` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#government`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#outside-the-walls` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#outside-the-walls`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#ways` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#ways`
 
 45 in-scope notes carry a key; 22 distinct URLs fetched, one attempt each. No host refused.
 

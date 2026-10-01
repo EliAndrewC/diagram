@@ -23,7 +23,7 @@ covers.
 *The town's stated population is the TIER's ~1,200, not this manifest's 590 (GM 2026-08-29: "The
 default population of a town is already 1,200 ... that is the total population including farmers,
 which means that the sum total of that population is not visible on the map, which is intentional").
-Whose farmers, settled by settlement-review round 8: the town's OWN. `research/towns.html` puts a
+Whose farmers, settled by settlement-review round 8: the town's OWN. `research/contents.json#towns` puts a
 town at ~238 households - ~156 farming plus 82 of every other trade - and this sheet draws exactly
 those 82 and only 36 of the ~156 farmhouses, which is why 590 is what the housing check sees and
 ~1,200 is what the town is. The county's village-district farmers are counted separately, under
@@ -96,7 +96,7 @@ invisible. On Ubame the wind is the default NW monsoon (downwind = SE) while the
   quench trough, slag heap, stacked bar iron. Ubame follows the **Japanese two-site** tatara/okaji
   split rather than the Chinese adjacent-hearth arrangement, and that divergence is disclosed with
   its reason: dispersed fuel forces two sites. Full grounding in
-  [`../../research/urban-features.html`](../../research/urban-features.html) and
+  [`../../research/contents.json#trades-and-services`](../../research/contents.json#trades-and-services) and
   [`../../research/urban-features.md`](../../research/urban-features.md).
 
 ## The potters' kiln works and the two carts (GM, 2026-08-17)
@@ -140,7 +140,7 @@ carry one. Ubame was the only settlement in the pool with no kiln works at all, 
 was an omission rather than a decision: every seat breaks and replaces bowls, pots and jars on a
 continuous cycle, and this one has a brewery's worth of vessels to keep in service besides.
 
-**The confusion hazard is real and is why the label is not the default.** `research/urban-features.html`
+**The confusion hazard is real and is why the label is not the default.** `research/contents.json#trades-and-services`
 records that the pre-2026-07-27 kiln glyph was a low earthen mound - a charcoal kiln's shape - and
 that Ubame's charcoal district made the two indistinguishable. The glyph is now a chambered climbing
 kiln, which is a different silhouette, but on **this** sheet that is not enough on its own: a caption
@@ -370,7 +370,7 @@ one), and a cart is the same 12x5 ft as the kosatsuba (1,550 ft apart, one of th
     the map - so the clause did not relax, it passed anything. The execution ground had carried a
     dwelling-distance fallback for exactly this since it was written; the stone never got one. It
     now shares that 120 ft figure on an unwalled map, while a rampart still settles it outright
-    where there is one (see `research/urban-features.html`, "The boundary stone").
+    where there is one (see `research/contents.json#trades-and-services`, "The boundary stone").
   - **The siting tool.** `tools/site_justice.py` had proposed that seat and still did after the check was
     fixed, because it scores a candidate as `gate(with it) - gate(without it)` and the governing
     check FAILS while there is no stone at all - so a useless seat added nothing new. `propose` now
@@ -422,7 +422,7 @@ one), and a cart is the same 12x5 ft as the kosatsuba (1,550 ft apart, one of th
     Mode B footprint need not match the Mode A sheet in shape or size, features the sheet draws
     OUTSIDE the walls need not appear, and the glyph is PRESUMED to contain everything the detailed
     drawing shows. Nothing is drawn at Ubame's gate and nothing should be. The rule is now written
-    into `settlement.py`'s `manor()` docstring, `research/towns.html`, and `settlement-review.md`
+    into `settlement.py`'s `manor()` docstring, `research/contents.json#towns`, and `settlement-review.md`
     itself - the agent had been told a disagreement was an error and the Mode A sheet authoritative,
     which is what manufactured this finding.
 

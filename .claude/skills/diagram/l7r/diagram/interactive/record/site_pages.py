@@ -147,7 +147,12 @@ def nav_tree(record: qs.Record, items: dict[str, Item], registry_title: str, reg
         for facet in ct.FACETS
     ]
     groups.append({"label": TAGS_GROUP, "sections": tag_nodes})
-    groups.append({"label": REGISTRY_GROUP, "sections": [{"key": "sources", "title": registry_title, "href": "sources/index.html", "sections": [], "items": [[i.title, f"sources/{i.id}.html"] for i in registry_items]}]})
+    groups.append(
+        {
+            "label": REGISTRY_GROUP,
+            "sections": [{"key": "sources", "title": registry_title, "href": "sources/index.html", "sections": [], "items": [[i.title, f"sources/{i.id}.html"] for i in registry_items]}],
+        }
+    )
     return {"title": TITLE, "home": "index.html", "all": "all.html", "groups": groups}
 
 

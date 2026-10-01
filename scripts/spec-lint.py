@@ -411,13 +411,13 @@ def selftest() -> None:
         d = root / "specs" / "200-landed"
         d.mkdir(parents=True)
         (d / "tasks.md").write_text("- [x] T01 do the thing (FR-001)\n")
-        (d / "spec.md").write_text("# x\n\n## Functional requirements\n\n**FR-001** A thing.\n\n**FR-002** Old, named by nothing; see research/water.html.\n")
+        (d / "spec.md").write_text("# x\n\n## Functional requirements\n\n**FR-001** A thing.\n\n**FR-002** Old, named by nothing; see research/contents.json#water.\n")
         git = ["git", "-C", td, "-c", "user.email=t@t", "-c", "user.name=t"]
         subprocess.run(["git", "-C", td, "init", "-q"], check=True)
         subprocess.run([*git, "add", "-A"], check=True)
         subprocess.run([*git, "commit", "-qm", "landed"], check=True)
         base = subprocess.run(["git", "-C", td, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
-        (d / "spec.md").write_text((d / "spec.md").read_text().replace("research/water.html", "research/water/"))
+        (d / "spec.md").write_text((d / "spec.md").read_text().replace("research/contents.json#water", "research/contents.json#water"))
         before = at_base(root, base, d)
         assert before and introduced(lint14(d), [x for x in before if not is_check5(x)]) == [], "a pointer-only edit adds nothing"
         (d / "spec.md").write_text((d / "spec.md").read_text() + "\n**FR-003** New, named by nothing.\n")

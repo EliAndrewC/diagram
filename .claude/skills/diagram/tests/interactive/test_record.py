@@ -147,7 +147,7 @@ def _as_the_page_reads_it(containing_rel: str) -> pathlib.PurePosixPath:
 
     For a FRAGMENT of the record (feature 258, `research/<page>/...`) that is the directory of the page
     it assembles into, not the fragment's own: the fragment's text becomes the page's text, and a
-    `../x.md` written for `research/buildings.html` is one level up from `research/buildings/`. Reading
+    `../x.md` written for `research/contents.json#compounds` is one level up from `research/contents.json#compounds`. Reading
     it from the fragment's directory reports a link that resolves perfectly on the page a reader opens.
     """
     here = pathlib.PurePosixPath(containing_rel).parent

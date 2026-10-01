@@ -35,10 +35,10 @@ record fragment (`buildings/120`) does not label its width (spec-fidelity round 
 
 How the 98 questions with a visible GUESS reach a map feature: a class's `Entry:` names `16`; a question a class
 names links to `4` more; engine source quotes the heading's first 40 characters or the anchor for `47` (overlapping
-the others); `45` are reached by none of the three. The rack length (homesteads 500) is reached through 505, which
+the others); `45` are reached by none of the three. The rack length (0016) is reached through 505, which
 the threshing yard class names and which links to 500 twice.
 
-The motivating item, the rack length per household, is in `research/homesteads/` ("The length of rack
+The motivating item, the rack length per household, is in `research/contents.json#homesteads` ("The length of rack
 per household is a GUESS until the record finds a figure").
 
 ## R4 - the built target on the whole tree (observed 2026-09-28, method: `make open-questions` from the skill, timed with `date`, its report parsed)

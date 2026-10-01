@@ -5,7 +5,7 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 (`/diagram/.clones/diagram-readability-2`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all.
 
-**What moved.** Session 1 added to `homesteads/150` that no village belt is drawn where the farms carry their own
+**What moved.** Session 1 added to `0031` that no village belt is drawn where the farms carry their own
 groves, and that a linear hamlet's farms front a street along the road; and to `vegetation/154` that a farm drawn with
 its own grove carries its bamboo inside that grove. Its handoff is `specs/291-homestead-grove-sides/briefs/r5-handoff.md`.
 

@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/fish-fry-and-nursery-ponds-yumiao
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-dike-pond-villages-fry-ponds
-- OLD=research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=FishPond FryPond
 - BASE=7c5651efa
 

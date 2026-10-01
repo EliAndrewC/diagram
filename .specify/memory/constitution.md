@@ -1500,7 +1500,7 @@ until v2.17.0, when the GM split the second into two - see below):
    finding. (Today's example: "a bog's margin is sedge grading into reed, and
    woody cover stands on the dry ground above it" was the reasoning behind
    letting grass alone grade into the marsh - it is plausible and it is
-   unsourced, and `research/vegetation/` says so.)
+   unsourced, and `research/contents.json#vegetation` says so.)
 
 Where it lives: the finding and its classification in the skill's `research/`
 file for that feature family (the interactive map will read from there); the

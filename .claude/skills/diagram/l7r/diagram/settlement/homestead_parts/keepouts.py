@@ -30,7 +30,7 @@ class KeepoutsMixin:
         channels, and the comb laterals' drawn truth (M['drawn_channels'] - added 2026-08-16, GM,
         Inashiro: grass tufts stood ON the head-race, because the scatter knew only the hairline
         topology record in M['channels'], w 2.5, while the drawn lateral ran ~14 wide on its own
-        filleted post-clip polyline - the "same manifest source" trap, research/rendering/ways/030-how-our-maps-draw-plank-bridges.html ('PLANK
+        filleted post-clip polyline - the "same manifest source" trap, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html ('PLANK
         BRIDGES'). A tapered lateral is split by `waterfields.taper_pieces` - ONE piece per SEGMENT
         at its arc-correct width, the very same call `field_channel` inks it with, so the corridor
         and the stroke it protects cannot disagree. Factored so the per-point test (_on_watercourse) and the
@@ -99,7 +99,7 @@ class KeepoutsMixin:
     # deliberate exception (settlement-review, 2026-08-16): a blade is 2.4-4.2*bs px, so at the
     # coarser tiers a tip can lean up to a few real feet over the margin line - accepted, because
     # grass leaning over a bund is real; bases and tall-glyph reach are what the rule enforces.
-    # Full grounding: research/rendering/vegetation/090-how-our-maps-keep-scrub-off-fields-channels-and-open-water.html.
+    # Full grounding: research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html.
     _BANK_MARGIN_FT = 6.0
     # CUT-BANK MARGIN (GM 2026-08-16, Inashiro second pass: tufts seeded in the 10-16 ft berm
     # strip between the dry hem plots and the supply channels - legal under the drawn-width water
@@ -112,7 +112,7 @@ class KeepoutsMixin:
     # (_CROP_MARGIN_FT above). STREAMS and the reed marsh deliberately take NO margin: a natural
     # bank is vegetated to the water's edge, and the 2026-08-16 settlement-review pass explicitly
     # praised the absence of a sterile halo on the brooks. Full grounding:
-    # research/rendering/vegetation/090-how-our-maps-keep-scrub-off-fields-channels-and-open-water.html.
+    # research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html.
     _HALO_STRUCT_FT = 30.0
     _HALO_WELL_FT = 20.0
     _HALO_PLOT_FT = 8.0
@@ -252,7 +252,7 @@ class KeepoutsMixin:
         """Record drawn canopy crowns as a flat [x, y, r, ...] run in M['tree_crowns'] - the manifest
         record of EVERY tree this map draws, which is what structures_clear_of_trees / wells_clear_of_trees
         test. Flat rather than per-tree dicts because a to-scale map draws thousands of them (see
-        research/vegetation/, the canopy rules)."""
+        research/contents.json#vegetation, the canopy rules)."""
         for x, y, r in crowns:
             self.M["tree_crowns"] += [round(x, 1), round(y, 1), round(r, 1)]
 

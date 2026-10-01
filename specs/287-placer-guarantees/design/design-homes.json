@@ -19,7 +19,7 @@
   },
   {
    "id": "H02",
-   "rule": "No per-household grain plot (dry_plots[].homestead, meta.homestead_fields) is laid by a house. Stated: tests/hamletgen/test_pool_261.py::test_no_household_grain_plot_is_laid_by_its_house; the GM 2026-09-28 (research/homesteads/, research/fields/).",
+   "rule": "No per-household grain plot (dry_plots[].homestead, meta.homestead_fields) is laid by a house. Stated: tests/hamletgen/test_pool_261.py::test_no_household_grain_plot_is_laid_by_its_house; the GM 2026-09-28 (research/contents.json#homesteads, research/contents.json#fields).",
    "rows": [
     "R1 tests/hamletgen/test_pool_261.py::test_no_household_grain_plot_is_laid_by_its_house"
    ],
@@ -33,7 +33,7 @@
   },
   {
    "id": "H03",
-   "rule": "A nucleated cluster never stands with its nearest house more than 700 px (ft at hamlet scale) from a field, nor any house more than 700 px + two cluster spans away. Stated: tests/gate/test_cluster_and_homes.py::test_the_cluster_abuts_the_ground_it_works; research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html (6 ft minimum, ~700 ft tolerance).",
+   "rule": "A nucleated cluster never stands with its nearest house more than 700 px (ft at hamlet scale) from a field, nor any house more than 700 px + two cluster spans away. Stated: tests/gate/test_cluster_and_homes.py::test_the_cluster_abuts_the_ground_it_works; research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html (6 ft minimum, ~700 ft tolerance).",
    "rows": [
     "R1 tests/gate/test_cluster_and_homes.py::test_the_cluster_abuts_the_ground_it_works"
    ],
@@ -77,7 +77,7 @@
   },
   {
    "id": "H14",
-   "rule": "A hamlet (any form, the polder included) never seats under 85% of its declared households, and never zero when a seeding pass (front row, lane frontage, cloud) offers nothing. Stated: tests/gate/test_generator_contracts.py::test_every_declared_household_is_seated; research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html (030: 0.85-1.05, aims at one apiece); stages.py:131.",
+   "rule": "A hamlet (any form, the polder included) never seats under 85% of its declared households, and never zero when a seeding pass (front row, lane frontage, cloud) offers nothing. Stated: tests/gate/test_generator_contracts.py::test_every_declared_household_is_seated; research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html (030: 0.85-1.05, aims at one apiece); stages.py:131.",
    "rows": [
     "R1 tests/gate/test_generator_contracts.py::test_every_declared_household_is_seated",
     "R1 tests/gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate (seating clause)",
@@ -387,7 +387,7 @@
   },
   {
    "id": "H32",
-   "rule": "Every farm fixture kind is drawn at its rolled count (the per-hamlet prevalence band's share x households, and any spec floor). Stated: hamletgen/homesteads/fixtures.py:18-30 (FIXTURE_BANDS), research/homesteads/215-chickens-and-chicken-coops.html; the shortfall comment at fixtures.py:653-660.",
+   "rule": "Every farm fixture kind is drawn at its rolled count (the per-hamlet prevalence band's share x households, and any spec floor). Stated: hamletgen/homesteads/fixtures.py:18-30 (FIXTURE_BANDS), research/questions/0045-chickens-and-chicken-coops.html; the shortfall comment at fixtures.py:653-660.",
    "rows": [
     "R2 hamletgen/homesteads/fixtures.py:seat_farm_fixtures:653-660 (the unseated shortfall)"
    ],
@@ -402,7 +402,7 @@
   },
   {
    "id": "H33",
-   "rule": "A hamlet's rolled woodpile form is the form drawn. Stated: future-work 'A rolled form the sheet never draws' (kizuma rolled on Kashikawa/Kuwabata, none drawn); GM 2026-08-24 (a rolled knob is honored by what is drawn); fixtures.py:25-30 (research/homesteads/260: the kizuma only where the homestead has the windbreak at its back, else the eaves stack).",
+   "rule": "A hamlet's rolled woodpile form is the form drawn. Stated: future-work 'A rolled form the sheet never draws' (kizuma rolled on Kashikawa/Kuwabata, none drawn); GM 2026-08-24 (a rolled knob is honored by what is drawn); fixtures.py:25-30 (research/questions/0047-farm-privies-and-their-night-soil-benjo.html: the kizuma only where the homestead has the windbreak at its back, else the eaves stack).",
    "rows": [
     "R3 future-work/farming-communities.md 'A rolled form the sheet never draws' (woodpile_form kizuma)"
    ],

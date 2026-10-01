@@ -4,7 +4,7 @@
 
 - SECTION=towns/market-days-and-the-market-ground-ichi
 - RENDERING=rendering/towns/how-our-maps-mark-a-towns-market-ground
-- OLD=research/towns/ research/towns/ research/towns/ research/cities/fabric/
+- OLD=research/contents.json#towns research/contents.json#towns research/contents.json#towns research/contents.json#urban-fabric
 - MODALS=
 - BASE=c42525701
 

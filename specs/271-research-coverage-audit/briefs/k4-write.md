@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-6`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -29,8 +29,8 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - B07 C03 **Rampart in section**: how high and thick is a county town's and a provincial city's rampart, rammed earth,
   stone- or brick-faced or a Japanese earthwork (dorui, sōgamae), with what parapet, how many gates, and what of it
-  shows from above? (towns/100; cities/capitals/150, 155; cities/defenses/060, 269 B38's - cite it). M. P1.
-  > COORDINATION (C03): new question; cite 269's cities/defenses 020-090 (B38) for the city figures
+  shows from above? (towns/100; cities/capitals/150, 155; 0148, 269 B38's - cite it). M. P1.
+  > COORDINATION (C03): new question; cite 269's 0147, 0148, 0149 (B38) for the city figures
 - B08 **Town gate**: a gatehouse or a tower over the opening, its footprint and opening width, at a walled county town?
   (cities/defenses/030, 040 are the city's, 269 B38's). M. P1.
   > COORDINATION (B08): take the TOWN side; cite 269's cities/defenses 020/040/050/080/090 (B38) for the city figures
@@ -39,7 +39,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
   > COORDINATION (C09): new question; cite 269's cities/defenses 020 (B38)
 - C17 **Moat crossing**: fixed timber bridge, earthen causeway, stone bridge, drawbridge - how does a road cross the
   moat at a city gate, and how wide and long? (cities/capitals/240 is the castle's gates only). M. P1.
-  > COORDINATION (C17): new question; cite 269's cities/defenses 040 (moat depth, B38)
+  > COORDINATION (C17): new question; cite 269's 0147 (moat depth, B38)
 - B09 **Town moat**: did a walled county town carry a moat or ditch, and how wide? (water/110, 120 are city moats).
   S. P3.
   > COORDINATION (B09): town side only; cite 269's cities/defenses 020/040/050/080/090 (B38) for the city
@@ -65,7 +65,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on cities/defenses 200-250, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0133, 0150, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

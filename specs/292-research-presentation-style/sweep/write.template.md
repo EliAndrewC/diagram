@@ -14,8 +14,8 @@ RENDERING section. Three pilot topics were written that way and the GM accepted 
 2026-09-30. You are applying the same process to the topics below.
 
 **The model to copy.** The third pilot is the closest model of a finished topic: the research section
-`research/homesteads/040-sunlight-and-shade-on-the-farm.html` (with its `.notes.html`) and its rendering section
-`research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html`. Read those two fragments
+`research/questions/0038-sunlight-and-shade-on-the-farm.html` (with its `.notes.html`) and its rendering section
+`research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`. Read those two fragments
 and the style guide before you write.
 
 ## Your items

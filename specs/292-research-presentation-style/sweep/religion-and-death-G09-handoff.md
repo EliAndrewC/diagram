@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/town-monasteries
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-town-monastery
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=
 - BASE=38968d43e
 
@@ -14,5 +14,5 @@ ranzan-temple-register-3), as the REMOVED comment says. The kanji in five note g
 names, and the two place names in ranzan-kinsenji-3's gloss) were dropped to clear the prepass; the quoted passages are
 untouched. The old 740 absence note's search-summary figure and the J-STAGE PDF on Edo's religious space that was not
 read are now in the note's comment, not the visible text. That PDF was not re-tried in this session. Links re-aimed:
-religion-and-death 500 (two, to #town-monasteries) and the tier table in rendering 210 (one link, to
+0229 (two, to #town-monasteries) and the tier table in rendering 210 (one link, to
 #how-our-maps-draw-a-town-monastery). One confusable pair recorded: Town monasteries / Village temples (tera).

@@ -2,7 +2,7 @@
 
 - SECTION=buildings/staff-rowhouses-and-barracks-nagaya
 - RENDERING=rendering/buildings/how-our-maps-draw-staff-rowhouses-and-barracks-nagaya
-- OLD=research/buildings/
+- OLD=research/contents.json#compounds
 - MODALS=
 - BASE=78aa78b79
 

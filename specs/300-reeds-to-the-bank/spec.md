@@ -65,7 +65,7 @@ added to the water only if the stream is still lost after that.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Reeds to the water's edge | historically accurate (research/water 280: a reservoir's shore is reeded; reeds stand in the shallows) | the margin was a thrown blade's, not the ground's | `land/wet.py` |
+| Reeds to the water's edge | historically accurate (research/questions/0061-reservoir-ponds-tameike.html: a reservoir's shore is reeded; reeds stand in the shallows) | the margin was a thrown blade's, not the ground's | `land/wet.py` |
 | A denser bank band of reeds | map drawing convention | frames the stream where the bare strip did | `land/tiles.py`, `settlement/finish.py` |
 
 ## Review history

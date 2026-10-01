@@ -2,7 +2,7 @@
 
 - SECTION=buildings/samurai-residences-and-their-rooms-buke-yashiki
 - RENDERING=rendering/buildings/how-our-maps-lay-out-the-residence
-- OLD=research/buildings/ research/buildings/ research/buildings/ research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds
 - MODALS=Residence ServantsQuarters GuestQuarters Kitchen Well Latrine Storehouse ResidenceCorridor LordsQuarters FamilyQuarters InnerRooms ReceptionRoom InnerCourt CompoundGarden RearYard
 - BASE=68cc19417
 
@@ -20,6 +20,6 @@ house is held to the Yokota house's 49 tsubo, and the Matsue 67-tsubo figure is 
 measures a Meiji-era plan. The rendering section says the latter. The "about ten servants" in the rendering is the
 plan's own count, labeled a GUESS, as ServantsQuarters labels it. No modal's prose was rewritten, only its Entry, so
 entry-drift is owed on all 15. The fixture needed no change: only well and garden are in it, and neither entry named a
-folded title. Links re-aimed: buildings/180 (to the new research section) and buildings/400 (to the rendering section,
+folded title. Links re-aimed: 0116 (to the new research section) and 0109 (to the rendering section,
 since it pointed at the reasoning that puts the service at the rear); code comments in compound.py and
-compound_model.py. The confusable pair with cities/government 280 is in confusables.md.
+compound_model.py. The confusable pair with 0118 is in confusables.md.

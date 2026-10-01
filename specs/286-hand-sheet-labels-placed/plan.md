@@ -53,7 +53,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 - **D7 - readers use tags, not positions** (FR-005). `pack_audit/labels.py` pairs a required item with its structure
   by the sheet's `data-kind` tags, not by the nearest label; any other reader of a caption's coordinates is moved to the
   placed text or the tags.
-- **D8 - the docs** (FR-006): `SKILL.md`'s Mode A usage, `buildings.md`, research presentation 040's note that names
+- **D8 - the docs** (FR-006): `SKILL.md`'s Mode A usage, `buildings.md`, research 0242's note that names
   `make seat-label`, and the `building-review` and `size-audit`
   contracts say a sheet declares a caption's text and subject and the pipeline places it; the contracts judge a label's
   wording, not its position.

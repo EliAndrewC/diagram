@@ -23,15 +23,15 @@ character is three bytes: counting characters understates the registry alone by 
 | file | bytes |
 |---|---:|
 | `research/sources/` | 1,150,367 |
-| `research/cities/capitals/` | 376,566 |
-| `research/urban-features/` | 294,925 |
-| `research/religion-and-death/` | 266,322 |
-| `research/water/` | 257,601 |
-| `research/homesteads/` | 212,221 |
-| `research/cities/capitals/` | 180,046 |
-| `research/fields/` | 163,877 |
-| `research/water/` | 163,008 |
-| `research/urban-features/` | 161,945 |
+| `research/contents.json#capitals` | 376,566 |
+| `research/contents.json#trades-and-services` | 294,925 |
+| `research/contents.json#religion-and-the-dead` | 266,322 |
+| `research/contents.json#water` | 257,601 |
+| `research/contents.json#homesteads` | 212,221 |
+| `research/contents.json#capitals` | 180,046 |
+| `research/contents.json#fields` | 163,877 |
+| `research/contents.json#water` | 163,008 |
+| `research/contents.json#trades-and-services` | 161,945 |
 
 Against that, ONE entry is small:
 
@@ -205,12 +205,12 @@ built.
 entry, and compare both what it read and what it found.
 
 **The recorded run** (`seeded-format-clean`, feature 255): `record-format` over the whole of
-`research/ways/` - 93,076 bytes under `research/`, 88% of everything that entered its context
+`research/contents.json#ways` - 93,076 bytes under `research/`, 88% of everything that entered its context
 (observed 2026-09-20; method: `measure.py R3` over that run's kept transcript). On the question "How far
 past the bank does a bridge land?" it reported VOCABULARY on **girder** and on **footing**.
 
 **The scoped run** (2026-09-20, this feature): the same agent, handed
-`research/ways/` and its `.notes.html`.
+`research/contents.json#ways` and its `.notes.html`.
 
 | | recorded, whole page | scoped |
 |---|---:|---:|

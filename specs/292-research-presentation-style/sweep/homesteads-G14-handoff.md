@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/the-headmans-house-and-the-rich-farmers-homestead-shoya-gono
 - RENDERING=rendering/homesteads/how-our-maps-draw-the-headmans-house
-- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
+- OLD=research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads
 - MODALS=
 - BASE=e24c8eea5
 

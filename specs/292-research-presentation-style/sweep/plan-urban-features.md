@@ -17,7 +17,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: urban-features/090-wells---the-research-and-the-deliberate-liberty.html, urban-features/120-communal-wells-and-the-samurai-exception.html, urban-features/260-where-does-a-villages-communal-well-stand---by-the-lane-or-among-the-houses-it-serves.html, urban-features/270-what-does-a-communal-well-look-like-from-above---curb-sweep-or-pulley-roof.html, urban-features/700-were-a-wells-sweep-pulley-frame-and-roof-in-use-before-modern-times.html, urban-features/180-wells-in-crop-fields-two-different-objects-and-only-one-of-them-is-ours.html
 - rendering: How our maps place and draw wells (ido)
 - modals: Well
-- note: 090's "deliberate liberty" (wells per household), 120's block-interior placement, 270's from-above glyph and 180's "only one of them is ours" are rendering. 180 (wells in crop fields) is the last subsection: the irrigation well it sets aside touches water/410 (lifting water onto fields) - cross-link, do not move. Related on other pages, not folded here: cities/government/300 (a samurai's own well), homesteads/060 and homesteads/200.
+- note: 090's "deliberate liberty" (wells per household), 120's block-interior placement, 270's from-above glyph and 180's "only one of them is ours" are rendering. 180 (wells in crop fields) is the last subsection: the irrigation well it sets aside touches 0063 (lifting water onto fields) - cross-link, do not move. Related on other pages, not folded here: cities/government/300 (a samurai's own well), homesteads/060 and homesteads/200.
 - size: 35862
 
 ## T3 Night watch and ward gates (kidoban)
@@ -73,7 +73,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: urban-features/350-how-many-bathhouses-does-a-place-keep-and-does-a-county-town-have-one.html, urban-features/360-how-big-is-a-bathhouse-and-why-does-it-keep-a-fuel-yard.html
 - rendering: none
 - modals: -
-- note: not the farm's bath shed (homesteads/214, 740) nor a residence's bath (buildings/320).
+- note: not the farm's bath shed (0044, 740) nor a residence's bath (0105).
 - size: 5974
 
 ## T11 Pawnshops (shichiya)
@@ -178,7 +178,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: urban-features/020-the-justice-works---why-a-county-seat-executes-and-why-the-ground-is-outside.html, urban-features/022-where-does-the-execution-ground-stand---by-the-road-on-the-outcast-side-clear-of-the-graves-and-past-the-boundary-stone.html, urban-features/024-how-big-is-an-execution-ground-and-why-is-a-county-seats-drawn-empty.html, urban-features/026-what-stands-on-the-punishment-ground-in-town-and-why-is-the-beating-not-done-there.html
 - rendering: How our maps site and draw execution and punishment grounds
 - modals: -
-- note: the two grounds are sited by opposite logics (outside vs in town) - one topic, two subsections. 024's "why drawn empty" is rendering. The jail is cities/government/240, not here.
+- note: the two grounds are sited by opposite logics (outside vs in town) - one topic, two subsections. 024's "why drawn empty" is rendering. The jail is 0168, not here.
 - size: 17638
 
 ## T26 Pleasure quarters and inn serving women (yukaku)
@@ -206,7 +206,7 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 - fold: urban-features/170-drawing-a-clan-border.html
 - rendering: How our maps draw a clan border
 - modals: BoundaryStones, FoxBorder, ParleyMats, ParleyRoom
-- note: the title and much of the entry are about drawing it; the Morioka-Sendai mounds are the research. buildings/570 and buildings/610 (the border court and the parley room) are the buildings page's.
+- note: the title and much of the entry are about drawing it; the Morioka-Sendai mounds are the research. 0110 and 0094 (the border court and the parley room) are the buildings page's.
 - size: 3443
 
 ## Groups
@@ -222,19 +222,19 @@ paragraph on what the map draws, it goes to a rendering section titled "How our 
 
 ## Cross-page folds
 - urban-features/110-how-do-you-get-through-a-packed-commoner-quarter---and-why-is-the-path-not-a-street.html (4745) -> ways topic "Town streets, side lanes and back alleys (roji)" (plan-ways.md T6)
-- urban-features/100-commercial-frontage-and-wealth-stratified-housing.html (2746) -> towns topic on how a town is zoned (the one that absorbs towns/030 "How is a town zoned - what fronts the street, and what sits behind it?"); cities/fabric/080 covers the same for a city
-- urban-features/140-government-and-commerce-of-a-seat-of-administration.html (3183) -> cities/government topic on where a province's government stands (the one that absorbs cities/government/010); its gate-tariff and gate-strip lines cross-link towns/080 (the gate market) and cities/hinterland/040
+- urban-features/100-commercial-frontage-and-wealth-stratified-housing.html (2746) -> towns topic on how a town is zoned (the one that absorbs 0119 "How is a town zoned - what fronts the street, and what sits behind it?"); 0159 covers the same for a city
+- urban-features/140-government-and-commerce-of-a-seat-of-administration.html (3183) -> cities/government topic on where a province's government stands (the one that absorbs 0163); its gate-tariff and gate-strip lines cross-link 0122 (the gate market) and 0171
 
 ## Confusable pairs
 - "Fire watch towers and firefighting gear (hinomi yagura)" / "The bell-and-drum tower (zhonggulou)": a ladder lookout for fire vs a walled Chinese seat's time-keeping tower; the village fire bell (hansho, in T4) is not the tower's time bell either.
 - "Iron refining forges (chao)" / "Smiths and farriers (kajiya)": fining pig iron into wrought iron in town vs forging and shoeing with it.
-- "Charcoal yards" / "Pottery kilns (noborigama)" / vegetation/340 (the charcoal kiln in the hills): a depot that stores and sells charcoal vs a kiln that fires pots vs a kiln that makes charcoal.
-- "Village granaries (gogura)" / the office granary (buildings/080, 730) / the farm storehouse (homesteads/430): a village's shared relief and tax store vs an office's grain store vs a household's own kura.
-- "Writing schools (terakoya)" / religion-and-death/555 (Confucian school) / cities/capitals/190 (the domain school): a private one-room school for commoners vs state and domain schools.
-- "Roofed playhouses (shibai goya)" / towns/060 (the town's theater stage): a permanent roofed theater in a great city vs an open festival stage.
+- "Charcoal yards" / "Pottery kilns (noborigama)" / 0079 (the charcoal kiln in the hills): a depot that stores and sells charcoal vs a kiln that fires pots vs a kiln that makes charcoal.
+- "Village granaries (gogura)" / the office granary (0098, 730) / the farm storehouse (homesteads/430): a village's shared relief and tax store vs an office's grain store vs a household's own kura.
+- "Writing schools (terakoya)" / religion-and-death/555 (Confucian school) / 0166 (the domain school): a private one-room school for commoners vs state and domain schools.
+- "Roofed playhouses (shibai goya)" / 0187 (the town's theater stage): a permanent roofed theater in a great city vs an open festival stage.
 - "Teahouses, eating houses and drinking houses (chaya)" / ways "Highways and what lines them (kaido)" (its ways/130 teahouses at a road village's ends): the town's eating houses vs the rest-stop teahouses on the road.
-- "Stable yards and watering troughs" / towns/350 and buildings/390: a town's or gate's shared animal yard vs a stable building and a samurai's own stable.
+- "Stable yards and watering troughs" / towns/350 and 0108: a town's or gate's shared animal yard vs a stable building and a samurai's own stable.
 - "Tanning yards" / "Burakumin quarters and caste zoning": the works on the water vs where its workers live.
-- "Execution and punishment grounds (keijo)" / cities/government/240 (the jail): where sentences were carried out vs where the accused were held.
+- "Execution and punishment grounds (keijo)" / 0168 (the jail): where sentences were carried out vs where the accused were held.
 - "Clan borders and their markers" / ways "Village boundaries (murazakai)": a domain border with stones and mounds vs a village's survey line and the boundary god at its entrance.
 - "Communal wells (ido)" / the field well inside T2 (180): a drinking well among the houses vs an irrigation well in a crop field - kept as two subsections of one topic.

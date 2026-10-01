@@ -1,4 +1,4 @@
-# Brief - feature 269, group R1 (burial), amendment: where a hamlet's dead lie is a KNOB (religion-and-death 160)
+# Brief - feature 269, group R1 (burial), amendment: where a hamlet's dead lie is a KNOB (0235)
 
 You are a FRESH session. Work in `/diagram/.clones/diagram-supplemental`; the research record's CLAUDE.md applies.
 Read `/diagram/.clones/RESEARCH-CLAIMS.md` first. 160 is 269's; 540 is feature 273's (Diagram shrines), so do not edit 540.

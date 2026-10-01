@@ -94,8 +94,8 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
 ## Part 3 - the record CONVERTS to HTML (FR-009 to FR-014)
 
 - **FR-009 The record files convert in place, and the Markdown is deleted.** The 15 record files and the registry
-  become tracked, hand-authored HTML at the same paths with the `.html` extension - `research/water/`,
-  `research/cities/fabric/`, `research/sources/` - and `research/water.md` etc. are removed in the same
+  become tracked, hand-authored HTML at the same paths with the `.html` extension - `research/contents.json#water`,
+  `research/contents.json#urban-fabric`, `research/sources/` - and `research/water.md` etc. are removed in the same
   commit (`git mv` plus the conversion, so history follows the file). From then on a research edit is an HTML
   edit. `research/CLAUDE.md` and `research/README.md` are NOT converted: they are instruction files, not
   reference sections, and the README is the GM's (constitution XVII) - its link table now names files that moved,
@@ -119,7 +119,7 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
 - **FR-012 The maps link locally, and the code reads HTML.** `sources.py` parses the pages: headings and their
   ids, the `Sources:` rosters (`<p><strong>Sources:</strong> ...`) and the `<code>key</code>` tokens in them, the
   section bodies; `_ENTRY_FILE` and every class's `entry` string name `research/<file>.html`;
-  `research_questions()` returns a path RELATIVE to the map's own page - `../../../research/homesteads/`
+  `research_questions()` returns a path RELATIVE to the map's own page - `../../../research/contents.json#homesteads`
   from `pool/<tier>/<name>/<name>.html` (every map and every legacy exhibit sits three levels under the skill
   root) - and the references modal opens it in a new tab as before. `RESEARCH_URL` (GitHub) is retired. A test
   proves every class entry's file and every anchor a pool map emits exist on disk (feature 180 FR-012a's silent

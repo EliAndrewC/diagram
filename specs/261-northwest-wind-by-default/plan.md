@@ -37,10 +37,10 @@ own perf ratchet judges it, and any band it reports is explained against R4's re
   shipped manifests by `measure.py`.
 - **X. Python discipline**: **PASS** - ruff, pyrefly, 100% coverage; the new branches (the off-wind fallback, the
   divided off-wind margin, the pop-up sentence's three cases) each have a test.
-- **XII. Historical grounding**: **PASS** - the northwest default is already cited in `research/vegetation/030`
+- **XII. Historical grounding**: **PASS** - the northwest default is already cited in `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`
   (the Sendai *igune*, the monsoon); the entry is rewritten to state the rule and its footnote gloss corrected, and
   `quote-check` and `record-format` run on it. The amendment's two physical questions (T13, T15) each had a research
-  pass: the ford spacing and a farmstead's one bank are guesses with absence notes (`research/water/270`,
+  pass: the ford spacing and a farmstead's one bank are guesses with absence notes (`research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`,
   `research/homesteads/250`); the one source newly relied on, `mizu-no-bunka-60`, was already read, and
   `source-applicability` judged it for its new use (APPLICABLE-WITH-LIMITS, the limits written into its registry
   entry).
@@ -101,11 +101,11 @@ as well as its bearing.
 the belt stands on and whether the wind is the region's or the place's declared one; a manifest without it (the
 frozen hand-authored pool) gets nothing and the class text stands alone. The class `What` loses "high side"
 (false where the northwest is downhill) and gains the north-and-west rule; its `Entry` names
-`vegetation/030`, the section the rule is written from; `siblings.json` says the same.
+`0072`, the section the rule is written from; `siblings.json` says the same.
 
 ### D6 - The record and the docs
 
-`research/vegetation/030`'s paragraph that claimed "northwest by default" while describing the slope rule is
+`research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html`'s paragraph that claimed "northwest by default" while describing the slope rule is
 rewritten to the rule as built, with the GM's 2026-09-26 words; the arc figures are re-measured on the re-rolled
 maps (`measure.py`); the `kisetsufu-jawiki` note's gloss stops calling the slope reading "this page's
 derivation". `hamletgen.md`, the hamletgen and sitegen indexes, and the five notes files' "Known open" wind lines
@@ -135,9 +135,9 @@ brook where its course bends less than 20 degrees over the crossing, so a way ca
 there and nowhere else; `ford_crossing` routes the field spur through the nearest ford when its direct line would
 cross the water; `stage_crossings`' `bridges()` decks every crossing, as it already did for any way over water. The
 far-bank refusal (`far_bank`), the strike-out and the brook re-roll are deleted. Class: accurate for the form (a
-hamlet astride its own small channel, `research/water/270`); the spacing and the bend limit are a guess with an
+hamlet astride its own small channel, `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html`); the spacing and the bend limit are a guess with an
 absence note there. Indexed: the fords are a short list per map (under 30), cut into the brook's corridor once.
-A crossing is PRICED: the route lattice charges `BROOK_CROSSING_COST_FT` (150 ft, a guess recorded in water/270) for
+A crossing is PRICED: the route lattice charges `BROOK_CROSSING_COST_FT` (150 ft, a guess recorded in 0035) for
 entering the brook's band, and the string-pull may not take back a crossing the lattice paid to avoid - Kashikawa drew a
 lane across the brook and back to reach a house on its own bank. And every crossing is SQUARED at `stage_crossings`
 (`square_crossings`, more than 10 degrees off square), the record and the ink together, before `bridges()` lays the deck
@@ -158,7 +158,7 @@ already being judged; no index is owed.
 `village_grove` takes `near=(points, reach)`: the dooryard copse within 90 ft of a farmhouse (`m:copse-house-reach`)
 (`COPSE_HOUSE_REACH_FT`), the against-the-belt copse within 60 ft of a belt crown (`COPSE_BELT_REACH_FT`); every
 clump, the re-seat nudge's included, is asked of one `Seats` index. The review found Kashikawa's copse spread to 393 crowns a median 167 ft from any house (R8). Class: accurate for the form ("in the gaps between the houses",
-vegetation/020); the reach is a calibration of that phrase, recorded at the constants.
+0071); the reach is a calibration of that phrase, recorded at the constants.
 
 ### D12 - The entrance board stands where every departure passes (FR-015)
 
@@ -180,7 +180,7 @@ limit is a calibration (a stream's own meander turns well under it), recorded at
 ### D14 - The belt keeps its depth, and its pop-up names a direction, not two sides (FR-016)
 
 The pool test measures the belt's depth along the wind in 40 ft bins across it and holds every bin that no way, no
-brook and no page edge cuts to the record's 30 ft minimum (`research/vegetation/020`: shallower "reads as a row of
+brook and no page edge cuts to the record's 30 ft minimum (`research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html`: shallower "reads as a row of
 blobs"). The windbreak pop-up says the belt stands "toward the northwest" rather than "on the north and west",
 because Kuwabata's belt is a west strip; the class text says "on the windward one or two sides".
 
@@ -251,7 +251,7 @@ Measured before and after in research R10.
   72 degrees inside 40 ft, which the cohort's lane-rules test refuses; straightening the joints again, the router's
   `_unjog` and keeping channel crossings unsquared were each tried and none reached it (the jog was the web's own).
 - A lane crossing any drawn channel is squared like a brook crossing (Mizuguchi's head-race plank lay 44 degrees off;
-  research ways/030: a plank "crosses its ditch square").
+  research 0084: a plank "crosses its ditch square").
 - A roll that raises removes its own stage, and `.roll-*/` is ignored: two interrupted rolls left staging directories in
   Kuwabata's pool folder and a commit took them in.
 - A caption whose halo would notch a tree crown is refused where a clear one exists: the siter ranks a board whose aligned
@@ -260,7 +260,7 @@ Measured before and after in research R10.
 - No third woodland parcel stands in a ruled row with two others: an in-row seat is stepped sideways where the ground
   allows and refused where it does not - the count is a target the scan meets only where there is ground (Inashiro keeps
   two). A preference that fell back to the row was tried first and kept the chain.
-- No copse clump is based in the marsh (research/vegetation/: woody cover "stands on the dry ground above it"). The
+- No copse clump is based in the marsh (research/contents.json#vegetation: woody cover "stands on the dry ground above it"). The
   keep-out is the copse's alone: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34
   of the 68 refused crowns stood on ground drawn dry - the toe marsh's recorded outline runs under the settlement's
   cleared ground there. Recorded in `future-work/farming-communities.md` with the measurement and a sketch.
@@ -298,7 +298,7 @@ Measured before and after in research R10.
   10 ft, so the frame and the skirt it is sized to are untouched), and an exit leg still on the page bends at its middle
   (`exit_bend`): Sawada's middle reach ran 872 ft within 3.1 ft of a line, 70% of its course on the page.
 - (RETIRED 2026-09-28 by D24) A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
-  the old settlement and its dry fields on the same raised ground, the paddy behind (research/fields/, the catena;
+  the old settlement and its dry fields on the same raised ground, the paddy behind (research/contents.json#fields, the catena;
   `shizen-teibo-jawiki`, `kohai-shicchi-jawiki`) - beside the canal hem, which stays as the second position. The toe
   band and the cover's cultivated extent leave these plots out, so neither moves after the seat and the router were
   handed it (a homestead plot moved Sawada's toe marsh over its handover). The plot's size is a GUESS.
@@ -330,7 +330,7 @@ Measured before and after in research R10.
   (`_trim_to_service`): a Mizuguchi lane left the connector, ran 61 ft past its house and counted as arriving at the
   connector it had left.
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
-  edge is alder or willow, never pine (research/vegetation/, the marsh margin). Sawada's windward belt stands on
+  edge is alder or willow, never pine (research/contents.json#vegetation, the marsh margin). Sawada's windward belt stands on
   its toe's reed edge (70 of 201 clumps in the marsh in that round; 201 alder clumps of the belt's 1,233 crowns on
   the pool main's feature 276 re-laid, `m:sawada-r17-alder`); holding the belt off the reeds took the windward belt away and
   failed its depth test, and a belt that stops at the marsh does the same. The carr along the rest of the toe - the
@@ -341,12 +341,12 @@ Measured before and after in research R10.
 - An `entrance` board at a handover stands on the approach itself where a seat there passes every departure: among the
   seats every way out passes, the connector's win, in the siter and the frame stage's re-seat alike. A board is squared
   to the way it stands on, and Inashiro's outermost join is a one-farmstead web straggler whose verge won, so the board
-  stood 87.7 degrees off the track every household walks (research/urban-features/: broadside to the one way out).
+  stood 87.7 degrees off the track every household walks (research/contents.json#trades-and-services: broadside to the one way out).
 - (RETIRED 2026-09-28 by D24) The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
-  mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/archetypes/; Kuwabata's GM-confirmed
+  mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/contents.json#field-archetypes; Kuwabata's GM-confirmed
   economy). Kuwabata had drawn six barley, millet and buckwheat plots.
 - A farmstead fixture is refused a seat whose line to its house crosses a lane (`across_a_lane`, the brook's line test):
-  a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads/), and Mizuguchi drew a
+  a shrine stands in a corner of the house plot and a coop in the yard (research/contents.json#homesteads), and Mizuguchi drew a
   coop, a woodpile and its one shrine beyond the lane behind their house. The rule's cost was measured, not assumed:
   against the commit before it, seven more fixtures went unseated on four maps (Inashiro a heap; Kashikawa two coops and
   a bath; Sawada a second heap; Mizuguchi a coop and a woodpile - observed 2026-09-27: `meta.farm_fixtures_unseated` in each pool manifest at commit 6b6031073, against 6f75efe4a's one Sawada heap) and two maps lost their only shrine (observed 2026-09-27 on a roll with the lane rule and without the shrine pass, not committed: Kashikawa and Mizuguchi). The placement was
@@ -357,7 +357,7 @@ Measured before and after in research R10.
     fit; the ring is a GUESS, labeled at the point of change (the record places each fixture at a wall, not at which
     one when that one is taken).
   - a shrine with no seat passes to the next house with room, and the miss is recorded only if none takes it. The
-    record gives the shrine's COUNT (3-8% of homesteads, never exceeding the share, research/homesteads/) and not
+    record gives the shrine's COUNT (3-8% of homesteads, never exceeding the share, research/contents.json#homesteads) and not
     its household; the engine chooses the household by a positional roll, and the pass re-rolls that choice to a house
     with room, keeping the count.
   - the ring is not refused by a homestead BUNDLE box: `_try_place_bundle` reserves a rectangle round each whole
@@ -381,7 +381,7 @@ Measured before and after in research R10.
   across the wind counts by `depth * sqrt(1 - (d / depth)^2)` of its lead. The far face used to be the near face moved
   along the wind, which is the belt's depth only where the fringe lies square to it; where the fringe runs along the wind
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
-  windward face (settlement-review, round 97c20bc9; research/vegetation/: a belt "reads as a wall of trees only at"
+  windward face (settlement-review, round 97c20bc9; research/contents.json#vegetation: a belt "reads as a wall of trees only at"
   80-120 ft of depth, and a windbreak with a hole funnels the wind). The band's thinnest depth across itself went from 20.7 ft
   to 97.2 on Kashikawa (`m:belt-r16-depth`). On the 105 ft band every pool belt was at least 95.0 ft deep and its median 103-107
   ft wherever the canvas edge does not cut it, at most 9% of a face over 120 ft (at its bends) - the record's 80-120;
@@ -407,7 +407,7 @@ Measured before and after in research R10.
   blocks at commits 881679390 and 02aa89eae): Inashiro 241 to 312 clumps, Kashikawa 277 to 504, Kuwabata 125 to 191,
   Mizuguchi 237 to 252, Sawada 201 to 539.
 - A brook turns on a curve: its corners are filleted at `BROOK_BEND_WIDTHS` (2.5) of its drawn width, the ratio the
-  ditches are drawn at (research/rendering/water/190-how-our-maps-draw-bends-junctions-and-the-run-of-the-water.html), and the tap the head race leaves
+  ditches are drawn at (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html), and the tap the head race leaves
   from is held (`round_the_brooks`, `Settlement.round_stream`). Sawada drew corners of 27-47 degrees
   (`m:brook-r16-turn`). It is done LATE, at the start of the crossings stage, rounding the drawn course and its record in
   place. Rounding it where the brook is first drawn was tried and reverted (observed 2026-09-27 on rolls not committed):

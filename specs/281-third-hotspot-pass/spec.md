@@ -184,7 +184,7 @@ density and keep-outs.
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | A plot edge shared by two plots is tested against the supply banks once, walked in one direction | map drawing convention (the same rule and threshold; a plot exactly at it may flip in the last floating-point bits) | research R1; the same ruling | point of change in `waterfields/carve.py` |
-| The marsh's pond-bank keep-out reads the whole bank ring, not every 16th point of it, so no reed stands in a bank's cut corner | historically accurate (the existing rule: reeds root outside planted earth, `research/water/`; now enforced at the drawn corners) | a defect the moved throws exposed (research R2) | point of change in `settlement/land/wet.py`; research R2 |
+| The marsh's pond-bank keep-out reads the whole bank ring, not every 16th point of it, so no reed stands in a bank's cut corner | historically accurate (the existing rule: reeds root outside planted earth, `research/contents.json#water`; now enforced at the drawn corners) | a defect the moved throws exposed (research R2) | point of change in `settlement/land/wet.py`; research R2 |
 
 ## Assumptions
 

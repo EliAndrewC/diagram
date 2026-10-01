@@ -4,7 +4,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/defenses/`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#city-defenses`
 
 ### "Gate structures - real footprints" (line 43)
 
@@ -44,7 +44,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/towns/`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#towns`
 
 ### "Chinese towns were PLANNED - the gate-to-yamen axis" (line 20)
 
@@ -95,7 +95,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#urban-fabric`
 
 ### "Urban commoners built in continuous street walls" (line 19)
 
@@ -129,7 +129,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/defenses/`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#city-defenses`
 
 ### The works section (lines 15-119)
 
@@ -154,7 +154,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/towns/`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#towns`
 
 ### The works section (lines 15-146)
 
@@ -175,7 +175,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#urban-fabric`
 
 ### The notes (lines 157-235)
 
@@ -206,12 +206,12 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECTS |
 |---|---|---|---|---|---|
-| `research/cities/defenses/` | 9 | 4 (`bastion`, `menbansho`, `mukaibansho`, `round cap`) | 3 | 1 | 6 |
-| `research/towns/` | 15 | 1 (`master's rank`) | 4 | 3 | 5 |
-| `research/cities/fabric/` | 15 | 2 (`myoji-taito`, `gogura` - both inline) | 2 | 1 | 4 |
-| `research/cities/defenses/` | works + 46 notes | 3 (`juan`, `Wubei Zhi`, `Taiping`) + `ditai` variant | 2 | none | 6 |
-| `research/towns/` | works + 45 notes | none new (all inline) | 2 | none | 6 |
-| `research/cities/fabric/` | works + 77 notes | 4 (`Wanshu zaji`, `yokocho`, `kirisute-gomen`, `keibodan`/`shobodan`) | 1 | none | none |
+| `research/contents.json#city-defenses` | 9 | 4 (`bastion`, `menbansho`, `mukaibansho`, `round cap`) | 3 | 1 | 6 |
+| `research/contents.json#towns` | 15 | 1 (`master's rank`) | 4 | 3 | 5 |
+| `research/contents.json#urban-fabric` | 15 | 2 (`myoji-taito`, `gogura` - both inline) | 2 | 1 | 4 |
+| `research/contents.json#city-defenses` | works + 46 notes | 3 (`juan`, `Wubei Zhi`, `Taiping`) + `ditai` variant | 2 | none | 6 |
+| `research/contents.json#towns` | works + 45 notes | none new (all inline) | 2 | none | 6 |
+| `research/contents.json#urban-fabric` | works + 77 notes | 4 (`Wanshu zaji`, `yokocho`, `kirisute-gomen`, `keibodan`/`shobodan`) | 1 | none | none |
 | `research/sources/` (243 marked entries) | 243 | 11 out-of-scope terms noted | none | none | 1 (aggregate: untranslated titles) |
 
 ### Glossary terms to add (`assets/glossary.json`)

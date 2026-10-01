@@ -62,7 +62,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html, research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
     """
 
     key = "residence"
@@ -103,7 +103,7 @@ class AncestralAlcove(Kind):
     Covers: the alcove's tablets label at the residence's formal end (a lineage alcove where the tablets are a lineage's)
     Label: accurate
     Sources: butsuma-kotobank, sosen-saishi-kotobank, mingguanci-zhwiki
-    Entry: research/buildings/270-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html; research/rendering/buildings/270-how-our-maps-decide-where-an-ancestral-alcove-is-drawn.html
+    Entry: research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html; research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html
     """
 
     key = "ancestral alcove"
@@ -130,7 +130,7 @@ class KarosHouse(Kind):
     Covers: the karo's house and its label with the "house elder" gloss
     Label: guess
     Sources: l7r-budgets, bukeyashiki-wiki, aizu-saigo-karo, jinya-kotobank, daikan-tetsuki-jawiki, mapple-takayama-jinya
-    Entry: research/buildings/340-the-chief-retainers-house-karo-yashiki.html; research/rendering/buildings/340-how-our-maps-house-the-chief-retainer.html
+    Entry: research/questions/0106-the-chief-retainers-house-karo-yashiki.html; research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html
     """
 
     key = "karo's house"
@@ -166,7 +166,7 @@ class RetainersQuarters(Kind):
     Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
     Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
-    Entry: research/buildings/060-staff-rowhouses-and-barracks-nagaya.html; research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/rendering/buildings/060-how-our-maps-draw-staff-rowhouses-and-barracks-nagaya.html
+    Entry: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html
     """
 
     key = "retainers' quarters"
@@ -198,7 +198,7 @@ class ServantsQuarters(Kind):
     Covers: the servants' nagaya and its label
     Label: accurate
     Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki, kotobank-bukeyashiki, kotobank-nagayamon
-    Entry: research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html; research/rendering/cities/government/080-how-our-maps-draw-servants-quarters-in-the-samurai-ward.html
+    Entry: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html
     """
 
     key = "servants' quarters"
@@ -229,7 +229,7 @@ class GuestQuarters(Kind):
     Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
     Label: accurate
     Sources: shirobito-1717-takayama, boso-no-mura-takei, honjin-jawiki, yakage-honjin, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
     """
 
     key = "guest quarters"
@@ -269,7 +269,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings/360-kitchens-daidokoro.html, research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/buildings/160-fire-and-the-fireproof-storehouses-dozo.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/rendering/buildings/360-how-our-maps-draw-the-kitchen.html, research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html, research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html, research/rendering/buildings/160-how-our-maps-draw-fire-water-and-the-fireproof-storehouses-dozo.html
+    Entry: research/questions/0107-kitchens-daidokoro.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html
     """
 
     key = "kitchen"
@@ -299,7 +299,7 @@ class Bath(Kind):
     Covers: the bath, its steam mark and its label
     Label: accurate
     Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, kanagawa-hatamoto-kaso, sayama-jinya-uematsu
-    Entry: research/buildings/320-baths-furo.html; research/rendering/buildings/320-how-our-maps-draw-the-bath-furo.html
+    Entry: research/questions/0105-baths-furo.html; research/questions/0105-baths-furo.drawing.html
     """
 
     key = "bath"
@@ -328,7 +328,7 @@ class Well(Kind):
     Covers: every well curb glyph and its label
     Label: convention
     Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki
-    Entry: research/urban-features/090-communal-wells-ido.html; research/rendering/urban-features/090-how-our-maps-place-and-draw-wells-ido.html; research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
+    Entry: research/questions/0196-communal-wells-ido.html; research/questions/0196-communal-wells-ido.drawing.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
     """
 
     key = "well"
@@ -366,7 +366,7 @@ class Latrine(Kind):
     Covers: every privy building and its label
     Label: accurate
     Sources: sayama-jinya-uematsu, kotobank-benjo, tajima-2007-night-soil, guernica-night-soil, sinyoken-madori, shoinzukuri-jawiki
-    Entry: research/buildings/220-privies-setchin.html, research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/220-how-our-maps-place-privies-setchin.html, research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
+    Entry: research/questions/0101-privies-setchin.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0101-privies-setchin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
     """
 
     key = "latrine"
@@ -402,7 +402,7 @@ class Stables(Kind):
     Covers: the stable building, its stall divisions and its label
     Label: accurate
     Sources: kotobank-umaya, jaanus-umaya, qingming-shanghe-tu, caravanserai-enwiki, equine-nutrition-enwiki
-    Entry: research/buildings/390-stables-umaya.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/urban-features/080-stable-yards-and-watering-troughs.html; research/rendering/buildings/390-how-our-maps-draw-stables-umaya.html, research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html; research/rendering/urban-features/080-how-our-maps-draw-stable-yards-and-their-troughs.html
+    Entry: research/questions/0108-stables-umaya.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0195-stable-yards-and-watering-troughs.html; research/questions/0108-stables-umaya.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html; research/questions/0195-stable-yards-and-watering-troughs.drawing.html
     """
 
     key = "stables"
@@ -427,7 +427,7 @@ class Kennel(Kind):
     Covers: the kennel building and its label
     Label: guess
     Sources: takagari-jawiki, kishuken-jawiki, inukai-kotobank, inugoya-jawiki
-    Entry: research/buildings/590-hunting-dogs-and-kennels-inugoya.html; research/rendering/buildings/590-how-our-maps-draw-kennels-inugoya.html
+    Entry: research/questions/0111-hunting-dogs-and-kennels-inugoya.html; research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html
     """
 
     key = "kennel"
@@ -454,7 +454,7 @@ class Storehouse(Kind):
     Covers: the household storehouse and its label
     Label: accurate
     Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/400-vegetable-gardens-at-a-samurai-residence-saien.html, research/buildings/160-fire-and-the-fireproof-storehouses-dozo.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
     """
 
     key = "storehouse"
@@ -484,7 +484,7 @@ class FireWaterTubs(Kind):
     Covers: every fire-water tub glyph and the "fire-water tubs" label
     Label: accurate
     Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, sado-bugyosho-fires, tensuioke-jawiki, dozo-jawiki
-    Entry: research/buildings/160-fire-and-the-fireproof-storehouses-dozo.html; research/rendering/buildings/160-how-our-maps-draw-fire-water-and-the-fireproof-storehouses-dozo.html; research/urban-features/390-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html
+    Entry: research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html; research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html; research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html
     """
 
     key = "fire-water tubs"
@@ -526,7 +526,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings/010-magistrates-compounds-jinya-and-yamen.html, research/buildings/030-the-compounds-own-shrine-yashikigami.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html, research/rendering/buildings/030-how-our-maps-draw-the-compounds-shrine.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
+    Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
     """
 
     key = "compound shrine"
@@ -552,7 +552,7 @@ class WritingPavilion(Kind):
     Covers: the pavilion and its label
     Label: guess
     Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai
-    Entry: research/buildings/600-detached-studies-shosai.html; research/rendering/buildings/600-how-our-maps-draw-a-detached-study.html
+    Entry: research/questions/0112-detached-studies-shosai.html; research/questions/0112-detached-studies-shosai.drawing.html
     """
 
     key = "writing pavilion"
@@ -582,7 +582,7 @@ class Hearth(Kind):
     Covers: the fire glyph in each kitchen
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-    Entry: research/buildings/360-kitchens-daidokoro.html, research/buildings/160-fire-and-the-fireproof-storehouses-dozo.html; research/rendering/buildings/360-how-our-maps-draw-the-kitchen.html, research/rendering/buildings/160-how-our-maps-draw-fire-water-and-the-fireproof-storehouses-dozo.html
+    Entry: research/questions/0107-kitchens-daidokoro.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html; research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html
     """
 
     key = "hearth"
@@ -615,7 +615,7 @@ class Genkan(Kind):
     Covers: the entry porch at the formal entrance
     Label: accurate
     Sources: genkan-jawiki, bukeyashiki-wiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, jaanus-uchigenkan, fuchu-joge-pamphlet, takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html
+    Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
     """
 
     key = "genkan"
@@ -645,7 +645,7 @@ class Engawa(Kind):
     Covers: the veranda strip along the residence's garden face
     Label: accurate
     Sources: engawa-kotobank, shoinzukuri-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings/240-verandas-and-storm-shutters-engawa-and-amado.html; research/rendering/buildings/240-how-our-maps-draw-verandas-and-shuttered-wings.html
+    Entry: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html; research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html
     """
 
     key = "engawa"
@@ -674,7 +674,7 @@ class ResidenceCorridor(Kind):
     Covers: the corridor between the residence blocks
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
     """
 
     key = "residence corridor"
@@ -706,7 +706,7 @@ class LordsQuarters(Kind):
     Covers: the lord's suite in the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/090-the-hearing-court-shirasu.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html, research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html; research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0099-the-hearing-court-shirasu.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0099-the-hearing-court-shirasu.drawing.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html
     """
 
     key = "lord's quarters"
@@ -733,7 +733,7 @@ class FamilyQuarters(Kind):
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
     """
 
     key = "family quarters"
@@ -758,7 +758,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html, research/buildings/270-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html; research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html, research/rendering/buildings/270-how-our-maps-decide-where-an-ancestral-alcove-is-drawn.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html
     """
 
     key = "inner rooms"
@@ -787,7 +787,7 @@ class ReceptionRoom(Kind):
     Covers: the reception bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, touken-world-buke-madori, matsue-bukeyashiki, shoinzukuri-jawiki, aizu-bukeyashiki-jawiki
-    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
+    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
     """
 
     key = "reception room"
@@ -810,7 +810,7 @@ class ShutteredWing(Kind):
     Covers: the shuttered bay, its shutters and its labels
     Label: guess
     Sources: amado-kotobank
-    Entry: research/buildings/240-verandas-and-storm-shutters-engawa-and-amado.html; research/rendering/buildings/240-how-our-maps-draw-verandas-and-shuttered-wings.html
+    Entry: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html; research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html
     """
 
     key = "shuttered wing"
@@ -846,7 +846,7 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/buildings/030-the-compounds-own-shrine-yashikigami.html; research/rendering/buildings/030-how-our-maps-draw-the-compounds-shrine.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
+    Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0218-the-compounds-own-shrine-yashikigami.html; research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
     """
 
     key = "shrine altar"
@@ -882,7 +882,7 @@ class Torii(Kind):
     Covers: the approach torii before a compound shrine or a country shrine
     Label: accurate
     Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-    Entry: research/religion-and-death/080-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/080-how-our-maps-draw-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
+    Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
     """
 
     key = "torii"

@@ -5,14 +5,14 @@ Written 2026-09-27 in clone diagram-research-3. No item of K1 had been claimed b
 ## Sections
 
 - SECTION=cities/fabric/200
-- SECTION=cities/fabric/210
+- SECTION=0160
 - SECTION=cities/fabric/220
 - SECTION=cities/fabric/230
 - SECTION=cities/fabric/240
-- SECTION=cities/fabric/090
+- SECTION=0155
 - SECTION=cities/fabric/100
 - SECTION=cities/fabric/130
-- SECTION=cities/hinterland/050
+- SECTION=0174
 - SECTION=settlements/090
 
 ## New registry keys
@@ -50,8 +50,8 @@ used.
 
 ## Left open, and owed to other owners
 
-- Coordination with 269: its cities/fabric 070 (B40, the street grid) and cities/government 085 (B39, the ward
-  gates) and cities/hinterland 030 / cities/sizing 010 (B41) were not yet written in this clone. fabric/200 links
+- Coordination with 269: its 0162 (B40, the street grid) and cities/government 085 (B39, the ward
+  gates) and cities/hinterland 030 / 0181 (B41) were not yet written in this clone. fabric/200 links
   070 by anchor; fabric/210 links cities/capitals/060 for the gates, and owes a link to 269's government ward-gate
   question once it lands; fabric/240 cites neither hinterland 030 nor sizing 010 (the 030 in this clone is the moat
   question, not about who farms).

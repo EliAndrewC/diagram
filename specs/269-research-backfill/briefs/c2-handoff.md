@@ -4,10 +4,10 @@ Written 2026-09-28 by the C2 write session (clone diagram-supplemental). The rec
 
 ## Sections
 
-- SECTION=cities/government/030
+- SECTION=0161
 - SECTION=cities/government/050
 - SECTION=cities/government/070
-- SECTION=cities/government/080
+- SECTION=0115
 - SECTION=cities/government/085
 - SECTION=cities/government/100 (new: split from 070 - the Chinese evidence - because 070 went over the 20,000-byte cap)
 - SECTION=cities/government/110 (new: split from 080 - the third plan position, servants with no gate range - because 080 went over the cap)
@@ -42,7 +42,7 @@ Written 2026-09-28 by the C2 write session (clone diagram-supplemental). The rec
 ## Left open
 
 - **Pointers owed once 271's and 267's work reaches this clone.** A link to a section this tree does not have fails `test_record.py`, so these are plain text for now, each with an HTML comment at the point:
-  - 030 -> cities/government 280 ("how big is a samurai's house lot, by rank", 271 K3, clone diagram-research-3).
+  - 030 -> 0118 ("how big is a samurai's house lot, by rank", 271 K3, clone diagram-research-3).
   - 070 -> buildings 780 ("how big was a dojo", 271 G2, on main).
   - 080 -> buildings 750 (the magistrate staff's row-house, 271 G1) and 340 (where the chief retainer lives, 267 G1B), both on main.
   - 100 -> buildings 780's Chongming drill ground for the garrison-drill clause, which that section attests.
@@ -50,4 +50,4 @@ Written 2026-09-28 by the C2 write session (clone diagram-supplemental). The rec
 - `meirinkan-jawiki` (defined in clone diagram-research-2) would have supported "the state hall stands in the school compound near the castle": the old Hagi Meirinkan's martial halls formed its perimeter, in the third enclosure. It was not cited, to avoid pulling in a second foreign key.
 - Two public PDFs from hist-geo.jp would likely give castle-town population shares by rank: `005_185.pdf`, on the zoning's area shares, and `111_001.pdf`, on domain and castle-town population. The fetch tool can read no text layer in either. They are public, so they are not added to TO-DOWNLOAD; a later pass with a PDF text tool could read them.
 - The saved pages include the Hirosaki Nakacho page. It shows servants' rooms added only in the Meiji period, so it was not used.
-- Nothing here owes a correction to a do-not-edit section. I grepped buildings 210 and the listed towns, urban-features and capitals sections for the machi-dojo and the "metropolitan" claim, and none states it.
+- Nothing here owes a correction to a do-not-edit section. I grepped 0165 and the listed towns, urban-features and capitals sections for the machi-dojo and the "metropolitan" claim, and none states it.

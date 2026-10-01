@@ -187,7 +187,7 @@
     },
     {
       "id": "W11",
-      "rule": "Every lane crosses the brook and every drawn channel within FORD_SQUARE_TOL_DEG (10) of square. Stated: test_pool_261::test_every_lane_crosses_a_drawn_channel_square and ::test_every_lane_crosses_the_brook_square; research ways/030.",
+      "rule": "Every lane crosses the brook and every drawn channel within FORD_SQUARE_TOL_DEG (10) of square. Stated: test_pool_261::test_every_lane_crosses_a_drawn_channel_square and ::test_every_lane_crosses_the_brook_square; research 0084.",
       "rows": ["R1 test_pool_261.py::test_every_lane_crosses_a_drawn_channel_square", "R1 test_pool_261.py::test_every_lane_crosses_the_brook_square"],
       "owner": "hamletgen/ways/checks.py:square_crossings, called from settle step 1 (moved out of frame.py:stage_crossings). The census owner is right about the function; the call site moves.",
       "mechanism": "square_crossings repaired to be total: split a segment too short to hold the square leg at the crossing (instead of 'left as drawn'), square every crossing on a segment (not break after the first), and iterate streams and drawn channels together until a pass changes nothing (so squaring at the head race cannot leave the brook crossing oblique). law.crossing_faults' squareness clause is the test's computation. Where the square leg would make the lane bend badly (the 2*half leg is two turns within ~16 ft), settle step 2 cuts the crossing out rather than keep a kink; corridors are admitted at seating already squared and bend-legal.",
@@ -278,7 +278,7 @@
     },
     {
       "id": "W18",
-      "rule": "A lane bends like a path: no turn >= 140 deg, no two turns >= 50 deg within 40 ft of path (non-connector lanes). Stated: gate/test_lane_network.py::test_no_lane_doubles_back_or_kinks; gate/test_cohort_lane_rules.py; soak polder and seed-43 tests; research/ways/020-village-lanes.html.",
+      "rule": "A lane bends like a path: no turn >= 140 deg, no two turns >= 50 deg within 40 ft of path (non-connector lanes). Stated: gate/test_lane_network.py::test_no_lane_doubles_back_or_kinks; gate/test_cohort_lane_rules.py; soak polder and seed-43 tests; research/questions/0081-village-lanes.html.",
       "rows": ["R1 gate/test_lane_network.py::test_no_lane_doubles_back_or_kinks", "R1 gate/test_cohort_lane_rules.py::test_the_clean_cohort_seeds_bend_like_paths", "R1 soak/test_polder_fall_0.py::test_the_polder_s_lanes_bend_like_paths", "R1 soak/test_seed_43_kink.py::test_seed_43_still_kinks_round_a_house_corner", "R2 hamletgen/ways/serve.py:door-path loop (_folded last resort):606-632", "R3 tests/soak/test_seed_43_kink.py strict xfail"],
       "owner": "settle.py step 2 + serve.py:_serve_stragglers (the fallback). The census named serve.py; the web's later rewrites (may_write is 'no worse', not 'good') also emit it.",
       "mechanism": "ONE predicate law.bends_badly = the tests' _kinks run-sum (clearance._bends_badly, which tests two turns separated by ONE segment, is replaced everywhere it is read - may_write, serve's ranking - FR-003). serve.py stops drawing the least-bad fold (_folded is deleted: a folded path is refused like a steading foul). Settle cuts a non-tree lane at the offending turn and keeps the longer legal side. Seed 43's lattice step round a house corner is two 50-deg turns within 40 ft: the settle cut removes it, and the house it served is reached by its corridor (straight by construction).",

@@ -33,8 +33,8 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M22 **The bath shed**: the bath drawn as a separate building (a share of 0-80%). Sugiura, passing on a prewar report, says "making them buildings of their own was a fashion of early Meiji" (sugiura-1977-tohoku), and Meiji housing improvement set the bath apart as unsanitary. The rates come from reconstructions of prewar Tohoku villages and from Sugiura 1972. The late-Edo spread "is a GUESS that no readable page supports" (homesteads/214) - kinds: Bathhouse (`homestead.py:224`); `settlement/farm_fixtures.py`; maps: the scripted hamlets that roll a bath shed. S.
-- M23 **The detached privy**: an outdoor privy as a building of its own on 85-95% of homesteads. The same "fashion of early Meiji" passage applies. The share comes from suzuki-1959-noson-benjo (1959) and from the prewar reconstructions. Against them, kotobank-benjo's undated "In farm households it was usual" stands in the fixtures section (homesteads/260, homesteads/210) - kinds: Privy (`homestead.py:156`), ManureHeap; `hamletgen/homesteads/fixtures.py`; maps: all scripted hamlets. S.
+- M22 **The bath shed**: the bath drawn as a separate building (a share of 0-80%). Sugiura, passing on a prewar report, says "making them buildings of their own was a fashion of early Meiji" (sugiura-1977-tohoku), and Meiji housing improvement set the bath apart as unsanitary. The rates come from reconstructions of prewar Tohoku villages and from Sugiura 1972. The late-Edo spread "is a GUESS that no readable page supports" (0044) - kinds: Bathhouse (`homestead.py:224`); `settlement/farm_fixtures.py`; maps: the scripted hamlets that roll a bath shed. S.
+- M23 **The detached privy**: an outdoor privy as a building of its own on 85-95% of homesteads. The same "fashion of early Meiji" passage applies. The share comes from suzuki-1959-noson-benjo (1959) and from the prewar reconstructions. Against them, kotobank-benjo's undated "In farm households it was usual" stands in the fixtures section (0047, homesteads/210) - kinds: Privy (`homestead.py:156`), ManureHeap; `hamletgen/homesteads/fixtures.py`; maps: all scripted hamlets. S.
 
 ## The procedure (session 1: research and write)
 
@@ -65,7 +65,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on homesteads/214, homesteads/260, homesteads/210, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0044, 0047, homesteads/210, and homesteads 700-790 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

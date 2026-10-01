@@ -6,7 +6,7 @@ searched for, a settled one is marked and kept, a grounds note and a convention 
 a map feature through a class's `Entry:`, through a question a class names that links to it, and through an engine file
 quoting its heading or anchor, and says so when none does; a GUESS marked outside the record is listed with its file and
 line, the tooling's logs skipped; rewriting a guess removes exactly its item. Then the real tree, once: the rack length
-per household (homesteads 500) reaches the threshing yard through 505, the kitchen postern's GUESS in `compound.py` is
+per household (0016) reaches the threshing yard through 505, the kitchen postern's GUESS in `compound.py` is
 listed, and every visible label in the record falls in a listed sentence.
 """
 
@@ -63,9 +63,9 @@ def _record(tmp: pathlib.Path) -> pathlib.Path:
     (page / "505-did-a-village-rack-by-the-house.html").write_text(LINKER)
     (page / "505-did-a-village-rack-by-the-house.notes.html").write_text("<ol></ol>")
     # an assembled page and a citations page repeat the fragments and are never read
-    (tmp / ".claude/skills/diagram/research/homesteads.html").write_text(QUESTION)
+    (tmp / ".claude/skills/diagram/research/contents.json#homesteads").write_text(QUESTION)
     (tmp / ".claude/skills/diagram/research/citations").mkdir()
-    (tmp / ".claude/skills/diagram/research/citations/homesteads.html").write_text(NOTES)
+    (tmp / ".claude/skills/diagram/research/contents.json#homesteads").write_text(NOTES)
     return tmp
 
 
@@ -97,7 +97,7 @@ def test_a_question_reaches_its_map_features_three_ways(tmp_path: pathlib.Path) 
     routes = oq.class_routes({"threshing yard": ["did-a-village-rack-by-the-house"], "farmhouse": ["how-long-was-a-rack"]}, qs)
     assert routes["how-long-was-a-rack"] == ["farmhouse", "threshing yard (through 'Did a village put its racks by the house?')"]
     assert routes["did-a-village-rack-by-the-house"] == ["threshing yard"]
-    engine = {"l7r/yards.py": "x = 1\n# the rack length: research homesteads 'How long was a rice-drying rack?'\n", "l7r/other.py": "# #how-long-was-a-rack\n"}
+    engine = {"l7r/yards.py": "x = 1\n# the rack length: research/contents.json#homesteads 'How long was a rice-drying rack?'\n", "l7r/other.py": "# #how-long-was-a-rack\n"}
     key = oq.heading_key(qs[0].heading)
     assert key == "How long was a rice-drying rack?"
     assert oq.heading_key("A castle has TWO gates") == "A castle has TWO gates", "no length floor: a short heading is cited too"

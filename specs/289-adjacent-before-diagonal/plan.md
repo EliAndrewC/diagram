@@ -12,7 +12,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 1). Request: [`request.md`](request.
   Zoraster's (the spec review).
 - **D2 - the fallback's sides** (FR-002). `_extended_cands` walks above, below, left, right (today above, below,
   right, left); its slides along each side are unchanged.
-- **D3 - the record** (FR-003). The research entry "Where does a caption sit" (`research/presentation/040-*.html`),
+- **D3 - the record** (FR-003). The research entry "Where does a caption sit" (`research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html-*.html`),
   in its "Which side" paragraph: the maps' order and that its first step is a deliberate deviation by the GM's ruling
   (a grounds note, this project's decision); the textbooks' order and why it starts at the corners (its existing
   citations); that no source treats a small drawn object on a plan as its own case (an absence note, with what was

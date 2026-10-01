@@ -4,7 +4,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D17). Research: [`res
 American spellings, hyphens only.
 
 **No task here is `research: physical`.** The northwest default and the katabatic reading are already cited in
-`research/vegetation/030` from sources read and quote-checked before this feature; no new source is used and no
+`research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html` from sources read and quote-checked before this feature; no new source is used and no
 historical question is reopened. What changes is which of the two recorded forms the map takes by default - the
 GM's ruling - and the record is rewritten to say so. `quote-check` and `record-format` still run on the changed
 entry (T10).
@@ -46,14 +46,14 @@ entry (T10).
 
 - [x] T08 `windbreak_default` and its wiring; the class `What`, `Entry`, the snapshot; `siblings.json`
       research: rendering
-      verify: DONE. place.windbreak_default wired in page.py (the notes win); Windbreak What hooked not embracing, Entry names vegetation/030, Note names what the side rests on; siblings.json and the snapshot. test_place + test_page cover the three cases.
+      verify: DONE. place.windbreak_default wired in page.py (the notes win); Windbreak What hooked not embracing, Entry names 0072, Note names what the side rests on; siblings.json and the snapshot. test_place + test_page cover the three cases.
 
 ## Phase 5 - the record and the docs (D6)
 
-- [x] T09 `research/vegetation/030` rewritten to the rule as built, arcs re-measured, the footnote gloss;
+- [x] T09 `research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html` rewritten to the rule as built, arcs re-measured, the footnote gloss;
       `hamletgen.md`, the two package indexes, the five notes files
       research: rendering
-      verify: DONE. vegetation/030 rewritten to the rule as built, arcs re-measured (113/134/87/168/157), gloss corrected; hamletgen.md, hamletgen and sitegen indexes, five notes files. make record also fixed to write the citations page (a notes-only edit was unwritable).
+      verify: DONE. 0072 rewritten to the rule as built, arcs re-measured (113/134/87/168/157), gloss corrected; hamletgen.md, hamletgen and sitegen indexes, five notes files. make record also fixed to write the citations page (a notes-only edit was unwritable).
 - [x] T10 `quote-check` and `record-format` on the entry; `entry-drift` on the windbreak class
       research: rendering
       verify: DONE. quote-check: 2/2 READABLE and VERBATIM, the katabatic clause trimmed to what the quote supports; record-format: Siberian high glossed, maps named, a history clause dropped; entry-drift: IN-STEP (embracing -> hooked applied).
@@ -70,10 +70,10 @@ entry (T10).
 ## Phase 7 - the amendment of 2026-09-27: the brook crossed, and the reviews' findings (D9-D14)
 
 - [x] T13 Fords and crossings (D9): `brook_fords`, `gap_segments`, `ford_crossing`; the strike-out, its re-roll and
-      the far-bank refusal deleted; `research/water/270` rewritten to the rule as built with the spacing's absence note
+      the far-bank refusal deleted; `research/questions/0035-villages-beside-their-stream-one-bank-or-both.html` rewritten to the rule as built with the spacing's absence note
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
-      verify: DONE. DONE. brook_fords every 160 ft (m:ford-spacing) where the brook bends under 20 degrees, gap_segments opens its corridor 30 ft each side, ford_crossing routes the spur through one, bridges() decks every crossing; far_bank, the strike-out and the brook re-roll deleted. Research pass 2026-09-27 found no source for spacing or form: absence note on research/water/270, whose question and rule paragraphs now state the rule as built; quote-check READABLE/VERBATIM on the Harie notes, its three unlabeled clauses labeled; no new source relied on here; tests: ways/test_checks ford tests, test_pool_261 every brook crossing bridged on all five maps.
+      verify: DONE. DONE. brook_fords every 160 ft (m:ford-spacing) where the brook bends under 20 degrees, gap_segments opens its corridor 30 ft each side, ford_crossing routes the spur through one, bridges() decks every crossing; far_bank, the strike-out and the brook re-roll deleted. Research pass 2026-09-27 found no source for spacing or form: absence note on research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, whose question and rule paragraphs now state the rule as built; quote-check READABLE/VERBATIM on the Harie notes, its three unlabeled clauses labeled; no new source relied on here; tests: ways/test_checks ford tests, test_pool_261 every brook crossing bridged on all five maps.
 - [x] T14 The seeds (D4): Kashikawa 3 and Mizuguchi 23 measured at their originals and kept; Sawada 24 kept
       research: rendering
       verify: DONE. DONE. Measured at the original seeds once crossings existed (research R7): Kashikawa 3 seats 20/20 wind-facing, belt 285 crowns at 320 deg; Mizuguchi 23 seats 12/12 wind-facing astride its brook (4 and 8), the weir back. Both kept; Sawada 24 kept (seed 6 refused by drain and wet toe). Reasons in each generator's docstring and notes.

@@ -1,11 +1,11 @@
 # Brief - feature 250: split ONE research question under the size cap
 
-You are a FRESH session with one job: the question `.claude/skills/diagram/research/homesteads/` is 21,313 bytes with its notes, over the 20,000-byte cap
+You are a FRESH session with one job: the question `.claude/skills/diagram/research/contents.json#homesteads` is 21,313 bytes with its notes, over the 20,000-byte cap
 (`scripts/check-question-size.py`, feature 250 D14). Split it. Work in this clone (`/diagram/.clones/diagram-research-1`); its CLAUDE.md files
 apply; read the rule as written in `.claude/skills/diagram/research/CLAUDE.md`, "A question has a size", and nothing
 else to orient.
 
-1. Read the question and its notes (`.claude/skills/diagram/research/homesteads/`). Find its TOPICS - the separate things a map reader might ask about -
+1. Read the question and its notes (`.claude/skills/diagram/research/contents.json#homesteads`). Find its TOPICS - the separate things a map reader might ask about -
    not its entry parts: a finding stays with the decision it drove and with the departures that qualify it.
 2. Split it: each topic its own question, a free prefix after `140` (they count by ten), an `<h2 id>` that is the
    question a reader would ask, the Grounds/Evidence comments that apply, its own `Sources:` line naming exactly the

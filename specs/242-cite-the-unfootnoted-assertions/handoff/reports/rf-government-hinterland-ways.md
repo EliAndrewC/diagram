@@ -3,12 +3,12 @@
 Read as the reader meets them (comments and tags stripped). Nothing was edited. Line numbers are from the files as they stand.
 
 Paths read:
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#government`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#outside-the-walls`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#ways`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#government`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#outside-the-walls`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#ways`
 - `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` (355 entries carrying `<!-- READ 2026-09-14 by a source-reader (feature 242) -->`, lines 411‑2184)
 - glossary: `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json`
 
@@ -16,7 +16,7 @@ Paths read:
 
 ---
 
-## A. `research/cities/government/`
+## A. `research/contents.json#government`
 
 ### §"Where does a province's government stand in its city?" (l.18)
 
@@ -79,7 +79,7 @@ A reader sees a sentence ending in a period followed by a comma-separated list o
 
 ---
 
-## B. `research/cities/hinterland/`
+## B. `research/contents.json#outside-the-walls`
 
 ### §"Gentry estates are DISPERSED, not clustered at the wall" (l.19)
 
@@ -126,7 +126,7 @@ Rendered, this text joins the tail of the preceding paragraph (l.66) and the str
 
 ---
 
-## C. `research/ways/`
+## C. `research/contents.json#ways`
 
 ### §"How far past the bank does a bridge land?" (l.19)
 
@@ -181,7 +181,7 @@ SESSION NOTE - none owed; the drawing consequence at l.71 is already a comment. 
 
 ---
 
-## D. `research/cities/government/` (227 lines)
+## D. `research/contents.json#government` (227 lines)
 
 The works section here is DERIVED by `make citations` from `SOURCES.html` - every item below in the works half must be fixed in the registry entry, not on this page.
 
@@ -219,7 +219,7 @@ The works section here is DERIVED by `make citations` from `SOURCES.html` - ever
 
 ---
 
-## E. `research/cities/hinterland/` (111 lines)
+## E. `research/contents.json#outside-the-walls` (111 lines)
 
 **DEFECT - a note that prints every quotation twice**
 - fn‑3 (l.84): the whole note is doubled. It gives 「The streets outside the city gate and the nearby area.」 and 「The main street outside the city gate.」 with their originals, and then repeats both in straight quotes, then gives 「In antiquity, the lodging-houses (亭舍) near the city walls.」 followed by *- "in antiquity, the lodging-houses near the city wall" -* and the Ming-shi example likewise twice. Four passages, eight printings.
@@ -235,7 +235,7 @@ The works section here is DERIVED by `make citations` from `SOURCES.html` - ever
 
 ---
 
-## F. `research/ways/` (123 lines)
+## F. `research/contents.json#ways` (123 lines)
 
 **DEFECT - broken sentence in the works section (fix in the registry)**
 - l.29, the `toyama-1988-road-undevelopment` write-up: *"It is the direct evidence for the countryside our lanes are drawn for - no horse-drawn carriage at all before Meiji, inhabitants on foot or on horseback, goods on a horse's back - It is also precise where the general account is loose:"* - a dash followed by a capitalized new sentence with no closing punctuation. This text is derived from `SOURCES.html`; the edit belongs to that entry.
@@ -295,12 +295,12 @@ Scope note: by the GM's own carve-out (spec 209 D6) the registry is **not** unde
 
 | file | sections read | VOCABULARY | SESSION NOTES | HISTORY | DEFECTS |
 |---|---|---|---|---|---|
-| `research/cities/government/` | 9 (`h2`) | 2 (`stroke` l.24; `property 1/2` l.93) + 3 defined inline | 1 (`3 ft/px` l.97) | 1 borderline (l.93 Minami arrangement) | 3 (Sources roster broken + footnote marks in it, l.66; contradicted claim l.88; untranslated 侍町/町人地/寺町 l.103) + heading form x3 |
-| `research/cities/hinterland/` | 5 (`h2`) | 1 (`metrology` l.68) | 2 mild (`declared` l.40; "the map wants" l.42; plus "the list the market rule reads" l.58) | none | 3 (missing `<p>` l.67; `Sources:` no space l.56; one-item `<ul>` l.24) + heading form x1 |
-| `research/ways/` | 5 (`h2`) | 5 (`girder`, `post-horse system`, `litters`, `footslope`, `seed`) | 1 (engine words l.36) | 3 (l.25 capital's deck; l.49 pool-wide plank sweep; l.70‑71 hand-placed decks and "now applied") | none |
-| `research/cities/government/` | works (36) + 66 notes | 3 + 5 era names + 1 glossary mismatch (`bu`) | 6 (`NOTE:` x3, fn‑6, fn‑22, fn‑38) | 1 (fn‑32 "not 21 ft"); fn‑11 mixes history with a real finding | 9 (doubled quote fn‑13, fn‑20, fn‑9, the trailing-paraphrase class over 10 notes, `((English.))` x7, backtick spans x2, fn‑39/40 order, entity-encoded l.91/93, flat `km2`) |
-| `research/cities/hinterland/` | works (13) + 26 notes | 1 (`Northern Wei`) | none | none | 2 (fn‑3 every quote twice; 「」 around English fn‑21) |
-| `research/ways/` | works (18) + 26 notes | 2 (`stringers`; `nawate` as a variant) | none | none | 3 (broken sentence in the derived write-up l.29; doubled quote fn‑22; 「」 around English fn‑26) |
+| `research/contents.json#government` | 9 (`h2`) | 2 (`stroke` l.24; `property 1/2` l.93) + 3 defined inline | 1 (`3 ft/px` l.97) | 1 borderline (l.93 Minami arrangement) | 3 (Sources roster broken + footnote marks in it, l.66; contradicted claim l.88; untranslated 侍町/町人地/寺町 l.103) + heading form x3 |
+| `research/contents.json#outside-the-walls` | 5 (`h2`) | 1 (`metrology` l.68) | 2 mild (`declared` l.40; "the map wants" l.42; plus "the list the market rule reads" l.58) | none | 3 (missing `<p>` l.67; `Sources:` no space l.56; one-item `<ul>` l.24) + heading form x1 |
+| `research/contents.json#ways` | 5 (`h2`) | 5 (`girder`, `post-horse system`, `litters`, `footslope`, `seed`) | 1 (engine words l.36) | 3 (l.25 capital's deck; l.49 pool-wide plank sweep; l.70‑71 hand-placed decks and "now applied") | none |
+| `research/contents.json#government` | works (36) + 66 notes | 3 + 5 era names + 1 glossary mismatch (`bu`) | 6 (`NOTE:` x3, fn‑6, fn‑22, fn‑38) | 1 (fn‑32 "not 21 ft"); fn‑11 mixes history with a real finding | 9 (doubled quote fn‑13, fn‑20, fn‑9, the trailing-paraphrase class over 10 notes, `((English.))` x7, backtick spans x2, fn‑39/40 order, entity-encoded l.91/93, flat `km2`) |
+| `research/contents.json#outside-the-walls` | works (13) + 26 notes | 1 (`Northern Wei`) | none | none | 2 (fn‑3 every quote twice; 「」 around English fn‑21) |
+| `research/contents.json#ways` | works (18) + 26 notes | 2 (`stringers`; `nawate` as a variant) | none | none | 3 (broken sentence in the derived write-up l.29; doubled quote fn‑22; 「」 around English fn‑26) |
 | `research/sources/` (355 marked entries) | 355 entries | 10 | 1 reported (l.947) - rules 2/3 exempt by spec 209 D6 | 3 reported (l.1893, l.1863, l.2148) - exempt, flagged because derived | 7 (garbled l.922; garbled + instruction l.947; untranslated 龍座林 l.1923; genge/renge l.1634; dash run l.531; flat `m2` l.1608; title-translation inconsistency across the set) |
 
 ### Glossary terms to add (paste-ready shape for `assets/glossary.json`)

@@ -249,7 +249,7 @@ def test_slow_gen_budget_fires_and_the_override_silences_it(tmp_path, monkeypatc
 def _typical_cell_acres(svgpath, ftpx):
     """Real-feet area of the TYPICAL leveled paddy cell (a bund-stroked plot polygon), taking the mean
     of the 45th-75th percentile band (the regular interior cells, above the edge wedges). Pins the
-    ~0.05-acre paddy calibration (GM 2026-07-22, see research/fields.html 'Plot sizes, pond sizing and acreage from population'). SVG-measured,
+    ~0.05-acre paddy calibration (GM 2026-07-22, see research/contents.json#fields 'Plot sizes, pond sizing and acreage from population'). SVG-measured,
     not a manifest gate, because villages do not record plot_polys."""
     import re
     import statistics

@@ -83,8 +83,8 @@ relay stables until there is fabric. Do not fix that by drawing the farrier; the
   their OWN jetty - the Emperor's grain moves by boat (that is what the "wharf" seat means), so
   it does not borrow the domain quay 200 ft downstream. The ote-suji was re-cut from 96 ft (a
   raw-pixel unit slip) to the researched 45 ft - Edo's own Honcho-dori class - with the
-  ministry files pulled in to corridor setback; research/rendering/cities/capitals/010-how-our-maps-size-and-lay-out-a-domain-capital.html.
-  A full dimensional audit followed (research/rendering/cities/capitals/010-how-our-maps-size-and-lay-out-a-domain-capital.html): every
+  ministry files pulled in to corridor setback; research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html.
+  A full dimensional audit followed (research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html): every
   drawn family checked against its anchor at 3 ft/px; all hold except the hanko, enlarged from
   0.33 ha (the bottom of the attested band) to ~1 ha - mid-band between Choshu's first
   Meirinkan and Aizu's Nisshinkan, per the schooling-magnet doctrine. The moat plumbing was
@@ -138,7 +138,7 @@ relay stables until there is fabric. Do not fix that by drawing the farrier; the
   boards slid off the junctions onto their channel runs, the granary rows moved to the QUAY
   (Kuramae unloads straight into the kura - raised floors are the flood answer, not distance),
   and the jetties shortened from causeway to landing-stage length (~39 ft, a third of the
-  channel, per the fairway law). research/cities/capitals/090-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html. Follow-ups on the GM's next look: the sluice frames now SPAN their
+  channel, per the fairway law). research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html. Follow-ups on the GM's next look: the sluice frames now SPAN their
   channels bank-to-bank (sluice_gate span=; the fixed field-channel frame floated mid-water on
   a 66 ft leat and read as detached - research: the operator walks the crossbeam and winds the
   windlass, neither of ours denotes open/closed); the estate captions split over two lines for
@@ -153,7 +153,7 @@ relay stables until there is fabric. Do not fix that by drawing the farrier; the
   grain-only look of the landing is the ground layer's emptiness - 021's brokers' row and
   warehouse frontage land on the bank top per the wharf-chain doctrine. Next battery: bridge
   decks now LAND - the GM's corner-at-the-water's-edge catch became engine and check law
-  (research in research/ways/: the abutment sill stands BACK from the channel edge so
+  (research in research/contents.json#ways: the abutment sill stands BACK from the channel edge so
   scour cannot undercut the bearing, so a carried deck runs LANDING_FT = 10 real ft of deck
   onto dry ground per side; bridges() solves the oblique span exactly, where the old flat
   +28px slack had left the east river deck landing 0.0 ft at its worst corner; the check
@@ -192,7 +192,7 @@ S (1400,2463), SW (502,1989). Canvas (3200,3050). River (shifted course) stays. 
 STRUCTURAL LAWS ARE GREEN and must stay green: capital_interior_slack_in_band (<=15%
 claimed-open, wall-settles-first), capital_wall_matches_budget (C_PACKED_CAPITAL 950,
 CIRC 0.15, suburb 60/2160 - the GM's wharf-hamlet-only extramural ruling, all recorded in
-research/cities/capitals/ + citybudget.py), and the packed split (in-wall 2100 / suburb 60).
+research/contents.json#capitals + citybudget.py), and the packed split (in-wall 2100 / suburb 60).
 
 **Where the grind stands:** ~24 singles. Bands: packed_inwall PASSES at 2100-scale when the
 freed ring zones are packed (E machi extended to (1940,550,2405,1310) etc). detached stuck
@@ -325,7 +325,7 @@ placement rule is reworked. The declaration is explicit - a map that simply FORG
 fails.
 
 **The research question** ("would there be the same number and size of kiln works in a capital as
-in a provincial city?") is answered in research/cities/capitals/ and encoded in
+in a provincial city?") is answered in research/contents.json#capitals and encoded in
 `capital_trade_counts_scaled`: four scaling classes, not one. Bathhouses and pawnshops multiply
 at attested per-capita ratios; kilns and cremation grounds consolidate; theater and the domain
 school are capital-only; the pauper's ground is fixed at one per seat by Song edict.
@@ -360,7 +360,7 @@ every jetty angle from the polyline instead of carrying a constant.
 MEASURING the pool rather than picking: the extramural tether (every shipped works sits 225-1,382
 ft from its wall; the flagged kiln stood at 1,563), the gate-market head (157-273 ft across
 Tango, Minami and Nagahara), and the wash-trade band (18-48 ft). The funerary cap came from
-RESEARCH instead, and overturned the existing draw: see research/cities/capitals/.
+RESEARCH instead, and overturned the existing draw: see research/contents.json#capitals.
 
 **Six mistakes of my own, each worth more than the fix:**
 
@@ -391,7 +391,7 @@ LADDER also never knew about the rampart at all; it does now.
 The GM, on the north gate market: *"Is that the correct amount of space between gate market
 buildings? No objection, they just look more spaced out than I expected."* Median gap between
 neighboring shops was 84 ft - the wrong urban form, not a tuning error. The research and the
-deliberate departure are in `research/cities/fabric/010-the-citys-street-front-continuous-rows-of-shophouses-machiya.html`; the engine side
+deliberate departure are in `research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.html`; the engine side
 is `frontage(dense=True)`.
 
 Where it landed: N market 18 ft median gap, S 18 ft, SW 9 ft, E 48 ft (a loose roadside market at
@@ -424,7 +424,7 @@ Recorded here rather than held in a session's head - this list is the contract.
    caption naming a specific FEATURE must carry a referent (the caption-group vocabulary in
    `_LABEL_GROUP` is the test for "names a specific feature"), then convert these to
    `place_caption` so the ladder seats them.
-2. ~~**The wharf's form.**~~ **DONE 2026-08-11** - the `quay()` glyph is written and drawn: a faced bank edge with three stepped landings and mooring posts, derived from the river's own line so a re-route carries the wharf with it. A jetty springing from the quay is a declared allowed pair, not a defect. RESEARCH, recorded in `research/cities/river-cities/`: the pier is not the main event - a river's level moves feet across the year, so the working form is a revetted quay face with STEPPED landings (matou / gangi), right at every water level. Three piers for six granaries is fine; the bank is the unloading face. STILL TO DRAW: the quay edge and its steps. Originally: Is three piers right for six granaries and three warehouses, and is there
+2. ~~**The wharf's form.**~~ **DONE 2026-08-11** - the `quay()` glyph is written and drawn: a faced bank edge with three stepped landings and mooring posts, derived from the river's own line so a re-route carries the wharf with it. A jetty springing from the quay is a declared allowed pair, not a defect. RESEARCH, recorded in `research/contents.json#river-cities`: the pier is not the main event - a river's level moves feet across the year, so the working form is a revetted quay face with STEPPED landings (matou / gangi), right at every water level. Three piers for six granaries is fine; the bank is the unloading face. STILL TO DRAW: the quay edge and its steps. Originally: Is three piers right for six granaries and three warehouses, and is there
    a DOCK or quay structure distinct from the piers that the map should draw? Research and record,
    then draw whatever the research says is visible.
 3. ~~**Flophouses.**~~ **DONE 2026-08-11** - `roadside_works_stand_on_their_road`, plus a bearing DERIVED from the way at draw time. Fixed on the capital and on Tango, Hirameki and Minami; Hoshizora carries a documented waiver (no seat in that town lets a 104 ft dormitory lie along its road). Originally: Max distance from the road they stand on, and ORIENTED to it - the one outside
@@ -437,7 +437,7 @@ Recorded here rather than held in a session's head - this list is the contract.
    caption may not be the only thing holding the frame open.
 6. ~~**Samurai country estates**~~ **DONE 2026-08-11** - `capital_dir` corrected to northeast and
     the three walled country seats moved to the northeast approach; the standing question is now
-    recorded in `research/settlements/010-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html` alongside water
+    recorded in `research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html` alongside water
     flow and clan. **ONE CONTRADICTION LEFT FOR THE GM:** the Imperial road on this map leaves to
     the NORTHWEST, so if the capital is northeast the road should too. Not re-routed on my own -
     moving an Imperial road moves the gate markets, the relay stables and the farrier with it.
@@ -485,7 +485,7 @@ Recorded here rather than held in a session's head - this list is the contract.
     city is the DEFAULT.** Four fields across three flanks (south, west, a second southern bay,
     east) with 28 farmsteads. `city_is_ringed_by_farmland` holds the floor at 4+ fields / 3+ flanks,
     calibrated from the pool's own practice (Tango 11, Nagahara 7, Minami 6). The recipe and the two
-    numbers that cost the most iterations are in `research/settlements/`. The first field: One comb field on the open ground south
+    numbers that cost the most iterations are in `research/contents.json#tiers`. The first field: One comb field on the open ground south
     of the rampart, tapped off the river's lower reach with the current (flow_deg 117.7), head gate
     at the tap and a second at the field, the fall running WITH the current so the drain returns
     downstream of its own intake, and the dry hem narrowed to clear the towpath. 155 plots. What is

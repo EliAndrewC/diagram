@@ -93,9 +93,9 @@ def test_every_entry_heading_resolves_today():
 
 def test_a_declared_silence_is_recognized_and_does_not_swallow_a_broken_heading():
     """SC-004. The two must be told apart by the FORM, never by the absence of a match."""
-    assert ceh.SILENT.search("research/fields.html (no dedicated entry - recorded as silent)")
-    assert not ceh.SILENT.search("research/fields.html - 'A heading that does not exist'")
-    assert not ceh.SILENT.search("research/archetypes.html - 'Real heading'")
+    assert ceh.SILENT.search("research/contents.json#fields (no dedicated entry - recorded as silent)")
+    assert not ceh.SILENT.search("research/contents.json#fields - 'A heading that does not exist'")
+    assert not ceh.SILENT.search("research/contents.json#field-archetypes - 'Real heading'")
 
 
 def test_the_heading_checker_proves_it_still_bites():

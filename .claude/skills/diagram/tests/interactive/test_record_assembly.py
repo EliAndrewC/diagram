@@ -1,4 +1,5 @@
-"""The record is written per entry and assembled into the pages a reader opens (feature 258).
+"""The registry is written per entry and assembled into the page a reader opens (feature 258; since feature 303 the
+questions are one file each, and the registry is the one page still assembled from fragments).
 
 The one property everything else rests on: taking a page apart and putting it back gives the same
 bytes. It is asserted over the REAL record rather than a fixture, because a fixture and the record
@@ -12,18 +13,14 @@ writing two fragments no reader's page has. So the section COUNT and the heading
 
 from __future__ import annotations
 
-import pytest
-
 from l7r.diagram.interactive.record import assemble, sections_of, split
-from l7r.diagram.interactive.record.store import record_pages
 from l7r.diagram.interactive.sources import record_text
 
 
-@pytest.mark.parametrize("page", record_pages())
-def test_a_page_splits_and_assembles_back_to_the_same_bytes(page: str) -> None:
-    """FR-006, FR-013, SC-003: concatenation with no normalization, over the whole record (assembled in memory since
+def test_the_registry_splits_and_assembles_back_to_the_same_bytes() -> None:
+    """FR-006, FR-013, SC-003: concatenation with no normalization, over the real registry (assembled in memory since
     feature 301 - nothing assembled is committed, so there is no committed page to compare with)."""
-    text = record_text(page)
+    text = record_text("SOURCES.html")
     assert text and assemble(split(text)) == text
 
 

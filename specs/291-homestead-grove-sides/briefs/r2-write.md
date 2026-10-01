@@ -18,7 +18,7 @@ what size and shape was it?" (session R1 wrote it; point there, do not restate i
 
 ## Your items
 
-- **vegetation/030** ("Does a shelter belt wrap the settlement? No - it stands on one or two windward sides"): its
+- **0072** ("Does a shelter belt wrap the settlement? No - it stands on one or two windward sides"): its
   paragraph "A knob the record handed us, and the ruling that declined it" records the 2026-08-29 ruling as deciding
   the grove's shape. Keep that ruling, quoted, and add the 2026-09-29 ruling after it, quoted: it reverses the first for
   the farmstead's own grove, whose sides are now rolled (pointing at the homestead grove's entry); the VILLAGE belt
@@ -37,7 +37,7 @@ what size and shape was it?" (session R1 wrote it; point there, do not restate i
 
 1. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="vegetation"`; a section another feature
    holds in progress is not edited - put the exact text it owes in the handoff with `OWED-TO <feature>`. Then
-   `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram readability (diagram-readability-2) | 291 | group R2 in progress (vegetation 030, 620) | 2026-09-29"`.
+   `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram readability (diagram-readability-2) | 291 | group R2 in progress (0072, 620) | 2026-09-29"`.
 2. **Read narrowly**, all in one message: the two fragments and their `.notes.html`. Every quote you write is COPIED
    from a note already in the record, character for character. The GM's rulings are quoted in the prose and need no
    footnote.

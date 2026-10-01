@@ -7,7 +7,7 @@ coordination files only with `make lines` / `make append`. Take registry and glo
 Split each of these along its topics, so that a question plus its notes stays under 20,000 bytes
 (`python3 scripts/check-question-size.py`). A finding stays with its footnotes. The new question takes a free prefix
 between its neighbors, and every pointer to a moved paragraph is repointed:
-- `water/280` (20,802 bytes after the 261 merge: the reeded shore and the mown embankment are its two topics).
+- `0061` (20,802 bytes after the 261 merge: the reeded shore and the mown embankment are its two topics).
 
 After the split, quote-check the new and changed questions from bundles (`make check-bundle ... FOR=quote-check`, the agents in the background in one message) and apply the reports with `make apply-edits`.
 

@@ -504,7 +504,7 @@ def test_a_carried_deck_lands_off_the_rice_or_takes_the_footplanks_form() -> Non
 
 def test_a_plank_is_laid_on_a_supply_ditch_only() -> None:
     """Ways W14: a plank on the collector, the drain or the feeder is never laid (`SUPPLY_ROLES`: a main, a branch, a
-    lateral - research/ways/030 and archetypes/110), and a seat whose nearest ditch is a drain (a junction) is refused."""
+    lateral - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html and archetypes/110), and a seat whose nearest ditch is a drain (a junction) is refused."""
     from l7r.diagram.settlement.city.bridges import plank_ditch, plank_on_supply
 
     s = _crop_settlement()

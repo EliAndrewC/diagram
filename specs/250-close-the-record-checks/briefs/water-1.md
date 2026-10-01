@@ -25,7 +25,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **No toe marsh at town/city scale** - *"ditch discharge went into an engineered moat/canal/river network (**Suzhou's canal grid**; Edo's canals and the immediate infill of the Hibiya inlet after 1590)"* — the footnote on that clause (`fn-23`, out of scope) quotes the Hibiya page only; Suzhou rests on nothing, and the section's own HTML comment records it as "not re-read - leftover".  _(from `hw-quotecheck.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/water/*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#water*.html` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 
@@ -42,7 +42,7 @@ fragment the grep did not name.
 
 ## The procedure (session 1: locate, read, write)
 
-1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/water/`; note the fragment and
+1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/contents.json#water`; note the fragment and
    sentence. An item that is a claim about the SETTING is checked against the GM's canon - `budgets.md` and `l7r.md`
    in `/host-l7r-repo/setting/`, and `/host-l7r-repo/gm-assistant/setting/*.md` - with ONE call naming every term of
    every such item: `make canon TERMS="<term>|<term>|<term>"` (in `.claude/skills/diagram`). A direct read of a canon

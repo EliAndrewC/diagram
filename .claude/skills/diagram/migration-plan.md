@@ -289,7 +289,7 @@ Ordered by value per unit of effort, not by tier.
    "the village generator draws no shrine grove, sacred tree or basin"). The scripted village MUST gate the
    headman's house: the nagayamon was the headman's right, and the GM confirmed it on 2026-09-28 ("when we begin
    scripting our village generation ... we should absolutely make sure that the village headsman's house is gated";
-   research/homesteads 110 and 520; `specs/269-research-backfill/rulings-2026-09-28.md`). The hand-drawn village maps
+   research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html and 520; `specs/269-research-backfill/rulings-2026-09-28.md`). The hand-drawn village maps
    are not changed for it. The rest of what 269 left owed here (the headman's kura or a village gogura, the house's
    size, the cluster's spacing, the dosojin at the entrance) is in the same future-work entry. The architectural
    question this step used to be expected to surface - whether `hamletgen/` generalizes or whether

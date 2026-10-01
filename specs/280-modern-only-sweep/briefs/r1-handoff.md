@@ -1,9 +1,9 @@
 # 280 R1 handoff - religion-and-death: the shrine's arches, fence, collar and salt
 
 - SECTION=religion-and-death/090
-- SECTION=religion-and-death/122
-- SECTION=religion-and-death/130
-- SECTION=religion-and-death/240
+- SECTION=0223
+- SECTION=0224
+- SECTION=0240
 - SECTION=religion-and-death/710
 - SECTION=religion-and-death/720
 - SECTION=religion-and-death/730

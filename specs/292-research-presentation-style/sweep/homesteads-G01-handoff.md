@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/groves-of-trees-around-farmhouses-yashikirin
 - RENDERING=rendering/homesteads/how-our-maps-draw-the-groves-around-farmhouses
-- OLD=research/vegetation/
+- OLD=research/contents.json#vegetation
 - MODALS=Copse
 - BASE=efbd6eb95
 
@@ -20,7 +20,7 @@ unique on the homesteads page: yashikirin-jawiki-7 to -13, miura-2019-yashikiyam
 -3, shakkanho-jawiki to -3, and the absence note how-big-was-the-villages-dooryard-copse to
 groves-of-trees-around-farmhouses-yashikirin-11 (converted to the new form). The miura-2019-yashikiyama-3 note's own
 trailing gloss "(the reading of 近野 is not given)" was reworded without the kanji, which the prepass failed; its quoted
-passage is unchanged. Links re-aimed: vegetation/020's dooryard-copse bullet, the Copse modal's Entry and its fixture,
+passage is unchanged. Links re-aimed: 0071's dooryard-copse bullet, the Copse modal's Entry and its fixture,
 and the code comments in hinterland/stages.py, homestead_parts/groves.py, stands.py, wood_share.py and the
-test_homestead_woods.py docstring (now rendering/homesteads/010). The confusable pair grove / dooryard copse is
+test_homestead_woods.py docstring (now 0036). The confusable pair grove / dooryard copse is
 appended to confusables.md (the table's earlier "NOT YET READ" row for it can now take this line's difference).

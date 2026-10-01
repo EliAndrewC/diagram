@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-country-monks-dwelling-and-writing-room
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=HallAndDwelling MonksRooms WritingRoom
 - BASE=6f264eaa7
 

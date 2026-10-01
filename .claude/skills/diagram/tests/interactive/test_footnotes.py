@@ -1,9 +1,9 @@
 """Feature 194 (GM 2026-09-06): a reference QUOTES the passage that supports the assertion - the mechanical half.
 
-The record's citation form (research/CLAUDE.md): `<sup class="fn"><a id="fnref-n" href="citations/<name>.html#fn-n">n</a></sup>`
-after an assertion, and - since feature 211 (GM 2026-09-07: the notes moved out of the research page into
-`research/citations/<name>.html`) - on the page's CITATIONS PAGE a `<li id="fn-n">` with the key link and the quote. What a test can hold: every reference points at its own
-citations page and resolves there, and every note is referenced; every note names a registry key and carries a quotation; every key on a section's
+The record's citation form (research/CLAUDE.md): a reference `<sup class="fn" data-note="<key>"></sup>` after an
+assertion, and in the page's own notes file (features 211, 258, 303) a `<li data-note="<key>">` with the key link and the
+quote; the build numbers both, from 1 on each question's page. What a test can hold: every reference resolves in its
+page's notes, and every note is referenced; every note names a registry key and carries a quotation; every key on a section's
 `**Sources:**` roster is quoted by a footnote in that section ("no point in including a reference if it is not
 being quoted"). What only the `quote-check` agent can hold - the quote is verbatim on the page, it supports the
 assertion, and every assertion has one - is its job, before a research edit lands."""
@@ -11,16 +11,16 @@ assertion, and every assertion has one - is its job, before a research edit land
 from __future__ import annotations
 
 import html
-import os
 import pathlib
 import re
 
 import pytest
 
-from l7r.diagram.interactive.citations import GROUNDS_REASONS, citations_page, footnote_form, grounds_reasons, is_settled, notes
-from l7r.diagram.interactive.record import absence
+from l7r.diagram.interactive.citations import GROUNDS_REASONS, footnote_form, grounds_reasons, is_settled
+from l7r.diagram.interactive.record import absence, store
+from l7r.diagram.interactive.record.notes import REFERENCE
 from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, registry_keys
-from tests._record_pages import citations_of, page, research_pages
+from tests._record_pages import notes_text, numbered, page, question_pages
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
 #: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
@@ -41,18 +41,14 @@ _NOT_FINDINGS = {"SOURCES.html"}
 
 
 def _finding_files() -> list[pathlib.Path]:
-    """The research pages, read through the in-memory assembly (feature 301: the pages are built, not committed)."""
-    return [p for p in research_pages() if p.name not in _NOT_FINDINGS]
+    """Every question page of both halves, read from its fragments (features 301, 303)."""
+    return list(question_pages())
 
 
-def _rel(path: pathlib.Path) -> str:
-    return str(path.relative_to(RESEARCH_DIR)).replace(os.sep, "/")
-
-
-def footnotes(text: str, citations: str) -> tuple[list[str], dict[str, str]]:
-    """(reference ids in reading order - the research page's, then the ones a note makes to another note on the
-    citations page; {note id: body} from the citations page)."""
-    return [m.group(1) for m in _REF.finditer(text)] + [m.group(1) for m in _REF.finditer(citations)], dict(notes(citations))
+def footnotes(path: pathlib.Path) -> tuple[str, list[str], dict[str, str]]:
+    """(the page with its references numbered, the reference numbers in reading order, {note number: body})."""
+    body, defs = numbered(path)
+    return body, [m.group(1) for m in _REF.finditer(body)], defs
 
 
 #: THE FORMS A FOOTNOTE MAY TAKE live in the engine (`interactive/citations.py`), not here: the gate, the
@@ -62,15 +58,13 @@ def footnotes(text: str, citations: str) -> tuple[list[str], dict[str, str]]:
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)
 def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source(path: pathlib.Path) -> None:
     text = path.read_text(encoding="utf-8")
-    cpath = citations_of(path)
-    assert cpath.exists(), f"{path.name}: no citations page at {cpath} (feature 211: every research page has one)"
-    refs, defs = footnotes(text, cpath.read_text(encoding="utf-8"))
-    want = "../" * _rel(path).count("/") + citations_page(_rel(path))
-    wrong = sorted({t for t in _REF_TARGET.findall(text) if t != want}) + sorted({t for t in _REF_TARGET.findall(cpath.read_text(encoding="utf-8")) if t})
-    assert not wrong, f"{path.name}: references pointing somewhere other than its citations page {want!r}: {wrong}"
+    body, refs, defs = footnotes(path)
+    wrong = sorted({t for t in _REF_TARGET.findall(body) if t})
+    assert not wrong, f"{path.name}: references pointing off their own page: {wrong}"
     keys = registry_keys()
-    assert set(refs) <= set(defs), f"{path.name}: references without a note on {cpath.name}: {sorted(set(refs) - set(defs))}"
-    assert set(defs) <= set(refs), f"{path.name}: notes on {cpath.name} nothing references: {sorted(set(defs) - set(refs))}"
+    assert set(refs) == set(defs), f"{path.name}: a reference without its note, or the reverse"
+    orphans = sorted(set(store.page_notes(path.name)) - set(REFERENCE.findall(text)))
+    assert not orphans, f"{path.name}: notes nothing references: {orphans}"
     canon = canon_keys()
     bad = []
     for fid, body in defs.items():
@@ -150,7 +144,7 @@ def sourceless_shape_faults(page_notes: dict[str, str]) -> list[str]:
 
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)
 def test_the_sourceless_footnote_forms_keep_their_shape(path: pathlib.Path) -> None:
-    faults = sourceless_shape_faults(dict(notes(citations_of(path).read_text(encoding="utf-8"))))
+    faults = sourceless_shape_faults(store.page_notes(path.name))
     assert not faults, f"{path.name} (feature 235 FR-009):\n" + "\n".join(faults)
 
 
@@ -180,9 +174,7 @@ def test_the_sourceless_shape_rule_fires() -> None:
 def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(path: pathlib.Path) -> None:
     """The roster is what the modal reads; the footnotes are where the quotes live; a key on the roster that no
     footnote of the section quotes is a reference that is not being quoted."""
-    text = path.read_text(encoding="utf-8")
-    _refs, defs = footnotes(text, citations_of(path).read_text(encoding="utf-8"))
-    body = text.split('<section class="citations">')[0]
+    body, _refs, defs = footnotes(path)
     heads = [(m.start(), int(m.group(1))) for m in _HEADING.finditer(body)]
     unquoted = []
     for i, (a, level) in enumerate(heads):
@@ -268,9 +260,10 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
     return bad
 
 
-@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()] + [page("SOURCES.html")], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+@pytest.mark.parametrize("path", [*_finding_files(), page("SOURCES.html")], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
-    bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8"))
+    """On the page and in its notes file."""
+    bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8")) + unmarked_foreign_quotes(notes_text(path))
     assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])
 
 
@@ -279,9 +272,9 @@ def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) ->
 _RETIRED = re.compile(r"the source(?:'|&#x27;|’)s own English|translated from the (?:[a-z]+ )?[A-Z][A-Za-z ()-]* by this project")
 
 
-@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+@pytest.mark.parametrize("path", _finding_files(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_no_note_says_the_source_s_own_english_or_by_this_project(path: pathlib.Path) -> None:
-    hits = [m.group(0) for m in _RETIRED.finditer(path.read_text(encoding="utf-8"))]
+    hits = [m.group(0) for m in _RETIRED.finditer(path.read_text(encoding="utf-8") + notes_text(path))]
     assert not hits, f"{path.name}: write `(translated; original: ...)` and leave English unmarked (feature 292): {hits[:3]}"
 
 

@@ -35,7 +35,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
 
 - M61 **The sty at the water**: the sty stands at the water on the pond dike, 6 ft off the culvert. The placement rule rests on FAO and NACA manuals (fao-ac264e-ch9 from 1989, fao-ac264e, fao-y1187e, fao-ac257e, fao-x6708e). The Qimin Yaoshu speaks only of filth, and the 6 ft is a guess. In the record's Qing loop "the dung goes to the dike, where the modern manuals flush it into the water". PigSty's Entry does not name the section that answers this (archetypes/180) - kinds: PigSty (`dikepond.py:249`); `hamletgen/pondstock.py`; maps: kuwabata (7 sties). S.
 - M62 **The pig shed on the dike**: the pig shed on the dike flushes into the pond, and the dike is held to a shed-dike width standard. The form comes from the modern FAO and NACA manual (fao-ac264e) and from isis-dykepond (2006), and the 5-10 m width "is a modern manual's design requirement" (fao-ac264e-ch10). Qing pigs in the loop (pwsannong-zhusanjiao-nongyeshi) and the 1639 sheep pen on a pond bank support the pig, so the form may stand. The duck half is excluded (269) (archetypes/171) - kinds: PigSty; maps: kuwabata. M.
-- M63 **Manure pits**: half-buried earthenware manure pits by the road. The sole source is fei-1939 (fieldwork of 1936). Check whether 269's pit forms on the homesteads page carry a premodern date. The "other dike crops" line in the same section is excluded (269) (archetypes/170) - kinds: ManurePit; maps: kuwabata. L.
+- M63 **Manure pits**: half-buried earthenware manure pits by the road. The sole source is fei-1939 (fieldwork of 1936). Check whether 269's pit forms on the homesteads page carry a premodern date. The "other dike crops" line in the same section is excluded (269) (0023) - kinds: ManurePit; maps: kuwabata. L.
 
 ## The procedure (session 1: research and write)
 
@@ -66,7 +66,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on archetypes/180, archetypes/171, archetypes/170, and archetypes 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on archetypes/180, archetypes/171, 0023, and archetypes 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

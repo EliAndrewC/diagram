@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/220
 - SECTION=religion-and-death/230
-- SECTION=religion-and-death/240
+- SECTION=0240
 - SECTION=religion-and-death/090
 - KEY=kotobank-aidono
 - KEY=jawiki-saijin

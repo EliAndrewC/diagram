@@ -52,14 +52,14 @@ when you have to make an edit, then you are opening a file which is relatively s
 | a source's registry entry | `research/sources/NNNN-<key>.html` - one file, about 1.2 KB |
 | a question | `research/<page>/NNN-<heading id>.html` |
 | that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
-| a `cities/` page | `research/cities/<page>/...`, the same shape one level down |
+| a `cities/` page | `research/contents.json#cities<page>/...`, the same shape one level down |
 | the page a reader opens | `research/site/<page>/<heading id>.html`, and `research/site/all.html` for the whole record - BUILT by `make record`, never committed (feature 301) |
 
 **Finding one, without reading a page.** There is no index to consult and none to keep in step:
 
     ls research/sources/*/*fei-1939*            a source, by its key
-    grep -rl "dike-pond" research/water/        a question, by something it says
-    ls research/water/                          a page's questions, in order
+    grep -rl "dike-pond" research/contents.json#water        a question, by something it says
+    ls research/contents.json#water                          a page's questions, in order
 
 Do not `ls research/sources/` bare - it is 2,127 entries. Do not open a built page to edit it: the guard will
 re-aim an Edit at the one fragment holding its text, and refuse where none or several do.

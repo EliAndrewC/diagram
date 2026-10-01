@@ -50,7 +50,7 @@ peak context (observed 2026-09-21; method: 28,400 over each run's `peak_context`
 
 | where the agent read the entry | nested files | peak | input | candidates ruled on |
 |---|---|---|---|---|
-| in the tree (`research/ways/...`) | 3 | 47,700 | 102,300 | 33 of 33 |
+| in the tree (`research/contents.json#ways...`) | 3 | 47,700 | 102,300 | 33 of 33 |
 | copies in the scratchpad | 0 | 14,500 | 62,600 | 25 of 25 |
 
 Peak context fell 70% and billed input 39% (both observed 2026-09-21; method: the two rows above, one

@@ -88,7 +88,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   side count; `settlement-review` on each whose layout moved.
 - **D12 - the record** (FR-001-FR-004). Two write sessions from briefs in a second clone
   (`/diagram/.clones/diagram-readability-2`, so a headless session never writes into the tree the engine work is in):
-  R1 = homesteads 010, 710, 480; R2 = vegetation 030, 620. Then check-and-apply sessions (`quote-check`,
+  R1 = 0036, 710, 480; R2 = 0072, 620. Then check-and-apply sessions (`quote-check`,
   `record-format`, `source-applicability` on `irie-2020-igune` for its new use). The modal docstrings written from
   those entries are checked by `entry-drift` and rewritten (FR-004); the grove kind's modal states the side count
   (FR-009).

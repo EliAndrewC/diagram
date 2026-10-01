@@ -3,828 +3,828 @@
   "registry": "CLASSES",
   "key": "farmhouse",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'"
+  "entry": "research/contents.json#homesteads - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'"
  },
  {
   "registry": "CLASSES",
   "key": "storage shed",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'What stood on a farmstead - the inventory, with numbers'"
+  "entry": "research/contents.json#homesteads - 'What stood on a farmstead - the inventory, with numbers'"
  },
  {
   "registry": "CLASSES",
   "key": "byre",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'"
+  "entry": "research/contents.json#homesteads - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'"
  },
  {
   "registry": "CLASSES",
   "key": "threshing yard",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'"
+  "entry": "research/contents.json#homesteads - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'"
  },
  {
   "registry": "CLASSES",
   "key": "garden",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'The garden's sun, and how far the windbreak shades'; 'How much open ground does a kitchen garden keep to its south and east?'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)"
+  "entry": "research/contents.json#homesteads - 'The garden's sun, and how far the windbreak shades'; 'How much open ground does a kitchen garden keep to its south and east?'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)"
  },
  {
   "registry": "CLASSES",
   "key": "privy",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "woodpile",
   "label": "guess",
-  "entry": "research/homesteads/ - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "manure heap",
   "label": "guess",
-  "entry": "research/homesteads/ - 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "bathhouse",
   "label": "guess",
-  "entry": "research/homesteads/ - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "hen coop",
   "label": "guess",
-  "entry": "research/homesteads/ - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "household shrine",
   "label": "convention",
-  "entry": "research/homesteads/ - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "persimmon",
   "label": "guess",
-  "entry": "research/homesteads/ - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead's fixtures'"
+  "entry": "research/contents.json#homesteads - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead's fixtures'"
  },
  {
   "registry": "CLASSES",
   "key": "homestead bamboo",
   "label": "convention",
-  "entry": "research/vegetation/ - 'Bamboo: how common, where it stood, and how to show it'"
+  "entry": "research/contents.json#vegetation - 'Bamboo: how common, where it stood, and how to show it'"
  },
  {
   "registry": "CLASSES",
   "key": "shared bamboo grove",
   "label": "convention",
-  "entry": "research/vegetation/ - 'Bamboo: how common, where it stood, and how to show it'"
+  "entry": "research/contents.json#vegetation - 'Bamboo: how common, where it stood, and how to show it'"
  },
  {
   "registry": "CLASSES",
   "key": "windbreak",
   "label": "accurate",
-  "entry": "research/vegetation/ - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads/ - 'The garden's sun, and how far the windbreak shades'"
+  "entry": "research/contents.json#vegetation - 'The fengshui forest - real scale, and why ours is honest'; research/contents.json#homesteads - 'The garden's sun, and how far the windbreak shades'"
  },
  {
   "registry": "CLASSES",
   "key": "copse",
   "label": "accurate",
-  "entry": "research/vegetation/020-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html; research/vegetation/ - 'What are the village's three groves'"
+  "entry": "research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html; research/contents.json#vegetation - 'What are the village's three groves'"
  },
  {
   "registry": "CLASSES",
   "key": "woodland commons",
   "label": "accurate",
-  "entry": "research/vegetation/ - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'"
+  "entry": "research/contents.json#vegetation - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'"
  },
  {
   "registry": "CLASSES",
   "key": "scrub and rough grazing",
   "label": "accurate",
-  "entry": "research/vegetation/ - 'The crop margin', 'Scrub stays off open water', 'The cut bank'"
+  "entry": "research/contents.json#vegetation - 'The crop margin', 'Scrub stays off open water', 'The cut bank'"
  },
  {
   "registry": "CLASSES",
   "key": "marsh",
   "label": "accurate",
-  "entry": "research/water/ - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\"; research/vegetation/ - 'The marsh margin'"
+  "entry": "research/contents.json#water - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\"; research/contents.json#vegetation - 'The marsh margin'"
  },
  {
   "registry": "CLASSES",
   "key": "paddy",
   "label": "accurate",
-  "entry": "research/fields/ - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'"
+  "entry": "research/contents.json#fields - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'"
  },
  {
   "registry": "CLASSES",
   "key": "wet paddy",
   "label": "accurate",
-  "entry": "research/fields/ - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'"
+  "entry": "research/contents.json#fields - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'"
  },
  {
   "registry": "CLASSES",
   "key": "bund",
   "label": "accurate",
-  "entry": "research/fields/ - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water/ - 'The bund runs along the channel bank'"
+  "entry": "research/contents.json#fields - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/contents.json#water - 'The bund runs along the channel bank'"
  },
  {
   "registry": "CLASSES",
   "key": "bund beans",
   "label": "convention",
-  "entry": "research/fields/ - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)"
+  "entry": "research/contents.json#fields - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)"
  },
  {
   "registry": "CLASSES",
   "key": "millet",
   "label": "accurate",
-  "entry": "research/fields/ - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'"
+  "entry": "research/contents.json#fields - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'"
  },
  {
   "registry": "CLASSES",
   "key": "buckwheat",
   "label": "accurate",
-  "entry": "research/fields/ - 'Where dry (hatake) crops go - the topographic catena'"
+  "entry": "research/contents.json#fields - 'Where dry (hatake) crops go - the topographic catena'"
  },
  {
   "registry": "CLASSES",
   "key": "barley",
   "label": "accurate",
-  "entry": "research/fields/ - 'Where dry (hatake) crops go - the topographic catena'"
+  "entry": "research/contents.json#fields - 'Where dry (hatake) crops go - the topographic catena'"
  },
  {
   "registry": "CLASSES",
   "key": "soy",
   "label": "accurate",
-  "entry": "research/fields/ - 'Where dry (hatake) crops go - the topographic catena'"
+  "entry": "research/contents.json#fields - 'Where dry (hatake) crops go - the topographic catena'"
  },
  {
   "registry": "CLASSES",
   "key": "fallow",
   "label": "guess",
-  "entry": "research/fields/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#fields (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "CLASSES",
   "key": "stream",
   "label": "convention",
-  "entry": "research/water/ - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'"
+  "entry": "research/contents.json#water - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'"
  },
  {
   "registry": "CLASSES",
   "key": "irrigation ditch",
   "label": "accurate",
-  "entry": "research/water/ - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields/ - 'Where does a field's water come from, and how is it shared out?'"
+  "entry": "research/contents.json#water - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/contents.json#fields - 'Where does a field's water come from, and how is it shared out?'"
  },
  {
   "registry": "CLASSES",
   "key": "drainage ditch",
   "label": "accurate",
-  "entry": "research/water/ - 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields/ - 'Water-first v2'"
+  "entry": "research/contents.json#water - 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/contents.json#fields - 'Water-first v2'"
  },
  {
   "registry": "CLASSES",
   "key": "weir",
   "label": "convention",
-  "entry": "research/water/ - 'Where does the brook stop being a brook and become the ditch'"
+  "entry": "research/contents.json#water - 'Where does the brook stop being a brook and become the ditch'"
  },
  {
   "registry": "CLASSES",
   "key": "pond",
   "label": "accurate",
-  "entry": "research/fields/ - 'Where does a field's water come from, and how is it shared out?'"
+  "entry": "research/contents.json#fields - 'Where does a field's water come from, and how is it shared out?'"
  },
  {
   "registry": "CLASSES",
   "key": "field pond",
   "label": "accurate",
-  "entry": "research/fields/ - 'In-field features - flat flooded paddy hosts obstacles least'"
+  "entry": "research/contents.json#fields - 'In-field features - flat flooded paddy hosts obstacles least'"
  },
  {
   "registry": "CLASSES",
   "key": "field rock",
   "label": "accurate",
-  "entry": "research/fields/ - 'In-field features - flat flooded paddy hosts obstacles least'"
+  "entry": "research/contents.json#fields - 'In-field features - flat flooded paddy hosts obstacles least'"
  },
  {
   "registry": "CLASSES",
   "key": "grave island",
   "label": "deviation",
-  "entry": "research/fields/ - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)"
+  "entry": "research/contents.json#fields - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)"
  },
  {
   "registry": "CLASSES",
   "key": "village lane",
   "label": "accurate",
-  "entry": "research/homesteads/ - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/sources/ re-sourcing queue (lane width)"
+  "entry": "research/contents.json#homesteads - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/sources/ re-sourcing queue (lane width)"
  },
  {
   "registry": "CLASSES",
   "key": "footbridge",
   "label": "guess",
-  "entry": "research/rendering/water/010-how-our-maps-draw-channel-widths.html (channel_footbridges)"
+  "entry": "research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html (channel_footbridges)"
  },
  {
   "registry": "CLASSES",
   "key": "well",
   "label": "convention",
-  "entry": "research/urban-features/ - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads/ - 'Does a DISPERSED hamlet's outlying farm have its own well?'"
+  "entry": "research/contents.json#trades-and-services - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/contents.json#homesteads - 'Does a DISPERSED hamlet's outlying farm have its own well?'"
  },
  {
   "registry": "CLASSES",
   "key": "notice board",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"
+  "entry": "research/contents.json#trades-and-services - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"
  },
  {
   "registry": "CLASSES",
   "key": "fish pond",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'"
+  "entry": "research/contents.json#field-archetypes - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'"
  },
  {
   "registry": "CLASSES",
   "key": "mulberry dike",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted'"
+  "entry": "research/contents.json#field-archetypes - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted'"
  },
  {
   "registry": "CLASSES",
   "key": "pond canal",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'A dike-pond is fed and drained through sluice gates'"
+  "entry": "research/contents.json#field-archetypes - 'A dike-pond is fed and drained through sluice gates'"
  },
  {
   "registry": "CLASSES",
   "key": "pond sluice",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'A dike-pond is fed and drained through sluice gates'"
+  "entry": "research/contents.json#field-archetypes - 'A dike-pond is fed and drained through sluice gates'"
  },
  {
   "registry": "CLASSES",
   "key": "sugarcane dike",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "banana dike",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "fruit dike",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "vegetable ground",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - 'What else was planted on a pond dike besides mulberry?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "pig sty",
   "label": "guess",
-  "entry": "research/archetypes/ - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "duck pen",
   "label": "guess",
-  "entry": "research/archetypes/ - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "fry pond",
   "label": "guess",
-  "entry": "research/archetypes/ - 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "manure pit",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+  "entry": "research/contents.json#field-archetypes - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
  },
  {
   "registry": "CLASSES",
   "key": "sluice gate",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'"
+  "entry": "research/contents.json#field-archetypes - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'"
  },
  {
   "registry": "CLASSES",
   "key": "perimeter dike",
   "label": "accurate",
-  "entry": "research/archetypes/ - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted'"
+  "entry": "research/contents.json#field-archetypes - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "outer court",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Office in front, residence behind - the two-court split is universal', 'Packing: a jin'ya is mostly open'"
+  "entry": "research/contents.json#compounds - 'Office in front, residence behind - the two-court split is universal', 'Packing: a jin'ya is mostly open'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "inner court",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Office in front, residence behind - the two-court split is universal', 'The shady rear is the service strip'"
+  "entry": "research/contents.json#compounds - 'Office in front, residence behind - the two-court split is universal', 'The shady rear is the service strip'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "border court",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Guest doors feed courts, not flanks'"
+  "entry": "research/contents.json#compounds - 'Guest doors feed courts, not flanks'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "hearing court",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room', 'Packing: a jin'ya is mostly open'"
+  "entry": "research/contents.json#compounds - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room', 'Packing: a jin'ya is mostly open'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "practice ground",
   "label": "accurate",
-  "entry": "research/buildings/ - 'A dojo is a city institution; county training is courtyard keiko'; research/cities/government/ - 'Martial training is an URBAN institution'"
+  "entry": "research/contents.json#compounds - 'A dojo is a city institution; county training is courtyard keiko'; research/contents.json#government - 'Martial training is an URBAN institution'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "garden",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The shady rear is the service strip', 'Guest doors feed courts, not flanks'"
+  "entry": "research/contents.json#compounds - 'The shady rear is the service strip', 'Guest doors feed courts, not flanks'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "vegetable garden",
   "label": "accurate",
-  "entry": "research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html; research/homesteads/ - 'How big was a dooryard garden?'"
+  "entry": "research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html; research/contents.json#homesteads - 'How big was a dooryard garden?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "shrine grove",
   "label": "accurate",
-  "entry": "research/religion-and-death/ - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Where does a village put its shrine, and how big is it?', 'How big is a country shrine, and what stands in its precinct?', 'How large was a village shrine's precinct, and how much of it was built on?'"
+  "entry": "research/contents.json#religion-and-the-dead - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Where does a village put its shrine, and how big is it?', 'How big is a country shrine, and what stands in its precinct?', 'How large was a village shrine's precinct, and how much of it was built on?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "compound wall",
   "label": "convention",
-  "entry": "research/buildings/ - 'A compound wall is a building, not a boundary line', 'Administrative culture is JAPAN-first for compound interiors'"
+  "entry": "research/contents.json#compounds - 'A compound wall is a building, not a boundary line', 'Administrative culture is JAPAN-first for compound interiors'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "main gate",
   "label": "accurate",
-  "entry": "research/towns/ - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/religion-and-death/ - 'How large are the gates, walls and funerary features drawn?'; research/buildings/ - 'Guest doors feed courts, not flanks'"
+  "entry": "research/contents.json#towns - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/contents.json#religion-and-the-dead - 'How large are the gates, walls and funerary features drawn?'; research/contents.json#compounds - 'Guest doors feed courts, not flanks'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "side gate",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Guest doors feed courts, not flanks', 'Privies attach to the house; night-soil drives their placement'"
+  "entry": "research/contents.json#compounds - 'Guest doors feed courts, not flanks', 'Privies attach to the house; night-soil drives their placement'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "court divider",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Office in front, residence behind - the two-court split is universal'"
+  "entry": "research/contents.json#compounds - 'Office in front, residence behind - the two-court split is universal'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "road",
   "label": "accurate",
-  "entry": "research/towns/ - 'Where does a magistrate's manor stand, and which way does its gate face?', 'Chinese towns were PLANNED - the gate-to-yamen axis'; research/ways/ - 'What vehicle used a village lane, and where could the lane run?'"
+  "entry": "research/contents.json#towns - 'Where does a magistrate's manor stand, and which way does its gate face?', 'Chinese towns were PLANNED - the gate-to-yamen axis'; research/contents.json#ways - 'What vehicle used a village lane, and where could the lane run?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "cart yard",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'; research/buildings/ - 'Packing: a jin'ya is mostly open'; research/ways/ - 'What vehicle used a village lane, and where could the lane run?'"
+  "entry": "research/contents.json#trades-and-services - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'; research/contents.json#compounds - 'Packing: a jin'ya is mostly open'; research/contents.json#ways - 'What vehicle used a village lane, and where could the lane run?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "garden pond",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "stone lantern",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "garden pines",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "striking posts",
   "label": "convention",
-  "entry": "research/buildings/ - 'A dojo is a city institution; county training is courtyard keiko'"
+  "entry": "research/contents.json#compounds - 'A dojo is a city institution; county training is courtyard keiko'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "weapon rack",
   "label": "guess",
-  "entry": "research/buildings/ - 'A dojo is a city institution; county training is courtyard keiko'"
+  "entry": "research/contents.json#compounds - 'A dojo is a city institution; county training is courtyard keiko'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "nakamon",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Office in front, residence behind - the two-court split is universal'"
+  "entry": "research/contents.json#compounds - 'Office in front, residence behind - the two-court split is universal'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "door",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Guest doors feed courts, not flanks', 'Rendering / layout is checked automatically'; research/cities/fabric/ - 'How did a dense wooden city watch for fire?'; research/cities/government/ - 'Servant housing in the samurai ward'"
+  "entry": "research/contents.json#compounds - 'Guest doors feed courts, not flanks', 'Rendering / layout is checked automatically'; research/contents.json#urban-fabric - 'How did a dense wooden city watch for fire?'; research/contents.json#government - 'Servant housing in the samurai ward'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "office hall",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The compound has a size HIERARCHY, not just individual sizes', 'Fire discipline: halls burn, kura endure'"
+  "entry": "research/contents.json#compounds - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The compound has a size HIERARCHY, not just individual sizes', 'Fire discipline: halls burn, kura endure'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "magistrate's dais",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors'"
+  "entry": "research/contents.json#compounds - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "clerks' room",
   "label": "guess",
-  "entry": "research/buildings/ - 'Clerks are few, local, and heimen'"
+  "entry": "research/contents.json#compounds - 'Clerks are few, local, and heimen'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "tax archive",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Fire discipline: halls burn, kura endure', 'Fire-water is distributed to the halls, not the kura', 'Administrative culture is JAPAN-first for compound interiors'; research/cities/fabric/ - 'How did a dense wooden city watch for fire?'"
+  "entry": "research/contents.json#compounds - 'Fire discipline: halls burn, kura endure', 'Fire-water is distributed to the halls, not the kura', 'Administrative culture is JAPAN-first for compound interiors'; research/contents.json#urban-fabric - 'How did a dense wooden city watch for fire?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "granary",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The granary is a staging node, not the terminal store', 'The granary holds grain, not just rice'; research/towns/ - 'Why is the magistrate's manor drawn as a plain walled box?'"
+  "entry": "research/contents.json#compounds - 'The granary is a staging node, not the terminal store', 'The granary holds grain, not just rice'; research/contents.json#towns - 'Why is the magistrate's manor drawn as a plain walled box?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "cell",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Cells are remand, not punishment', 'No interrogation room'"
+  "entry": "research/contents.json#compounds - 'Cells are remand, not punishment', 'No interrogation room'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "gatehouse",
   "label": "accurate",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "barracks",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Staff housing spans a real spectrum', 'The compound has a size HIERARCHY, not just individual sizes'"
+  "entry": "research/contents.json#compounds - 'Staff housing spans a real spectrum', 'The compound has a size HIERARCHY, not just individual sizes'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "notice board",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"
+  "entry": "research/contents.json#trades-and-services - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "tally office",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The granary is a staging node, not the terminal store'; research/urban-features/ - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
+  "entry": "research/contents.json#compounds - 'The granary is a staging node, not the terminal store'; research/contents.json#trades-and-services - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "weighing floor",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
+  "entry": "research/contents.json#trades-and-services - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "day office",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room'"
+  "entry": "research/contents.json#compounds - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "official study",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The courtroom is a room of the office hall, not a freestanding stage'"
+  "entry": "research/contents.json#compounds - 'The courtroom is a room of the office hall, not a freestanding stage'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "clerks' seats",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "kneeling positions",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'"
+  "entry": "research/contents.json#compounds - 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "granary stilts",
   "label": "accurate",
-  "entry": "research/cities/capitals/ - \"The sluice's lifting frame\""
+  "entry": "research/contents.json#capitals - \"The sluice's lifting frame\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "residence",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY'"
+  "entry": "research/contents.json#compounds - 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "ancestral alcove",
   "label": "accurate",
-  "entry": "research/buildings/ - 'An ancestral alcove holding office-predecessor tablets'"
+  "entry": "research/contents.json#compounds - 'An ancestral alcove holding office-predecessor tablets'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "karo's house",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "retainers' quarters",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Staff housing spans a real spectrum'; research/cities/government/ - 'Servant housing in the samurai ward'"
+  "entry": "research/contents.json#compounds - 'Staff housing spans a real spectrum'; research/contents.json#government - 'Servant housing in the samurai ward'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "servants' quarters",
   "label": "accurate",
-  "entry": "research/cities/government/ - 'Servant housing in the samurai ward'; research/buildings/ - 'The shady rear is the service strip'"
+  "entry": "research/contents.json#government - 'Servant housing in the samurai ward'; research/contents.json#compounds - 'The shady rear is the service strip'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "guest quarters",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Guest doors feed courts, not flanks'"
+  "entry": "research/contents.json#compounds - 'Guest doors feed courts, not flanks'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "kitchen",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The compound has a size HIERARCHY', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'"
+  "entry": "research/contents.json#compounds - 'The compound has a size HIERARCHY', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "bath",
   "label": "accurate",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "well",
   "label": "convention",
-  "entry": "research/urban-features/ - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/buildings/ - 'The shady rear is the service strip'"
+  "entry": "research/contents.json#trades-and-services - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/contents.json#compounds - 'The shady rear is the service strip'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "latrine",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Privies attach to the house', 'The shady rear is the service strip'"
+  "entry": "research/contents.json#compounds - 'Privies attach to the house', 'The shady rear is the service strip'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "stables",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The compound has a size HIERARCHY'; research/urban-features/ - 'Stable yards'"
+  "entry": "research/contents.json#compounds - 'The compound has a size HIERARCHY'; research/contents.json#trades-and-services - 'Stable yards'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "kennel",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "fire-water tubs",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Fire-water is distributed to the halls', 'Fire discipline: halls burn, kura endure'; research/cities/fabric/ - 'How did a dense wooden city watch for fire?'"
+  "entry": "research/contents.json#compounds - 'Fire-water is distributed to the halls', 'Fire discipline: halls burn, kura endure'; research/contents.json#urban-fabric - 'How did a dense wooden city watch for fire?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "compound shrine",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Every administrative compound keeps a shrine', 'The compound has a size HIERARCHY'; research/religion-and-death/ - 'Torii are VOTIVE DONATIONS', 'Torii spacing'"
+  "entry": "research/contents.json#compounds - 'Every administrative compound keeps a shrine', 'The compound has a size HIERARCHY'; research/contents.json#religion-and-the-dead - 'Torii are VOTIVE DONATIONS', 'Torii spacing'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "writing pavilion",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "hearth",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Fire-water is distributed to the halls, not the kura'"
+  "entry": "research/contents.json#compounds - 'Fire-water is distributed to the halls, not the kura'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "genkan",
   "label": "accurate",
-  "entry": "research/buildings/ - 'Guest doors feed courts, not flanks', 'The courtroom is a room of the office hall, not a freestanding stage'"
+  "entry": "research/contents.json#compounds - 'Guest doors feed courts, not flanks', 'The courtroom is a room of the office hall, not a freestanding stage'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "engawa",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "residence corridor",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "lord's quarters",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The courtroom is a room of the office hall, not a freestanding stage'; research/cities/government/ - 'Servant housing in the samurai ward'"
+  "entry": "research/contents.json#compounds - 'The courtroom is a room of the office hall, not a freestanding stage'; research/contents.json#government - 'Servant housing in the samurai ward'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "family quarters",
   "label": "accurate",
-  "entry": "research/cities/government/ - 'Servant housing in the samurai ward'; research/buildings/ - 'Office in front, residence behind'"
+  "entry": "research/contents.json#government - 'Servant housing in the samurai ward'; research/contents.json#compounds - 'Office in front, residence behind'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "inner rooms",
   "label": "accurate",
-  "entry": "research/cities/government/ - 'Servant housing in the samurai ward'"
+  "entry": "research/contents.json#government - 'Servant housing in the samurai ward'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "reception room",
   "label": "accurate",
-  "entry": "research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html; research/cities/government/ - 'Servant housing in the samurai ward'"
+  "entry": "research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html; research/contents.json#government - 'Servant housing in the samurai ward'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "shuttered wing",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "shrine altar",
   "label": "deviation",
-  "entry": "research/buildings/ - 'Every administrative compound keeps a shrine'"
+  "entry": "research/contents.json#compounds - 'Every administrative compound keeps a shrine'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "torii",
   "label": "accurate",
-  "entry": "research/religion-and-death/ - 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'How big is a country shrine, and what stands in its precinct?'"
+  "entry": "research/contents.json#religion-and-the-dead - 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'How big is a country shrine, and what stands in its precinct?'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "threshold stones",
   "label": "deviation",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "fox-fire lantern",
   "label": "deviation",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "cinnabar workshop",
   "label": "deviation",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "fox relics",
   "label": "deviation",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "salt wards",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "river",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The granary is a staging node, not the terminal store'; research/ways/ - \"Where does a village's freight go?\""
+  "entry": "research/contents.json#compounds - 'The granary is a staging node, not the terminal store'; research/contents.json#ways - \"Where does a village's freight go?\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "river landing",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The granary is a staging node, not the terminal store'; research/cities/river-cities/ - \"The wharf's working face\"; research/cities/capitals/ - \"The sluice's lifting frame\"; research/ways/ - \"Where does a village's freight go?\""
+  "entry": "research/contents.json#compounds - 'The granary is a staging node, not the terminal store'; research/contents.json#river-cities - \"The wharf's working face\"; research/contents.json#capitals - \"The sluice's lifting frame\"; research/contents.json#ways - \"Where does a village's freight go?\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "fox border",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'Drawing a clan border'"
+  "entry": "research/contents.json#trades-and-services - 'Drawing a clan border'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "parley room",
   "label": "deviation",
-  "entry": "research/urban-features/ - 'Drawing a clan border'"
+  "entry": "research/contents.json#trades-and-services - 'Drawing a clan border'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "boundary stones",
   "label": "convention",
-  "entry": "research/urban-features/ - 'Drawing a clan border'"
+  "entry": "research/contents.json#trades-and-services - 'Drawing a clan border'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "charcoal store",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'Charcoal yards: a tallied depot'"
+  "entry": "research/contents.json#trades-and-services - 'Charcoal yards: a tallied depot'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "wood-kami altar",
   "label": "deviation",
-  "entry": "research/religion-and-death/ - 'Torii are VOTIVE DONATIONS'; research/homesteads/ - \"The farmstead's fixtures\""
+  "entry": "research/contents.json#religion-and-the-dead - 'Torii are VOTIVE DONATIONS'; research/contents.json#homesteads - \"The farmstead's fixtures\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "revetment",
   "label": "accurate",
-  "entry": "research/cities/river-cities/ - \"The wharf's working face\"; research/cities/capitals/ - \"The sluice's lifting frame\""
+  "entry": "research/contents.json#river-cities - \"The wharf's working face\"; research/contents.json#capitals - \"The sluice's lifting frame\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "dock",
   "label": "accurate",
-  "entry": "research/cities/river-cities/ - \"The wharf's working face\"; research/cities/capitals/ - \"The sluice's lifting frame\"; research/ways/ - \"Where does a village's freight go?\""
+  "entry": "research/contents.json#river-cities - \"The wharf's working face\"; research/contents.json#capitals - \"The sluice's lifting frame\"; research/contents.json#ways - \"Where does a village's freight go?\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "tax barge",
   "label": "accurate",
-  "entry": "research/buildings/ - 'The granary is a staging node, not the terminal store'; research/cities/river-cities/ - \"The wharf's working face\""
+  "entry": "research/contents.json#compounds - 'The granary is a staging node, not the terminal store'; research/contents.json#river-cities - \"The wharf's working face\""
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "boatmen's altar",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "river watch",
   "label": "guess",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "balance beam",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
+  "entry": "research/contents.json#trades-and-services - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "charcoal bales",
   "label": "accurate",
-  "entry": "research/urban-features/ - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
+  "entry": "research/contents.json#trades-and-services - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "parley mats",
   "label": "deviation",
-  "entry": "research/urban-features/ - 'Drawing a clan border'"
+  "entry": "research/contents.json#trades-and-services - 'Drawing a clan border'"
  },
  {
   "registry": "COMPOUND_CLASSES",
   "key": "drying stones and bowls",
   "label": "deviation",
-  "entry": "research/buildings/ (no dedicated entry - recorded as silent)"
+  "entry": "research/contents.json#compounds (no dedicated entry - recorded as silent)"
  }
 ]

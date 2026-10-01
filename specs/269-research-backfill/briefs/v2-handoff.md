@@ -11,12 +11,12 @@ in a windbreak), 0 CONTRADICTED. No item had been claimed by another session.
 - SECTION=vegetation/280
 - SECTION=vegetation/290
 - SECTION=vegetation/010
-- SECTION=vegetation/030
+- SECTION=0072
 - SECTION=vegetation/050
-- SECTION=vegetation/090
+- SECTION=0073
 - SECTION=vegetation/110
-- SECTION=vegetation/120
-- SECTION=vegetation/150
+- SECTION=0074
+- SECTION=0075
 - SECTION=vegetation/154
 
 ## Keys

@@ -17,4 +17,4 @@ B42 KNOB - settlements 030 now cites the household of five (canon) against the r
 - **`/tmp/l7r-check/269-s1-pages/07-kotobank.jp.txt` is the wrong page.** kotobank served 日本教育学会 for the 名子 URL. Nothing is cited from it.
 - **Not claimed by anyone else** at the start: B42 was free on RESEARCH-CLAIMS.md.
 - **No section owned by 265, 267 or 268 owes a correction** from this finding.
-- **Pre-existing question-size failures seen but not touched**, because they are not S1's: homesteads 210 (20,107), religion-and-death 160 (20,082), vegetation 120 (20,095), water 070 (20,442), water 270 (21,396).
+- **Pre-existing question-size failures seen but not touched**, because they are not S1's: homesteads 210 (20,107), 0235 (20,082), 0074 (20,095), water 070 (20,442), 0035 (21,396).

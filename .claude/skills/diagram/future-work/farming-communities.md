@@ -32,12 +32,12 @@ The GM, 2026-09-28: *"we just want to make sure that [when] we make village maps
 things in the scripted generation."* So the village's own burial ground is not a feature of its own now; it is owed by
 the village tier's scripted generator when that is built (migration-plan step 5), with the rest of a village's
 funerary grounds. The design, already researched:
-- **The GM's ruling of 2026-09-27** (religion-and-death 210, 530): a village has a cremation ground and a hamlet none;
+- **The GM's ruling of 2026-09-27** (0226, 530): a village has a cremation ground and a hamlet none;
   the country monk lives in the main village and serves its district; within its district the village alone keeps the
   shrine, the headsman's house and the cremation ground.
 - **The cremation ground**: already drawn by the roller's village tier (`_roll_civic` -> `_roll_cremation`, feature 273):
   530's `cremation_seat` knob, the shared `edge_seat`, six jizo. The village generator reuses it.
-- **The burial ground**: religion-and-death 280's knob (in the shrine or temple yard, or a ground of its own apart;
+- **The burial ground**: 0236's knob (in the shrine or temple yard, or a ground of its own apart;
   even odds; a hilltop shrine always apart) and 270's siting (a ground apart downstream, beyond the last house,
   within ~650 ft of the middle of the houses) - feature 269's research, on main once 269 lands; sized by 160's rule in
   the population served (the village's own households plus those of its hamlets that roll `village_ground`); seated
@@ -50,7 +50,7 @@ Hand-rolled village maps are not edited for any of this (the GM, 2026-09-28).
 The GM: *"As for the headsman's gate, Yes, absolutely, we should have that. ... I don't want you to update the
 hand-drawn maps with this, but I do want it recorded in the research, and I do want it to be the case that when we
 begin scripting our village generation ... we should absolutely make sure that the village headsman's house is gated
-if that was a headsman's right."* It was: the one headman's plot read has a nagayamon (research/homesteads 110, 520;
+if that was a headsman's right."* It was: the one headman's plot read has a nagayamon (research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html, 520;
 `specs/269-research-backfill/rulings-2026-09-28.md`). Measurement: `settlement/rolling/place.py` `headman()` draws a
 92 x 56 ft house and no gate on every hand-rolled village. Mechanism: nothing in the roller knows a gate. Sketch: the
 village generator seats the headman's house with a nagayamon on its road face as part of the plot, reserved with the
@@ -72,7 +72,7 @@ house, so a lane arrives at the gate rather than at the wall.
 ## OPEN 2026-09-27, OWED AT CONVERSION: the village generator draws no cremation ground and no wayside stones
 
 Feature 272 put a village cremation ground (six stone jizo at it) and a group of wayside stones at the south lane's
-entry on Hoshigaoka by hand, from research religion-and-death 530 (a VILLAGE draws a cremation ground of its own,
+entry on Hoshigaoka by hand, from research 0238 (a VILLAGE draws a cremation ground of its own,
 seated by a roll beside its burial ground or on its own at the edge downstream; a hamlet none) and 520 (one to three
 wayside stones at each place a road or lane enters a hamlet or village; a wayside-hall knob at even odds). No village
 generator draws either, so converting Hoshigaoka drops them. Sketch: after the burial ground is seated, roll the
@@ -210,7 +210,7 @@ names the two kinds.
 
 ## OPEN 2026-09-28 (269 K3): the toe marsh rolls no alder-willow carr
 
-research/vegetation 120 now reads the wet toe as either the cut open reed form or an alder-willow carr; the engine
+research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html now reads the wet toe as either the cut open reed form or an alder-willow carr; the engine
 draws only the first, and the Marsh modal names the shortfall. **Mechanism**: the marsh placer has one form.
 **Sketch**: a knob `marsh_form` open / carr in the marsh placer, the carr drawn as the alder clumps the belt's marsh
 already uses; the modal's shortfall sentence goes when it lands.
@@ -220,9 +220,9 @@ already uses; the modal's shortfall sentence goes when it lands.
 The kind pass (269 K1-K5, `specs/269-research-backfill/briefs/engine/log.md`) left these research sentences stale;
 each is a rewrite of the "what the map draws" prose to the engine as it is now, with `record-format` and, where a note
 moves, `quote-check`: homesteads/210 (the privy's retired back .60 / gate .25 / stable .15 roll and its counts);
-homesteads/211 (the heap "near the stable or under the eaves" - drawn beyond the privy); homesteads/215 (the band
-higher on wet-rice hamlets, and 0.50-0.80 "until B13 lands"); homesteads/218 (the flank first and "the 18 ft" crown);
-vegetation/154 (back .45 / shed .30 / wind .15); fields/180 ("What the map draws today"); archetypes/140 (the GM's
+0042 (the heap "near the stable or under the eaves" - drawn beyond the privy); 0045 (the band
+higher on wet-rice hamlets, and 0.50-0.80 "until B13 lands"); 0046 (the flank first and "the 18 ft" crown);
+vegetation/154 (back .45 / shed .30 / wind .15); fields/180 ("What the map draws today"); 0018 (the GM's
 2026-08-28 water-heavy DEVIATION beside an accurate label); towns/110 (a storehouse row in a rice-transit town against
 the modal's remote county); cities/government/070 (~20 samurai a county seat against the modal's ~15).
 
@@ -1089,7 +1089,7 @@ its area):
 
 ## Review residue from the canal-B fork re-roll (settlement-review + cohort, 2026-08-16)
 
-The fork feature (research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html) re-rolled
+The fork feature (research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html) re-rolled
 the four live hamlets three times; the review rounds' errors are fixed (thread tails, minimax
 wells, the board's clump keep-out, the lane-crossing guards).
 
@@ -1097,7 +1097,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 
 - **DONE 2026-08-16: the in/out width ladder at junctions - RULED, keep the convention.** The GM
   weighed keep / intake-stilling-pool / conserve-at-fork and ruled that drawn width depicts rank,
-  not discharge (full reasoning recorded in research/rendering/water/010-how-our-maps-draw-channel-widths.html); the
+  not discharge (full reasoning recorded in research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html); the
   settlement-review doctrine now says junction conservation is not a finding, so reviewers stop
   re-flagging it. No ink changes.
 - **DONE 2026-08-16 (second ledger round): collector-junction wedge plots in the water-gray
@@ -1142,7 +1142,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 
 Both items are the CARVE's fan-toe geometry, not the seam pass that surfaced them, and both are
 measured rather than impressionistic. Full context in `pool/hamlets/inashiro/inashiro.notes.md` (2026-08-17)
-and `research/fields/260-bunds-between-the-paddies-aze.html`.
+and `research/questions/0014-bunds-between-the-paddies-aze.html`.
 
 ### OPEN, each with its measurement: four things the 2026-08-18 review round raised and left
 
@@ -1259,7 +1259,7 @@ tint. Measured on Inashiro: the demoted #456 converges at 19.2 deg with a 3.4 ft
 keeps its tint at 18.5 deg with a 10.4 ft end - **the sharper taper is the one that stays blue**, and
 only truncation depth separates them.
 
-That is intended (`research/fields/`: a basin never tapers to a point, and the fan toe TRUNCATES;
+That is intended (`research/contents.json#fields`: a basin never tapers to a point, and the fan toe TRUNCATES;
 10.4 ft less two aze leaves ~7.4 ft of standing water, a workable basin, and it reads as a wedge with
 a flat end at fit zoom). **The trigger to revisit** is a roll that produces a 5-8 ft end which still
 reads as a point on the sheet - the band is empty on today's maps, so the rule is untested there.
@@ -1316,7 +1316,7 @@ Recorded here because feature 121 declined the obvious move and the reasoning sh
 houses in each other's drying shadow. The honest way to pack a nucleus tighter is what real
 *yashiki* lots did - **STAGGER the rows east-west** rather than space them further apart, which
 costs no sunlight at all. The placer is free to; nothing asks it to yet. That belongs to the village
-tier's own work. (`research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html`;
+tier's own work. (`research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`;
 `specs/121-placer-drawn-footprint/research.md` D2.)
 
 ## OPEN, from the 2026-08-18 settlement-review round (four maps, four independent agents)
@@ -1615,7 +1615,7 @@ pool: 9 for 66 farmhouses - inashiro 3/15 (20.0%), sawada 5/19 (26.3%), kashikaw
      position that decided is not the position recorded. Nothing in the artifact can reproduce it.
 
 **THE FIX, verified and then reverted.** Add an avalanche integer hash and key the roll on the household
-COUNT (which `research/homesteads/` already names as the alternative, and which makes the decision
+COUNT (which `research/contents.json#homesteads` already names as the alternative, and which makes the decision
 reproducible from the manifest):
 
     @staticmethod
@@ -1709,7 +1709,7 @@ this file.
 
 FIX DIRECTION (from the reviewer): add a minimum working width - `area / longest side` - to the toe pass
 AND to the gate, derived rather than picked; a basin must be wide enough to stand in and puddle, which
-puts it somewhere in the 12-16 ft band. `research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html` already holds the
+puts it somewhere in the 12-16 ft band. `research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html` already holds the
 reasoning frame, including the point that the alternative to a scrap is making its neighbour bigger.
 **Owner: `waterfields/`** - same subsystem as the FLOODED tint (the `hem_block_len` knob it once named was settled as hem TRACTS, 269 B06), and the toe pass is
 where all three meet.
@@ -2021,7 +2021,7 @@ it claims no approved rate, and leave the question for a later pass. The pass as
 rice-south Chinese villages put graves among the working paddy, and how often? If attested, the label moves
 to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a
 source-backed statement of what the record puts in its place. The modal (`GraveIsland` in
-`interactive/classes/water_and_ways.py`) and the research entry (`research/fields/010-*`) move together.
+`interactive/classes/water_and_ways.py`) and the research entry (`research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html-*`) move together.
 
 ## Carve the paddy around an in-field grave island (settlement-review, Kashikawa, 2026-08-28)
 
@@ -2233,7 +2233,7 @@ builder's corner, which every polder map draws.
 82 (22%) - Kashikawa 6 of 20 to 1 of 20, Mizuguchi 4 of 12 to 0 of 12. Every house is `kind: plain`, so the drawing
 condition did not change: the positional roll simply re-rolled when the houses moved.
 
-**Already recorded, and what is new**: `research/homesteads/120-farm-storehouses-kura.html` records the
+**Already recorded, and what is new**: `research/questions/0040-farm-storehouses-kura.html` records the
 positional roll, its p=0.2993, the realized 28.4% over 1,208 farmhouses, and the precedent that "one re-pack took a
 hamlet from 25% to 15% in a single roll". The magnitude is what is new - 5% and 0% are past that precedent, and the
 entry itself describes the kura as a wealth marker that reads only because most farms lack one.
@@ -2290,7 +2290,7 @@ from a median 178 ft to 827 ft (nearest 90 -> 312 ft, farthest 565 -> 1,455 ft),
 The research pass the sketch below asked for ran on 2026-09-28 (feature 261 plan D24, at the GM's instruction): no page
 read puts a household's grain beside its house - the plot there is the yashikibatake, its kitchen bed - and the pages
 place dry fields on the ground just above the paddy water (a levee ridge shared with the settlement) or upslope on a
-fan. research/fields/160-dry-fields-and-their-crops-hatake.html now says so. What stays open is the settlement's own raised
+fan. research/questions/0006-dry-fields-and-their-crops-hatake.html now says so. What stays open is the settlement's own raised
 ground as a dry-field position on LEVEE terrain, where the settlement and its dry fields share the ridge.
 
 SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `on_the_ridge` (dry plots on the raised
@@ -2341,7 +2341,7 @@ wind) and make it a placer guarantee with a unit test, as feature 166 did for th
 The GM's rule of 2026-09-28: anything attested only in modern times is eliminated. The scripted hamlets were brought into
 line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item); what is left is open here.
 
-- **Wayside stones: no scripted hamlet draws them yet.** The record (religion-and-death 210, the row retitled "Wayside
+- **Wayside stones: no scripted hamlet draws them yet.** The record (0226, the row retitled "Wayside
   stones"; 520 dates a paired dosojin set at a settlement's entrance to 1695, Ueda) supports stones at a hamlet's
   entrance and at its crossings. Sketch: a placer that seats one to three stones where the connector leaves the web
   and at the busiest crossing, as `farm_fixtures[kind=wayside_stone]` with a class and a caption group.
@@ -2401,8 +2401,8 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
   whose seat is `main_door` (Kuwabata, Sawada) draws its bath rooms at the next seat, and `meta.bath_seats_drawn` says so.
   Sketch: let the bath lap the yard's corner under the eaves beside the door - the yard's keep-out is a guess, the seat is not.
 - **The record classes the storehouse annex two ways** (updated by feature 293, 2026-09-30): feature 293 dealt the annex to the
-  largest houses and held its shape to feature 280's farm-shed band (18-27 ft, 1.5-1.8 to one; 280 M18, homesteads/440 - the naya),
-  while homesteads/120 and 430 read the annex as the kura (about 15 x 18 ft, which "as a rule" stands apart from the house) - the
+  largest houses and held its shape to feature 280's farm-shed band (18-27 ft, 1.5-1.8 to one; 280 M18, 0052 - the naya),
+  while 0040 and 430 read the annex as the kura (about 15 x 18 ft, which "as a rule" stands apart from the house) - the
   same split as the `storage shed` class above. Owed: a research pass on which building the annex is; its size follows from that
   section (a kura re-packs every scripted hamlet: a cohort run and a review per map).
 - **Mizuguchi's two east houses walk about four times the straight distance to the way out** (1,176 and 1,207 ft of lane for
@@ -2467,7 +2467,7 @@ first leg from (2290, 1649) to a bend at (2012, 1477) just off the sheet, so the
 north-west apex, about 13 degrees off the north-west wind; main's left south-west through the belt's west arm. The
 planting resumes on both sides (35, 22 and 50 ft of open ground between canopy edges over the first 75 ft).
 **Mechanism**: the connector's dry-exit search (`ways/track.py`, `connector_through`, `dry_exit.py`) scores bearings by dry,
-clear ground and has no preference for the belt's open side. research/rendering/vegetation/030-how-our-maps-draw-the-shelter-belt-its-sides-its-trees-and-why-it-runs-off-the-edge-of-the-map.html records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
+clear ground and has no preference for the belt's open side. research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
 the Huizhou water mouths). **Sketch**: among the dry bearings the sweep admits, prefer the one that leaves through the
 belt's lee or flank arc (`plan.windward`), and fall back to the windward arc only where no other is dry - asked of the
 whole cohort, since it moves every map whose connector currently leaves windward.

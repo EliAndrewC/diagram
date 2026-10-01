@@ -7,9 +7,9 @@ coordination files only with `make lines` / `make append`. Take registry and glo
 Split each of these along its topics, so that a question plus its notes stays under 20,000 bytes
 (`python3 scripts/check-question-size.py`). A finding stays with its footnotes. The new question takes a free prefix
 between its neighbors, and every pointer to a moved paragraph is repointed:
-- `vegetation/120`;
+- `0074`;
 - `water/070`;
-- `water/270`.
+- `0035`.
 
 Then `make record && make citations`, the four record tests, and the size check. Write
 `specs/269-research-backfill/briefs/sp2-handoff.md` with one `- SECTION=<page>/<NNN>` line per question you created or

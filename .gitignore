@@ -103,9 +103,9 @@ __pycache__
 .claude/skills/diagram/research/site/
 .claude/skills/diagram/research/.site-*/
 .claude/skills/diagram/research/*.html
-.claude/skills/diagram/research/cities/*.html
+.claude/skills/diagram/research/contents.json#cities*.html
 .claude/skills/diagram/research/rendering/*.html
-.claude/skills/diagram/research/rendering/cities/*.html
+.claude/skills/diagram/research/contents.json#cities*.html
 .claude/skills/diagram/research/citations/
 .claude/skills/diagram/research/assets/glossary.js
 

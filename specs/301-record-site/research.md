@@ -93,6 +93,6 @@ every margin seated all ten households in one straight row about 260 ft apart. `
 CENTERS, so the row read about 0.2 ft deep and 2,345:1. Two causes, both fixed. (1) The measure: a row is one homestead
 deep, so both extents are floored at `BUNDLE_PITCH` (`hamletgen/homesteads/seats.py`). (2) The band: the row then reads
 23:1, still past the elongated cluster's 12:1 ceiling, but the research gives a row of ten farms 5:1 to 22:1 (frontage
-54-240 ft, `research/homesteads/155-row-villages-resson.html`), and `row_rules` governs a row. So the cluster band is
+54-240 ft, `research/questions/0033-row-villages-resson.html`), and `row_rules` governs a row. So the cluster band is
 not applied to the linear form (`drawn_in_band`, `hamletgen/homesteads/stages.py`). Seed 33 now rolls OK at 10/10.
 Observed and not changed: the row's 260 ft spacing is slightly above the researched 240 ft maximum frontage.

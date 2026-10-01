@@ -6,11 +6,11 @@ claimed by another session. The record checks are owed and NOT run.
 ## Sections
 
 - SECTION=urban-features/580
-- SECTION=urban-features/590
+- SECTION=0212
 - SECTION=urban-features/600
-- SECTION=urban-features/610
-- SECTION=urban-features/620
-- SECTION=cities/capitals/090
+- SECTION=0213
+- SECTION=0214
+- SECTION=0142
 - SECTION=cities/capitals/336
 
 ## Keys
@@ -54,7 +54,7 @@ gave its `wazi` variant to the new term. meshimori (11750) now says what the wom
   now. Two lines owe a change. First, "That provincial cities made do with touring players on temple ground is a
   guess" is now attested and can cite `shibaigoya-jawiki` (roofed theaters only in Edo, Kyoto and Osaka before Meiji)
   and `kanamaruza-jawiki` (a temporary hut for each run, about three times a year, before 1835). Second, "Where the
-  record is thinnest here - a guess: the roofed theater's footprint" is answered: point it at urban-features 620
+  record is thinnest here - a guess: the roofed theater's footprint" is answered: point it at 0214
   (about 80 x 145 ft, the Kanamaruza).
 - **urban-features/030 is over the 20,000-byte cap (21,527 bytes).** It was already over before this work, and I
   did not touch it. U2, U4 and U5 all edit 030, so its owner should split it.

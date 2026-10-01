@@ -1,4 +1,4 @@
-"""Feature 269 group E7: the village windbreak belt's two forms, conifer-led in rank or mixed broadleaf (B30, research/vegetation.html "Shelter belts on a village's windward side")."""
+"""Feature 269 group E7: the village windbreak belt's two forms, conifer-led in rank or mixed broadleaf (B30, research/contents.json#vegetation "Shelter belts on a village's windward side")."""
 
 import math
 import re

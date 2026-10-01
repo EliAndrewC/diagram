@@ -124,13 +124,13 @@ class RollVillageMixin:
         }
 
     def _roll_cremation(self: Settlement, down_deg: float, approach: list[Pt]) -> None:  # type: ignore[misc]
-        """The village's CREMATION GROUND (research religion-and-death 530, the GM's ruling of 2026-09-27: a village
+        """The village's CREMATION GROUND (research 0238, the GM's ruling of 2026-09-27: a village
         and a town have one, a hamlet none, and the country monk performs the rites). Its seat is 530's knob,
         `cremation_seat` - beside the village's burial ground, or on its own at the edge - at even odds, a GUESS; a
         pinned value is honored. The village draws no burial ground yet (feature 273 T06), so "beside" has nothing to
         stand beside and seats as on its own, and the manifest says so. On its own it stands at the village's edge
         through the shared edge seat: 120 ft clear of houses and wells (the engine's pollution clearance), out of the water
-        by a bank's margin only (feature 280 M75, research/religion-and-death/160 'Village burial grounds (bochi)': no set-back from water is attested before
+        by a bank's margin only (feature 280 M75, research/questions/0235-village-burial-grounds-bochi.html 'Village burial grounds (bochi)': no set-back from water is attested before
         modern times, and the 90 ft cremation margin was a scaled guess), its fire bed off the shrine's approach, as near
         beyond the last houses as that allows - the scan's 650 ft is how far it looks, not a distance the record gives
         (feature 280 M77); six stone jizo at it (530, where the village has no burial ground for them to stand at)."""
@@ -281,7 +281,7 @@ class RollVillageMixin:
         # ground. 92 ft is the bundle plus the circles' waste and no more.
         #
         # CONVERTED THROUGH `ftpx`, NOT `bscale`. They are the same number everywhere except the
-        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html)
+        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html)
         # - and a village bundle really is drawn at half a hamlet's pixel size (measured: house 25x14
         # px against 53x27). Sizing off bscale therefore asked a village band for twice the ground
         # its bundles occupy, which strung its cluster thin over a hollow hull and tripped
@@ -333,7 +333,7 @@ class RollVillageMixin:
         # longer list only APPENDS candidates - the leading ones are unchanged, and any map that fills
         # its quota breaks out below and is byte-identical. The old 3x+18 left no headroom: Honda seated
         # exactly 15 houses for 18 households, the floor of the households_consistent band, so the small
-        # geometry shift from the per-line bund wander (research/rendering/archetypes/050-how-our-maps-draw-parcels-and-bunds-inside-a-polder-aze.html, sixth) cost
+        # geometry shift from the per-line bund wander (research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html, sixth) cost
         # it one house and failed the gate. A map should not sit one rejected candidate from failing.
         for lx, ly in self.cluster_seeds(cluster_shape, 0.0, 0.0, f.lat, f.dep, int(households * 6.0) + 30, rng):
             if placed >= households:

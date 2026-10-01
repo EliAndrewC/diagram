@@ -2,12 +2,12 @@
 
 - SECTION=presentation/labels-on-maps-cartographic-label-placement
 - RENDERING=none
-- OLD=research/presentation/ research/presentation/ research/presentation/
+- OLD=research/contents.json#map-conventions research/contents.json#map-conventions research/contents.json#map-conventions
 - MODALS=
 
 - SECTION=presentation/what-a-label-may-cover-on-town-and-city-maps
 - RENDERING=none
-- OLD=research/presentation/
+- OLD=research/contents.json#map-conventions
 - MODALS=
 
 - BASE=e414d1590

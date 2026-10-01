@@ -103,13 +103,13 @@ lists each opening and where its text went, or that it was retired and why.
 `research/<page>.html#<anchor>` to the stem holding the anchor (with `#anchor` kept when it is not the heading); a
 whole-page pointer `research/<page>/` or `research/<page>.html` to the section the part became,
 `research/contents.json#<section id>`; a prose pointer `research <page> '<heading>'` to the stem; and an old number
-`<page> NNN` or `<page>/NNN` naming an existing question (e.g. `homesteads 440`) to `NNNN` (three digits after a page
+`<page> NNN` or `<page>/NNN` naming an existing question (a page name and its three-digit number) to `NNNN` (three digits after a page
 name; every number-form rewrite is listed for review in `migration.md`, because prose can put a page name before a
 number that is not a question). The pointer check (`check-research-pointers.py`) validates the new forms (a stem file
 exists; a section id exists in `contents.json`) and refuses every old form whose old path or (page, number) is in
 `moved-303.json`, naming the new pointer from it. Exempt: `specs/*/request.md`, SOURCE blocks, `moved-303.json`, and
 `specs/303-research-organization/migration.md`, which holds only the generated old-to-new mapping. Everything else in this
-feature's own directory is swept and checked like any landed spec. A range in a landed brief (`buildings 240-640`) is
+feature's own directory is swept and checked like any landed spec. A range in a landed brief (a page name and a span of numbers) is
 rewritten to the new numbers of the questions it covered; a range covering no question names no research file and is
 left as written - it passes the check without an escape, because the check refuses only a (page, number) that IS in
 the mapping, and neither end of such a range is.

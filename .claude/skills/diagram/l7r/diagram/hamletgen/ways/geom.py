@@ -332,7 +332,7 @@ def worked_ground_rings(M: Mapping[str, Any]) -> list[list[Pt]]:
 
 
 class WorkedGround:
-    """The worked ground's EDGE - the bund a way arrives on (269 B04, research/rendering/fields/260) - built once and asked per end.
+    """The worked ground's EDGE - the bund a way arrives on (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html) - built once and asked per end.
 
     The paddy's outline, its dry plots, and its drawn rice: the outline runs 3-9 ft off the rice on a valley fan and a
     plot can stand up to 12 ft past it (measured on the five pool hamlets), so a tip measured to the outline alone could
@@ -431,9 +431,9 @@ def end_serves(
     three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
     tread that had arrived at a garden fence - the steading clause, at `STEADING_ARRIVAL_FT`. An end served by a house
     alone is cut beside it, at its closest approach, by `_trim_to_service` (the GM's road to nowhere, 2026-09-27; 269 B17,
-    research/rendering/ways/020: "pulled back to the last house it serves").
+    research/questions/0081-village-lanes.drawing.html: "pulled back to the last house it serves").
 
-    THE FIELD IS REACHED ON ITS BUND (269 B04, research/rendering/fields/260: the path "never ends in open ground short of the
+    THE FIELD IS REACHED ON ITS BUND (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path "never ends in open ground short of the
     bund"): within `BUND_REACH_FT` of the worked ground's edge, where it used to be anywhere within 60 ft of the field. An
     end short of the bund is carried on to it (`ways/bund.py`) before the trims that read this."""
     if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):

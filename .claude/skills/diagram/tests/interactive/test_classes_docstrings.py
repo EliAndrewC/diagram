@@ -27,7 +27,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     "banana dike": (),
     "vegetable ground": (),
     "duck pen": (),
-    # feature 280 M57 (research/archetypes/140): a sluice through each pond's dike is a modern manual's form - retired
+    # feature 280 M57 (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html): a sluice through each pond's dike is a modern manual's form - retired
     "pond sluice": (),
     # feature 280 (settlement-review of Inashiro): the heading named the form eliminated - the bath is a room joined to the
     # house (M22) and the firewood is kept in a wood shed (M21); renamed, the prose and data carried over unchanged
@@ -43,7 +43,7 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
     "tea dike",  # 269 E9 (B34): the attested tea dike, a third dike-crop form beside mulberry and fruit
     "homestead grove",  # feature 291: a farm's own grove, on the sides its settlement rolled - drawn once the forms rolled again
-    "farm holding",  # feature 291 amendment 3: a row village's far-row farm's holding behind its lot (research homesteads/155)
+    "farm holding",  # feature 291 amendment 3: a row village's far-row farm's holding behind its lot (research 0033)
     "farm channel",  # feature 291 amendment 5: the channel led into a dispersed farm's grounds (research homesteads/200)
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
@@ -82,7 +82,7 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     of the three is license for a fourth. Feature 293 moved one more sibling text under the same bar: the farmhouse /
     storage shed pair told a reader the sheds "stand for" the 1972 survey's 4.4 outbuildings a household, a modern count the
     GM's ruling of 2026-09-28 dropped and the class's own Note says is not drawn; it now says the shed is the storehouse the
-    larger farms have, about one in eight (research/homesteads/120).
+    larger farms have, about one in eight (research/questions/0040-farm-storehouses-kura.html).
 
     Feature 232 moved `sources` three more times, all under the same bar and all in the same direction -
     a key the record stopped being able to cite. `stream` and `field ditch` had been written from the
@@ -109,14 +109,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     Chinese village's separate grove patches and the Sendai grove, and gained the key it now cites (`coggins-minor-2018`).
 
     Feature 269 (K1) moved `fallow`'s `label` from guess to accurate under the same bar: its section was recorded as
-    silent, and fields/250 now reads the resting paddy basin - scattered among the cropped plots, grazed - which the
+    silent, and 0013 now reads the resting paddy basin - scattered among the cropped plots, grazed - which the
     engine draws as a rolled form; its entry and sources moved with it. The same pass re-pointed paddy (fields/270),
-    bund (fields/260) and the four dry crops (fields/180, and 050 on the three that lacked it) and gave each the keys
+    bund (0014) and the four dry crops (fields/180, and 050 on the three that lacked it) and gave each the keys
     its rewritten prose rests on, and corrected the five fallow sibling texts, which still called fallow a patch of
     ground resting for the season.
 
     Feature 269 (K2) moved three more labels from guess to accurate under the same bar, each once the engine drew
-    what the record now reads: `bathhouse` (homesteads/214 - the village-by-village share and the front-yard or
+    what the record now reads: `bathhouse` (0044 - the village-by-village share and the front-yard or
     corridor seat), `hen coop` (215 - Buck's 82% of farms) and `persimmon` (218 - the dooryard or behind the house,
     the 23 ft crown). It re-pointed farmhouse (240, the spread of bearings), byre (300, the beast living with its
     keeper), privy and manure heap (260, the four seats and the field pit), and corrected two sibling texts the
@@ -134,19 +134,19 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     Feature 269 (K4) moved `footbridge`'s `label` from guess to accurate under the same bar: water/290 reads the three
     crossings over small water (a single log or board, logs under trodden earth, a planked deck), which the engine now
     rolls per settlement; the evenness of the roll, the 2 ft line and the spacing stay disclosed guesses and rulings.
-    Its entry gained ways/030 and its sources the keys 290 and 030 rest on. The same pass gave `village lane`
-    rendering/ways/020 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
+    Its entry gained 0084 and its sources the keys 290 and 030 rest on. The same pass gave `village lane`
+    0081 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
     keys 290 cites; re-pointed the irrigation ditch (water/310, the bare intake mouth), the drainage ditch (water/090 and
     fields/090 - where the drain lets its water go and why it runs across the fall; the retired 'Water-first v2'
     heading dropped) and the weir (300's four forms and 310's choice); and corrected two sibling texts the engine had
     made false: a weir always of stone-packed crib, and a ditch always crossed by a plank.
 
-    Feature 269 (K5) moved `pig sty`'s `label` from guess to accurate under the same bar: archetypes/210 reads the pig
+    Feature 269 (K5) moved `pig sty`'s `label` from guess to accurate under the same bar: 0025 reads the pig
     as the dike-pond district's own animal and a pen on a fish-pond bank as a late-Ming instruction, so the sty is read
     and only the share of households keeping one stays a disclosed guess. The same pass re-pointed the mulberry dike
     (220 - the density continuum, the drawn spacing the late-Qing figure by the GM's ruling), the fruit dike (230 - the
     oldest dike planting, lychee above all; the modern cane-and-vegetable succession no longer its why), the fry pond
-    (200 - the fry bought from one township, the two kinds of village), the manure pit (homesteads/260 - the field
+    (200 - the fry bought from one township, the two kinds of village), the manure pit (0047 - the field
     pit), and, by the GM's ruling that a write-up of a place where animals lived says so, the fish pond (200 and 210 -
     its carp) and the paddy (210 - the delta's ducks herded in the rice fields), each with the keys its prose rests on.
 
@@ -158,7 +158,7 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
 
     Feature 280 (the modern-only sweep, the GM's ruling of 2026-09-28 that nothing attested only in modern times is drawn)
     moved data fields under the same bar, each with the prose that research rewrote: `woodpile`'s `label` guess to
-    accurate and its `covers` to the wood shed (homesteads/212, 720 - the shed attested in 1824 and the Kakimochi count,
+    accurate and its `covers` to the wood shed (0043, 720 - the shed attested in 1824 and the Kakimochi count,
     the open stack and the kizuma not drawn); `fry pond`'s `label` to accurate and its `covers` to a fry village's ponds
     (archetypes/200 - the two attested kinds of village, now rolled); `bathhouse`'s `covers` to the bath room joined to the
     house (homesteads/740); `storage shed`'s to the storehouse against the farmhouse (720, 440); `pig sty`'s to the pond
@@ -167,9 +167,9 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     and well to the keys their new prose rests on.
 
     Feature 292's closing pass (C3, 2026-10-01) moved two labels and one `sources` under the same bar, each to match the
-    rendering section its rewritten prose is written from: `garden` accurate to guess (homesteads 050 - the bed's crops and
+    rendering section its rewritten prose is written from: `garden` accurate to guess (0039 - the bed's crops and
     its area are guesses, and the rendering section's area band is the research's own guess), `storage shed` accurate to
-    convention (rendering/homesteads 120 - the storehouse is drawn as an annex on a fixed wall at a farm shed's size,
+    convention (0040 - the storehouse is drawn as an annex on a fixed wall at a farm shed's size,
     where the storehouses recorded stood free of the house and were smaller), and `byre`'s `sources` gained `koshigaya-shishi-noumin-jukyo` (Hasuda's 50
     stables in 76 houses, against which the drawn share is now named a calibration).
 

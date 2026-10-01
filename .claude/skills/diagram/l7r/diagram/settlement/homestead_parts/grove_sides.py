@@ -1,4 +1,4 @@
-"""How many sides a farmstead's grove takes, and which (feature 291; research/homesteads/010-groves-of-trees-around-farmhouses-yashikirin.html).
+"""How many sides a farmstead's grove takes, and which (feature 291; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html).
 
 The record reports three forms, each of one region: the grove on the windward pair of faces (the Sendai plain's north and
 west, planted so under the first Sendai lord and kept for centuries), on three faces with the front left open (the Tonami
@@ -30,7 +30,7 @@ GROVE_SIDES_FLOOD = (2,) * 15 + (3,) * 9 + (4,) * 16
 # rolled per settlement, even odds - nothing says which.
 GROVE_FLANKS = (-1, 1)
 
-# A THIN BAND IS ONE TREE DEEP: two mean crown radii (`CANOPY_R_FT` = 8.5 ft, research/rendering/vegetation/060-how-our-maps-stock-woods-and-size-crowns.html). The sides of a grove away from the wind are a band of lesser trees (Tonami's east side: flowering trees,
+# A THIN BAND IS ONE TREE DEEP: two mean crown radii (`CANOPY_R_FT` = 8.5 ft, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html). The sides of a grove away from the wind are a band of lesser trees (Tonami's east side: flowering trees,
 # persimmon, fig; its west-to-north side hackberry and alder), far thinner than the windward stand (1.57 house depths -
 # 44 ft at the pool's median house); how deep it was is on no page read, so one tree is a GUESS.
 THIN_BAND_FT = 17.0
@@ -43,7 +43,7 @@ _CLOCKWISE = (N, E, S, W)
 #   NW - as laid out: yard south.
 #   NE - mirrored east-west: yard south, garden west.
 #   SW - a quarter turn counterclockwise: yard east - the Tonami plain's own arrangement, whose tall trees stood from the
-#        south round to the west and whose east side was the entrance and the garden (research/homesteads/010-groves-of-trees-around-farmhouses-yashikirin.html).
+#        south round to the west and whose east side was the entrance and the garden (research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html).
 #   SE - the mirror across the anti-diagonal: yard west, the afternoon sun (a half turn would put it north, in the house's
 #        shadow all day).
 _TURNS: dict[str, Turn] = {

@@ -15,7 +15,7 @@ check to prevent trees from overlapping with other things") was never meant to s
 another, and the pack audit's `trees_overlap` does - so a shrine grove draws as spaced trees (42% canopy) where a
 kept wood has a closed canopy. **The hall is sized from the research**: the Hoshigaoka shrine hall's 60 by 48 ft
 footprint came from the village map's glyph, not from the GM, so it is presumed not a real measurement and the
-building is sized from the record's measured bands (religion-and-death 120: a village hall about 20 to 35 ft on a
+building is sized from the record's measured bands (0222: a village hall about 20 to 35 ft on a
 side; the one-roof hall-and-dwelling building 2,100 to 3,600 sq ft, its depth 26 to 43 ft at the one attested
 example), on the sheet and on the village map together. (Figures observed 2026-09-27; method: read from the
 record's question 120 and the pack audit's report on the 268 sheet; research.md R1-R3.)

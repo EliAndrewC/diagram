@@ -3,7 +3,7 @@
 The GM ruled that a village district's main village alone keeps the shrine, the headman's house and the cremation
 ground, and asked where a hamlet's dead then lie - its own ground, the village's, or bones brought home - to follow
 the history where it agrees and to roll a knob where it does not. Feature 273 rolled `hamlet_burial` between a ground
-at the hamlet's edge and none. Feature 280 (research/religion-and-death/280, M68) searched for the hamlet's own ground
+at the hamlet's edge and none. Feature 280 (research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, M68) searched for the hamlet's own ground
 before modern times: a settlement's own graveyard is attested at the end of the Edo period as ONE form among an
 individual's, a lineage's and a temple's, and the dead went more often to temple graves; that EVERY hamlet kept a
 ground of its own rests only on twentieth-century folklore records and surveys - an undated record of custom, which
@@ -28,7 +28,7 @@ def stage_burial(s: Settlement, plan: SitePlan) -> None:
 
     Records `meta.hamlet_burial` on a hamlet, so a map says where its dead lie; a pinned value must be an attested one.
     Nothing is drawn - the village's ground lies with the main village, and the hamlet's own ground is attested only in
-    twentieth-century records (research/religion-and-death/280).
+    twentieth-century records (research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html).
 
     Steps:
         l7r.diagram.hamletgen.burial.stage_burial

@@ -197,7 +197,7 @@ class KidoMixin:
                     [round(cx, 1), round(cy, 1)] for cx, cy in _corners(guard)
                 ],  # the watch box's own footprint, so kido_guard_box_clear_of_lanes can grade it (the bbox alone cannot tell box from bar)
                 # ...and the TRUE (rotated) footprint of every part (the kido squares to its LANE, not the
-                # fence - research/rendering/cities/fabric/210-how-our-maps-draw-city-wards-and-their-gates-machi-kido.html). The bbox is an axis-aligned box
+                # fence - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html). The bbox is an axis-aligned box
                 # round the whole group - honest while every kido was axis-aligned, badly overstated
                 # now that they turn onto their lane: Nagahara's SW gate at 115deg has a bbox ~60%
                 # larger than the glyph, and the keep-clear checks read it as overlapping a mural

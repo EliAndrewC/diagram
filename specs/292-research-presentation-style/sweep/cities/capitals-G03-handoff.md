@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-the-castle
-- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
+- OLD=research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals
 - MODALS=
 - BASE=2c07f4ac0
 

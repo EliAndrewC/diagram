@@ -47,7 +47,7 @@ constructed inputs including the violating case (FR-004), and retires the tests 
       verify: DONE. verified at ade061bc7: research R12 names each rule's placer and unit test (the violating case included); make done green; cohort 1-60 60/60; the R11 sweep clean plain and under the 284 probes
 - [x] T12 [US1] `waterfields/comb.py` - water:W13, water:W14, water:W15, water:W31, water:W36
       research: rendering
-      verify: DONE. verified at ade061bc7: research R12 names each rule's placer and unit test (the violating case included); make done green; cohort 1-60 60/60; the R11 sweep clean plain and under the 284 probes; water W36 is the winter-crop knob (R7, research/fields/165)
+      verify: DONE. verified at ade061bc7: research R12 names each rule's placer and unit test (the violating case included); make done green; cohort 1-60 60/60; the R11 sweep clean plain and under the 284 probes; water W36 is the winter-crop knob (R7, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html)
 - [x] T13 [US1] `waterfields/seams/close.py` - water:W16, water:W17, water:W18, water:W20, water:W21, water:W22, water:W23, water:W24, water:W26, water:W27
       research: rendering
       verify: DONE. verified at ade061bc7: research R12 names each rule's placer and unit test (the violating case included); make done green; cohort 1-60 60/60; the R11 sweep clean plain and under the 284 probes; water W26/W27 recorded, not enforced (R7, a guess held open)

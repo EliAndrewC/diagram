@@ -39,8 +39,8 @@ _SITE = "site"
 def page_dir_for(rel: str) -> str | None:
     """The fragment directory of an assembled page, or None if this path is not one.
 
-    `research/ways.html` and `research/citations/ways.html` -> `research/ways`;
-    `research/cities/fabric.html` and `research/citations/cities/fabric.html` -> `research/cities/fabric`;
+    `research/contents.json#ways` and `research/contents.json#ways` -> `research/ways`;
+    `research/contents.json#urban-fabric` and `research/contents.json#urban-fabric` -> `research/contents.json#citiesfabric`;
     `research/SOURCES.html` -> `research/sources`.
     """
     rel = rel.replace(os.sep, "/")

@@ -30,7 +30,7 @@ The reference hamlet (Inashiro) regenerates with its road drawn at the new defau
 
 1. **Given** a Mode B gen that calls `s.road(...)` without a width, **When** it runs, **Then** the road is drawn at the new default real width (converted at the map's scale) and `M["road_width"]` records it.
 2. **Given** a gen that passes an explicit width, **When** it runs, **Then** that width is honored as before.
-3. **Given** the research record, **When** a reader looks up the road width, **Then** `research/cities/capitals.md` "Street widths" and the road's own docstring cite `tokaido-jawiki` (5 ken) for the default, and the interactive map's road modal says the same.
+3. **Given** the research record, **When** a reader looks up the road width, **Then** `research/contents.json#citiescapitals.md` "Street widths" and the road's own docstring cite `tokaido-jawiki` (5 ken) for the default, and the interactive map's road modal says the same.
 
 ---
 
@@ -73,7 +73,7 @@ The scope is UNLOCKED (released 2026-08-27, T92), so the pool sweep that widens 
 
 | Decision | Class (accurate / deviation / guess) | Why | Recorded at |
 |---|---|---|---|
-| trunk road default ~30 ft (5 ken) | accurate | ja.wikipedia 東海道: the 1604 standard of 5 ken | `research/cities/capitals.md#street-widths`, the `s.road` docstring, `interactive/classes.py` road text |
+| trunk road default ~30 ft (5 ken) | accurate | ja.wikipedia 東海道: the 1604 standard of 5 ken | `research/contents.json#citiescapitals.md#street-widths`, the `s.road` docstring, `interactive/classes.py` road text |
 | 30 ft rather than 29.5 ft (if the plan rounds) | deviation (a round figure) | the GM said "about thirty feet" | the same entry |
 
 ## Assumptions

@@ -6,12 +6,12 @@ claimed by another session since the brief was written.
 
 ## Sections
 
-- SECTION=fields/010
+- SECTION=0008
 - SECTION=fields/022
 - SECTION=fields/050
 - SECTION=fields/100
 - SECTION=fields/400
-- SECTION=fields/410
+- SECTION=0015
 
 ## New registry keys
 
@@ -58,13 +58,13 @@ Existing keys newly cited on these sections: `aze-jawiki`, `jori-jawiki`, `tamei
   by the calendar a high-summer barley plot is stubble, bare or under soybean, millet is green and tall, and only
   buckwheat can be in flower (white). Whether to keep one season or each crop's recognizable color is an open
   drawing choice for the GM - recorded as open on fields/400, not made.
-- A18 SILENT (the rates) - fields/010 now cites where a pond among paddy comes from (the plains "dish pond" dug
+- A18 SILENT (the rates) - 0008 now cites where a pond among paddy comes from (the plains "dish pond" dug
   into hollows or even converted farmland; household ponds about 10 m square), how many ponds Japan has, and
   Kagawa as the densest pond country (12,187 ponds, half under 1,000 t); nothing readable gives a rate per field or
   per village, and nothing speaks of rocks left in paddy, so the engine's rates (pond 0.55 on low ground; rocks on
   every terrace field, half of ribbon fields, 1-3 each) stay disclosed guesses - no change; pond frequency is a
   degree (calibrated liberty), not a knob.
-- A27 B125 DEVIATION + ACCURATE + SILENT - new fields/410: the chrysanthemum is the imperial emblem by custom since
+- A27 B125 DEVIATION + ACCURATE + SILENT - new 0015: the chrysanthemum is the imperial emblem by custom since
   Go-Toba and an offering flower, but nothing read describes a planted field kept for a court, so Hirameki's
   Imperial field is recorded as the setting's deliberate deviation; flowers WERE grown for the market in nursery
   villages on Edo's edge (Somei, Sugamo, Horikiri) and sent in from Boso, and chrysanthemums were a Chinese medicinal
@@ -74,7 +74,7 @@ Existing keys newly cited on these sections: `aze-jawiki`, `jori-jawiki`, `tamei
 
 ## Corrections owed to other owners
 
-- fields/020 (feature 269): it frames the straight rectangular plot as the modern consolidation artifact. The
+- 0005 (feature 269): it frames the straight rectangular plot as the modern consolidation artifact. The
   `suido-ishizue-kochi-seiri` page says 「西日本では、条里地割など明治期までの整形区画が広く分布していた」 - regular
   jori plots were widespread in western Japan up to Meiji. 020 should say the ruled grid is modern EXCEPT where the
   jori division survived, and cite it (fields/022 now does, as `suido-ishizue-kochi-seiri-2`).
@@ -88,6 +88,6 @@ Existing keys newly cited on these sections: `aze-jawiki`, `jori-jawiki`, `tamei
   size or the court's chrysanthemum beds.
 - The Edo farming manuals (農業全書 and others) would settle the dry-crop sowing question; no readable full text
   was found.
-- Entry drift: fields/010, 022, 050 and 100 are `Entry:` sections for modal classes (the dry-crop classes name 050;
+- Entry drift: 0008, 022, 050 and 100 are `Entry:` sections for modal classes (the dry-crop classes name 050;
   paddy features name 010), so `_entry_owed.py` will name those pairs for the check sessions.
 - The jori-plain knob (A05) and the dry-crop season colors (A15) are GM decisions, not made here.

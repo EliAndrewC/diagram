@@ -4,14 +4,14 @@
 
 - SECTION=religion-and-death/ground-swept-clear-around-shrines-and-graves
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-swept-ground-around-shrines-and-graves
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=SweptClearing ShrineGrove
 
 ## Salt heaps at doorways (morijio)
 
 - SECTION=religion-and-death/salt-heaps-at-doorways-morijio
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-salt-heaps-at-doorways-morijio
-- OLD=research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead
 - MODALS=
 
 - BASE=0bfdb1aba

@@ -130,7 +130,9 @@ class HamletSpec:
         if self.kosatsuba_siting is not None and self.kosatsuba_siting not in KOSATSUBA_SITINGS:
             raise ValueError(f"kosatsuba_siting {self.kosatsuba_siting!r} must be one of {sorted(set(KOSATSUBA_SITINGS))}")
         if self.pond_layout is not None and self.pond_layout not in POND_LAYOUTS:
-            raise ValueError(f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/rendering/archetypes/160-how-our-maps-draw-polders-weitian-waju.html)")
+            raise ValueError(
+                f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html)"
+            )
         lo, hi = HOUSEHOLD_BAND
         if not lo <= self.households <= hi:
             raise ValueError(
@@ -409,7 +411,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     water_flow = spec.water_flow if spec.water_flow is not None else down_deg
     _form = spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS))
     # FLOOD-PRONE GROUND (feature 291): the farms stand on reclaimed low ground behind dikes, or on a dike - the ground
-    # the Izumo ring guarded against floods. This project's decision (research/homesteads/, the grove's shape); a
+    # the Izumo ring guarded against floods. This project's decision (research/contents.json#homesteads, the grove's shape); a
     # spec pins it either way.
     _flood = spec.flood_ground if spec.flood_ground is not None else (_archetype in POLDER_ARCHETYPES or _form == "dike_top")
     if spec.grove_sides is not None and spec.grove_sides not in (2, 3, 4):

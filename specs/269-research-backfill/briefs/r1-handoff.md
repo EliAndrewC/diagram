@@ -1,11 +1,11 @@
 # 269 R1 handoff - religion-and-death: burial (B36)
 
-- SECTION=religion-and-death/160
+- SECTION=0235
 - SECTION=religion-and-death/170
 - SECTION=religion-and-death/180
 - SECTION=religion-and-death/206
 - SECTION=religion-and-death/270
-- SECTION=religion-and-death/280
+- SECTION=0236
 - KEY=meiji-1884-bochi-saimoku
 - KEY=isesaki-bochi-kijun
 - KEY=kawazoe-2010-ryobosei

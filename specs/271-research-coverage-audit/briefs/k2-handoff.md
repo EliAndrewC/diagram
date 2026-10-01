@@ -7,13 +7,13 @@ Written 2026-09-27 by the K2 write session (clone diagram-research-6). The recor
 - SECTION=cities/government/200
 - SECTION=cities/government/210
 - SECTION=cities/government/220
-- SECTION=cities/government/230
-- SECTION=cities/government/240
-- SECTION=cities/government/250
-- SECTION=cities/government/010
+- SECTION=0167
+- SECTION=0168
+- SECTION=0169
+- SECTION=0163
 - SECTION=cities/government/060
 - SECTION=cities/capitals/290
-- SECTION=buildings/040
+- SECTION=0096
 
 (010, 290 and 040 gained pointer sentences only; 010's `neixiang-yamen` note gloss changed; 060 gained one sentence and the note `kidoban-jawiki-2`.)
 
@@ -53,7 +53,7 @@ Existing keys newly cited on cities/government: `bjd-qing-yamen`, `takayama-jiny
 
 - **towns/010 (T1's, already checked)**: its spec calls the gate-to-yamen avenue "a guess ... no readable source was found putting it in a small seat". Still true for a county seat, but cities/government/220 now cites a provincial office with a 9 m avenue running south from its gate (`kokuga-jawiki`, Shimotsuke) and the Ming-Qing alternative (the screen wall across a cross street, `sohu-wuzhou-yamen`). Suggest one pointer sentence in towns/010 to `cities/government.html#which-way-does-a-governors-compound-face-and-does-an-avenue-lead-to-its-gate`; not made here because T1 owns the section.
 - **267 (compounds R19-R22, R24, R26)**: the brief's coordination asks 200 and 240 to cite 267's gatehouse, clerks' room, hearing-court surface, main-gate width and cell-size sections. None of them exists in this clone yet, so nothing cites them. Once 267 lands, 210 (clerks' rooms, gatehouse) and 240 (cells) should each gain a pointer.
-- **buildings/040 (possible defect, not K2's to fix silently)**: the note `neixiang-yamen-zhwiki-6` quotes the Neixiang jail as 「占地南北130丈，东西70丈」 - 130 by 70 zhang is about 430 by 230 m, larger than the whole yamen (47,000 m2). The quote may be verbatim, but the page's figure is almost certainly a typo for 13 by 7 zhang. Whoever checks buildings/040 next should re-read the page and add a gloss saying the figure cannot be the jail's.
+- **0096 (possible defect, not K2's to fix silently)**: the note `neixiang-yamen-zhwiki-6` quotes the Neixiang jail as 「占地南北130丈，东西70丈」 - 130 by 70 zhang is about 430 by 230 m, larger than the whole yamen (47,000 m2). The quote may be verbatim, but the page's figure is almost certainly a typo for 13 by 7 zhang. Whoever checks 0096 next should re-read the page and add a gloss saying the figure cannot be the jail's.
 - **cities/capitals/290 vs the drawn cities**: 290 says the 224 x 148 ft ministry is "the researched provincial footprint", but the three provincial cities draw 114x78 to 140x95 ft. 230 records both. Whether the capital's ministries should shrink, or the provincial ones grow, is a GM decision under feature 018. Not changed here.
 
 ## Left open

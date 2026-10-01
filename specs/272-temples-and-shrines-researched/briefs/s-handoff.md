@@ -24,13 +24,13 @@ Each split moved text and notes unchanged except for joining pointers; no class 
 
 - SECTION=religion-and-death/090
 - SECTION=religion-and-death/092
-- SECTION=religion-and-death/100
-- SECTION=religion-and-death/110
+- SECTION=0215
+- SECTION=0221
 - SECTION=religion-and-death/112
 - SECTION=religion-and-death/114
-- SECTION=religion-and-death/120
+- SECTION=0222
 - SECTION=religion-and-death/121
-- SECTION=religion-and-death/122
+- SECTION=0223
 - SECTION=religion-and-death/124
 - SECTION=religion-and-death/125
 - SECTION=religion-and-death/126

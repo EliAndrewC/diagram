@@ -10,7 +10,7 @@ from .palette import FLOODED, PADDY_CELL_ACRES, RICE_GREENS
 
 
 # The two hill archetypes below are unscripted at the settlement tier; the specification a future generator
-# owes them is research/rendering/archetypes/040-how-our-maps-draw-terraced-and-valley-paddies-tanada-yachida.html (the history at research/archetypes/040-terraced-and-valley-paddies-tanada-yachida.html).
+# owes them is research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html (the history at research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html).
 def build_terraces(
     W: float,
     H: float,
@@ -37,7 +37,7 @@ def build_terraces(
     most are far smaller (some hold three rice plants), 15,862 terraces in one village. So each step is split
     along the contour into cells of ~`cell_acres` (the universal PADDY_CELL_ACRES target, derived at this
     map's `ftpx`), and `n_terraces` is set so the step DEPTH stays shallow enough that a cell reads wider than
-    deep (a terrace runs long along the contour, short down the fall). See research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html."""
+    deep (a terrace runs long along the contour, short down the fall). See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html."""
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill unit
     ux, uy = -dy, dx  # cross-slope (contour) unit
@@ -162,7 +162,7 @@ def build_ribbon(
     individual leveled cells - a ribbon paddy is a leveled cell like any other (the same small ~`cell_acres`
     as a comb or terrace paddy; a hill valley floor cannot hold one field-wide sheet level over any slope).
     `n_bands` sets the cross-bund (down-valley) step and the width is split into cells of that target, derived
-    at this map's `ftpx`. See research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html."""
+    at this map's `ftpx`. See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html."""
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))
     ux, uy = dy, -dx

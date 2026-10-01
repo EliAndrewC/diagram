@@ -12,7 +12,6 @@ import pytest
 from l7r.diagram.interactive.record.notes import (
     NoteError,
     allocate,
-    derive_key,
     merge,
     notes_of,
     number_references,
@@ -82,15 +81,3 @@ def test_a_key_that_is_not_lower_case_kebab_is_refused() -> None:
 def test_a_note_is_read_with_its_body_verbatim() -> None:
     body = '<a href="http://x"><code>fei-1939</code></a> - 「a quotation」 (the gloss)'
     assert notes_of(f'<li data-note="fei-1939">{body}</li>') == {"fei-1939": body}
-
-
-def test_the_splitter_derives_a_key_from_the_source_and_then_an_ordinal() -> None:
-    """R5: 1,524 notes lead with a source key, a page repeats one 635 times, 326 lead with none."""
-    taken: set[str] = set()
-    for want, source in [("fei-1939", "fei-1939"), ("fei-1939-2", "fei-1939"), ("fei-1939-3", "fei-1939")]:
-        got = derive_key(source, "how-deep-the-water-stands", taken)
-        assert got == want
-        taken.add(got)
-    assert derive_key(None, "how-deep-the-water-stands", taken) == "how-deep-the-water-stands"
-    taken.add("how-deep-the-water-stands")
-    assert derive_key(None, "how-deep-the-water-stands", taken) == "how-deep-the-water-stands-2"

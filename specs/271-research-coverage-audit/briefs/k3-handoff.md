@@ -4,15 +4,15 @@ Written 2026-09-27 in clone diagram-research-3, commit 97458704a. Nothing pushed
 
 ## Sections
 
-- SECTION=cities/government/280
+- SECTION=0118
 - SECTION=cities/government/290
 - SECTION=cities/government/300
-- SECTION=cities/government/310
-- SECTION=cities/government/320
+- SECTION=0170
+- SECTION=0164
 - SECTION=cities/government/330
-- SECTION=buildings/180
+- SECTION=0116
 - SECTION=urban-features/120
-- SECTION=cities/sizing/020
+- SECTION=0182
 
 ## Registry keys
 
@@ -52,10 +52,10 @@ owners should add "cities/government" to the "Used for" line. Glossary terms add
 
 ## Corrections owed to other owners (for the orchestrator to send)
 
-- **269 B39, cities/government/030**: its rule "NONE of them is walled: a walled samurai estate stands OUTSIDE the rampart, and the only walled samurai compound within the city is the governor's" contradicts 290 - senior retainers' houses inside the town had earthen walls and long-house gates (bukeyashiki-wiki, jta-nagayamon, kotobank-bukeyashiki), and every samurai lot was enclosed by something. 030 should say senior houses are walled and junior ones fenced or hedged, and point at 290; its "rank" size split should point at 280 for the lot and house sizes.
+- **269 B39, 0161**: its rule "NONE of them is walled: a walled samurai estate stands OUTSIDE the rampart, and the only walled samurai compound within the city is the governor's" contradicts 290 - senior retainers' houses inside the town had earthen walls and long-house gates (bukeyashiki-wiki, jta-nagayamon, kotobank-bukeyashiki), and every samurai lot was enclosed by something. 030 should say senior houses are walled and junior ones fenced or hedged, and point at 290; its "rank" size split should point at 280 for the lot and house sizes.
 - **G2 (diagram-research-4), cities/capitals/100** (renamed there, so not edited here): its detached samurai house (2,322 sq ft drawn, the Matsue 67 tsubo) is a 500-1,000-koku retainer's house - the top of the ladder - and a pointer to government 280 for the whole ladder belongs beside it. Its Fukui note quotes the page's meters, which the page transposes (28 ken is about 51 m, 32.5 ken about 59 m); the feet in its prose are right.
-- **K5 (diagram-research-2), cities/capitals/360**: the OUTSIDE column should add the garrison's barracks (canon, government 310), the drill ground (320) and the riding ground (330); the inside column's castle-guard barracks and armory stand.
-- **267, buildings 320/380/390/400/420**: 280 and 290 name those questions in plain text with the links in HTML comments, because the anchors are not in this clone yet; turn the comments into links once 267 lands.
+- **K5 (diagram-research-2), 0143**: the OUTSIDE column should add the garrison's barracks (canon, government 310), the drill ground (320) and the riding ground (330); the inside column's castle-guard barracks and armory stand.
+- **267, 0105/380/390/400/420**: 280 and 290 name those questions in plain text with the links in HTML comments, because the anchors are not in this clone yet; turn the comments into links once 267 lands.
 
 ## Left open
 

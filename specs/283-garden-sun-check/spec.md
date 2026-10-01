@@ -63,7 +63,7 @@ and its reviews.
   "This feels like you are asking me something that should be a research question"): a magistracy's seat is taken from
   the attested seats of research buildings 405 (west of the residence, south beside the formal garden, the rear
   service ground, a parcel of its own), the sun ruling out every seat under its hours; a bed that fits its sun only
-  smaller takes the size knob's attested low end (research buildings 400), never less than the sheet drew unless that
+  smaller takes the size knob's attested low end (research 0109), never less than the sheet drew unless that
   low end is itself what fits. Each sheet's notes, program checks and kinds stay true, and each sheet is `building-review`ed and ledgered, its findings on the garden applied; findings on what fills the ground a garden left are applied or carried, listed, to a follow-up (Decisions Recorded). A shrine garden's place stays within the sheet's
   match to its village map.
 - **FR-006**: The program declarations and operative docs that describe where a garden goes MUST name the sun rule,
@@ -100,14 +100,14 @@ and its reviews.
   shrine's bed moved to the open ground below the forecourt, west of the approach (research
   homesteads 044).
 - **Ubame's bed at the size knob's low end (accurate)**: the only open ground in its walls with a sun bed's hours (research homesteads 044) holds about
-  `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research buildings 400 (research.md R1); the rear strip held about `2,100 sq ft` (observed 2026-09-28; method: its rect 430 x 44 px at 3 px a foot). Hayakawa's bed, drawn at
+  `1,065 sq ft` (observed 2026-09-28; method: the bed's rect 102 x 94 px at 3 px a foot), the soup-greens plot of research 0109 (research.md R1); the rear strip held about `2,100 sq ft` (observed 2026-09-28; method: its rect 430 x 44 px at 3 px a foot). Hayakawa's bed, drawn at
   `780 sq ft` (observed 2026-09-28; method: its rect 88 x 80 px at 3 px a foot, as the rear strip's 160 x 44), under that
   low end, grows to it (about `1,076 sq ft`, research.md R1) at its seat before Hajime's quarters, the pond and pines moved
   before the reception (constitution XIV).
 - **Round 1 of the building reviews applied (2026-09-28)**: Hayakawa's bed moved from the reception's garden front to
   the divider beyond the pond; each bed is painted in rows over its formal garden, which keeps its own shape (a map
   drawing convention - the bed reads as worked ground, not a compartment of the ornamental garden); the three rear
-  strips the beds left are filled by two household storehouses each (research buildings 400, 160 and 230: Matsushiro's
+  strips the beds left are filled by two household storehouses each (research 0109, 160 and 230: Matsushiro's
   two dozo, Takayama's kitchen storehouse; a `storehouse` kind), a service alley kept behind each house; the shrine's
   bed moved `12 px` south, clear of the swept clearing (observed 2026-09-28; method: the bed's rect). Screening, a bed's
   order against the formal garden, a plot's fencing and a shrine keeper's plot were searched and are absence notes on

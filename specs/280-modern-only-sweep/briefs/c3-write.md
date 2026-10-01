@@ -33,7 +33,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M126 **The generous lot**: the generous end of the per-town lot-size degree. It is a present-day extent: the Aoyagi estate "is just under a hectare today" (semboku-kakunodate-en), and jta-aoyagi-kakunodate says "the layout a visitor sees may not be exactly the Edo one". The Fukui, Kaga and Matsue anchors are period (cities/government/280) - kinds: none (samurai house lots); maps: minami, nagahara, tango, and the future city generator. M.
+- M126 **The generous lot**: the generous end of the per-town lot-size degree. It is a present-day extent: the Aoyagi estate "is just under a hectare today" (semboku-kakunodate-en), and jta-aoyagi-kakunodate says "the layout a visitor sees may not be exactly the Edo one". The Fukui, Kaga and Matsue anchors are period (0118) - kinds: none (samurai house lots); maps: minami, nagahara, tango, and the future city generator. M.
 - M127 **The storehouse cap**: the city's storehouses capped at "never more than one to every four households". The one town ratio is a modern count at Kitakata: "some 2,600 storehouses are said to stand, one to every four households, most still in use ... after a great fire in 1880" (iwasaki-kitakata; jtb-kitakata, "current as of 2023"). The village kura size comes from sekkei-sya-sayama-kura, an architect's recent walk (cities/fabric/230) - kinds: none (storehouses); maps: tango, nagahara, minami, hoshizora, ubame, hirameki. M.
 
 ## The procedure (session 1: research and write)
@@ -65,7 +65,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on cities/government/280, cities/fabric/230, and cities/government or cities/fabric 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0118, cities/fabric/230, and cities/government or cities/fabric 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

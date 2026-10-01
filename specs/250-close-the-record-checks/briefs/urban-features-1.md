@@ -35,7 +35,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **Refining forges / clan border** - *"agreed between the two domains in 1642 **after more than fifty years of dispute**, and **growing smaller and more closely spaced over time** as the zonal frontier became a line"* - fn-65 carries the 1642 re-confirmation and the 130 km line, but neither the fifty years nor the changing spacing.  _(from `urban-quotecheck.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/urban-features/*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#trades-and-services*.html` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 
@@ -50,7 +50,7 @@ fragment the grep did not name.
 
 ## The procedure (session 1: locate, read, write)
 
-1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/urban-features/`; note the fragment and
+1. **Locate.** Grep each item's words over `.claude/skills/diagram/research/contents.json#trades-and-services`; note the fragment and
    sentence. An item that is a claim about the SETTING is checked against the GM's canon - `budgets.md` and `l7r.md`
    in `/host-l7r-repo/setting/`, and `/host-l7r-repo/gm-assistant/setting/*.md` - with ONE call naming every term of
    every such item: `make canon TERMS="<term>|<term>|<term>"` (in `.claude/skills/diagram`). A direct read of a canon

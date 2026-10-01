@@ -14,7 +14,7 @@
    "id": "D2-layout",
    "summary": "A page is a directory of fragments: _front, NNN-<slug>, _tail, prefixes gapped by ten, three digits a question and four a registry entry",
    "class": "within",
-   "why": "FR-011 and FR-012 state exactly this. Now also verified on disk: `research/ways/` holds 010- to 050- question fragments plus _front and _tail, `research/sources/010-works-cited/` holds 0010- to 9200- four-digit entries gapped by ten, and `research/cities/capitals/` the same shape one level down."
+   "why": "FR-011 and FR-012 state exactly this. Now also verified on disk: `research/contents.json#ways` holds 010- to 050- question fragments plus _front and _tail, `research/sources/010-works-cited/` holds 0010- to 9200- four-digit entries gapped by ten, and `research/contents.json#capitals` the same shape one level down."
   },
   {
    "id": "D2-registry",

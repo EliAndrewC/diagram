@@ -207,7 +207,7 @@ def test_a_resume_item_continues_the_same_session_in_its_own_log(tmp_path: pathl
 
 # Feature 274: the write cap (D2), the continuation (D3) and the key cap's variable (D4), SC-001.
 
-OVER = "# Brief\n\n**Do not edit:** fields 010-900\n\n## Your items\n" + "".join(f"- B{n} question {n}\n" for n in range(10, 15))
+OVER = "# Brief\n\n**Do not edit:** 0005, 0006, 0007, 0008, 0009, 0010, 0011, 0012, 0013, 0014, 0015, 0017, 0231\n\n## Your items\n" + "".join(f"- B{n} question {n}\n" for n in range(10, 15))
 
 
 def test_an_over_cap_brief_is_refused_at_launch_before_anything_starts(tmp_path: pathlib.Path, capsys, monkeypatch) -> None:

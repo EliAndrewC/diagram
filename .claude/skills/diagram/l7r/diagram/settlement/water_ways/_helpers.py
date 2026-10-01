@@ -32,7 +32,7 @@ def _angle_between(run: Any, other: Any) -> float:
 
 _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nobody (see trim_lane_stubs)
 
-# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/rendering/ways/020 - "a lane that serves a farmhouse
+# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/questions/0081-village-lanes.drawing.html - "a lane that serves a farmhouse
 # ends at that house's dooryard, or runs on to reach something a reader can see"; how close counts as serving is the
 # record's GUESS). It was 90 ft to the house's CENTER here, which let an end run 60 ft past the last steading into the
 # grass. The figure is hamletgen's `STEADING_ARRIVAL_FT`, derived there from the clip (a tread that reaches a plot records
@@ -44,7 +44,7 @@ HOUSE_SERVE_FT = 60.0
 # An end has walked past a house when the foot of the perpendicular from the house falls more than this far back along
 # its last segment - the 4 ft grain `_trim_to_service` walks in, and the `_stop_at_closest_approach` cut's own.
 PAST_GRAIN_FT = 4.0
-# ...OR RUNS ON TO THE BUND (269 B04/B17, research/rendering/fields/260 - "the field path runs from the hamlet to the paddy's outer
+# ...OR RUNS ON TO THE BUND (269 B04/B17, research/questions/0014-bunds-between-the-paddies-aze.drawing.html - "the field path runs from the hamlet to the paddy's outer
 # bund and joins it ... it never ends in open ground short of the bund"). An end has arrived when its centerline stops
 # within a bund's width (~1.5 ft) and the widest lane's half-tread (3 ft) of the worked ground's edge, with a foot and a
 # half of drawing margin: the cap of the tread then lies on the bund line. A map drawing convention.

@@ -212,7 +212,7 @@ def test_a_seating_drawn_past_every_shapes_band_is_taken_back_and_the_next_margi
 
 def test_a_row_village_is_a_row_not_a_cluster_and_takes_no_cluster_band(monkeypatch: pytest.MonkeyPatch) -> None:
     """The GM, 2026-10-01 (tripwire seed 33): a row village's farms stand one frontage apart along their street - 54 to
-    240 ft on the measured planned rows (research/homesteads/155-row-villages-resson.html) - so ten farms run 490 to 2,160
+    240 ft on the measured planned rows (research/questions/0033-row-villages-resson.html) - so ten farms run 490 to 2,160
     ft, 5:1 to 22:1 against one homestead's depth. The 12:1 ceiling is a CLUSTER's; the linear form's row is held by
     `row_rules`, and its seating is kept however long it runs."""
     s, plan = _toy(10)

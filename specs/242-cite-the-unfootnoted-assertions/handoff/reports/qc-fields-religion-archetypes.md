@@ -1,9 +1,9 @@
 # Quote check — feature 242 footnotes on `fields.html`, `religion-and-death.html`, `archetypes.html`
 
 Files read:
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/fields/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/fields/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/religion-and-death/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/religion-and-death/`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/archetypes/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/archetypes/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#fields` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#fields`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#religion-and-the-dead` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#religion-and-the-dead`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#field-archetypes` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#field-archetypes`
 
 62 distinct URLs; each fetched once by its OWN footnote link. **No host refused.** Nothing is NOT-READABLE: every footnote link is a public page needing no login, purchase or institutional network.
 

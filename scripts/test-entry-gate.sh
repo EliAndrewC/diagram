@@ -6,7 +6,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(git -C "$HERE" rev-parse --show-toplevel)"
 GATE="$HERE/entry-gate.sh"
-PAGE="$ROOT/.claude/skills/diagram/research/archetypes.html"
+PAGE="$ROOT/.claude/skills/diagram/research/contents.json#field-archetypes"
 BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
 # ISOLATE THE CENSUS (feature 169). A suite that drives a recording guard must write into a throwaway
 # log, or its fixtures land in the live guard census - the very numbers this project uses to decide

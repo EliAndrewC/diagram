@@ -2,13 +2,13 @@
  "ford-spacing": {
   "value": 160,
   "unit": "ft",
-  "quantity": "FORD_SPACING in hamletgen/consts.py - the along-brook distance between crossing places, 160 px at the hamlet scale of 1 ft per px; a chosen value (a guess, research/water/270), read 2026-09-27",
+  "quantity": "FORD_SPACING in hamletgen/consts.py - the along-brook distance between crossing places, 160 px at the hamlet scale of 1 ft per px; a chosen value (a guess, research/questions/0035-villages-beside-their-stream-one-bank-or-both.html), read 2026-09-27",
   "command": "grep -n FORD_SPACING .claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
  },
  "copse-house-reach": {
   "value": 90,
   "unit": "ft",
-  "quantity": "COPSE_HOUSE_REACH_FT in hamletgen/consts.py - how far a dooryard-copse crown may stand from a farmhouse; a calibration of 'in the gaps between the houses' (research/vegetation/020), read 2026-09-27",
+  "quantity": "COPSE_HOUSE_REACH_FT in hamletgen/consts.py - how far a dooryard-copse crown may stand from a farmhouse; a calibration of 'in the gaps between the houses' (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html), read 2026-09-27",
   "command": "grep -n COPSE_HOUSE_REACH_FT .claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
  },
  "inashiro-F1": {
@@ -1121,7 +1121,7 @@
   "answers": "101615354a60",
   "value": 0.58,
   "unit": "ha",
-  "quantity": "Kuwabata's drawn belt polygon; the windbreak pop-up no longer claims one to two hectares for every map but says a hamlet's belt is half a hectare to under two across these maps (the pool: 0.58-1.75 ha), from research/vegetation 030",
+  "quantity": "Kuwabata's drawn belt polygon; the windbreak pop-up no longer claims one to two hectares for every map but says a hamlet's belt is half a hectare to under two across these maps (the pool: 0.58-1.75 ha), from research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html",
   "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py Windbreak; .claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json village_groves",
   "command": "grep -n 'half a hectare to under two across these maps' .claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py"
  },

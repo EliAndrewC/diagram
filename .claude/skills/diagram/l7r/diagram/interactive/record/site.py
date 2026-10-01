@@ -310,7 +310,11 @@ class Build:
             notes.append(render_note(Placed(placed.key, placed.number, sn.keyed_to(body, "#"), 0), ""))
         out.append('<section class="part footnotes">\n<h1 id="citations">Citations</h1>\n<ol>\n' + "\n".join(notes) + "\n</ol></section>\n")
         reg = self.registry
-        toc.append(f'<li><a href="#{reg.title_id}">{html.escape(reg.title)}</a><ul>' + "".join(f'<li><a href="#{gid}">{html.escape(_text(_HEAD.search(gh).group(3)) if _HEAD.search(gh) else gid)}</a></li>' for gid, gh, _i in reg.groups) + "</ul></li>")
+        toc.append(
+            f'<li><a href="#{reg.title_id}">{html.escape(reg.title)}</a><ul>'
+            + "".join(f'<li><a href="#{gid}">{html.escape(_text(_HEAD.search(gh).group(3)) if _HEAD.search(gh) else gid)}</a></li>' for gid, gh, _i in reg.groups)
+            + "</ul></li>"
+        )
         out.append(f'<section class="part">\n<h1 id="{reg.title_id}">{html.escape(reg.title)}</h1>\n')
         out.append(self.rewrite(reg.intro, None, "all.html", f"{store.REGISTRY_DIR}/_front.html", single=True))
         for gid, ghtml, items in reg.groups:

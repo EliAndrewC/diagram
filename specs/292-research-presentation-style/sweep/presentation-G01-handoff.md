@@ -2,7 +2,7 @@
 
 - SECTION=presentation/the-map-sheet-its-title-legend-frame-and-margins
 - RENDERING=none
-- OLD=research/presentation/ research/presentation/ research/presentation/
+- OLD=research/contents.json#map-conventions research/contents.json#map-conventions research/contents.json#map-conventions
 - MODALS=
 - BASE=bc2d135dd
 

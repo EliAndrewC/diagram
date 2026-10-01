@@ -10,7 +10,7 @@ committed asset that a test holds in sync - the DRY-by-derivation pattern this f
 
 ## Summary
 
-The footnotes are 35 to 65 percent of every research page's bytes (`research/homesteads/`: 157.5 KB, of which
+The footnotes are 35 to 65 percent of every research page's bytes (`research/contents.json#homesteads`: 157.5 KB, of which
 58.9 KB is its 88 footnotes; `cities/capitals.html`: 190.9 KB, 64.9 KB) and the GM expects them to grow - longer
 quotations, explanatory text around them. This feature (1) moves every page's footnotes into a CITATIONS PAGE,
 `research/citations/<name>.html` beside `research/<name>.html`, without duplicating their content - the research
@@ -22,7 +22,7 @@ judges whether a source is applicable to a premodern East Asian setting, runs it
 as their write-ups are added, and makes it a step of the procedure BEFORE a new source's numbers, claims or details
 are integrated into the maps.
 
-The pages in scope are the fifteen research pages (`research/*.html` less `SOURCES.html`, and `research/cities/*.html`;
+The pages in scope are the fifteen research pages (`research/*.html` less `SOURCES.html`, and `research/contents.json#cities*.html`;
 795 footnotes citing 319 distinct registry keys as of 2026-09-07), the registry `SOURCES.html`, the record's assets,
 the tooling and tests that read the record, and the procedure documents.
 
@@ -116,10 +116,10 @@ the tooling and tests that read the record, and the procedure documents.
 
 ## Success criteria
 
-- **SC-001** `research/homesteads/` is at most 100 KB, and every research page has lost at least the bytes of
-  its footnote section; `research/homesteads/` exists, opens from disk, and lists its works before
+- **SC-001** `research/contents.json#homesteads` is at most 100 KB, and every research page has lost at least the bytes of
+  its footnote section; `research/contents.json#homesteads` exists, opens from disk, and lists its works before
   its 88 notes.
-- **SC-002** Hovering footnote 1 on `research/homesteads/` opened from disk shows the Kashima survey's quote,
+- **SC-002** Hovering footnote 1 on `research/contents.json#homesteads` opened from disk shows the Kashima survey's quote,
   as before the split; clicking it lands on `citations/homesteads.html#fn-1`, whose back link returns.
 - **SC-003** Every one of the 319 cited keys has both write-ups in `SOURCES.html`; the `source-applicability`
   agent's verdict on each is recorded in this feature's `research.md`, and no MISSING limit is left unwritten.

@@ -176,7 +176,7 @@ caption, and writes, moves or removes the caption's leader - a `<line>` beside i
   l7r/diagram/compound.py                                                captions through the placer
   tests/labels/                                                          new: the placer's unit tests, the path test
   tests/gate/test_hand_sheet_captions.py, tests/fixtures/caption_ledger.json
-  research/presentation/*, research/sources/010-works-cited/94x0-*
+  research/contents.json#map-conventions*, research/sources/010-works-cited/94x0-*
   buildings.md, dev/placement.md, future-work/cities.md
 .claude/agents/building-review.md
 scripts/review-round-hooks.sh                                            T13

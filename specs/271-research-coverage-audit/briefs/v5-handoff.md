@@ -9,12 +9,12 @@ check sessions' work.
 - SECTION=archetypes/300
 - SECTION=archetypes/310
 - SECTION=archetypes/320
-- SECTION=archetypes/330
+- SECTION=0027
 - SECTION=archetypes/340
 - SECTION=archetypes/020
 - SECTION=archetypes/080
 - SECTION=archetypes/150
-- SECTION=archetypes/160
+- SECTION=0019
 
 ## Registry keys
 
@@ -46,13 +46,13 @@ verbatim. New glossary terms here: `horita` (12990), `hakehi` (13000), `warichi`
 - A21 KNOB - tea had two forms, the hillside garden and Japan's bund tea (one row of bushes along field banks, taking no plot); mulberry on a polder stood in rows along the dike crest (Wanchun, 1061); lotus was grown only a little before the Meiji market and whole-district lotus is a late crop near a great city; the lotus share of a village's paddy stays unsourced (absence) - for the generator: tea rolls between the hill fringe and a bund-row form; on a non-dike-pond polder mulberry belongs on the dike crest (the perimeter dike already draws an inner mulberry row, consistent); lotus belongs at the low end, which puts the GM's 2026-07-19 liberty (upper part of the band) further from what was read - raised for the GM, NOT changed.
 - A24 ACCURATE - a household's land was small parcels scattered among its neighbors' (the pre-reform pattern), warichi re-divided fields by lot in unstable lowland and landslide villages with one part of every quality group to each lot, and in the setting most farmers are tenants; nothing read says tenure or tenancy left any mark on the ground (absence) - for the generator: nothing to change; the maps are right to draw no holdings, no household blocks and no tenant marking.
 - A62 ACCURATE (bounds; a village polder's own dike SILENT) - the Wanchun polder's dike was six zhang broad and one zhang two chi high (foot five times the height), crown only a few chi, planted with mulberry and willow with reeds at its foot; an early Edo river dike was about 5.45 m base, 1.82 m crown, 3.64 m high; a Mino waju dike was fixed 1 m lower than Owari's great dike by agreement; a Fukutsuka drain culvert through the ring was 41.1 m long - for the generator: a dike's size is a calibrated liberty scaled by the polder; a village polder's dike belongs under about 3.6 m high on about 5.5 m of foot. MEASURE the perimeter dike band (drawn 14-40 px across, `settlement/land/dikes.py`) in feet on the Kuwabata manifest and say whether it sits inside those bounds; I did not convert px to feet.
-- A66 KNOB + CONTRADICTION-RESOLVED - a polder drained by gravity through gated culverts (hakehi) opened when the water outside fell, intake at the high end and outlet at the low, as many as its size needed (Fukutsuka 1789-1872: 34 drains, 1 gate, 4 intakes); by the chain pump lifting water out in flood; or, where it stayed waterlogged, by raising the rice on horita strips with boat channels between (Japan, about 1753 to 1975); a sea polder's outlet worked the same way against the tide (the tide operation itself is absence-noted) - for the generator: two sluices are fine for a village polder, drains should sit at the low end and intakes at the high (the pool polders already do); horita is a knob a Japanese polder may roll in place of ordinary paddy. CONTRADICTION-RESOLVED: archetypes/160 said water crossed "only at the two gated sluices" as if a property of polders; it now says the pool maps draw two and a larger polder had as many as it needed.
+- A66 KNOB + CONTRADICTION-RESOLVED - a polder drained by gravity through gated culverts (hakehi) opened when the water outside fell, intake at the high end and outlet at the low, as many as its size needed (Fukutsuka 1789-1872: 34 drains, 1 gate, 4 intakes); by the chain pump lifting water out in flood; or, where it stayed waterlogged, by raising the rice on horita strips with boat channels between (Japan, about 1753 to 1975); a sea polder's outlet worked the same way against the tide (the tide operation itself is absence-noted) - for the generator: two sluices are fine for a village polder, drains should sit at the low end and intakes at the high (the pool polders already do); horita is a knob a Japanese polder may roll in place of ordinary paddy. CONTRADICTION-RESOLVED: 0019 said water crossed "only at the two gated sluices" as if a property of polders; it now says the pool maps draw two and a larger polder had as many as it needed.
 
 ## Owed to other owners
 
-- 269 B35 (archetypes/040): its sentence "the leveled cell stays the size it is everywhere else" is contradicted by archetypes/300 - terrace paddies scale with slope, from about 20 m2 (Shiroyone) to a few hundred (Obasute). Its two absence notes can cite `kotobank-tanada` ("on steep mountain ground the paddies become narrow strips with fairly high vertical walls between tiers, kept with stone") and `tanada-jawiki`; and it should point to 300 for wall and paddy size.
-- 269 B35 (archetypes/050): may point to 320 for whether tenure shows in the plot pattern.
-- archetypes/030 (no owner named in either inventory): its note "bund-margin tea (keihan-cha) is a Japanese practice with no Chinese equivalent" is labeled absent, but `chaen-jawiki` now attests bund tea in Japan (310); the Chinese half stays unsourced.
+- 269 B35 (0021): its sentence "the leveled cell stays the size it is everywhere else" is contradicted by archetypes/300 - terrace paddies scale with slope, from about 20 m2 (Shiroyone) to a few hundred (Obasute). Its two absence notes can cite `kotobank-tanada` ("on steep mountain ground the paddies become narrow strips with fairly high vertical walls between tiers, kept with stone") and `tanada-jawiki`; and it should point to 300 for wall and paddy size.
+- 269 B35 (0022): may point to 320 for whether tenure shows in the plot pattern.
+- 0020 (no owner named in either inventory): its note "bund-margin tea (keihan-cha) is a Japanese practice with no Chinese equivalent" is labeled absent, but `chaen-jawiki` now attests bund tea in Japan (310); the Chinese half stays unsourced.
 
 ## Left open
 

@@ -4,11 +4,11 @@
 
 - SECTION=vegetation/sloping-ground-and-hillsides
 - RENDERING=rendering/vegetation/how-our-maps-show-that-the-ground-slopes
-- OLD=research/vegetation/ research/vegetation/
+- OLD=research/contents.json#vegetation research/contents.json#vegetation
 - MODALS=
 - BASE=34da1bed7
 
-Sloping ground and hillsides: no other feature held vegetation 160, so nothing was left out. The old section had no
+Sloping ground and hillsides: no other feature held 0070, so nothing was left out. The old section had no
 `.originals.html` (its one citation quotes English). No modal, code comment or fixture named the old anchor, so the
 only links to re-aim were in the assembled page. The research section keeps only the farming consequences of slope.
 They still rest on general reading and say so where each claim stands. Their two old-form absence notes were

@@ -33,7 +33,7 @@ writer finds such a paragraph, it goes to a rendering section titled "How our ma
 - fold: archetypes/050-polder-parcels-were-a-private-tenure-patchwork.html, archetypes/060-what-lies-between-two-parcels-and-how-wide-is-it.html, archetypes/320-does-who-held-or-rented-a-plot-show-in-the-field-pattern.html
 - rendering: How our maps draw a polder's parcels and the bunds between them
 - modals: -
-- note: 050 leads (the chessboard was the canal grid; the parcels were a private-tenure patchwork); 060 (the gap between two drawn parcels IS the bund - the GM's question of 2026-07-24 and this project's decision) is mostly rendering; 320 (does who held or rented a plot show in the field pattern? No) generalizes the patchwork - most farmers are tenants is the setting's canon. archetypes/070 (why a hand-piled bund is never straight) folds out to the fields page's bund topic - link; fields/260 and 630 (bund width) - link, do not repeat.
+- note: 050 leads (the chessboard was the canal grid; the parcels were a private-tenure patchwork); 060 (the gap between two drawn parcels IS the bund - the GM's question of 2026-07-24 and this project's decision) is mostly rendering; 320 (does who held or rented a plot show in the field pattern? No) generalizes the patchwork - most farmers are tenants is the setting's canon. archetypes/070 (why a hand-piled bund is never straight) folds out to the fields page's bund topic - link; 0014 and 630 (bund width) - link, do not repeat.
 - size: 12237
 
 ## T5 Polder dikes: what they were made of, how big, and what grew on them
@@ -54,7 +54,7 @@ writer finds such a paragraph, it goes to a rendering section titled "How our ma
 - fold: archetypes/170-what-stands-on-a-dike-pond-hamlet-that-a-paddy-hamlet-lacks.html, archetypes/620-were-manure-jars-sunk-in-the-ground-by-paths-and-roads-before-modern-times-yes---a-1797-account-of-china-saw-them.html
 - rendering: How our maps furnish a dike-pond hamlet
 - modals: FruitDike, FryPond, ManurePit, PigSty
-- note: 170 is the inventory (the GM's question of 2026-08-27); its fruit-dike, fry-pond and pig parts are told in full in T8, T9 and T10 - keep here only the list and point there. The sunk manure jar and pit have no topic elsewhere, so they live here, with 620 as their before-modern-times check (a 1797 account of China saw them). homesteads/211 and 730 (the farm's manure heap) - link.
+- note: 170 is the inventory (the GM's question of 2026-08-27); its fruit-dike, fry-pond and pig parts are told in full in T8, T9 and T10 - keep here only the list and point there. The sunk manure jar and pit have no topic elsewhere, so they live here, with 620 as their before-modern-times check (a 1797 account of China saw them). 0042 and 730 (the farm's manure heap) - link.
 - size: 16073
 
 ## T8 Mulberry and other crops on pond dikes (sangji, guoji)
@@ -75,7 +75,7 @@ writer finds such a paragraph, it goes to a rendering section titled "How our ma
 - fold: archetypes/210-which-animals-did-a-dike-pond-village-keep-at-its-ponds-pigs---the-ducks-were-herded-in-the-rice-fields.html, archetypes/171-does-a-dike-pond-hamlet-keep-pigs-and-ducks-on-its-pond-dikes.html, archetypes/180-does-a-pig-sty-have-to-stand-back-from-the-water-or-from-the-ponds-sluice.html
 - rendering: How our maps place the pig sty at the pond
 - modals: FishPond, Paddy, PigSty
-- note: 210 leads because it is the settled answer (pigs at the ponds; the ducks were herded in the rice fields), and 171 (pigs and ducks ON the pond dikes, from Ruddle & Zhong's modern figures) must be reconciled with it, not told beside it. 180 (the sty stands at the water on purpose - the waste goes in) follows. homesteads/470 (did an ordinary south-China rice village keep pigs and ducks?) - link.
+- note: 210 leads because it is the settled answer (pigs at the ponds; the ducks were herded in the rice fields), and 171 (pigs and ducks ON the pond dikes, from Ruddle & Zhong's modern figures) must be reconciled with it, not told beside it. 180 (the sty stands at the water on purpose - the waste goes in) follows. 0049 (did an ordinary south-China rice village keep pigs and ducks?) - link.
 - size: 22801
 
 ## Groups
@@ -90,13 +90,13 @@ writer finds such a paragraph, it goes to a rendering section titled "How our ma
 - archetypes/070-why-is-a-hand-piled-bund-never-straight---and-never-square-at-the-corners.html (10532) -> fields topic on bunds and their shape (the one that absorbs fields/021 "Bunds are SHARED" and fields/022 "A bund runs on, or it turns for a reason"); a general paddy bund question, with the GM's questions and ruling of 2026-07-25
 - archetypes/120-wet-rice-hydrology-has-no-crossings-to-draw.html (2768) -> water topic on where two watercourses meet (the one that absorbs water/200 "Where two watercourses meet, how is the junction drawn?"); wet-rice hydrology in general, largely rendering
 - archetypes/190-what-a-settlement-is-and-what-the-place-card-may-say-about-it.html (8521) -> settlements T1 "The five sizes of settlement: hamlet, village, town, provincial city and capital" (the settlements planner offered it; it covers the same place card as settlements/040; its branch-hamlet (hongo) finding is research, the card's claims rendering)
-- archetypes/250-were-most-villages-clustered-or-scattered-and-how-common-was-each-form.html (3460) -> homesteads topic on nucleated and dispersed villages (the one that absorbs homesteads/150 "Does a hamlet have to be NUCLEATED at all?"); it answers the place card's "is this form ordinary?" - link settlements T1
+- archetypes/250-were-most-villages-clustered-or-scattered-and-how-common-was-each-form.html (3460) -> homesteads topic on nucleated and dispersed villages (the one that absorbs 0031 "Does a hamlet have to be NUCLEATED at all?"); it answers the place card's "is this form ordinary?" - link settlements T1
 - archetypes/260-did-a-hamlet-have-a-shrine-of-its-own.html (3402) -> religion-and-death T2 "Village shrines: where they stand, and how big their grounds are" (the religion-and-death planner offered it)
 
 ## Confusable pairs
-- "Polder dikes: what they were made of, how big, and what grew on them" (100's dike willows) / the vegetation page's village shelter belt (vegetation/030): willows planted to hold a dike vs the windbreak that shelters the houses.
+- "Polder dikes: what they were made of, how big, and what grew on them" (100's dike willows) / the vegetation page's village shelter belt (0072): willows planted to hold a dike vs the windbreak that shelters the houses.
 - "Polders: fields diked against the fluctuating water (weitian, waju)" / "Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)": a great dike round many fields vs small dikes heaped from each pond's own mud - both are called dikes.
 - "Parcels and bunds inside a polder (aze)" / "Polder dikes": the low bund between two parcels vs the high dike round the polder.
-- "Pigs and ducks at a dike-pond" / homesteads/470 (pigs and ducks in an ordinary south-China rice village): the sty set on the pond dike to feed the fish vs a rice farm's own pigs.
-- "The dike-pond hamlet: ... manure jars" / homesteads/211 (the farm's manure heap): a sunk jar or pit by the path vs a heap in the farmyard.
+- "Pigs and ducks at a dike-pond" / 0049 (pigs and ducks in an ordinary south-China rice village): the sty set on the pond dike to feed the fish vs a rice farm's own pigs.
+- "The dike-pond hamlet: ... manure jars" / 0042 (the farm's manure heap): a sunk jar or pit by the path vs a heap in the farmyard.
 - "Cash crops on rice land" (the tea row along the bunds) / "Mulberry and other crops on pond dikes" (230's tea dike): tea planted as a row on paddy bunds vs tea on a pond dike.

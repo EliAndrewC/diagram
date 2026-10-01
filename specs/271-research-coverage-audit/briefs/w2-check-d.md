@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-5`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -32,8 +32,8 @@ apply ONE GROUP of the questions it wrote - read only your own lines of the hand
 session's section, cut it to a pointer and cite that section:
 COORDINATION (C89): town street widths only; city street widths are 269's cities/fabric 030/070 (B40) - cite them
 COORDINATION (B15): take the TOWN side; cite 269's cities/fabric 030/070/080 (B40) for the city side
-COORDINATION (C101): town side only; the city street surface is 269's cities/fabric 080 (B40) - cite it
-COORDINATION (C175): town approach roads only; the city strip outside a gate is 269's cities/hinterland 040 (B41) - cite it
+COORDINATION (C101): town side only; the city street surface is 269's 0159 (B40) - cite it
+COORDINATION (C175): town approach roads only; the city strip outside a gate is 269's 0171 (B41) - cite it
 
 ## The procedure (check, apply)
 

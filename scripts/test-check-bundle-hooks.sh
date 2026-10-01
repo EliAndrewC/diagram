@@ -40,7 +40,7 @@ dispatch source-applicability "Judge the entry $S against its page."
 # GUARD_EDIT_OK: feature 250 D19 - a source-reader's command is the whole page in parts, never the excerpt
 dispatch source-reader "Read the entry $S and find the passage behind the claim."
 [ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki WHOLE=1' "$T/err" && ok "a source-reader gets KEY= WHOLE=1 - the whole page, not the excerpt" || no "source-reader was not given WHOLE=1" "$(cat "$T/err")"
-dispatch quote-check "Check .claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-built.notes.html"
+dispatch quote-check "Check .claude/skills/diagram/research/contents.json#citiessizing/020-how-densely-is-a-quarter-built.notes.html"
 [ "$(rc)" -eq 2 ] && grep -q 'PAGE=cities/sizing SECTION=020' "$T/err" && ok "a cities/ page and a notes file, relative, are read off the path too" || no "the cities path was not read" "$(cat "$T/err")"
 dispatch source-reader "Read the passage quoted in .claude/skills/diagram/research/SOURCES.html"
 [ "$(rc)" -eq 2 ] && grep -q 'PAGE=<page> SECTION=<question>' "$T/err" && ok "a path the guard cannot map still refuses, with the general form" || no "an unmappable path passed" "(rc=$(rc))"

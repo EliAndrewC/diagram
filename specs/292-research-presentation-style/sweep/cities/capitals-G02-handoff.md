@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has
 - RENDERING=rendering/cities/capitals/how-our-maps-scale-a-capitals-program-up-from-a-provincial-citys
-- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
+- OLD=research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals research/contents.json#capitals
 - MODALS=
 - BASE=159730836
 
@@ -17,9 +17,9 @@ found neither; the silence is now stated. 330's "3-5 burial grounds" band, which
 states the silence. The "where the record is thinnest" summaries: every guess is still labeled where it stands. In 336's
 purveyor note, a search summary about Hikone's dyers named a page nobody read, so it is moved into the note's comment.
 jokamachi-jawiki-9 is merged into -3 (the same passage). There are three new canon quotes: l7r-rites-and-temples-3
-("Demographics"), l7r-budgets-6 ("Capital city"), and a copy of l7r-rites-and-temples/-2 from religion-and-death 550/555.
+("Demographics"), l7r-budgets-6 ("Capital city"), and a copy of l7r-rites-and-temples/-2 from 0230/555.
 The witch hunter office, the Imperial Magistrate and the lineages stay canon claims with no footnote, as they were in 370. No
 registry entry covers l7r.md's "Iuchiban's Coup" or budgets.md's "Per-magistrate office staffing", and adding one was out of
 scope, so quote-check may list them. The 333 pauper mound's 10-30 ft size is not repeated: the rendering section links
-rendering/religion-and-death 410, which draws it. The research fragment is 19,957 bytes, just under the 20,000 cap. A check
+0237, which draws it. The research fragment is 19,957 bytes, just under the 20,000 cap. A check
 that adds prose will need to cut something first.

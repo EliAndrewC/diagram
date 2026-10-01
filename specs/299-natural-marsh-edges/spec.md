@@ -107,7 +107,7 @@ pines and the ground cut out of it.
 |---|---|---|---|
 | The marsh's outline rounded and waved | map drawing convention | the GM: a marsh would show "a rounded curve", not a ruled line; the laid band's straight strips are this engine's construction, not a finding | `land/wet.py` |
 | The wave only takes ground away | map drawing convention | every rule that reads the marsh holds; the scrub takes what the marsh gives up | `land/wet.py` |
-| A mixed fringe tile at the scrub-marsh boundary | map drawing convention (the margin's grading - grass into sedge into reed - is the record's finding, research/vegetation 120) | the GM's "more gradual transition" | `settlement/finish.py` |
+| A mixed fringe tile at the scrub-marsh boundary | map drawing convention (the margin's grading - grass into sedge into reed - is the record's finding, research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html) | the GM's "more gradual transition" | `settlement/finish.py` |
 | A second, larger tile over the marsh and the scrub | map drawing convention | the GM's "a little bit more varied" | `land/tiles.py` |
 
 ## Assumptions

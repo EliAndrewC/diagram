@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/shrines-temples-and-graves-in-each-size-of-settlement
 - RENDERING=rendering/religion-and-death/which-religious-and-funerary-features-our-maps-place-in-each-size-of-settlement
-- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead research/contents.json#religion-and-the-dead
 - MODALS=
 - BASE=410388abb
 

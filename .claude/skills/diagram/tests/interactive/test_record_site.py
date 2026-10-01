@@ -1,9 +1,10 @@
-"""Feature 301: the record as a manual - a site of small pages with a navigation tree, and the whole record on one page.
+"""Features 301 and 303: the record as a manual - a site of small pages with a navigation tree, and the whole record on one
+page - organized by the table of contents and the tags rather than by directories.
 
-SC-001: one small page per question and per registry entry, one page per part, the home page and the single page, and
-the navigation names every page. SC-002: a small page's notes run 1..n with its foot listing exactly the notes and works
-it cites; the single page's notes run 1..N through the record. SC-003: every link in both forms resolves, and the build
-refuses one that does not, a duplicated id, a note nothing cites and a cited work with no write-up."""
+Feature 301's SC-001..SC-003 (every page built and named by the navigation; notes numbered per page and once on the
+single page; every link resolved, and the build refusing one that is not), and feature 303's: the halves follow the
+table of contents and open on the settlement tiers (SC-001), each section in level-then-number order and two builds
+identical (SC-002), every tag's page exactly its questions (SC-005), and a regrouping that moves no URL (SC-006)."""
 
 from __future__ import annotations
 
@@ -14,16 +15,27 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.record import site
+from l7r.diagram.interactive.record import contents as ct
+from l7r.diagram.interactive.record import site, store
 from l7r.diagram.interactive.record import site_links as links
 from l7r.diagram.interactive.record import site_notes as sn
+from l7r.diagram.interactive.record import site_pages as sp
 from l7r.diagram.interactive.record.notes import NoteError, Placed
-from l7r.diagram.interactive.record.store import RecordError, record_pages
+from l7r.diagram.interactive.record.store import RecordError
 from l7r.diagram.interactive.sources import RESEARCH_DIR
+from tests import _flat_record as fr
 
 _HREF = re.compile(r'\shref="([^"]*)"')
 _ID = re.compile(r'\sid="([^"]+)"')
 _FN = re.compile(r'<li id="fn-(\d+)">')
+
+
+def _nav(files: dict[str, str]) -> dict:
+    return json.loads(files["nav.js"].split("window.RECORD_NAV = ", 1)[1].rstrip(";\n"))
+
+
+def _named(node: dict) -> set[str]:
+    return {node["href"]} | {h for _t, h in node["items"]} | {h for s in node["sections"] for h in _named(s)}
 
 
 # ------------------------------------------------------------------------------------------------- the real record
@@ -34,57 +46,102 @@ def built() -> dict[str, str]:
     return site.build(RESEARCH_DIR)
 
 
-def test_every_question_entry_and_part_has_its_page_and_the_navigation_names_them(built: dict[str, str]) -> None:
-    """SC-001."""
-    parts = site.load(RESEARCH_DIR)
-    assert {p.page_rel for p in parts} == set(record_pages(RESEARCH_DIR))
-    for part in parts:
-        assert f"{part.dir}/index.html" in built, part.dir
-        for item in part.all_items():
-            assert f"{part.dir}/{item.id}.html" in built, (part.dir, item.id)
-    questions = sum(len(p.items) for p in parts if not p.is_registry)
-    entries = sum(len(p.all_items()) for p in parts if p.is_registry)
-    assert questions > 400 and entries > 1000, (questions, entries)
-    assert {"index.html", "all.html", "nav.js", "assets/glossary.js", "assets/record.js", "assets/site.js"} <= set(built)
-    nav = json.loads(built["nav.js"].split("window.RECORD_NAV = ", 1)[1].rstrip(";\n"))
-    named = {href for g in nav["groups"] for p in g["parts"] for _t, href in p["items"]} | {f"{p['dir']}/index.html" for g in nav["groups"] for p in g["parts"]}
+@pytest.fixture(scope="module")
+def record() -> store.qs.Record:
+    return store.load(RESEARCH_DIR)
+
+
+def test_every_question_section_tag_and_entry_has_its_page_and_the_navigation_names_them(built: dict[str, str], record: store.qs.Record) -> None:
+    """301 SC-001, on the new layout: a page per question page, per section of each half that holds one, per tag."""
+    for page in record.pages():
+        assert f"q/{page.heading_id}.html" in built, page.file
+    for half, _label in sp.HALVES:
+        for section in ct.walk(record.sections):
+            assert (sp.section_file(half, section) in built) == record.holds(section, half), (half, section.id)
+    for facet in ct.FACETS:
+        for tag in sp.facet_tags(record.vocab, facet):
+            assert sp.tag_file(facet, tag.id) in built, tag.id
+    assert len(record.pages()) > 400, "non-vacuity"
+    nav = _nav(built)
+    named = {h for g in nav["groups"] for s in g["sections"] for h in _named(s)} - {"index.html#tags"}
     pages = {f for f in built if f.endswith(".html") and f not in ("index.html", "all.html")}
     assert named == pages, sorted(pages ^ named)[:10]
-    assert nav["all"] == "all.html" and nav["home"] == "index.html"
-    for f in ("fields/rice-paddies-and-their-plots-suiden.html", "sources/index.html", "index.html", "all.html"):
-        page = built[f]
-        assert 'id="sidebar"' in page and "nav.js" in page and "site.js" in page and "glossary.js" in page, f
+    for f in ("q/rice-paddies-and-their-plots-suiden.html", "sources/index.html", "index.html", "all.html", "research/fields.html"):
+        assert 'id="sidebar"' in built[f] and "nav.js" in built[f] and "site.js" in built[f] and "glossary.js" in built[f], f
+
+
+def test_the_halves_follow_the_table_of_contents_and_open_on_the_settlement_tiers(built: dict[str, str], record: store.qs.Record) -> None:
+    """303 SC-001: each half's top level is exactly the contents' sections that hold one of its pages, in order, the
+    first being the settlement tiers; nothing is named for a directory."""
+    nav = _nav(built)
+    for (half, label), group in zip(sp.HALVES, nav["groups"], strict=False):
+        assert group["label"] == label
+        assert [s["key"] for s in group["sections"]] == [sp.node_key(half, s) for s in record.sections if record.holds(s, half)]
+        assert group["sections"][0]["title"] == "The settlement tiers"
+    assert [g["label"] for g in nav["groups"]] == ["The research", "How our maps draw it", "Tags", "Sources"]
+    home = built["index.html"]
+    assert home.index("The settlement tiers") < home.index("The countryside") < home.index("Estates and other compounds") < home.index("Map conventions")
+    assert "Map conventions" not in home[: home.index('id="drawing"')], "the conventions are in the drawing half only"
+
+
+def test_every_section_lists_its_questions_by_level_then_number(built: dict[str, str], record: store.qs.Record) -> None:
+    """303 SC-002: no question of a later level before one of an earlier level; same-level questions in number order."""
+    checked = 0
+    for half, _label in sp.HALVES:
+        for section in ct.walk(record.sections):
+            pages = record.in_section(section, half)
+            keys = [(record.vocab.level_rank(record.question_of(p).tags.level), p.number) for p in pages]  # type: ignore[union-attr]
+            assert keys == sorted(keys), (half, section.id)
+            if pages:
+                listed = re.findall(r'<li><a href="\.\./q/([^"]+)\.html"', built[sp.section_file(half, section)])
+                assert listed == [p.heading_id for p in pages], (half, section.id)
+                checked += 1
+    assert checked > 30
+
+
+def test_two_builds_are_byte_identical(built: dict[str, str]) -> None:
+    """303 SC-002's tiebreak (the GM: *"running the makefile command twice in a row will never give output HTML files
+    in two different orders"*)."""
+    assert site.build(RESEARCH_DIR) == built
+
+
+def test_every_tag_page_lists_exactly_the_questions_carrying_it(built: dict[str, str], record: store.qs.Record) -> None:
+    """303 SC-005, inherited tags included."""
+    for facet in ct.FACETS:
+        for tag in sp.facet_tags(record.vocab, facet):
+            want = {p.heading_id for q in record.questions if (facet, tag.id) in q.tags.all() for p in q.pages()}  # type: ignore[union-attr]
+            got = set(re.findall(r'<li><a href="\.\./q/([^"]+)\.html"', built[sp.tag_file(facet, tag.id)]))
+            assert got == want, (facet, tag.id)
 
 
 def test_a_small_page_numbers_its_notes_from_one_and_its_foot_lists_what_it_cites(built: dict[str, str]) -> None:
-    """SC-002, on every small page."""
+    """301 SC-002, on every small page."""
     checked = 0
     for name, page in built.items():
-        if not name.endswith(".html") or name.endswith("index.html") or name == "all.html":
+        if not name.endswith(".html") or not name.startswith(("q/", "sources/")) or name.endswith("index.html"):
             continue
         refs = [int(n) for n in re.findall(r'href="#fn-(\d+)"', page)]
         notes = [int(n) for n in _FN.findall(page)]
         assert notes == list(range(1, len(notes) + 1)), name
         assert sorted(set(refs)) == notes, f"{name}: the foot lists exactly the notes the page cites"
         works = re.findall(r'<h3 id="work-([a-z0-9-]+)">', page)
-        cited = {k for k in re.findall(r'href="#work-([a-z0-9-]+)"', page)}
-        assert set(works) == cited, f"{name}: the works at the foot are exactly the ones its notes cite"
+        assert set(works) == set(re.findall(r'href="#work-([a-z0-9-]+)"', page)), f"{name}: the works at the foot are exactly the ones its notes cite"
         checked += bool(notes)
     assert checked > 300, "non-vacuity: most questions carry notes"
 
 
 def test_the_single_page_numbers_once_through_the_whole_record(built: dict[str, str]) -> None:
-    """SC-002's other half, and the single page's table of contents."""
     page = built["all.html"]
     notes = [int(n) for n in _FN.findall(page)]
     assert len(notes) > 3000 and notes == list(range(1, len(notes) + 1))
     assert '<nav class="toc">' in page and 'href="#citations"' in page and "data-lazy-glossary" in page
     ids = _ID.findall(page)
     assert len(ids) == len(set(ids)), "every id on the single page is unique"
+    assert page.index('id="research"') < page.index('id="drawing"') < page.index('id="citations"')
 
 
 def test_every_link_in_both_forms_resolves(built: dict[str, str]) -> None:
-    """SC-003: a link into the site names a page that was built and an id on it; the single page's anchors exist."""
+    """301 SC-003: a link into the site names a page that was built and an id on it."""
     ids = {name: set(_ID.findall(page)) for name, page in built.items() if name.endswith(".html")}
     bad = []
     for name, page in built.items():
@@ -96,10 +153,10 @@ def test_every_link_in_both_forms_resolves(built: dict[str, str]) -> None:
             path, _, anchor = href.partition("#")
             target = posixpath.normpath(posixpath.join(posixpath.dirname(name), path)) if path else name
             if target.startswith("../"):
-                continue  # an asset of the record outside the site (none today, and not the site's to hold)
+                continue
             if target not in built:
                 bad.append(f"{name}: {href} - no such page")
-            elif anchor and target in ids and anchor not in ids[target]:
+            elif anchor and anchor not in ids[target]:
                 bad.append(f"{name}: {href} - no id {anchor!r}")
     assert not bad, "\n".join(bad[:20])
 
@@ -107,97 +164,72 @@ def test_every_link_in_both_forms_resolves(built: dict[str, str]) -> None:
 # ------------------------------------------------------------------------------------------------- a small record
 
 
-def _record(tmp: pathlib.Path) -> pathlib.Path:
-    """Two research pages (one in a collection), a registry with a section and two entries, notes and assets."""
-    page = '<!DOCTYPE html>\n<html>\n<body>\n<main>\n<h1 id="{0}">{1}</h1>\n<p id="{0}-intro"><em>{1}, the intro.</em></p>\n<hr>\n'
-    tail = "</main>\n</body>\n</html>\n"
-    ways = tmp / "ways"
-    ways.mkdir(parents=True)
-    (ways / "_front.html").write_text(page.format("ways", "Ways"), encoding="utf-8")
-    (ways / "_tail.html").write_text(tail, encoding="utf-8")
-    (ways / "010-lanes.html").write_text(
-        '<h2 id="lanes">Lanes</h2>\n<div class="confusables"><p>Not to be confused with:</p></div>\n'
-        '<p>A lane is narrow.<sup class="fn" data-note="alpha"></sup> See <a href="cities/fabric.html#rows">the rows</a>'
-        ' and <a href="#bridges">bridges</a> and <a href="https://x.org">out</a>.<!-- <a href="nowhere.html">x</a> --></p>\n',
-        encoding="utf-8",
-    )
-    (ways / "010-lanes.notes.html").write_text(
-        '<li data-note="alpha"><a href="https://a"><code>alpha</code></a> - 「q」</li>\n<li data-note="beta"><a href="../SOURCES.html#beta"><code>beta</code></a> - 「r」</li>\n', encoding="utf-8"
-    )
-    (ways / "020-bridges.html").write_text(
-        '<h2 id="bridges">Bridges</h2>\n<p>One span.<sup class="fn" data-note="beta"></sup> Again.<sup class="fn" data-note="beta"></sup>'
-        ' <a href="ways.html">the page</a> <a href="SOURCES.html#alpha">a source</a> <img src="assets/x.png"></p>\n',
-        encoding="utf-8",
-    )
-    fabric = tmp / "cities" / "fabric"
-    fabric.mkdir(parents=True)
-    (fabric / "_front.html").write_text(page.format("fabric", "Fabric"), encoding="utf-8")
-    (fabric / "_tail.html").write_text(tail, encoding="utf-8")
-    (fabric / "010-rows.html").write_text(
-        '<h2 id="rows">Rows</h2>\n<p>Shops in a row. <a href="../citations/ways.html#work-alpha">w</a> <a href="../ways/020-bridges.html">b</a> <a href="../citations/ways.html">its notes</a></p>\n',
-        encoding="utf-8",
-    )
-    src = tmp / "sources"
-    (src / "010-works-cited").mkdir(parents=True)
-    (src / "_front.html").write_text(page.format("sources", "Sources"), encoding="utf-8")
-    (src / "_tail.html").write_text(tail, encoding="utf-8")
-    (src / "010-works-cited.html").write_text('<h2 id="works-cited">Works cited</h2>\n<p>Every work.</p>\n', encoding="utf-8")
-    for n, key, url in ((10, "alpha", "https://a"), (20, "beta", "https://b; SUMMARY-ONLY")):
-        (src / "010-works-cited" / f"00{n}-{key}.html").write_text(
-            f'<h3 id="{key}"><code>{key}</code></h3>\n<p>{key.title()}, a work ({url})</p>\n<p><em>What it is:</em> a work.</p>\n<p><em>Why it applies, and its limits:</em> it does.</p>\n',
-            encoding="utf-8",
-        )
-    (tmp / "assets").mkdir()
-    for name in site.ASSETS:
-        (tmp / "assets" / name).write_text(f"/* {name} */", encoding="utf-8")
-    return tmp
-
-
-def test_a_small_record_builds_both_forms(tmp_path: pathlib.Path) -> None:
-    rec = _record(tmp_path)
-    files = site.build(str(rec))
-    lanes, bridges = files["ways/lanes.html"], files["ways/bridges.html"]
-    assert '<h1 id="lanes">Lanes</h1>' in lanes and 'href="../cities/fabric/rows.html"' in lanes and 'href="bridges.html"' in lanes
+def test_a_small_record_builds_both_halves(tmp_path: pathlib.Path) -> None:
+    files = site.build(str(fr.write(tmp_path)))
+    lanes, bridges, rows = files["q/lanes.html"], files["q/bridges.html"], files["q/rows.html"]
+    assert '<h1 id="lanes">' in lanes and 'href="rows.html"' in lanes and 'href="bridges.html#span"' in lanes
     assert 'href="https://x.org"' in lanes and '<a href="nowhere.html">' in lanes, "an external link and a comment are left alone"
-    assert '<li id="fn-1">' in bridges and 'id="fnref-1-2"' in bridges, "numbered from 1 on its own page; the repeat its own id"
-    assert 'href="index.html"' in bridges and 'href="../sources/alpha.html"' in bridges and 'src="../../assets/x.png"' in bridges
+    assert 'href="drawing-lanes.html">How it' in lanes and 'href="wide-lanes.html">How it' in lanes, "both drawing pages are linked"
+    assert 'href="lanes.html">The history' in files["q/wide-lanes.html"], "a second drawing page links the question it draws"
+    assert "Not to be confused with" in lanes and 'href="lanes.html">Lanes</a>' in rows, "a confusable pair is listed both ways"
+    assert '<li id="fn-1">' in bridges and 'id="fnref-1-2"' in bridges and 'href="#span"' in bridges
+    assert 'href="../sources/alpha.html"' in bridges and 'src="../../assets/x.png"' in bridges
     assert 'href="#work-beta"' in bridges and 'href="../sources/beta.html"' in bridges, "a key links its work at the foot, which links its entry"
-    assert 'rel="prev"' in bridges and 'rel="next"' in lanes, "the pages of a part are chained"
-    rows = files["cities/fabric/rows.html"]
-    assert 'href="../../sources/alpha.html"' in rows and 'href="../../ways/bridges.html"' in rows
-    assert 'href="../../ways/index.html"' in rows, "a citations page is its research page's part"
-    single = files["all.html"]
-    assert 'href="#rows"' in single and 'href="#bridges"' in single and 'href="#alpha"' in single and 'href="#ways"' in single
-    assert single.count('<li id="fn-') == 2, "two notes, numbered once through the record"
+    assert 'rel="next"' in lanes and 'rel="prev"' in bridges, "a section's questions are chained"
+    assert '<a href="../tags/subject-samurai.html">Samurai</a>' in rows and 'href="../research/fabric.html"' in rows
+    assert "Drawn land." in files["drawing/countryside.html"] and "The land." in files["research/countryside.html"]
+    assert 'href="../research/ways.html"' in files["research/countryside.html"] and "A lane is narrow." in files["research/ways.html"]
+    assert "drawing/cities.html" not in files, "a section with no page of a half is not in that half"
+    assert "No question carries this tag yet." not in files["tags/subject-samurai.html"] and "Rows" in files["tags/subject-samurai.html"]
     assert "Works cited" in files["sources/index.html"] and 'href="alpha.html"' in files["sources/index.html"]
-    assert "A lane is narrow." in files["ways/index.html"] and "Not to be confused" not in files["ways/index.html"], "the lead skips the box"
-    assert files["index.html"].index("Research") < files["index.html"].index("Cities") < files["index.html"].index("Sources")
+    single = files["all.html"]
+    assert 'href="#rows"' in single and 'href="#span"' in single and 'href="#alpha"' in single and 'id="research-ways"' in single
+    assert single.count('<li id="fn-') == 3, "three notes, numbered once through the record"
+
+
+def test_a_tag_nobody_carries_has_a_page_saying_so(tmp_path: pathlib.Path) -> None:
+    rec = fr.write(tmp_path)
+    fr.edit(rec, "0003-rows.html", "subject=fabric,samurai", "subject=fabric")
+    files = site.build(str(rec))
+    assert "No question carries this tag yet." in files["tags/subject-samurai.html"]
+
+
+def test_a_regrouping_moves_no_url_and_needs_no_question_edited(tmp_path: pathlib.Path) -> None:
+    """303 SC-006: swap two sections, and select on a setting and on a subject that is not primary."""
+    rec = fr.write(tmp_path)
+    before = site.build(str(rec))
+    data = json.loads((rec / "contents.json").read_text(encoding="utf-8"))
+    data["sections"].reverse()
+    (rec / "contents.json").write_text(json.dumps(data), encoding="utf-8")
+    after = site.build(str(rec))
+    assert {f for f in before if f.startswith("q/")} == {f for f in after if f.startswith("q/")}
+    assert [g["sections"][0]["key"] for g in _nav(after)["groups"][:1]] == ["research/cities"]
+    data["sections"].insert(0, {"id": "samurai", "title": "Samurai", "takes": [{"subject": "samurai"}, {"setting": "city", "level": "foundational"}]})
+    (rec / "contents.json").write_text(json.dumps(data), encoding="utf-8")
+    third = site.build(str(rec))
+    assert "Rows" in third["research/samurai.html"] and "q/rows.html" in third, "a non-primary subject took the question"
+    assert "research/fabric.html" not in third, "the section its first match emptied is omitted"
 
 
 def test_the_build_refuses_what_lands_nowhere_and_names_it(tmp_path: pathlib.Path) -> None:
-    rec = _record(tmp_path)
-    q = rec / "ways" / "020-bridges.html"
-    q.write_text(
-        q.read_text(encoding="utf-8")
-        + '<p><a href="ways.html#gone">x</a> <a href="citations/ways.html#fn-3">n</a> <a href="citations/towns.html">t</a> <a href="cities/fabric/090-gone.html">g</a></p>\n',
-        encoding="utf-8",
-    )
+    rec = fr.write(tmp_path)
+    fr.edit(rec, "0002-bridges.html", "<p id=", '<p><a href="0003-rows.html#gone">x</a> <a href="0009-none.html">n</a> <a href="../towns.html">t</a> <a href="#nope">p</a></p>\n<p id=')
     with pytest.raises(RecordError) as e:
         site.build(str(rec))
-    for words in ("no id `gone`", "not addressable", "no research page towns.html", "no question `gone`"):
+    for words in ("no id `gone` on 0003-rows.html", "no question page 0009-none.html", "no such page in the record", "no id `nope` on 0002-bridges.html"):
         assert words in str(e.value), words
 
 
 def test_the_build_refuses_a_duplicate_id_a_reserved_one_an_orphan_note_and_a_work_with_no_write_up(tmp_path: pathlib.Path) -> None:
-    rec = _record(tmp_path)
-    (rec / "cities" / "fabric" / "020-lanes.html").write_text('<h2 id="lanes">Lanes again</h2>\n', encoding="utf-8")
-    with pytest.raises(RecordError, match="the id `lanes` is used in"):
+    rec = fr.write(tmp_path)
+    fr.edit(rec, "0003-rows.html", "<p>Shops", '<p id="span">Shops')
+    with pytest.raises(RecordError, match="the id `span` is used in"):
         site.build(str(rec))
-    (rec / "cities" / "fabric" / "020-lanes.html").write_text('<h2 id="contents">Contents</h2>\n', encoding="utf-8")
+    fr.edit(rec, "0003-rows.html", '<p id="span">Shops', '<p id="tags">Shops')
     with pytest.raises(RecordError, match="one the site's own pages use"):
         site.build(str(rec))
-    (rec / "cities" / "fabric" / "020-lanes.html").unlink()
-    notes = rec / "ways" / "010-lanes.notes.html"
+    fr.edit(rec, "0003-rows.html", '<p id="tags">Shops', "<p>Shops")
+    notes = rec / "questions" / "0001-lanes.notes.html"
     notes.write_text(notes.read_text(encoding="utf-8") + '<li data-note="lonely">x</li>\n', encoding="utf-8")
     with pytest.raises(RecordError, match="lonely - defined as a note, referenced nowhere"):
         site.build(str(rec))
@@ -209,18 +241,24 @@ def test_the_build_refuses_a_duplicate_id_a_reserved_one_an_orphan_note_and_a_wo
 
 
 def test_a_reference_to_no_note_is_refused_on_both_forms(tmp_path: pathlib.Path) -> None:
-    rec = _record(tmp_path)
-    q = rec / "ways" / "020-bridges.html"
-    q.write_text(q.read_text(encoding="utf-8").replace("One span.", 'One span.<sup class="fn" data-note="nobody"></sup>'), encoding="utf-8")
+    rec = fr.write(tmp_path)
+    fr.edit(rec, "0002-bridges.html", "One span.", 'One span.<sup class="fn" data-note="nobody"></sup>')
     with pytest.raises(RecordError) as e:
         site.build(str(rec))
     assert "which no note" in str(e.value) and str(e.value).count("nobody") >= 2
 
 
-def test_a_part_without_its_title_is_refused(tmp_path: pathlib.Path) -> None:
-    rec = _record(tmp_path)
-    (rec / "ways" / "_front.html").write_text("<!DOCTYPE html>\n<p>no main, no title</p>\n", encoding="utf-8")
-    with pytest.raises(RecordError, match="a part needs its title"):
+def test_a_notes_file_with_a_bad_original_is_refused_by_name(tmp_path: pathlib.Path) -> None:
+    rec = fr.write(tmp_path)
+    (rec / "questions" / "0001-lanes.notes.html").write_text('<li data-note="alpha">x <span class="orig" data-orig="alpha#1"></span></li>\n', encoding="utf-8")
+    with pytest.raises(RecordError, match="0001-lanes.notes.html"):
+        site.build(str(rec))
+
+
+def test_a_registry_without_its_title_is_refused(tmp_path: pathlib.Path) -> None:
+    rec = fr.write(tmp_path)
+    (rec / "sources" / "_front.html").write_text("<!DOCTYPE html>\n<p>no main, no title</p>\n", encoding="utf-8")
+    with pytest.raises(RecordError, match="the registry needs its title"):
         site.build(str(rec))
 
 
@@ -241,31 +279,33 @@ def test_the_lead_and_the_title() -> None:
     assert site.lead_of("<h2>x</h2><p>No full stop</p>") == "No full stop" and site.lead_of("<h2>x</h2>") == ""
     assert site._as_title("<p>no heading</p>") == "<p>no heading</p>"
     assert site._item("<p>untitled</p>", "u").title == "u"
-    assert site.collection_of("rendering/cities/sizing.html") == "rendering/cities" and site.collection_of("ways.html") == ""
 
 
 def test_the_link_resolver_on_plain_strings() -> None:
     index = links.Index()
-    index.add_part("ways.html", "ways", "ways")
-    index.add("ways.html", "ways", None, '<p id="intro">x</p>')
-    index.add("ways.html", "ways", "lanes", '<h2 id="lanes">L</h2><span id="inner"></span>')
-    assert index.resolve("https://x", "") is None and index.resolve("//x/y", "") is None and index.resolve("", "") is None
-    assert index.resolve("ways.html#inner", "") == links.Loc("ways", "lanes", "inner")
-    assert index.resolve("ways.html#intro", "") == links.Loc("ways", None, "intro")
-    assert index.resolve("assets/x.css", "") == "assets/x.css"
-    with pytest.raises(links.LinkError, match="in-page anchor"):
-        index.resolve("#x", "")
-    assert links.site_href(links.Loc("ways", "lanes", "inner"), "cities/fabric/rows.html") == "../../ways/lanes.html#inner"
-    assert links.single_href(links.Loc("ways", None, None), index) == "#ways" and links.single_href(links.Loc("ways", None, "intro"), index) == "#intro"
-    assert links.asset_href("assets/x.css#y", "ways/lanes.html") == "../../assets/x.css#y"
-    assert links.part_dir("SOURCES.html") == "sources" and links.part_dir("cities/fabric.html") == "cities/fabric"
-    out, errs = links.rewrite('<a href="#nope">x</a>', page_rel="ways.html", from_dir="", index=index, here="ways/lanes.html", single=False, where="w")
-    assert errs and "no id `nope`" in errs[0] and out == '<a href="#nope">x</a>'
-    assert index.anchor("ways.html", "", "#") == links.Loc("ways", None)
+    index.add_page("0001-a.html", "a", '<h2 id="a">A</h2><span id="inner"></span>')
+    index.add_registry(None, '<p id="intro">x</p>')
+    index.add_registry("k", '<h3 id="k">k</h3>')
+    assert index.resolve("https://x", "0001-a.html") is None and index.resolve("//x/y", None) is None and index.resolve("", None) is None
+    assert index.resolve("0001-a.html#inner", "0001-a.html") == links.Loc("q", "a", "inner")
+    assert index.resolve("#a", "0001-a.html") == links.Loc("q", "a", None), "a page's own heading is its top"
+    assert index.resolve("../SOURCES.html#intro", "0001-a.html") == links.Loc("source", None, "intro")
+    assert index.resolve("../SOURCES.html", "0001-a.html") == links.Loc("source", None)
+    assert index.resolve("#k", None) == links.Loc("source", "k") and index.resolve("assets/x.css", None) == "assets/x.css"
+    assert index.resolve("../assets/x.css", "0001-a.html") == "assets/x.css"
+    for bad, words in (("#zzz", "no id `zzz` on the registry"), ("towns.html", "no such page")):
+        with pytest.raises(links.LinkError, match=words):
+            index.resolve(bad, None)
+    assert links.site_href(links.Loc("q", "a", "inner"), "research/ways.html") == "../q/a.html#inner"
+    assert links.site_href(links.Loc("source", None), "q/a.html") == "../sources/index.html"
+    assert links.single_href(links.Loc("source", None), "srcs") == "#srcs" and links.single_href(links.Loc("q", "a", None), "s") == "#a"
+    assert links.asset_href("assets/x.css#y", "q/a.html") == "../../assets/x.css#y"
+    out, errs = links.rewrite('<a href="#nope">x</a> <img src="../assets/i.png">', own="0001-a.html", index=index, here="q/a.html", single=True, where="w")
+    assert errs and "no id `nope`" in errs[0] and '<a href="#nope">' in out and 'src="../assets/i.png"' in out
 
 
 def test_the_notes_of_a_small_page_and_of_the_single_page() -> None:
-    page = {"a": "<a href=\"https://x\"><code>k</code></a> - 「q」", "b": "no source"}
+    page = {"a": '<a href="https://x"><code>k</code></a> - 「q」', "b": "no source"}
     body, placed = sn.small_page('x<sup class="fn" data-note="b"></sup> y<sup class="fn" data-note="a"></sup>', page, "w")
     assert [p.key for p in placed] == ["b", "a"] and 'href="#fn-1">1</a>' in body
     assert sn.foot([], "") == ""
@@ -280,9 +320,10 @@ def test_the_notes_of_a_small_page_and_of_the_single_page() -> None:
     assert sn.keyed_to(page["a"], "#") == '<a href="#k"><code>k</code></a> - 「q」'
 
 
-def test_the_shell_and_the_navigation_data(tmp_path: pathlib.Path) -> None:
-    page = site.shell("T", "cities/fabric/rows.html", "cities/fabric", "<p>x</p>", lazy_glossary=True)
-    assert 'data-root="../../"' in page and 'href="../../assets/site.css"' in page and "data-lazy-glossary" in page
-    assert "data-lazy-glossary" not in site.shell("T", "index.html", "", "x")
-    parts = site.load(str(_record(tmp_path)))
-    assert site.nav_js(parts).startswith("// DERIVED FILE") and site.grouped(parts)[-1][0] == site.REGISTRY_GROUP
+def test_the_shell_and_the_trail() -> None:
+    page = sp.shell("T", "q/rows.html", "research/cities research/cities/fabric", "<p>x</p>", lazy_glossary=True)
+    assert 'data-root="../"' in page and 'href="../assets/site.css"' in page and "data-lazy-glossary" in page
+    assert 'data-part="research/cities research/cities/fabric"' in page
+    assert "data-lazy-glossary" not in sp.shell("T", "index.html", "", "x")
+    assert sp.open_keys("research", None) == "" and sp.crumbs("index.html", []) == '<p class="crumbs"><a href="index.html">The research record</a></p>\n'
+    assert sp.nav_js({"a": 1}).startswith("// DERIVED FILE")

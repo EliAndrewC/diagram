@@ -3,12 +3,12 @@
 Written 2026-09-27 in clone diagram-research-5. Record checks NOT run (the check sessions own them).
 
 - SECTION=urban-features/500
-- SECTION=urban-features/510
-- SECTION=urban-features/520
-- SECTION=urban-features/530
-- SECTION=urban-features/540
+- SECTION=0207
+- SECTION=0208
+- SECTION=0209
+- SECTION=0210
 - SECTION=urban-features/550
-- SECTION=urban-features/560
+- SECTION=0211
 - SECTION=cities/fabric/050
 - KEY=token-edo-shokunin
 - KEY=kotobank-okeya
@@ -46,12 +46,12 @@ dongjing-menghualu-wikisource. One source-reader pass read all 35 claims READ fr
 ## Items
 
 - B45 ACCURATE - urban-features/500: the cooper, tatami maker, tofu maker, noodle shop and apothecary each work and sell in the keeper's house (Japanese reference entries), the carpenter works out on site, and in castle towns coopers (and Edo's drug sellers) stood together in one street - the rice dealer is 520 - no workshop size read. - Nothing changes: they stay in the generic shop rows; a city may group one trade's shops in a street.
-- B46 ACCURATE (count SILENT) - urban-features/510: a county town keeps a brewer (canon: the county's sake brewer; Edo law first confined brewing to castle towns, post towns and ports and licensed every brewer, and let villages brew only after the early 18th century); brewers were lenders and often pawnbrokers; one Edo-period castle-town store (Yachiya, Kanazawa, 1751-1829) measures 132 m2, about 19 m long (~60 x 23 ft). The 1-2 per ~3,000 stays an estimate (absence note). - The town tier should draw one brewery (a shopfront at the center, a store of at least ~60 x 23 ft behind it on a deep plot); no village brewery.
-- B47 ACCURATE (drying-yard area SILENT) - urban-features/530: dyers lived in a ward in the towns and a few to a village, all working at home to order, their indigo jars sunk four together indoors; rinsing in a channel off the castle moat (Yamatokoriyama) and bolts drying in rows in the sun (Kanda) now cited; canon has the county's dye-house owner. - The town tier should draw one (or two) dyer's houses with a drying ground and rinsing water within reach, like the city dye works; count and yard placement are a labeled guess.
-- B52 KNOB - urban-features/520: hulling was done on the farm (the town receives brown rice); polishing was the specialist rice polisher's (Edo 1744: ~2,100 polishers, ~5,500 mortars), by treadle mortar in the shop, or by a waterwheel driving pestles on a stream (Hokusai's Onden wheel). - Every town's rice polisher stays a generic shop; add a seeded knob for a waterwheel mill, only where a stream with fall passes the town's edge: a small shed on the bank with its wheel in the water, outside the built-up blocks (siting and size a labeled guess).
-- B53 KNOB (and CONTRADICTION-RESOLVED in part) - urban-features/540: the timber trade grew where consumers met water transport and its merchants' quarters were the kiba (a 12 m city stream served Kyoto as a log pond), but retail timber dealers, who kept sawyers, were found scattered in every region. - Two forms, seeded: a yard on the bank with logs in the water (a river or channel town), or a retail dealer's shop with a small yard of stacked sawn timber behind it in ANY town, river or not (yard a labeled guess). This corrects 030's rule sentence "a landlocked city has none" (see below).
+- B46 ACCURATE (count SILENT) - 0207: a county town keeps a brewer (canon: the county's sake brewer; Edo law first confined brewing to castle towns, post towns and ports and licensed every brewer, and let villages brew only after the early 18th century); brewers were lenders and often pawnbrokers; one Edo-period castle-town store (Yachiya, Kanazawa, 1751-1829) measures 132 m2, about 19 m long (~60 x 23 ft). The 1-2 per ~3,000 stays an estimate (absence note). - The town tier should draw one brewery (a shopfront at the center, a store of at least ~60 x 23 ft behind it on a deep plot); no village brewery.
+- B47 ACCURATE (drying-yard area SILENT) - 0209: dyers lived in a ward in the towns and a few to a village, all working at home to order, their indigo jars sunk four together indoors; rinsing in a channel off the castle moat (Yamatokoriyama) and bolts drying in rows in the sun (Kanda) now cited; canon has the county's dye-house owner. - The town tier should draw one (or two) dyer's houses with a drying ground and rinsing water within reach, like the city dye works; count and yard placement are a labeled guess.
+- B52 KNOB - 0208: hulling was done on the farm (the town receives brown rice); polishing was the specialist rice polisher's (Edo 1744: ~2,100 polishers, ~5,500 mortars), by treadle mortar in the shop, or by a waterwheel driving pestles on a stream (Hokusai's Onden wheel). - Every town's rice polisher stays a generic shop; add a seeded knob for a waterwheel mill, only where a stream with fall passes the town's edge: a small shed on the bank with its wheel in the water, outside the built-up blocks (siting and size a labeled guess).
+- B53 KNOB (and CONTRADICTION-RESOLVED in part) - 0210: the timber trade grew where consumers met water transport and its merchants' quarters were the kiba (a 12 m city stream served Kyoto as a log pond), but retail timber dealers, who kept sawyers, were found scattered in every region. - Two forms, seeded: a yard on the bank with logs in the water (a river or channel town), or a retail dealer's shop with a small yard of stacked sawn timber behind it in ANY town, river or not (yard a labeled guess). This corrects 030's rule sentence "a landlocked city has none" (see below).
 - B60 B61 C133 ACCURATE (null result) - urban-features/550: cloth was woven at home or put out to farm households in the slack season, with a city weaving quarter (Nishijin) as the ceiling; canon lists weavers and a county's clothier; papermaking was a village's off-season side job, sheets dried on boards in the sun (clean-water need unread, labeled). - No weaving works and no paper mill in a town; a city weavers' quarter draws as houses; a village map that declares papermaking may draw drying boards propped beside the farmhouses.
-- B63 C116 D150 ACCURATE (count SILENT) - urban-features/560, cities/fabric/050: the kinds (tea stall, cooked-food shop, drinking house, restaurant; the Song wine shop and teahouse) and where they gathered (temple gates and precincts - the first tea sellers at Toji's gate, 1403; the road through a post town and its ends; busy quarters; bridges and water - Osaka's drinking houses even on the bridges; every lane of the Song capital) are cited; one generic shop glyph is a map drawing convention; villages got drinking houses only in the later 18th century. cities/fabric/050 now adds that the travelers' teahouses moved to the post town's ends. - The generator should place eating/tea houses among the generic shops at a temple's gate, at the town's road entrances and along the road, and at a bridge foot; a village draws none unless a road through it carries travelers.
+- B63 C116 D150 ACCURATE (count SILENT) - 0211, cities/fabric/050: the kinds (tea stall, cooked-food shop, drinking house, restaurant; the Song wine shop and teahouse) and where they gathered (temple gates and precincts - the first tea sellers at Toji's gate, 1403; the road through a post town and its ends; busy quarters; bridges and water - Osaka's drinking houses even on the bridges; every lane of the Song capital) are cited; one generic shop glyph is a map drawing convention; villages got drinking houses only in the later 18th century. cities/fabric/050 now adds that the travelers' teahouses moved to the post town's ends. - The generator should place eating/tea houses among the generic shops at a temple's gate, at the town's road entrances and along the road, and at a bridge foot; a village draws none unless a road through it carries travelers.
 
 ## Left open, and owed to others
 
@@ -64,7 +64,7 @@ dongjing-menghualu-wikisource. One source-reader pass read all 35 claims READ fr
   132 m2); (3) the dyer sentence should point at 530; (4) the lumber-dealer sentence and the rule sentence "since
   stacked timber stands on dry ground and a landlocked city has none" should be corrected per 540: a city or town
   without a river may still keep a retail timber dealer's yard; only the log pond needs water.
-- **religion-and-death/050 has no pointer to 560.** It stands at 19,961 bytes with its notes; even a one-sentence
+- **0233 has no pointer to 560.** It stands at 19,961 bytes with its notes; even a one-sentence
   pointer took it over the 20,000 cap, so it was reverted. Its owner (272, done) or the orchestrator can add the
   pointer with a split, or 560 is joined from the modal side. 560 carries the gate-teahouse finding (Toji, 1403).
 - **Key collisions handled:** `bunka-sugita-shikomigura` is reserved in diagram-research-1 (U2) and is not cited

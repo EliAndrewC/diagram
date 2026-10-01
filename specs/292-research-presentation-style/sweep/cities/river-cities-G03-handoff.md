@@ -2,7 +2,7 @@
 
 - SECTION=cities/river-cities/wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi
 - RENDERING=rendering/cities/river-cities/how-our-maps-draw-a-citys-wharf-and-landings
-- OLD=research/cities/river-cities/ research/cities/capitals/ research/cities/river-cities/ research/cities/river-cities/
+- OLD=research/contents.json#river-cities research/contents.json#capitals research/contents.json#river-cities research/contents.json#river-cities
 - MODALS=Dock Revetment RiverLanding TaxBarge
 - BASE=e1d65b689
 

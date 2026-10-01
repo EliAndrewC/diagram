@@ -40,7 +40,7 @@ sheet with untagged ink or an unregistered kind, and on a registered kind no shr
 - A kind both a magistracy and a country shrine draw (a well, a latrine, a torii, the grove) is written once and serves
   both; where the country shrine's reads differently, the page's own notes carry the difference, not a second kind.
 - The background and pure framing ink carry the ruled-out tag (`-`), as on the magistracy sheets.
-- A write-up is written FROM the research record (religion-and-death 090-128, 540 where it applies); a kind the record
+- A write-up is written FROM the research record (0215, 0221, 0222, 0223, 540 where it applies); a kind the record
   does not cover says it is silent, as the magistracy kinds do. A kind that a folded `types.json` item already
   classifies keeps that classification and its reason (feature 262's FR-005 carry-over) - the dwelling and the bell
   tower stay `guess` with their stated reasons; nothing is re-decided.

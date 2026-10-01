@@ -147,7 +147,7 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
     assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
-    assert any(q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "vegetation/") for q in data["windbreak"]["questions"])
+    assert any(q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "q/groves-around-a-southern-chinese-village") for q in data["windbreak"]["questions"])
     assert not {"sources", "refs", "entry"} & set(data["windbreak"]), "dropped from the page data (spec FR-011)"
 
 
@@ -188,12 +188,12 @@ def test_a_question_s_text_drops_the_dated_bookkeeping_and_nothing_else() -> Non
 def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_section_has_some() -> None:
     """Spec FR-004 / D4: the class author's primary question first, not file order; FR-002: the one entry
     that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
-    fields/250, so now every class names a findable section."""
+    0013, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
     assert [q["text"][:30] for q in qs] == ["Farmhouses (minka)", "The farmstead and what stood o", "Village lanes", "How our maps draw farmhouses (", "How our maps draw the farmstea"], qs
     # feature 301: a question links its own small page in the record's site
-    assert all(q["url"].startswith(SITE_PAGES + "homesteads/") for q in qs[:2])
-    assert qs[2]["url"] == SITE_PAGES + "ways/village-lanes.html"
+    assert all(q["url"].startswith(SITE_PAGES + "q/") for q in qs), "flat, whatever section the question is in (feature 303)"
+    assert qs[2]["url"] == SITE_PAGES + "q/village-lanes.html"
     assert qs[0]["url"].endswith("/farmhouses-minka.html")
     # file order would put the farmstead topic before the farmhouse topic; the entry's order wins (the lane entry moved to the ways page in the feature 292 sweep)
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
@@ -382,7 +382,7 @@ def test_the_scrub_region_is_the_shape_its_tile_fills_not_its_polygon() -> None:
 
 def test_the_citations_come_from_the_research_entries() -> None:
     """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
-    keys = research_sources("research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html")
+    keys = research_sources("research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html")
     assert "sugiura-1973-fuzoku" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
@@ -393,7 +393,7 @@ def test_the_citations_come_from_the_research_entries() -> None:
 
 def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_four() -> None:
     """No entry is left without a key. `fallow` was the last, its section recording a silence, until feature 269 (K1)
-    wrote it from fields/250 (the resting paddy basin). The
+    wrote it from 0013 (the resting paddy basin). The
     in-field-features section of `fields.html` (field pond, field rock, grave island) was cited in feature 242. `copse` and `windbreak` were uncited for a day: their
     fengshui-forest entry rested on two MDPI papers mdpi.com would not serve to this container, until the GM
     downloaded them (2026-09-07) and the passages were read from the copies - the Fujian paper supports the

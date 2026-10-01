@@ -31,6 +31,7 @@ import sys
 SKILL = ".claude/skills/diagram"
 RECORD = f"{SKILL}/research"
 MIGRATION = "specs/303-research-organization/migration.md"
+TITLE = " - second pass (a page name and number naming a drawing page)"
 EXEMPT = (f"{RECORD}/moved-303.json", MIGRATION, "scripts/_pointer_sweep_303.py", "scripts/_record_flatten.py")
 _SOURCE = re.compile(r"<!-- SOURCE: GM NOTES.*?<!-- END SOURCE -->", re.S)
 _ID = re.compile(r'\bid="([^"]+)"')
@@ -127,11 +128,13 @@ class Sweep:
 
         def number(m: re.Match[str]) -> str:
             key = f"{m.group(2)} {m.group(4)}"
+            if key not in self.numbers and f"rendering/{key}" in self.numbers:
+                key = f"rendering/{key}"  # "homesteads 152" naming the drawing page of that part and number
             if key not in self.numbers:
                 return m.group(0)
             new = self.numbers[key]
             if m.group(1):
-                old_path = next((o for o in self.files if o.startswith(f"{m.group(2)}/{m.group(4)}-") and o.endswith(".html") and not o.endswith((".notes.html", ".originals.html"))), None)
+                old_path = next((o for o in self.files if o.startswith(f"{key.split(" ")[0]}/{m.group(4)}-") and o.endswith(".html") and not o.endswith((".notes.html", ".originals.html"))), None)
                 out = f"research/{self.files[old_path]}" if old_path else f"research/questions/{new}"
             else:
                 out = new
@@ -170,7 +173,7 @@ def main() -> int:
     print("\n".join(report))
     if args.write:
         with open(os.path.join(args.root, MIGRATION), "a", encoding="utf-8") as fh:
-            fh.write("\n## The pointer sweep's review list (number forms, ranges, and pointers it could not place)\n\n")
+            fh.write(f"\n## The pointer sweep's review list{TITLE} (number forms, ranges, and pointers it could not place)\n\n")
             fh.write("\n".join(f"- {r}" for r in sweep.review) + "\n")
     else:
         print("\n".join(sweep.review[:400]))

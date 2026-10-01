@@ -7,12 +7,12 @@ turn. Work in this clone (`/diagram/.clones/diagram-research-4`); the project's 
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** feature 267: buildings 240-640, vegetation 170-200,
-religion-and-death 220-260, fields 220-240 (magistracy and compound buildings); feature 268: religion-and-death 080-126;
+**Do not edit these sections - other sessions own them:** feature 267: 0091, 0093, 0094, 0102, 0103, 0104, 0105, 0106, 0107, 0108, 0109, 0110, 0111, 0112, 0117, 0239, 0076,
+0240, fields 220-240 (magistracy and compound buildings); feature 268: 0215, 0220, 0221, 0222, 0223;
 feature 270: the country/village shrine hall's size; feature 269: every section its inventory
 (`/diagram/.clones/diagram-supplemental/specs/269-research-backfill/inventory.md`) names, and its new ranges (fields
-250-360, homesteads 250-360, water 290-360, vegetation 210-290, archetypes 200-270, religion-and-death 270-330,
-cities/defenses 100-140, cities/government 100-140, cities/fabric 160-190, cities/hinterland 060-090, cities/sizing
+250-360, 0047, water 290-360, 0077, 0025, 0026, 0236,
+0151, cities/government 100-140, cities/fabric 160-190, 0172, cities/sizing
 030-050, settlements 030 and 090-110). Where a finding OWES one of those a correction, say exactly what in the handoff;
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
@@ -29,16 +29,16 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 - A149 B48 C129 **Smiths**: did a village have its own smith (or an itinerant one); what is a town blacksmith's
   premises (forge, anvil shed, fire gap), where does it stand, how many per town; how many ordinary blacksmiths and
-  swordsmiths does a city carry, and is the smithy bigger than a shop? (urban-features/160, 032, 030 omit it). M. P2.
+  swordsmiths does a city carry, and is the smithy bigger than a shop? (0198, 032, 030 omit it). M. P2.
 - A150 **Village trades**: a general shop, a sake brewer (often the headman), an oil presser, a carpenter, a cooper -
   which trades did a village of 350 hold, and how many? (none). M. P2.
 - A145 D104 **Village granary**: the tax-rice gokura, the relief granaries (gisō, shasō), China's charity granary -
-  did a village keep a communal granary, how many, how big, and where? (cities/fabric/143, buildings/080, in passing).
+  did a village keep a communal granary, how many, how big, and where? (cities/fabric/143, 0098, in passing).
   M. P2.
   > COORDINATION (A145): cite 267's R18 (the raised grain-kura floor)
 - A151 D145 B88 C143 **Schools below the capital**: where were village and town children taught to read (a temple
   school, terakoya; the headman's house; a Chinese county school, sishu), how many did a city hold, and were they
-  distinct buildings? (none; cities/capitals/190 is the domain school). M. P2.
+  distinct buildings? (none; 0166 is the domain school). M. P2.
   > COORDINATION (A151): schools often at a temple touch 272's village temple (R3) - cite religion-and-death 510 (the village temple's precinct) and 500 (how common a village temple was), in diagram-shrines-2 until 272 lands
 - A152 **Village fire watch**: a fire bell on a ladder (hanshō), a watch hut, a fire-water pond - did a village keep
   them, and where? (towns/070, the town's tower). S. P2.
@@ -62,7 +62,7 @@ the map features whose write-ups will be rewritten from what you find (by the or
    an ABSENCE note with what was searched and when; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). A search that finds nothing is an outcome, not a
    failure: record it and move on. A degree along a continuum is calibrated liberty; distinct forms are a knob.
-5. **Write** on urban-features 430-490, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
+5. **Write** on 0051, 0205, 0206, and the existing sections the items name. A new question is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in
    your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words. A THIN-SECTION item is answered in the section that makes the claim: every real-world assertion there

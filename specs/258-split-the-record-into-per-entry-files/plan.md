@@ -56,9 +56,9 @@ the record's bytes as they are, including its trailing spaces and its blank line
 **Scale/Scope**: 19 research pages (288 questions between them, 2 to 39 each), 19 citations pages, 1,850
 notes, 1,860 references, 920 registry entries (R1, R4, R5).
 
-**Single-artifact target**: **`research/ways/`** and its citations page - the smallest complete case
+**Single-artifact target**: **`research/contents.json#ways`** and its citations page - the smallest complete case
 (5 questions, 26 notes, a `cities/`-style relative link absent, so stage 2's second artifact is
-`research/cities/defenses/`, which has them). Round trip on `ways.html` is sub-second; it is the
+`research/contents.json#city-defenses`, which has them). Round trip on `ways.html` is sub-second; it is the
 page every stage is proven on before the sweep.
 
 **Every step is two steps.** Each stage below is written as: prove it on the one page, then run the
@@ -217,16 +217,16 @@ research/sources/     one section: its <h2> and its prose
 research/sources/030-setting-canon.html          the same
 research/sources/_tail.html                      </main></body></html> - verbatim
 
-research/ways/_front.html                        doctype, head, h1, intro, <hr> - verbatim
+research/contents.json#ways_front.html                        doctype, head, h1, intro, <hr> - verbatim
 research/ways/010-<slug>.html                    one question: its <h2> and everything to the next
 research/ways/010-<slug>.notes.html              that question's notes (stage 3)
-research/ways/_tail.html                         the citations-page pointer and the closing tags
-research/ways/_citations-front.html              head, h1, intro, and the works section's own opening
-research/ways/_citations-mid.html                between the works block and the notes: `</section>`,
+research/contents.json#ways_tail.html                         the citations-page pointer and the closing tags
+research/contents.json#ways_citations-front.html              head, h1, intro, and the works section's own opening
+research/contents.json#ways_citations-mid.html                between the works block and the notes: `</section>`,
                                                  the `<h2 id="notes">` heading, `<section
                                                  class="footnotes"><ol>` - hand-authored bytes that
                                                  belong to no derivation and to no question
-research/ways/_citations-tail.html               `</ol></section>` and the closing tags
+research/contents.json#ways_citations-tail.html               `</ol></section>` and the closing tags
 ```
 
 **A research page is cut on `<h2>` ONLY.** 14 `<h3>` headings stand inside questions on six pages, and a

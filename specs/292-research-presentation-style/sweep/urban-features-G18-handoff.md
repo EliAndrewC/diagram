@@ -6,16 +6,16 @@
 
 - SECTION=urban-features/pleasure-quarters-and-inn-serving-women-yukaku
 - RENDERING=rendering/urban-features/how-our-maps-draw-and-do-not-draw-a-pleasure-quarter
-- OLD=research/urban-features/ research/urban-features/
+- OLD=research/contents.json#trades-and-services research/contents.json#trades-and-services
 - MODALS=
 
-The setting's canon, cited before only in HTML comments, is now footnoted in the rendering section through `l7r-castes` (note `l7r-castes-52`, the Castes line on prostitution; its registry "Used for" extended) and a new registry entry `l7r-geisha-houses` (l7r.md, "Justifiable Homicide Cases"); the RokuganHistory.md passage stays an HTML comment because `sources._CANON_FILE` recognizes only l7r.md and budgets.md as footnotable canon (a reserved key `rokugan-history-crab-crane`, prefix 20480, was dropped unused). The three forms and the size are told as held in reserve with no ruling made. Nothing was cut but the Sources rosters and the two old pointer paragraphs; the capitals link (cities/capitals 090) now points at both the research and the rendering section.
+The setting's canon, cited before only in HTML comments, is now footnoted in the rendering section through `l7r-castes` (note `l7r-castes-52`, the Castes line on prostitution; its registry "Used for" extended) and a new registry entry `l7r-geisha-houses` (l7r.md, "Justifiable Homicide Cases"); the RokuganHistory.md passage stays an HTML comment because `sources._CANON_FILE` recognizes only l7r.md and budgets.md as footnotable canon (a reserved key `rokugan-history-crab-crane`, prefix 20480, was dropped unused). The three forms and the size are told as held in reserve with no ruling made. Nothing was cut but the Sources rosters and the two old pointer paragraphs; the capitals link (0142) now points at both the research and the rendering section.
 
 ## Almshouses and infirmaries for the sick and poor
 
 - SECTION=urban-features/almshouses-and-infirmaries-for-the-sick-and-poor
 - RENDERING=rendering/urban-features/how-our-maps-draw-a-relief-house
-- OLD=research/urban-features/
+- OLD=research/contents.json#trades-and-services
 - MODALS=
 
 The old absence note split in two: the research note keeps the floor-area and castle-town silence, the rendering note keeps the footprint and shared-yard GUESS with its arithmetic; nothing open.
@@ -24,7 +24,7 @@ The old absence note split in two: the research note keeps the floor-area and ca
 
 - SECTION=urban-features/roofed-playhouses-shibai-goya
 - RENDERING=rendering/urban-features/how-our-maps-draw-roofed-playhouses
-- OLD=research/urban-features/
+- OLD=research/contents.json#trades-and-services
 - MODALS=
 
-The brief named no rendering section, but 620's "What it means for the map" paragraph (the count and the two forms rolled per capital, the 80 by 145 ft size, and the GUESS that no town keeps one) is a map rule, so it went to a new rendering section rather than stay in the research one; the check should confirm that call. The glossary term `shibai-goya` (hyphenated; defined as the temporary shed, against a city's permanent theater) does not match the title's "shibai goya" and was left alone; a confusable pair with towns 060 (a town's theater stage) is recorded.
+The brief named no rendering section, but 620's "What it means for the map" paragraph (the count and the two forms rolled per capital, the 80 by 145 ft size, and the GUESS that no town keeps one) is a map rule, so it went to a new rendering section rather than stay in the research one; the check should confirm that call. The glossary term `shibai-goya` (hyphenated; defined as the temporary shed, against a city's permanent theater) does not match the title's "shibai goya" and was left alone; a confusable pair with 0187 (a town's theater stage) is recorded.

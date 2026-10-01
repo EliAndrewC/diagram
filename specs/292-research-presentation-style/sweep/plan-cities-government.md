@@ -84,7 +84,7 @@ how-our-maps-draw-it content; if the writer finds some, it goes to a rendering s
 - cities/government/050-which-way-does-a-ward-gate-face.html -> cities/fabric T4 "City wards and the gates that shut them at night (machi, kido)"
 - cities/government/060-where-does-the-gate-watch-stand.html -> cities/fabric T4 "City wards and the gates that shut them at night (machi, kido)"
 - cities/government/020-what-stands-between-the-temples-in-a-temple-neighborhood.html -> religion-and-death T11 "How many temples a city keeps, and its temple quarter (teramachi)" (offered by the religion-and-death planner; the small shrines between a temple quarter's temples)
-- cities/government/070-martial-training-is-an-urban-institution.html -> buildings T25 "Martial training grounds and dojo" (offered by the buildings planner; buildings/210 "A dojo is a city institution" is the same subject; carries the modal PracticeGround, already on that topic)
+- cities/government/070-martial-training-is-an-urban-institution.html -> buildings T25 "Martial training grounds and dojo" (offered by the buildings planner; 0165 "A dojo is a city institution" is the same subject; carries the modal PracticeGround, already on that topic)
 - cities/government/100-does-china-put-martial-training-in-the-towns-too.html -> buildings T25 "Martial training grounds and dojo" (China's half of 070)
 
 ## Confusable pairs

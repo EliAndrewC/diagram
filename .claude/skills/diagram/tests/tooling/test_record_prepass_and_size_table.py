@@ -242,9 +242,9 @@ def test_the_candidate_list_over_the_real_entry() -> None:
     frequency, keys = rp.corpus_frequency(str(record)), rp.registry_keys(str(record))
     words = [w for w, _n in rp.rare_words(text, set(), frequency, keys=keys)]
     assert 20 <= len(words) <= 60, f"{len(words)} candidates - tens, not hundreds (R1, R2)"
-    # at least two of the three: rarity is measured against a corpus that GROWS - feature 271's town bridges (ways 200)
+    # at least two of the three: rarity is measured against a corpus that GROWS - feature 271's town bridges (0087)
     # use "girder" enough that it stopped being rare, which is the list working, not failing. Feature 292 folded the
-    # entry feature 259 measured (ways 010) into ways 200, where "girder" and "stringers" are no longer rare and
+    # entry feature 259 measured (ways 010) into 0087, where "girder" and "stringers" are no longer rare and
     # "obliquity" went to the rendering section; these three are the abutment words the folded entry brought with it
     assert len({"backwall", "wingwalls", "embedment"} & set(words)) >= 2, words
     assert "and" not in words and "the" not in words

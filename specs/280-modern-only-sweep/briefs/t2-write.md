@@ -33,9 +33,9 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Each names the section that makes the claim, the drawn form, why the audit thinks it modern-only, and the maps it
 touches. The kinds and maps named will be changed from your outcome by the orchestrating session, NOT by you.
 
-- M87 **Core length**: an unwalled road town's strip of about 650 to 750 ft, two lots deep. The strip is scaled from Narai's "about 1 km ... and 200 m across" (naraijuku-jawiki: "its extent is the preserved townscape of today rather than a surveyed Edo boundary") and from Seki's 1.8 km (denken-sekijuku, a preservation-district page). Each is set against a house count of 1843 (towns/210) - kinds: none (the town generator, unscripted); maps: legacy hoshizora, ubame. M.
+- M87 **Core length**: an unwalled road town's strip of about 650 to 750 ft, two lots deep. The strip is scaled from Narai's "about 1 km ... and 200 m across" (naraijuku-jawiki: "its extent is the preserved townscape of today rather than a surveyed Edo boundary") and from Seki's 1.8 km (denken-sekijuku, a preservation-district page). Each is set against a house count of 1843 (0134) - kinds: none (the town generator, unscripted); maps: legacy hoshizora, ubame. M.
 - M88 **Core density**: about 8 houses to the acre and about 19 ft of street front per house. These are house counts of 1843 spread over the preservation districts' extents (naraijuku-jawiki, denken-sekijuku) (towns/220) - kinds: none (the town generator); maps: the legacy towns' street fronts. M.
-- M89 **Market catchment**: a catchment of about 50 sq km, a walk of 4.5 km at most. The figure is from skinner-2002-etudes-rurales, "a mid-twentieth-century social-science model" built from fieldwork of the 1940s to 1960s (towns/440) - kinds: none (the town's farmed hinterland); maps: none directly. L.
+- M89 **Market catchment**: a catchment of about 50 sq km, a walk of 4.5 km at most. The figure is from skinner-2002-etudes-rurales, "a mid-twentieth-century social-science model" built from fieldwork of the 1940s to 1960s (0130) - kinds: none (the town's farmed hinterland); maps: none directly. L.
 
 ## The procedure (session 1: research and write)
 
@@ -66,7 +66,7 @@ touches. The kinds and maps named will be changed from your outcome by the orche
      cite the attested ones, give the search for the rest. For a degree (a size, density, count), give the premodern
      figure the map should be calibrated to, as the GM ruled for mulberry spacing.
    A search that finds nothing is an outcome, not a failure: record it and move on.
-5. **Write** on towns/210, towns/220, towns/440, and towns 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
+5. **Write** on 0134, towns/220, 0130, and towns 600-690 for a new question - a held section excepted (the held rule above: its text goes in the handoff). The finding is written in the section that makes the claim: the premodern attestation cited,
    or the modern-only finding with its search and date, and the decision in plain words ("the maps do not draw it").
    Write it as the finding a casual reader needs, never as what the section used to say. A new question, where one is
    needed, is a fragment `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with

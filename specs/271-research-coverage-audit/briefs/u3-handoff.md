@@ -7,9 +7,9 @@ session on these items.
 
 - SECTION=urban-features/370
 - SECTION=urban-features/380
-- SECTION=urban-features/390
+- SECTION=0203
 - SECTION=urban-features/400
-- SECTION=urban-features/410
+- SECTION=0204
 - SECTION=urban-features/420
 - SECTION=cities/fabric/060
 - SECTION=cities/fabric/140

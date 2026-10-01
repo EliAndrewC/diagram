@@ -45,7 +45,7 @@ class ThresholdStones(Kind):
     Covers: the vermilion pair outside the main gate and their label with the "buried Pact-Bowl" sublabel
     Label: deviation
     Sources: not recorded
-    Entry: research/buildings/ (no dedicated entry - recorded as silent)
+    Entry: research/contents.json#compounds (no dedicated entry - recorded as silent)
     """
 
     key = "threshold stones"
@@ -68,7 +68,7 @@ class CinnabarWorkshop(Kind):
     Covers: the hatched workshop, its posts and its label
     Label: deviation
     Sources: not recorded
-    Entry: research/buildings/ (no dedicated entry - recorded as silent)
+    Entry: research/contents.json#compounds (no dedicated entry - recorded as silent)
     """
 
     key = "cinnabar workshop"
@@ -97,7 +97,7 @@ class River(Kind):
     Covers: the river band and its labels
     Label: accurate
     Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
-    Entry: research/buildings/080-storehouses-for-the-tax-rice.html; research/rendering/buildings/080-how-our-maps-draw-storehouses-for-the-tax-rice.html; research/ways/060-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/rendering/ways/060-how-our-maps-draw-moving-goods-cart-lanes-and-boat-landings-kashi.html
+    Entry: research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html
     """
 
     key = "river"
@@ -122,7 +122,7 @@ class RiverLanding(Kind):
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings/080-storehouses-for-the-tax-rice.html; research/rendering/buildings/080-how-our-maps-draw-storehouses-for-the-tax-rice.html; research/cities/river-cities/040-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/cities/capitals/090-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html; research/ways/060-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/rendering/ways/060-how-our-maps-draw-moving-goods-cart-lanes-and-boat-landings-kashi.html; research/rendering/cities/river-cities/040-how-our-maps-draw-wharves-and-landings-kashi-gangi.html
+    Entry: research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
     """
 
     key = "river landing"
@@ -149,7 +149,7 @@ class FoxBorder(Kind):
     Covers: the border line, its labels and the border note box
     Label: accurate
     Sources: nanbu-date-mounds-enwiki, kuniezu-enwiki, kotobank-genroku-kuniezu, mukoyama-linear-borders
-    Entry: research/urban-features/170-clan-borders-and-their-markers.html; research/rendering/urban-features/170-how-our-maps-draw-a-clan-border.html
+    Entry: research/questions/0083-clan-borders-and-their-markers.html; research/questions/0083-clan-borders-and-their-markers.drawing.html
     """
 
     key = "fox border"
@@ -177,7 +177,7 @@ class ParleyRoom(Kind):
     Covers: the room in the border wall and its label
     Label: deviation
     Sources: kyakhta-trade-enwiki, wakan-kotobank
-    Entry: research/buildings/610-rooms-for-a-parley-across-a-border.html; research/rendering/buildings/610-how-our-maps-draw-a-parley-room-on-a-border.html; research/urban-features/170-clan-borders-and-their-markers.html; research/rendering/urban-features/170-how-our-maps-draw-a-clan-border.html
+    Entry: research/questions/0094-rooms-for-a-parley-across-a-border.html; research/questions/0094-rooms-for-a-parley-across-a-border.drawing.html; research/questions/0083-clan-borders-and-their-markers.html; research/questions/0083-clan-borders-and-their-markers.drawing.html
     """
 
     key = "parley room"
@@ -201,7 +201,7 @@ class BoundaryStones(Kind):
     Covers: the two border pillars and their label
     Label: convention
     Sources: nanbu-date-mounds-enwiki, kuniezu-enwiki, kotobank-genroku-kuniezu, mukoyama-linear-borders
-    Entry: research/urban-features/170-clan-borders-and-their-markers.html; research/rendering/urban-features/170-how-our-maps-draw-a-clan-border.html
+    Entry: research/questions/0083-clan-borders-and-their-markers.html; research/questions/0083-clan-borders-and-their-markers.drawing.html
     """
 
     key = "boundary stones"
@@ -227,7 +227,7 @@ class CharcoalStore(Kind):
     Covers: the sealed charcoal kura and its labels
     Label: guess
     Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-    Entry: research/urban-features/150-charcoal-yards-and-charcoal-stores.html; research/rendering/urban-features/150-how-our-maps-draw-charcoal-yards-and-charcoal-stores.html
+    Entry: research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
     """
 
     key = "charcoal store"
@@ -251,7 +251,7 @@ class WoodKamiAltar(Kind):
     Covers: the altar and its label with the "personally maintained" sublabel
     Label: deviation
     Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-    Entry: research/religion-and-death/080-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html; research/homesteads/216-household-shrines-yashikigami.html
+    Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html; research/questions/0219-household-shrines-yashikigami.html
     """
 
     key = "wood-kami altar"
@@ -278,7 +278,7 @@ class Revetment(Kind):
     Covers: the stone facing along the landing's bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
-    Entry: research/cities/river-cities/040-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/rendering/cities/river-cities/040-how-our-maps-draw-wharves-and-landings-kashi-gangi.html; research/cities/capitals/090-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html
+    Entry: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html; research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html
     """
 
     key = "revetment"
@@ -309,7 +309,7 @@ class Dock(Kind):
     Covers: the landing steps in the faced bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
-    Entry: research/cities/river-cities/040-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/rendering/cities/river-cities/040-how-our-maps-draw-wharves-and-landings-kashi-gangi.html
+    Entry: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
     """
 
     key = "dock"
@@ -333,7 +333,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features/190-straw-bales-of-rice-and-charcoal-tawara.html; research/rendering/urban-features/190-how-our-maps-draw-straw-bales-of-rice-and-charcoal-tawara.html; research/buildings/080-storehouses-for-the-tax-rice.html; research/rendering/buildings/080-how-our-maps-draw-storehouses-for-the-tax-rice.html; research/cities/river-cities/040-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/rendering/cities/river-cities/040-how-our-maps-draw-wharves-and-landings-kashi-gangi.html
+    Entry: research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.html; research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html; research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
     """
 
     key = "tax barge"
@@ -358,7 +358,7 @@ class BoatmensAltar(Kind):
     Covers: the altar on the bank and its label
     Label: accurate
     Sources: funadama-jawiki, kotobank-funadama, kotobank-suitengu
-    Entry: research/cities/river-cities/060-the-boatmens-shrine-at-the-landing-funadama-suijin.html; research/rendering/cities/river-cities/060-how-our-maps-draw-the-boatmens-shrine-at-the-landing-funadama.html
+    Entry: research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.html; research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.drawing.html
     """
 
     key = "boatmen's altar"
@@ -387,7 +387,7 @@ class RiverWatch(Kind):
     Covers: the guard post at the landing and its label
     Label: accurate
     Sources: funabansho-jawiki, koto-nakagawa-funabansho, l7r-tariffs
-    Entry: research/cities/river-cities/050-the-river-watch-post-at-a-landing-funabansho.html; research/rendering/cities/river-cities/050-how-our-maps-draw-the-river-watch-post-funabansho.html
+    Entry: research/questions/0177-the-river-watch-post-at-a-landing-funabansho.html; research/questions/0177-the-river-watch-post-at-a-landing-funabansho.drawing.html
     """
 
     key = "river watch"
@@ -411,7 +411,7 @@ class Steelyard(Kind):
     Covers: the steelyard on the weighing floor
     Label: accurate
     Sources: zhwiki-ganchen, zjnews-cixi-steelyard, osaka-keiryo-history, kanazawa-saobakari
-    Entry: research/urban-features/150-charcoal-yards-and-charcoal-stores.html; research/rendering/urban-features/150-how-our-maps-draw-charcoal-yards-and-charcoal-stores.html
+    Entry: research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
     """
 
     key = "steelyard"
@@ -436,7 +436,7 @@ class CharcoalBales(Kind):
     Covers: the stacked bales on the weighing floor
     Label: convention
     Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
-    Entry: research/urban-features/190-straw-bales-of-rice-and-charcoal-tawara.html, research/urban-features/150-charcoal-yards-and-charcoal-stores.html; research/rendering/urban-features/190-how-our-maps-draw-straw-bales-of-rice-and-charcoal-tawara.html, research/rendering/urban-features/150-how-our-maps-draw-charcoal-yards-and-charcoal-stores.html
+    Entry: research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.html, research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html, research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
     """
 
     key = "charcoal bales"
@@ -459,7 +459,7 @@ class ParleyMats(Kind):
     Covers: the four kneeling mats in the parley room
     Label: deviation
     Sources: kyakhta-trade-enwiki, wakan-kotobank
-    Entry: research/buildings/610-rooms-for-a-parley-across-a-border.html; research/rendering/buildings/610-how-our-maps-draw-a-parley-room-on-a-border.html; research/urban-features/170-clan-borders-and-their-markers.html; research/rendering/urban-features/170-how-our-maps-draw-a-clan-border.html
+    Entry: research/questions/0094-rooms-for-a-parley-across-a-border.html; research/questions/0094-rooms-for-a-parley-across-a-border.drawing.html; research/questions/0083-clan-borders-and-their-markers.html; research/questions/0083-clan-borders-and-their-markers.drawing.html
     """
 
     key = "parley mats"
@@ -481,7 +481,7 @@ class DryingStonesAndBowls(Kind):
     Covers: the drying river-stones and lacquer bowls in the workshop
     Label: deviation
     Sources: not recorded
-    Entry: research/buildings/ (no dedicated entry - recorded as silent)
+    Entry: research/contents.json#compounds (no dedicated entry - recorded as silent)
     """
 
     key = "drying stones and bowls"

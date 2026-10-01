@@ -156,7 +156,7 @@ Each of these could read as a narrowing; they are put here rather than decided s
   sheets alike. The GM's "we'll treat labels as mandatory" (`labels/standard.py`) is honored without an overlap; the
   least-cost overlapping seat is retired.
 - **D11 A village's worked woodland off a tight sheet is recorded off the sheet with its bearing** (woods, R3's woodland
-  row): research/vegetation/220 puts the wood on the hill beyond the fields, and the GM's frame rule forbids a parcel
+  row): research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html puts the wood on the hill beyond the fields, and the GM's frame rule forbids a parcel
   setting the frame. Raised with the GM once it works.
 - **D12 The question for the GM**, after P0's count and through `escalation-check`: the notice board where no verge in the
   view takes a board whose caption clears roofs, lanes, crowns and neighbors (labels L4) - every option breaks one of the

@@ -190,7 +190,7 @@ def test_an_area_caption_lies_inside_the_area_over_its_centroid() -> None:
 
 def test_a_caption_may_lie_on_its_own_group_but_a_civic_one_never_on_another_civic_building() -> None:
     """FR-014, the GM's 2026-07-21 rule: a temple's caption may lie on a temple; a ministry's name may not lie on the
-    next ministry (research/presentation 070)."""
+    next ministry (research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html)."""
     temple = Obstacle(tuple(ABOVE), WEIGHT_OBSTACLE, group="flophouse")
     assert place("flophouse", SIZE, BOARD, ObstacleIndex([temple])).position == "above"
     assert place("notice board", SIZE, BOARD, ObstacleIndex([temple])).position != "above"

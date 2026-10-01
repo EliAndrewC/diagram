@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/740
 - SECTION=religion-and-death/460
-- SECTION=religion-and-death/040
+- SECTION=0232
 - KEY=ranzan-senjudo-1843
 - KEY=ranzan-senjuin
 - KEY=kotobank-bomori
@@ -19,7 +19,7 @@ M73 PREMODERN-ATTESTED - 040 now cites these as attested before modern times: a 
 
 ## Left open
 
-- No section was held: religion-and-death 040 and 460 are neither 279's (124-129) nor 269's (no unlanded 269 commit on religion-and-death).
+- No section was held: 0232 and 460 are neither 279's (124-129) nor 269's (no unlanded 269 commit on religion-and-death).
 - Not committed: `research/sources/`, the glossary assets and the fields/archetypes files, which also carry another session's uncommitted work in this clone. The six new registry fragments are committed; `make record` must run again before the checks so SOURCES.html carries them.
 - `tests/interactive/test_footnotes.py` fails on towns.html [^99] (a grounds note with a reason not on the closed list). That comes from other uncommitted work, not R3.
 - The source-reader found that the Ranzan register pages do not themselves say "Meiji" (the site files them as the prefecture's 1963 papers). 460 and 740 now say "a register made after 1868". The older entries (ranzan-temple-register, ranzan-koshoji-senjudo) still call it Meiji-era, as "this page's inference".

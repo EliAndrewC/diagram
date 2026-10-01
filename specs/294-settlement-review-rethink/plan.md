@@ -120,12 +120,12 @@ Mode A (registry checks in `tools/pack_audit/registry.py`, each with its red fix
 and its tier entry in `buildings/types.json`):
 
 - **B16** `lodging_entrances` (door on every lodging block's outer wall); **B17** `privies_by_zone` (a latrine attached to the
-  residence, one per court, at least 3 - research buildings/220, 310; the count GUESS) - fails on the generated
+  residence, one per court, at least 3 - research 0101, 310; the count GUESS) - fails on the generated
   `ochiba-roundtrip-test`, fixed in `compound.py`; **B18** `fire_water_distribution` (research buildings/170); **B19**
-  `size_hierarchy` (research buildings/180); **B20** `sheet_furniture` (title present, no compass rose, no key box - SKILL.md);
+  `size_hierarchy` (research 0116); **B20** `sheet_furniture` (title present, no compass rose, no key box - SKILL.md);
   **B21** `roads_leave_the_frame` (a road end meets the frame, a gate, a door, a torii or another road); **B22** `palette_roles`
   (fill in the kind's allowed set; the table a drawing convention); **B23** `gate_feeds_its_road` (road no wider than its gate
-  opening plus 1 ft - research buildings/480, feature 267); **B24** `mapmatch` gate side and width, roads read under every key,
+  opening plus 1 ft - research 0093, feature 267); **B24** `mapmatch` gate side and width, roads read under every key,
   and an `**On map**` line required where a map records the sheet's subject (US5's home for plan-sheet agreement).
 - **Hand-drawn sheets.** Where B21, B23 or B24 fails a hand-drawn sheet (Ochiba's 13.3 ft road into an 8 ft gate; Ubame's
   missing `**On map**`; Hoshigaoka's footpath 24 ft short), the fix is a hand edit, which the GM approves first (D8). The

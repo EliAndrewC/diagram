@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows
 - RENDERING=rendering/archetypes/how-our-maps-lay-cash-crops-over-a-villages-rice-land
-- OLD=research/archetypes/ research/archetypes/ research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=FishPond
 - BASE=76f9aaab8
 

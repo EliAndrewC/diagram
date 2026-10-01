@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/bamboo-groves-chikurin
 - RENDERING=rendering/vegetation/how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see
-- OLD=research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/
+- OLD=research/contents.json#vegetation research/contents.json#vegetation research/contents.json#vegetation research/contents.json#vegetation research/contents.json#vegetation
 - MODALS=HomesteadBamboo SharedBambooGrove Windbreak
 - BASE=d49d68eb3
 

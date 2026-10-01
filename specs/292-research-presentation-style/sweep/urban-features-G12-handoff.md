@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/charcoal-yards-and-charcoal-stores
 - RENDERING=rendering/urban-features/how-our-maps-draw-charcoal-yards-and-their-fire-gap
-- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/
+- OLD=research/contents.json#trades-and-services research/contents.json#trades-and-services research/contents.json#trades-and-services research/contents.json#trades-and-services
 - MODALS=CartYard CharcoalBales CharcoalStore Steelyard TallyOffice WeighingFloor
 - BASE=f5e67de4e
 

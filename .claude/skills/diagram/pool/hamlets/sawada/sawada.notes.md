@@ -29,7 +29,7 @@ the low side where the gate requires it.
   review flagged got its well via the coverage-greedy well sort.
 
 - 2026-08-16 (the fork draws both arms - engine change, this map re-rolled): the GM's Inashiro
-  question settled in research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html;
+  question settled in research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html;
   every `OFFTAKE_LADDER` row now draws canal B, gated by `comb_supply_commands_both_flanks`.
   This map re-rolled three times as review fallout was fixed at the engine (canal-B thread
   tails via interpolated piece boundaries, minimax worst-served well placement, the notice
@@ -91,7 +91,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with
 
-The fan-toe SUNBURST ruling (full research in `research/rendering/fields/190-how-our-maps-draw-wet-paddies-shitsuden.html`; engine changes in `_comb_toe_and_hem`, `close_seams` and `_absorb`). Sawada carried 7 rings
+The fan-toe SUNBURST ruling (full research in `research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html`; engine changes in `_comb_toe_and_hem`, `close_seams` and `_absorb`). Sawada carried 7 rings
 under the 15 deg gate line and now carries none, at a cost of **-0.27% cultivated area** - the
 sunburst was bought out almost for free, because the needles were removed by re-subdividing and
 absorbing rather than by deleting paddy.
@@ -317,7 +317,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html`.
+why the gate could not sit at 0.15: `research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html`.
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 843 -> 818 basins (the largest
 share in the pool); smallest surviving basin 379 sq ft against a 372 sq ft floor; total plot area
@@ -362,7 +362,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `research/presentation/` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/contents.json#map-conventions` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -469,7 +469,7 @@ after `crop_to_content` (a draw-order change - the belt is drawn early on purpos
 clumps once the frame settles. Both are ordering changes in the stage that this feature explicitly did not
 touch, which is why it is deferred rather than half-done here.
 
-Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads/`,
+Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/contents.json#homesteads`,
 2026-08-18); two of four scripted hamlets now roll ZERO woodland commons, so three woodland checks pass
 vacuously - a question for feature 146's check census.
 
@@ -586,7 +586,7 @@ priced trade-off whose price has risen on this roll, not a siting bug.
 **Why this is not fixed here - and it is NOT for want of research (GM 2026-08-29).** An earlier version
 of this entry called it a research question. The GM pushed back - *"I thought that our notice board
 already was well researched? I would be really surprised if our existing research was insufficient to
-that task"* - and they were right. `research/urban-features/` already carries the answer, READ and
+that task"* - and they were right. `research/contents.json#trades-and-services` already carries the answer, READ and
 cited in feature 133 T13 from four sources: the bakufu set kosatsuba *"at points of heavy passage:
 barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"*;
 in farming villages *"at the village center, the shrine precinct, or the place where villagers
@@ -942,7 +942,7 @@ farmhouse off the way network, so the map keeps its second. The water story is r
 the drain leaves by the west edge, the brook by the top. The copse keeps within 90 ft of a farmhouse (median 62 ft).
 The rolled `elongated` shape is not what this seat draws - a drawn aspect of 1.92, inside the round form's ceiling of 2 -
 and the manifest records it as unhonored rather than claiming it. The plot a household works by its own house is its kitchen garden; no grain plot is laid beside a house (a research
-pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields/160-dry-fields-and-their-crops-hatake.html), so the dry crops stand in the hem along the supply canal; the ranks of this accretion-form hamlet (`lane_web: alleys`) stand off their exact lines by up to an eighth of a pitch either way (`RANK_DEPTH_JITTER`).
+pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/questions/0006-dry-fields-and-their-crops-hatake.html), so the dry crops stand in the hem along the supply canal; the ranks of this accretion-form hamlet (`lane_web: alleys`) stand off their exact lines by up to an eighth of a pitch either way (`RANK_DEPTH_JITTER`).
 Known open (settlement-review, 2026-09-28): four or five of the eight homestead bamboo stands (by crown circle or by area) are inked over a copse crown, so
 at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
 the attested yashiki-rin form; and lane 11 stops
@@ -976,10 +976,10 @@ limit review round 1 gave this map's pile (+-30).
 ## 2026-09-28 (feature 282): the harvest yard drawn - mats over the floor, and racks by the houses; nothing placed moved
 
 Every threshing yard is now drawn as the harvest leaves it: straw mats of 3 by 6 ft laid in rows over the whole floor,
-most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline or its rack leaves no room (a drawing convention - the real yard was covered, research homesteads 'What lay in the work yard at harvest?'). The old fixed center mat and the rack
+most turned a little as if laid by hand and nudged off their rows where the gap leaves room, and the map draws between a third and two thirds of the mats that covered it, a mat or two fewer where the yard's outline or its rack leaves no room (a drawing convention - the real yard was covered, research/contents.json#homesteads 'What lay in the work yard at harvest?'). The old fixed center mat and the rack
 along each yard's south edge are gone. This map DECLARES changeable harvest weather (`harvest_weather="changeable"` in
 `sawada.gen.py`): it is the pool's exhibit of racks gathered by the houses, the form the record names for a coast of
-changeable autumn weather (research homesteads 'Did a village put its drying racks by the houses by custom, or because
+changeable autumn weather (research/contents.json#homesteads 'Did a village put its drying racks by the houses by custom, or because
 of its weather?'), so each yard carries a rack along one side in its map-north half, out of the drying floor's sun. The
 weather is declared, never rolled, so the random stream is untouched: the manifest diff is `mats` and `rack` on each
 yard, `meta.harvest_weather`, and each yard's outline recorded to a thousandth (no yard moved). The first settlement-review (2026-09-28) found the rack, drawn as an outlined box,
@@ -998,13 +998,13 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
   the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's rolled
   seat main_door (tried first, then the stable end, then the floored rooms; the seat each bath took is in the measured line below).
-- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
+- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, 0043 and 720:
   Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
   (undated modern pages only) are no longer drawn.
 - **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
 - **The storehouse against the farmhouse** on about one farm in eight, at the Edo sheds' proportion, about 1.67
   to one (M18, M20: Kakimochi's 2 storehouses in 16 households; the ~30% it was drawn at was the 1972 count's).
-- **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
+- **The work yard's median is 25 tsubo** (M16, 0037: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
   depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).
 - **No farmhouse is turned a quarter away** (M26, homesteads/780): the right-turned tenth rests only on the 1974-1984 count; each
   house still turns a little with its lane, inside the survey's three compass points.
@@ -1030,6 +1030,6 @@ streets and door paths held to the lane law as tree lanes. Measured on this roll
 
 ## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses - the layout moved
 
-The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 5th and 14th of 19 farmhouses and now stand on the 1st and 2nd, drawn 24.8 x 13.8 and 24.6 x 13.7 ft. The re-pack kept 4 of the 19 house centers.
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research 0040) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 5th and 14th of 19 farmhouses and now stand on the 1st and 2nd, drawn 24.8 x 13.8 and 24.6 x 13.7 ft. The re-pack kept 4 of the 19 house centers.
 
 What else the re-pack moved: the notice board stands 57 ft from main's seat, at (4069.1, 1942.6); two of the three shared wells moved with their houses, to (4133, 2243) and (4573, 2485); 15 lanes where main drew 17, the web settled in 5 rounds, the 135 ft field way to the bund kept; the cluster now draws round, 1.98 to one, where main's drew a crescent at 2.47 (`declare_cluster_shape`). The fixture counts are main's: bath rooms 5, wood sheds 8, privies 17, coops 14, manure heaps 13, shrine 1.

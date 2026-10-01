@@ -16,7 +16,7 @@ declared silence. This enforces a rule with no current violation rather than fix
 later audit should not read it as a bug fix.
 
 THE ONE LEGITIMATE NON-MATCH is a section deliberately not written, in the form `fallow` already uses:
-`research/fields/ (no dedicated entry - recorded as silent)`. It is recognized EXPLICITLY, never by
+`research/contents.json#fields (no dedicated entry - recorded as silent)`. It is recognized EXPLICITLY, never by
 the absence of a match, so a BROKEN heading and a DECLARED silence cannot be confused - and `make audit`
 enumerates every entry taking it, because a carve-out nobody can list is one nobody revisits.
 
@@ -87,10 +87,10 @@ def selftest() -> int:
     of its siblings at the push call site run one. Fires on a heading that does not exist; stays quiet on
     a real one; and does NOT let the declared-silence form swallow a broken heading."""
     root = Path(__file__).resolve().parent.parent
-    real = "research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html"
+    real = "research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html"
     # the FORM half always runs: telling a declared silence from a broken heading is this file's own
     # logic and owes nothing to the engine
-    assert SILENT.search("research/fields/ (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"
+    assert SILENT.search("research/contents.json#fields (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"
     assert not SILENT.search(real), "a real entry must not read as a declared silence"
     assert not SILENT.search("research/fields/999-not-there.html"), "a broken pointer must not read as a declared silence"
     loaded = _load(root)
@@ -100,7 +100,7 @@ def selftest() -> int:
     _classes, unresolved = loaded
     assert not unresolved(real), "the checker cannot see a question that exists - its matching surface is dead"
     assert unresolved("research/archetypes/999-a-question-that-does-not-exist.html"), "a broken pointer must be named"
-    assert unresolved("research/archetypes.html - 'a page and a heading, the form retired by feature 301'"), "an entry naming no fragment is broken"
+    assert unresolved("research/contents.json#field-archetypes - 'a page and a heading, the form retired by feature 301'"), "an entry naming no fragment is broken"
     print("check-entry-headings selftest ok")
     return 0
 

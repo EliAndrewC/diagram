@@ -2,7 +2,7 @@
 
 - SECTION=buildings/household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai
 - RENDERING=rendering/buildings/how-our-maps-decide-where-an-ancestral-alcove-is-drawn
-- OLD=research/buildings/ research/buildings/ research/buildings/
+- OLD=research/contents.json#compounds research/contents.json#compounds research/contents.json#compounds
 - MODALS=AncestralAlcove InnerRooms
 - BASE=738921c7f
 

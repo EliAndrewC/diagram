@@ -1,4 +1,4 @@
-"""Feature 269 group E6, B27: where a village keeps its fuel wood (research/vegetation/220) - beyond the fields, on ground
+"""Feature 269 group E6, B27: where a village keeps its fuel wood (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html) - beyond the fields, on ground
 higher than the fields it adjoins, never downslope of the houses."""
 
 import math

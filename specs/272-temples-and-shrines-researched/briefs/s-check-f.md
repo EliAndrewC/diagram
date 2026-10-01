@@ -7,8 +7,8 @@ above all (it auto-loads when you read a research file).
 
 **Read narrowly.** For a few notes of a question use `make notes PAGE=<page> SECTION=<NNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
-**Do not edit these sections - other sessions own them:** religion-and-death 130-206 and new 270-300 (feature 269's
-burial group R1, in `/diagram/.clones/diagram-supplemental`); religion-and-death 220-260 (feature 267); every page
+**Do not edit these sections - other sessions own them:** 0224, 0235 and new 270-300 (feature 269's
+burial group R1, in `/diagram/.clones/diagram-supplemental`); 0240 (feature 267); every page
 other than religion-and-death. Where a finding OWES one of those a correction, say exactly what in the handoff; the
 orchestrator sends it to the owner. Other groups of THIS feature run beside you in sibling clones: stay inside your
 own sections and range.

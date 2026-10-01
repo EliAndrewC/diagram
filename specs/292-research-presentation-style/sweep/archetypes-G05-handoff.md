@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-polders-dike-and-its-trees
-- OLD=research/archetypes/ research/archetypes/ research/archetypes/ research/archetypes/
+- OLD=research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes research/contents.json#field-archetypes
 - MODALS=MulberryDike PerimeterDike
 - BASE=f6ada12bc
 

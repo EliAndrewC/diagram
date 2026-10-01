@@ -1,6 +1,6 @@
 # Research - feature 279
 
-The research itself is on the record: `research/religion-and-death/`
+The research itself is on the record: `research/contents.json#religion-and-the-dead`
 (its sources, checks and reader reports as run 2026-09-28). This file holds only what the spec measures.
 
 ## R1 - the grove as drawn before this feature

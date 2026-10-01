@@ -1,6 +1,6 @@
 """269 E3 (B18, B17): which way a farmhouse faces, the homestead turning as one piece, and where a lane end stops at a house.
 
-research/homesteads/400 and 310. `settlement/rolling/bearing.py`, the turned boxes of `_bundle_geom`, and the dooryard clause
+research/questions/0029-farmhouses-minka.html and 310. `settlement/rolling/bearing.py`, the turned boxes of `_bundle_geom`, and the dooryard clause
 of `trim_lane_stubs`.
 """
 
@@ -52,7 +52,7 @@ def test_the_margin_bearing_reads_the_lane_line_a_house_stands_on() -> None:
 
 
 def test_the_house_turn_is_common_bearing_lane_and_spread_within_thirty_and_never_a_quarter_turn() -> None:
-    """Feature 280 M26 (research/homesteads/400): the quarter-turned tenth rests only on a modern count, so no draw turns a
+    """Feature 280 M26 (research/questions/0029-farmhouses-minka.html): the quarter-turned tenth rests only on a modern count, so no draw turns a
     house a quarter away - the widest draw is the spread's edge, held under thirty degrees."""
     mid = lambda x, y, salt: 0.5  # noqa: E731 - a draw at the middle: no spread
     low = lambda x, y, salt: 0.0  # noqa: E731 - the bottom of every draw: the widest spread
@@ -103,7 +103,7 @@ def test_the_bundle_boxes_are_the_drawn_parts_turned_and_the_parts_keep_their_tr
 
 
 def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edge_toward_it_level() -> None:
-    """The GM's ruling of 2026-09-26 (homesteads/400): a yard and its beds always line up with their house. A village whose
+    """The GM's ruling of 2026-09-26 (0029): a yard and its beds always line up with their house. A village whose
     common bearing is a quarter turn carries the yard from the south front round to the west, and its edge toward the house
     stays straight - the level edge is chosen in the house's frame, not the map's."""
     s = _nuc_village()
@@ -156,7 +156,7 @@ def _lanes_past_a_house(end_x: float) -> Settlement:
 
 
 def test_trim_lane_stubs_pulls_an_arm_back_to_the_last_house_it_serves() -> None:
-    """269 B17 (research/rendering/ways/020: "a lane end that reaches nothing is pulled back to the last house it serves"). The
+    """269 B17 (research/questions/0081-village-lanes.drawing.html: "a lane end that reaches nothing is pulled back to the last house it serves"). The
     arm ran 90 ft past the house's center - inside the old 90 ft reach, so it stayed; now it walks back to the house."""
     s = _lanes_past_a_house(590.0)
     s.trim_lane_stubs()

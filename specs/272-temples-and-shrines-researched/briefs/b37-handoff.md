@@ -1,7 +1,7 @@
 # Handoff - feature 272, group B37 (city temples), session 1: research and write
 
 - SECTION=religion-and-death/010
-- SECTION=religion-and-death/050
+- SECTION=0233
 - SECTION=religion-and-death/070
 - SECTION=religion-and-death/310
 - SECTION=religion-and-death/320

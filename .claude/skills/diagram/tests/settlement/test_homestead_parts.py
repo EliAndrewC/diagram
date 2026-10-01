@@ -196,7 +196,7 @@ def test_commons_keeps_scrub_off_dry_plots_and_the_crop_margin():
     # GM 2026-08-15: scrub scattered over dry hatake plots and right up against crop edges. The
     # scatter must skip DRY PLOTS (read from dry_polys, which every dry-crop path registers) as
     # well as paddies, and keep _CROP_MARGIN_FT of clearance off EVERY crop edge - the bund/balk
-    # plus one cut swath (research/vegetation.html "Scrub stands off the crops"). Tall glyphs
+    # plus one cut swath (research/contents.json#vegetation "Scrub stands off the crops"). Tall glyphs
     # (scraggly pines, woodland crowns) stand their own drawn reach further back, so no tip leans
     # over the crop; base points alone are asserted here (the lean is engine-side headroom).
     s = _nuc_village()  # paddy at [(640,150),(1120,150),(1120,780),(640,780)]
@@ -263,7 +263,7 @@ def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():
     # mid-strip. Decision: IRRIGATION channels (M['channels'] + M['drawn_channels']) hold a
     # maintained CUT-BANK margin of _BANK_MARGIN_FT beyond the drawn water edge - the bank is
     # walked for sluice work and scythed for fodder, the same economics as the crop margin
-    # (research/vegetation.html "The cut bank"). STREAMS deliberately get NO margin: a natural bank
+    # (research/contents.json#vegetation "The cut bank"). STREAMS deliberately get NO margin: a natural bank
     # is vegetated to the water's edge, and a sterile halo on the brook is the defect the
     # settlement-review pass warned against. Base points asserted, as in the tests above.
     def _min_dist(gx, gy, poly):

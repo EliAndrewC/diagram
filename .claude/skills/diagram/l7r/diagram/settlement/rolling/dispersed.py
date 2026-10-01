@@ -15,7 +15,7 @@ from ..homestead_parts.grove_sides import THIN_BAND_FT as THIN_BAND_FT
 from ..homestead_parts.grove_sides import E, N, S, Turn, W, turn_face, turns_axes
 
 # THE GARDEN'S MORNING SUN: no grove band stands within this reach east of a garden across its height - the reach
-# `_east_trees` reads (px at the village grain, scaled by `bscale`; research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html).
+# `_east_trees` reads (px at the village grain, scaled by `bscale`; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html).
 EAST_SHADE_REACH = 22.0
 # THE YARD'S DRYING SUN: the strip south of a threshing yard no grove may stand in - `_yard_sun_conflict`'s 22 px strip.
 YARD_SUN_STRIP = 22.0
@@ -24,7 +24,7 @@ YARD_SUN_STRIP = 22.0
 # fabric gap plus 0.71 of its planning cell off every band on each side, 22.2 ft at its 10 ft cell (measured on cohort
 # seed 12, whose rings were first opened 12 ft, two treads: no route at cells 10, 5 or 3, and 14 of 17 farms stranded).
 # A physical necessity; the width is a GUESS - no old page gives an opening's width, and the old entrances found stood on
-# a grove's open side, which a ring does not have (research/vegetation/030-shelter-belts-on-a-villages-windward-side-bofurin.html).
+# a grove's open side, which a ring does not have (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html).
 WAY_IN_FT = 36.0
 # THE LANE'S ROOM BETWEEN TWO FARMS' GROVES: a farm's frame is padded by half of it on every side, so two neighbors' groves
 # stand at least this far apart. Unpadded, the frames packed 2-3 ft apart (16 of seed 12's 17 farms) and the neighbors'
@@ -43,7 +43,7 @@ LANE_ROOM_FT = 32.0
 # shed's depth (12 ft) and the 2 ft the fixture placer keeps off a footprint, with half a foot over - at 21 ft, without
 # the placer's gap, the back seats ended 1.5 ft off the band and Mizuguchi's largest farmhouse seated no shed.
 SERVICE_STRIP_FT = 24.0
-# THE WINDWARD STAND'S DEPTH, in house depths: the grove ~6x the house (research/homesteads/, the grove's real scale).
+# THE WINDWARD STAND'S DEPTH, in house depths: the grove ~6x the house (research/contents.json#homesteads, the grove's real scale).
 DEEP_BAND_HOUSE_DEPTHS = 1.57
 
 Rect = tuple[float, float, float, float]

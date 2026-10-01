@@ -109,7 +109,7 @@ hyphens only.
 
 ## Phase 4 - the record (FR-012 to FR-014; D13)
 
-- [x] T13 `research/religion-and-death/`: two new sections after the village-shrine section - "Does
+- [x] T13 `research/contents.json#religion-and-the-dead`: two new sections after the village-shrine section - "Does
       the country monk live at the shrine?" and "How big is a country shrine, and what stands in its
       precinct?" - with `Sources:` lines, footnotes fn-143 onward on `citations/religion-and-death.html`
       quoting each passage (English translation marked, original kept), the four labels; the village

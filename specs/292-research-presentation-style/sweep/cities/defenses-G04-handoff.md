@@ -4,14 +4,14 @@
 
 - SECTION=cities/defenses/barbicans-wengcheng-masugata
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-barbican-wengcheng-masugata
-- OLD=research/cities/defenses/ research/cities/defenses/
+- OLD=research/contents.json#city-defenses research/contents.json#city-defenses
 - MODALS=
 
 ## Barriers and inspection posts at a town's entrance (bansho)
 
 - SECTION=cities/defenses/barriers-and-inspection-posts-at-a-towns-entrance-bansho
 - RENDERING=none
-- OLD=research/cities/defenses/ research/cities/defenses/
+- OLD=research/contents.json#city-defenses research/contents.json#city-defenses
 - MODALS=
 
 - BASE=1b98f7612

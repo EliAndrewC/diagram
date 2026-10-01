@@ -138,21 +138,21 @@ One line per outcome that changed what a map draws (from `outcomes.md` section 3
 sizes, odds and weights each names as a guess are recorded as guesses at the point of change.
 
 - **B01 fallow** - historically accurate: a field rests 2-4 whole paddy basins, not a blighted patch; the knob
-  settled/unsettled and its 0.8/0.2 weighting a guess (research/fields 250).
+  settled/unsettled and its 0.8/0.2 weighting a guess (research/questions/0013-paddies-left-to-rest-kataarashi.html).
 - **B04 field paths** - historically accurate: every way reaches the field on its bund; the old floor on a spur's drawn length gone
   (fields 290).
 - **B06 dry-hem furrows** - historically accurate: rows set tract by tract, turning at the seams; tract sizes and angles
   guesses (fields 180).
 - **B07 fan middle** - historically accurate: a fan's middle rolls wild or cleared, the dry hem kept to a wild fan's
-  toe; the 0.75/0.25 odds a guess (fields 160).
-- **B10 privy** - historically accurate: four attested seats; the per-hamlet weights a guess (homesteads 260).
-- **B11 night-soil pit** - historically accurate: a rolled share of pits at the field edge (homesteads 260).
-- **B12 bath** - historically accurate: a share of households rolled per hamlet up to most of them, in the front yard or joined by a corridor (homesteads 214).
-- **B13 hen coop** - historically accurate: the band centered on Buck's farm survey share (homesteads 215).
+  toe; the 0.75/0.25 odds a guess (0006).
+- **B10 privy** - historically accurate: four attested seats; the per-hamlet weights a guess (0047).
+- **B11 night-soil pit** - historically accurate: a rolled share of pits at the field edge (0047).
+- **B12 bath** - historically accurate: a share of households rolled per hamlet up to most of them, in the front yard or joined by a corridor (0044).
+- **B13 hen coop** - historically accurate: the band centered on Buck's farm survey share (0045).
 - **B14 persimmon** - historically accurate: the recorded crown, in the dooryard or behind the house, never on the flank
-  (homesteads 218).
+  (0046).
 - **B15 woodpile** - historically accurate: woodshed, kizuma along the windbreak, or eaves stack; the even odds a guess
-  (homesteads 212).
+  (0043).
 - **fc:2261 fixture counts** - historically accurate: each declared share is drawn as its count.
 - **B16 byre** - historically accurate: the beast with its household, the inner stable drawn against the farmhouse (a
   map drawing convention) or a yard shed; the shared commons shed a rare guess that homesteads/060 now disagrees with, open in future-work.
@@ -170,13 +170,13 @@ sizes, odds and weights each names as a guess are recorded as guesses at the poi
 - **B29 grove bamboo** - guess: the bamboo's small share of the windbreak mix and the household stand's side weights (vegetation 260, 154).
 - **B30 windbreak belt** - historically accurate: conifer-led rows or mixed broadleaf, rolled (vegetation 270).
 - **B32 duck pen** - historically accurate: removed as a modern-only form, the GM's ruling of 2026-09-28; the ducks are
-  written into the paddy's write-up (archetypes 210).
+  written into the paddy's write-up (0025).
 - **B34 dike crops** - historically accurate: mulberry, fruit or tea, the GM's ruling of 2026-09-28; cane, banana and
   vegetable retired; the 3/2/1 weights a guess (archetypes 230).
 - **B40 town alley** - historically accurate: beaten earth under a line of drain boards; the ground beside the boards
   a guess (cities/fabric 160).
 - **B42 retirement house** - historically accurate (the form): a rolled share of homesteads keeps one; the share and
-  the house size guesses (settlements 035).
+  the house size guesses (0004).
 - **K1-K5 the kinds** - every changed modal was written from its `Entry:` sections and checked by `entry-drift`; the
   bath, coop and persimmon relabeled from guess to historically accurate.
 

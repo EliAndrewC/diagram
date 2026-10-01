@@ -4,7 +4,7 @@
 
 - SECTION=ways/village-lanes
 - RENDERING=rendering/ways/how-our-maps-draw-village-lanes
-- OLD=research/ways/ research/ways/ research/ways/ research/homesteads/ research/homesteads/ research/homesteads/
+- OLD=research/contents.json#ways research/contents.json#ways research/contents.json#ways research/contents.json#homesteads research/contents.json#homesteads research/contents.json#homesteads
 - MODALS=VillageLane Farmhouse ApproachRoad CartYard
 - BASE=efbd6eb95
 
@@ -19,5 +19,5 @@ Shanghai lane housing) stands in its place, with the silence noted. `mlit-tokaid
 `village-lanes[-N]` / `how-our-maps-draw-village-lanes[-N]`; the Manchu note's two Chinese terms gained their
 `(romaji, "meaning")` glosses. ApproachRoad and CartYard named a title that no longer existed ("What vehicle used a
 village lane, and where could the lane run?"); both now name 'Village lanes'. The cart evidence stays in this section;
-the later moving-goods topic (ways 060, T4) links to `#village-lanes` already. Code comments naming homesteads/310 now
-name rendering/ways/020.
+the later moving-goods topic (0082, T4) links to `#village-lanes` already. Code comments naming homesteads/310 now
+name 0081.

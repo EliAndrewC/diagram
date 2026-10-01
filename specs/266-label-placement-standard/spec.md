@@ -150,7 +150,7 @@ rule quoted from a page they can open.
   word of the overlap taxonomy's caption registry (a "temple" caption may lie on a temple, a flophouse caption on a
   flophouse), which is how that rule has always been keyed in code - except that a caption naming one civic building (a
   ministry, the governor's yamen or a temple by name) gives every OTHER named civic building the full obstacle weight
-  (research/presentation 070, the city rule: the group rule alone "would permit one ministry's name to sit on the next
+  (research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html, the city rule: the group rule alone "would permit one ministry's name to sit on the next
   ministry").
 
 ### Key Entities

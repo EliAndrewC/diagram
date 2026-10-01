@@ -71,7 +71,7 @@ with "This is a guess", and a thin part is disclosed in its kind's caveat (`l7r/
 - **How often was a grave drawn in the fields, by field kind?** The rate (about three maps in ten) is a degree chosen
   for the maps; the record argues "common where the custom held" and gives no number (research fields 220).
 - **Where were a house's ancestral tablets kept** - a butsudan in the butsuma beside the zashiki, which the kind calls
-  the ancestral alcove? The placing at the formal end stands (research buildings 270); the word may not.
+  the ancestral alcove? The placing at the formal end stands (research 0239); the word may not.
 
 ### Silences the maps fill with a labeled guess
 

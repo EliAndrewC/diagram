@@ -36,7 +36,7 @@ The snapshot the dispatch names: `<map>.png` (Read it as an image - what the GM 
 `meta.ftpx`, which varies by tier: hamlet and town 1, village 2, provincial city 3), `.gen.py` (its docstring and comments),
 `.notes.md` (its "Settled by the GM" section and Review log are settled - do not re-raise them; a missing notes file is a
 finding). The sibling maps of the same tier are under `pool/<type>/*/` (their `.png` and `.notes.md`). The tier's
-specification is in `research/settlements/` and its pages (`towns.html`, `cities/*.html`).
+specification is in `research/contents.json#tiers` and its pages (`towns.html`, `cities/*.html`).
 
 ## What you judge
 

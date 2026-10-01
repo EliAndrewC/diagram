@@ -191,7 +191,7 @@ verdicts unchanged.
 ## Phase 8: Polish & Cross-Cutting
 
 - [ ] T029 Documentation (record-the-why, load-bearing): new research sections into
-      `research/cities/capitals.md` (service band, fire watch, wind/nuisance, terrace form,
+      `research/contents.json#citiescapitals.md` (service band, fire watch, wind/nuisance, terrace form,
       named-machi decision), doctrine updates into `settlements/capitals.md` (knobs table:
       `ward_style`, `wind_from`, cistern band; the "Open, still to settle" list pruned),
       and the feature log in `wip/shiro-daika.notes.md`; verify every new check name

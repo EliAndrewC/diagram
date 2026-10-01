@@ -1,5 +1,5 @@
-"""Where a hamlet's coarse grain grows (feature 287, water W36; `settlement/fields/grain.py`, research/fields.html
-fields/165): the placer's guarantee - the drawn dry band holds the need the winter-crop form leaves, or every plot the
+"""Where a hamlet's coarse grain grows (feature 287, water W36; `settlement/fields/grain.py`, research/contents.json#fields
+0011): the placer's guarantee - the drawn dry band holds the need the winter-crop form leaves, or every plot the
 ground offers is drawn - tested on constructed inputs that include the violating cases (a reserve plot on the brook, a
 wet paddy that cannot carry barley, a need the ground cannot hold)."""
 

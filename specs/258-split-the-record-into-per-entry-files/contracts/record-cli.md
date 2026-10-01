@@ -23,8 +23,8 @@ Stale, the common case - the message names what to run, as every guard in this r
 
 ```
 record: STALE - run `make record`:
-  research/water/
-  research/water/
+  research/contents.json#water
+  research/contents.json#water
 ```
 
 In sync:
@@ -36,8 +36,8 @@ record: in sync (19 pages, 1 registry, 1,850 notes)
 A refusal names the file and the thing, never a count alone:
 
 ```
-record: research/water/ references `mineta-2007-tameike-4`,
-        which no note in research/water/ defines
+record: research/contents.json#water references `mineta-2007-tameike-4`,
+        which no note in research/contents.json#water defines
 ```
 
 ## Where it is enforced

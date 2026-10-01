@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-state-cults-altars-and-temples
-- OLD=research/religion-and-death/
+- OLD=research/contents.json#religion-and-the-dead
 - MODALS=
 - BASE=49b93c926
 

@@ -1,8 +1,8 @@
 ## Scope read
 
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/homesteads/` — notes `fn-100`…`fn-153` (54 notes: 37 citations, 17 absence, 0 grounds)
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/water/` — notes `fn-132`…`fn-185` (54 notes: 34 citations, 19 absence, 1 grounds)
-- Assertions read on `research/homesteads/` and `research/water/`. 61 distinct URLs fetched, one attempt per URL.
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#homesteads` — notes `fn-100`…`fn-153` (54 notes: 37 citations, 17 absence, 0 grounds)
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/contents.json#water` — notes `fn-132`…`fn-185` (54 notes: 34 citations, 19 absence, 1 grounds)
+- Assertions read on `research/contents.json#homesteads` and `research/contents.json#water`. 61 distinct URLs fetched, one attempt per URL.
 
 ---
 

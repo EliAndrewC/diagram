@@ -19,5 +19,5 @@ M122 PREMODERN-ATTESTED - the field-gate calendar is premodern: the Yuan Jing ca
 Open:
 - capitals/340 was over the 20,000-byte cap with its notes once touched; its fire finding was split out as capitals/600 (the joins point both ways), and a duplicated English paraphrase in note kozukappara-jawiki-3 and a stale trailing Sources comment were removed. 340 is now under the cap.
 - Pre-existing, not this group's: tests/interactive/test_footnotes.py fails on towns.html note [^99] (a grounds reason not on the closed list); it was failing before this session's edits.
-- The clone had uncommitted work from an earlier session (archetypes 050/130/150, fields 070/600, registry 18760-18790, glossary 5830 and two new terms); this group's commit leaves it alone. The assembled SOURCES.html diff holds only this group's five entries.
+- The clone had uncommitted work from an earlier session (0022/130/150, fields 070/600, registry 18760-18790, glossary 5830 and two new terms); this group's commit leaves it alone. The assembled SOURCES.html diff holds only this group's five entries.
 - Checks owed: quote-check, record-format and source-applicability on capitals 040, 310, 340, 600 and the five keys; entry-drift for any Kind whose Entry names 340 or 310 (340's body changed and lost its fire paragraph to 600).
