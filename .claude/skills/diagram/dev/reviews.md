@@ -28,7 +28,9 @@ lives.
 
 **The declaration.** Every feature that touches drawing or placement code carries an `## Occasions` section in its `tasks.md`,
 one `- <occasion>: <argument>` line each, or `- none: <why>` - whether a change is substantial is the feature's call to
-DECLARE; a delta that touches drawing or placement code with no section is refused at push (`review-gate.sh`). The research
+DECLARE; a delta that touches drawing or placement code with no section is refused at push (`review-gate.sh`). A TWEAK -
+a change done directly, with no spec-kit feature - declares in its commit message instead, one `Occasion: <occasion>: <argument>`
+line (GM 2026-10-01, the household shrine's torii); and a landed feature's section is not read again once every task is ticked. The research
 behind the table is `specs/294-settlement-review-rethink/research.md` R1: every check of the three contracts sorted by what it
 needs and when its answer changes, and what a placer or a test now holds instead.
 

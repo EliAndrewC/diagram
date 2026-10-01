@@ -209,6 +209,26 @@ def test_a_mode_a_sheet_in_the_legacy_tree_still_owes_its_review(clone: Path) ->
     assert ("building-review", "kaminari", "kaminari") in units(clone)
 
 
+def test_a_tweak_declares_in_its_commit_message(clone: Path) -> None:
+    """GM 2026-10-01 (the household shrine's torii): a change done directly has no tasks.md, so its commit carries the line."""
+    (clone / SKILL / "l7r" / "engine.py").write_text("X = 2\n")
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "the torii's second crossbar\n\nOccasion: glyph-redrawn: privy - the second crossbar")
+    assert units(clone) == [("glyph-check", "privy", "inashiro")]
+    assert owed.check_declared(clone) is None
+
+
+def test_a_landed_feature_s_pointer_declares_nothing(clone: Path) -> None:
+    """`.specify/feature.json` outlives its feature: once every task is ticked, its occasions are not owed again."""
+    _tasks(clone, ["glyph-redrawn: privy"])
+    tasks = clone / "specs" / "999-test" / "tasks.md"
+    tasks.write_text(tasks.read_text().replace("- [ ] T01", "- [x] T01"))
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "the feature")
+    git(clone, "update-ref", "refs/remotes/origin/main", git(clone, "rev-parse", "HEAD"))
+    assert units(clone) == []
+
+
 def test_a_committed_change_beyond_the_merge_base_counts(clone: Path) -> None:
     _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
     git(clone, "commit", "-qam", "a well")

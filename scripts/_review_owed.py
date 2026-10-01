@@ -230,7 +230,10 @@ def active_features(root: Path, base: str) -> list[str]:
         pointer = str(json.loads((root / ".specify" / "feature.json").read_text()).get("feature_directory", "")).rstrip("/")
     except (OSError, ValueError):
         pointer = ""
-    if pointer:
+    # THE POINTER ONLY WHILE ITS FEATURE IS OPEN: `.specify/feature.json` outlives the feature it names, and a landed
+    # feature's `## Occasions` re-declared its units on every later delta (feature 294's own copse, owed again by a tweak)
+    tasks = root / pointer / "tasks.md" if pointer else None
+    if tasks is not None and tasks.is_file() and re.search(r"^- \[ \]", tasks.read_text(), re.M):
         found.add(pointer)
     touched = (_git(root, "diff", "--name-only", base, "--", "specs") or "") if base else ""
     for path in touched.splitlines():
@@ -248,14 +251,26 @@ def occasions_section(tasks_text: str) -> list[tuple[str, str]] | None:
     return [(o["kind"], o["arg"]) for o in map(_OCCASION.match, m["body"].splitlines()) if o]
 
 
+def commit_occasions(root: Path, base: str) -> list[tuple[str, str]]:
+    """The `Occasion: <kind>: <argument>` lines of the delta's own commit messages - where a TWEAK declares, a change done
+    directly with no spec-kit feature to carry a `tasks.md` (GM 2026-10-01: the household shrine's torii given its second
+    crossbar). Scoped to the delta by construction: a landed commit is behind the base and is never read again."""
+    log = (_git(root, "log", "--format=%B", f"{base}..HEAD") or "") if base else ""
+    return [(o["kind"], o["arg"]) for line in log.splitlines() if (m := re.match(r"^Occasion:\s*(.*)$", line.strip())) and (o := _OCCASION.match(f"- {m[1]}"))]
+
+
 def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
     """(the units the active features declare, problems with the declarations, whether any feature declares at all)."""
     units: list[Unit] = []
     problems: list[str] = []
     any_section = False
+    sources: list[tuple[str, list[tuple[str, str]] | None]] = []
     for feature in active_features(root, base):
         tasks = root / feature / "tasks.md"
-        lines = occasions_section(tasks.read_text()) if tasks.is_file() else None
+        sources.append((feature, occasions_section(tasks.read_text()) if tasks.is_file() else None))
+    if tweak := commit_occasions(root, base):
+        sources.append(("the delta's commit messages", tweak))
+    for feature, lines in sources:
         if lines is None:
             continue
         any_section = True
@@ -305,8 +320,10 @@ def check_declared(root: Path) -> str | None:
         return None
     shown = ", ".join(code[:5]) + (f" and {len(code) - 5} more" if len(code) > 5 else "")
     return (
-        f"drawing or placement code moved ({shown}) and no active feature's tasks.md has an `## Occasions` section. Declare what "
-        f"the change re-places or redraws - `- placement-changed: <class>`, `- glyph-redrawn: <class>`, ... - or `- none: <why>` "
+        f"drawing or placement code moved ({shown}) and no active feature's tasks.md has an `## Occasions` section, nor any commit "
+        f"of the delta an `Occasion:` line. Declare what the change re-places or redraws - `- placement-changed: <class>`, "
+        f"`- glyph-redrawn: <class>`, ... or `- none: <why>` in the feature's tasks.md; a tweak with no feature puts "
+        f"`Occasion: glyph-redrawn: <class> - <why>` in its commit message "
         f"(feature 294: whether a change is substantial is the feature's to declare, never silent)"
     )
 
