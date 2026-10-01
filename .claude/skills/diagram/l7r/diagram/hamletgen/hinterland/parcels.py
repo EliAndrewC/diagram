@@ -861,7 +861,7 @@ def open_ground_region(
 
         x0, y0, x1, y1 = window
         pad = max([normal, sunny]) + half + 40.0
-        got = Region((x0 - pad, y0 - pad, x1 + pad, y1 + pad), 8.0)
+        got = Region((x0 - pad, y0 - pad, x1 + pad, y1 + pad), 3.0)  # 3 px: the margin is two cells, 6 px; at 8 px its 16 px moved a parcel off the brook line its lot follows (test_hinterland_287)
         polys = [g if g.is_valid else g.buffer(0) for g in (Polygon(c) for c in crops if len(c) >= 3)]
         geoms: list[Any] = list(polys)
         pads: list[float] = [normal + half] * len(polys)

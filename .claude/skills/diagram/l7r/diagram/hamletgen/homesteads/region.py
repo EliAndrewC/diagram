@@ -150,7 +150,11 @@ def flood_from(region: Region, segs: Sequence[tuple[Pt, Pt]], half: float) -> An
     seeds = Region((region.x0, region.y0, region.x0 + region.nx * region.cell, region.y0 + region.ny * region.cell), region.cell)
     for a, b in segs:  # the strip grown by a cell more than it was painted: its first unpainted cells on either side
         seeds.line([a, b], half + region.cell)
-    hit = np.unique(labels[(seeds.array() > 0) & free])
+    seed = np.zeros(free.shape, dtype=bool)  # the seeds' raster can round to one more row or column than the region's
+    sa = seeds.array() > 0
+    h, w = min(seed.shape[0], sa.shape[0]), min(seed.shape[1], sa.shape[1])
+    seed[:h, :w] = sa[:h, :w]
+    hit = np.unique(labels[seed & free])
     hit = hit[hit > 0]
     _ = GROW
     return np.isin(labels, hit)

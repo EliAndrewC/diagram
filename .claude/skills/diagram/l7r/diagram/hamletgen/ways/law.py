@@ -52,6 +52,7 @@ from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
 from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
 from .joints import _HOOK_DEG, _HOOK_FT, hairpin_over_a_short_leg, joints, oriented
+from .keeper import kept
 from .sweeps import _DOUBLED_DEG, along_tail
 
 Lanes = Sequence[Mapping[str, Any]]
@@ -677,6 +678,7 @@ def over_and_back(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     return [(i, n) for brook in _brooks(M) for i, p in enumerate(ways) if (n := len(_crossings(p, brook))) >= 2]
 
 
+@kept
 def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
     """(segment index, point) for every crossing of `course` by the run `p`, in the run's order.
 

@@ -470,7 +470,7 @@ class KeepoutGrid:
 
     def __init__(self) -> None:
         self.grid = PointGrid()
-        self._trees: dict[tuple[float | None, ...], Any] = {}  # `hit_many`'s shapes, per (extra, the queried points' box)
+        self._trees: dict[tuple[Any, ...], Any] = {}  # `hit_many`'s shapes and `taken_many`'s regions, per (extra, the queried points' box)
 
     def rings(self, polys: Any, pad: float = 0.0, slot: int = 0, reach: float = 0.0) -> None:
         """Rings refused inside or within `pad` (+ the query's extra for `slot`) of an edge."""

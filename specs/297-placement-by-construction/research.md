@@ -101,3 +101,24 @@ seats at one pitch lost its fourth. The yard's area is a lognormal roll seeded b
 the per-seat rolls offered a household a different yard size at every seat - the seating's only way to fit a large-yard
 household into a tight spot. Keyed once per household, a large-yard household had no seat. Withdrawn by measurement; the seat's
 own questions (the first half of C) stand and do not depend on it.
+
+## R10. Measuring by the wall clock, and what the first levers bought (observed 2026-10-01)
+
+**cProfile misleads here.** It charges every Python call, so it over-weights call-heavy code and under-weights the C work
+(shapely, numpy, PIL) the regions are made of: a lever that cut calls 30% under cProfile left the homesteads stage's wall time
+unchanged. The stage times below are `make map PROFILE=1` best of three (`stagemin.sh` in the session's scratchpad), base
+(`/tmp/base297`) and clone back to back; the shares are a wall-clock SAMPLER (a thread reading the main thread's stack every
+millisecond, `sys.setswitchinterval(1e-4)` so plain Python is sampled fairly - at the default 5 ms the sample over-weights code
+that releases the GIL).
+
+- **The seat's corridor asked first ran the costliest search on every offered seat** (plan C as first written): the corridor
+  search went from 166 distinct searches to 325 (`seat_reaches_tree` 0.48 s profiled against 0.35 s), because the cheap envelope
+  test had been refusing most seats before it. Reordered: the field's reach and the water first, the envelope, then the corridor
+  once per seat.
+- **The regions' cost was shapely's buffers**, not the reads: the woodland region took the hinterland from 0.89 s to 1.16 s
+  until every shape was painted with PIL's own primitives (a two-cell margin for PIL's wide-line placement); then 0.75 s.
+- **The seat region's flood was PIL's `floodfill`, which is pure Python** (1.1 s profiled over nine fills); replaced by a
+  run-length union-find of the free cells (0.09 s). A fill on an image that shares numpy's buffer paints nothing (PIL 12.3).
+- **The access tree's lanes drawn first in the web (plan D2) made the web slower** on its own (Inashiro 0.72 -> 1.12 s,
+  Kashikawa 0.6 -> 1.44 s, single runs): the web's thirty-odd passes then process the tree's lanes too, and the settle still
+  runs its rounds. Reverted until the repairs move to the writes (D3).

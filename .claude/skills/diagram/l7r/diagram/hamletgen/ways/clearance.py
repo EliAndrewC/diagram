@@ -16,6 +16,7 @@ from ..consts import (
     Pt,
 )
 from .geom import _TOUCH_GAP, _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
+from .keeper import kept
 
 
 def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> FabricIndex:
@@ -329,6 +330,7 @@ _ZIGZAG_RUN_FT = 40.0
 _ARM_FT = 40.0
 
 
+@kept
 def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     """Where a run fails to bend like a path, as (kind, first vertex, last vertex): a turn of `_HAIRPIN_DEG` or more
     ("doubles back", one vertex), or two turns of `_ZIGZAG_DEG` or more whose SUMMED path between them is `_ZIGZAG_RUN_FT`
