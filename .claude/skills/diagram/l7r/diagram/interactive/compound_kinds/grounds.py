@@ -596,7 +596,7 @@ class GardenPines(Kind):
     Covers: the old pines' canopies and their label
     Label: accurate
     Sources: uekipedia-kuromatsu, kotobank-mikoshi-no-matsu
-    Entry: research/vegetation.html - 'How big were the pines in a residence garden?'
+    Entry: research/vegetation.html - 'Pines in residence gardens (kuromatsu)'; research/rendering/vegetation.html - 'How our maps draw garden pines'
     """
 
     key = "garden pines"

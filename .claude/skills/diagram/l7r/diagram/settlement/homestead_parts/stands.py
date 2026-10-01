@@ -106,7 +106,7 @@ def _trim_ends(clumps: Sequence[tuple[float, float]], houses: Any, wind: tuple[f
 
 def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
     """The marsh deeper than its reed margin: each ring inset by `margin` (feature 287, woods W06). Woody cover stands on
-    the dry ground above the marsh and its reed MARGIN carries alder (research/vegetation.html, the marsh margin), so a
+    the dry ground above the marsh and its reed MARGIN carries alder (research/vegetation.html, Reed beds and the marsh's edge), so a
     grove clump may be based in the margin - drawn as alder - and never deeper. A ring the inset empties has no deep
     ground; a ring the inset splits gives each piece."""
     from shapely.geometry import Polygon
@@ -452,7 +452,7 @@ class StandsMixin:
             dry=self.dry_polys,
             dry_pad=12,
             # ...AND THE MARSH, INSIDE ONLY, as a dike bank is: woody cover "stands on the dry ground above it"
-            # (research/vegetation.html, the marsh margin), so no clump is BASED in the marsh - a Kashikawa copse clump
+            # (research/vegetation.html, Reed beds and the marsh's edge), so no clump is BASED in the marsh - a Kashikawa copse clump
             # stood 3-21 ft inside the toe (settlement-review, feature 261) - while a crown may reach over its edge.
             # The COPSE only: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34 of the
             # 68 crowns it refused stood on ground DRAWN dry - the toe marsh's recorded outline runs under the settlement's
@@ -894,7 +894,7 @@ class StandsMixin:
             seated = stocked_copse(seated, clump / 2 + 4.0, kept)
         clumps = [[x, y] for x, y in seated]  # the seats are at the record's grain (W01), so the record is the ink
         # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
-        # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
+        # a reed margin is alder or willow (research/vegetation.html, Reed beds and the marsh's edge), and alder is the tree of a
         # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
         _wet = marsh_ground(self.M, only=("toe", "waterside")) if role == "windbreak" else []
         alder = 0

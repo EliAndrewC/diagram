@@ -643,7 +643,7 @@ class GrovesMixin:
                 # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
                 rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
                 # ALDER AT THE REED EDGE (feature 261): the woody stage of a marsh margin is alder or willow, never pine
-                # (research/vegetation.html, the marsh margin), so a belt crown standing in the marsh is drawn as one - a
+                # (research/vegetation.html, Reed beds and the marsh's edge), so a belt crown standing in the marsh is drawn as one - a
                 # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
                 # real foliage is a plain dark green; the tint is chosen so the wet stand reads apart)
                 col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))

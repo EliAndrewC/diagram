@@ -191,7 +191,7 @@ class Alder(Kind):
     Covers: `village_groves[role=windbreak]` crowns standing in the marsh
     Label: accurate
     Sources: haneishi-2011-kushiro-alder
-    Entry: research/vegetation.html - 'The marsh margin: reed -> sedge/grass -> dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE'
+    Entry: research/vegetation.html - "Reed beds and the marsh's edge (yoshihara)"; research/rendering/vegetation.html - "How our maps draw the marsh's edge"
     """
 
     key = 'alder'
@@ -356,7 +356,7 @@ class Marsh(Kind):
     Covers: `marshes` - every marsh patch, whatever its role
     Label: accurate
     Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum, kayabun-kayabuki, ohmi-yoshi, biwako-visitors-yoshi-hiire, opal-biwa-yoshi-hara
-    Entry: research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - "How our maps draw the marsh at the fields' foot", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'
+    Entry: research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - "How our maps draw the marsh at the fields' foot", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - "Reed beds and the marsh's edge (yoshihara)"; research/rendering/vegetation.html - "How our maps draw the marsh's edge"
     """
 
     key = 'marsh'
