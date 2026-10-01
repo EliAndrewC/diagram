@@ -3418,6 +3418,7 @@ suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego
+sumigama	sumigama
 summer-green	summer-green
 summer-green broadleaf forest	summer-green
 summer-green forest	summer-green
