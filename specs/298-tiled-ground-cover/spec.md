@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-10-01
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 3 (2026-10-01)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: drawing "individual blades of grass and lines for marshland
 and scrubland" serves no purpose that individual trees do; "instead of then drawing individual glyphs within that, can we perhaps
 have some tiled pattern where a relatively small block of background is then repeated within that, or even like set as the
@@ -144,3 +144,4 @@ size that likely slows us down algorithmically").
   FR-004's reason rested on an unmeasured claim. Addressed: SC-002 names scrub and marsh (its first clause); FR-004's reason restated.
 - Round 2 (spec-fidelity-verify): CHANGES REQUIRED - SC-002's second clause still named every cover shape. Addressed: it names
   scrub and marsh, so SC-002 does in both clauses.
+- Round 3 (spec-fidelity-verify): FAITHFUL. Aside: pasture grass is tiled too (FR-001 names every role that throws blades).
