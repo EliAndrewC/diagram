@@ -274,8 +274,8 @@ register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage"], default
 register_knob(Knob("cluster_position", ["high_margin", "flank", "mid_margin", "valley_mouth", "valley_head", "on_rise"], default="high_margin"))
 register_knob(Knob("cluster_shape", ["round", "elongated", "crescent", "split"], default="round", typing_rule=_cluster_shape_ok))
 register_knob(Knob("lane_web", list(LANE_WEBS), default="alleys"))
-# BAMBOO (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it stood,
-# and how to show it"): below the frost line a village has bamboo as a matter of course - a stand,
+# BAMBOO (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo groves (chikurin)";
+# research/rendering/vegetation.html "How our maps draw bamboo, when one culm is too small to see"): below the frost line a village has bamboo as a matter of course - a stand,
 # not a seasoning - and above it none. Two attested forms of WHERE: bamboo on the homestead (which side a GUESS -
 # feature 280 M15: the damp N/W side rests on no record before 1868) and a take-yabu thicket at the settlement's edge
 # (feature 280 M49: not at the field margin, which rested on a present-day page); a hamlet may have either, both, or (cold

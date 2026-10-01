@@ -155,7 +155,7 @@
   "copse": {
     "caveat": "how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
     "covers": "`village_groves[role=copse]`",
-    "entry": "research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'; research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'; research/rendering/homesteads.html - 'How our maps draw groves of trees around farmhouses (yashikirin)'",
+    "entry": "research/vegetation.html - \"Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse\"; research/rendering/vegetation.html - \"How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse\"; research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'; research/rendering/homesteads.html - 'How our maps draw groves of trees around farmhouses (yashikirin)'",
     "key": "copse",
     "label": "accurate",
     "label_note": "The role is attested with the fengshui-grove system; how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
@@ -418,7 +418,7 @@
   "hen coop": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=coop]`",
-    "entry": "research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Chickens and chicken coops'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw chicken coops', 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "hen coop",
     "label": "accurate",
     "label_note": "The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.",
@@ -438,7 +438,7 @@
   "homestead bamboo": {
     "caveat": "",
     "covers": "`bamboo_stands[role=homestead]`",
-    "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'Did every farmstead keep its own bamboo', \"Did a farmstead's grove carry bamboo\", 'How is bamboo drawn, when one culm is too small to see?'",
+    "entry": "research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'",
     "key": "homestead bamboo",
     "label": "convention",
     "label_note": "we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention Japan's own topographic legend uses. Presence and place are read.",
@@ -516,7 +516,7 @@
   "marsh": {
     "caveat": "",
     "covers": "`marshes` - every marsh patch, whatever its role",
-    "entry": "research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - \"How our maps draw the marsh at the fields' foot\", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
+    "entry": "research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - \"How our maps draw the marsh at the fields' foot\", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - \"Reed beds and the marsh's edge (yoshihara)\"; research/rendering/vegetation.html - \"How our maps draw the marsh's edge\"",
     "key": "marsh",
     "label": "accurate",
     "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
@@ -771,7 +771,7 @@
   "scrub and rough grazing": {
     "caveat": "nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
     "covers": "`commons[role=grazing]`",
-    "entry": "research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'",
+    "entry": "research/vegetation.html - 'Scrub and rough grass at the edges of fields and channels'; research/rendering/vegetation.html - 'How our maps keep scrub off fields, channels and open water'",
     "key": "scrub and rough grazing",
     "label": "accurate",
     "label_note": "The margins are read; nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
@@ -791,7 +791,7 @@
   "shared bamboo grove": {
     "caveat": "",
     "covers": "`bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge",
-    "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'",
+    "entry": "research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'",
     "key": "shared bamboo grove",
     "label": "convention",
     "label_note": "we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.",
@@ -921,7 +921,7 @@
   "threshing yard": {
     "caveat": "the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
     "covers": "`threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable",
-    "entry": "research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun'",
+    "entry": "research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Rice-drying racks (hasa, hasagi)'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun', 'How our maps draw rice-drying racks (hasa, hasagi)'",
     "key": "threshing yard",
     "label": "convention",
     "label_note": "The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
@@ -977,7 +977,7 @@
   "well": {
     "caveat": "",
     "covers": "`wells` - the wellheads",
-    "entry": "research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'",
+    "entry": "research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw clustered and scattered villages (shūson, sanson)'",
     "key": "well",
     "label": "convention",
     "label_note": "we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof - many times its true size, in order to make the well visible at map scale: the glyph marks where the well stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a person to work in, under a well house that is posts and a roof and nothing more; the width of the curb frame itself was not found. Count and sharing are read (the Sphere/UNICEF figures, jawiki).",
@@ -1015,7 +1015,7 @@
   "windbreak": {
     "caveat": "",
     "covers": "`village_groves[role=windbreak]`",
-    "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', \"Did a farmstead's grove carry bamboo\"",
+    "entry": "research/vegetation.html - \"Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse\"; research/rendering/vegetation.html - \"How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse\"; research/vegetation.html - \"Shelter belts on a village's windward side (bofurin)\"; research/rendering/vegetation.html - \"How our maps draw the shelter belt: its sides, its trees, and why it runs off the edge of the map\"; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'",
     "key": "windbreak",
     "label": "accurate",
     "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
@@ -1038,7 +1038,7 @@
   "woodland commons": {
     "caveat": "a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
     "covers": "`commons[role=woodland]` - the coppice patches",
-    "entry": "research/vegetation.html - 'Where did a village keep its fuel wood', 'How thickly was a worked coppice stocked', 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?'",
+    "entry": "research/vegetation.html - 'Village fuel woods and their coppice (satoyama)', 'How thickly trees stood in a wood, and how wide their crowns'; research/rendering/vegetation.html - 'How our maps bound and draw the coppice woods', 'How our maps stock woods and size crowns'",
     "key": "woodland commons",
     "label": "accurate",
     "label_note": "The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",

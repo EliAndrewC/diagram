@@ -1,0 +1,8 @@
+{
+ "term": "hillshade",
+ "def": "Shading on a map drawn as if a lamp shone across the ground from one side, so that slopes facing away from it fall dark and the land seems to stand up from the page. Also called shaded relief.",
+ "variants": [
+  "hillshade",
+  "shaded relief"
+ ]
+}

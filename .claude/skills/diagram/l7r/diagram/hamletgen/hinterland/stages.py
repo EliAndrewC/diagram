@@ -202,7 +202,7 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
     Managed coppice on ground nothing else wanted, drawn on the parcels the previous stage scanned - so the
     scrub has already kept out of them. Each parcel is an irregular ring inside the reach its keep-outs were
     tested at, never a rectangle (T36): an iriai wood's edge was a line the villages agreed or were given, bent to
-    the ground, and the wood was governed by rules rather than parcel lines (research/vegetation/140). That the line
+    the ground, and the wood was governed by rules rather than parcel lines (research/vegetation/220). That the line
     followed ridge, stream and path is a GUESS - no page read says so.
 
     A few managed-woodland patches on the high, far ground - the green EXCEPTION to the scrub.

@@ -45,6 +45,7 @@ akusuiro	akusui
 alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
+alnus	Alnus
 along the contour	contour
 along the ridge	ridge span
 alternate attendance	alternate attendance
@@ -199,6 +200,7 @@ berms	berm
 betto	bettō
 bettō	bettō
 bettō-ji	bettō
+betula	Betula
 betweenness centrality	betweenness centrality
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
@@ -210,6 +212,7 @@ bishamon	Bishamon
 bishamonten	Bishamon
 bitchu	Bitchu
 bituminous coke	coke
+biwa	Lake Biwa
 bizen	Bizen
 bizen province	Bizen
 black charcoal	black charcoal
@@ -217,6 +220,8 @@ black-charcoal	black charcoal
 black-seal	shuinchi
 black-seal land	shuinchi
 black-seal lands	shuinchi
+block village	kaison
+block villages	kaison
 blyxa	Blyxa
 bo	bo
 board feet	board foot
@@ -395,6 +400,7 @@ chi	chi
 chicken-feather inn	chicken-feather inn
 chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
+chigaya	chigaya
 chikaraishi	chikaraishi
 chimei	chimei
 chinese toon	toon
@@ -453,6 +459,7 @@ clay mills	clay mill
 clay-mill	clay mill
 clear width	clear width
 clear widths	clear width
+climax type	climax type
 climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
@@ -466,8 +473,8 @@ clothier	clothier
 clothier's	clothier
 clothiers	clothier
 cluster's spine	cluster's spine
-clustered village	kaison
-clustered villages	kaison
+clustered village	shuson
+clustered villages	shuson
 coaching inn	coaching inn
 coaching inns	coaching inn
 coaching-inn	coaching inn
@@ -565,7 +572,6 @@ cribs	cribbing
 crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
-crossref	Crossref
 crown	crown
 crown fire	crown fire
 crown fires	crown fire
@@ -627,6 +633,7 @@ daimyōs	daimyo
 dairokuten	Dairokuten
 daizu	daizu
 dajokan	Daijokan
+dake	dake
 dakyu	dakyu
 dali	Dali
 danka	danna-dera
@@ -858,8 +865,6 @@ enpō era	Enpo era
 eta	eta
 etchu	Etchu
 etchu's	Etchu
-eunis	EUNIS
-europe pmc	Europe PMC
 eutrophic	eutrophication
 eutrophication	eutrophication
 evapotranspiration	evapotranspiration
@@ -1340,6 +1345,7 @@ harakata-shu	harakata-shu
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
+hasagi	hazakake
 hashi	hashi
 hata	hatake
 hata-ei	hata-ei
@@ -1411,6 +1417,7 @@ hikone	Hikone
 hill spacing	hill spacing
 hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
+hillshade	hillshade
 hinin	hinin
 hinoe-inu	sexagenary year
 hinoki	hinoki
@@ -1603,6 +1610,7 @@ in spate	spate
 in-field pocket pond	pocket pond
 inari	Inari
 inashiro	Inashiro
+inbatsuchi	inbatsuchi
 inekake	hazakake
 initiate	initiate
 initiates	initiate
@@ -1797,6 +1805,7 @@ kaifeng	Kaifeng
 kaigisho	kaigisho
 kaine	kainyo
 kainyo	kainyo
+kainyu	kainyo
 kaisho	kaisho
 kaishochi	kaishochi
 kaison	kaison
@@ -1852,6 +1861,7 @@ karamete-mon	karamete-mon
 karamon	Chinese-style gate
 karesansui	karesansui
 karishiki	karishiki
+kariyasu	kariyasu
 karo	karo
 karō	karo
 kasagake	kasagake
@@ -2046,6 +2056,7 @@ kyogen	kyogen
 kyoho	Kyoho
 kyoma	Kyoto measure
 kyoto measure	Kyoto measure
+kyowa	Kyowa
 kyozo	sutra house
 kyuden	kyuden
 kyuhi	kyuhi
@@ -2064,6 +2075,7 @@ kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
 lacey	Lacey
+lake biwa	Lake Biwa
 lake tai	Lower Yangzi
 land class	land class
 land classes	land class
@@ -2082,6 +2094,8 @@ lateral	lateral
 laterals	lateral
 lath	lath
 laths	lath
+laurel forest	laurel forest
+laurel forests	laurel forest
 leaf litter	forest litter
 leat	leat
 leats	leat
@@ -2168,6 +2182,8 @@ lu guimeng	Lu Guimeng
 luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
+lump village	kaison
+lump villages	kaison
 luocheng	luocheng
 lushi chunqiu	Lushi chunqiu
 lychee	litchi
@@ -2202,8 +2218,10 @@ mahavira halls	Mahavira hall
 main channel	main stem
 main stem	main stem
 major axis	major axis
+makomo	makomo
 makusa	makusa
 mamian	mamian
+man'en	Man'en
 man'yoshu	Man'yoshu
 manji	Manji
 manji era	Manji
@@ -2275,6 +2293,7 @@ middle moat	middle moat
 middle moats	middle moat
 middle rowhouse	middle rowhouse
 middle rowhouses	middle rowhouse
+midori-tsumi	midori-tsumi
 military commissioner	military commissioner
 military commissioners	military commissioner
 military examination	military examination
@@ -2333,6 +2352,7 @@ mogao	Mogao caves
 mogao caves	Mogao caves
 mokoshi	mokoshi
 momi	momi
+momiage	momiage
 momoyama	Momoyama
 momoyama period	Momoyama
 mon	mon
@@ -2574,6 +2594,7 @@ oku-muki	oku
 oku-no-ma	oku-no-ma
 oku-zashiki	zashiki
 okura	kura
+okuyama	okuyama
 older than modern times	modern times
 omamori	omamori
 omi	Omi
@@ -2881,11 +2902,14 @@ registered tangible cultural property	Tangible Cultural Property
 regulator	regulator
 regulators	regulator
 rehe	Jehol
+reihendorf	Reihendorf
+reihendörfer	Reihendorf
 reikurikata	reikurikata
 relay office	toiyaba
 relay offices	toiyaba
 relay town	relay town
 relay towns	relay town
+relief	relief
 remand	remand
 remanded	remand
 ren	ren
@@ -3019,6 +3043,7 @@ sakuba-michi	sakuba-michi
 sakutoku	sakutoku
 sakutoku landlord	sakutoku
 sakutoku landlords	sakutoku
+salix	Salix
 sally gate	sally port
 sally port	sally port
 sally ports	sally port
@@ -3098,6 +3123,8 @@ sedan	sedan
 sedan chair	sedan
 sedan chairs	sedan
 sedans	sedan
+sedge	sedge
+sedges	sedge
 seed	seed
 seed drill	seed drill
 seed drills	seed drill
@@ -3134,6 +3161,9 @@ sentō	sento
 senzai	senzai
 separated flow	separation zone
 separation zone	separation zone
+seral	seral
+seral stage	seral
+seral stages	seral
 seri	seri
 sericulture	sericulture
 ses	SES
@@ -3151,6 +3181,7 @@ seven-hall garan	garan
 sexagenary year	sexagenary year
 seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
+shaded relief	hillshade
 shadoof	jiegao
 shadowlands	Shadowlands
 shaduf	jiegao
@@ -3263,7 +3294,6 @@ shosai	shosai
 shotoku	Shotoku era
 shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu
-shoulder month	shoulder month
 showa	Showa
 shoya	shoya
 shubiki	shubiki
@@ -3284,10 +3314,12 @@ shunchengjie	shunchengjie
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
+shuson	shuson
 shōtoku	Shotoku era
 shōtoku era	Shotoku era
 shōwa	Showa
 shōya	shoya
+shūson	shuson
 si	SI
 siberian high	Siberian high
 siege mining	siege mining
@@ -3365,6 +3397,8 @@ spoil bank	spoil bank
 spoil banks	spoil bank
 spot fire	spotting
 spot fires	spotting
+spot height	spot height
+spot heights	spot height
 spotting	spotting
 spread footing	footing
 spring and autumn	Spring and Autumn
@@ -3438,6 +3472,8 @@ subsidiary shrines	subsidiary shrine
 substructure	substructure
 substructures	substructure
 subuta	Blyxa
+sucker	sucker
+suckers	sucker
 sue ware	Sue ware
 sueki	Sue ware
 sugi	sugi
@@ -3458,6 +3494,7 @@ suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego
+sumigama	sumigama
 summer-green	summer-green
 summer-green broadleaf forest	summer-green
 summer-green forest	summer-green
@@ -3814,6 +3851,7 @@ ubusunagami	ubusuna
 uchi-bori	uchibori
 uchibori	uchibori
 uchigenkan	uchigenkan
+uchiyama	uchiyama
 udatsu	udatsu
 udegi	udegi gate
 udegi gate	udegi gate
@@ -4029,6 +4067,7 @@ wood-fee lodgings	kichin-yado
 worship hall	haiden
 worship halls	haiden
 wrought iron	wrought iron
+wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wudu	wudu
 wujing zongyao	Wujing Zongyao
@@ -4116,6 +4155,7 @@ yose	variety hall
 yosemune	yosemune-zukuri
 yosemune-zukuri	yosemune-zukuri
 yoshi	Phragmites
+yoshihara	yoshihara
 yoshimune	Yoshimune
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
@@ -4171,6 +4211,7 @@ zhouli	Zhouli
 zhu yuanzhang	Taizu
 zhuque dajie	Suzaku-oji
 zicheng	zicheng
+zizania	makomo
 zokibayashi	zokibayashi
 zonation	zonation
 zone of separated flow	separation zone

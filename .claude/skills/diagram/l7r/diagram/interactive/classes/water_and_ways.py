@@ -91,12 +91,15 @@ class FarmChannel(Kind):
 
     Why: A farm of a dispersed hamlet has no neighbors to share a well with, so it carries its own water. On the
     Tonami plain, the canonical dispersed settlement, the fan's water table lay deep and a well was hard to dig, so in
-    many areas a small channel was led off the irrigation water into the house's grounds. The other areas are read as
-    having dug a well of their own, so a dispersed hamlet draws one form or the other, rolled per settlement.
+    many areas a small channel was led off the irrigation water into the house's grounds. No page read says how the
+    other areas drew their water; this record guesses that they dug a well of their own, so a dispersed hamlet draws
+    one form or the other, rolled per settlement.
 
-    Note: The channel into the grounds is read (the Tonami museum). That the other areas dug a well is this record's
-    reading, and the even odds between the two a guess. It is drawn from the nearest supply ditch, or the brook where
-    that is nearer; where it ends in the dooryard no page read says, and where it left the lot again is not drawn.
+    Note: The channel into the grounds is read (the Tonami museum). That the other areas dug a well is a guess, the
+    record silent on how they drew their water, and the even odds between the two a guess too. It is drawn from the
+    nearest supply ditch, or the brook where that is nearer - the nearest a convention, the brook standing for the
+    irrigation water a guess, as is a channel led off a neighbor's; where it ends in the dooryard no page read says,
+    and where it left the lot again is not drawn.
 
     Caveat: where it ends in the dooryard no page read says, and where it left the lot again is not drawn
 
@@ -104,7 +107,7 @@ class FarmChannel(Kind):
     Covers: `farm_channels` - the channel led into a dispersed farm's grounds (feature 291), drawn with its record in `drawn_channels`
     Label: accurate
     Sources: tonami-sankyoson-museum
-    Entry: research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
+    Entry: research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw clustered and scattered villages (shūson, sanson)'
     """
 
     key = "farm channel"
@@ -433,13 +436,13 @@ class Well(Kind):
     roof over one well in three are this record's guesses: the dictionaries define the well house but do not
     say how common it was. A dispersed farm's own well is a
     guess: on the Tonami plain, where the water table lay deep and a well was hard to dig, the farms in many
-    areas led a small channel into their grounds instead, and a dispersed settlement draws that channel or a well of its own, rolled at even odds (a guess). The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
+    areas led a small channel into their grounds instead, and a dispersed settlement draws that channel or a well of its own, rolled at even odds (a guess); where that well stands on the farm's lot, in the dooryard by the work yard, is a guess too. The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
 
     Name: well
     Covers: `wells` - the wellheads
     Label: convention
     Sources: qq-2024-beijing-wells, saijo-mizu-rekishikan, kotobank-idoyakata
-    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
+    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw clustered and scattered villages (shūson, sanson)'
     """
 
     key = 'well'

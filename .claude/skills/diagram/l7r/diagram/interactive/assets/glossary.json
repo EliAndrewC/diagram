@@ -51,12 +51,6 @@
    "diameter at breast height"
   ]
  },
- "EUNIS": {
-  "def": "The European habitat classification, which names the layers of a woodland edge.",
-  "variants": [
-   "EUNIS"
-  ]
- },
  "Echinochloa crus-galli": {
   "def": "Barnyard grass: the coarse annual weed of wet ground, first to take an abandoned paddy.",
   "variants": [
@@ -1788,10 +1782,11 @@
   ]
  },
  "hazakake": {
-  "def": "Rice-drying racks: poles in the field on which the cut sheaves hang for a week or two before threshing.",
+  "def": "Rice-drying racks: poles laid across posts, mostly out on the reaped paddies, on which the cut sheaves hang to dry, usually for twenty to thirty days, before threshing. In Niigata the posts were living alders, the hasagi (drying trees).",
   "variants": [
    "hazakake",
    "hasa",
+   "hasagi",
    "inekake"
   ]
  },
@@ -2129,7 +2124,8 @@
   "def": "The Tonami plain's own word for a homestead grove: the stand of cedar and other trees wrapped around each of its dispersed farmsteads.",
   "variants": [
    "kainyo",
-   "kaine"
+   "kaine",
+   "kainyu"
   ]
  },
  "kaji-ya": {
@@ -4998,12 +4994,6 @@
    "NRCS-designed"
   ]
  },
- "shoulder month": {
-  "def": "The harvest month at the end of the growing season, when the sun stands low - about 28 degrees at 9am and 3pm at 38N - while the grain is being threshed and the autumn greens are still in the ground; its long shadows set how much clear ground a yard or bed needs.",
-  "variants": [
-   "shoulder month"
-  ]
- },
  "threshing yard": {
   "def": "The flat, open, sunlit yard beside a farmhouse where the harvested grain was threshed; the record keeps 39 ft of clear ground south of it.",
   "variants": [
@@ -7689,18 +7679,6 @@
    "Huizhou"
   ]
  },
- "Europe PMC": {
-  "def": "A free online database of life-science and biomedical literature that can be searched across the full text of its papers.",
-  "variants": [
-   "Europe PMC"
-  ]
- },
- "Crossref": {
-  "def": "The registry that issues DOIs for scholarly papers; its index of their titles and details can be searched.",
-  "variants": [
-   "Crossref"
-  ]
- },
  "ha": {
   "def": "Hectare: a unit of area of 10,000 m², about 2.5 acres.",
   "variants": [
@@ -9278,11 +9256,13 @@
   ]
  },
  "kaison": {
-  "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got.",
+  "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got; the commonest kind of clustered village.",
   "variants": [
    "kaison",
-   "clustered village",
-   "clustered villages"
+   "block village",
+   "block villages",
+   "lump village",
+   "lump villages"
   ]
  },
  "Rinzai": {
@@ -15012,6 +14992,18 @@
   ],
   "cased": true
  },
+ "Wu Ding": {
+  "def": "A reign era of the Eastern Wei dynasty of northern China, 543-550; Chinese years were counted from the start of an era, so its second year is 544.",
+  "variants": [
+   "Wu Ding"
+  ]
+ },
+ "Kyowa": {
+  "def": "A Japanese era name, the years being counted from its start in 1801, so that Kyowa 1 is 1801.",
+  "variants": [
+   "Kyowa"
+  ]
+ },
  "Han Chinese": {
   "def": "China's majority people, named for the Han dynasty; a Han Chinese house is the house of that majority rather than of one of China's minority peoples.",
   "variants": [
@@ -15044,6 +15036,50 @@
   "def": "The \"homestead field\": the plot a Japanese farm household cultivated for its own table, the kitchen bed beside the house.",
   "variants": [
    "yashikibatake"
+  ]
+ },
+ "uchiyama": {
+  "def": "In the Yoshino mountains of Nara, the band of hill land next beyond the satoyama: farther from the village and higher.",
+  "variants": [
+   "uchiyama"
+  ]
+ },
+ "okuyama": {
+  "def": "The \"inner mountains\": in the Yoshino mountains' division of the hills, the band beyond the uchiyama, farther from the village and higher still.",
+  "variants": [
+   "okuyama"
+  ]
+ },
+ "dake": {
+  "def": "A mountain peak; in the Yoshino mountains' division of the hills, the farthest and highest band, beyond the okuyama.",
+  "variants": [
+   "dake"
+  ]
+ },
+ "laurel forest": {
+  "def": "Dense, dark evergreen broadleaf forest, the forest of warm-temperate western Japan; an oak coppice grew back into it when it was no longer cut.",
+  "variants": [
+   "laurel forests",
+   "laurel forest"
+  ]
+ },
+ "climax type": {
+  "def": "The kind of forest that ground settles into when it is left uncut and unworked for a long time; in western Japan it is dense evergreen laurel forest.",
+  "variants": [
+   "climax type"
+  ]
+ },
+ "inbatsuchi": {
+  "def": "Open strips of forest land about 33 ft wide, kept along the borders of rice fields, mostly on their south side; litter and compost for the paddies were gathered from them.",
+  "variants": [
+   "inbatsuchi"
+  ]
+ },
+ "sucker": {
+  "def": "A shoot that rises from a tree's root or the base of its trunk, which can be dug up with its piece of root and set out as a new tree.",
+  "variants": [
+   "sucker",
+   "suckers"
   ]
  },
  "hashi": {
@@ -15083,6 +15119,12 @@
    "Kenmonshu"
   ]
  },
+ "sumigama": {
+  "def": "A charcoal kiln: a firing chamber dug into a hillside, with a chimney trench rising up the slope from its back, where wood from the hills was burned to charcoal.",
+  "variants": [
+   "sumigama"
+  ]
+ },
  "coarse grain": {
   "def": "The grains other than rice, such as barley, wheat and the millets, grown on dry fields rather than in the paddy.",
   "variants": [
@@ -15116,11 +15158,114 @@
    "chimei"
   ]
  },
+ "yoshihara": {
+  "def": "A reed bed: ground at a lake's or marsh's edge where reed (yoshi) grows thick. On Lake Biwa it was cut each winter for thatch and reed goods and its stubble burned in spring.",
+  "variants": [
+   "yoshihara"
+  ]
+ },
+ "makomo": {
+  "def": "Manchurian wild rice, a tall grass of shallow water. Japan's river classification lists it in one community with the club-rush ukiyagara, the two growing singly or mixed.",
+  "variants": [
+   "makomo",
+   "Zizania"
+  ]
+ },
+ "kariyasu": {
+  "def": "A perennial grass related to susuki, cut for thatch in Japan.",
+  "variants": [
+   "kariyasu"
+  ]
+ },
+ "chigaya": {
+  "def": "Cogon grass, a perennial grass of open ground, cut for thatch in Japan.",
+  "variants": [
+   "chigaya"
+  ]
+ },
+ "seral": {
+  "def": "Belonging to one stage of a succession, the series of plant communities that replace one another on the same ground, as reed gives way to wet woodland in a hydrosere.",
+  "variants": [
+   "seral",
+   "seral stage",
+   "seral stages"
+  ]
+ },
+ "Betula": {
+  "def": "The genus of the birches, which grow with alder and willow in the wet woodland at the end of a hydrosere.",
+  "variants": [
+   "Betula"
+  ]
+ },
+ "Salix": {
+  "def": "The genus of the willows, which in Japan grow on the sand and mud of the lower reaches of rivers.",
+  "variants": [
+   "Salix"
+  ]
+ },
+ "sedge": {
+  "def": "A grass-like plant of wet ground, the genus Carex among them; at a marsh's margin, sedge forms the band between the reed and the wet meadow.",
+  "variants": [
+   "sedge",
+   "sedges"
+  ]
+ },
+ "Alnus": {
+  "def": "The genus of the alders, trees of wet ground; in Japan an alder community grows on excessively wet ground and takes over a mire as it dries.",
+  "variants": [
+   "Alnus"
+  ]
+ },
+ "momiage": {
+  "def": "One of the two tendings a Japanese garden pine needs each year, beside midori-tsumi; a pine left without them loses its worth as a garden tree.",
+  "variants": [
+   "momiage"
+  ]
+ },
+ "midori-tsumi": {
+  "def": "Pinching off a pine's new shoots (midori), which stick up in early spring; one of the two tendings a Japanese garden pine needs each year.",
+  "variants": [
+   "midori-tsumi"
+  ]
+ },
+ "Lake Biwa": {
+  "def": "Japan's largest lake, in Shiga Prefecture beside Kyoto, whose shores hold the country's best-known reed beds.",
+  "variants": [
+   "Lake Biwa",
+   "Biwa"
+  ]
+ },
+ "spot height": {
+  "def": "A number printed on a survey map beside a point, giving that point's height above the sea.",
+  "variants": [
+   "spot height",
+   "spot heights"
+  ]
+ },
+ "hillshade": {
+  "def": "Shading on a map drawn as if a lamp shone across the ground from one side, so that slopes facing away from it fall dark and the land seems to stand up from the page. Also called shaded relief.",
+  "variants": [
+   "hillshade",
+   "shaded relief"
+  ]
+ },
+ "relief": {
+  "def": "On a map, the rise and fall of the ground - hills, slopes and valleys - and the ways a map shows them, such as a hill drawn in profile, hachures, contours or shading.",
+  "variants": [
+   "relief"
+  ]
+ },
  "head house": {
   "def": "The main line of a family, from which its branch houses split off; in a village the head house kept a voice over its branches and the first place among them.",
   "variants": [
    "head house",
    "head houses"
+  ]
+ },
+ "Man'en": {
+  "def": "A Japanese era name, 1860 to 1861; \"Man'en 1\" is 1860.",
+  "variants": [
+   "Man'en"
   ]
  },
  "water country": {
@@ -15150,6 +15295,22 @@
   "def": "A ninth-century Chinese book of miscellaneous notes from the Tang dynasty. It records the common saying that the persimmon has seven virtues.",
   "variants": [
    "Youyang Zazu"
+  ]
+ },
+ "shuson": {
+  "def": "A clustered village: a Japanese farming village whose farmhouses are gathered in one limited area with the fields around them, the general form in Japan; its houses may stand densely packed or loosely, each on a wide lot. The lump village (kaison) is the commonest kind.",
+  "variants": [
+   "shuson",
+   "shūson",
+   "clustered village",
+   "clustered villages"
+  ]
+ },
+ "Reihendorf": {
+  "def": "German for a row village: one or two rows of houses or farmsteads along a village street, each dwelling's farmland lying next to it.",
+  "variants": [
+   "Reihendorf",
+   "Reihendörfer"
   ]
  }
 }

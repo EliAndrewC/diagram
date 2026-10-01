@@ -272,7 +272,7 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     # the walking bund's two to five feet is now disclosed as a GUESS held between that and the one-ken farm road.
     # `windbreak` and `marsh` LEFT the list on 2026-09-28 (feature 269 K3): the windbreak discloses that its
     # conifer-led form is drawn at village scale from farmstead surveys and that the odds, the rows' spacing and the
-    # conifer's lead are guesses (vegetation/270); the marsh that a village's own cutting of its toe is carried across
+    # conifer's lead are guesses (rendering/vegetation, "How our maps draw the shelter belt"); the marsh that a village's own cutting of its toe is carried across
     # from thatch fields and Lake Biwa (vegetation/280), with the carr form left undrawn and sedge-for-fodder unsourced.
     assert bare == {"notice board"}
 
