@@ -12,6 +12,7 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 - none: B1 - the polder feed's channel record traces its drawn stub (settlement/fields/comb.py); nothing drawn moves, every element placed under rules already judged
 - none: B10 - the nucleated placer refuses a layout whose lot found no seat for a part (settlement/rolling/fit.py), the rule `_bundle_side_fits` already held; households re-seat under rules already judged, and a fixture kind new to a map is detected and owes its glyph check
+- placement-changed: copse - B9: the dooryard copse is filled to the ground's capacity and trimmed back to each homestead's wood, rolled within the part of the register's range the ground can hold (settlement/homestead_parts/wood_goal.py)
 
 ## Setup
 

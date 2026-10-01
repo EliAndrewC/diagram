@@ -203,14 +203,6 @@ def _boxes_meet(a: Any, b: Any) -> bool:
     return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
 
 
-def homestead_wood_ft2(u: float) -> float:
-    """One homestead's wood from a positional roll `u` in [0, 1): log-uniform over `HOMESTEAD_WOOD_FT2`, so the middle
-    of the roll (~13,000 sq ft) sits near the register's middle household - the SHAPE of the roll is a GUESS; the
-    register gives three woods, not a spread. A degree along a continuum, so calibrated liberty rather than a knob."""
-    lo, hi = HOMESTEAD_WOOD_FT2
-    return float(lo * (hi / lo) ** u)
-
-
 def bamboo_mark(x: float, y: float, bs: float, tall: float, lean: float) -> str:
     """ONE bamboo mark - two culms leaning together and a leafy fork at the top of the taller one - the stand glyph's
     map drawing convention (`bamboo_stand`; a culm is inches across and cannot be drawn to scale). `tall` and `lean`

@@ -34,6 +34,7 @@ BEARING_BAND_DEG = 33.75  # research homesteads/240: the commonest compass point
 PILE_AT_LIMIT = 2  # no more than two houses within a degree of the widest turn (the 9-of-16 pile, 269 E round 1)
 PILE_FLOOR_DEG = 5.0  # a turn this small is the common bearing itself, not a clamp
 SHED_TURN_TOL_DEG = 2.0
+DRAWN_TO_ROLLED = 0.15  # GUESS (plan D11): a drawn size within 15% of its roll - a clump's canopy is the grain of a copse
 RECORD_OFF_INK_FT = 3.0  # GUESS (plan D11): about one drawn ditch's width - a record is its drawing (map drawing convention)
 POINT_ON_WATER_FT = 2.0  # GUESS: a sluice gate or weir stands on its water (the recorded case: a gate snapped 7 ft off)
 
@@ -225,6 +226,26 @@ def test_a_roll_drawn_short_fires() -> None:
     ]
 
 
+# ---- B9: what is drawn is the size that was rolled -------------------------------------------------------
+
+
+def drawn_off_roll(meta: Mapping[str, Any]) -> list[str]:
+    """Every `meta` pair `{rolled, drawn}` whose drawn size is more than `DRAWN_TO_ROLLED` off its roll."""
+    out = []
+    for key, v in meta.items():
+        if isinstance(v, Mapping) and {"rolled", "drawn"} <= set(v) and float(v["rolled"]) > 0:
+            share = float(v["drawn"]) / float(v["rolled"])
+            if abs(share - 1.0) > DRAWN_TO_ROLLED:
+                out.append(f"{key}: drawn {v['drawn']} against {v['rolled']} rolled ({share:.0%})")
+    return out
+
+
+def test_a_size_drawn_off_its_roll_fires() -> None:
+    """Seeded: Sawada's recorded case before feature 294, its homesteads' wood drawn at 60% of its roll."""
+    assert drawn_off_roll({"homestead_wood_ft2": {"rolled": 17692, "drawn": 10672}}) == ["homestead_wood_ft2: drawn 10672 against 17692 rolled (60%)"]
+    assert drawn_off_roll({"homestead_wood_ft2": {"rolled": 10109, "drawn": 10106}, "view": [0, 0, 1, 1]}) == []
+
+
 # ---- the shipped hamlets ----------------------------------------------------------------------------------
 
 
@@ -242,6 +263,7 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
     assert shed_faults(M) == [], "B3: wood shed seating"
     assert record_off_ink(M) == [], "B1: a record off its ink"
     assert undrawn_rolls(M) == [], "B10: a roll drawn short"
+    assert drawn_off_roll(meta) == [], "B9: a size drawn off its roll"
     # B13: the lane law the placer guarantees, proved on what shipped
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"

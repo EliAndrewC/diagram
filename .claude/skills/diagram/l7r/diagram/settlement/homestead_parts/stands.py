@@ -13,6 +13,7 @@ from .bamboo_keepout import stand_spares_seats as stand_spares_seats
 from .belt_law import settle_the_belt
 from .grove_blocks import BankNear, GroveBlocks, Seats
 from .groves import RANK_JITTER_FT, crown_lift
+from .wood_goal import canopy_of, trim_to_goal
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -277,6 +278,7 @@ class StandsMixin:
         reserved: tuple[float, float, float, float] | None = None,
         near: tuple[Any, ...] | None = None,
         area: float | None = None,
+        area_from: Callable[[float, float], float] | None = None,
         wind: tuple[float, float] | None = None,
         page: Callable[[list[tuple[float, float]]], tuple[float, float, float, float]] | None = None,
         reach: float | None = None,
@@ -302,7 +304,8 @@ class StandsMixin:
         copse = bamboo + fruit, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump
         is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
         the stand is filled TO: seating stops once its clumps cover it, and a second pass offers more seats where the first
-        fell short (269 B26, the copse sized by the homesteads' woods). `wind` (toward where the wind comes from), given for the
+        fell short (269 B26, the copse sized by the homesteads' woods); `area_from`, given instead, fills to the ground's capacity
+        and trims back to the goal it returns for that capacity and the reserved seats' canopy (feature 294 B9, `wood_goal`). `wind` (toward where the wind comes from), given for the
         windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). `seats` are the
         households' reserved shares of the wood floor (feature 287, woods W25; `wood_share`), planted FIRST, each through the
         same rejection chain but `near`, and never dropped as a straggler; a seat's reach is its household's - the dooryard
@@ -607,6 +610,8 @@ class StandsMixin:
         clumps: list[Any] = []
         seated: list[tuple[float, float]] = []  # unrounded seats, inked after the face trim below
         canopy = CanopyArea(2.0 * bs)  # the ground the seated clumps cover, for an `area` goal (269 B26)
+        if area_from is not None:  # fill to the ground's capacity; the goal is decided from it below (feature 294 B9, `wood_goal`)
+            area = math.inf
 
         def _goal_met() -> bool:
             return area is not None and canopy.area >= area
@@ -898,6 +903,9 @@ class StandsMixin:
             seated = trim_to_the_wind(seated, _houses, wind)
         if role == "copse" and len(seated) > 1:
             seated = stocked_copse(seated, clump / 2 + 4.0, kept)
+        if area_from is not None:  # ...and trimmed back to the goal the ground's capacity gives the roll (feature 294 B9)
+            seated = trim_to_goal(seated, kept, cr, 2.0 * bs, area_from(canopy_of(seated, cr, 2.0 * bs), canopy_of([p for p in seated if p in kept], cr, 2.0 * bs)))
+            seated = stocked_copse(seated, clump / 2 + 4.0, kept) if role == "copse" and len(seated) > 1 else seated
         clumps = [[x, y] for x, y in seated]  # the seats are at the record's grain (W01), so the record is the ink
         # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
         # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
