@@ -74,8 +74,8 @@ def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, fl
     return (cx - pw / 2, y - ph / 2, cx + pw / 2, y + ph / 2)
 
 
-# THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation/270, "Was a windbreak one kind of
-# tree in a row?"). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
+# THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation.html, "Shelter belts on a village's windward side",
+# on what a belt was planted with). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
 # scale - planted in rows round one tall conifer (cedar at every homestead of three surveyed regions, the igune's four tall
 # trees), with many lesser kinds among it; the village scale is an interpolation the entry names, every survey being of one
 # farmstead's grove. `mixed_broadleaf` is the Chinese village fengshui wood - ~47 kinds a patch, measuring as evergreen
@@ -85,7 +85,7 @@ def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, fl
 WINDBREAK_BELT_FORMS = ("conifer_led", "mixed_broadleaf")
 register_knob(Knob("windbreak_belt", list(WINDBREAK_BELT_FORMS), default="conifer_led"))
 
-# THE RANKS OF A CONIFER-LED BELT (269 B30, vegetation/270): the conifers stand in rows laid ALONG THE BELT AS DRAWN - each
+# THE RANKS OF A CONIFER-LED BELT (269 B30, research/vegetation.html "Shelter belts on a village's windward side"): the conifers stand in rows laid ALONG THE BELT AS DRAWN - each
 # row an offset of the belt's own centerline (`belt_centerline`, `rank_points`), so on a bent belt the rows bend with it
 # (settlement-review 2026-09-28: one straight axis fitted to Inashiro's crescent set the east arm's rows ~76 deg across it).
 # They are laid once for the whole belt, seated before any lesser crown and painted over them all (`_belt_ranks`). The
@@ -99,7 +99,7 @@ RANK_APART_FT = 26.0
 RANK_JITTER_FT = 3.0
 RANK_BIN_FT = 40.0  # the centerline's vertex spacing along the belt: two rows' width, fine enough to follow a crescent's bend (a GUESS)
 RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT x 1.15), not the emergent mix
-LESSER_BROADLEAF_S = (0.6, 0.85)  # "lesser broadleaf crowns among them" (vegetation/270): smaller than the woods' crowns
+LESSER_BROADLEAF_S = (0.6, 0.85)  # "lesser broadleaf crowns among them" (research/rendering/vegetation.html "How our maps draw the shelter belt"): smaller than the woods' crowns
 # ...and FEWER than the conifers: of a clump's usual rolls, this share is thrown for the broadleaf and the bamboo between the
 # rows, so the conifer stays the commonest crown (the entry's guess; the share itself a GUESS, measured against the maps'
 # `crowns` tallies, 269 B30). Measured on Inashiro's belt with the rows laid per clump: 0.3 drew 182 conifers to 330
@@ -249,14 +249,14 @@ class GrovesMixin:
         return w if w in self._GROVE_ARMS else "NW"
 
     def _windbreak_belt(self: Settlement) -> str:  # type: ignore[misc]
-        """The village belt's form, `conifer_led` or `mixed_broadleaf` (269 B30, vegetation/270): pinned or rolled from the
+        """The village belt's form, `conifer_led` or `mixed_broadleaf` (269 B30, research/vegetation.html "Shelter belts on a village's windward side"): pinned or rolled from the
         map's seed, and declared as meta.windbreak_belt."""
         form = str(self.resolve("windbreak_belt"))
         self.M["meta"]["windbreak_belt"] = form
         return form
 
     def _belt_ranks(self: Settlement, seated: list[tuple[float, float]], clump: float, wet: list[Any]) -> tuple[list[tuple[float, float, float]], str]:  # type: ignore[misc]
-        """Seat a conifer-led belt's rows of conifers (269 B30, vegetation/270) over the whole belt at once, BEFORE its clumps
+        """Seat a conifer-led belt's rows of conifers (269 B30, research/vegetation.html "Shelter belts on a village's windward side") over the whole belt at once, BEFORE its clumps
         draw their lesser crowns, and return (the crowns, their ink). The caller paints the ink after every clump, so no lesser
         crown is inked over a conifer - painted per clump, a later clump's broadleaf lay over an earlier clump's conifers (the
         settlement-review of 2026-09-28 counted 29 of the 73 broadleaf on Inashiro's page). A row point is kept only on the
@@ -552,7 +552,7 @@ class GrovesMixin:
         `GROVE_BAMBOO_SHARE`). Returns the count of bamboo marks inked. `mix` picks the species blend: 'windbreak' is
         conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is bamboo
         + fruit broadleaf with NO conifer (the leafy bamboo/fruit greenery scattered among village houses).
-        The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, vegetation/270): a 'conifer_led'
+        The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, research/vegetation.html "Shelter belts on a village's windward side"): a 'conifer_led'
         clump draws only the lesser broadleaf and the bamboo between the belt's rows of conifers, which `_belt_ranks`
         seats for the whole belt first; 'mixed_broadleaf' is rounded broadleaf crowns in the woods' irregular size mix,
         no conifer. `tally`, when given, counts the crowns drawn by kind. `bamboo=False` draws no bamboo in any mix: a farm

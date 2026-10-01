@@ -54,7 +54,7 @@ def belt_bearing_and_subtense(clumps: Any, houses: Any, wind: tuple[float, float
     """THE ONE PREDICATE of `test_every_pool_hamlet_has_its_belt_on_the_regional_northwest` (feature 287, woods W18), as
     (how far the belt's center bears off the wind's quarter, how many degrees its crowns subtend round the cluster), both
     seen from the houses' centroid. `wind` points toward where the wind comes from (the regional northwest on every pool
-    hamlet). research/vegetation, "Does a shelter belt wrap the settlement?": the record's shape is a hook on the windward
+    hamlet). research/vegetation, "Shelter belts on a village's windward side": the record's shape is a hook on the windward
     side, one or two sides of the houses, never round them."""
     cx = sum(float(h["x"]) for h in houses) / len(houses)
     cy = sum(float(h["y"]) for h in houses) / len(houses)
@@ -757,7 +757,7 @@ class StandsMixin:
                 _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
                 _added = 0
                 # A DEAD END, MEASURED AND REVERTED (2026-08-29, the acceptance re-check's ERROR 2; the
-                # record: research/vegetation.html "Why does the belt run off the edge of the sheet?").
+                # record: research/rendering/vegetation.html "How our maps draw the shelter belt").
                 # The review read Kuwabata's belt as stopping before its polygon did, and the obvious
                 # repair was to bracket this run by the polygon's own across-wind extent so the END
                 # stretches were offered seats like any interior gap. Implemented and rolled: it bought
@@ -900,7 +900,7 @@ class StandsMixin:
         alder = 0
         alder_clumps: list[list[float]] = []  # which seats are drawn as alder, so a recount after the page is known reads them (woods W05)
         bamboo = 0  # the bamboo marks inked low under the windbreak's crowns (269 B29, `_draw_grove`)
-        # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/vegetation/270): conifer-led, its
+        # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/rendering/vegetation.html "How our maps draw the shelter belt"): conifer-led, its
         # rows of conifers laid along the belt as drawn and seated before the clumps' lesser crowns, then painted over them
         # (`_belt_ranks`), or mixed broadleaf. The water-mouth grove keeps the older mix.
         form = self._windbreak_belt() if role == "windbreak" and seated else None
