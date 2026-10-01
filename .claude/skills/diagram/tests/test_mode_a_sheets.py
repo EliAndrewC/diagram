@@ -16,12 +16,15 @@ classifier's ratchet in `test_villages.py` refuses it as `unknown` first.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pytest
 
 from l7r.diagram.buildings import types as bt
 from l7r.diagram.pipeline import poolmaps
+from l7r.diagram.tools import notes_census
 from l7r.diagram.tools import pack_audit as pa
+from l7r.diagram.tools.pack_audit import mapmatch, onmap, size_marks
 from l7r.diagram.tools.pack_audit import registry as R
 from tests import _sheets
 
@@ -60,7 +63,7 @@ def test_the_sweep_covers_every_declared_tier_that_has_a_sheet() -> None:
     assert "magistracies" in swept
 
 
-def test_a_generated_sheet_is_regenerated_when_missing_or_stale_and_a_hand_drawn_one_never(tmp_path) -> None:
+def test_a_generated_sheet_is_regenerated_when_missing_or_stale_and_a_hand_drawn_one_never(tmp_path: Path) -> None:
     """The stale-copy failure of 2026-09-26: a sheet older than its generator or the engine is written again."""
     svg, gen = tmp_path / "a.svg", tmp_path / "a.gen.py"
     gen.write_text("", encoding="utf-8")
@@ -80,3 +83,52 @@ def test_a_generated_sheet_is_regenerated_when_missing_or_stale_and_a_hand_drawn
     assert len(ran) == 2, "older than its generator: generated again"
     assert _sheets.is_stale(str(svg), str(gen), os.path.getmtime(svg) + 10), "older than the engine is stale"
     assert _sheets.newest_engine_mtime() > 0
+
+
+def _notes(bundle: poolmaps.MapBundle) -> str:
+    path = bundle.path(".notes.md")
+    if not os.path.isfile(path):
+        return ""
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+@pytest.mark.parametrize("bundle", _bundles(), ids=lambda b: b.stem)
+def test_a_sheet_whose_subject_a_map_records_says_so(bundle: poolmaps.MapBundle) -> None:
+    """Feature 294 B24 (US5's home for plan-sheet agreement): where a pool or legacy map records a subject of the sheet's
+    tier at its place (`<place>-<type>`, under the tier's key), the notes carry the `**On map**:` declaration - so the
+    map check holds the sheet to the map - or opt out of it in so many words, `**On map**: none - <why>`."""
+    maps = mapmatch.maps_recording(bundle.stem, bundle.tier)
+    if maps:
+        assert onmap.declares(_notes(bundle)), (
+            f"{bundle.stem}: {', '.join(maps)} records its subject under {mapmatch.TIER_KEYS[bundle.tier]} and the notes carry no "
+            f"`**On map**:` line - declare it (`{onmap.GRAMMAR}`) or opt out (`{onmap.OPT_OUT}`)"
+        )
+
+
+def test_the_map_record_rule_finds_the_sheets_it_is_for() -> None:
+    """Non-vacuity: the two sheets whose places a map records are found, the two no map records are not."""
+    assert mapmatch.maps_recording("hoshigaoka-shrine", "country-shrines") == ["legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.json"]
+    assert mapmatch.maps_recording("ubame-magistracy", "magistracies") == ["legacy-hand-authored-pool/towns/ubame/ubame.json"]
+    assert mapmatch.maps_recording("ochiba-magistracy", "magistracies") == [] and mapmatch.maps_recording("hayakawa-magistracy", "magistracies") == []
+
+
+@pytest.mark.parametrize("bundle", _bundles(), ids=lambda b: b.stem)
+def test_a_sheets_notes_type_the_counts_it_draws(bundle: poolmaps.MapBundle) -> None:
+    """Feature 294 B15b (the audit's B11 row): a count of tubs, privies or wells typed in the notes' current prose agrees
+    with what the sheet draws, by B14's rule - dated history is exempt (`notes_census.stale_sheet_counts`)."""
+    svg = _sheet(bundle)
+    with open(svg, encoding="utf-8") as fh:
+        text = fh.read()
+    stale = notes_census.stale_sheet_counts(_notes(bundle), text)
+    assert not stale, f"{bundle.stem}: the notes type counts the sheet does not draw - correct them, or move them under a dated entry: {stale}"
+
+
+@pytest.mark.parametrize("bundle", _bundles(), ids=lambda b: b.stem)
+def test_the_size_table_lists_every_tagged_kind(bundle: poolmaps.MapBundle) -> None:
+    """Feature 294 B15c (the audit's Z5 row): every kind the sheet tags is sized by a row - a rect's, or a circle's, path's
+    or line's (`size_marks.mark_rows`) - so `size-audit` enumerates every sized feature from the table."""
+    svg = _sheet(bundle)
+    with open(svg, encoding="utf-8") as fh:
+        missing = size_marks.untabled_kinds(fh.read())
+    assert not missing, f"{bundle.stem}: tagged kinds no size-table row carries (a kind on a caption alone): {missing} - tag the drawn element with the kind, or the caption with the kind it names"

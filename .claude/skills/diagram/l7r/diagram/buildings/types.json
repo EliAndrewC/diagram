@@ -10,10 +10,12 @@
     ],
     "checks": [
       "notice_board_adrift",
+      "privies_by_zone",
       "coverage_band",
       "perimeter_hugging",
       "two_court_zoning",
       "fire_water_adrift",
+      "fire_water_distribution",
       "tubs_in_buildings",
       "tubs_on_wells"
     ],
@@ -232,6 +234,7 @@
       "well_clear_of_arch",
       "no_precinct_enclosure",
       "fire_water_adrift",
+      "fire_water_distribution",
       "tubs_in_buildings",
       "tubs_on_wells"
     ],

@@ -23,6 +23,9 @@ from ...buildings.types import BuildingType, load_types
 from . import checks as c
 from . import labels as lbl
 from . import mapmatch as mm
+from . import palette as pal
+from . import program_rules as pr
+from . import roads as rd
 from . import shared as s
 from . import sun
 from .grids import FTPX
@@ -160,12 +163,63 @@ CHECKS: tuple[Check, ...] = (
         "ochiba-big-bath-red.svg",
         "redraw the footprint inside its band, or record the instance particular that justifies it and re-derive the band",
     ),
+    # --- the building-review's sweep, moved into the registry (feature 294, plan B16 and B19-B23): every sheet ---
+    Check(
+        "lodging_entrances",
+        lambda ctx: pr.lodging_entrances(ctx.text, ctx.plan),
+        True,
+        "ochiba-lodging-no-door-red.svg",
+        "draw a door (data-kind=\"door\") or a genkan on the lodging block's outer wall, flush in it",
+    ),
+    Check(
+        "size_hierarchy",
+        lambda ctx: pr.size_hierarchy(ctx.plan),
+        True,
+        "ochiba-stables-outsize-red.svg",
+        "resize the pair so the compound ranks as the record reads it - the house out-measures its kitchen, the barracks its stables",
+    ),
+    Check(
+        "sheet_furniture",
+        lambda ctx: pr.sheet_furniture(ctx.text),
+        True,
+        "ochiba-no-title-red.svg",
+        "draw the title (bold, the sheet's largest text) just above the compound, and no compass rose or key box",
+    ),
+    Check(
+        "roads_leave_the_frame",
+        lambda ctx: rd.roads_leave_the_frame(ctx.text, ctx.plan),
+        True,
+        "ochiba-road-stub-red.svg",
+        "run the road off the viewBox edge, or end it at the gate, door, arch or road it serves - never a stub stopping short",
+    ),
+    Check("palette_roles", lambda ctx: pal.palette_roles(ctx.text), True, "ochiba-stables-painted-red.svg", "paint the building in its palette role's fill (SKILL.md, Palette)"),
+    Check(
+        "gate_feeds_its_road",
+        lambda ctx: rd.gate_feeds_its_road(ctx.text, ctx.plan),
+        True,
+        "ochiba-road-wider-than-gate-red.svg",
+        "narrow the road to the gate's passage (a foot of grain at most), or widen the gate if the record calls for a wider one",
+    ),
     # --- fire-water: required by BOTH programs, so both declarations list it (spec 254 FR-003, round-1 item 2) ---
     Check("fire_water_adrift", _tub_adrift, False, "ochiba-tub-adrift-red.svg", "move the tub to a wall or eaves corner - a tensuioke is gutter-fed"),
+    Check(
+        "fire_water_distribution",
+        lambda ctx: pr.fire_water_distribution(ctx.text, ctx.plan),
+        False,
+        "ubame-kitchen-one-tub-red.svg",
+        "seat a tub by the eaves of the listed wooden building (two at the kitchen), and none by a plaster kura alone",
+    ),
     Check("tubs_in_buildings", _tub_in_building, False, "ubame-tubs-inside-red.svg", "move the tub OUT, clear of the wall"),
     Check("tubs_on_wells", _tub_on_well, False, "ochiba-tub-on-well-red.svg", "move the tub to a different eaves corner"),
     # --- the magistracy's own ---
     Check("notice_board_adrift", _board, False, "ochiba-layout-red.svg", "move the notice board to within 20 ft of a gate opening"),
+    Check(
+        "privies_by_zone",
+        lambda ctx: pr.privies_by_zone(ctx.text),
+        False,
+        "ochiba-privy-detached-red.svg",
+        "attach the family's privy to the residence (data-part-of=\"residence\"), and stand one in each court - at least three in all",
+    ),
     Check("coverage_band", lambda ctx: s.coverage_band(ctx.plan), False, "ochiba-coverage-red.svg", "consolidate loose slack or add a program building - never shrink the envelope"),
     Check("perimeter_hugging", lambda ctx: s.perimeter_hugging(ctx.plan), False, "ochiba-hugging-red.svg", "move the building against its wall - the center of each court stays open"),
     Check(

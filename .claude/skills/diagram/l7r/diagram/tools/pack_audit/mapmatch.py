@@ -28,9 +28,11 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import Any
 
+from .checks import _main_gate_passage, main_gate_passage_ft
 from .grids import FTPX
 from .onmap import OnMap
 from .parse import ParsedPlan, Rect
+from .tagged import marks
 
 MAP_GRAIN_PX: float = 15.0  # m:map-grain (research.md R1): a POSITION is the same feature within this
 SIZE_GRAIN_PX: float = 1.0  # a SIDE matches within the map's own resolution: the map records a footprint to the px and a sheet draws it exactly
@@ -44,12 +46,21 @@ CLASSES: dict[str, tuple[str, ...]] = {
     "water_point": ("wells",),  # a well or a purification basin: the map's shrine well IS the shrine's ablution water
     "arch": ("torii",),
     "water": ("streams", "channels", "pond", "crescent_ponds"),
-    "lane": ("lanes",),
+    # every key a map records a way under (feature 294 B24): `lanes` and `roads` are lists of ways, `lane`, `road` and a
+    # city's `ring_road` ONE way as a flat point list - the town map records four, and reading `lanes` alone never checked a road
+    "lane": ("lanes", "lane", "roads", "road", "ring_road"),
     "building": ("houses", "byres", "farm_sheds", "retirement_houses", "storehouses", "buildings"),
 }
+#: The keys whose value is one polyline, a flat list of points, rather than a list of records.
+POLYLINE_KEYS: frozenset[str] = frozenset({"lane", "road", "ring_road"})
+#: The kinds a sheet draws a way under that a map can record: a tagged road IS a lane-class feature, sampled along its
+#: line. A `footpath` is not among them - no map in either pool records a footpath under any key (measured 2026-10-01:
+#: the ways are the five keys above), so the map's silence about one is not evidence.
+SHEET_WAY_KINDS: frozenset[str] = frozenset({"road"})
 # How the sheet marks each class, by element id (trees are known by their drawing - `parse.TREE_FILL`).
 SHEET_IDS: dict[str, str] = {"burial_ground": "burial_ground", "well": "water_point", "basin": "water_point", "arch": "arch", "water": "water", "lane": "lane", "building": "building"}
-_ALL_KEYS = frozenset(k for keys in CLASSES.values() for k in keys)
+# a manifest key a sheet might mistake for a class id - less the ids that ARE the class marks (`lane` is both since B24)
+_ALL_KEYS = frozenset(k for keys in CLASSES.values() for k in keys) - set(SHEET_IDS)
 
 
 @dataclass(frozen=True)
@@ -129,6 +140,10 @@ def _features(key: str, cls: str, recs: Any) -> list[MapFeature]:
                 out += [MapFeature(cls, cx, cy, r=float(g.get("r", 0.0))) for cx, cy in _pairs(g.get("clumps", ()))]
     elif key == "torii":
         out += [MapFeature(cls, x, y) for x, y in _pairs(recs)]
+    elif key in POLYLINE_KEYS:  # ONE way as a flat list of points (the town's `road`, a village's `lane`)
+        pts = _pairs(recs)
+        if pts:
+            out.append(MapFeature(cls, pts[0][0], pts[0][1], pts=pts))
     elif key == "pond" and recs and not isinstance(recs[0], (list, tuple, Mapping)):  # one rect: x, y, w, h
         if len(recs) >= 4:
             x, y, w, h = (float(v) for v in recs[:4])
@@ -204,9 +219,90 @@ def inventory(on_map: OnMap, frame: tuple[float, float, float, float]) -> dict[s
     return out
 
 
+def subject_box(plan: ParsedPlan, sheet_id: str) -> Rect | None:
+    """The subject's footprint on the sheet: the UNION of every rect marked with its id (feature 294 B24) - a walled
+    compound marks each court `precinct`, and its first rect alone was the inner court, half the compound."""
+    rects = plan.by_id(sheet_id)
+    if not rects:
+        return None
+    x0, y0 = min(r.x for r in rects), min(r.y for r in rects)
+    return Rect(x0, y0, max(r.x2 for r in rects) - x0, max(r.y2 for r in rects) - y0, rects[0].fill, rects[0].pos, sheet_id)
+
+
+def _inside(px: float, py: float, r: Rect) -> bool:
+    return r.x <= px <= r.x2 and r.y <= py <= r.y2
+
+
+def sheet_ways(text: str) -> list[tuple[tuple[float, float], ...]]:
+    """Every way the sheet draws (a path or line tagged road or footpath), as its points in sheet px, each once."""
+    out: list[tuple[tuple[float, float], ...]] = []
+    for mk in marks(text):
+        if mk.tag in ("path", "line") and mk.kind in SHEET_WAY_KINDS and len(mk.pts) >= 2 and mk.pts not in out:
+            out.append(mk.pts)
+    return out
+
+
+def densify(pts: tuple[tuple[float, float], ...], step: float) -> list[tuple[float, float]]:
+    """The polyline's points with more set between them, none farther apart than `step`."""
+    out = [pts[0]]
+    for (ax, ay), (bx, by) in zip(pts, pts[1:], strict=False):
+        n = max(1, math.ceil(math.hypot(bx - ax, by - ay) / step))
+        out += [(ax + (bx - ax) * i / n, ay + (by - ay) * i / n) for i in range(1, n + 1)]
+    return out
+
+
+_SIDES: dict[str, str] = {"north": "N", "south": "S", "east": "E", "west": "W", "n": "N", "s": "S", "e": "E", "w": "W"}
+
+
+def side_of(px: float, py: float, box: Rect) -> str:
+    """The side (N, S, E, W) of `box` nearest the point."""
+    return min((("N", abs(py - box.y)), ("S", abs(py - box.y2)), ("W", abs(px - box.x)), ("E", abs(px - box.x2))), key=lambda s: s[1])[0]
+
+
+def subject_record(m: Mapping[str, Any], on_map: OnMap, grain: float) -> Mapping[str, Any] | None:
+    """The subject's raw record in the manifest (the one whose center lies within the grain of the declaration)."""
+    for rec in m.get(on_map.key) or []:
+        if isinstance(rec, Mapping) and "x" in rec and "y" in rec and math.hypot(float(rec["x"]) - on_map.x, float(rec["y"]) - on_map.y) <= grain:
+            return rec
+    return None
+
+
+def gate_agrees(plan: ParsedPlan, rec: Mapping[str, Any], tf: Transform, box: Rect, grain: float) -> list[str]:
+    """(e) Where the subject's record carries its gate (`gate`, `gate_dir`, `gate_w` - a town's manor records all three),
+    the sheet's main-gate passage stands at it within the grain, on the side it names, and as wide within the map's
+    resolution (`SIZE_GRAIN_PX`). A record with none of the three asks nothing."""
+    if not any(k in rec for k in ("gate", "gate_dir", "gate_w")):
+        return []
+    passage = _main_gate_passage(plan)
+    if not passage:
+        return ["the map records the subject's gate, and the sheet draws no `main gate` (tag its posts data-kind=\"main gate\")"]
+    px, py = passage[0]
+    out: list[str] = []
+    gate = rec.get("gate")
+    if isinstance(gate, (list, tuple)) and len(gate) >= 2:
+        mx, my = tf.to_map(px, py)
+        off = math.hypot(mx - float(gate[0]), my - float(gate[1]))
+        if off > grain:
+            out.append(f"the main gate at svg({px:.0f},{py:.0f}) = map ({mx:.0f},{my:.0f}) is {off:.0f} map px from the map's gate at ({float(gate[0]):.0f},{float(gate[1]):.0f})")
+    want = _SIDES.get(str(rec.get("gate_dir", "")).lower())
+    have = side_of(px, py, box)
+    if want is not None and want != have:
+        out.append(f"the main gate is on the sheet's {have} side; the map faces it {rec['gate_dir']}")
+    ft = main_gate_passage_ft(plan)
+    if "gate_w" in rec and ft is not None and abs(ft - float(rec["gate_w"]) * tf.ftpx) > SIZE_GRAIN_PX * tf.ftpx:
+        out.append(f"the main gate's passage is {ft:.1f} ft on the sheet; the map records it {float(rec['gate_w']) * tf.ftpx:.1f} ft")
+    return out
+
+
 def matches_map(plan: ParsedPlan, text: str, on_map: OnMap | None, grain: float = MAP_GRAIN_PX) -> list[str]:
-    """Spec FR-004's three directions and FR-005's refusals; an empty list on a sheet with no declaration
-    (the report says "on no map" for it - `skipped`)."""
+    """Spec FR-004's three directions and FR-005's refusals, and (feature 294 B24) the subject's gate; an empty list on a
+    sheet with no declaration (the report says "on no map" for it - `skipped`).
+
+    THE SUBJECT IS A GLYPH ON THE MAP (GM 2026-07-27, recorded in feature 257 and the settlement-review contract): a
+    compound on a settlement map is one mark that contains everything the sheet draws inside it. So what stands INSIDE
+    the subject's footprint - the garden's trees, a well in a court - is the sheet's own and is not compared, on either
+    side; what is compared is the subject's relationship to the map (its place, its footprint, its gate, its approach)
+    and the SITE outside it."""
     if on_map is None:
         return []
     path = manifest_path(on_map)
@@ -219,20 +315,24 @@ def matches_map(plan: ParsedPlan, text: str, on_map: OnMap | None, grain: float 
     subject_map = [f for f in _features(on_map.key, "subject", m.get(on_map.key)) if math.hypot(f.x - on_map.x, f.y - on_map.y) <= grain]
     if not subject_map:
         return [f"no `{on_map.key}` feature within {grain:.0f} map px of ({on_map.x:.0f}, {on_map.y:.0f}) in {on_map.manifest}"]
-    subject = plan.by_id(on_map.sheet_id)
-    if not subject:
+    box = subject_box(plan, on_map.sheet_id)
+    if box is None:
         return [f'no element marked id="{on_map.sheet_id}" on the sheet - the declaration names it as the subject']
     out: list[str] = []
     for ident in sorted(plan.ids & _ALL_KEYS):
         out.append(f'the sheet marks id="{ident}", a manifest key, not a class the check knows - the classes are {", ".join(SHEET_IDS)}')
-    sx, sy = _center(subject[0])
+    sx, sy = _center(box)
     tf = Transform(ftpx, sx, sy, subject_map[0].x, subject_map[0].y)
     frame = tf.frame(text)
     if frame is None:
         return out + ["the sheet has no viewBox, so its frame cannot be laid on the map"]
-    inv = inventory(on_map, frame)
+    home = subject_map[0]
+    # a map feature standing inside the subject's own map footprint is the glyph's, as a sheet feature inside it is
+    inv = {cls: [f for f in feats if f.pts or home.distance(f.x, f.y) > 0.0] for cls, feats in inventory(on_map, frame).items()}
     all_of: dict[str, list[MapFeature]] = {cls: [f for key in keys for f in _features(key, cls, m.get(key))] for cls, keys in CLASSES.items()}
-    sheet = sheet_features(plan)
+    sheet = [(cls, r) for cls, r in sheet_features(plan) if not _inside(*_center(r), box)]
+    step = grain * FTPX * ftpx  # a way is sampled at the map's grain, in sheet px
+    ways = [[p for p in densify(pts, step) if not _inside(*p, box)] for pts in sheet_ways(text)]
     # (b) every sheet feature has its map counterpart within the grain
     for cls, r in sheet:
         cx, cy = _center(r)
@@ -240,21 +340,30 @@ def matches_map(plan: ParsedPlan, text: str, on_map: OnMap | None, grain: float 
         near = min((f.distance(mx, my) for f in all_of[cls]), default=math.inf)
         if near > grain:
             out.append(f"{cls.replace('_', ' ')} at svg({cx:.0f},{cy:.0f}) has no {cls.replace('_', ' ')} on the map within {grain:.0f} map px (map ({mx:.0f},{my:.0f}))")
+    for samples in ways:
+        offs = [(min((f.distance(*tf.to_map(px, py)) for f in all_of["lane"]), default=math.inf), px, py) for px, py in samples]
+        worst = max(offs, default=None)
+        if worst is not None and worst[0] > grain:
+            out.append(f"the road at svg({worst[1]:.0f},{worst[2]:.0f}) runs {worst[0]:.0f} map px from every way on the map (the grain is {grain:.0f})")
     # (c) every map feature inside the frame has its sheet counterpart within the grain
     for cls, feats in inv.items():
         mine = [tf.to_map(*_center(r)) for c, r in sheet if c == cls]
+        if cls == "lane":
+            mine += [tf.to_map(px, py) for samples in ways for px, py in samples]
         for f in feats:
             if not any(f.distance(mx, my) <= grain for mx, my in mine):
-                sxy = tf.to_map(0, 0)  # only for the message: the feature's place in sheet px
                 px = tf.sheet_ox + (f.x - tf.map_ox) * FTPX * ftpx
                 py = tf.sheet_oy + (f.y - tf.map_oy) * FTPX * ftpx
-                del sxy
                 out.append(f"the map's {cls.replace('_', ' ')} at map ({f.x:.0f},{f.y:.0f}) = svg({px:.0f},{py:.0f}) is inside the frame and not on the sheet")
     # (d) the subject's footprint, per side
-    sw, sh = subject[0].w / FTPX, subject[0].h / FTPX
-    mw, mh = subject_map[0].w * ftpx, subject_map[0].h * ftpx
+    sw, sh = box.w / FTPX, box.h / FTPX
+    mw, mh = home.w * ftpx, home.h * ftpx
     if abs(sw - mw) > SIZE_GRAIN_PX * ftpx or abs(sh - mh) > SIZE_GRAIN_PX * ftpx:
         out.append(f"the subject is {sw:.0f} x {sh:.0f} ft on the sheet; the map draws it {mw:.0f} x {mh:.0f} ft")
+    # (e) the subject's gate, where the map records one
+    rec = subject_record(m, on_map, grain)
+    if rec is not None:
+        out += gate_agrees(plan, rec, tf, box, grain)
     return out
 
 
@@ -270,14 +379,39 @@ def site_classes(plan: ParsedPlan, text: str, on_map: OnMap | None) -> dict[str,
     m = load_map(path)
     ftpx = float(m.get("meta", {}).get("ftpx", 0) or 0)
     subject_map = [f for f in _features(on_map.key, "subject", m.get(on_map.key)) if math.hypot(f.x - on_map.x, f.y - on_map.y) <= MAP_GRAIN_PX]
-    subject = plan.by_id(on_map.sheet_id)
-    if ftpx <= 0 or not subject_map or not subject:
+    subject = subject_box(plan, on_map.sheet_id)
+    if ftpx <= 0 or not subject_map or subject is None:
         return None
-    sx, sy = _center(subject[0])
+    sx, sy = _center(subject)
     frame = Transform(ftpx, sx, sy, subject_map[0].x, subject_map[0].y).frame(text)
     if frame is None:
         return None
     return {cls: bool(feats) for cls, feats in inventory(on_map, frame).items()}
+
+
+#: Where a map records a subject of each Mode A tier: the top-level keys of a settlement manifest (feature 294 B24).
+TIER_KEYS: dict[str, tuple[str, ...]] = {"magistracies": ("manors",), "country-shrines": ("religious", "shrines")}
+#: The trees a settlement manifest lives in, from the skill root.
+MAP_TREES: tuple[str, ...] = ("pool", "legacy-hand-authored-pool")
+
+
+def maps_recording(stem: str, tier: str, root: str = SKILL_ROOT) -> list[str]:
+    """The manifests (paths from `root`) that record a subject of the sheet's tier at the sheet's PLACE - the name
+    convention `<place>-<type>` (`ubame-magistracy` -> `ubame`), matched to a map folder `<tree>/<tier>/<place>/<place>.json`
+    whose tier key is a non-empty list. The name convention is a GUESS (the scout's, feature 294): a sheet named for
+    another place than its map's is not found, and the explicit `**On map**: none - <why>` opt-out covers the rest."""
+    place = stem.split("-")[0]
+    out: list[str] = []
+    for tree in MAP_TREES:
+        base = os.path.join(root, tree)
+        if not os.path.isdir(base):
+            continue
+        for map_tier in sorted(os.listdir(base)):
+            rel = os.path.join(tree, map_tier, place, place + ".json")
+            path = os.path.join(root, rel)
+            if os.path.isfile(path) and any(isinstance(load_map(path).get(k), list) and load_map(path).get(k) for k in TIER_KEYS.get(tier, ())):
+                out.append(rel)
+    return out
 
 
 def skipped(on_map: OnMap | None) -> str | None:
