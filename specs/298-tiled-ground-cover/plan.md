@@ -51,10 +51,10 @@ scatter was:
   blades.
 
 `flush_covers()` (in `finish()`, where `flush_blade_groups` ran): each cover's shape = ring minus bare ground, clipped to the view
-plus `OFFMAP_MARGIN`; an empty shape draws nothing. The block is `<defs>` with the patterns used, then one `<path
-fill-rule="evenodd" fill="url(#...)" d="...">` per cover, each with its cover's class, spliced into the stream immediately after
-the land `<rect>` (`self._land_idx`, recorded in `_header`) - below everything else (FR-004). Grass before reed, so a marsh's fill
-is above any scrub fill (they do not overlap by construction). Each scrub cover's shape is recorded on its commons record
+plus `OFFMAP_MARGIN`; an empty shape draws nothing. `_header` RESERVES the slots right after the land `<rect>` - the tiles'
+`<defs>`, then the scrub, a pasture's (unclassed, as its blades were) and the marsh - and the flush writes each cover's `<path
+fill-rule="evenodd" fill="url(#...)">` into its class's slot: below everything else (FR-004), and with no splice, so no recorded
+z index shifts. Grass before reed, so a marsh's fill is above any scrub fill (they do not overlap by construction). Each scrub cover's shape is recorded on its commons record
 (`cover`, rings rounded to 1 decimal) for the page.
 
 `_blade_groups`, `flush_blade_groups`, `_blade_starts` and their consumers go: nothing else threw blades. `_mark_groups` stays

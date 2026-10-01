@@ -1,0 +1,99 @@
+{
+ "feature": "298-tiled-ground-cover",
+ "plan_sha256": "8040d3de721b6b89205b4384c754f05a7d6ef104ba1ed14004a5d21c48e06657",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Tile 64 ft for grass and reed; bamboo tile is the stand's own grid",
+   "class": "within",
+   "why": "A tile size is calibration inside FR-001-FR-003; the GM asked for 'a relatively small block' and does not mind the repetition."
+  },
+  {
+   "id": "D2",
+   "summary": "Tile density is the scatter's interior density (74 sq ft per throw for every blade role, 150/360 sq ft for reeds/tint), no rim feather",
+   "class": "within",
+   "why": "FR-001/FR-002 'density per area as today's scatter' (base cover.py: one density for every role); FR-005 drops the feathers on the GM's 'I don't mind the issue about edges'."
+  },
+  {
+   "id": "D3",
+   "summary": "Bare ground cut out of the shape by geometry, not left to layering",
+   "class": "within",
+   "why": "FR-005 as written; US1 scenario 4."
+  },
+  {
+   "id": "D4",
+   "summary": "Bamboo fill stays at the stand's place in the stack",
+   "class": "within",
+   "why": "FR-004's second sentence as written."
+  },
+  {
+   "id": "D5",
+   "summary": "Pasture's cover path stays unclassed, as its blades were",
+   "class": "within",
+   "why": "FR-007 forbids only unclassed ink a class did not have before; pasture had none."
+  },
+  {
+   "id": "A-tile",
+   "summary": "cover_pattern per kind and scale, fixed seed, the scatter's glyph shapes/colors/stroke, seamless wrap, no background",
+   "class": "within",
+   "why": "FR-001-FR-003 and the Key Entity 'cover tile'."
+  },
+  {
+   "id": "B-commons-bare",
+   "summary": "Scrub bare ground = _commons_keep shape at its pads, every marsh, the crescent ponds and the pond",
+   "class": "within",
+   "why": "FR-005 'the ground its scatter keeps bare today': base grass_scatter already refused crescent ponds and the pond; no ground the scatter painted is dropped."
+  },
+  {
+   "id": "B-marsh",
+   "summary": "Marsh zone = drawn ground minus its KeepoutGrid shape; _throw, offer_rethrow, throw_again and throw_to_the_view retire; marsh files no scatter frame",
+   "class": "within",
+   "why": "FR-002 and FR-005 as written; throw_to_the_view served only the marsh re-throw registry (frame.py at base)."
+  },
+  {
+   "id": "B-cull-cover-in",
+   "summary": "A clearing swept later is added to every waiting cover's bare ground",
+   "class": "within",
+   "why": "US1 scenario 4; the GM's swept-clearing fallback not needed when the ground is never painted."
+  },
+  {
+   "id": "B-flush-placement",
+   "summary": "flush_covers clips to the view plus OFFMAP_MARGIN; defs then one evenodd path per cover in slots reserved in _header right after the land rect (scrub, pasture, marsh), so no recorded z index shifts",
+   "class": "within",
+   "why": "FR-004 'immediately above the land'; the edge case on zones off the map. Reserved slots versus a splice is mechanism, not scope."
+  },
+  {
+   "id": "B-retire-blades",
+   "summary": "_blade_groups, flush_blade_groups, _blade_starts and consumers removed; _mark_groups kept",
+   "class": "within",
+   "why": "FR-008; verified at base 258626e2f that only cover.py and wet.py append blade groups. Pines and crowns stay per FR-006."
+  },
+  {
+   "id": "C-bamboo",
+   "summary": "bamboo_stand draws one tiled path in its g; marks stays the seat count; windbreak culms untouched",
+   "class": "within",
+   "why": "FR-003, FR-004, FR-006 as written."
+  },
+  {
+   "id": "D-page",
+   "summary": "Scrub hit region from the recorded cover shape; premerged blade path removed; classes on cover paths; modal prose updated",
+   "class": "within",
+   "why": "FR-007 and FR-008 as written."
+  },
+  {
+   "id": "E-tools-tests-docs",
+   "summary": "scatter_audit blade/dot/reed families retire; blade/reed tests rewritten against covers; re-throw tests retire; placement_stages watermark; docs and record edited, entry-drift on modals",
+   "class": "within",
+   "why": "FR-008 and SC-002/SC-004; tests that enforce the requested covers serve the request."
+  },
+  {
+   "id": "F-measure",
+   "summary": "Base /tmp/base298 and clone back to back on the five pool hamlets, best of three per stage, file sizes, into measurements.md with dates, methods and loads",
+   "class": "within",
+   "why": "US3, FR-010, SC-003 as written."
+  }
+ ],
+ "verdict": "CLEAR"
+}
