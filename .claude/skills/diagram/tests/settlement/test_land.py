@@ -819,7 +819,7 @@ def test_marsh_keeps_its_reeds_off_a_crescent_pond_and_a_sliver_draws_nothing():
     s = _crop_settlement()
     s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 300.0, "r": 60.0}]
     s.marsh([(150, 150), (450, 150), (450, 450), (150, 450)])
-    for x1, y1, x2, y2 in [b for _slot, _c, bl in s._blade_groups for b in bl]:
+    for x1, y1, _x2, _y2 in [b for _slot, _c, bl in s._blade_groups for b in bl]:
         assert math.hypot(float(x1) - 300.0, float(y1) - 300.0) >= 60.0, "a reed on the crescent pond's water"
     tiny = _crop_settlement()
     tiny.marsh([(500, 500), (503, 500), (503, 503), (500, 503)])
