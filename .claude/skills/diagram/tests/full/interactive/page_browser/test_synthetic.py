@@ -19,7 +19,7 @@ from __future__ import annotations
 import pytest
 
 from l7r.diagram.interactive.classes import CLASSES, PLACE
-from l7r.diagram.interactive.sources import RESEARCH_PAGES
+from l7r.diagram.interactive.sources import SITE_PAGES
 from tests.full.interactive.page_browser._driver import Page, _mechanics
 
 pytestmark = [
@@ -305,7 +305,8 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     # THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): every line is a link into the research
     # record's local page (feature 194), the button says where it returns to, and the explanation carries no "Record:" line
     links = synthetic.js("() => Array.from(document.querySelectorAll('#r-list a.q')).map(a => [a.textContent, a.getAttribute('href'), a.getAttribute('target')])")
-    assert links and all(t and h.startswith(RESEARCH_PAGES) and "#" in h and tg == "_blank" for t, h, tg in links), links
+    # feature 301: each question links its own small page in the record's site
+    assert links and all(t and h.startswith(SITE_PAGES) and h.endswith(".html") and tg == "_blank" for t, h, tg in links), links
     assert synthetic.js("() => document.getElementById('x-refs').textContent") == f"See references ({len(links)})"
     name = CLASSES["bund"].name
     assert synthetic.js("() => document.getElementById('r-close').textContent") == f"Return to {name[0].upper()}{name[1:]} writeup"

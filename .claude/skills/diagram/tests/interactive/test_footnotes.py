@@ -49,8 +49,6 @@ def _rel(path: pathlib.Path) -> str:
     return str(path.relative_to(RESEARCH_DIR)).replace(os.sep, "/")
 
 
-
-
 def footnotes(text: str, citations: str) -> tuple[list[str], dict[str, str]]:
     """(reference ids in reading order - the research page's, then the ones a note makes to another note on the
     citations page; {note id: body} from the citations page)."""

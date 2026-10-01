@@ -9,11 +9,9 @@ ran, which is the whole argument for counting mechanically.
 from __future__ import annotations
 
 import collections
-import pathlib
 import re
 
-from l7r.diagram.interactive.citations import footnote_form
-from l7r.diagram.interactive.citations import research_pages
+from l7r.diagram.interactive.citations import footnote_form, research_pages
 from l7r.diagram.interactive.sources import canon_keys, record_text
 from l7r.diagram.tools import footnote_census as fc
 

@@ -38,15 +38,30 @@ def _skill(tmp_path: pathlib.Path) -> pathlib.Path:
 def test_the_inputs_are_the_fragments_the_assets_and_the_data_and_nothing_built() -> None:
     assert rb.is_input("water/010-ponds.html") and rb.is_input("water/010-ponds.notes.html") and rb.is_input("water/_front.html")
     assert rb.is_input("cities/fabric/010-rows.html") and rb.is_input("assets/site.js") and rb.is_input("confusables.json")
-    for built in ("water.html", "SOURCES.html", "cities/fabric.html", "rendering/water.html", "rendering/cities/sizing.html",
-                  "citations/water.html", "citations/water.js", "site/index.html", ".site-x/a.html", "assets/glossary.js", "CLAUDE.md"):
+    for built in (
+        "water.html",
+        "SOURCES.html",
+        "cities/fabric.html",
+        "rendering/water.html",
+        "rendering/cities/sizing.html",
+        "citations/water.html",
+        "citations/water.js",
+        "site/index.html",
+        ".site-x/a.html",
+        "assets/glossary.js",
+        "CLAUDE.md",
+    ):
         assert not rb.is_input(built), built
 
 
 def test_the_record_s_files_are_walked_and_the_built_ones_left_out(tmp_path: pathlib.Path) -> None:
     skill = _skill(tmp_path)
     assert rb.record_files(str(skill / "research")) == [
-        "assets/record.css", "cities/fabric/010-rows.html", "confusables.json", "water/010-ponds.html", "water/_front.html",
+        "assets/record.css",
+        "cities/fabric/010-rows.html",
+        "confusables.json",
+        "water/010-ponds.html",
+        "water/_front.html",
     ]
 
 

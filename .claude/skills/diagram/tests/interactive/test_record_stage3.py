@@ -281,7 +281,6 @@ def test_the_last_refusals_and_the_quiet_paths(record: pathlib.Path) -> None:
     assert "one is 3 characters and the other 2" in _first_difference("abc", "ab")
 
 
-
 def test_a_page_whose_split_does_not_rebuild_is_refused(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """`make record SPLIT=` will not leave fragments behind that do not assemble back (store.py)."""
     from l7r.diagram.interactive.record import store
@@ -303,5 +302,3 @@ def test_a_note_edited_alone_reaches_its_small_page(record: pathlib.Path, capsys
     assert record_asset.main(["--research-dir", str(record)]) == 0
     assert "(a gloss moved)" in (record / "site" / "ways" / "second.html").read_text(encoding="utf-8")
     capsys.readouterr()
-
-

@@ -12,7 +12,6 @@ writing two fragments no reader's page has. So the section COUNT and the heading
 
 from __future__ import annotations
 
-
 import pytest
 
 from l7r.diagram.interactive.record import assemble, sections_of, split

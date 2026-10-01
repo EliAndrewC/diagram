@@ -16,7 +16,6 @@ from l7r.diagram.interactive import glossary
 from l7r.diagram.interactive import glossary_source as source
 
 
-
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="assemble interactive/assets/glossary.json, then write research/assets/glossary.js")
     ap.add_argument("--check", action="store_true", help="exit 1 when the committed glossary.json differs from its term files")
