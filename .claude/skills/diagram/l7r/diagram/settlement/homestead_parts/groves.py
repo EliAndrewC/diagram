@@ -638,7 +638,8 @@ class GrovesMixin:
                 # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
                 # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
                 # Inashiro: belt median r 4.5 ft, commons 9.0). Now the same CANOPY_R_FT the woods and the commons
-                # use, in real feet (research/vegetation.html 'Forest density and crown size'); a conifer 15% wider,
+                # use, in real feet (research/rendering/vegetation.html 'How our maps stock woods and size
+                # crowns'); a conifer 15% wider,
                 # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
                 rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
                 # ALDER AT THE REED EDGE (feature 261): the woody stage of a marsh margin is alder or willow, never pine

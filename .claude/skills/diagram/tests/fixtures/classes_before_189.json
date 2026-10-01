@@ -1037,7 +1037,7 @@
   "woodland commons": {
     "caveat": "a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
     "covers": "`commons[role=woodland]` - the coppice patches",
-    "entry": "research/vegetation.html - 'Village fuel woods and their coppice (satoyama)', 'How thickly was a worked coppice stocked'; research/rendering/vegetation.html - 'How our maps bound and draw the coppice woods'",
+    "entry": "research/vegetation.html - 'Village fuel woods and their coppice (satoyama)', 'How thickly trees stood in a wood, and how wide their crowns'; research/rendering/vegetation.html - 'How our maps bound and draw the coppice woods', 'How our maps stock woods and size crowns'",
     "key": "woodland commons",
     "label": "accurate",
     "label_note": "The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
