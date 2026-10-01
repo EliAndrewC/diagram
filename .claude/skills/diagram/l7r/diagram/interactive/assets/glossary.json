@@ -13706,5 +13706,12 @@
    "drainage bearing",
    "water's bearing"
   ]
+ },
+ "Hattori site": {
+  "def": "An excavated archaeological site of early Yayoi-period paddy fields, where the widths and heights of both the large bunds along the canals and the small bunds between plots were measured.",
+  "variants": [
+   "Hattori site",
+   "Hattori"
+  ]
  }
 }
