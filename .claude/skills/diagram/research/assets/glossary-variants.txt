@@ -887,6 +887,7 @@ five classics	Four Books and Five Classics
 five dynasties	Five Dynasties
 five grains	five grains
 five highways	Five Highways
+five punishments	five-punishments
 five watches	night watch
 five-household group	five-household group
 five-household groups	five-household group
@@ -1689,6 +1690,7 @@ keicho-era	Keicho
 keidai	keidai
 keihan	bund
 keihan-cha	keihan-cha
+keijo	keijo
 keiko	keiko
 keio	Keio
 keio era	Keio
