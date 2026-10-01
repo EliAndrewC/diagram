@@ -711,7 +711,7 @@ class StandsMixin:
                     continue  # the copse has its homesteads' wood (269 B26): the rest of the grid stays open ground
                 _seat(jx, jy)
         # ...AND A COPSE IS FILLED TO THE HOMESTEADS' WOOD, not left at what one grid's gaps gave (269 B26;
-        # research/vegetation/210: each homestead that keeps a wood has ~6,000-28,000 sq ft of trees, its windward grove
+        # research/rendering/homesteads/010: each homestead that keeps a wood has ~6,000-28,000 sq ft of trees, its windward grove
         # and its share of the copse together). The grid above tries one seat a `step`; where it falls short of `area`,
         # the grid is offered again at its three half-step offsets, each seat asking every test the first pass asked.
         # Nothing is relaxed: a copse the ground cannot hold stays short, and the caller records by how much.

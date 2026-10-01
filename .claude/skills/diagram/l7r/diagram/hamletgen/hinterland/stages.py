@@ -418,7 +418,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     _dooryard = _copse_near  # a household's reserved seat is its dooryard's on either siting (woods W25), asked of it as planted
     # the belt's own footprint and its lee anchors, where the copse is sited against the belt (`copse_seat`)
     _box, _copse_near = copse_seat(plan.copse_siting, _dented, s.M.get("village_groves") or [], plan.wind, s.px(COPSE_BELT_REACH_FT) / 2.0, _box, _copse_near, _brook)
-    # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/vegetation/210): each homestead's wood - its
+    # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/rendering/homesteads/010): each homestead's wood - its
     # windward grove and its share of the copse together, which the record knows as one - is rolled within the 1684
     # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's
     # gaps gave: 750-1,700 sq ft a homestead beside a belt share of 3,700-9,200, so four of five maps drew less wood
@@ -486,7 +486,7 @@ def wood_canopy(s: Settlement, roles: Sequence[str]) -> float:
 
 
 def homestead_wood_drawn(s: Settlement) -> float:
-    """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/vegetation/210): the wood each
+    """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/rendering/homesteads/010): the wood each
     homestead keeps, in sq ft - the belt, the copse and each farm's own grove (feature 291) together, shared among the
     houses - which the register puts at no less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it."""
     houses = s.M.get("houses") or []

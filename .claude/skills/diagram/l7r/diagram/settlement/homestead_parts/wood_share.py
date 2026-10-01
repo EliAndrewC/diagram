@@ -1,7 +1,7 @@
 """The household's share of the wood floor, reserved at its seat (feature 287, woods W25 made absolute; plan D9).
 
 THE FLOOR. Each homestead keeps no less than `HOMESTEAD_WOOD_FT2[0]` of trees - its windward grove and its share of the
-copse together (research/vegetation/210; `homestead_wood_drawn` is the finished-map predicate). Until this module the floor
+copse together (research/rendering/homesteads/010; `homestead_wood_drawn` is the finished-map predicate). Until this module the floor
 was met AFTER the fact: `stage_windbreak` topped a short copse up in the belt's lee, wherever the ground the houses, the
 lanes and the belt had left still took a clump - which met it on cohort 1-60 (the lowest 6,012 sq ft, seed 14) but could
 fall short on a site whose lee was already built over, and nothing then could make the room.

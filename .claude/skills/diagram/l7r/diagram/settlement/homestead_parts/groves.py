@@ -194,7 +194,7 @@ def rank_points(line: list[tuple[float, float]], half_depth: float, along: float
 
 HOMESTEAD_WOOD_FT2 = (6000.0, 28000.0)
 """The trees one homestead keeps, its windward grove and its share of the copse together, in sq ft (269 B26;
-research/vegetation/210): a 1684 Mito register lists three homestead woods of about 6,100, 10,700 and 27,800 sq ft. A
+research/rendering/homesteads/010): a 1684 Mito register lists three homestead woods of about 6,100, 10,700 and 27,800 sq ft. A
 calibration against three households, not a survey; counting grove and copse as one wood is the entry's decision."""
 
 
@@ -393,7 +393,7 @@ class GrovesMixin:
         ladder ends on `reserve` - the least grove `_grove_reserve` held for this farm when it was seated, in the same
         face order - so a farm seated with room plants every face; a face with neither (a farm no seat search reserved
         for) is counted in `meta.grove_faces_unplanted`, never dropped unseen."""
-        # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/vegetation/210): a homestead's own wood is ~6,000-28,000 sq
+        # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/rendering/homesteads/010): a homestead's own wood is ~6,000-28,000 sq
         # ft, and a lone yashikirin is all the wood its homestead has, so the ~6:1 target never asks for less or more
         _lo, _hi = (self.px(1.0) ** 2 * v for v in HOMESTEAD_WOOD_FT2)
         target = min(_hi, max(_lo, self.GROVE_RATIO * hw * hh))

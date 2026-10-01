@@ -82,7 +82,7 @@ def test_bamboo_mark_is_two_culms_and_a_fork():
 
 
 def test_a_copse_with_an_area_goal_stops_at_it_and_fills_toward_it():
-    """B26 (vegetation/210): seating stops once the clumps cover the goal, and a short first pass is topped up."""
+    """B26 (rendering/homesteads/010): seating stops once the clumps cover the goal, and a short first pass is topped up."""
     poly = [(150, 300), (560, 300), (560, 700), (150, 700)]
     s = _nuc_village()
     free = s.village_grove(poly, role="copse", dense=False)
