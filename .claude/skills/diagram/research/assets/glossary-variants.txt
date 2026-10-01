@@ -1993,6 +1993,8 @@ manyoshu	Man'yoshu
 mao	Mao commentary
 mao commentary	Mao commentary
 maoqu	maoqu
+market god	ichigami
+market-god	ichigami
 martial temple	Martial temple
 martial temples	Martial temple
 massing	massing
@@ -3194,6 +3196,8 @@ teien	teien
 teikaku	teikaku
 temizuya	temizuya
 temple bell tower	shoro
+temple fair	miaohui
+temple fairs	miaohui
 temple registration	temple registration
 temple-certification system	terauke
 ten-volume wamyosho	Wamyosho
