@@ -40,3 +40,13 @@ what moved on an engine sweep). The GM:
 > I agree with the label wording not needing its own check. If we find that this is something that is slipping through a lot, we can add a new type of check, which would be similar to the glyph checks in terms of only running when a new type of label is added or something.
 
 > For the report of what moved, I'm not sure that that is super helpful, to be honest. Because I don't know that that report would do any good relative to me just looking at the new map. So I don't know that it's actually worth putting together unless that is a report which the subagent reviewers need in order to more efficiently do their job.
+
+## 2026-10-01 - the audit's scope confirmed, and the go-ahead
+
+The revised draft limited the audit to the three map reviews and left the research-record checks out. The GM:
+
+> Your scoping is correct. I do not need the research reviews to change as I am happy with those and those have been reviewed and adjusted elsewhere.
+
+And then:
+
+> Thanks!  Please work feature 294 from start to finish and let me know when it lands on main.
