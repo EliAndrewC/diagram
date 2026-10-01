@@ -21,7 +21,6 @@ from l7r.diagram.settlement.homestead_parts.stands import (
     trunk_on_tread,
 )
 from l7r.diagram.settlement.land.cover import ring_center
-from l7r.diagram.settlement.land.wet import offer_rethrow, throw_again
 
 NW = (-math.sqrt(0.5), -math.sqrt(0.5))  # toward where the wind comes from: up and left on the sheet
 
@@ -182,42 +181,6 @@ def test_a_commons_record_carries_its_rings_center() -> None:
     s.commons(ring, role="woodland")
     rec = s.M["commons"][-1]
     assert (rec["x"], rec["y"]) == ring_center(ring) == (195.0, 215.0)
-
-
-# ---- W52 / M6: the marsh's throw offered again ----------------------------------------------------------------------
-
-
-def test_a_throw_again_is_clipped_to_its_parcel_and_keeps_the_stream() -> None:
-    thrown: list[tuple[float, ...]] = []
-    random.seed(11)
-    expect = random.random()
-    random.seed(11)
-    throw_again((50.0, 50.0, 500.0, 500.0), (0.0, 0.0, 200.0, 300.0), lambda *a: thrown.append(a))
-    assert thrown == [(50.0, 50.0, 200.0, 300.0, None)] and random.random() == expect, "clipped, and the map's stream untouched"
-    throw_again((400.0, 0.0, 500.0, 100.0), (0.0, 0.0, 200.0, 300.0), lambda *a: thrown.append(a))
-    assert len(thrown) == 1, "a strip outside the parcel throws nothing"
-
-
-def test_a_marsh_offers_its_rethrow_only_to_a_caller_that_asked() -> None:
-    """The marsh registers its re-throw where `stage_hinterland` opened `_scatter_catchup`, and nowhere else - and the
-    re-throw fills a strip past the frame it first threw within, at the marsh's own density."""
-    s = _hamlet()
-    s._scatter_frame = (0.0, 0.0, 1200.0, 400.0)
-    s.marsh([(0.0, 300.0), (1200.0, 300.0), (1200.0, 900.0), (0.0, 900.0)], role="waterside")
-    assert "_scatter_catchup" not in vars(s), "no caller asked: nothing is kept"
-    t = _hamlet()
-    t._scatter_frame = (0.0, 0.0, 1200.0, 400.0)
-    vars(t)["_scatter_catchup"] = {}
-    t.marsh([(0.0, 300.0), (1200.0, 300.0), (1200.0, 900.0), (0.0, 900.0)], role="waterside")
-    reg = vars(t)["_scatter_catchup"]
-    assert list(reg) == [len(t._scatter_frames) - 1]
-    marks = t._mark_groups[-1][1]
-    blades = t._blade_groups[-1][2]
-    before = (len(marks), len(blades))
-    assert all(m[1] <= 400.0 + 30.0 for m in marks), "non-vacuity: the first throw stopped at the frame's foot"
-    reg[len(t._scatter_frames) - 1]((0.0, 400.0, 1200.0, 900.0))
-    assert len(marks) > before[0] and len(blades) > before[1] and any(m[1] > 500.0 for m in marks), "the strip holds the marsh"
-    offer_rethrow(s, 0, print)  # no registry on `s`: a no-op, not an error
 
 
 # ---- W13: a woodland commons is visibly stocked -------------------------------------------------------------------
@@ -443,25 +406,20 @@ def test_the_alder_count_is_taken_again_over_the_clumps_on_the_page() -> None:
 # ---- W10 (the cull half): no cover inside a clearing swept after it -----------------------------------------------------
 
 
-def test_a_clearing_swept_after_the_scrub_takes_its_blades_and_marks_out() -> None:
-    """Woods W10, the violating case: the scrub is scattered over a square, then a household shrine's clearing is swept
-    inside it. The finish writes nothing rooted inside the clearing, and the scrub outside it stays."""
-    from l7r.diagram.settlement._geom import RingIndex
-
+def test_a_clearing_swept_after_the_scrub_leaves_its_ground_bare() -> None:
+    """Woods W10, the violating case: the scrub is laid over a square, then a household shrine's clearing is swept inside
+    it. The grass tile's shape leaves the clearing out (feature 298), and the scrub round it stays."""
     s = _hamlet()
     s.commons([(100.0, 100.0), (700.0, 100.0), (700.0, 700.0), (100.0, 700.0)], role="grazing")
-    blades = [ln for _z, _c, bl in s._blade_groups for ln in bl]
-    marks = [mk for _z, mk in s._mark_groups for mk in mk]
-    assert blades and marks, "non-vacuity: the scrub threw blades and dots"
+    assert [c.kind for c in s._covers] == ["grass"], "non-vacuity: the scrub recorded its cover"
     s.reserve_clearing(400.0, 400.0, 60.0, 60.0)
-    ring = RingIndex(s.clearings[-1])
-    left = [ln for _z, _c, bl in s._blade_groups for ln in bl]
-    left_marks = [mk for _z, mk in s._mark_groups for mk in mk]
-    assert not any(ring.inside(float(ln[0]), float(ln[1])) for ln in left)
-    assert not any(ring.inside((mk[0] + mk[2]) / 2, (mk[1] + mk[3]) / 2) for mk in left_marks)
-    assert len(blades) > len(left) > 0 and len(left_marks) > 0, "only the clearing's ground was taken"
-    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)  # the same clearing again: the reused blob culls nothing more
-    assert len([ln for _z, _c, bl in s._blade_groups for ln in bl]) == len(left)
+    s.flush_covers()
+    cover = s.M["commons"][-1]["cover"]
+    from shapely.geometry import Point, Polygon
+
+    shape = Polygon(cover[0], cover[1:]) if len(cover) > 1 else Polygon(cover[0])
+    assert not shape.contains(Point(400.0, 400.0)), "the swept clearing is bare"
+    assert shape.contains(Point(150.0, 650.0)), "the scrub round it stays"
 
 
 # ---- W08 (the record half): a clearing swept after the marsh shrinks the marsh's record ------------------------------

@@ -13,9 +13,9 @@ irrigation cut-bank margin, and the manifest's `fields[].outline` + `dry_plots[]
 `Settlement._CROP_MARGIN_FT` through the same `boxed_*` helpers the scatter uses. No margin rule is
 re-implemented here, so a future rule change moves this audit's verdicts automatically.
 
-Families: blade / dot / pine / crown are adjudicated; reed is REPORT-ONLY (reeds are the water
-fringe by doctrine - research/vegetation.html). Bases only - blade TIPS may lean a few real feet by
-the disclosed departure. Zero bases parsed is a LOUD failure (exit 2), never a clean pass: a
+Families: pine / crown. The blade, dot and reed families retired with the glyphs (feature 298): the scrub's grass
+and the marsh's reeds are tiles filling a shape that leaves the keep-outs out by construction (`Settlement.flush_covers`),
+so there is no base to parse. Zero bases parsed is a LOUD failure (exit 2), never a clean pass: a
 styling drift in the engine's emission must read as "the audit is broken", not "the map is clean".
 
 CLI contract (exit 0 clean / 1 violations / 2 unusable):
@@ -31,19 +31,7 @@ from l7r.diagram.settlement._geom import CROWN_FILLS
 Base = tuple[float, float]
 
 _NUM = r"(-?[\d.]+)"
-# Anchors are the engine's exact emission styling (the grass bucket in settlement/land/cover.py, the
-# reed bucket in settlement/land/wet.py; research.md R2). Attribute
-# order is stable because one code path emits each family.
-_BLADE_GROUP = re.compile(r'<g stroke="#A7A860"[^>]*>(.*?)</g>', re.S)  # commons grass bucket
-_REED_GROUP = re.compile(r'<g stroke="#6E9377"[^>]*>(.*?)</g>', re.S)  # marsh reed bucket
-_LINE_BASE = re.compile(rf'<line x1="{_NUM}" y1="{_NUM}"')  # a blade/reed line's root
-_PATH_BASE = re.compile(rf'M{_NUM},{_NUM}L')  # ...or, since feature 222, its `M x,y L` subpath in the bucket's merged paths
-# AND SINCE FEATURE 223 THE FILE HOLDS ONLY THE ON-FRAME BLADES: the writer culls those wholly outside the viewBox (+24 px)
-# before it merges, so `parse_bases` returns the in-frame population - right for every inside-a-margin count here, and NOT
-# a basis for an inside-versus-outside density comparison across the frame edge (roll the map and read the settlement's
-# `_blade_groups` before finish for that).
 _TRANSLATE_G = re.compile(rf'<g transform="translate\({_NUM},{_NUM}\)[^"]*"[^>]*>')  # grove clumps draw their canopy in a translated group
-_DOT = re.compile(rf'<circle cx="{_NUM}" cy="{_NUM}" r="[\d.]+" fill="#94A063"')  # brush dot
 _PINE = re.compile(rf'<line x1="{_NUM}" y1="{_NUM}" x2="{_NUM}" y2="{_NUM}" stroke="#7A6A48"')  # trunk (branches are #6E8452 - canopy ink, not a base)
 # THE CROWN FILLS COME FROM THE ENGINE, not from a copy here (2026-08-17). This pattern used to
 # hardcode #6E8B4A / #7C9856 / #87A45C - none of which the engine has painted for some time - so the
@@ -95,15 +83,8 @@ def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, 
     # thing to scan. What no SVG lacks and no path has is a tag at all.
     if "<" not in svg:
         raise ValueError(f"parse_bases wants SVG TEXT and got {svg[:60]!r} - if that is a PATH, read it first (`Path(p).read_text()`)")
-    fams: dict[str, list[Base]] = {"blade": [], "dot": [], "pine": [], "crown": [], "reed": []}
-    want = set(families) if families else set(fams)  # `families` limits the parse to the ones asked for (a crown guard need not scan 220k blades)
-    for group, fam in ((_BLADE_GROUP, "blade"), (_REED_GROUP, "reed")):
-        if fam not in want:
-            continue
-        for body in group.findall(svg):
-            fams[fam] += [(float(x), float(y)) for x, y in _LINE_BASE.findall(body)] + [(float(x), float(y)) for x, y in _PATH_BASE.findall(body)]
-    if "dot" in want:
-        fams["dot"] = [(float(x), float(y)) for x, y in _DOT.findall(svg)]
+    fams: dict[str, list[Base]] = {"pine": [], "crown": []}
+    want = set(families) if families else set(fams)  # `families` limits the parse to the ones asked for
     if "pine" in want:
         fams["pine"] = [(float(x), float(y)) for x, y, _, _ in _PINE.findall(svg)]
     if "crown" not in want:

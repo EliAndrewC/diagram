@@ -282,3 +282,4 @@ or a later pass found what this one should have).
 | 2026-10-01 | spec-fidelity | feature 298 (tiled ground cover), round 1 | CHANGES REQUIRED (2) | SC-002 named bamboo against FR-004; FR-004 rested on an unmeasured claim |
 | 2026-10-01 | spec-fidelity-verify | feature 298, round 2 | CHANGES REQUIRED (1) | SC-002 second clause |
 | 2026-10-01 | spec-fidelity-verify | feature 298, round 3 | FAITHFUL | aside: pasture grass is tiled too |
+| 2026-10-01 | spec-fidelity | feature 298 plan decisions | CLEAR | 15 decisions, all within |

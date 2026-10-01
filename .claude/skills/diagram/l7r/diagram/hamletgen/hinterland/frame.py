@@ -237,26 +237,6 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     return (min(xs) - grow, min(ys) - grow - TITLE_BAND_ALLOWANCE, max(xs) + grow, max(ys) + grow)
 
 
-def throw_to_the_view(s: Settlement, frame: tuple[float, float, float, float]) -> None:
-    """Every scatter thrown before the view was decided, thrown again into the strips of its parcel past the frame it
-    predicted and inside `frame` - the scatter frame of the DECIDED view (`scatter_frame` once `plan.view` is set) - and its
-    frame then recorded as `frame` (feature 287, M6 and water W52). So the scatter and the view agree by construction: the
-    marsh is laid before the decision (the title pocket's search and the woodland scan read it) and thrown within a
-    prediction of the view, and on cohort seed 8 the decided view reached 87 px past that prediction's foot - a strip of
-    marsh with no reeds, which `finish` recorded as `scatter_frame_breach`. The re-throws are those the throwers offered
-    (`land.wet.offer_rethrow`) while `stage_hinterland` held `s._scatter_catchup` open; it is closed here, so no closure over
-    the settlement outlives the stage."""
-    from l7r.diagram.settlement.finish import scatter_strips  # noqa: PLC0415 - the one strip computation, kept beside its use
-
-    reg = vars(s).pop("_scatter_catchup", None) or {}
-    fx0, fy0, fx1, fy1 = frame
-    for k, rethrow in sorted(reg.items()):
-        old, parcel = s._scatter_frames[k]
-        for strip in scatter_strips(old, parcel, (fx0, fy0, fx1 - fx0, fy1 - fy0)):
-            rethrow(strip)
-        s._scatter_frames[k] = (frame, parcel)
-
-
 TITLE_POCKET_CLEAR_FT = 40.0
 """How far the title's pocket keeps from a feature GLYPH (feature 287, water W58; future-work, "The burial ground beside the
 title placard": Kashikawa's burial glyph stood 23 ft left of the placard on its center line and read as its ornament). A

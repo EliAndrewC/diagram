@@ -5,7 +5,7 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from tests.settlement._builders import _crop_settlement, _scatter_base_points, _town
+from tests.settlement._builders import _crop_settlement, _ground_points, _town
 
 
 @pytest.mark.tiers("town")
@@ -44,8 +44,7 @@ def test_commons_keeps_scrub_off_the_road_bed():
     before = len(s.out)
     s.commons([(150, 150), (600, 150), (600, 450), (150, 450)], role="pasture")
     lim = s.M["road_width"] / 2 + 3 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts and all(abs(py - 300) > lim for px, py in pts if 100 <= px <= 700)
 
 

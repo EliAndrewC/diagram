@@ -949,3 +949,14 @@ guess, and the measurement says these levers' ceiling is about a seventh.
   26% (its crowns' own spacing and drawing), the woodland search 24% before its region (now a raster read per size).
 - **The page, 1.46 s**: the picture is its critical path - resvg at zoom 2 in four tiles (0.69 s) and the JPEG child (0.49 s); the
   rest of the page's work now runs while it renders.
+
+## Ground cover as tiles, and what it bought (feature 298, 2026-10-01)
+
+The scrub's grass and brush, the marsh's tint, glints and reeds, and a bamboo stand's culms were thrown glyph by glyph -
+55-68% of four pool hamlets' SVGs (specs/298 research R1). The GM (2026-10-01): drawing them one by one serves no purpose that
+individual trees do, so each zone is now ONE shape filled with a repeating `<pattern>` of the same glyphs at the same density
+(`settlement/land/tiles.py`), its bare ground left out by geometry (`KeepoutGrid.shape`), drawn in slots `_header` reserves
+right above the land so everything in it draws over it. Measured base against tiles, back to back (specs/298 research R2):
+a regeneration 0.2-0.7 s faster, the ground-cover stage 0.83 -> 0.66 s on Inashiro and 0.62 -> 0.38 s on Kashikawa, the
+SVG a quarter of its size or less, the page 13-30% smaller (the rest of it is the embedded picture), the PNG a little larger.
+The blade buckets, their merge (`merge_lines`), the page's mark-cell scrub region and the marsh's re-throw went with the throws.

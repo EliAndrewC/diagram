@@ -124,38 +124,6 @@ def _tiles(tag: str, members: Sequence[int], elems: Sequence[tuple[int, int, str
     return list(cells.values())
 
 
-def merge_lines(lines: Sequence[tuple[str, str, str, str]]) -> str:
-    """The `<path>`s `merge_primitives` would make of `<line x1 y1 x2 y2/>` elements of ONE style with nothing
-    between them, built from the coordinate strings directly: one path per TILE cell of each line's first
-    endpoint once there are TILE_MIN or more (cells in order of first appearance, lines in their order within
-    a cell - `_tiles`), one path below that, a single line left as the `<line>` it is (a one-member bucket is
-    never merged). The writer's form of the merge (feature 222): the grass and reed buckets are 260,000 lines
-    on Inashiro, and writing them as elements for `merge_primitives` to parse back cost 1.9 s of the
-    hinterland stage where this costs a fraction of that. `test_merge_lines_is_merge_primitives_on_the_same_lines`
-    holds the two to the same bytes.
-
-    THE INK IS THE SAME GEOMETRY, NOT THE SAME PIXELS (settlement-review, 2026-09-11): a tuft's three or four blades
-    share one root, and a path unions its subpaths' coverage where separate elements composite one after another,
-    so every shared root is anti-aliased once instead of three times and comes out ~8/255 lighter. Measured on the
-    five pool hamlets against the `<line>` form: 0.4-1.7% of the sheet's pixels differ, max channel delta 61,
-    whole-sheet mean tone shift under 0.2/255, invisible at 1:1 and at 6x magnification - a render diff that
-    finds it has found this, not a moved blade (the coordinate multisets are identical to the last digit)."""
-    if not lines:
-        return ""
-    if len(lines) == 1:
-        x1, y1, x2, y2 = lines[0]
-        return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
-    runs: list[list[tuple[str, str, str, str]]]
-    if len(lines) < TILE_MIN:
-        runs = [list(lines)]
-    else:
-        cells: dict[tuple[int, int], list[tuple[str, str, str, str]]] = {}
-        for ln in lines:
-            cells.setdefault((math.floor(float(ln[0]) / TILE), math.floor(float(ln[1]) / TILE)), []).append(ln)
-        runs = list(cells.values())
-    return "".join('<path d="' + "".join(f"M{x1},{y1}L{x2},{y2}" for x1, y1, x2, y2 in run) + '" fill="none"/>' for run in runs)
-
-
 def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
     """The area this element paints inside - a disc `(cx, cy, r)` for a circle, otherwise a box
     `(x0, y0, x1, y1)` - or None when that cannot be known cheaply.
@@ -390,17 +358,8 @@ HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans",
 HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "retirement_houses", "farm_fixtures", "pig_sties", "kosatsuba")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
-#: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
-#: hinterland, including the ground the scatter deliberately keeps clear - the GM: "if my mouse is just
-#: in the middle of the village, over blank space where there is deliberately no scrubland, then I
-#: don't think that the scrubland should be highlighted"). A grid of HIT_CELL px cells; a cell with a
-#: mark in it is part of the region; runs of cells become one rect each.
-HIT_FROM_MARKS: frozenset[str] = frozenset({"scrub and rough grazing"})
-HIT_CELL = 24.0
-
 _STROKE_W = re.compile(r'stroke-width="([\d.]+)"')
 _GROUP_W = re.compile(r'<g [^>]*stroke-width="([\d.]+)"')
-_MARK_XY = re.compile(r'(?:x1|cx)="([-\d.]+)" (?:y1|cy)="([-\d.]+)"|[Mm]([-\d.]+),([-\d.]+)')
 
 
 def hit_copies(s: str, factor: float = HIT_WIDEN_FACTOR, floor: float = HIT_WIDEN_MIN, bead: float = 3.0) -> str:
@@ -428,56 +387,6 @@ def hit_copies(s: str, factor: float = HIT_WIDEN_FACTOR, floor: float = HIT_WIDE
     return "".join(out)
 
 
-def _in_any(x: float, y: float, polys: Sequence[Sequence[Sequence[float]]]) -> bool:
-    for poly in polys:
-        n = len(poly)
-        inside = False
-        for i in range(n):
-            x1, y1 = poly[i][0], poly[i][1]
-            x2, y2 = poly[(i + 1) % n][0], poly[(i + 1) % n][1]
-            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
-                inside = not inside
-        if inside:
-            return True
-    return False
-
-
-def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = (), points: Sequence[tuple[str, str]] = ()) -> str:
-    """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent -
-    GROWN by `grow` cells around every mark and kept inside the recorded footprints `within`. The
-    growth is what makes a bare patch INSIDE the scrub count as scrub (the GM, 2026-08-28: "patches
-    of dirt with nothing growing there ... should still be counted as part of the scrub land") while
-    the village's deliberate clearing, wider than two cells, stays clear; the footprint stops the
-    growth spilling past the scrub's own edge. The rects carry fill="none" so the highlight never
-    paints them - the first cut left the attribute off and the grid showed as gold steps."""
-    # `points`: the marks' own coordinate strings where the caller holds them (a blade slot's roots, feature 284) - the very
-    # figures the regex below reads out of the text
-    marked: set[tuple[int, int]] = {(int(float(x) // cell), int(float(y) // cell)) for x, y in points}
-    for s in strings:
-        for m in _MARK_XY.finditer(s):
-            x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
-            marked.add((int(float(x) // cell), int(float(y) // cell)))
-    cells: set[tuple[int, int]] = set()
-    for gx, gy in marked:
-        for dx in range(-grow, grow + 1):
-            for dy in range(-grow, grow + 1):
-                c = (gx + dx, gy + dy)
-                if (dx == 0 and dy == 0) or not within or _in_any((c[0] + 0.5) * cell, (c[1] + 0.5) * cell, within):
-                    cells.add(c)
-    out: list[str] = []
-    for gy in sorted({c[1] for c in cells}):
-        xs = sorted(c[0] for c in cells if c[1] == gy)
-        start = prev = xs[0]
-        for gx in xs[1:]:
-            if gx == prev + 1:
-                prev = gx
-                continue
-            out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
-            start = prev = gx
-        out.append(f'<rect x="{start * cell:.0f}" y="{gy * cell:.0f}" width="{(prev - start + 1) * cell:.0f}" height="{cell:.0f}" fill="none"/>')
-    return "".join(out)
-
-
 def _open(key: str, planted: bool = False) -> str:
     #: `planted` adds the token the stylesheet needs to keep a feature's greenery legible while the
     #: feature is lit - see `tags.Planted`. The key, and so the hover and the modal, are unchanged.
@@ -490,15 +399,14 @@ def _inline_hits(s: str, key: str) -> str:
     return hit_copies(s, *HIT_WIDEN[key]) if key in HIT_WIDEN and key not in HIT_ON_TOP else ""
 
 
-def wrap(s: str, tag: ClsTag, premerged: bool = False) -> str:
+def wrap(s: str, tag: ClsTag) -> str:
     """The HTML form of one record-stream string: unchanged when unclassed or ruled out; wrapped in its
     class group when classed; two copies for a `Split` (fill-only under the fill class, stroke-only under
     the stroke class - the paddy body and the bund from one polygon); piece by piece for `Parts`."""
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        # `premerged`: a blade slot the finish wrote in its merged form (`merge_lines`), which `merge_primitives` returns as it is
-        return _open(tag, isinstance(tag, Planted)) + (s if premerged else merge_primitives(s)) + _inline_hits(s, tag) + "</g>"
+        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + _inline_hits(s, tag) + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
@@ -706,8 +614,13 @@ def hit_regions(manifest: dict[str, Any] | None, present: set[str]) -> str:
             cls = roles.get(str(rec.get("role", "*")), roles.get("*"))
             if cls is None or cls not in present:
                 continue
-            pts = " ".join(f"{float(x):.1f},{float(y):.1f}" for x, y in rec["poly"])
-            out.append(_open(cls) + f'<polygon class="hit" points="{pts}" fill="none" style="pointer-events: fill"/></g>')
+            # a cover's record carries the shape its tile fills (`cover`, feature 298) - the scrub's ground less what it keeps
+            # bare - and that shape is its region, holes and all; a scrub zone whose tile filled nothing has none
+            rings = rec.get("cover") if "cover" in rec or cls == "scrub and rough grazing" else [rec["poly"]]
+            if not rings:
+                continue
+            d = "".join("M" + "L".join(f"{float(x):.1f},{float(y):.1f}" for x, y in r) + "Z" for r in rings)
+            out.append(_open(cls) + f'<path class="hit" d="{d}" fill-rule="evenodd" fill="none" style="pointer-events: fill"/></g>')
     return "".join(out)
 
 
@@ -805,7 +718,6 @@ def render_page(
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
-    blade_starts: dict[int, list[tuple[str, str]]] | None = None,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
@@ -818,7 +730,6 @@ def render_page(
     and openable, `"r": 0`. The raster is a RENDER: `finish()` passes the PNG's own condition, so a roll a test
     makes never pays the 7.3 s and 450 MB spike of a picture nobody opens (specs/208 research.md R1)."""
     present = present_classes(tags)
-    blades = blade_starts or {}
     # THE OFF-MAP INK IS DROPPED FIRST (feature 200, FR-001): 90% of a hamlet page's subpaths lay outside
     # the viewBox - the hinterland scatter the generator draws over the whole commons and the crop never
     # shows (specs/200 research.md R2). Invisible by construction, and the reason the page still loads
@@ -826,9 +737,8 @@ def render_page(
     # without). Only classed strings are judged; the sheet and the unclassed pass through.
     vb = raster.viewbox_of(strings[0]) if strings else None
     if vb is not None:
-        # ...but not a blade slot the finish culled already, by this same rule (feature 284, FR-006; `flush_blade_groups`)
-        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED and i not in blades else s for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
-    wrapped = [wrap(s, t, premerged=i in blades) for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
+        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED else s for s, t in zip(strings, tags, strict=True)]
+    wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
     if within is not None:
         wrapped = [part_of(w, ks) for w, ks in zip(wrapped, within, strict=True)]
     # THE PICTURE STARTS NOW (feature 297, FR-006 - the GM: "could that be done in parallel"): it reads the drawn ink without
@@ -839,28 +749,10 @@ def render_page(
     f_pic = pool.submit(raster.picture, raster.without_text("\n".join(wrapped).replace("<svg ", '<svg id="map" ', 1))) if pool is not None else None
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
-    # THE MARKS' REGIONS GO FIRST, the recorded footprints ABOVE them (GM 2026-09-27: over the windbreak "if I hit a
-    # tiny gap between two trees in the interior of the forest, then the forest stops lighting up"). The scrub's region
-    # is its marks' cells grown by one, and its grass runs a few feet in under a wood's edge (feature 266's fringe), so
-    # the grown cells reached into the belt - 36% of Inashiro's belt lay under a scrub cell stacked over the belt's own
-    # polygon, and a gap between crowns lit the scrub instead. A feature with an outline of its own owns that outline;
-    # the scrub fills the ground round it.
-    regions = ""
-    for key in sorted(HIT_FROM_MARKS & present):
-        polys = [
-            rec["poly"]
-            for mk, roles in HIT_REGIONS
-            for rec in (manifest or {}).get(mk) or []
-            if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key
-        ]
-        rects = marks_region(
-            [s for i, (s, t) in enumerate(zip(strings, tags, strict=True)) if t == key and i not in blades],
-            within=polys,
-            points=[pt for i, t in enumerate(tags) if t == key and i in blades for pt in blades[i]],
-        )
-        if rects:
-            regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
-    regions += hit_regions(manifest, present - HIT_FROM_MARKS)
+    # THE RECORDED FOOTPRINTS' REGIONS (`hit_regions`): the scrub's is the shape its tile fills (feature 298), which leaves out
+    # the ground its scatter kept bare - the GM: "if my mouse is just in the middle of the village, over blank space where there
+    # is deliberately no scrubland, then I don't think that the scrubland should be highlighted"
+    regions = hit_regions(manifest, present)
     wrapped.insert(sheet + 1, regions)
     # the widened boxes ride ABOVE the ink, in one layer of their own - see `hit_layer`
     close = next((i for i in range(len(wrapped) - 1, -1, -1) if "</svg>" in wrapped[i]), len(wrapped))
@@ -966,7 +858,6 @@ def write_html(
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
-    blade_starts: dict[int, list[tuple[str, str]]] | None = None,
 ) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
@@ -974,4 +865,4 @@ def write_html(
     render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within, blade_starts=blade_starts))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within))

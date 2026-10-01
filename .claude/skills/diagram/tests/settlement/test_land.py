@@ -609,35 +609,22 @@ def test_surface_water_dist_survives_the_split_at_both_import_paths():
 
 
 def test_commons_keeps_scrub_off_every_recorded_marsh():
-    """GM 2026-08-26 (feature 133 T12): scrub scattered straight through the reeds. Every commons pass
-    now treats every recorded marsh polygon as a keep-out, at the source."""
-    from l7r.diagram.tools.scatter_audit import parse_bases
+    """GM 2026-08-26 (feature 133 T12): scrub scattered straight through the reeds. Every commons pass treats every recorded
+    marsh as a keep-out, at the source: since feature 298 the grass tile's shape leaves the marsh's ground out (the reeds'
+    feather the grass once thinned into is the edge the GM does not mind)."""
+    from shapely.geometry import Polygon
 
-    def inside(px: float, py: float, poly: list[tuple[float, float]]) -> bool:
-        hit = False
-        for i in range(len(poly)):
-            (x0, y0), (x1, y1) = poly[i], poly[(i + 1) % len(poly)]
-            if (y0 > py) != (y1 > py) and px < x0 + (py - y0) * (x1 - x0) / (y1 - y0):
-                hit = not hit
-        return hit
+    from tests.settlement._builders import _covered
 
     s = _nuc_village()  # field to the EAST (x >= 640)
     wet = [(40, 280), (300, 280), (300, 700), (40, 700)]  # open ground WEST of the field
     s.marsh(wet)
-    n_reed = len(parse_bases("".join(s.flush_blade_groups() or s.out))["reed"])
+    reeds = _covered(s)
+    assert reeds.area > 1000.0, "non-vacuity: the marsh's tile fills its ground"
     s.commons([(20, 250), (330, 250), (330, 720), (20, 720)])  # a scrub pass that straddles the marsh
-    fams = parse_bases("".join(s.flush_blade_groups() or s.out))
-    assert len(fams["reed"]) == n_reed and fams["blade"] and fams["dot"], "reeds untouched, scrub drawn around them"
-    from l7r.diagram.settlement._geom import edge_dist
-    from l7r.diagram.settlement.land.wet import MARSH_FEATHER_BS
-
-    deep = MARSH_FEATHER_BS * s.bscale
-    assert not [b for b in fams["blade"] if inside(b[0], b[1], wet) and edge_dist(b[0], b[1], wet) > deep], "grass scattered deep inside the marsh"
-    for fam in ("dot", "pine"):  # WOODY families never stand in the bog, feather band included (GM 2026-08-26, round 3)
-        assert not [b for b in fams[fam] if inside(b[0], b[1], wet)], f"{fam} scattered inside the marsh"
-    # ...but it THINS INTO the marsh over the reeds' own feather (settlement-review 2026-08-26: a hard
-    # cut left a ruled line and a bare strip on the toe's straight edge), so the band is not empty
-    assert [b for b in fams["blade"] if inside(b[0], b[1], wet)], "no scrub in the feather band - the edge would be a ruled line"
+    grass = _covered(s)
+    assert grass.area > 1000.0, "scrub drawn around the marsh"
+    assert grass.intersection(Polygon(wet)).area < 1.0, "no grass in the marsh"
 
 
 def test_reserve_clearing_registers_swept_ground_before_the_scatter_runs() -> None:
@@ -775,52 +762,18 @@ def test_draw_furrows_writes_cut_rows_for_a_convex_plot_and_keeps_the_clip_for_a
     assert s.out[z2].startswith('<clipPath id="dry') and 'clip-path="url(#dry' in s.out[z2]
 
 
-def test_the_vectorized_grass_keeps_every_keep_out_the_point_test_kept():
-    """Feature 278 (FR-008): the grass is thrown and tested as arrays. Every tuft and dot it keeps stands where the
-    per-point test would have let it: inside the parcel, off every keep-out at the grass's lean (0), off the pond, inside
-    the frame - and no dot stands in a soft ground (woody). Each refusal occurs (non-vacuity), and the same seed throws the
-    same marks."""
-    from l7r.diagram.settlement._geom import KeepoutGrid, RingIndex
-    from l7r.diagram.settlement.land.cover import grass_scatter
-
-    parcel = [(0.0, 0.0), (600.0, 0.0), (620.0, 500.0), (300.0, 560.0), (0.0, 480.0)]
-    ring = RingIndex(parcel)
-    keep = KeepoutGrid()
-    keep.rings([[(100.0, 100.0), (220.0, 90.0), (230.0, 200.0), (110.0, 210.0)]], pad=6.0, slot=1, reach=14.0)
-    keep.segs([([(0.0, 300.0), (620.0, 330.0)], 5.0)])
-    keep.rects([(400.0, 50.0, 480.0, 120.0)], closed=True)
-    keep.circles([(500.0, 400.0, 30.0)], closed=True)
-    marsh = RingIndex([(250.0, 380.0), (380.0, 380.0), (380.0, 470.0), (250.0, 470.0)])
-    pond = (300.0, 200.0, 40.0, 25.0)
-    frame = (0.0, 0.0, 580.0, 540.0)
-    blades, marks = grass_scatter(12000, (0.0, 0.0, 620.0, 560.0), frame, ring, keep, None, pond, [marsh], [30.0], 42.0, 1.0, 278)
-    assert blades and marks, "non-vacuity: both tufts and dots"
-    tufts = {(float(b[0]), float(b[1])) for b in blades}
-    dots = [((m[0] + m[2]) / 2, (m[1] + m[3]) / 2) for m in marks]
-    # A MARK IS RECORDED TO 0.1 px, so the point it was thrown at lies within 0.05 px of it: a tuft thrown at y = 120.03,
-    # clear of a closed rect ending at 120, is recorded ON its edge. Each test asks for a clear point in that rounding cell.
-    near = [(dx, dy) for dx in (-0.05, 0.0, 0.05) for dy in (-0.05, 0.0, 0.05)]
-
-    def ok(x, y):
-        return any(ring.inside(x + dx, y + dy) and not keep.hit(x + dx, y + dy, (0.0, 0.0)) and ((x + dx - pond[0]) / pond[2]) ** 2 + ((y + dy - pond[1]) / pond[3]) ** 2 > 1.0 for dx, dy in near)
-
-    for x, y in [*tufts, *dots]:
-        assert frame[0] - 0.05 <= x <= frame[2] + 0.05 and frame[1] - 0.05 <= y <= frame[3] + 0.05
-        assert ok(x, y), (x, y)
-    assert not any(all(marsh.inside(x + dx, y + dy) for dx, dy in near) for x, y in dots), "no woody dot in the bog"
-    assert any(marsh.inside(x, y) for x, y in tufts), "grass grades into the soft ground"
-    assert grass_scatter(12000, (0.0, 0.0, 620.0, 560.0), frame, ring, keep, None, pond, [marsh], [30.0], 42.0, 1.0, 278) == (blades, marks)
-    assert grass_scatter(0, (0.0, 0.0, 1.0, 1.0), None, ring, keep, None, None, [], [], 42.0, 1.0, 1) == ([], [])
-
-
 def test_marsh_keeps_its_reeds_off_a_crescent_pond_and_a_sliver_draws_nothing():
-    """Feature 297 (plan B2): a crescent pond is filed into the marsh's one region, so no reed stands on its water; and a marsh
-    too small for a single throw draws no mark."""
+    """Feature 297 (plan B2): a crescent pond is filed into the marsh's one region, so the reed tile's shape (feature 298)
+    leaves its water out; and a marsh too small to hold any ground draws nothing."""
+    from shapely.geometry import Point
+
+    from tests.settlement._builders import _covered
+
     s = _crop_settlement()
     s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 300.0, "r": 60.0}]
     s.marsh([(150, 150), (450, 150), (450, 450), (150, 450)])
-    for x1, y1, _x2, _y2 in [b for _slot, _c, bl in s._blade_groups for b in bl]:
-        assert math.hypot(float(x1) - 300.0, float(y1) - 300.0) >= 60.0, "a reed on the crescent pond's water"
+    reeds = _covered(s)
+    assert reeds.area > 1000.0 and reeds.intersection(Point(300.0, 300.0).buffer(60.0)).area < 1.0, "reeds on the crescent pond's water"
     tiny = _crop_settlement()
     tiny.marsh([(500, 500), (503, 500), (503, 503), (500, 503)])
-    assert not [b for _slot, _c, bl in tiny._blade_groups for b in bl]
+    assert _covered(tiny).area < 10.0

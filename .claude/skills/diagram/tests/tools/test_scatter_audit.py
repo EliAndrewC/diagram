@@ -25,7 +25,7 @@ def _mini_channel_settlement(seed: int = 1) -> Settlement:
     s.meta(name="A", scale="village", ftpx=1.0)  # ftpx recorded, as every real pool map records it
     s.field_channel([(300, 100), (310, 700)], "#6C9CBE", 14.0, 14.0)
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="grazing")
-    s.flush_blade_groups()  # the buckets are written at finish since feature 223; this reads the ink before one
+    s.flush_mark_groups()  # the pines are written at finish since feature 225; this reads the ink before one
     return s
 
 
@@ -41,27 +41,11 @@ def _manifest(**kw):
 def test_parse_counts_every_family_from_engine_emission():
     s = _mini_channel_settlement()
     fams = sa.parse_bases("".join(s.out))
-    assert len(fams["blade"]) > 100  # grazing commons = tufts of 3 blades each
-    assert len(fams["dot"]) > 0
-    assert len(fams["pine"]) > 0  # role="grazing" draws scraggly pines
-    assert fams["blade"] and all(isinstance(x, float) for x, _ in fams["blade"])
+    assert set(fams) == {"pine", "crown"}, "the grass, dots and reeds are tiles since feature 298 - no bases"
+    assert len(fams["pine"]) > 0 and all(isinstance(x, float) for x, _ in fams["pine"])  # role="grazing" draws scraggly pines
 
 
-def test_parse_counts_one_base_per_blade_line_three_per_tuft():
-    svg = '<g stroke="#A7A860" stroke-width="0.8"><line x1="10.0" y1="20.0" x2="10.5" y2="16.0"/><line x1="10.0" y1="20.0" x2="9.4" y2="16.2"/><line x1="10.0" y1="20.0" x2="10.1" y2="15.9"/></g>'
-    fams = sa.parse_bases(svg)
-    assert fams["blade"] == [(10.0, 20.0)] * 3  # one BasePoint per blade line, tips ignored
-
-
-def test_parse_reads_blade_roots_from_the_merged_paths_the_writer_emits_now():
-    """Feature 222: the buckets are written as `M x,y L x,y` paths (one per tile); a root is each subpath's M."""
-    svg = '<g stroke="#A7A860" stroke-width="0.8"><path d="M10.0,20.0L10.5,16.0M10.0,20.0L9.4,16.2" fill="none"/><path d="M500.0,20.0L500.1,15.9" fill="none"/></g><g stroke="#6E9377" stroke-width="0.8"><path d="M5.0,6.0L5.0,2.0" fill="none"/></g>'
-    fams = sa.parse_bases(svg)
-    assert fams["blade"] == [(10.0, 20.0), (10.0, 20.0), (500.0, 20.0)]
-    assert fams["reed"] == [(5.0, 6.0)]
-
-
-def test_parse_reeds_pine_trunks_and_crowns_but_not_companion_ink():
+def test_parse_reads_pine_trunks_and_crowns_but_not_companion_ink():
     """...and the CROWN fill is taken from the engine's own `CROWN_FILLS`, never written out here.
 
     This test used to hardcode `#7C9856` - a color the engine had stopped painting - which is
@@ -79,27 +63,7 @@ def test_parse_reeds_pine_trunks_and_crowns_but_not_companion_ink():
         '<circle cx="60.0" cy="61.0" r="2.0" fill="#94A063" fill-opacity="0.85"/>'  # brush dot
     )
     fams = sa.parse_bases(svg)
-    assert fams["reed"] == [(5.0, 6.0)]
-    assert fams["pine"] == [(40.0, 50.0)]
-    assert fams["crown"] == [(80.0, 90.0)]
-    assert fams["dot"] == [(60.0, 61.0)]
-    assert fams["blade"] == []
-
-
-# ---- adjudication ----------------------------------------------------------------------------
-
-
-def _one_dot_svg(x, y):
-    return f'<circle cx="{x}" cy="{y}" r="2.0" fill="#94A063" fill-opacity="0.85"/>'
-
-
-# ---- CLI -------------------------------------------------------------------------------------
-
-
-def _write_map(tmp_path, svg_body, manifest):
-    (tmp_path / "t.svg").write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800">{svg_body}</svg>')
-    (tmp_path / "t.json").write_text(json.dumps(manifest))
-    return str(tmp_path / "t")
+    assert fams == {"pine": [(40.0, 50.0)], "crown": [(80.0, 90.0)]}
 
 
 def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
@@ -191,14 +155,15 @@ def test_parse_bases_honours_the_families_filter_and_stops_before_the_crown_tran
     """
     # the REAL markers, copied from the module's own patterns (`_BLADE_GROUP`, `_DOT`) - an
     # invented colour parses as nothing, which would make this test pass by finding zero of everything
-    svg = '<g stroke="#A7A860"><line x1="10" y1="20" x2="12" y2="16"/></g><circle cx="30" cy="40" r="1.1" fill="#94A063"/>'
-    only_dots = sa.parse_bases(svg, families=("dot",))
-    assert only_dots["dot"], "the family that was asked for is parsed"
-    assert only_dots["blade"] == [], "and the ones that were not are left empty rather than scanned"
-    assert only_dots["crown"] == [], "the crown transform pass is skipped entirely"
+    from l7r.diagram.settlement._geom import CROWN_FILLS
+
+    svg = f'<line x1="40.0" y1="50.0" x2="40.0" y2="38.0" stroke="#7A6A48" stroke-width="1.1"/><circle cx="5" cy="7" r="9" fill="{CROWN_FILLS[0]}"/>'
+    only_pines = sa.parse_bases(svg, families=("pine",))
+    assert only_pines["pine"], "the family that was asked for is parsed"
+    assert only_pines["crown"] == [], "the crown transform pass is skipped entirely"
 
     everything = sa.parse_bases(svg)
-    assert everything["dot"] and everything["blade"], "the default still parses every family"
+    assert everything["pine"] and everything["crown"], "the default still parses every family"
 
 
 def test_parse_bases_resolves_a_crowns_group_TRANSLATE_into_its_true_position() -> None:
@@ -229,5 +194,5 @@ def test_parse_bases_refuses_something_that_is_not_an_svg() -> None:
 
     with pytest.raises(ValueError, match="PATH"):
         parse_bases("pool/hamlets/sawada/sawada.svg")
-    assert parse_bases('<svg viewBox="0 0 10 10"></svg>') == {"blade": [], "dot": [], "pine": [], "crown": [], "reed": []}, "an SVG with no scatter really is empty"
-    assert parse_bases('<g stroke="#A7A860"><line x1="5" y1="6" x2="5" y2="1"/></g>')["blade"] == [(5.0, 6.0)], "a FRAGMENT is still a legitimate thing to scan"
+    assert parse_bases('<svg viewBox="0 0 10 10"></svg>') == {"pine": [], "crown": []}, "an SVG with no scatter really is empty"
+    assert parse_bases('<line x1="5" y1="6" x2="5" y2="1" stroke="#7A6A48"/>')["pine"] == [(5.0, 6.0)], "a FRAGMENT is still a legitimate thing to scan"

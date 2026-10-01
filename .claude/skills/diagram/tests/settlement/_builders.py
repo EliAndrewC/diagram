@@ -41,6 +41,42 @@ def _scatter_base_points(frags):
     return pts
 
 
+def _covered(s):
+    """The ground the covers' tiles fill (feature 298) as one shapely shape, read back from the ink each cover slot gained in
+    this flush (`flush_covers`): each slot's new even-odd paths, holes bare."""
+    from shapely.geometry import Polygon
+
+    was = {k: s.out[z] for k, z in s._cover_slots.items() if k != "defs"}
+    s.flush_covers()
+    shape = Polygon()
+    for k, z in s._cover_slots.items():
+        if k == "defs":
+            continue
+        for d in re.findall(r'<path d="([^"]+)"', s.out[z][len(was[k]) :]):
+            for ring in re.findall(r"M([^Z]+)Z", d):
+                shape = shape.symmetric_difference(Polygon([tuple(map(float, q.split(","))) for q in ring.split("L")]))
+    return shape
+
+
+def _ground_points(s, before, step=3.0):
+    """Every point a ground cover stands on since `before`: the scatter's bases in the ink after it (`_scatter_base_points` -
+    the pines and crowns still thrown one by one) and a `step` grid over the shape the tiles fill (`_covered`), so a test
+    that every base keeps off a keep-out holds the tile's ground to it too."""
+    import numpy as np
+    import shapely
+
+    s.flush_mark_groups()
+    pts = _scatter_base_points(s.out[before:])
+    shape = _covered(s)
+    if not shape.is_empty:
+        x0, y0, x1, y1 = shape.bounds
+        gx, gy = np.meshgrid(np.arange(x0, x1 + step, step), np.arange(y0, y1 + step, step))
+        gx, gy = gx.ravel(), gy.ravel()
+        inside = shapely.contains_xy(shape, gx, gy)
+        pts += list(zip(gx[inside].tolist(), gy[inside].tolist(), strict=True))
+    return pts
+
+
 def _yard_glyphs(s, yards=None):
     """Every drawn well / trough cluster / hitching rail on the map as (label, quad) - built with
     the SAME shared builders the placement and the check both use (settlement.wellhead_quad etc.),

@@ -8,8 +8,7 @@ Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md f
 
 import math
 from collections.abc import Sequence
-
-import numpy as np
+from typing import Any
 
 from .base import Poly, Pt
 
@@ -55,10 +54,12 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
     return math.hypot(px - cx, py - cy)
 
 
-def seg_dists(pts: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> np.ndarray:
+def seg_dists(pts: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> Any:
     """`seg_dist` from every point of `pts` to every segment of `segs`, as one array (rows the points, columns the segments) -
     the same projection, clamped the same way, asked of the whole set at once. A scan of a few hundred points against a few
     hundred segments was a third of Kashikawa's lane stage as scalar calls (2026-10-01, the wall-clock sampler)."""
+    import numpy as np  # bound here, not at import (feature 237: the engine loads no heavy library at import time)
+
     P = np.asarray(pts, dtype=float).reshape(-1, 2)
     S = np.asarray(segs, dtype=float).reshape(-1, 2, 2)
     A, D = S[:, 0, :], S[:, 1, :] - S[:, 0, :]

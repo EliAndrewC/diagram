@@ -8,7 +8,7 @@ the make-only guard refuses a bare interpreter reaching an engine module, so the
 agent could not run. This is the wrapper `make scatter-bases` calls.
 
 It MEASURES and never judges (feature 193's ruling: the adjudicating half of the old audit was removed because the
-author's allowance is precisely what a review is there to question): per family - blade, dot, pine, crown, reed -
+author's allowance is precisely what a review is there to question): per family - pine, crown (the grass, dots and reeds are tiles since feature 298) -
 the count of bases, and with `--box x0,y0,x1,y1` the bases inside that world-coordinate window, listed.
 """
 

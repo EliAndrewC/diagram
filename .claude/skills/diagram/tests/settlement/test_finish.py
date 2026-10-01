@@ -296,29 +296,31 @@ def test_the_page_raster_is_a_render_like_the_png(monkeypatch):
     assert "malloc_trim" not in Path(finish_mod.__file__).read_text(encoding="utf-8")
 
 
-def test_flush_blade_groups_culls_the_blades_the_frame_clips_and_keeps_them_all_without_a_frame():
-    """Feature 223 FR-003: a deferred bucket is written at its draw position at finish; with a view, a blade wholly
-    outside the viewBox plus OFFMAP_MARGIN is culled (drop_offmap's own rule) and one inside or reaching in is
-    kept; with no view every blade stays. Idempotent, and an empty bucket is an empty group."""
-    from l7r.diagram.interactive.raster import OFFMAP_MARGIN
+def test_flush_covers_draws_each_zone_less_its_bare_ground_in_its_slot_above_the_land():
+    """Feature 298: a cover is written at finish into its class's slot, which `_header` reserved right above the land - its
+    ring less its bare ground, clipped to the view plus OFFMAP_MARGIN, filled with its tile; the tiles used go into the
+    reserved <defs>; a zone with nothing left draws nothing; a scrub cover's shape is recorded on its commons record.
+    Idempotent."""
+    from shapely.geometry import box
+
+    from l7r.diagram.settlement.land.tiles import Cover, pattern_id
 
     s = Settlement(W=1000, H=1000, seed=1)
+    land = next(i for i, c in enumerate(s.out_cls) if c == "-")
+    assert s._cover_slots["defs"] == land + 1 and s._cover_slots[("reed", "marsh")] == land + 4, "the covers sit right above the land"
     s.set_view(100, 100, 400, 400)
-    inside = ("150.0", "150.0", "151.0", "146.0")
-    reaching = (f"{100 - OFFMAP_MARGIN - 2:.1f}", "150.0", f"{100 - OFFMAP_MARGIN + 1:.1f}", "146.0")
-    far = ("900.0", "900.0", "901.0", "896.0")
-    z = s.add("", cls="marsh")
-    s._blade_groups.append((z, "#6E9377", [inside, far, reaching]))
-    s.flush_blade_groups()
-    assert s.out[z] == '<g stroke="#6E9377" stroke-width="0.8"><path d="M150.0,150.0L151.0,146.0M74.0,150.0L77.0,146.0" fill="none"/></g>'
-    s.flush_blade_groups()  # nothing pending: nothing changes
-    assert "M900.0" not in s.out[z]
-    t = Settlement(W=1000, H=1000, seed=1)
-    z2 = t.add("", cls="marsh")
-    t._blade_groups.append((z2, "#6E9377", [inside, far]))
-    t._blade_groups.append((t.add("", cls=None), "#A7A860", []))
-    t.flush_blade_groups()
-    assert t.out[z2].count("M") == 2 and t.out[z2 + 1] == '<g stroke="#A7A860" stroke-width="0.8"></g>'
+    rec: dict = {}
+    s._covers.append(Cover("grass", "scrub and rough grazing", [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)], [box(200, 200, 300, 300)], rec))
+    s._covers.append(Cover("reed", "marsh", [(900.0, 900.0), (950.0, 900.0), (950.0, 950.0)], []))  # off the view: nothing
+    s._covers.append(Cover("reed", "marsh", [(0.0, 0.0), (1.0, 0.0)], []))  # not a ring: nothing
+    s.flush_covers()
+    scrub = s.out[s._cover_slots[("grass", "scrub and rough grazing")]]
+    assert scrub.count("<path") == 1 and f'url(#{pattern_id("grass", 1.0)})' in scrub and 'fill-rule="evenodd"' in scrub
+    assert s.out[s._cover_slots[("reed", "marsh")]] == ""
+    assert len(rec["cover"]) == 2, "the clipped frame and the bare square's hole"
+    assert pattern_id("grass", 1.0) in s.out[s._cover_slots["defs"]] and pattern_id("reed", 1.0) not in s.out[s._cover_slots["defs"]]
+    s.flush_covers()  # nothing pending: nothing changes
+    assert s.out[s._cover_slots[("grass", "scrub and rough grazing")]] == scrub
 
 
 def test_fold_element_opacity_folds_one_paint_elements_and_declines_the_rest():
@@ -357,7 +359,7 @@ def test_finish_flushes_the_scatter_marks_culled_to_the_frame_after_the_slots_ow
     s.set_view(100, 100, 400, 400)
     z = s.add('<circle cx="200" cy="200" r="9" fill="#6E8B4A"/>', cls=None)
     s._mark_groups.append((z, [(150.0, 150.0, 154.0, 154.0, "<in/>"), (900.0, 900.0, 904.0, 904.0, "<out/>"), (70.0, 150.0, 78.0, 154.0, "<reach/>")]))
-    s.flush_blade_groups()
+    s.flush_mark_groups()
     assert s.out[z] == '<circle cx="200" cy="200" r="9" fill="#6E8B4A"/><in/><reach/>'
     assert not s._mark_groups
 

@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.finish import neatline_clip, scatter_overhang, scatter_strips
+from l7r.diagram.settlement.finish import neatline_clip, scatter_overhang
 from tests.settlement._builders import _crop_settlement
 
 
@@ -101,19 +101,6 @@ def test_the_neatline_wraps_the_map_ink_and_nothing_else() -> None:
     assert neatline_clip(["<svg>", "a"], [None, "x"], None) == (["<svg>", "a"], [None, "x"])
 
 
-def test_the_scatter_overhang_and_its_strips() -> None:
-    """Water W52's one predicate: the overhang per side where the view shows a parcel past the scatter's frame; the
-    strips are that ground, which a re-throw fills; a parcel the view never reaches is no breach."""
-    frame = (100.0, 100.0, 900.0, 900.0)
-    parcel = (0.0, 0.0, 1000.0, 1000.0)
-    view = (70.0, 50.0, 800.0, 900.0)  # 30 past the frame's left, 50 past its top, 50 past its bottom
-    assert scatter_overhang(frame, parcel, view) == [30.0, 50.0, -30.0, 50.0]
-    strips = scatter_strips(frame, parcel, view)
-    assert strips == [(70.0, 50.0, 100.0, 950.0), (70.0, 50.0, 870.0, 100.0), (70.0, 900.0, 870.0, 950.0)]
-    assert scatter_overhang(frame, (2000.0, 2000.0, 2100.0, 2100.0), view) is None and scatter_strips(frame, (2000.0, 2000.0, 2100.0, 2100.0), view) == []
-    assert scatter_strips((0.0, 0.0, 800.0, 800.0), parcel, (100.0, 100.0, 750.0, 750.0))[0][0] == 800.0, "the right strip"
-
-
 def test_a_scatter_frame_of_the_decided_view_holds_the_title_band_on_either_side(tmp_path: Path) -> None:
     """Water W52 / M6, cohort seed 8's violating case: the view is decided, the scatter thrown within its frame
     (`scatter_frame_for`), and then every seat in the band above the map is crossed, so the title's band is grown UNDER
@@ -200,3 +187,12 @@ def test_the_title_band_is_clothed_as_the_view_was() -> None:
     assert t.refill_the_view() == 0 and not t.M["commons"], "a map that never filled its holes"
     assert map_window({"meta": {"view": [0, 0, 10, 10], "neatline": [0, 5, 10, 5]}}) == [0.0, 5.0, 10.0, 5.0]
     assert map_window({"meta": {"view": [0, 0, 10, 10]}}) == [0.0, 0.0, 10.0, 10.0]
+
+
+def test_the_scatter_overhang() -> None:
+    """Water W52's one predicate: the overhang per side where the view shows a parcel past the scatter's frame; a parcel the
+    view never reaches is no breach."""
+    frame = (100.0, 100.0, 900.0, 900.0)
+    view = (70.0, 50.0, 800.0, 900.0)  # 30 past the frame's left, 50 past its top, 50 past its bottom
+    assert scatter_overhang(frame, (0.0, 0.0, 1000.0, 1000.0), view) == [30.0, 50.0, -30.0, 50.0]
+    assert scatter_overhang(frame, (2000.0, 2000.0, 2100.0, 2100.0), view) is None

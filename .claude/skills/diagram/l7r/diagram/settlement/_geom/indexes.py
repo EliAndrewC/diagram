@@ -470,7 +470,7 @@ class KeepoutGrid:
 
     def __init__(self) -> None:
         self.grid = PointGrid()
-        self._trees: dict[tuple[Any, ...], Any] = {}  # `hit_many`'s shapes and `taken_many`'s regions, per (extra, the queried points' box)
+        self._trees: dict[tuple[Any, ...], Any] = {}  # `hit_many`'s and `shape`'s unions, per (extra, the queried points' box)
 
     def rings(self, polys: Any, pad: float = 0.0, slot: int = 0, reach: float = 0.0) -> None:
         """Rings refused inside or within `pad` (+ the query's extra for `slot`) of an edge."""
@@ -556,49 +556,11 @@ class KeepoutGrid:
             out[i] = self.hit(float(xs[i]), float(ys[i]), extra)
         return out
 
-    def taken_many(self, xs: Any, ys: Any, extra: tuple[float | None, ...] = (0.0,), cell: float = 2.0) -> Any:
-        """Which points the keep-outs refuse, read off ONE painted region (feature 297, FR-004 - the GM: "drawing a box and then
-        filling it in"): every item whose box meets the points' box painted once per `extra` - a ring filled and grown by its pad,
-        a segment at its half-width, a rectangle, a circle, each plus the query's extra for its slot - and each point one array
-        read. Conservative (`region.Region`): a point the region calls clear is clear of every item; one at an item's very margin
-        may be refused where `hit` would keep it. The region is kept per (`extra`, box), as `_trees_for`'s shapes were."""
-        import numpy as np
-
-        from .region import Region
-
-        xs, ys = np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)
-        if not len(xs):
-            return np.zeros(0, dtype=bool)
-        within = (float(xs.min()), float(ys.min()), float(xs.max()), float(ys.max()))
-        key = ("region", cell, *extra, *within)
-        region = self._trees.get(key)
-        if region is None:
-            region = Region((within[0] - cell, within[1] - cell, within[2] + cell, within[3] + cell), cell)
-            seen: set[int] = set()
-            x0, y0, x1, y1 = within
-            for item in self.grid.oversized + [it for cell_items in self.grid.buckets.values() for it in cell_items]:
-                if id(item) in seen or item[-4] > x1 or item[-2] < x0 or item[-3] > y1 or item[-1] < y0:
-                    continue
-                seen.add(id(item))
-                kind = item[0]
-                if kind == self.RING:
-                    _k, idx, pad, slot, *_b = item
-                    ex = extra[slot] if slot < len(extra) else None
-                    if ex is not None:
-                        region.poly(idx.ring, pad + ex)
-                elif kind == self.SEG:
-                    _k, a, b, hw, slot, *_b = item
-                    ex = extra[slot] if slot < len(extra) else None
-                    if ex is not None:
-                        region.line([a, b], hw + ex)
-                elif kind == self.RECT:
-                    _k, rx0, ry0, rx1, ry1, _closed, *_b = item
-                    region.rect(rx0, ry0, rx1, ry1)
-                else:
-                    _k, cx, cy, r, _closed, *_b = item
-                    region.circle(cx, cy, r)
-            self._trees[key] = region
-        return region.taken_many(xs, ys)
+    def shape(self, extra: tuple[float | None, ...], within: tuple[float, float, float, float]) -> Any:
+        """Every keep-out meeting `within` as ONE geometry (feature 298): the ground a cover's tile leaves bare, built once from the
+        very items `hit_many` asks - each grown by its pad plus the query's `extra` for its slot (and the hair of margin
+        `_trees_for` grows by, so the shape never falls short of a refused point). None where nothing meets `within`."""
+        return self._trees_for(extra, within)[1]
 
     def _trees_for(self, extra: tuple[float | None, ...], within: tuple[float, float, float, float]) -> tuple[Any, Any]:
         """The shrunk and grown shapes of every item whose box meets `within` (the queried points' box), as two prepared unions -

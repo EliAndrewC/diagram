@@ -11,8 +11,6 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-import numpy as np
-
 from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.primitives import seg_dists
 
@@ -276,6 +274,8 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     """A door path ended where it first arrives within `touch` of its way (`segs`) - square onto it, at the way's nearest point
     to the leg's start - so it never runs on beside the street it joins (feature 291 on 287: a door path is a tree lane the settle does not cut, and
     one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused)."""
+    import numpy as np  # bound here, not at import (feature 237)
+
     pts = list(path)
     for k in range(1, len(pts) if segs else 0):
         a, b = pts[k - 1], pts[k]

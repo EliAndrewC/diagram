@@ -21,7 +21,6 @@ Split from settlement/land.py by feature 120 - see settlement/land/CLAUDE.md for
 """
 
 import math
-import random
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
@@ -29,17 +28,10 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.geometry import Polygon as ShapelyPolygon
     from shapely.ops import unary_union
 
-# THE BLADES ARE WRITTEN AS MERGED PATHS (feature 222, GM 2026-09-11: "merging each blade group into one path"):
-# one <line> per blade made a hamlet's SVG 13-16 MB, 89% of it these two buckets, and resvg parsed every one of
-# them three times per gen (the PNG, the page's picture, its id map). The page's own `merge_primitives` turns the
-# bucket into `M x,y L x,y` paths - one per 400 px tile past 200 blades (feature 199's paint tiling, kept), one
-# path below that - and `merge_lines` is that merge on the coordinates themselves (parsing 260,000 written elements
-# back cost 1.9 s), so the file carries exactly what the page carried, the ink is unchanged, and every reader of
-# the file is smaller: measured on Inashiro, resvg at 2600 px 2.13 s -> 1.18 s (specs/222 research R1, R2).
-# AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
-# lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
-# so the file never carries them (`Settlement.flush_blade_groups`).
-from .._geom import KeepoutGrid, Pt, RingIndex, point_in_poly, seg_dist
+# THE REEDS ARE A TILE (feature 298): the marsh's tint, glints and reed tufts, thrown one by one until then, are the reed tile
+# (`land.tiles`) filling the drawn ground less what the tufts were kept off (`Cover`, `Settlement.flush_covers`).
+from .._geom import KeepoutGrid, Pt, point_in_poly, seg_dist
+from .tiles import Cover
 
 _SHAPELY_LOADED = False
 
@@ -95,29 +87,6 @@ MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) ins
 
 if TYPE_CHECKING:
     from ..core import Settlement
-
-
-def _band_half_width(poly: Any, pond: Any, role: str) -> float:
-    """Half-width of the ground a marsh outline actually leaves for reeds - `area / perimeter`.
-
-    Measured on the GROUND, not the outline: a pond's reed fringe is recorded as a filled disc (the pond
-    ellipse grown by its margin), and reeds are then kept off the open water by the pond test in `_sparse`.
-    So the outline's own area/perimeter is the disc's radius - large - while the band the reeds may occupy
-    is only the margin. Measuring the disc is what made the first attempt at this fix do nothing at all.
-    """
-    _load_shapely()
-    pts = [(float(a), float(b)) for a, b in poly]
-    if len(pts) < 3:
-        return 0.0
-    try:
-        g = ShapelyPolygon(pts).buffer(0)
-        if pond and role == "pond_fringe":  # ONLY the role the paragraph above is about: a waterside bed that
-            g = g.difference(_ellipse(pond))  # happened to wrap the pond would otherwise be over-feathered too
-    except ValueError, GEOSException:
-        return 0.0
-    if g.is_empty or g.length <= 0:
-        return 0.0
-    return float(g.area / g.length)
 
 
 def _ellipse(pond: Any, n: int = 64) -> Any:
@@ -289,48 +258,10 @@ def marsh_ground(M: Any, only: Any = None, but: Any = ()) -> list[list[Pt]]:
     return out
 
 
-def offer_rethrow(s: Any, k: int, rethrow: Any) -> None:
-    """Hand the view's decider a scatter's re-throw (feature 287, M6 and water W52): `rethrow(strip)` throws the scatter
-    registered at index `k` of `s._scatter_frames` again into the box `strip` (x0, y0, x1, y1). Kept only where the caller
-    opened `s._scatter_catchup` (a dict) - a hamlet's `stage_hinterland`, before the marsh it throws before the view is
-    decided - and nowhere else, so a closure over the settlement never outlives the stage that asked for it (a deep copy
-    of the settlement, as the placement-stages plates take, would share it)."""
-    reg = vars(s).get("_scatter_catchup")
-    if isinstance(reg, dict):
-        reg[k] = rethrow
-
-
-def throw_again(strip: Any, parcel: Any, throw: Any) -> None:
-    """A scatter's `throw(x0, y0, x1, y1, frame)` over the part of `strip` inside its `parcel`'s box, with no frame (the
-    strip is the frame), on the global stream seeded from the strip and restored after - so a re-throw moves nothing drawn
-    later, as every scatter here keeps its own draws (feature 287, M6)."""
-    sx0, sy0, sx1, sy1 = max(strip[0], parcel[0]), max(strip[1], parcel[1]), min(strip[2], parcel[2]), min(strip[3], parcel[3])
-    if sx1 <= sx0 or sy1 <= sy0:
-        return
-    st = random.getstate()
-    random.seed(int(abs(sx0) * 5 + abs(sy0) * 7 + round(sx1 - sx0) * 11 + round(sy1 - sy0) * 13))
-    throw(sx0, sy0, sx1, sy1, None)
-    random.setstate(st)
-
-
 def ellipse_ring(cx: float, cy: float, rx: float, ry: float, n: int = 32) -> list[tuple[float, float]]:
     """An ellipse as an `n`-gon through its rim (feature 297): how a round keep-out - a crescent pond, the pond's water - is filed
     into a `KeepoutGrid` as a ring, its pad the query's own."""
     return [(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)]
-
-
-def feather_keeps(rim: Any, xs: Any, ys: Any, u: Any, feather: float, drop: float) -> Any:
-    """Which of the points survive the feather toward the outline `rim` (feature 297, the marsh's `_sparse` as arrays): a point
-    within `feather` of the outline is dropped where its draw `u` exceeds `(distance / feather) ** drop`, the rest kept."""
-    import numpy as np
-    import shapely
-    from shapely.geometry import LinearRing
-
-    if not len(xs):
-        return np.zeros(0, dtype=bool)
-    d = shapely.distance(LinearRing(rim), shapely.points(xs, ys))
-    near = d < feather
-    return ~(near & (u > (np.minimum(d, feather) / feather) ** drop))
 
 
 def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
@@ -381,8 +312,8 @@ class WetGroundMixin:
             return
         # ...AND THE RECORD IS THE GROUND THE REEDS ARE DRAWN ON (feature 287, M7): the outline less every area the scatter
         # below refuses - the padded paddies, the no-build blocks, the swept clearings, `avoid` - one ring (`drawn_ground`).
-        # The scatter is thrown over the same bounding box and thinned by the same feather as before, and a mark is kept only
-        # inside this ring, so the ink and the record are one shape. Nothing left: nothing is drawn or recorded.
+        # The reed tile fills this ring (feature 298), so the ink and the record are one shape. Nothing left: nothing is drawn
+        # or recorded.
         _ground = drawn_ground(poly, self.field_polys, self.block_polys, self.clearings, avoid)
         if _ground is None:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": role, "why": "no open ground left"})
@@ -393,18 +324,6 @@ class WetGroundMixin:
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
         bs = self.bscale
-        st = random.getstate()
-        random.seed(int(abs(x0) * 5 + abs(y0) * 7 + round(x1 - x0)))
-        # THE FEATHER CANNOT BE WIDER THAN THE BAND IT FEATHERS (settlement-review 2026-08-29). The reeds
-        # thin to nothing over `MARSH_FEATHER_BS` (46 ft) inside the outline, which is right for a blob and
-        # ruinous for a narrow one: a pond's reed fringe is a 44 ft annulus, so EVERY point in it stood
-        # within the feather distance of an edge and was thinned as margin. Measured on Kuwabata: 10.14 reed
-        # marks per 1,000 sq ft in the fringe against 22.9, 22.8 and 21.5 in this map's own waterside beds -
-        # 44%, and the reservoir read as a bare blue plate rather than a reeded shore. `area / perimeter` is
-        # a band's half-width (a width-w ribbon of mean radius R: 2 pi R w / 4 pi R = w/2) and is large for
-        # a blob, so the constant still governs everywhere it should; only a narrow outline is affected.
-        _half = _band_half_width(poly, self.M.get("pond"), role)
-        feather = min(MARSH_FEATHER_BS * bs, _half) if _half > 0 else MARSH_FEATHER_BS * bs
         pond = self.M.get("pond")
         halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts): reeds no more belong in a dooryard than scrub does
         corridors = self._corridor_buffers(3 * bs)  # every trodden tread (lane/street/road), not just lanes
@@ -454,96 +373,26 @@ class WetGroundMixin:
         keep.rings(_banks, slot=2, reach=max(_pads))
         keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
-        ring = RingIndex(drawn)  # the drawn ground, indexed once per marsh (feature 145; the why is on RingIndex): a mark is kept only in the record
-        rim_ring = [(float(q[0]), float(q[1])) for q in poly]  # ...and the outline the feather thins from, as it always did (feature 287, M7)
-
-        g: list[str] = []
-        marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the tint and the glints, culled to the frame at finish (feature 225)
-        blades: list[tuple[str, str, str, str]] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
-        # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
-        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.html "A reservoir's
-        # shore is reeded, and its EMBANKMENT is mown": the intuitive counter-hypothesis (a maintained
-        # reservoir has a bare margin, so reeds there would mean neglect) is contradicted by a Kagawa study
-        # in which dredging and algae-cutting correlate POSITIVELY with emergent-plant richness. The tint keeps its
-        # own radius clear of the open water, and for a pond fringe that pad - 28 ft - is wider than the band
-        # the reeds have: on Kuwabata a 44 ft fringe left a 12 ft strip for the tint CENTER, the feather then
-        # thinned that to nothing, and the shore came out with reeds standing on visibly dry ground - 0.09
-        # tint circles per 1,000 sq ft against 1.87-2.25 in this map's own beds, a 25x deficit, and one no
-        # density knob could reach because NO pond fringe on ANY map could carry the mark. Where the band is
-        # narrow the circle is drawn SMALLER and its own radius is the pad, so the haze still never washes
-        # over the water. The radius is rolled BEFORE the test only here: rolling it first everywhere would
-        # re-roll every marsh on every map, which is why the widest radius is used below.
-        _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
 
         # THE MARSH'S WHOLE REGION IN ONE KEEP-OUT GRID (feature 297, FR-004, plan B2): the crescent ponds and the pond's ellipse -
         # asked point by point beside the grid until now - are filed into it as rings (slot 4 the crescents at the mark's pad,
         # slot 5 the pond grown by the mark's lateral pad, slot 6 the pond moved up by a tuft's blade so no tip crosses its rim),
-        # so every throw is read against one painted region at once (`KeepoutGrid.taken_many`)
+        # so the ground the reed tile leaves bare is one shape (`KeepoutGrid.shape`, feature 298)
         if crescents:
             keep.rings([ellipse_ring(cp["cx"], cp["cy"], cp["r"], cp["r"]) for cp in crescents], slot=4, reach=2.0 + max(_pads))
         if pond:
             keep.rings([ellipse_ring(pond[0], pond[1], pond[2], pond[3])], slot=5, reach=max(_pads))
             keep.rings([ellipse_ring(pond[0], pond[1] + MARSH_TUFT_R * bs, pond[2], pond[3])], slot=6)
 
-        def _throw(bx0: float, by0: float, bx1: float, by1: float, fr: Any) -> None:
-            """The tint, the tufts and the glints over the box, at the marsh's own density per area, AS ARRAYS (feature 297): the
-            points drawn at once from a generator seeded off the marsh's stream, kept where the region holds them - in the drawn
-            ground, out of every keep-out the grid files - and thinned toward the outline by the feather. A throw outside `fr`
-            is skipped first (feature 224; the note in cover.py). The whole parcel's box at the first throw; a strip of it on a
-            re-throw (`throw_again`)."""
-            import numpy as np
-
-            barea = (bx1 - bx0) * (by1 - by0)
-            rng = np.random.default_rng(random.getrandbits(64))
-            pond_pad = 2.0 if role == "pond_fringe" else None
-            for kind, n, pad in (("tint", int(barea / (360 * bs * bs)), _tint_r * bs), ("tuft", int(barea / (150 * bs * bs)), MARSH_TUFT_R * bs)):
-                if n <= 0:
-                    continue
-                gx, gy, u = rng.uniform(bx0, bx1, n), rng.uniform(by0, by1, n), rng.random(n)
-                idx = np.arange(n)
-                if fr is not None:
-                    idx = idx[(gx >= fr[0]) & (gx <= fr[2]) & (gy >= fr[1]) & (gy <= fr[3])]
-                idx = idx[ring.inside_many(gx[idx], gy[idx])]
-                lat = pad if kind == "tint" else min(pad, 1.5)
-                extra = (
-                    0.0,
-                    pad if pad in _pads else None,
-                    pad,
-                    (pond_pad if pond_pad is not None else 2.0 + pad),
-                    (pond_pad if pond_pad is not None else 2.0 + pad),
-                    lat,
-                    0.0 if kind == "tuft" else None,
-                )
-                idx = idx[~keep.taken_many(gx[idx], gy[idx], extra)]
-                idx = idx[feather_keeps(rim_ring, gx[idx], gy[idx], u[idx], feather, 0.9 if kind == "tint" else 0.7)]
-                if kind == "tint":
-                    r = rng.uniform(min(15.0, _tint_r * 0.6), _tint_r, n) * bs
-                    for i in idx.tolist():
-                        px, py, rr = float(gx[i]), float(gy[i]), float(r[i])
-                        marks.append((px - rr, py - rr, px + rr, py + rr, f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{rr:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
-                    continue
-                glint = rng.random(n) < 0.12
-                rx, ry = rng.uniform(2.6, 4.6, n) * bs, rng.uniform(1.2, 2.0, n) * bs
-                ang, bl = rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(4.0, 7.0, (n, 4)) * bs
-                for i in idx.tolist():
-                    px, py = float(gx[i]), float(gy[i])
-                    if glint[i]:  # a standing-water glint
-                        marks.append((px - rx[i], py - ry[i], px + rx[i], py + ry[i], f'<ellipse cx="{px:.1f}" cy="{py:.1f}" rx="{rx[i]:.1f}" ry="{ry[i]:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
-                        continue
-                    for k in range(4):  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
-                        blades.append((f"{px:.1f}", f"{py:.1f}", f"{px + math.sin(ang[i, k]) * bl[i, k]:.1f}", f"{py - math.cos(ang[i, k]) * bl[i, k]:.1f}"))
-
-        _fr = self._scatter_frame
-        _throw(x0, y0, x1, y1, _fr)
-        if _fr is not None:
-            self._scatter_frames.append((_fr, (x0, y0, x1, y1)))
-            # ...AND THE THROW IS OFFERED AGAIN once the view is decided (feature 287, M6 and water W52): a marsh laid before
-            # the decision threw inside a PREDICTION, and the view decided after it reached 87 px past that on cohort seed 8.
-            # The caller that decides the view hands each strip past the prediction back here (`throw_again`).
-            offer_rethrow(self, len(self._scatter_frames) - 1, lambda strip: throw_again(strip, (x0, y0, x1, y1), _throw))
-        self._blade_groups.append((self.add("", cls="marsh"), "#6E9377", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
-        self._mark_groups.append((self.add(''.join(g), cls="marsh"), marks))  # `g` holds nothing today; the marks are flushed into this slot at finish
-        random.setstate(st)
+        # THE REEDS ARE A TILE (feature 298, the GM 2026-10-01: "instead of then drawing individual glyphs within that ... some
+        # tiled pattern"): the drawn ground is recorded with the ground its tufts were kept off - every keep-out the grid files,
+        # at the tuft's own pads (the mounds, the banks, the water, the crescents, the pond) - and `flush_covers` fills the rest
+        # with the reed tile (tint, glints and reeds) at the bottom of the stack. Nothing is thrown, so nothing is thrown again
+        # once the view is decided (the re-throw of feature 287, M6, is gone with the throw).
+        pad = MARSH_TUFT_R * bs
+        pond_pad = 2.0 if role == "pond_fringe" else 2.0 + pad
+        bare = keep.shape((0.0, pad, pad, pond_pad, pond_pad, min(pad, 1.5), 0.0), (x0, y0, x1, y1))
+        self._covers.append(Cover("reed", "marsh", [(float(q[0]), float(q[1])) for q in drawn], [bare] if bare is not None else []))
         self._cover_n += 1
         dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)
         self.M["marshes"].append(

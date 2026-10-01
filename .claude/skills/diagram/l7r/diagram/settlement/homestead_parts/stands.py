@@ -5,13 +5,14 @@ from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CanopyArea, point_in_poly
+from ..land.tiles import pattern_id
 from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
 from .bamboo_keepout import copse_bamboo_reach, grown_ring
 from .bamboo_keepout import stand_spares_seats as stand_spares_seats
 from .belt_law import settle_the_belt
 from .grove_blocks import BankNear, GroveBlocks, Seats
-from .groves import RANK_JITTER_FT, bamboo_mark, crown_lift
+from .groves import RANK_JITTER_FT, crown_lift
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -222,32 +223,34 @@ class StandsMixin:
         scale and the marks inside it are symbolic - the convention Japan's own GSI topographic legend uses,
         a distinct bamboo-grove symbol beside the broadleaf and conifer ones, so a reader can tell the three
         apart at map scale. Each mark is a pair of culm strokes with a leafy fork, in bamboo's pale
-        yellow-green, on a jittered grid dense enough to read as one block at fit zoom; nothing is filled,
-        per the no-solid-fill rule for cover. `role` is "homestead" (the damp N/W strip of the cluster) or
+        yellow-green, on a jittered grid dense enough to read as one block at fit zoom - laid once in the bamboo tile and the
+        stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (the damp N/W strip of the cluster) or
         "thicket" (the take-yabu at the field margin). Recorded in M['bamboo_stands'] (bbox + role + poly);
         the marks are decoration keyed to the stand (positional randomness)."""
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
         bs = self.bscale
-        g = ['<g class="bamboo">']
         step = 7.0 * bs
         n = 0
         y = y0 + step * 0.5
         row = 0
-        while y < y1:
+        while y < y1:  # the stand's size in marks: the seats of its jittered grid inside the ring (`marks` on the record)
             x = x0 + step * (0.5 if row % 2 == 0 else 1.0)
             while x < x1:
                 jx, jy = x + (self._hjit(x, y, 91.0) - 0.5) * step * 0.6, y + (self._hjit(x, y, 92.0) - 0.5) * step * 0.6
-                if point_in_poly(jx, jy, pts):
-                    g.append(bamboo_mark(jx, jy, bs, self._hjit(x, y, 93.0), self._hjit(x, y, 94.0)))  # a mark 5-8 ft tall: legible, not a tree
-                    n += 1
+                n += point_in_poly(jx, jy, pts)
                 x += step
             y += step * 0.86
             row += 1
-        g.append("</g>")
         if n == 0:
             return 0
+        # THE MARKS ARE A TILE (feature 298, the GM 2026-10-01 - bamboo "is too small to show up on these maps", so "would we be
+        # able to use a similar approach here?"): the stand's ring filled with the bamboo tile (`land.tiles.bamboo_tile`, the
+        # same mark on the same grid), at the stand's own place in the stack, where its marks were drawn
+        self._cover_kinds.add(("bamboo", bs))
+        d = "M" + "L".join(f"{a:.1f},{b:.1f}" for a, b in pts) + "Z"
+        g = [f'<g class="bamboo"><path d="{d}" fill="url(#{pattern_id("bamboo", bs)})"/></g>']
         z = self.add("".join(g), cls="homestead bamboo" if role == "homestead" else "shared bamboo grove")  # feature 150
         self.M.setdefault("bamboo_stands", []).append(
             {

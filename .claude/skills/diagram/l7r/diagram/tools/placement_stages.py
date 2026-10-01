@@ -128,9 +128,10 @@ _RECORD_ATTRS = (
     "ground",
     # ...AND THE DEFERRED STORES, because each entry holds the INDEX of the slot it reserved in `out` and `finish`
     # writes through it: a rewind that truncated `out` and kept the groups appended after it crashed on the first
-    # step plate of the hinterland (`IndexError` in `flush_blade_groups`). Truncating them by the same watermark is
-    # exactly right - a group reserved BEFORE the step still points inside the rewound list.
-    "_blade_groups",
+    # step plate of the hinterland (`IndexError` in the blade flush feature 298 retired). Truncating them by the same watermark
+    # is exactly right - a group reserved BEFORE the step still points inside the rewound list; and a cover recorded after the
+    # step is not on the plate (`_covers`, whose slots `_header` reserved before any step).
+    "_covers",
     "_mark_groups",
     "_pending_stands",
     "_pending_yards",

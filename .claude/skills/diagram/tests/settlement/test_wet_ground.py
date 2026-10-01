@@ -7,6 +7,9 @@ polygon in `wet_polys`, which `_hard_ground` folds in beside the crop, the bog a
 from __future__ import annotations
 
 import re
+from typing import Any
+
+from shapely.geometry import Polygon
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.land.wet import _clipped_to_open_ground
@@ -60,16 +63,19 @@ _CREST = [
 _WIDE = [(300.0, 200.0), (900.0, 200.0), (900.0, 800.0), (300.0, 800.0)]  # a marsh polygon straight over it
 
 
-def _marks(s: Settlement) -> list[tuple[float, float]]:
-    """Every reed blade start, wet-tint center and glint the marsh drew, from the ink itself."""
-    s.flush_blade_groups()  # the reed bucket is written at finish since feature 223
-    svg = "".join(s.out)
-    out = [(float(a), float(b)) for a, b in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="[\d.]+" fill="#9FBBAE"', svg)]
-    out += [(float(a), float(b)) for a, b in re.findall(r'<ellipse cx="([-\d.]+)" cy="([-\d.]+)"[^>]*fill="#C2D6CE"', svg)]
-    for g in re.findall(r'<g stroke="#6E9377" stroke-width="0.8">(.*?)</g>', svg, re.S):
-        out += [(float(a), float(b)) for a, b in re.findall(r'<line x1="([-\d.]+)" y1="([-\d.]+)"', g)]
-        out += [(float(a), float(b)) for a, b in re.findall(r'M([-\d.]+),([-\d.]+)L', g)]  # the merged form (feature 222)
-    return out
+def _reeded(s: Settlement) -> Any:
+    """The ground the marsh's reed tile fills (feature 298), read back from the ink itself: the even-odd path in the marsh's
+    cover slot, as a shapely shape (holes are bare)."""
+    from shapely.geometry import Polygon
+
+    s.flush_covers()
+    ink = s.out[s._cover_slots[("reed", "marsh")]]
+    shape = Polygon()
+    for d in re.findall(r'<path d="([^"]+)"', ink):
+        for ring in re.findall(r"M([^Z]+)Z", d):
+            pts = [tuple(map(float, q.split(","))) for q in ring.split("L")]
+            shape = shape.symmetric_difference(Polygon(pts))
+    return shape
 
 
 def _on_band(x: float, y: float) -> bool:
@@ -83,29 +89,14 @@ def test_a_marsh_over_a_dike_band_draws_no_reed_on_it_and_would_without_the_dike
     bare = Settlement(1200, 1000, seed=2)
     bare.meta(name="V", scale="village")
     bare.marsh(_WIDE, role="waterside")
-    assert sum(1 for x, y in _marks(bare) if _on_band(x, y)) > 20, "the un-guarded marsh reeds the band - the test's own premise"
+    assert _reeded(bare).intersection(Polygon(_BAND)).area > 1000.0, "the un-guarded marsh reeds the band - the test's own premise"
 
     diked = Settlement(1200, 1000, seed=2)
     diked.meta(name="V", scale="village")
     diked.M["dikes"] = [{"outline": _BAND, "crest": _CREST, "w_min": 40.0, "w_max": 40.0}]
     diked.marsh(_WIDE, role="waterside")
-    assert [1 for x, y in _marks(diked) if _on_band(x, y)] == []
-
-
-def test_a_wet_tint_circle_keeps_its_whole_body_off_the_mound() -> None:
-    """The tint is a 15-28 ft haze circle: its CENTER standing off the band is not enough, the body
-    is what laps the greenery. Centers stand at least the widest radius clear."""
-    s = Settlement(1200, 1000, seed=5)
-    s.meta(name="V", scale="village")
-    s.M["dikes"] = [{"outline": _BAND, "crest": _CREST, "w_min": 40.0, "w_max": 40.0}]
-    s.marsh(_WIDE, role="waterside")
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    svg = "".join(s.out)
-    tints = [(float(a), float(b), float(r)) for a, b, r in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)" fill="#9FBBAE"', svg)]
-    assert tints, "no tint drawn at all - the test would pass vacuously"
-    for x, y, r in tints:
-        if 200.0 <= y <= 800.0:
-            assert x + r <= 600.0 or x - r >= 640.0, f"a tint circle laps the mound: {(x, y, r)}"
+    reeded = _reeded(diked)
+    assert reeded.area > 1000.0 and reeded.intersection(Polygon(_BAND)).area < 1.0
 
 
 def test_a_pond_bank_keeps_the_reeds_off_the_same_way() -> None:
@@ -114,7 +105,8 @@ def test_a_pond_bank_keeps_the_reeds_off_the_same_way() -> None:
     s.meta(name="V", scale="village")
     s.M["dikeponds"] = [{"bank": _ring(600.0, 300.0, 700.0, 500.0)}]
     s.marsh(_WIDE, role="toe")
-    assert [1 for x, y in _marks(s) if 600.0 <= x <= 700.0 and 300.0 <= y <= 500.0] == []
+    reeded = _reeded(s)
+    assert reeded.area > 1000.0 and reeded.intersection(Polygon(_ring(600.0, 300.0, 700.0, 500.0))).area < 1.0
 
 
 # ---------------------------------------------------------------------------
@@ -125,36 +117,6 @@ def test_a_pond_bank_keeps_the_reeds_off_the_same_way() -> None:
 # everything. They are cheap to reach directly and impossible to reach from a
 # rolled map, which is exactly why they sat uncovered: a real settlement never
 # produces them, and the guard exists for the day one does.
-
-
-def test_a_band_half_width_of_a_degenerate_ring_is_zero_not_a_crash() -> None:
-    """Under three points there is no polygon to measure, and a collinear sliver has area 0 with a
-    non-zero perimeter - `buffer(0)` returns an EMPTY geometry for it rather than raising."""
-    from l7r.diagram.settlement.land.wet import _band_half_width
-
-    assert _band_half_width([(0.0, 0.0), (10.0, 0.0)], None, "toe") == 0.0
-    collinear = [(0.0, 0.0), (10.0, 0.0), (20.0, 0.0), (10.0, 0.0)]
-    assert _band_half_width(collinear, None, "toe") == 0.0
-
-
-def test_an_unbuildable_band_measures_zero_rather_than_propagating(monkeypatch) -> None:
-    """The `except` here is NOT reachable through the argument, and that is worth stating: Shapely 2
-    tolerates NaN, infinite and self-crossing rings, returning a geometry rather than raising, and the
-    `len(pts) < 3` guard above already excludes the one constructor error a caller could provoke. What
-    raises is the geometry ENGINE, on invalid topology inside `buffer` or `difference` - a GEOSException
-    from library internals, which no input reliably reproduces across versions. So the handler's
-    CONTRACT is what is pinned: whatever the engine throws, an unmeasurable band is zero, not a
-    traceback out of a draw call."""
-    from l7r.diagram.settlement.land import wet
-
-    square = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
-
-    def _boom(*_a, **_k):
-        raise ValueError("invalid topology")
-
-    wet._load_shapely()  # feature 237: the name is bound on FIRST USE, so a module-global patch needs the loader to have run
-    monkeypatch.setattr(wet, "ShapelyPolygon", _boom)
-    assert wet._band_half_width(square, None, "toe") == 0.0
 
 
 def test_a_clip_that_would_remove_everything_is_no_marsh() -> None:
@@ -295,8 +257,8 @@ def _toe_over_a_house_and_a_field() -> Settlement:
 def test_the_marsh_records_the_ground_its_reeds_are_drawn_on() -> None:
     """Woods W08 / plan M7: the toe laid over a house block, a paddy corner and a swept clearing records a ring that holds
     none of them - the scatter refused them all along, and the record kept the whole outline (the future-work entry's
-    Sawada belt lost 68 of 179 crowns to it) - and every reed the scatter drew stands inside the recorded ring."""
-    from l7r.diagram.settlement._geom import point_in_poly, seg_dist
+    Sawada belt lost 68 of 179 crowns to it) - and the reed tile's shape (feature 298) lies inside the recorded ring."""
+    from l7r.diagram.settlement._geom import point_in_poly
 
     s = _toe_over_a_house_and_a_field()
     ring = [(float(a), float(b)) for a, b in s.M["marshes"][0]["poly"]]
@@ -305,12 +267,9 @@ def test_the_marsh_records_the_ground_its_reeds_are_drawn_on() -> None:
     assert not point_in_poly(275.0, 625.0, ring), "the clearing is cut out"
     assert point_in_poly(300.0, 300.0, ring), "the open toe is still marsh"
     assert s.wet_polys[-1] == ring and s.block_polys[-1] == ring, "the no-build keep-out is the same ring"
-    marks = _marks(s)
-    assert marks, "the toe drew reeds"
-    # ...to the ink's own grain: a blade is written at 0.1 px, so one based a hair inside an edge can print ON it
-    edges = list(zip(ring, [*ring[1:], ring[0]], strict=True))
-    stray = [(x, y) for x, y in marks if not point_in_poly(x, y, ring) and min(seg_dist(x, y, a, b) for a, b in edges) > 0.05]
-    assert not stray, f"no reed stands outside the recorded marsh: {stray[:6]} of {len(marks)}"
+    reeded = _reeded(s)
+    assert reeded.area > 1000.0, "the toe drew reeds"
+    assert reeded.difference(Polygon(ring).buffer(0.05)).area < 0.5, "no reed stands outside the recorded marsh"
 
 
 def test_marsh_ground_reads_the_recorded_rings_by_role() -> None:

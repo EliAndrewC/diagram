@@ -4,7 +4,7 @@ directory's CLAUDE.md for the index. Tests for `settlement/structures/urban.py`.
 import math
 
 from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect
-from tests.settlement._builders import _city, _crop_settlement, _scatter_base_points, _town, _ward_city_with_samurai
+from tests.settlement._builders import _city, _crop_settlement, _ground_points, _town, _ward_city_with_samurai
 
 
 def test_face_street_rot_without_streets_and_with_a_road():
@@ -34,8 +34,7 @@ def test_commons_clears_the_urban_halo_around_buildings():
     s.building(1900, 1400, 40, 28, "shop")  # far outside the cover poly - the bbox prefilter drops it
     before = len(s.out)
     s.commons([(150, 150), (600, 150), (600, 500), (150, 500)], role="pasture")
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts  # the open ground beyond the halos still got its scatter
     halo = 30 * s.bscale - 0.06  # the SVG rounds coords to 0.1, so a base just OUTSIDE the halo can print ON its edge
     hd = math.hypot(20, 14) + halo
@@ -52,8 +51,7 @@ def test_marsh_clears_the_urban_halo_and_wellheads():
     s.marsh([(150, 150), (600, 150), (600, 450), (150, 450)])
     lim = s.M["wells"][0]["vr"] + 20 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
     halo = 30 * s.bscale - 0.06
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts
     for px, py in pts:
         assert not (280 - halo <= px <= 320 + halo and 286 - halo <= py <= 314 + halo)
