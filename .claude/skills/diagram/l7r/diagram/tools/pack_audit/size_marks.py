@@ -59,10 +59,11 @@ def _sized(m: Mark) -> bool:
 def untabled_kinds(svg: str) -> list[str]:
     """The tagged kinds that no rect row and no mark row carries, as its own kind or as a kind it is a part of - sized
     nowhere a size audit reads. A group kind whose parts carry kinds of their own (a river landing of revetment, steps
-    and a barge) is listed by its parts' rows; a kind tagged on nothing but a caption is not."""
+    and a barge) is listed by its parts' rows. A kind tagged on nothing but captions (a room's alcove named in its caption)
+    has no drawn extent to size, so it owes no row (feature 294: the rule holds a DRAWN feature to the table)."""
     ms = marks(svg)
     listed = {k for m in ms if _sized(m) for k in (m.kind, *m.lineage)}
-    tagged = {m.kind for m in ms if m.kind is not None}
+    tagged = {m.kind for m in ms if m.kind is not None and m.tag != "text"}
     return sorted(k for k in tagged - listed if k != NOT_HIGHLIGHTED)
 
 

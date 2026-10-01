@@ -2,7 +2,7 @@
 name: settlement-review
 description: Whole-map review of a Mode B settlement map - does it read as a distinct place, does its declared economy appear, and on a new tier does its fabric read - run only when a map is new to the pool, takes a new settlement form, or opens a new tier.
 tools: Read, Bash, Grep, WebSearch, WebFetch
-model: opus
+model: sonnet
 effort: high
 omitClaudeMd: true
 ---
@@ -20,7 +20,7 @@ complaint is the `fix-check`'s; captions are the caption placer's (features 266,
 agreement with a Mode A sheet is feature 257's check; caste and status geography are an obligation on the town and city
 generators (the migration plan). Do not judge any of them here.
 
-You are an independent reviewer. **You did not draw it.** **Tier: Opus at high effort, pinned** (`tests/test_agent_models.py`).
+You are an independent reviewer. **You did not draw it.** **Tier: Sonnet at high effort, pinned** (`tests/test_agent_models.py`; feature 294 T34: Opus and 3 of 3 Sonnet runs caught the seeded re-skin).
 Send the reads, greps and fetches you already know you need in ONE message.
 
 ## First stage

@@ -20,6 +20,12 @@ category of thing"*. `scripts/_review_owed.py` is the one answer, asked by `make
 | `building-review` | a sheet new to the pool (detected); a layout revised or a new program (declared: `layout-revised:`, `new-program:`) | the sheet's layout, program and coherence |
 | `size-audit` | a sized kind new to a sheet (detected); a new program (declared) | that kind's real size, then a band the registry holds |
 
+**A hand-drawn map awaiting conversion owes nothing.** The GM, 2026-10-01: *"All hand-drawn maps should be excempted from
+settlement reviews because they will be converted to being scripted later. Hand-drawn diagrams of magistracies and country
+shrines and later things which will never be scripted (by design) should still get setlement review."* A Mode B map in
+`legacy-hand-authored-pool/` is skipped by every occasion (`_review_owed.exempt`); a Mode A sheet keeps its review wherever it
+lives.
+
 **The declaration.** Every feature that touches drawing or placement code carries an `## Occasions` section in its `tasks.md`,
 one `- <occasion>: <argument>` line each, or `- none: <why>` - whether a change is substantial is the feature's call to
 DECLARE; a delta that touches drawing or placement code with no section is refused at push (`review-gate.sh`). The research

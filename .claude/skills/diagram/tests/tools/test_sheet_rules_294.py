@@ -327,12 +327,13 @@ def test_the_size_marks_list_every_sized_kind() -> None:
         '<g data-kind="trees"><circle cx="50" cy="300" r="15"/></g>',
         _road("M 0 400 L 300 400", 12),
         '<text x="5" y="5" data-kind="alcove">alcove</text><text x="5" y="9" data-kind="-">x</text>',
+        '<rect x="0" y="0" width="0" height="9" data-kind="gap"/>',
     )
     rows = sm.mark_rows(sheet)
     assert {(r.tag, r.kind) for r in rows} == {("circle", "trees"), ("path", "road")}
     road = next(r for r in rows if r.kind == "road")
     assert (road.length_ft, road.stroke_ft) == (100.0, 4.0)
-    assert sm.untabled_kinds(sheet) == ["alcove"]  # the landing is listed by its dock's row
+    assert sm.untabled_kinds(sheet) == ["gap"]  # the landing is listed by its dock's row; a caption-only kind has nothing to size
     assert "marks (circles" in sm.render(rows) and "road" in sm.render(rows)
 
 

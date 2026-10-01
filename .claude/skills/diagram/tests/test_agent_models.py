@@ -53,9 +53,9 @@ TIERS: dict[str, tuple[str, str]] = {
     "source-applicability": ("opus", "high"),
     "size-audit": ("opus", "high"),
     "building-review": ("opus", "high"),
-    "settlement-review": ("opus", "high"),
+    "settlement-review": ("sonnet", "high"),  # feature 294 T34: Opus + 3/3 Sonnet found the seeded re-skin
     "glyph-check": ("opus", "high"),  # feature 294: the element-in-place check, owed on its occasion
-    "fix-check": ("opus", "high"),  # feature 294: the GM-complaint fix verification, owed on a declared gm-fix
+    "fix-check": ("sonnet", "high"),  # feature 294: the GM-complaint fix check; T34: Opus + 3/3 Sonnet found the unfired fix
     "perf-audit": ("opus", "high"),
     "effort-grader": ("opus", "high"),  # feature 293: one fixed grader for both tasks of the effort experiment (FR-010)
 }

@@ -191,6 +191,24 @@ def test_the_legacy_tree_and_unclassed_ink_owe_nothing(clone: Path) -> None:
     assert units(clone) == []
 
 
+def test_a_hand_drawn_map_awaiting_conversion_owes_nothing(clone: Path) -> None:
+    """GM 2026-10-01: a hand-drawn Mode B map is exempt - new to the pool, a new element on it, or one it alone draws."""
+    _map(clone, "legacy-hand-authored-pool", "furu", {"tannery": 2})
+    _map(clone, "legacy-hand-authored-pool", "kaze", {"farmhouse": 3})
+    assert units(clone) == []
+    _tasks(clone, ["placement-changed: tannery"])
+    _, _, problems = owed.owed(clone)
+    assert problems == ["specs/999-test: placement-changed: 'tannery' is drawn on no pool map or sheet"]
+
+
+def test_a_mode_a_sheet_in_the_legacy_tree_still_owes_its_review(clone: Path) -> None:
+    """GM 2026-10-01: a hand-drawn magistracy or shrine is never scripted, so it keeps its review wherever it lives."""
+    d = clone / SKILL / "legacy-hand-authored-pool" / "shrines" / "kaminari"
+    d.mkdir(parents=True)
+    (d / "kaminari.svg").write_text('<svg><rect data-kind="hall"/></svg>')
+    assert ("building-review", "kaminari", "kaminari") in units(clone)
+
+
 def test_a_committed_change_beyond_the_merge_base_counts(clone: Path) -> None:
     _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
     git(clone, "commit", "-qam", "a well")

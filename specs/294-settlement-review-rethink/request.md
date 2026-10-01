@@ -50,3 +50,9 @@ The revised draft limited the audit to the three map reviews and left the resear
 And then:
 
 > Thanks!  Please work feature 294 from start to finish and let me know when it lands on main.
+
+## The GM's ruling on the hand-drawn sheets (2026-10-01, asked through `escalation-check` under plan D8)
+
+> All hand-drawn maps should be excempted from settlement reviews because they will be converted to being scripted later.  Hand-drawn diagrams of magistracies and country shrines and later things which will never be scripted (by design) should still get setlement review.
+
+And on the three narrowings (D5, D7, D15): "Fine as is".

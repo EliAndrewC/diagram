@@ -121,6 +121,14 @@ def is_sheet(folder: Path) -> bool:
     return not (folder / f"{folder.name}.json").is_file() and ((folder / f"{folder.name}.svg").is_file() or (folder / f"{folder.name}.gen.py").is_file())
 
 
+def exempt(folder: Path) -> bool:
+    """A hand-drawn Mode B map awaiting conversion owes no review (GM 2026-10-01, feature 294: *"All hand-drawn maps should be
+    excempted from settlement reviews because they will be converted to being scripted later. Hand-drawn diagrams of
+    magistracies and country shrines and later things which will never be scripted (by design) should still get setlement
+    review."*): a folder in the legacy tree that is not a Mode A sheet."""
+    return folder.parent.parent.name == TREES[1] and not is_sheet(folder)
+
+
 def _rel(root: Path, path: Path) -> str:
     return path.relative_to(root).as_posix()
 
@@ -162,6 +170,8 @@ def legends(root: Path) -> dict[str, set[str]]:
     """Each folder's elements now (`<name>` -> classes or kinds)."""
     out: dict[str, set[str]] = {}
     for d in _folders(root):
+        if exempt(d):
+            continue
         if (d / f"{d.name}.json").is_file():
             out[d.name] = ink_classes((d / f"{d.name}.json").read_text(errors="replace"))
         elif (d / f"{d.name}.svg").is_file():
@@ -184,6 +194,8 @@ def detected(root: Path, base: str) -> list[Unit]:
     before: dict[str, set[str]] = {}
     for d in _folders(root):
         manifest, svg = d / f"{d.name}.json", d / f"{d.name}.svg"
+        if exempt(d):
+            continue
         if not (manifest.is_file() or svg.is_file() or (d / f"{d.name}.gen.py").is_file()):
             continue
         if not _existed(root, base, d):

@@ -138,7 +138,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/ledger-hooks.sh pretool",
+            "command": "h=/diagram/scripts/ledger-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/ledger-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 294 - a NEW guard: a commit staging the review ledger with a measured row short of its check, class or cost",
             "timeout": 10
           }
         ]

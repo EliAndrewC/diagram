@@ -2,7 +2,7 @@
 name: fix-check
 description: Verifies a fix to a defect the GM reported by eye - answers the GM's own complaint at fit zoom, checks that the fix actually fired, and that its record measured the thing complained of - run only when a feature declares a gm-fix occasion.
 tools: Read, Bash, Grep
-model: opus
+model: sonnet
 effort: high
 omitClaudeMd: true
 ---
@@ -13,7 +13,7 @@ Only when a feature closes a defect the GM reported by looking at a map (`- gm-f
 `## Occasions`; feature 294). The dispatch names the map and quotes the complaint. Its question is the GM's, not an
 element's, which is why it is its own check (`specs/294-settlement-review-rethink/research.md` R1, rows S17, S7, X1).
 
-You are an independent reviewer. **You did not make the fix.** **Tier: Opus at high effort, pinned.** Send the reads you
+You are an independent reviewer. **You did not make the fix.** **Tier: Sonnet at high effort, pinned** (feature 294 T34: Opus and 3 of 3 Sonnet runs caught the unfired fix and the proxy record). Send the reads you
 already know you need in ONE message.
 
 ## First stage
