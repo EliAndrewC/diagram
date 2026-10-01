@@ -1,6 +1,6 @@
 {
  "feature": "297-placement-by-construction",
- "plan_sha256": "2381eb00a7dbb1ac30d2b2443272f84bea5f993f244958057fad58e1043697a1",
+ "plan_sha256": "42eb90abfacfed64d651cbd8119a90063d674212d56713b0adf48ea0c38c1415",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -21,7 +21,7 @@
    "summary": "Seated homesteads not painted into the seat region; region recomputed per new corridor only",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Built and measured (R15): painted and not painted both seat 442 of 442; painted cuts placer calls 4,712 -> 4,054 but the homesteads stage ran 56.01 s vs 51.31 s. Withdrawn under the plan's rule (a lever that makes its stage slower), and the GM's own lever asks for a 'precomputed' region. Spec FR-001 and plan B1 now cite R15 (e3f5bbf3b). R15 records no loads and not fastest-of-three, as the plan's method asks; re-take it that way."
+   "why": "Built and measured (R15): both seat 442 of 442; painted is 9% slower on the stage. Withdrawn under the plan's rule; the GM's lever asks for a 'precomputed' region. Caveat unchanged: R15 is not fastest-of-three with loads as the plan's method asks."
   },
   {
    "id": "B2-marsh-grass",
@@ -30,18 +30,17 @@
    "why": "FR-004 as written."
   },
   {
-   "id": "B3-reserved-seat-exact",
-   "summary": "A household's reserved wood-floor seat (and its re-seat) asked of the exact families where the region reads taken",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "R16: regions alone failed woods W25 at the gate, both failures on reserved seats the seating proved clear, refused by the conservative margin. The gate requires planting them, so the literal fails here."
+   "id": "B3-regions-ordinary",
+   "summary": "Three family regions (hard/lane/local); taken_by alone decides every ordinary clump (jittered grid, gap fill, re-seat): drop on hard, re-seat on lane/local",
+   "class": "within",
+   "why": "FR-004/US3 as written: each candidate read against the region, no keep-out asked in turn. Built as the previous round required (grove_blocks.py taken_by/static_clear; stands.py)."
   },
   {
-   "id": "B3-prefilter-every-candidate",
-   "summary": "static_clear asks hard/local/lane in turn wherever the region reads taken, for EVERY candidate (jittered grid, gap fill, settle seats), not only reserved seats",
+   "id": "B3-reserved-seat-exact",
+   "summary": "A household's reserved wood-floor seat and its re-seat asked of the exact families (exact_taken_by / exact_clear)",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-004/US3: each candidate read against the region, not tested against each keep-out in turn. R16's failure is confined to reserved seats (_seat(reserved=True) and its re-seat); the grid candidates' only change was a sixth fewer crowns, a map move the GM allowed. 'The one fix is the prefilter form' stretches one case's argument over unlike cases: the reserved-seat fix is local and was not built. Build regions-alone with the exact families asked for reserved seats only, gate and measure it; withdraw only on that measurement."
+   "ruling": "LEGITIMATE",
+   "why": "Now confined to the one case R16 showed fails: regions alone refused reserved seats the seating proved clear (woods W25 at the gate), and the gate requires planting them. Code gates it on `reserved` only; measured no slower (R16 last paragraph) and the gate green on the moved pool, per the caller."
   },
   {
    "id": "B4-3px",
@@ -54,7 +53,7 @@
    "summary": "Field reach and water before any layout; corridor once per seat after the envelope",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged: asked first it doubled the costliest search (R10); the GM's 'lane test done once per seat rather than once per orientation' still holds."
+   "why": "Unchanged: asked first it doubled the costliest search (R10); 'lane test done once per seat rather than once per orientation' still holds."
   },
   {
    "id": "C-template-withdrawn",
@@ -74,7 +73,7 @@
    "summary": "Tree lanes first, repairs at the write, no settle - built three ways and withdrawn; settle rounds stay",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Now built as D1-D4 state it (outermost write, network-wide repairs at the end): 16 of 22 webs broken or unreached, two raising from the passes' index walks, 1.72x slower (R14). Withdrawn under the plan's rule; an overhaul deferred with measurement and mechanism. Spec says it is narrower than lever 3; the GM must be told."
+   "why": "Built as stated and failed the gate (16 of 22 webs broken or unreached) and 1.72x slower (R14). Withdrawn under the plan's rule with measurement and mechanism; narrower than lever 3 and the GM must be told."
   },
   {
    "id": "D-targeted-rounds-withdrawn",
@@ -101,5 +100,5 @@
    "why": "FR-003, FR-006 as written."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
