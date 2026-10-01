@@ -1393,6 +1393,7 @@ hikone	Hikone
 hill spacing	hill spacing
 hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
+hillshade	hillshade
 hinin	hinin
 hinoe-inu	sexagenary year
 hinoki	hinoki
@@ -3129,6 +3130,7 @@ seven-hall garan	garan
 sexagenary year	sexagenary year
 seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
+shaded relief	hillshade
 shadoof	jiegao
 shadowlands	Shadowlands
 shaduf	jiegao
@@ -3340,6 +3342,8 @@ spoil bank	spoil bank
 spoil banks	spoil bank
 spot fire	spotting
 spot fires	spotting
+spot height	spot height
+spot heights	spot height
 spotting	spotting
 spread footing	footing
 spring and autumn	Spring and Autumn
