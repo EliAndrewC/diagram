@@ -132,11 +132,11 @@ class FoxBorder(Kind):
 
     Why: Agreed, marked borders between domains were real: two neighboring domains settled a boundary of about
     130 km in 1642 after half a century of dispute and marked it with a line of earth mounds, and every
-    province's map made in the Genroku revision drew its district boundaries clearly. A border exists where
+    province's map made in the Genroku revision drew its district boundaries clearly, though those were lines between districts, not between domains. A border exists where
     two authorities have agreed it, so the plan draws the agreed line itself, which nothing on the ground need
     stand clear of.
 
-    Note: The agreed, drawn border line is a recorded finding. The period's large border markers were earthen
+    Note: The agreed border line is a recorded finding; drawing it with no width is a convention, as the period's provincial maps drew their boundaries as lines, and leaving out the mounds that marked it is a deliberate deviation. The period's large border markers were earthen
     mounds, and the plan draws the line alone; a compound standing on the line is its map's story.
 
     Caveat: The period's large border markers were earthen mounds, and the plan draws the line alone; a compound
@@ -167,7 +167,7 @@ class ParleyRoom(Kind):
     dealt regularly across a border, the forms recorded are a post on each side of the line, facing each
     other across it, as Russia and Qing China built at Kyakhta, or a compound on one side's ground where the
     other side's officers worked, with the host's banquet hall beside it, as at the Japan House at Choryang,
-    where Tsushima traded with Korea. The drawn border line the room stands on is the attested part.
+    where Tsushima traded with Korea. The border the room stands on is the attested part, since domains of the period agreed linear borders between them; drawing it as a line with no width is a convention, as the period's provincial maps drew their district boundaries.
 
     Name: parley room
     Covers: the room in the border wall and its label

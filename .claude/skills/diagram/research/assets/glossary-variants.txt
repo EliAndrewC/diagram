@@ -76,6 +76,8 @@ ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
 ashina	Ashina
+assessed yield	kokudaka
+assessed yields	kokudaka
 assignation house	assignation house
 assignation houses	assignation house
 assize	assize
