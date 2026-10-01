@@ -191,8 +191,8 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
     fields/250, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
-    assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by ", "Why do a village's farmhouses "], qs
-    assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs)
+    assert [q["text"][:30] for q in qs] == ["The farmstead and what stood o", "How close does a farmhouse sta", "Is every farmhouse reached by ", "Why do a village's farmhouses ", "How our maps choose what stand"], qs
+    assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs[:4])
     assert qs[1]["url"].endswith("#how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund")
     # file order would put the lane entry (line 274) before the paddy entry (line 400); the entry's order wins
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
@@ -399,7 +399,7 @@ def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
 
 def test_the_citations_come_from_the_research_entries() -> None:
     """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
-    keys = research_sources("research/homesteads.html - 'What stood on a farmstead'")
+    keys = research_sources("research/homesteads.html - 'The farmstead and what stood on it'")
     assert "sugiura-1973-fuzoku" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]

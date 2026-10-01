@@ -46,7 +46,7 @@ class Farmhouse(Kind):
     Covers: `houses` - the dwelling of each household
     Label: accurate
     Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'
+    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'farmhouse'
@@ -73,7 +73,7 @@ class StorageShed(Kind):
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: accurate
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-    Entry: research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'
+    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'storage shed'
@@ -113,7 +113,7 @@ class Byre(Kind):
     Covers: `byres` - the draft-animal sheds
     Label: accurate
     Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki
-    Entry: research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'What stood on a farmstead - the inventory'
+    Entry: research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'byre'
@@ -246,7 +246,7 @@ class Privy(Kind):
     Covers: `farm_fixtures[kind=privy]`
     Label: accurate
     Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori
-    Entry: research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?', 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'privy'
@@ -275,7 +275,7 @@ class WoodShed(Kind):
     Covers: `farm_fixtures[kind=woodpile]` - the wood shed
     Label: accurate
     Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'wood shed'
@@ -302,7 +302,7 @@ class ManureHeap(Kind):
     Covers: `farm_fixtures[kind=manure]`
     Label: guess
     Sources: jawiki-koedame, artic-pigsty-latrine, kyuhi-jawiki, suzuki-1959-noson-benjo
-    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'manure heap'
@@ -331,7 +331,7 @@ class BathRoom(Kind):
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
-    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'bath room'
@@ -360,7 +360,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: accurate
     Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop, buck-1930-farm-economy
-    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'hen coop'
@@ -385,7 +385,7 @@ class HouseholdShrine(Kind):
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'household shrine'
@@ -415,7 +415,7 @@ class Persimmon(Kind):
     Covers: `persimmons` - the dooryard persimmon tree
     Label: accurate
     Sources: toyoko-kaki, uekipedia-kaki, jataff-fuyu-kaki, sato-1962-haichi, pfaf-kaki
-    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
     """
 
     key = 'persimmon'

@@ -46,7 +46,7 @@
   "bathhouse": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=bath]` - the bath room joined to the house",
-    "entry": "research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "bathhouse",
     "label": "accurate",
     "label_note": "Use is read (Mizumaki museum); where the shed stood was found nowhere - the back wall or a flank is a guess, and so is the 6 x 6 ft size.",
@@ -131,7 +131,7 @@
   "byre": {
     "caveat": "the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
     "covers": "`byres` - the draft-animal sheds",
-    "entry": "research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'What stood on a farmstead - the inventory'",
+    "entry": "research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "byre",
     "label": "accurate",
     "label_note": "The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
@@ -219,7 +219,7 @@
   "farmhouse": {
     "caveat": "the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
     "covers": "`houses` - the dwelling of each household",
-    "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'",
+    "entry": "research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "farmhouse",
     "label": "accurate",
     "label_note": "Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
@@ -418,7 +418,7 @@
   "hen coop": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=coop]`",
-    "entry": "research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "hen coop",
     "label": "accurate",
     "label_note": "The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.",
@@ -461,7 +461,7 @@
   "household shrine": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=shrine]` - the hokora",
-    "entry": "research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "household shrine",
     "label": "convention",
     "label_note": "we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii before it, in order to make it visible on the map at this scale. The one measured stone hokora is about 40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence, rarity and corner are read.",
@@ -479,7 +479,7 @@
   "manure heap": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=manure]`",
-    "entry": "research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "manure heap",
     "label": "guess",
     "label_note": "The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size are guesses - the pages describe the pit, not where it stood.",
@@ -668,7 +668,7 @@
   "persimmon": {
     "caveat": "",
     "covers": "`persimmons` - the dooryard persimmon tree",
-    "entry": "research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "persimmon",
     "label": "accurate",
     "label_note": "Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown are guesses - the crown width was found nowhere.",
@@ -749,7 +749,7 @@
   "privy": {
     "caveat": "the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
     "covers": "`farm_fixtures[kind=privy]`",
-    "entry": "research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?', 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "privy",
     "label": "accurate",
     "label_note": "Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
@@ -860,7 +860,7 @@
   "storage shed": {
     "caveat": "the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
     "covers": "`houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)",
-    "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'",
+    "entry": "research/homesteads.html - 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "storage shed",
     "label": "accurate",
     "label_note": "Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
@@ -1063,7 +1063,7 @@
   "woodpile": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=woodpile]` - the wood shed",
-    "entry": "research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'",
     "key": "woodpile",
     "label": "accurate",
     "label_note": "The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.",

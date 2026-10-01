@@ -5,8 +5,8 @@ Sugiura 1973 counted 4.4 roofed outbuildings per Tōhoku farm household and the 
 kura) - the T52 pass listed the rest, and the GM chose these. Every one is drawn at TRUE size
 (feedback: to-scale modes never inflate); the only legibility liberty is a bold stroke, and the
 persimmon's fruit dots and the shrine's vermilion are RENDERING conventions, recorded as such in
-research/homesteads.html "Farmstead fixtures". Research and sources: research/homesteads.html
-"The farmstead's fixtures". The PLACER is the scripted generator's (hamletgen/homesteads.py
+research/rendering/homesteads.html "How our maps choose what stands on a farmstead". Research and sources:
+research/homesteads.html "The farmstead and what stood on it (yashiki)" and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
 `farmstead_fixtures`); this mixin only draws and records.
 """
 
