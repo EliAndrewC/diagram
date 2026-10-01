@@ -32,7 +32,7 @@ Verdicts: CUT / MOVED / STRUCK / TRIGGERED on <occasion> / WHOLE-MAP on <occasio
 
 ### settlement-review.md (Opus high; owed today for every pool map whose manifest moved)
 
-| # | check | what it judges | verdict | occasion or replacing test/rule | ledger fires (~n) | note |
+| # | check | what it judges | verdict | occasion or replacing test/rule | ledger fires (~n) | note (figures observed 2026-10-01; method: the ledger rows named) |
 |---|---|---|---|---|---|---|
 | S1 | When to dispatch (L10-12) | the review's remit statement | PROCESS - rewrite | occasions from this audit (FR-005) | - | lists Mode A agreement, generic annotations: both struck |
 | S2 | Tier pin (L18-24) | Opus/high pinned | PROCESS - survives per check | US8 re-tests per check | - | |
@@ -102,7 +102,7 @@ PROCESS 27, no home 1 (V3d), out of contract 1 (X3).
 
 ### building-review.md (Opus high; dispatched by hand when a Mode A sheet is drawn or revised - no script owes it; `pair-hooks.sh:463` only refuses a multi-subject dispatch)
 
-| # | check | what it judges | verdict | occasion or replacing test/rule | ledger fires (~n) | note |
+| # | check | what it judges | verdict | occasion or replacing test/rule | ledger fires (~n) | note (figures observed 2026-10-01; method: the ledger rows named) |
 |---|---|---|---|---|---|---|
 | B1 | When to dispatch (L10-12) | before any Mode A sheet is done | PROCESS - rewrite to occasions; give it a scripted owed-answer | a sheet drawn, its layout revised, a new program | - | ledger also shows it run on interactive-page text deltas (262, 264) |
 | B2 | Tier pin, batching (L18-27) | - | PROCESS - survives | - | - | |
@@ -143,7 +143,7 @@ PROCESS 7, out of contract 1 (BX).
 
 ### size-audit.md (Opus high; "when a diagram is drawn or revised, or a size looks off" - already narrow, but no script owes it)
 
-| # | check | what it judges | verdict | occasion or replacing test/rule | ledger fires (~n) | note |
+| # | check | what it judges | verdict | occasion or replacing test/rule | ledger fires (~n) | note (figures observed 2026-10-01; method: the ledger rows named) |
 |---|---|---|---|---|---|---|
 | Z1 | When to dispatch (L10-12) | drawn or revised plan | PROCESS - survives; narrow to a sized element added/resized or a new program | - | - | occasion already narrow; leave it |
 | Z2 | Tier pin; arithmetic scripted (L18-24) | - | PROCESS - survives | `make size-table` | - | |
