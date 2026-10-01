@@ -232,8 +232,8 @@ class GroundCoverMixin:
         stands), counted as cover. The bare sample points (`bare_cells`, the rule's one predicate) are grouped into
         connected blocks and the largest are clothed first, each as one grazing commons over its cells - its record
         covers every one of its points, so the share falls by exactly the block and the fill ends. Returns the commons laid.
-        Rough grazing is what the record puts on ground nothing else claims (research/vegetation.html, "Why is the hillside
-        past the grove open scrub rather than more forest?")."""
+        Rough grazing is what the record puts on ground nothing else claims (research/rendering/vegetation.html, "How our maps
+        draw the open hills past the grove")."""
         vars(self)["_fills_holes"] = True  # ...and the view the finish grows for the title is clothed the same way (`refill_the_view`)
         probe = {**self.M, "_planned_cover": [[(float(q[0]), float(q[1])) for q in p] for p in planned]}
         bare, total = bare_cells(probe, view)
@@ -343,7 +343,7 @@ class GroundCoverMixin:
         poorer ground so it is VISUALLY DISTINCT from the dense, dark, closed-canopy village grove - this is a
         COMMONS (not anyone's field), non-arable. WHY (south China's hills were stripped for fuel/timber over a
         millennium - open pine + grass + erosion; the protected grove is the green EXCEPTION; the back slope
-        also carried the graves + dry hill-crops): research/vegetation.html 'Groves around a southern Chinese village' / 'Why is the hillside past the grove open scrub rather than more forest?'. Recorded
+        also carried the graves + dry hill-crops): research/vegetation.html 'Groves around a southern Chinese village' / 'Grass hills and fodder meadows (kusayama, magusaba)'. Recorded
         in M['commons']. `role` picks the glyph (woodland / pasture / commons); `avoid` is a list of KEEP-OUT
         polygons (e.g. the hamlet cluster) the scatter stays out of, so ground-cover never creeps onto them."""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
@@ -635,7 +635,7 @@ class GroundCoverMixin:
         (the toe side) AND orients the marsh itself: the toe is a CONTOUR BAND perpendicular to the fall, so it
         rotates with the map like every other feature (see the comment at the marsh block); the scrub ring is
         radial. A comb-FAN field leaves the opposite bbox corner open -> the gen fills it (scrub +
-        woodland patches). See research/vegetation.html 'Why is the hillside past the grove open scrub rather than more forest?'."""
+        woodland patches). See research/rendering/vegetation.html 'How our maps draw the open hills past the grove'."""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys
