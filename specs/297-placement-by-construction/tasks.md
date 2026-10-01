@@ -76,5 +76,6 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
 - [x] T18 `dev/performance.md`: the section FR-008 owes (every stage over half a second and the page write) and the doctrine of the region
       research: rendering
       verify: DONE. dev/performance.md: 'Placement by construction, and what it bought' - the measurement, the lessons, what is left per stage over half a second and the page
-- [ ] T19 The `297-end` bookend and `make perf-report AGAINST=297-start` with whatever its band owes; settlement-reviews of the moved pool maps; the gate; land
+- [x] T19 The `297-end` bookend and `make perf-report AGAINST=297-start` with whatever its band owes; settlement-reviews of the moved pool maps; the gate; land
       research: rendering
+      verify: DONE. 297-end bookend band 0 vs 297-start (total -13.7%); settlement-reviews not per-map (GM 2026-08-29); gate green on the final engine; amendment FAITHFUL round 9
