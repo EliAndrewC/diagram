@@ -353,11 +353,11 @@
   },
   "after-inashiro-regen-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py regen-after",
-    "load": "1.4 -> 1.5",
+    "load": "1.7 -> 2.2",
     "quantity": "`make map` of inashiro uncached (svg, png, page), the fastest of three, as REGENERATED reports it",
     "source": "/diagram/.clones/diagram-performance",
     "unit": "s",
-    "value": 5.8,
+    "value": 5.9,
     "varies": true
   },
   "after-inashiro-roll-s": {
@@ -5742,11 +5742,11 @@
   },
   "before-inashiro-regen-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py regen-before",
-    "load": "1.0 -> 1.4",
+    "load": "0.8 -> 1.7",
     "quantity": "`make map` of inashiro uncached (svg, png, page), the fastest of three, as REGENERATED reports it",
     "source": "/tmp/base297",
     "unit": "s",
-    "value": 6.1,
+    "value": 6.5,
     "varies": true
   },
   "before-inashiro-roll-s": {

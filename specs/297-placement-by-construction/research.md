@@ -171,7 +171,7 @@ from running there (R11), both kept.
 Each pool map's houses, field acreage, lanes (count and length), wells, grove crowns and marshes are the same as the base's on all
 five maps (method: the manifests of `/tmp/base297` HEAD against the clone's regenerated pool). What moved is the threshing yards'
 mats (the fill) and the scatter's marks (the marsh's array throws and the regions' margins). `make cohort N=24`: 30/30 passed the
-whole gate, as the base's (`cohort-base.log`).
+whole gate, as the base's (`cohort-base.log`) - and again on the final engine after B3's grove (`cohort-after.log`).
 
 ## R14. Plan D2-D4 built as specified, and measured (observed 2026-10-01, method: scratch harnesses run as test nodes over the five pool maps and cohort seeds 1-24, `build` through `stage_web`, the same session and load 1.4-2.1)
 

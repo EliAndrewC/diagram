@@ -911,7 +911,7 @@ as region-then-fill, the lane law kept per lane - and measured each by the WALL 
 
 **What it bought, base and clone back to back** (`specs/297-placement-by-construction/measure.py after`, loads 2.1 -> 2.7 and
 2.7 -> 3.7): Inashiro's stages 4.32 -> 3.81 s (1.14x); the pool's five rolls 24.5 -> 22.3 s (1.10x); every pool map's stages
-1.05-1.35x; `make map` of Inashiro 6.1 -> 5.8 s; its page write 1.65 -> 1.46 s; the reference bookend 16.1 -> 15.4 s (band 0).
+1.05-1.35x; `make map` of Inashiro 6.5 -> 5.9 s; its page write 1.65 -> 1.46 s; the reference bookend 16.1 -> 13.9 s (band 0).
 Per stage on Inashiro: the web 0.77 -> 0.39 (the keeper and the `settle_dangling` fix), the homesteads 0.95 -> 0.88, the
 hinterland 0.91 -> 0.82, the field 1.10 -> 1.08. Every pool map keeps its houses, acreage, lanes and wells; its groves are about 6%
 thinner (the regions' margins, R16); the cohort is 30/30, as the base's. The session had expected "well under half"; it was a

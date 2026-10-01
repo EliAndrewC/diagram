@@ -66,13 +66,13 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
       research: rendering
 - [x] T16 The moved pool regenerated and gated with T12-T15 in, every failure fixed; `make cohort N=24` against the base; each moved map's houses, paddies and ways before and after recorded in research (SC-009)
       research: rendering
-      verify: DONE. make cohort N=24: 30/30 as the base's; make done green; R13/R16 record the moved maps
+      verify: DONE. make cohort N=24: 30/30 as the base's, re-run on the final engine (cohort-after.log); make done green; R13/R16 record the moved maps
 
 ## Measurement and record (F)
 
 - [x] T17 `measure.py after` and `regen-after`, the page marks for SC-006, every SC judged in the spec (an amendment for any withdrawn lever)
       research: rendering
-      verify: DONE. measure.py after on the final engine: Inashiro stages 4.323 -> 3.806 s, pool 24.5 -> 22.3 s; page write 1.648 -> 1.462 s; every SC judged in Amendment 1
+      verify: DONE. measure.py after on the final engine: Inashiro stages 4.323 -> 3.806 s, pool 24.5 -> 22.3 s; page write 1.648 -> 1.462 s; make map 6.5 -> 5.9 s (regen, final engine); every SC judged in Amendment 1
 - [x] T18 `dev/performance.md`: the section FR-008 owes (every stage over half a second and the page write) and the doctrine of the region
       research: rendering
       verify: DONE. dev/performance.md: 'Placement by construction, and what it bought' - the measurement, the lessons, what is left per stage over half a second and the page

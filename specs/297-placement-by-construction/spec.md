@@ -215,8 +215,8 @@ the accepted spec, each with its evidence:
   cost made Sawada's field slower; the single-ring hem is the scalar walk again.
 - **What the measurements say of each success criterion** (`measure.py after` on the final engine, base `c5a631f9b` and the clone
   back to back; `m:` keys in `measurements.json`):
-  - SC-001: Inashiro's stages 4.323 -> 3.806 s, 1.14x - MISSED (the floor was half); `make map` 6.1 -> 5.8 s (`m:before-inashiro-regen-s`,
-    `m:after-inashiro-regen-s`) - met, within its noise. The pool 24.5 -> 22.3 s, 1.10x.
+  - SC-001: Inashiro's stages 4.323 -> 3.806 s, 1.14x - MISSED (the floor was half); `make map` 6.5 -> 5.9 s on the final engine (`m:before-inashiro-regen-s`,
+    `m:after-inashiro-regen-s`, back to back) - met. The pool 24.5 -> 22.3 s, 1.10x.
   - SC-002: the seats bucket's calls ROSE, 2,640,745 -> 3,525,463 (the region's own painting and labeling are calls); the layouts
     built 2,716 -> 1,479 (1.84x); the homesteads stage 0.946 -> 0.882 s (1.07x) - MISSED (3x, 3x, 2x).
   - SC-003: the mats' calls 477,299 -> 215,696 (2.2x) - MISSED (3x); every mat rule holds (`test_every_pool_yard_lays_lawful_mats`).
@@ -230,7 +230,7 @@ the accepted spec, each with its evidence:
     plot's corners asked at once) - met; every bund held off the drain (the gate).
   - SC-008: `dev/performance.md`, "Placement by construction, and what it bought" - met.
   - SC-009: the gate green at 100%; every pool map regenerates with the same houses, acreage, lanes and wells (R13), its groves
-    about 6% thinner (1,986 -> 1,869 crowns over the three maps that draw them, R16); `make cohort N=24` 30/30 as the base's - met.
+    about 6% thinner (1,986 -> 1,869 crowns over the three maps that draw them, R16); `make cohort N=24` 30/30 on the final engine (`cohort-after.log`), as the base's - met.
   - SC-010: the hinterland's `PointGrid.near` 102,164 -> 43,856 (2.3x) - MISSED (3x).
   The floors were set with no projection behind them (the spec says so); what each lever reaches is measured above, and what
   is left of each stage is in `dev/performance.md`. SC-002's seats bucket went the WRONG way (2,640,745 -> 3,525,463 calls: the
