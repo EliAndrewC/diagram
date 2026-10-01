@@ -58,4 +58,27 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
 - [ ] T23 ways, as T22. research: rendering
 - [ ] T24 homesteads (beyond the three pilot topics), as T22. research: rendering
 - [ ] T25 The record as a whole: a test that no section keeps a `Sources:` roster and every section's sources are its footnotes' (the sweep's completion, held); `make translation-owed` empty; `make done`; 291 landed, main merged, the feature landed (D10). research: rendering
+  - [x] the three clones merged into this one and main merged (features 287 and 291 landed): 239 sections, every one carrying the sweep's mark; interactive tests 1555 passed (2026-10-01)
+- [ ] T26 The closing pass: what the sweep's checks left (the 26 items "for the GM" put to `escalation-check` on 2026-10-01 - 1 kept and answered, 24 cut as the session's own; the open-questions file that carried them is deleted, its content here and in request.md). research: rendering
+  - [ ] the GM's answer to the one kept question (request.md, 2026-10-01: "(b) the earlier ruling was never intended to be a deviation from historical norms"): a senior samurai house inside a provincial city's wall is enclosed by rank, as `rendering/cities/government` 280 says; 030's "deliberate deviation" is dropped, and the capital-versus-provincial contrast in `rendering/cities/capitals` 390 is rewritten around what the record shows actually differed
+  - [ ] the ministry office's size at a capital against a provincial seat, as RESEARCH (the GM, 2026-10-01: "whatever our research shows should be the driving force ... the offices of the six ministries in Imperial China or differences between smaller and larger cities in Edo period Japan"); the "recorded feature 018 decision (GM 2026-08-09)" in `rendering/cities/government` 230 is corrected - it is feature 018's research note (`specs/018-capital-space-budget/research.md` line 62), not a ruling of the GM's; the drawn sizes (the capital's 224 x 148 ft, the provincial 114 x 78 to 140 x 95 ft, citybudget's "roughly 2x" comment) follow what the research finds, a judgment between the Japanese and the Chinese evidence labeled as one
+  - [ ] the `l7r-budgets` registry link stands (the GM's notes are canon and keep their registry link); the two PARTIAL quotes and the grounds note at cities/capitals 010 get their stored originals and a citation or an absence note
+  - [ ] BenchNoticeBoard relabeled guess, matching its rendering section
+  - [ ] the town-framing spec heading in presentation reads "for a provincial city" (presentation 010 already says a town map is as much about its surroundings)
+  - [ ] the Takayama survey's figure (site 9,807 m², total floor 3,018 m², about 31%, floor area not footprint) written in as a citation; the 37-42% built-cover guess revisited against it
+  - [ ] the byre's drawn share calibrated or labeled; the StorageShed modal narrowed to its sections and labeled as its rendering section is; the Privy and HenCoop modal fixes applied
+  - [ ] the Garden modal relabeled guess, matching its rewritten section
+  - [ ] the road at a compound gate is the road the compound stands on, at that road's width (ways 070); Ochiba's 13.3 ft approach checked against the Imperial road's 30 ft
+  - [ ] the paddy's shoot-scatter rule moved to the rendering section
+  - [ ] the dike band past the Echizen 18 ft bound brought under it or labeled a convention with its reason; the PerimeterDike modal's "6-10 m" (the pond dikes' figure) corrected
+  - [ ] the county-yamen encyclopedia and the fujita-2007 PDF on the GM's download list
+  - [ ] the small practice ground inside the wall (attested at Chongming) a knob
+  - [ ] the T-shaped town plan (ways 180) joins the town-plan knob in rendering/towns 230; the crank at a town's ends noted as future work
+  - [ ] the day-office and official-study bullet moved to the office-hall rendering section, the DayOffice and OfficialStudy modals following it
+  - [ ] the retitles the checks proposed made where the style guide calls for them, their links re-aimed
+  - [ ] the note gating a seventeenth-century date by period dropped (it is inside the record's pre-1868 window)
+  - [ ] the town's inn count reconciled (a calibration); a walled town's inn stands in its gate market (towns 080)
+  - [ ] the downstream intake side, attested only in modern practice, dropped under the GM's ruling of 2026-09-28
+  - [ ] the KarosHouse modal gives the guess for the hand-drawn house and "accurate" for the county-town bay
+  - [ ] the cross-topic moves the checks deferred to a later group (the yamen bullet and the rectangular-compound bullet to cities/government's compound topic; the granary siting-knob link; the caravan and post-station bullets to towns 340; the dispersed-farm bullet of the row-village rendering), each where the topic it belongs to now stands
 - [ ] T10 **Not to be confused with** (FR-016) - AFTER the sweep, when every section has its final title: the pairs as data (from `confusables.md`, two-way by construction), rendered at the top of each section by `make record`, a test that every pair resolves to a real section and every rendered list matches the data, and `record-style` checking a section that a reader could confuse with another has its list. research: rendering
