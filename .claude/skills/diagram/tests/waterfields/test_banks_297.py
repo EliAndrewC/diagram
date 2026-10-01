@@ -3,7 +3,7 @@
 import math
 import random
 
-from l7r.diagram.waterfields.banks import drain_bank_clearance, drain_bank_clearance_many, hem_to_bank, polyline_cum
+from l7r.diagram.waterfields.banks import drain_bank_clearance, drain_bank_clearance_many, hem_rings_to_bank, hem_to_bank, polyline_cum
 
 
 def test_the_array_verdict_is_the_scalar_verdict_per_vertex():
@@ -31,4 +31,6 @@ def test_the_hem_lifts_a_vertex_in_the_drain_and_keeps_the_rest():
     assert out[:2] == ring[:2]
     assert out[2][1] < 100.0 - 2.0 and out[3][1] < 100.0 - 2.0
     assert hem_to_bank([], drain, 90.0, 4.0, 4.0) == []
-    assert hem_to_bank(ring, [(0.0, 0.0)], 90.0, 4.0, 4.0) == ring
+    other = [(200.0, 40.0), (260.0, 40.0), (260.0, 104.0)]
+    assert hem_rings_to_bank([ring, other], drain, 90.0, 4.0, 4.0) == [out, hem_to_bank(other, drain, 90.0, 4.0, 4.0)], "every ring at once, as one at a time"
+    assert hem_rings_to_bank([ring], [(0.0, 0.0)], 90.0, 4.0, 4.0) == [ring] and hem_rings_to_bank([], drain, 90.0, 4.0, 4.0) == []

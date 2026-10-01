@@ -1,6 +1,7 @@
 """Layer-1 bank clearance: how plots hem to supply canals and delivery ditches (clearance, toe, overhang), plus channel-joint rounding."""
 
 import math
+from collections.abc import Sequence
 from typing import Any
 
 from .frame import BANK_MARGIN, Poly, Pt, _f_at_u, _Frame, _pip, _seg_d, _seg_x, taper_w
@@ -288,18 +289,40 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     thin-plot drop. The move is along the FALL, so a lifted vertex slides up its own column and the
     parcel keeps its shape."""
     dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
-    if not ring or len(dpts) < 2:
-        return list(ring)
-    # EVERY VERTEX AT ONCE (feature 297, FR-007 - the GM's "12,000 drain-bank clearance checks"): the predicate
-    # `drain_bank_clearance` asks per vertex, as one array computation over the ring's vertices and the collector's segments
-    gap, need, lean, past = drain_bank_clearance_many(ring, dpts, dv, w0, w1, polyline_cum(dpts))
+    cum = polyline_cum(dpts)
     out: Poly = []
-    for k, q in enumerate(ring):
-        if past[k] or gap[k] >= need[k] or lean[k] < 0.2:  # clear, off the collector's span, or a drain running WITH the fall
+    for q in ring:  # one ring: the scalar walk (a plot's few corners cost less than an array's fixed cost); many rings at once:
+        # `hem_rings_to_bank` (feature 297)
+        gap, need, lean, past = drain_bank_clearance(q, dpts, dv, w0, w1, cum)
+        if past or gap >= need or lean < 0.2:  # clear, off the collector's span, or a drain running WITH the fall
             out.append(q)
             continue
-        shift = (need[k] - gap[k]) / lean[k]
+        shift = (need - gap) / lean
         out.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))
+    return out
+
+
+def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: float, w1: float) -> list[Poly]:
+    """`hem_to_bank` for every ring at once (feature 297, FR-007): every vertex of every ring asked of the collector in ONE array
+    computation - a comb's plots are a few corners each, and asked a ring at a time the array's fixed cost outweighed the
+    loop it replaced (Sawada's field, 1.2 s -> 2.1 s). Each ring comes back as `hem_to_bank` would return it."""
+    flat = [q for ring in rings for q in ring]
+    if not flat or len(dpts) < 2:
+        return [list(r) for r in rings]
+    dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
+    gap, need, lean, past = drain_bank_clearance_many(flat, dpts, dv, w0, w1, polyline_cum(dpts))
+    out: list[Poly] = []
+    k = 0
+    for ring in rings:
+        moved: Poly = []
+        for q in ring:
+            if past[k] or gap[k] >= need[k] or lean[k] < 0.2:
+                moved.append(q)
+            else:
+                shift = (need[k] - gap[k]) / lean[k]
+                moved.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))
+            k += 1
+        out.append(moved)
     return out
 
 

@@ -10,7 +10,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.geometry import Polygon
     from shapely.ops import unary_union
 
-from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
+from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_rings_to_bank, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
 from .carve import _carve
 from .frame import (
     CANAL_A_FT,
@@ -449,8 +449,8 @@ def _comb_toe_and_hem(plots: list[dict[str, Any]], dpts: Poly, down_deg: float, 
     # opening a sector whose boundary has already collapsed onto the drain, which is a change to the
     # carve's sector geometry and not to this rule - so until that is done, the corner is held to
     # the invariant here rather than left standing in the water.
-    for pl in plots:
-        pl["poly"] = hem_to_bank(pl["poly"], dpts, down_deg, chan_px(DRAIN_FT[0], grain), chan_px(DRAIN_FT[1], grain))
+    for pl, ring in zip(plots, hem_rings_to_bank([pl["poly"] for pl in plots], dpts, down_deg, chan_px(DRAIN_FT[0], grain), chan_px(DRAIN_FT[1], grain)), strict=True):
+        pl["poly"] = ring  # every plot's corners asked of the drain at once (feature 297, `hem_rings_to_bank`)
     # THREE WAYS TO BE UNBUNDABLE, and they are genuinely independent measurements - each constant's
     # own comment in `banks.py` says what it is answering. Thinness catches the sliver too narrow to
     # hold water anywhere; the apex catches the long wedge that is workable through its middle and a
