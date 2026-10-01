@@ -8735,7 +8735,8 @@
  "Diospyros kaki": {
   "def": "The scientific (Latin) name of the Japanese persimmon, called kaki in Japanese: the tree this entry is about.",
   "variants": [
-   "Diospyros kaki"
+   "Diospyros kaki",
+   "kaki"
   ]
  },
  "take-well": {
@@ -15001,6 +15002,12 @@
   "def": "A reign era of China's Song dynasty, which named its years by count; Shaoxing 19 is 1149, the year Chen Fu finished his farm manual.",
   "variants": [
    "shaoxing"
+  ]
+ },
+ "Youyang Zazu": {
+  "def": "A ninth-century Chinese book of miscellaneous notes from the Tang dynasty. It records the common saying that the persimmon has seven virtues.",
+  "variants": [
+   "Youyang Zazu"
   ]
  }
 }
