@@ -840,6 +840,8 @@ festival host house	festival lodging
 festival lodging	festival lodging
 festival's host house	festival lodging
 fetch	fetch
+fief	fief
+fiefs	fief
 field boat	field boat
 field boats	field boat
 field channel	field channel
@@ -2675,6 +2677,8 @@ root-cut	root-cut
 root-cutting	root-cut
 roson	roson
 rotation period	rotation period
+row-house	row house
+row-houses	row house
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 ruiju sandai kyaku	Ruiju Sandai Kyaku
@@ -2877,6 +2881,7 @@ shima	Shima
 shimazu	Shimazu
 shimenawa	shimenawa
 shimo-yashiki	lower mansion
+shimoyashiki	lower mansion
 shin sect	Jodo Shinshu
 shinai	shinai
 shinano	Shinano
