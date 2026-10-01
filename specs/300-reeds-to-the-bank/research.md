@@ -6,3 +6,7 @@ The marsh files the watercourses in its keep-out grid at slot 3 with the query's
 the reed tile's bare ground is the drawn half-width plus 9 ft each side - the thrown tuft's reach, kept so no blade crossed the
 water. Feature 298 carried the slot into the tile's bare ground unchanged. The bank band's target is about 6 ft each side (the
 session's proposal); the as-built figure and the outline decision are recorded here once calibrated.
+
+As built (observed 2026-10-01, method: `make map` of Inashiro, its PNG read at full size): the bank band 6 ft each side of the
+drawn water, reeds at three times the marsh's density in a darker green; the stream reads clearly through the toe marsh with
+it - a light line framed by darker reeds - so the conditional outline (FR-003) is not added.

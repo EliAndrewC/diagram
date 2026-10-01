@@ -45,8 +45,9 @@ added to the water only if the stream is still lost after that.
 ### Functional Requirements
 
 - **FR-001**: The marsh's reed tile MUST be kept off a watercourse only at its drawn width - no extra margin (research R1).
-- **FR-002**: Within a marsh, a band along each watercourse's bank MUST be drawn with a bank reed tile - denser and darker reeds
-  than the marsh's own - in the marsh's class; the band's width is calibrated by eye (target and as-built in research R1).
+- **FR-002**: Within a marsh, a narrow band along each watercourse's bank (the proposal's target width and the as-built one in research R1) MUST be drawn
+  with a bank reed tile of denser, slightly darker reeds than the marsh's own, in the marsh's class; the as-built width is
+  calibrated by eye and recorded in R1.
 - **FR-003**: If the stream is not clearly legible with FR-002 alone (judged by eye on Inashiro and recorded in research R1), the
   watercourse MUST be given a thin dark outline where it crosses a marsh.
 - **FR-004**: The scrub, the pond's embankment and every other cover MUST be unchanged.
@@ -68,3 +69,6 @@ added to the water only if the stream is still lost after that.
 | A denser bank band of reeds | map drawing convention | frames the stream where the bare strip did | `land/tiles.py`, `settlement/finish.py` |
 
 ## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - FR-002 dropped the approved "narrow", the target width and "slightly
+  darker". Addressed.
