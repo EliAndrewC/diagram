@@ -3597,7 +3597,6 @@ weathering	weathering
 weblio	weblio
 wei-tian	weitian
 weilongwu	weilongwu
-weineihe	weineihe
 weir	weir
 weirs	weir
 weitian	weitian

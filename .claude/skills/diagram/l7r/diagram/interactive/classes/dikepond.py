@@ -284,15 +284,15 @@ class SluiceGate(Kind):
     wooden boards to set the level - opened in drought to draw the river in, shut in flood to keep it out - and it is why the dike can be complete and the block still fed and
     drained.
 
-    Note: The board form is read only from a modern FAO pond-construction manual, which puts its sluice through a single pond's dike rather than the polder's, and its opening in drought and shutting in flood from a Chinese account of the Jiangnan polders; the dou is read as the polder's own sluice - the Minle dou of the Sangyuan polder is an old sluice gate, its name carved above its opening in 1878; the inlet-high, outfall-low placement comes from Ruddle & Zhong (1988), which has no readable copy and is not read, and no premodern source was found for it; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
+    Note: The board form is read only from a modern FAO pond-construction manual, which puts its sluice through a single pond's dike rather than the polder's, and its opening in drought and shutting in flood from a Chinese account of the Jiangnan polders; the dou is read as the polder's own sluice - the Minle dou of the Sangyuan polder is an old sluice gate, its name carved above its opening in 1878; the inlet-high, outfall-low placement is read from an account of the Japanese ring-diked polders, which sets the intake at the ring's upstream head and the outlet at its downstream tail; a large polder had many such openings, drains outnumbering intakes, and drawing a village polder with only two is a guess; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
     Caveat: the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
 
     Name: sluice gate
     Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
     Label: accurate
-    Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo
-    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw a polder and its water'
+    Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo, ishizue-waju, wajyu-nogyo
+    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)'
     """
 
     key = 'sluice gate'
@@ -309,7 +309,7 @@ class PerimeterDike(Kind):
     heaped and packed, breached and repaired for centuries, so it reads as a mottled vegetated band of
     varying width rather than a ruled line; the dead-straight rectangle is a post-1949 industrial shape.
 
-    Note: Full enclosure, the organic outline and the planting are read, though that any gap re-floods the block is this project's reasoning from the general polder; the drawn width band (14-40 ft) is a
+    Note: Full enclosure, the organic outline and the planting are read, though that any gap re-floods the block is this project's reasoning from the general polder; the inlet high and outfall low are read, but a large polder had many openings, drains outnumbering intakes, and drawing a village polder with just two is a calibrated liberty and a guess; the drawn width band (14-40 ft) is a
     drawing calibration inside the attested 6-10 m dike widths.
 
     Caveat: the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.
@@ -317,8 +317,8 @@ class PerimeterDike(Kind):
     Name: perimeter dike
     Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
     Label: accurate
-    Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Why dikes were planted'; research/rendering/archetypes.html - 'How our maps draw a polder and its water'
+    Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988, ishizue-waju, wajyu-nogyo
+    Entry: research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Why dikes were planted'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)'
     """
 
     key = 'perimeter dike'

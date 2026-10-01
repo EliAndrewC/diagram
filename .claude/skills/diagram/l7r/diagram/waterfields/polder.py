@@ -64,7 +64,7 @@ def build_polder(
       `gap` default (1.5, 4.0): between-row gaps 3 px (~1 m walking bund, attested 20-50 cm + stroke) and
       8 px column corridors carrying the 3.2 px lateral (a bang 浜 field ditch + spoil banks, ~2.4 m).
       A GAP IS ONLY AS WIDE AS WHAT RUNS IN IT (`split_gap`, GM 2026-07-24; research/archetypes.html "What lies
-      between two parcels, and how wide is it?"; `mosaic` at research/rendering/archetypes.html "How our maps draw a polder and its water", and
+      between two parcels, and how wide is it?"; `mosaic` at research/rendering/archetypes.html "How our maps draw polders (weitian, waju)", and
       `line_wander` at research/rendering/fields.html "How our maps draw bunds between the paddies (aze)"):
       `gap[1]` is the width of a
       DITCH corridor, so it belongs only on the module column lines, where a lateral actually runs. The
