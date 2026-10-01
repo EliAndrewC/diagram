@@ -240,17 +240,17 @@ wording where it says the same.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: A shared engine change that moves all five hamlets' manifests with no occasion owes zero review runs (today: five
+- **SC-001** (FR-005): A shared engine change that moves all five hamlets' manifests with no occasion owes zero review runs (today: five
   per round).
-- **SC-002**: A feature that adds one glyph owes exactly the checks whose occasion that is, on one map, once; the same for a
+- **SC-002** (FR-006, FR-007): A feature that adds one glyph owes exactly the checks whose occasion that is, on one map, once; the same for a
   redraw, for a substantial re-placement (the tannery case, seeded), and for a new element that reuses an existing glyph
   (seeded).
-- **SC-003**: Every FR-003 class has a red-then-green test; no review asks for any of them.
-- **SC-004**: Every check in the three agent files has an audit verdict; the settlement-review contract is at most half its
+- **SC-003** (FR-003, FR-004): Every FR-003 class, and FR-004's count check, has a red-then-green test; no review asks for any of them.
+- **SC-004** (FR-001, FR-002, FR-008, FR-011, FR-012): Every check in the three agent files has an audit verdict; the settlement-review contract is at most half its
   current 49,960 characters (observed 2026-10-01; method: `wc -c` on the agent file) (a target; a larger residue is accepted if every remaining item is whole-map judgment).
-- **SC-005**: A dispatch that would have returned NOT-REVIEWABLE is refused before launch on the recorded 280 and 293 cases
+- **SC-005** (FR-009): A dispatch that would have returned NOT-REVIEWABLE is refused before launch on the recorded 280 and 293 cases
   replayed.
-- **SC-006**: The ledger report reproduces R0 within the hand census's error and adds cost per feature and per check.
+- **SC-006** (FR-010, FR-013): The ledger report reproduces R0 within the hand census's error and adds cost per feature and per check.
 
 ## Decisions Recorded
 

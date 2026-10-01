@@ -274,6 +274,6 @@ and `make review-census` totals it with the measured table's rows. Settlement-re
 
 Against R0 (the hand census): the COUNTS are higher because the data takes a cell's stated totals ("8 errors, 6 questions") as
 that many findings where R0 deduplicated by hand - 535 findings against ~360, 312 runs against ~260. The SHARES agree within
-R0's own error: geometric 50% (R0 44%), judgment 14% (R0 19%), paperwork 33% (R0 31%), nothing 3% (R0 6%); NOT-REVIEWABLE runs
+R0's own error (observed 2026-10-01; method: `make review-census` over the ledger and `docs/review-ledger-r0.json`): geometric 50% (R0 44%), judgment 14% (R0 19%), paperwork 33% (R0 31%), nothing 3% (R0 6%); NOT-REVIEWABLE runs
 40 against ~36. SC-006 is read on the shares, which is what R0 was used for (the judgment-vs-geometric argument), and the counts
 are the script's from here on.
