@@ -4167,9 +4167,10 @@
   ]
  },
  "yagura": {
-  "def": "A tower or turret - on a castle wall, or a town's lookout for fires.",
+  "def": "A tower or turret - on a castle wall, or a town's lookout for fires; over a playhouse's entrance, the tower only a licensed playhouse was permitted to raise.",
   "variants": [
-   "yagura"
+   "yagura",
+   "raising the tower"
   ]
  },
  "yaita": {
@@ -13695,6 +13696,34 @@
   "def": "The graded penalties of Chinese law, among them beating with a light bamboo cane and beating with a large stick.",
   "variants": [
    "five punishments"
+  ]
+ },
+ "Pacification Commission": {
+  "def": "A Song-dynasty government office; in Hangzhou it ran a bureau that sold prepared medicine.",
+  "variants": [
+   "Pacification Commission",
+   "pacification commissioner",
+   "pacification commissioners"
+  ]
+ },
+ "purple robe": {
+  "def": "A purple monk's robe granted by the Chinese court as an honor to a Buddhist monk of special merit.",
+  "variants": [
+   "purple robe"
+  ]
+ },
+ "Yojosho": {
+  "def": "The shogunate's free infirmary in Edo, opened in 1722 inside the Koishikawa herb garden: a longhouse with beds for forty sick poor.",
+  "variants": [
+   "Yojosho",
+   "Koishikawa Yojosho"
+  ]
+ },
+ "Chunyou": {
+  "def": "A Southern Song reign era, 1241-1252, under which Hangzhou's famous shops were remembered.",
+  "variants": [
+   "Chunyou",
+   "Chunyou era"
   ]
  }
 }

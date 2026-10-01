@@ -396,6 +396,8 @@ chugen	chugen
 chugoku	Chugoku
 chuma	chuma
 chumon-zukuri	chumon-zukuri
+chunyou	Chunyou
+chunyou era	Chunyou
 chō	cho
 chōtsuke	chōtsuke
 chōzuya	temizuya
@@ -1750,6 +1752,7 @@ kofun	Kofun period
 kofun period	Kofun period
 koguchi	koguchi
 koike	koike
+koishikawa yojosho	Yojosho
 koji	koji
 kojiki	Kojiki
 koke	koke
@@ -2361,6 +2364,9 @@ ox-shoeing frame	ox-shoeing frame
 ox-shoeing frames	ox-shoeing frame
 oyaike	oyaike
 pacific high	Pacific High
+pacification commission	Pacification Commission
+pacification commissioner	Pacification Commission
+pacification commissioners	Pacification Commission
 paddock	paddock
 paddocks	paddock
 paddy seams	seam
@@ -2492,6 +2498,7 @@ puddled	puddling
 puddling	puddling
 purlin	purlin
 purlins	purlin
+purple robe	purple robe
 purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
 qi	qi
@@ -2514,6 +2521,7 @@ quercus acutissima	kunugi
 quercus serrata	konara
 raft-mat	raft-mat
 raft-mats	raft-mat
+raising the tower	yagura
 raku	raku
 rakuchu rakugai	Rakuchu rakugai
 rakuchu rakugai screens	Rakuchu rakugai
@@ -3647,6 +3655,7 @@ yicheng	yicheng
 yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
+yojosho	Yojosho
 yokocho	yokocho
 yokogi	yokogi
 yokogi-uchi	yokogi
