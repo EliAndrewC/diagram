@@ -106,8 +106,8 @@ def _extend(pts: list[Pt], by: float) -> list[Pt]:
 class Sectors:
     """The fan's sectors - the ground between adjacent threads - as the partition cuts them (see the module docstring)."""
 
-    def __init__(self, F: _Frame, threads: list[_Thread], dpts: Poly, bank: Any, region: Any, R: random.Random, RW: random.Random, plot_across: float, row_step: tuple[float, float], g: float) -> None:
-        self.F, self.threads, self.dpts, self.bank, self.region = F, threads, dpts, bank, region
+    def __init__(self, F: _Frame, threads: list[_Thread], region: Any, R: random.Random, RW: random.Random, plot_across: float, row_step: tuple[float, float], g: float) -> None:
+        self.F, self.threads, self.region = F, threads, region
         self.R, self.RW, self.plot_across, self.row_step, self.g = R, RW, plot_across, row_step, g
         minx, miny, maxx, maxy = region.bounds
         self.f_bottom = max(F.to_uf(x, y)[1] for x, y in ((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy))) + 20
@@ -120,7 +120,7 @@ class Sectors:
         end = T.pts[-1]
         f_end = self.F.to_uf(*end)[1]
         if fv <= f_end:
-            return _bnd(T, fv, self.F, self.dpts, self.bank)
+            return _bnd(T, fv, self.F)
         return (end[0] + self.F.d[0] * (fv - f_end), end[1] + self.F.d[1] * (fv - f_end))
 
     def thread_lines(self) -> list[Any]:

@@ -28,7 +28,7 @@ def _thread(x: float, y0: float, y1: float) -> _Thread:
 
 
 def _sectors(region: Any, threads: list[_Thread], across: float = 48.0) -> pt.Sectors:
-    return pt.Sectors(_Frame(90.0), threads, [(0.0, 520.0), (700.0, 520.0)], lambda _u: 2.0, region, random.Random(1), random.Random(2), across, (26.0, 36.0), 1.0)
+    return pt.Sectors(_Frame(90.0), threads, region, random.Random(1), random.Random(2), across, (26.0, 36.0), 1.0)
 
 
 def _tiles(region: Any, cells: list[Any]) -> None:

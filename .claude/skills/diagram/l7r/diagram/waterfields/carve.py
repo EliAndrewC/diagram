@@ -16,23 +16,14 @@ from .frame import CANAL_BERM_FT, Poly, Pt, _at_f, _Frame, _miter_normals, _pip,
 from .furrows import TRACT_PLOT_TURN_RAD, tract_ways
 from .palette import DRY_CROPS
 
-_BankAt = Callable[[float], float]  # a collector's bank set-back at contour position u (`frame._drain_bank`)
 
-
-def _bnd(t: _Thread, f: float, F: _Frame, dpts: Poly, bank_at: _BankAt) -> Pt:
-    """Where thread `t` runs at fall `f`: its parent's path above its takeoff, its own course, and past its end the collector's
-    BANK (the sector a partition's lattice is drawn between, `partition.Sectors.bound`)."""
+def _bnd(t: _Thread, f: float, F: _Frame) -> Pt:
+    """Where thread `t` runs at fall `f`, down to its own end: its parent's path above its takeoff, else its own course (the
+    sector a partition's lattice is drawn between). Past its end the partition runs the bound straight down the fall itself
+    (`partition.Sectors.bound`); the carve's bound along the collector's bank went with the carve (feature 302)."""
     if f < t.f0 and t.fallback is not None:
         fb = t.fallback
         return _at_f(F, fb if isinstance(fb, list) else fb.pts, f)
-    if f > F.to_uf(*t.pts[-1])[1]:
-        # past its own end a boundary follows the COLLECTOR - and it follows the collector's
-        # BANK, not its centerline. Without the offset the fan's side corner is planted exactly
-        # on the drain head (Hoshizora's west fan did, by 1.6px) and the sector's outermost bund
-        # is drawn inside the ditch it is supposed to stop at.
-        pd = _at_f(F, dpts, f)
-        ud, fdp = F.to_uf(*pd)
-        return F.to_xy(ud, fdp - bank_at(ud))
     return _at_f(F, t.pts, f)
 
 

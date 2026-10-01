@@ -180,14 +180,14 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
     low ground and its tint, measure the acreage, lay the dry plots and the bund beans, and assemble the net. Consumes the
     carve's own random generator from where the carve left it - each build seeds its own `R`, so a carve kept during a search
     and finished later sees the state an inline finish would have seen."""
-    R, F, channels, envelope, a_pts, dpts, drain_bank, grain = c.R, c.F, c.channels, c.envelope, c.a_pts, c.dpts, c.drain_bank, c.grain
+    R, F, channels, envelope, a_pts, dpts, grain = c.R, c.F, c.channels, c.envelope, c.a_pts, c.dpts, c.grain
     W, H, down_deg, plot_across, row_step, fork, bc, threads, brook = c.W, c.H, c.down_deg, c.plot_across, c.row_step, c.fork, c.bc, c.threads, c.brook
     dry_keepout, dry_band, bean_frac, furrow_spread, grain_drift = c.dry_keepout, c.dry_band, c.bean_frac, c.furrow_spread, c.grain_drift
     # THE PLOTS BY CONSTRUCTION (feature 302). The region is cut by every bund at once (`partition.cut`), so the plots tile it
     # with every bund SHARED as laid - what `close_seams` used to reach by finding each scrap the carve left and planting or
     # absorbing it: a real cascade fan wasted nothing, its fork wedges terraced into small IRREGULAR paddies and the odd
     # unplantable scrap taken into the basin beside it (`settle`: split, merged, or left bare - research/fields, the fabric).
-    sectors = Sectors(F, threads, dpts, drain_bank, c.region, R, random.Random(c.seed ^ 0x12005), plot_across, row_step, grain)
+    sectors = Sectors(F, threads, c.region, R, random.Random(c.seed ^ 0x12005), plot_across, row_step, grain)
     cell = cell_area(plot_across, row_step)
     ctx = fan_context(channels if c.supply_banks else [ch for ch in channels if ch.get("role") == "drain"], grain, cell)
     cells, _scraps = settle_cells(cut(sectors), ctx, plot_across, cell)

@@ -52,6 +52,7 @@ def test_parts_drops_invalid_rings():
 
 def test_ring_drops_vertices_that_rounding_collapses():
     assert _ring(Polygon([(0, 0), (0.02, 0.01), (10, 0), (10, 10), (0, 10)])) == [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    assert _ring(Polygon([(0, 0), (10, 0), (10, 10), (0, 10), (0.02, 0.01)])) == [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)], "a last point rounded onto the first"
 
 
 def test_a_truncated_wedge_is_seen_as_tapering_to_a_point():
