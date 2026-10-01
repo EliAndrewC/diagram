@@ -11,6 +11,7 @@ and the tier experiment; then the landing.
 This feature's own delta, declared under the rules it builds (plan D10). Lines are added as the rules land.
 
 - none: B1 - the polder feed's channel record traces its drawn stub (settlement/fields/comb.py); nothing drawn moves, every element placed under rules already judged
+- none: B10 - the nucleated placer refuses a layout whose lot found no seat for a part (settlement/rolling/fit.py), the rule `_bundle_side_fits` already held; households re-seat under rules already judged, and a fixture kind new to a map is detected and owes its glyph check
 
 ## Setup
 

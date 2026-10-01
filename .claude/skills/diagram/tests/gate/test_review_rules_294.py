@@ -193,6 +193,38 @@ def test_a_record_off_its_ink_fires() -> None:
     assert record_off_ink(M2) == ["a house at (45, 25) stands on a marsh"]
 
 
+# ---- B10: what was rolled is drawn ----------------------------------------------------------------------
+
+
+def undrawn_rolls(M: Mapping[str, Any]) -> list[str]:
+    """Each roll the map declares and does not draw (the GM, 2026-08-24: a rolled knob is honored by what is drawn): a
+    fixture kind short of its target or below its floor, the byres and retirement houses short of theirs, the settlement
+    form drawn other than the one asked."""
+    meta = M.get("meta") or {}
+    drawn: dict[str, int] = {}
+    for f in M.get("farm_fixtures") or []:
+        drawn[f["kind"]] = drawn.get(f["kind"], 0) + 1
+    drawn["persimmon"] = len(M.get("persimmons") or [])
+    out = [f"{k}: {drawn.get(k, 0)} drawn of {n} rolled" for k, n in (meta.get("farm_fixtures_target") or {}).items() if drawn.get(k, 0) != n]
+    out += [f"{k}: {drawn.get(k, 0)} drawn under its floor {n}" for k, n in (meta.get("farm_fixtures_min") or {}).items() if drawn.get(k, 0) < n]
+    for key, rolled in (("byres", "byre_target"), ("retirement_houses", "retirement_target")):
+        if meta.get(rolled) is not None and len(M.get(key) or []) != int(meta[rolled]):
+            out.append(f"{key}: {len(M.get(key) or [])} drawn of {meta[rolled]} rolled")
+    if meta.get("settlement_form_asked") and meta.get("settlement_form") != meta["settlement_form_asked"]:
+        out.append(f"the settlement drawn {meta.get('settlement_form')}, asked {meta['settlement_form_asked']}")
+    return out
+
+
+def test_a_roll_drawn_short_fires() -> None:
+    """Seeded: Kuwabata's recorded case - three households seated bare (privy 11 of 14, its household shrine 0 of 1)."""
+    M = {"meta": {"farm_fixtures_target": {"privy": 14, "shrine": 1}, "farm_fixtures_min": {"shrine": 1}}, "farm_fixtures": [{"kind": "privy"}] * 11}
+    assert undrawn_rolls(M) == ["privy: 11 drawn of 14 rolled", "shrine: 0 drawn of 1 rolled", "shrine: 0 drawn under its floor 1"]
+    assert undrawn_rolls({"meta": {"byre_target": 2, "settlement_form": "dispersed", "settlement_form_asked": "nucleated"}, "byres": [{}]}) == [
+        "byres: 1 drawn of 2 rolled",
+        "the settlement drawn dispersed, asked nucleated",
+    ]
+
+
 # ---- the shipped hamlets ----------------------------------------------------------------------------------
 
 
@@ -209,6 +241,7 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
         assert brook_pieces_in_view(stream, meta["view"]) <= 1, "B12: the brook leaves and re-enters the view"
     assert shed_faults(M) == [], "B3: wood shed seating"
     assert record_off_ink(M) == [], "B1: a record off its ink"
+    assert undrawn_rolls(M) == [], "B10: a roll drawn short"
     # B13: the lane law the placer guarantees, proved on what shipped
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"
