@@ -2970,6 +2970,8 @@ slope face	slope face
 slope faces	slope face
 slope-face	slope face
 sluice	sluice
+sluice share	sluice share
+sluice shares	sluice share
 sluices	sluice
 snow-viewing lantern	yukimi
 so village	so village

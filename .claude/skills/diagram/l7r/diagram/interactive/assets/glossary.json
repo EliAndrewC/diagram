@@ -13784,5 +13784,12 @@
   "variants": [
    "hantei"
   ]
+ },
+ "sluice share": {
+  "def": "On a Chinese irrigation canal, a field sluice together with its allotted turn at the canal's water: each one drew in its fixed order and at its set time, then was shut and the water handed on to the next sluice up the canal.",
+  "variants": [
+   "sluice share",
+   "sluice shares"
+  ]
  }
 }
