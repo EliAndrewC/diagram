@@ -127,7 +127,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
   is taken in a detached worktree (`git worktree add --detach /tmp/base HEAD`, never a stash) and
   each failure is checked against the clone, because a worktree carries no gitignored artifacts.
-  Pre-existing failures are ledgered, not fixed under someone else's feature. Three exits: fix it,
+  A pre-existing failure does not block a push, but one you find is fixed in the work at hand
+  (XIV; GM 2026-10-01: "We should definitely fix the pre-existing failure"). Three exits: fix it,
   revert it with a written impossibility investigation, or an explicit GM waiver; fixing is the
   expected one. A regressed state stays in the clone, unpushed.
 - Fix defects where you find them (constitution XIV), in the same work with the same verification.
