@@ -118,7 +118,7 @@ class Bund(Kind):
     Covers: the stroke of every paddy plot and the piled junctions between them
     Label: accurate
     Sources: kotobank-azebiki, hattori-site-yayoiken, kato-1999-ittanbu-kukaku, kotobank-aze-sekai-daihyakka, kigosai-azenuri, kubota-azenuri-kuwa, aze-standard
-    Entry: research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'The bund runs along the channel bank'
+    Entry: research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)'; research/rendering/water.html - 'How our maps draw where a field meets its ditch'
     """
 
     key = 'bund'

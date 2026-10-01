@@ -78,7 +78,7 @@ class IrrigationDitch(Kind):
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run', 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)'
+    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths', 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run', 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)', 'How our maps draw where a field meets its ditch'
     """
 
     key = "irrigation ditch"

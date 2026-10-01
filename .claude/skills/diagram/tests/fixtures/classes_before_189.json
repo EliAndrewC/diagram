@@ -88,7 +88,7 @@
   "bund": {
     "caveat": "",
     "covers": "the stroke of every paddy plot and the piled junctions between them",
-    "entry": "research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'The bund runs along the channel bank'",
+    "entry": "research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)'; research/rendering/water.html - 'How our maps draw where a field meets its ditch'",
     "key": "bund",
     "label": "accurate",
     "label_note": "Construction, width and the shared-wall finding are read; the drawn stroke is at true size.",
