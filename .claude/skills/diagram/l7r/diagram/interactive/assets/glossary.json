@@ -2927,7 +2927,6 @@
   "def": "The climbing kiln: a long chambered kiln built up a slope, firebox at the bottom and chimney at the top, stoked in shifts for days.",
   "variants": [
    "noborigama",
-   "anagama",
    "climbing kiln",
    "climbing kilns"
   ]
@@ -4319,6 +4318,7 @@
    "okajiba",
    "ōkaji",
    "okaji",
+   "ohkaji",
    "sageba"
   ]
  },
@@ -13611,6 +13611,41 @@
   "def": "A Chinese rosewood: a dense, hard, fragrant timber prized in China for fine furniture and tools.",
   "variants": [
    "huanghuali"
+  ]
+ },
+ "nitre bed": {
+  "def": "A heap of dung, earth, urine and wood ashes in which saltpeter, the chief ingredient of gunpowder, was made in pre-modern China and Europe.",
+  "variants": [
+   "nitre bed",
+   "nitre beds",
+   "niter bed",
+   "niter beds"
+  ]
+ },
+ "Iron Office": {
+  "def": "One of the government offices of the Han dynasty that ran the state's monopoly on iron, each at an ironworking place.",
+  "variants": [
+   "Iron Office",
+   "Iron Offices"
+  ]
+ },
+ "chao": {
+  "def": "Chinese for fining, the refining of cast iron into wrought iron by stirring it semi-molten under a blast of air - literally \"stir-frying.\"",
+  "variants": [
+   "chao"
+  ]
+ },
+ "material index": {
+  "def": "In Alfred Weber's location theory, a measure of which costs more to carry, a trade's raw materials or its finished goods: above one, the trade settles near its raw materials; below one, near its buyers.",
+  "variants": [
+   "material index",
+   "MI"
+  ]
+ },
+ "anagama": {
+  "def": "The older single-chamber tunnel kiln, sometimes dug into a bank of clay, fired round the clock for days and left as long again to cool; the climbing kiln's chain of chambers is a different build.",
+  "variants": [
+   "anagama"
   ]
  }
 }

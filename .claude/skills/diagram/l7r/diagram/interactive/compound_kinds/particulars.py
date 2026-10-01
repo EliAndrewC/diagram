@@ -414,7 +414,7 @@ class CharcoalBales(Kind):
     """
     What: Bales of charcoal stacked on Ubame's weighing floor, waiting to be weighed.
 
-    Why: Charcoal traveled in straw bales, woven into a cylinder like the rice bale, and a bale had no standard
+    Why: Charcoal traveled in straw bales, most woven into a cylinder like the rice bale (one great charcoal district shipped its charcoal in square ones), and a bale had no standard
     size before the modern period - not even for rice, whose bale held anything from 2 to 5 to by time and place.
     Charcoal was packed at a weight set by its grade: in one charcoal district, at a date its source does not give, 4 kan for the best and 8 or 10 for
     the lower grades. A bale of no standard size cannot be traded by count, which is why, in our reading (no page we read says a dealer weighed the bales at sale), every bale is weighed

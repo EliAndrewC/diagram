@@ -306,7 +306,7 @@ class TradesMixin:
         households that work it. `rot` lays the kiln's UPSLOPE axis along local +x, so the stoke
         mouth is at local -x and the chimney at local +x.
 
-        Historical grounding (the "why" - see research/urban-features.html "Pottery kilns (noborigama)" and research/rendering/urban-features.html "How our maps draw kiln works", full
+        Historical grounding (the "why" - see research/urban-features.html "Pottery kilns (noborigama)" and research/rendering/urban-features.html "How our maps draw pottery kilns (noborigama)", full
         record in research/urban-features.html). Two GM questions on 2026-07-27 drove the whole
         feature: *"would whoever works the kiln also live next to it?"* and *"why is it
         specifically a tile kiln and not just a kiln?"*

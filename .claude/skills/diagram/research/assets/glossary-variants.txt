@@ -52,7 +52,7 @@ amida buddha	Amida
 amoy	Amoy
 an'ei	An'ei
 anaerobic	anaerobic
-anagama	noborigama
+anagama	anagama
 ancestral hall	ancestral hall
 ancestral halls	ancestral hall
 anchor culture	anchor culture
@@ -351,6 +351,7 @@ chancellor's	chancellor
 chancellors	chancellor
 chancellors'	chancellor
 chang'an	Chang'an
+chao	chao
 chaoguan	chaoguan
 charity graveyard	charity graveyard
 charity graveyards	charity graveyard
@@ -1459,6 +1460,8 @@ irimoya-roofed	irimoya
 iroha	iroha companies
 iroha companies	iroha companies
 iroha-gumi	iroha-gumi
+iron office	Iron Office
+iron offices	Iron Office
 irori	irori
 irri	IRRI
 irrigation ditch	irrigation ditch
@@ -1978,6 +1981,7 @@ master xuanhu	Xuanhu
 master-mountain	master-mountain
 masugata	masugata
 matebajii	matebajii
+material index	material index
 matoi	matoi
 matou	gangi
 matsu	matsu
@@ -2010,6 +2014,7 @@ meso scale	meso scale
 meso-scale	meso scale
 metamorphosis fengshui	metamorphosis fengshui
 metropolitan examination	military examination
+mi	material index
 miaohui	miaohui
 michikiri	michikiri
 micro-high	micro-high
@@ -2221,6 +2226,10 @@ ninsokusashi	ninsokusashi
 nippo jisho	Nippo Jisho
 nipponica	Nipponica
 nishijin	Nishijin
+niter bed	nitre bed
+niter beds	nitre bed
+nitre bed	nitre bed
+nitre beds	nitre bed
 niwa	niwa
 noborigama	noborigama
 nodame	nodame
@@ -2274,6 +2283,7 @@ ofuregaki	ofuregaki
 ogashoya	ogashoya
 ohaguro dobu	ohaguro-dobu
 ohaguro-dobu	ohaguro-dobu
+ohkaji	ōkaji
 ojoya	ogashoya
 okabasho	okabasho
 okaji	ōkaji
