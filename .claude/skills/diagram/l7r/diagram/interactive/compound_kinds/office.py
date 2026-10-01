@@ -164,7 +164,7 @@ class Granary(Kind):
     county, where transport costs more, keeps it in the office's own storehouse instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in the office's storehouse is this map's reading, since no source describes storehouses at a county's landing or says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
+    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in the office's storehouse is this map's reading and partly a guess: the storehouses at a county's landing are inferred from a great domain's store at the river port of Kawashiri, and no source says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
     25 to 27 ft and set by guess, since no source gives a county office's storehouse size, between the 440 to 740 sq ft of a three-village store's storehouses and a tenth of Takayama's 11,222 sq ft; its two forms follow the record, each sheet taking one. The
     storehouse on posts is attested in Japan for the southern islands and the Ainu north rather than for an
     intendant's office, whose grain store on the Takayama model is the earth-walled kura. The staging - tax rice passing through the compound and
@@ -186,7 +186,7 @@ class Granary(Kind):
     Covers: the granary, on posts or earth-walled, and its label
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "granary"
@@ -339,7 +339,7 @@ class TallyOffice(Kind):
     is drawn on our maps as a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
     stands where the goods pass, between the store and the way out.
 
-    Note: That the shogunate's tax rice went by sea on hired hulls under an official pennant and port inspection is read, and carrying that to a county's river is this project's own; that the
+    Note: That the shogunate's tax rice went by sea on hired hulls under an official pennant and port inspection is read, and that the office owned no hulls of its own, and carrying that to a county's river, are this project's own; that the
     office's hold on it was documentary is this project's reading, and drawing a charcoal store as a supervised, tallied depot is this project's decision, not a finding. No source describes the tally office as a
     building of its own; the room where the seal and the tally are made is inferred from them.
 
@@ -350,7 +350,7 @@ class TallyOffice(Kind):
     Covers: the tally office or tally shed and its label
     Label: accurate
     Sources: nishimawari-koro-jawiki, wagner-ming-iron, tonya-enwiki, economy-song-enwiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "tally office"
@@ -511,7 +511,7 @@ class GranaryStilts(Kind):
     Covers: the posts at the granary's foot
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "granary stilts"

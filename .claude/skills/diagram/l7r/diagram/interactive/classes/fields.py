@@ -28,7 +28,9 @@ class Paddy(Kind):
     the villages kept ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
 
     Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
-    that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
+    that the bunds meet at T-junctions is a guess no page read states; the rice is drawn as shoots in no ruled
+    rows, read, since it was transplanted without rows until Meiji, and how dense the scatter is, a sample of the
+    planting, is a convention; drawing the patchwork on the western
     plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, a basin smaller
     than the register parcels of the 1600s (about 0.09-0.44 acre, read) on the guess that a parcel was split
     into several level basins, placed inside a pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
