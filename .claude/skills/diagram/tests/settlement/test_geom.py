@@ -917,3 +917,18 @@ def test_ring_meets_ellipse_reads_the_full_rim() -> None:
     assert ring_meets_ellipse([[48.0, 48.0], [52.0, 48.0], [52.0, 52.0], [48.0, 52.0]], cx, cy, rx, ry)  # in the water
     assert not ring_meets_ellipse([[70.0, 40.0], [90.0, 40.0], [90.0, 60.0], [70.0, 60.0]], cx, cy, rx, ry)  # touches
     assert not ring_meets_ellipse([[0.0, 0.0], [100.0, 0.0], [100.0, 100.0], [0.0, 100.0]], cx, cy, rx, ry)  # the host
+
+
+def test_seg_dists_is_seg_dist_for_every_pair() -> None:
+    """`seg_dists` (the array form) answers `seg_dist` for every point and segment - a zero-length segment included."""
+    from l7r.diagram.settlement._geom.primitives import seg_dists
+
+    rng = random.Random(7)
+    pts = [(rng.uniform(-50, 50), rng.uniform(-50, 50)) for _ in range(40)]
+    segs = [((rng.uniform(-50, 50), rng.uniform(-50, 50)), (rng.uniform(-50, 50), rng.uniform(-50, 50))) for _ in range(25)]
+    segs.append(((3.0, 4.0), (3.0, 4.0)))
+    d = seg_dists(pts, segs)
+    assert d.shape == (40, 26)
+    for i, p in enumerate(pts):
+        for j, (a, b) in enumerate(segs):
+            assert d[i, j] == pytest.approx(seg_dist(p[0], p[1], a, b), abs=1e-9)

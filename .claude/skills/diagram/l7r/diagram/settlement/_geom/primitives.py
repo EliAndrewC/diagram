@@ -9,6 +9,8 @@ Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md f
 import math
 from collections.abc import Sequence
 
+import numpy as np
+
 from .base import Poly, Pt
 
 FIELD_KEEPOUT_EPS = (
@@ -51,6 +53,20 @@ def seg_closest(px: float, py: float, a: Pt, b: Pt) -> Pt:
 def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
     cx, cy = seg_closest(px, py, a, b)
     return math.hypot(px - cx, py - cy)
+
+
+def seg_dists(pts: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> np.ndarray:
+    """`seg_dist` from every point of `pts` to every segment of `segs`, as one array (rows the points, columns the segments) -
+    the same projection, clamped the same way, asked of the whole set at once. A scan of a few hundred points against a few
+    hundred segments was a third of Kashikawa's lane stage as scalar calls (2026-10-01, the wall-clock sampler)."""
+    P = np.asarray(pts, dtype=float).reshape(-1, 2)
+    S = np.asarray(segs, dtype=float).reshape(-1, 2, 2)
+    A, D = S[:, 0, :], S[:, 1, :] - S[:, 0, :]
+    dd = (D * D).sum(axis=1)
+    rel = P[:, None, :] - A[None, :, :]
+    t = np.where(dd > 0, (rel * D[None, :, :]).sum(axis=2) / np.where(dd > 0, dd, 1.0), 0.0)
+    t = np.clip(t, 0.0, 1.0)
+    return np.hypot(rel[..., 0] - t * D[None, :, 0], rel[..., 1] - t * D[None, :, 1])
 
 
 def ring_meets_ellipse(ring: Sequence[Sequence[float]], cx: float, cy: float, rx: float, ry: float) -> bool:

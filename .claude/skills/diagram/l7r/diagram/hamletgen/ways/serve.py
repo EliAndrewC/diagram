@@ -11,7 +11,10 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+import numpy as np
+
 from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement._geom.primitives import seg_dists
 
 from ..consts import (
     BUNDLE_PITCH,
@@ -34,7 +37,7 @@ def shadow_measure(run: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> tuple[in
     longest unbroken stretch of such points in feet. `_lay_web_lane` refuses a run on it against the whole network as the
     run is laid; the pool's finished-map test reads it way against way (feature 293: a re-packed Sawada roll of the earlier
     293 pass shipped two lanes 244 ft side by side that no pass laying them had asked about)."""
-    near_flags = [min(seg_dist(q[0], q[1], a, b) for a, b in segs) < WEB_SHADOW_FT for q in run]
+    near_flags = [bool(f) for f in (seg_dists(run, segs).min(axis=1) < WEB_SHADOW_FT)] if run and segs else [False] * len(run)
     step_ft = polyline_len(list(run)) / max(len(run) - 1, 1)
     worst = cur = 0
     for f in near_flags:
@@ -274,23 +277,26 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     to the leg's start - so it never runs on beside the street it joins (feature 291 on 287: a door path is a tree lane the settle does not cut, and
     one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused)."""
     pts = list(path)
-    for k in range(1, len(pts)):
+    for k in range(1, len(pts) if segs else 0):
         a, b = pts[k - 1], pts[k]
         n = max(1, int(math.dist(a, b) // 2.0))
-        for j in range(1, n + 1):
-            q = (a[0] + (b[0] - a[0]) * j / n, a[1] + (b[1] - a[1]) * j / n)
-            best = min(segs, key=lambda sg: seg_dist(q[0], q[1], sg[0], sg[1]), default=None)
-            if best is not None and seg_dist(q[0], q[1], best[0], best[1]) <= touch:
-                # ...SQUARE ONTO IT: the last leg runs from the vertex before the arrival to the way's nearest point to that
-                # vertex, where the clear chord allows it - a leg arriving at a shallow slant ran on beside the street, and the
-                # doubled-tail sweep cut it to a jog the law read as a kink (cohort seed 904)
-                a0 = pts[k - 1]
-                foot = min((seg_closest(a0[0], a0[1], u, v) for u, v in segs), key=lambda f: math.dist(f, a0))
-                # ...where that square leg is clear (`clear`); else at the arrival itself, as the path came (cohort seeds 12 and
-                # 901: a square leg across a neighbor's grove corner left three farms with no path at all)
-                if clear is not None and not clear(a0, foot):
-                    foot = seg_closest(q[0], q[1], best[0], best[1])
-                return [*pts[:k], foot]
+        qs = [(a[0] + (b[0] - a[0]) * j / n, a[1] + (b[1] - a[1]) * j / n) for j in range(1, n + 1)]
+        # every sample of the leg against every segment at once (`seg_dists`); the first sample within `touch` arrives
+        d = seg_dists(qs, segs)
+        hit = np.flatnonzero(d.min(axis=1) <= touch)
+        if hit.size:
+            j = int(hit[0])
+            q, best = qs[j], segs[int(d[j].argmin())]
+            # ...SQUARE ONTO IT: the last leg runs from the vertex before the arrival to the way's nearest point to that
+            # vertex, where the clear chord allows it - a leg arriving at a shallow slant ran on beside the street, and the
+            # doubled-tail sweep cut it to a jog the law read as a kink (cohort seed 904)
+            a0 = pts[k - 1]
+            foot = min((seg_closest(a0[0], a0[1], u, v) for u, v in segs), key=lambda f: math.dist(f, a0))
+            # ...where that square leg is clear (`clear`); else at the arrival itself, as the path came (cohort seeds 12 and
+            # 901: a square leg across a neighbor's grove corner left three farms with no path at all)
+            if clear is not None and not clear(a0, foot):
+                foot = seg_closest(q[0], q[1], best[0], best[1])
+            return [*pts[:k], foot]
     return pts
 
 
