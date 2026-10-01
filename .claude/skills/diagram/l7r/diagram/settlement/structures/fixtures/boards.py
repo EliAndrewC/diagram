@@ -105,7 +105,7 @@ class BoardsMixin:
         The board is a POINT subject: its drawn, rotated footprint and its angle. Everything else - the ranked side,
         the preferred gap off the board's edge, the angle (the board's own, upright; the GM's 2026-08-27 ruling), the
         line breaks, and a leader if the caption cannot stand directly beside it - is the cartographic standard's,
-        decided in `l7r.diagram.labels` (research/presentation, "Where does a caption sit"). The 560-line search that
+        decided in `l7r.diagram.labels` (research/presentation, "Labels on maps (cartographic label placement)"). The 560-line search that
         stood here, with its own annulus, ladder, lane target and half-way pull, is gone with the hand-built rules it
         encoded."""
         subject = Subject("point", tuple(rect(x, y, vw / 2, vh / 2, rot)), angle=rot)

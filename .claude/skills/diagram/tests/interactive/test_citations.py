@@ -46,8 +46,9 @@ def test_the_record_s_pages_are_found_and_the_registry_and_citations_pages_are_n
     # 21 with rendering/buildings, 22 with rendering/religion-and-death, 23 with rendering/cities/capitals,
     # 24 with rendering/cities/defenses, 25 with rendering/cities/fabric, 26 with rendering/cities/government,
     # 27 with rendering/cities/hinterland, 28 with rendering/cities/river-cities, 29 with rendering/cities/sizing,
-    # 30 with rendering/urban-features, 31 with rendering/towns (feature 292)
-    assert len(pages) == 31, pages
+    # 30 with rendering/urban-features, 31 with rendering/towns, 32-35 with rendering/fields, rendering/water,
+    # rendering/settlements and rendering/archetypes (feature 292)
+    assert len(pages) == 35, pages
 
 
 def test_the_paths_beside_a_research_page() -> None:

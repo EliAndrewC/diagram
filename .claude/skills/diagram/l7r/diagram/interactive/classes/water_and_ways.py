@@ -17,20 +17,21 @@ class Stream(Kind):
     watercourse on the map declares which way it flows, because downstream is a real constraint on what may
     stand beside it.
 
-    Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
+    Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by the water it carries, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
     (the GM's ruling of 2026-08-16). The two rulings behind this modal do not quite agree, and the record
     has not reconciled them: the width ladder (the GM's ruling of 2026-07-21) draws a stream feeding a moat
     as wide as the moat, because the water that enters has to be carried, while the later ruling sizes
     every stroke by its own rank with no coordination across a junction. The stream's type and place are read. The 2 m is not: no page read gives a village
-    creek a width, and the 0.3 m it is measured against is a modern design MINIMUM - the narrowest a canal of
-    any grade may be built to - rather than a ditch anyone measured.
+    creek a width, and the 0.3 m it is measured against is the Rites of Zhou's finest channel, one chi - an
+    ideal, not a survey - matched by a 1657 village intake of about 21 cm and by a modern design MINIMUM, the
+    narrowest a canal of any grade may be built to; none of the three is a ditch anyone measured.
 
     Name: stream
     Covers: `streams` - the brook
     Label: convention
     Sources: jsslkx-002-2021, toro-site
-    Entry: research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'
+    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw channel widths'
     """
 
     key = 'stream'
@@ -40,8 +41,9 @@ class IrrigationDitch(Kind):
     """
     What: The dug channels that bring water TO the paddies: the head race that leaves the brook at its intake,
     the two supply canals it forks into along the field's high margins, and the delivery ditches running
-    down-slope between the plots. The intake is only an opening in the brook's bank: the head race opens out
-    of the bank there, with no gate and no boards across its mouth.
+    down-slope between the plots. Some hamlets build a weir across the brook at the intake and some take their
+    water off the bare bank, where the intake is only an opening: the head race opens out of the bank there,
+    with no gate and no boards across its mouth.
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
     the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
@@ -53,25 +55,30 @@ class IrrigationDitch(Kind):
     stood high enough, the intake was nothing more than an entrance cut for it; the gates and slotted boards
     read at canal mouths and weirs all stand on great works, and none is recorded at a village intake.
 
-    Note: Topology and taper are read (Tabayashi, the Minuma-dai record), and so is the paddy-to-paddy form
+    Note: Topology and taper are read (Tabayashi, the Minuma-dai record) - the split of supply from drain
+    cleanly only at the trunk canals, a study of the district adding that not everything was neatly
+    separated - and so is the paddy-to-paddy form
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are drawn at true size on a ladder whose rungs are each dated before modern times: the head race's 6 ft matches the central canal of an excavated early paddy and a channel fixed by rule in 1537, and every drawn width but the drain's outfall has a width from before modern times beside it.
-    The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention. The national standard the record once leaned on for both is readable nowhere and is
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is said by a 1948 history of Japanese irrigation: only with the 1910 amendment of the land consolidation law were plots and channels properly arranged, and before it most irrigation flowed from field to field, though the essay gives this as a consequence and cites no evidence; the Konosu model of 1902 put each plot on its own channel, the Ishikawa method of 1887 put each squared parcel on one, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are drawn at true size on a ladder whose rungs are each dated before modern times: the head race's 6 ft matches the central canal of an excavated early paddy and a channel fixed by rule in 1537, and every drawn width but the drain's outfall has a width from before modern times beside it.
+    The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention, though all three show it as an ideal or at the scale of district waterways and the grid's 109 m squares, and none shows how closely a village's own ditches kept to it. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
     channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
-    race's length from the intake to the fork follows the fan's geometry, the record giving no distance. The
+    race runs from the intake to the fork at the head of the fan, its shape derived, but the head race's length is
+    a guess chosen afresh for each map, the record giving no distance; and whether a hamlet has a weir at its intake
+    is chosen with even odds, a guess, since the record makes it follow the brook's level through the season,
+    which the map does not give, and no source counts the two forms. The
     bare mouth is read; that no gate or boards are drawn there rests on none being recorded at a village
     intake, and at a two-foot opening either would be smaller than the map can show.
 
-    Caveat: the head race's length from the intake to the fork follows the fan's geometry, the record giving no distance
+    Caveat: the head race's length is a guess chosen afresh for each map, the record giving no distance; and whether a hamlet has a weir at its intake is chosen with even odds, a guess
 
     Name: irrigation ditch
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch', 'Where on the brook's bank is the intake', 'What does the intake mouth look like'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths', 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run', 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)', 'How our maps draw where a field meets its ditch'
     """
 
     key = "irrigation ditch"
@@ -122,22 +129,24 @@ class DrainageDitch(Kind):
     lower on the ground than the end it starts from. It lets its water go at its lowest point - its low end, or partway along where its run meets a sink - off the map, into
     the passing brook, or into the pond at the field's foot, whichever lies below it.
 
-    Note: The collector's form and its separation from the supply net are read, as an Edo layout (Minuma, 1728), and so is a drain letting its water go into a river or a natural watercourse, in a modern
+    Note: The collector's form and its separation from the supply net are read, as an Edo layout at the scale of a district's trunk canals and its drain (Minuma, 1728), its ditch to every plot being modern consolidation's, and so is a drain letting its water go into a river or a natural watercourse, in a modern
     design standard and in a Saitama drain, which its article does not date, that carried the spent water of a district its canals watered in the
-    Edo period; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
+    Edo period; whether it widens along its run follows the field it drains, and the full width it is drawn
+    at where it leaves the field is wider than the one old drain read (0.5-1 m, at the Hattori site), resting
+    on a reading of what a drain must carry, not a period figure, and the thread it starts as, about 1.5 ft, matches the channel at the head of the field in the Rites of Zhou, an ideal scheme whose feet are this record's reading of its unit; it is drawn for every hamlet,
     a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
     has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A
     drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the
-    collector meets the brook is this record's own inference, the right angle a modern drainage manual gives
+    collector meets the brook is given by no page read and set by no rule of the map, left to the ground, the right angle a modern drainage manual gives
     being the one between the field drains and the collector.
 
-    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the collector meets the brook is this record's own inference, the right angle a modern drainage manual gives being the one between the field drains and the collector.
+    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the collector meets the brook is given by no page read and set by no rule of the map, left to the ground, the right angle a modern drainage manual gives being the one between the field drains and the collector.
 
     Name: drainage ditch
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
     Label: accurate
     Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro, maff-drain-shape, shonairyo-akusuiro-jawiki, fao-drainage-systems, akusuiro-kotobank
-    Entry: research/water.html - 'Where does a field's drain let its water go?', 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields.html - 'Why does the drain run across the slope instead of down it?'
+    Entry: research/water.html - 'Field drains (akusuiro)', 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw field drains', 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run'
     """
 
     key = "drainage ditch"
@@ -175,7 +184,7 @@ class Weir(Kind):
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
     Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, kotobank-shigarami, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
-    Entry: research/water.html - 'Is there a weir at the intake', 'What was a village weir built of', 'What does the intake mouth look like', 'Where does the brook stop being a brook and become the ditch'
+    Entry: research/water.html - 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw the intake and its weir (toshuko and seki)'
     """
 
     key = "weir"
@@ -187,26 +196,29 @@ class Pond(Kind):
     it lies: above the fields and feeding them, it is the reservoir their water is drawn from; at the field's
     low foot, fed by the drainage ditch, it is where the water leaving the paddies is gathered.
 
-    Why: The reservoir is the Japanese tameike - built by dividing off a valley mouth with a dike, at an
-    elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through
-    the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
+    Why: The reservoir is the Japanese tameike - some made by closing a valley mouth with an earthen dike, each set at an
+    elevation above the paddies it serves, with ONE outlet: an inclined or vertical intake pipe feeding a bottom
+    conduit through the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
     that has passed through the plots, because before modern consolidation that water was used again below
     rather than thrown away.
 
-    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet, and the
-    spillway's having no part in sharing the water out, are this record's reading of them: the Kagawa page
-    describes the inclined intake, the bottom conduit and a works that passes heavy-rain inflow safely
-    downstream, and does not itself say there is only one way out or that the spillway never serves the fields. And where a pond is drawn at a field's foot to
-    gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and
-    outlet are not drawn from a surveyed example.
+    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents), and the pond's size, two or three
+    parts in every ten of the field it waters, from a Song-dynasty Chinese farming manual of 1149. The SINGLE outlet,
+    and the spillway's having no part in sharing the water out, are this record's reading of them: the Kagawa page
+    describes the inclined or vertical intake, the bottom conduit and a works that passes heavy-rain inflow safely
+    downstream, and does not itself say there is only one way out or that the spillway never serves the fields. And
+    where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its
+    drainage, and the pond's bank and outlet are not drawn from a surveyed example; a pond a stream also feeds is drawn
+    smaller than the manual's measure by a guess at how much; every bank is drawn bare, though the same manual also
+    plants a pond's bank with a few trees - a form the map does not yet draw.
 
-    Caveat: where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and outlet are not drawn from a surveyed example.
+    Caveat: where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and outlet are not drawn from a surveyed example; a pond a stream also feeds is drawn smaller than the manual's measure by a guess at how much; every bank is drawn bare, though the same manual also plants a pond's bank with a few trees - a form the map does not yet draw.
 
     Name: pond
     Covers: `pond` - the tameike
     Label: accurate
-    Sources: tabayashi-1987, kagawa-tameike
-    Entry: research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Sources: tabayashi-1987, kagawa-tameike, chenfu-nongshu-juanshang
+    Entry: research/water.html - 'Irrigation canals and how they are laid out (yosuiro)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'
     """
 
     key = 'pond'
@@ -215,13 +227,13 @@ class Pond(Kind):
 class FieldPond(Kind):
     """
     What: A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground
-    pools, or a header pond within the field.
+    pools and lies too deep for rice.
 
-    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - graves and
-    knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
+    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - a grave
+    stands in only some fields, feng shui having sent south China's to the hills, and knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
     that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.
 
-    Note: That a plains pond is dug into low wet ground is read, as is feng shui setting graves on the hills; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
+    Note: That a plains pond is dug into low wet ground is read, as are feng shui setting south China's graves on the hills and villagers of the Yangzi delta and parts of Japan burying theirs in or beside the fields; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
     how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
     does not litter the field.
 
@@ -232,7 +244,7 @@ class FieldPond(Kind):
     Covers: `field_ponds` - the in-field pond sunk into one low paddy
     Label: accurate
     Sources: not recorded
-    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
+    Entry: research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'
     """
 
     key = 'field pond'
@@ -242,20 +254,20 @@ class FieldRock(Kind):
     """
     What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
 
-    Why: The maps treat rock outcrops as a TERRACE feature, bedrock the risers wrap around, absent on alluvial
-    valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
+    Why: The maps treat rock outcrops as a feature of TERRACES and narrow valley strips, bedrock the risers wrap
+    around, absent on broad alluvial valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
     a natural obstacle.
 
     Note: Which archetypes host an outcrop is this project's guess - no source found puts outcrops on terraces and
-    off valley, polder and delta ground - and no source counts how many, so a terraced field
-    gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
+    off valley, polder and delta ground, and no page we read speaks of rocks kept in a paddy at all - nor does any
+    count how many, so a terraced field (and a narrow valley strip about half the time) gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
     Name: field rock
     Covers: `field_rocks` - a bedrock outcrop inside a plot
     Label: guess
     Sources: not recorded
-    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
+    Entry: research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'
     """
 
     key = 'field rock'
@@ -286,7 +298,7 @@ class GraveIsland(Kind):
     Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
     Label: accurate
     Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
-    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
+    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """
 
     key = 'grave island'
@@ -328,7 +340,9 @@ class VillageLane(Kind):
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
     too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street running
-    on as the road the row stands on, and a path from each farm's door to it, are map drawing conventions.
+    on as the road the row stands on, and a path from each farm's door to it, are map drawing conventions. The
+    one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
+    1869 - a planned layout, not an old way measured.
 
     Caveat: the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
@@ -345,7 +359,7 @@ class VillageLane(Kind):
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur
     Label: accurate
     Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate, sonraku-jawiki
-    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)
+    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)
     """
 
     key = 'village lane'

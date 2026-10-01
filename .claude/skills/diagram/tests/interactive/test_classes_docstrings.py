@@ -27,7 +27,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     "banana dike": (),
     "vegetable ground": (),
     "duck pen": (),
-    # feature 280 M57 (research/archetypes/150): a sluice through each pond's dike is a modern manual's form - retired
+    # feature 280 M57 (research/archetypes/140): a sluice through each pond's dike is a modern manual's form - retired
     "pond sluice": (),
     # feature 280 (settlement-review of Inashiro): the heading named the form eliminated - the bath is a room joined to the
     # house (M22) and the firewood is kept in a wood shed (M21); renamed, the prose and data carried over unchanged

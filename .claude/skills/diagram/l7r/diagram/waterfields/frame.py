@@ -18,7 +18,7 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # They are now TRUE WIDTHS IN FEET, converted to pixels by `chan_px`, so the comb net is to scale
 # like everything else on a to-scale sheet. The research, the two independent derivations behind
 # each figure, and the disclosed departures are in
-# `../../../research/water.html#the-comb-net-is-drawn-at-true-size`.
+# `../../../research/rendering/water.html#how-our-maps-draw-channel-widths`.
 #
 # Sized from the ATTESTED tier ladder (a field ditch watering one paddy ~0.3 m; a distribution
 # lateral ~1 m; a district main/yosui ~5 m) placed by COMMAND AREA, with a Manning/Lacey check on a
@@ -65,7 +65,7 @@ SUB_PARENT_FRAC = 0.75
 # terminal tier is 0.4 px, i.e. not a line at all. So a stroke is drawn at its true width or this
 # floor, whichever is larger - the coarser the sheet, the more of the ladder collapses onto it,
 # which is the honest form of the "minimum-visibility floor" the stroke convention in
-# `../../../research/water.html` already sanctions.
+# `../../../research/rendering/water.html#how-our-maps-draw-channel-widths` already sanctions.
 #
 # 1.5, AND 1.2 WAS TRIED AND REVERTED (2026-08-17) - the number is load-bearing on the carve, not
 # just on legibility. `settlement-review` noted that 1.5 COLLIDES with `aze_w`, which at hamlet grain
@@ -152,7 +152,7 @@ def taper_w(w0: float, w1: float, t: float) -> float:
 
     THE WIDTH SQUARED IS WHAT RUNS LINEARLY, not the width - because a channel's width goes as the
     SQUARE ROOT of the discharge it carries, and the discharge is what changes linearly along one of
-    these runs. (why: `../../../research/water.html#a-channel-taper-is-a-square-root-not-a-straight-line`)
+    these runs. (why: `../../../research/water.html#how-wide-canals-and-ditches-are-the-ladder-of-channel-widths`)
 
     Both halves of that are load-bearing, so neither is a free choice:
 
@@ -176,7 +176,7 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     0.93 before), so the shape below is correct and unreadable at once. The GM asked directly, was
     given x1.5 and x2 legibility multipliers with the gradients priced, and chose true size
     (2026-08-17). Do NOT widen these strokes to make the taper show - the numbers and the reasoning
-    are in `../../../research/water.html#what-drawing-at-true-size-left-open`.
+    are in `../../../research/rendering/water.html#how-our-maps-draw-a-channel-narrowing-along-its-run`.
 
     **THE WORKED EXAMPLE LIVES IN A TEST, NOT HERE** -
     `test_the_delivery_taper_holds_then_dwindles` asserts the SHAPE this paragraph promises (wider

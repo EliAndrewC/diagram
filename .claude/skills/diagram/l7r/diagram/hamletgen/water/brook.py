@@ -32,8 +32,8 @@ from ..consts import (
 )
 from ..plan import SitePlan
 
-# THE WEIR'S FORM (269 B22; research/water/300): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
-# fence is in the Man'yoshu, the reed weave only in a present-day weir - research/water/640), a frame of stakes and logs packed
+# THE WEIR'S FORM (269 B22; research/rendering/water.html "How our maps draw the intake and its weir"): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
+# fence is in the Man'yoshu, the reed weave only in a present-day weir - research/water.html, "Where the ditch leaves the brook"), a frame of stakes and logs packed
 # with clay, a crib of timber packed with stone, or a course of stone-filled baskets, each drawn at its own thickness
 # (`WEIR_THICK_FT`). "The rule the map follows: a weir hamlet's weir takes one of four forms, rolled per settlement
 # with an even chance" - the EVEN chance a GUESS, no source counting them. `crib` is the default because it is the
@@ -166,7 +166,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     """The brook's course BELOW the intake: past the cultivated ground on one flank, then off the frame.
 
     A stream is tapped, not consumed - the intake takes what the field needs and the brook carries the rest
-    on down (research/water.html, "Where does the brook stop being a brook and become the ditch"). So the
+    on down (research/water.html, "Where the ditch leaves the brook: the intake and its weir (toshuko and seki)"). So the
     course below the intake has one job: pass the crop without touching it, and be a stream while it does.
 
     It is built in the fall's own frame - `u` along the fall, `v` across it on the chosen flank - by walking
@@ -429,12 +429,12 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     """What stands where the head race leaves the brook - a WEIR, or nothing at all.
 
     The record attests both and gives no proportion, so `plan.intake` is rolled per map
-    (research/water.html, "Is there a weir at the intake?"). On an `open`
+    (research/rendering/water.html, "How our maps draw the intake and its weir"). On an `open`
     hamlet the point is marked by the junction itself: the brook runs straight on and the race opens out of its
     bank at an acute angle (`open_race_mouth`), which is a fork a reader can see - no gate or boards, none being
-    recorded at a village intake (research/water/310). On a `weir` hamlet a bar crosses the brook, set OBLIQUE -
+    recorded at a village intake (research/rendering/water.html, "How our maps draw the intake and its weir"). On a `weir` hamlet a bar crosses the brook, set OBLIQUE -
     the old weirs ran diagonally upstream from the intake mouth, damming the shallow riffle and standing clear of
-    the flood's fastest water - built in one of four forms rolled per hamlet (`WEIR_FORM`, research/water/300).
+    the flood's fastest water - built in one of four forms rolled per hamlet (`WEIR_FORM`).
 
     One disclosed liberty, in the entry: the bar is drawn as a FULL closure of the brook, a map drawing convention,
     because a half-river closure - the common old form - is a pixel or two at a 7 ft brook. Each form's thickness is
@@ -484,7 +484,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
 
 
 def open_race_mouth(s: Settlement, sluice: Pt) -> None:
-    """The head race OPENS OUT OF THE BROOK'S BANK (269 B22; research/water/310, "What does the intake mouth look like").
+    """The head race OPENS OUT OF THE BROOK'S BANK (269 B22; research/rendering/water.html, "How our maps draw the intake and its weir").
 
     The attested bare intake is an opening: "water can easily be taken just by providing an entrance for it", a
     damless intake "opening a mouth at the concave side". So the ditch begins at the bank's edge, and nothing of it is
@@ -516,7 +516,7 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
 
 
 def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: float, half_t: float) -> str:
-    """The SVG of a weir bar by its FORM (269 B22, research/water/300), inside the bar's own `poly`.
+    """The SVG of a weir bar by its FORM (269 B22, research/rendering/water.html, "How our maps draw the intake and its weir"), inside the bar's own `poly`.
 
     A WEIR IS NOT A BRIDGE, and it was drawn as one: the same brown oblique bar as the nine footbridges on the reference
     hamlet's own sheet, which `settlement-review` read as "the crossing" - actively misleading, since it is the only bar

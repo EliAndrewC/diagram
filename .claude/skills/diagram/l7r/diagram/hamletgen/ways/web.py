@@ -699,7 +699,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     split_at_crossings(s)  # a crossing is a junction: recorded as one before the trim judges what each end serves (the 269 landing)
     tidy_lane_ends(s, list(plan.envelope))
     meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
-    # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
+    # ...AND THE PADDY IS REACHED (269 B04, research/rendering/fields/260): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
     # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
     # back off its door by them (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)

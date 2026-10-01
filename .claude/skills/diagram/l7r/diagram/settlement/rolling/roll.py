@@ -277,7 +277,7 @@ class RollVillageMixin:
         # ground. 92 ft is the bundle plus the circles' waste and no more.
         #
         # CONVERTED THROUGH `ftpx`, NOT `bscale`. They are the same number everywhere except the
-        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/settlements.html 'How far is it across this map? The scale, tier by tier')
+        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/rendering/settlements.html 'How our maps draw and state each size of settlement')
         # - and a village bundle really is drawn at half a hamlet's pixel size (measured: house 25x14
         # px against 53x27). Sizing off bscale therefore asked a village band for twice the ground
         # its bundles occupy, which strung its cluster thin over a hollow hull and tripped

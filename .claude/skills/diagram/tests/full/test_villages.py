@@ -34,5 +34,5 @@ def test_village_passes_gate(gen):
     if _valley or _hill_rice:
         cell = _typical_cell_acres(svg, meta.get("ftpx") or 2)
         assert cell is not None and 0.030 <= cell <= 0.072, (
-            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see research/fields.html 'Plot sizes, pond sizing and acreage from population')"
+            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see research/rendering/fields.html 'How our maps draw rice paddies and their plots (suiden)')"
         )

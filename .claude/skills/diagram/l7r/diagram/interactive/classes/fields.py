@@ -19,16 +19,19 @@ class Paddy(Kind):
 
     Why: Pre-modern paddies were fitted to land and water by piecemeal reclamation, so the plots are
     odd-sized and odd-shaped; the tidy rectangular grid is a Meiji/Showa land-consolidation artifact, though
-    the alluvial plains of the west kept the far older jori grid working into the medieval period. A flooded
-    paddy makes its own nitrogen, which is why the same basins were cropped year after year. On the Chinese
+    the alluvial plains of the west kept the far older jori grid working through the medieval period, and its
+    regular plots stayed widespread there up to Meiji. A paddy's soil was fed from within: in China the water
+    fern azolla was grown on the flooded paddy to take nitrogen from the air for the rice, and in Japan a
+    winter vetch, renge, was sown in the paddy as a green manure. On the Chinese
     delta the rice fields were also where the ducks fed: Qu Dajun, writing of Guangdong in 1678, says the
-    coastal fields bred small crabs that ate the rice sprouts and only ducks could eat them, so the villages
-    kept many ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
+    coastal fields of Guangzhou bred small crabs that ate the rice sprouts and only ducks could eat them, so many in
+    the villages kept ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
 
     Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
     that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
-    plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, placed inside a
-    pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
+    plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, a basin smaller
+    than the register parcels of the 1600s (about 0.09-0.44 acre, read) on the guess that a parcel was split
+    into several level basins, placed inside a pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
     from flooded to cracked and back - a cycle China's farming manuals give from the sixth century on, a paddy let out
     to sun its roots firm after weeding and drained again before the harvest; the depths behind that choice are modern
     extension figures, and no pre-modern depth was found; the midsummer drain appears in Edo-period farm books, in some places, and before
@@ -46,7 +49,7 @@ class Paddy(Kind):
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
     Label: accurate
     Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, qimin-yaoshu-juan2, chenfu-nongshu-juanshang, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
+    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike'
     """
 
     key = 'paddy'
@@ -61,12 +64,12 @@ class WetPaddy(Kind):
 
     Why: It lies at the foot of the field, on the drain. Water falls basin to basin down a gravity system, and in
     a traditional paddy no line can be drawn between irrigating and draining, so the plots at the bottom
-    take what the plots above shed and never come dry. That makes it the ground nobody wanted: the mud is
-    deep, the soil runs colder and shorter of oxygen than a kanden, no winter crop of wheat or barley can
-    follow the rice, and lodging and disease leave the yield unreliable. From Meiji the state drained wet
-    paddy into dry as a national undertaking, and more than two thirds of the country's fields were
-    converted - the measure of how much of it there was to convert, and the reason a map of these centuries
-    should carry some.
+    take what the plots above shed and never come dry. The dictionaries count what such ground cost: the mud is
+    deep, the soil runs colder in summer and shorter of oxygen than a kanden's, no winter crop of wheat or barley
+    can follow the rice, and lodging and disease leave the yield unreliable. From Meiji the state drained wet
+    paddy into dry as a national undertaking, and more than two thirds of the country's paddies are said to have
+    been converted - a program that size is, on our reading, the measure of how much there was, and the reason a
+    map of these centuries should carry some.
 
     Note: The shitsuden and kanden categories, the wetness that defines them and the penalties they carry come
     from the dictionaries, quoted in the entry. Which plots wear the tint is a drawing convention rather
@@ -82,7 +85,7 @@ class WetPaddy(Kind):
     Covers: the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has
     Label: accurate
     Sources: kotobank-shitsuden, kotobank-kanden, kotobank-yatsuda, kotobank-fukada, fao-rice-water
-    Entry: research/fields.html - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'
+    Entry: research/fields.html - 'Wet paddies that never drain (shitsuden)'; research/rendering/fields.html - 'How our maps draw wet paddies (shitsuden)'
     """
 
     key = 'wet paddy'
@@ -94,28 +97,32 @@ class Bund(Kind):
     inches high - outside modern works it had no fixed size, varying by region and soil; today's standard bund is about a
     foot high. Each late spring, before
     transplanting, its face was stripped of weeds and plastered with kneaded mud by the hoe (azenuri), so each
-    paddy holds its water. A wider walking bund ran between the plots, two to five feet across. Where bunds cross,
-    the earth is piled into a lumpy node - the most-worked point in a field.
+    paddy holds its water. A wider bund ran along the canal, about three to five feet across at the one early site
+    where it was measured, and seems to have served as a path for the farm work. Where bunds cross,
+    the earth is piled into a lumpy node - by this project's guess, the most-worked point in a field.
 
     Why: A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting
     at T-junctions - never two parallel ridges with idle ground between. The bund was the path of farm work
     (azemichi) and the boundary of a holding; the footplanks over the ditches serve that walking.
 
     Note: Construction, the spring plastering and the dividing bund's width are read - the shogunate's survey reckoned a
-    bund at one shaku in 1726, and the small bunds of an early Yayoi paddy ran 20 to 60 cm wide and 5 to 20 cm high -
-    and it is drawn about a foot and a half wide, at true size; no height from the Edo period was found; the
-    shared-wall finding is this record's derivation from how the bund is built and kept. The walking bund's two to
-    five feet is a GUESS: no page read gives its width, so it is held between the two-shaku bund and the one-ken
-    (six-foot) farm road of that replanned field.
+    bund at one shaku (the word's earliest example is a shogunate order of 1726), and the small bunds of an early Yayoi paddy ran 20 to 60 cm wide and 5 to 20 cm high -
+    and it is drawn about a foot and a half wide between plots and along a delivery ditch, at true size, and about
+    three feet along the head race or a canal; no height from the Edo period was found; the shared-wall finding is
+    this record's derivation from how the bund is built and kept. The large bund along a canal is a calibration,
+    not a guess: it is drawn about three feet against the one excavated site, the early Yayoi Hattori paddies' 80 to
+    150 cm canal bund, which the excavators say seems to have been a path; no width was found for an Edo bund along
+    a canal.
 
-    Caveat: The walking bund's two to five feet is a GUESS: no page read gives its width, so it is held between the
-    two-shaku bund and the one-ken (six-foot) farm road of that replanned field.
+    Caveat: The large bund along a canal is a calibration, not a guess: it is drawn about three feet against the one
+    excavated site, the early Yayoi Hattori paddies' 80 to 150 cm canal bund, which the excavators say seems to have
+    been a path; no width was found for an Edo bund along a canal.
 
     Name: bund
     Covers: the stroke of every paddy plot and the piled junctions between them
     Label: accurate
     Sources: kotobank-azebiki, hattori-site-yayoiken, kato-1999-ittanbu-kukaku, kotobank-aze-sekai-daihyakka, kigosai-azenuri, kubota-azenuri-kuwa, aze-standard
-    Entry: research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason', 'How wide is a bund, and how wide is the one a farmer walks on?'; research/water.html - 'The bund runs along the channel bank'
+    Entry: research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)'; research/rendering/water.html - 'How our maps draw where a field meets its ditch'
     """
 
     key = 'bund'
@@ -125,8 +132,9 @@ class BundBeans(Kind):
     """
     What: Soybeans planted along the tops of the paddy bunds - azemame - drawn as dark green beads.
 
-    Why: A bund's top is soil that would otherwise grow weeds; planting it with beans took a second crop from the
-    same ground without touching the paddy. A share of the bunds is planted, rolled per map.
+    Why: The beans were a food crop of their own, sown along the bund tops after transplanting and harvested with
+    the rice. Once grown across Japan, most disappeared with land consolidation, herbicide and damage by
+    animals. A share of the bunds is planted, rolled per map.
 
     Note: we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the
     plant, in order to make them visible on the map at this scale against the pale rice, and any stretch of
@@ -139,7 +147,7 @@ class BundBeans(Kind):
     Covers: the bead run along the bunds (`bund_beans`)
     Label: convention
     Sources: nabunken-azemame, wikipedia-soybean, cropfarming-soybeans
-    Entry: research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)
+    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; waterfields/palette.py BEAN_GREEN (the color decision)
     """
 
     key = 'bund beans'
@@ -164,9 +172,10 @@ class Millet(Kind):
     ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
     order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
     instead; the plot a household works by its own house is named for its own consumption, read, and no page read puts
-    grain there; ridged rows are read for China - a modern history says the sixth-century Qimin Yaoshu set ridge
-    rules for soybeans and millet - but for Japan they are a GUESS: no page read says whether a pre-modern Japanese
-    dry field was sown in rows or broadcast, and the only ridged rows found in Japan are modern. That the land sets
+    grain there; ridged rows are read - a modern history says the Northern Wei Qimin Yaoshu set ridge rules for
+    soybeans and millet, and a Japanese farming manual of 1697 weeds its dry fields along the ridges - but their
+    SPACING is a GUESS: no page read says how far apart a pre-modern Japanese dry field's rows stood, and the only
+    spacings found are modern. That the land sets
     the row direction tract by tract is this record's reading of a classical passage. The crop MIX on any one map
     (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions;
     whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared
@@ -184,8 +193,8 @@ class Millet(Kind):
     Name: millet
     Covers: `dry_plots[crop=millet]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'millet'
@@ -214,10 +223,10 @@ class Buckwheat(Kind):
     order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead; the plot a household works by its own house is named
     for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-    the crop itself is not drawn from the sections this entry names; ridged rows are read for China - a modern
-    history says the sixth-century Qimin Yaoshu set ridge rules for soybeans and millet - but no page read says
-    whether a pre-modern Japanese dry field was sown in rows or broadcast, and the only ridged rows found in Japan
-    are modern, so for Japan the rows are a GUESS. That the land sets the row direction tract by tract is this
+    the crop itself is not drawn from the sections this entry names; ridged rows are read - a modern
+    history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
+    manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
+    Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
     record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
     proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
     Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
@@ -234,8 +243,8 @@ class Buckwheat(Kind):
     Name: buckwheat
     Covers: `dry_plots[crop=buckwheat]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'buckwheat'
@@ -263,29 +272,32 @@ class Barley(Kind):
     on a fan two put the water-short middle late to clearing and the spring-fed toe early to paddy; elsewhere that
     order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead; the plot a household works by its own house is named
-    for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-    the crop itself is not drawn from the sections this entry names; ridged rows are read for China - a modern
-    history says the sixth-century Qimin Yaoshu set ridge rules for soybeans and millet - but no page read says
-    whether a pre-modern Japanese dry field was sown in rows or broadcast, and the only ridged rows found in Japan
-    are modern, so for Japan the rows are a GUESS. That the land sets the row direction tract by tract is this
+    for its own consumption, read, and no page read puts grain there. The crop's season, sown in autumn and taken
+    in early summer, is read; ridged rows are read - a modern
+    history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
+    manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
+    Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
     record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
     proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
     Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
     the fan's toe, and where on the fall the toe begins is a GUESS; how many plots a tract holds, how far a plot
     turns within one, and that every tract on steep ground runs along the contour are GUESSES - no page read says
-    how rows ran there.
+    how rows ran there. The plot is drawn in ripe barley's early-summer gold though the map shows high summer, when
+    barley is already cut; which season to show is not yet decided.
 
     Caveat: The crop mix per map is rolled from the seed and is a GUESS at the proportions; whether a fan's middle
     stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared theirs early, and the
     odds of that roll are a GUESS; where it stays wild the dry strip keeps to the fan's toe, and where on the fall
     the toe begins is a GUESS; how many plots a tract holds, how far a plot turns within one, and that every tract
-    on steep ground runs along the contour are GUESSES - no page read says how rows ran there.
+    on steep ground runs along the contour are GUESSES - no page read says how rows ran there. The plot is drawn in
+    ripe barley's early-summer gold though the map shows high summer, when barley is already cut; which season to
+    show is not yet decided.
 
     Name: barley
     Covers: `dry_plots[crop=barley]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'barley'
@@ -315,10 +327,10 @@ class Soy(Kind):
     order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead; the plot a household works by its own house is named
     for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-    the crop itself is not drawn from the sections this entry names; ridged rows are read for China - a modern
-    history says the sixth-century Qimin Yaoshu set ridge rules for soybeans and millet - but no page read says
-    whether a pre-modern Japanese dry field was sown in rows or broadcast, and the only ridged rows found in Japan
-    are modern, so for Japan the rows are a GUESS. That the land sets the row direction tract by tract is this
+    the crop itself is not drawn from the sections this entry names; ridged rows are read - a modern
+    history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
+    manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
+    Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
     record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
     proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
     Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
@@ -335,8 +347,8 @@ class Soy(Kind):
     Name: soy
     Covers: `dry_plots[crop=soy]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'soy'
@@ -352,15 +364,17 @@ class Fallow(Kind):
     to be worked were chosen anew from the cropped and the resting ground (kataarashi). The resting land was mixed
     in among the land under crop, not a block of its own, and while it rested it was not marked off but grazed in
     common by cattle and horses. The nucleated village on stable ground, and the early modern village after the
-    land surveys, cropped the same paddy every year, so most maps draw no resting plot.
+    land surveys, cropped the same paddy every year; the setting's canon holds that a paddy once made can be cropped
+    for centuries without tiring its soil, so most maps draw no resting plot.
 
     Note: Whether a settlement rests any paddy is rolled from the map's seed: settled, cropped every year, or
     unsettled, with a few basins resting. The two forms, the scattering and the grazing are read; that the settled
-    form is the commoner is this record's reading, and the weight between the two a GUESS; how many basins rest is
-    a liberty kept within the record's "a few"; that they favor the far end of the water's run is this record's
-    reading of short water, and a GUESS, since nothing read says which plots of a village's paddy were rested.
+    form is the commoner is this project's reading of the setting's nucleated villages and its canon, and the
+    weight between the two a GUESS; how many basins rest is a liberty kept within the record's "a few"; that they
+    favor the far end of the water's run is this record's reading of short water, and a GUESS, since nothing read
+    says which plots of a village's paddy were rested.
 
-    Caveat: that the settled form is the commoner is this record's reading, and the weight between the two a
+    Caveat: that the settled form is the commoner is this project's reading of the setting's nucleated villages and its canon, and the weight between the two a
     GUESS; how many basins rest is a liberty kept within the record's "a few"; that they favor the far end of the
     water's run is this record's reading of short water, and a GUESS, since nothing read says which plots of a
     village's paddy were rested.
@@ -369,7 +383,7 @@ class Fallow(Kind):
     Covers: `fallow_patches`
     Label: accurate
     Sources: nishitani-2023-chusei-nogyo, kotobank-kataarashi-yamakawa, kotobank-kataarashi-nipponica, mizkan-2005-sato-kyuko
-    Entry: research/fields.html - 'Is any paddy left to rest - and where does a resting plot lie?'
+    Entry: research/fields.html - 'Paddies left to rest (kataarashi)'; research/rendering/fields.html - 'How our maps place paddies left to rest (kataarashi)'
     """
 
     key = 'fallow'

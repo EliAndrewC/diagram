@@ -313,7 +313,7 @@ WEST_SUN_FT = 50.0
 # `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
-# overlay, which is what it is historically too (research/archetypes.html "The three overlays a village may carry":
+# overlay, which is what it is historically too (research/archetypes.html "Cash crops on rice land: dike-ponds, lotus fields and tea rows":
 # the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
 # of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
@@ -333,7 +333,7 @@ POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 #   so a ~160 ft module with a merge-heavy mix ((0.10, 0.0, 0.60): mostly 160x320 ft ~0.48 ha 1:2
 #   ponds, a square ~2.4-mu minority), the grid's ~22 ft gaps ((11, 11)), and each pond's water inset 23 ft inside its
 #   parcel (`settlement/fields/landuse.py` `DIKEPOND_WATER_INSET`). THE WATER SHARE (feature 280 M58,
-#   research/archetypes/610): every page that writes the water-to-dike split as a number (6:4, 7:3, 4:6) is modern, and
+#   research/archetypes/140): every page that writes the water-to-dike split as a number (6:4, 7:3, 4:6) is modern, and
 #   the oldest figures are Qu Dajun's for Jiujiang in 1678 - read together (a GUESS, this record's arithmetic) water to
 #   dike about 5:3 - so a parcel is calibrated to about 6 parts water in 10 (0.62 measured on Kuwabata, 2026-09-29);
 #   the 11 ft inset it replaced left 80% water per parcel, wetter than any figure read in any period. The dike's
@@ -345,12 +345,12 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
     "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
 }
 
-# THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/130): the grid is attested for
+# THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/160): the grid is attested for
 # the Song tangpu CANALS, the mosaic for the PONDS, while a uniform chessboard of ponds is found only as today's aerial view
 # of Digang - so a dike-pond block is drawn as the mosaic and the pond grid is no longer rolled. The GM ruled the knob in on
 # 2026-08-18 on the reading that both were attested ponds; that reading is withdrawn at pond scale and the reversal
 # reported. What follows is the knob's original note (constitution XII,
-# GM 2026-08-18). research/archetypes.html "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
+# GM 2026-08-18). research/archetypes.html "Polders: fields diked against the fluctuating water (weitian, waju)": the lower-Yangtze wei-tian was a SURVEYED
 # rectilinear grid (the Song tangpu lattice) while the Pearl-delta dike-pond accreted household by
 # household into a MOSAIC - rectangles of varied size at varied local orientation around winding
 # creeks. Both systems carried dike-ponds (Lake Tai mulberry sat on the tang banks inside the
@@ -361,7 +361,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic",)
 
-# THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
+# THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes.html 'Fish fry and nursery ponds (yumiao)'): the ordinary
 # delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
 # parts of ten of its pond water (Qu Dajun, 1678). The "one parcel in ten" once drawn is on no page read, premodern or
 # modern. Two attested forms, so a knob; the fry village rare (Qu Dajun: fry ponds only in Jiujiang) - the odds a GUESS.
@@ -373,7 +373,7 @@ FRY_FORMS = ("none", "none", "none", "fry_village")
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
-# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks?".
+# the roll is even. research/archetypes.html "The dike-pond hamlet: its houses, boats and manure jars".
 MANURE_FORMS = ("heap", "pit")
 
 # THE HARVEST WEATHER - an ENVIRONMENT FACT the spec declares, never a roll (feature 282, FR-005). Racks gathered by
@@ -397,7 +397,7 @@ KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest
 # genuine two-answer question rather than a defect.
 
 # THE DIKE CROP - which dike-pond planting a hamlet is (feature 150, GM 2026-08-28 choosing audit A6; the
-# options re-read by 269 B34). research/archetypes/230: Qu Dajun (late 17th c.) has the villages' pond dikes
+# options re-read by 269 B34). research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)': Qu Dajun (late 17th c.) has the villages' pond dikes
 # planted with fruit - lychee most, tea and mulberry next - and a modern history dates the fruit dike first
 # (mid-Ming) and the mulberry dike dominant through the Qing. So three premodern plantings: mulberry, fruit and
 # tea. The cane, banana and vegetable dikes are attested only in modern sources (one undated modern listing
@@ -410,7 +410,7 @@ DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 # WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, or no leftover
 # at all (every parcel a pond); the roll is even. A third state, tilled vegetable ground, rested on Fei's 1930s
 # silk village and the modern vegetable dike, and is retired by the GM's ruling of 2026-09-28 that a form
-# attested only in modern sources is not drawn (269 E9; research/archetypes/230).
+# attested only in modern sources is not drawn (269 E9; research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)').
 WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
 LEFTOVER_FORMS = ("rice", "pond")
 POND_LAYOUT_MOSAIC = 0.5
@@ -513,7 +513,7 @@ POND_SETBACK_LIMIT = 300.0
 # settlement-review) rather than an oversight - `build_comb`'s docstring carries the same account.
 GRAIN = 2.0
 
-# THE HAMLET BAND (research/settlements.html "What are the five kinds of settlement, and how big is each?"): 10-20 households, 50-100 inhabitants. Below
+# THE HAMLET BAND (research/settlements.html "The five sizes of settlement: hamlet, village, town, provincial city and capital"): 10-20 households, 50-100 inhabitants. Below
 # 10 the place is an outlying farmstead or two rather than a hamlet; above ~20 it is a small village
 # and grows the features a hamlet must not have (a headman, a shrine, tax-free plots).
 HOUSEHOLD_BAND = (10, 20)
@@ -537,11 +537,11 @@ REF_CANAL_B = (680.0, 800.0)
 FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 
 # THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
-# research/water.html "Where does the brook stop being a brook and become the ditch"). A brook does not
+# research/water.html "Where the ditch leaves the brook: the intake and its weir (toshuko and seki)"). A brook does not
 # turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
 # hamlet's brook now passes the fan's head and runs on down one flank to the frame.
 #
-# THE INTAKE'S FORM IS A KNOB (research/water.html "Is there a weir at the intake?") because the record
+# THE INTAKE'S FORM IS A KNOB (research/rendering/water.html "How our maps draw the intake and its weir") because the record
 # attests two and prefers neither: in old Japan "in many cases no intake weir was built at all - water was taken naturally", and where the level would not serve
 # a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
 # proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
@@ -616,10 +616,10 @@ BROOK_TAP_RUN = 70.0
 # intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
 # closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
 WEIR_HALF_FT = 7.0
-# WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/water/300, "What was a
-# village weir built of, and how thick was it?"). The weir on small water was built of what lay to hand, and four forms
+# WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/rendering/water.html
+# "How our maps draw the intake and its weir"). The weir on small water was built of what lay to hand, and four forms
 # are read, so the form is a knob (`WEIR_FORM`, water/brook.py) rolled per weir hamlet, each at its own thickness:
-# - `fence`, stakes with reed woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
+# - `fence`, stakes with brushwood woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
 #   WIDER than that so it can be seen at all - a MAP DRAWING CONVENTION;
 # - `gabion`, a course of stone-filled baskets: one basket "about 40-60 cm in diameter", read as about 2 ft - the
 #   basket's read size; the gabion course as a BROOK weir at all is a GUESS (the source gives gabions on rivers);
@@ -643,7 +643,7 @@ WEIR_SKEW_DEG = 30.0
 # one dangling collector. A last offtake at ~0.88 - which is also `build_comb`'s own default - keeps
 # the tail short and inside the rice.
 # ...AND EVERY ROW DRAWS CANAL B (GM caught Inashiro's bare west margin 2026-08-16; researched -
-# research/water.html "The head-race forks - supply commands both flanks"). A gravity canal commands
+# research/rendering/water.html "How our maps lay out irrigation canals"). A gravity canal commands
 # only the ground BELOW it, and the carve plants paddy on BOTH sides of the bunsuiguchi fork - so
 # the hamlet rows' old offtakes_b=() (copied from Ikegami's authored choice, now a frozen exhibit)
 # left the whole canal-B flank carved as watered ground with no drawn water: the modeled net and
@@ -726,7 +726,7 @@ BROOK_MAX_TURN_DEG = 100.0
 
 # A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
 # many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
-# research/water.html "Why does every ditch turn on a curve?": sharp corners belong to stone-lined channels, and nothing
+# research/rendering/water.html "How our maps draw bends, junctions and the run of the water": sharp corners belong to stone-lined channels, and nothing
 # on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded LATE, at the crossings stage,
 # and held at the tap the head race leaves from (`round_the_brooks`). A map drawing convention on an accurate rule.
 BROOK_BEND_WIDTHS = 2.5
@@ -735,7 +735,8 @@ BROOK_BEND_WIDTHS = 2.5
 # at no cost the router took any ford that was a few feet shorter: a lane crossed the brook and came straight back to
 # reach a house on its own bank - two planks built to save a short walk. A crossing is one more thing to build and keep,
 # so the router charges it as this much extra walking; a way that has to reach the far bank still crosses. 150 ft is a
-# GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in research/water/270.
+# GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in rendering/water/270,
+# "How our maps place a hamlet on its stream".
 BROOK_CROSSING_COST_FT = 150.0
 
 WIND_VECTORS: dict[str, Pt] = {

@@ -543,8 +543,8 @@ class GroundCoverMixin:
         The verge's OUTLINE is ORGANIC (irregular bays carved into the padded rectangle), never the
         rectangle itself (GM 2026-07-23): swept ground is PRODUCED by tending - brooms, feet, the sando's
         traffic - radiating from the feature, and its edge sits wherever the tending peters out into the
-        scrub; a surveyed straight line belongs to walls and paddy bunds, never to clearage (research/religion-and-death.html, the swept-ground entry
-        'Swept ground around sacred + funerary features'). The bays are INWARD-ONLY, so the blob always
+        scrub; a surveyed straight line belongs to walls and paddy bunds, never to clearage (research/rendering/religion-and-death.html,
+        'How our maps draw the swept ground around shrines and graves'). The bays are INWARD-ONLY, so the blob always
         stays INSIDE the old padded rect: a collar is a maintenance CLAIM, and making it irregular means
         the sweeping falls short of the surveyed ideal - it never annexes ground (an outward lobe could
         newly overlap a cover that legitimately predates the clearing and flip

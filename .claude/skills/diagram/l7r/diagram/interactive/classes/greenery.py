@@ -300,8 +300,9 @@ class Marsh(Kind):
     """
     What: Reed wetland on the undrained low ground - the wet toe below the fields and the fringe of the pond.
 
-    Why: Wet rice is reclaimed FROM marsh: where reclamation stops, or the ground is too wet to manage, it stays
-    reed wetland, and an abandoned paddy reverts to it. The toe marsh is as wide as the fan it drains, and
+    Why: Wet rice is reclaimed FROM marsh: where reclamation stops it stays wetland, and an abandoned paddy
+    reverts to it. The toe marsh is as wide as the fan it drains - this record's reading of where the fan's springs
+    come out - and
     its margin grades reed, then sedge and grass, then dry ground - the form of a toe that is cut. Reed and thatch
     grass were a crop, cut every year from ground kept for it, wetlands among it; on Lake Biwa the reed was cut in
     winter and the stubble burned in spring, and the cutting and burning are what kept such ground from going over to
@@ -315,31 +316,36 @@ class Marsh(Kind):
     and it is the small ponds where water use has STOPPED and bank mowing has fallen off that have been given up
     furthest. The reeds
     are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different
-    ground: a dry, firm bank kept for its strength and not cultivated - turfed or trodden before modern times, a Chinese
-    classic's commentary already keeping the water plants off it, and mown and burned today - and what grows on it
-    is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
-    you will not see the wet haze on a dike or a pond's raised rim. Whether a pond's own reed was cut as a crop, no page
-    read says - the reed harvest is attested for Lake Biwa and river reed beds, not for a tameike - so the pond's fringe
+    ground: a bank kept for its strength and not cultivated - trodden firm by cattle in a Song-dynasty Chinese farming
+    manual, a Chinese classic's commentary already keeping the water plants off it, and mown and burned today - and
+    what grows on it is sun-loving meadow flowers. So reeds stand in the shallows and stop at the foot of the bank -
+    which is why you will not see the wet haze on a dike or a pond's raised rim. Whether a pond's own reed was cut as a
+    crop, no page read says - the reed harvest is attested for Lake Biwa, not for a tameike - so the pond's fringe
     is drawn standing, with no cut bed, drying racks or stacks.
 
     Note: The reclaimed-from-marsh finding, the order of the margin gradient, the reeded-shore finding, and the yearly
-    winter cutting that keeps trees out of a reed bed are all read; that a village cut its own toe marsh the same way is
-    carried across from thatch fields in general and Lake Biwa's reed beds, no page saying it of a village marsh; that
-    every toe is drawn in the cut, open form is a shortfall, the record supporting an alder-willow carr as well and the
-    map not yet rolling between them; that sedge was cut for fodder is unsourced; a pond's fringe shows no harvest
-    because none is read there; the embankment's mowing and burning are present-day management, the reed-free bank
-    itself older.
+    winter cutting that keeps trees out of a reed bed are all read; a pond's fringe shows no harvest because none is
+    read there; the toe's width following the fan is this record's reading of where its springs come out; the
+    embankment's mowing and burning are present-day management, the reed-free bank itself older (the turfing of a
+    bank is read only of one Edo domain's river embankments); the toe is drawn as a straight band along the contour
+    where a real fan's toe is an arc, a deliberate deviation; that a village cut its own toe marsh the same way is carried across from thatch fields in general and Lake Biwa's reed beds, no page saying it of a village
+    marsh; that every toe is drawn in the cut, open form is a shortfall, the record supporting an alder-willow carr as
+    well and the map not yet rolling between them; that sedge was cut for fodder is unsourced; that every pond bank is
+    drawn bare is a shortfall, the Song manual planting a pond's bank sparsely with mulberry and cudrania and the map
+    not yet drawing it.
 
-    Caveat: that a village cut its own toe marsh the same way is carried across from thatch fields in general and Lake
-    Biwa's reed beds, no page saying it of a village marsh; that every toe is drawn in the cut, open form is a
+    Caveat: the toe is drawn as a straight band along the contour where a real fan's toe is an arc, a deliberate
+    deviation; that a village cut its own toe marsh the same way is carried across from thatch fields in general and
+    Lake Biwa's reed beds, no page saying it of a village marsh; that every toe is drawn in the cut, open form is a
     shortfall, the record supporting an alder-willow carr as well and the map not yet rolling between them; that sedge
-    was cut for fodder is unsourced
+    was cut for fodder is unsourced; that every pond bank is drawn bare is a shortfall, the Song manual planting a
+    pond's bank sparsely with mulberry and cudrania and the map not yet drawing it.
 
     Name: marsh
     Covers: `marshes` - every marsh patch, whatever its role
     Label: accurate
     Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum, kayabun-kayabuki, ohmi-yoshi, biwako-visitors-yoshi-hiire, opal-biwa-yoshi-hara
-    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown", "Why is a reservoir's embankment bare of reeds", "Was the reed at a reservoir's margin cut as a crop"; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'
+    Entry: research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - "How our maps draw the marsh at the fields' foot", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'
     """
 
     key = 'marsh'

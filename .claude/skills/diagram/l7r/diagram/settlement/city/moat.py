@@ -35,15 +35,15 @@ class MoatMixin:
         `river=<pts>` makes it an OPEN moat for a river-bank city: the arc facing the river (moat
         vertices within `river_cut` of the river centerline) is dropped and both open ends extend
         ONTO the river, which closes the water ring itself - inlet upstream, outlet downstream,
-        so the current flushes the moat (the historical norm; see research/cities/river-cities.html 'Which way does an offtake leave a river, and why?').
+        so the current flushes the moat (the historical norm; see research/rendering/water.html 'How our maps draw bends, junctions and the run of the water').
         CONVENTION: `river` pts run UPSTREAM-FIRST (source before mouth) - the junction tilts and
         the city_moat_junction_angles check both key on it. The two junction feet are NOT square
         perpendicular tees (that was an rfoot artifact): the INLET (upstream end) shifts upstream
         by `river_inlet_tilt` degrees off square, the OUTLET sweeps downstream by
-        `river_outlet_tilt` - see research/cities/river-cities.html "Which way does an offtake leave a river, and why?" for the
+        `river_outlet_tilt` - see research/rendering/water.html "How our maps draw bends, junctions and the run of the water" for the
         hydrology (confluences merge at downstream angles; intakes stay near-square for sediment)."""
         if width is None:
-            width = self.px(66)  # a provincial-seat moat ~66 ft across (26px at the old 2.55 ft/px grain; research/cities/defenses.html "What keeps the moat full?")
+            width = self.px(66)  # a provincial-seat moat ~66 ft across (26px at the old 2.55 ft/px grain; research/rendering/water.html "How our maps draw moat water")
         cx = sum(p[0] for p in ring) / len(ring)
         cy = sum(p[1] for p in ring) / len(ring)
         mo: list[Pt] = []
@@ -72,7 +72,7 @@ class MoatMixin:
                 keep.append(mo[i])
                 i = (i + 1) % n0
             # THE JUNCTION FEET TILT WITH THE CURRENT (GM 2026-07-24 hydrology review; see
-            # research/cities/river-cities.html "Which way does an offtake leave a river, and why?"). The perpendicular
+            # research/rendering/water.html "How our maps draw bends, junctions and the run of the water"). The perpendicular
             # rfoot projection gave both arms identical square tees - an algorithm artifact, not a
             # decision. Real waterworks are ASYMMETRIC: the OUTLET sweeps visibly downstream
             # (confluence hydraulics - a square tee drives the exit jet across the river; natural

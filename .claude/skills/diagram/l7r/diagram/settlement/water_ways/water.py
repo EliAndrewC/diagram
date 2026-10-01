@@ -28,7 +28,7 @@ SUPPLY_HUE = "#6C9CBE"
 #: against the tan hinterland and the brown bund it hems for its whole length it read as a second boundary line
 #: rather than as water. Kashikawa is where that cost something: its confluence is the pool's one map of a drain
 #: RETURNING to its brook, and the junction read as the field's edge touching a stream - which leaves the GM's own
-#: "water just flows" ruling (research/water.html, 'Where two watercourses meet, how is the junction drawn?') intact
+#: "water just flows" ruling (research/rendering/water.html, 'How our maps draw bends, junctions and the run of the water') intact
 #: in mechanism and gone in effect.
 #: So the separation the middle hue bought is KEPT on lightness and saturation and GIVEN BACK on hue: 203 degrees,
 #: value 0.53 against the supply's 0.75. It stands 76 RGB units from the supply (the rejected first hue stood 21),
@@ -129,8 +129,8 @@ class WaterBodiesMixin:
         """Round the corners of a stream ALREADY drawn - its record and its deferred ink together - at `radius`, keeping the
         vertices in `hold` where they are (settlement-review of Sawada, feature 261).
 
-        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/water.html "Why does every ditch
-        turn on a curve?"), and a generator whose ways are routed against the course as first drawn rounds it once they are
+        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/rendering/water.html "How our maps
+        draw bends, junctions and the run of the water"), and a generator whose ways are routed against the course as first drawn rounds it once they are
         laid: rounding it at `stream` moved every way the brook's corners had shaped, and each re-rolled web found a new
         way to fail. The water block is not emitted until `finish`, so the bed and sheen are redrawn from the rounded course
         here and nothing already on the map has to move. A held vertex splits the course: each stretch is rounded between
