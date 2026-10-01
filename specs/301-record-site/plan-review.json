@@ -1,6 +1,6 @@
 {
  "feature": "301-record-site",
- "plan_sha256": "79a94c6f083ecb0720ea5a6ce370728a7c9b1a82ba0e33b6c9b17a6ba21fb02c",
+ "plan_sha256": "2c32f9b49e7df77ab1da11dff10d0e7f4ec002ad0780c45adf4832f9eb4244f4",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -41,11 +41,10 @@
    "why": "Presentation of the parent section the GM asked for; the lead line is drawn from the fragment's own text and adds no behavior or scope."
   },
   {
-   "id": "D2-single-page-no-glossary",
-   "summary": "all.html carries no glossary hover (data-no-glossary), on the grounds that it is about 14 MB and the hover wraps every term at load; recorded by the session as a deliberate choice",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Every record page carries the glossary hover today (record.js wrapGlossary; the standing rule 'glossary tooltips for terms', feature 209), the spec carries today's look over, and the GM asked for a single page with 'all of the research' - nothing in request.md removes a reading aid from either form. The reason is performance, and it is unmeasured: the plan states no load time, and its '14 MB' carries no measurement label (13,611,081 bytes on this round's run). A slow wrap is awkward, not impossible (the wrap can be deferred to what is on screen), so none of the three tests for an exception is met; a deliberate deviation the GM did not approve is the GM's to grant."
+   "id": "D2-single-page-lazy-glossary",
+   "summary": "all.html keeps the glossary hover; record.js (data-lazy-glossary) wraps each heading's run, and each Citations note, when it comes within 2,000 px of the view; every other page wraps whole as today",
+   "class": "within",
+   "why": "Resolves the previous round's NOT LEGITIMATE narrowing: the reader meets the same hover on every term they can see, so nothing is removed from what the GM asked for ('all of the research' on one page, today's reading aids carried over). Deferring work to what is near the view is implementation, not a reduction. The figures behind it carry a one-shot label (research R8: observed 2026-10-01, Playwright load-event timing). Implementation checked: site.py sets data-lazy-glossary only on all.html; record.js observes h1-h3 and Citations notes."
   },
   {
    "id": "D2-links-notes",
@@ -111,9 +110,9 @@
   },
   {
    "id": "D5-lint-delta",
-   "summary": "spec-lint --delta lints a pre-existing spec directory at the merge base (git show into a temp tree) and reports only findings the push adds, compared without the path:line: prefix as a multiset; a new directory linted whole; selftest both cases",
+   "summary": "spec-lint --delta lints a pre-existing spec directory at the merge base (git show into a temp tree) and reports only findings the push adds, compared without the path:line: prefix as a multiset; a new directory linted whole; selftest both cases; a location written inside a message ({where}:{n}) is dropped too",
    "class": "within",
-   "why": "FR-027 as the GM chose it. Mechanism follows the requirement literally. Note for T17: the withdrawn-text finding (spec-lint.py line 200) embeds a second '{where}:{n}' location in its message, so stripping only the leading prefix lets a line move there read as a new finding - an over-refusal, not a leak; strip embedded locations too."
+   "why": "FR-027 as the GM chose it; the mechanism follows the requirement literally. The previous round's T17 note (the withdrawn-text finding's inner location) is now in the plan."
   },
   {
    "id": "D5-gate-escapes",
@@ -152,5 +151,5 @@
    "why": "Verification of what was asked; no new behavior."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
