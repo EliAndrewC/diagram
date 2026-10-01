@@ -5,7 +5,7 @@ import random
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea, CrownIndex
-from l7r.diagram.settlement.homestead_parts.groves import GROVE_BAMBOO_SHARE, HOMESTEAD_WOOD_FT2, bamboo_mark
+from l7r.diagram.settlement.homestead_parts.groves import BAMBOO_CULM, GROVE_BAMBOO_SHARE, HOMESTEAD_WOOD_FT2, bamboo_mark
 from l7r.diagram.settlement.homestead_parts.wood_goal import rolled_wood
 from tests.settlement._builders import _nuc_village
 
@@ -60,7 +60,7 @@ def test_a_windbreak_clump_inks_bamboo_only_in_the_open():
     s = _hamlet()
     n = sum(s._draw_grove(200.0 + 60 * k, 300.0, 28.0, 28.0, face=(0, -1), mix="windbreak") for k in range(12))
     ink = "".join(str(o) for o in s.out)
-    assert n > 0 and ink.count('stroke="#9AAE3C"') == n, "every counted bamboo mark is inked, and nothing else in its color"
+    assert n > 0 and ink.count(f'stroke="{BAMBOO_CULM}"') == n, "every counted bamboo mark is inked, and nothing else in its color"
     crowns = [(s.M["tree_crowns"][i], s.M["tree_crowns"][i + 1], s.M["tree_crowns"][i + 2]) for i in range(0, len(s.M["tree_crowns"]), 3)]
     assert crowns, "non-vacuity: the clumps drew crowns too"
     assert 0 < GROVE_BAMBOO_SHARE < 0.2

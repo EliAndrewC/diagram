@@ -302,3 +302,17 @@ def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_le
     assert not runs_downhill(up, fall), "the case: a 600 px lead up the fall, 100 back down, climbs"
     run = outfall_run((100.0, 100.0), (100.0, 50.0), fall, lead=600.0, reach=100.0)
     assert run == [(100.0, 100.0), (100.0, 800.0)] and runs_downhill(run, fall)
+
+
+def test_every_grave_stone_stands_on_its_mound() -> None:
+    """Glyph check, Inashiro (feature 302): a fixed step back put the third stone's base 2 ft off a mound under 10 ft tall. Each
+    base stands inside the mound's ellipse at its x, on a small mound and a large one; on a large one the stagger is unchanged."""
+    from l7r.diagram.settlement.fields.features import stone_step
+
+    for rx, ry in ((9.0, 6.0), (12.0, 8.0), (30.0, 20.0)):
+        for i in range(3):
+            dx = -4.0 + i * 4.5
+            up = stone_step(i, dx, rx, ry)
+            assert (dx / rx) ** 2 + (up / ry) ** 2 < 1.0, (rx, ry, i, up)
+    assert [stone_step(i, -4.0 + i * 4.5, 30.0, 20.0) for i in range(3)] == [3.0, 6.5, 10.0], "a large mound keeps the stagger"
+    assert stone_step(0, 0.0, 0.0, 6.0) == 0.0, "a mound with no width has no room"

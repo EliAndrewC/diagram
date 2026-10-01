@@ -137,6 +137,18 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
     hold_ring_rules(plots, ctx, only=[*touched, *range(len(plots) - len(added), len(plots))])
 
 
+STONE_INSET = 0.8
+"""A grave stone's base stands within this share of the mound's half-height at its x, so it reads as standing ON the mound."""
+
+
+def stone_step(i: int, dx: float, rx: float, ry: float) -> float:
+    """How far above the mound's center grave stone `i` stands (its base), `dx` off the center: the stagger's own step back (3 ft,
+    then 3.5 ft more a stone), held inside the mound's ellipse at that x (`STONE_INSET`). Glyph check, Inashiro (feature 302):
+    the fixed step put the third stone's base 2 ft off a mound under 10 ft tall, in the rice."""
+    half = ry * math.sqrt(max(0.0, 1.0 - (dx / rx) ** 2)) if rx > 0 else 0.0
+    return min(3.0 + i * 3.5, STONE_INSET * half)
+
+
 def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str, Any]]) -> bool:
     """Whether a grave's mound (its disc) would stand in a field pond: the disc's outline meets the pond's rim, or either
     center lies inside the other - an island is dry ground, never drawn in open water."""
@@ -423,7 +435,8 @@ class FieldFeaturesMixin:
         for i in range(rng.randint(2, 3)):
             mx = cx - 4.0 + i * 4.5
             h = (8.0, 5.0, 6.5)[i]
-            markers += f'<rect x="{mx - 1.3:.1f}" y="{cy - 3.0 - i * 3.5 - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
+            by = cy - stone_step(i, mx - cx, rx, ry)
+            markers += f'<rect x="{mx - 1.3:.1f}" y="{by - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
         self._field_feature_ink(ink, f'<g>{markers}</g>', "grave island")
         self.M.setdefault("field_graves", []).append({"x": cx, "y": cy})
         return True

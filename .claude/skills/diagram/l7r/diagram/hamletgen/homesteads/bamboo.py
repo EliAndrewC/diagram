@@ -132,6 +132,8 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                     continue
                 if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])):
                     continue  # the household's strip stands on its house's bank (feature 287, homes H01)
+                if across_a_lane((hx, hy), (cx, cy), lanes):
+                    continue  # ...and on its house's side of every lane (glyph check, feature 302: Sawada's strip across a lane)
                 ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
                 plan.bamboo_of[len(plan.bamboo_polys) + len(out)] = (hx, hy)  # its owner, for the stand's record (`of`)
                 out.append(ring)
@@ -141,6 +143,13 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 seated = True
                 break
     return out
+
+
+def across_a_lane(house: Pt, strip: Pt, lanes: Sequence[tuple[Poly, float]]) -> bool:
+    """Does a lane run between a house and its bamboo strip - the line from the house's center to the strip's crossing a lane's
+    centerline? The household's bamboo grows in its own grove (research/vegetation/150): the glyph check of Sawada (feature 302)
+    found a strip 6.7 ft past a 3 ft lane from its house, which the stream test (`crosses_a_stream`, homes H01) never asked."""
+    return any(segments_cross(house, strip, a, b) for pts, _half in lanes for a, b in zip(pts, pts[1:], strict=False))
 
 
 def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: float) -> bool:

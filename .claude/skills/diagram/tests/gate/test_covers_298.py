@@ -12,6 +12,8 @@ import re
 import pytest
 from shapely.geometry import Polygon
 
+from l7r.diagram.settlement.homestead_parts.groves import BAMBOO_CULM
+
 _POOL = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "pool")
 _GLYPHS = {
     "grass blade": r'<g stroke="#A7A860"',
@@ -40,7 +42,7 @@ def test_the_covers_are_tiles_at_the_bottom_and_leave_the_clearings_bare(gen: st
     found = {name: len(re.findall(pat, ink)) for name, pat in _GLYPHS.items()}
     assert not any(found.values()), f"a cover glyph drawn one by one: {found}"
     for stand in re.findall(r'<g class="bamboo">(.*?)</g>', ink, flags=re.S):
-        assert "#9AAE3C" not in stand and "url(#cover-bamboo" in stand, "a bamboo stand drawn mark by mark"
+        assert f'stroke="{BAMBOO_CULM}"' not in stand and "url(#cover-bamboo" in stand, "a bamboo stand drawn mark by mark"
     # SC-002: every scrub or marsh tile in the lines right after the land, before any other ink
     lines = svg.split("\n")
     covers = [i for i, ln in enumerate(lines) if re.search(r'fill="url\(#cover-(grass|reed)', ln)]

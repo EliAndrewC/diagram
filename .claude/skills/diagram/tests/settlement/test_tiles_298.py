@@ -9,6 +9,7 @@ from shapely.geometry import Point, box
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import KeepoutGrid
+from l7r.diagram.settlement.homestead_parts.groves import BAMBOO_CULM
 from l7r.diagram.settlement.land import tiles
 
 
@@ -30,7 +31,7 @@ def test_a_tile_is_a_pattern_of_its_scatters_glyphs_at_its_density(kind: str) ->
         assert 'stroke="#6E9377"' in svg and 'fill="#9FBBAE"' in svg and "<ellipse" in svg
         assert svg.count("<circle") >= round(side * side / tiles.REED_SQFT_PER_TINT)
     else:
-        assert svg.count('stroke="#9AAE3C"') >= tiles.BAMBOO_TILE_MARKS**2
+        assert svg.count(f'stroke="{BAMBOO_CULM}"') >= tiles.BAMBOO_TILE_MARKS**2
 
 
 def test_a_glyph_across_the_tiles_edge_is_drawn_again_at_the_opposite_edge() -> None:
@@ -88,7 +89,7 @@ def test_a_bamboo_stand_is_its_ring_filled_with_the_bamboo_tile_where_its_marks_
     assert s.bamboo_stand(ring) > 100
     rec = s.M["bamboo_stands"][-1]
     ink = s.out[rec["z"]]
-    assert ink.count("<path") == 1 and f'url(#{tiles.pattern_id("bamboo", 1.0)})' in ink and 'stroke="#9AAE3C"' not in ink
+    assert ink.count("<path") == 1 and f'url(#{tiles.pattern_id("bamboo", 1.0)})' in ink and f'stroke="{BAMBOO_CULM}"' not in ink
     s.flush_covers()
     assert tiles.pattern_id("bamboo", 1.0) in s.out[s._cover_slots["defs"]]
     assert s.bamboo_stand([(500.0, 500.0), (501.0, 500.0), (501.0, 501.0)]) == 0, "a stand too small for a seat draws nothing"

@@ -136,13 +136,15 @@ def reed_tile(bs: float) -> str:
 BAMBOO_STEP_FT = 7.0
 BAMBOO_ROW = 0.86
 BAMBOO_TILE_MARKS = 4
+#: The stand's ground shade under its marks: its culm green at this opacity (a map drawing convention).
+BAMBOO_SHADE = 0.18
 
 
 def bamboo_tile(bs: float) -> str:
     """A bamboo stand's tile: `bamboo_mark` (two culms and a leafy fork, 5-8 ft tall) on the stand's own jittered grid."""
     import numpy as np
 
-    from ..homestead_parts.groves import bamboo_mark
+    from ..homestead_parts.groves import BAMBOO_CULM, bamboo_mark
 
     step = BAMBOO_STEP_FT * bs
     w, h = BAMBOO_TILE_MARKS * step, BAMBOO_TILE_MARKS * step * BAMBOO_ROW
@@ -154,7 +156,10 @@ def bamboo_tile(bs: float) -> str:
             y = step * BAMBOO_ROW * (row + 0.5) + (float(rng.random()) - 0.5) * step * 0.6
             tall, lean = float(rng.random()), float(rng.random())
             marks.append(_wrapped(w, h, lambda px, py, tall=tall, lean=lean: bamboo_mark(px, py, bs, tall, lean), x % w, y, 11.0 * bs))
-    return f'<pattern id="{pattern_id("bamboo", bs)}" width="{w:g}" height="{h:g}" patternUnits="userSpaceOnUse">{"".join(marks)}</pattern>'
+    # ...ON THE THICKET'S OWN SHADE (`BAMBOO_SHADE`): a stand shades out almost everything under it (research/vegetation/150), and
+    # marks alone over the scrub's ground read as a tuft of grass (the glyph check of Sawada's homestead bamboo, feature 302)
+    shade = f'<rect width="{w:g}" height="{h:g}" fill="{BAMBOO_CULM}" fill-opacity="{BAMBOO_SHADE}"/>'
+    return f'<pattern id="{pattern_id("bamboo", bs)}" width="{w:g}" height="{h:g}" patternUnits="userSpaceOnUse">{shade}{"".join(marks)}</pattern>'
 
 
 #: THE OVERLAY'S REPEAT (feature 299, the GM 2026-10-01 of the marsh: "Could you do the same thing" - the scrub's varied look):
