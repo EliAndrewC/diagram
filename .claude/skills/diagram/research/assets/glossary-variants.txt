@@ -1155,6 +1155,7 @@ hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
 hakone barrier	Hakone barrier
+hakusan	hakusan
 half-river closure	half-river closure
 half-river closures	half-river closure
 half-stories	half-story
@@ -1853,6 +1854,7 @@ land surveys	cadastre
 land-readjustment	kochi seiri
 landrace	landrace
 landraces	landrace
+later hojo	Later Hojo
 lateral	lateral
 laterals	lateral
 lath	lath
