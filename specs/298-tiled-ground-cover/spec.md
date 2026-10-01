@@ -99,7 +99,7 @@ size that likely slows us down algorithmically").
 - **FR-008**: Every consumer of the individual glyphs MUST be moved to the fill or retired with the glyphs: the page's scrub hit
   region from blade roots, the scatter audit's blade and reed families, the tests that count blades and reeds, the placement-stages
   page, and the docs and research record that describe the glyphs.
-- **FR-009**: The pool MUST regenerate and pass the gate at the 100% floor; maps change only in how the three covers are drawn (and
+- **FR-009**: The pool MUST regenerate and pass the gate at its coverage floor; maps change only in how the three covers are drawn (and
   whatever a removed random draw shifts, within the rules - the GM 2026-09-30: maps "do NOT need to remain identical in output").
 - **FR-010**: The measurements of User Story 3 MUST be recorded with their keys or labels, and reported to the GM as measured,
   including any cost that did not go down.
