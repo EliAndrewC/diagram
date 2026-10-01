@@ -2,9 +2,8 @@
 
 **Feature Branch**: none (main, in the clone `diagram-review`)
 **Created**: 2026-09-30; scope written 2026-10-01, revised the same day on the GM's answers
-**Status**: Draft - written for the GM's reading before work begins (request.md, 2026-10-01: *"update the spec with all of
-these changes and then I will take a look at it before I have you begin"*). Not yet reviewed by `spec-fidelity`; no plan, no
-tasks.
+**Status**: Taken up 2026-10-01 (request.md: *"Please work feature 294 from start to finish"*); first drafted for the GM's reading (*"update the spec with all of
+these changes and then I will take a look at it before I have you begin"*). Accepted - FAITHFUL at round 3 (2026-10-01).
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the review's time and tokens, *"as the number of settlements
 that we have in our pool grows ... This will become quickly untenable after we branch out into villages and towns and provincial
 cities and capital cities"*; *"if our settlement review is checking for anything which a properly implemented placement
@@ -22,7 +21,7 @@ map), 266/289 (the one caption placer), 286 (captions declared), 287 (placer gua
 
 ## Summary
 
-The `settlement-review` agent (`.claude/agents/settlement-review.md`, Opus at high effort, a 48k-character contract) is owed
+The `settlement-review` agent (`.claude/agents/settlement-review.md`, Opus at high effort, a 49,960-character contract, observed 2026-10-01; method: `wc -c`) is owed
 for EVERY pool map whose manifest differs from main (`scripts/_review_owed.py`), enforced by the pair guard, the stop hook and
 `review-gate.sh`. A shared engine change moves every map, so every map is reviewed every round, and every fix moves the
 manifests again. The cost is maps x rounds x one run (43 turns, 6.6 M input tokens a run; `specs/251-*/research.md`), and it
@@ -37,7 +36,7 @@ This feature replaces "review every map that moved, for everything" with three t
 
 1. what a placer or a test can decide is decided there, and leaves every review;
 2. what needs judgment is split into **triggered checks**, each run only when the thing it judges is new or changed - the
-   glyph check (a glyph added, redrawn, or its placement rule substantially changed) is the first, and an audit of every
+   glyph check (an element added whatever its mark, a glyph redrawn, or an element's placement rule substantially changed) is the first, and an audit of every
    check we run decides which others follow the same logic;
 3. what remains as a whole-map review runs only on the occasion it exists for (a map new to the pool, or whatever the audit
    finds), never because an engine change moved a manifest.
@@ -66,14 +65,15 @@ the "author had missed?" column is empty from 2026-09-27.
 ### User Story 1 - The audit: every check we run, sorted by what it needs and when it is owed (Priority: P1)
 
 Every check the map reviews run - each sweep, protocol step and validated example of `settlement-review`, and of the other map
-reviews (`building-review`, `size-audit`) where the same question arises - is put through the same questions, recorded as one
+reviews (`building-review`, `size-audit`) - is put through the same questions, recorded as one
 table in research:
 
 1. **Can a placer or a test decide it?** Then it is CUT (an existing guarantee or test covers it, named) or MOVED (a new rule,
    User Story 2).
 2. **Was it struck by the GM?** Then STRUCK (User Story 5).
-3. **If it needs judgment, what is the occasion on which its answer can change?** The glyph check's answer changes only when a
-   glyph is added, redrawn, or placed by substantially different rules; at any other time it would re-judge the same thing. Each
+3. **If it needs judgment, what is the occasion on which its answer can change?** The glyph check's answer changes only when an
+   element new to the map is added (whatever its mark), a glyph is redrawn, or an element is placed by substantially different
+   rules; at any other time it would re-judge the same thing. Each
    judgment check names its occasion (a new element, a new form of an existing element, a new map, a new tier, a new caption
    type, a new compound sheet, ...) and becomes TRIGGERED on it - its own check, run then and never otherwise - or stays in a
    whole-map review only when its answer genuinely depends on the whole map changing (the twin detector, "does this read as a
@@ -99,10 +99,12 @@ any of them.
 
 The trigger "a pool map's manifest differs from main" is retired. A review is owed only on an occasion the audit assigned to
 it: a triggered check on its occasion, a whole-map review on its occasion. An engine change that moves things within the same
-rules (a speed lever, a re-seat, a refactor, a new rule that moves what it governs) owes nothing, and produces no report of
-what moved - the GM looks at the map, which tells them more than a report would. A report of what moved is built only if the
+rules - every element still placed under rules it has already been judged under (a speed lever, a re-seat, a refactor) - owes
+nothing, and produces no report of what moved - the GM looks at the map, which tells them more than a report would. A report of what moved is built only if the
 audit finds a triggered check needs one as its input (for example, where on the map the changed element now stands, so the
-check looks there and not at the whole sheet).
+check looks there and not at the whole sheet). A new or substantially changed placement rule is NOT the same rules: it is an
+occasion, and owes the glyph check for the elements it re-places (the GM's tannery case) and any other triggered check the
+audit assigns to that occasion.
 
 **Acceptance**: `_review_owed.py` (or its successor) answers from occasions, never from "a manifest moved"; a shared engine
 change across all five hamlets with no new or changed element owes zero runs; for tiers larger than a hamlet, a triggered check
@@ -114,7 +116,7 @@ The first triggered check is the **glyph check**: does the mark read as what it 
 in the legend (the manure heap read as a bush, the rack as a woodpile, the privy as the wood shed), and does it look right
 where it now stands. Its occasions:
 
-- a glyph is added to a map;
+- an element new to the map is added, whatever its mark (a new glyph, or an existing glyph in a new role);
 - an existing glyph is redrawn;
 - the rules for where or how a glyph's element is placed change substantially (the GM's example: tanneries moved from inside
   the city to along the water - the same mark, in a new setting it has never been judged in).
@@ -185,8 +187,8 @@ wording where it says the same.
 
 - A delta with several occasions (a new glyph and a substantially re-placed existing one): each owed check runs once per
   element, in parallel.
-- A new element drawn with an existing glyph: the glyph check is owed for the new element only if the audit's occasion says a
-  glyph in a new role can be confused (the decision is the audit's, recorded).
+- A new element drawn with an existing glyph: the glyph check is owed for the new element (an element new to the map is the
+  occasion, whatever its mark - a shared mark is exactly the confusability the check exists for).
 - A map new to the pool: the whole-map review, plus the triggered checks for any element new to the legend.
 - A minor tweak to an element (a color, a constant within its band): no occasion; the task's declaration says so.
 - The hand-authored legacy pool: owes nothing on an engine change; a triggered check looks at it only when it is the one map
@@ -212,7 +214,8 @@ wording where it says the same.
 - **FR-005**: "A manifest moved" is retired as a trigger; a review is owed only on an occasion the audit assigned.
 - **FR-006**: No what-moved report is built, unless the audit finds a triggered check needs one as input; then it is built as
   that check's input, not for the GM.
-- **FR-007**: The glyph check, on its three occasions (added, redrawn, placement rules substantially changed), and every other
+- **FR-007**: The glyph check, on its three occasions (an element added, whatever its mark; a glyph redrawn; an element's placement rules
+  substantially changed), and every other
   TRIGGERED check of the audit: own contract, pinned tier, scripted owed-answer from the delta and the task's declarations,
   enforced dispatch.
 - **FR-008**: Caste geography, Mode A sheet agreement, label placement and label wording leave every review contract with no
@@ -240,10 +243,11 @@ wording where it says the same.
 - **SC-001**: A shared engine change that moves all five hamlets' manifests with no occasion owes zero review runs (today: five
   per round).
 - **SC-002**: A feature that adds one glyph owes exactly the checks whose occasion that is, on one map, once; the same for a
-  redraw and for a substantial re-placement (the tannery case, seeded).
+  redraw, for a substantial re-placement (the tannery case, seeded), and for a new element that reuses an existing glyph
+  (seeded).
 - **SC-003**: Every FR-003 class has a red-then-green test; no review asks for any of them.
 - **SC-004**: Every check in the three agent files has an audit verdict; the settlement-review contract is at most half its
-  current 48k characters (a target; a larger residue is accepted if every remaining item is whole-map judgment).
+  current 49,960 characters (observed 2026-10-01; method: `wc -c` on the agent file) (a target; a larger residue is accepted if every remaining item is whole-map judgment).
 - **SC-005**: A dispatch that would have returned NOT-REVIEWABLE is refused before launch on the recorded 280 and 293 cases
   replayed.
 - **SC-006**: The ledger report reproduces R0 within the hand census's error and adds cost per feature and per check.
@@ -281,4 +285,12 @@ change when it is built.
 
 ## Review history
 
-(none yet)
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED, 4 items - User Story 3's example "a new rule that moves what it
+  governs" exempted the GM's tannery case that User Story 4 requires; the edge case making a new element drawn with an existing
+  glyph owe the glyph check only conditionally (NOT LEGITIMATE: a new element is the occasion, whatever its mark); User Story
+  1's "where the same question arises" narrowing its own acceptance; the contract's size unlabeled and stale (48k vs 49,960).
+  Addressed: the example struck and a new or changed placement rule stated as an occasion; an element new to the map owes the
+  glyph check whatever its mark (User Story 4, FR-007, SC-002 seeded); the phrase struck; the size measured and labeled.
+- Round 2 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 1 item - the item-2 fix not carried into User Story 1's audit
+  question 3 and the Summary, which still said "a glyph added". Addressed: both now say an element added whatever its mark.
+- Round 3 (spec-fidelity-verify, 2026-10-01): FAITHFUL. Every passage stating the glyph check's occasion agrees.
