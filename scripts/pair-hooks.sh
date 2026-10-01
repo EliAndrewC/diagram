@@ -135,12 +135,19 @@ if complete() and not before:
 PY
 }
 
-pending_maps() { # pending_maps <subagents dir> -> the maps a still-running settlement-review names, space-separated
+# GUARD_EDIT_OK: feature 294 - THE REVIEW IS FIVE CHECKS, EACH OWED ON ITS OCCASION (GM 2026-10-01: the glyph check is
+# "a category of thing"; research R1 sorts every check). Every branch that asked about `settlement-review` alone now asks
+# about any of the five, and what it counts is an owed UNIT (`<check>:<subject>`, `_review_owed.py`), not a moved map.
+REVIEW_AGENTS="settlement-review building-review glyph-check size-audit fix-check"
+REVIEW_AGENTS_RE="settlement-review|building-review|glyph-check|size-audit|fix-check"
+is_review_agent() { case " $REVIEW_AGENTS " in *" $1 "*) return 0 ;; esac; return 1; }
+
+pending_maps() { # pending_maps <subagents dir> -> the units a still-running review names, space-separated
   local dir="$1" f aid
   [ -n "$dir" ] && [ -d "$dir" ] || return 0
   for f in "$dir"/agent-*.jsonl; do
     [ -e "$f" ] || continue
-    grep -ql "settlement-review" "$f" 2>/dev/null || continue
+    grep -qlE "$REVIEW_AGENTS_RE" "$f" 2>/dev/null || continue   # GUARD_EDIT_OK: feature 294 - any of the five checks
     aid="$(basename "$f" .jsonl)"; aid="${aid#agent-}"
     bash "${CLONE_ROOT}/scripts/agent-stall-hooks.sh" pending "$dir" 2>/dev/null | grep -qx "$aid" || continue
     head -n 1 "$f" > "$f.prompt.$$" 2>/dev/null && maps_named_by "$f.prompt.$$"; rm -f "$f.prompt.$$"
@@ -216,13 +223,13 @@ p.write_text(json.dumps(d, indent=2))
 PY
 }
 
-review_pending() { # a settlement-review agent this session launched that has not finished
+review_pending() { # a review agent (any of the five checks) this session launched that has not finished
   local dir="$1"
   [ -n "$dir" ] && [ -d "$dir" ] || return 1
   local f
   for f in "$dir"/agent-*.jsonl; do
     [ -e "$f" ] || continue
-    grep -ql "settlement-review" "$f" 2>/dev/null || continue
+    grep -qlE "$REVIEW_AGENTS_RE" "$f" 2>/dev/null || continue   # GUARD_EDIT_OK: feature 294 - any of the five checks
     # finished agents carry a final assistant turn with no pending tool_result; agent-stall-hooks.sh
     # owns that determination, so ask IT rather than keeping a second copy of the rule
     local aid; aid="$(basename "$f" .jsonl)"; aid="${aid#agent-}"   # the scanner prints the bare id
@@ -257,13 +264,59 @@ review_waived() { # the gate ran with PAIR_OK against this exact content, so no 
   [ "$(read_field "$(pairing_file)" waived_key)" = "$key" ]
 }
 
-gate_running_or_fresh() { # a gate started for this content, or a green record against it
+# GUARD_EDIT_OK: feature 294 US6 - a review is dispatched on a GREEN gate for this content, never beside a running one:
+# a gate that went red mid-review cost ~36 NOT-REVIEWABLE runs (research R0). Green is the gate stamp, as the reviewer's
+# own `make review-paired-gate` reads it; the verification record is the fallback where no stamp script exists.
+gate_green() { # gate_green <key> - a green gate has seen exactly this content
   local key="$1"
   [ -n "$key" ] || return 1
-  [ "$(read_field "$(pairing_file)" gate_key)" = "$key" ] && return 0
+  # GUARD_EDIT_OK: feature 294 - the stamp alone when it exists: the verification record is last-event-wins, so a green
+  # `make test-file` would read as a gate (feature 240's note on `gate_state`)
+  if [ -f "${CLONE_ROOT}/scripts/gate-stamp.py" ]; then
+    ( cd "${CLONE_ROOT}/.claude/skills/diagram" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 )
+    return $?
+  fi
   [ "$(read_field "${CLONE_ROOT}/.git/verification-state.json" engine_key)" = "$key" ]
 }
 
+# GUARD_EDIT_OK: feature 294 FR-009 - the rounds a unit has had in the active feature: one per distinct engine key it was
+# dispatched at, kept in .git/review-rounds.json as {feature: {unit: [keys]}}.
+round_number() { # round_number <unit> <key> -> the round this dispatch would be
+  python3 - "${CLONE_ROOT}/.git/review-rounds.json" "${CLONE_ROOT}/.specify/feature.json" "$1" "$2" <<'PY' 2>/dev/null || echo 0
+import json, pathlib, sys
+rec, pointer, unit, key = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3], sys.argv[4]
+try:
+    feature = json.loads(pointer.read_text()).get("feature_directory", "") or "none"
+except Exception:
+    feature = "none"
+try:
+    d = json.loads(rec.read_text())
+except Exception:
+    d = {}
+keys = d.get(feature, {}).get(unit, [])
+print(len(keys) + (0 if key in keys else 1))
+PY
+}
+record_round() { # record_round <unit> <key> - count this dispatch's round
+  python3 - "${CLONE_ROOT}/.git/review-rounds.json" "${CLONE_ROOT}/.specify/feature.json" "$1" "$2" <<'PY' 2>/dev/null || true
+import json, pathlib, sys
+rec, pointer, unit, key = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3], sys.argv[4]
+try:
+    feature = json.loads(pointer.read_text()).get("feature_directory", "") or "none"
+except Exception:
+    feature = "none"
+try:
+    d = json.loads(rec.read_text())
+except Exception:
+    d = {}
+keys = d.setdefault(feature, {}).setdefault(unit, [])
+if key not in keys:
+    keys.append(key)
+rec.write_text(json.dumps(d, indent=1))
+PY
+}
+
+# GUARD_EDIT_OK: feature 294 US6 - gate_running_or_fresh retired: a review no longer runs beside a gate (gate_green above)
 log_bypass() { # the override's reason, where `make bypass-audit` reads it
   local why="$1" what="$2"
   local dir="${CLONE_ROOT}/.claude/skills/diagram/dev/bypass-log"
@@ -364,10 +417,10 @@ why, note = os.environ["PAIR_WHY"], os.environ.get("PAIR_NOTE", "")
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "additionalContext": (
-        "NO SETTLEMENT-REVIEW OWED: " + why + " (feature 231). The gate runs alone - no pool manifest moved, "
-        "so a review would re-judge ink that has not changed. A glyph or page change with the same manifest is "
-        "the GM to look at rather than the agent: hand the map back and say what moved. The waiver is recorded "
-        "at turn end. If this gate MOVES a manifest, the review becomes owed and the stop hook says so."
+        "NO REVIEW CHECK OWED: " + why + " (feature 294: a check is owed on its occasion - an element new to a "
+        "map, a glyph redrawn or re-placed, a map or sheet new to the pool, or a declared one - never because a "
+        "manifest moved). The gate runs alone; the GM looks at the map. If this gate adds an element to a map, "
+        "the glyph check becomes owed and the stop hook says so."  # GUARD_EDIT_OK: feature 294 - occasions
         + (" " + note if note else "")),
 }}))'
       # GUARD_EDIT_OK: feature 231's amendment - the marker moved out of the python block, where an
@@ -399,11 +452,12 @@ print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "updatedInput": payload,
     "additionalContext": (
-        "Rewritten to `make verify`: the same gate, started together with the review it owes. "
-        "DISPATCH THE settlement-review IN THIS SAME TURN - verify prints which maps changed and "
-        "then runs the gate in the background, so the review is not sitting on the critical path. "
+        "Rewritten to `make verify`: the same gate, with the review checks this delta owes. "
+        "verify prints the owed units (one prompt file each) and runs the gate in the background; "
+        "DISPATCH THEM WHEN THE GATE IS GREEN - a dispatch beside a running gate is refused (feature 294, "
+        "US6: a red gate is found before a review is launched, never in the middle of one). "
         "If no review is owed for this delta, re-issue with PAIR_OK=\"<why>\" and the reason is "
-        "logged." + (" " + note if note else "")),
+        "logged." + (" " + note if note else "")),  # GUARD_EDIT_OK: feature 294 - dispatch on green, per unit
 }}))'
       # GUARD_EDIT_OK: feature 231's amendment - the fallback disclosure on the rewrite branch
       exit 0
@@ -440,18 +494,16 @@ import json, os, sys
 maps, key, detached = os.environ["PAIR_MAPS"], os.environ["PAIR_KEY"], os.environ["PAIR_DETACHED"]
 snap = os.environ["PAIR_SNAP"].strip()
 maps = f"{maps} - review the SNAPSHOT, the gate evicts the pool renders: {snap}" if snap else maps
-how = ("This run is detached, so it returns now and the review overlaps the gate."
+# GUARD_EDIT_OK: feature 294 - the owed checks are dispatched on a GREEN gate, per unit (US6)
+how = ("This run is detached; dispatch the owed checks when it reports green."
        if detached else
-       "This gate runs in the FOREGROUND, so you read this only when it returns and the review will "
-       "start AFTER it, adding its whole runtime to the wall clock. To overlap them next time, detach "
-       "the gate (`setsid nohup make ... > <log> 2>&1 &` - run_in_background reaps `make maps`) or use "
-       "`make verify` for a plain gate.")
+       "This gate runs in the FOREGROUND; dispatch the owed checks when it returns green.")
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "additionalContext": (
-        f"GATE PERMITTED WITH A REVIEW OWED (engine key {key}). The gate and the independent "
-        f"settlement-review run TOGETHER (GM 2026-08-29). DISPATCH NOW, in the same turn: "
-        f"settlement-review over {maps}. {how} A turn may not end with this gate green and no review "
+        f"GATE PERMITTED WITH REVIEW CHECKS OWED (engine key {key}): {maps}. Each owed unit is one "
+        f"agent of its check, dispatched once this gate is GREEN (feature 294: a dispatch beside a running "
+        f"gate is refused). {how} A turn may not end with this gate green and an owed unit not "
         f"dispatched. One-sided case (docs, tests, a guard script)? Say so: "
         f"PAIR_OK=\"<why this needs no review>\" <command> - the reason lands in dev/bypass-log/."
         + (" " + os.environ["PAIR_NOTE"] if os.environ.get("PAIR_NOTE") else "")),
@@ -460,45 +512,32 @@ print(json.dumps({"hookSpecificOutput": {
     exit 0
   fi
 
-  if [ "$tool" = "Agent" ] && { [ "$atype" = "settlement-review" ] || [ "$atype" = "building-review" ]; }; then
-    # GUARD_EDIT_OK: feature 248 FR-001 - A DISPATCH ASKS FOR EXACTLY ONE MAP, counted against every pool map
-    # (owed or not: a legacy map or a spot check serializes the same way), refused BEFORE the agent starts, with
-    # no escape token - a multi-map review is never the right shape. The refusal hands back the per-map prompt
-    # files `make verify` (or the permit branch below) wrote, one Agent call each, in the same message.
-    named=""
-    if [ "$atype" = "settlement-review" ]; then
-      nf="$(mktemp)"
-      printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' > "$nf" 2>/dev/null
-      named="$(maps_named_by "$nf")"; rm -f "$nf"
-      if [ "$(printf '%s\n' $named | grep -c .)" -gt 1 ]; then
-        printf '\n\033[1mBLOCKED: this settlement-review asks for %s maps in ONE agent - one map per agent, all in this same message.\033[0m\n' "$(printf '%s\n' $named | grep -c .)" >&2
-        printf 'The sweeps share no work across maps, so one agent serializes them (feature 247: four maps, 11 of 36 minutes).\n' >&2
-        printf 'Dispatch %s settlement-review agents now, one per map, each with the contents of its prompt file:\n' "$(printf '%s\n' $named | grep -c .)" >&2
-        for m in $named; do
-          pf="${CLONE_ROOT}/.git/review-snapshot/$m/dispatch.md"
-          if [ -f "$pf" ]; then printf '    %s\n' "$pf" >&2; else printf '    %s: no prompt file (not owed a review, or the snapshot was never taken - `make verify` writes it)\n' "$m" >&2; fi
-        done
-        printf 'There is no escape for this shape (feature 248 D1).\n' >&2
-        guard_log pair blocked "$atype" review-multi-map
-        exit 2
-      fi
+  if [ "$tool" = "Agent" ] && is_review_agent "$atype"; then
+    # GUARD_EDIT_OK: feature 248 FR-001 - A DISPATCH ASKS FOR EXACTLY ONE UNIT (one map, before feature 294), refused
+    # BEFORE the agent starts, with no escape token - a multi-unit review is never the right shape. The refusal hands
+    # back the per-unit prompt files `make verify` (or the permit branch above) wrote, one Agent call each.
+    # GUARD_EDIT_OK: feature 294 - every one of the five checks is held to the same shape, the same prerequisites, a
+    # GREEN gate (not a running one: US6, a NOT-REVIEWABLE outcome never costs a run) and a cap of two rounds per unit
+    # per feature (FR-009); the third needs REVIEW_ROUNDS_OK="<the GM's words>" in the prompt.
+    ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
+    nf="$(mktemp)"; printf '%s' "$ptext" > "$nf"
+    named="$(maps_named_by "$nf")"; rm -f "$nf"
+    if [ "$(printf '%s\n' $named | grep -c .)" -gt 1 ]; then
+      printf '\n\033[1mBLOCKED: this %s asks for %s units in ONE agent - one unit per agent, all in this same message.\033[0m\n' "$atype" "$(printf '%s\n' $named | grep -c .)" >&2
+      printf 'The sweeps share no work across maps, so one agent serializes them (feature 247: four maps, 11 of 36 minutes).\n' >&2
+      printf 'Dispatch one agent per unit now, each with the contents of its prompt file:\n' >&2
+      for m in $named; do
+        pf="${CLONE_ROOT}/.git/review-snapshot/$m/dispatch.md"
+        if [ -f "$pf" ]; then printf '    %s\n' "$pf" >&2; else printf '    %s: no prompt file (not owed, or the snapshot was never taken - `make verify` writes it)\n' "$m" >&2; fi
+      done
+      printf 'There is no escape for this shape (feature 248 D1).\n' >&2
+      guard_log pair blocked "$atype" review-multi-map
+      exit 2
     fi
-    # GUARD_EDIT_OK: feature 168 - the escape is recorded as well as logged to the bypass log; the two
-    # answer different questions (that one carries the REASON, this one makes the RATE computable).
-    # GUARD_EDIT_OK: feature 231 - AN ESCAPED REVIEW IS STILL A REVIEW: it records review_key as the normal
-    # branch does, so the stop branch does not fire half-open on a review that actually ran (feature 228).
-    # GUARD_EDIT_OK: feature 240 FR-003 to FR-006, adding a guard - A REVIEW ROUND IS NOT SPENT ON AN UNVERIFIED
-    # FIX (GM 2026-09-13: "procedures which rely on someone ... remembering to do something are flawed"). Before a
-    # settlement-review may start, `_review_prereq.py` asks the RECORD four things: every finding from the map's
-    # last verdict verified or accepted; a review of fixes behind a green gate; every map current and complete;
-    # every quoted figure backed. A refusal names what is missing. It runs BEFORE the no-gate rule and apart from
-    # PAIR_OK, which answers a different question (is a gate beside it) - one escape must not buy the other's
-    # bypass. Its own escape is REVIEW_PREREQ_OK="<why>", for a map left bad on purpose (a negative fixture, a
-    # reproduction). building-review is Mode A, which has no pool map for these questions to be about.
-    if [ "$atype" = "settlement-review" ] && [ -n "${CLONE_ROOT:-}" ] && [ -f "${CLONE_ROOT}/scripts/_review_prereq.py" ]; then
-      # GUARD_EDIT_OK: feature 240 - `$prompt` is the JSON dump of tool_input (quotes escaped, newlines as `\n`),
-      # so the prose the checks read is taken from the payload itself: a paragraph break must stay a break.
-      ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
+    # GUARD_EDIT_OK: feature 240 FR-003 to FR-006 - A REVIEW ROUND IS NOT SPENT ON AN UNVERIFIED FIX: every finding
+    # of the unit's last verdict verified or accepted; every map current and complete; every quoted figure backed. Its
+    # escape is REVIEW_PREREQ_OK="<why>", apart from PAIR_OK, which answers a different question.
+    if [ -n "${CLONE_ROOT:-}" ] && [ -f "${CLONE_ROOT}/scripts/_review_prereq.py" ]; then
       case "$ptext" in
         *REVIEW_PREREQ_OK=*)
           why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"REVIEW_PREREQ_OK=\"([^\"]*)\"", sys.stdin.read()); print(m.group(1) if m else "")' 2>/dev/null)"
@@ -511,14 +550,14 @@ print(json.dumps({"hookSpecificOutput": {
           log_bypass "REVIEW_PREREQ_OK: $why" "review prerequisites"
           ;;
         *)
-          pf="$(mktemp)"; printf '%s' "$ptext" > "$pf"  # GUARD_EDIT_OK: feature 240 - the prose, not its JSON dump
+          pf="$(mktemp)"; printf '%s' "$ptext" > "$pf"
           green=no
           ( cd "${CLONE_ROOT}/.claude/skills/diagram" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 ) && green=yes
-          problems="$(python3 "${CLONE_ROOT}/scripts/_review_prereq.py" check --clone "$CLONE_ROOT" --maps "$(review_owed_names)" --prompt-file "$pf" --gate-green "$green" 2>&1)"
+          problems="$(python3 "${CLONE_ROOT}/scripts/_review_prereq.py" check --clone "$CLONE_ROOT" --maps "${named:-$(review_owed_names)}" --prompt-file "$pf" --gate-green "$green" 2>&1)"
           rc=$?; rm -f "$pf"
           if [ "$rc" -ne 0 ]; then
-            printf '\n\033[1mBLOCKED: this settlement-review would spend its round on work that has not been verified.\033[0m\n' >&2
-            printf 'The review costs 7 to 25 minutes; each item below costs seconds to fix (feature 240):\n\n' >&2
+            printf '\n\033[1mBLOCKED: this %s would spend its round on work that has not been verified.\033[0m\n' "$atype" >&2
+            printf 'A review round costs minutes; each item below costs seconds to fix (feature 240):\n\n' >&2
             printf '%s\n' "$problems" | sed 's/^/  - /' >&2
             printf '\nDeliberately reviewing a map left in this state? Put REVIEW_PREREQ_OK="<why>" in the dispatch prompt.\n' >&2
             guard_log pair blocked "$atype" review-prerequisites-unmet
@@ -527,18 +566,43 @@ print(json.dumps({"hookSpecificOutput": {
           ;;
       esac
     fi
-    # GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews, and no longer records the
-    # review as done: `review_recorded` reads the verdict. The agent copies this key into its verdict record.
+    # GUARD_EDIT_OK: feature 294 FR-009 - AT MOST TWO ROUNDS PER UNIT PER FEATURE: a round is a dispatch at a new engine
+    # key; the third is refused unless the prompt carries REVIEW_ROUNDS_OK="<the GM's words>", logged like an escape.
+    if [ -n "$named" ] && [ -n "$key" ]; then
+      rounds="$(round_number "$named" "$key")"
+      if [ "${rounds:-0}" -gt 2 ]; then
+        case "$ptext" in
+          *REVIEW_ROUNDS_OK=*)
+            why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"REVIEW_ROUNDS_OK=\"([^\"]*)\"", sys.stdin.read()); print(m.group(1) if m else "")' 2>/dev/null)"
+            if [ -z "$why" ] || ! printf '%s' "$why" | python3 "${CLONE_ROOT}/scripts/_hookmatch.py" reason-ok >/dev/null 2>&1; then
+              printf '\n\033[1mBLOCKED: REVIEW_ROUNDS_OK needs a REASON\033[0m (the GM'"'"'s words waiving the cap, in quotes).\n' >&2
+              guard_log pair blocked "$atype" review-rounds-no-reason
+              exit 2
+            fi
+            guard_log pair escaped "$atype:$named" review-rounds-ok
+            log_bypass "REVIEW_ROUNDS_OK: $why" "review round $rounds"
+            ;;
+          *)
+            printf '\n\033[1mBLOCKED: round %s of %s for %s in this feature - the cap is two (feature 294 FR-009).\033[0m\n' "$rounds" "$named" "$atype" >&2
+            printf 'One review round and one fix-verification round. What remains goes to future-work, or to the GM through\n' >&2
+            printf '`escalation-check`; a third round needs the GM'"'"'s waiver: REVIEW_ROUNDS_OK="<their words>" in the prompt.\n' >&2
+            guard_log pair blocked "$atype:$named" review-round-cap
+            exit 2
+            ;;
+        esac
+      fi
+    fi
+    # GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews; the agent copies this key
+    # into its verdict record, and `review_recorded` reads the verdict.
     [ -n "$key" ] && write_pairing "$(pairing_file)" review_dispatch_key "$key"
-    # GUARD_EDIT_OK: feature 248 FR-003/FR-004 - a PERMITTED one-map dispatch is recorded (the map, the key, the
-    # clock) on BOTH permitting paths, the escape included (the plan review's note: an escaped dispatch that
-    # recorded nothing would be counted missing at turn end), and when the last owed map is dispatched at this
-    # key the span of the dispatch times is recorded as parallel or serialized - measured, never refused.
+    # GUARD_EDIT_OK: feature 248 FR-003/FR-004 - a PERMITTED dispatch is recorded (the unit, the key, the clock) on
+    # BOTH permitting paths, and its round counted (feature 294).
     dispatched_note() {
       local m span
-      [ "$atype" = "settlement-review" ] && [ -n "$named" ] && [ -n "$key" ] || return 0
+      [ -n "$named" ] && [ -n "$key" ] || return 0
       for m in $named; do
         span="$(record_dispatch "$m" "$key")"
+        record_round "$m" "$key"
         guard_log pair permitted "$atype:$m" review-dispatched
         case "$span" in
           parallel*)   guard_log pair permitted "$atype:${span#parallel }s" reviews-parallel ;;
@@ -547,21 +611,22 @@ print(json.dumps({"hookSpecificOutput": {
       done
     }
     case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; dispatched_note; exit 0;; esac
-    if gate_running_or_fresh "$key"; then
+    if gate_green "$key"; then
       dispatched_note
       exit 0
     fi
-    printf '\n\033[1mBLOCKED: a settlement-review with no gate beside it.\033[0m\n' >&2
-    printf 'Neither half runs alone (GM 2026-08-29). No gate is running for this content and no green\n' >&2
-    printf 'record matches it, so the review would be adjudicating a map the suite has not checked.\n\n' >&2
-    printf '    make verify        # starts the gate, then dispatch the review in the same turn\n\n' >&2
+    printf '\n\033[1mBLOCKED: a %s with no green gate for this content.\033[0m\n' "$atype" >&2
+    printf 'A review is dispatched once the gate is GREEN on the content it reviews (feature 294, US6): a gate that\n' >&2
+    printf 'goes red under a running review makes the round NOT-REVIEWABLE, and that round is the cost this avoids.\n\n' >&2
+    printf '    make verify        # starts the gate and writes the owed prompts; dispatch when it reports green\n\n' >&2
     printf 'Deliberately one-sided? Put PAIR_OK and the reason in the dispatch prompt.\n' >&2
-    note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2   # GUARD_EDIT_OK: 231's amendment
-    guard_log pair blocked "$atype" review-without-gate   # GUARD_EDIT_OK: feature 168
+    note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2
+    guard_log pair blocked "$atype" review-without-gate
     exit 2
   fi
   exit 0
 }
+
 
 stop() {
   local payload dir key
@@ -603,8 +668,9 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     mkey="$key:$(printf '%s' "$missing" | tr ' ' ',')"
     [ "$(read_field "$(pairing_file)" stop_missing_told)" = "$mkey" ] && exit 0   # once per (content, set), never a loop
     write_pairing "$(pairing_file)" stop_missing_told "$mkey"
-    printf 'REVIEW MISSING FOR: %s - the gate is green on this content and these maps have no settlement-review dispatched, running or recorded.\n' "$missing" >&2
-    printf 'One agent per map (feature 248). Dispatch each now, in one message, with the contents of its prompt file:\n' >&2
+    # GUARD_EDIT_OK: feature 294 - the owed units, of any of the five checks
+    printf 'REVIEW MISSING FOR: %s - the gate is green on this content and these owed units have no review dispatched, running or recorded.\n' "$missing" >&2
+    printf 'One agent per unit (feature 248, 294). Dispatch each now, in one message, with the contents of its prompt file:\n' >&2
     for m in $missing; do printf '    %s/.git/review-snapshot/%s/dispatch.md\n' "$CLONE_ROOT" "$m" >&2; done
     note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2
     guard_log pair blocked "stop:$missing" review-map-undispatched
@@ -612,7 +678,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   fi
   [ "$(read_field "$(pairing_file)" stop_told)" = "$key" ] && exit 0   # once per content, never a loop
   write_pairing "$(pairing_file)" stop_told "$key"
-  printf 'PAIRING HALF-OPEN: the gate went green on this content and no settlement-review looked at it.\n' >&2
+  printf 'PAIRING HALF-OPEN: the gate went green on this content and no owed review check looked at it.\n' >&2  # GUARD_EDIT_OK: feature 294 - any check
   printf 'Dispatch one now, or record why it is not owed: PAIR_OK="<reason>" on your next gate run.\n' >&2
   note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2   # GUARD_EDIT_OK: 231's amendment
   guard_log pair blocked "stop" half-open-pairing   # GUARD_EDIT_OK: feature 168

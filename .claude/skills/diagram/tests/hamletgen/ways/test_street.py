@@ -154,3 +154,27 @@ def test_a_join_leg_loses_a_hook_at_either_end() -> None:
     assert unhooked_both([(0.0, 0.0), (5.0, 0.0), (5.0, -50.0)]) == [(0.0, 0.0), (5.0, -50.0)]
     assert unhooked_both([(5.0, -50.0), (5.0, 0.0), (0.0, 0.0)]) == [(5.0, -50.0), (0.0, 0.0)]
     assert unhooked_both([(0.0, 0.0), (80.0, 0.0)]) == [(0.0, 0.0), (80.0, 0.0)]
+
+
+def test_a_join_the_law_refuses_is_searched_from_either_end(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 291 (cohort seed 904), driven since feature 294's rolls stopped reaching it: when the nearest join leg is
+    unlawful, the lawful join is searched from either end of the street as a door path is."""
+    from l7r.diagram.hamletgen.ways import street
+
+    class Never:
+        def __init__(self, *a, **k) -> None:  # type: ignore[no-untyped-def]
+            pass
+
+        def __call__(self, *a, **k) -> bool:  # type: ignore[no-untyped-def]
+            return False
+
+    searched: list[object] = []
+    monkeypatch.setattr(street, "Lawful", Never)
+    monkeypatch.setattr(street, "door_path", lambda s, e, *a: searched.append(e) or None)
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s._row_streets = [LINE]
+    s.M["lanes"] = [{"pts": [[1300.0, 300.0], [1300.0, 900.0]], "w": 6, "connector": True}]
+    houses = [{"x": 300.0, "y": 560.0}, {"x": 700.0, "y": 440.0}, {"x": 1000.0, "y": 560.0}]
+    lay_row_streets(s, houses, [], [], [], reach=150.0, pad=50.0)
+    assert len(searched) == 2, "both ends searched when neither yields a lawful join"

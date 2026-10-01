@@ -1,0 +1,36 @@
+perf-profile seed 25 stage field: 10.9s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261001T173232Z-seed25-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         19838266 function calls (19241928 primitive calls) in 10.855 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1394 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001   10.873   10.873 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000   10.613   10.613 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:37(fit_field)
+        2    0.003    0.002    9.743    4.872 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:160(_fit_at_aspect)
+       11    0.001    0.000    9.068    0.824 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:124(carve_comb)
+       11    0.001    0.000    7.688    0.699 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:792(_comb_canal_pieces)
+       11    0.000    0.000    7.683    0.698 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/twins.py:84(drop_twin_deliveries)
+       11    0.002    0.000    7.599    0.691 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/twins.py:66(twins)
+     1150    0.262    0.000    7.597    0.007 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/twins.py:39(twin_run_ft)
+  1730730    2.331    0.000    6.090    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+   183484    0.435    0.000    5.271    0.000 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/twins.py:33(_bearing)
+1148296/587735    0.652    0.000    4.126    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+   458710    0.166    0.000    2.322    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:956(interpolate)
+   366968    0.158    0.000    1.083    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/point.py:93(y)
+   366968    0.150    0.000    1.042    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/point.py:88(x)
+       11    0.000    0.000    1.042    0.095 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:447(_carve)
+       11    0.001    0.000    1.041    0.095 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:454(_carve_plots)
+       66    0.002    0.000    0.981    0.015 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:234(_carve_sector)
+   285992    0.128    0.000    0.880    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:351(length)
+        1    0.000    0.000    0.870    0.870 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:117(_finish_first_admissible)
+        1    0.001    0.001    0.865    0.865 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:238(finish_comb)
+       48    0.053    0.001    0.864    0.018 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/sector_rows.py:21(_sector_body_rows)
+   458710    0.839    0.000    0.839    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/linear.py:24(line_interpolate_point)
+        1    0.011    0.011    0.817    0.817 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/seams/close.py:76(close_seams)
+       11    0.009    0.001    0.669    0.061 /diagram/.clones/diagram-review/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:108(planted_area)
+    91742    0.057    0.000    0.575    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:913(project)
+
+

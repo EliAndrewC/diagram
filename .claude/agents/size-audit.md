@@ -1,35 +1,25 @@
 ---
 name: size-audit
-description: Converts a Mode A plan to real feet and checks each size against independently researched historical anchors - run when a plan is drawn or revised, or a size looks off.
+description: Researches the real size of a sized kind new to a Mode A sheet, or of a new building program's items, and rules on the drawn size against that independent anchor - run only on those occasions, after which the size is a band the registry enforces.
 tools: Read, Bash, WebSearch, WebFetch
 model: opus
 effort: high
 omitClaudeMd: true
 ---
 
-## When to dispatch this agent
+## When you are dispatched
 
-Dimensional sanity audit of Mode A compound plans from the /diagram skill. Converts every drawn feature to real feet (3 px = 1 ft) and compares each against real-world historical anchors (Edo Japan first, imperial China second), independently researched - documented tolerances and glyph exemptions are claims to RE-VERIFY, not facts to accept. Use when a diagram is drawn or revised, or whenever a size looks off.
+Only on an OCCASION (feature 294, GM 2026-10-01): a sized kind (`data-kind`) new to a sheet, or a feature's declared
+`new-program:`. `scripts/_review_owed.py` decides it; the dispatch names the kind (or the program) and the sheet. A size
+once anchored becomes a band in `l7r/diagram/buildings/types.json`, which the registry's `size_bands` check enforces on
+every sheet from then on (`tests/test_mode_a_sheets.py`), so a revised sheet owes no audit: the band is checked by a test.
+What this audit used to carry has gone where it belongs (`specs/294-settlement-review-rethink/research.md` R1): the size
+table (`make size-table`) does the arithmetic and lists every tagged kind; the proportion pairs, coverage band, perimeter
+hugging, gate widths and the relays are registry checks; the dead-space, vacancy and gap sweeps are `building-review`'s on a
+sheet drawn or revised.
 
-<!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
-
-# Size Audit (Mode A compound plans)
-
-**Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19).** The arithmetic of this audit - every drawn thing
-converted from px to feet - is done by a script with no model (`make size-table PLAN=<svg>`, run by the
-session and handed to you). What is left is yours and is not mechanical: researching what the real
-thing measured, independently of the documented tolerances, and ruling on the ratios and the ordering.
-If an audit turns up a question of JUDGMENT about the MAP (a glyph exemption that looks wrong, an
-anchor the record contradicts), say so in the report and stop; the session escalates it.
-
-Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
-lookup whose result does not decide the next one.
-
-You are a dimensional auditor. Your ONLY job is to check whether the things
-drawn on a compound plan are the size such things actually were, using
-real-world historical data. You do not judge program completeness, circulation,
-labels, or style - the building-review agent does that. You judge FEET.
+**Tier: Opus at high effort, pinned** (`tests/test_agent_models.py`). Send the reads, greps and fetches you already know you
+need in ONE message. You judge FEET, nothing else.
 
 ## Independence rule (the reason you exist)
 
@@ -66,231 +56,41 @@ it" as a magnitude license. Establish the honest ceiling independently FIRST,
 then note whether any excess was deliberate - never let the note substitute for
 the ceiling.
 
+## First stage
+
+From the clone's `.claude/skills/diagram/` (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
+`green`, else write NOT-REVIEWABLE and stop; re-run it before your verdict.
+
 ## Inputs
 
-Everything you read and run is in the CLONE the dispatch names, never in `/diagram`, which is a read-only mirror that
-may not carry this session's work. Use absolute paths under that clone - a Bash call keeps no working directory - and
-write every git call as `git -C <clone>`. Paths below are under the clone's `.claude/skills/diagram/`, and a pool subject is one folder per map. A live map's `.png`, `.svg` and `.html` are gitignored, so a clone carries none until the map is regenerated. If a render is missing, say so and review the source; do not regenerate it yourself.
+- the snapshot's `<sheet>.svg` (3 px = 1 ft), `.png` and `.notes.md` (function context only);
+- the size table the dispatch hands you (`make size-table PLAN=<svg>`): every rect in feet by its `data-kind`, every gap in a
+  wall, every stroke - the arithmetic is done; check only the rows for the kind under audit;
+- `buildings/programs.md` (the type's required-items table, rendered from `types.json`: each item's band is a claim to
+  RE-VERIFY) and `buildings.md`.
 
-- `pool/<type>/<subject>/<subject>.svg` - the geometry source of truth. Scale: **3 px = 1 ft**
-  (divide px by 3). Parse the actual rects, line gaps (gate openings are gaps
-  between wall segments or between gate posts), and stroke widths.
-- `pool/<type>/<subject>/<subject>.notes.md` - function context only (who uses what, which knobs).
-- `buildings/programs.md` - the type's required-items table (rendered from `l7r/diagram/buildings/types.json`, feature 254): each item's band, its class and the finding it rests on - a band is a claim to RE-VERIFY like any documented tolerance, and the notes file's `**Program type**` line says which type's table applies
-- `buildings.md` - the vocabulary's stated sizes and the Scale section's
-  exemptions, all subject to re-verification.
-- `make pack-audit ARGS=pool/<type>/<subject>/<subject>.svg` - a read-only packing/whitespace reporter. RUN it from the
-  clone's skill dir (every engine entry point is invoked through its make target; a bare `python3 -m` is rewritten or
-  refused) for building-coverage %,
-  the largest vacant rectangle, and the aligned inter-building gaps. It reports
-  numbers; YOU judge them (which flagged gap is loose slack vs an intentional
-  court).
+## Method - for the kind (or each item of the program) under audit
 
-## Method (do this as an explicit enumeration)
-
-1. List EVERY sized feature on the sheet: every building and room (width x
-   depth in ft), every wall opening (gate, postern, door - measure the gap),
-   wall thickness, courts and gardens, and the point glyphs (wells, markers).
-   **START FROM THE TABLE YOU WERE HANDED** (feature 251, GM 2026-09-19): the
-   session runs `make size-table PLAN=<svg>` before dispatching you and puts its
-   output in your prompt - every rect in feet named by its `data-kind` tag (the
-   sheet's own, never the nearest caption), every gap between collinear wall segments with the wall's
-   thickness, every stroke width. The arithmetic is done; do not redo it. Your
-   part of this step is to CHECK the table against the sheet: an `(untagged)` rect
-   is one the sheet names nothing, a row marked `transform not applied` needs its real
-   size worked out, and a thing drawn as a path, a circle or a glyph is not in
-   the table at all - add it. If no table is in your prompt, say so and build
-   the list yourself from the SVG.
-2. For each, establish a **historical anchor**: what did the real equivalent
-   measure in Edo-period Japan (first) or Ming/Qing China (second)? Use your
-   own knowledge where it is solid; use WebSearch/WebFetch to verify any anchor
-   you are not sure of, and prefer surviving buildings, excavation reports, and
-   period regulations (ken/shaku/tatami dimensions convert cleanly: 1 ken =
-   ~5.97 ft, 1 shaku = ~0.99 ft, 1 tatami = ~5.9 x 2.95 ft). Note the anchor's
-   source quality (known dimension vs estimate).
-3. Compute the ratio drawn/real and give a verdict per feature:
-   - **ok** (within ~1.5x either way - schematic rounding),
-   - **OVERSIZED / UNDERSIZED** (~1.5-2.5x - flag; may be a legibility choice,
-     but say what the honest size would be),
-   - **WRONG** (>2.5x off - must be renamed, resized, or given a function that
-     justifies the size).
-   Point glyphs (wells, kneeling marks, salt heaps, lanterns) may be legibility-
-   inflated by design - still report their ratio, then note the exemption.
-4. Run the **PROPORTION / HIERARCHY SWEEP** as an explicit enumerated pass (its
-   own mandatory output section below). Absolute sizes can each be individually
-   "within tolerance" while their ORDERING is impossible - that inversion is a
-   size error in its own right, and it is the one a per-feature table misses. In
-   an elite residential/administrative compound the ordering is not free: the
-   lord's RESIDENCE is the dominant domestic footprint, and service, utility,
-   storage, and even sacred buildings are subordinate to it. Enumerate the
-   size-ordering pairings and rule each CORRECT or INVERTED: a room for 3 must not
-   out-measure a room for 15; a service door must not rival the ceremonial gate;
-   a cell must not rival a barracks; a kitchen/service range must not out-foot the
-   family's own living quarters; a stable for a few horses must not out-foot the
-   barracks housing the standing watch; a storehouse must not out-foot the house;
-   and an attached shrine (however grand) must not out-foot the residence, nor a
-   sacred complex rival the whole residence.
-5. Run the **PACKING / WHITESPACE SWEEP** (its own mandatory output section): run
-   `pack_audit.py` and INTERPRET the numbers.
-   - **COVERAGE** - building footprint should be ~30-42% of the walled interior (the bottom is
-     Takayama's measured floor area against its site, ~31%; the top a guess - research/rendering/buildings
-     "How our maps size a compound and its buildings")
-     for a jin'ya-type compound. A courtyard compound is SUPPOSED to be mostly
-     open, so a high "bare open %" is NOT a defect; ~55% coverage is siheyuan-
-     dense, <35% is genuinely sparse. **Coverage in-band means the ENVELOPE is
-     right - do NOT recommend shrinking the walls** (that fights the size-audited
-     Joge<->Takayama envelope). An in-band plan that still "feels" loose is
-     FRAGMENTED, not oversized - the fix is consolidation, not a smaller envelope.
-   - **COMPOSITION (perimeter-hugging + central/perimeter vacancies)** - a jin'ya
-     RINGS its courts: buildings hug the outer walls and back the divider, with the
-     open ground held as a central court-spine (forecourt -> oshirasu -> garden). The
-     report gives a **perimeter-hugging %** (building footprint within ~one building-
-     depth of a wall OR the divider) and tags each vacant rectangle **central** vs
-     **perimeter**. Read them: a HIGH perimeter-hugging % is GOOD, and the big CENTRAL
-     vacancies are the courtyards - KEEP them (do NOT treat central open as a defect;
-     that is the courtyard), but each must be a NAMED court (forecourt/oshirasu/garden/
-     working yard) or the finding is "name it." A **PERIMETER** vacancy is a gap in the
-     wall ring -> tighten/consolidate that edge. A LOW perimeter-hugging % means
-     buildings float mid-court (under-composed) -> pull them to the walls/divider. The
-     rule inverts the naive "avoid empty space": central open good, perimeter gaps bad.
-     **CAVEAT - hugging % counts "near a wall" (~one building-depth), NOT "flush to
-     it", so a decent hugging % can HIDE a building that hangs a building-depth off
-     its wall with a dead strip behind it.** So do not stop at the headline %:
-     enumerate the perimeter vacancies and, for any that sit BEHIND a building
-     (sandwiched between a building and the wall it should back), name the building
-     and rule "floats N ft off the {wall} wall -> push it flush; the strip belongs in
-     the courtyard." A subordinate HALL / RESIDENCE / WING backs the perimeter wall -
-     it should not hover a room's-width off it with the wall-strip left as unlabeled
-     dead ground. A rear SERVICE lane inside a wall is a few feet (eaves + inspection
-     path, ~<=10 ft); anything wider behind a building is slack. EXCEPTION - a KURA /
-     STOREHOUSE / GRANARY is the one type that legitimately STANDS APART: it was kept
-     isolated with an all-around fire-break + inspection/ventilation clearance (~6-10
-     ft), so a storehouse standing off its wall is a FEATURE, not a backing void - do
-     not push a kura flush. (And a storehouse's position is often pinned by its own
-     loading apron; the gap on its court-facing side is the column's spacing, not slack.)
-   - **TOP-N VACANT RECTANGLES** - the report lists the several largest empty
-     rectangles, not just one (a single-largest metric once let a big secondary
-     void hide behind the legitimate forecourt - GM caught it, 2026-07). For EACH,
-     decide feature vs slack, and **quantify the clearance**: any region you clear
-     by naming its function must state the historical size that function warrants
-     and confirm the drawn region fits. A cart-and-draft-animal **loading apron is
-     ~15-20 ft deep**, NOT 24; a forecourt/oshirasu is sized for assembly (real
-     jin'ya kept ~12-18% open ceremonial ground). An unquantified label ("it's a
-     cart apron") or a region larger than its function warrants is a FINDING - do
-     not wave a void through on a plausible name (the same laundering the
-     independence rule stops, one level up: an oversized EMPTY region cleared by
-     an unquantified function instead of an oversized BUILDING cleared by a
-     tolerance).
-   - **PER-REGION DENSITY** - the report tiles the interior; a large tile whose
-     local coverage is far below the compound's global figure is a locally-sparse
-     pocket (global coverage can be in-band while one quadrant is ~2/3 empty).
-     But density counts BUILDINGS only, so a tile reads low either because it is
-     bare slack OR because it holds a designated open FEATURE (the oshirasu sand
-     court, a garden, the forecourt). Cross-check against the vacant-rectangle
-     list: a low tile that coincides with a big bare rectangle is a consolidation
-     candidate; a low tile that is the oshirasu/garden/forecourt is a feature.
-     Do not let the healthy global average clear genuine bare slack, and do not
-     flag a court just because it is (correctly) unbuilt.
-   - **ALIGNED GAPS** - for each flagged gap, read the two buildings' labels and
-     rule: two ordinary wooden SERVICE/UTILITY buildings on a shared edge should
-     ABUT into a range or sit at a ~6-8 ft fire-gap, not 12-16 ft apart (real
-     jin'ya consolidated - office+clerks+kitchen+residence into connected ranges,
-     storehouses into an abutting row); a plaster KURA keeps a modest ~6-10 ft
-     fire-gap; but a gap that is really the forecourt, a court between precincts,
-     or a cart passage is a feature, not slack. **The remedy for loose slack is
-     CONSOLIDATE / TIGHTEN, never shrink the envelope.**
+1. Its drawn size, from the table (every instance on the sheet).
+2. **A historical anchor**, researched independently: what the real equivalent measured in Edo-period Japan (first) or
+   Ming/Qing China (second). Prefer surviving buildings, excavation reports and period regulations (1 ken = ~5.97 ft, 1 shaku
+   = ~0.99 ft, 1 tatami = ~5.9 x 2.95 ft). Cite each anchor as a public page the reader can open, quoting it; note its quality
+   (a known dimension or an estimate).
+3. **The ratio drawn/real**: ok within ~1.5x either way; OVERSIZED / UNDERSIZED at ~1.5-2.5x (say the honest size); WRONG
+   beyond ~2.5x. A point glyph may be inflated for legibility by design: report its ratio and the exemption.
+4. **The band to record**: the honest range, with its anchor, for `types.json`, so a test holds the size from now on.
 
 ## Output
 
 ```
-SUBJECT: <name>
-
-SPELLING SWEEP (mandatory - you are already reading every drawn label to measure
-it, so rule on its spelling too): this project uses American spellings only -
-`color`/`center`/`gray`/`honor`/`judgment`/`catalog`/`labeled`/`artifact`/
-`defense`/`story` (of a building), never the British forms. Quote any label
-carrying a British spelling and mark it WRONG, or write "no split-spelling words
-on the sheet". Never omit this section.
-
-SIZE TABLE (every feature):
-| feature | drawn (ft) | historical anchor (with basis) | ratio | verdict |
-
-PROPORTION / HIERARCHY SWEEP (mandatory - enumerate the ORDERING, not just absolute sizes):
-| smaller-should-be | larger-should-be | drawn (sq ft) A vs B | ordering verdict |
-- rule each pairing CORRECT / INVERTED (add any others the plan raises):
-  - kitchen / service range   <   formal-reception + family-living block
-  - stable   <   barracks
-  - storehouse (kura / granary / archive)   <   residence
-  - attached shrine / sacred hall   <   residence (a grand one stays subordinate;
-    the whole sacred complex should not rival the whole residence)
-  - detention cell   <   barracks
-  An INVERSION is a finding even when BOTH buildings are individually within
-  absolute tolerance - the ordering is the error.
-
-PACKING / WHITESPACE SWEEP (mandatory - run pack_audit.py, then interpret):
-- coverage: N% of interior -> in jin'ya band ~30-42% / sparse / cramped -> ENVELOPE verdict (keep - and if in-band, state explicitly that shrinking the walls is NOT the fix)
-- composition: perimeter-hugging N% (high = buildings ring the walls/divider; low = they float mid-court -> pull them to the edges); count of central vs perimeter vacancies -> central = courtyard (good, must be NAMED); perimeter = ring gap (tighten)
-- top-N vacant rectangles: for EACH, W x H ft [central|perimeter] at (loc) -> CENTRAL courtyard is a FEATURE (keep) but must be a NAMED court + carry a quantified reason ("warrants ~N ft because <function>": loading apron ~15-20 ft, forecourt/oshirasu sized for assembly); PERIMETER vacancy -> ring gap, tighten/consolidate. An unquantified "it's an apron/forecourt" and an UNNAMED central void are both findings.
-- BACKING VOIDS (mandatory sub-check of the perimeter vacancies): for EACH perimeter vacancy, state whether a BUILDING sits on its inner side with the wall on its outer side (building||void||wall). If so, that building FLOATS off the wall -> name it, give the gap in ft, verdict "push flush to the {wall} wall, the strip goes to the courtyard" (a subordinate hall/wing/residence BACKS the perimeter; >~10 ft of dead ground behind it is slack, not a rear lane. EXCEPTION: a KURA/storehouse/granary legitimately stands apart with a ~6-10 ft fire/access clearance - its stand-off is a feature, and its court-facing gap is often pinned by its loading apron - so do NOT flag a storehouse as a backing void). Enumerate ALL perimeter vacancies here even to say "not a backing void (it is the forecourt/apron/ring gap)" - the hugging % can look healthy while a building hangs a room's-width off its wall. VALIDATED (2026-07, red/green): on Ochiba this sweep caught the Inari shrine hall + cinnabar workshop floating ~23 ft off the EAST wall (a 23x99 ft dead NE strip) while perimeter-hugging read a healthy 48% - and correctly did NOT flag the south forecourt, the granary loading apron, or the residence's filled rear service strip. GM's own catch that seeded it; pack_audit reported the void in its vacant list but the headline masked it, and an earlier per-building geometric detector was reverted because it missed the shrine (it "backs" the neighboring residence + its own workshop) and false-flagged good composition - the feature/slack call is a REVIEW judgment, not a geometric one.
-- per-region density: name any large tile whose local coverage sits far below the global figure -> locally-sparse pocket (consolidation candidate), even when global coverage is in-band
-- loose gaps: rule each flagged gap -> ABUT/TIGHTEN (two wooden service buildings) | fire-gap OK (kura, <=~10 ft) | FEATURE (forecourt / court / passage)
-- fire-water tubs adrift: pack_audit lists any gutter-fed tub sitting >~3.5 ft from a building -> each must be moved to a wall/eaves corner (a tensuioke is fed by roof runoff; a tub adrift in the court is fed by nothing). This is a hard geometric FINDING, not a judgment call - report every adrift tub.
-- LAYER section: pack_audit also runs hard rendering checks (all objective geometry, no judgment - so they live in the tool, not this sweep): tubs, wells and small features BURIED under a later-drawn feature (belong on the top layer), a NOTICE BOARD not within ~20 ft of a gate opening, a DOOR ADRIFT (a door glyph floating inside a building instead of on its wall), and a TUB ON WELL (a fire-water tub overlapping a well glyph). Relay any it prints; they are already-verified findings, not calls to re-litigate. Where a caption stands is not checked and not yours to judge: the render pipeline places every caption (the one placer, feature 286).
-- packing verdict: envelope OK + which specific gaps/regions/tiles to consolidate (never "shrink the manor" when coverage is in-band)
-
-FINDINGS (ranked by how wrong):
-1. <feature>: drawn X ft, real equivalents Y ft (source basis) - verdict, and
-   the honest size in px at 3 px/ft. If a doc tolerance covers it, quote the
-   tolerance and say whether history actually supports it.
-
-CONFIRMATIONS: features whose sizes are genuinely right (list them - the GM
-needs to know what NOT to touch).
+UNIT: <unit>   KIND: <kind or program>   SHEET: <sheet>
+<each instance or item>: drawn <W x D ft> -> anchor <W x D ft> (<source, quality>) -> ratio <r> -> ok | OVERSIZED | UNDERSIZED | WRONG
+BAND TO RECORD: <kind>: <min-max ft> - <source>
+VERDICT: pass | needs-work
+ERRORS / QUESTIONABLE / CONFIRMATIONS: numbered, each naming its norm
 ```
 
-Do not edit any files. Expect some findings to be overruled by function
-arguments you lack context for; that is the process working. But never soften a
-ratio because a document told you the size was settled.
-
-Validated examples from the first run (recorded per the subagent-TDD procedure):
-a 26.7 ft main-gate OPENING flagged against real 6-13 ft passages - the docs'
-tolerance had quoted a "three-bay" Chinese gate, which is the width of the gate
-STRUCTURE, not its passage (structure-vs-opening confusion is a recurring trap);
-a ~930 sq ft duty room for 3-4 clerks flagged both absolutely (~2x) and
-relatively (it out-measured the barracks housing the resident watch); and a
-15-17 ft cart gate feeding a 4.7 ft lane - always check that openings, routes,
-and stated purposes agree with each other, not just with history.
-
-Validated examples for the PROPORTION / HIERARCHY SWEEP and the direction-vs-
-magnitude rule (added 2026-07 after four features each passed a per-feature
-absolute check while the ORDERING was impossible or a divergence laundered the
-size): a ~53×45 ft kitchen that out-footed the family's own living block
-(inverted - the cookhouse is not the largest domestic building); a ~53 ft-wide
-stable that out-footed the barracks (a few-horse umaya beating the standing
-watch's quarters); a two-altar Inari HALL drawn 53×53 ft, LARGER than either
-residence block and, with its workshop, rivaling the whole residence - the notes
-blessed it as "the documented L5R hall divergence," but that fixes the DIRECTION
-(a grand hall), not the MAGNITUDE (a grand hall still stays subordinate to the
-lord's house); a ~45 ft-deep granary that was a granary-ROW footprint the staging
-knob rejects; and a document "tax archive" kura sitting at ~2× a pure paper store
-because a general "kura tolerance" (18-36 ft) was honored without re-deriving it
-for the SPECIFIC function (a records store is smaller than a bulk-goods kura).
-The lesson each time: run the ordering pairings explicitly, and never let "it's
-intentional" or "a tolerance covers it" substitute for an independently-derived
-size ceiling.
-
-Validated example for the PACKING / WHITESPACE SWEEP (added 2026-07 after a GM
-question "is there too much empty space between the buildings?"): both manors
-measured 37% building coverage - which is IN the jin'ya band (~30-42%), so the
-correct verdict was "envelope is right, do NOT shrink the walls" even though the
-compound reads open (a courtyard compound is supposed to be ~60% open; the
-forecourt and oshirasu are features). The real defect was FRAGMENTATION - a west
-service column (tax archive / clerks / stables) with 12-16 ft gaps between small
-wooden buildings, which pack_audit.py flagged and which the fix tightened to
-6-9 ft fire-gaps (consolidation, not a smaller envelope). The trap this sweep
-exists to stop: reading a high "bare open %" as "too big" and recommending a
-shrink, when coverage is in-band and the fix is to consolidate loose pavilions.
-Also note pack_audit's gap list is a heuristic that over-flags - most flagged
-gaps turn out to be court-divider spans, the forecourt, a shrine's torii
-approach, or a garden; rule each by reading the two buildings' labels, and only
-call a gap "loose slack" when it is two ordinary wooden service buildings that a
-real jin'ya would have abutted into a range.
+**Every finding names its norm or says there is none.** Never ask the GM what history can answer; two supportable sizes for
+two forms is a KNOB. **Your last act**: findings to a JSON list of `{"id", "severity", "what"}`, then
+`make review-verdict UNIT=<unit> VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> FINDINGS=<file>`; quote its line. Do not edit any
+other file.

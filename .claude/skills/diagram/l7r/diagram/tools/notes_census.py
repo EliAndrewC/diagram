@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import sys
 from collections import Counter
 from typing import Any
@@ -95,3 +96,143 @@ def main(argv: list[str]) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
+
+
+# ---- feature 294 B14: a count typed into the notes' CURRENT prose agrees with the manifest -----------------------------
+
+#: a heading that dates its section, or names the feature or pass it records, is HISTORY: its counts were true when written
+_HISTORY = re.compile(r"\b(?:\d{4}-\d{2}-\d{2}|[Ff]eature \d{3}|pass \d+|round \d+)\b")
+_HEADING = re.compile(r"^#{1,6} .*$", re.M)
+_DATED = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
+_WORDS = {
+    w: i
+    for i, w in enumerate(
+        (
+            "zero",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+            "twenty",
+        )
+    )
+}
+#: the kinds a typed count names, and how the manifest counts them
+COUNTED: dict[str, Any] = {
+    "farmhouses": lambda M: len(M.get("houses") or []),
+    "households": lambda M: len(M.get("houses") or []),
+    "homesteads": lambda M: len(M.get("houses") or []),
+    "retirement houses": lambda M: len(M.get("retirement_houses") or []),
+    "byres": lambda M: len(M.get("byres") or []),
+    "wells": lambda M: len(M.get("wells") or []),
+    "footbridges": lambda M: len(M.get("bridges") or []),
+    "persimmons": lambda M: len(M.get("persimmons") or []),
+    "privies": lambda M: sum(1 for f in M.get("farm_fixtures") or [] if f.get("kind") == "privy"),
+    "wood sheds": lambda M: sum(1 for f in M.get("farm_fixtures") or [] if f.get("kind") == "woodpile"),
+}
+_COUNT = re.compile(r"\b(\d+|" + "|".join(_WORDS) + r")\s+(" + "|".join(re.escape(k) for k in COUNTED) + r")\b", re.I)
+
+
+def current_prose(text: str) -> str:
+    """The notes' CURRENT description: every section whose heading is not history (`_HISTORY`), less the census block."""
+    i, j = text.find(BEGIN), text.find(END)
+    if 0 <= i < j:
+        text = text[:i] + text[j + len(END) :]
+    out, keep, last = [], True, 0
+    for m in _HEADING.finditer(text):
+        if keep:
+            out.append(text[last : m.start()])
+        keep, last = not _HISTORY.search(m.group(0)), m.start()
+    if keep:
+        out.append(text[last:])
+    # ...and a paragraph or a bullet that carries its own date is history too ("As first rolled (2026-08-11) ...", "- 2026-08-28 the
+    # GM's review ..."): split on blank lines and at each bullet, and drop every block with a date in it
+    blocks = re.split(r"\n\s*\n|\n(?=\s*- )", "".join(out))
+    return "\n\n".join(b for b in blocks if not _DATED.search(b))
+
+
+def stale_counts(text: str, M: dict[str, Any]) -> list[str]:
+    """Each count the notes' current prose types that the manifest does not ship - "15 farmhouses" on a map of 16."""
+    out = []
+    for m in _COUNT.finditer(current_prose(text)):
+        typed = int(m.group(1)) if m.group(1).isdigit() else _WORDS[m.group(1).lower()]
+        kind = m.group(2).lower()
+        shipped = COUNTED[kind](M)
+        if typed != shipped:
+            out.append(f"'{m.group(0)}' - the map ships {shipped} {kind}")
+    return out
+
+
+# ---- feature 294 B15b: a count typed into a Mode A sheet's notes agrees with the sheet's own `data-kind` census ---------
+
+#: the nouns a sheet's notes type a count of, and the object each counts on the sheet (`sheet_counts`). Arches are NOT
+#: counted: the notes type them as ranges and rules ("a compound shrine takes 1-2 arches", "not a seven-arch avenue"),
+#: never as a census, and a drawn arch is a group of strokes no tag marks as one (measured 2026-10-01 on the six sheets).
+SHEET_NOUNS: dict[str, str] = {
+    "fire-water tubs": "tubs",
+    "tubs": "tubs",
+    "privies": "privies",
+    "latrines": "privies",
+    "wells": "wells",
+}
+_SHEET_COUNT = re.compile(r"(?<![\d~-])\b(\d+|" + "|".join(_WORDS) + r")\s+(" + "|".join(re.escape(k) for k in sorted(SHEET_NOUNS, key=len, reverse=True)) + r")\b", re.I)
+#: A count after a determiner names a PART of the sheet's objects, not their census ("the house's two privies", "the two
+#: wells do not read as a pair", "its two tubs"): such a count is not checked. The word list is a GUESS - the forms the
+#: six sheets' notes use for a part (measured 2026-10-01).
+_PART_OF_THE_WHOLE = re.compile(r"(?:\b(?:the|its|their|his|her|own|these|those|both|each|all)|'s)\s+$", re.I)
+#: A sheet's journal dates its entries by MONTH as often as by day ("- 2026-07 fire-water placement"): a block carrying
+#: either is history, beside `current_prose`'s day-dated rule.
+_MONTH_DATED = re.compile(r"\b\d{4}-\d{2}\b")
+
+
+def sheet_counts(svg: str) -> dict[str, int]:
+    """How many of each counted object the sheet DRAWS, read from its tags: a tub is a circle of the fire-water group
+    (`parse.ParsedPlan.tubs`); a privy a latrine-tagged rect in the privy fill (its collection hatch is not a second
+    privy); a well a well-tagged rect in the curb fill."""
+    from l7r.diagram.tools.pack_audit.parse import WELL_FILL, parse_svg
+    from l7r.diagram.tools.pack_audit.program_rules import PRIVY_FILL
+    from l7r.diagram.tools.pack_audit.tagged import marks
+
+    rects = [m for m in marks(svg) if m.tag == "rect"]
+    return {
+        "tubs": len(parse_svg(svg).tubs),
+        "privies": sum(1 for m in rects if m.belongs_to("latrine") and m.fill == PRIVY_FILL),
+        "wells": sum(1 for m in rects if m.belongs_to("well") and m.fill == WELL_FILL),
+    }
+
+
+def sheet_prose(notes: str) -> str:
+    """A sheet's notes' CURRENT prose: `current_prose`, less every block dated by month."""
+    blocks = re.split(r"\n\s*\n|\n(?=\s*- )", current_prose(notes))
+    return "\n\n".join(b for b in blocks if not _MONTH_DATED.search(b))
+
+
+def stale_sheet_counts(notes: str, svg: str) -> list[str]:
+    """Each census count a sheet's notes type in their CURRENT prose that the sheet does not draw - "11 tubs" on a sheet
+    of 10. Dated history is exempt (`sheet_prose`), and so is a count of a part (`_PART_OF_THE_WHOLE`)."""
+    drawn = sheet_counts(svg)
+    prose = sheet_prose(notes)
+    out = []
+    for m in _SHEET_COUNT.finditer(prose):
+        if _PART_OF_THE_WHOLE.search(prose[max(0, m.start() - 40) : m.start()]):
+            continue
+        typed = int(m.group(1)) if m.group(1).isdigit() else _WORDS[m.group(1).lower()]
+        what = SHEET_NOUNS[m.group(2).lower()]
+        if typed != drawn[what]:
+            out.append(f"'{m.group(0)}' - the sheet draws {drawn[what]} {what}")
+    return out

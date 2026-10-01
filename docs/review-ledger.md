@@ -297,3 +297,34 @@ or a later pass found what this one should have).
 | 2026-10-01 | record-format | rendering/vegetation 120 (feature 300) | 0/0/0 | - |
 | 2026-10-01 | record-style | rendering/vegetation 120 (feature 300) | 1 FAIL, 2 NOTE | bullet split; scrub bullet and rule reworded; footnotes not added (the cross-link kept) |
 | 2026-10-01 | record-format | rendering/vegetation 120 (the drain at the paddy foot) | 0/0/0 | - |
+
+## Review checks, measured (feature 294 on)
+
+From feature 294 on, a review pass is a row of THIS table, whose cells a script totals (`make review-census`): the CHECK that
+ran (`settlement-review`, `glyph-check`, `fix-check`, `building-review`, `size-audit`, or a record or plan check), one row per
+finding with its CLASS (`geometric` - a rule a placer or a test could hold, `judgment`, `paperwork`, `nothing`), whether the
+author had missed it (`yes`, `no`, `-`), and the run's WALL and TOKENS copied from `make review-cost AGENT=<id>`, never typed. A
+commit staging this file is refused while a row is short of a cell (`scripts/_ledger_lint.py`, `ledger-hooks.sh`). The rows
+above this heading are classified once, as data, in `docs/review-ledger-r0.json` (research R0).
+
+| date | check | subject | verdict | finding | class | author missed? | acted on | wall | tokens |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-01 | spec-fidelity | feature 294 spec, round 1 | CHANGES REQUIRED | the tannery example narrowed the glyph check's occasion; "a glyph added" missed an element reusing a mark; the contract's size unlabeled | judgment | yes | spec amended | 101 s | 241k in (194k cached) / 9.2k out |
+| 2026-10-01 | spec-fidelity-verify | feature 294 spec, round 2 | CHANGES REQUIRED | the occasion fix not carried into User Story 1 and the Summary | paperwork | yes | both reworded | 34 s | 48k in (31k cached) / 3.0k out |
+| 2026-10-01 | spec-fidelity-verify | feature 294 spec, round 3 | FAITHFUL | - | nothing | - | - | 13 s | 23k in (16k cached) / 1.2k out |
+| 2026-10-01 | spec-fidelity | feature 294 plan, round 1 | CHANGES REQUIRED | five decisions NOT LEGITIMATE (B4's comb exemption, class 12 against the range, broadleaf over conifer sent to the glyph check, the tier experiment skipping settlement-review, B11/Z5 homeless) | judgment | yes | each rewritten | 242 s | 543k in (447k cached) / 22.4k out |
+| 2026-10-01 | spec-fidelity | feature 294 plan, round 2 | CHANGES REQUIRED | rewritten decisions confirmed; residual wording | paperwork | yes | reworded | 91 s | 400k in (339k cached) / 8.5k out |
+| 2026-10-01 | spec-fidelity | feature 294 plan, round 3 | CLEAR | - | nothing | - | - | 36 s | 248k in (196k cached) / 3.2k out |
+| 2026-10-01 | record-format | water 670 (twin ditches, feature 294) | 0/0/0 | vocabulary and session-note edits | paperwork | yes | applied | 18 s | 36k in (22k cached) / 1.7k out |
+| 2026-10-01 | escalation-check | feature 294 draft for the GM (hand sheets, narrowings) | 4 keep, 2 rewrite, 2 cut, 1 merge | the Hoshigaoka path was the rule's own reach, not the GM's to decide; two narrowings not losses | judgment | yes | B21 widened, items cut and merged | 75 s | 180k in (160k cached) / 5.9k out |
+| 2026-10-01 | spec-fidelity | feature 294 plan, round 4 (D18-D20) | CLEAR | the spec's legacy-pool line, Ochiba's road comment and D19's wording stale | paperwork | yes | all three fixed | 143 s | 644k in (570k cached) / 13.0k out |
+| 2026-10-01 | spec-fidelity-verify | feature 294 spec amendment, round 1 | CHANGES REQUIRED | SC-004 and SC-002 labeled FRs they do not measure | paperwork | yes | SC-007, SC-008 added | 75 s | 388k in (289k cached) / 6.7k out |
+| 2026-10-01 | spec-fidelity-verify | feature 294 spec amendment, round 2 | CHANGES REQUIRED | SC-002 dropped FR-006's exception; SC-008 narrowed the cheaper tier | paperwork | yes | reworded | 46 s | 55k in (43k cached) / 4.2k out |
+| 2026-10-01 | spec-fidelity-verify | feature 294 spec amendment, round 3 | FAITHFUL | - | nothing | - | - | 20 s | 38k in (29k cached) / 1.9k out |
+| 2026-10-01 | perf-audit | feature 294 band 1 explanation | INCONSISTENT | the windbreak growth is B9's wood_goal, not over_a_conifer; the end bookend predated the twins commit | judgment | yes | bookend re-taken (band 0), cost recorded in R5 | 373 s | 647k in (595k cached) / 13.3k out |
+| 2026-10-01 | glyph-check | copse on inashiro (placement-changed, glyph-redrawn) | PASS | copse and woodland commons the same green, told apart by crown size and setting (nitpick) | judgment | - | - | 125 s | 713k in (652k cached) / 11.0k out |
+| 2026-10-01 | glyph-check | drainage ditch on inashiro (placement-changed) | PASS | the drain and the irrigation ditches share one stroke, told apart only by position (questionable; on purpose per interactive/page.py) | judgment | - | put to the GM | 88 s | 394k in (352k cached) / 7.7k out |
+| 2026-10-01 | glyph-check | household shrine on kuwabata (new to the map) | PASS | the torii's single crossbar could read as a bench alone (nitpick) | judgment | - | put to the GM | 79 s | 309k in (282k cached) / 6.8k out |
+| 2026-10-01 | glyph-check | irrigation ditch on inashiro (placement-changed) | PASS | - | nothing | - | - | 70 s | 279k in (246k cached) / 5.6k out |
+| 2026-10-01 | glyph-check | household shrine on inashiro (glyph-redrawn, round 1) | NEEDS-WORK | the second crossbar overlapped the lintel into one slab on stub feet - more a bench than before | geometric | yes | the nuki moved 0.6 ft clear, posts lengthened | 112 s | 869k in (801k cached) / 10.1k out |
+| 2026-10-01 | glyph-check | household shrine on inashiro (glyph-redrawn, round 2) | PASS | two bars and posts read as a torii; at 1 px/ft the gap is under a pixel (nitpick, the scale's limit) | nothing | - | - | 158 s | 274k in (249k cached) / 8.4k out |

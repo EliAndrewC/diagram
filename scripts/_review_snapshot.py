@@ -19,16 +19,22 @@ automatically"*. So each map's snapshot carries `dispatch.md`, the whole prompt 
 guard refuses a dispatch naming more than one map (pair-hooks.sh); the session's part is to send N Agent
 calls in one message, each with one file's contents.
 
-Usage: _review_snapshot.py --root CLONE [--mirror MAIN] [--key ENGINE_KEY] MAP...
-  copies MAP.json .svg .png .html .notes.md from the clone's pool into <CLONE>/.git/review-snapshot/MAP/clone/
-  and main's copies from the mirror into .../MAP/main/, clearing that map's previous snapshot first; writes
-  <CLONE>/.git/review-snapshot/MAP/dispatch.md; prints one line per map naming both directories, every file
-  the clone did not have (a render not regenerated is NAMED, never silently skipped) and the prompt file.
+PER UNIT, NOT PER MAP (feature 294). A review is owed per OCCASION now (`_review_owed.py`): a unit is
+`<check>:<subject>`, reviewed on one map or sheet. The snapshot is that map's or sheet's files, and the prompt is the
+CHECK's - a glyph check is told the element and why it is owed, a whole-map review that the map is new.
+
+Usage: _review_snapshot.py --root CLONE [--mirror MAIN] [--key ENGINE_KEY] UNIT...
+  for each owed unit slug, copies its map's or sheet's .json .svg .png .html .notes.md from the clone's pool into
+  <CLONE>/.git/review-snapshot/UNIT/clone/ and main's copies from the mirror into .../UNIT/main/, clearing the unit's
+  previous snapshot first; writes <CLONE>/.git/review-snapshot/UNIT/dispatch.md; prints one line per unit naming both
+  directories, every file the clone did not have (a render not regenerated is NAMED, never silently skipped) and the
+  prompt file.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import shutil
 import sys
 from collections.abc import Sequence
@@ -37,12 +43,12 @@ from typing import Any
 
 SKILL = ".claude/skills/diagram"
 TREES = ("pool", "legacy-hand-authored-pool")
-#: what a reviewer reads of a map, in the order it is listed
+#: what a reviewer reads of a map or sheet, in the order it is listed
 SUFFIXES = (".json", ".svg", ".png", ".html", ".notes.md")
 
 
 def map_dir(tree_root: Path, name: str) -> Path | None:
-    """The folder of map `name` under either pool tree of `tree_root`, or None."""
+    """The folder of map or sheet `name` under either pool tree of `tree_root`, or None."""
     for tree in TREES:
         for d in sorted((tree_root / SKILL / tree).glob(f"*/{name}")):
             if d.is_dir():
@@ -50,31 +56,56 @@ def map_dir(tree_root: Path, name: str) -> Path | None:
     return None
 
 
-DISPATCH = """Settlement review of ONE map: {map}. This prompt was written by the tooling (feature 248): one agent
-per map, and the pair guard refuses a dispatch that names more than one. Do not review any other map -
-its own agent has it - and do not wait for anything but your own work.
+def owed_module() -> Any:
+    """`_review_owed.py`, loaded by path (a hook calls this script; no package to import from)."""
+    here = Path(__file__).resolve().parent
+    spec = importlib.util.spec_from_file_location("review_owed_for_snapshot", here / "_review_owed.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    prior, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        sys.dont_write_bytecode = prior
+    return mod
+
+
+#: what each check is asked, per its contract (`.claude/agents/<check>.md`)
+ASK = {
+    "settlement-review": "the WHOLE-MAP review of {on}: {occasion}. Run your contract's whole-map sweeps on it.",
+    "building-review": "the review of the sheet {on}: {occasion}. Run the sections of your contract this occasion owes.",
+    "glyph-check": "the glyph check of the element {subject!r}, on {on}: {occasion}. Judge that element where it stands on this map - nothing else on the map is under review.",
+    "size-audit": "the size audit of {subject!r} on {on}: {occasion}. Anchor that kind's size; nothing else is under review.",
+    "fix-check": "the fix check on {on}: {occasion}. Answer the GM's complaint at fit zoom first, then whether the fix fired and whether its record can bear it.",
+}
+
+DISPATCH = """UNIT: {slug}
+{check} - {ask}
+
+This prompt was written by the tooling (feature 294): one agent per owed unit, and the pair guard refuses a dispatch that
+names more than one. Do not review anything else - its own agent has it - and wait for nothing but your own work.
 
 Clone: {clone} (the directory holding `.git/review-snapshot/`; run the `make` targets from its
-`.claude/skills/diagram/`). Engine key: {key}. The gate is running beside this review.
+`.claude/skills/diagram/`). Engine key: {key}. The gate went green on this content before this dispatch.
 
-Snapshot - read THESE, the gate's cache evicts the pool's renders mid-run:
+Snapshot - read THESE:
   after (the clone): {after}{missing}
   before (main):     {before}
 
-Scope: DELTA - what moved on {map} against main, what it moved, and what the delta made incoherent;
-confirm what moved from the two manifests first, and say in one line which sweeps you skipped.
-
-Follow your contract end to end: the first stage (`make review-paired-gate`; the map's last verdict and
-what disposes of each finding), the review, then `make review-verdict MAP={map} VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> [FINDINGS=<json file>]`
+Follow your contract end to end, then `make review-verdict UNIT={slug} VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> [FINDINGS=<json file>]`
 as your last act, and quote the line it prints.
 """
 
 
 def dispatch_text(rec: dict[str, Any], root: Path, key: str) -> str:
-    """The one-map prompt a session hands the Agent tool for `rec['map']` (feature 248 FR-002)."""
+    """The one-unit prompt a session hands the Agent tool (feature 248 FR-002, per unit since feature 294)."""
     missing = f"  (missing in the clone: {' '.join(rec['missing'])} - regenerate it with make map)" if rec["missing"] and rec["clone"] else ""
+    ask = ASK[rec["check"]].format(on=rec["on"] or "no map draws it", subject=rec["subject"], occasion=rec["occasion"])
     return DISPATCH.format(
-        map=rec["map"],
+        slug=rec["unit"],
+        check=rec["check"],
+        ask=ask,
         clone=root,
         key=key or "not computed",
         after=rec["clone"] or "not in the clone's pool",
@@ -83,29 +114,30 @@ def dispatch_text(rec: dict[str, Any], root: Path, key: str) -> str:
     )
 
 
-def snapshot(root: Path, mirror: Path | None, names: Sequence[str], key: str = "") -> list[dict[str, Any]]:
-    """Copy each named map's files from `root` (the clone) and `mirror` (main) into the clone's
-    `.git/review-snapshot/<name>/{clone,main}/` and write its `dispatch.md`. Returns one record per map:
-    the two directories (main's None when there is no mirror or main has no such map), the suffixes each
-    side lacked, and the prompt file."""
+def snapshot(root: Path, mirror: Path | None, units: Sequence[Any], key: str = "") -> list[dict[str, Any]]:
+    """Copy each unit's map or sheet from `root` (the clone) and `mirror` (main) into the clone's
+    `.git/review-snapshot/<slug>/{clone,main}/` and write its `dispatch.md`. Returns one record per unit: the two
+    directories (main's None when there is no mirror or main has no such map), the suffixes each side lacked, and the
+    prompt file."""
     out: list[dict[str, Any]] = []
-    for name in names:
-        dest = root / ".git" / "review-snapshot" / name
+    for unit in units:
+        dest = root / ".git" / "review-snapshot" / unit.slug
         if dest.exists():
             shutil.rmtree(dest)
-        rec: dict[str, Any] = {"map": name, "clone": None, "main": None, "missing": [], "main_missing": [], "dispatch": None}
+        rec: dict[str, Any] = {"unit": unit.slug, "check": unit.check, "subject": unit.subject, "on": unit.on, "occasion": unit.occasion,
+                               "clone": None, "main": None, "missing": [], "main_missing": [], "dispatch": None}
         for side, tree, lack in (("clone", root, "missing"), ("main", mirror, "main_missing")):
-            src = map_dir(tree, name) if tree is not None else None
+            src = map_dir(tree, unit.on) if tree is not None and unit.on else None
             if src is None:
                 rec[lack] = list(SUFFIXES)
                 continue
             target = dest / side
             target.mkdir(parents=True, exist_ok=True)
             for suffix in SUFFIXES:
-                f = src / f"{name}{suffix}"
+                f = src / f"{unit.on}{suffix}"
                 if f.is_file():
                     shutil.copy2(f, target / f.name)
-                else:
+                elif not (suffix == ".json" and (src / f"{unit.on}.svg").is_file()):  # a Mode A sheet has no manifest; a map always has one
                     rec[lack].append(suffix)
             rec[side] = str(target)
         dest.mkdir(parents=True, exist_ok=True)
@@ -116,12 +148,12 @@ def snapshot(root: Path, mirror: Path | None, names: Sequence[str], key: str = "
 
 
 def describe(rec: dict[str, Any]) -> str:
-    """One line per map: where each side is, what the clone did not have, and the prompt file."""
+    """One line per unit: where each side is, what the clone did not have, and the prompt file."""
     clone = rec["clone"] or "not in the clone's pool"
     main = rec["main"] or "unavailable (no mirror, or main has no such map)"
     missing = f" (missing in the clone: {' '.join(rec['missing'])} - regenerate it with make map)" if rec["missing"] and rec["clone"] else ""
     prompt = f" | prompt {rec['dispatch']}" if rec.get("dispatch") else ""
-    return f"snapshot {rec['map']}: clone {clone}{missing} | main {main}{prompt}"
+    return f"snapshot {rec['unit']} (on {rec['on'] or '?'}): clone {clone}{missing} | main {main}{prompt}"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -129,13 +161,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--root", required=True, help="the clone")
     ap.add_argument("--mirror", default=None, help="main's tree (default: the parent of the clone's .clones/, when it has one)")
     ap.add_argument("--key", default="", help="the engine key the dispatch prompt quotes (feature 248)")
-    ap.add_argument("names", nargs="+", help="the maps whose manifest moved")
+    ap.add_argument("units", nargs="+", help="the owed unit slugs (`_review_owed.py`)")
     args = ap.parse_args(argv)
     root = Path(args.root).resolve()
     mirror = Path(args.mirror) if args.mirror else None
     if mirror is None and ".clones" in root.parts:
         mirror = Path(*root.parts[: root.parts.index(".clones")])
-    for rec in snapshot(root, mirror, args.names, args.key):
+    _, units, _ = owed_module().owed(root)
+    by_slug = {u.slug: u for u in units}
+    unknown = [s for s in args.units if s not in by_slug]
+    if unknown:
+        print(f"_review_snapshot: not owed by this delta: {' '.join(unknown)}", file=sys.stderr)
+        return 2
+    for rec in snapshot(root, mirror, [by_slug[s] for s in args.units], args.key):
         print(describe(rec))
     return 0
 

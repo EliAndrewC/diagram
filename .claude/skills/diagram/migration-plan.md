@@ -153,6 +153,23 @@ now says it first.
 `future-work/farming-communities.md` (the frozen hamlets and villages), `future-work/towns.md` and `future-work/cities.md`,
 each headed "feature 280"; read the one for the tier before drawing its first scripted map.
 
+**What a tier's generator must carry as PLACEMENT RULES, because no review judges it any more** (feature 294, GM
+2026-10-01: caste geography, agreement with a building's plan sheet and label placement *"should be struck from the subagent
+review since every single one of those is something that the placement rules should handle once we have automated the
+generation of maps where they are relevant"*). The town and city generators owe, each as a rule its placer guarantees and a
+test proves:
+
+- **outcast geography** - segregated quarters, tanning, cremation, execution on marginal ground, on the way out, not among the
+  community's dead (and a nuisance on its own axis: smoke downwind, filth downstream);
+- **status zoning** - who sits near the seat of authority, who fronts the commercial street, who holds the deep block cores;
+- **the border rule** - a structure stays on its own side of a ward or property border (the founding Ubame review's
+  "building on the neighbor's soil"; no hamlet rule holds it, because at hamlet scale a border blocks nothing);
+- **the Imperial-road caption** - only an Imperial road is labeled, and an Imperial road that is drawn is labeled (a declared
+  caption, feature 286).
+
+The tier's first scripted map is a map new to the pool and owes the whole-map `settlement-review`, declared `new-tier:`,
+which lists these four and whether the generator carries each.
+
 
 ### Mode A (compound plans) - out of scope, listed so nobody wonders
 

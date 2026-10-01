@@ -1,0 +1,349 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "231598514",
+    "label": "294-start",
+    "utc": "20261001T151220Z"
+  },
+  "binding": "566401608ca3a55decac55252391aabc20b38001b6d28b382ea1bd9392f449b0",
+  "end": {
+    "commit": "a3ea47286",
+    "label": "294-end",
+    "utc": "20261001T173420Z"
+  },
+  "environment": "local",
+  "explanation": "seeds 4 and 25 grew 0.2-0.3 s across windbreak, web and homesteads: feature 294 B5b asks over_a_conifer of every lesser crown in a clump (groves.py) and the access tree asks tree_shadows of every corridor at seating (ways/tree.py); the field stage's 7.6 s twin cost (cProfile seed 25) was removed by vectorizing twins.py, and the total is 15.6% faster than 294-start",
+  "feature": "294-settlement-review-rethink",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "68560146-7086-4e5b-a430-f5b48028631d",
+    "utc": "20261001T173433Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "seeds": {
+      "25": 8.1,
+      "39": -27.9,
+      "4": 9.8,
+      "47": -39.7
+    },
+    "total_pct": -15.6
+  },
+  "render": "perf bands [local]: 294-end vs 294-start -> band 1\n  seed   4    +9.8%; grew: windbreak +0.2s, homesteads +0.1s, web +0.1s\n  seed  25    +8.1%; grew: windbreak +0.1s, web +0.1s, hinterland +0.1s\n  seed  39   -27.9%\n  seed  47   -39.7%\n  TOTAL      -15.6%\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.01,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        1.6,
+        1.58
+      ],
+      "frame": [
+        0.0,
+        0.01
+      ],
+      "hinterland": [
+        0.42,
+        0.48
+      ],
+      "homesteads": [
+        0.75,
+        0.73
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.03,
+        0.03
+      ],
+      "track": [
+        0.04,
+        0.04
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.53,
+        0.61
+      ],
+      "windbreak": [
+        0.14,
+        0.29
+      ],
+      "woodland": [
+        0.04,
+        0.03
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.06,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.02,
+        0.01
+      ],
+      "field": [
+        0.9,
+        0.73
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.69,
+        0.48
+      ],
+      "homesteads": [
+        1.62,
+        0.69
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.11,
+        0.07
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.06,
+        0.02
+      ],
+      "sink": [
+        0.02,
+        0.01
+      ],
+      "track": [
+        0.08,
+        0.07
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.53,
+        0.55
+      ],
+      "windbreak": [
+        0.17,
+        0.33
+      ],
+      "woodland": [
+        0.03,
+        0.04
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.07,
+        0.06
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.03,
+        0.03
+      ],
+      "field": [
+        1.27,
+        1.19
+      ],
+      "frame": [
+        0.0,
+        0.01
+      ],
+      "hinterland": [
+        0.66,
+        0.71
+      ],
+      "homesteads": [
+        1.04,
+        1.18
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.12,
+        0.11
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.04
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.12,
+        0.11
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.51,
+        0.61
+      ],
+      "windbreak": [
+        0.14,
+        0.32
+      ],
+      "woodland": [
+        0.06,
+        0.07
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.08,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        2.26,
+        1.0
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.85,
+        0.46
+      ],
+      "homesteads": [
+        1.23,
+        0.91
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.16,
+        0.1
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.03
+      ],
+      "track": [
+        0.07,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.55,
+        0.51
+      ],
+      "windbreak": [
+        0.4,
+        0.32
+      ],
+      "woodland": [
+        0.08,
+        0.04
+      ]
+    }
+  },
+  "unverified": "no control run: the bookend start predates the main merges (297-300) the end includes, so the per-stage growth is not split between this feature and main",
+  "verdict": "pending"
+}

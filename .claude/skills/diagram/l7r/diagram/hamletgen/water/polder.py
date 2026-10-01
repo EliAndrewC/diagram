@@ -209,11 +209,9 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # covers the rim stroke at the mouth: one continuous water.
     if main is not None:
         main["pts"] = inlet_to_rim(main["pts"], pond, env)
-    # `join_head=True`: a polder's ring canal ENDS on the block's corner, outside the planted
-    # extent, so the inlet must visibly meet it or the ring reads as dangling
-    # (`watercourse_ends_reach_water`). A comb's head-race ends among its own plots and needs no
-    # such junction, which is why this is the polder's flag rather than the engine's default.
-    s.draw_comb_field(net, f"{plan.spec.name.lower()}-polder", {"kind": "pond", "pond": pond}, join_head=True)
+    # A polder's ring canal ENDS on the block's corner, outside the planted extent; the feed's record traces the drawn stub
+    # to that corner (`comb.feed_stub`, feature 294), so the inlet meets the ring by construction.
+    s.draw_comb_field(net, f"{plan.spec.name.lower()}-polder", {"kind": "pond", "pond": pond})
     plan.sink_pond = None
     # THE DIKE-POND SYSTEM (桑基魚塘): convert (almost) every cell to a fish pond rimmed by a
     # mulberry dike. `eligible="all"` is the archetype's named opt-out of the topographic filter -

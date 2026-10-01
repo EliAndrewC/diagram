@@ -22,7 +22,9 @@ import os
 import subprocess
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))  # <tree>/<tier>/<map>/ - one level deeper since feature 161 gave every map its own folder
+sys.path.insert(
+    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+)  # <tree>/<tier>/<map>/ - one level deeper since feature 161 gave every map its own folder
 
 from l7r.diagram import compound as C  # noqa: E402
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES  # noqa: E402
@@ -63,7 +65,9 @@ def ochiba_program() -> C.CompoundProgram:
         b("cell", "cell", 18.0, 15.0, "outer", "E", order=1, feature="cell"),
         b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8, feature="gatehouse"),
         b("stables", "service", 29.0, 22.0, "outer", "S", order=5, feature="stables"),
-        b("clerks' room", "service", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),  # a room of the hall on the sheet; a mass here (feature 254)
+        # a room of the hall on the sheet; a mass here (feature 254). Plain wood, the palette's clerks' duty room (feature 294
+        # B22 `palette_roles`: it was drawn in the service color)
+        b("clerks' room", "plain", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),
         b("guest room", "lord", 22.0, 15.0, "inner", "E", order=2, feature="guest quarters"),  # a room of the residence on the sheet; a mass here (feature 254)
     )
     return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings, tier="magistracies")  # its declared type: the bands it is placed to (feature 287 H29b)

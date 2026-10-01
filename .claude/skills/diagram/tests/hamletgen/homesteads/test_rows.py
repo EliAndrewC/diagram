@@ -240,3 +240,31 @@ def test_a_row_seat_is_on_the_sheet_and_where_the_stage_allows() -> None:
     assert not seat_allowed(-1.0, 10.0, 100.0, 100.0, None) and not seat_allowed(10.0, 100.0, 100.0, 100.0, None)
     assert not seat_allowed(10.0, 10.0, 100.0, 100.0, lambda x, y: False)
     assert seat_allowed(10.0, 10.0, 100.0, 100.0, lambda x, y: True)
+
+
+def test_a_refused_frame_is_passed_over_and_seats_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`seat_rows` passes over a seat whose frame `frame_refused` refuses (feature 294: the shipped rolls stopped reaching it once
+    the access tree refused a shadowing corridor, so it is driven here): every seat refused, no farm seated, no street kept."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.homesteads import rows
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="R", scale="hamlet", ftpx=1, toscale=True, households=2)
+    line = [((float(x), 700.0), (0.0, 1.0)) for x in range(100, 1301, 20)]
+    monkeypatch.setattr(rows, "best_row_line", lambda *a, **k: line)
+    asked: list[object] = []
+    monkeypatch.setattr(rows, "frame_refused", lambda *a: asked.append(a) or True)
+    plan = SimpleNamespace(
+        spec=SimpleNamespace(households=2),
+        envelope=FIELD,
+        seat={"cx": 700.0, "cy": 700.0},
+        row_sides="one",
+        row_line="edge",
+        windward="NW",
+        grove_sides=2,
+        grove_flank=0,
+    )
+    assert rows.seat_rows(s, plan, (0.0, 0.0, 60.0, 40.0)) == 0  # type: ignore[arg-type]
+    assert asked and s._row_streets == []  # type: ignore[attr-defined]

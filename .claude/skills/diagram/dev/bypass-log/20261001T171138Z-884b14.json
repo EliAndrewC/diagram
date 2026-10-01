@@ -1,0 +1,6 @@
+{
+  "utc": "20261001T171138Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 294 retires the manifest trigger: the owed units are this delta"
+}

@@ -4,16 +4,19 @@
     "title": "Magistracies (Mode A compound plans)",
     "program": "Magistrate's manor (county magistracy)",
     "hand_drawn": true,
+    "map_keys": ["manors"],
     "generated_exceptions": [
       "county-magistracy-example",
       "ochiba-roundtrip-test"
     ],
     "checks": [
       "notice_board_adrift",
+      "privies_by_zone",
       "coverage_band",
       "perimeter_hugging",
       "two_court_zoning",
       "fire_water_adrift",
+      "fire_water_distribution",
       "tubs_in_buildings",
       "tubs_on_wells"
     ],
@@ -226,12 +229,14 @@
     "title": "Country shrines (Mode A compound plans)",
     "program": "Country shrine (a village district's shrine)",
     "hand_drawn": true,
+    "map_keys": ["religious", "shrines"],
     "checks": [
       "sanctuary_on_axis",
       "arch_on_approach",
       "well_clear_of_arch",
       "no_precinct_enclosure",
       "fire_water_adrift",
+      "fire_water_distribution",
       "tubs_in_buildings",
       "tubs_on_wells"
     ],

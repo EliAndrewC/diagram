@@ -510,3 +510,14 @@ def test_the_pond_seat_steps_across_the_fall_to_where_its_ditch_crosses_no_brook
     assert sway != 0.0
     center = (out[0] - plan.fall[1] * sway + plan.fall[0] * back, out[1] + plan.fall[0] * sway + plan.fall[1] * back)
     assert not crosses_mid_run(brook, hg.sink.pond_run(out, heading, center, plan.fall))
+
+
+def test_a_drain_route_beside_the_brook_joins_it() -> None:
+    """Feature 294 B4: Kashikawa's off-map outfall ran 12-32 ft beside the brook for 130 ft; the constructed route joins it."""
+    from l7r.diagram.hamletgen.sink import join_beside
+
+    brook = [(0.0, 0.0), (0.0, 600.0)]
+    route, to = join_beside([(100.0, 0.0), (20.0, 100.0), (20.0, 600.0)], brook, 1.0)
+    assert to == "stream" and route[-1] == (0.0, route[-2][1]) and abs(route[-2][0] - 32.0) < 2.0
+    away = [(100.0, 0.0), (100.0, 600.0)]
+    assert join_beside(away, brook, 1.0) == (away, "offmap")

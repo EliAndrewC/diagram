@@ -9,7 +9,7 @@ from typing import Any, cast
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea
 from l7r.diagram.settlement.homestead_parts.belt_law import wind_unit
-from l7r.diagram.settlement.homestead_parts.groves import homestead_wood_ft2
+from l7r.diagram.settlement.homestead_parts.wood_goal import copse_goal
 
 from ..consts import COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from ..homesteads import farmstead_fixtures, household_bamboo
@@ -421,12 +421,21 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's
     # gaps gave: 750-1,700 sq ft a homestead beside a belt share of 3,700-9,200, so four of five maps drew less wood
     # than the register's smallest household.
-    _wood_ft2 = sum(homestead_wood_ft2(s._hjit(float(h["x"]), float(h["y"]), 210.0)) for h in houses)
+    # ...WITHIN WHAT THIS GROUND CAN HOLD (feature 294 B9, `wood_goal`): the copse is filled to its capacity, each homestead's
+    # wood rolled within the part of the register's range between what the belt and the groves give and what the ground holds,
+    # and the copse trimmed back to the roll - so the size recorded as rolled is the size drawn (Sawada drew 60% of its roll).
+    _rolls = [s._hjit(float(h["x"]), float(h["y"]), 210.0) for h in houses]
     _ft2 = s.px(1.0) ** 2  # px^2 per sq ft
     # ...AND WHAT EACH FARM'S OWN GROVE ALREADY HOLDS (feature 291): where the farms carry their own groves the record's one
     # wood is that grove and its share of the copse, so the copse is filled to what the groves leave (settlement-review of
     # Kashikawa: filled to the belt's remainder alone, the drawn wood ran ~17,400 sq ft a house against 14,872 rolled)
-    _copse_goal = max(0.0, _wood_ft2 * _ft2 - wood_canopy(s, ("windbreak",)) - farm_grove_area(s))
+    _given = wood_canopy(s, ("windbreak",)) + farm_grove_area(s)
+    _rolled: list[float] = [copse_goal(_rolls, _given, 0.0, 0.0, _ft2)[1]]  # the mean rolled wood a homestead, set again at the fill
+
+    def _goal_for(capacity: float, kept: float) -> float:
+        goal, _rolled[0] = copse_goal(_rolls, _given, kept, capacity, _ft2)
+        return goal
+
     # ...EVERY HOUSEHOLD'S RESERVED SHARE FIRST (feature 287, woods W25; plan D9): the seats the seating reserved for each
     # household's share of the floor (`wood_share`) are planted before any other clump, on either siting - each within its
     # own house's dooryard reach, not the siting's `near` - and the goal counts them, so the grid fills only the rest.
@@ -438,7 +447,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         dense=False,
         reserved=title_pocket(s, plan),
         near=_copse_near,
-        area=_copse_goal,
+        area_from=_goal_for,
         seats=_seats,
         seat_near=_dooryard,
         bamboo_rings=plan.bamboo_polys,
@@ -466,7 +475,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         s.M["meta"]["copse_house_ft"] = round(_near[len(_near) // 2] * float(s.M["meta"].get("ftpx") or 1), 1)
     # ...and what the woods came to beside what was rolled, so a copse the ground could not hold is a number, not a silence
     if _hs:
-        s.M["meta"]["homestead_wood_ft2"] = {"rolled": round(_wood_ft2 / len(_hs)), "drawn": round(homestead_wood_drawn(s))}
+        s.M["meta"]["homestead_wood_ft2"] = {"rolled": round(_rolled[0]), "drawn": round(homestead_wood_drawn(s))}
 
 
 def wood_canopy(s: Settlement, roles: Sequence[str]) -> float:

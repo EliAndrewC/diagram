@@ -55,10 +55,10 @@
   <!-- Outer land (surrounding countryside / town outskirts) -->
   <rect x="0" y="0" width="1200" height="900" fill="#EFE3C2" data-kind="-"/>
 
-  <!-- Imperial road approaching the south gate: the ROAD is 13.3 ft wide (a width of its own - the gate's passage is the ~8 ft yakuimon, feature 267 R26; the old comment said the road matched a 13.3 ft gate) -->
+  <!-- Imperial road approaching the south gate: the ROAD is 8 ft wide, its gate's passage (the ~8 ft yakuimon, feature 267 R26; drawn 13.3 ft until feature 294's B23, the GM 2026-10-01) -->
   <g data-kind="road">
-    <path d="M 600 900 L 600 750" stroke="#B89060" stroke-width="40" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 600 900 L 600 750" stroke="#9C7448" stroke-width="40" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <path d="M 600 900 L 600 750" stroke="#B89060" stroke-width="24" stroke-linecap="butt" opacity="0.55"/>
+    <path d="M 600 900 L 600 750" stroke="#9C7448" stroke-width="24" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
 
   <!-- Title block (just above the compound; no redundant summary line - the

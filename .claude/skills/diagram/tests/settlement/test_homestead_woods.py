@@ -5,7 +5,8 @@ import random
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea, CrownIndex
-from l7r.diagram.settlement.homestead_parts.groves import GROVE_BAMBOO_SHARE, HOMESTEAD_WOOD_FT2, bamboo_mark, homestead_wood_ft2
+from l7r.diagram.settlement.homestead_parts.groves import GROVE_BAMBOO_SHARE, HOMESTEAD_WOOD_FT2, bamboo_mark
+from l7r.diagram.settlement.homestead_parts.wood_goal import rolled_wood
 from tests.settlement._builders import _nuc_village
 
 
@@ -39,8 +40,8 @@ def test_canopy_area_counts_the_union_of_its_discs():
 
 def test_a_homestead_wood_rolls_inside_the_register_s_range():
     lo, hi = HOMESTEAD_WOOD_FT2
-    assert homestead_wood_ft2(0.0) == lo and abs(homestead_wood_ft2(1.0) - hi) < 1e-6
-    assert lo < homestead_wood_ft2(0.5) < 14000.0  # log-uniform: the middle of the roll near the register's middle wood
+    assert rolled_wood(0.0, HOMESTEAD_WOOD_FT2) == lo and abs(rolled_wood(1.0, HOMESTEAD_WOOD_FT2) - hi) < 1e-6
+    assert lo < rolled_wood(0.5, HOMESTEAD_WOOD_FT2) < 14000.0  # log-uniform: the middle of the roll near the register's middle wood
 
 
 def test_the_woodland_commons_is_stocked_as_a_coppice_thicket():
@@ -106,3 +107,32 @@ def test_a_lone_yashikirin_is_held_inside_the_register_s_range():
     arms = s._find_grove_arms(500.0, 500.0, 10.0, 10.0)
     assert arms, "an open site grows its arms"
     assert max(min(w, h) for _cx, _cy, w, h, _face, _depth in arms) >= 35.0
+
+
+def test_the_roll_is_taken_within_what_the_ground_can_hold() -> None:
+    """Feature 294 B9: the attainable band - no less than the belt and the groves give, no more than the ground holds, inside
+    the register's range; a ground giving more than the register's largest wood is one value."""
+    from l7r.diagram.settlement.homestead_parts.wood_goal import attainable_band, copse_goal
+
+    lo, hi = HOMESTEAD_WOOD_FT2
+    assert attainable_band(0.0, 1e9) == (lo, hi)
+    assert attainable_band(9000.0, 12000.0) == (9000.0, 12000.0)
+    assert attainable_band(30000.0, 31000.0) == (30000.0, 30000.0)
+    assert attainable_band(1000.0, 2000.0) == (lo, lo), "the floor stands even where the ground cannot hold it"
+    goal, mean = copse_goal([0.0, 1.0], given_px2=2 * 9000.0, kept_px2=0.0, capacity_px2=2 * 3000.0, px2_per_ft2=1.0)
+    assert (goal, mean) == (3000.0, 10500.0)
+    goal, mean = copse_goal([0.0, 0.0], given_px2=2 * 9000.0, kept_px2=2 * 2000.0, capacity_px2=2 * 3000.0, px2_per_ft2=1.0)
+    assert (goal, mean) == (4000.0, 11000.0), "the reserved seats always stand, so the floor counts them"
+    assert copse_goal([], 1.0, 1.0, 1.0, 1.0) == (0.0, 0.0)
+
+
+def test_the_copse_is_trimmed_back_to_its_goal_and_never_below_its_reserved_seats() -> None:
+    from l7r.diagram.settlement.homestead_parts.wood_goal import canopy_of, trim_to_goal
+
+    seats = [(float(i * 30), 0.0) for i in range(10)]  # ten crowns of radius 10, apart: each ~314 px^2
+    one = canopy_of(seats[:1], 10.0, 1.0)
+    kept = frozenset({seats[9]})
+    out = trim_to_goal(seats, kept, 10.0, 1.0, 3.4 * one)
+    assert seats[9] in out and len(out) == 3, "the reserved seat, then the shortest run nearest the goal"
+    assert trim_to_goal(seats, kept, 10.0, 1.0, 0.0) == [seats[9]]
+    assert len(trim_to_goal(seats, kept, 10.0, 1.0, 3.6 * one)) == 4

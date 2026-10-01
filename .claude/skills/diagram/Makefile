@@ -374,19 +374,22 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
+	@: "GUARD_EDIT_OK: feature 294 - verify names the OWED UNITS (_review_owed.py: occasions, not moved manifests), writes one prompt per unit, and refuses nothing itself; an undeclared delta is printed here and refused at push."; \
+	  root=$$(git rev-parse --show-toplevel); undeclared=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" --check-declared); \
+	  [ -z "$$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$$undeclared"
 	@: "GUARD_EDIT_OK: feature 231 - verify DECIDES whether a review is owed (GM 2026-09-12: a scripted check, part of make verify, tells us whether any change should even trigger a review). The maps come from scripts/_review_owed.py - every manifest that moved against the merge base with origin/main, not the HEAD~1 diff that saw one commit - and when some did, the reviewer's snapshot is taken here, automatically, into the clone's .git/review-snapshot/ where the gate's cache never evicts it."; \
 	  root=$$(git rev-parse --show-toplevel); \
 	  maps=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
 	  why=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" --why); \
 	  if [ -z "$$maps" ]; then \
-	    printf '\n\033[1mNO SETTLEMENT-REVIEW OWED\033[0m: %s (feature 231). The gate runs alone; a glyph or page change with the same manifest is the GM'"'"'s to look at, and the waiver is recorded at turn end.\n' "$$why"; \
+	    printf '\n\033[1mNO REVIEW CHECK OWED\033[0m: %s (feature 294: a check is owed on its occasion, never because a manifest moved). The gate runs alone; the GM looks at the map.\n' "$$why"; \
 	  else \
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
 	    : "GUARD_EDIT_OK: feature 248 - ONE AGENT PER MAP, and the tooling writes each prompt (GM 2026-09-14: whatever the tooling is doing to kick off reviews should make the correct thing happen automatically). The old one-line instruction naming every map was followed literally on feature 247 - one agent, four maps, serialized, 11 of 36 minutes - so the snapshot script now writes <map>/dispatch.md per map and the pair guard refuses a dispatch naming more than one."; \
 	    snap=$$(python3 "$$root/scripts/_review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
-	    printf 'maps whose layout moved: %s (%s)\n%s\n' "$$maps" "$$why" "$$snap"; \
-	    printf '\n\033[1mDISPATCH NOW, in this same message: %s settlement-review agent(s), ONE PER MAP\033[0m - each Agent call takes the contents of that map'"'"'s prompt file named above (.git/review-snapshot/<map>/dispatch.md). A dispatch naming more than one map is refused before it starts; a turn may not end while a map above has no review dispatched. Then let this gate run beside them.\n' "$$n"; \
+	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
+	    printf '\n\033[1mWHEN THE GATE IS GREEN, dispatch %s review agent(s), ONE PER UNIT\033[0m - each Agent call is the unit'"'"'s check (its slug begins with it) and takes the contents of its prompt file named above (.git/review-snapshot/<unit>/dispatch.md). A dispatch beside a running gate, or naming more than one unit, is refused (feature 294); a turn may not end with the gate green and an owed unit undispatched.\n' "$$n"; \
 	  fi
 	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
 	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
@@ -1241,13 +1244,22 @@ review-paired-gate:  ## [project] the settlement-review's paired gate - green, r
 # verification record; running is a gate target live in this clone, by cwd.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
 
-review-verdict:  ## [project] the settlement-review's LAST act - write the map's verdict record   MAP=<map> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
-##  MAP=<map>          the pool map reviewed
+review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
+##  AGENT=<id>  the agent id the Agent tool's result names
+	@: "GUARD_EDIT_OK: feature 294 FR-010, adding an operation - the ledger's measured table copies its cost from this, never from memory"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_cost.py" --agent "$(AGENT)"
+
+review-census:   ## [project] is each review check pulling its weight? the ledger's totals by check (feature 294)
+	@: "GUARD_EDIT_OK: feature 294 FR-013, adding an operation - the spec's R0 census re-taken by a script"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_census.py" --root "$$(git rev-parse --show-toplevel)"
+
+review-verdict:  ## [project] a review check's LAST act - write the unit's verdict record   UNIT=<unit> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
+##  UNIT=<unit>        the owed unit reviewed (its prompt's UNIT: line; MAP= is the same field)
 ##  VERDICT=<v>        PASS, NEEDS-WORK or NOT-REVIEWABLE
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
 # GUARD_EDIT_OK: feature 240 FR-001, adding an operation - the pair closes on this record, not on the dispatch. The
 # engine key is copied from the dispatch and the gate is re-read here, so a red gate records NOT-REVIEWABLE.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" verdict --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
 test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
 ##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run

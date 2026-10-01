@@ -96,7 +96,7 @@ those before you argue with a rule.
 | [`dev/perf-log/`](../../dev/perf-log/CLAUDE.md), [`dev/run-log/`](../../dev/run-log/CLAUDE.md), [`dev/bypass-log/`](../../dev/bypass-log/CLAUDE.md) | You are about to add an entry to one of the append-only histories, or wonder why they are DIRECTORIES rather than files |
 | [`dev/lessons.md`](../../dev/lessons.md) | A fix is not working and you are about to try another one - dead ends already walked, claims that turned out wrong, and the SHAPES those failures take |
 | [`dev/decisions.md`](../../dev/decisions.md) | You are about to build on a property of the engine nobody decided, or you are leaving a decision open for a later session |
-| [`dev/reviews.md`](../../dev/reviews.md) | You are about to launch `settlement-review`, `building-review` or `backstory-review` |
+| [`dev/reviews.md`](../../dev/reviews.md) | You are about to launch a review check (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) or `backstory-review`, or to write a feature's `## Occasions` |
 | [`dev/skill-boundary.md`](../../dev/skill-boundary.md) | You are wondering whether building plans (Mode A) and settlement maps (Mode B) should be separate skills or packages, you are adding a new Mode A building type, or a Mode A `.gen.py` is about to appear - the 2026-08-27 decision to keep one skill, the prediction of what would change it (a generator, not a building count), and the order to split in when it does |
 
 [`future-work/`](../../future-work/CLAUDE.md) is the deferred-engineering backlog, split by map type on
@@ -133,7 +133,7 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 | `make page-check` | THE PAGE CHECK (feature 188): the interactive tests + the browser test, no coverage, then the `page` stamp - what an edit to `interactive/assets/` owes at push instead of the gate (GM 2026-09-05: *"there's no actual reason to rerun all the tests for style sheet changes"*). An asset-only delta is a TWEAK: DIRECT route, no spec-kit feature, no review, no tasks | ~1 min |
 | `make tick F=188 T=T03 NOTE="..." [BOXES=1]` | tick ONE task in a feature's tasks.md with its verify note; refuses a missing or already-ticked task rather than guessing (feature 188) | ~0 s |
 | `make map GEN=... PROFILE=1` | the same roll, plus where its time went: per-stage timings, the total and the slowest stage | the roll + ~0 |
-| `make verify` | THE PAIRED RUN: starts the gate and prints the settlement-review to dispatch in the same turn. Neither half runs alone (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, with the review beside it |
+| `make verify` | THE PAIRED RUN: starts the gate and names the review checks the delta owes (feature 294: their occasions), one prompt per unit, dispatched once the gate is green (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, then the owed checks |
 | `make _reference` (internal since 2026-09-06; the public rung was retired) | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
 | `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
 | `make cov-file FILE=... MOD=...` | which lines of MOD does ONE test file reach - the answer `make test-full` costs 10 minutes to give (feature 146). Serial, no workers; grep the module you care about out of the table | ~2-10 s |
@@ -261,11 +261,11 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 - A seed that passed before your change and fails after it is a REGRESSION, and nothing merges to
   main carrying one (constitution Principle XIII). "It rotated" is not a defense.
 
-**Reviews** ([`dev/reviews.md`](../../dev/reviews.md)) - `settlement-review` is mandatory before a Mode B
-map ships - which since 2026-08-26 means at ACCEPTANCE and at UNLOCK, not per task: while `scope`
-is locked the GM looks at every result and no per-task review runs; when one runs it runs in the
-background after the map is handed back (or beside a LONG gate, never `make quick`) and is never
-waited on. Say the SCOPE (`DELTA:` vs `FULL`), one map per agent in parallel. **A finding OUTSIDE the delta
+**Reviews** ([`dev/reviews.md`](../../dev/reviews.md)) - a review check runs ON ITS OCCASION (feature 294): the
+glyph check when an element is new to a map, its glyph redrawn or its placement rule substantially changed; the
+whole-map `settlement-review` when a map is new to the pool or a new form or tier; `fix-check` on a GM complaint's
+fix. A feature that touches drawing or placement code declares its occasions in `tasks.md`'s `## Occasions` (or
+`- none: <why>`); one unit per agent, on a green gate, two rounds at most, never waited on. **A finding OUTSIDE the delta
 is still yours to fix** (constitution Principle XIV) - a reviewer pointed at a delta reliably turns
 up unrelated defects, and that is it working.
 

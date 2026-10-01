@@ -424,10 +424,6 @@ def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_
 # ---- feature 276 FR-003 (plan D9): the free ground proposes, the fit test decides ----------------------------------
 
 
-def _seats(s):  # type: ignore[no-untyped-def]
-    return [(round(h["x"], 3), round(h["y"], 3), tuple(round(v, 3) for v in (h.get("geom") or {}).get("bbox", ()))) for h in s.M["houses"]]
-
-
 def _rescue(form):  # type: ignore[no-untyped-def]
     s, plan = _toy_hamlet(20, east=True)
     s._nucleated = form == "nucleated"
@@ -438,49 +434,71 @@ def _rescue(form):  # type: ignore[no-untyped-def]
     return s, plan
 
 
-@pytest.mark.parametrize("form", ["nucleated", "dispersed"])
 @pytest.mark.parametrize("scenario", ["rescue", "open"])
 @pytest.mark.parametrize("sides", [2, 4])
-def test_the_free_ground_changes_no_seat(form: str, scenario: str, sides: int, monkeypatch: pytest.MonkeyPatch) -> None:
-    """The same houses, at the same seats, with the index asked first and with it switched off entirely - for a farm
-    grove on two sides and on four (feature 291: a dispersed bundle's grove takes its settlement's rolled sides)."""
-    from l7r.diagram.hamletgen.homesteads import boundary, stage_homesteads
+def test_every_seat_the_prescreens_refuse_the_fit_test_refuses(scenario: str, sides: int, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The dispersed pre-screens (plan D9a) are exact: a seat `_seat_refused` turns away, and a bundle `_bundle_refused`
+    turns away, is one `_bundle_fits` refuses - asked at the moment of the refusal, of the same bundle, with the free-ground
+    raster switched off so the answer leans on none of the index. A grove on two sides and on four (feature 291).
+
+    WHY THIS AND NOT A SECOND ROLL (GM 2026-10-01): this replaced a test that seated each toy twice, once with the
+    pre-screens and once with them switched off, and compared the seats - 95 s of the suite, 42 s of it one case, the gate's
+    critical path. Production never runs with the pre-screens off; the second roll was only a yardstick, and a weaker one
+    (a wrongly refused seat can be hidden by an equally good one beside it). This asks the claim itself. The nucleated path
+    has no pre-screen but the free-ground cells, whose exactness is `test_every_surely_taken_cell_is_ground_the_fit_test_refuses`
+    and `test_a_side_is_not_dropped_for_ground_the_loop_never_judges`."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.settlement import Settlement
 
     # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
-    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    # since feature 287 M8 (`access.parts_clear`); with it, too few farms seat for the neighbor pre-screens to fire
     monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
+    seat_refused, bundle_refused = Settlement._seat_refused, Settlement._bundle_refused
+    # EVERY 97th REFUSAL, from the first: measured 2026-10-01, the four toys refuse 50,000-180,000 seats and bundles each,
+    # and asking the fit test of every one cost 18-62 s a case - the whole of what the old second roll cost. A prime stride
+    # keeps the sample out of step with the spiral's twelve offsets a ring; 700-1,800 asked a case. PROVEN TO FIRE (planted
+    # faults, 2026-10-01): `_seat_refused`'s placed-box margin at 120 px, and `_bundle_refused`'s at 30 px, each fail it on
+    # the seat or bundle wrongly refused; a 40 px margin on the house refuses nothing the fit test admits (the bundle holds it).
+    stride = 97
+    refused_n = {"seat": 0, "bundle": 0}
+    asked = {"seat": 0, "bundle": 0}
 
-    def roll():  # type: ignore[no-untyped-def]
-        s, plan = _rescue(form) if scenario == "rescue" else _toy_hamlet(15)
-        s._nucleated = form == "nucleated"
-        s.M["meta"]["grove_sides"] = sides
-        if scenario == "rescue":  # the rescue ground cannot hold its quota (D2): refused, and the seats it took compared all the same
-            with pytest.raises(SiteRefused):
-                stage_homesteads(s, plan)
-        elif form == "dispersed" and sides == 4:
-            # ...and the open toy cannot hold fifteen ring farms since each carries its well pocket and fixtures (feature 291
-            # on 287): refused, its seats compared all the same
-            with pytest.raises(SiteRefused):
-                stage_homesteads(s, plan)
-        else:
-            stage_homesteads(s, plan)
-        return _seats(s)
+    def fits_without_the_index(s, geom):  # type: ignore[no-untyped-def]
+        fg, s._free_ground = s._free_ground, None
+        try:
+            return s._bundle_fits(geom)
+        finally:
+            s._free_ground = fg
 
-    with_index = roll()
-    monkeypatch.setattr(boundary.FreeGround, "rect_refused", lambda self, rect: False)
-    monkeypatch.setattr(Settlement, "_seat_refused", lambda self, x, y, hw, hh: False)
-    monkeypatch.setattr(Settlement, "_bundle_refused", lambda self, geom: False)
-    without = roll()
-    # the rescue's walled band, each homestead with its fixtures (homes H32) and its share of the wood floor (woods W25):
-    # measured, 6 of the walled band's households seat with their wood where 8 did without it. A grove farm's frame - its
-    # grove, the service strip on both windward sides and the lane's room - is some 200 ft across, and the 520 ft rescue strip
-    # holds 4 two-sided farms and 1 ring (measured 2026-09-29, feature 291) - and 2 two-sided farms once each carries its own
-    # well pocket and fixtures (feature 291 on 287, measured 2026-09-30); the open toy 12 rings of 15. The equivalence is
-    # what the test is for.
-    floor = {("dispersed", "rescue", 2): 2, ("dispersed", "rescue", 4): 1, ("dispersed", "open", 4): 12}.get((form, scenario, sides), 6)
-    assert with_index == without
-    assert len(with_index) >= floor, len(with_index)
+    def sampled(kind):  # type: ignore[no-untyped-def]
+        refused_n[kind] += 1
+        if (refused_n[kind] - 1) % stride:
+            return False
+        asked[kind] += 1
+        return True
+
+    def seat(self, x, y, hw, hh):  # type: ignore[no-untyped-def]
+        refused = seat_refused(self, x, y, hw, hh)
+        if refused and sampled("seat"):
+            assert not fits_without_the_index(self, self._bundle_geom(x, y, hw, hh)), ("seat", x, y)
+        return refused
+
+    def bundle(self, geom):  # type: ignore[no-untyped-def]
+        refused = bundle_refused(self, geom)
+        if refused and sampled("bundle"):
+            assert not fits_without_the_index(self, geom), ("bundle", geom["bbox"])
+        return refused
+
+    monkeypatch.setattr(Settlement, "_seat_refused", seat)
+    monkeypatch.setattr(Settlement, "_bundle_refused", bundle)
+    s, plan = _rescue("dispersed") if scenario == "rescue" else _toy_hamlet(15)
+    s._nucleated = False
+    s.M["meta"]["grove_sides"] = sides
+    # the rescue ground cannot hold its quota (D2), nor the open toy fifteen ring farms (feature 291 on 287): a refused site
+    # has still asked every pre-screen on the way
+    with contextlib.suppress(SiteRefused):
+        stage_homesteads(s, plan)
+    assert min(asked.values()) >= 50, f"non-vacuity: each pre-screen's refusals were asked of the fit test {asked}"
 
 
 def test_a_side_is_not_dropped_for_ground_the_loop_never_judges() -> None:

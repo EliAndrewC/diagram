@@ -86,6 +86,8 @@ class BuildingType:
     checks: tuple[str, ...]
     generated_exceptions: tuple[str, ...] = ()
     notes: str = ""
+    #: the settlement manifest keys a map records this tier's subject under (feature 294 B24's `**On map**` line)
+    map_keys: tuple[str, ...] = ()
 
 
 def _range(value: Any, where: str) -> tuple[float, float]:
@@ -154,8 +156,8 @@ def parse_types(data: Any) -> tuple[BuildingType, ...]:
     out: list[BuildingType] = []
     for raw in data:
         need = {"tier", "title", "program", "hand_drawn", "required", "checks"}
-        if not isinstance(raw, dict) or not need <= set(raw) or set(raw) - (need | {"generated_exceptions", "notes"}):
-            raise ValueError(f"a type object carries {sorted(need)} (and generated_exceptions, notes), not {sorted(raw) if isinstance(raw, dict) else raw!r}")
+        if not isinstance(raw, dict) or not need <= set(raw) or set(raw) - (need | {"generated_exceptions", "notes", "map_keys"}):
+            raise ValueError(f"a type object carries {sorted(need)} (and generated_exceptions, notes, map_keys), not {sorted(raw) if isinstance(raw, dict) else raw!r}")
         tier = str(raw["tier"])
         if not _TIER.match(tier):
             raise ValueError(f"tier {tier!r} is not lower-case kebab")
@@ -173,6 +175,7 @@ def parse_types(data: Any) -> tuple[BuildingType, ...]:
                 checks=tuple(str(c) for c in raw["checks"]),
                 generated_exceptions=tuple(str(s) for s in raw.get("generated_exceptions", ())),
                 notes=str(raw.get("notes", "")),
+                map_keys=tuple(str(k) for k in raw.get("map_keys", ())),
             )
         )
     tiers_seen = [t.tier for t in out]

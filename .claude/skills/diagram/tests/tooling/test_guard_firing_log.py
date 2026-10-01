@@ -306,6 +306,12 @@ _ESCAPES = {
         "one stated exclusion - a prompt is prose with no command grammar, and "
         "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
     ),
+    "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so _hookmatch.py escape anchors it"),
+    "REVIEW_ROUNDS_OK": (
+        "command",
+        "feature 294: matched in an AGENT PROMPT by pair-hooks.sh's round cap - the PAIR_OK prompt exclusion's shape, a prompt "
+        "being prose with no command grammar; it must carry a quoted reason and is logged like an escape",
+    ),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
     "CONFLICT_MARKERS_OK": (
         "command",

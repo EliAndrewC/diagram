@@ -400,6 +400,12 @@ class BundleFitMixin:
         """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
         (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
         yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
+        # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
+        # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
+        # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
+        # bare (privy 11 of 14, bath 2 of 5, its household shrine 0 of 1).
+        if geom.get("unlaid"):
+            return False
         house = geom["house"]
         # the four garden sides of a seat stand one house: its reach to the field is asked once (`_reach_memo`)
         _rm = self.__dict__.get("_reach_memo")

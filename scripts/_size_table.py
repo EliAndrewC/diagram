@@ -170,6 +170,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     data = table(path.read_text(encoding="utf-8"))
     print(render(path.name, data))
+    from l7r.diagram.tools.pack_audit import size_marks  # the non-rect marks (feature 294, B15c)
+
+    print(size_marks.render(size_marks.mark_rows(path.read_text(encoding="utf-8"))))
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps(data, indent=1) + "\n", encoding="utf-8")
     return 0

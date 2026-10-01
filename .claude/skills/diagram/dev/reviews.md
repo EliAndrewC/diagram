@@ -1,46 +1,59 @@
 # Invoking a review agent
 
-**Load this file when:** You are about to launch `settlement-review`, `building-review` or `backstory-review`.
+**Load this file when:** You are about to launch a review check - `glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit` - or `backstory-review`, or a feature asks which one is owed.
 
 Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
-## Invoking a review agent: SCOPE it, SPLIT it, and launch it EARLY
+## WHICH review is owed: its OCCASION (feature 294, GM 2026-10-01)
 
-`settlement-review` is mandatory before a Mode B map ships, and it is also the single most expensive
-thing a session waits on. Measured 2026-08-08, on a change that resized some captions: one agent,
-two maps, a full audit - **12.3 minutes, 22% of the whole task's wall clock**, with this session idle
-for 11.4 of them. The findings were right; two of the five had nothing to do with the change and had
-been sitting in the pool for weeks.
+A review check is owed only on the occasion its answer can change - never because an engine change moved a manifest. The GM:
+*"as the number of settlements that we have in our pool grows ... This will become quickly untenable"*, and of the glyph
+review, *"something that would be run only when a new element is added to the map and then not run it other times"* - *"a
+category of thing"*. `scripts/_review_owed.py` is the one answer, asked by `make verify`, the pair guard and `review-gate.sh`:
 
-Three rules, all of them free:
+| check | owed when | looks at |
+|---|---|---|
+| `glyph-check` | an element new to a map or sheet, whatever its mark (detected from `ink_classes` / `data-kind`); a glyph redrawn or an element re-placed by substantially different rules (declared: `glyph-redrawn:`, `placement-changed:` - the GM's tannery) | that element, on one map where it stands |
+| `settlement-review` | a map new to the pool (detected); a new settlement form or tier (declared: `new-form:`, `new-tier:`) | the whole map: does it read as a distinct place, its declared economy, a new tier's fabric |
+| `fix-check` | a feature closing a defect the GM reported by eye (declared: `gm-fix: <map> - <the complaint>`) | the GM's complaint, at fit zoom first |
+| `building-review` | a sheet new to the pool (detected); a layout revised or a new program (declared: `layout-revised:`, `new-program:`) | the sheet's layout, program and coherence |
+| `size-audit` | a sized kind new to a sheet (detected); a new program (declared) | that kind's real size, then a band the registry holds |
 
-- **Say the SCOPE.** The agent now takes `DELTA: <what changed>` and reviews the change, whatever the
-  re-pack moved, and whatever the change made incoherent - skipping the spelling/twin/nuisance/traffic
-  sweeps and saying which it skipped. Reserve `FULL` for a new or heavily-rewritten map. A caption
-  resize is a DELTA.
-- **One map per agent, launched in parallel - and since feature 248 (GM 2026-09-14) the tooling makes
-  it so.** The sweeps share no work across maps, so handing two maps to one agent just serializes two
-  audits behind one notification; this rule was here and in the reviewer's contract on 2026-09-14 and
-  was disregarded anyway (feature 247, 11 of 36 minutes), which is why it is enforced now: the pair
-  guard refuses a settlement-review dispatch naming more than one pool map (no escape), `make verify`
-  writes one prompt file per owed map, the stop hook holds the turn until every owed map is dispatched,
-  and the guard log records whether the dispatches shared a message. A feature whose every task is
-  `research: rendering` owes no settlement-review at all (`_review_owed.py`, the same script that
-  decides "did a layout move"): the week's ledger shows the review catching a defect on every layout
-  pass and nothing on a map for any rendering one. A changed map ships on its reviewer's verdict
-  record, not on a notes-file touch (review-gate.sh).
-- **Launch it the moment the motivating map's regen + gate is green - BEFORE your own visual
-  pass**, the docs and the commit. Everything you do while it runs is free; everything after it is
-  added on. Measured 2026-08-16 (the cut-bank fix): the review agent was the whole task's
-  critical-path TAIL - its last 84s ran past an already-green `make done` - and it was launched
-  only after a 52s reasoning turn plus the session's own crop reads. The reviewer independently
-  re-verifies that ground anyway, so every second of your own pass spent before the launch is a
-  second added to the task's total.
+**A hand-drawn map awaiting conversion owes nothing.** The GM, 2026-10-01: *"All hand-drawn maps should be excempted from
+settlement reviews because they will be converted to being scripted later. Hand-drawn diagrams of magistracies and country
+shrines and later things which will never be scripted (by design) should still get setlement review."* A Mode B map in
+`legacy-hand-authored-pool/` is skipped by every occasion (`_review_owed.exempt`); a Mode A sheet keeps its review wherever it
+lives.
 
-Same three rules apply to `building-review` and `backstory-review`.
+**The declaration.** Every feature that touches drawing or placement code carries an `## Occasions` section in its `tasks.md`,
+one `- <occasion>: <argument>` line each, or `- none: <why>` - whether a change is substantial is the feature's call to
+DECLARE; a delta that touches drawing or placement code with no section is refused at push (`review-gate.sh`). A TWEAK -
+a change done directly, with no spec-kit feature - declares in its commit message instead, one `Occasion: <occasion>: <argument>`
+line (GM 2026-10-01, the household shrine's torii); and a landed feature's section is not read again once every task is ticked. The research
+behind the table is `specs/294-settlement-review-rethink/research.md` R1: every check of the three contracts sorted by what it
+needs and when its answer changes, and what a placer or a test now holds instead.
 
-## WHEN a review runs (GM 2026-08-26) - and it never blocks the GM's look
+**The shape, enforced** (the pair guard): one owed UNIT per agent (`<check>:<subject>`), each dispatched from the prompt file
+`make verify` writes (`.git/review-snapshot/<unit>/dispatch.md`, with its `UNIT:` line); dispatched once the gate is GREEN for the
+content (a review beside a running gate is refused - a gate going red mid-review cost ~36 NOT-REVIEWABLE runs, research R0); at
+most two rounds per unit per feature (one review and one fix-verification; a third needs `REVIEW_ROUNDS_OK="<the GM's words>"`);
+the stop hook holds the turn while an owed unit has no dispatch, run or record. An engine change that moves things under rules
+already judged owes nothing and gets no report - the GM looks at the map.
+
+**The ledger measures it.** Every pass is a row of the ledger's measured table - the check, each finding's class, whether the
+author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `make review-census` totals them per check, so a
+check that never finds anything is a number.
+
+## Invoking a review agent: launch it EARLY (feature 233's measurements, still true)
+
+`settlement-review` used to be owed for every moved map and was the single most expensive thing a session waited on. Measured
+2026-08-08, on a change that resized some captions: one agent, two maps, a full audit - **12.3 minutes, 22% of the whole task's
+wall clock**, with this session idle for 11.4 of them. Launch an owed check the moment its gate is green - BEFORE your own
+visual pass, the docs and the commit: everything you do while it runs is free (measured 2026-08-16: the review was the whole
+task's critical-path TAIL after a 52 s reasoning turn and the session's own crop reads).
+
+## History: WHEN a review ran before feature 294 (GM 2026-08-26) - it never blocked the GM's look
 
 **FIRST: is one owed at all? (feature 231, GM 2026-09-12)** *"if there are no changes to the actual way
 that the settlement is laid out, then we should not need to re review the settlement because we're just

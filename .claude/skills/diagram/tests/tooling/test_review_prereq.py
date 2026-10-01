@@ -292,3 +292,36 @@ def test_a_verdict_a_red_gate_downgraded_still_raises_its_own_findings() -> None
     assert prereq.raised_findings({"verdict": "NOT-REVIEWABLE", "concluded": "NEEDS-WORK", "findings": [f1], "carried": []}) == [f1]
     assert prereq.raised_findings({"verdict": "NOT-REVIEWABLE", "findings": [{"id": "P1"}], "carried": [f1]}) == [f1], "a prerequisite is not a finding"
     assert prereq.raised_findings({"verdict": "NEEDS-WORK", "findings": [f1, "x"]}) == [f1]
+
+
+# ---- feature 294: per unit ----------------------------------------------------------------------------------
+
+
+def test_a_dispatch_names_its_unit_by_its_unit_line_and_otherwise_by_the_maps_it_names() -> None:
+    pool = ["inashiro", "sawada"]
+    assert prereq.units_named("UNIT: glyph-check--well\nlook at inashiro and sawada", pool) == ["glyph-check--well"]
+    assert prereq.units_named("UNIT: a\nUNIT: b\n", pool) == ["a", "b"], "two units are two, and the guard refuses them"
+    assert prereq.units_named("review inashiro", pool) == ["inashiro"], "a hand-written prompt is counted by its maps, as before"
+
+
+def test_a_sheet_owes_no_manifest_and_a_unit_is_checked_on_its_map(tmp_path: pathlib.Path, monkeypatch) -> None:
+    skill = tmp_path / ".claude" / "skills" / "diagram"
+    sheet = skill / "pool" / "magistracies" / "hayakawa"
+    sheet.mkdir(parents=True)
+    for ext in (".gen.py", ".svg", ".png", ".html"):
+        (sheet / f"hayakawa{ext}").write_text("x")
+    assert prereq.stale_maps(skill, ["hayakawa"], lambda _g: True) == [], "a Mode A sheet is complete without a .json"
+    (sheet / "hayakawa.png").unlink()
+    assert "lacks .png" in prereq.stale_maps(skill, ["hayakawa"], lambda _g: True)[0]
+    monkeypatch.setattr(prereq, "unit_maps", lambda _c: {"glyph-check--kura": "hayakawa"})
+    problems = prereq.check(tmp_path, ["glyph-check--kura"], "UNIT: glyph-check--kura", True, lambda _g: True)
+    assert problems and "hayakawa: its pool folder lacks .png" in problems[0], "the unit's staleness is its map's"
+
+
+def test_unit_maps_reads_the_owed_script_and_survives_a_repository_it_cannot_read(tmp_path: pathlib.Path) -> None:
+    assert prereq.unit_maps(tmp_path) == {}
+
+
+def test_two_unit_snapshot_folders_in_one_prompt_are_two_units() -> None:
+    prompt = "read /x/.git/review-snapshot/glyph-check--well/clone and /x/.git/review-snapshot/fix-check--inashiro/clone"
+    assert prereq.units_named(prompt, ["inashiro"]) == ["fix-check--inashiro", "glyph-check--well"]

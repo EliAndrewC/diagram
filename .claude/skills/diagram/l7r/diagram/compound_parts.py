@@ -192,6 +192,20 @@ def _mats(z: CourtZone) -> list[Box]:
     return [(cx - 3.0, fy, cx + 3.0, fy + 3.0), (cx - 16.0, fy + 6.0, cx - 10.0, fy + 9.0), (cx + 10.0, fy + 6.0, cx + 22.0, fy + 9.0)]
 
 
+def _family_privy(env: Envelope, homes: Sequence[Placed], taken: list[Box], zones: list[Box], wells: tuple[Box, ...]) -> tuple[float, float] | None:
+    """The top-left of the family's privy, attached to the house: on the first block of `homes` (largest first) with a
+    clear seat, at its rear face, else at one of its ends (west or north first) - None where no block has one."""
+    for home in homes:
+        others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
+        court = _court_side(home)
+        rear = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
+        ends = ("W", "E") if court in ("N", "S") else ("N", "S")
+        for side in (rear, *ends):
+            if seat := _attach(env, home, side, PRIVY_FT, PRIVY_FT, others + zones, wells):
+                return seat
+    return None
+
+
 def _guest_privy(env: Envelope, home: Placed, boxes: list[Box]) -> Box | None:
     """A privy attached to the house's rear face behind its reception room, centered on the room (research buildings
     220: "at the rear of the guest parlor"); None without a reception room or where the ground there is taken."""
@@ -467,15 +481,20 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # court, never within LATRINE_WELL_FT of a well; one against a compound wall is emptied through a hatch in it
     # (`_hatch`, drawn below).
     well_boxes = tuple((wx - 3.65, wy - 3.65, wx + 3.65, wy + 3.65) for wx, wy in wells)
-    if "residence" in by_name:
-        home = by_name["residence"]
-        others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
+    # THE HOUSE IS FOUND BY ITS FEATURE, NOT ITS NAME (feature 294 B17): the round-trip draft names its two blocks
+    # "residence (W)" and "residence (E)", so a lookup by the name "residence" found no house and seated no family privy -
+    # `privies_by_zone` caught it. A house in several blocks takes the privy on the first block, largest first, that has
+    # a clear seat.
+    homes = sorted((p for p in result.placed if p.spec.feature == "residence"), key=lambda p: -p.spec.w_ft * p.spec.h_ft)
+    if homes:
+        home = by_name.get("residence", homes[0])
         # the family's: IN THE HOUSE, attached at its rear corner by the family's rooms (research buildings 220: "within
         # the residence the privy came to be built in a corner of the corridor"), its cesspit toward the rear wall. Pass
         # 7 (building-review round 6): pass 6 had stood it flush to the rear wall for a hatch, ~140 ft outdoors round
         # the house from the inner entrance; the hatch was a guess and is dropped for it - the 10 ft alley keeps 5 ft.
-        rear = {"N": "S", "S": "N", "E": "W", "W": "E"}[_court_side(home)]
-        if fam := _attach(env, home, rear, PRIVY_FT, PRIVY_FT, others + zones, well_boxes):
+        # Where the rear is the compound wall itself (a block set against it), the privy is attached to an end of the
+        # block instead, west or north first (feature 294 B17: still the house's own) - `_family_privy`.
+        if fam := _family_privy(env, homes, taken, zones, well_boxes):
             taken.append((fam[0], fam[1], fam[0] + PRIVY_FT, fam[1] + PRIVY_FT))
             privies.append((fam[0] + PRIVY_FT / 2, fam[1] + PRIVY_FT / 2, "residence"))
         # the guests': attached to the house behind the reception room (pass 6; research 220's "at the rear of the guest
