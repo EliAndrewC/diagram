@@ -3,7 +3,7 @@
 **Feature Branch**: none (main, in the clone `diagram-review`)
 **Created**: 2026-09-30; scope written 2026-10-01, revised the same day on the GM's answers
 **Status**: Taken up 2026-10-01 (request.md: *"Please work feature 294 from start to finish"*); first drafted for the GM's reading (*"update the spec with all of
-these changes and then I will take a look at it before I have you begin"*). Under `spec-fidelity` review (Review history).
+these changes and then I will take a look at it before I have you begin"*). Accepted - FAITHFUL at round 3 (2026-10-01).
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the review's time and tokens, *"as the number of settlements
 that we have in our pool grows ... This will become quickly untenable after we branch out into villages and towns and provincial
 cities and capital cities"*; *"if our settlement review is checking for anything which a properly implemented placement
@@ -293,3 +293,4 @@ change when it is built.
   glyph check whatever its mark (User Story 4, FR-007, SC-002 seeded); the phrase struck; the size measured and labeled.
 - Round 2 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 1 item - the item-2 fix not carried into User Story 1's audit
   question 3 and the Summary, which still said "a glyph added". Addressed: both now say an element added whatever its mark.
+- Round 3 (spec-fidelity-verify, 2026-10-01): FAITHFUL. Every passage stating the glyph check's occasion agrees.
