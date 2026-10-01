@@ -735,7 +735,8 @@ BROOK_BEND_WIDTHS = 2.5
 # at no cost the router took any ford that was a few feet shorter: a lane crossed the brook and came straight back to
 # reach a house on its own bank - two planks built to save a short walk. A crossing is one more thing to build and keep,
 # so the router charges it as this much extra walking; a way that has to reach the far bank still crosses. 150 ft is a
-# GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in research/water/270.
+# GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in rendering/water/270,
+# "How our maps place a hamlet on its stream".
 BROOK_CROSSING_COST_FT = 150.0
 
 WIND_VECTORS: dict[str, Pt] = {
