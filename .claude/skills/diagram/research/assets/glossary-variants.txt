@@ -333,6 +333,8 @@ censorate	Censorate
 center-pivot	center-pivot
 centipede lane	centipede lane
 centipede lanes	centipede lane
+centroid	centroid
+centroids	centroid
 ceremonial gate	ceremonial gate
 ceremonial gates	ceremonial gate
 cesspit	koedame

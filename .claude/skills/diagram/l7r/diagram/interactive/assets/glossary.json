@@ -13857,5 +13857,12 @@
    "duck landings",
    "埠 (bu, \"landing\")"
   ]
+ },
+ "centroid": {
+  "def": "The center point of an area. A caption naming a whole field or building is set over it first.",
+  "variants": [
+   "centroid",
+   "centroids"
+  ]
  }
 }
