@@ -245,7 +245,7 @@ wording where it says the same.
   per round).
 - **SC-002** (FR-006, FR-007): A feature that adds one glyph owes exactly the checks whose occasion that is, on one map, once; the same for a
   redraw, for a substantial re-placement (the tannery case, seeded), and for a new element that reuses an existing glyph
-  (seeded); and no what-moved report is built for any of them - a triggered check's dispatch carries only its unit and the map it stands on (FR-006).
+  (seeded), and no what-moved report is built for any of them unless the audit recorded that check as needing one as its input, in which case it is built into that check's dispatch only; a triggered check's dispatch otherwise carries its element and the one map it stands on (FR-006).
 - **SC-003** (FR-003, FR-004): Every FR-003 class, and FR-004's count check, has a red-then-green test; no review asks for any of them.
 - **SC-004** (FR-001, FR-002, FR-008): Every check in the three agent files has an audit verdict; the settlement-review contract is at most half its
   current 49,960 characters (observed 2026-10-01; method: `wc -c` on the agent file) (a target; a larger residue is accepted if every remaining item is whole-map judgment).
@@ -254,8 +254,8 @@ wording where it says the same.
 - **SC-006** (FR-010, FR-013): The ledger report reproduces R0 within the hand census's error and adds cost per feature and per check.
 - **SC-007** (FR-011): No document or guard User Story 9 names states an obligation this feature removed (`make stale-terms` over
   the old trigger finds none).
-- **SC-008** (FR-012): Each check's tier experiment and its result are recorded (the feature's `measure/`, the tier table), and a
-  tier changes only where every Sonnet run finds what Opus finds.
+- **SC-008** (FR-012): Each check's tier experiment and its verdict are recorded in the ledger and the tier table, and a tier
+  changes only where every run of the cheaper tier (Sonnet, or Opus at lower effort) finds what Opus finds.
 
 ## Decisions Recorded
 
@@ -302,3 +302,7 @@ change when it is built.
 - Amendment pass, round 1 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 2 items - the legacy-pool edge case faithful to
   the GM's ruling; SC-004's labels FR-011 and FR-012, and SC-002's label FR-006, name requirements those criteria do not
   measure. Addressed: FR-011 and FR-012 off SC-004, measured by new SC-007 and SC-008; SC-002 extended with FR-006's clause.
+- Amendment pass, round 2 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 2 items - SC-004's labels fixed and SC-007
+  faithful; SC-002's new clause dropped FR-006's "unless a check needs it as input" exception and named an undefined "unit";
+  SC-008 narrowed User Story 8's cheaper tier to Sonnet and recorded outside the ledger. Addressed: both replaced with the
+  reviewer's wording.
