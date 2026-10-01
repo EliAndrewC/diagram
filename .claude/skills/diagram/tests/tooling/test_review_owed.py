@@ -227,6 +227,10 @@ def test_a_landed_feature_s_pointer_declares_nothing(clone: Path) -> None:
     git(clone, "commit", "-qm", "the feature")
     git(clone, "update-ref", "refs/remotes/origin/main", git(clone, "rev-parse", "HEAD"))
     assert units(clone) == []
+    (clone / "specs" / "999-test" / "measurements.json").write_text("{}\n")  # a later record in the landed feature's folder
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "a record")
+    assert units(clone) == []
 
 
 def test_a_committed_change_beyond_the_merge_base_counts(clone: Path) -> None:
