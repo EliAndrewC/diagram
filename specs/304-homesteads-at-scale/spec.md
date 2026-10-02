@@ -23,6 +23,10 @@ seeds 4 and 25, and timed every stage:
 | 40 | 13.2-14.7 s | 7.07-7.74 | 1.34-2.70 | 1.30-1.76 |
 | 80 | refused (`FieldRefused`: no single fan lands 104 acres) | - | - | - |
 
+The other two reference seeds, rolled the same way after the spec's first acceptance (observed 2026-10-01, method: the same
+scratch probe, seeds 39 and 47): stage totals 1.6-1.8 s at 10 households, 3.3-3.4 s at 20, and at 40 households seed 39 16.0 s
+(homesteads 9.8) and **seed 47 61.2 s (homesteads 55.6)** - a tail seven times the other three seeds' homesteads at that size.
+
 The homesteads stage is the one that grows faster than the household count (4x the houses, ~16x the time); the rest grow
 roughly in proportion. Profiled at 40 households (seed 25, cProfile, which roughly doubled the stage): the exhaustive seating
 pass offered 3,774 seats to seat 40 houses (~70% of the stage), every refused seat paying the corridor search, the layouts and
@@ -104,7 +108,7 @@ and the cohort and check every map passes its rules and seats every household it
   cannot land 104 acres), out of scope here; the benchmark stops at 40 and says why.
 - A seed that refuses at a benchmark size on the base engine (a `WebRefused` or `FieldRefused`): the snapshot records the
   refusal for that row, not a time, and does not fail the run. The four reference seeds are kept at every size; a refusing
-  seed is never swapped out (seeds 39 and 47 have not yet been rolled above 15 households).
+  seed is never swapped out.
 - Seed variance: seed 25 at 20 households took 5.0 s in homesteads where seed 4 took 1.5 s. The benchmark keeps the reference's
   fixed seeds so a slow seed stays in the set, as perf_snapshot's own docstring requires.
 - Machine load: every before/after comparison is the base and the clone run back to back (feature 297's method), never against
@@ -169,9 +173,9 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
 
 - 40 households stands in for a small village's household count; the village tier's own generator may change the stages, but
   the homesteads placer is the code a village will reuse.
-- The perf bookend's cost grows by the three new sizes; an estimate (observed 2026-10-01, method: the scratch scaling
-  probe's stage totals for seeds 4 and 25 at 10, 20 and 40 households, 19.1-25.1 s a seed) of 76-100 s of stage time over the
-  four seeds, the two unprobed seeds (39, 47) unmeasured, paid only where the bookend runs today (`make done FULL=1`, `make perf`), never in `make quick` or the plain gate.
+- The perf bookend's cost grows by the three new sizes; on the base (observed 2026-10-01, method: the scratch
+  scaling probe's stage totals for all four seeds at 10, 20 and 40 households) that is about 132 s of stage time, 66 s of it
+  seed 47 at 40 households alone, paid only where the bookend runs today (`make done FULL=1`, `make perf`), never in `make quick` or the plain gate.
 - The line-of-sight reach region and the live seat region are both candidates for FR-006; feature 297's research (R9-R17)
   lists the levers already withdrawn and is read before either is built.
 - The field's refusal at 80 households is left to the village tier.
@@ -180,7 +184,9 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
 
 - Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED, 4 items - the Edge Cases let the seed list be chosen on the base
   against FR-001's fixed seeds; FR-006 reached past the two accepted forms; SC-002/SC-003 were targets the GM did not ask for;
-  the bookend's "about 70 s" was unlabeled and disagreed with the table. Addressed: the four reference seeds kept at every size,
+  the bookend's cost figure was unlabeled and disagreed with the table. Addressed: the four reference seeds kept at every size,
   a refusal recorded; FR-006 names the two forms and sends any other pruning to the GM; the goals labeled the session's, a miss
-  recorded and raised; the cost an observed-label estimate of 76-100 s.
+  recorded and raised; the cost a labeled estimate from the two probed seeds.
 - Round 2 (spec-fidelity, verify, 2026-10-01): FAITHFUL; all four items resolved, no new contradiction.
+- After acceptance (2026-10-01, a measurement, no requirement changed): seeds 39 and 47 rolled at 10/20/40 households; the
+  Context gains their figures (seed 47's 55.6 s homesteads tail at 40) and the bookend's cost is restated from all four seeds.
