@@ -336,7 +336,15 @@ def zigzags_at_a_joint(lanes: Sequence[Any], link: Sequence[Pt]) -> bool:
     a joint)?"""
     from .joints import joints, oriented  # joints imports this module
 
-    trial = [*lanes, {"pts": [list(q) for q in link]}]
+    # ...its ends taken where they will be drawn: on a lane end within the join reach (the route starts and ends a grid cell
+    # off the vertex it was asked from, and the drawn link is joined there - Inashiro's spur end, 2026-10-02)
+    ends = [(float(e[0]), float(e[1])) for ln in lanes if len(ln.get("pts") or []) >= 2 and not ln.get("connector") for e in (ln["pts"][0], ln["pts"][-1])]
+    pts = [(float(q[0]), float(q[1])) for q in link]
+    for k in (0, -1):
+        near = min(ends, key=lambda e: math.dist(e, pts[k]), default=None)
+        if near is not None and math.dist(near, pts[k]) <= _LANE_JOIN_FT:
+            pts[k] = near
+    trial = [*lanes, {"pts": [list(q) for q in pts]}]
     n = len(trial) - 1
     for i, ei, j, ej in joints(trial):
         if n in (i, j):
