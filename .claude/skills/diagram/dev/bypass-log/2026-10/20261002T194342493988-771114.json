@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T19:43:42Z",
+  "target": "review-accept",
+  "commit": "be1cdcda6",
+  "outcome": "permitted",
+  "why": "review-accept fix-check--inashiro 5: the wood figure change is the plan's SC-004 report, which goes to the GM at T41"
+}
