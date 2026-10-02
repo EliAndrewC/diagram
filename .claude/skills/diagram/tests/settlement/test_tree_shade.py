@@ -1,7 +1,7 @@
 """The single tree's shade on a yard or a bed (GM 2026-10-02, `settlement/homestead_parts/tree_shade.py`): the plot's sun
 ground runs from its north edge, `reach` east, west and south of it; a crown north of that line throws its shadow away."""
 
-from l7r.diagram.settlement.homestead_parts.tree_shade import _plot_box, crown_shades, persimmons_shading_plots
+from l7r.diagram.settlement.homestead_parts.tree_shade import _plot_box, crown_in_ground, crown_shades, persimmons_shading_plots, sun_ground
 
 PLOT = (0.0, 0.0, 40.0, 20.0)  # x -20..20, y -10..10 (+y south)
 
@@ -31,3 +31,11 @@ def test_the_map_check_names_each_crown_in_a_plots_sun_at_the_maps_scale() -> No
     }
     assert persimmons_shading_plots(M, 50.0) == [("threshing_yards", (50.0, 0.0), (0.0, 0.0))]
     assert persimmons_shading_plots({"persimmons": M["persimmons"], "threshing_yards": M["threshing_yards"][:1]}, 50.0) != [], "no meta: a foot a pixel"
+
+
+def test_a_plots_sun_ground_taken_once_answers_as_the_crown_test_does() -> None:
+    """Feature 314: the sun ground taken once (`sun_ground`) and asked of many crowns (`crown_in_ground`) is `crown_shades`."""
+    g = sun_ground(PLOT, 50.0)
+    for x in range(-90, 91, 15):
+        for y in range(-40, 91, 13):
+            assert crown_in_ground(float(x), float(y), 10.0, g) == crown_shades(float(x), float(y), 10.0, PLOT, 50.0), (x, y)

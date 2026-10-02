@@ -27,7 +27,8 @@ def test_the_search_finds_the_goal_round_a_wall_and_none_where_it_is_shut_in() -
     assert got is not None
     cells, q = got
     assert cells[0] == (0, 0) and q[0] >= 4 and not set(cells) & wall, "from the start, round the wall, to the goal"
-    assert all(max(abs(a[0] - b[0]), abs(a[1] - b[1])) == 1 for a, b in zip(cells, cells[1:], strict=False)), "eight-neighbor steps"
+    assert max(abs(cells[1][0]), abs(cells[1][1])) <= 2, "the first step off the start spans up to two cells (feature 314)"
+    assert all(max(abs(a[0] - b[0]), abs(a[1] - b[1])) == 1 for a, b in zip(cells[1:], cells[2:], strict=False)), "...then eight-neighbor steps"
     assert search(lambda c: False, goal, [], 10, 1.5) is None, "shut in: no route"
     assert search(lambda c: True, goal, [(4.0, 0.0)], 2, 1.5) is None, "the goal beyond the search's reach: none"
 
@@ -98,6 +99,8 @@ def test_a_grid_point_on_taken_ground_or_by_a_reserved_seat_is_shut() -> None:
             return 800.0 < x < 1100.0
 
     class Wood:
+        seats = type("Seats", (), {"n": 0})()  # what the standing memo's state reads
+
         def corridor_bars(self, a: tuple[float, float], b: tuple[float, float]) -> bool:
             return a[0] < 600.0
 
@@ -120,5 +123,40 @@ def test_a_grid_point_on_taken_ground_or_by_a_reserved_seat_is_shut() -> None:
         s._reach_index(s.placed, "placed_reach"),
         route.ROUTE_STEP_PX,
         lambda a, b: True,
+        geom,
     )
     assert run is None, "east of the neighbor taken, west of it a reserved wood: no way round"
+
+
+def test_a_search_starts_where_it_is_told_and_its_first_steps_are_judged() -> None:
+    """Feature 314: the search starts at any cell of the map's grid; its first step may span two cells, and `first_ok` judges
+    each - none admitted, none found."""
+
+    def goal(c: tuple[int, int]) -> tuple[float, float] | None:
+        return (float(c[0]), float(c[1])) if c[0] >= 14 else None
+
+    got = search(lambda c: True, goal, [(14.0, 5.0)], 10, 1.5, (5, 5))
+    assert got is not None and got[0][0] == (5, 5) and max(abs(got[0][1][0] - 5), abs(got[0][1][1] - 5)) <= 2, "a first step of two cells"
+    assert search(lambda c: True, goal, [(14.0, 5.0)], 10, 1.5, (5, 5), lambda c: False) is None, "every first step refused"
+    assert search(lambda c: True, goal, [], 10, 1.5, (5, 5)) is not None, "no aim: the start's own"
+
+
+def test_a_route_keeps_off_its_own_parts_and_its_last_leg_off_what_stands(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 314: the grid points on the household's own beds, sheds and fixtures are shut, each by its leg test's gap, and a
+    goal whose last leg onto the tree the standing ground refuses is no goal."""
+    monkeypatch.setattr(access, "parts_clear", lambda *a: True)
+    s = _open()
+    geom = _hemmed(s)
+    s._access.routed = True
+    geom["boxes"]["fixtures"] = {"privy": (640.0, 640.0, 6.0, 6.0), "persimmon": (760.0, 640.0, 20.0, 20.0)}
+    geom["boxes"]["shed"] = (700.0, 660.0, 10.0, 10.0)
+    got = access_corridor(s, geom)
+    assert got is not None, "routed round its own parts"
+    for a, b in zip(got, got[1:], strict=False):
+        assert not access.seg_box_within(a, b, (640.0, 640.0, 6.0, 6.0), s._access.half), "...off its privy"
+    s = _open()
+    geom = _hemmed(s)
+    s._access.routed = True
+    real = access.standing_ground
+    monkeypatch.setattr(access, "standing_ground", lambda s_, a, b, memo: abs(b[1] - 450.0) > 1e-6 and real(s_, a, b, memo))
+    assert access_corridor(s, geom) is None, "every last leg onto the tree refused: no goal"

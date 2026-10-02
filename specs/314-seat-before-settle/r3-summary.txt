@@ -1,0 +1,4 @@
+base: 16 seeds, stage 19.5 s, 240 houses
+new: 16 seeds, stage 18.8 s, 240 houses
+base: 10 seeds, stage 48.4 s, 400 houses
+new: 10 seeds, stage 51.0 s, 400 houses

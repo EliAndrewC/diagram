@@ -163,9 +163,7 @@ def water_index(s: Any) -> Any:
     got = s.__dict__.get("_water_index")
     if got is None or got[0] != sig:
         grid = PointGrid()
-        grid.extend(
-            (a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in lines for a, b in zip(ln, ln[1:], strict=False)
-        )
+        grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in lines for a, b in zip(ln, ln[1:], strict=False))
         got = s.__dict__["_water_index"] = (sig, grid)
     return got[1]
 
