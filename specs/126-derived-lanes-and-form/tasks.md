@@ -108,7 +108,7 @@ old uniform pitch.
 
 - [ ] T031 [P] Update the `STAGES` table in `dev/placement.md` - rows 4 and 7 change name and meaning - and the phase-model notes beneath it
 - [ ] T032 Rewrite the affected `NOTES` prose in `l7r/diagram/tools/placement_stages.py` for the renamed and moved stages, then regenerate `dev/placement-stages/hamlet-placement.html`. **A re-render alone is not sufficient** - the page explains WHY each stage sits where it does, and this feature changes those answers (GM, 2026-08-23)
-- [ ] T033 [P] Verify the new `research/homesteads.md` section is reachable from the rules it justifies - each form-conditional check and the shadow corridor should cite it, so a future reader meets the research at the rule
+- [ ] T033 [P] Verify the new `research/contents.json#homesteads` section is reachable from the rules it justifies - each form-conditional check and the shadow corridor should cite it, so a future reader meets the research at the rule
 - [ ] T034 [P] Update the hamlet row in `migration-plan.md` if its status changed
 - [ ] T035 Regenerate the four live pool hamlets (inashiro, kashikawa, mizuguchi, sawada)
 - [ ] T036 Run `settlement-review` on each regenerated map, with **at least one map per form** in the reviewed set (Principle I - the author is not a reviewer of their own visual output)
