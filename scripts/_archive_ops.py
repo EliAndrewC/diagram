@@ -268,7 +268,7 @@ def find(
             )
     if not hits:
         print(
-            "archive: nothing held - search the web (and archive what you read: `make source-pages` does)",
+            "archive: nothing held - search the web (a page you cite is archived by `make source-outcome OUTCOME=cited:<key>`)",
             file=out,
         )
     return 0 if hits else 1
