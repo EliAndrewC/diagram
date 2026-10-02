@@ -137,3 +137,23 @@ figure (`consts.SEATING_GROUND_FT = 162`, `_seat_households`' lattice and seat b
 margin, the worst 14.1 s, 84.2 s summed (the base engine about 449 s over the same seeds, R7's sweep and the spec's Context);
 the cohort 30/30; the pool: Inashiro refused by the web (an access lane, `needle_joins`) and Sawada failing the pool test of two
 ways side by side past a pitch - each sent to its root cause (R13).
+
+## R13. The nine flagged checks indexed, and the census after (observed 2026-10-02, method: three background agents in worktrees, each check against its old scan kept as the oracle, `make maps SCOPE=all` with the pool manifests compared; then `make census` on the clone's engine)
+
+(Observed 2026-10-02, method: as the heading.) Every fix exact - byte-identical pool manifests, an equivalence test with the old
+scan as its oracle, red when the index drops a candidate:
+
+| check | comparisons a call, before -> after | its own time, before -> after |
+|---|---|---|
+| `ways/touch._clear_of_fabric` | 111,700 -> 69 | 103-128 ms -> 3.0-3.5 ms |
+| `ways/dry_exit._blocked_cells` | 101,229 -> 5,485 (the exact deciding tests left) | 1.4-2.8 s -> 0.07-0.09 s; Sawada's seat stage 1.1-1.9 -> 0.09-0.12 s |
+| `cluster.seat_cluster` | 30,604 -> 572 | 2.0 s -> 0.13-0.18 s (mostly the raster above) |
+| `city/bridges.bridges` | 16,190 -> 8 | 0.061 -> 0.027 s |
+| `homestead_parts/groves._belt_ranks` | 15,005 -> 1,196 | 0.071 -> 0.047 s |
+| `fields/comb._comb_record_field` | 12,263 -> 174 | 0.122 -> 0.065 s |
+| `ways/street.street_span` | 6,394 -> ~472 | 15.6 -> 2.0 ms (a `PointGrid` was slower; boxes of 16 segments) |
+| `city/bridges.channel_footbridges` | 5,485 -> 6 | 0.206 -> 0.054 s |
+| `water/polder.dike_gaps_at_channels` | 5,048 -> 51 | 2-3 -> ~1 ms |
+
+The census on the clone's engine afterwards (the pool and the reference at 40, shapely's predicates counted): **no check over
+5,000**; the largest 2,624 (`ways/street.joints_along`), 2,137 (`_blocked_cells`), 1,989 (`web.tidy_lane_ends`).

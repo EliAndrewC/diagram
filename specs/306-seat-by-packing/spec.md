@@ -129,9 +129,11 @@ flagged. It stays a standing check, run beside `make perf`, so a future scan of 
   rules (GM 2026-09-30, feature 297: "They do NOT need to remain identical in output").
 - **FR-009**: Every lever MUST be timed by the wall clock, base and clone back to back, and recorded in `dev/performance.md`
   with what it bought, including any withdrawn.
-- **FR-010**: The seat band MUST hold the ground a homestead actually takes - the GM's *"start off larger"* (request.md) and
-  the GM's *"a bounding box that will contain a homestead and the things in the homestead"*: its envelope and its wood floor -
-  derived from measured homesteads, not tuned to just fit.
+- **FR-010**: The band the seating spreads its households over MUST hold the ground a homestead actually takes - the GM's
+  *"start off larger"* (request.md) and the GM's *"a bounding box that will contain a homestead and the things in the
+  homestead"*: its envelope and its wood floor - derived from measured homesteads, not tuned to just fit. Where growing the
+  margin's band, the canvas or the belt with it re-fits fields and refuses sites the base seated (research R11, R12), those keep
+  their figure and the seating's band is its own.
 - **FR-011**: Each lever (FR-003, FR-004, FR-010 and any later round's) is built in the engine only on its OWN prototype verdict
   (faster beyond the spread, every household seated); a lever measured NO-GO is recorded with its numbers (FR-009) and not
   built, and the goals SC-002/SC-003 are judged on the levers that are.
@@ -160,7 +162,7 @@ the implementation finds it needs is recorded here with its class before it land
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The seat band's ground per household (observed 2026-10-02, method: the pool's manifests, research R6): 162 ft, the side of a square holding the pool's MEAN homestead envelope (20,366 sq ft) and the least wood floor (6,000 sq ft) - the band's area is the households' sum, so the mean | guess - the record gives no figure for a seat band's ground per household; 162 ft is reasoned from the pool's measured envelopes (the mean, because the band's area is the households' sum) plus the researched least wood floor (`HOMESTEAD_WOOD_FT2`, 6,000 sq ft); was 104, which left the wood floor out | FR-010; research R6-R7 | research R7; `hamletgen/consts.py` `HOMESTEAD_GROUND_FT` |
+| The ground per household of the band the SEATING spreads its households over (`SEATING_GROUND_FT`; the margin's band, the canvas and the belt keep `HOMESTEAD_GROUND_FT`'s 104 - research R12) (observed 2026-10-02, method: the pool's manifests, research R6): 162 ft, the side of a square holding the pool's MEAN homestead envelope (20,366 sq ft) and the least wood floor (6,000 sq ft) - the band's area is the households' sum, so the mean | guess - the record gives no figure for a seat band's ground per household; 162 ft is reasoned from the pool's measured envelopes (the mean, because the band's area is the households' sum) plus the researched least wood floor (`HOMESTEAD_WOOD_FT2`, 6,000 sq ft); was 104, which left the wood floor out | FR-010; research R6-R7 | research R7, R12; `hamletgen/consts.py` `SEATING_GROUND_FT` |
 | Homesteads packed adjacent, nearest the seat's center first | map drawing convention (the placement ORDER, not a rule) | the GM's *"place another one next to it"*; the rules decide whether a seat may stand | this spec; the packing's docstring |
 
 ## Assumptions
@@ -185,3 +187,7 @@ the implementation finds it needs is recorded here with its class before it land
 - Amendment 1, round 1 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 1 item - the band figure's class was not one of the
   four; it is a labeled guess with its reasoning.
 - Amendment 1, round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL.
+- Amendment 2 (2026-10-02, research R11-R12): FR-010 scoped to the seating's band - the band, canvas and belt grown together
+  re-fitted fields and refused sites (the cohort 30/30 -> 27/30, Sawada refused); the seating's band alone keeps the 40-household
+  win (observed 2026-10-02, method: research R12's probe - 84.2 s summed over sixteen seeds against the base's ~449) with every
+  canvas, field and margin as before.

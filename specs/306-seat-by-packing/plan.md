@@ -36,30 +36,38 @@ lanes) did not move that edge; giving the band the ground a homestead actually t
 
 ## Decisions
 
-- **D1 The seat band's ground per household is 162 ft** (`hamletgen/consts.py` `HOMESTEAD_GROUND_FT`, FR-010; spec Decisions: a
-  guess with its reasoning). The band's area is `households x HOMESTEAD_GROUND_FT^2` (`plan.band_extent`), so the figure is the
-  side of a square holding the MEAN homestead: the pool's 82 envelopes' mean (20,366 sq ft, research R6) plus the least wood
-  floor (`HOMESTEAD_WOOD_FT2[0]`, 6,000). The comment beside it carries the derivation, the twelve- and thirty-seed sweeps (R7)
-  and the 104 it replaces (and why: the wood floor came after it). It also grows the canvas's room for the seat (`seat_room`),
-  so every hamlet map moves; the pool and the cohort are re-rolled and held to every rule (FR-008).
+- **D1 The seating's band holds the homestead's whole ground: `SEATING_GROUND_FT = 162`** (`hamletgen/consts.py`, FR-010; spec
+  Decisions: a guess with its reasoning). The side of a square holding the MEAN homestead (the band's area is the households'
+  sum): the pool's 82 envelopes' mean (20,366 sq ft, R6) plus the least wood floor (`HOMESTEAD_WOOD_FT2[0]`, 6,000). It sizes
+  only `_seat_households`' lattice and seat bound; the margin's choice, the canvas's room and the belt keep `HOMESTEAD_GROUND_FT`'s
+  104 - growing those too re-fitted every field and refused sites the base seated (R11), and the canvas grown alone made 40
+  households worse (R12). Its own verdict (FR-011): GO - at 40 households 11 of 16 seeds on the first margin, 84.2 s summed
+  against the base's ~449, every household seated (R12); the cohort 30/30. The pool's two regressions under it (Inashiro's
+  access lane, Sawada's doubled way) go to their root causes (R13) before it lands.
 - **D2 The rescue and the dry-spell cap are built only if they pay on top of D1** (FR-011): measured on the sixteen-seed set
   at 40 households, D1 alone against D1 with both (research R9); built where faster beyond the spread with every household
   seated, else recorded and withdrawn.
-- **D3 FR-003 (capacity predicted before seating) and FR-004 (packed proposals) are not built** - their prototypes were NO-GO
-  (R1-R4, FR-011); with D1 the first or second margin seats 28 of 30 seeds at 40 households (R7), so the ladder's cost is a
-  margin or two, not sixteen.
-- **D4 The overlap census** (FR-006): `tools/overlap_census.py`. `sys.monitoring` armed on the geometry primitives' code objects
-  (`settlement/_geom/primitives.py`'s pairwise measures and `_geom/overlap.py`'s public predicates); each comparison charged to
-  the nearest named function outside `settlement/_geom/` (comprehensions and lambdas charged to their function), whose calls
-  are counted from its first comparison on (its code object armed then). Rolled over every pool hamlet's spec (read from its
-  gen, `generate` intercepted) and the reference at 40 households, stages only (the perf tool's loop). Reports per check: the
-  stage, calls, comparisons, comparisons per call; FLAGS a check over `CENSUS_FLAG = 5,000` comparisons per call - the knee
-  of the measured distribution (R10: nine checks from 5,048 to 111,700; the next below at 3,859, the bulk under 1,500). `make
-  census` runs it; `make perf` runs it after the snapshot (FR-006's standing check), printing the flagged list.
-- **D5 Each flagged check gets its index, box or line, with identical answers** (FR-007): the nine of R10, given to three
-  background agents in worktrees grouped by file, each held to byte-identical pool manifests and an equivalence test with the
-  old scan as its oracle; a check that cannot be indexed exactly, or is slower indexed, is recorded with its measurement,
-  mechanism and sketch (research R11).
+- **D3 FR-003 (capacity predicted before seating) and FR-004 (packed proposals) are not built.** FR-004's packed proposals
+  were prototyped and measured NO-GO (R3: beside the tree, grown from the houses; R4: along planned lanes). FR-003's
+  free-ground prediction was measured and disproved (R1); its rules-based form was argued from R2-R3 (the cap is reachability,
+  not ground) and NOT prototyped - with D1 a margin's capacity is no longer the edge it was. Seed 47 still seats on the seventh
+  margin at 162 alone (R7); with the rescue on the third (R9) and under D1's final form on the first (R12) - every reference
+  seed's miss against SC-002/SC-003 is recorded with every round's numbers and raised with the GM.
+- **D4 The overlap census** (FR-006): `tools/overlap_census.py`. `sys.monitoring` armed on every pairwise measure - the
+  geometry package's (`_geom/primitives.py`, `_geom/overlap.py`'s public predicates) AND shapely's binary predicates and
+  `distance` on its geometries; each comparison charged to the nearest named function outside both (comprehensions and lambdas
+  to their function), whose calls are counted from its first comparison. The reach it does not have, stated: comparisons made in
+  C over arrays (a numpy raster, shapely's vectorized functions) - the boxes and rasters the rule asks for. Rolled over every pool
+  hamlet's spec and the reference at 40 households. FLAGS a check over `CENSUS_FLAG = 5,000` comparisons a call - R10's
+  distribution: nine checks 5,048-111,700; below them 3,859 (`serve._lay_web_lane`), then 2,631, 2,624, 1,857, 1,799, 1,725 ... and
+  the bulk under 1,500: the step from the bulk to the tail is at ~4,000-5,000, and 5,000 flags the tail. `make census`; `make perf`
+  runs it after the snapshot (the standing check).
+- **D5 Every check the D4 census flags gets its index, box or line** (FR-007), starting with R10's nine. Identical answers are
+  the preferred fix (an exact index, byte-identical pool manifests, an equivalence test with the old scan as its oracle); where
+  only a box or a line that MOVES an answer cuts the comparisons, it is built and held to FR-008 instead (every pool map and
+  cohort seed passes every rule and seats as many households). A check is left unchanged only where the fix is SLOWER by the
+  wall clock, recorded with the measurement, mechanism and sketch. (R13: the nine indexed, all exact; the census after them
+  flags none.)
 - **D6 The planted region's sliver line** (R8): fixed, tested (constitution XIV).
 
 ## Constitution Check
