@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T15:21:15+00:00",
+ "final_url": "https://web.archive.org/web/20251008014044id_/https://www.britannica.com/topic/kuramai",
+ "first": "3e/3e486c2494eb/20261002T152115Z",
+ "gm_copies": [],
+ "keys": [
+  "kuramai"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "3e/3e486c2494eb/20261002T152115Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://www.britannica.com/topic/kuramai"
+}

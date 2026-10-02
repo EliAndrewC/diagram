@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T15:49:59+00:00",
+ "final_url": "https://www.mapple.net/article/48327/",
+ "first": "7d/7df725baf4e7/20261002T154958Z",
+ "gm_copies": [],
+ "keys": [
+  "mapple-takayama-jinya"
+ ],
+ "notes": [
+  "0106-the-chief-retainers-house-karo-yashiki.notes.html",
+  "0113-the-office-hall-and-its-clerks-goyakusho.drawing.notes.html",
+  "0113-the-office-hall-and-its-clerks-goyakusho.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "7d/7df725baf4e7/20261002T154958Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "eb9b27b3a8c971827ae80ed54cd5c1e1cc5f88f8cd0bdf6865e545dab323b959",
+ "url": "https://www.mapple.net/article/48327/"
+}

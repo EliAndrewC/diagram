@@ -60,17 +60,21 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
 
 ## Phase 5 - Amendment 1 (US4-US6; FR-003, FR-013 - FR-016)
 
-- [ ] T40 [US6] The sharded layout (D11): `ROW_GLOB`, `row_path`, `capture_base`, `gm-copies/`; the one-time relayout run on
+- [x] T40 [US6] The sharded layout (D11): `ROW_GLOB`, `row_path`, `capture_base`, `gm-copies/`; the one-time relayout run on
       the archive and the manifest
       research: rendering
-- [ ] T41 [US4] The inbox (D12): `_archive_ops.py inbox`, `make archive-inbox`; tests (archive, confirm, delete; a failed push
+      verify: DONE. ROW_GLOB/row_path/capture_base/gm-copies; relayout ran: 1,803 rows moved, archive top level 1,775 -> 257 entries; tests pass
+- [x] T41 [US4] The inbox (D12): `_archive_ops.py inbox`, `make archive-inbox`; tests (archive, confirm, delete; a failed push
       deletes nothing; the GM's lists stay); run on the GM's directory
       research: rendering
+      verify: DONE. process_inbox + MATCH/NONE; 7 ops tests pass; ran on academic-sources: 40 entries archived to gm-copies/, confirmed in origin/main, removed - the two GM lists remain
 - [ ] T42 [US5] Every page read (D13): `archive_reads` from `source-pages` and `source-outcome`, `_archive_ops.py urls`, the
       test seam; the consulted backfill (`make archive-sources CONSULTED=1`) over the ledger's URLs with no row
       research: rendering
-- [ ] T43 [US6] The lookup (D14): `make archive-find`; tests
+- [x] T43 [US6] The lookup (D14): `make archive-find`; tests
       research: rendering
-- [ ] T44 [US6] The procedures (FR-016): root `CLAUDE.md`, `docs/research-doctrine.md`, `docs/research-record-rules.md`,
+      verify: DONE. make archive-find: KEY=forests-2020 names the capture and the GM copy; TERMS=Tonami|sankyoson finds the Visit Toyama text; test passes
+- [x] T44 [US6] The procedures (FR-016): root `CLAUDE.md`, `docs/research-doctrine.md`, `docs/research-record-rules.md`,
       `research/CLAUDE.md`, `container-scripts/page-session-rules.md`, the `source-reader` and `quote-check` contracts
       research: rendering
+      verify: DONE. root CLAUDE.md, research-doctrine, research-record-rules, research/CLAUDE.md, page-session-rules, source-reader and quote-check contracts edited

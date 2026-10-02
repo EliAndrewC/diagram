@@ -1,6 +1,6 @@
 {
  "feature": "309-source-archive",
- "plan_sha256": "77af89632abe1a76bd854da42f954c9267c5e5923c0f1f7dc8a7427a6f2666d7",
+ "plan_sha256": "aa0453b3a243af5ad815fc9800f96f8771734ae5a8a88dde851c5deb5da808b4",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -90,10 +90,9 @@
   },
   {
    "id": "D12-keys",
-   "summary": "A file not yet in gm-copies.json is added with keys: [] and archived; 'a session that matches it later edits its keys'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-013 says an inbox file is archived 'its key's rows naming it where it copies a cited source, its keys empty where it copies none', and FR-012 that every file that copies a cited source MUST be matched to its key. D12 (and _archive_ops.process_inbox) gives EVERY new file empty keys, so a new download of a cited source - the usual case, since the GM downloads what a session could not fetch - is archived unmatched and deleted from the inbox, and no procedure document (CLAUDE.md, research/CLAUDE.md, research-doctrine, research-record-rules, page-session-rules) names a matching step; 'later' has no trigger. The consequence defeats FR-012/FR-010's purpose: the key's rows never name the copy, the source page does not list it, and `make archive-find KEY=<k>` does not find it. Matching is not impossible at inbox time (T12 matched all 40 by reading heads; TO-DOWNLOAD.md names the key a download was asked for). Fix: the inbox step matches each new file to its key(s) before it is deleted (a KEY=/match input, or archive-inbox listing each unmatched new file and the procedure requiring the session to record its keys and run the GM=1 sync), and the plan says so; keys: [] stays only for a file judged to copy no cited source."
+   "summary": "A NEW inbox file (not in gm-copies.json) waits in the inbox, listed WAITING, until the session reads it and gives its keys (MATCH='<file>=<key>') or judges it to copy no cited source (NONE='<file>', keys []); then it is archived, pushed and deleted",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item is cleared: no new file is now archived keyless by default. FR-012 requires every copy of a cited source to be matched to its key, and FR-013 that it be archived with its key's rows naming it, keys empty only where it copies none; matching before archiving is the order those two requirements together impose. The wait is not a carve-out from FR-013: the file is still archived and deleted once matched, it stays visible in the inbox while it waits (the inbox's purpose: what is there is unprocessed), and the match step has a trigger - research/CLAUDE.md and page-session-rules.md both put it in the archive-inbox step at the start of every research pass. process_inbox and the Makefile target carry it."
   },
   {
    "id": "D13",
@@ -133,11 +132,11 @@
    "why": "FR-016's six files are all named (research-record-rules.md is an extra home of the same passage, enforcing FR-016)."
   },
   {
-   "id": "FR-012 match section (stale line)",
-   "summary": "'7 copy no cited source and are listed, not archived'; Summary 'every file ... that copies a cited source is archived'",
+   "id": "FR-012 match section / Summary (rewritten)",
+   "summary": "The 7 unmatched files are now 'archived all the same under Amendment 1 (FR-013)'; the Summary says every academic-sources file is archived, each matched to the key it copies",
    "class": "within",
-   "why": "Pre-amendment text superseded by D12, which archives every inbox entry; not a ruling, but the lines contradict FR-013 as read and should say the 7 are archived under FR-013."
+   "why": "Round 1's stale lines are rewritten and now agree with FR-013 (the 7 archived and deleted) and FR-012."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

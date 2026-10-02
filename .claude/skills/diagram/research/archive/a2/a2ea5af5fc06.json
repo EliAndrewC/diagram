@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T15:27:22+00:00",
+ "final_url": "https://web.archive.org/web/20250714095125id_/https://www.city.kiyosu.aichi.jp/kurashi_joho/seikatsu_kankyo/nogyo/tsusui_R7.html",
+ "first": "a2/a2ea5af5fc06/20261002T152721Z",
+ "gm_copies": [],
+ "keys": [
+  "kiyosu-haisui-schedule"
+ ],
+ "notes": [
+  "0179-water-gates-and-sluices-shuimen.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "a2/a2ea5af5fc06/20261002T152721Z",
+ "reason": "HTTP 404",
+ "revision": "",
+ "sha256": "6d8c386f9d8e8c818ef9c39a4bf14e7f4f64c3c1e196f50bc2d8c52494d5dc21",
+ "url": "https://www.city.kiyosu.aichi.jp/kurashi_joho/seikatsu_kankyo/nogyo/tsusui_R7.html"
+}

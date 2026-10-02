@@ -27,7 +27,7 @@ from l7r.diagram.interactive.sources import RESEARCH_DIR  # noqa: E402
 
 scratch = pathlib.Path(sys.argv[1])
 rng = random.Random(int(sys.argv[2]) if len(sys.argv) > 2 else 309)
-rows = [json.load(open(p, encoding="utf-8")) for p in sorted(glob.glob("research/archive/[0-9a-f]*.json"))]
+rows = [json.load(open(p, encoding="utf-8")) for p in sorted(glob.glob("research/archive/*/[0-9a-f]*.json"))]
 rows = [r for r in rows if r["outcome"] in ("archived", "archived-earlier-snapshot") and r.get("keys") and r.get("path")]
 wiki = [r for r in rows if "wikipedia.org" in r["url"]]
 pdf = [r for r in rows if r["url"].lower().split("?")[0].endswith(".pdf") or "/_pdf" in r["url"]]

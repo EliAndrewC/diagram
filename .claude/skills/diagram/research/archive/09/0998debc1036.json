@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T15:17:34+00:00",
+ "final_url": "https://web.archive.org/web/20140223165717id_/http://wiki.mbalib.com:80/wiki/%E7%81%8C%E6%BA%89%E6%B8%A0%E9%81%93%E7%B3%BB%E7%BB%9F",
+ "first": "09/0998debc1036/20261002T151734Z",
+ "gm_copies": [],
+ "keys": [
+  "mbalib-canal-layout"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "09/0998debc1036/20261002T151734Z",
+ "reason": "APIRequestContext.get: Client network socket disconnected before secure TLS connection was established",
+ "revision": "",
+ "sha256": "31935eb01c7d0a0d93e4257b337575c95f61b24de9039a8418badc1b5d6bf4de",
+ "url": "https://wiki.mbalib.com/wiki/灌溉渠道系统"
+}

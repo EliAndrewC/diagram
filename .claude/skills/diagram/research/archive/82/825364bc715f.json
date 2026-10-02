@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T15:39:04+00:00",
+ "final_url": "",
+ "first": "",
+ "gm_copies": [],
+ "keys": [
+  "jah-song-military-cities"
+ ],
+ "notes": [
+  "0148-towers-along-the-city-wall-mamian.drawing.notes.html",
+  "0148-towers-along-the-city-wall-mamian.notes.html"
+ ],
+ "outcome": "unreachable",
+ "path": "",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://www.jgcm.ac.cn/jah/cn/article/pdf/preview/10.12329/20969368.2026.02011.pdf"
+}

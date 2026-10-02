@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T15:32:51+00:00",
+ "final_url": "https://www.ecoagri.ac.cn/article/doi/10.12357/cjea.20240340?viewType=HTML",
+ "first": "27/2793d4319d42/20261002T153250Z",
+ "gm_copies": [],
+ "keys": [
+  "rice-rape-calendar-summary"
+ ],
+ "notes": [
+  "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.notes.html",
+  "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "27/2793d4319d42/20261002T153250Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "2a8c3452ae7ec954f547d1dde7977ad9c573afba66f8b63ffc3c40cb301f0333",
+ "url": "https://www.ecoagri.ac.cn/article/doi/10.12357/cjea.20240340?viewType=HTML"
+}
