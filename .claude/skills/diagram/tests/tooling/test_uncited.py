@@ -273,6 +273,7 @@ def test_install_writes_each_good_entry_and_refuses_the_rest(tmp_path: pathlib.P
         {"id": "p00003", "key": "k-three", **{**good, "tags": "period=nonsense; region=japan; kind=reference"}},
     ]
     (d / "entries.jsonl").write_text("".join(json.dumps(x) + "\n" for x in lines) + "not json\n", encoding="utf-8")
+    un.kept(root, ["https://k.org/1", "https://k.org/2", "https://k.org/3"], "source-filter")
     made = []
 
     def reserve(kind: str, key: str, root_: pathlib.Path, url: str = "") -> pathlib.Path:
@@ -283,7 +284,7 @@ def test_install_writes_each_good_entry_and_refuses_the_rest(tmp_path: pathlib.P
         made.append((kind, key, url))
         return p
 
-    assert un.install(root, d, reserve) == {"written": 1, "refused": 3, "already": 0}
+    assert un.install(root, d, reserve) == {"written": 1, "refused": 3, "already": 0, "dropped": 0}
     assert made == [("uncited", "taken-3", "https://k.org/1")], "a taken key gets -2, and -3 when another clone holds -2"
     text = (root / un.at.UNCITED / "0020-taken-3.html").read_text()
     assert text.startswith('<h3 id="taken-3"><code>taken-3</code></h3>') and "<p><em>What it is:</em> A dictionary entry.</p>" in text, "a label the drafter wrote is not doubled"
@@ -293,7 +294,10 @@ def test_install_writes_each_good_entry_and_refuses_the_rest(tmp_path: pathlib.P
     assert "refused p00002" in err and "period" in err
     assert un.install(root, d, reserve)["already"] == 1, "installed twice, written once"
     (d / "entries.jsonl").unlink()
-    assert un.install(root, d, reserve) == {"written": 0, "refused": 0, "already": 0}, "a bundle the agent wrote nothing for installs nothing"
+    assert un.install(root, d, reserve) == {"written": 0, "refused": 0, "already": 0, "dropped": 0}, "a bundle the agent wrote nothing for installs nothing"
+    (d / "entries.jsonl").write_text(json.dumps({"id": "p00002", "key": "k-two", **{**good, "citation": "K (https://k.org/2)"}}) + "\n", encoding="utf-8")
+    (root / un.KEPT).write_text("".join(s for s in (root / un.KEPT).read_text().splitlines(keepends=True) if "k.org/2" not in s))
+    assert un.install(root, d, reserve)["dropped"] == 1, "a page retired since its bundle was drafted is not written"
 
 
 # ---- the imported copies (R5) ----
@@ -379,3 +383,32 @@ def test_dedupe_retires_variants_redirects_and_cited_works_and_keeps_the_first(t
     assert un.dedupe(root) == []
     with pytest.raises(ValueError, match="no entry for 'nowhere'"):
         un.merge(root, "k-wiki", "nowhere")
+
+
+class _Dying(Stand):
+    """A browser whose event loop closed under one page (Playwright, 2026-10-02): every call raises until replaced."""
+
+    def __init__(self, pages: dict, bad: str) -> None:
+        super().__init__(pages)
+        self.bad, self.closed = bad, False
+
+    def get(self, url: str):  # noqa: ANN201
+        if url == self.bad:
+            raise RuntimeError("Event loop is closed! Is Playwright already stopped?")
+        return super().get(url)
+
+    def close(self) -> None:
+        self.closed = True
+        raise RuntimeError("cannot close a dead browser")
+
+
+def test_a_browser_that_dies_under_one_page_ends_that_read_not_the_lane(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture) -> None:
+    root = _root(tmp_path)
+    pages = {"https://a.org/1": _page("https://a.org/1", body="Live text. " * 70)}
+    fresh = Stand(pages)
+    monkeypatch.setattr(ar, "Browser", lambda: fresh)
+    dying = _Dying(pages, "https://z.org/9")
+    got = un.fetch(root, ["https://z.org/9", "https://a.org/1"], dying)
+    assert got == {"read": 1, "unreadable": 0, "error": 1} and dying.closed
+    assert un.needs_fetch(_home(), "https://z.org/9"), "the page that broke the browser is left for the next run, not ruled unreadable"
+    assert "Event loop is closed" in capsys.readouterr().out

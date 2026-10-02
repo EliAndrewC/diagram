@@ -296,7 +296,19 @@ def fetch(root: pathlib.Path, urls: list[str], browser) -> dict[str, int]:  # no
         if n % ar.RECYCLE_EVERY == 0 and hasattr(browser, "close"):
             browser.close()
             browser = ar.Browser()
-        state, why = fetch_one(browser, where, u)
+        try:
+            state, why = fetch_one(browser, where, u)
+        except Exception as err:  # a browser that died under one page (Playwright "Event loop is closed!", 2026-10-02) ends
+            # one page's read, not the lane: the page is left unjudged for the next run, and the lane gets a fresh browser
+            print(f"{'error':22} {u} - {type(err).__name__}: {str(err)[:120]}", flush=True)
+            counts["error"] = counts.get("error", 0) + 1
+            if hasattr(browser, "close"):
+                try:
+                    browser.close()
+                except Exception:  # noqa: BLE001, S110 - a dead browser may fail to close; the new one is what matters
+                    pass
+                browser = ar.Browser()
+            continue
         at.add(root, u, "unknown", "feature 312's filter: is the page worth keeping", "unreadable" if state else "unknown", route="uncited-fetch")
         if state:
             not_kept(root, [line(u, ["unreadable"], "rule", why, state)])
@@ -319,10 +331,10 @@ def _lane(args: tuple[str, list[str]]) -> dict[str, int]:  # pragma: no cover - 
 def fetch_all(root: pathlib.Path, urls: list[str], workers: int) -> dict[str, int]:  # pragma: no cover - the live run
     """The fetch in lanes, every URL of one host in one lane (the archive's rule: never two requests to a host at once)."""
     jobs = [(str(root), lane) for lane in ar.lanes(urls, workers)]
-    total = {"read": 0, "unreadable": 0}
+    total = {"read": 0, "unreadable": 0, "error": 0}
     with ar.multiprocessing.get_context("spawn").Pool(len(jobs) or 1) as pool:
         for got in pool.imap_unordered(_lane, jobs):
-            total = {k: total[k] + got[k] for k in total}
+            total = {k: total[k] + got.get(k, 0) for k in total}
     return total
 
 
@@ -634,7 +646,8 @@ def install(root: pathlib.Path, d: pathlib.Path, reserve) -> dict[str, int]:  # 
     vocab = st.load_vocabulary(str(at.base(root) / at.RESEARCH))
     taken = registry_keys(root)
     done = written(root)
-    counts = {"written": 0, "refused": 0, "already": 0}
+    kept_now = {x["url"] for x in at.read(root, KEPT)}
+    counts = {"written": 0, "refused": 0, "already": 0, "dropped": 0}
     for raw in (d / "entries.jsonl").read_text(encoding="utf-8").splitlines() if (d / "entries.jsonl").is_file() else []:
         try:
             e = json.loads(raw)
@@ -652,6 +665,9 @@ def install(root: pathlib.Path, d: pathlib.Path, reserve) -> dict[str, int]:  # 
             continue
         if src.norm(url) in done:  # a bundle installed twice writes nothing twice
             counts["already"] += 1
+            continue
+        if src.norm(url) not in kept_now:  # retired since its bundle was drafted (`dedupe`, a merge): nothing to write
+            counts["dropped"] += 1
             continue
         base, n = key, 1
         while True:
