@@ -361,10 +361,8 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
     behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
     40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
     left; the houses past the front row's own count can therefore only have come from them."""
-    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
+    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH, HOMESTEAD_GROUND_FT
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
-
-    from l7r.diagram.hamletgen.consts import HOMESTEAD_GROUND_FT
     from l7r.diagram.hamletgen.homesteads import stages as _stages
 
     # the seating's band at the band's own figure: the rule under test is the rank's ends, measured on this toy's strip before

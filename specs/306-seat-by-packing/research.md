@@ -107,7 +107,9 @@ envelope's, and the fit raised `AttributeError`. A line plants nothing: only the
 `cluster.seat_cluster` 30,604 (the seat), `city/bridges.bridges` 16,190, `homestead_parts/groves._belt_ranks` 15,005,
 `fields/comb._comb_record_field` 12,263, `ways/street.street_span` 6,394, `city/bridges.channel_footbridges` 5,485,
 `water/polder.dike_gaps_at_channels` 5,048; the next below at 3,859 (`ways/serve._lay_web_lane`), the bulk under 1,500. The flag
-is set at the knee, 5,000.
+is set at the knee, 5,000. The tail below the nine, from the same run: `ways/serve._lay_web_lane` 3,859, `ways/web.tidy_lane_ends`
+2,631, `ways/street.joints_along` 2,624, `land/dikes.perimeter_dike` 1,857, `ways/touch._touch_junctions` 1,799,
+`ways/geom._components` 1,725 - the step from the bulk to the tail lies at ~4,000-5,000.
 
 ## R9. The rescue and the dry cap on top of the band's figure (observed 2026-10-02, method: `rim.py` with `HOMESTEAD_GROUND_FT=162`, `MODE=base` against `MODE=rescue RESCUE=3 DRY=400`, sixteen seeds (1-13, 25, 39, 47) at 40 households, two processes at once)
 
@@ -136,7 +138,7 @@ figure (`consts.SEATING_GROUND_FT = 162`, `_seat_households`' lattice and seat b
 `HOMESTEAD_GROUND_FT`'s 104 - every canvas, field and margin as the base drew it. At 40 households: 11 of 16 seeds on the first
 margin, the worst 14.1 s, 84.2 s summed (the base engine about 449 s over the same seeds, R7's sweep and the spec's Context);
 the cohort 30/30; the pool: Inashiro refused by the web (an access lane, `needle_joins`) and Sawada failing the pool test of two
-ways side by side past a pitch - each sent to its root cause (R13).
+ways side by side past a pitch - each sent to its root cause (R14).
 
 ## R13. The nine flagged checks indexed, and the census after (observed 2026-10-02, method: three background agents in worktrees, each check against its old scan kept as the oracle, `make maps SCOPE=all` with the pool manifests compared; then `make census` on the clone's engine)
 

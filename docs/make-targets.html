@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 105 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 106 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -76,6 +76,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Performance</h2>
 <p class=sec>The bookends and the three bands. A run that got slower owes records before the push.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
+<tr><td class=n>make census</td><td class=a>&ndash;</td><td>the overlap census: comparisons per call of every check the pool&#x27;s rolls run, the ones over the flag named</td></tr>
 <tr><td class=n>make perf</td><td class=a><div class=ad><span class=an>LABEL=&lt;NNN&gt;-start|&lt;NNN&gt;-end</span><span class=aw>which bookend this snapshot is (default: `adhoc`, which counts as neither)</span></div></td><td>take a performance snapshot of the reference hamlet across its seeds</td></tr>
 <tr><td class=n>make perf-audit</td><td class=a><div class=ad><span class=an>VERDICT=justified|not-justified|cannot-determine</span><span class=aw>the band-2 adjudication</span></div><div class=ad><span class=an>NECESSARY=&lt;text&gt;</span><span class=aw>is the slowdown necessary?</span></div><div class=ad><span class=an>COMMENSURATE=&lt;text&gt;</span><span class=aw>is it commensurate with the functionality gained?</span></div><div class=ad><span class=an>NO_WAY_AROUND=&lt;text&gt;</span><span class=aw>was there no good way around it?</span></div><div class=ad><span class=an>AS=perf-audit</span><span class=aw>who is recording - only the subagent may pass this</span></div></td><td>band 2 - the subagent adjudicates</td></tr>
 <tr><td class=n>make perf-confirm<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a><div class=ad><span class=an>VERDICT=consistent|inconsistent</span><span class=aw>whether the written cause matches the recorded per-stage delta</span></div><div class=ad><span class=an>AS=perf-audit</span><span class=aw>who is recording - only the subagent may pass this, and nothing else distinguishes the shells</span></div></td><td>band 1, second half - the perf-audit SUBAGENT runs this</td></tr>

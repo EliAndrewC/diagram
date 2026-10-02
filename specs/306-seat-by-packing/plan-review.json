@@ -1,78 +1,91 @@
 {
  "feature": "306-seat-by-packing",
- "plan_sha256": "f369264c9fce7bcdd81c4b461dfba9e2fe159275a00c3c6916caf9519ac9a73e",
+ "plan_sha256": "5c69f6c28a8a59c4c6f97fe375bb0bf730c7f1338363cea89b56c4a656ae1125",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D1",
-   "summary": "Seat band ground per household 162 ft (HOMESTEAD_GROUND_FT), growing seat_room so every hamlet map moves",
+   "id": "D1-figure",
+   "summary": "SEATING_GROUND_FT = 162, the side of a square holding the pool's mean envelope plus the least wood floor, sizing _seat_households' lattice and seat bound",
    "class": "within",
-   "why": "FR-010 and the spec's Decisions table settle the figure and its class; maps moving within the rules is FR-008. Note: FR-011 builds FR-010 only on its own verdict; D1 should state that verdict from R7 (faster beyond the spread, every household seated) rather than leave it implied."
+   "why": "FR-010 (both the accepted and the amended text) and the spec's Decisions table settle the figure, its derivation from measured homesteads and its class (a labeled guess)."
+  },
+  {
+   "id": "D1-scope",
+   "summary": "The margin's choice, the canvas's room and the belt keep HOMESTEAD_GROUND_FT's 104; maps do not start larger",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The GM's larger-maps line is conditional in its own words ('If the thing that is stopping us ... is the margin in the sense of being the edge of the map'). R12 measured the condition false (the canvas grown alone with the band at 104 made 40 households worse: seed 39, 42 margins, 216 s), and growing canvas, margin and belt with the band refused sites the base seated (R11: cohort 30/30 -> 27/30, Sawada refused), which FR-008 forbids. The exception is implied by the GM's own condition, not by cost."
+  },
+  {
+   "id": "D1-verdict",
+   "summary": "D1's own FR-011 verdict stated as GO from R12 (11 of 16 on the first margin, 84.2 s summed against the base's ~449)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-011 builds each lever only on its OWN verdict. R12 was measured on the clone's engine with the dry cap and the rescue already in it (commit 9dc315843, before R12's d9c27b02f; capacity.py DRY_SPELL=400, RESCUE_SHORT=3), so 84.2 s is D1 plus D2, not D1. The ~449 base sum is not back to back with it (R7's sweep ran four to six processes at once; FR-009 asks base and clone back to back) and no per-seed base appears in research. Fix: on the final form, run the sixteen-seed set at 40 households back to back - base, D1 alone (dry cap and rescue off), D1 with both - record it as a new research entry, and state D1's verdict from the D1-alone leg."
   },
   {
    "id": "D2",
-   "summary": "Rescue and dry-spell cap built only if they pay on top of D1, measured on the sixteen-seed set at 40 households",
-   "class": "within",
-   "why": "FR-011 word for word: each lever on its own verdict, NO-GO recorded and withdrawn."
+   "summary": "Rescue and dry-spell cap built only if they pay on top of D1, the evidence named R9",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The rule is FR-011, but the measurement it names is not of it: R9 measured both on top of HOMESTEAD_GROUND_FT=162 grown everywhere, the form of D1 that R11-R12 withdrew because the canvas's room changes the outcome materially (R12). Both levers are already in the engine. Under the final D1 (11 of 16 on the first margin) whether a near-miss rescue still pays is unmeasured; building on a premise nobody measured on the configuration being built narrows FR-011. Fix: the D1-alone vs D1-with-both legs of the same back-to-back run; build or withdraw each lever from it (each separately if they differ)."
   },
   {
    "id": "D3",
-   "summary": "FR-003 and FR-004 not built on their NO-GO verdicts",
+   "summary": "FR-003 and FR-004 not built: FR-004 prototyped NO-GO (R3, R4); FR-003's free-ground form disproved (R1), its rules-based form argued and not prototyped; reference-seed misses recorded and raised",
    "class": "within",
-   "why": "FR-003/FR-004 are 'On GO' requirements and FR-011 bars a lever without its own GO; the GM's request contemplates a redesign that does not pan out and the goal says to document it. Notes, not blocking: R1 measured the free-ground prediction the spec replaced, so FR-003's rules-based form was argued from R2-R3, not prototyped; and 'a margin or two' omits seed 47's seventh margin at 162 alone (R7), a reference-seed miss of SC-002/SC-003 that the spec says is recorded with every round's numbers and raised with the GM."
+   "why": "FR-011 builds no lever without its own GO, and FR-002's further rounds were run (R5-R7, R9, R11, R12). Round 1's notes are addressed. Note: 'under D1's final form on the first (R12)' for seed 47 is not in R12, which gives only 11 of 16 and the worst 14.1 s; R11 gives seed 47 at 3.6 s on a different form. Restate from the new run."
   },
   {
    "id": "D4-reach",
-   "summary": "Census instrument armed only on settlement/_geom primitives and overlap.py predicates",
+   "summary": "Census armed on _geom primitives, overlap.py predicates and shapely's binary predicates and distance; comparisons in C over arrays not seen",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 counts every overlap or proximity check a roll asks; the GM's rule is about ANY check against many things. Per-item scans written with shapely predicates directly are invisible to this instrument, e.g. hamletgen/homesteads/rows.py:214 any(clipped.intersects(box(...)) for ... in boxes), rows.py:292 any(band.intersects(g) for g in lanes + water), cluster.py:115 all(p.distance(ray) ... for p, m in polys). Counting them is not impossible (arm shapely's binary predicates and distance the same way), and nothing in the request implies excluding them. Fix: arm shapely's predicates and distance alongside the _geom ones, and state any remaining reach limit in the plan."
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's fix is in the tool (overlap_census.py _SHAPELY). The stated remaining limit is real for sys.monitoring, and the engine's vectorized shapely calls checked (boundary.py 321-337 raster blocks and cells, indexes.py and yards.py intersects_xy/contains_xy grids, tint.py one distance per plot computed once, partition.py) are rasters being built or each item's own measurement - the boxes and rasters the GM's rule asks for, not scans standing in for them."
   },
   {
    "id": "D4-threshold",
-   "summary": "CENSUS_FLAG = 5,000 comparisons per call, called the knee of R10",
+   "summary": "CENSUS_FLAG = 5,000, the tail listed down to the bulk",
    "class": "within",
-   "why": "The spec delegates the threshold to the plan from the measured distribution. Note: R10's stated values do not show a knee at 5,000 (5,048 against 3,859 is 1.3x; the step below 3,859 to the bulk under 1,500 is wider); R10 should list the tail between 1,500 and 5,048 so the knee is shown, not asserted."
+   "why": "The spec delegates the threshold to the plan from the measured distribution. Note: the tail values the plan now lists (2,631, 2,624, 1,857, 1,799, 1,725) are attributed to R10 but R10 does not contain them; add them to R10 from its run."
   },
   {
    "id": "D4-standing",
-   "summary": "make census; make perf runs it after the snapshot; stages only (the perf tool's roll)",
+   "summary": "make census; make perf runs it after the snapshot",
    "class": "within",
-   "why": "FR-006's standing check beside make perf; US3 counts the checks a hamlet roll asks."
+   "why": "FR-006's standing check beside make perf."
   },
   {
-   "id": "D5-exact",
-   "summary": "Each flagged check fixed only with byte-identical manifests; a check that cannot be indexed exactly is recorded instead",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The GM's remedy is 'a bounding box or a segmented line to stay on the right side of', which can move an answer, and FR-008 (GM 2026-09-30) says maps need not stay identical. Making 'not exact' a reason to record rather than fix preserves existing output the GM did not ask to preserve. Identical answers is the right oracle for an exact index; where only a box or line that moves the answer serves, it is built and held to FR-008 (every pool map and cohort seed passes every rule and seats as many), not recorded."
+   "id": "D5",
+   "summary": "Every check the census flags, starting with R10's nine, gets its index, box or line; identical answers preferred, a moved answer held to FR-008",
+   "class": "within",
+   "why": "FR-007 and FR-008 as written; round 1's D5-exact and D5-scope items are fixed, and tasks.md T22 now says the same."
   },
   {
    "id": "D5-slower",
-   "summary": "A check slower when indexed is recorded with its measurement, mechanism and sketch",
+   "summary": "A check left unchanged only where the fix is slower by the wall clock, recorded with measurement, mechanism and sketch",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-007 allows 'recorded with the measurement of why not'; building a slower index would defeat the request's purpose (efficiency), and the measurement is the record."
-  },
-  {
-   "id": "D5-scope",
-   "summary": "D5 fixes 'the nine of R10' (a scratch census, seed 4)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-007 covers every flagged check in any stage; the built census (D4, with its reach fixed) may flag checks the scratch run did not. Fix: every check the D4 census flags, the nine of R10 at least."
+   "why": "FR-007 allows 'recorded with the measurement of why not'; a slower index would defeat the request's purpose."
   },
   {
    "id": "D6",
-   "summary": "Planted region sliver line fixed and tested (R8)",
+   "summary": "The planted region's sliver line fixed and tested (R8)",
    "class": "within",
-   "why": "Constitution XIV, a defect found in the work; no scope beyond it."
+   "why": "Constitution XIV, a defect found in the work."
+  },
+  {
+   "id": "D1-regressions",
+   "summary": "Inashiro's access lane and Sawada's doubled way taken to their root causes before D1 lands (R14)",
+   "class": "within",
+   "why": "FR-008: no pool map may fail a rule it passed; the fixes change no rule."
   },
   {
    "id": "VI-occasions",
-   "summary": "Review occasions declared none for D1",
+   "summary": "Review occasions declared none",
    "class": "within",
-   "why": "Process under feature 294's occasion table, not a narrowing of what the GM asked."
+   "why": "Process under feature 294's occasion table, not a narrowing of the request."
   }
  ],
  "verdict": "BLOCKED"

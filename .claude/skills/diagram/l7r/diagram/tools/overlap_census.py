@@ -60,7 +60,8 @@ def primitives() -> list[Callable[..., Any]]:
     """Every measure a comparison is a call of (see the module docstring)."""
     from shapely.geometry.base import BaseGeometry
 
-    from l7r.diagram.settlement._geom import overlap, primitives as prim
+    from l7r.diagram.settlement._geom import overlap
+    from l7r.diagram.settlement._geom import primitives as prim
 
     out: list[Callable[..., Any]] = [getattr(prim, n) for n in _PRIMITIVES]
     out += [f for n, f in vars(overlap).items() if callable(f) and not n.startswith("_") and getattr(f, "__module__", "") == overlap.__name__ and hasattr(f, "__code__")]
