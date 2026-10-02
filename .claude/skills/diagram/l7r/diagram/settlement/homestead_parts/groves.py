@@ -617,9 +617,20 @@ class GrovesMixin:
                 # ...and the bamboo stays GROVE_BAMBOO_SHARE of ALL the clump's items (269 B29), rows included, not of the fewer rolls
                 b_th = c_th = min(1.0, GROVE_BAMBOO_SHARE * (rows + n) / n)
             items: list[Any] = []
-            for _ in range(n):
+            # A THIN BAND'S FEW TREES RUN ITS WHOLE LENGTH (feature 310, the homestead grove's glyph-check on Kashikawa): a farm
+            # grove's thin side (the dooryard mix, a band at least twice as long as it is wide) carries four or five items, and
+            # thrown anywhere in the box they left the band's end bare on 2 farms in 20 - a tree standing 20-30 ft clear of the
+            # north band it joins. So each item takes its own equal stretch of the long axis, jittered inside it.
+            strata = mix == "dooryard" and max(w, h) >= 2.0 * min(w, h)
+            for k in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
                 py = random.uniform(-h / 2 + 2, h / 2 - 2)
+                if strata:
+                    t = (k + random.random()) / n  # the k-th of n equal stretches
+                    if h >= w:
+                        py = -h / 2 + 2 + t * (h - 4)
+                    else:
+                        px = -w / 2 + 2 + t * (w - 4)
                 roll = random.random()
                 kind = "bamboo" if roll < b_th or in_box(cx + px, cy + py, bamboo_box) else ("conifer" if roll < c_th else "broadleaf")
                 band = LESSER_BROADLEAF_S if mix == "conifer_led" else ((1.25, 1.7) if random.random() < 0.25 else (0.72, 1.05))  # a few emergent crowns over many small

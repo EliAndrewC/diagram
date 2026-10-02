@@ -149,3 +149,17 @@ def test_the_woodland_commons_seats_no_crown_in_a_plots_sun():
     s.commons([(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)], role="woodland")
     assert s.M["tree_crowns"], "non-vacuity: the wood stands"
     assert trees_shading_plots(s.M, CANOPY_SHADE_FT) == []
+
+
+def test_a_thin_dooryard_band_runs_its_trees_its_whole_length() -> None:
+    """Feature 310 (the homestead grove's glyph-check): a band at least twice as long as wide in the dooryard mix spreads its
+    few trees along its whole length - no stretch of it left bare - lying either way."""
+    for w, h in ((17.0, 54.0), (54.0, 17.0)):
+        s = _hamlet()
+        s._draw_grove(400.0, 400.0, w, h, (1, 0), mix="dooryard", cls="homestead grove", bamboo=False)
+        tc = s.M["tree_crowns"]
+        along = sorted(tc[i + 1] if h > w else tc[i] for i in range(0, len(tc), 3))
+        assert len(along) >= 3, "non-vacuity: the band drew its trees"
+        lo, hi = 400.0 - max(w, h) / 2, 400.0 + max(w, h) / 2
+        steps = [along[0] - lo, *(b - a for a, b in zip(along, along[1:], strict=False)), hi - along[-1]]
+        assert max(steps) < max(w, h) / 2, (w, h, steps)
