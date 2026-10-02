@@ -451,3 +451,18 @@ def test_work_folds_one_file_servers_two_names_and_a_github_raw_url() -> None:
     assert un.work("online.bunka.go.jp/heritages/detail/1") == "bunka.nii.ac.jp/heritages/detail/1"
     assert un.work("raw.githubusercontent.com/u/r/master/a/b.txt") == "github.com/u/r/blob/master/a/b.txt"
     assert un.work("github.com/u/r/blob/master/a/b.txt") == "github.com/u/r/blob/master/a/b.txt"
+
+
+def test_work_folds_a_kotobank_entry_to_its_number_whatever_word_is_in_front() -> None:
+    assert un.work("kotobank.jp/word/竈-39622") == un.work("kotobank.jp/word/かまど-39622") == "kotobank.jp/word/39622"
+    assert un.work("kotobank.jp/word/竈") == "kotobank.jp/word/竈" and un.work("kotobank.jp/word/a-1/x") == "kotobank.jp/word/a-1/x"
+
+
+def test_the_report_counts_kept_pages_with_no_entry_and_entries_with_no_kept_page(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    assert un.report(root).endswith("0 written up, 0 kept with no entry, 0 entr(ies) whose URL is no kept page's (a citation a check corrected)")
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "20520-a.html").write_text("<p>A (https://a.org/1).</p>\n", encoding="utf-8")
+    (root / un.at.UNCITED / "20530-b.html").write_text("<p>B (https://b.org/corrected)</p>\n", encoding="utf-8")
+    un.kept(root, ["https://a.org/1", "https://c.org/2"], "source-filter")
+    assert un.report(root).endswith("2 written up, 1 kept with no entry, 1 entr(ies) whose URL is no kept page's (a citation a check corrected)")

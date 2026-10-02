@@ -334,6 +334,7 @@ caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
 carex lyngbyei	Carex
+carex rostrata	Carex rostrata
 carr	carr
 carried deck	carried deck
 carried decks	carried deck
@@ -2759,6 +2760,7 @@ plot seams	seam
 pocket pond	pocket pond
 pocket ponds	pocket pond
 polder	polder
+poldered	polder
 polders	polder
 pollard	pollard
 pollarded	pollard

@@ -3102,7 +3102,8 @@
   "def": "Land reclaimed from marsh or lake behind an enclosing dike and drained by canals.",
   "variants": [
    "polder",
-   "polders"
+   "polders",
+   "poldered"
   ]
  },
  "pollard": {
@@ -15317,6 +15318,12 @@
   "def": "\"Homestead hill-wood\": the word a 1684 register of hill land in the Mito domain uses for a household's wood, which the paper quoting it takes to be a homestead grove (yashikirin).",
   "variants": [
    "yashikiyama"
+  ]
+ },
+ "Carex rostrata": {
+  "def": "Bottle sedge, a tussock-forming sedge of marshes. It was the last stage in a modern study of abandoned paddy turning back into wetland.",
+  "variants": [
+   "Carex rostrata"
   ]
  }
 }
