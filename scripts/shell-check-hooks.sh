@@ -22,6 +22,7 @@
 #                       the string early, so any rewrite would faithfully preserve a message nobody
 #                       wrote. Measured: the instance on record was caught by `bash -n` only by the
 #                       accident of a later `(` (`research.md` R2 row 3), so the ban stands alone.
+#                       An UNAMBIGUOUS message is rewritten instead (2026-10-02, below).
 #   coauthor-address  - only the session knows why another address appeared; the placeholder that
 #                       reached main did so through an `||` fallback, and history is never rewritten.
 #
@@ -48,6 +49,23 @@ VERDICT=$(printf '%s' "$INPUT" | python3 "$SC_HERE/_hm_shell.py" 2>/dev/null)
 
 RULE=$(printf '%s' "$VERDICT" | head -1)
 MESSAGE=$(printf '%s' "$VERDICT" | tail -n +2)
+
+# GUARD_EDIT_OK: 2026-10-02, the GM: "I do indeed want that git commit rewrite" - a `-m` message that is unambiguous (one
+# quoted piece, nothing the shell expands) is MOVED into a quoted `-F -` heredoc and the commit runs, rather than refused:
+# 209 of September's 220 refusals were exactly that, a round trip that prevented nothing. `_hm_shell.commit_dash_m_rewrite`
+# decides, and answers only when the result is the same commit and passes every rule; the ambiguous cases still refuse.
+if [ "$RULE" = rewrite ]; then
+  guard_log shell-check rewrote "$(guard_cmd)" commit-dash-m-heredoc
+  printf '%s' "$INPUT" | REWRITTEN="$MESSAGE" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": "shell-check: the commit message was moved from -m into a quoted -F - heredoc (same message, same commit)."}}))'
+  exit 0
+fi
 guard_log shell-check blocked "$(guard_cmd)" "$RULE"
 
 {
