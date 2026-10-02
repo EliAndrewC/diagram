@@ -84,8 +84,7 @@ and the style guide before you write.
      FILE=/diagram/.clones/diagram-reorg/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.
 4. **Build and test**, in `.claude/skills/diagram`: `make glossary` if you added or changed a glossary term (a new
    one takes its prefix from `make reserve KIND=glossary KEY=<term>`; never a common English word as a variant);
-   `make record && make citations`; then for each research and rendering section `make style-prepass PAGE=buildings
-   SECTION=<id>` (the rendering one with `PAGE=rendering/buildings`) and fix everything in its FAIL lists (a metric figure
+   `make record && make citations`; then for each research and rendering section `make style-prepass Q=<NNNN>` (the rendering one with `IN=compounds`) and fix everything in its FAIL lists (a metric figure
    with no feet, "GM" in the visible text, a paragraph over 150 words, an absence note in the old form, kanji without
    its `(romaji, "meaning")` gloss); then `make test-file FILE=tests/interactive` and
    `python3 scripts/check-question-size.py` from the clone root. Fix what fails and re-run once.

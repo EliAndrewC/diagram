@@ -25,7 +25,7 @@ checks report with `make append`.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/c4b-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/sizing SECTION=030, PAGE=cities/sizing SECTION=010
+**Your questions:** PAGE=cities/sizing SECTION=030, Q=0181
 **Your registry keys:** KEY=satsuma-gaijo-datamax, KEY=reimeikan-satsuma-gaijo, KEY=sendai-castles-jawiki
 
 ## The procedure (check, apply)

@@ -11,10 +11,10 @@ a correction, say exactly what in the handoff; the orchestrator sends it to the 
 Each is a research QUESTION the record owes: never researched, labeled a guess, or thinly sourced. The kinds named are
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
-- B29 **Bamboo in a farmstead grove** (yashikirin): whether it was there, and its share. `fc:2113`, `0075`, `154`,
+- B29 **Bamboo in a farmstead grove** (yashikirin): whether it was there, and its share. `fc:2113`, `0010`, `0011`,
   `hamletgen/homesteads/bamboo.py:21`. S-M.
 - B30 **Windbreak belt vs copse**: was the belt a single ranked species? `fc:1397`. S.
-- B31 Guessed sizes and margins: the water-mouth grove size and how far the hillside was stripped (`vegetation/010`,
-  `050`); crop and bank margins (`090`, `110`); reed mowing (`120`); the width of a gap in the belt (`030`). M.
+- B31 Guessed sizes and margins: the water-mouth grove size and how far the hillside was stripped (`0012`,
+  `0013`); crop and bank margins (`0014`, `0015`); reed mowing (`0016`); the width of a gap in the belt (`0017`). M.
 
 

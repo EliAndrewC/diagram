@@ -4,7 +4,7 @@
  "rules": [
   {
    "id": "H01",
-   "rule": "No farmstead part (yard, garden bed, kura, byre, shed, privy and every farm fixture, persimmon, homestead bamboo stand) stands across a stream from its own house. Stated: tests/hamletgen/test_pool_261.py::test_every_farmstead_part_stands_on_its_house_bank; fit.py:_parts_across_stream docstring (feature 261 FR-013, a GUESS recorded in research/homesteads).",
+   "rule": "No farmstead part (yard, garden bed, kura, byre, shed, privy and every farm fixture, persimmon, homestead bamboo stand) stands across a stream from its own house. Stated: tests/hamletgen/test_pool_261.py::test_every_farmstead_part_stands_on_its_house_bank; fit.py:_parts_across_stream docstring (feature 261 FR-013, a GUESS recorded in research/contents.json#homesteads).",
    "rows": [
     "R1 tests/hamletgen/test_pool_261.py::test_every_farmstead_part_stands_on_its_house_bank"
    ],
@@ -126,7 +126,7 @@
   },
   {
    "id": "H17",
-   "rule": "A hamlet never draws its plain farmhouses so uniform that under 20% differ from the median footprint by more than 5%. Stated: tests/gate/test_generator_contracts.py::test_farmhouses_vary_in_size; research/homesteads farmhouse-size spread.",
+   "rule": "A hamlet never draws its plain farmhouses so uniform that under 20% differ from the median footprint by more than 5%. Stated: tests/gate/test_generator_contracts.py::test_farmhouses_vary_in_size; research/contents.json#homesteads farmhouse-size spread.",
    "rows": [
     "R1 tests/gate/test_generator_contracts.py::test_farmhouses_vary_in_size"
    ],
@@ -155,7 +155,7 @@
   },
   {
    "id": "H45",
-   "rule": "About 30% of farmhouses carry a kura (p = 0.2993), the headman always; the share does not alias with position. Stated: research/homesteads 'Which farmhouses have a storehouse?'; future-work/farming-communities.md 'the kura roll under-delivers 2.2x' and 'The storehouse share is a positional roll'.",
+   "rule": "About 30% of farmhouses carry a kura (p = 0.2993), the headman always; the share does not alias with position. Stated: research/contents.json#homesteads 'Which farmhouses have a storehouse?'; future-work/farming-communities.md 'the kura roll under-delivers 2.2x' and 'The storehouse share is a positional roll'.",
    "rows": [
     "R3 future-work/farming-communities.md OPEN 2026-08-19 kura roll FINDING 1 / 'The storehouse share is a positional roll'"
    ],
@@ -211,7 +211,7 @@
    "unit_test": "mat_cells at YARD_MIN over every rot in 0..90 step 5 and 200 quad salts, with and without the rack: >= 4. The existing test_a_yard_with_room_for_no_mat_draws_none becomes a test of mat_cells alone (still true of the function) and _yard_dims never returns such a size.",
    "retire": "The 4-mat clause of test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather.",
    "risk": "medium",
-   "notes": "Moves any homestead whose rolled yard lay below the floor (envelopes grow); the research's yard-size distribution loses its smallest tail - to be checked against research/homesteads' yard-area entry before landing."
+   "notes": "Moves any homestead whose rolled yard lay below the floor (envelopes grow); the research's yard-size distribution loses its smallest tail - to be checked against research/contents.json#homesteads' yard-area entry before landing."
   },
   {
    "id": "H20",
@@ -431,7 +431,7 @@
   },
   {
    "id": "H35",
-   "rule": "An eaves woodpile stands against a wall (within the wall gap of a building of its own steading). Stated: future-work 'Eaves woodpiles standing off the wall' (Mizuguchi F2: 5-7 of 10 stacks 10.5-27.8 ft off any building; Kuwabata 7 of 15); research/homesteads eaves woodpile.",
+   "rule": "An eaves woodpile stands against a wall (within the wall gap of a building of its own steading). Stated: future-work 'Eaves woodpiles standing off the wall' (Mizuguchi F2: 5-7 of 10 stacks 10.5-27.8 ft off any building; Kuwabata 7 of 15); research/contents.json#homesteads eaves woodpile.",
    "rows": [
     "R3 future-work/farming-communities.md 'Eaves woodpiles standing off the wall' / 'Woodpiles off the wall also on Kuwabata'"
    ],

@@ -14,7 +14,7 @@ pass, D1-D7 its decisions; D8-D9 in the plan). Every prose or code task: America
       `make glossary`
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
-      measure: `make quote-verbatim PAGE=religion-and-death` before quote-check; `make record-prepass PAGE=religion-and-death` before record-format
+      measure: `make quote-verbatim IN=religion-and-the-dead` before quote-check; `make record-prepass IN=religion-and-the-dead` before record-format
       verify: DONE. DONE. 0223, 124, 126, 128 (128 split from 120 by the size cap), 090 rewritten, 120 and 100 brought to it; 27 registry entries; 7+6 glossary terms; make record/citations/glossary current; record tests 1128 green. Boxes: research pass = the four reader reports; source-reader 81 claims READ, 2 CONTRADICTED applied (Bishamon temple, Kanzaki registers); quote-check two passes, every finding applied, one NOT-ON-PAGE (Hakusan 09jin11, a malformed byte; read with curl); source-applicability 26 keys, 14 write-ups given their limits
 - [x] T02 The record's checks, in the background, from bundles (`make check-bundle`): `source-reader`,
       `quote-check`, `record-format`, `source-applicability` on the new and changed entries and keys;

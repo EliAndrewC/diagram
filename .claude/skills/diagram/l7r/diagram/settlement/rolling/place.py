@@ -21,7 +21,7 @@ class PlacerMixin:
         # the grandest in the village but still a house - ~92x56 ft, clearly larger than a plain 46x28 ft
         # farmhouse without the old fortress-sized 216x136 ft. headman_is_largest holds.
         # ...AND NEVER ON A HAMLET (feature 287, homes H18): a hamlet has no headman of its own - it answers to its
-        # village's (research/settlements) - so the one producer of the role refuses a hamlet-scale map outright.
+        # village's (research/contents.json#tiers) - so the one producer of the role refuses a hamlet-scale map outright.
         if self.M["meta"].get("scale") == "hamlet":
             raise ValueError("a hamlet has no headman of its own - the headman is a village's (homes H18)")
         if self._toscale():

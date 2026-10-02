@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/t5-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=buildings SECTION=220, PAGE=cities/fabric SECTION=110
+**Your questions:** Q=0101, PAGE=cities/fabric SECTION=110
 **Your registry keys:** KEY=kotobank-rokusaiichi, KEY=kotobank-sansaiichi, KEY=ichigami-jawiki, KEY=kotobank-ichigami, KEY=okamura-1999-ichimachi, KEY=thepaper-changan-markets, KEY=xiao-2009-tang-fangshi, KEY=miaohui-zhwiki, KEY=otabisho-jawiki, KEY=kinsei-kaisho-jawiki, KEY=kotobank-machikaisho, KEY=machidoshiyori-jawiki, KEY=huiguan-zhwiki, KEY=culturepro-nagaya-benjo, KEY=taiwancn-beijing-waste, KEY=niwa-jawiki, KEY=l7r-market-day
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

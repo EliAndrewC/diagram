@@ -15,7 +15,7 @@ sections a correction, say exactly what in the handoff (the orchestrator makes i
 Session 1 researched this group and committed; its handoff is `specs/267-compound-research-owed/briefs/g8-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=fields SECTION=220, PAGE=fields SECTION=010
+**Your questions:** PAGE=fields SECTION=220, Q=0008
 **Your registry keys:** KEY=henriot-shanghai-graves, KEY=henan-grave-removal-enwiki, KEY=yashikibaka-ibaraki-blog
 
 ## The procedure (check, apply)

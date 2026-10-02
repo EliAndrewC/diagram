@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/h2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=homesteads SECTION=470
+**Your questions:** Q=0049
 **Your registry keys:** KEY=bunka-ueno-umaya, KEY=bunka-okamoto-umaya, KEY=bunka-minami-naya, KEY=nerima-mitome-naya, KEY=zhang-guo-2019-nongshu, KEY=daizhige-bunongshu
 
 ## The procedure (check, apply)

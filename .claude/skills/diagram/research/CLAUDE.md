@@ -5,49 +5,62 @@ nothing else. Why each is the rule - the GM's words, the incidents, the measurem
 [`docs/research-record-rules.md`](../../../../docs/research-record-rules.md), under the same headings; read it
 before arguing with a rule. The entry format and the evidence classes are in [`README.md`](README.md).
 
-## Where things are (feature 258)
+## Where things are (features 258, 303)
 
 | what you want | where it is |
 |---|---|
+| a question's research | `research/questions/NNNN-<heading id>.html` - one flat directory, one STEM per question (feature 303) |
+| how our maps draw it | `research/questions/NNNN-<heading id>.drawing.html`, the same stem |
+| a page's footnotes | `<its file>.notes.html` beside it (`NNNN-<id>.notes.html`, `NNNN-<id>.drawing.notes.html`); originals in `.originals.html` |
+| a question's tags | the marker on the line after its heading: `<!-- tags: subject=a,b; setting=countryside,town; level=detail -->` |
+| the vocabulary | `research/tags.json` - every subject, setting and level |
+| the sections, their order | `research/contents.json` - the table of contents; a section takes questions by a rule over their tags |
 | a source's registry entry | `research/sources/010-works-cited/NNNN-<key>.html` |
-| a question | `research/<page>/NNN-<heading id>.html` |
-| that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
-| a `cities/` page | `research/contents.json#cities<page>/...`, the same shape one level down |
-| the page a reader opens | `research/site/<page>/<heading id>.html` (a question), `research/site/all.html` (the whole record) - BUILT by `make record` (feature 301), never committed, never hand-edited |
-| a pointer to a question | `research/<page>/NNN-<heading id>.html` - the FRAGMENT, never a built page (`scripts/check-research-pointers.py`); a whole page is `research/<page>/` |
+| the page a reader opens | `research/site/q/<heading id>.html` (a question), `findings/<section>.html` and `drawing/<section>.html` (a section in each half), `tags/<facet>-<tag>.html`, `all.html` (the whole record) - BUILT by `make record`, never committed, never hand-edited |
+| a pointer to a question | `research/questions/NNNN-<heading id>[.drawing].html` - the FILE, never a built page; a whole section is `research/contents.json#<section id>` (`scripts/check-research-pointers.py`) |
 | a glossary term | `l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one file per term (feature 259) |
 
-Find one with a glob on the key (`ls research/sources/*/*fei-1939*`) or a grep over the page's directory - never
-`ls research/sources/` bare (2,127 entries), never open a built page to edit it (the guard re-aims the Edit). A
-pointer whose heading was retired names its page: `ls research/<page>/*-<anchor>.html` finds the question when it still
-stands.
+`NNNN` is the question's identity across the record, never its order: the order is the table of contents' (its section,
+then its level, then its number). Find a question with a glob on its heading id (`ls research/questions/*-<anchor>*`) or
+a grep over `research/questions/` - never `ls research/sources/` bare (2,127 entries), never open a built page to edit
+it (the guard re-aims the Edit). A pointer of a retired form (`research/<page>/NNN-...`, or an old page name and its three-digit number) is refused by
+the pointer check, naming the new one from `research/moved-303.json`.
 `research/assets/glossary-variants.txt` maps a word to the term that owns it; grep it, never read it whole.
 
-**Editing.** Edit the fragment, then `make record` (and `make glossary` for a term) in `.claude/skills/diagram`;
+**Editing.** Edit the file, then `make record` (and `make glossary` for a term) in `.claude/skills/diagram`;
 `make record CHECK=1` builds in memory and names every refusal (a link that lands nowhere, an id used twice, a note
-nothing cites). **A question**: a free prefix between its neighbors (they count by ten), the file opening with its
-`<h2 id="...">`. **Renaming or reordering one** - a new prefix, a retitled heading, another page - is `make
-fragment-move FROM=<fragment> TO=<fragment>`, which moves its notes and originals and rewrites every pointer to it. **A footnote**: no number anywhere - `<sup class="fn" data-note="<key>"></sup>`
-in the prose, `<li data-note="<key>">...</li>` in the `.notes.html`; repeats of one work are `key`, `key-2`, ...
+nothing cites, a question with no tags or tags no section takes). **A new question**: `make reserve KIND=question
+KEY=<heading id>` gives it the next number and a stub; write its heading and FILL ITS TAGS from `research/tags.json` -
+subjects (the first is primary and decides its section), settings, one level (foundational, subtype, detail, counts and
+measurements); its home is the first section of `contents.json` whose rule takes those tags. Its drawing page is the
+same stem's `.drawing.html` and states no tags (it inherits them); a second drawing page of one question is a stem of its
+own saying `<!-- about: NNNN-<slug> -->`. **Renaming or renumbering one** - a retitled heading, a new number - is `make
+fragment-move FROM=<file> TO=<file>`, which moves every file of the stem and rewrites every pointer to it. **Regrouping
+the record** is an edit to `contents.json` alone; no question file moves. **A footnote**: no number anywhere - `<sup
+class="fn" data-note="<key>"></sup>` in the prose, `<li data-note="<key>">...</li>` in that page's `.notes.html`; repeats
+of one work are `key`, `key-2`, ... A reference resolves in its own page's notes only.
+**A link** inside the record is written from `questions/`: another question as `NNNN-<slug>[.drawing].html[#id]`, an id
+on the same page as `#id`, the registry as `../SOURCES.html#<key>`.
 **A term**: a new file with a free prefix; the prefix order decides which term wins a shared variant. The
 assembled `assets/glossary.json` is written by `make glossary`, and the site's `glossary.js` by `make record`; neither
 is hand-edited.
 
-**Checking** (feature 250). `make check-bundle PAGE=<p> SECTION=<q>` (or `KEY=<k>`; `KIND=<class>` for
-`entry-drift`; `NOTES=<key,key>` to re-check only those) copies what ONE check reads out of the repository,
-inline in one `MANIFEST.md`; dispatch the check naming that MANIFEST and nothing under `/diagram` - reading a
-file here would attach ~28,000 tokens of CLAUDE.md files to the agent, and `check-bundle-hooks.sh` refuses the
-dispatch. A check replies with its counts first, then only what to act on. `make notes PAGE= SECTION= KEYS=`
-prints a few notes and the paragraphs carrying them. **A page is worked in fresh sessions** (`make page-session`
-with briefs: write, then check-and-apply in groups of two questions), and a report's findings are applied in
-ONE turn - every turn re-reads the whole context.
+**Checking** (feature 250). `make check-bundle Q=<NNNN>` (a question's number - both its pages - or one page's file
+name; `KEY=<k>` for a registry entry; `KIND=<class>` for `entry-drift`; `NOTES=<key,key>` to re-check only those)
+copies what ONE check reads out of the repository, inline in one `MANIFEST.md`; dispatch the check naming that MANIFEST
+and nothing under `/diagram` - reading a file here would attach ~28,000 tokens of CLAUDE.md files to the agent, and
+`check-bundle-hooks.sh` refuses the dispatch. A check replies with its counts first, then only what to act on. `make
+notes Q= KEYS=` prints a few notes and the paragraphs carrying them; `IN=<section or tag>` runs a prepass over a whole
+section. **Questions are worked in fresh sessions** (`make page-session` with briefs naming `Q=NNNN` items: write, then
+check-and-apply in groups of two questions), and a report's findings are applied in ONE turn - every turn re-reads the
+whole context.
 
 **Every page read is on the sources-consulted ledger** (feature 288). `make source-pages OUT=<dir> URL=<u>
-QUESTION=<page/NNN>` prints each page's earlier reads - when, which feature and session, for which question, with
+QUESTION=<NNNN>` prints each page's earlier reads - when, which feature and session, for which question, with
 what outcome - BEFORE it fetches, and saves each page once in the host's page cache (a copy under seven days old is
 not fetched again; `REFRESH=1` fetches it). Check what it prints: a page already `rejected` for the same question is
 not re-read without a reason. Record every page's outcome with `make source-outcome URL=<u>
-OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable [QUESTION=<page/NNN>]`; `make reserve KIND=registry
+OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable [QUESTION=<NNNN>]`; `make reserve KIND=registry
 KEY=<k> URL=<u>` marks a new entry's source `cited:<k>` itself. `make sources-consulted URL=<u>` (or `KEY=<regex>`)
 looks a page up without fetching it.
 
@@ -83,10 +96,9 @@ title, opening with a short account of what the thing was and why, then short bu
 statement; no `Sources:` roster; the GM's inciting question nowhere. Until the GM signs the pilot off, only the
 sections feature 292 has rewritten follow it; everything else below holds for both forms. The **`record-style`**
 agent judges a restyled section against the guide, after `make style-prepass` (metric figures without feet, a visible
-"GM", paragraphs over 150 words, every lead line). How the maps DRAW a thing is its own collection,
-`research/rendering/<page>.html` (`sources.COLLECTIONS`); a rendering section declares the research section it is about
-in an `about:` comment and `make record` writes the links both ways (`record/xref.py`); its rule of the map may be a
-`<div class="spec">` holding a list.
+"GM", paragraphs over 150 words, every lead line). How the maps DRAW a thing is its own page,
+the question's `.drawing.html` (feature 303: the same stem, so the pairing is the name); `make record` writes the links
+both ways (`record/xref.py`); its rule of the map may be a `<div class="spec">` holding a list.
 
 ## Who the record is for (GM 2026-09-05, feature 180)
 
@@ -97,7 +109,7 @@ references" (the QUESTIONS we asked) -> the answer on the research page -> the s
   bookkeeping (date, feature, task) is an HTML comment on the next line, never in the heading.
 - **An anchor is stable**: a renamed heading owes its inbound links - the class entries' `Entry:` tags
   (`scripts/check-entry-headings.py` fails the gate on one that resolves to nothing). A section deliberately not
-  written is `research/<page>/ (no dedicated entry - recorded as silent)`.
+  written is `research/contents.json#<section> (no dedicated entry - recorded as silent)`.
 - A class's explanation names the entries it was written from; that pointer is all that puts a question on a
   modal. New questions reach a modal only when the GM asks for them.
 
@@ -196,11 +208,11 @@ changed entry - two agents, dispatched in the same turn (spec 209 D5). The regis
 
 ## A question's notes stand at its foot; every cited work says what it is (GM 2026-09-07, feature 211; feature 301)
 
-- A note is written once, beside the question that first cites it; the site's page for each question carries the notes
-  it cites, numbered from 1, then the works they cite (the GM, 2026-10-01: *"start the footnotes counting at one every
-  time ... include the footnotes and reference sources at the bottom of each individual page"*); the single page numbers
-  once through the whole record. The per-page citations pages of feature 211 are assembled in memory for the checks
-  and never written.
+- A note is written in the notes file of the page that cites it (feature 303: a note two pages cite is in both); the
+  site's page for each question carries the notes it cites, numbered from 1, then the works they cite (the GM,
+  2026-10-01: *"start the footnotes counting at one every time ... include the footnotes and reference sources at the
+  bottom of each individual page"*); the single page numbers once through the whole record. Feature 211's per-page
+  citations pages are retired.
 - **A registry entry explains its work once**: after the citation line, `<p><em>What it is:</em> ...</p>` and
   `<p><em>Why it applies, and its limits:</em> ...</p>`, each one to three sentences, honest about date, place
   and method. A cited key without both fails the build; every list of works cited is derived from them.
@@ -211,8 +223,8 @@ changed entry - two agents, dispatched in the same turn (spec 209 D5). The regis
 
 ## The record IS HTML (feature 194)
 
-The record is hand-authored HTML FRAGMENTS under `research/<page>/` (and `cities/`, `rendering/`, `sources/`); a
-fragment's heading id is its anchor and its name. `make record` builds the site from them (`record/site.py`): each
+The record is hand-authored HTML: the questions under `research/questions/`, the registry's fragments under
+`research/sources/` (feature 303); a page's heading id is its anchor and its file's slug. `make record` builds the site from them (`record/site.py`): each
 page's `<head>` links the site's copy of `assets/record.css`, `site.css`, `glossary.js`, `nav.js`, `site.js` and
 `record.js`. `README.md` and this file stay Markdown. The page mechanics are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md).

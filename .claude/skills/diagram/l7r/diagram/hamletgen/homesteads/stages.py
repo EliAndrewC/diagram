@@ -925,7 +925,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
                 # (Outward only was tried first: the last rank stands against the band's outer edge, the placer's computed move
                 # pulled every jittered seat back to that one line, and Mizuguchi's back rank stood within 3 ft again.)
                 # ...ONLY WHERE THE VILLAGE GREW BY ACCRETION. The record gives two forms and rolls between them per map
-                # (research/rendering/ways "How our maps draw village lanes"): a back lane implies PLANNING - the framework laid
+                # (research/contents.json#ways "How our maps draw village lanes"): a back lane implies PLANNING - the framework laid
                 # out at once and the plots regular - and alleys off a spine imply ACCRETION, each household cutting its own way,
                 # the result irregular. So the ranks of a `back_lane` hamlet stay regular and an `alleys` hamlet's are taken off
                 # the line. (Jittering every form was tried first: each amplitude re-laid all five maps into a new draw, and 0.15,

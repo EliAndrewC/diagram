@@ -113,3 +113,19 @@ def test_a_broken_record_loads_as_a_record_error(record: pathlib.Path) -> None:
     (record / "tags.json").unlink()
     with pytest.raises(RecordError, match="tags.json: missing"):
         store.load(str(record))
+
+
+def test_the_small_refusals_of_the_layout() -> None:
+    """What only a direct call can reach: a name with no prefix asked for its position, a page with no section, a page
+    that does not close the way the record closes, a reference whose key is not a key."""
+    from l7r.diagram.interactive.record.notes import NoteError, allocate
+
+    with pytest.raises(ValueError, match="must be named <prefix>-<id>.html"):
+        frag.position_of("_front.html")
+    page = split('<!DOCTYPE html>\n<h1 id="t">T</h1>\n<p>only a front</p>\n</main>\n</body>\n</html>\n')
+    assert page.sections == () and page.front.endswith("<p>only a front</p>")
+    with pytest.raises(ValueError, match="has not been shown its shape"):
+        split('<!DOCTYPE html>\n<h2 id="x">X</h2>\n<p>no closing run</p>\n')
+    with pytest.raises(NoteError, match="`Bad Key` is not a note key"):
+        allocate('<sup class="fn" data-note="Bad Key"></sup>', {}, "w")
+    assert frag.page_dir("SOURCES.html") == "sources" and frag.page_dir("ways.html") == "ways"

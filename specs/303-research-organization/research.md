@@ -70,5 +70,63 @@ session reviewed the whole table and the torn calls (`tags.md`). Drawing pages i
 
 ## R9 - the part openings (spec FR-016)
 
-Filled in by the migration (T05): for each retired part directory, where its `_front.html` reader-facing text went
-(the description of the section it introduced) or that it was retired and why.
+Every part directory's `_front.html` carried one reader-facing paragraph, an italic summary of the part (measured by the
+migration, `scripts/_record_flatten.py`, 2026-10-01); everything else in it was a session comment about the part's own
+history, retired with the part. Each paragraph became the description of the section the part became, in the half it
+introduced; none was dropped. Two edits followed, recorded here: the drawing half's descriptions said "the X page" of a
+part that no longer exists and now say "the research on X"; the Presentation part's opening - two paragraphs, the second
+saying "almost everything on this page is a map drawing convention" - moved to Map conventions' drawing description, since
+that section is in the drawing half only, with "this page" read as "this section". The three container sections
+(The countryside, Cities, Religion and the dead's subsections) had no part of their own and were given a description of
+one sentence each. `_tail.html` (the closing markup and a line linking the part's citations page) and the
+`_citations-*.html` shells had no reader-facing text of their own and are retired with the citations pages.
+
+| retired part | its opening went to |
+|---|---|
+| the archetypes part | section `field-archetypes`, its `description` |
+| the buildings part | section `compounds`, its `description` |
+| the cities/capitals part | section `capitals`, its `description` |
+| the cities/defenses part | section `city-defenses`, its `description` |
+| the cities/fabric part | section `urban-fabric`, its `description` |
+| the cities/government part | section `government`, its `description` |
+| the cities/hinterland part | section `outside-the-walls`, its `description` |
+| the cities/river-cities part | section `river-cities`, its `description` |
+| the cities/sizing part | section `city-sizing`, its `description` |
+| the fields part | section `fields`, its `description` |
+| the homesteads part | section `homesteads`, its `description` |
+| the presentation part | section `map-conventions`, its `description` |
+| the religion-and-death part | section `religion-and-the-dead`, its `description` |
+| the rendering/archetypes part | section `field-archetypes`, its `drawing_description` |
+| the rendering/buildings part | section `compounds`, its `drawing_description` |
+| the rendering/cities/capitals part | section `capitals`, its `drawing_description` |
+| the rendering/cities/defenses part | section `city-defenses`, its `drawing_description` |
+| the rendering/cities/fabric part | section `urban-fabric`, its `drawing_description` |
+| the rendering/cities/government part | section `government`, its `drawing_description` |
+| the rendering/cities/hinterland part | section `outside-the-walls`, its `drawing_description` |
+| the rendering/cities/river-cities part | section `river-cities`, its `drawing_description` |
+| the rendering/cities/sizing part | section `city-sizing`, its `drawing_description` |
+| the rendering/fields part | section `fields`, its `drawing_description` |
+| the rendering/homesteads part | section `homesteads`, its `drawing_description` |
+| the rendering/religion-and-death part | section `religion-and-the-dead`, its `drawing_description` |
+| the rendering/settlements part | section `tiers`, its `drawing_description` |
+| the rendering/towns part | section `towns`, its `drawing_description` |
+| the rendering/urban-features part | section `trades-and-services`, its `drawing_description` |
+| the rendering/vegetation part | section `vegetation`, its `drawing_description` |
+| the rendering/water part | section `water`, its `drawing_description` |
+| the rendering/ways part | section `ways`, its `drawing_description` |
+| the settlements part | section `tiers`, its `description` |
+| the towns part | section `towns`, its `description` |
+| the urban-features part | section `trades-and-services`, its `description` |
+| the vegetation part | section `vegetation`, its `description` |
+| the water part | section `water`, its `description` |
+| the ways part | section `ways`, its `description` |
+
+## R10 - four links that named a whole part
+
+The migration's link resolver (R4) found 4 of the record's 1,175 in-record links naming a whole part rather than a
+question - a part is no longer a place to link. Each was pointed, before the move, at the question its text meant, and
+these are the only changes of reader-facing words the feature made (SC-003's two "DIFF" lines): the village-boundaries
+question's "the religion and death page" became "the question on a village shrine's precinct" (the sacred tree it
+spoke of is there); the highways question's "the towns page" became "the questions on a town's inns and its relay
+office"; and the smiths-and-farriers drawing page's two links to "the buildings research" now land on the question that
+gives the fire gap they cite (the size of a compound and the rank of its buildings), its words unchanged.

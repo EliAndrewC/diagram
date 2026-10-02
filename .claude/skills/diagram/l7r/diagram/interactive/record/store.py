@@ -54,7 +54,7 @@ def load(record_dir: str = RESEARCH_DIR) -> qs.Record:
 
 def read_fragments(page_rel: str = REGISTRY, record_dir: str = RESEARCH_DIR) -> Page:
     """The `Page` the registry's directory of fragments holds, in prefix order, with every refusal checked."""
-    where = REGISTRY_DIR if page_rel == REGISTRY else frag.page_dir(page_rel)
+    where = frag.page_dir(page_rel)
     root = os.path.join(record_dir, where)
     if not os.path.isdir(root):
         raise RecordError(f"{where}/: no fragment directory for {page_rel}")

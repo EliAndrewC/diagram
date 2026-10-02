@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/k3-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/sizing SECTION=020
+**Your questions:** Q=0182
 **Your registry keys:** KEY=touken-bukeyashiki-madori, KEY=bunka-akasaka-bukeyashikimon, KEY=kotobank-baba, KEY=baba-jawiki, KEY=takadanobaba-jawiki, KEY=kotobank-yaba, KEY=toshiya-jawiki, KEY=kotobank-oimawashi, KEY=fuzhou-nanjiaochang-zhwiki, KEY=mancheng-zhwiki, KEY=xian-mancheng-zhwiki, KEY=matsushiro-castle-jawiki, KEY=rehouse-meidaimae-enshogura, KEY=jta-aoyagi-kakunodate, KEY=semboku-bukeyashiki, KEY=semboku-kakunodate-en, KEY=chiran-kagoshima-kankou, KEY=fujiclean-ido, KEY=l7r-toshi-ranbo-barracks
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

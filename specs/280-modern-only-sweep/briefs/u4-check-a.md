@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/u4-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=urban-features SECTION=130, PAGE=urban-features SECTION=032
+**Your questions:** Q=0156, PAGE=urban-features SECTION=032
 **Your registry keys:** KEY=naniwa-nitto-lookback, KEY=gannin-kotobank, KEY=teitetsu-kotobank, KEY=liu-2006-beijing-minren, KEY=blakiston-enwiki
 
 ## The procedure (check, apply)

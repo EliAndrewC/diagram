@@ -7,8 +7,8 @@ multiple places." The record already labels each GUESS and writes an absence not
 (research/CLAUDE.md), so the list is those labels, collected; closing one in the record removes it here.
 
 WHAT IT READS (specs/285 plan):
-- the research record's QUESTION FRAGMENTS (`research/**/NNN-<id>.html` and the `.notes.html` beside each) - never an
-  assembled page or a citations page, which repeat them (D1). HTML comments are session notes and are stripped (D2).
+- the research record's QUESTION PAGES (`research/questions/NNNN-<id>[.drawing].html` and the `.notes.html` beside each,
+  feature 303) - never a built page, which repeats them (D1). HTML comments are session notes and are stripped (D2).
 - every other tracked text file of the skill, outside `research/` and `tests/`, for a whole-word GUESS: a guess is
   sometimes marked only where it is coded or drawn (D7; research.md R2 found `compound.py`'s postern and two in the
   hand-drawn magistracy plans). Only the tooling's own logs are skipped: they repeat what a session typed elsewhere.
@@ -30,8 +30,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 SKILL = ".claude/skills/diagram"
-#: a question fragment: a three-digit prefix, the heading id, `.html` - its notes are the `.notes.html` beside it
-_FRAGMENT = re.compile(r"^\d{3}-.+\.html$")
+#: a question's page (feature 303): its number, its heading id, `.html` or `.drawing.html` - its notes beside it
+_FRAGMENT = re.compile(r"^\d{4}-[^.]+(?:\.drawing)?\.html$")
+#: a question's tags, on the line after its heading; a drawing page beside its research page states none
+_TAGS = re.compile(r"<!-- tags: subject=([a-z0-9-]+)")
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _TAG = re.compile(r"<[^>]+>")
 _HEADING = re.compile(r'<h2 id="([^"]+)">(.*?)</h2>', re.S)
@@ -108,8 +110,7 @@ def read_question(path: Path, root: Path) -> Question | None:
     m = _HEADING.search(html)
     if not m:
         return None
-    rel = path.relative_to(root / SKILL / "research")
-    page = str(rel.parent)
+    page = subject_of(path)
     q = Question(page=page, anchor=m.group(1), heading=visible(m.group(2)), path=str(path.relative_to(root)))
     q.links = set(_LINK.findall(_COMMENT.sub("", html)))
     q.items = [Item("guess", s) for s in guess_sentences(html)]
@@ -123,10 +124,22 @@ def read_question(path: Path, root: Path) -> Question | None:
     return q
 
 
+def subject_of(path: Path) -> str:
+    """What a report groups a question by: its primary subject (feature 303 - the record has no page directories), read
+    from its own tags or, for a drawing page, from the research page of its stem; `untagged` when neither states one."""
+    research = path.with_name(path.name.replace(".drawing.html", ".html"))
+    for candidate in (path, research):
+        if candidate.is_file():
+            m = _TAGS.search(candidate.read_text(encoding="utf-8"))
+            if m:
+                return m.group(1)
+    return "untagged"
+
+
 def questions(root: Path) -> list[Question]:
-    base = root / SKILL / "research"
+    base = root / SKILL / "research" / "questions"
     out = []
-    for path in sorted(base.rglob("*.html")):
+    for path in sorted(base.glob("*.html")):
         if path.name.endswith((".notes.html", ".originals.html")) or not _FRAGMENT.match(path.name):
             continue
         q = read_question(path, root)
@@ -237,7 +250,7 @@ def report(qs: Sequence[Question], routes: dict[str, list[str]], cites: dict[str
     lines.append("")
     lines.append(f"GUESS lines outside the record: {len(outside)} ({', '.join(f'{a} {n}' for a, n in sorted(areas.items()))})")
     for page, pqs in sorted(pages.items()):
-        lines += ["", "=" * 100, f"research/{page}", "=" * 100]
+        lines += ["", "=" * 100, f"subject: {page}", "=" * 100]
         for q in pqs:
             lines += ["", f"## {q.heading}", f"   {q.path}"]
             feeds = routes.get(q.anchor, []) + cites.get(q.anchor, [])

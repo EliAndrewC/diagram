@@ -29,7 +29,7 @@ found exactly and for no tokens, so they are found here and handed over:
 - **LEAD LINES** (STYLE.md 3): every bullet's bold lead line, marked `Q` (a question) or `S` (a statement), with the
   start of its body - the list the agent rules on, statement or question, and whether a newcomer could read it.
 
-    _style_prepass.py <page> --root <repo> [--section <text>]
+    _style_prepass.py <q> --root <repo>      q: a question's number (`0412`, both its pages) or a page's file name (feature 303)
 """
 
 from __future__ import annotations
@@ -204,17 +204,16 @@ def report(fragments: dict[str, str], glossary_words: set[str] | None = None, no
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("page", help="a research page name: homesteads, cities/tango")
+    ap.add_argument("q", help="a question's number (0412) or a page's file name, comma-separated for several")
     ap.add_argument("--root", default=".")
-    ap.add_argument("--section", default="", help="only the questions whose heading or file name contains this text")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
     from _hm_record import fragments_for  # noqa: PLC0415
 
-    rels = [r for r in fragments_for(args.page, args.section, str(root)) if not r.endswith(".notes.html")]
+    rels = [r for r in fragments_for(args.q, str(root)) if not r.endswith(".notes.html")]
     if not rels:
-        print(f"style-prepass: no question of {args.page} matches {args.section!r}", file=sys.stderr)
+        print(f"style-prepass: no question is {args.q!r} - name one by its number, e.g. make style-prepass Q=0041", file=sys.stderr)
         return 2
     variants = root / ".claude/skills/diagram/research/assets/glossary-variants.txt"
     words = {line.split("\t", 1)[0] for line in variants.read_text(encoding="utf-8").splitlines()} if variants.is_file() else set()

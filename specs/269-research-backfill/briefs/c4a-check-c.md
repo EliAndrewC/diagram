@@ -25,7 +25,7 @@ checks report with `make append`.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/c4a-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/hinterland SECTION=040
+**Your questions:** Q=0171
 **Your registry keys:** KEY=liuyuan-zhwiki, KEY=nanguanxiang-haining-zhwiki, KEY=masuami-yosui-ueda, KEY=yanagawa-jogo-mizuochi, KEY=jin-zhongdu-water-gate-bjd, KEY=odawara-shinshuku-cho
 
 ## The procedure (check, apply)

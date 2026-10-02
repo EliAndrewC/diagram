@@ -4,8 +4,8 @@ broken now that we have changed and remade these sections"*).
 `research_questions` lists a modal's references from the questions its `Entry:` names, and one that names no fragment
 simply drops out of the list - so a modal whose other questions still resolve kept passing
 `test_every_class_entry_resolves`, its stale pointer invisible. This test holds each named question, not just each
-entry. Since feature 301 an `Entry:` names FRAGMENTS (`research/<page>/<prefix>-<heading id>.html`), so the check is
-that each named file is there.
+entry. Since feature 301 an `Entry:` names FRAGMENTS (since feature 303 `research/questions/NNNN-<slug>.html`), so the
+check is that each named file is there.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from l7r.diagram.interactive.sources import RESEARCH_DIR, entry_fragments
 
 def stale_titles(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
     """The questions an entry names that are not in the record."""
-    return [f"{d}/{n}" for d, n in entry_fragments(entry) if not os.path.isfile(os.path.join(research_dir, d, n))]
+    return [n for n in entry_fragments(entry) if not os.path.isfile(os.path.join(research_dir, "questions", n))]
 
 
 def test_every_named_question_of_every_modal_exists() -> None:
@@ -28,5 +28,5 @@ def test_every_named_question_of_every_modal_exists() -> None:
 
 
 def test_the_check_sees_a_stale_question() -> None:
-    entry = "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/homesteads/999-not-there.html"
-    assert stale_titles(entry) == ["homesteads/999-not-there.html"]
+    entry = "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0999-not-there.html"
+    assert stale_titles(entry) == ["0999-not-there.html"]

@@ -448,8 +448,8 @@ def test_merge_primitives_folds_a_run_of_unfilled_circles() -> None:
 def test_research_sections_of_a_missing_file_are_empty_not_an_error() -> None:
     """Feature 146: a research pointer naming a file that is not there yields nothing - the interactive page loses that
     entry's references rather than failing to build (`scripts/check-entry-headings.py` refuses it at the push)."""
-    assert research_questions("research/homesteads/999-no-such-question.html") == []
-    assert research_sources("research/homesteads/999-no-such-question.html") == []
+    assert research_questions("research/questions/0999-no-such-question.html") == []
+    assert research_sources("research/questions/0999-no-such-question.html") == []
 
 
 # ---- feature 148: the merge gathers what is SEPARATED, without moving the picture ----------------

@@ -14,7 +14,7 @@ feature 292 the original is stored apart and read by no other check (GM 2026-09-
 subagent that checks that our translation is good when either the text being quoted has changed or the translation has
 changed. And then otherwise that check doesn't need to run."*). `make translation-owed` lists the pairs that are new or
 changed since the merge base; dispatch this agent on those, one question's bundle at a time
-(`make check-bundle PAGE=<p> SECTION=<q> FOR=translation-check`). Judgment about meaning, so Opus; it never edits.
+(`make check-bundle Q=<NNNN> FOR=translation-check`). Judgment about meaning, so Opus; it never edits.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4). -->
 

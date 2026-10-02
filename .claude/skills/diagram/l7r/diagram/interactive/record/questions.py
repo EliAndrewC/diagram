@@ -113,6 +113,25 @@ class Record:
         """Does this section, or a subsection, home a page of this half? An empty section is omitted (FR-013)."""
         return bool(self.in_section(section, half)) or any(self.holds(s, half) for s in section.sections)
 
+    def select(self, term: str) -> list[Page]:
+        """The pages a tool's `Q=` or `IN=` names (spec 303 FR-019), in presentation order: a stem's number (`0412`,
+        both its pages), a page's file name, a section's id (its subsections' questions too, both halves), or a tag's
+        id in any facet. Several terms, comma- or space-separated, are joined; a term that names nothing names nothing."""
+        out: list[Page] = []
+        sections = {s.id: s for s in ct.walk(self.sections)}
+        for t in (x for x in re.split(r"[,\s]+", term) if x):
+            if t in self.by_file:
+                found = [self.by_file[t]]
+            elif re.fullmatch(r"\d{1,4}", t):
+                found = [p for p in self.pages() if p.number == int(t)]
+            elif t in sections:
+                inside = {s.id for s in ct.walk([sections[t]])}
+                found = [p for p in self.pages() if self.question_of(p).home.id in inside]  # type: ignore[union-attr]
+            else:
+                found = [p for p in self.pages() if any(tag == t for _f, tag in self.question_of(p).tags.all())]  # type: ignore[union-attr]
+            out += [p for p in found if p not in out]
+        return self.ordered(out)
+
 
 def text_of(markup: str) -> str:
     return re.sub(r"\s+", " ", _TAG.sub("", _XREF.sub("", markup))).strip()

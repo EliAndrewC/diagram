@@ -57,7 +57,7 @@
   "rules": [
     {
       "id": "W01",
-      "rule": "No seated farmhouse stands off the connected lane network (every farmhouse within WEB_REACH_FT of the component grown from the connector). Stated: ways/checks.py:unreached_houses; driver.py generate() re-roll; research/settlements 'every house in a nucleated cluster is reached'.",
+      "rule": "No seated farmhouse stands off the connected lane network (every farmhouse within WEB_REACH_FT of the component grown from the connector). Stated: ways/checks.py:unreached_houses; driver.py generate() re-roll; research/contents.json#tiers 'every house in a nucleated cluster is reached'.",
       "rows": ["driver.py:generate re-roll loop (FR-002 by name)", "R2 hamletgen/ways/serve.py:door-path loop (unserved house):612-635", "R1 gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate (its reach clause)"],
       "owner": "l7r/diagram/settlement/rolling/fit.py:_parts_fit (the corridor admitted at seating) + hamletgen/ways/settle.py:settle_the_web step 4 (the corridor drawn). The census named serve.py:_serve_stragglers; the straggler pass cannot own it - 2b shows that by the time it runs no path may exist.",
       "mechanism": "M3: each seat is admitted only with a reserved access corridor to the tree rooted at the exit ray; every later placer refuses a footprint on a reserved corridor (s.on_access_corridor); settle step 4 draws, for every house in unreached_houses, its corridor chain to first contact with the served network. Predicate: ways/checks.py:unreached_houses (placer and unit test read it). generate() loses its loop: one build, no avoid list.",

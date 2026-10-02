@@ -104,10 +104,10 @@ highlights into questions ... I think that we need to come up with a different n
 - **An aside that carries a real finding is its own bullet**, not a parenthesis or an italic afterthought. (GM, of the
   Okinawa cross-check: *"it deserves its own bullet point and doesn't need to be a parenthetical."*)
 - **How the maps draw it is not in the research section at all.** A research section says what the record found. What
-  our maps draw - sizes chosen, knobs, conventions, the rule the map follows - is a section of its own in the
-  RENDERING collection, `research/rendering/<page>.html` (one page beside each research page), which declares the
-  research section it is about in a comment after its heading (`about: <page>.html#<id>`); `make record` then writes
-  a link under both headings, "How our maps draw it" and "The history behind it". No link between the two is ever
+  our maps draw - sizes chosen, knobs, conventions, the rule the map follows - is a page of its own, the question's
+  drawing page `NNNN-<id>.drawing.html` beside its research page (feature 303: the same stem pairs them; a second
+  drawing page of one question says `<!-- about: NNNN-<id> -->`); `make record` then writes a link under both
+  headings, "How our maps draw it" and "The history behind it". No link between the two is ever
   typed. A rendering section follows this guide too, and still cites the research it rests on. (GM, 2026-09-29: *"anything that is specifically about how we choose to render the grove or render a map element generally probably belongs in a separate place ... there should probably just be a separate collection of files that have to do with our rendering decisions ... the two of them should definitely link to each other. And I think that linking should be automated rather than something that we write."*)
 - **No paragraph over 150 words**, and no bullet whose own text is. A longer one is split, or made a list - a rule
   paragraph of several rules and rationales is a bulleted list, nested where the rules group. The bar is mechanical
@@ -127,8 +127,8 @@ highlights into questions ... I think that we need to come up with a different n
   research; it's just stating what is plainly visible on the map. Whereas the second half of the sentence IS
   useful."*) A statement of HOW the map draws something, and why - every crown at its real size, a glyph by
   convention - is kept: the GM called that one *"More great stuff, love it."*
-- **The `Sources:` roster.** The footnotes carry every citation, and a footnote's hover links the work's entry on the
-  citations page. Before a roster is removed, every key it named is cited by a footnote of the section, every
+- **The `Sources:` roster.** The footnotes carry every citation, and a footnote's hover links the work's entry at the
+  foot of the question's page. Before a roster is removed, every key it named is cited by a footnote of the section, every
   passage its own footnote quoted is quoted by one, and anything the roster says that the section does not (a work's
   gloss, say) is carried into the text - a removal never loses a citation or a fact. (GM: *"we should never be
   removing a citation ... keep that information just not in a sources section."*)
@@ -167,7 +167,7 @@ highlights into questions ... I think that we need to come up with a different n
 - **Not to be confused with** (GM, 2026-09-29; built after the sweep, feature 292 T10): a section whose subject a
   reader could mistake for another's opens, right under its heading, with a list *Not to be confused with:* - each entry
   the other section's title, linked, and the first sentence of that section's opening, which is the record's definition
-  of it. The pairs are data, kept once in `research/confusables.json` (`{"a": "<page>#<id>", "b": "<page>#<id>",
+  of it. The pairs are data, kept once in `research/confusables.json` (`{"a": "NNNN-<id>.html#<id>", "b": "NNNN-<id>.html#<id>",
   "why": "<the difference>"}`) and always two-way: `make record` writes the list under both sections, and refuses a pair
   naming a section that does not exist. A section that gains a confusable neighbor - a new topic, a renamed one - adds
   its pair to the data file, never a list by hand. Because the list quotes the other section's first sentence, that

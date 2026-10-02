@@ -446,7 +446,7 @@ Measured before and after in research R10.
   its exact rank (`RANK_DEPTH_JITTER` 0.25, a GUESS), from the map's position hash, the placer still holding the lane
   room and the sun corridor and the exact seat offered where the jittered one is refused. A `back_lane` hamlet's ranks
   stay regular, since the record reads a back lane as PLANNING with regular plots and alleys as ACCRETION with an
-  irregular result (research/homesteads "Is every farmhouse reached by a lane").
+  irregular result (research/contents.json#homesteads "Is every farmhouse reached by a lane").
 - Jittering every form was tried first and reverted (observed 2026-09-28 on rolls not committed: RANK_DEPTH_JITTER
   0.15, 0.18, 0.25 and 0.3 over the pool): each amplitude re-laid all five maps into a new draw, 0.15-0.25 tipped
   Inashiro's rolled crescent under round's ceiling, and 0.3 left a persimmon unseated on two maps - a knob that moves
@@ -468,7 +468,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   polder; it reads the field AS DRAWN now. It left whole a lane it trimmed to a point, or to a nub shorter than a lane
   (`_WEB_MIN_FT`); it drops both, unless the lane is some house's only way. And it runs once more as the last pass of
   `stage_web`, since the passes after it reshape lanes (0 dangling ends on the pool, `m:lanes-r22-ends`).
-- **The belt in two pieces** (accurate: a windbreak with a hole funnels the wind, research/vegetation). Between two
+- **The belt in two pieces** (accurate: a windbreak with a hole funnels the wind, research/contents.json#vegetation). Between two
   columns the near face is one chord, and where the fringe falls back steeply the chord cut the corner at the leading
   house: Kashikawa's ran 37.3 ft from its westernmost farmhouse, through that house's garden, whose afternoon-sun lane
   then took the band's trees; Sawada's 33.8 ft (`m:belt-r22-near-face`). `round_the_houses` adds a point every 30 ft
@@ -479,7 +479,7 @@ want to route around deficiencies in our placement algorithm... we should fix th
   84.1-89.8 ft, median 95.6-101.4, 1-16% of a face over 120 at the ends and bends, one piece on every map
   (`m:belt-r22-depth`, `m:belt-r22-pieces`).
 - (RETIRED 2026-09-28 by D24) **Too few homestead fields on a packed cluster** (accurate for the position: a household's dry field lay on the
-  raised ground its house stood on, research/fields "Where dry (hatake) crops go"; the offset a GUESS, labeled). Main's
+  raised ground its house stood on, research/contents.json#fields "Where dry (hatake) crops go"; the offset a GUESS, labeled). Main's
   placer packed Mizuguchi's steadings closer than a plot's depth, 3 of 12 households laid a plot, and the median house
   stood 157 ft from its nearest dry plot. Where no side has room flush, the plot is offered the nearest ground beside
   the steading, out from each lee or flank side and along it every 15 ft to 90 ft, never upwind of the steading
@@ -500,12 +500,12 @@ want to route around deficiencies in our placement algorithm... we should fix th
 - The GM asked why dry crops now stood by the houses when the record's model is dry crops on the higher ground just
   above the paddy water, and a vegetable garden by the house is a different thing. A search pass (2026-09-28) found
   the house-side plot of the record is the kitchen bed: the yashikibatake is "cultivated ground for growing crops for a
-  Japanese household's own consumption" (kateisaien-jawiki, already cited by research/homesteads "How big was a
+  Japanese household's own consumption" (kateisaien-jawiki, already cited by research/contents.json#homesteads "How big was a
   dooryard garden?", which puts the household's grain and bulk vegetables "out in the household's own hatake dry
   fields, not here"). The natural-levee source puts the settlement and the dry fields on the same levee ridge, not a
   plot per house; on a fan the dry fields lie upslope, away from the paddy. So D19's and D23's homestead field was not
   supported - no page read puts a grain plot beside a house, and that the household's grain grew out in its fields is
-  the record's own reading, labeled a GUESS (an absence note on research/fields records the search) - and it is removed with its stage (`stage_homestead_fields`, `homesteads/fields.py`), its fallback seats
+  the record's own reading, labeled a GUESS (an absence note on research/contents.json#fields records the search) - and it is removed with its stage (`stage_homestead_fields`, `homesteads/fields.py`), its fallback seats
   and its persimmon-ring reservation. The dry crops stand in the comb's hem along the supply canal, as they did on
   main; the research entry and the four dry-crop pop-ups now say so.
 - Inashiro's settlement-review finding of round 0ae309f0 (every dry plot across the rice, a median of 658 ft, `m:inashiro-r11-dry`) is

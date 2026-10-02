@@ -59,7 +59,7 @@ def test_a_direct_read_is_named_and_a_mention_is_not() -> None:
     passing = [
         ("Bash", {"command": "echo /host-l7r-repo/setting/budgets.md"}),
         ("Bash", {"command": "grep -rn road research/"}),
-        ("Read", {"file_path": "/diagram/research/x.html"}),
+        ("Read", {"file_path": "/diagram/research/questions/0001-x.html"}),
         ("Edit", {"file_path": "/host-l7r-repo/setting/l7r.md"}),
         ("Bash", {"command": "make canon TERMS=road | grep -c road"}),
     ]

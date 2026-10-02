@@ -100,7 +100,7 @@ def repo(tmp_path: pathlib.Path) -> pathlib.Path:
         "l7r/diagram/interactive/assets/page.css": "body{}\n",
         "l7r/diagram/interactive/assets/page.js": "1;\n",
         f"{PACKAGE}/test_synthetic.py": "def test_x(): pass\n",
-        "research/contents.json#fields": "<h2>Why</h2>\n",
+        "research/questions/0008-q.html": "<h2>Why</h2>\n",
         "l7r/diagram/settlement/houses.py": "x = 1\n",
     }.items():
         p = skill / rel
@@ -136,7 +136,7 @@ def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(repo: pathli
         "l7r/diagram/interactive/assets/page.css",
         "l7r/diagram/interactive/page.py",
         f"{PACKAGE}/test_synthetic.py",
-        "research/contents.json#fields",
+        "research/questions/0008-q.html",
     ):
         with open(skill / rel, "a") as fh:
             fh.write("# touched\n" if rel.endswith(".py") else "\n")
@@ -160,7 +160,7 @@ def test_check_never_demands_a_browser_stamp(repo: pathlib.Path) -> None:
     test edit owes no gate at push, feature 132 FR-024)."""
     gs = _gate_stamp()
     skill = repo / ".claude/skills/diagram"
-    with open(skill / "research/contents.json#fields", "a") as fh:
+    with open(skill / "research/questions/0008-q.html", "a") as fh:
         fh.write("<h2>More</h2>\n")
     with open(skill / f"{PACKAGE}/test_synthetic.py", "a") as fh:
         fh.write("def test_y(): pass\n")

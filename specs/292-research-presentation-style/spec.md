@@ -81,7 +81,7 @@ the pilot; the GM reads the pages in this feature's clone.
   `make record`; a test fails on a pair naming a section that does not exist. It waits for the sweep because the
   titles it links are not final; until then each restyle records its pairs in `confusables.md`.
 - **FR-017** (GM 2026-09-29): how the maps draw a thing is a section of the RENDERING collection
-  (`research/rendering/<page>.html`), never part of the research section; each rendering section declares the research
+  (`research/questions/<page>.html`), never part of the research section; each rendering section declares the research
   section it is about once, and `make record` writes a link under both headings; a declaration naming a missing
   section refuses the build. The grove topic's map bullets and its rule of the map moved there.
 - **FR-018** (GM 2026-09-29): no paragraph, and no bullet's own text, runs over 150 words - a mechanical check in the

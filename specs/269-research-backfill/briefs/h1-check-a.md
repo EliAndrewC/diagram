@@ -21,7 +21,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/h1-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=homesteads SECTION=210, PAGE=homesteads SECTION=212
+**Your questions:** PAGE=homesteads SECTION=210, Q=0043
 **Your registry keys:** none - the last group has them
 
 ## The procedure (check, apply)

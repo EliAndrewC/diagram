@@ -13,7 +13,7 @@
 ## Phase 1: Setup
 
 - [x] T001 Sync the clone; confirm clean: `scripts/sync-with-main.sh sync-in && git status --porcelain`
-- [x] T002 Re-read the settled decisions: `settlements/capitals.md`, `research/contents.json#citiescapitals.md`, `wip/README.md` (which carries the two deferred defects)
+- [x] T002 Re-read the settled decisions: `settlements/capitals.md`, `research/cities/capitals.md`, `wip/README.md` (which carries the two deferred defects)
 
 ---
 

@@ -135,7 +135,7 @@ README correction text, the Mode A rulings question (FR-009), and any physical c
 ```
 specs/229-rule-files-into-research/   request.md spec.md plan.md tasks.md research.md migration-rules.md audit/
 .claude/skills/diagram/research/      15 pages edited; ways.html presentation.html settlements.html cities/sizing.html added
-.claude/skills/diagram/research/citations/   the matching citations pages and derived .js
+.claude/skills/diagram/research/questions/   the matching citations pages and derived .js
 .claude/skills/diagram/research/sources/ new keys with write-ups (Phase 3)
 .claude/skills/diagram/research/CLAUDE.md   the spec-paragraph convention
 .claude/skills/diagram/settlements.md, settlements/, settlements/cities/   DELETED

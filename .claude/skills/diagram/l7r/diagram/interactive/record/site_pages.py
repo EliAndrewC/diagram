@@ -4,7 +4,7 @@ top, a listing of questions, the pager, and the navigation tree as data. `site.p
 The site's layout (spec 303 plan D6):
 
     index.html                     home: both halves, their sections nested as `contents.json` nests them; tags; sources
-    research/<section>.html        a section's page in the research half: its description, subsections and questions
+    findings/<section>.html        a section's page in the research half: its description, subsections and questions
     drawing/<section>.html         the same section in the half on how our maps draw it
     q/<heading id>.html            a question page of either half - flat, so a regrouping moves no URL (FR-004)
     tags/<facet>-<tag>.html        every question carrying one tag (FR-014)
@@ -25,6 +25,10 @@ TITLE = "The research record"
 #: The two halves of the record, in the order they are read. A section is shown in a half only when it, or one of its
 #: subsections, holds a page of that half (spec 303 FR-012, FR-013).
 HALVES = (("research", "The research"), ("drawing", "How our maps draw it"))
+#: Where each half's section pages are in the site. Not `research/`: a path `research/<x>.html` is what the pointer check
+#: refuses as a retired built page of the record (`scripts/check-research-pointers.py`), and a site path must not read
+#: as one.
+HALF_DIR = {"research": "findings", "drawing": "drawing"}
 REGISTRY_GROUP = "Sources"
 TAGS_GROUP = "Tags"
 FACET_NAMES = {"subject": "Subject", "setting": "Setting", "level": "Level"}
@@ -72,7 +76,7 @@ def half_title(half: str) -> str:
 
 
 def section_file(half: str, section: ct.Section) -> str:
-    return f"{half}/{section.id}.html"
+    return f"{HALF_DIR[half]}/{section.id}.html"
 
 
 def tag_file(facet: str, tag: str) -> str:
@@ -80,7 +84,8 @@ def tag_file(facet: str, tag: str) -> str:
 
 
 def node_key(half: str, section: ct.Section) -> str:
-    return f"{half}/{section.id}"
+    """A section's key in the navigation, which a page names to open it: its half's directory and its id."""
+    return f"{HALF_DIR[half]}/{section.id}"
 
 
 def open_keys(half: str, section: ct.Section | None) -> str:

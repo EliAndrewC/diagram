@@ -33,13 +33,13 @@ def _load(name: str):  # noqa: ANN202
 eo = _load("_entry_owed")
 ceh = _load("check_entry_headings")
 
-A, B = "archetypes.html#one", "archetypes.html#two"
+A, B = "0001-one.html", "0002-two.html"
 
 
 def test_a_moved_section_under_unchanged_prose_is_named():
     """The rule, in its simplest form (SC-001)."""
     out = eo.named_pairs({A}, {"k": {A}}, {"k": "prose"}, {"k": "prose"}, {"k": "f.py:1"})
-    assert out == ["k - archetypes.html#one - prose at f.py:1"]
+    assert out == ["k - 0001-one.html - prose at f.py:1"]
 
 
 def test_prose_that_moved_in_the_same_delta_is_not_named():
@@ -66,9 +66,9 @@ def test_the_prose_key_is_derived_and_ignores_the_data_tags():
     def src(why: str, entry: str) -> str:
         return f'class K:\n    """\n    What: a thing.\n    Why: {why}\n    Note: GUESS: a note.\n    Name: k\n    Covers: c\n    Label: guess\n    Sources: s\n    Entry: {entry}\n    """\n\n    key = "k"\n'
 
-    base = eo.classes_in(src("because.", "research/a.html - 'H'"), _base)
-    same_prose = eo.classes_in(src("because.", "research/b.html - 'OTHER'"), _base)
-    moved_prose = eo.classes_in(src("for another reason.", "research/a.html - 'H'"), _base)
+    base = eo.classes_in(src("because.", "research/questions/0001-a.html"), _base)
+    same_prose = eo.classes_in(src("because.", "research/questions/0002-b.html"), _base)
+    moved_prose = eo.classes_in(src("for another reason.", "research/questions/0001-a.html"), _base)
     assert base == same_prose, "a data-tag edit must leave the prose key untouched"
     assert base != moved_prose, "a Why: edit must move it"
 
@@ -138,24 +138,25 @@ def _git(root, *args):  # noqa: ANN001, ANN202
     subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
 
 
-def test_a_question_moves_when_its_fragment_changes_and_not_when_only_its_notes_or_prefix_do(tmp_path):  # noqa: ANN001
-    """Feature 301: the pages are built, never committed, so a moved question is read off its FRAGMENT - its prose
-    changed; a note edited beside it is not a moved body (a note's text was never in the body), and a fragment
-    renamed to a new prefix (`make fragment-move`) is compared with the one it was."""
-    rec = tmp_path / eo.RESEARCH / "water"
+def test_a_question_moves_when_its_page_changes_and_not_when_only_its_notes_or_number_do(tmp_path):  # noqa: ANN001
+    """Features 301, 303: the pages are built, never committed, so a moved question is read off its file - its prose
+    changed; a note edited beside it is not a moved body (a note's text was never in the body), and a question renumbered
+    (`make fragment-move`) is compared with the one it was. A drawing page moves on its own."""
+    rec = tmp_path / eo.RESEARCH / "questions"
     rec.mkdir(parents=True)
-    (rec / "_front.html").write_text("x", encoding="utf-8")
-    (rec / "010-ponds.html").write_text('<h2 id="ponds">Ponds</h2><p>Dug.</p>', encoding="utf-8")
-    (rec / "020-ditches.html").write_text('<h2 id="ditches">Ditches</h2><p>Cut.</p>', encoding="utf-8")
-    (rec / "030-weirs.html").write_text('<h2 id="weirs">Weirs</h2><p>Built.</p>', encoding="utf-8")
-    (rec / "030-weirs.notes.html").write_text('<li data-note="k">a note</li>', encoding="utf-8")
+    (rec / "0010-ponds.html").write_text('<h2 id="ponds">Ponds</h2><p>Dug.</p>', encoding="utf-8")
+    (rec / "0010-ponds.drawing.html").write_text('<h2 id="dp">Drawn</h2><p>Blue.</p>', encoding="utf-8")
+    (rec / "0020-ditches.html").write_text('<h2 id="ditches">Ditches</h2><p>Cut.</p>', encoding="utf-8")
+    (rec / "0030-weirs.html").write_text('<h2 id="weirs">Weirs</h2><p>Built.</p>', encoding="utf-8")
+    (rec / "0030-weirs.notes.html").write_text('<li data-note="k">a note</li>', encoding="utf-8")
     _git(tmp_path, "init", "-q")
     _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A")
     _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base")
     base = subprocess.run(["git", "-C", str(tmp_path), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
-    (rec / "010-ponds.html").write_text('<h2 id="ponds">Ponds</h2><p>Dug and lined.</p>', encoding="utf-8")
-    (rec / "020-ditches.html").rename(rec / "025-ditches.html")
-    (rec / "030-weirs.notes.html").write_text('<li data-note="k">a note, edited</li>', encoding="utf-8")
-    (rec / "040-new.html").write_text('<h2 id="new">New</h2>', encoding="utf-8")
+    (rec / "0010-ponds.html").write_text('<h2 id="ponds">Ponds</h2><p>Dug and lined.</p>', encoding="utf-8")
+    (rec / "0010-ponds.drawing.html").write_text('<h2 id="dp">Drawn</h2><p>Blue-green.</p>', encoding="utf-8")
+    (rec / "0020-ditches.html").rename(rec / "0025-ditches.html")
+    (rec / "0030-weirs.notes.html").write_text('<li data-note="k">a note, edited</li>', encoding="utf-8")
+    (rec / "0040-new.html").write_text('<h2 id="new">New</h2>', encoding="utf-8")
     _git(tmp_path, "add", "-A")
-    assert eo.moved_anchors(tmp_path, base, None) == {"water/ponds"}
+    assert eo.moved_anchors(tmp_path, base, None) == {"0010-ponds.html", "0010-ponds.drawing.html"}

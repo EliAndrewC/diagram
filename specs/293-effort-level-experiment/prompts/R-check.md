@@ -12,11 +12,11 @@ covers to the `adhoc-judge` agent. Dispatch ad-hoc reading, fetching, translatin
 Session 1 researched the Ubame servants' quarters question (one dormitory behind sliding partitions, or a door a household?)
 and committed; its handoff is `handoffs/293/R-handoff.md`. You check and apply ALL of it: every
 `SECTION=` and `KEY=` line the handoff names. **Read narrowly**: `make lines FILE=<handoff> KEY="SECTION=|KEY="` for your
-list; `make notes PAGE=buildings SECTION=<NNN> KEYS=<key,key>` for a few notes.
+list; `make notes Q=<NNNN> KEYS=<key,key>` for a few notes.
 
 ## The procedure (check, apply)
 
-1. **Check, all in one message, in the background.** For each question: `make check-bundle PAGE=buildings SECTION=<NNN>
+1. **Check, all in one message, in the background.** For each question: `make check-bundle Q=<NNNN>
    FOR=quote-check` for `quote-check`, and `... FOR=record-format` for `record-format`, each agent naming its own MANIFEST.md
    and nothing else. For each key: `make check-bundle KEY=<key>` and `source-applicability`. An ABSENCE note that says what was
    searched is checked as one: its search is stated, dated and specific.

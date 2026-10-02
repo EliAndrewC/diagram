@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-organization`)
 **Created**: 2026-10-01
-**Status**: Accepted - FAITHFUL at round 3 (2026-10-01)
+**Status**: Accepted - FAITHFUL at round 3 (2026-10-01); amendment 1 (FR-017's exceptions) FAITHFUL at its round 3
 **Request**: [`request.md`](request.md) - the GM's words verbatim. The organization of the record today is *"haphazard"*:
 a top-level "Research" beside a "Cities" that is also research, "How our maps draw it" beside "How our maps draw cities",
 drawing conventions (Presentation) filed as research, and an order that opens on field archetypes for no reason. The GM
@@ -226,16 +226,22 @@ build places it. Forgetting the tags fails the build, naming the question.
 
 - **FR-017** Every reference to a research question by old path, old page name or old number - code comments, `Entry:`
   lines, modal text, docs, every `CLAUDE.md`, `SKILL.md`, agent files, scripts, tests, landed specs, and cross-links
-  inside the record - is rewritten to the new stem. The GM's verbatim words (`request.md` files, SOURCE blocks) are not
-  edited. No redirect is written.
+  inside the record - is rewritten to the new stem, and a tool's retired argument (`PAGE=<p> SECTION=<NNN>`) to the new
+  one (`Q=<NNNN>`). Not edited: the GM's verbatim words (`request.md` files, SOURCE blocks, a quotation of the GM); a
+  verbatim record of a command a session ran (the guard-replay corpora under `scripts/fixtures/`); and a test's or a
+  selftest's data that names a retired form in order to prove it is refused - none of these is a reference a reader
+  follows. A README is not edited by the session either (constitution XVII), but its references ARE references a reader
+  follows: every stale one is written up as a correction offered to the GM in the feature's directory
+  (`readme-correction-offered.md`, as feature 229 did) and applied only if the GM authorizes it. No redirect is written.
+  (Amendment 1, 2026-10-01: the exceptions were found while the sweep ran.)
 - **FR-018** The pointer check (`check-research-pointers.py`) validates the new form, recognizes old-layout paths and old
   page names as stale, and names the new stem for each from the migration mapping.
 - **FR-019** Every research make target and script that took a page (`PAGE=`), and every hook that recognizes a record
   path (record edits, reserving, check bundles, entry drift, open questions, page sessions, fragment moves), works on the
   new layout, taking a question stem, a tag or a section where it took a page.
 - **FR-020** The interactive maps' research links resolve after the feature lands.
-- **FR-021** The research docs (`research/CLAUDE.md`, `README.md`, `STYLE.md`, the page-session rules, the root and skill
-  `CLAUDE.md`) describe the new layout, the tags and the table of contents, including how a new question is tagged.
+- **FR-021** The research docs (`research/CLAUDE.md`, `STYLE.md`, the page-session rules, the root and skill `CLAUDE.md`)
+  describe the new layout - `README.md` through the offered correction of FR-017 - the tags and the table of contents, including how a new question is tagged.
 
 ### Key Entities
 
@@ -261,9 +267,9 @@ build places it. Forgetting the tags fails the build, naming the question.
 - **SC-006** (FR-004, FR-009) Swapping two sections in the table-of-contents file and rebuilding changes the navigation
   and changes no question page's URL; changing a section's rule to select on a setting or a non-primary subject moves
   the matching questions without editing any question file; tests hold both.
-- **SC-007** (FR-017, FR-018, FR-021) Zero references to old research paths or old page names remain outside the GM's
-  verbatim words; the pointer check passes over the whole repository; a test shows it refuses an old path and names the
-  new stem.
+- **SC-007** (FR-017, FR-018, FR-021) Zero references to old research paths, old page names or old numbers remain
+  outside FR-017's exceptions; every old reference left in a README is in the offered correction; the pointer check
+  passes over the whole repository; a test shows it refuses an old path and names the new stem.
 - **SC-008** (FR-019) Each research make target and hook named in FR-019 has a test run against the new layout, and the
   hooks' self-tests pass (`make hooks-test`).
 - **SC-009** (FR-020) Every research link in every pool map's interactive page resolves to a built page.
@@ -305,3 +311,9 @@ This feature draws nothing on a map and states nothing new about one; it reorgan
 - Round 2: CHANGES REQUIRED - three passages still said primary-subject homing or one-to-one pairing; FR-010 refused
   what FR-013 omitted. Fixed.
 - Round 3: FAITHFUL.
+- Amendment 1, round 1: CHANGES REQUIRED - the `PAGE=`/`SECTION=` rewrite within the request; the exceptions for the
+  GM's words, the replay corpora and refusal-test data legitimate; the README exception not, as written (its references
+  are followed by readers; constitution XVII says offer the correction). Fixed: `readme-correction-offered.md`, FR-021.
+- Amendment 1, round 2: CHANGES REQUIRED - the check exempted all of `tests/` and `scripts/`, wider than FR-017, hiding a
+  live old path; plan D8a mislabeled the README. Fixed: the check's exemptions narrowed to FR-017's.
+- Amendment 1, round 3: FAITHFUL.

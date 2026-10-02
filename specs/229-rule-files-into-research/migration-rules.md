@@ -7,7 +7,7 @@ short operational version plus what is specific to this sweep.
 ## What you receive
 
 The rule file (`settlements/<topic>.md`), the research page (`research/<topic>.html`), its citations page
-(`research/citations/<topic>.html`), the audit report (`specs/229-rule-files-into-research/audit/<...>.md`) with
+(`research/questions/<topic>.html`), the audit report (`specs/229-rule-files-into-research/audit/<...>.md`) with
 the unit-by-unit classes, and this file. You edit the research page and its citations page IN PLACE in the clone
 `/diagram/.clones/diagram-research/`. You do not edit the rule file, any engine file, `SOURCES.html`, the glossary
 or any other page: you REPORT what those need (below) and the session makes those edits centrally.

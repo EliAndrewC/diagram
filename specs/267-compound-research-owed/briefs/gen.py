@@ -33,7 +33,7 @@ GROUPS = {
     "G5": ("the shrine", "0240"),
     "G6": ("river, trade and roads", "0177, 0225, 0199, 0082"),
     "G7": ("the map-story kinds", "0094, 0111, 0112, 0117"),
-    "G8": ("the in-field grave island", "fields 220-240, or the existing fields question 010 on in-field features"),
+    "G8": ("the in-field grave island", "fields 220-240, or the existing question 0008 on in-field features"),
 }
 
 HEAD = """# Brief - feature 267 (the compound research owed), group {group}: {title}, session {what}

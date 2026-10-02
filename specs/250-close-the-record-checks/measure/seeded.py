@@ -95,7 +95,7 @@ def setup(only: tuple[str, ...] = ()) -> None:
 
 def setup_later(base: dict[str, pathlib.Path]) -> None:
     # entry-drift: the section now says a tenth where the modal still says two thirds
-    sh(["make", "check-bundle", "PAGE=fields", "SECTION=190", "NO_QUOTES=1", "KIND=WetPaddy", f"OUT={base['ed']}"])
+    sh(["make", "check-bundle", "IN=fields", "SECTION=190", "NO_QUOTES=1", "KIND=WetPaddy", f"OUT={base['ed']}"])
     frag = next(p for p in base["ed"].glob("190-*.html") if not p.name.endswith(".notes.html"))
     plant(frag, [("more than two-thirds of the nation's paddies became dry paddy", "about one tenth of the nation's paddies became dry paddy"),
                  ("全国の水田の2/3以上は乾田となったといわれる", "全国の水田の1/10ほどが乾田となったといわれる")])
@@ -106,8 +106,8 @@ def setup_later(base: dict[str, pathlib.Path]) -> None:
 
 
 def setup_first(base: dict[str, pathlib.Path]) -> None:
-    sh(["make", "check-bundle", "PAGE=ways", "SECTION=010", "NO_QUOTES=1", f"OUT={base['rf']}"])
-    sh(["make", "check-bundle", "PAGE=cities/sizing", "SECTION=020", f"OUT={base['qc']}"])
+    sh(["make", "check-bundle", "IN=ways", "SECTION=010", "NO_QUOTES=1", f"OUT={base['rf']}"])
+    sh(["make", "check-bundle", "IN=city-sizing", "SECTION=020", f"OUT={base['qc']}"])
     sh(["make", "check-bundle", "KEY=edo-enwiki", f"OUT={base['sa']}"])
     # rf: a visible Grounds field, a history sentence, a TODO to a session, an undefined term on the list
     rf = base["rf"] / f"{RF_SEC}.html"

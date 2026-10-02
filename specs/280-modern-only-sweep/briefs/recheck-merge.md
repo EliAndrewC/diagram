@@ -3,7 +3,7 @@
 
 You are a FRESH session in `/diagram/.clones/diagram-supplemental-2`; the research record's CLAUDE.md applies.
 
-**Your questions:** PAGE=homesteads SECTION=210, PAGE=homesteads SECTION=211, PAGE=homesteads SECTION=212, PAGE=urban-features SECTION=084
+**Your questions:** PAGE=homesteads SECTION=210, Q=0042, Q=0043, PAGE=urban-features SECTION=084
 
 Also check urban-features 152: the merge split 082 into 084 and 150 into 152 for the size cap.
 

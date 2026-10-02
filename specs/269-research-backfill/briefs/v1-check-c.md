@@ -21,7 +21,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/v1-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=vegetation SECTION=060, PAGE=vegetation SECTION=070
+**Your questions:** Q=0080, PAGE=vegetation SECTION=070
 **Your registry keys:** KEY=miura-2019-yashikiyama, KEY=takehara-2004-yashikirin, KEY=kotobank-yashikirin-heibonsha, KEY=kotobank-murazakai, KEY=yaotsu-sanron, KEY=narumi-2002-sanron-ezu, KEY=kanagawa-museum-saikyo-ezu, KEY=migita-chiba-konara-canopy, KEY=hasegawa-2018-toyama-konara, KEY=rinya-satoyama-junkan, KEY=niigata-konara-coppice, KEY=katakura-1989-konara-coppice, KEY=iriaichi-jawiki
 
 ## The procedure (check, apply)

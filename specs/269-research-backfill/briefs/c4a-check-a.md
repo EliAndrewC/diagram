@@ -25,7 +25,7 @@ checks report with `make append`.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/c4a-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/hinterland SECTION=060, PAGE=cities/hinterland SECTION=010
+**Your questions:** Q=0172, Q=0173
 **Your registry keys:** none - the last group has them
 
 ## The procedure (check, apply)

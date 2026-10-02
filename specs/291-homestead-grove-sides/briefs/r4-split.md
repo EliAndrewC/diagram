@@ -10,7 +10,7 @@ sides") is 20,226 bytes with its notes, over the 20,000 cap, since this feature 
 (the farmstead's own grove now rolls its sides; the village belt stays on one or two windward sides). `make quick`
 fails on it.
 
-**Your questions:** PAGE=vegetation SECTION=030
+**Your questions:** Q=0072
 
 ## The procedure
 
@@ -23,7 +23,7 @@ fails on it.
    included (`grep -rn "shelter belt wrap" .claude/skills/diagram/l7r/diagram/interactive/classes/`), which
    `scripts/check-entry-headings.py` enforces.
 3. In `.claude/skills/diagram`: `make record && make citations`, the four record tests (`make test-file FILE="tests/interactive/test_footnotes.py tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`), and `python3 scripts/check-question-size.py` from the clone root.
-4. Check what moved, in the background: `make check-bundle PAGE=vegetation SECTION=<NNN> FOR=record-format` for
+4. Check what moved, in the background: `make check-bundle Q=<NNNN> FOR=record-format` for
    `record-format` on each question you changed or made (and `FOR=quote-check` for `quote-check` on any note that moved).
    Apply with `make apply-edits FROM=<output_file>`; re-run the tests once.
 5. Commit only your files (message beginning `291 R4:`); do not push. Append one line to

@@ -12,7 +12,7 @@ rolled per settlement, 50 / 30 / 20 for two / three / four sides, 37.5 / 22.5 / 
 is `specs/291-homestead-grove-sides/briefs/r1-handoff.md` - read only your own lines
 (`make lines FILE=<handoff> KEY="SECTION=homesteads/(010|710)"`).
 
-**Your questions:** PAGE=homesteads SECTION=010, PAGE=homesteads SECTION=710
+**Your questions:** Q=0036, PAGE=homesteads SECTION=710
 **Your registry keys:** none
 
 **Two facts the engine work fixed after session 1, for 710's rule paragraph** (write them in; they are this feature's
@@ -26,7 +26,7 @@ its own question (the record's `CLAUDE.md`, "A question has a size") - never by 
 ## The procedure (check, apply)
 
 1. **Check, all in one message, in the background.** For each of your questions:
-   `make check-bundle PAGE=homesteads SECTION=<NNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format`
+   `make check-bundle Q=<NNNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format`
    for `record-format` (in `.claude/skills/diagram`), each agent naming its own MANIFEST.md and nothing else; and
    `make check-bundle KEY=irie-2020-igune` for `source-applicability` - the key is now also used to date the two-sided
    grove to the early Edo period, and its write-up must say honestly what it can and cannot carry (a 2020 paper

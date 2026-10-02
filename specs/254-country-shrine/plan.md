@@ -158,7 +158,7 @@ failures at merge; a pre-existing failure is ledgered.
   jochi, shasō) in `assets/glossary.json`; `make citations` and `make glossary`; the village section's
   revision; `interactive/classes` entries for the village shrine gain the two new questions by `Entry:`
   name. The agents, in order: `source-reader` on the two new sections (READ per claim); `make
-  quote-verbatim PAGE=religion-and-death` then `quote-check`; `make record-prepass` then
+  quote-verbatim IN=religion-and-the-dead` then `quote-check`; `make record-prepass` then
   `record-format`; `source-applicability` over the new keys in three dispatches by group (Japanese
   encyclopedia and cultural-property pages; Chinese pages; the RPG wiki); `entry-drift` on every class
   entry naming the revised village section. Within the spec (FR-012 to FR-014).

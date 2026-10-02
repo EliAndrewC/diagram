@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/v5-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=archetypes SECTION=160
+**Your questions:** Q=0019
 **Your registry keys:** KEY=wuhurec-wanchun, KEY=fukui-kuzuryu-edo-dikes, KEY=wajyu-nogyo, KEY=ishizue-ariake, KEY=people-longgu-shuiche, KEY=njg-horita, KEY=kotobank-tanada, KEY=chikuma-obasute, KEY=bunka-shiroyone, KEY=sakaori-ishizumi, KEY=kotobank-warichi-seido, KEY=kotobank-bunsan-sakuho, KEY=tokyo-ja-kasai-renkon, KEY=katsushika-renkon, KEY=pwsannong-zhuwei
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

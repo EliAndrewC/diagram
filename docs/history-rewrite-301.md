@@ -1,7 +1,7 @@
 # Feature 301: the history rewrite of 2026-10-01 - every commit's old and new id
 
 The GM, 2026-10-01: *"I think I do want to do the git history scrub to free up the 17 megabytes"*. Main's history was
-rewritten to drop the record's BUILT pages (`research/<page>.html`, the collections' pages, `research/citations/`,
+rewritten to drop the record's BUILT pages (`research/<page>.html`, the collections' pages, the citations pages,
 `research/assets/glossary.js`) from every commit from feature 258's `0fef1e6f3` on - the pages were assembled from the
 fragments since then, and feature 301 stopped committing them. Commits before `0fef1e6f3` keep those paths: there they
 were the hand-written source. Every rewritten commit's tree is its original's less those paths; every other commit's

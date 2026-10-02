@@ -38,7 +38,7 @@ from what you find (by the orchestrating session, NOT by you); O, H, U are the O
    done until the wrong section is CORRECTED, cited, in this session - on any page, whatever its prefix - unless it is
    on the do-not-edit list above, in which case the handoff says exactly what the correction is. A search that finds
    nothing is an outcome, not a failure: record it and move on.
-5. **Write.** Each item (or a few closely joined ones) is a question on fields 220-240, or the existing fields question 010 on in-field features: a new fragment
+5. **Write.** Each item (or a few closely joined ones) is a question on fields 220-240, or the existing question 0008 on in-field features: a new fragment
    `research/<page>/NNN-<heading id>.html` at a free prefix in your range, opening with `<h2 id="...">` whose text is
    the question a reader would ask from the map; a `<p><strong>Sources:</strong> ...</p>` roster; the finding; and
    where it drives what a plan draws, the decision in plain words. Footnotes: `<sup class="fn" data-note="<key>"></sup>`

@@ -15,7 +15,7 @@ record reaches every modal without anyone re-typing anything into `classes.py`:
   answers the question.
 - **the SOURCES** (feature 134, GM 2026-08-28: "all of the things that say that there is no reference
   for them should at this point have a reference") - the `**Sources:**` keys those sections cite and
-  the `research/SOURCES.html` registry behind them. The page no longer shows these; the tests over the
+  the registry behind them (`research/sources/`). The page no longer shows these; the tests over the
   record still read them, to prove every entry cites and every source carries a URL where it can be
   read (constitution v2.13.0).
 """

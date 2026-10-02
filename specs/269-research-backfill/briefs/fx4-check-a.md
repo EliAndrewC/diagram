@@ -25,7 +25,7 @@ checks report with `make append`.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/fx4-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/government SECTION=080
+**Your questions:** Q=0115
 **Your registry keys:** KEY=shuson-jawiki, KEY=kotobank-jokamachi, KEY=gogura-kotobank
 
 ## The procedure (check, apply)

@@ -282,7 +282,7 @@
   },
   {
    "id": "W18",
-   "rule": "No paddy basin ring (as recorded, raw and deduped) has an interior angle under 15 degrees (NEEDLE_DEG); this includes the tapering scraps no weld resolves. Stated: test_paddy_fabric.py::test_no_basin_tapers_to_a_point and ::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (comb fans); GM realism ruling 2026-08-17; research/fields 'Minimum basin SIZE'.",
+   "rule": "No paddy basin ring (as recorded, raw and deduped) has an interior angle under 15 degrees (NEEDLE_DEG); this includes the tapering scraps no weld resolves. Stated: test_paddy_fabric.py::test_no_basin_tapers_to_a_point and ::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (comb fans); GM realism ruling 2026-08-17; research/contents.json#fields 'Minimum basin SIZE'.",
    "rows": [
     "R1 test_paddy_fabric.py::test_no_basin_tapers_to_a_point",
     "R1 test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (comb part)",
@@ -415,7 +415,7 @@
   },
   {
    "id": "W26",
-   "rule": "A basin is wide enough to stand in and puddle: working width (area / longest side) over a floor. Stated: research/fields 'Minimum basin SIZE'; future-work 'OPEN 2026-08-19: the paddy area floor cannot see WIDTH' (5.9 ft basins; 9 under 12 ft, 30 under 16 ft on Kashikawa).",
+   "rule": "A basin is wide enough to stand in and puddle: working width (area / longest side) over a floor. Stated: research/contents.json#fields 'Minimum basin SIZE'; future-work 'OPEN 2026-08-19: the paddy area floor cannot see WIDTH' (5.9 ft basins; 9 under 12 ft, 30 under 16 ft on Kashikawa).",
    "rows": [
     "R3 future-work 'OPEN 2026-08-19 (waterfields): the paddy area floor cannot see WIDTH'"
    ],
@@ -577,7 +577,7 @@
   },
   {
    "id": "W36",
-   "rule": "A hamlet's dry field is sized from its population (coarse grain about a third of the diet) whatever the fan_middle knob rolls: a 'wild' middle does not leave the hamlet almost no dry field. Stated: research/fields 'Acreage from population'; future-work 'OPEN 2026-09-28 (269 B07)' (Inashiro 0.42 acre, Mizuguchi 0.41 acre).",
+   "rule": "A hamlet's dry field is sized from its population (coarse grain about a third of the diet) whatever the fan_middle knob rolls: a 'wild' middle does not leave the hamlet almost no dry field. Stated: research/contents.json#fields 'Acreage from population'; future-work 'OPEN 2026-09-28 (269 B07)' (Inashiro 0.42 acre, Mizuguchi 0.41 acre).",
    "rows": [
     "R3 future-work 'OPEN 2026-09-28 (269 B07): a wild fan middle leaves a hamlet almost no dry field'"
    ],
@@ -641,7 +641,7 @@
   },
   {
    "id": "W40",
-   "rule": "A polder dike's widest stretch is at least 1.4x its narrowest (a hand-piled earthwork, never a uniform band). Stated: test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork; research/archetypes 'The perimeter dike followed the natural water edge'.",
+   "rule": "A polder dike's widest stretch is at least 1.4x its narrowest (a hand-piled earthwork, never a uniform band). Stated: test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork; research/contents.json#field-archetypes 'The perimeter dike followed the natural water edge'.",
    "rows": [
     "R1 test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork"
    ],
@@ -737,7 +737,7 @@
   },
   {
    "id": "W46",
-   "rule": "A polder's header reservoir rim never lies on the crop, and the reservoir never sits downhill of the field's highest point. Stated: tests/soak/test_polder_fall_0.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop; research/archetypes polder siting (the source sits above what it waters).",
+   "rule": "A polder's header reservoir rim never lies on the crop, and the reservoir never sits downhill of the field's highest point. Stated: tests/soak/test_polder_fall_0.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop; research/contents.json#field-archetypes polder siting (the source sits above what it waters).",
    "rows": [
     "R1 soak/test_polder_fall_0.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop"
    ],
@@ -947,7 +947,7 @@
   },
   {
    "id": "W59",
-   "rule": "Paddy acreage lands within 15% of the figure the household count implies - no seeds excused. Stated: research/fields 'Acreage from population'; tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47) in test_a_rolled_cohort_passes_the_whole_gate.",
+   "rule": "Paddy acreage lands within 15% of the figure the household count implies - no seeds excused. Stated: research/contents.json#fields 'Acreage from population'; tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47) in test_a_rolled_cohort_passes_the_whole_gate.",
    "rows": [
     "R3 tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47)"
    ],

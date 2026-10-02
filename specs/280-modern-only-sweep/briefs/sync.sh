@@ -18,7 +18,7 @@ L=/diagram/.clones/.tools/logs/sync-280.log
 # commits behind main unseen. Every skip and abort is now logged, and the driver stops on them.
 # Assembled output a session regenerated but did not commit (research/<page>.html, citations/, SOURCES.html, the glossary
 # builds) is derivable, so it is committed here rather than blocking the merge (2026-09-29: V1's check left SOURCES.html).
-GEN='^\.claude/skills/diagram/(research/[a-z-]+\.html|research/contents.json#cities[a-z-]+\.html|research/citations/.*|research/SOURCES\.html|research/assets/glossary(\.js|-variants\.txt)|l7r/diagram/interactive/assets/glossary\.json)$'
+GEN='^\.claude/skills/diagram/(research/[a-z-]+\.html|research/site/.*|research/SOURCES\.html|research/assets/glossary(\.js|-variants\.txt)|l7r/diagram/interactive/assets/glossary\.json)$'
 dirty=$(git -C $C status --porcelain --untracked-files=no | cut -c4-)
 if [ -n "$dirty" ] && [ -z "$(printf '%s\n' "$dirty" | grep -Ev "$GEN")" ]; then
   printf '%s\n' "$dirty" | xargs git -C $C add -- && git -C $C commit -q -m "280: assembled pages a session regenerated and left uncommitted" && echo "$(date -u +%FT%TZ) committed leftover assembled pages" >> $L

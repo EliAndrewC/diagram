@@ -21,43 +21,44 @@ dispatch() { # dispatch <subagent_type> <prompt> -> rc in $T/rc, stderr in $T/er
 }
 rc() { cat "$T/rc"; }
 logged() { grep -rlq "$1" "$GUARD_LOG_ROOT" 2>/dev/null; }
-Q=/diagram/.clones/x/.claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge-land.html
+Q=/diagram/.clones/x/.claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html
 S=/diagram/.claude/skills/diagram/research/sources/010-works-cited/4220-edo-enwiki.html
 
 echo "1. what is refused"
 dispatch record-format "Check ONE entry: $Q and its notes."
 [ "$(rc)" -eq 2 ] && ok "a record-format dispatch naming a question fragment is refused" || no "it was allowed" "(rc=$(rc))"
-grep -q 'make check-bundle PAGE=ways SECTION=010' "$T/err" && ok "...and the refusal carries the command for THAT question" || no "no compliant command" "$(cat "$T/err")"
+grep -q 'make check-bundle Q=0087' "$T/err" && ok "...and the refusal carries the command for THAT question" || no "no compliant command" "$(cat "$T/err")"
 grep -q 'MANIFEST.md' "$T/err" && ok "...and says to name the MANIFEST it prints" || no "the message does not say what to re-send"
 logged repo-path && ok "...recorded blocked/repo-path" || no "repo-path not recorded"
 # GUARD_EDIT_OK: feature 292 - the new record-style check is refused the same way, and told to build ITS bundle
 dispatch record-style "Judge the style of $Q and its notes."
-[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle PAGE=ways SECTION=010 FOR=record-style' "$T/err" && ok "a record-style dispatch into the repository is refused with its own bundle's command" || no "record-style was not refused, or the command lacks FOR=" "$(cat "$T/err")"
+[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle Q=0087 FOR=record-style' "$T/err" && ok "a record-style dispatch into the repository is refused with its own bundle's command" || no "record-style was not refused, or the command lacks FOR=" "$(cat "$T/err")"
 dispatch translation-check "Judge the translations in $Q and its notes."
-[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle PAGE=ways SECTION=010 FOR=translation-check' "$T/err" && ok "a translation-check dispatch into the repository is refused with its own bundle's command" || no "translation-check was not refused, or the command lacks FOR=" "$(cat "$T/err")"
+[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle Q=0087 FOR=translation-check' "$T/err" && ok "a translation-check dispatch into the repository is refused with its own bundle's command" || no "translation-check was not refused, or the command lacks FOR=" "$(cat "$T/err")"
 dispatch source-applicability "Judge the entry $S against its page."
 [ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki' "$T/err" && ! grep -q 'WHOLE=1' "$T/err" && ok "a registry entry gets the KEY= form (the excerpt, for source-applicability)" || no "the key form is wrong" "$(cat "$T/err")"
 # GUARD_EDIT_OK: feature 250 D19 - a source-reader's command is the whole page in parts, never the excerpt
 dispatch source-reader "Read the entry $S and find the passage behind the claim."
 [ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki WHOLE=1' "$T/err" && ok "a source-reader gets KEY= WHOLE=1 - the whole page, not the excerpt" || no "source-reader was not given WHOLE=1" "$(cat "$T/err")"
-dispatch quote-check "Check .claude/skills/diagram/research/contents.json#citiessizing/020-how-densely-is-a-quarter-built.notes.html"
-[ "$(rc)" -eq 2 ] && grep -q 'PAGE=cities/sizing SECTION=020' "$T/err" && ok "a cities/ page and a notes file, relative, are read off the path too" || no "the cities path was not read" "$(cat "$T/err")"
+# GUARD_EDIT_OK: feature 303 - a question's files are research/questions/NNNN-<slug>...; the command names its number
+dispatch quote-check "Check .claude/skills/diagram/research/questions/0151-how-densely-is-a-quarter-built.drawing.notes.html"
+[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle Q=0151' "$T/err" && ok "a drawing page's notes file, relative, is read off the path too" || no "the drawing notes path was not read" "$(cat "$T/err")"
 dispatch source-reader "Read the passage quoted in .claude/skills/diagram/research/SOURCES.html"
-[ "$(rc)" -eq 2 ] && grep -q 'PAGE=<page> SECTION=<question>' "$T/err" && ok "a path the guard cannot map still refuses, with the general form" || no "an unmappable path passed" "(rc=$(rc))"
+[ "$(rc)" -eq 2 ] && grep -q 'Q=<question number>' "$T/err" && ok "a path the guard cannot map still refuses, with the general form" || no "an unmappable path passed" "(rc=$(rc))"
 dispatch record-format "CHECK_BUNDLE_OK=\"x\" read $Q"
 [ "$(rc)" -eq 2 ] && logged CHECK_BUNDLE_OK-no-reason && ok "an escape with no real reason is refused and recorded" || no "a bare escape passed" "(rc=$(rc))"
 
 echo "2. what passes"
-dispatch record-format "Read /tmp/l7r-check/ways-010/MANIFEST.md and the files it lists. Origin: $Q"
+dispatch record-format "Read /tmp/l7r-check/q-0087/MANIFEST.md and the files it lists. Origin: $Q"
 [ "$(rc)" -eq 0 ] && [ ! -s "$T/err" ] && ok "a dispatch naming a bundle passes, silently, even beside an origin path" || no "a bundle dispatch was refused" "(rc=$(rc))"
 logged bundle-named && ok "...recorded permitted/bundle-named" || no "bundle-named not recorded"
 dispatch source-reader "Report per claim whether https://en.wikipedia.org/wiki/Edo says it."
 [ "$(rc)" -eq 0 ] && logged no-repo-path && ok "a dispatch naming no repository file passes (a reader handed URLs)" || no "a URL-only dispatch was refused" "(rc=$(rc))"
 dispatch record-format "CHECK_BUNDLE_OK=\"the glossary term file itself is under review\" read $Q"
 [ "$(rc)" -eq 0 ] && logged check-bundle-ok && ok "an escape with a reason passes and is recorded" || no "a reasoned escape was refused" "(rc=$(rc))"
-dispatch entry-drift "Compare the modal with /diagram/.claude/skills/diagram/research/fields/190-the-wettest.html"
-[ "$(rc)" -eq 2 ] && grep -q "PAGE=fields SECTION=190" "$T/err" && ok "an entry-drift dispatch into the tree is refused too" || no "entry-drift passed" "(rc=$(rc))"
-dispatch spec-fidelity "Review /diagram/.claude/skills/diagram/research/ways/010-x.html"
+dispatch entry-drift "Compare the modal with /diagram/.claude/skills/diagram/research/questions/0007-the-wettest.html"
+[ "$(rc)" -eq 2 ] && grep -q "Q=0007" "$T/err" && ok "an entry-drift dispatch into the tree is refused too" || no "entry-drift passed" "(rc=$(rc))"
+dispatch spec-fidelity "Review /diagram/.claude/skills/diagram/research/questions/0010-x.html"
 [ "$(rc)" -eq 0 ] && ok "an agent that is not a record check is not this guard's business" || no "spec-fidelity was refused" "(rc=$(rc))"
 out=$(printf '{"session_id":"t","tool_name":"Bash","tool_input":{"command":"make done"}}' | ( cd "$T" && "$HOOK" pretool 2>/dev/null )); r=$?
 [ "$r" -eq 0 ] && [ -z "$out" ] && ok "a Bash call is ignored" || no "a Bash call was not ignored" "(rc=$r)"

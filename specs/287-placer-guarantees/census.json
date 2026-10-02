@@ -30,7 +30,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/settlement/shrines_wells/byres.py:draft_byres (the one unguarded placer)",
   "mechanism": "Yard, gardens and shed: settlement/rolling/fit.py:_parts_fit (351) refuses the homestead when _parts_across_stream (359-380) finds the house-to-part line crossing any stream. Farm fixtures: hamletgen/homesteads/fixtures.py:613 refuses across_the_brook (786). Persimmons: fixtures.py:328 does the same.",
-  "sketch": "Give draft_byres (_courtyard_byre_seat, _yard_shed_seat and its spiral) the same across_the_brook refusal and try the next seat. Move round_the_brooks before the homesteads so every bank test reads the final course. FR-013; the shared-bank rule is recorded as a GUESS in research/homesteads.",
+  "sketch": "Give draft_byres (_courtyard_byre_seat, _yard_shed_seat and its spiral) the same across_the_brook refusal and try the next seat. Move round_the_brooks before the homesteads so every bank test reads the final course. FR-013; the shared-bank rule is recorded as a GUESS in research/contents.json#homesteads.",
   "later_stage_risk": "hamletgen/frame.py:round_the_brooks (stage_crossings) re-fillets the brook after every part is placed. It moves the course up to about 8-9 px toward the inside of a bend. A part whose endpoint is kept outside that sliver cannot flip banks, but this rests on the keep-out margins, not on any check.",
   "notes": "Byres (byres.py:338/360 write `of`) have no stream or bank test anywhere in byres.py. Homestead bamboo stands carry no `of`, so the test does not see them.",
   "group": 1
@@ -138,7 +138,7 @@
   "guaranteed": "no",
   "owner": "l7r/diagram/labels/placer.py:place",
   "mechanism": null,
-  "sketch": "Add a cost term (or a hard refusal for point subjects) when another obstacle's gap to the block is at or below the block's gap to its own subject, so a caption that names a neighbor is never cost-0. The cartographic standard's proximity principle (research/presentation, 'Where does a caption sit').",
+  "sketch": "Add a cost term (or a hard refusal for point subjects) when another obstacle's gap to the block is at or below the block's gap to its own subject, so a caption that names a neighbor is never cost-0. The cartographic standard's proximity principle (research/contents.json#map-conventions, 'Where does a caption sit').",
   "later_stage_risk": "The label phase's index differs from the siter's probe (see the previous test).",
   "notes": "At cost 0 the caption is at least 4 ft from other obstacles, and at ring 0 it is 4 ft from its own board: a tie is allowed (the test is strict). At ring > 0 the caption is farther from its board while the others need only 4 ft, so a neighbor can be nearer. Nothing compares the two distances.",
   "group": 1
@@ -1410,7 +1410,7 @@
   "guaranteed": "no",
   "owner": "l7r/diagram/settlement/houses.py:try_place (the size roll, _try_place_bundle)",
   "mechanism": null,
-  "sketch": "Sizes are a position-seeded hash (houses.py:650-661: length factor 0.85-1.35, depth 0.90-1.10 on the nucleated path; wealth tiers on the dispersed path), so variety is statistical, not constrained. Guarantee by drawing sizes from a stratified set per settlement (e.g. a shuffled ladder of length factors) so the spread is fixed by construction. Research: the farmhouse-size spread in research/homesteads.",
+  "sketch": "Sizes are a position-seeded hash (houses.py:650-661: length factor 0.85-1.35, depth 0.90-1.10 on the nucleated path; wealth tiers on the dispersed path), so variety is statistical, not constrained. Guarantee by drawing sizes from a stratified set per settlement (e.g. a shuffled ladder of length factors) so the spread is fixed by construction. Research: the farmhouse-size spread in research/contents.json#homesteads.",
   "later_stage_risk": "None - the drawn size is set at seat time.",
   "notes": "With >=10 houses a violation is very unlikely but not impossible.",
   "group": 4
@@ -1626,7 +1626,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/hamletgen/hinterland/belt.py:belt_polygon (the band) and l7r/diagram/settlement/homestead_parts/stands.py:village_grove (the drawn clumps the test measures)",
   "mechanism": "Guarded: the band's near face is floored at the cluster's median upwind coordinate (belt.py:255-256, fringe_profile), so the POLYGON stands on the windward half; meta windward/wind_source/seat_offwind are written unconditionally (skeleton.py). Unguarded: the test measures the DRAWN clumps' centroid and angular spread, and village_grove filters crowns against every structure, crop and the west sun lane, stage_windbreak dents the band round the title pocket and clamps clumps to the frame, and belt_polygon's ladder falls through to its last rung even if still fouled (belt.py:328-333). Nothing bounds the bearing to 45 degrees or the subtense to 200. Household count: see seating rows.",
-  "sketch": "After village_grove, measure the drawn clumps' bearing and subtense against the cluster and repair (replant the thinned windward stretch, drop a flank arm past the hook) or refuse the band and try the next ladder rung. Research: research/vegetation 'Does a shelter belt wrap the settlement?' (a hook on one or two sides).",
+  "sketch": "After village_grove, measure the drawn clumps' bearing and subtense against the cluster and repair (replant the thinned windward stretch, drop a flank arm past the hook) or refuse the band and try the next ladder rung. Research: research/contents.json#vegetation 'Does a shelter belt wrap the settlement?' (a hook on one or two sides).",
   "later_stage_risk": "stage_windbreak's title-pocket dent and frame clamp; village_grove's per-crown structure filter; the retirement-house/lane re-lays noted in retirement.py (E8) moved belts before.",
   "notes": "len(houses)==households exactly is asserted here too - not guaranteed by stage_homesteads.",
   "group": 4
@@ -1674,7 +1674,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/hamletgen/water/polder.py:walk_pond_uphill (called from stage_polder:142)",
   "mechanism": "walk_pond_uphill (polder.py:30-41) steps the pond against the fall until no sampled rim point is in the envelope - but it is bounded at limit=60 steps (720 px) and returns the last position whether or not it cleared; the rim is sampled at 16 points, so an envelope vertex can still poke between samples. Uphill-of-field is not checked: the start is the ring head plus a stand-off, and nothing asserts the projection is below the envelope's minimum.",
-  "sketch": "Raise instead of returning an uncleared pond (or fall back to a different anchor), test the rim as a polygon against the envelope rather than 16 points, and assert the fall projection before accepting. Rule: the source sits above what it waters (research/archetypes polder siting).",
+  "sketch": "Raise instead of returning an uncleared pond (or fall back to a different anchor), test the rim as a polygon against the envelope rather than 16 points, and assert the fall projection before accepting. Rule: the source sits above what it waters (research/contents.json#field-archetypes polder siting).",
   "later_stage_risk": "Anything that moves the ring canal's head after the walk (the doubling-back stub trim once slid it onto the crop).",
   "notes": "Unit test of the walk on a rectangle exists (tests/hamletgen/test_water.py per the module docstring).",
   "group": 4

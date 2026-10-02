@@ -140,3 +140,13 @@ def test_the_tag_pieces() -> None:
     assert tags.marker() == "<!-- tags: subject=ways,samurai; setting=city; level=detail -->"
     assert ct.matches({"subject": ["samurai"], "setting": ["city"]}, tags) and not ct.matches({"primary": ["samurai"]}, tags)
     assert qs.text_of('<span class="xref">x</span>A <b>b</b>') == "A b" and qs.heading("<p>none</p>") is None
+
+
+def test_a_tool_selects_pages_by_number_file_section_or_tag(tmp_path: pathlib.Path) -> None:
+    """Spec FR-019: `Q=` and `IN=` name a stem, a page, a section (with its subsections) or a tag."""
+    record = qs.load(str(fr.write(tmp_path)))
+    files = lambda term: [p.file for p in record.select(term)]  # noqa: E731
+    assert files("1") == ["0001-lanes.html", "0001-lanes.drawing.html"] and files("0003-rows.html") == ["0003-rows.html"]
+    assert files("countryside") == ["0001-lanes.html", "0001-lanes.drawing.html", "0004-wide-lanes.drawing.html", "0002-bridges.html"]
+    assert files("samurai") == ["0003-rows.html"] and files("0002, 0003") == ["0003-rows.html", "0002-bridges.html"]
+    assert files("nothing-by-this-name") == []

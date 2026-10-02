@@ -128,7 +128,7 @@ def _finish_first_admissible(found: list[tuple[tuple[bool, float], CombCarve]], 
 
 
 FIELD_ACRE_BAND = 0.15
-"""How far a comb fan's drawn paddy may land from the acreage its households need (research/fields 'Acreage from
+"""How far a comb fan's drawn paddy may land from the acreage its households need (research/contents.json#fields 'Acreage from
 population'; the band the household ratchet has always read). The search aims at `tolerance` (6%) inside it."""
 
 

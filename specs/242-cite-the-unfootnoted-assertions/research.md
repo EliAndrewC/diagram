@@ -94,7 +94,7 @@ the wider reading they are backlog: `research/CLAUDE.md` says an absence note *"
 that changes what can be read"*, and a note that was never searched has nothing to re-open FROM. The
 spec takes the wider reading and records why, with the narrow one priced, as decision D1.
 
-<!-- The census counts research/citations/*.html only. citations/<name>.js is DERIVED from the page by
+<!-- The census counts research/questions/*.html only. citations/<name>.js is DERIVED from the page by
      `make citations`, so a grep over both doubles every figure, which it did on the first attempt. -->
 
 ## R5 - what the capitals pass found WRONG, and corrected (2026-09-14, FR-006)

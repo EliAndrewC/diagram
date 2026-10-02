@@ -12,15 +12,13 @@ required declaration would have broken the other features' generators until each
 
 WHAT IS COUNTED - only what the brief assigns (spec, round 4): the `## Your items` section (to the next `## `), and
 the `**Your questions:**` and `**Your pairs**` lines or blocks. Never a "do not edit" paragraph, which names other
-sessions' sections and would count them. In an item line:
-  - each section named: `<page>/NNN` (the last segment of a page's name is accepted as an alias), a backticked `NNN`
-    or a bare range `NNN-MMM` under the page named last in the line, or else under the item list's most-named page;
-  - a range is expanded against the page's actual `NNN-*.html` fragments; code references (`file.py:195-304`) are
-    stripped first;
-  - a line naming no section counts one question per distinct item id (`B30`, `D52`), and at least one.
-In the check-brief form, `PAGE=<p> SECTION=<NNN>` counts one each; a pair (`KIND=X (SECTION=NNN)`) one per section.
-It errs toward over-counting, the safe side for a cap. Prototyped on the real briefs: 269's V2 counts 9, C1 6 and X1
-10; 272's S 8; 271's `g1-check-a` and 269's `h1-check-a` 2 each (plan D1).
+sessions' sections and would count them. Since feature 303 a question is named by its stem number, which is unique
+across the record (`research/questions/NNNN-<slug>.html`):
+  - in the check-brief form, `Q=NNNN` (or `Q=NNNN, NNNN`) counts one each; a pair (`KIND=X (Q=NNNN)`) one per question;
+  - in an item line, every four-digit number inside a backtick span (`0412`, `0215, 0221`) that is a stem on disk;
+    code and fact-check references (`file.py:195-304`, `fc:2113`) are stripped first;
+  - a line naming no question counts one question per distinct item id (`B30`, `D52`), and at least one.
+It errs toward over-counting, the safe side for a cap. Prototyped on the real briefs of 269, 271 and 272 (plan D1).
 
 THE EXEMPT KINDS (spec, Edge Cases). A brief that is not a group's writing declares one line,
 `<!-- page-load: kind=<kind> -->`: `check` (a check-and-apply session, which the cap does not cover), `assertions`
@@ -39,40 +37,18 @@ import sys
 CAP = 4
 KINDS = ("check", "assertions", "split", "handover")
 KIND_LINE = re.compile(r"<!--\s*page-load:\s*kind=([\w-]+)\s*-->")
-NOT_PAGES = {"sources", "citations", "assets"}  # the registry, the assembled citations and the images: never a page
-FRAGMENT = re.compile(r"(\d{3})-.*\.html$")
-CODE_REF = re.compile(r"[\w/.-]+\.(?:py|json|md|js|svg|txt|sh)(?::[\d,-]+)?")
+STEM = re.compile(r"^(\d{4})-[^.]+(?:\.drawing)?\.html$")
+CODE_REF = re.compile(r"[\w/.-]+\.(?:py|json|md|js|svg|txt|sh)(?::[\d,-]+)?|\b[a-z]+:\d[\d,-]*")
+Q_LIST = re.compile(r"Q=(\d{4}(?:\s*,\s*\d{4})*)")
+NUMBER = re.compile(r"(?<![\d.])\d{4}(?![\d])")
 ITEM_ID = re.compile(r"\b[A-Z]{1,2}\d{2,3}\b")
 
 
-def pages(record: pathlib.Path) -> list[str]:
-    """Every research page, as its path under the record (`fields`, `cities/defenses`): a directory holding a question
-    fragment. Derived, never listed, so a page added later is counted without an edit here."""
-    got = set()
-    for f in record.rglob("[0-9][0-9][0-9]-*.html"):
-        rel = f.parent.relative_to(record).as_posix()
-        if rel != "." and rel.split("/")[0] not in NOT_PAGES and not f.name.endswith((".notes.html", ".originals.html")):
-            got.add(rel)
-    return sorted(got)
-
-
-def _aliases(names: list[str]) -> dict[str, str]:
-    """Each page by its full name, and by its last segment where no other page shares it (`defenses`)."""
-    out = {p: p for p in names}
-    last: dict[str, list[str]] = {}
-    for p in names:
-        last.setdefault(p.split("/")[-1], []).append(p)
-    for short, full in last.items():
-        if len(full) == 1:
-            out.setdefault(short, full[0])
-    return out
-
-
-def fragments(record: pathlib.Path, page: str, lo: int, hi: int) -> set[int]:
-    """The page's question numbers in `lo..hi`, from its fragments on disk."""
-    d = record / page
-    got = {int(m.group(1)) for f in d.glob("[0-9][0-9][0-9]-*.html") if (m := FRAGMENT.match(f.name)) and not f.name.endswith((".notes.html", ".originals.html"))}
-    return {n for n in got if lo <= n <= hi}
+def stems(record: pathlib.Path) -> set[int]:
+    """Every question's number in the record (`<record>/questions/NNNN-<slug>.html`). Derived, never listed, so a
+    question added later is counted without an edit here."""
+    q = record / "questions"
+    return {int(m.group(1)) for f in q.glob("[0-9][0-9][0-9][0-9]-*.html") if (m := STEM.match(f.name))} if q.is_dir() else set()
 
 
 def declared(text: str) -> str:
@@ -99,43 +75,25 @@ def assignment_lists(text: str) -> tuple[str, str]:
 
 
 def count(text: str, record: pathlib.Path) -> tuple[int, list[str]]:
-    """(questions assigned, what was counted: `page/NNN` for a section, the item id for a new question)."""
-    alias = _aliases(pages(record))
-    names = sorted(alias, key=len, reverse=True)
-    page_re = "(?<![\\w-])(" + "|".join(re.escape(p) for p in names) + ")" if names else "(?!x)x"
+    """(questions assigned, what was counted: `NNNN` for a question, the item id for a new question)."""
+    on_disk = stems(record)
     items, blocks = assignment_lists(text)
-    sections: set[tuple[str, int]] = set()
-    for p, s in re.findall(r"PAGE=([\w/-]+)\s+SECTION=(\d{3})", blocks):
-        sections.add((alias.get(p, p), int(s)))
-    blocks_left = re.sub(r"PAGE=[\w/-]+\s+SECTION=\d{3}", " ", blocks)
-    for s in dict.fromkeys(re.findall(r"KIND=\w+\s*\(SECTION=(\d{3})\)", blocks_left)):
-        sections.add(("?", int(s)))
-    named = [alias[p] for p in re.findall(page_re + r"[/ ]", items)]
-    main = max(dict.fromkeys(named), key=named.count) if named else None
+    found: set[int] = {int(n) for m in Q_LIST.finditer(blocks) for n in re.findall(r"\d{4}", m.group(1))}
     new: list[str] = []
-    tok_re = re.compile(page_re + r"/(\d{3})(?:-(\d{3}))?|`(\d{3})(?:-(\d{3}))?`|\b(\d{3})-(\d{3})\b")
     for line in re.split(r"\n(?=- )", items):
         if not line.startswith("- "):
             continue
-        got: set[tuple[str, int]] = set()
-        page = main
-        for tok in tok_re.finditer(CODE_REF.sub(" ", line)):
-            if tok.group(1):
-                page, lo, hi = alias[tok.group(1)], int(tok.group(2)), int(tok.group(3) or tok.group(2))
-            elif page is None:
-                continue
-            elif tok.group(4):
-                lo, hi = int(tok.group(4)), int(tok.group(5) or tok.group(4))
-            else:
-                lo, hi = int(tok.group(6)), int(tok.group(7))
-            got |= {(page, n) for n in (fragments(record, page, lo, hi) if hi > lo else {lo})}
+        clean = CODE_REF.sub(" ", line)
+        got = {int(n) for m in Q_LIST.finditer(clean) for n in re.findall(r"\d{4}", m.group(1))}
+        got |= {int(n) for span in re.findall(r"`([^`]*)`", clean) for n in NUMBER.findall(span)}
+        got &= on_disk
         if got:
-            sections |= got
+            found |= got
         else:
             ids = list(dict.fromkeys(ITEM_ID.findall(line.split("**")[0])))
             new += ids or [line[2:].split()[0]]
-    detail = [f"{p}/{n:03d}" for p, n in sorted(sections)] + new
-    return len(sections) + len(new), detail
+    detail = [f"{n:04d}" for n in sorted(found)] + new
+    return len(found) + len(new), detail
 
 
 def load(text: str, record: pathlib.Path) -> tuple[str, int, list[str]]:

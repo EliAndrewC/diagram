@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/a4-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=archetypes SECTION=170, PAGE=archetypes SECTION=620
+**Your questions:** Q=0023, PAGE=archetypes SECTION=620
 **Your registry keys:** KEY=staunton-1797-embassy, KEY=pwsannong-gudai-feiliao
 
 ## The procedure (check, apply)

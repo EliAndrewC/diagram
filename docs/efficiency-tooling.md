@@ -208,8 +208,8 @@ somebody reads.
 
 ## `make record` - the record's pages are derived (feature 258)
 
-`make record` assembles every page of the research record from the per-entry fragments under
-`research/<page>/` and `research/sources/`; `CHECK=1` reports any committed page that differs, in
+`make record` builds the research record's site from its questions under `research/questions/` and the registry's
+fragments under `research/sources/` (features 258, 301, 303); `CHECK=1` reports any committed page that differs, in
 **0.11 s** over the whole record (20 pages, 1,251 fragments). It runs in two places, and the second is
 not redundant: the gate (`tests/interactive/test_record_assembly.py`) and the push
 (`scripts/sync-with-main.sh`), because a record-only change takes the DIRECT route and never reaches the
@@ -218,8 +218,8 @@ gate at all - the same reason `entry-gate.sh` is in both.
 What it saves is not the session's own editing (0.56% of all tool output, and 90% of those reads were
 already windowed) but the CHECKING AGENTS: `record-format`, `quote-check`, `entry-drift` and
 `source-applicability` were spending 23-98% of their whole context on one page to check one entry
-(median 68% over 17 recorded runs). `make record-prepass PAGE=<p> SECTION=<q>` and `make quote-verbatim
-PAGE=<p> SECTION=<q>` name the fragments a check should read; the agents' own contracts tell them to
+(median 68% over 17 recorded runs). `make record-prepass Q=<NNNN>` and `make quote-verbatim
+Q=<NNNN>` name the files a check should read; the agents' own contracts tell them to
 read those and not the page.
 
 `scripts/record-edit-hooks.sh` keeps the fragments the source: an Edit aimed at an assembled page is

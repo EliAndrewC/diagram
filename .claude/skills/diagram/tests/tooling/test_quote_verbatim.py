@@ -18,6 +18,7 @@ import io
 import json
 import os
 import pathlib
+import re
 import urllib.error
 
 REPO = pathlib.Path(__file__).resolve().parents[5]
@@ -123,6 +124,26 @@ RESEARCH = (
 )
 
 
+def _record(tmp_path: pathlib.Path) -> pathlib.Path:
+    """A flat record (feature 303) with one more question, `0005-x`, whose notes are NOTE's seven, cited in order."""
+    from tests import _flat_record as fr
+
+    research = tmp_path / ".claude/skills/diagram/research"
+    research.mkdir(parents=True)
+    fr.write(research)
+    bodies = [re.sub(r' <a class="fnback".*?</a>$', "", m.group(1)) for m in re.finditer(r'<li id="fn-\d+">(.*?)</li>', NOTE)]
+    notes = "".join(f'<li data-note="n{i}">{b.replace("SOURCES.html", "../SOURCES.html")}</li>\n' for i, b in enumerate(bodies, 1))
+    refs = "".join(f' Then more.<sup class="fn" data-note="n{i}"></sup>' for i in range(3, 8))
+    page = (
+        '<h2 id="x">X</h2>\n<!-- tags: subject=ways; setting=countryside; level=detail -->\n'
+        '<p>Rape is an autumn crop. It is sown into the drained stubble<sup class="fn" data-note="n1"></sup> and cut in spring'
+        f'<sup class="fn" data-note="n2"></sup>.</p>\n<p>Others.{refs}</p>\n'
+    )
+    (research / "questions" / "0005-x.html").write_text(page, encoding="utf-8")
+    (research / "questions" / "0005-x.notes.html").write_text(notes, encoding="utf-8")
+    return research
+
+
 def test_footnotes_are_classified_and_a_translation_is_paired_with_its_original():
     notes = {n["id"]: n for n in qv.footnotes(NOTE)}
     assert [notes[f"fn-{i}"]["class"] for i in range(1, 8)] == ["citation", "absence", "grounds", "citation", "citation", "citation", "unlinked"]
@@ -219,31 +240,30 @@ def test_the_live_path_asks_a_refusing_host_once_and_reads_pdf_by_content_type()
 
 
 def test_main_writes_the_report_the_agent_is_handed(tmp_path, capsys):
-    research = tmp_path / ".claude/skills/diagram/research"
-    (research / "citations").mkdir(parents=True)
-    (research / "x.html").write_text(RESEARCH, encoding="utf-8")
-    (research / "citations" / "x.html").write_text(NOTE, encoding="utf-8")
+    _record(tmp_path)
     saved = tmp_path / "pages"
     saved.mkdir()
     _offline(saved, "https://ja.example/wiki/アブラナ", "<p>秋に種をまき</p>")
     out = tmp_path / "report.json"
-    assert qv.main(["x", "--root", str(tmp_path), "--offline", str(saved), "--json", str(out)]) == 0
+    assert qv.main(["0005", "--root", str(tmp_path), "--offline", str(saved), "--json", str(out)]) == 0
     data = json.loads(out.read_text(encoding="utf-8"))
-    assert data["page"] == "x" and len(data["footnotes"]) == 7
+    assert data["page"] == "0005" and len(data["footnotes"]) == 7 and data["footnotes"][0]["question"] == "0005-x.html"
+    assert data["footnotes"][0]["assertion"] == "It is sown into the drained stubble", "the page's own sentence, numbered as its page numbers it"
+    assert data["footnotes"][0]["passages"][0]["quotation"] == "VERBATIM"
     assert "report for quote-check" in capsys.readouterr().out
-    assert qv.main(["absent", "--root", str(tmp_path)]) == 2
-    assert qv.main(["x", "--root", str(tmp_path), "--offline", str(saved)]) == 0, "with no --json the report lands under .git/quote-verbatim/"
-    assert (tmp_path / ".git" / "quote-verbatim" / "x.json").is_file()
+    assert qv.main(["9999", "--root", str(tmp_path)]) == 2
+    assert "make quote-verbatim Q=" in capsys.readouterr().err
+    assert qv.main(["0005", "--root", str(tmp_path), "--offline", str(saved)]) == 0, "with no --json the report lands under .git/quote-verbatim/"
+    assert (tmp_path / ".git" / "quote-verbatim" / "0005.json").is_file()
+    assert qv.main(["--in", "ways", "--root", str(tmp_path), "--offline", str(saved), "--json", str(out)]) == 0, "a section, through the engine"
+    assert {f["question"] for f in json.loads(out.read_text(encoding="utf-8"))["footnotes"]} >= {"0005-x.html", "0002-bridges.html"}
 
 
 def test_a_scoped_check_names_its_notes_and_fetches_nothing_else(tmp_path, capsys):
     assert qv.wanted("") is None and qv.wanted("fn-2, 4-6") == {"fn-2", "fn-4", "fn-5", "fn-6"}
-    research = tmp_path / ".claude/skills/diagram/research"
-    (research / "citations").mkdir(parents=True)
-    (research / "x.html").write_text(RESEARCH, encoding="utf-8")
-    (research / "citations" / "x.html").write_text(NOTE, encoding="utf-8")
+    _record(tmp_path)
     out = tmp_path / "r.json"
-    assert qv.main(["x", "--root", str(tmp_path), "--offline", str(tmp_path), "--notes", "3-4", "--json", str(out)]) == 0
+    assert qv.main(["0005", "--root", str(tmp_path), "--offline", str(tmp_path), "--notes", "3-4", "--json", str(out)]) == 0
     capsys.readouterr()
     assert [f["id"] for f in json.loads(out.read_text(encoding="utf-8"))["footnotes"]] == ["fn-3", "fn-4"]
 
@@ -298,10 +318,7 @@ def test_with_no_offline_directory_the_page_cache_serves_an_exact_copy_only(tmp_
     src = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(src)
     where = pathlib.Path(os.environ["L7R_SOURCES_HOME"])
-    research = tmp_path / ".claude/skills/diagram/research"
-    (research / "citations").mkdir(parents=True)
-    (research / "x.html").write_text(RESEARCH, encoding="utf-8")
-    (research / "citations" / "x.html").write_text(NOTE, encoding="utf-8")
+    _record(tmp_path)
     calls: list[str] = []
 
     def opener(req, timeout=0):
@@ -314,8 +331,8 @@ def test_with_no_offline_directory_the_page_cache_serves_an_exact_copy_only(tmp_
     assert type(got).__name__ == "CachedPages" and got.exact and got.where == where
     src.put(where, "https://ja.example/wiki/アブラナ", "秋に種をまき、冬を越す。")
     out = tmp_path / "report.json"
-    assert qv.main(["x", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
+    assert qv.main(["0005", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
     assert calls == [] and '"VERBATIM"' in out.read_text(encoding="utf-8")
     src.put(where, "https://ja.example/wiki/アブラナ", "秋に種をまき、\n冬を越す。\n", exact=False)
-    assert qv.main(["x", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
+    assert qv.main(["0005", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
     assert len(calls) == 1, "an imported copy is fetched afresh"

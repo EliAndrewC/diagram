@@ -329,7 +329,7 @@
    "summary": "An alleys (accretion) hamlet's rank seats stand up to an eighth of a pitch off their exact rank; a back_lane (planned) hamlet's ranks stay regular, so Mizuguchi's lattice, the finding, is kept.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "It leaves the review finding unfixed on the map it was found on, so it is an exception and is ruled. The previous spec-fidelity round refused keeping the lattice because the proposer never read the form and Sawada (alleys) drew the same lattice; both are now cured: the proposer reads the form and Sawada's ranks spread. What remains is the case the GM's own ruling names as legitimate - 'our research shows' - and the research does show it: research/homesteads 080 reads a back lane as a planning device giving 'a regular layout, right-angled development' (back-lane-enwiki, nucleated-village-enwiki, quoted in its notes). It keeps no behavior the GM asked to change and rests on no engine limitation."
+   "why": "It leaves the review finding unfixed on the map it was found on, so it is an exception and is ruled. The previous spec-fidelity round refused keeping the lattice because the proposer never read the form and Sawada (alleys) drew the same lattice; both are now cured: the proposer reads the form and Sawada's ranks spread. What remains is the case the GM's own ruling names as legitimate - 'our research shows' - and the research does show it: research/contents.json#homesteads 080 reads a back lane as a planning device giving 'a regular layout, right-angled development' (back-lane-enwiki, nucleated-village-enwiki, quoted in its notes). It keeps no behavior the GM asked to change and rests on no engine limitation."
   },
   {
    "id": "D23a-lane-ends-that-serve-nothing",

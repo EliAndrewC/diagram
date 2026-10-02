@@ -68,7 +68,7 @@ def crosses_a_stream(house: Pt, part: Pt, streams: Any) -> bool:
     `Settlement._parts_across_stream` for the homestead's yard, gardens and shed, and `across_the_brook` for the farm
     fixtures and persimmons - and a third time by the finished-map test; all three now call this. The two engine
     copies measured the same thing (a house-to-seat line against every stream segment), so no reading had to be chosen.
-    That the parts share the house's bank is a GUESS recorded in `research/homesteads` (the farmstead's layout)."""
+    That the parts share the house's bank is a GUESS recorded in `research/contents.json#homesteads` (the farmstead's layout)."""
     for rec in streams:
         poly = rec.get("poly") or ()
         for k in range(len(poly) - 1):

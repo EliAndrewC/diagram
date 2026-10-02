@@ -10,6 +10,6 @@ feature 270: the country/village shrine hall's size; feature 269: every section 
 the orchestrator sends it to the owner.
 **New registry entries and glossary terms take their prefix under the host-wide lock**, never "the highest + 10" by
 
-**Your questions:** PAGE=buildings SECTION=700, PAGE=buildings SECTION=710
+**Your questions:** Q=0040, Q=0041
 **Your registry keys:** none - the last group has them
 

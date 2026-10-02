@@ -13,7 +13,7 @@ committed asset that a test holds in sync - the DRY-by-derivation pattern this f
 The footnotes are 35 to 65 percent of every research page's bytes (`research/contents.json#homesteads`: 157.5 KB, of which
 58.9 KB is its 88 footnotes; `cities/capitals.html`: 190.9 KB, 64.9 KB) and the GM expects them to grow - longer
 quotations, explanatory text around them. This feature (1) moves every page's footnotes into a CITATIONS PAGE,
-`research/citations/<name>.html` beside `research/<name>.html`, without duplicating their content - the research
+`research/questions/<name>.html` beside `research/<name>.html`, without duplicating their content - the research
 page's hover still shows the footnote's text, loaded from the citations page's content rather than re-typed; (2) puts
 at the top of each citations page a list of the works its footnotes cite - for each, what it is (name, authors, one to
 three sentences on what the work is) and why we consider it a good and valid source for what we look up in it, with
@@ -29,7 +29,7 @@ the tooling and tests that read the record, and the procedure documents.
 ## Functional requirements
 
 - **FR-001 A citations page beside every research page.** For every research page `research/<name>.html` there is
-  `research/citations/<name>.html` (`research/citations/cities/<name>.html` for a `cities/` page), hand-authored HTML
+  `research/questions/<name>.html` (`research/questions/<name>.html` for a `cities/` page), hand-authored HTML
   like the rest of the record (feature 194's ruling: the record IS HTML, edited as a page), loading the same
   stylesheet, glossary and script. Its body is: a heading naming the page it serves and a link back to it; the WORKS
   section of FR-003; then the page's footnotes, `<section class="footnotes"><ol><li id="fn-n">...</li>` - every
@@ -42,7 +42,7 @@ the tooling and tests that read the record, and the procedure documents.
   (`href="citations/<name>.html#fn-n"`; `../citations/cities/<name>.html#fn-n` from `cities/`); the
   `<section class="footnotes">` is replaced by a short section linking to the citations page. Hovering a reference
   shows the SAME note as before - the footnote's content, key link and quote - which the page reads from a DERIVED
-  asset, `research/citations/<name>.js` (`citations/cities/<name>.js`), written from the citations page by a make
+  asset, `research/questions/<name>.js` (`citations/cities/<name>.js`), written from the citations page by a make
   target (`make citations`) and committed; a test proves each committed asset equals its derivation, so the note's
   text exists in exactly ONE hand-authored place and the asset can never disagree with it. Why an asset and not a
   fetch: the pages are opened from disk (`file://`), where a browser refuses a script's fetch of a sibling file and
@@ -96,7 +96,7 @@ the tooling and tests that read the record, and the procedure documents.
   resolves - the file, the id), `test_record_format.py` (a citations page is a record page: it loads the glossary,
   its visible text carries no session note and no history, its terms count as used). The `quote-check` agent takes
   the citations page as where the notes are; `record-format` takes a citations page as a page in scope. The
-  `browser` gate key (`scripts/gate-stamp.py`) covers `research/citations/**` as it covers `research/*.html`. The
+  `browser` gate key (`scripts/gate-stamp.py`) covers `research/questions/**` as it covers `research/*.html`. The
   code that decides where a key links (`link_target`, `not_read`, `citation_lines` in `test_sources.py`) moves
   into `interactive/sources.py`, because the make target needs it and a tool under `l7r/` does not import from
   `tests/`; the test imports it from there - still one body.
@@ -127,7 +127,7 @@ the tooling and tests that read the record, and the procedure documents.
   its `SOURCES.html` entry; every other occurrence (`citations/homesteads.html`, `citations/fields.html`) lies
   between the FR-003 derivation markers, where the derivation test pins it to the registry's text. Editing the
   registry paragraph and running `make citations` changes both citations pages; a grep for the paragraph outside
-  `research/citations/` finds the registry's copy and no other.
+  `research/questions/` finds the registry's copy and no other.
 - **SC-005** `make page-check` and `make done` green; the derivation is exercised by the tests that compare it.
 
 ## Decisions Recorded

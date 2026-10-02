@@ -3,7 +3,7 @@
 The site is built (`make record`) and not committed, so a test that opened a built page would read nothing in a fresh
 clone, or a stale copy in an old one. Every test over the record reads it here instead, through `sources.record_text`
 - the same reading the engine does. `RecordPath` is a path to where a page IS (`research/questions/<file>`, or the
-registry's `research/SOURCES.html`), so a test keeps its path arithmetic (`relative_to`, `.name`, `/`); its text is a
+registry's `SOURCES.html`), so a test keeps its path arithmetic (`relative_to`, `.name`, `/`); its text is a
 question page as its reader sees it - with its cross-link and its *Not to be confused with:* list - and `numbered`
 gives the same page with its references numbered from 1 and its notes by number, as its small page carries them.
 """

@@ -52,7 +52,7 @@ def test_only_a_new_or_changed_pair_is_owed_and_a_moved_one_is_not(tmp_path: pat
     _git(d, "config", "user.name", "t")
     _note(
         d,
-        "p/010-a.notes.html",
+        "questions/0010-a.notes.html",
         '<li data-note="k">「An oak」 (translated from the Japanese by this project; original: 「樫」)</li>\n'
         '<li data-note="j">「A pine」 (translated from the Japanese by this project; original: 「松」)</li>\n',
     )
@@ -60,10 +60,10 @@ def test_only_a_new_or_changed_pair_is_owed_and_a_moved_one_is_not(tmp_path: pat
     _git(d, "commit", "-qm", "base")
     _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
     # the oak moves to another question, split out; the pine's translation changes; a cedar is new
-    (d / R / "p/010-a.notes.html").unlink()
+    (d / R / "questions/0010-a.notes.html").unlink()
     _note(
         d,
-        "q/020-b.notes.html",
+        "questions/0020-b.notes.html",
         '<li data-note="k">「An oak」 (translated from the Japanese by this project; <span class="orig" data-orig="k#1"></span>)</li>\n'
         '<li data-note="j">「A pine tree」 (translated from the Japanese by this project; original: 「松」)</li>\n'
         '<li data-note="c">「A cedar」 (translated from the Japanese by this project; original: 「杉」)</li>\n',
@@ -82,17 +82,17 @@ def test_a_new_term_gloss_in_our_own_words_is_owed_too(tmp_path: pathlib.Path) -
     _git(d, "init", "-q", "-b", "main")
     _git(d, "config", "user.email", "t@t")
     _git(d, "config", "user.name", "t")
-    _note(d, "p/010-a.notes.html", "")
-    (d / R / "p/010-a.html").write_text('<p>written 垣根 (kakine, "hedge")</p>', encoding="utf-8")
+    _note(d, "questions/0010-a.notes.html", "")
+    (d / R / "questions/0010-a.html").write_text('<p>written 垣根 (kakine, "hedge")</p>', encoding="utf-8")
     _git(d, "add", "-A")
     _git(d, "commit", "-qm", "base")
     _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
     assert to.owed(d) == []
-    (d / R / "p/010-a.html").write_text('<p>written 垣根 (kakine, "fence")</p>', encoding="utf-8")
+    (d / R / "questions/0010-a.html").write_text('<p>written 垣根 (kakine, "fence")</p>', encoding="utf-8")
     assert [(r[1], r[4]) for r in to.owed(d)] == [("a term's gloss", "垣根")]
 
 
 def test_the_command_scopes_to_one_question(capsys) -> None:  # noqa: ANN001
-    assert to.main(["--root", str(REPO), "--page", "homesteads", "--section", "010"]) == 0
+    assert to.main(["--root", str(REPO), "--q", "0041"]) == 0
     out = capsys.readouterr().out
     assert out.startswith("translation-owed: ") and all(line.startswith(("translation-owed", "==", "  ")) for line in out.splitlines())

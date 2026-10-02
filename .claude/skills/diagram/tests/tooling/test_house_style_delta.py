@@ -69,8 +69,8 @@ def test_an_untracked_file_is_scanned(tmp_path: pathlib.Path) -> None:
 
 def test_a_line_inside_a_multi_line_quotation_is_exempt(tmp_path: pathlib.Path) -> None:
     """FR-008a: the changed line carries no opening marker of its own, so the FILE decides."""
-    root = _tree(tmp_path, {"research/a.html": "<blockquote>\nfirst line\n</blockquote>\n"})
-    _write(root, "research/a.html", "<blockquote>\nfirst line\nthe colour of the sky\n</blockquote>\n")
+    root = _tree(tmp_path, {"research/questions/0001-a.html": "<blockquote>\nfirst line\n</blockquote>\n"})
+    _write(root, "research/questions/0001-a.html", "<blockquote>\nfirst line\nthe colour of the sky\n</blockquote>\n")
     assert chk.findings(root) == []
 
 

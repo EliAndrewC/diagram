@@ -90,7 +90,7 @@ that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
 7. **Asides.** A parenthesis or italic afterthought carrying a real finding should be its own bullet.
 8. **History here, the maps elsewhere.** In a RESEARCH section, any statement of what our maps draw - a size chosen, a
    knob, a convention, "the rule the map follows" - is a FAIL: it belongs in the rendering section about it
-   (`research/rendering/<page>.html`). A rendering section is judged by the same guide and must still cite what it
+   (the question's drawing page, `research/questions/NNNN-<id>.drawing.html`). A rendering section is judged by the same guide and must still cite what it
    rests on. The link between the two is written by the assembly; a hand-typed one is a FAIL.
 9. **Cuts.** Framing the whole record presumes ("to scale", "the real numbers"); a restatement of a number already
    given; a statement that says only what the map visibly shows, with no finding (but a statement of HOW the map

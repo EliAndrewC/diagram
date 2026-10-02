@@ -24,7 +24,7 @@ placer holds them `BAR_MARGIN_PX` stricter, the placer-stricter-by-a-hair rule t
 because the planting reads the drawn records and the seat reads the parts they are drawn from.
 
 WHERE THE SEATS GO. Behind the house first - the homestead's own windward trees stand at its back (the yashikirin's
-north and west, research/homesteads) and its front is the yard's and the garden's sun: the lattice is taken nearest a
+north and west, research/contents.json#homesteads) and its front is the yard's and the garden's sun: the lattice is taken nearest a
 point half the reach behind the house's back wall. A lattice of `SEAT_PITCH_BS` (a clump's radius times the square root
 of two, so every point of a lattice cell lies under a crown) anchored on the house.
 
@@ -65,7 +65,7 @@ BAR_MARGIN_PX = 0.5
 #: the side is than a foot deeper: the wood is taken as a block BEHIND its own house before it spreads to the flanks,
 #: where the row's neighbors stand their gardens (a front row at `BUNDLE_PITCH` lost a third of its seats to a round
 #: reservation - `test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest`). A MAP DRAWING CONVENTION on the
-#: record's "the windward grove at the back" (research/homesteads, the yashikirin's north and west): the figures are
+#: record's "the windward grove at the back" (research/contents.json#homesteads, the yashikirin's north and west): the figures are
 #: the placer's, not the record's.
 FOCUS_DEPTH = 0.7
 LATERAL_WEIGHT = 2.0

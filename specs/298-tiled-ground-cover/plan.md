@@ -14,7 +14,7 @@ render them.
 - X.15 (build the blocked ground once): each zone's bare ground is built ONCE as a shape from the keep-outs the scatter already
   files (`KeepoutGrid`), not tested per point - the per-point throw is what goes.
 - XII (decisions recorded): the three covers are map drawing conventions; the record entries that describe the glyphs are edited
-  (research/vegetation, research/water) and the modals' prose (`interactive/classes/greenery.py`) checked by `entry-drift`.
+  (research/contents.json#vegetation, research/contents.json#water) and the modals' prose (`interactive/classes/greenery.py`) checked by `entry-drift`.
 - XIII (no regressions): the base worktree `/tmp/base298` at the commit before this feature's code is the baseline;
   measured before/after back to back.
 - XIV: a defect found on the way is fixed in the work.
@@ -80,7 +80,7 @@ in marks). The windbreak grove's culms (`groves._draw_grove`) are untouched (FR-
 - Tests: the blade/reed/dot tests are rewritten against the covers (a cover per zone, its shape leaves out a clearing, the tile is
   seamless and at the stated density, the block is right after the land); the re-throw tests retire with the re-throw.
 - `tools/placement_stages.py`: its watermark list names `_covers` in place of `_blade_groups`.
-- `dev/performance.md`: the blade-merge section gets a closing note; research/vegetation and research/water entries that describe
+- `dev/performance.md`: the blade-merge section gets a closing note; research/contents.json#vegetation and research/contents.json#water entries that describe
   the glyphs say the cover is a tiled pattern (a map drawing convention); `entry-drift` on each modal written from them.
 
 ### F. Measurement

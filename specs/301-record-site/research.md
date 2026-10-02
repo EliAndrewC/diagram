@@ -11,7 +11,7 @@ pays about a second once per process, which is what lets every reader leave the 
 ## R2 - who reads a built page today
 
 Observed 2026-10-01; method: grep over the engine, `scripts/` and `tests/` for reads of `research/<page>.html`,
-`research/citations/`, `SOURCES.html`, `record_pages`, `research_pages`, `_parsed`. Engine: `interactive/sources.py`
+`research/questions/`, `SOURCES.html`, `record_pages`, `research_pages`, `_parsed`. Engine: `interactive/sources.py`
 (modal questions, sources, registry), `interactive/citations.py` (`derive` reads the citations page and the
 registry from disk), `record/store.py` (`check`, `write_pages`, page enumeration by `os.listdir`). Scripts:
 `_quote_verbatim.py`, `_record_prepass.py` (the registry keys), `_entry_owed.py` (git diff of page files and

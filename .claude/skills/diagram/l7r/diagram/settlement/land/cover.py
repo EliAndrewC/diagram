@@ -34,7 +34,7 @@ from .tiles import Cover
 WOOD_FRINGE_FT = 8.0
 """How far grass reaches in under a wood's edge before the kept-clear floor (GM 2026-09-27, Inashiro: highlighting the
 scrub showed "broad swaths of the forest with scrubland underneath" - "a tiny bit of overlap" at the edge is fine). The
-record already said the grass fringe "thins out inside the first few paces" (research/homesteads, the woodland-edge
+record already said the grass fringe "thins out inside the first few paces" (research/contents.json#homesteads, the woodland-edge
 mantle-and-fringe); the woods were handed the marsh's 46 ft reed feather instead, so blades ran 46 ft under the belt.
 A few paces is the record's own figure, so this is ACCURATE as a degree; 8 ft is the calibration within it."""
 

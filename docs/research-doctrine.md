@@ -3,7 +3,7 @@
 *Project reference, split out of [`../CLAUDE.md`](../CLAUDE.md) so it is loaded on demand rather
 than in every session's context. CLAUDE.md keeps the six rules in one line each; this file is the
 full record with the GM's words. The operative form of the citation rules - the footnote shape, the
-citations pages, the download list - is
+notes and the works cited, the download list - is
 [`.claude/skills/diagram/research/CLAUDE.md`](../.claude/skills/diagram/research/CLAUDE.md), which
 auto-loads when a session edits the record; the principles are constitution XII.*
 
@@ -57,8 +57,9 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   the checker's anchor). The one exception is the GM's own campaign notes, canon rather than
   evidence (GM 2026-09-07: *"it is correct to make L7R setting notes an exception to the citation
   rule, so that should indeed be a documented exception"*).
-- **The record is HTML**, hand-authored as one fragment per question (`research/<page>/NNN-<heading id>.html`,
-  its notes beside it), and BUILT by `make record` into the site a reader opens (feature 301, GM 2026-10-01):
+- **The record is HTML**, hand-authored as one stem per question (`research/questions/NNNN-<heading id>.html`, how
+  our maps draw it as its `.drawing.html`, each page's notes beside it; feature 303), tagged and grouped by
+  `research/tags.json` and `research/contents.json`, and BUILT by `make record` into the site a reader opens (feature 301, GM 2026-10-01):
   `research/site/`, a page per question with its notes numbered from 1 and the works it cites at its foot, and
   the whole record on one page - never committed, built on main by render-sync. The maps link each question's
   small page, and every pointer to the research names its fragment (`scripts/check-research-pointers.py`).
@@ -162,7 +163,7 @@ output and 90% of them already ask for a window, but one research page was **23%
 that entered a checking agent's context** - a median of 68% over seventeen recorded runs - to check one
 entry (`specs/258-split-the-record-into-per-entry-files/research.md` R2, R3).
 
-So a question is `research/<page>/NNN-<heading id>.html`, its footnotes are the `.notes.html` beside it,
+So a question is `research/questions/NNNN-<heading id>.html` (feature 303), its footnotes are the `.notes.html` beside it,
 a source is `research/sources/NNNN-<key>.html`, and `make record` writes the pages a reader opens. The
 operative rules - how to find an entry without reading a page, how to add a question or a footnote, what
 to hand a check - are in `.claude/skills/diagram/research/CLAUDE.md`.

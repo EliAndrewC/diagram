@@ -37,7 +37,7 @@ added to the water only if the stream is still lost after that.
 
 ### Edge Cases
 
-- The pond's embankment stays bare (research/water 285: a reservoir's bank is kept dry and firm); only the watercourses' margin goes.
+- The pond's embankment stays bare (research/contents.json#water 285: a reservoir's bank is kept dry and firm); only the watercourses' margin goes.
 - A watercourse along a marsh's edge gets the bank band only on the marsh's side.
 
 ## Requirements *(mandatory)*

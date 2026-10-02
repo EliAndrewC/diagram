@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/a3-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=archetypes SECTION=172, PAGE=archetypes SECTION=200
+**Your questions:** Q=0024, PAGE=archetypes SECTION=200
 **Your registry keys:** KEY=guixin-zashi-bieji, KEY=zhwiki-guixin-zashi, KEY=guangdong-xinyu-22, KEY=nongzheng-quanshu-41, KEY=chinese-units-enwiki
 
 ## The procedure (check, apply)

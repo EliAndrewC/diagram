@@ -159,7 +159,7 @@ building or district (`Subject("area", ...)` through `_draw_seated_caption`), an
 
 ## OWED AT CONVERSION (269's research, 2026-09-28): what the scripted city generator must draw differently
 
-Feature 269 read these questions for the city tier (research/cities; `specs/269-research-backfill/outcomes.md`
+Feature 269 read these questions for the city tier (research/contents.json#cities; `specs/269-research-backfill/outcomes.md`
 section 3). The hand-drawn maps are frozen, so each is owed by the city tier's conversion (`migration-plan.md`), and
 the rows marked GM wait on a ruling that the conversion puts to the GM through `escalation-check`.
 

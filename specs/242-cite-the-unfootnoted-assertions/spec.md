@@ -79,7 +79,7 @@ however they are dressed. Feature 238 had a grounds note refused by `quote-check
 prohibition, after writing a warning about that risk into the note's own comment.
 
 **FR-005 - the note lives on the citations page.** The `<li id="fn-n">` goes on
-`research/citations/<name>.html` with its back link, the `<sup class="fn">` reference goes at the
+`research/questions/<name>.html` with its back link, the `<sup class="fn">` reference goes at the
 assertion on the research page, and `make citations` derives `citations/<name>.js`. A new registry key
 carries both write-ups - *What it is* and *Why it applies, and its limits* - before it is cited.
 

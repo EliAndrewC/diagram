@@ -1,6 +1,6 @@
 """How a caption may be cut into lines (feature 266; the cutting rule is feature 133 T39's, lifted here unchanged).
 
-The GM's wrap rule (research/presentation, "Labels on maps (cartographic label placement)"): one line if that
+The GM's wrap rule (research/contents.json#map-conventions, "Labels on maps (cartographic label placement)"): one line if that
 clears the sheet, else the first of two or three lines that does. The placer asks it at every seat, one line first.
 """
 

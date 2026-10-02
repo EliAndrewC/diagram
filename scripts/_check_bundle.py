@@ -12,8 +12,8 @@ So a check reads COPIES, and this writes them - with the prepass output the chec
 and a MANIFEST naming each copy's origin, because a finding has to cite the file the session will edit.
 The agent's reply is its report, counts first and passes in one line each (feature 250 D8: the harness refuses a subagent's report file).
 
-    _check_bundle.py PAGE --section S [--out DIR] [--extra PATH ...] [--no-quotes]
-        one question: its fragment and notes, the prepass, the quote-verbatim report, the registry
+    _check_bundle.py Q [--out DIR] [--extra PATH ...] [--no-quotes]
+        one question (feature 303: its number, `0412`, or a page's file name): its page(s) and notes, the prepass, the quote-verbatim report, the registry
         entries its notes cite, the glossary's variant index - for quote-check and record-format;
         with --kind <Class> (and --no-quotes), the modal written from it too - for entry-drift
     _check_bundle.py --key KEY [--out DIR]
@@ -211,14 +211,14 @@ NOTES_BUDGET = 12_000
 STYLE = pathlib.Path(".claude/skills/diagram/research/STYLE.md")
 
 
-def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
+def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
                  notes: frozenset[str] = frozenset(), for_: str = "all") -> int:
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
-    fragments = fragments_for(page, section, str(root))
+    fragments = fragments_for(q, str(root))
     if not fragments:
-        print(f"check-bundle: SECTION={section!r} matched no question of {page}", file=sys.stderr)
+        print(f"check-bundle: Q={q!r} names no question - name one by its number, e.g. make check-bundle Q=0041", file=sys.stderr)
         return 2
     found_kind = kind_docstring(root, kind) if kind else None
     if kind and found_kind is None:
@@ -244,18 +244,18 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
             keys += cited_keys((out / name).read_text(encoding="utf-8"))
     want = PARTS[for_]
     if "prepass" in want:
-        code, text = run_script("_record_prepass.py", [page, "--root", str(root), "--section", section], root)
+        code, text = run_script("_record_prepass.py", [q, "--root", str(root)], root)
         (out / "prepass.txt").write_text(text, encoding="utf-8")
-        rows.append(("prepass.txt", f"make record-prepass PAGE={page} SECTION={section}", "for record-format: the WORDS TO RULE ON and the pattern candidates"))
+        rows.append(("prepass.txt", f"make record-prepass Q={q}", "for record-format: the WORDS TO RULE ON and the pattern candidates"))
         if code:
             print(text, file=sys.stderr)
             return code
     if quotes and "quote" in want:
-        code, text = run_script("_quote_verbatim.py", [page, "--root", str(root), "--section", section, "--json", str(out / "quote-verbatim.json")], root)
+        code, text = run_script("_quote_verbatim.py", [q, "--root", str(root), "--json", str(out / "quote-verbatim.json")], root)
         if notes and not code:
             text = scoped_verbatim(out, text)
         (out / "quote-verbatim.txt").write_text(text, encoding="utf-8")
-        rows.append(("quote-verbatim.txt", f"make quote-verbatim PAGE={page} SECTION={section}", "for quote-check: which quotations are on their pages, character for character"))
+        rows.append(("quote-verbatim.txt", f"make quote-verbatim Q={q}", "for quote-check: which quotations are on their pages, character for character"))
         if code:
             print(text, file=sys.stderr)
             return code
@@ -266,16 +266,16 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         if src is not None:
             rows.append((copy(src, out, f"sources/{key}.html"), str(src.relative_to(root)), f"the registry entry of `{key}`"))
     if "styleprepass" in want:
-        code, text = run_script("_style_prepass.py", [page, "--root", str(root), "--section", section], root)
+        code, text = run_script("_style_prepass.py", [q, "--root", str(root)], root)
         (out / "style-prepass.txt").write_text(text, encoding="utf-8")
-        rows.append(("style-prepass.txt", f"make style-prepass PAGE={page} SECTION={section}", "for record-style: the metric figures with no conversion (each a FAIL) and every lead line to rule on"))
+        rows.append(("style-prepass.txt", f"make style-prepass Q={q}", "for record-style: the metric figures with no conversion (each a FAIL) and every lead line to rule on"))
         if code:
             print(text, file=sys.stderr)
             return code
     if "translations" in want:
-        code, text = run_script("_translation_owed.py", ["--root", str(root), "--page", page, "--section", section], root)
+        code, text = run_script("_translation_owed.py", ["--root", str(root), "--q", q], root)
         (out / "translations.txt").write_text(text, encoding="utf-8")
-        rows.append(("translations.txt", f"make translation-owed PAGE={page} SECTION={section}", "for translation-check: each owed translated quotation, its translation and its original"))
+        rows.append(("translations.txt", f"make translation-owed Q={q}", "for translation-check: each owed translated quotation, its translation and its original"))
         if code:
             print(text, file=sys.stderr)
             return code
@@ -286,7 +286,7 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
     for path in extra:
         src = (root / path) if not pathlib.Path(path).is_absolute() else pathlib.Path(path)
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
-    (out / MANIFEST).write_text(manifest(out, f"{page}, question {section}" + ("" if for_ == "all" else f", for {for_}"), rows), encoding="utf-8")
+    (out / MANIFEST).write_text(manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -346,16 +346,16 @@ def scoped_verbatim(out: pathlib.Path, full_text: str) -> str:
     return "\n".join(lines) + f"\n  (scoped to the {len(kept)} footnote(s) of the notes being re-checked)\n"
 
 
-def print_notes(root: pathlib.Path, page: str, section: str, keys: frozenset[str]) -> int:
+def print_notes(root: pathlib.Path, q: str, keys: frozenset[str]) -> int:
     """`make notes`: the named notes of one question and the blocks carrying them, and nothing else - what a
     session needs to edit a few notes, where the first page session dumped whole notes files and wide `sed`
     ranges of large fragments, 17,000 to 20,000 characters apiece (feature 250, recommendation 4)."""
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
-    found = fragments_for(page, section, str(root))
+    found = fragments_for(q, str(root))
     if not found or not keys:
-        print(f"notes: PAGE={page} SECTION={section} KEYS=<key,key> - {'no such question' if not found else 'name the keys'}", file=sys.stderr)
+        print(f"notes: Q={q} KEYS=<key,key> - {'no such question' if not found else 'name the keys'}", file=sys.stderr)
         return 2
     for rel in found:
         text = (root / rel).read_text(encoding="utf-8")
@@ -422,8 +422,7 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("page", nargs="?", default="", help="a research page: ways, cities/sizing")
-    ap.add_argument("--section", default="", help="one question: its prefix (010) or part of its heading id")
+    ap.add_argument("q", nargs="?", default="", help="one question: its number (0412) or a page's file name (feature 303)")
     ap.add_argument("--key", default="", help="one registry key, for a source bundle")
     ap.add_argument("--whole", action="store_true", help="with --key: the whole page in parts, not the excerpt - for source-reader (D19)")
     ap.add_argument("--question", default="", help="with --whole: the research question the page is read for, recorded on the sources-consulted ledger (feature 288)")
@@ -439,23 +438,23 @@ def main(argv: list[str] | None = None) -> int:
     root = pathlib.Path(args.root).resolve()
     if args.key:
         return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole, args.question)
-    if not args.page or not args.section:
-        ap.error("PAGE and --section, or --key")
+    if not args.q:
+        ap.error("Q (a question's number), or --key")
     wanted = frozenset(k.strip() for k in args.notes.split(",") if k.strip())
     if args.print_notes:
-        return print_notes(root, args.page.removesuffix(".html"), args.section, wanted)
-    out = pathlib.Path(args.out or DEFAULT_ROOT / f"{slug(args.page)}-{slug(args.section)}{'' if args.for_ == 'all' else '-' + args.for_}")
-    page = args.page.removesuffix(".html")
-    batches = [] if wanted or args.for_ != "quote-check" else note_batches(root, page, args.section)
+        return print_notes(root, args.q, wanted)
+    out = pathlib.Path(args.out or DEFAULT_ROOT / f"q-{slug(args.q)}{'' if args.for_ == 'all' else '-' + args.for_}")
+    q = args.q
+    batches = [] if wanted or args.for_ != "quote-check" else note_batches(root, q)
     if len(batches) > 1:
         print(f"check-bundle: the notes are over {NOTES_BUDGET:,} bytes - {len(batches)} quote-check bundles, one agent each:")
-        codes = [entry_bundle(root, page, args.section, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_)
+        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_)
                  for i, b in enumerate(batches, start=1)]
         return max(codes)
-    return entry_bundle(root, page, args.section, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_)
+    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_)
 
 
-def note_batches(root: pathlib.Path, page: str, section: str) -> list[list[str]]:
+def note_batches(root: pathlib.Path, q: str) -> list[list[str]]:
     """The question's note keys in runs of at most `NOTES_BUDGET` bytes of notes each, in note order (a single note
     over the budget is a run of its own). One run when they fit - the ordinary bundle."""
     sys.path.insert(0, str(HERE))
@@ -463,7 +462,7 @@ def note_batches(root: pathlib.Path, page: str, section: str) -> list[list[str]]
 
     batches: list[list[str]] = [[]]
     size = 0
-    for rel in fragments_for(page, section, str(root)):
+    for rel in fragments_for(q, str(root)):
         if not rel.endswith(".notes.html"):
             continue
         for m in _NOTE_LI.finditer((root / rel).read_text(encoding="utf-8")):

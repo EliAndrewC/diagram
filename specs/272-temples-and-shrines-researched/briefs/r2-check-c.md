@@ -26,7 +26,7 @@ stub's path; fill it in. It refuses a key another clone already holds - then use
 Session 1 researched this group and committed; its handoff is `specs/272-temples-and-shrines-researched/briefs/r2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=religion-and-death SECTION=210
+**Your questions:** Q=0226
 **Your registry keys:** KEY=ranzan-temple-register, KEY=ranzan-kinsenji, KEY=ranzan-koshoji, KEY=ranzan-soshinji, KEY=ranzan-anyoji, KEY=ranzan-kamagata-hachiman, KEY=jinja-goshi-jawiki, KEY=amagasaki-teramachi, KEY=miyazu-teramachi, KEY=eijuji-shinshiro, KEY=licheng-chenghuangmiao-zhwiki, KEY=sanyuan-chenghuangmiao-zhwiki, KEY=zhangde-chenghuangmiao-zhwiki, KEY=pingyao-gucheng-zhwiki, KEY=bicchu-sojagu-jawiki, KEY=shinoda-2004-edo-shrines, KEY=kamigamo-shake-plan
 
 ## The procedure (check, apply)

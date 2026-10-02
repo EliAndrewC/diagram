@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/v6-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=vegetation SECTION=340
+**Your questions:** Q=0079
 **Your registry keys:** KEY=esj-yashikirin-regions, KEY=chaen-jawiki, KEY=kotobank-shiboku-sanso, KEY=biwa-jawiki, KEY=kotobank-magusaba, KEY=biodic-kusayama, KEY=takamori-karishiki, KEY=aso-kayaba, KEY=kitamoto-magusaba, KEY=fuchu-magusaba-jawiki, KEY=hanamoku-enoki, KEY=ichirizuka-jawiki, KEY=kotobank-ichirizuka, KEY=sukumo-charcoal, KEY=fcp-gyoaido-kiln, KEY=mokutan-jawiki
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

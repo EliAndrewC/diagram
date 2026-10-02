@@ -59,7 +59,7 @@
 - `l7r/diagram/interactive/sources.py`, `l7r/diagram/interactive/citations.py` (new), `l7r/diagram/tools/citations_asset.py`
   (new), `l7r/diagram/_invocation.py`, `Makefile` (`citations`)
 - `research/assets/record.js`, `research/assets/record.css`; every `research/*.html`, `research/contents.json#cities*.html`;
-  `research/citations/**` (new: 15 pages + 15 derived scripts); `research/sources/`
+  `research/questions/**` (new: 15 pages + 15 derived scripts); `research/sources/`
 - `.claude/agents/source-applicability.md` (new), `quote-check.md`, `record-format.md`
 - `tests/interactive/test_footnotes.py`, `test_sources.py`, `test_record.py`, `test_record_format.py`,
   `test_citations.py` (new), `tests/tools/test_citations_asset.py` (new), `tests/test_task_research_boxes.py`,

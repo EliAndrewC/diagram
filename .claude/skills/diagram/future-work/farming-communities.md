@@ -118,7 +118,7 @@ grove - the reservation keeps lanes off a household's seats, it does not answer 
 (The entry as it stood:)
 
 The record gives the floor the old copse entry lacked: each homestead that keeps a wood keeps 6,000-28,000 sq ft of
-it (research/vegetation 210), and 269 E6 rolls it per homestead (log-uniform, a GUESS) and fills the copse to what the
+it (research/contents.json#vegetation 210), and 269 E6 rolls it per homestead (log-uniform, a GUESS) and fills the copse to what the
 belt leaves of the sum (`homestead_parts/groves.py` `HOMESTEAD_WOOD_FT2`, `village_grove(area=)`, the `CanopyArea`
 raster, half- and quarter-step top-up passes). **Measurement** (`meta.homestead_wood_ft2`, rolled / drawn, the pool
 regenerated after the landing's third review round, 2026-09-28): Inashiro 13,059 / 10,539, Kashikawa 11,523 / 8,658,
@@ -135,11 +135,11 @@ self-measured density (the old entry's lesson: a density on a self-measured exte
 
 The settlement-reviews at the 269 landing: with `meta.fan_middle` = wild, `waterfields/comb.py` `fan_toe_hem` keeps the
 dry hem only on the toe's last third of the fall, and **Inashiro draws 2 dry plots (0.42 acre, from 20 plots and 3.64
-acres on main) and Mizuguchi 3 (0.41 acre, from 16 and 2.51)** - about 0.03 acre a household, while research/fields
+acres on main) and Mizuguchi 3 (0.41 acre, from 16 and 2.51)** - about 0.03 acre a household, while research/contents.json#fields
 ("Acreage from population") sizes the paddy on coarse grain being about a third of the diet. **Mechanism**: the knob
 removes the middle's hem and nothing places the dry band anywhere else. **The research question** (constitution XII, so
 no number is picked by eye): where did a fan-toe hamlet with a wild middle grow its coarse grain - on the raised ground
-the houses stand on, on a lower slope or levee, or as winter barley on the drained paddy (research/fields, "Did a paddy
+the houses stand on, on a lower slope or levee, or as winter barley on the drained paddy (research/contents.json#fields, "Did a paddy
 grow a second crop over the winter?")? **Sketch** once answered: the dry band goes to the named ground at the acreage
 the sizing rule leaves, or the winter crop is recorded and the sizing rule says so.
 
@@ -162,7 +162,7 @@ engine fixes; the round-2 reviews re-measure them.
 - **Belt bamboo reads as grass** (Sawada F3, Mizuguchi N1): the culm marks share the scrub grass's size and yellow-green.
   Sketch: draw the belt's bamboo as a small clustered stand, or in a culm color no grass uses.
 - **Coppice lots read as stamped discs** (Kashikawa F5, Sawada F4): the new stocking fills a near-round 12-sided outline
-  edge to edge. Sketch: bound a lot by what research/vegetation 140 names (a path, a stream, the slope) and roughen it.
+  edge to edge. Sketch: bound a lot by what research/contents.json#vegetation 140 names (a path, a stream, the slope) and roughen it.
 - **The burial ground beside the title placard** (Kashikawa F2): the glyph stood 23 ft left of the placard on its center
   line and read as its ornament. Sketch: the title pocket treats feature glyphs and their clearings as keep-outs.
 - **A needle join** (Mizuguchi round 1 F4, round 2 F3) - CLOSED by feature 287 (`settle_ends` relays a needle end as a
@@ -191,7 +191,7 @@ engine fixes; the round-2 reviews re-measure them.
 
 `settlement/_knobs.py` `byre_form` rolls `courtyard` (the inner stable) / `yard_shed` (the outer stable) /
 `detached_commons` at 0.6 / 0.3 / 0.1. The record found the beast living with its household and no page describing a
-shed several households kept in common or one at the village edge (research/homesteads 300), and homesteads/060 now
+shed several households kept in common or one at the village edge (research/contents.json#homesteads 300), and homesteads/060 now
 says a byre on the commons "is a GUESS and not a second form to roll against the homestead's own". **Measurement**:
 Inashiro (seed 4) and Sawada (seed 24) roll `detached_commons` and draw it. **Mechanism**: the form was kept as a rare
 labeled guess when B16 added the two household forms. **Sketch**: drop `detached_commons` from the knob (or weight it
@@ -200,7 +200,7 @@ the inner-commons-or-fringe question this replaces are closed (`closed.md`).
 
 ## OPEN 2026-09-28 (269 B32): grow-out hamlet or fry village - a knob the record supports, owed
 
-The GM's rulings of 2026-09-28 retired the duck pen and did not rule on the fry pond. The record (research/archetypes
+The GM's rulings of 2026-09-28 retired the duck pen and did not rule on the fry pond. The record (research/contents.json#field-archetypes
 200) reads two kinds of dike-pond village: a grow-out village that buys its fry (from one township's West River
 landings by Jiujiang) and keeps no fry pond, and a fry village where about seven in ten of the water is nursery.
 **Measurement**: `hamletgen/pondstock.py` makes the smallest parcel in ten a fry pond, which matches neither;
@@ -1980,7 +1980,7 @@ not others."* Sketch when it comes: a `season` knob on the spec (spring / summer
 read by the field renderer (flooded vs drained vs winter crop), by a `farmstead_fixtures` row for the
 rick (harvest and winter only, at the yard's edge) and by a hasa pass in the fields; the checks that
 read `meta.farm_fixtures` already carry the declaration shape. The research is now recorded (269 B05): the
-winter barley on a drained paddy and the rick on the reaped paddy or its bund (research/fields); the GM's deferral
+winter barley on a drained paddy and the rick on the reaped paddy or its bund (research/contents.json#fields); the GM's deferral
 stands, so nothing is drawn.
 
 ## OPEN 2026-08-27 (settlement-review at the T99 acceptance): the south well stands in the commons, not a dooryard
@@ -2207,7 +2207,7 @@ every map's packing, so it belongs to a feature that can re-roll the cohort and 
 **Measured** (Sawada): the head race leaves the brook at `#6C9CBE` (128,167,191) - darker and more saturated than the
 brook's own `#9CB4C8` (168,187,199) - and at 6.0 px against the brook's 7, so it is 86% of the trunk's width. At 9x the
 dug ditch can read as the principal watercourse. The mouth half is done (269 B22: the race now opens out of the brook's
-bank, research/water 310, `hamletgen/water/brook.py` `open_race_mouth`); the width and the hue are what remain.
+bank, research/contents.json#water 310, `hamletgen/water/brook.py` `open_race_mouth`); the width and the hue are what remain.
 **Mechanism**: both widths are the water-width ladder's own figures, drawn by RANK rather than discharge, and the hues
 are the supply/brook pair every map uses; changing either for this junction trades a junction-scale misread for a
 map-scale one. **Sketch**: judge the new mouth at 9x in a settlement-review first; only if the race still reads as the

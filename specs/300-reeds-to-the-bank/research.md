@@ -17,5 +17,5 @@ The GM, after the feature landed: "irrigated drainage ditches at the bottom of t
 clearance. which I think should probably be fixed in the same way." The cause was a second leftover margin (observed 2026-10-01, method: reading `land/wet.py`): the marsh was cut
 10 ft off every paddy's outline (`drawn_ground`'s `field_pad`, and the reeds' keep-out ring), "the same 10 px pad as the old edge
 test" - a thrown reed's, not a finding. The marsh is now cut at the paddy's edge; the collector drain along it is a watercourse,
-so the bank band lines it. The scrub's own 6 ft margin off a field (research/vegetation, the crop margin: bund grass kept cut)
+so the bank band lines it. The scrub's own 6 ft margin off a field (research/contents.json#vegetation, the crop margin: bund grass kept cut)
 is a finding and stays.

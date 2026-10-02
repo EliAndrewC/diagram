@@ -148,3 +148,19 @@ def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, cap
     assert "KIND=registry only" in capsys.readouterr().err
     assert rp.main(["registry", "kyo-jawiki", "--root", str(a), "--url", "https://ja.wikipedia.org/wiki/Kyo"]) == 0
     assert src.read(where)[-1]["outcome"] == "cited:kyo-jawiki"
+
+
+def test_a_question_takes_the_next_number_with_no_gap_and_a_stub_the_build_refuses_until_tagged(tmp_path) -> None:
+    """Feature 303: a question's number is its identity, so the numbers run on (no gap of ten); the stub's tags marker
+    names no real tag, so `make record` refuses the question until it is tagged."""
+    mirror, a = _world(tmp_path)
+    q = a / rp.DIRS["question"]
+    q.mkdir(parents=True)
+    (q / "0243-the-last.html").write_text("x", encoding="utf-8")
+    (q / "0243-the-last.notes.html").write_text("x", encoding="utf-8")
+    path = rp.reserve("question", "a-new-question", a)
+    assert path.name == "0244-a-new-question.html"
+    text = path.read_text(encoding="utf-8")
+    assert text.startswith('<h2 id="a-new-question">') and "<!-- tags: subject=<subject>;" in text
+    assert rp.reserve("question", "another", a).name == "0245-another.html"
+    assert rp.reserved("question", 244, mirror, "a-new-question")

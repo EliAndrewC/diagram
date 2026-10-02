@@ -38,7 +38,7 @@ religion-and-death 540 ("Where do a hamlet's dead lie?"): `own_ground` (a burial
 - `Read` 160, its notes and 206 in ONE message; `Edit`. In `.claude/skills/diagram`: `make record && make citations`,
   the four record tests (`tests/interactive/test_footnotes.py test_citations.py test_sources.py test_record_format.py`),
   and `python3 scripts/check-question-size.py` from the clone root.
-- Check: `make check-bundle PAGE=religion-and-death SECTION=160 FOR=quote-check` and `... FOR=record-format` (and 206
+- Check: `make check-bundle Q=0235 FOR=quote-check` and `... FOR=record-format` (and 206
   if edited), both agents in the background in one message; `make apply-edits FROM=<each output_file>`, then by hand
   what it refuses; re-check once what moved.
 - Commit, with the message `269 R1 amend: where a hamlet's dead lie is a knob (273's 540); the village ground sized by the

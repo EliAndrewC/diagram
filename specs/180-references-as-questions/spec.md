@@ -120,7 +120,7 @@ research entry and renames no heading.
   `research/([a-z-]+\.md)`, which cannot match a file in a subdirectory, so an entry naming
   `research/contents.json#cities<x>.md` would resolve to no sources and no questions, silently. No class does that
   today (the 51 entries name only the six top-level files), so nothing on a page changes; the pattern
-  MUST accept one directory level, and a test MUST prove an entry naming `research/contents.json#citiesfabric.md`
+  MUST accept one directory level, and a test MUST prove an entry naming `research/cities/fabric.md`
   resolves. It is fixed now because this feature builds the URL from that same match, and a town or
   city vocabulary will need it.
 - **FR-013** The SVG and the PNG are untouched (feature 134 FR-010); this is a change to the HTML target

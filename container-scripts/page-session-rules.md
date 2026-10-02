@@ -32,10 +32,11 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   English translation marked as one (the original after). A source that cannot be read is not cited. A source only
   the GM can fetch goes at the END of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in its format.
 - The record is written for a casual reader: glossary tooltips for terms, session notes in HTML comments, nothing
-  about what an entry used to say. Never edit an assembled page; edit the fragment and run `make record`.
+  about what an entry used to say. Never edit a built page; edit the question's file (`research/questions/NNNN-<id>.html`, its `.drawing.html`, its
+  `.notes.html`), keep its tags marker filled from `research/tags.json`, and run `make record`.
 - Checks read BUNDLES made by `make check-bundle`, never a path under `/diagram`; run the mechanical pre-pass the
   record's CLAUDE.md names before each check.
-- **Every page read is on the sources-consulted ledger** (feature 288). `make source-pages ... QUESTION=<page/NNN>`
+- **Every page read is on the sources-consulted ledger** (feature 288). `make source-pages ... QUESTION=<NNNN>`
   prints each page's earlier reads and their outcomes before it fetches: check them - a page already `rejected` for
   the same question is not re-read without a reason. Record every page's outcome with `make source-outcome URL=<u>
   OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable`; `make sources-consulted URL=<u>` looks one up.

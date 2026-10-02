@@ -68,7 +68,7 @@ def trim_receding_ends(cols: Sequence[tuple[float, float]], drop: float) -> list
     THE BELT STANDS ACROSS THE WIND (settlement-review of Sawada at the 269 landing). Where a cluster lies along the wind,
     the column at the belt's end leans on a house far downwind of the rest - Sawada's end column stood 766 ft behind its
     neighbor - and the band followed it into an arm lying along the wind: 500 ft of one row of trees, 35-60 ft across,
-    sheltering nothing, where research/vegetation asks a belt never thinner than 80 ft. A column that recedes more than a
+    sheltering nothing, where research/contents.json#vegetation asks a belt never thinner than 80 ft. A column that recedes more than a
     belt's own depth is not the windward fringe any more; the belt ends at the column before it."""
     out = list(cols)
     while len(out) > 2 and out[1][1] - out[0][1] > drop:

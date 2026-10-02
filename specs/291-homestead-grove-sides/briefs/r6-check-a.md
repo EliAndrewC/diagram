@@ -10,12 +10,12 @@ followed, one side or both, frontage and spacing, where the fields lay, how long
 pointer to it in the LINEAR section of "Does a hamlet have to be nucleated at all?". Its handoff, with the section ids and new keys, is
 `specs/291-homestead-grove-sides/briefs/r6-handoff.md` - read it first for the ids.
 
-**Your questions:** the sections the handoff names (PAGE=homesteads)
+**Your questions:** the sections the handoff names (IN=homesteads)
 **Your registry keys:** the new keys the handoff names
 
 ## The procedure (check, apply)
 
-1. In the background, in one message, for each question: `make check-bundle PAGE=homesteads SECTION=<q> FOR=quote-check`
+1. In the background, in one message, for each question: `make check-bundle Q=<NNNN> FOR=quote-check`
    for `quote-check` and `... FOR=record-format` for `record-format`; and for each new key `make check-bundle KEY=<k>
    FOR=source-applicability` for `source-applicability` (in `.claude/skills/diagram`), each naming its own MANIFEST.md.
 2. `make apply-edits FROM=<each output_file>`; by hand only what it refuses or lists as `EDIT: none`, in one message.

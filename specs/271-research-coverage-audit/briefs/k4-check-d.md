@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/k4-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=towns SECTION=100, PAGE=towns SECTION=240
+**Your questions:** PAGE=towns SECTION=100, Q=0125
 **Your registry keys:** none - the last group has them
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

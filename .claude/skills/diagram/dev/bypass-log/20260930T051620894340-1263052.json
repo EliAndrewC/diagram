@@ -3,5 +3,5 @@
   "target": "review-accept",
   "commit": "d9a3db90e",
   "outcome": "permitted",
-  "why": "review-accept mizuguchi F2: the reviewer's own words: by design, and where the field path joins its bund is a labeled GUESS in research/fields"
+  "why": "review-accept mizuguchi F2: the reviewer's own words: by design, and where the field path joins its bund is a labeled GUESS in research/contents.json#fields"
 }

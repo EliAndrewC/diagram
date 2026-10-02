@@ -575,8 +575,9 @@ record:         ## [docs] build the record's site, research/site/, from its ques
 
 # GUARD_EDIT_OK: feature 301 FR-015 - a new operation, `fragment-move`: a question's fragment renamed or moved with every
 # pointer to it, so a reorder or a retitle never leaves a pointer behind. Nothing loosened.
-fragment-move:  ## [docs] move or rename a question's fragment with its notes and originals, and rewrite every pointer to it - the record's own links, the Entry: lines, the code and docs (feature 301)   FROM=research/<page>/<prefix>-<id>.html TO=research/<page>/<prefix>-<id>.html
-	@test -n "$(FROM)" -a -n "$(TO)" || { echo "make fragment-move FROM=research/<page>/<prefix>-<id>.html TO=research/<page>/<prefix>-<id>.html" >&2; exit 2; }
+# GUARD_EDIT_OK: feature 303 - fragment-move now moves a question's STEM (every page, notes and originals file) by its new name or number.
+fragment-move:  ## [docs] rename or renumber a question - every file of its stem - and rewrite every pointer to it - the record's own links, about: markers, confusables, the Entry: lines, the code and docs (features 301, 303)   FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html
+	@test -n "$(FROM)" -a -n "$(TO)" || { echo "make fragment-move FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html" >&2; exit 2; }
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_fragment_move.py" "$(FROM)" "$(TO)" --root "$$(git rev-parse --show-toplevel)"
 
 
@@ -1100,29 +1101,32 @@ agent-census:   ## [project] what each subagent check has cost, from the session
 ##  OUT=<json>     also write the rows to this file
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_agent_census.py" $(if $(SINCE),--since "$(SINCE)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
-quote-verbatim: ## [project] is every quoted passage on the page it cites, character for character - run BEFORE quote-check   PAGE=hamlets [OUT=<json>]
-##  PAGE=<name>    a research page (`hamlets`, `cities/tango`); its citations page is read beside it
+# GUARD_EDIT_OK: feature 303 - the record's page directories are gone: Q= names questions by number, IN= a section or a tag; no guard changes.
+quote-verbatim: ## [project] is every quoted passage on the page it cites, character for character - run BEFORE quote-check   Q=0412 | IN=homesteads [NOTES=1-4] [OUT=<json>]
+##  Q=<NNNN>       one or more questions, by number (both pages) or a page's file name; its own notes are read beside it
+##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
+##  NOTES=<n,n-m>  only these notes of each page, by the number its page shows them under
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
-	@if [ -z "$(PAGE)" ]; then printf 'make quote-verbatim: PAGE=<research page name> is required - e.g. make quote-verbatim PAGE=hamlets\n' >&2; exit 2; fi
+	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make quote-verbatim: Q=<question number> or IN=<section or tag> is required - e.g. make quote-verbatim Q=0041\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - NOTES= scopes the new quote-verbatim operation to the notes a check is about; no guard changes.
-# GUARD_EDIT_OK: feature 250 - SECTION= is passed through: research/CLAUDE.md documented it and the rule dropped it, so both sizing runs checked all 11 notes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(NOTES),--notes "$(NOTES)",) $(if $(SECTION),--section "$(SECTION)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
-record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a research page - run BEFORE record-format   PAGE=hamlets
-##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
-	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
-# GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
+# GUARD_EDIT_OK: feature 303 - Q= (questions by number), IN= (a section or a tag) or Q=SOURCES replace PAGE= SECTION=; no guard changes.
+record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a question - run BEFORE record-format   Q=0412 | IN=homesteads | Q=SOURCES
+##  Q=<NNNN>       one or more questions, by number (both pages) or a page's file name; `SOURCES` for the registry
+##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
+	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make record-prepass: Q=<question number> or IN=<section or tag> is required - e.g. make record-prepass Q=0041\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
 
-translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [PAGE=homesteads SECTION=010]
-# GUARD_EDIT_OK: feature 292 - a new read-only operation (which translations owe their check); no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(PAGE),--page "$(PAGE)" --section "$(SECTION)",)
+# GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
+translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
 
-style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   PAGE=homesteads SECTION=010
-##  PAGE=<name> SECTION=<question>   the question (its file prefix or heading text)
-# GUARD_EDIT_OK: feature 292 - a new read-only operation (the style prepass record-style is handed); no guard changes.
-	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ]; then printf 'make style-prepass: PAGE=<page> SECTION=<question> is required - e.g. make style-prepass PAGE=homesteads SECTION=010\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)"
+# GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
+style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
+##  Q=<NNNN>       the question, by number (both pages) or a page's file name
+	@if [ -z "$(Q)" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)"
 
 # GUARD_EDIT_OK: feature 250 D14 - a new operation (report every research question over the size cap); no guard changes.
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
@@ -1133,9 +1137,10 @@ open-questions: ## [project] every guess and every unfound source, read from the
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_open_questions.py" --root "$$(git rev-parse --show-toplevel)"
 
 # GUARD_EDIT_OK: feature 250 - a new operation (print the named notes of one question, not the whole file); no guard changes.
-notes: ## [project] print the named notes of ONE question and only the blocks of its fragment that carry them - for editing a few notes without reading the whole file (feature 250)   PAGE=homesteads SECTION=040 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
-	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
+# GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
+notes: ## [project] print the named notes of ONE question and only the blocks of its page that carry them - for editing a few notes without reading the whole file (feature 250)   Q=0041 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
+	@if [ -z "$(Q)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: Q=<question number or page file> KEYS=<key,key> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)" --notes "$(KEYS)" --print-notes
 
 # GUARD_EDIT_OK: feature 274 D5 - two new operations (read a coordination file's matching lines; append one line without reading it); no guard changes.
 lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
@@ -1148,8 +1153,9 @@ append: ## [project] append ONE line to a coordination file without reading or p
 
 # GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
 # GUARD_EDIT_OK: feature 274 D4 - KEY_CAP_OK='<reason>' passes a write session's key cap; make exports it to the recipe as it is, so no change below.
-reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused)   KIND=glossary|registry KEY=<term or key> [KEY_CAP_OK='<reason>']
-	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
+# GUARD_EDIT_OK: feature 303 - KIND=question: a new question's identity number, reserved under the same lock.
+reserve: ## [project] reserve the next glossary, registry-entry or question number under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused; feature 303: a question's stub carries a tags marker to fill)   KIND=glossary|registry|question KEY=<term, key or heading id> [KEY_CAP_OK='<reason>']
+	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 288 FR-005 - an optional URL=, nothing loosened: a registry stub then names its source and the sources-consulted ledger marks it cited.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",)
 
@@ -1193,20 +1199,23 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
 
 # GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
-check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   PAGE=ways SECTION=010 | KEY=edo-enwiki
-##  PAGE= SECTION=   one question: fragment, notes, prepass, quote-verbatim, cited registry entries, the variant index
+# GUARD_EDIT_OK: feature 303 - Q= (a question by number or page file) replaces PAGE= SECTION=; no guard changes.
+check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   Q=0087 | KEY=edo-enwiki
+##  Q=<NNNN>         one question (both pages; a page's file name for one): pages, notes, prepass, quote-verbatim, cited registry entries, the variant index
 ##  KEY=<key>        one source: its registry entry and its saved page
-##  OUT=<dir>        default /tmp/l7r-check/<page>-<section> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches   KIND=<modal class> adds its docstring, for entry-drift   NOTES=<key,key> a RE-check of those notes only   FOR=quote-check|record-format|entry-drift only that check's parts   WHOLE=1 with KEY= the whole page in parts, for source-reader (D19)
-	@if [ -z "$(KEY)" ] && { [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ]; }; then printf 'make check-bundle: PAGE=<page> SECTION=<question> (or KEY=<registry key>) is required - e.g. make check-bundle PAGE=ways SECTION=010\n' >&2; exit 2; fi
+##  OUT=<dir>        default /tmp/l7r-check/q-<question> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches   KIND=<modal class> adds its docstring, for entry-drift   NOTES=<key,key> a RE-check of those notes only   FOR=quote-check|record-format|entry-drift only that check's parts   WHOLE=1 with KEY= the whole page in parts, for source-reader (D19)
+	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>) is required - e.g. make check-bundle Q=0087\n' >&2; exit 2; fi
 ##  QUESTION=<q>     with KEY= WHOLE=1: the research question the page is read for, on the sources-consulted ledger (feature 288)
 # GUARD_EDIT_OK: feature 288 D3 - an optional QUESTION=, nothing loosened: a WHOLE=1 read is a research read and is ledgered with it.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(PAGE)" --section "$(SECTION)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",)
+# GUARD_EDIT_OK: feature 303 - the question is passed as Q, not PAGE --section; nothing loosened.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(Q)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
 ##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=
-##  QUESTION=<q>   the research question the pages are read for (page/NNN), recorded on the sources-consulted ledger
+##  QUESTION=<q>   the research question the pages are read for (its number, NNNN - feature 303), recorded on the sources-consulted ledger
+# GUARD_EDIT_OK: feature 303 - help text only: a question is named by its number now; nothing loosened.
 ##  REFRESH=1      fetch again even where the page cache holds a copy younger than seven days
 # GUARD_EDIT_OK: feature 288 - two optional variables, nothing loosened: QUESTION= reaches the ledger line the save now
 # appends (each URL's earlier reads are printed first), and REFRESH=1 is read from make's exported environment by the cache.
@@ -1214,7 +1223,8 @@ source-pages: ## [project] save the full visible text of the named pointers, wit
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(QUESTION),--question "$(QUESTION)",)
 
 # GUARD_EDIT_OK: feature 288 - three new operations (the sources-consulted ledger's outcome, its lookup, and the one-time seed and page-cache import); no guard changes.
-source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger - every page a research pass reads (feature 288)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<page/NNN>]
+# GUARD_EDIT_OK: feature 303 - help text only: QUESTION= names a question's number now.
+source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger - every page a research pass reads (feature 288)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>]
 	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",)
 

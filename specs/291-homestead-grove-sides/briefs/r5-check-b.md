@@ -9,7 +9,7 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 groves, and that a linear hamlet's farms front a street along the road; and to `vegetation/154` that a farm drawn with
 its own grove carries its bamboo inside that grove. Its handoff is `specs/291-homestead-grove-sides/briefs/r5-handoff.md`.
 
-**Your questions:** PAGE=homesteads SECTION=150; PAGE=vegetation SECTION=154
+**Your questions:** Q=0031; PAGE=vegetation SECTION=154
 **Your registry keys:** none
 
 ## The procedure (check, apply)

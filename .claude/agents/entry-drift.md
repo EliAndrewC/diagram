@@ -28,9 +28,9 @@ was 55-65% of a check's context and five to twelve times what the check read of 
 without them. Everything you need is in the bundle or on the web.
 
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
-paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
-beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
-`research/sources/`), each of which is thirty entries read to check one. A missing bundle is the
+paths it names instead - a question's page, `research/questions/NNNN-<heading id>.html` (or its `.drawing.html`), and
+the `.notes.html` beside it - and never a built page or a whole directory (`research/site/`, `research/questions/`,
+`research/sources/`), each of which is hundreds of entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
 ## Your report: the counts first, then only what the session must act on (feature 250)
@@ -95,7 +95,7 @@ subject - the data tags (`Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:`) are
 **The distinction that matters most, because it is the whole reason you exist.** A research section
 changes for two quite different reasons, and only one of them touches a modal:
 
-- The record was MAINTAINED - a footnote moved onto a citations page, a session note turned into an HTML
+- The record was MAINTAINED - a footnote moved into its notes file, a session note turned into an HTML
   comment, a citation re-pointed, a passage given in translation, an anchor renamed. Nothing a reader is
   told about the thing on the map has changed. That is IN-STEP, and it is the common case.
 - A FINDING moved - an assertion was corrected, narrowed, reversed or added; a number changed; a label

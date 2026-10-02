@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 
 # THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6; 269 B34 re-read the options - the
-# premodern plantings only, research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)'): one hamlet is one type.
+# premodern plantings only, research/contents.json#field-archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)'): one hamlet is one type.
 DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "tea dike"}
 # THE POND'S WATER INSET INSIDE ITS PARCEL (feature 280 M58, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html): 23 ft of planted dike round the
 # water leaves about six parts in ten of a parcel water, the reading of Qu Dajun's figures for Jiujiang (1678) - the
@@ -200,7 +200,7 @@ class LandUseMixin:
         # case only: a partial overlay's unconverted plots are ordinary textured comb paddies already.
         # THE DIKE CROP AND THE LEFTOVERS ARE KNOBS (feature 150, GM 2026-08-28 choosing audits A6 and B2).
         # dike_crop: mulberry (桑基, the silk case), fruit (果基, the oldest) or tea - the premodern plantings
-        # (research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)'; the modern cane, banana and vegetable dikes are not drawn, the GM 2026-09-28),
+        # (research/contents.json#field-archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)'; the modern cane, banana and vegetable dikes are not drawn, the GM 2026-09-28),
         # one hamlet one planting. leftover: what an unconverted parcel reads as - standing rice, or none at all
         # (the block wholly converted; the caller passes fraction 1.0).
         if dike_crop not in DIKE_CROP_CLASS:
@@ -488,7 +488,7 @@ class LandUseMixin:
         # hedgerows of low bush, drawn as dark runs broken between bushes - the form that tells it from the mulberry's
         # loose crowns at fit zoom. Fruit (lychee, longan, citrus): standard trees at ~18 ft on the band's centerline.
         # The pitches are drawing calibrations from each plant's habit, not surveyed dikes (nothing read gives a
-        # spacing along a dike, research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)') - labeled so in the class entries.
+        # spacing along a dike, research/contents.json#field-archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)') - labeled so in the class entries.
         if crop == "mulberry":
             for t in mulberry_row_ts(DIKEPOND_WATER_INSET):  # the planted rows across the band
                 for x, y in walk(s_w + t * (s_b - s_w), 4.4):

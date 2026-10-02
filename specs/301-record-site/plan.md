@@ -13,7 +13,7 @@ The record stays written as fragments; what changes is what `make record` writes
    map render depending on a build having run.
 2. **`make record` writes a site, not pages.** Under `research/site/` (gitignored): a home page, one parent page per
    current page, one small page per question and per registry entry, and `all.html`, the single page. The old
-   per-page files (`research/<page>.html`, `research/citations/`, `SOURCES.html`) are no longer written at all.
+   per-page files (`research/<page>.html`, `research/questions/`, `SOURCES.html`) are no longer written at all.
 3. **Pointers name fragments.** The modal `Entry:` lines and every pointer in code, docs and specs name a fragment
    path; a script sweeps today's ~2,500 occurrences, a check fails the gate and the push on one that does not
    resolve, and `make fragment-move` moves a fragment with its pointers.
@@ -143,7 +143,7 @@ Layout under `research/site/`:
 `research_questions` returns `../../../research/site/<page dir>/<heading id>.html` for each question. The `Entry:`
 line names fragments:
 
-    Entry: research/archetypes/120-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/rendering/archetypes/050-how-our-maps-draw-dike-ponds-sangji-yutang.html
+    Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
 
 in the order the class author quotes them (spec 180 D4 kept). The parser reads paths; the heading comes from the
 fragment. `check-entry-headings.py`, `_entry_owed.py`, `entry-gate.sh` and `_check_bundle.py`'s Entry reading move
@@ -151,7 +151,7 @@ to the same form. The sweep converts every `Entry:` (R5 counts them).
 
 ### D4. Out of git, onto main (Phase 4)
 
-- `.gitignore`: `research/*.html`, `research/{cities,rendering,rendering/cities}/*.html`, `research/citations/`,
+- `.gitignore`: `research/*.html`, `research/{cities,rendering,rendering/cities}/*.html`, `research/questions/`,
   `research/site/`, `research/assets/glossary.js`; `git rm --cached` of every assembled output (FR-009).
 - `sync-with-main.sh` push block: `make record CHECK=1` (now: builds cleanly) and `make glossary CHECK=1` (its JSON
   asset is still committed and still checked) stay; the message names the new meaning.

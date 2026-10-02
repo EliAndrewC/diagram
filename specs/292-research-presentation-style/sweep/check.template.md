@@ -32,7 +32,7 @@ them. Its handoff is `specs/292-research-presentation-style/sweep/{page}-{group}
      several bundles (the notes in batches); each is its own agent;
    - `record-format` on each research and rendering section: `... FOR=record-format`;
    - `entry-drift` for each class in `MODALS=`: `make check-bundle PAGE={page} SECTION=<id> KIND=<class>
-     FOR=entry-drift EXTRA="research/rendering/{page}/<the rendering fragment>"`, and say in the dispatch that the
+     FOR=entry-drift EXTRA="research/questions/{page}/<the rendering fragment>"`, and say in the dispatch that the
      modal is judged against both sections together;
    - `translation-check`, only if `make translation-owed PAGE={page} SECTION=<id>` lists pairs (and the same for the
      rendering section): `make check-bundle PAGE={page} SECTION=<id> FOR=translation-check`.

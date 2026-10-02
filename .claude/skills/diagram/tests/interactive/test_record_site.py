@@ -66,7 +66,7 @@ def test_every_question_section_tag_and_entry_has_its_page_and_the_navigation_na
     named = {h for g in nav["groups"] for s in g["sections"] for h in _named(s)} - {"index.html#tags"}
     pages = {f for f in built if f.endswith(".html") and f not in ("index.html", "all.html")}
     assert named == pages, sorted(pages ^ named)[:10]
-    for f in ("q/rice-paddies-and-their-plots-suiden.html", "sources/index.html", "index.html", "all.html", "research/fields.html"):
+    for f in ("q/rice-paddies-and-their-plots-suiden.html", "sources/index.html", "index.html", "all.html", "findings/fields.html"):
         assert 'id="sidebar"' in built[f] and "nav.js" in built[f] and "site.js" in built[f] and "glossary.js" in built[f], f
 
 
@@ -176,9 +176,9 @@ def test_a_small_record_builds_both_halves(tmp_path: pathlib.Path) -> None:
     assert 'href="../sources/alpha.html"' in bridges and 'src="../../assets/x.png"' in bridges
     assert 'href="#work-beta"' in bridges and 'href="../sources/beta.html"' in bridges, "a key links its work at the foot, which links its entry"
     assert 'rel="next"' in lanes and 'rel="prev"' in bridges, "a section's questions are chained"
-    assert '<a href="../tags/subject-samurai.html">Samurai</a>' in rows and 'href="../research/fabric.html"' in rows
-    assert "Drawn land." in files["drawing/countryside.html"] and "The land." in files["research/countryside.html"]
-    assert 'href="../research/ways.html"' in files["research/countryside.html"] and "A lane is narrow." in files["research/ways.html"]
+    assert '<a href="../tags/subject-samurai.html">Samurai</a>' in rows and 'href="../findings/fabric.html"' in rows
+    assert "Drawn land." in files["drawing/countryside.html"] and "The land." in files["findings/countryside.html"]
+    assert 'href="../findings/ways.html"' in files["findings/countryside.html"] and "A lane is narrow." in files["findings/ways.html"]
     assert "drawing/cities.html" not in files, "a section with no page of a half is not in that half"
     assert "No question carries this tag yet." not in files["tags/subject-samurai.html"] and "Rows" in files["tags/subject-samurai.html"]
     assert "Works cited" in files["sources/index.html"] and 'href="alpha.html"' in files["sources/index.html"]
@@ -203,12 +203,12 @@ def test_a_regrouping_moves_no_url_and_needs_no_question_edited(tmp_path: pathli
     (rec / "contents.json").write_text(json.dumps(data), encoding="utf-8")
     after = site.build(str(rec))
     assert {f for f in before if f.startswith("q/")} == {f for f in after if f.startswith("q/")}
-    assert [g["sections"][0]["key"] for g in _nav(after)["groups"][:1]] == ["research/cities"]
+    assert [g["sections"][0]["key"] for g in _nav(after)["groups"][:1]] == ["findings/cities"]
     data["sections"].insert(0, {"id": "samurai", "title": "Samurai", "takes": [{"subject": "samurai"}, {"setting": "city", "level": "foundational"}]})
     (rec / "contents.json").write_text(json.dumps(data), encoding="utf-8")
     third = site.build(str(rec))
-    assert "Rows" in third["research/samurai.html"] and "q/rows.html" in third, "a non-primary subject took the question"
-    assert "research/fabric.html" not in third, "the section its first match emptied is omitted"
+    assert "Rows" in third["findings/samurai.html"] and "q/rows.html" in third, "a non-primary subject took the question"
+    assert "findings/fabric.html" not in third, "the section its first match emptied is omitted"
 
 
 def test_the_build_refuses_what_lands_nowhere_and_names_it(tmp_path: pathlib.Path) -> None:
@@ -296,7 +296,7 @@ def test_the_link_resolver_on_plain_strings() -> None:
     for bad, words in (("#zzz", "no id `zzz` on the registry"), ("towns.html", "no such page")):
         with pytest.raises(links.LinkError, match=words):
             index.resolve(bad, None)
-    assert links.site_href(links.Loc("q", "a", "inner"), "research/ways.html") == "../q/a.html#inner"
+    assert links.site_href(links.Loc("q", "a", "inner"), "findings/ways.html") == "../q/a.html#inner"
     assert links.site_href(links.Loc("source", None), "q/a.html") == "../sources/index.html"
     assert links.single_href(links.Loc("source", None), "srcs") == "#srcs" and links.single_href(links.Loc("q", "a", None), "s") == "#a"
     assert links.asset_href("assets/x.css#y", "q/a.html") == "../../assets/x.css#y"
@@ -321,9 +321,9 @@ def test_the_notes_of_a_small_page_and_of_the_single_page() -> None:
 
 
 def test_the_shell_and_the_trail() -> None:
-    page = sp.shell("T", "q/rows.html", "research/cities research/cities/fabric", "<p>x</p>", lazy_glossary=True)
+    page = sp.shell("T", "q/rows.html", "findings/cities findings/fabric", "<p>x</p>", lazy_glossary=True)
     assert 'data-root="../"' in page and 'href="../assets/site.css"' in page and "data-lazy-glossary" in page
-    assert 'data-part="research/cities research/cities/fabric"' in page
+    assert 'data-part="findings/cities findings/fabric"' in page
     assert "data-lazy-glossary" not in sp.shell("T", "index.html", "", "x")
     assert sp.open_keys("research", None) == "" and sp.crumbs("index.html", []) == '<p class="crumbs"><a href="index.html">The research record</a></p>\n'
     assert sp.nav_js({"a": 1}).startswith("// DERIVED FILE")

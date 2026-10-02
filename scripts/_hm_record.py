@@ -19,29 +19,30 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 
 RECORD = os.path.join(".claude", "skills", "diagram", "research")
-# GUARD_EDIT_OK: feature 292 - the record gains a second sub-collection (rendering/), and its sweep a nested one (rendering/cities/); the page lookup learns their names, nothing loosened.
-#: The record's sub-collections, one directory down - the engine's `sources.COLLECTIONS`, restated because a hook
-#: helper imports nothing from the engine; `tests/tooling/test_style_prepass.py` holds the two equal.
-COLLECTIONS = ("cities", "rendering", "rendering/cities")
+# GUARD_EDIT_OK: feature 303 - the record's page directories are gone: the questions are one flat directory and the
+# registry the one page of fragments left, so an edit aimed at any built page is re-aimed among the questions (or the
+# registry's fragments), and a check reads a question's files by its number. A change of layout; nothing loosened.
 #: The glossary is the same kind of file in a different tree (feature 259): assembled from one file
 #: per term, read by the engine, and never hand-edited. One case here rather than a second guard.
 GLOSSARY = os.path.join(".claude", "skills", "diagram", "l7r", "diagram", "interactive", "assets", "glossary.json")
-#: Where a page's fragments live. The citations page's notes live in the RESEARCH page's directory -
-#: one question's prose and its notes are siblings, which is the whole of stage 3.
+#: The questions, one stem each (feature 303), and the registry's fragments.
+QUESTIONS = "questions"
 _REGISTRY = "SOURCES.html"
 #: The built site (feature 301): never edited, never searched for a fragment - it is the record again, page by page.
 _SITE = "site"
+_STEM = re.compile(r"^(\d{4})-[^.]+(?:\.drawing)?\.html$")
 
 
 def page_dir_for(rel: str) -> str | None:
-    """The fragment directory of an assembled page, or None if this path is not one.
+    """Where the fragments behind a built or assembled page are, or None if this path is not one.
 
-    `research/contents.json#ways` and `research/contents.json#ways` -> `research/ways`;
-    `research/contents.json#urban-fabric` and `research/contents.json#urban-fabric` -> `research/contents.json#citiesfabric`;
-    `research/SOURCES.html` -> `research/sources`.
+    The registry - `research/SOURCES.html`, `research/site/sources/...` - is `research/sources`; any other page of the
+    site (a question's page, a section's, a tag's, the home page, the single page), or a page the record assembled before
+    feature 301 at its root, is `research/questions`. A fragment itself is not a page.
     """
     rel = rel.replace(os.sep, "/")
     if rel.endswith(GLOSSARY.replace(os.sep, "/")):
@@ -50,21 +51,13 @@ def page_dir_for(rel: str) -> str | None:
         return None
     inside = rel.split(RECORD.replace(os.sep, "/") + "/", 1)[1]
     root = rel[: len(rel) - len(inside)]
-    # GUARD_EDIT_OK: feature 301 - the pages a session can open now are the SITE's (research/site/), built and never
-    # committed: a small page or a part's page is re-aimed at its part's fragments, the single page and the home page
-    # at the whole record. A widening of what is caught; nothing loosened.
     if inside.startswith(_SITE + "/"):
-        built = inside[len(_SITE) + 1 :]
-        part = os.path.dirname(built)
-        return root.rstrip("/") if not part else root + part
+        return root + ("sources" if inside.startswith(f"{_SITE}/sources/") else QUESTIONS)
     if inside == _REGISTRY:
         return root + "sources"
-    if inside.startswith("citations/"):
-        inside = inside[len("citations/"):]
-    parts = inside.split("/")
-    if len(parts) > 1 and "/".join(parts[:-1]) not in COLLECTIONS:
-        return None                                   # inside a page directory: this IS a fragment
-    return root + inside[: -len(".html")]
+    if "/" in inside.removeprefix("citations/"):
+        return None                                   # inside a directory of fragments: this IS a fragment
+    return root + QUESTIONS
 
 
 def fragments_holding(page_dir: str, needle: str, root: str) -> list[str]:
@@ -84,34 +77,25 @@ def fragments_holding(page_dir: str, needle: str, root: str) -> list[str]:
     return sorted(out)
 
 
-def fragments_for(page: str, section: str, root: str) -> list[str]:
-    """The fragments a check should READ for one question - the question and its notes, nothing else.
+def fragments_for(q: str, root: str) -> list[str]:
+    """The files a check should READ for the questions `q` names - each page and its notes, nothing else.
 
-    This is where the saving of feature 258 is actually collected (spec FR-023): a recorded
-    `record-format` run spent 88% of its context on one page, and `quote-check` 90% (research R3), to
-    check one entry. `section` matches a fragment's name - its prefix, its heading id, or any part of
-    either - and an empty one names every question of the page.
+    This is where the saving of feature 258 is actually collected (spec FR-023): a recorded `record-format` run spent 88%
+    of its context on one page, and `quote-check` 90% (research R3), to check one entry. `q` names a question by its
+    number (`0412`, `412` - both its pages) or a page by its file name (`0412-x.drawing.html`), comma- or
+    space-separated (feature 303); a section or a tag is the engine's to resolve (`make ... IN=`).
     """
-    name = page.removesuffix(".html")
-    page_dir = os.path.join(RECORD, "sources" if name in ("sources", "SOURCES") else name)
-    here = os.path.join(root, page_dir)
+    here = os.path.join(root, RECORD, QUESTIONS)
     if not os.path.isdir(here):
         return []
-    # A caller names a section the way it reads on the page ("the bund runs along the channel bank")
-    # or the way the file spells it ("040", "the-bund-runs-along"). Both match: a fragment's name is a
-    # convenience, and a lookup that only accepted one of the two forms would be a second thing to learn.
-    forms = {section.casefold(), section.casefold().replace(" ", "-")}
-    out = []
-    for entry in sorted(os.listdir(here)):
-        # GUARD_EDIT_OK: feature 292 - a question's originals file (.originals.html) is not a question; nothing loosened.
-        if not entry.endswith(".html") or entry.startswith("_") or entry.endswith((".notes.html", ".originals.html")):
-            continue
-        if section and not any(f in entry.casefold() for f in forms):
-            continue
-        out.append(f"{page_dir}/{entry}")
-        notes = entry[: -len(".html")] + ".notes.html"
-        if os.path.isfile(os.path.join(here, notes)):
-            out.append(f"{page_dir}/{notes}")
+    names = sorted(n for n in os.listdir(here) if _STEM.match(n))
+    out: list[str] = []
+    for term in (t for t in re.split(r"[,\s]+", q) if t):
+        picked = [term] if term in names else [n for n in names if term.isdigit() and int(_STEM.match(n).group(1)) == int(term)]  # type: ignore[union-attr]
+        for name in picked:
+            for f in (name, name[: -len(".html")] + ".notes.html"):
+                if os.path.isfile(os.path.join(here, f)) and f"{RECORD}/{QUESTIONS}/{f}" not in out:
+                    out.append(f"{RECORD}/{QUESTIONS}/{f}")
     return out
 
 
@@ -159,8 +143,8 @@ def main() -> int:
     if len(sys.argv) > 1 and sys.argv[1] == "--selftest":
         return selftest()
     if len(sys.argv) > 2 and sys.argv[1] == "--fragments":
-        # `--fragments <page> [section]` - what a check over one question should read
-        print("\n".join(fragments_for(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "", os.getcwd())))
+        # `--fragments <Q>` - what a check over one question should read
+        print("\n".join(fragments_for(sys.argv[2], os.getcwd())))
         return 0
     payload = json.load(sys.stdin)
     root = payload.get("cwd") or os.getcwd()
@@ -185,43 +169,41 @@ def main() -> int:
 def selftest() -> int:
     import tempfile
 
-    assert page_dir_for(f"{RECORD}/ways.html") == f"{RECORD}/ways"
-    assert page_dir_for(f"{RECORD}/citations/ways.html") == f"{RECORD}/ways"
-    assert page_dir_for(f"{RECORD}/cities/fabric.html") == f"{RECORD}/cities/fabric"
-    assert page_dir_for(f"{RECORD}/citations/cities/fabric.html") == f"{RECORD}/cities/fabric"
+    q = f"{RECORD}/{QUESTIONS}"
     assert page_dir_for(f"{RECORD}/SOURCES.html") == f"{RECORD}/sources"
-    assert page_dir_for(f"{RECORD}/ways/010-x.html") is None, "a fragment is not an assembled page"
-    assert page_dir_for(f"{RECORD}/site/ways/x.html") == f"{RECORD}/ways", "a small page of the site (feature 301)"
-    assert page_dir_for(f"{RECORD}/site/cities/fabric/index.html") == f"{RECORD}/cities/fabric"
     assert page_dir_for(f"{RECORD}/site/sources/fei-1939.html") == f"{RECORD}/sources"
-    assert page_dir_for(f"{RECORD}/site/all.html") == RECORD, "the single page is the whole record"
+    assert page_dir_for(f"{RECORD}/site/q/x.html") == q, "a question's page of the site (features 301, 303)"
+    assert page_dir_for(f"{RECORD}/site/research/fields.html") == q and page_dir_for(f"{RECORD}/site/all.html") == q
+    assert page_dir_for(f"{RECORD}/ways.html") == q and page_dir_for(f"{RECORD}/citations/ways.html") == q, "a page assembled before 301"
+    assert page_dir_for(f"{q}/0010-x.html") is None, "a fragment is not an assembled page"
+    assert page_dir_for(f"{RECORD}/sources/010-works-cited.html") is None
     assert page_dir_for(f"{RECORD}/assets/record.js") is None
     assert page_dir_for("docs/guards.md") is None
     with tempfile.TemporaryDirectory() as root:
-        page_dir = os.path.join(root, RECORD, "ways")
-        os.makedirs(page_dir)
-        with open(os.path.join(page_dir, "010-x.html"), "w", encoding="utf-8") as fh:
-            fh.write("<h2 id='x'>X</h2>\nthe deck lands ten feet past the bank\n")
-        with open(os.path.join(page_dir, "020-y.html"), "w", encoding="utf-8") as fh:
-            fh.write("<h2 id='y'>Y</h2>\nshared sentence\n")
-        with open(os.path.join(page_dir, "030-z.html"), "w", encoding="utf-8") as fh:
-            fh.write("<h2 id='z'>Z</h2>\nshared sentence\n")
-        page = os.path.join(root, RECORD, "ways.html")
+        qdir = os.path.join(root, q)
+        os.makedirs(qdir)
+        for name, text in (
+            ("0010-x.html", "<h2 id='x'>X</h2>\nthe deck lands ten feet past the bank\n"),
+            ("0010-x.notes.html", '<li data-note="k">body</li>\n'),
+            ("0010-x.drawing.html", "<h2 id='dx'>DX</h2>\nshared sentence\n"),
+            ("0020-y.html", "<h2 id='y'>Y</h2>\nshared sentence\n"),
+        ):
+            with open(os.path.join(qdir, name), "w", encoding="utf-8") as fh:
+                fh.write(text)
+        page = os.path.join(root, RECORD, "site", "q", "x.html")
         one = decide("Edit", page, {"old_string": "ten feet past the bank"}, root)
-        assert one["verdict"] == "rewrite" and one["fragment"].endswith("010-x.html"), one
-        os.makedirs(os.path.join(root, RECORD, "site", "ways"))
-        with open(os.path.join(root, RECORD, "site", "ways", "x.html"), "w", encoding="utf-8") as fh:
+        assert one["verdict"] == "rewrite" and one["fragment"] == f"{q}/0010-x.html", one
+        os.makedirs(os.path.join(root, RECORD, "site", "q"))
+        with open(page, "w", encoding="utf-8") as fh:
             fh.write("the deck lands ten feet past the bank\n")
-        small = decide("Edit", os.path.join(root, RECORD, "site", "ways", "x.html"), {"old_string": "ten feet past the bank"}, root)
-        assert small["verdict"] == "rewrite" and small["fragment"].endswith("ways/010-x.html"), small
         whole = decide("Edit", os.path.join(root, RECORD, "site", "all.html"), {"old_string": "ten feet past the bank"}, root)
-        assert whole["verdict"] == "rewrite" and whole["fragment"].endswith("ways/010-x.html"), "the site itself is never a holder"
+        assert whole["verdict"] == "rewrite" and whole["fragment"] == f"{q}/0010-x.html", "the site itself is never a holder"
         assert decide("Edit", page, {"old_string": "shared sentence"}, root)["rule"] == "text-in-several-fragments"
         assert decide("Edit", page, {"old_string": "nowhere at all"}, root)["rule"] == "text-in-no-fragment"
         assert decide("Write", page, {"content": "x"}, root)["rule"] == "write-to-assembled-page"
-        assert decide("Edit", os.path.join(page_dir, "010-x.html"), {"old_string": "the deck"}, root)["verdict"] == "pass"
-        assert decide("Edit", os.path.join(root, RECORD, "towns.html"), {"old_string": "x"}, root)["verdict"] == "pass", \
-            "a page whose stage has not landed is edited the old way"
+        assert decide("Edit", os.path.join(qdir, "0010-x.html"), {"old_string": "the deck"}, root)["verdict"] == "pass"
+        assert decide("Edit", os.path.join(root, RECORD, "SOURCES.html"), {"old_string": "x"}, root)["verdict"] == "pass", \
+            "a registry with no fragment directory is not this guard's"
         terms = os.path.join(root, os.path.dirname(GLOSSARY), "glossary")
         os.makedirs(terms)
         with open(os.path.join(terms, "0010-girder.json"), "w", encoding="utf-8") as fh:
@@ -230,12 +212,10 @@ def selftest() -> int:
         moved = decide("Edit", glossary, {"old_string": "the main beam"}, root)
         assert moved["verdict"] == "rewrite" and moved["fragment"].endswith("0010-girder.json"), moved
         assert "make glossary" in decide("Write", glossary, {}, root)["message"]
-        with open(os.path.join(page_dir, "010-x.notes.html"), "w", encoding="utf-8") as fh:
-            fh.write('<li data-note="k">body</li>\n')
-        assert fragments_for("ways", "010", root) == [f"{RECORD}/ways/010-x.html", f"{RECORD}/ways/010-x.notes.html"]
-        assert fragments_for("ways", "x", root)[0].endswith("010-x.html")
-        assert len(fragments_for("ways", "", root)) == 4, "every question of the page, with its notes"
-        assert fragments_for("ways", "nosuch", root) == []
+        assert fragments_for("0010", root) == [f"{q}/0010-x.drawing.html", f"{q}/0010-x.html", f"{q}/0010-x.notes.html"]
+        assert fragments_for("10, 0020-y.html", root)[-1] == f"{q}/0020-y.html"
+        assert fragments_for("0010-x.drawing.html", root) == [f"{q}/0010-x.drawing.html"]
+        assert fragments_for("nosuch", root) == [] and fragments_for("0010", os.path.join(root, "elsewhere")) == []
     print("_hm_record selftest ok")
     return 0
 

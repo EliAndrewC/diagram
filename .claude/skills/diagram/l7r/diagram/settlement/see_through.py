@@ -3,7 +3,7 @@
 The reviews caught a mark drawn faintly where it should read solid four times - the title placard at 0.94 and a field grave's
 mound at 0.9 (features 145 and 150), each ghosting the ground through it. A mark drawn below `SOLID` opacity is a choice,
 and here it is declared: its class, the faintest it is drawn at, and why it is see-through - a map drawing convention every
-one (research/presentation: a mark drawn so the map reads). `tools/see_through.translucent_marks` reads a page's marks and the
+one (research/contents.json#map-conventions: a mark drawn so the map reads). `tools/see_through.translucent_marks` reads a page's marks and the
 gate holds every shipped map to this table (`tests/gate/test_review_rules_294.py`); a class drawn see-through that is not
 here, or fainter than its floor, fails it."""
 

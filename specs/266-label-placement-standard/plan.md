@@ -139,7 +139,7 @@ caption, and writes, moves or removes the caption's leader - a `<line>` beside i
 
 ### Record and doctrine
 
-- research/presentation: questions 040 (rewritten on the standard) and 050 (the standard's rotation and line rules),
+- research/contents.json#map-conventions: questions 0242 (rewritten on the standard) and the old 050, since folded into it (the standard's rotation and line rules),
   with notes; eight registry entries; `quote-check`, `record-format`, `source-applicability` over them.
 - `buildings.md` (Mode A doctrine) and `.claude/agents/building-review.md`: captions seated with `make seat-label`,
   revising a sheet re-seats all of its captions.

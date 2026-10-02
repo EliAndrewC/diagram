@@ -8,5 +8,5 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
 **Measure.** Before each numbered step: `python3 specs/250-close-the-record-checks/measure/tokens.py mark "owed buildings 1 <step>" --marks specs/250-close-the-record-checks/measure/marks-owed-buildings.json`
 
 **Your pairs** (a modal and ONE question it is owed from - a modal owed from two questions is two pairs, each
-checked and recorded on its own): KIND=CompoundShrine (SECTION=030), KIND=CompoundShrine (SECTION=180), KIND=Residence (SECTION=020), KIND=Residence (SECTION=120), KIND=Residence (SECTION=180), KIND=Residence (SECTION=230), KIND=StrikingPosts (SECTION=210)
+checked and recorded on its own): KIND=CompoundShrine (Q=0044), KIND=CompoundShrine (Q=0045), KIND=Residence (Q=0046), KIND=Residence (Q=0047), KIND=Residence (Q=0045), KIND=Residence (Q=0048), KIND=StrikingPosts (Q=0049)
 

@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 
 #: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7): GUESS, anchored on the research's three-shaku
-#: (~3 ft) eaves strip before a townhouse (research/buildings) with a margin for the eaves themselves; the recorded defect was a
+#: (~3 ft) eaves strip before a townhouse (research/contents.json#compounds) with a margin for the eaves themselves; the recorded defect was a
 #: tread 3.85 ft from a wall, and every pool map measured 4.9 ft or more when the rule was written (rules-recon.md item 8).
 TREAD_WALL_FT = 4.0
 
@@ -71,7 +71,7 @@ class HousesMixin:
         # this: every check reads the manifest, never the SVG.
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         if shed and kind == "plain":
-            # THE SOLID GRAY STOREHOUSE (research/homesteads, 'distinct from the solid gray storehouse'): drawn in the house's roof
+            # THE SOLID GRAY STOREHOUSE (research/contents.json#homesteads, 'distinct from the solid gray storehouse'): drawn in the house's roof
             # color it read as a rear wing of an L-shaped farmhouse once feature 280 made it a block (settlement-review of Sawada)
             g.append(f'<rect x="{_sox - _ssw / 2:.1f}" y="{_soy - _ssh / 2:.1f}" width="{_ssw:.1f}" height="{_ssh:.1f}" rx="2" fill="{STOREHOUSE_GRAY}" stroke="{edge}" stroke-width="1.1"/>')
         g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w}" height="{h / 2:.1f}" fill="{dark}"/>')

@@ -128,7 +128,7 @@ size that likely slows us down algorithmically").
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Scrub grass and marsh reeds drawn as a repeating tile per zone | map drawing convention | the GM's request; the glyphs stood for an area, not objects | `land/cover.py`, `land/wet.py`, research/vegetation |
+| Scrub grass and marsh reeds drawn as a repeating tile per zone | map drawing convention | the GM's request; the glyphs stood for an area, not objects | `land/cover.py`, `land/wet.py`, research/contents.json#vegetation |
 | Bamboo stands drawn as a repeating tile | map drawing convention (as the culm mark already was) | the GM's request | `homestead_parts/stands.py` |
 | Scrub and marsh fills at the bottom of the stack | map drawing convention | the GM: "Z indexing ... to make sure that that thing appears on top" | the cover splice in `settlement/finish.py` |
 | The zones' rim feathers dropped | map drawing convention | the GM: "I don't mind the issue about edges" | the points of change |

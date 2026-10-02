@@ -72,7 +72,7 @@ def offenses(text: str) -> list[str]:
     return out
 
 
-@pytest.mark.parametrize("here", ["index.html", "q/x.html", "research/fields.html", "sources/k.html", "all.html"])
+@pytest.mark.parametrize("here", ["index.html", "q/x.html", "findings/fields.html", "sources/k.html", "all.html"])
 def test_every_site_page_loads_the_glossary_before_the_record_script(here: str) -> None:
     """Every page of the site is written by one shell (`record/site_pages.py`, feature 303), so the shell is what holds
     the order: the glossary asset is loaded, and before record.js (both deferred, so document order is run order)."""

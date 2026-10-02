@@ -29,6 +29,8 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 #: the checks whose contract reads a bundle (`.claude/agents/<name>.md`, "Read the BUNDLE")
 # GUARD_EDIT_OK: feature 292 - record-style and translation-check are new bundle-reading checks; added to the list, nothing is loosened.
+# GUARD_EDIT_OK: feature 303 - the questions are research/questions/NNNN-<slug>.html; the compliant command is read off
+# that path as `make check-bundle Q=NNNN`. A change of layout; nothing loosened.
 CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check"
 
 pretool() {
@@ -56,15 +58,17 @@ if not paths:
     print("\x1fnone\x1f" + atype); sys.exit(0)
 cmds = []
 for path in paths:
-    m = re.search(r"research/((?:cities/)?[a-z-]+)/(\d{3})-[^/]*\.html$", path)
+    # GUARD_EDIT_OK: feature 303 - a question is research/questions/NNNN-<slug>.html now; a change of layout
+    m = re.search(r"research/questions/(\d{4})-[^/]*\.html$", path)
     k = re.search(r"research/sources/010-works-cited/\d+-([a-z0-9-]+)\.html$", path)
     if k:
         # D19 (plan review): a source-reader hunts the passage behind a NEW claim, so it gets the whole page in parts;
         # the excerpt around already-quoted passages is for source-applicability (no apostrophe: this is single-quoted)
         cmds.append(f"make check-bundle KEY={k.group(1)}" + (" WHOLE=1" if atype == "source-reader" else ""))
     elif m:
-        cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}" + (f" FOR={atype}" if atype in ("record-style", "translation-check") else ""))
-cmds = list(dict.fromkeys(cmds)) or ["make check-bundle PAGE=<page> SECTION=<question>   (or KEY=<registry key>)"]
+        # GUARD_EDIT_OK: feature 303 - the compliant command names the question by its number (Q=), nothing loosened
+        cmds.append(f"make check-bundle Q={m.group(1)}" + (f" FOR={atype}" if atype in ("record-style", "translation-check") else ""))
+cmds = list(dict.fromkeys(cmds)) or ["make check-bundle Q=<question number>   (or KEY=<registry key>)"]
 print("\x1frefuse\x1f" + atype + "\x1e" + "\x1e".join(cmds))
 ' 2>/dev/null)" || exit 0
   IFS=$'\x1f' read -r _ kind detail <<<"$verdict"

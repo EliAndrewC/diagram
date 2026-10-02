@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/f2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=fields SECTION=410, PAGE=fields SECTION=620
+**Your questions:** Q=0015, PAGE=fields SECTION=620
 **Your registry keys:** KEY=hanshu-daitian-wikisource, KEY=qimin-yaoshu-juan1, KEY=nogyo-zensho-joun-sera, KEY=dongjing-menghualu-chongyang
 
 ## The procedure (check, apply)

@@ -43,7 +43,7 @@ fix wants its own pass with its own sweep rather than riding along.
 ## OWED AT CONVERSION (269 B43, 2026-09-28): where a Chinese-model town seats its magistrate
 
 Measurement: the town tier seats the magistrate's compound at the town's edge on every map. The record
-(research/towns 250) puts a Chinese-model town's yamen on the main avenue; the Japanese form keeps the edge
+(research/contents.json#towns 250) puts a Chinese-model town's yamen on the main avenue; the Japanese form keeps the edge
 (research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html). Mechanism: one seat rule for both models. Sketch: the scripted town generator reads the
 settlement's model and seats the compound on the main avenue for the Chinese model, at the edge for the Japanese.
 

@@ -10,13 +10,12 @@ apply to you, the research record's `CLAUDE.md` above all.
 recorded that in the village belt's entries. Its handoff is `specs/291-homestead-grove-sides/briefs/r2-handoff.md` -
 read only your own lines (`make lines FILE=<handoff> KEY="SECTION=vegetation"`).
 
-**Your questions:** PAGE=vegetation SECTION=030, PAGE=vegetation SECTION=620
+**Your questions:** Q=0072, PAGE=vegetation SECTION=620
 **Your registry keys:** none
 
 ## The procedure (check, apply)
 
-1. **Check, all in one message, in the background.** For each question: `make check-bundle PAGE=vegetation
-   SECTION=<NNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format` for `record-format` (in
+1. **Check, all in one message, in the background.** For each question: `make check-bundle Q=<NNNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format` for `record-format` (in
    `.claude/skills/diagram`), each agent naming its own MANIFEST.md and nothing else.
 2. **Apply each report with ONE command**: `make apply-edits FROM=<the output_file its dispatch printed>`, `SKIP=<n,n>`
    for a block you disagree with. Then do BY HAND only what it lists as REFUSED, what you skipped, and the `EDIT: none`

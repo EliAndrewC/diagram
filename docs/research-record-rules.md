@@ -50,10 +50,10 @@ when you have to make an edit, then you are opening a file which is relatively s
 | what you want | where it is |
 |---|---|
 | a source's registry entry | `research/sources/NNNN-<key>.html` - one file, about 1.2 KB |
-| a question | `research/<page>/NNN-<heading id>.html` |
-| that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
-| a `cities/` page | `research/contents.json#cities<page>/...`, the same shape one level down |
-| the page a reader opens | `research/site/<page>/<heading id>.html`, and `research/site/all.html` for the whole record - BUILT by `make record`, never committed (feature 301) |
+| a question | `research/questions/NNNN-<heading id>.html`, how our maps draw it beside it as `.drawing.html` (feature 303) |
+| a page's footnotes | `<its file>.notes.html`, beside it |
+| its tags, the sections | the marker after its heading; `research/tags.json`, `research/contents.json` (feature 303) |
+| the page a reader opens | `research/site/q/<heading id>.html`, and `research/site/all.html` for the whole record - BUILT by `make record`, never committed (feature 301) |
 
 **Finding one, without reading a page.** There is no index to consult and none to keep in step:
 
@@ -78,7 +78,7 @@ cites one work several times they are `fei-1939`, `fei-1939-2`, and so on.
 
 **Checking one entry**, which is what the split is for:
 
-    make check-bundle PAGE=water SECTION=<the question>     one question, copied OUT of the repository
+    make check-bundle Q=<NNNN>     one question, copied OUT of the repository
     make check-bundle KEY=<registry key>                    one source, for source-applicability: a long page as an EXCERPT
                                                             (its front and a window around each passage the record quotes)
     make check-bundle KEY=<registry key> WHOLE=1            one source, for source-reader: the whole page, a long one in parts
@@ -98,7 +98,7 @@ report, file and tool result stays in the context for every later turn: on the m
 session was 87% of the input and ended at 324,000 tokens a turn. So a research feature is worked a page
 at a time, each page in two FRESH sessions - one locates, reads and writes, the next checks and applies - started
 from written briefs (`make page-session BRIEF="<1> <2>"` runs them in order), and the briefs and the handoff
-between them, not the context, carry the state. `make notes PAGE= SECTION= KEYS=` prints a few notes and the
+between them, not the context, carry the state. `make notes Q= KEYS=` prints a few notes and the
 paragraphs carrying them; a re-check names only the notes that moved (`make check-bundle ... NOTES=<key,key>`).
 
 **At most four questions and ten new registry keys to a write session** (feature 274, its research R1). After
@@ -318,7 +318,7 @@ reads it - the rule stands here with its reason.
 
 Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
 resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
-quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus at medium effort, AFTER `make quote-verbatim PAGE=<name> [NOTES=<ids>]` has checked every passage against its page character for character with no model and its report is named in the prompt - feature 251; verification not
+quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus at medium effort, AFTER `make quote-verbatim Q=<NNNN> [NOTES=<ids>]` has checked every passage against its page character for character with no model and its report is named in the prompt - feature 251; verification not
 judgment - the sibling of `source-reader`) holds the half a test cannot: per footnote, is the quote VERBATIM on
 the page (or DIFFERS / NOT-ON-PAGE), does it SUPPORT the assertion it is attached to (or PARTIAL /
 DOES-NOT-SUPPORT), and per section, which assertions carry no footnote. Run it in the background on every new or
@@ -373,7 +373,7 @@ are the form of every entry from here, new or revised:
 mechanical half at the gate: the fields are comments, every page loads the glossary, the asset equals its
 derivation, every term is used, and the shapes of session-speak and history that recurred (a feature number, a
 task id, a correction date, a fetch verdict, "used to say") are absent from the visible text. The
-**`record-format` agent** (`.claude/agents/record-format.md`, Opus at medium effort, handed the listing of `make record-prepass PAGE=<name>` in its prompt - feature 251) holds the half a
+**`record-format` agent** (`.claude/agents/record-format.md`, Opus at medium effort, handed the listing of `make record-prepass Q=<NNNN>` in its prompt - feature 251) holds the half a
 test cannot: per section, the VOCABULARY that deserves a tooltip (with a definition drafted from the record),
 the SESSION NOTES still visible, and the HISTORY still visible, each quoted with the rewrite it proposes. Run
 it beside `quote-check` on every new or changed entry before the feature lands, and record its verdicts in the
@@ -388,12 +388,13 @@ should be is the GM's question.
 The GM: *"this is making the research pages fairly long ... I think that we should have, inside to our research/
 directory, a research/citations directory ... All of the citations at the end of a research file can be moved into
 the citations document. We should be careful to avoid duplicating content because currently the tooltips ... display
-the actual content."* So every research page `research/<name>.html` has a citations page
-`research/citations/<name>.html` (`citations/cities/<name>.html` for a `cities/` page), and three things follow:
+the actual content."* So every research page had, from feature 211 to 301, a citations page beside it in a
+`citations` directory of the record (one level deeper for a city page), and three things followed:
 
 - (Feature 301, 2026-10-01, retired the WRITTEN citations pages and their derived scripts: the site carries each
   question's notes at its own foot, numbered from 1, with the works they cite - see "The record is a built site"
-  below. What follows is how the notes stood from feature 211 to 301; the write-ups' part still holds whole.)
+  below; and feature 303 gave each page its own notes file. What follows is how the notes stood from feature 211 to
+  301; the write-ups' part still holds whole.)
   **The notes are on the citations page, once.** Its `<section class="footnotes"><ol>` holds every `<li id="fn-n">` -
   the key link, the quoted passage, the gloss, exactly as before; a note may run to several paragraphs (`<p>` inside
   the `<li>`) when a quotation is lengthened or explanation added. The research page keeps the references
@@ -510,7 +511,7 @@ any modal.
 **And a renamed heading owes its inbound links** - the rule this file already stated, now checked:
 `scripts/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
 section. A section deliberately not written is written in the declared form
-`research/<page>/ (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
+`research/contents.json#<section> (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
 
 ## The record is a built site, and a pointer names a fragment (feature 301, GM 2026-10-01)
 
@@ -533,8 +534,8 @@ the tools or the tests reads a built page: they read the record through the in-m
 
 **A pointer names the fragment.** *"The obvious solution is to not link to the generated HTML page, but to link to the
 source which is fed into and used to generate that HTML page, because that is the canonical location of the research"*.
-A code comment, a doc, a spec, a modal's `Entry:` names `research/<page>/NNN-<heading id>.html` (or `research/<page>/`
-for a whole page); `scripts/check-research-pointers.py` fails the gate and the push on one that does not resolve or
+A code comment, a doc, a spec, a modal's `Entry:` names the question's file (since feature 303
+`research/questions/NNNN-<heading id>.html`, or `research/contents.json#<section>` for a whole section); `scripts/check-research-pointers.py` fails the gate and the push on one that does not resolve or
 that names a built page, and `make fragment-move` renames a fragment with every pointer to it - the reorder or retitle
 that would otherwise strand them. The landed specs were swept too, the GM choosing on 2026-10-01 that the push's spec
 check judge a landed spec on what a push CHANGES in it; a pointer there whose heading had since been retired names its
@@ -578,3 +579,28 @@ must not be stranded and a later check must not meet a claim it cannot verify:
   other part's evidence: a restatement is an unfootnoted claim to a check that reads one part alone (the first split
   wrote two such bridges and was corrected before it landed);
 - a split that would strip a finding of what it needs to be understood is not made; the session says so instead.
+
+## The record is organized by tags, in one flat directory (feature 303, GM 2026-10-01)
+
+The record's top level was its directories: a group "Research" beside a group "Cities" that was also research, "How our
+maps draw it" beside "How our maps draw cities", drawing conventions filed as research, and an order that opened on field
+archetypes because its folder sorted first. The GM: *"it totally makes sense to have a research section specifically
+about cities but if that is about cities then the top level section should probably be about farming settlements"*; the
+settlement tiers are *"an excellent place to start since we're literally beginning with saying, hey, what are the
+different types of places that we are mapping"*; and of the order within a section, *"anything with a 'foundational' tag
+would get presented before anything with a 'subtype' tag or a 'detail' tag or a 'counts and measurements' tag ... running
+the makefile command twice in a row will never give output HTML files in two different orders."* And then: *"are we
+actually getting anything out of having a directory called cities? Or is that just literally confusing things?"*
+
+So every question is one stem in `research/questions/` - `NNNN-<heading id>.html`, its drawing page `.drawing.html`, each
+page's notes and originals beside it - with a number that is its identity and never its order. Each carries tags from
+`research/tags.json` (subjects, the first primary; settings; one level), and `research/contents.json` declares the
+sections, their nesting and order, and the rule over the tags each takes; a question lives in the first section that
+takes it, ordered by level and then number. Regrouping is an edit to `contents.json` and nothing else - the GM's reason
+for tags (*"instead of only treating the first tag as the primary one ... it is just a straightforward change"*). Every
+tag has its own page in the site, so a question with one home is found under all of them; a question's home follows the
+place a reader is looking at from the map, except that a section spanning settings (Estates and other compounds - the
+GM's name for the building-plan section - Trades and services, Religion and the dead) takes its subject wherever it
+stands. Every pointer by old path, old page or old number was rewritten (*"use the correct new number"*), with no
+redirect (*"Nothing is bookmarked"*); `research/moved-303.json` keeps the mapping so the pointer check names the new
+form to a late pointer. The measurements, the tag table and the decisions are in `specs/303-research-organization/`.

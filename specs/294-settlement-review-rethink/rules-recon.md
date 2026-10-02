@@ -122,7 +122,7 @@ against `houses`, `retirement_houses`, `farm_sheds`, `byres` rectangles. Nearest
 **Measured** (tread edge to wall): minima Inashiro 7.3, Kashikawa 27.5, Kuwabata 11.9, Mizuguchi 26.9, **Sawada 4.94 ft**.
 At a 6 ft threshold Sawada fails once; at 4 ft all pass.
 **Norm**: research has a three-shaku (~3 ft) eaves strip (inubashiri) "required before townhouses facing a public" way -
-found by grep in research/buildings; it is a TOWN figure and an eaves overhang must be added, so a hamlet threshold is a
+found by grep in research/contents.json#compounds; it is a TOWN figure and an eaves overhang must be added, so a hamlet threshold is a
 GUESS anchored on it (e.g. eaves 3 ft + 3 ft). **Effort**: S (test) + engine change if > 4.9 ft.
 
 ## 9. Privy seat and wind

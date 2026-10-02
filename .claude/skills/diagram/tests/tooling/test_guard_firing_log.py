@@ -61,11 +61,11 @@ CASES = [
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 3 of specs/999-nowhere REVIEW_ROUND_OK"), "blocked", "REVIEW_ROUND_OK-no-reason"),
     # feature 252 (GM 2026-09-19): an ad-hoc agent dispatch names its model, or is refused
     ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", prompt="read three pages"), "blocked", "no-model"),
-    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check .claude/skills/diagram/research/ways/010-x.html"), "blocked", "repo-path"),
+    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check .claude/skills/diagram/research/questions/0010-x.html"), "blocked", "repo-path"),
     ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="read /tmp/l7r-check/ways-010/MANIFEST.md"), "permitted", "bundle-named"),
     (
         "check-bundle",
-        _payload(_tool="Agent", subagent_type="record-format", prompt='read .claude/skills/diagram/research/ways/010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
+        _payload(_tool="Agent", subagent_type="record-format", prompt='read .claude/skills/diagram/research/questions/0010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
         "escaped",
         "check-bundle-ok",
     ),

@@ -6,7 +6,7 @@ INSTANCES: 19, one on each threshing yard's map-north edge beside its house. The
 READS AS: at fit zoom a slightly darker stripe along the yard's edge; at full size a small framed straw strip with a bar at each post, like a little wooden ladder or rail -> ok (questionable, F1)
 CONFUSABLE WITH: straw mats (lighter and unframed), wood shed (24x12 ft with log-end dots), hen coop and footbridge -> ok (nitpicks F2 and F3)
 FORM: a run of rack along one side of the yard -> a band 2.5 ft wide, 4.7 to 15 ft long, on the yard's edge -> ok
-SETTING: the rack is not a nuisance, funerary, traffic-sited or ground-cover element. It follows the rule in research/rendering/homesteads ("Which side of the yard does a rack take?") on all 19 yards -> ok
+SETTING: the rack is not a nuisance, funerary, traffic-sited or ground-cover element. It follows the rule in research/contents.json#homesteads ("Which side of the yard does a rack take?") on all 19 yards -> ok
 VERDICT: pass
 ```
 

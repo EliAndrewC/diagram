@@ -13,7 +13,7 @@ originals were inline, and the base is read either way), and paired by `_quote_v
 translated-quotation form.
 
     _translation_owed.py --root <repo>                       every owed pair, one line each, and a count
-    _translation_owed.py --root <repo> --page P --section S  only that question's, as the translation-check reads them
+    _translation_owed.py --root <repo> --q 0412              only that question's, as the translation-check reads them
 """
 
 from __future__ import annotations
@@ -96,15 +96,14 @@ def report(rows: list[tuple[str, str, str, str, str]]) -> str:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
-    ap.add_argument("--page", default="", help="with --section: only that question's pairs")
-    ap.add_argument("--section", default="")
+    ap.add_argument("--q", default="", help="only these questions' pairs: a number (`0412`) or a page's file name (feature 303)")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
     rows = owed(root)
-    if args.page:
+    if args.q:
         from _hm_record import fragments_for  # noqa: PLC0415
 
-        mine = {r for r in fragments_for(args.page.removesuffix(".html"), args.section, str(root)) if r.endswith(".notes.html")}
+        mine = {r for r in fragments_for(args.q, str(root)) if r.endswith(".notes.html")}
         rows = [r for r in rows if r[0] in mine]
     print(report(rows), end="")
     return 0

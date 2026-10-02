@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/v3-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=fields SECTION=400, PAGE=fields SECTION=410
+**Your questions:** PAGE=fields SECTION=400, Q=0015
 **Your registry keys:** KEY=suido-ishizue-kochi-seiri, KEY=fukui-kenshi-noji, KEY=soba-jawiki, KEY=awa-jawiki, KEY=kibi-jawiki, KEY=omugi-jawiki, KEY=hakubaku-omugi-ichinen, KEY=maruyanagi-daizu-hatake, KEY=kagawa-tameike-data, KEY=inamino-saraike, KEY=kikka-monsho-jawiki, KEY=kiku-jawiki, KEY=toshima-somei, KEY=sugamo-kikumatsuri, KEY=katsushika-horikiri, KEY=mboso-hana, KEY=chinagate-tongxiang
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

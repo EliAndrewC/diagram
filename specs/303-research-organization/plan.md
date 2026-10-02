@@ -85,8 +85,10 @@ sections}`; `takes` is a list of clauses, each an object whose keys (`primary`, 
 match (values may be a list = any of). Home = first section in depth-first order whose `takes` matches. Initial
 contents: FR-013, every leaf taking `{"primary": <its subject>}`. Map conventions sits last before Sources.
 
-**D6 - The site.** `site/index.html` (both halves, sections nested); `site/research/<section>.html` and
-`site/drawing/<section>.html` (a section's page in each half: description, subsections, its questions in order);
+**D6 - The site.** `site/index.html` (both halves, sections nested); `site/findings/<section>.html` and
+`site/drawing/<section>.html` (a section's page in each half: description, subsections, its questions in order - the
+research half's directory is not `research/`, because a path `research/<x>.html` is what the pointer check refuses as a
+retired built page);
 `site/q/<heading id>.html` (every question page of both halves - flat, so a regrouping moves no URL);
 `site/tags/<facet>-<tag>.html`; `site/sources/...` (unchanged); `all.html`; `nav.js`. Each question page shows its tags
 (linked to their pages), its notes numbered from 1, its works, and the research/drawing cross-link. Maps link
@@ -114,7 +116,28 @@ rewritten to the new numbers of the questions it covered; a range covering no qu
 left as written - it passes the check without an escape, because the check refuses only a (page, number) that IS in
 the mapping, and neither end of such a range is.
 
-**D9 - Tools.** Every `PAGE=<p> SECTION=<q>` becomes `Q=<NNNN>` (one or more stems, by number or stem); a whole-page
+**D8a - What the sweep and the check met on the way (implementation, 2026-10-01).** (1) A pointer of a retired form was
+also written as a tool's argument, `PAGE=<page> SECTION=<NNN>` and a bare `PAGE=<page>`; these are rewritten to `Q=<NNNN>`
+and `IN=<section>` like any number, and the check refuses them, naming the replacement (a pair whose number names no
+question - one merged away before this feature - names nothing and passes, as a range does). (2) The check reads every tracked file except what FR-017 does not edit: the GM's own words (`request.md`, a SOURCE block,
+a quotation of the GM in the docs' form `*"..."*`); a README, whose stale references are listed in
+`readme-correction-offered.md` until the GM rules on them (constitution XVII); the mapping (`moved-303.json`,
+`migration.md`); and the guard-replay corpora under `scripts/fixtures/` - verbatim records of commands sessions ran,
+restored to their words after the sweep touched them. Within the rest, five files are REFUSAL DATA (the check and its
+test, the hook helper `_hm_record.py` and the record-edit and check-bundle hook suites), whose retired forms are what they
+prove refused or re-aimed; and a test, a hook suite or a script's selftest is a FIXTURE, which builds a record of its own,
+so a new-form question file it names need not exist here - but a retired form in a fixture is refused like anywhere
+else, since a test using an old path for any other reason is stale. A retired directory is caught written with or
+without its slash (a page directory's name followed by a slash, by a quote as code builds a path, or by a comma in prose), and four passes of the
+sweep, each from what the check found, rewrote them all. (3) A whole-page pointer the sweep
+turned into a section pointer was checked for sense in code and docs; where the sweep's directory pattern had glued a
+Markdown-era path (`research/cities/capitals.md`) onto a section id, the original text was restored from the commit
+before the sweep (101 places). (4) The sweep's edits to landed features' specs and plans make those features' recorded
+reviews stale; as feature 301's sweep did (its FR-027), the push passes the review and plan gates with their escapes and
+the reason logged - a mechanical rewrite of pointers, reviewed here, not a change to what those features decided.
+
+**D9 - Tools.** Every `PAGE=<p> SECTION=<q>` becomes `Q=<NNNN>` (one or more questions: a number names both of a question's pages, a
+file name one page); a whole-page
 `PAGE=<p>` becomes `IN=<section id or tag>`; `_hm_record.py` gains the one selection function every tool calls
 (`select(Q, IN) -> stems`). Hooks (`check-bundle-hooks.sh`, `record-edit-hooks.sh`) emit the new commands; briefs name
 `Q=` items; `_brief_load.py` parses both a brief's `Q=NNNN` and its numbers. `make fragment-move FROM= TO=` renames a

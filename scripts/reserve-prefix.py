@@ -42,13 +42,18 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import _escape_log  # noqa: E402
 
+# GUARD_EDIT_OK: feature 303 - a third kind, `question`: a new question of the record takes the next free identity number
+# (`research/questions/NNNN-<heading id>.html`) under the same lock, so two sessions never number two questions alike.
 DIRS = {
     "glossary": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary",
     "registry": ".claude/skills/diagram/research/sources/010-works-cited",
+    "question": ".claude/skills/diagram/research/questions",
 }
-SUFFIX = {"glossary": ".json", "registry": ".html"}
+SUFFIX = {"glossary": ".json", "registry": ".html", "question": ".html"}
 LEDGER = "prefixes.jsonl"
 STEP = 10
+#: A question's number is its identity and not its order (feature 303), so the numbers run on with no gap.
+STEPS = {"question": 1}
 
 
 class Refusal(Exception):
@@ -190,6 +195,12 @@ def registry_stub(key: str, url: str) -> str:
     return f'<h3 id="{key}"><code>{key}</code></h3>\n<p>({url})</p>\n'
 
 
+def question_stub(key: str) -> str:
+    """A new question's page: its heading, and a tags marker the build refuses until it is filled from `tags.json`
+    (feature 303) - so a question cannot reach the site untagged."""
+    return f'<h2 id="{key}">TITLE</h2>\n<!-- tags: subject=<subject>; setting=<setting>; level=<level> -->\n<p></p>\n'
+
+
 def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: str | None = None, timeout: float = 30.0, url: str = "") -> Path:
     """The new file's path, its prefix reserved and a stub written before the lock is released.
 
@@ -202,7 +213,7 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
     if url and stub is None:
         stub = registry_stub(key, url)
     if not key.strip():
-        raise Refusal("KEY is required - the glossary term or the registry key")
+        raise Refusal("KEY is required - the glossary term, the registry key, or the question's heading id")
     mirror = mirror_of(root) if mirror is None else mirror
     d = root / DIRS[kind]
     existing = holding(d, kind, key)
@@ -213,11 +224,12 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
         if elsewhere:
             raise Refusal(f"{key!r} is already being defined in {elsewhere} - one home per {kind} key; pull that work in and edit it there")
         check_key_cap(kind, key, mirror)
-        prefix = (highest(kind, root, mirror) // STEP + 1) * STEP
+        step = STEPS.get(kind, STEP)
+        prefix = (highest(kind, root, mirror) // step + 1) * step
         path = d / f"{prefix:04d}-{name_for(kind, key)}"
         d.mkdir(parents=True, exist_ok=True)
         if stub is None:
-            stub = json.dumps({"term": key, "def": "", "variants": [key]}, ensure_ascii=False, indent=1) + "\n" if kind == "glossary" else ""
+            stub = question_stub(key) if kind == "question" else json.dumps({"term": key, "def": "", "variants": [key]}, ensure_ascii=False, indent=1) + "\n" if kind == "glossary" else ""
         path.write_text(stub, encoding="utf-8")
         row = {"kind": kind, "key": key, "prefix": prefix, "clone": str(root), "session": os.environ.get("L7R_PAGE_SESSION", ""), "utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
         with open(mirror / ".specify" / LEDGER, "a", encoding="utf-8") as f:

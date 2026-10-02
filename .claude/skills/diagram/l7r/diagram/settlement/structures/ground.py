@@ -103,7 +103,7 @@ class GroundMixin:
     def _finish_road_label(self: Settlement) -> None:  # type: ignore[misc]
         """Seat and draw the Imperial road's caption in the label phase, by the ONE placer (feature 266): a LINE
         subject - the road's centerline at its drawn half-width - so the name runs along the road, above it before
-        below it, never upside down, nearest the authored anchor first (psu-geog486-point-labels; research/presentation,
+        below it, never upside down, nearest the authored anchor first (psu-geog486-point-labels; research/contents.json#map-conventions,
         "Labels on maps (cartographic label placement)"). The anchor is a HINT for where along the road, never a distance."""
         text, lx, ly = self._road_label
         rd = [(float(p[0]), float(p[1])) for p in self.M.get("road") or []]

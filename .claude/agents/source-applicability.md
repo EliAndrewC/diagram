@@ -30,9 +30,9 @@ was 55-65% of a check's context and five to twelve times what the check read of 
 without them. Everything you need is in the bundle or on the web.
 
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
-paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
-beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
-`research/sources/`), each of which is thirty entries read to check one. A missing bundle is the
+paths it names instead - a question's page, `research/questions/NNNN-<heading id>.html` (or its `.drawing.html`), and
+the `.notes.html` beside it - and never a built page or a whole directory (`research/site/`, `research/questions/`,
+`research/sources/`), each of which is hundreds of entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
 ## Your report: the counts first, then only what the session must act on (feature 250)

@@ -94,7 +94,7 @@ def test_an_alley_is_drawn_at_the_LINEWORK_FLOOR_rather_than_to_true_scale() -> 
 
 
 def test_an_alley_is_EARTH_with_its_line_of_drain_boards_down_the_middle() -> None:
-    """269 B40, research/contents.json#citiesfabric/160: the drain boards laid in a line down a roji's middle are read, so the
+    """269 B40, research/cities/fabric/160: the drain boards laid in a line down a roji's middle are read, so the
     alley's top mark is a dark board line of long dashes; the ground beside them is read nowhere, so it is drawn as
     plain beaten earth (the hamlet lane's tread color), no longer the pale gravel with its speckle."""
     s = _town()

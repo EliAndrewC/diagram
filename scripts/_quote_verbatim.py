@@ -11,8 +11,9 @@ style should not normalize british spellings or em-dashes inside things we are q
 that comparison exactly, for no tokens, and hands the `quote-check` agent what is left: whether the
 quotation SUPPORTS the assertion, whether a translation is faithful, and the pages this could not read.
 
-WHAT IT READS. A research page (`research/<name>.html`) for the ASSERTIONS - the sentence carrying each
-`<sup class="fn">` - and its citations page (`research/citations/<name>.html`) for the notes:
+WHAT IT READS. A question's page (`research/questions/<file>`, feature 303) for the ASSERTIONS - the sentence carrying
+each `<sup class="fn">` - and its own notes for the passages, numbered from 1 as its page in the record's site numbers
+them (`record/site_notes.py`):
 
     <li id="fn-3"><a href="URL"><code>key</code></a> - 「passage」 ... <a class="fnback" ...>back</a></li>
 
@@ -467,64 +468,65 @@ def cached_pages():  # noqa: ANN201
     return src.CachedPages(Pages(), src.home(), refresh=src.refresh_wanted(), exact=True)
 
 
-def record_text(research: pathlib.Path, rel: str) -> str:
-    """A page of the record, assembled in memory by the engine's own reader (feature 301)."""
+def _engine(research: pathlib.Path) -> None:
     skill = str(research.resolve().parent)
     if skill not in sys.path:
         sys.path.insert(0, skill)
-    from l7r.diagram.interactive.sources import record_text as assembled  # noqa: PLC0415 - the skill the record is in
 
-    return assembled(rel, str(research))
+
+def numbered(research: pathlib.Path, file: str) -> tuple[str, str]:
+    """(a question page with its references numbered from 1, its notes as `<li id="fn-N">`), as its small page in the
+    record's site carries them (features 301, 303) - read in memory by the engine's own reader."""
+    _engine(research)
+    from l7r.diagram.interactive.record import site_notes, store  # noqa: PLC0415 - the skill the record is in
+    from l7r.diagram.interactive.record.notes import render_note  # noqa: PLC0415
+    from l7r.diagram.interactive.sources import record_text as assembled  # noqa: PLC0415
+
+    body, placed = site_notes.small_page(assembled(f"questions/{file}", str(research)), store.page_notes(file, str(research)), file)
+    return body, "\n".join(render_note(n, "") for n in placed)
+
+
+def selected(research: pathlib.Path, term: str) -> list[str]:
+    """The page files a section's id or a tag's id names - the engine's `Record.select` (feature 303)."""
+    _engine(research)
+    from l7r.diagram.interactive.record import store  # noqa: PLC0415
+
+    return [p.file for p in store.load(str(research)).select(term)]
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("page", help="a research page name: hamlets, cities/tango")
-    ap.add_argument("--notes", default="", help="only these notes, e.g. 90-108,113 - nothing else is fetched")
-    ap.add_argument("--section", default="", help="only the notes ONE question cites, named by its fragment "
-                                                  "(a prefix, a heading id, or part of either) - feature 258")
+    ap.add_argument("q", nargs="?", default="", help="questions by number (0412) or page file, comma-separated (feature 303)")
+    ap.add_argument("--in", dest="within", default="", help="every question of a section (its id) or carrying a tag (its id)")
+    ap.add_argument("--notes", default="", help="only these notes of each page, by the number its page shows them under, e.g. 9-12,14")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", default="")
     ap.add_argument("--offline", default="", help="a directory of saved pages named by Pages.name_for(url)")
     args = ap.parse_args(argv)
     research = pathlib.Path(args.root) / ".claude/skills/diagram/research"
-    name = args.page.removesuffix(".html")
-    # the page and its citations page as their fragments assemble them (feature 301: built, never committed)
-    page_text, cite_text = record_text(research, f"{name}.html"), record_text(research, f"citations/{name}.html")
-    if not page_text or not cite_text:
-        print(f"quote-verbatim: no such page - wanted {name} and its citations page under {research}", file=sys.stderr)
-        return 2
-    pages = Pages(pathlib.Path(args.offline)) if args.offline else cached_pages()
-    only = wanted(args.notes)
-    fragments: list[str] = []
-    if args.section:
-        # THE NOTES ONE QUESTION CITES (feature 258, spec FR-023). Taken from the assembled page's own
-        # section rather than from the notes fragment, because what a quote-check needs is the notes
-        # behind THESE assertions, and the page is where an assertion and its reference stand together.
+    if args.q:
         sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
         from _hm_record import fragments_for  # noqa: PLC0415
 
-        fragments = fragments_for(name, args.section, str(pathlib.Path(args.root).resolve()))
-        body = page_text
-        chosen = [f for f in fragments if not f.endswith(".notes.html")]
-        wanted_ids: set[str] = set()   # `fn-26`, the form `footnotes()` and `wanted()` both use
-        for fragment in chosen:
-            heading = pathlib.Path(fragment).name.split("-", 1)[1][: -len(".html")]
-            marker = f'<h2 id="{heading}"'
-            if marker not in body:
-                continue
-            start = body.index(marker)
-            end = body.find("<h2 ", start + 4)
-            wanted_ids |= {f"fn-{n}" for n in re.findall(r"#fn-(\d+)", body[start: end if end > 0 else len(body)])}
-        if not chosen:
-            # an unmatched SECTION used to check NOTHING and print a clean report (feature 250)
-            print(f"quote-verbatim: SECTION={args.section!r} matched no question of {name} - nothing was checked", file=sys.stderr)
-            return 2
-        only = wanted_ids if only is None else (only & wanted_ids)
-    notes = [n for n in footnotes(cite_text) if only is None or n["id"] in only]
-    entries = report(notes, assertions(page_text), pages)
-    print(render(name, entries, pages.refused))
-    out = pathlib.Path(args.json) if args.json else pathlib.Path(args.root) / ".git" / "quote-verbatim" / (name.replace("/", "-") + ".json")
+        files = [pathlib.Path(f).name for f in fragments_for(args.q, str(pathlib.Path(args.root).resolve())) if not f.endswith(".notes.html")]
+    else:
+        files = selected(research, args.within) if args.within else []
+    name = args.q or f"IN={args.within}"
+    if not files:
+        print(f"quote-verbatim: {args.q or args.within or 'nothing'!r} names no question - e.g. make quote-verbatim Q=0041 or IN=homesteads", file=sys.stderr)
+        return 2
+    pages = Pages(pathlib.Path(args.offline)) if args.offline else cached_pages()
+    only = wanted(args.notes)
+    entries: list[dict] = []
+    for file in files:
+        page_text, cite_text = numbered(research, file)
+        notes = [n for n in footnotes(cite_text) if only is None or n["id"] in only]
+        mine = report(notes, assertions(page_text), pages)
+        for e in mine:
+            e["question"] = file
+        entries += mine
+        print(render(f"questions/{file}", mine, pages.refused))
+    out = pathlib.Path(args.json) if args.json else pathlib.Path(args.root) / ".git" / "quote-verbatim" / (re.sub(r"[^A-Za-z0-9.-]+", "-", name) + ".json")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"page": name, "footnotes": entries, "refused": pages.refused}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"  report for quote-check: {out}")

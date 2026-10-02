@@ -15,7 +15,7 @@ sections a correction, say exactly what in the handoff (the orchestrator makes i
 Session 1 researched this group and committed; its handoff is `specs/267-compound-research-owed/briefs/g2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=buildings SECTION=420, PAGE=buildings SECTION=180
+**Your questions:** PAGE=buildings SECTION=420, Q=0116
 **Your registry keys:** KEY=kotobank-umaya, KEY=jaanus-umaya, KEY=matsushiro-bukeyashiki, KEY=irori-jawiki, KEY=liq-takayasu-daidokoro, KEY=kotobank-uchigenkan, KEY=homes-jin-bukeyashiki, KEY=takayama-onkura-heritage, KEY=takayukashiki-jawiki, KEY=kotobank-goura, KEY=tamba-kashiwara-jinya, KEY=kitain-bansho, KEY=bansho-jawiki, KEY=boso-no-mura-takei, KEY=matsue-bukeyashiki, KEY=matsue-bukeyashiki-about, KEY=takayama-jinya-city, KEY=takayama-jinya-jawiki, KEY=kotobank-katteguchi, KEY=dozo-jawiki
 
 ## The procedure (check, apply)

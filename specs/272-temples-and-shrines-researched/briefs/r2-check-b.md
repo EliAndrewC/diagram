@@ -26,7 +26,7 @@ stub's path; fill it in. It refuses a key another clone already holds - then use
 Session 1 researched this group and committed; its handoff is `specs/272-temples-and-shrines-researched/briefs/r2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=religion-and-death SECTION=470, PAGE=religion-and-death SECTION=040
+**Your questions:** Q=0216, Q=0232
 **Your registry keys:** none - the last group has them
 
 ## The procedure (check, apply)

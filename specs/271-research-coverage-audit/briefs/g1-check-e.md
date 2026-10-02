@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/g1-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=buildings SECTION=090, PAGE=buildings SECTION=160
+**Your questions:** Q=0099, Q=0100
 **Your registry keys:** KEY=takayama-jinya-gifu, KEY=omori-daikansho-kunishitei, KEY=kaibara-jinya-tamba, KEY=fuchu-joge-jinya, KEY=tomiyama-1961-gokura, KEY=kawashiri-komegura-kunishitei, KEY=sagami-2012-gogurasho
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

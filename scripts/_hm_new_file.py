@@ -21,7 +21,10 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-KIND_OF = {"assets/glossary": "glossary", "sources/010-works-cited": "registry"}
+# GUARD_EDIT_OK: feature 303 - a new question's stem takes a reserved number too; a page, notes or originals file of a
+# stem that already exists passes, as an edit of an existing file does.
+KIND_OF = {"assets/glossary": "glossary", "sources/010-works-cited": "registry", "research/questions": "question"}
+_COMPANION = re.compile(r"(\.drawing)?(\.notes|\.originals)?$")
 # GUARD_EDIT_OK: feature 265 - registry prefixes passed 9990 on 2026-09-27 (10040 and up), so a prefix is four OR five
 # digits; `(?<!\d)` keeps a five-digit name from being read as its last four
 TARGET = re.compile(r"(?:>>?|\btee\s+(?:-a\s+)?)\s*[\"']?([^\s\"'<>|;&]*?(?<!\d)(\d{4,5})-([^\s\"'<>|;&/]+?)\.(json|html))[\"']?(?=[\s;|&)]|$)")
@@ -64,6 +67,10 @@ def verdict(payload: dict) -> str:
     for kind, path, key, prefix in targets:
         if path is not None and path.exists():
             continue  # an edit of a file that is already there
+        if kind == "question":
+            key = _COMPANION.sub("", key)
+            if path is not None and any(path.parent.glob(f"{prefix:04d}-{key}.*")):
+                continue  # another file of a stem that exists
         root = path.parents[len(Path(rp.DIRS[kind]).parts)] if path is not None and len(path.parents) > len(Path(rp.DIRS[kind]).parts) else cwd
         plain = key.replace("%2F", "/").replace("%25", "%")
         if not rp.reserved(kind, prefix, rp.mirror_of(_top(root)), plain):

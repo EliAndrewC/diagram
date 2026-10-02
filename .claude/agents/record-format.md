@@ -83,9 +83,9 @@ without them. Everything you need is in the bundle or on the web.
 translation's words; the placeholder is not a SESSION NOTE and the absent original is not a defect.
 
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
-paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
-beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
-`research/sources/`), each of which is thirty entries read to check one. A missing bundle is the
+paths it names instead - a question's page, `research/questions/NNNN-<heading id>.html` (or its `.drawing.html`), and
+the `.notes.html` beside it - and never a built page or a whole directory (`research/site/`, `research/questions/`,
+`research/sources/`), each of which is hundreds of entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
 ## Your report: the counts first, then only what the session must act on (feature 250)
@@ -154,10 +154,9 @@ whether there are references to things which are past edits that should no longe
 
 ## Input
 
-A research page path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of
-it named by heading - or a CITATIONS PAGE (`research/citations/<name>.html`, feature 211: the page's notes, and at
-its top the works section derived from the registry's write-ups, which a reader meets like any other page) or the
-registry itself. The glossary is `.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
+A question's page (`.claude/skills/diagram/research/questions/NNNN-<heading id>.html`, or its `.drawing.html`), or
+several - with its notes file beside it (`NNNN-<heading id>.notes.html`, features 258, 303: the page's notes, which a
+reader meets at the foot of its page with the works they cite) - or the registry itself. The glossary is `.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
 definition) - every occurrence of a term in a page's visible text is a hover tooltip, so a word IN the glossary
 needs nothing from you. `SOURCES.html` is NOT under the session-note and history rules (its `READ` markers are read by the link
 classifier and its entries are the record of the search): on the registry, report VOCABULARY only. Your drafted
@@ -174,7 +173,7 @@ already where it belongs, and you do not report it.
    the stray markup, and MISSED what only reading finds: a session note
    worded as prose, the one history passage left on a page, a sentence contradicting the clause before it, a
    drawing term with no definition. Those are this agent's whole reason, so the model stayed. Opus at MEDIUM found every one of them on
-   the same two cases.) The session runs `make record-prepass PAGE=<name>`
+   the same two cases.) The session runs `make record-prepass Q=<NNNN>`
    before dispatching you and puts its listing in your prompt: per section, the SESSION NOTE shapes a pattern can
    find (a `Grounds:` field, a feature number, a task id, a spec path, a make target, a file path, an engine
    identifier in code markup, a fetch verdict) and the VOCABULARY candidates (a run of kanji or kana, an

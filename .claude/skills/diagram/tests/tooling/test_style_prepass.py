@@ -112,14 +112,16 @@ def test_a_sentence_resting_on_an_absence_note_is_listed_for_a_ruling() -> None:
     assert "SENTENCES RESTING ON AN ABSENCE NOTE (1)" in sp.report({"q.html": prose}, set(), {"q.html": notes})
 
 
-def test_the_hook_helper_and_the_engine_name_the_same_collections() -> None:
-    """`_hm_record.py` restates the record's sub-collections because a hook helper imports nothing from the engine."""
-    from l7r.diagram.interactive.sources import COLLECTIONS
+def test_the_hook_helper_and_the_engine_name_the_same_questions_directory() -> None:
+    """`_hm_record.py` restates the record's questions directory because a hook helper imports nothing from the engine
+    (feature 303: the sub-collections it restated before are gone)."""
+    from l7r.diagram.interactive.record.questions import QUESTIONS
 
-    assert _load("_hm_record").COLLECTIONS == COLLECTIONS
+    assert _load("_hm_record").QUESTIONS == QUESTIONS
 
 
-def test_the_command_reads_a_page_s_question_and_refuses_one_that_matches_nothing(capsys) -> None:  # noqa: ANN001
-    assert sp.main(["homesteads", "--root", str(REPO), "--section", "010"]) == 0
-    assert "== 010-" in capsys.readouterr().out
-    assert sp.main(["homesteads", "--root", str(REPO), "--section", "no-such-question-anywhere"]) == 2
+def test_the_command_reads_a_question_and_refuses_one_that_matches_nothing(capsys) -> None:  # noqa: ANN001
+    assert sp.main(["0041", "--root", str(REPO)]) == 0
+    assert "== 0041-" in capsys.readouterr().out
+    assert sp.main(["9999", "--root", str(REPO)]) == 2
+    assert "make style-prepass Q=" in capsys.readouterr().err

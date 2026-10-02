@@ -60,7 +60,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [x] T11 `make quote-verbatim ... SECTION=` checks only that question's notes (the rule dropped the
       argument), and an unmatched SECTION exits 2
       research: rendering
-      verify: DONE. DONE. The Makefile rule now passes SECTION; make quote-verbatim PAGE=cities/sizing SECTION=010 checks 4 notes where it checked 11; SECTION=nonesuch exits 2. quote-verbatim tests green.
+      verify: DONE. DONE. The Makefile rule now passes SECTION; make quote-verbatim Q=0181 checks 4 notes where it checked 11; SECTION=nonesuch exits 2. quote-verbatim tests green.
 - [x] T12 `make check-bundle` (`KIND=` for entry-drift) and the five contracts that read a bundle and write `REPORT.md` (D6, D8);
       tests in `tests/tooling/test_check_bundle.py`
       research: rendering

@@ -46,7 +46,8 @@ call Bash '{"command":"echo see /host-l7r-repo/setting/budgets.md for the figure
 [ "$(rc)" -eq 0 ] && ok "a mention (echo) of the path" || no "a mention was refused"
 call Bash '{"command":"grep -rn imperial .claude/skills/diagram/research/contents.json#cities"}'
 [ "$(rc)" -eq 0 ] && ok "a grep over the record, not the canon" || no "refused"
-call Read '{"file_path":"/diagram/.clones/x/.claude/skills/diagram/research/contents.json#citiesfabric/040-q.html"}'
+# GUARD_EDIT_OK: feature 303 - the record file in this case takes the flat layout's path; the case is unchanged.
+call Read '{"file_path":"/diagram/.clones/x/.claude/skills/diagram/research/questions/0040-q.html"}'
 [ "$(rc)" -eq 0 ] && ok "a Read of a record file" || no "refused"
 earlier 'ls'
 call Bash '{"command":"cd .claude/skills/diagram && make canon TERMS=\"imperial road|merchant\""}'

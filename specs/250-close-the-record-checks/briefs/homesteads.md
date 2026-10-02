@@ -50,7 +50,7 @@ the REPORT's heading, not the record's, and is only a hint. Then either confirm 
    `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`.
 4. **Check, one agent per changed entry or key, all in one message, in the background.** For each changed
-   question: `make check-bundle PAGE=homesteads SECTION=<NNN>`, then `quote-check` and `record-format`, each
+   question: `make check-bundle Q=<NNNN>`, then `quote-check` and `record-format`, each
    naming the MANIFEST.md it printed and nothing else. For each new or changed registry key:
    `make check-bundle KEY=<key>` and `source-applicability`. Each replies with ONE line of counts and writes
    its report to `REPORT.md` in its bundle.

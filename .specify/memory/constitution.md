@@ -1625,8 +1625,8 @@ named, or NOT-APPLICABLE - and whether the write-up's limits are honest, at two 
 or changed, and before a session integrates its numbers into a map or a rule, which is the fifth research box. The
 record's own notes are written once, beside the question that first cites them, and the record is BUILT into the site
 a reader opens (feature 301): each question's page carries its notes and the works they cite at its foot, so nothing
-is typed twice. A pointer to the research names the question's fragment (`research/<page>/NNN-<heading id>.html`),
-never a built page.
+is typed twice. A pointer to the research names the question's file (`research/questions/NNNN-<heading id>.html`,
+feature 303), never a built page.
 rigor: the consequences of a wrong bund width on a hobby map are small and the players have been
 told the level of rigor honestly - but the project still wants as much rigor as its time and
 tokens allow, and reading the source is the cheapest rigor there is.

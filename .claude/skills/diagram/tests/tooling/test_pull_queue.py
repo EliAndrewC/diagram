@@ -21,11 +21,11 @@ def _git(cwd: pathlib.Path, *args: str) -> str:
 
 def _world(tmp: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
     a = tmp / "a"
-    (a / "research").mkdir(parents=True)
+    (a / "research" / "site").mkdir(parents=True)
     _git(tmp, "init", "-q", str(a))
     for k, v in (("user.name", "t"), ("user.email", "t@t")):
         _git(a, "config", k, v)
-    (a / "research" / "fields.html").write_text("page v0\n", encoding="utf-8")
+    (a / "research" / "site/index.html").write_text("page v0\n", encoding="utf-8")
     (a / "research" / "note.txt").write_text("note v0\n", encoding="utf-8")
     _git(a, "add", "-A")
     _git(a, "commit", "-q", "-m", "base")
@@ -37,7 +37,7 @@ def _world(tmp: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
 
 
 def _run(a: pathlib.Path) -> subprocess.CompletedProcess:
-    env = {**os.environ, "PULL_QUEUE_REBUILD": "echo rebuilt > research/contents.json#fields"}
+    env = {**os.environ, "PULL_QUEUE_REBUILD": "echo rebuilt > research/site/index.html"}
     return subprocess.run([str(SCRIPT), "1"], cwd=a, capture_output=True, text=True, env=env, check=False)
 
 
@@ -48,11 +48,11 @@ def _change(root: pathlib.Path, name: str, text: str) -> None:
 
 def test_a_generated_conflict_is_rebuilt_and_committed(tmp_path) -> None:
     a, q = _world(tmp_path)
-    _change(a, "fields.html", "page from a\n")
-    _change(q, "fields.html", "page from the queue\n")
+    _change(a, "site/index.html", "page from a\n")
+    _change(q, "site/index.html", "page from the queue\n")
     got = _run(a)
     assert got.returncode == 0, got.stderr
-    assert (a / "research" / "fields.html").read_text(encoding="utf-8") == "rebuilt\n"
+    assert (a / "research" / "site/index.html").read_text(encoding="utf-8") == "rebuilt\n"
     assert "rebuilt" in _git(a, "log", "--oneline", "-1") and not _git(a, "status", "--porcelain")
 
 
@@ -60,8 +60,8 @@ def test_a_hand_written_conflict_stops_and_a_dirty_queue_is_refused(tmp_path) ->
     a, q = _world(tmp_path)
     _change(a, "note.txt", "note from a\n")
     _change(q, "note.txt", "note from the queue\n")
-    _change(a, "fields.html", "page from a\n")
-    _change(q, "fields.html", "page from the queue\n")
+    _change(a, "site/index.html", "page from a\n")
+    _change(q, "site/index.html", "page from the queue\n")
     got = _run(a)
     assert got.returncode == 1 and "research/note.txt" in got.stderr
     assert _git(a, "diff", "--name-only", "--diff-filter=U").split() == ["research/note.txt"], "the generated side is resolved first"

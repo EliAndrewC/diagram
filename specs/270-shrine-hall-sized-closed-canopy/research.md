@@ -3,7 +3,7 @@
 *No new research pass: both decisions rest on the record as feature 268 left it. (Figures observed 2026-09-27;
 method: read from the named record question and the 268 sheet's notes.)*
 
-## R1. How big is the hall-and-dwelling? (religion-and-death question 120)
+## R1. How big is the hall-and-dwelling? (question 0222)
 
 The record's bands, each accurate as a band: a village hall about 20 to 35 ft on a side (the Saitama Kannon hall
 6.54 m square to the Ehime worship hall's 10.62 m); the hall and dwelling under one roof 2,100 to 3,600 sq ft, from

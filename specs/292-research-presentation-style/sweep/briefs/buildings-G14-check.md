@@ -19,17 +19,17 @@ them. Its handoff is `specs/292-research-presentation-style/sweep/buildings-G14-
 2. **Bundles**, in `.claude/skills/diagram`, one per check (each prints the MANIFEST to hand its agent):
    - the old sections, for the merge audit: for each path in `OLD=`, `git -C /diagram/.clones/diagram-reorg show
      <BASE>:.claude/skills/diagram/<path> > /tmp/l7r-old-buildings-G14/<file name>` (the fragment only);
-   - `record-style` on each research section, WITH the merge audit: `make check-bundle PAGE=buildings SECTION=<id>
+   - `record-style` on each research section, WITH the merge audit: `make check-bundle Q=<NNNN>
      FOR=record-style EXTRA="<the saved old fragments>" OUT=/tmp/l7r-check/buildings-G14-<n>-rs`; and on each
-     rendering section: `make check-bundle PAGE=rendering/buildings SECTION=<rid> FOR=record-style OUT=...`;
+     rendering section: `make check-bundle Q=<NNNN> FOR=record-style OUT=...`;
    - `quote-check` on each research and rendering section: `make check-bundle ... FOR=quote-check` - it may print
      several bundles (the notes in batches); each is its own agent;
    - `record-format` on each research and rendering section: `... FOR=record-format`;
-   - `entry-drift` for each class in `MODALS=`: `make check-bundle PAGE=buildings SECTION=<id> KIND=<class>
+   - `entry-drift` for each class in `MODALS=`: `make check-bundle Q=<NNNN> KIND=<class>
      FOR=entry-drift EXTRA="research/contents.json#compounds<the rendering fragment>"`, and say in the dispatch that the
      modal is judged against both sections together;
-   - `translation-check`, only if `make translation-owed PAGE=buildings SECTION=<id>` lists pairs (and the same for the
-     rendering section): `make check-bundle PAGE=buildings SECTION=<id> FOR=translation-check`.
+   - `translation-check`, only if `make translation-owed Q=<NNNN>` lists pairs (and the same for the
+     rendering section): `make check-bundle Q=<NNNN> FOR=translation-check`.
 3. **Dispatch the checks in the background, at most THREE at a time** (the containers share a 9 GB memory cap):
    each agent is named for its check (`record-style`, `quote-check`, `record-format`, `entry-drift`,
    `translation-check`) and handed its MANIFEST and nothing under `/diagram`. Ask each for counts first, then only

@@ -5,7 +5,7 @@ whole of what you need; do not read the feature's spec, plan or research files t
 stays in your context and is paid for again on every later turn. Work in this clone (`/diagram/.clones/diagram-research`); the project's
 CLAUDE.md files still apply to you.
 
-**Read narrowly.** For a few notes of a question use `make notes PAGE=cities/fabric SECTION=<NNN> KEYS=<key,key>` (in
+**Read narrowly.** For a few notes of a question use `make notes Q=<NNNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`), which prints those notes and only the paragraphs carrying them - never `cat` a notes
 file or `sed` a wide range of a fragment. Grep with `-o` and a short context. Send the lookups you know you need
 in one message.

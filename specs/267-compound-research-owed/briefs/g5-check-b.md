@@ -15,7 +15,7 @@ sections a correction, say exactly what in the handoff (the orchestrator makes i
 Session 1 researched this group and committed; its handoff is `specs/267-compound-research-owed/briefs/g5-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=religion-and-death SECTION=240, PAGE=religion-and-death SECTION=090
+**Your questions:** Q=0240, PAGE=religion-and-death SECTION=090
 **Your registry keys:** KEY=kotobank-aidono, KEY=jawiki-saijin, KEY=jawiki-goshi, KEY=genbu-honden-styles, KEY=tokyo-jinjacho-kamidana, KEY=jinjahoncho-keidai, KEY=jawiki-torii, KEY=kotobank-morijio, KEY=jawiki-morijio, KEY=ise-miyachu-morijio, KEY=jawiki-yashikigami
 
 ## The procedure (check, apply)

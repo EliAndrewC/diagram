@@ -495,7 +495,7 @@ class BundleFitMixin:
         passes between them: Inashiro drew two garden beds across the brook from their house and Mizuguchi a privy.
         A household crosses its own brook to reach the field, over a plank; it does not keep its vegetable beds on the
         far bank. That the parts share the house's bank is a GUESS - no page read places a garden across a channel from
-        its house, and none says it never was (research/homesteads, the farmstead's layout) - kept because a plot
+        its house, and none says it never was (research/contents.json#homesteads, the farmstead's layout) - kept because a plot
         split by running water reads as two holdings. Exact: the straight line from the house's center to each part's
         crosses no reach of any stream - `crosses_a_stream`, the one predicate the farm fixtures and the finished-map
         test read too (feature 287, FR-003)."""

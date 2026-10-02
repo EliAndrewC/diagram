@@ -58,7 +58,7 @@ blocked sources is where your TO-DOWNLOAD entries start - first try each once mo
    and when, both searches where there were two; the claim stays a labeled guess), or CONTRADICTION-RESOLVED (an
    existing section was wrong - say which and what corrects it). The GM's canon governs the setting: report the
    history against it, never override it.
-5. **Write** on religion-and-death 580-590 (new), and edits to 020 and 030 only. A new question is a fragment `research/contents.json#religion-and-the-deadNNN-<heading id>.html` at a free
+5. **Write** on religion-and-death 580-590 (new), and edits to 020 and 030 only. A new question is a fragment `research/religion-and-death/NNN-<heading id>.html` at a free
    prefix in your range, opening with `<h2 id="...">` whose text is the question a reader would ask from the map; a
    `<p><strong>Sources:</strong> ...</p>` roster; the finding; and where it drives what a map draws, the decision in
    plain words, labeled (accurate, deviation, convention, guess). Footnotes: `<sup class="fn" data-note="<key>"></sup>`

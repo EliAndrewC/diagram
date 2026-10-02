@@ -79,7 +79,7 @@ Mode B (gate tests in `tests/gate/`, template `test_covers_298.py`; a placer gua
 - **B4** parallel twin watercourses (class 4): no two courses - comb branches INCLUDED - run parallel (within 15 deg) 12-32 ft
   apart for more than 60 ft (GUESS). The recorded case (ledger 2026-08-28, "twin branch canals ~25 ft apart") is two comb
   branches, and so are the four maps that fail today. A research pass on the spacing of a comb's branch canals runs first
-  (constitution XII; the scout found no norm in `research/water`): if it FINDS an attested branch spacing, B4's test
+  (constitution XII; the scout found no norm in `research/contents.json#water`): if it FINDS an attested branch spacing, B4's test
   ENFORCES it with the citation - siblings at the attested spacing pass, a closer pair or a non-sibling pair fails - and the
   placer lays branches at it; otherwise the placer is fixed so branches are not laid side by side. The class goes back through
   the audit only if the research shows the spacing to be a matter of judgment.

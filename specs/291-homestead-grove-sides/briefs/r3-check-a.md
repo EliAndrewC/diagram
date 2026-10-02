@@ -9,12 +9,12 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 depths, about 44 ft at a 28 ft-deep farmhouse, a GUESS) - so it agrees with what the maps draw. Its handoff is
 `specs/291-homestead-grove-sides/briefs/r3-handoff.md`.
 
-**Your questions:** PAGE=homesteads SECTION=010
+**Your questions:** Q=0036
 **Your registry keys:** none
 
 ## The procedure (check, apply)
 
-1. In the background, in one message: `make check-bundle PAGE=homesteads SECTION=010 FOR=quote-check` for `quote-check`
+1. In the background, in one message: `make check-bundle Q=0036 FOR=quote-check` for `quote-check`
    and `... FOR=record-format` for `record-format` (in `.claude/skills/diagram`), each naming its own MANIFEST.md.
 2. `make apply-edits FROM=<each output_file>`; by hand only what it refuses or lists as `EDIT: none`, in one message.
    Then `make record && make citations` and the four record tests once.

@@ -58,7 +58,7 @@ Find every instance of the element on the map first (the manifest's records, the
    existing mark is exactly this case.
 3. **Does its FORM read?** Where the element is correct only in its shape: a windbreak is a long narrow belt along a fringe,
    not a blob; a precinct (temple, shrine, burial, market) reads as one composed group; a channel's width depicts RANK, not
-   discharge (research/water "Drawn width is RANK" - widths at a junction are never a finding).
+   discharge (research/contents.json#water "Drawn width is RANK" - widths at a junction are never a finding).
 4. **Does it look right where it now stands?** Judged by what the element IS:
    - ground cover or open ground: is it there for a reason the place supplies, or does it look check-shaped (hugging computed
      gaps, tiling leftovers)?
@@ -72,7 +72,7 @@ Find every instance of the element on the map first (the manifest's records, the
    - "X stands inside Y" (scrub in the marsh, trees on a paddy): count it, do not eyeball it - the PNG you see is downscaled.
      Take the element's bases from the SVG (`make scatter-bases MAP=<map> [BOX=...]` for scatter), map each onto the PNG,
      classify the ground under it by PIXEL COLOR, and report the count. Any count above a handful is needs-work.
-5. A glyph drawn off scale or off color so that it reads is a map drawing CONVENTION (`research/presentation`), not a defect.
+5. A glyph drawn off scale or off color so that it reads is a map drawing CONVENTION (`research/contents.json#map-conventions`), not a defect.
 
 ## What you do not judge
 

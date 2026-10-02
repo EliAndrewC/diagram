@@ -122,7 +122,7 @@ so cannot move; the name can.*
 
 ## 2026-09-27 - feature 267: the field grave is the corner form
 
-The field grave became a knob (research/fields 220): the Chinese island inside a plot or the Japanese grave in a
+The field grave became a knob (research/contents.json#fields 220): the Chinese island inside a plot or the Japanese grave in a
 plot's corner, rolled per hamlet on its own stream (`features.grave_form`). This map rolls the corner: a 6.5 x 4.5 px
 mound with two staggered stones, seated at a true turning corner of a 31 x 40 ft plot (`turning_corners`) and stepped
 12 px in from the vertex (`corner_seat`, floored after settlement-review found a third of the way - 8.7 px on this

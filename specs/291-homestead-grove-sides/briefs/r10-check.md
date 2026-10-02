@@ -8,12 +8,12 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 **What moved.** Session 1 reconciled 0081 and ways/100 on a field road's width (the 3-shaku figure attributed to Ieyasu's testament, and its standing) and said how the map's 3 and 5 ft widths stand beside it. Its handoff is
 `specs/291-homestead-grove-sides/briefs/r10-handoff.md`.
 
-**Your questions:** PAGE=ways SECTION=020; PAGE=ways SECTION=100
+**Your questions:** Q=0081; PAGE=ways SECTION=100
 **Your registry keys:** any the handoff names as new
 
 ## The procedure (check, apply)
 
-1. In the background, in one message, for each question: `make check-bundle PAGE=ways SECTION=<q> FOR=quote-check` for
+1. In the background, in one message, for each question: `make check-bundle Q=<NNNN> FOR=quote-check` for
    `quote-check` and `... FOR=record-format` for `record-format` (in `.claude/skills/diagram`), each naming its own
    MANIFEST.md; and `source-applicability` (`make check-bundle KEY=<k>`) on any registry key the handoff names as new.
 2. `make apply-edits FROM=<each output_file>`; by hand only what it refuses or lists as `EDIT: none`, in one message.

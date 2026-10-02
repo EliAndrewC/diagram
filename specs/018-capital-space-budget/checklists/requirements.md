@@ -48,7 +48,7 @@
    rather than skip.
 
 **No [NEEDS CLARIFICATION] markers were needed.** Every decision this feature encodes was settled with
-the GM on 2026-08-08 and recorded in `settlements/capitals.md` and `research/contents.json#citiescapitals.md`
+the GM on 2026-08-08 and recorded in `settlements/capitals.md` and `research/cities/capitals.md`
 before the spec was written; the Assumptions section names each one and its source rather than
 re-opening it.
 

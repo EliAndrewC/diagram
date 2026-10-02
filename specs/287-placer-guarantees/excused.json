@@ -66,7 +66,7 @@
   "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 B26): the homesteads' woods fall short of their rolled area",
   "what": "Drawn homestead wood is 49-86% of the rolled area on every map; Kuwabata near/under the 6,000 sq ft floor; copse crowns across a lane from their house.",
   "verdict": "in",
-  "why": "Rule: each homestead that keeps a wood keeps 6,000-28,000 sq ft of it, rolled per homestead (research/vegetation 210; HOMESTEAD_WOOD_FT2). The copse top-up runs out of seats inside COPSE_HOUSE_REACH_FT.",
+  "why": "Rule: each homestead that keeps a wood keeps 6,000-28,000 sq ft of it, rolled per homestead (research/contents.json#vegetation 210; HOMESTEAD_WOOD_FT2). The copse top-up runs out of seats inside COPSE_HOUSE_REACH_FT.",
   "still_open": "yes",
   "owner": "hamletgen homestead_parts/groves.py village_grove(area=) copse top-up",
   "sketch": "Seat the shortfall as a second stand (behind the belt on the homestead's side) or widen the reach for a full homestead; unit-test drawn/rolled >= a stated floor per homestead."
@@ -75,7 +75,7 @@
   "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 B07): a wild fan middle leaves a hamlet almost no dry field",
   "what": "fan_middle=wild leaves Inashiro 0.42 acre and Mizuguchi 0.41 acre of dry field (~0.03 acre/household).",
   "verdict": "in",
-  "why": "Rule: the paddy and dry fields are sized from population, coarse grain about a third of the diet (research/fields 'Acreage from population'); the knob removes the hem and nothing re-places it. WHERE the band goes is research owed first.",
+  "why": "Rule: the paddy and dry fields are sized from population, coarse grain about a third of the diet (research/contents.json#fields 'Acreage from population'); the knob removes the hem and nothing re-places it. WHERE the band goes is research owed first.",
   "still_open": "yes",
   "owner": "waterfields/comb.py fan_toe_hem (the dry-band placer)",
   "sketch": "After the research pass, place the dry band on the named ground at the acreage the sizing rule leaves; unit-test dry acreage per household against the sizing rule on both fan_middle forms."
@@ -117,7 +117,7 @@
   "where": "same section, 'Coppice lots read as stamped discs'",
   "what": "Coppice lot stocking fills a near-round 12-sided outline edge to edge.",
   "verdict": "in",
-  "why": "Rule: a lot is bounded by what research/vegetation 140 names (a path, a stream, the slope), no fixed shape.",
+  "why": "Rule: a lot is bounded by what research/contents.json#vegetation 140 names (a path, a stream, the slope), no fixed shape.",
   "still_open": "yes",
   "owner": "hamletgen/hinterland/parcels.py open_ground_patches (lot outline)",
   "sketch": "Bound the lot by the nearest path/stream/slope break and roughen the rest; unit-test the outline is not a regular polygon."
@@ -312,7 +312,7 @@
   "where": "future-work/farming-communities.md: ## Review residue from the shared-bund re-roll - 'A tip-angle companion to the area floor'",
   "what": "Basins of 0.55-0.72 cell with 27-30 deg tips read as darts.",
   "verdict": "in",
-  "why": "Rule: a basin never tapers to a point (research/fields 'Minimum basin SIZE'); tests/gate/test_paddy_fabric.py now checks NEEDLE_DEG on shipped manifests, no placer guarantee of a tip floor.",
+  "why": "Rule: a basin never tapers to a point (research/contents.json#fields 'Minimum basin SIZE'); tests/gate/test_paddy_fabric.py now checks NEEDLE_DEG on shipped manifests, no placer guarantee of a tip floor.",
   "still_open": "unknown",
   "owner": "waterfields toe/seam pass",
   "sketch": "Add a tip-angle floor to the carve/toe pass's acceptance, placer stricter than the test."
@@ -342,7 +342,7 @@
   "where": "same section - 'cohort seeds 9 and 11'",
   "what": "Carve leaves a tapering scrap no weld resolves; paddy_plot_seams_shared fails.",
   "verdict": "in",
-  "why": "Rules: plot seams shared, basins workable (research/fields 'Bunds are shared').",
+  "why": "Rules: plot seams shared, basins workable (research/contents.json#fields 'Bunds are shared').",
   "still_open": "unknown",
   "owner": "waterfields/carve.py sector opening",
   "sketch": "Stop the carve opening a sector whose boundary collapses onto the collector."
@@ -426,7 +426,7 @@
   "where": "future-work/farming-communities.md: ## OPEN 2026-08-19: the kura roll under-delivers 2.2x - FINDING 1; and ## The storehouse share is a positional roll",
   "what": "_hjit positional roll aliases along a front row; pool share 13.6-22% against ~30% (p=0.2993), a re-pack moves it.",
   "verdict": "in",
-  "why": "Rule: ~30% of farmhouses have a kura (research/homesteads 'Which farmhouses have a storehouse?'). settlement/houses.py still keys it on _hjit(x, y).",
+  "why": "Rule: ~30% of farmhouses have a kura (research/contents.json#homesteads 'Which farmhouses have a storehouse?'). settlement/houses.py still keys it on _hjit(x, y).",
   "still_open": "yes",
   "owner": "settlement/houses.py kura roll",
   "sketch": "Key the roll to the household number with an avalanche hash (_nth_roll in the entry); test the pool share against 0.2993."
@@ -459,7 +459,7 @@
   "where": "future-work/farming-communities.md: ## OPEN 2026-08-19 (waterfields): the paddy area floor cannot see WIDTH",
   "what": "Basins 5.9 ft wide pass the area floor; 9 under 12 ft, 30 under 16 ft on Kashikawa.",
   "verdict": "in",
-  "why": "Rule: a basin is wide enough to stand in and puddle (research/fields 'Minimum basin SIZE').",
+  "why": "Rule: a basin is wide enough to stand in and puddle (research/contents.json#fields 'Minimum basin SIZE').",
   "still_open": "unknown",
   "owner": "waterfields toe pass",
   "sketch": "Add a working-width floor (area / longest side) to the toe pass, merging a scrap into its neighbor."
@@ -534,7 +534,7 @@
   "where": "future-work/farming-communities.md: ## Two checks that pass VACUOUSLY - woodland",
   "what": "Sawada and Kashikawa roll zero woodland parcels.",
   "verdict": "in",
-  "why": "Rule: a farming village held worked woodland (iriai; research/vegetation); the scan finds no legal seat on a tight sheet.",
+  "why": "Rule: a farming village held worked woodland (iriai; research/contents.json#vegetation); the scan finds no legal seat on a tight sheet.",
   "still_open": "unknown",
   "owner": "hamletgen/hinterland/parcels.py open_ground_patches",
   "sketch": "Guarantee at least one parcel (a smaller floor or a set-back seat) and test count >= 1 on every roll."
@@ -645,7 +645,7 @@
   "where": "future-work/farming-communities.md: ## The toe marsh's recorded outline is not the drawn marsh",
   "what": "marshes[0].poly keeps the unclipped ring, so the belt cannot be kept off the marsh (68 of 179 belt crowns inside it on Sawada).",
   "verdict": "in",
-  "why": "Rule: woody cover stands on dry ground above the marsh (research/vegetation; the copse test in test_pool_261).",
+  "why": "Rule: woody cover stands on dry ground above the marsh (research/contents.json#vegetation; the copse test in test_pool_261).",
   "still_open": "yes",
   "owner": "settlement/land/wet.py marsh record + hamletgen/hinterland/belt.py",
   "sketch": "Record drawn_poly and have every grove and parcel test against it; then give the belt the copse's keep-out."
@@ -816,7 +816,7 @@
   "where": "tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47), test_a_rolled_cohort_passes_the_whole_gate",
   "what": "Seed 45 reaches 18.6 of 22.1 acres, seed 47 21.9 of 26.0; the 15% acreage assertion is skipped for them.",
   "verdict": "in",
-  "why": "Rule: paddy acreage lands on the figure the household count implies (research/fields 'Acreage from population'; the 15% band in the same test). The envelope clamps the fan at every aspect for a large household count at that fall.",
+  "why": "Rule: paddy acreage lands on the figure the household count implies (research/contents.json#fields 'Acreage from population'; the 15% band in the same test). The envelope clamps the fan at every aspect for a large household count at that fall.",
   "still_open": "yes",
   "owner": "hamletgen/water fit_field + canvas/envelope sizing (plan_site)",
   "sketch": "Grow the canvas/envelope (or change archetype) when the largest fan cannot reach the target, and unit-test acreage within band on a large-household, steep-fall spec."
@@ -825,7 +825,7 @@
   "where": "tests/gate/hamletgen/test_driver.py:109 (and tests/soak/test_polder_fall_0.py:113) - placed >= round(0.85 * households)",
   "what": "The test accepts a hamlet seating 85% of its declared households.",
   "verdict": "in",
-  "why": "A rule, not a bare excuse: research/settlements 030 states the band 0.85-1.05 occupied farmhouses per declared household and 'aims at one apiece'. But the seating stage only records a shortfall (stages.py docstring) - no placer guarantees even the 0.85 floor; it is asserted on rolled maps.",
+  "why": "A rule, not a bare excuse: research/contents.json#tiers 030 states the band 0.85-1.05 occupied farmhouses per declared household and 'aims at one apiece'. But the seating stage only records a shortfall (stages.py docstring) - no placer guarantees even the 0.85 floor; it is asserted on rolled maps.",
   "still_open": "yes",
   "owner": "hamletgen/homesteads/stages.py stage_homesteads (front row, cloud, widening rounds)",
   "sketch": "Make the seating stage keep widening its candidate ground until the band is met (or fail the roll loudly); unit-test placed/households >= 0.85 on a tight-ground spec."

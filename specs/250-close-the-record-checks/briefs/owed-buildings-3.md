@@ -10,7 +10,7 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
 checked and recorded on its own): KIND=BorderCourt (SECTION=120), KIND=CartYard (SECTION=190), KIND=FireWaterTubs (SECTION=160), KIND=Granary (SECTION=080), KIND=Granary (SECTION=150), KIND=GuestQuarters (SECTION=120), KIND=RetainersQuarters (SECTION=060)
 
 1. **Check, all in one message, in the background.** For each PAIR:
-   `make check-bundle PAGE=buildings SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class> OUT=/tmp/l7r-check/owed-<class>-<NNN>` (in
+   `make check-bundle Q=<NNNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class> OUT=/tmp/l7r-check/owed-<class>-<NNN>` (in
    `.claude/skills/diagram`) and one `entry-drift` naming its MANIFEST.
 2. **Apply each report with ONE command**: `make apply-edits FROM=<the output_file its dispatch printed>`; the refused
    blocks and any `EDIT: none` finding by hand, all in ONE message of parallel `Edit` calls.

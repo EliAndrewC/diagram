@@ -25,7 +25,7 @@ checks report with `make append`.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/fx2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=vegetation SECTION=020, PAGE=vegetation SECTION=230
+**Your questions:** Q=0071, PAGE=vegetation SECTION=230
 **Your registry keys:** none - the last group has them
 
 ## The procedure (check, apply)

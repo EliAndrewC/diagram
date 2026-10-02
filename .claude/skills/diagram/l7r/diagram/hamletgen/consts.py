@@ -680,7 +680,7 @@ CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is lai
 # The East Asian winter monsoon blows out of the Siberian high from the northwest across China and Japan, and
 # the GM ruled (2026-08-29) that it does across Rokugan too "in most places when the local geography does not
 # override the regional geography" - which is why shelter belts stand on the north and west, and why a reader
-# who sees them there is being told a real fact about the regional wind (research/vegetation, 'Does a shelter
+# who sees them there is being told a real fact about the regional wind (research/contents.json#vegetation, 'Does a shelter
 # belt wrap the settlement?'). A local wind that departs from it - a valley whose cold air drains off its own
 # high side, say - is a DECLARATION on the spec (`HamletSpec.windward`), and nothing else (GM 2026-09-26:
 # "only when declared"). No pool map declares one.
@@ -713,7 +713,7 @@ WIND_BACK_MIN_DOT = 0.7071
 #     the corridor is deep lets a way through only near square - about 40 deg from square at most, the same
 #     bound `shallow_crossing` holds every other crossing to. A map drawing convention, not a finding.
 #   FORD_SPACING: px along the brook between fords. A guess: often enough that a field path never walks far to
-#     one (the record gives no spacing for field-path crossings; searched 2026-09-27, see research/ways).
+#     one (the record gives no spacing for field-path crossings; searched 2026-09-27, see research/contents.json#ways).
 #   FORD_BEND_DEG: a site where the brook turns more than this across the gap is skipped - a deck across a bend
 #     is not square to both reaches.
 FORD_HALF = 30.0
@@ -721,7 +721,7 @@ FORD_SPACING = 160.0
 FORD_BEND_DEG = 20.0
 
 # THE COPSE STANDS AMONG WHAT IT IS NAMED FOR (feature 261). The record gives the dooryard copse as "a loose copse of
-# bamboo and fruit trees in the gaps between the houses" and no distance (research/rendering/vegetation, 'How our maps draw a
+# bamboo and fruit trees in the gaps between the houses" and no distance (research/contents.json#vegetation, 'How our maps draw a
 # village's groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
 # more than 90 ft from any house), and the pool's copses before the reseats sat at a median 77-81 ft. A map drawing
 # convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its

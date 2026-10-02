@@ -30,9 +30,9 @@ was 55-65% of a check's context and five to twelve times what the check read of 
 without them. Everything you need is in the bundle or on the web.
 
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
-paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
-beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
-`research/sources/`), each of which is thirty entries read to check one. A missing bundle is the
+paths it names instead - a question's page, `research/questions/NNNN-<heading id>.html` (or its `.drawing.html`), and
+the `.notes.html` beside it - and never a built page or a whole directory (`research/site/`, `research/questions/`,
+`research/sources/`), each of which is hundreds of entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
 ## Your report: the counts first, then only what the session must act on (feature 250)
@@ -85,12 +85,12 @@ multiple footnote links per paragraph or even multiple per sentence in sentences
 
 ## Input
 
-A research file path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of it
-named by heading. The record is HTML (feature 194): `<sup class="fn"><a href="citations/<name>.html#fn-n">n</a></sup>`
-after an assertion, and - since feature 211 (GM 2026-09-07) - the note `<li id="fn-n"><a href="url"><code>key</code></a>
-- 「quoted passage」 (gloss)</li>` in the `<section class="footnotes">` of the page's CITATIONS PAGE,
-`research/citations/<name>.html` (`citations/cities/<name>.html` for a `cities/` page): read BOTH files, the research
-page for the assertions and the citations page for the notes. `research/sources/` holds the registry entry behind each key. A footnote with no
+A question's page (`.claude/skills/diagram/research/questions/NNNN-<heading id>.html`, or its `.drawing.html`), or
+several. The record is HTML (feature 194): `<sup class="fn" data-note="<key>"></sup>` after an assertion, and the note
+`<li data-note="<key>"><a href="url"><code>key</code></a> - 「quoted passage」 (gloss)</li>` in the page's own notes file
+beside it (`NNNN-<heading id>.notes.html`; features 258, 303): read BOTH files, the page for the assertions and its notes
+file for the notes; a bundle gives them numbered as the reader sees them. `research/sources/` holds the registry entry
+behind each key. A footnote with no
 key and no link that reads `no publicly readable source (searched ...)` is an ABSENCE note - report it as such and
 check nothing for it.
 
@@ -108,7 +108,7 @@ backlog while the record gets less honest.
 
 ## What a script has already done, and what is left for you (feature 251, GM 2026-09-19)
 
-The character-for-character half of this check is done by `make quote-verbatim PAGE=<name>` BEFORE you are
+The character-for-character half of this check is done by `make quote-verbatim Q=<NNNN>` BEFORE you are
 dispatched, by no model: a language model reads tokens, not characters, and a hyphen for the source's dash is
 exactly what it blurs. The session runs it and names its JSON report in your prompt. Per footnote the report
 carries the id, key, links, class (citation / absence / grounds), each quoted passage - for a translated one the

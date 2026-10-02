@@ -15,7 +15,7 @@ sections a correction, say exactly what in the handoff (the orchestrator makes i
 Session 1 researched this group and committed; its handoff is `specs/267-compound-research-owed/briefs/g4-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=buildings SECTION=570, PAGE=vegetation SECTION=170
+**Your questions:** Q=0110, Q=0076
 **Your registry keys:** KEY=okutono-jinya-garden, KEY=chiran-bukeyashiki-gardens, KEY=kotobank-teien, KEY=kotobank-ishidoro, KEY=kotobank-mikoshi-no-matsu, KEY=uekipedia-kuromatsu, KEY=kotobank-yashikigami, KEY=jigen-ryu-jawiki, KEY=kotobank-tategi-uchi, KEY=nodachi-jigen-ryu, KEY=bujutsukarate-tategi, KEY=kotobank-katanakake, KEY=kotobank-mitsu-dogu, KEY=kotobank-bansho, KEY=bunka-nuruyu-bansho
 
 ## The procedure (check, apply)

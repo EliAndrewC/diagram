@@ -13,12 +13,12 @@ the map features whose write-ups will be rewritten from what you find (by the or
 
 First, for each: a section that is a drawing convention or project decision (a "no source is owed" note or a map-convention
 label) owes no source. Say so in the handoff and leave it.
-- B43 `towns/020` (who lives in a town, and in how many houses) and `towns/150` (a town's paddy plot): no footnotes.
-  `0123`, `towns/140`: thin. M.
-- B44 `towns/110` (the magistrate's manor drawn as a plain walled box) and `buildings/110` (poverty texture): no
+- B43 `0030` (who lives in a town, and in how many houses) and `0031` (a town's paddy plot): no footnotes.
+  `0032`, `0033`: thin. M.
+- B44 `0034` (the magistrate's manor drawn as a plain walled box) and `0035` (poverty texture): no
   footnotes. S.
-- B45 `cities/capitals/380` (Scorpion vs Crane capital: canon first, by `make canon`) and `390` (which provincial
+- B45 `0036` (Scorpion vs Crane capital: canon first, by `make canon`) and `0037` (which provincial
   rules invert in a capital): no footnotes. M.
-- B46 `cities/river-cities/030` and `ways/050`: thin. S.
+- B46 `0038` and `0039`: thin. S.
 
 ## The procedure (session 1: research and write)

@@ -1,11 +1,12 @@
 """`scripts/_brief_load.py` (feature 274 D1): the questions a page-session brief assigns, the count the write cap rests on.
 
 WHAT THESE PROVE (SC-001). The fixtures are trimmed COPIES of real briefs - their header, their do-not-edit paragraph
-and their assignment lists - over a fixture record of one empty fragment a page: 269's V2, C1 and X1 count 9, 6 and 10,
+and their assignment lists, rewritten into feature 303's form (a question named by its number) - over a fixture record
+of empty question files, `record/questions/NNNN-q<n>.html`: 269's V2, C1 and X1 count 9, 6 and 10,
 272's S (a range and an id list) 8, and each is refused with its split named; 271's `g1-check-a` and 269's
 `h1-check-a` count 2 though their do-not-edit paragraphs name dozens of sections; 250's owed-modal brief of six
-sections passes on its declared `check`. A one-line item spanning six sections counts six, a range is expanded
-against the fragments on disk, a code reference is not a section, and a brief assigning nothing is refused.
+sections passes on its declared `check`. A one-line item naming six questions counts six, a number that is no question
+on disk is not counted, a code reference is not a question, and a brief assigning nothing is refused.
 """
 
 from __future__ import annotations
@@ -45,7 +46,7 @@ def test_the_costliest_real_write_briefs_count_over_the_cap_and_are_refused(name
 
 def test_v2_counts_each_section_and_the_item_that_names_none() -> None:
     _kind, _n, detail = bl.load(_brief("v2-write.md"), RECORD)
-    assert detail == [f"vegetation/{s}" for s in ("010", "030", "050", "090", "110", "120", "150", "154")] + ["B30"]
+    assert detail == [f"{n:04d}" for n in range(10, 18)] + ["B30"]
 
 
 @pytest.mark.parametrize("name", ["g1-check-a.md", "h1-check-a.md"])
@@ -60,15 +61,18 @@ def test_the_owed_modal_brief_of_six_sections_runs_on_its_declared_kind() -> Non
     assert (kind, n) == ("check", 6) and bl.refusal(FIX / "owed-buildings-1.md", _brief("owed-buildings-1.md"), RECORD) == ""
 
 
-def test_one_line_spanning_six_sections_counts_six_and_a_range_expands_on_disk() -> None:
-    six = "## Your items\n\n- A1 one line: `0008`, `020`, `030`, `040`, `050`, `060`. M.\n\n## Next\n- Z9 not assigned\n"
+def test_one_line_naming_six_questions_counts_six_and_only_questions_on_disk_count() -> None:
+    six = "## Your items\n\n- A1 one line: `0008`, `0009`, `0010`, `0011`, `0012`, `0013`. M.\n\n## Next\n- Z9 not assigned\n"
     assert bl.load(six, RECORD)[1] == 6
-    ranged = "## Your items\n- R1 absences in `0215, 0221, 0222, 0223`, and `scripts/x.py:195-304` is code\n"
-    assert bl.load(ranged, RECORD)[2] == [f"religion-and-death/{s}" for s in ("090", "100", "110", "128")]
+    listed = "## Your items\n- R1 absences in `0215, 0221, 0222, 0223`, and `scripts/x.py:1950-3040` is code\n"
+    assert bl.load(listed, RECORD)[2] == ["0215", "0221", "0222", "0223"]
     code = "## Your items\n- C7 the parser at `scripts/x.py:195-304`\n- no id here at all\n"
-    assert bl.load(code, RECORD)[2] == ["C7", "no"], "a code reference is not a section; an item with no id counts one"
-    under_main = "## Your items\n- B1 `towns/020`\n- B2 its range 100-200 and `090`\n"
-    assert bl.load(under_main, RECORD)[2] == ["towns/020", "towns/090"], "the main page's range expands to no fragment"
+    assert bl.load(code, RECORD)[2] == ["C7", "no"], "a code reference is not a question; an item with no id counts one"
+    off_disk = "## Your items\n- B1 `0020` and `9999`\n"
+    assert bl.load(off_disk, RECORD)[2] == ["0020"], "a number that is no question on disk is not counted"
+    assert bl.count("## Your items\n- B1 `0020`\n", RECORD / "empty")[1] == ["B1"], "no record, no questions"
+    pairs = "**Your pairs:** KIND=X (Q=0030), KIND=Y (Q=0031, 0032)\n"
+    assert bl.load(pairs, RECORD)[2] == ["0030", "0031", "0032"]
 
 
 def test_the_exempt_kinds_pass_and_anything_else_is_refused() -> None:
@@ -78,17 +82,6 @@ def test_the_exempt_kinds_pass_and_anything_else_is_refused() -> None:
     assert "not an exempt kind" in bl.refusal(FIX / "x.md", f"<!-- page-load: kind=write -->\n{big}", RECORD)
     assert "assigns nothing" in bl.refusal(FIX / "x.md", "# a brief\n\nDo the work.\n", RECORD), "the count never fails open"
     assert bl.refusal(FIX / "x.md", "## Your items\n- B1 one\n- B2 two\n", RECORD) == ""
-
-
-def test_pages_are_the_record_s_directories_and_a_shared_last_segment_is_no_alias(tmp_path: pathlib.Path) -> None:
-    assert "cities/defenses" in bl.pages(RECORD) and "sources" not in bl.pages(RECORD) and "sources/010-works-cited" not in bl.pages(RECORD)
-    for p in ("a/x", "b/x", "c/y"):
-        (tmp_path / p).mkdir(parents=True)
-        (tmp_path / p / "010-q.html").write_text("", encoding="utf-8")
-    alias = bl._aliases(bl.pages(tmp_path))
-    assert "x" not in alias and alias["y"] == "c/y"
-    assert bl.load("## Your items\n- B1 `y/010`\n", tmp_path)[2] == ["c/y/010"]
-    assert bl.count("## Your items\n- B1 `nowhere/010`\n", tmp_path / "empty")[1] == ["B1"], "no record, no pages"
 
 
 def test_split_names_and_the_command_line(capsys) -> None:

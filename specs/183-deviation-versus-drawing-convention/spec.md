@@ -146,7 +146,7 @@ rule is written where the classification is defined.
   - **Staying a `deviation`** - the setting differing from history: `research/archetypes.md:123` and
     `:133` (the 6:4 pond-to-dike regional reading), `:217` and `:226` (*"a hamlet has no headman of its
     own" is CANON*), `research/SOURCES.md:1954` and `tests/interactive/test_place.py:304` (the same
-    headman canon, in a source's Used-for line and a test docstring), `research/contents.json#citiescapitals.md:532`
+    headman canon, in a source's Used-for line and a test docstring), `research/cities/capitals.md:532`
     and `:559` (the setting's 30 ft trunk road for the historical 29.5 - D6); the grave island class.
   - **Ordinary English, untouched**: statistical and geometric uses (`research/homesteads.md:65`,
     `homestead_parts/yards.py:83`, `:98` and `:109`, `hamletgen/ways/serve.py:100`, `fields/comb.py:567`,

@@ -42,7 +42,7 @@ def reservoir_clear_of_crop(pond: tuple[float, float, float, float], envelope: S
 
 def reservoir_uphill_of_field(pond: tuple[float, float, float, float], envelope: Sequence[Pt], fall: Pt) -> bool:
     """THE RULE (feature 287, water W46): the source sits ABOVE what it waters - the reservoir's center is further up the
-    fall than the field's highest point (research/archetypes polder siting; the soak test's own reading)."""
+    fall than the field's highest point (research/contents.json#field-archetypes polder siting; the soak test's own reading)."""
     return pond[0] * fall[0] + pond[1] * fall[1] < min(float(p[0]) * fall[0] + float(p[1]) * fall[1] for p in envelope)
 
 

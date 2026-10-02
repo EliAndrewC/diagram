@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/c5-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/hinterland SECTION=600, PAGE=cities/defenses SECTION=100
+**Your questions:** PAGE=cities/hinterland SECTION=600, Q=0151
 **Your registry keys:** KEY=kemingbaike-pingyao-gucheng, KEY=sohu-moat-history, KEY=zhengding-chengqiang-zhwiki, KEY=han-changan-zhwiki, KEY=visitbeijing-caiyuan
 
 ## The procedure (check, apply)

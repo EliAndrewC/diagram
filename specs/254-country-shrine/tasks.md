@@ -119,8 +119,8 @@ hyphens only.
       and `make glossary`; the village shrine's class entries name the two new questions
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
-      measure: `make quote-verbatim PAGE=religion-and-death` before quote-check; `make record-prepass
-      PAGE=religion-and-death` before record-format
+      measure: `make quote-verbatim IN=religion-and-the-dead` before quote-check; `make record-prepass
+      IN=religion-and-the-dead` before record-format
       verify: DONE. two sections on religion-and-death.html, the village section corrected to the one-roof reading, fn-143 to fn-205 (five absence notes), 35 registry entries with write-ups, 20 glossary terms; make citations and make glossary in sync; entry-drift owes no modal (no class names the section - only hamlets are scripted). Boxes as T11
 - [x] T14 The verification agents, in the background, in order: `source-reader` on the two new sections
       (READ per claim; a CONTRADICTED verdict changes the text); `quote-check` after the verbatim script;

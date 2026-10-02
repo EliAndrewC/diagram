@@ -9,7 +9,7 @@ Read narrowly - you need no question's whole text; the agents read the bundles.
 **Your modals:** KIND=ManureHeap (SECTION=210)
 
 1. **Check, all in one message, in the background.** For each modal:
-   `make check-bundle PAGE=homesteads SECTION=<its NNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class>` (in
+   `make check-bundle Q=<NNNN> NO_QUOTES=1 FOR=entry-drift KIND=<its class>` (in
    `.claude/skills/diagram`) and one `entry-drift` naming its MANIFEST.
 2. **Apply each report with ONE command**: `make apply-edits FROM=<the output_file its dispatch printed>`; the refused
    blocks and any `EDIT: none` finding by hand, all in ONE message of parallel `Edit` calls.

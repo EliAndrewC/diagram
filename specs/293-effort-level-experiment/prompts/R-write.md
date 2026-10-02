@@ -21,7 +21,7 @@ real spectrum), 750 (how big was the rowhouse a magistrate's staff lived in) and
 barracks divided) - read what they say first and extend one of them if the answer belongs there, or write ONE new question
 at a free prefix from 910 to 990.
 
-**Read narrowly.** For a few notes of a question use `make notes PAGE=buildings SECTION=<NNN> KEYS=<key,key>` (in
+**Read narrowly.** For a few notes of a question use `make notes Q=<NNNN> KEYS=<key,key>` (in
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
 **Coordination files are read by line, never whole**: `make lines FILE=<f> KEY=<regex>` and `make append FILE=<f>
 LINE="<text>"`. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="buildings"`; a section another

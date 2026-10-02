@@ -13,7 +13,7 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 
 ## The procedure (check, apply)
 
-1. In the background, in one message, for each question: `make check-bundle PAGE=homesteads SECTION=<q> FOR=quote-check` for
+1. In the background, in one message, for each question: `make check-bundle Q=<NNNN> FOR=quote-check` for
    `quote-check` and `... FOR=record-format` for `record-format` (in `.claude/skills/diagram`), each naming its own
    MANIFEST.md; and `source-applicability` (`make check-bundle KEY=<k>`) on any registry key the handoff names as new.
 2. `make apply-edits FROM=<each output_file>`; by hand only what it refuses or lists as `EDIT: none`, in one message.

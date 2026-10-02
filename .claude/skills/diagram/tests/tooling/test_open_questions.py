@@ -35,6 +35,7 @@ def _load(name: str):  # noqa: ANN202
 oq = _load("_open_questions")
 
 QUESTION = """<h2 id="how-long-was-a-rack">How long was a rice-drying rack? As long as the field</h2>
+<!-- tags: subject=homesteads; setting=countryside; level=detail -->
 <!-- researched 2026-09-28; a GUESS in a session note is not a claim -->
 <p><strong>Sources:</strong> <a href="x"><code>k</code></a></p>
 <p>A rack ran along the paddy.<sup class="fn" data-note="k"></sup> Its length per household is a GUESS until a figure is
@@ -56,16 +57,15 @@ LINKER = """<h2 id="did-a-village-rack-by-the-house">Did a village put its racks
 
 
 def _record(tmp: pathlib.Path) -> pathlib.Path:
-    page = tmp / ".claude/skills/diagram/research/homesteads"
-    page.mkdir(parents=True)
-    (page / "500-how-long-was-a-rack.html").write_text(QUESTION)
-    (page / "500-how-long-was-a-rack.notes.html").write_text(NOTES)
-    (page / "505-did-a-village-rack-by-the-house.html").write_text(LINKER)
-    (page / "505-did-a-village-rack-by-the-house.notes.html").write_text("<ol></ol>")
-    # an assembled page and a citations page repeat the fragments and are never read
-    (tmp / ".claude/skills/diagram/research/contents.json#homesteads").write_text(QUESTION)
-    (tmp / ".claude/skills/diagram/research/citations").mkdir()
-    (tmp / ".claude/skills/diagram/research/contents.json#homesteads").write_text(NOTES)
+    q = tmp / ".claude/skills/diagram/research/questions"
+    q.mkdir(parents=True)
+    (q / "0500-how-long-was-a-rack.html").write_text(QUESTION)
+    (q / "0500-how-long-was-a-rack.notes.html").write_text(NOTES)
+    (q / "0505-did-a-village-rack-by-the-house.html").write_text(LINKER)
+    (q / "0505-did-a-village-rack-by-the-house.notes.html").write_text("<ol></ol>")
+    # a built page repeats the questions and is never read
+    (tmp / ".claude/skills/diagram/research/site/q").mkdir(parents=True)
+    (tmp / ".claude/skills/diagram/research/site/q/how-long-was-a-rack.html").write_text(QUESTION)
     return tmp
 
 
@@ -80,12 +80,13 @@ def test_a_question_yields_one_item_per_guess_sentence_and_per_absence_note(tmp_
     assert absences == [("absence", "How many racks one household put up no page says."), ("absence-settled", "A settled search.")]
     assert all("grounds" not in i.text and "CONVENTION" not in i.text for i in q.items), "a grounds note and a convention are not open"
     assert not qs[1].items and "how-long-was-a-rack" in qs[1].links
+    assert qs[1].page == "untagged", "a page with no tags, and no research page of its stem, is grouped as untagged"
 
 
 def test_rewriting_a_guess_removes_exactly_its_item(tmp_path: pathlib.Path) -> None:
     root = _record(tmp_path)
     before = [i.text for i in oq.questions(root)[0].items]
-    frag = root / ".claude/skills/diagram/research/homesteads/500-how-long-was-a-rack.html"
+    frag = root / ".claude/skills/diagram/research/questions/0500-how-long-was-a-rack.html"
     frag.write_text(QUESTION.replace("Its length per household is a GUESS until a figure is\nfound.", "Its length was 30 m."))
     after = [i.text for i in oq.questions(root)[0].items]
     assert [t for t in before if t not in after] == ["Its length per household is a GUESS until a figure is found."]
@@ -97,7 +98,7 @@ def test_a_question_reaches_its_map_features_three_ways(tmp_path: pathlib.Path) 
     routes = oq.class_routes({"threshing yard": ["did-a-village-rack-by-the-house"], "farmhouse": ["how-long-was-a-rack"]}, qs)
     assert routes["how-long-was-a-rack"] == ["farmhouse", "threshing yard (through 'Did a village put its racks by the house?')"]
     assert routes["did-a-village-rack-by-the-house"] == ["threshing yard"]
-    engine = {"l7r/yards.py": "x = 1\n# the rack length: research/contents.json#homesteads 'How long was a rice-drying rack?'\n", "l7r/other.py": "# #how-long-was-a-rack\n"}
+    engine = {"l7r/yards.py": "x = 1\n# the rack length: research/questions/0500 'How long was a rice-drying rack?'\n", "l7r/other.py": "# #how-long-was-a-rack\n"}
     key = oq.heading_key(qs[0].heading)
     assert key == "How long was a rice-drying rack?"
     assert oq.heading_key("A castle has TWO gates") == "A castle has TWO gates", "no length floor: a short heading is cited too"
@@ -114,7 +115,7 @@ def test_guesses_outside_the_record_are_listed_with_file_and_line_the_logs_skipp
         "l7r/compound.py": "a = 6  # the postern's 6 ft passage is a GUESS\n",
         "pool/m/m.svg": "<svg><!-- what the east room held is a GUESS --></svg>\n",
         "dev/bypass-log/1.json": '{"reason": "a GUESS repeated"}\n',
-        "research/x/010-a.html": "<p>a GUESS</p>\n",
+        "research/questions/0010-a.html": "<p>a GUESS</p>\n",
         "tests/t.py": "# GUESS\n",
         "icon.png": None,
     }.items():
@@ -123,7 +124,7 @@ def test_guesses_outside_the_record_are_listed_with_file_and_line_the_logs_skipp
             (skill / rel).write_bytes(b"\x89PNG\xff\xfe GUESS")
         else:
             (skill / rel).write_text(body)
-    files = oq.outside_files(tmp_path, ["l7r/compound.py", "pool/m/m.svg", "dev/bypass-log/1.json", "research/x/010-a.html", "tests/t.py", "icon.png"])
+    files = oq.outside_files(tmp_path, ["l7r/compound.py", "pool/m/m.svg", "dev/bypass-log/1.json", "research/questions/0010-a.html", "tests/t.py", "icon.png"])
     assert sorted(files) == ["l7r/compound.py", "pool/m/m.svg"], "the record, the tests, the logs and a binary are not read here"
     found = oq.outside_guesses(files)
     assert found == [("l7r/compound.py", 1, "a = 6  # the postern's 6 ft passage is a GUESS"), ("pool/m/m.svg", 1, "<svg><!-- what the east room held is a GUESS --></svg>")]
@@ -147,7 +148,7 @@ def test_a_note_marker_in_no_passage_leaves_the_claim_empty() -> None:
 
 def test_a_fragment_without_its_heading_is_skipped(tmp_path: pathlib.Path) -> None:
     root = _record(tmp_path)
-    (root / ".claude/skills/diagram/research/homesteads/510-no-heading.html").write_text("<p>a GUESS with no heading</p>")
+    (root / ".claude/skills/diagram/research/questions/0510-no-heading.html").write_text("<p>a GUESS with no heading</p>")
     assert [q.anchor for q in oq.questions(root)] == ["how-long-was-a-rack", "did-a-village-rack-by-the-house"]
 
 
@@ -164,7 +165,7 @@ def test_the_real_tree() -> None:
     assert any("postern" in line and "GUESS" in line for line in compound.splitlines()), "the postern's GUESS, marked only in code (SC-004)"
     # every visible label in the record falls in a listed sentence (SC-001)
     labels = 0
-    for frag in (SKILL / "research").rglob("*.html"):
+    for frag in (SKILL / "research" / "questions").glob("*.html"):
         if frag.name.endswith(".notes.html") or not oq._FRAGMENT.match(frag.name):
             continue
         labels += len(oq._GUESS.findall(oq.visible(frag.read_text(encoding="utf-8"))))

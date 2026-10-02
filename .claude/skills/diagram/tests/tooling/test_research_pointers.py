@@ -1,5 +1,5 @@
-"""Feature 301: every pointer to the research names a fragment that exists, and none names a built page (FR-014); the
-tools that keep it so prove they still bite (FR-013, FR-015)."""
+"""Features 301 and 303: every pointer to the research names a question or a section that exists, and none is of a
+retired form (301 FR-014, 303 FR-018); the tools that keep it so prove they still bite (301 FR-015, 303 SC-007)."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def test_every_pointer_in_the_repository_resolves_to_a_fragment() -> None:
     assert done.returncode == 0, done.stderr
 
 
-def test_the_pointer_check_the_move_and_the_sweep_each_still_bite() -> None:
-    for script in ("check-research-pointers.py", "_fragment_move.py", "_pointer_sweep.py"):
+def test_the_pointer_check_and_the_move_each_still_bite() -> None:
+    for script in ("check-research-pointers.py", "_fragment_move.py"):
         done = _run(script, "--selftest")
         assert done.returncode == 0, f"{script}: {done.stdout}{done.stderr}"

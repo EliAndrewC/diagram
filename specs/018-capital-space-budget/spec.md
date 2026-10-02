@@ -13,7 +13,7 @@
 Every number and rule this feature encodes was settled with the GM across 2026-08-08 and is recorded, with its historical basis, in:
 
 - [`.claude/skills/diagram/settlements/capitals.md`](../../.claude/skills/diagram/settlements/capitals.md) - the tier's operational rules
-- [`.claude/skills/diagram/research/contents.json#citiescapitals.md`](../../.claude/skills/diagram/research/contents.json#citiescapitals.md) - the findings, anchors and disclosed departures
+- [`.claude/skills/diagram/research/cities/capitals.md`](../../.claude/skills/diagram/research/cities/capitals.md) - the findings, anchors and disclosed departures
 
 **Read both before planning. Do not re-litigate the decisions in them.** This spec's job is to say what the software must do, not to re-derive why.
 
@@ -125,7 +125,7 @@ A capital declares choices that give two capitals different skeletons: where the
 
 ## Assumptions
 
-- **The recorded decisions are authoritative.** Population, caste table, rank split, ground-cost constants, castle size band, the two knobs, and the in-wall samurai fraction all come from `settlements/capitals.md` and `research/contents.json#citiescapitals.md` and are treated as settled input, not open questions.
+- **The recorded decisions are authoritative.** Population, caste table, rank split, ground-cost constants, castle size band, the two knobs, and the in-wall samurai fraction all come from `settlements/capitals.md` and `research/cities/capitals.md` and are treated as settled input, not open questions.
 - **`C_TERRACE` is the softest number in the feature** and is documented as such. It is bracketed by measured anchors at both ends but its position between them is a judgment, and both new constants are expected to be re-derived against the first drawn capital, exactly as the provincial constants were back-predicted from Tango.
 - **The capital keeps the provincial tier's circulation fraction** unless the first drawn capital shows otherwise; there is no measured capital figure yet, and inventing one would be less honest than reusing a measured one.
 - **The capital has no agricultural district.** The wall encloses all inhabitants and no farmland (GM 2026-08-08), so the provincial agricultural-district reserve does not apply.

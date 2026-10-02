@@ -10,11 +10,9 @@
   var hideTimer = null;
   function keep() { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } }
   function hideSoon() { keep(); hideTimer = setTimeout(function () { tip.hidden = true; }, 180); }
-  // WHERE A NOTE COMES FROM (feature 211, GM 2026-09-07): the notes live on the page's CITATIONS PAGE
-  // (research/citations/<name>.html), and a reference points there ("citations/<name>.html#fn-n"). The hover
-  // reads the note from window.RECORD_CITATIONS - the script `make citations` derives from that page, loaded
-  // before this one - because a page opened from disk cannot fetch a sibling file. A note still in the page
-  // (the synthetic test page, an older page) is read from the page, as before.
+  // WHERE A NOTE COMES FROM (features 211, 301, 303): a page of the site carries its own notes at its foot, and a
+  // reference points there ("#fn-n"), so the hover reads the note from the page. window.RECORD_CITATIONS - the script
+  // feature 211's citations pages loaded - is still honored if present, for a page built before them.
   function noteHtml(ref) {
     var href = ref.getAttribute('href') || ''; var id = href.slice(href.indexOf('#') + 1);
     var note = id && document.getElementById(id);

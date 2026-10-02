@@ -6,6 +6,6 @@
 0240, fields 220-240. Feature 268: 0215, 0220, 0221, 0222, 0223. Where a finding OWES one of those
 a correction, say exactly what in the handoff; the orchestrator sends it to the owner.
 
-**Your questions:** PAGE=homesteads SECTION=210, PAGE=homesteads SECTION=212
+**Your questions:** Q=0042, Q=0043
 **Your registry keys:** none - the last group has them
 

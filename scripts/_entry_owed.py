@@ -124,38 +124,40 @@ def classes_in(text: str, _base, lines: dict[str, int] | None = None) -> dict[st
 
 
 
-#: A question's fragment, relative to the record: its page directory, its prefix, its heading id.
-_QUESTION = re.compile(r"^((?:[a-z-]+/)+)\d{3}-(.+)\.html$")
+#: A question's page, relative to the record (feature 303): `questions/NNNN-<slug>[.drawing].html`.
+_QUESTION = re.compile(r"^questions/(\d{4}-([^.]+)(\.drawing)?\.html)$")
 
 
 def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001, ARG001 - the engine is not needed since 301
-    """The `<page dir>/<heading id>` of every research question whose BODY changed against `base`.
+    """The file name of every research question page whose BODY changed against `base` (feature 303).
 
     Since feature 301 the pages are built and never committed, so the question is asked of its FRAGMENT - the body a
     reader meets, less nothing (a fragment carries no footnote number to strip; its notes live beside it, and a note's
-    text was never part of the body). A fragment renamed to a new prefix is compared with the one it was."""
+    text was never part of the body). A question renamed or renumbered (`make fragment-move`) is compared with the one it
+    was. A page with no older file under `questions/` is new - and that includes every page feature 303 moved there, whose
+    bodies changed only in their links and tags marker (its SC-003), so the move owes no modal a re-check."""
     moved: set[str] = set()
     names = (_git(root, "diff", "--name-only", base, "--", f"{RESEARCH}/") or "").split()
     for rel in names:
         inside = os.path.relpath(rel, RESEARCH).replace(os.sep, "/")
         m = _QUESTION.match(inside)
-        if m is None or inside.endswith((".notes.html", ".originals.html")) or inside.startswith("sources/"):
+        if m is None:
             continue
         new = root / rel
         if not new.is_file():
             continue
-        old_text = _git(root, "show", f"{base}:{rel}") or _renamed_from(root, base, rel, m.group(2))
+        old_text = _git(root, "show", f"{base}:{rel}") or _renamed_from(root, base, rel, m.group(2), m.group(3) or "")
         if old_text is None:
             continue  # a new question: no older body for a modal to have been written from
         if old_text != new.read_text(encoding="utf-8"):
-            moved.add(f"{m.group(1).rstrip('/')}/{m.group(2)}")
+            moved.add(m.group(1))
     return moved
 
 
-def _renamed_from(root: Path, base: str, rel: str, heading_id: str) -> str | None:
-    """The body a question had at `base` under another prefix in the same directory (`make fragment-move`)."""
+def _renamed_from(root: Path, base: str, rel: str, slug: str, drawing: str = "") -> str | None:
+    """The body a question's page had at `base` under another number in `questions/` (`make fragment-move`)."""
     listing = _git(root, "ls-tree", "--name-only", f"{base}:{os.path.dirname(rel)}") or ""
-    was = [n for n in listing.split() if n.endswith(f"-{heading_id}.html") and re.match(r"^\d{3}-", n)]
+    was = [n for n in listing.split() if n.endswith(f"-{slug}{drawing}.html") and re.match(r"^\d{4}-[^.]+(\.drawing)?\.html$", n)]
     return _git(root, "show", f"{base}:{os.path.dirname(rel)}/{was[0]}") if len(was) == 1 else None
 
 
@@ -210,7 +212,7 @@ def owed(root: Path) -> tuple[str, list[str]]:
             old_text = _git(root, "show", f"{base}:{rel}")
             if old_text is not None:
                 was |= classes_in(old_text, _base)
-        anchors = {key: {f"{d}/{n.split('-', 1)[1].removesuffix('.html')}" for d, n in sources.entry_fragments(fc.entry)} for key, fc in registry.items()}
+        anchors = {key: set(sources.entry_fragments(fc.entry)) for key, fc in registry.items()}
         pairs += named_pairs(moved, anchors, now, was, at)
     return desc, pairs
 
@@ -220,18 +222,14 @@ def _fragments_line(hit: Sequence[str]) -> str:
 
     Feature 258: the section a modal was written from is a file of its own now, and a recorded
     `entry-drift` run spent 82% of everything in its context on the whole page (spec research R3). The
-    anchors in `hit` are `<page dir>/<heading id>` (feature 301); the fragment is that heading's own file.
+    names in `hit` are question pages' files (feature 303), each read with nothing else.
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from _hm_record import fragments_for  # noqa: PLC0415
 
     out: list[str] = []
-    for anchor in hit:
-        page, _, heading = str(anchor).rpartition("/")
-        if not page:
-            continue
-        out += [f for f in fragments_for(page, heading, os.getcwd())
-                if not f.endswith((".notes.html", ".originals.html"))]
+    for file in hit:
+        out += [f for f in fragments_for(str(file), os.getcwd()) if not f.endswith((".notes.html", ".originals.html"))]
     return ("\n      read: " + ", ".join(dict.fromkeys(out))) if out else ""
 
 

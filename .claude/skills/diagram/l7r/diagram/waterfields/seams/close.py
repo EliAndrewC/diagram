@@ -595,7 +595,7 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
        hop across the basin - the GM's own description of the right form, the wall "continuing on and meeting at the
        four way intersection" instead of going "sharply to the left before going down" (Inashiro, 2026-08-18). Each part
        that keeps every rule is a basin of its own.
-    2. WELDED into the neighbor it shares the most bund with, when the union keeps every rule - research/fields 'Bunds
+    2. WELDED into the neighbor it shares the most bund with, when the union keeps every rule - research/contents.json#fields 'Bunds
        are shared': the odd scrap is "taken into the basin beside it rather than walled off on its own".
     3. BARE, under the fan floor `comb_base_fill` draws - "the odd corner left unpaddied" the same research describes,
        which the Sawada review confirmed invisible in ink (`pockets._absorb`'s last branch).

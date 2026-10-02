@@ -13,7 +13,7 @@ SETTING: this is a yard fixture, not a nuisance, funerary or traffic-sited eleme
 VERDICT: pass
 
 QUESTIONABLE:
-1. F1: at fit zoom the rack is only about 3 px by 7-16 px. It reads as a yard-edge tick rather than a rack. There is no norm against this, because true scale is a drawing convention (`research/presentation`).
+1. F1: at fit zoom the rack is only about 3 px by 7-16 px. It reads as a yard-edge tick rather than a rack. There is no norm against this, because true scale is a drawing convention (`research/contents.json#map-conventions`).
 
 NITPICKS:
 2. F2: the rack's brown-with-marks style is close to the woodpile's and wood shed's. I rate confusion unlikely, since the rack is darker and narrower and sits inside the yard outline. Keep the two distinct if either is redrawn. No norm applies.

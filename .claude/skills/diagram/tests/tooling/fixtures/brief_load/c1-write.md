@@ -12,6 +12,6 @@ Each is a research QUESTION the record owes: never researched, labeled a guess, 
 the map features whose write-ups will be rewritten from what you find (by the orchestrating session, NOT by you).
 
 - B38 Gate-tower and gatepost footprints, moat depth, the facing guard and inspection stations, tower count against
-  wars fought, the patrol road, the fence at the rampart (`cities/defenses/020`, `040`, `050`, `060`, `080`, `090`). L.
+  wars fought, the patrol road, the fence at the rampart (`0020`, `0021`, `0022`, `0023`, `0024`, `0025`). L.
 
 

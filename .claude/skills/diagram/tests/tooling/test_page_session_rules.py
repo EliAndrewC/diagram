@@ -33,7 +33,7 @@ CARRIED = {
         "Every rendering decision is recorded": "four classes",
         "Record the why of every research-driven rule": "Record the why of every research-driven rule",
         "A citation is a footnote at the assertion": "quoting the passage verbatim",
-        "The record is HTML under": "Never edit an assembled page",
+        "The record is HTML under": "Never edit a built page",
         "Reading and checking are dispatched to agents": "run the mechanical pre-pass",
         "A record check reads a BUNDLE": "Checks read BUNDLES",
     },

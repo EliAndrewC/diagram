@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/u5-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=urban-features SECTION=560, PAGE=cities/fabric SECTION=050
+**Your questions:** Q=0211, PAGE=cities/fabric SECTION=050
 **Your registry keys:** KEY=token-edo-shokunin, KEY=kotobank-okeya, KEY=kotobank-tatamiya, KEY=kotobank-tofuya, KEY=kotobank-sobaya, KEY=kotobank-yakushuya, KEY=kusuriya-jawiki, KEY=kotobank-sakaya, KEY=bunka-yachiya-sakagura, KEY=momisuriki-jawiki, KEY=seimai-jawiki, KEY=kotobank-konya, KEY=konya-jawiki, KEY=konyacho-jawiki, KEY=kotobank-zaimokuya, KEY=zaimokuuri-jawiki, KEY=kotobank-debata, KEY=kotobank-nishijin, KEY=toyota-museum-washi, KEY=kotobank-washi, KEY=kotobank-niuriya, KEY=kotobank-mizujaya, KEY=kotobank-chaya, KEY=kotobank-izakaya, KEY=izakaya-jawiki, KEY=kotobank-ryorijaya, KEY=taishu-shokudo-jawiki
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

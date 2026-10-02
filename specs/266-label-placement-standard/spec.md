@@ -82,7 +82,7 @@ rule quoted from a page they can open.
 - A subject rotated past 90 degrees: the text is turned to read upright, and "upper" is the upright text's up.
 - A seat past the edge of the finished frame: never taken - a clipped caption is unreadable.
 - Two captions competing: the earlier-placed caption is an obstacle to the later one (queue order, as today).
-- A caption that clears only when wrapped: the GM's wrap rule (research/presentation, "Why does a caption sometimes
+- A caption that clears only when wrapped: the GM's wrap rule (research/contents.json#map-conventions, "Why does a caption sometimes
   break across two lines?") stands - at a seat, one line is tried first, then two, then three.
 - A hand-drawn sheet's caption with no `data-kind` tag (Hayakawa's board caption): it is tagged with its subject's
   kind when it is re-seated, because the tool finds a caption's subject by the tag.
@@ -144,7 +144,7 @@ rule quoted from a page they can open.
   - the Mode A doctrine (`buildings.md`) and the `building-review` agent's contract MUST say that every caption on a
     hand-drawn sheet is seated with the tool, and that revising a sheet re-seats all of its captions.
 
-- **FR-014**: The GM's standing rule of what a town or city caption may lie on (2026-07-21, research/presentation,
+- **FR-014**: The GM's standing rule of what a town or city caption may lie on (2026-07-21, research/contents.json#map-conventions,
   "What does a town or a city map label, and what may a label cover?") MUST be kept in the weights: a caption's own
   subject weighs 0 for it, and so does every built feature of a group the caption's own wording names - the group
   word of the overlap taxonomy's caption registry (a "temple" caption may lie on a temple, a flophouse caption on a
@@ -215,7 +215,7 @@ rule quoted from a page they can open.
 - **D4 - The weights: MAP DRAWING CONVENTION, sourced in form, calibrated in value.** Esri's 0-to-1,000 scale and its
   free-space-first rule; its "cross one road instead of several" for ways (research.md R1). Which families weigh 1,000
   and which 0, and the 500 per way crossed, are this project's calibration - the classification follows the record's
-  existing rule that ground cover is not an obstacle (research/presentation, the wrap question), and 500 is chosen so
+  existing rule that ground cover is not an obstacle (research/contents.json#map-conventions, the wrap question), and 500 is chosen so
   a way costs less than any obstacle but two ways cost as much as one obstacle.
 - **D4a - The search's other calibrations** (plan P1-P6), each a map drawing convention chosen by this project where the
   standard names the rule and not the number: the preferred offset is also the least a caption may stand from any
@@ -227,7 +227,7 @@ rule quoted from a page they can open.
 - **D5 - Never dropped: the GM's ruling, 2026-09-27** - *"for the time being we'll treat labels as mandatory when the
   thing is marked as needing a label."* Esri's and QGIS's "leave unplaced" option is therefore not implemented.
 - **D6 - A rotated feature's caption follows its angle: sourced** (Esri, rotation by attribute overrides the
-  position) **and the GM's standing ruling** of 2026-08-27 (research/presentation, the tilt question), reaffirmed:
+  position) **and the GM's standing ruling** of 2026-08-27 (research/contents.json#map-conventions, the tilt question), reaffirmed:
   *"Tilted or horizontal text is okay for small point features like the board."*
 - **D7 - The 50 percent pull toward the board (GM 2026-08-27, marked provisional in the record) is superseded** by
   the preferred offset, which is the standard's answer to the same question. To raise with the GM at landing.

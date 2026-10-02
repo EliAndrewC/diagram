@@ -12,7 +12,7 @@ of it is touched. `SOURCES.html` is 1,150,367 bytes and 920 entries; `citations/
 
 One premise of the request has to be corrected before stage 3 makes sense. The GM took the citations
 page to be *"automatically assembled from a script which reads a couple of JSON files ... So that part is
-probably okay"*. It is the other way around: `research/citations/<name>.html` is hand-authored HTML, and
+probably okay"*. It is the other way around: `research/questions/<name>.html` is hand-authored HTML, and
 what is derived from it is the hover script `citations/<name>.js` beside it, together with the works
 section at its top, which comes from the registry. The 376,566-byte citations page is a file someone
 types into, which is why splitting it is stage 3 and not out of scope.

@@ -21,7 +21,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/a1-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=archetypes SECTION=220, PAGE=archetypes SECTION=230
+**Your questions:** Q=0026, PAGE=archetypes SECTION=230
 **Your registry keys:** none - the last group has them
 
 ## The procedure (check, apply)

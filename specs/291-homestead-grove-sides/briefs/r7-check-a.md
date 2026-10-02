@@ -10,12 +10,12 @@ draw (the line and sides knobs, the spacing, the street, further streets, the fa
 where the map draws a dispersed farm's own well - each value in its class. Its handoff is
 `specs/291-homestead-grove-sides/briefs/r7-handoff.md`.
 
-**Your questions:** PAGE=homesteads SECTION=155; PAGE=homesteads SECTION=156; PAGE=homesteads SECTION=200
+**Your questions:** Q=0033; PAGE=homesteads SECTION=156; PAGE=homesteads SECTION=200
 **Your registry keys:** none
 
 ## The procedure (check, apply)
 
-1. In the background, in one message, for each question: `make check-bundle PAGE=homesteads SECTION=<q> FOR=quote-check`
+1. In the background, in one message, for each question: `make check-bundle Q=<NNNN> FOR=quote-check`
    for `quote-check` and `... FOR=record-format` for `record-format` (in `.claude/skills/diagram`), each naming its own
    MANIFEST.md.
 2. `make apply-edits FROM=<each output_file>`; by hand only what it refuses or lists as `EDIT: none`, in one message.

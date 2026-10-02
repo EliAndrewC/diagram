@@ -6,7 +6,7 @@ prose; a class pointing at a heading that no longer exists is not. It has no leg
 fires on exactly the thing it names, which is this project's bar for gating a rule at all.
 
 WHAT IT CATCHES. `interactive/sources.py` `research_questions()` lists the questions an `Entry:` names - since feature
-301 by their FRAGMENT paths - and drops one that is not there, silently (before 301 it matched quoted headings by
+301 by their FRAGMENT paths, since feature 303 `research/questions/NNNN-<slug>[.drawing].html` - and drops one that is not there, silently (before 301 it matched quoted headings by
 prefix, with the same silence). The consequence is a "See references" list that goes
 quietly empty on every map carrying that feature. `research/CLAUDE.md` already requires a rename to fix
 its inbound class entries; this is the mechanism that sentence never had.
@@ -61,7 +61,7 @@ def _load(root: Path):  # noqa: ANN202
         named = entry_fragments(entry)
         if not named:
             return [entry]
-        return [f"research/{d}/{n}" for d, n in named if not (Path(RESEARCH_DIR) / d / n).is_file()]
+        return [f"research/questions/{n}" for n in named if not (Path(RESEARCH_DIR) / "questions" / n).is_file()]
 
     return CLASSES, unresolved
 
@@ -92,14 +92,14 @@ def selftest() -> int:
     # logic and owes nothing to the engine
     assert SILENT.search("research/contents.json#fields (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"
     assert not SILENT.search(real), "a real entry must not read as a declared silence"
-    assert not SILENT.search("research/fields/999-not-there.html"), "a broken pointer must not read as a declared silence"
+    assert not SILENT.search("research/questions/0999-not-there.html"), "a broken pointer must not read as a declared silence"
     loaded = _load(root)
     if loaded is None:
         print("check-entry-headings selftest ok (form only - no diagram skill in this tree to resolve against)")
         return 0
     _classes, unresolved = loaded
     assert not unresolved(real), "the checker cannot see a question that exists - its matching surface is dead"
-    assert unresolved("research/archetypes/999-a-question-that-does-not-exist.html"), "a broken pointer must be named"
+    assert unresolved("research/questions/0999-a-question-that-does-not-exist.html"), "a broken pointer must be named"
     assert unresolved("research/contents.json#field-archetypes - 'a page and a heading, the form retired by feature 301'"), "an entry naming no fragment is broken"
     print("check-entry-headings selftest ok")
     return 0
@@ -114,7 +114,7 @@ def main(argv: list[str]) -> int:
         print("a class entry names a research question the record does not hold:", file=sys.stderr)
         for line in bad:
             print(f"  {line}", file=sys.stderr)
-        print("\nRename an anchor and you owe its inbound links - `research/CLAUDE.md` says so and this is what\nchecks it. Fix the `Entry:` tag (`make fragment-move` rewrites it for you), or restore the question. A section deliberately not written is written\nas `research/<page>/ (no dedicated entry - recorded as silent)`.", file=sys.stderr)
+        print("\nRename an anchor and you owe its inbound links - `research/CLAUDE.md` says so and this is what\nchecks it. Fix the `Entry:` tag (`make fragment-move` rewrites it for you), or restore the question. A section deliberately not written is written\nas `research/contents.json#<section> (no dedicated entry - recorded as silent)`.", file=sys.stderr)
         return 1
     return 0
 

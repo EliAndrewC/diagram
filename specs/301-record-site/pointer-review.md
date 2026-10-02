@@ -24,10 +24,10 @@ question. The sweep reads this table (`--map`); a row's target is a fragment pat
 | water.html | the marsh follows the fan's toe | research/questions/0057-marshes-and-wetlands-shitchi.drawing.html- | the same rule |
 | water.html | What ground is too wet to build on? | research/questions/0058-ground-too-wet-to-build-on.html- | ground too wet to build on |
 | water.html | A reservoir's shore is reeded, and its EMBANKMENT is mown | research/questions/0061-reservoir-ponds-tameike.html- | reservoir ponds, their shore and embankment |
-| cities/defenses.html | wall-towers-the-mamian-system-and-bowshot-ranges | research/contents.json#citiesdefenses/060- | towers along the city wall (mamian) |
-| rendering/cities/defenses.html | How our maps keep the strip inside the wall clear | research/contents.json#citiesdefenses/080- | the street along the inside of the wall |
+| cities/defenses.html | wall-towers-the-mamian-system-and-bowshot-ranges | research/cities/defenses/060- | towers along the city wall (mamian) |
+| rendering/cities/defenses.html | How our maps keep the strip inside the wall clear | research/rendering/cities/defenses/080- | the street along the inside of the wall |
 | vegetation.html | forest-density-and-crown-size | research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html- | how thickly trees stood, and how wide their crowns |
-| buildings.html | How big was a samurai's house, and what rank is a 67-tsubo house? | research/contents.json#citiesgovernment/280- | samurai house lots and houses by rank - where the 67-tsubo house is |
+| buildings.html | How big was a samurai's house, and what rank is a 67-tsubo house? | research/cities/government/280- | samurai house lots and houses by rank - where the 67-tsubo house is |
 | buildings.html | How wide was the main gate of a magistrate's post? | research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html- | the main gate and its gatekeepers |
 | buildings.html | Where did the gatekeepers sit - in the gate range, or a gatehouse beside it? | research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html- | the main gate and its gatekeepers |
 | buildings.html | Was the hearing court open white sand, or roofed? | research/questions/0099-the-hearing-court-shirasu.html- | the hearing court (shirasu) |
@@ -65,15 +65,15 @@ question. The sweep reads this table (`--map`); a row's target is a fragment pat
 | settlements.html | What are the five kinds of settlement, and how big is each? | research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html- | the five sizes of settlement |
 | settlements.html | Is every household in a hamlet actually drawn? | research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html- | how the maps draw and state each size of settlement |
 | rendering/urban-features.html | How our maps draw shops, and the trades that outgrow the shop glyph | research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html- | how the maps draw shops and trades |
-| rendering/cities/government.html | How our maps place and count a city's samurai households | research/contents.json#citiesgovernment/030- | how the maps draw the samurai quarter and count its households |
-| rendering/cities/fabric.html | How our maps draw ward walls and ward gates | research/contents.json#citiesfabric/210- | how the maps draw city wards and their gates |
-| cities/capitals.html | Street widths | research/contents.json#citiescapitals/010- | how the maps size and lay out a domain capital |
-| cities/capitals.html | Dimensional audit | research/contents.json#citiescapitals/010- | the same |
-| cities/capitals.html | A river gets a TOWPATH, not a road | research/contents.json#citiescapitals/130- | how the maps draw a towpath along a river |
-| cities/capitals.html | A castle has TWO gates | research/contents.json#citiescapitals/020- | how the maps draw the castle in a capital |
-| cities/capitals.html | How a josui actually ran | research/contents.json#citiescapitals/080- | the capital's aqueduct (josui) |
-| cities/capitals.html | Placements that change | research/contents.json#citiescapitals/390- | how the maps draw a capital differently from a provincial city |
-| cities/capitals.html | a different program, not a scaled precinct | research/contents.json#citiescapitals/390- | the same |
+| rendering/cities/government.html | How our maps place and count a city's samurai households | research/rendering/cities/government/030- | how the maps draw the samurai quarter and count its households |
+| rendering/cities/fabric.html | How our maps draw ward walls and ward gates | research/rendering/cities/fabric/210- | how the maps draw city wards and their gates |
+| cities/capitals.html | Street widths | research/rendering/cities/capitals/010- | how the maps size and lay out a domain capital |
+| cities/capitals.html | Dimensional audit | research/rendering/cities/capitals/010- | the same |
+| cities/capitals.html | A river gets a TOWPATH, not a road | research/rendering/cities/capitals/130- | how the maps draw a towpath along a river |
+| cities/capitals.html | A castle has TWO gates | research/rendering/cities/capitals/020- | how the maps draw the castle in a capital |
+| cities/capitals.html | How a josui actually ran | research/cities/capitals/080- | the capital's aqueduct (josui) |
+| cities/capitals.html | Placements that change | research/rendering/cities/capitals/390- | how the maps draw a capital differently from a provincial city |
+| cities/capitals.html | a different program, not a scaled precinct | research/rendering/cities/capitals/390- | the same |
 | buildings.html | Cells are remand, not punishment | research/questions/0096-holding-cells-agariya-and-roya.html- | holding cells |
 | vegetation.html | Scrub stays off open water | research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html- | how the maps keep scrub off fields, channels and open water |
 | vegetation.html | The cut bank | research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html- | scrub and rough grass at the edges of fields and channels - the cut bank among them |
@@ -92,11 +92,11 @@ question. The sweep reads this table (`--map`); a row's target is a fragment pat
 | homesteads.html | Was the homestead grove there before 1868, and what size and shape was it? | research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html- | groves of trees around farmhouses |
 | homesteads.html | Which side of the house did the windbreak stand on | research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html- | the same - the grove's sides |
 | homesteads.html | How does a village lane bend? | research/questions/0081-village-lanes.html- | village lanes |
-| cities/capitals.html | How much of a capital lives OUTSIDE the walls | research/contents.json#citiescapitals/010- | how the maps size and lay out a domain capital |
-| cities/capitals.html | The sluice's lifting frame, the quay-side kura, and the boat-length jetty | research/contents.json#citiescapitals/090- | rice storehouses and the brokers' row on the water |
-| cities/capitals.html | The government ward | research/contents.json#citiescapitals/010- | how the maps size and lay out a domain capital, its wards among it |
-| cities/fabric.html | Machiya row density | research/contents.json#citiesfabric/010- | the street front's continuous rows of shophouses |
-| cities/defenses.html | Historical grounding | research/contents.json#citiesdefenses/250- | the guardhouse and inspection hall it sizes: barriers and inspection posts at a town's entrance |
+| cities/capitals.html | How much of a capital lives OUTSIDE the walls | research/rendering/cities/capitals/010- | how the maps size and lay out a domain capital |
+| cities/capitals.html | The sluice's lifting frame, the quay-side kura, and the boat-length jetty | research/cities/capitals/090- | rice storehouses and the brokers' row on the water |
+| cities/capitals.html | The government ward | research/rendering/cities/capitals/010- | how the maps size and lay out a domain capital, its wards among it |
+| cities/fabric.html | Machiya row density | research/cities/fabric/010- | the street front's continuous rows of shophouses |
+| cities/defenses.html | Historical grounding | research/cities/defenses/250- | the guardhouse and inspection hall it sizes: barriers and inspection posts at a town's entrance |
 | archetypes.html | Polder fourth pass | research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html- | how the maps draw parcels and bunds inside a polder |
 | archetypes.html | Why is a hand-piled bund never straight - and never square at the corners? | research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html- | parcels and bunds inside a polder |
 | archetypes.html | A dike-pond is fed and drained through sluice gates | research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html- | dike-ponds: fish ponds ringed by mulberry dikes |

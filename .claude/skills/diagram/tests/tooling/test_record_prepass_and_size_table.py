@@ -75,21 +75,51 @@ def test_vocabulary_drops_what_the_glossary_covers_and_a_quoted_ruling():
     assert rp.known_terms({"x": {"def": "d"}}) == {"x"}, "an entry with no variants still counts"
 
 
-def test_render_and_main_over_a_fixture_tree(tmp_path, capsys):
+BODY = """<h2 id="how-wide-is-a-lane">How wide is a lane?</h2>
+<!-- tags: subject=ways; setting=countryside; level=detail -->
+<p>Grounds: lane_width, the L-belt. Feature 143 set it in T41; run make quick. Intro names <em>aze</em> and <em>tameike</em>.</p>
+<h3 id="and-a-bund">And a bund?</h3>
+<p>Nothing to report here.</p>
+"""
+
+
+def _tree(tmp_path: pathlib.Path) -> pathlib.Path:
+    """A flat record (feature 303) with one more question, `0005`, carrying session notes to find."""
+    from tests import _flat_record as fr
+
     research = tmp_path / rp.RESEARCH
     research.mkdir(parents=True)
-    (research / "lanes.html").write_text(PAGE, encoding="utf-8")
+    fr.write(research)
+    (research / "questions" / "0005-how-wide-is-a-lane.html").write_text(BODY, encoding="utf-8")
+    return research
+
+
+def test_render_and_main_over_a_fixture_tree(tmp_path, capsys):
+    research = _tree(tmp_path)
     out = tmp_path / "pre.json"
-    assert rp.main(["lanes", "--root", str(tmp_path), "--json", str(out)]) == 0, "a tree with no glossary still runs"
+    assert rp.main(["0005", "--root", str(tmp_path), "--json", str(out)]) == 0, "a tree with no glossary still runs"
     text = capsys.readouterr().out
-    assert "3 sections" in text and "## How wide is a lane?" in text and "## And a bund?" not in text
-    assert json.loads(out.read_text(encoding="utf-8"))["page"] == "lanes"
+    assert "2 sections" in text and "\n## How wide is a lane?" in text and "\n## And a bund?" not in text, "a section with no candidate has no heading"
+    assert "questions/0005-how-wide-is-a-lane.html" in text, "the files to hand the check"
+    assert json.loads(out.read_text(encoding="utf-8"))["page"] == "0005"
     gloss = tmp_path / rp.GLOSSARY
     gloss.parent.mkdir(parents=True)
     gloss.write_text(json.dumps(GLOSSARY), encoding="utf-8")
-    assert rp.main(["lanes.html", "--root", str(tmp_path)]) == 0
+    assert rp.main(["0005-how-wide-is-a-lane.html", "--root", str(tmp_path)]) == 0
     assert "'aze'" not in capsys.readouterr().out
-    assert rp.main(["absent", "--root", str(tmp_path)]) == 2
+    assert rp.main(["9999", "--root", str(tmp_path)]) == 2
+    assert "make record-prepass Q=" in capsys.readouterr().err
+    assert rp.main(["SOURCES", "--root", str(tmp_path)]) == 0 and "record-prepass: SOURCES" in capsys.readouterr().out
+    assert (research / "questions").is_dir()
+
+
+def test_a_prepass_over_a_section_or_a_tag(tmp_path, capsys):
+    """Feature 303: `IN=` names a section (its subsections' questions too) or a tag, through the engine."""
+    _tree(tmp_path)
+    assert rp.main(["--in", "countryside", "--root", str(tmp_path)]) == 0
+    text = capsys.readouterr().out
+    assert "record-prepass: IN=countryside" in text and "## How wide is a lane?" in text and "0002-bridges.html" in text
+    assert rp.main(["--in", "no-such-section", "--root", str(tmp_path)]) == 2
 
 
 def test_a_heading_s_link_to_its_rendering_section_is_not_its_text():
@@ -101,8 +131,9 @@ def test_a_heading_s_link_to_its_rendering_section_is_not_its_text():
 
 def test_the_prepass_reads_the_real_record():
     glossary = json.loads((REPO / rp.GLOSSARY).read_text(encoding="utf-8"))
-    listing = rp.prepass(rp.page_text(str(SKILL / "research"), "ways.html"), glossary)  # assembled in memory (feature 301)
-    assert len(listing) >= 3 and any(s["items"] for s in listing), "non-vacuity: the real page yields sections and candidates"
+    bridges = next((SKILL / "research" / "questions").glob("*-road-bridges-over-rivers-and-canals-hashi.html"))
+    listing = rp.prepass(rp.page_text(str(SKILL / "research"), f"questions/{bridges.name}"), glossary)  # read in memory (feature 301)
+    assert listing and any(s["items"] or s["rare"] is not None for s in listing), "non-vacuity: the real page yields sections"
 
 
 SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
@@ -158,41 +189,14 @@ def test_the_table_reads_a_real_pool_plan():
     assert len(data["rects"]) > 20 and data["gaps"] and any(w >= 2.0 for w in data["strokes_ft"])
 
 
-def test_a_scoped_prepass_lists_one_section(tmp_path, capsys):
-    research = tmp_path / rp.RESEARCH
-    research.mkdir(parents=True)
-    (research / "lanes.html").write_text(PAGE, encoding="utf-8")
-    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "how wide"]) == 0
-    text = capsys.readouterr().out
-    assert "1 sections" in text and "Grounds:" in text and "tameike" not in text
-
-
-def test_a_section_named_by_its_file_is_found_whatever_its_heading_punctuates(tmp_path, capsys):
-    """`SECTION=010` on a heading with an apostrophe matched nothing and said nothing (feature 250).
-
-    The record's id for "a city's wall" is `a-citys-wall`; a slug re-derived from the heading says
-    `a-city-s-wall`. The wanted headings are read from the fragment, and its `<h3>` comes with it.
-    """
-    research = tmp_path / rp.RESEARCH
-    (research / "lanes").mkdir(parents=True)
-    body = '<h2 id="a-citys-wall">A city\'s wall</h2>\n<p>Ordinary words.</p>\n<h3 id="and-under-it">And under it</h3>\n<p>More.</p>\n'
-    (research / "lanes.html").write_text(PAGE + body, encoding="utf-8")
-    (research / "lanes" / "010-a-citys-wall.html").write_text(body, encoding="utf-8")
-    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "010"]) == 0
+def test_a_question_s_heading_and_its_subsection_are_found_whatever_they_punctuate(tmp_path, capsys):
+    """The record's id for "a city's wall" is `a-citys-wall`; a question is named by its number (feature 303), so its
+    heading and its `<h3>` come with it, and an entity reads as its character (feature 261)."""
+    research = _tree(tmp_path)
+    body = '<h2 id="a-citys-wall">A city\'s wall: reed -&gt; sedge</h2>\n<!-- tags: subject=ways; setting=city; level=detail -->\n<p>Ordinary words.</p>\n<h3 id="and-under-it">And under it</h3>\n<p>More.</p>\n'
+    (research / "questions" / "0006-a-citys-wall.html").write_text(body, encoding="utf-8")
+    assert rp.main(["0006", "--root", str(tmp_path)]) == 0
     assert "2 sections" in capsys.readouterr().out
-    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "no such question"]) == 2
-    assert "matched no section" in capsys.readouterr().err
-
-
-def test_a_section_whose_heading_holds_an_entity_is_found_by_its_file(tmp_path, capsys):
-    """`SECTION=120` on vegetation ("reed -&gt; sedge") matched nothing: the raw fragment kept `gt`."""
-    research = tmp_path / rp.RESEARCH
-    (research / "lanes").mkdir(parents=True)
-    body = '<h2 id="reed--gt-sedge">Reed -&gt; sedge</h2>\n<p>Ordinary words.</p>\n'
-    (research / "lanes.html").write_text(PAGE + body, encoding="utf-8")
-    (research / "lanes" / "120-reed--gt-sedge.html").write_text(body, encoding="utf-8")
-    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "120"]) == 0
-    assert "1 sections" in capsys.readouterr().out
 
 
 # --------------------------------------------------------------- feature 260: the candidate words
@@ -230,12 +234,8 @@ def test_a_registry_source_key_is_not_a_candidate() -> None:
 def test_the_candidate_list_over_the_real_entry() -> None:
     """SC-001: 34 where the prepass reports 0 today, on the entry feature 259 measured three times."""
     record = SKILL / "research"
-    text = rp.text_of(
-        rp.strip_comments(
-            (record / "ways" / "200-road-bridges-over-rivers-and-canals-hashi.html").read_text(encoding="utf-8")
-            + (record / "ways" / "200-road-bridges-over-rivers-and-canals-hashi.notes.html").read_text(encoding="utf-8")
-        )
-    )
+    bridges = next((record / "questions").glob("*-road-bridges-over-rivers-and-canals-hashi.html"))
+    text = rp.text_of(rp.strip_comments(bridges.read_text(encoding="utf-8") + bridges.with_name(bridges.name[: -len(".html")] + ".notes.html").read_text(encoding="utf-8")))
     # Against an EMPTY glossary, so the test does not go red the day the glossary does its job: feature 250
     # defined `girder` and `stringers`, which is what the list exists to cause, and the assertion that they
     # are raised failed for it. What the glossary then removes is asserted separately, by its own content.

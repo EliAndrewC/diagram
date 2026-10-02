@@ -33,15 +33,15 @@ import sys
 
 CAP = 20_000
 RECORD = pathlib.Path(".claude/skills/diagram/research")
-_QUESTION = re.compile(r"^[0-9]{3}-.+\.html$")
+#: A question's page (feature 303: `NNNN-<slug>.html`, or how our maps draw it, `NNNN-<slug>.drawing.html`).
+_QUESTION = re.compile(r"^[0-9]{4}-[^.]+(?:\.drawing)?\.html$")
 #: A question's companion files, beside it: its notes and the originals of its translated quotations.
 COMPANIONS = (".notes.html", ".originals.html")
 
 
 def is_question(path: pathlib.Path) -> bool:
     parts = path.parts
-    return (_QUESTION.match(path.name) is not None and not path.name.endswith(COMPANIONS) and "sources" not in parts
-            and "citations" not in parts and "assets" not in parts)
+    return _QUESTION.match(path.name) is not None and "questions" in parts
 
 
 def question_of(path: pathlib.Path) -> pathlib.Path:
@@ -66,7 +66,7 @@ def changed(root: pathlib.Path) -> list[pathlib.Path]:
 
 
 def every(root: pathlib.Path) -> list[pathlib.Path]:
-    return sorted(q.relative_to(root) for q in (root / RECORD).rglob("[0-9][0-9][0-9]-*.html")
+    return sorted(q.relative_to(root) for q in (root / RECORD / "questions").glob("[0-9][0-9][0-9][0-9]-*.html")
                   if is_question(q.relative_to(root)))
 
 

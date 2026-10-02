@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/v7-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=homesteads SECTION=180
+**Your questions:** Q=0041
 **Your registry keys:** KEY=kotobank-nanushi, KEY=kotobank-shoya, KEY=kusawake-jawiki, KEY=takizawa-sonshi-yashiki, KEY=sukumo-shishi-kenchi, KEY=kotobank-kadoya, KEY=kotobank-mizunomi, KEY=kotobank-nago, KEY=kotobank-yoriai, KEY=kotobank-mura-yoriai, KEY=yamagata-kashiwakura, KEY=sennan-yamada, KEY=kotobank-gono, KEY=sohu-guangfu-comb-layout, KEY=douban-feng-jiang-citang, KEY=gz-gov-citang, KEY=citang-zhwiki, KEY=l7r-merchant-families
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

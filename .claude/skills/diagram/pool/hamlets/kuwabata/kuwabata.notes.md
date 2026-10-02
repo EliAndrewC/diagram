@@ -729,7 +729,7 @@ but every one of the 11 drawn baths is `unjoined` (`bath_seats_drawn`). The comm
 (`house_bearing_deg` 5.44) with 2 of the 16 houses turned square to the lane instead (`house_quarter_turns`).
 
 **Homestead wood below the record's floor**: `meta.homestead_wood_ft2` reads `{"rolled": 13030, "drawn": 6441}` on
-this manifest - 441 sq ft ABOVE the research record's 6,000 sq ft floor (research/vegetation 210), not under it.
+this manifest - 441 sq ft ABOVE the research record's 6,000 sq ft floor (research/contents.json#vegetation 210), not under it.
 future-work/farming-communities.md's OPEN 2026-09-28 (269 B26, PARTIAL) entry still names this map at "10,891 / 5,619
 (under the 6,000 floor)", the figure from the 269-landing commit before today's review round re-rolled the pool; that
 entry's Kuwabata figure is now stale and wants a re-measurement there. The entry's title still names three maps

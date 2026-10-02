@@ -25,7 +25,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/271-research-coverage-audit/briefs/t4-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=cities/hinterland SECTION=050
+**Your questions:** Q=0174
 **Your registry keys:** KEY=townnews-zama-magusaba, KEY=xuanquanzhi-neac, KEY=kotobank-ressen, KEY=kotobank-edo, KEY=katsushika-edo-yasai, KEY=ja-tokyo-edo-yasai, KEY=kotobank-zokibayashi, KEY=maff-musashino-giahs, KEY=rinya-satoyama, KEY=thepaper-city-gardens, KEY=bunka-imado-kawarayaki, KEY=higashiyamato-nariki-lime
 
 **Coordination with the other sessions** - hold your questions to these while checking; where one duplicates another

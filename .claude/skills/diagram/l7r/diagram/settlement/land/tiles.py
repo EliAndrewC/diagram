@@ -5,7 +5,7 @@ every throw tested against the keep-outs and culled at the finish one at a time 
 individual blades of grass and lines for marshland and scrubland" serves no purpose that individual trees do, so "instead of then
 drawing individual glyphs within that ... some tiled pattern where a relatively small block of background is then repeated".
 Each tile here lays the scatter's own glyphs - their shapes, colors, strokes and density per area - ONCE, from a fixed seed, and
-the zone is filled with it (`Settlement.flush_covers`). A MAP DRAWING CONVENTION, recorded as such (research/vegetation, the
+the zone is filled with it (`Settlement.flush_covers`). A MAP DRAWING CONVENTION, recorded as such (research/contents.json#vegetation, the
 spec's Decisions Recorded); the GM does not mind the repetition.
 
 SEAMLESS: a glyph whose extent crosses the tile's edge is laid again at the opposite edge, so the tiles meet without a cut. No

@@ -18,7 +18,7 @@ Three stages, each shippable, each proven on one page before the other eighteen:
 |---|---|---|
 | 1 - the registry | `SOURCES.html` -> `research/sources/` | the assembled registry is byte-identical |
 | 2 - the questions | `research/<page>.html` -> `research/<page>/` | every assembled page is byte-identical |
-| 3 - the notes | `research/citations/<page>.html` notes -> `research/<page>/*.notes.html` | numbers allocated at assembly, notes in document order; the assertion-to-note pairing unchanged |
+| 3 - the notes | `research/questions/<page>.html` notes -> `research/<page>/*.notes.html` | numbers allocated at assembly, notes in document order; the assertion-to-note pairing unchanged |
 
 Stage 3 carries the renumbering, so it is the only stage whose output differs from what it replaced. It
 differs in two ways, both declared and both consequences of the same decision: the numbers are
@@ -217,16 +217,16 @@ research/sources/     one section: its <h2> and its prose
 research/sources/030-setting-canon.html          the same
 research/sources/_tail.html                      </main></body></html> - verbatim
 
-research/contents.json#ways_front.html                        doctype, head, h1, intro, <hr> - verbatim
+research/ways/_front.html                        doctype, head, h1, intro, <hr> - verbatim
 research/ways/010-<slug>.html                    one question: its <h2> and everything to the next
 research/ways/010-<slug>.notes.html              that question's notes (stage 3)
-research/contents.json#ways_tail.html                         the citations-page pointer and the closing tags
-research/contents.json#ways_citations-front.html              head, h1, intro, and the works section's own opening
-research/contents.json#ways_citations-mid.html                between the works block and the notes: `</section>`,
+research/ways/_tail.html                         the citations-page pointer and the closing tags
+research/ways/_citations-front.html              head, h1, intro, and the works section's own opening
+research/ways/_citations-mid.html                between the works block and the notes: `</section>`,
                                                  the `<h2 id="notes">` heading, `<section
                                                  class="footnotes"><ol>` - hand-authored bytes that
                                                  belong to no derivation and to no question
-research/contents.json#ways_citations-tail.html               `</ol></section>` and the closing tags
+research/ways/_citations-tail.html               `</ol></section>` and the closing tags
 ```
 
 **A research page is cut on `<h2>` ONLY.** 14 `<h3>` headings stand inside questions on six pages, and a

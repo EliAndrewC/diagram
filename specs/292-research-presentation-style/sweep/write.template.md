@@ -40,7 +40,7 @@ and the style guide before you write.
      the folded sections' `Grounds:` and `Evidence:` fields merged into one of each, and a `REMOVED` comment for any
      claim you cut under STYLE.md section 4 (what it said and why it went). Then the opening paragraphs, then the
      bullets, as the model does.
-   - **The rendering fragment** is `research/rendering/{page}/<NNN>-<rid>.html`, titled to mirror the research title
+   - **The rendering fragment** is `research/questions/{page}/<NNN>-<rid>.html`, titled to mirror the research title
      ("How our maps draw ..."), its second line `<!-- about: {page}.html#<id> -->` - `make record` then links the two
      both ways; never type a link between them. It follows the style guide too, and cites the research it rests on.
      The map's rules, the sizes chosen, conventions, knobs, what the generator places where, and why, go here, and
@@ -70,7 +70,7 @@ and the style guide before you write.
      goes to the new research section, or to the rendering section where it pointed at a map rule (from another page:
      `rendering/{page}.html#<rid>`; from a rendering page: `../{page}.html#<id>`). A modal's `Entry:` names the new
      titles - the research title under `research/{page}.html - '<title>'` and the rendering title under
-     `research/rendering/{page}.html - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
+     `research/questions/{page}.html - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
      string. A code comment that named an old heading names the new one.
    - **Confusable pairs** you meet (two things a reader could mistake for each other): `make append
      FILE={clone}/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.

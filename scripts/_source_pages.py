@@ -170,7 +170,7 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
     ap.add_argument("out", help="the directory the pages and MANIFEST.txt are written to")
     ap.add_argument("urls", nargs="*", help="the pointers to save")
     ap.add_argument("--quotes", default="", help="a JSON list of the passages the record quotes from these pages: a long page is saved as an excerpt around them (D19)")
-    ap.add_argument("--question", default="", help="the research question the pages are read for (page/NNN), recorded on the ledger")
+    ap.add_argument("--question", default="", help="the research question the pages are read for (its number, NNNN), recorded on the ledger")
     ap.add_argument("--no-ledger", action="store_true", help="a re-verification save (an excerpt bundle): the cache, but no ledger lines (feature 288 D1)")
     args = ap.parse_args(argv)
     if not args.urls:

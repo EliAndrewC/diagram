@@ -32,7 +32,7 @@ follow its message (write the unreached items to `$L7R_CONTINUE` as a brief of t
 Session 1 researched this group and committed; its handoff is `specs/280-modern-only-sweep/briefs/t2-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=towns SECTION=210, PAGE=towns SECTION=220
+**Your questions:** Q=0134, PAGE=towns SECTION=220
 **Your registry keys:** none - the last group has them
 
 ## The procedure (check, apply)

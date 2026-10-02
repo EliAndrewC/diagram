@@ -277,10 +277,12 @@ def notes_index(record_dir: str | None) -> dict[str, str]:
         for name in names:
             if not name.endswith(".notes.html"):
                 continue
+            # keyed by the heading id of the page the notes belong to (feature 303: a drawing page's notes are beside
+            # it, `NNNN-<slug>.drawing.notes.html`, and its heading is not the stem's slug), by its letters and digits
+            page = os.path.join(base, name[: -len(".notes.html")] + ".html")
+            found = re.search(r'<h[23] id="([^"]+)"', open(page, encoding="utf-8").read()) if os.path.isfile(page) else None
             with open(os.path.join(base, name), encoding="utf-8") as fh:
-                # keyed by the id's letters and digits: a slug re-derived from a heading spells "city's" as
-                # `city-s` where the file says `citys`, and that question's notes were never scanned
-                out[_bare(name.split("-", 1)[-1][: -len(".notes.html")])] = without_code(strip_comments(fh.read()))
+                out[_bare(found.group(1) if found else name.split("-", 1)[-1][: -len(".notes.html")])] = without_code(strip_comments(fh.read()))
     return out
 
 
@@ -318,55 +320,56 @@ def _bare(heading: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", html.unescape(re.sub(r"<[^>]+>", "", heading)).casefold())
 
 
-def _fragments(page: str, section: str, root: str) -> list[str]:
-    """The per-entry files a check should read (feature 258, spec FR-023).
+def _fragments(q: str, root: str) -> list[str]:
+    """The per-entry files a check should read (feature 258, spec FR-023): each question's page and its notes.
 
     A recorded `record-format` run spent 88% of everything that entered its context on one research
     page, to check one entry (spec research R3). The prepass is what the dispatch is built from, so it
     is where the fragment paths belong.
     """
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-    from _hm_record import fragments_for  # noqa: PLC0415 - one call, and only when the page is split
+    from _hm_record import fragments_for  # noqa: PLC0415
 
-    return fragments_for(page, section, str(pathlib.Path(root).resolve()))
+    return fragments_for(q, str(pathlib.Path(root).resolve()))
+
+
+def selected(record_dir: str, term: str) -> str:
+    """The page files a section's id or a tag's id names, comma-separated - the engine's `Record.select` (feature 303)."""
+    skill = pathlib.Path(record_dir).resolve().parent
+    if str(skill) not in sys.path:
+        sys.path.insert(0, str(skill))
+    from l7r.diagram.interactive.record import store  # noqa: PLC0415 - the engine, from the skill the record is in
+
+    return ",".join(p.file for p in store.load(record_dir).select(term))
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("page", help="a research page name: hamlets, cities/tango, citations/hamlets, SOURCES")
+    ap.add_argument("q", nargs="?", default="", help="questions by number (0412) or page file, comma-separated; or SOURCES, the registry")
+    ap.add_argument("--in", dest="within", default="", help="every question of a section (its id) or carrying a tag (its id)")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", default="")
-    ap.add_argument("--section", default="", help="only the sections whose heading contains this text")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root)
-    name = args.page.removesuffix(".html")
-    rel = "SOURCES.html" if name in ("sources", "SOURCES") else f"{name}.html"
-    page = page_text(str(root / RESEARCH), rel)
+    record_dir = str(root / RESEARCH)
+    if args.q in ("sources", "SOURCES", "SOURCES.html"):
+        name, page, fragments = "SOURCES", page_text(record_dir, "SOURCES.html"), []
+    else:
+        q = args.q or (selected(record_dir, args.within) if args.within else "")
+        fragments = _fragments(q, args.root) if q else []
+        pages = [f for f in fragments if not f.endswith(".notes.html")]
+        name = args.q or f"IN={args.within}"
+        page = "\n".join(page_text(record_dir, "questions/" + pathlib.Path(f).name) for f in pages)
     if not page:
-        print(f"record-prepass: no such page - wanted {name} under {root / RESEARCH}", file=sys.stderr)
+        print(f"record-prepass: {args.q or args.within or 'nothing'!r} names no question - e.g. make record-prepass Q=0041, IN=homesteads, or Q=SOURCES", file=sys.stderr)
         return 2
     gloss_path = root / GLOSSARY
     glossary = json.loads(gloss_path.read_text(encoding="utf-8")) if gloss_path.is_file() else {}
-    fragments = _fragments(args.page, args.section, args.root)
-    # ONE flag, two matchers (feature 258): `--section` names a question the way it reads ("the bund
-    # runs along...") or the way its file spells it ("040"). The heading filter alone answers the first
-    # and finds nothing for the second, which is the form the fragment paths are in.
-    # The wanted headings are READ from the fragments, never re-derived from a file name (feature 250,
-    # 2026-09-21): `_slug` writes "city's" as `city-s` where the record's id is `citys`, so SECTION=010 on
-    # cities/sizing matched no section and handed `record-format` an empty list with no complaint; and a
-    # fragment's `<h3>` subsections have no file of their own, so a name could never have found them.
-    wanted = {_bare(h) for f in fragments if not f.endswith(".notes.html")
-              for h in re.findall(r"(?s)<h[23][^>]*>(.*?)</h[23]>", (root / f).read_text(encoding="utf-8"))}
-    listing = [s for s in prepass(page, glossary, str(root / RESEARCH))
-               if not args.section or args.section.casefold() in s["section"].casefold() or _bare(s["section"]) in wanted]
-    if args.section and not listing:
-        print(f"record-prepass: SECTION={args.section!r} matched no section of {name} - nothing was checked", file=sys.stderr)
-        return 2
-
+    listing = prepass(page, glossary, record_dir)
     print(render(name, listing))
     if fragments:
         print("\n## What to hand the check (feature 258)\n")
-        print("The fragments these sections are written in - read THESE, not the assembled page:\n")
+        print("The files these sections are written in - read THESE, not the built site:\n")
         print("\n".join(f"  {f}" for f in fragments))
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps({"page": name, "sections": listing}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

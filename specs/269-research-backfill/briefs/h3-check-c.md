@@ -21,7 +21,7 @@ in progress; edit only that line.
 Session 1 researched this group and committed; its handoff is `specs/269-research-backfill/briefs/h3-handoff.md`. You check and
 apply ONE GROUP of the questions it wrote - read only your own lines of the handoff.
 
-**Your questions:** PAGE=homesteads SECTION=170, PAGE=homesteads SECTION=190
+**Your questions:** PAGE=homesteads SECTION=170, Q=0003
 **Your registry keys:** KEY=gogura-kotobank, KEY=jikata-monjo-kotobank, KEY=oamishirasato-kaoku, KEY=kawai-jutaku-bunka, KEY=nta-nengu, KEY=chimei-jawiki, KEY=yaji-tani-sawa, KEY=okamoto-1956-sonraku, KEY=santome-shinden-jawiki, KEY=shuson-jawiki
 
 ## The procedure (check, apply)

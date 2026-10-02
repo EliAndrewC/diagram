@@ -24,7 +24,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   `seeded.py catalog`, one with a NOT-APPLICABLE or MISSING verdict and one clean.
 - **P1 `scripts/_source_entries.py`, `make source-entries KEYS=a,b`** (FR-002): parses `research/sources/` for
   the entry whose anchor or `<code>` key matches, prints its citation line, write-ups and `Used for:` line, then
-  every footnote on `research/citations/**/*.html` whose key matches, with its assertion (reusing
+  every footnote on `research/questions/**/*.html` whose key matches, with its assertion (reusing
   `_quote_verbatim.footnotes` and `assertions` by import). Contract: a "step 0" in `source-applicability.md`.
 - **P2 scoped text** (FR-003): `_record_prepass.py --section` gains `--text`, which prints the section's visible
   text and its numbered HTML source lines after the candidate list; `_quote_verbatim.py --notes` already writes
