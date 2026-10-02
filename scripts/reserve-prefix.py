@@ -51,8 +51,13 @@ DIRS = {
     "glossary": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary",
     "registry": ".claude/skills/diagram/research/sources/010-works-cited",
     "question": ".claude/skills/diagram/research/questions",
+    # GUARD_EDIT_OK: feature 312 FR-012 - a fourth kind, `uncited`: a kept page's write-up, in its own part of the registry,
+    # numbered in the registry's ONE sequence (so an entry moved to the works cited when it is first cited keeps its number).
+    "uncited": ".claude/skills/diagram/research/sources/040-uncited-works",
 }
-SUFFIX = {"glossary": ".json", "registry": ".html", "question": ".html"}
+SUFFIX = {"glossary": ".json", "registry": ".html", "question": ".html", "uncited": ".html"}
+#: Kinds that share one number sequence and one key space: a registry key is one work, cited or not (feature 312).
+SHARED = {"registry": ("registry", "uncited"), "uncited": ("registry", "uncited")}
 LEDGER = "prefixes.jsonl"
 STEP = 10
 #: A question's number is its identity and not its order (feature 303), so the numbers run on with no gap.
@@ -87,11 +92,12 @@ def prefixes_in(d: Path) -> list[int]:
 
 
 def highest(kind: str, root: Path, mirror: Path) -> int:
-    held = prefixes_in(mirror / DIRS[kind]) + prefixes_in(root / DIRS[kind])
+    kinds = SHARED.get(kind, (kind,))
+    held = [p for k in kinds for p in prefixes_in(mirror / DIRS[k]) + prefixes_in(root / DIRS[k])]
     clones = mirror / ".clones"
     if clones.is_dir():
         for c in clones.iterdir():
-            held += prefixes_in(c / DIRS[kind])
+            held += [p for k in kinds for p in prefixes_in(c / DIRS[k])]
     ledger = mirror / ".specify" / LEDGER
     if ledger.is_file():
         for line in ledger.read_text(encoding="utf-8").splitlines():
@@ -99,7 +105,7 @@ def highest(kind: str, root: Path, mirror: Path) -> int:
                 row = json.loads(line)
             except json.JSONDecodeError:
                 continue
-            if row.get("kind") == kind:
+            if row.get("kind") in kinds:
                 held.append(int(row.get("prefix", 0)))
     return max(held, default=0)
 
@@ -115,11 +121,11 @@ def held_elsewhere(kind: str, key: str, root: Path, mirror: Path) -> str:
                 row = json.loads(line)
             except json.JSONDecodeError:
                 continue
-            if row.get("kind") == kind and row.get("key") == key and Path(str(row.get("clone", ""))).resolve() != root.resolve():
+            if row.get("kind") in SHARED.get(kind, (kind,)) and row.get("key") == key and Path(str(row.get("clone", ""))).resolve() != root.resolve():
                 return f"{row.get('clone')} (reserved {row.get('prefix')}, {row.get('utc')})"
     clones = mirror / ".clones"
     for c in sorted(clones.iterdir()) if clones.is_dir() else []:
-        if c.resolve() != root.resolve() and holding(c / DIRS[kind], kind, key):
+        if c.resolve() != root.resolve() and any(holding(c / DIRS[k], k, key) for k in SHARED.get(kind, (kind,))):
             return str(c)
     return ""
 
@@ -241,17 +247,17 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
     marks it `cited:<key>` at once; without it, nothing differs from before."""
     if kind not in DIRS:
         raise Refusal(f"KIND must be one of {sorted(DIRS)}")
-    if url and kind != "registry":
-        raise Refusal("URL= names a registry entry's source - it is for KIND=registry only")
-    if tags and kind != "registry":
-        raise Refusal("TAGS= are a registry entry's source tags - they are for KIND=registry only")
-    if kind == "registry" and stub is None:
+    if url and kind not in ("registry", "uncited"):
+        raise Refusal("URL= names a registry entry's source - it is for KIND=registry or KIND=uncited only")
+    if tags and kind not in ("registry", "uncited"):
+        raise Refusal("TAGS= are a registry entry's source tags - they are for KIND=registry or KIND=uncited only")
+    if kind in ("registry", "uncited") and stub is None:
         stub = registry_stub(key, url, tags_marker(tags, root) if tags else TAGS_PLACEHOLDER)
     if not key.strip():
         raise Refusal("KEY is required - the glossary term, the registry key, or the question's heading id")
     mirror = mirror_of(root) if mirror is None else mirror
     d = root / DIRS[kind]
-    existing = holding(d, kind, key)
+    existing = [f for k in SHARED.get(kind, (kind,)) for f in holding(root / DIRS[k], k, key)]
     if existing:
         raise Refusal(f"{existing[0].relative_to(root)} already holds {key!r} - edit it rather than reserving another")
     with Lock(mirror / ".specify" / "prefixes.lock", timeout):
@@ -269,7 +275,7 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
         row = {"kind": kind, "key": key, "prefix": prefix, "clone": str(root), "session": os.environ.get("L7R_PAGE_SESSION", ""), "utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
         with open(mirror / ".specify" / LEDGER, "a", encoding="utf-8") as f:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
-    if url:
+    if url and kind == "registry":  # an uncited entry's page is written up, not cited (feature 312)
         src = _sources()
         src.append(src.home(root), [src.line(src.context(root), url, f"cited:{key}")])
     return path
