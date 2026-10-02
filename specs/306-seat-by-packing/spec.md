@@ -35,9 +35,10 @@ The cost is not a slow check: one placer call is ~1.5 ms. It is the SHAPE of the
 ### User Story 1 - The packing measured before the engine changes (Priority: P1)
 
 A prototype outside the engine takes each margin's starting state as the engine has it (the boundary, the exit strip, the
-field's corridor, the seat region) and (a) PREDICTS the margin's capacity by packing each homestead's bounding box (house, yard,
-garden, the kura where it has one) on the margin's free ground, adjacent to the boxes already placed, and (b) offers the
-packed seats, in packing order, to the engine's own placer, which asks every rule it asks today. It is timed against the
+field's corridor, the seat region) and (a) PREDICTS the margin's capacity from its free ground under the rules that limit
+how many homesteads it holds (FR-003), and (b) offers seats proposed by packing each homestead's bounding box (house, yard,
+garden, the kura where it has one) next to the ones already standing (FR-004), in packing order, to the engine's own placer,
+which asks every rule it asks today. It is timed against the
 engine's seating of the same states, back to back.
 
 **Why this priority**: the GM asked for the approach to be tested before it is built into the engine where that is practical;
@@ -60,8 +61,8 @@ seated count.
 
 ### User Story 2 - The engine seats by packing (Priority: P2, only on GO)
 
-The engine chooses the margin whose packed capacity holds every household (seating no margin it can predict will fall
-short), proposes seats by packing bounding boxes on the margin's free ground next to the ones already standing, and asks the
+The engine chooses the margin whose predicted capacity (FR-003) holds every household (seating no margin it can predict will
+fall short), proposes seats by packing bounding boxes on the margin's free ground next to the ones already standing, and asks the
 full rules of those seats only. The exhaustive pass over every free grid point is retired where the packing replaces it.
 
 **Why this priority**: it is the redesign the GM asked for; it is built only once the prototype shows it pays.
@@ -99,8 +100,8 @@ flagged. It stays a standing check, run beside `make perf`, so a future scan of 
 
 ### Edge Cases
 
-- A margin the packing predicts too small that the engine's greedy seating would have filled: the prediction is a lower bound
-  where it can be; a wrong prediction is measured by the harness (US1) and costs at most one extra seated margin (US2.1).
+- A margin whose capacity is predicted wrongly, in either direction: measured by the harness (US1), and it costs at most one
+  extra seated margin (US2.1).
 - Every form is seated through `seat_every_household` and its margin ladder, so FR-003 and FR-004 apply to every form; the
   harness (US1) and SC-002/SC-003 report each form the pool rolls. A form the packing physically cannot serve is put to an
   independent `spec-fidelity` check with its measurement, never excluded here.
@@ -168,3 +169,6 @@ the implementation finds it needs is recorded here with its class before it land
   measured, the census over the pool's rolls and standing beside `make perf`. FR-003 also reworded after the round-1 prototype
   (research R1): the capacity is predicted under the rules that limit it, since the free ground alone holds 213-305 boxes where
   15-40 homesteads seat.
+- Round 2 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 1 item - US1 (a), US2 and the first Edge Case still described
+  the capacity by packing that R1 disproved. Addressed: both stories state the capacity in FR-003's terms, packing only where
+  FR-004 proposes seats; the Edge Case gives no direction for a wrong prediction.
