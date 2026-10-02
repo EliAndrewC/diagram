@@ -32,7 +32,7 @@ capability, a map or a tier - the scope is the closed list.
 marsh currently explains the wet ground; it does not carry the finding that active management SUSTAINS
 a reed fringe (a Kagawa study found dredging and algae-cutting positively correlated with emergent-plant
 richness), nor its companion - that the embankment itself is mown and burned to keep the bank strong.
-Both are researched, cited and already in `research/water.md`; the reader never sees them.
+Both are researched, cited and already in `research/contents.json#water`; the reader never sees them.
 
 *Independently testable*: open a map's `.html`, click a marsh, and read the finding with its class
 (accurate / deviation / guess) and its sources.
@@ -122,7 +122,7 @@ siter can express only one.
 
 ## Requirements
 
-- **FR-001** (US1.1) The marsh modal MUST carry the tameike finding, classed and cited from `research/water.md`,
+- **FR-001** (US1.1) The marsh modal MUST carry the tameike finding, classed and cited from `research/contents.json#water`,
   visible to a reader who clicks marsh on a rendered map. Its second half - that the EMBANKMENT is mown
   and burned to keep the bank strong - is part of the SAME recorded finding, not a second deliverable:
   the section is titled "A reservoir's shore is reeded, and its EMBANKMENT is mown - the two are

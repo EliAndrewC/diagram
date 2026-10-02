@@ -94,19 +94,19 @@ against its entry.
 
 | class | drawn from | label |
 |---|---|---|
-| farmhouse | `research/homesteads.md` "What stood on a farmstead - the inventory, with numbers"; "How close does a farmhouse stand to the paddy"; `homesteads.md` groves entry for the yashikirin | accurate |
+| farmhouse | `research/contents.json#homesteads` "What stood on a farmstead - the inventory, with numbers"; "How close does a farmhouse stand to the paddy"; `homesteads.md` groves entry for the yashikirin | accurate |
 | storage shed | `homesteads.md` "What stood on a farmstead" (the naya / kura inventory - `sugiura-1973-fuzoku`) | accurate |
 | byre | `homesteads.md` "May a byre stand beside a wellhead?"; `settlements/homesteads.md` byre form knob (`byre_form`) | accurate |
 | threshing yard | `homesteads.md` "The threshing yard's sun, and how far a farmhouse shades" | accurate |
 | garden | `homesteads.md` "The garden's sun, and how far the windbreak shades" | accurate |
 | privy, woodpile, manure heap, bathhouse, hen coop, household shrine, persimmon | `homesteads.md` "The farmstead's fixtures" (T53-T59; per-fixture READ / SUMMARY-ONLY verdicts inline) - the sizes are stated there as GUESSES unless a source is named | accurate for presence and seat; **guess** for size, said so per fixture |
-| homestead bamboo, shared bamboo grove | `research/vegetation.md` "Bamboo: how common, where it stood, and how to show it" (the household-vs-common distinction; the drawn stand is a legibility glyph) | accurate for presence; **deviation** for the drawn size (a culm cannot be drawn at true scale) |
+| homestead bamboo, shared bamboo grove | `research/contents.json#vegetation` "Bamboo: how common, where it stood, and how to show it" (the household-vs-common distinction; the drawn stand is a legibility glyph) | accurate for presence; **deviation** for the drawn size (a culm cannot be drawn at true scale) |
 | windbreak | `vegetation.md` "The fengshui forest - real scale, and why ours is honest"; `homesteads.md` "The garden's sun, and how far the windbreak shades"; `archetypes.md` "Why dike willows do NOT replace the village windbreak" | accurate |
 | copse | `vegetation.md` "How is a coppice lot bounded?"; "Does scrub stand under a village wood?" | accurate |
 | woodland commons | `vegetation.md` "How is a coppice lot bounded?" (the iriai commons); "Forest density and crown size" | accurate |
 | scrub and rough grazing | `vegetation.md` "The crop margin"; "Scrub stays off open water"; "The cut bank" | accurate |
-| marsh | `research/water.md` "Marsh - wet rice is reclaimed FROM wetland"; "The wet toe is as wide as the FAN"; `vegetation.md` "The marsh margin" | accurate |
-| paddy | `research/fields.md` "Paddy plots - irregular patchwork, and why the grid is anachronistic"; "Nitrogen - a flooded paddy makes its own"; "Plot sizes" | accurate |
+| marsh | `research/contents.json#water` "Marsh - wet rice is reclaimed FROM wetland"; "The wet toe is as wide as the FAN"; `vegetation.md` "The marsh margin" | accurate |
+| paddy | `research/contents.json#fields` "Paddy plots - irregular patchwork, and why the grid is anachronistic"; "Nitrogen - a flooded paddy makes its own"; "Plot sizes" | accurate |
 | bund | `fields.md` "Bunds are SHARED, and the fabric is continuous"; "A bund runs on, or it turns for a reason"; `water.md` "The bund runs along the channel bank" | accurate |
 | bund beans | `waterfields/palette.py` `BEAN_GREEN` comment (azemame); `fields.md` bund entries - the practice is attested, the drawn color is a legibility departure ("real soybean foliage is lighter") | accurate for the practice; **deviation** for the color, said so |
 | millet, buckwheat, barley | `fields.md` "Where dry (hatake) crops go - the topographic catena"; "Why ruled rows waited for Meiji" (the furrows) | accurate for placement; the crop MIX per map is a rolled knob - **guess** for the proportions, said so |
@@ -116,7 +116,7 @@ against its entry.
 | pond | `fields.md` "Water-first v2 - pond, distribution and the three layout modes"; `SOURCES.md` `kagawa-tameike` | accurate |
 | village lane | `homesteads.md` "Is every farmhouse reached by a lane, and in what FORM?"; "How does a village lane bend?"; the width note in `SOURCES.md` re-sourcing queue (no numeric source - the widths are drawing conventions) | accurate for form; **guess** for width, said so; the connector's provenance (predates the settlement) from `dev/placement.md` |
 | footbridge | `water.md` "What drawing at TRUE SIZE left open" (footplanks); the spec template's own worked example names the footplank rule a GM-ruled guess | **guess**, said so |
-| well | `research/urban-features.md` "Wells - the research, and the deliberate liberty"; "Communal wells and the samurai exception"; `homesteads.md` "Does a DISPERSED hamlet's outlying farm have its own well?" | accurate for presence; **deviation** for the drawn size (the oversized well for legibility - the constitution's own example) |
+| well | `research/contents.json#trades-and-services` "Wells - the research, and the deliberate liberty"; "Communal wells and the samurai exception"; `homesteads.md` "Does a DISPERSED hamlet's outlying farm have its own well?" | accurate for presence; **deviation** for the drawn size (the oversized well for legibility - the constitution's own example) |
 | notice board | `urban-features.md` "The notice board (kosatsuba) - siting is a TRAFFIC decision" | accurate |
 
 **Sibling text** (FR-005) is written from the same entries: windbreak vs. copse vs. woodland

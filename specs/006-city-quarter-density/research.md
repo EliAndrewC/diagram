@@ -1,6 +1,6 @@
 # Research: City Quarter Density and Wall-Sizing Correctness
 
-**Sources (feature 138, 2026-08-28):** the grounding in C is re-recorded and cited in `research/cities/fabric.md` ("Urban commoners built in continuous street walls"; "A county seat's street share, open reserve and civic share") - the Pingyao and Edo density anchors named in prose stand as recorded at the 2026-07 pass.
+**Sources (feature 138, 2026-08-28):** the grounding in C is re-recorded and cited in `research/contents.json#urban-fabric` ("Urban commoners built in continuous street walls"; "A county seat's street share, open reserve and civic share") - the Pingyao and Edo density anchors named in prose stand as recorded at the 2026-07 pass.
 
 
 ## A. Empirical calibration: why per-quarter, not per-block or per-aggregate

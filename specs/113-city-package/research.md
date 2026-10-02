@@ -317,7 +317,7 @@ order of weight:
    statement-based reading by a wide margin. Decomposing them would satisfy no stated requirement.
 2. **A third of their bulk is researched grounding, and splitting harms it.** `log_boom` is 97 raw
    lines of which 35 are a docstring recording WHY a log boom is a shore-fast pen rather than a
-   line across the stream, with the GM's 2026-08-02 review and the `research/urban-features.md`
+   line across the stream, with the GM's 2026-08-02 review and the `research/contents.json#trades-and-services`
    citation. `farmland_ring` carries 31. Project policy (CLAUDE.md, "Record the why of every
    research-driven rule") makes that content mandatory, so it is not fat to be trimmed - and
    splitting the function underneath it forces the why either to be duplicated across helpers or

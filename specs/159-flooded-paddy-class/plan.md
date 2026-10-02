@@ -5,7 +5,7 @@
 ## Summary
 
 Give the FLOODED-tinted paddy plot its own interactive class so it highlights and opens apart from
-the rice-green paddy, with an explanation written from the research pass (`research/fields.md`, "The
+the rice-green paddy, with an explanation written from the research pass (`research/contents.json#fields`, "The
 wettest plots are their own kind of ground - shitsuden, and why they read blue"). The whole change
 is a class KEY chosen at one emit site plus one row of the vocabulary; nothing about the drawn map
 moves.
@@ -90,10 +90,10 @@ per plot, and the tinted plots number 2 on the reference map.
   expression and its comment).
 - **XI. Japanese Authenticity**: PASS and load-bearing - 湿田 shitsuden, 乾田 kanden, 谷津田 yatsuda,
   深田 fukada each pass the kanji / romaji / meaning triangle, and each is quoted from a published
-  dictionary with the reading and the gloss in `research/fields.md`.
+  dictionary with the reading and the gloss in `research/contents.json#fields`.
 - **XII. Historical Grounding Bookends (NON-NEGOTIABLE)**: PASS. **Opening**: done before this plan
   was written - the `source-reader` pass of 2026-08-29, recorded as a full entry in
-  `research/fields.md` with five new keys in `research/SOURCES.md`, and with its three failures
+  `research/contents.json#fields` with five new keys in `research/SOURCES.md`, and with its three failures
   (the maintained water depth, the canopy-closure visibility, the "Kishu-school" name) written into
   the re-sourcing queue rather than asserted. **Closing**: the class's `label_note` / `caveat` carry
   the liberty to the modal, and the Decisions Recorded table in `spec.md` lists every one.
@@ -114,7 +114,7 @@ per plot, and the tinted plots number 2 on the reference map.
 
 ## Phase 0 - research
 
-Complete before this plan. `research/fields.md`, "The wettest plots are their own kind of ground -
+Complete before this plan. `research/contents.json#fields`, "The wettest plots are their own kind of ground -
 shitsuden, and why they read blue"; `research/SOURCES.md` keys `kotobank-shitsuden`,
 `kotobank-kanden`, `kotobank-yatsuda`, `kotobank-fukada`, `fao-rice-water`.
 

@@ -76,7 +76,7 @@ modern number applied backward to a pre-modern map is exactly that risk.
 
 - **The same false number is in SEVEN places, not one.** `classes.py` `paddy.what`; four sibling
   texts (`paddy` against millet, buckwheat, barley and soy) that each repeat it; the `seams.py`
-  module docstring; and `research/fields.md`'s aze finding. Fixing the modal alone would leave the
+  module docstring; and `research/contents.json#fields`'s aze finding. Fixing the modal alone would leave the
   research record asserting it, which is where the next session would read it back.
 - **The walkthrough pages were 57 engine commits stale, and refreshing them is not this feature's
   drawing change.** `dev/placement-stages/*.html` embeds a snapshot of the class registry, so it
@@ -89,7 +89,7 @@ modern number applied backward to a pre-modern map is exactly that risk.
   the only change attributable to feature 160 is the text. **Nothing keeps this artifact fresh** -
   no cache, no guard, no test - which is why it drifted 57 commits; recorded as a defect for the GM
   rather than fixed here, since a staleness guard is its own piece of tooling.
-- **The bund is NOT re-derived from this.** `research/fields.md` has the aze at roughly 1-2 ft wide
+- **The bund is NOT re-derived from this.** `research/contents.json#fields` has the aze at roughly 1-2 ft wide
   and about a foot high, separately sourced. A foot of bund over an inch of water is not a
   contradiction to be "fixed": the ridge has to hold the 10-20 cm cold-protection state and keep
   freeboard in rain, and it is walked. Nothing drawn changes, and `AZE_FT` is untouched.
@@ -118,7 +118,7 @@ modern number applied backward to a pre-modern map is exactly that risk.
 
 - **SC-001**: `grep -r "four to six inches\|4-6 inches"` over the skill and `docs/` returns only
   RECORDS OF THE CORRECTION - no text that asserts the number. Read that as a category, not as a
-  list of directories: `research/fields.md` legitimately holds two of them (the feature-159 note
+  list of directories: `research/contents.json#fields` legitimately holds two of them (the feature-159 note
   that the number could not be sourced, and FR-005's new entry, which must name the claim it
   corrects), alongside the specs, the review ledger and the sources queue. **Do not delete or blur a
   truthful record to make a grep green** - that is the failure this criterion could otherwise
@@ -133,7 +133,7 @@ modern number applied backward to a pre-modern map is exactly that risk.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| A paddy is described as a shallow sheet of water, staged through the season, rather than a fixed four to six inches | accurate, with the liberty disclosed - the depths are modern extension figures, no pre-modern number was found | Two extension sources give 2-3 cm maintained at tillering and through the twenty days after heading, and 10/20 cm only as cold contingency; the season includes a deliberate drain to cracking | `research/fields.md` new entry; the `paddy` class's `what` / `label_note` / `caveat`; `SOURCES.md` keys |
+| A paddy is described as a shallow sheet of water, staged through the season, rather than a fixed four to six inches | accurate, with the liberty disclosed - the depths are modern extension figures, no pre-modern number was found | Two extension sources give 2-3 cm maintained at tillering and through the twenty days after heading, and 10/20 cm only as cold contingency; the season includes a deliberate drain to cracking | `research/contents.json#fields` new entry; the `paddy` class's `what` / `label_note` / `caveat`; `SOURCES.md` keys |
 | `tabayashi-1986` is dropped as the source for the depth | correction of a mis-citation | The paper is about irrigation-system distribution and says nothing about depth; our own "Used for" line never claimed otherwise | `SOURCES.md` queue entry, closed out |
 | The bund's drawn size is NOT re-derived | accurate - unchanged | The ridge answers to the deepest managed state plus freeboard and to being walked, not to the routine depth | this spec's Edge Cases; `AZE_FT` comment untouched |
 

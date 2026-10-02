@@ -10,7 +10,7 @@ rect by half its own size and laid two lanes straight over farmhouses.
 
 ## Done
 
-- [x] T001 Research recorded in `.claude/skills/diagram/research/homesteads.md` - decisive on
+- [x] T001 Research recorded in `.claude/skills/diagram/research/contents.json#homesteads` - decisive on
       access, two-formed on shape.
 - [x] T002 `farmhouses_reach_a_way` (`check_village/segments_07c_*.py`), registered in
       `tests/fixtures/gate_check_names.json`.

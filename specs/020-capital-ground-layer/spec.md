@@ -13,7 +13,7 @@
 Feature 018 shipped the capital space budget; feature 019 shipped the tier plumbing, the castle and the skeleton map, parked as a draft at `.claude/skills/diagram/wip/shiro-daika.gen.py`. Every decision this feature draws against is already settled and recorded in:
 
 - [`.claude/skills/diagram/settlements/capitals.md`](../../.claude/skills/diagram/settlements/capitals.md)
-- [`.claude/skills/diagram/research/cities/capitals.md`](../../.claude/skills/diagram/research/cities/capitals.md)
+- [`.claude/skills/diagram/research/contents.json#capitals`](../../.claude/skills/diagram/research/contents.json#capitals)
 - [`.claude/skills/diagram/wip/README.md`](../../.claude/skills/diagram/wip/README.md) - including two defects feature 019's review found and deliberately deferred here
 
 **Read all three before planning. Do not re-litigate them.**

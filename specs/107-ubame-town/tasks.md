@@ -74,7 +74,7 @@ Every task names the verification that must pass before it is checked off (Princ
 
 - [x] **T010** Record the "why" where the rule lives: the trade-works rules and both separation
   figures in `settlements/urban-features.md`, the full research record in
-  `research/urban-features.md`, Ubame in the worked-examples list in `settlements/towns.md`, and the
+  `research/contents.json#trades-and-services`, Ubame in the worked-examples list in `settlements/towns.md`, and the
   reference entry in `SKILL.md`.
   *Verify*: each new magic number (30 ft, 60 ft, two hearths, the cooling apron) is discoverable
   with its reasoning without reading code (SC-007).

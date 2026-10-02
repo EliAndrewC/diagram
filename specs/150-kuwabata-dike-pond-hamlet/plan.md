@@ -28,7 +28,7 @@ sweep and dispatches nothing).
 - VI: PASS - iterate on Kuwabata alone; `make done` once at the end; the reference hamlet's
   identity is the regression guard; the pool sweep is owed at unlock and said so.
 - X: 100% coverage on `hamletgen/`; new branches get tests in `tests/hamletgen/`.
-- XII: the conversion rests on findings already in `research/archetypes.md` (siting, sluices,
+- XII: the conversion rests on findings already in `research/contents.json#field-archetypes` (siting, sluices,
   grid-vs-mosaic, 6:4) - their `Sources:` lines read "not recorded", so T11 sources them through the
   source-reader before the generator work ships; the audit (T30-T32) is a new pass with its own
   reader run. Two attested forms -> a knob: `pond_layout` grid|mosaic already exists engine-side and

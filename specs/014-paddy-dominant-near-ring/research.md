@@ -1,6 +1,6 @@
 # Phase 0 Research: Paddy-Dominant Near-Ring Farmland
 
-**Sources (feature 138, 2026-08-28):** Part A names its sources in prose without links (recorded 2026-07); cited from `research/fields.md` "Tract sizes" and "Where dry (hatake) crops go".
+**Sources (feature 138, 2026-08-28):** Part A names its sources in prose without links (recorded 2026-07); cited from `research/contents.json#fields` "Tract sizes" and "Where dry (hatake) crops go".
 
 
 **Feature**: 014-paddy-dominant-near-ring | **Date**: 2026-07-22

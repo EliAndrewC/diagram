@@ -42,7 +42,7 @@
 **Independent test**: The convention is in the diagram dev-loop doc; the cut-bank entry is retro-fitted as the worked example.
 
 - [X] T007 [P] [US3] Add the convention to `.claude/skills/diagram/CLAUDE.md` (beside the record-the-why/"A side effect is not a rule" material): an entry recording a deliberately-open rule ALSO records a 2-3 line implementation sketch - landing site, holding test, deliberate exclusions - with the measured why (2026-08-16: the cut-bank follow-up spent its largest LLM turn re-deriving what the open-decision author already knew; ~60-120s per follow-up)
-- [X] T008 [P] [US3] Retro-fit the worked example in `.claude/skills/diagram/research/vegetation.md`: annotate the "Scrub stays off open water" entry's superseded open-decision bullet with the sketch it SHOULD have carried (commons `wat_b` call site, the drawn-channels test to extend, streams/marsh exclusions), explicitly labeled as the convention's worked example pointing at "The cut bank" resolution
+- [X] T008 [P] [US3] Retro-fit the worked example in `.claude/skills/diagram/research/contents.json#vegetation`: annotate the "Scrub stays off open water" entry's superseded open-decision bullet with the sketch it SHOULD have carried (commons `wat_b` call site, the drawn-channels test to extend, streams/marsh exclusions), explicitly labeled as the convention's worked example pointing at "The cut bank" resolution
 
 ## Phase 6: User Story 4 - Pre-gate rule + profile recorded (P4)
 

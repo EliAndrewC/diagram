@@ -73,7 +73,7 @@ def test_a_then_step_queues_the_briefs_it_prints(tmp_path: pathlib.Path, monkeyp
     (tmp_path / ".git" / "page-sessions").mkdir(parents=True)
     a, b = str(tmp_path / "veg-2a.md"), str(tmp_path / "veg-2b.md")
     for f in (a, b):
-        pathlib.Path(f).write_text("<!-- page-load: kind=check -->\n**Your questions:** PAGE=vegetation SECTION=010\n", encoding="utf-8")
+        pathlib.Path(f).write_text("<!-- page-load: kind=check -->\n**Your questions:** Q=0071\n", encoding="utf-8")
     step = tmp_path / "checks.sh"
     step.write_text("#!/bin/sh\n", encoding="utf-8")
     step.chmod(0o755)

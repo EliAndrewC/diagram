@@ -90,7 +90,7 @@
    "id": "D8a-2-exemptions",
    "summary": "check skips request.md, SOURCE blocks, *\"...\"* quotations, READMEs (listed in readme-correction-offered.md), the mapping, scripts/fixtures/ corpora; five refusal-data files",
    "class": "within",
-   "why": "exactly FR-017 amendment 1's exceptions; _hm_record.py's retired forms measured as selftest data (line 176). Measured: the *\"...\"* pattern reaches one non-GM span holding a record path, specs/180-references-as-questions/spec.md:61 (research/fields.md) - covered by D8a-3-specs"
+   "why": "exactly FR-017 amendment 1's exceptions; _hm_record.py's retired forms measured as selftest data (line 176). Measured: the *\"...\"* pattern reaches one non-GM span holding a record path, specs/180-references-as-questions/spec.md:61 (research/contents.json#fields) - covered by D8a-3-specs"
   },
   {
    "id": "D8a-2-fixture-leniency",
@@ -104,7 +104,7 @@
    "summary": "Markdown-era page paths left as written in live files: pool/hamlets/inashiro/inashiro.notes.md:303 and :1132, legacy-hand-authored-pool/towns/ubame/ubame.notes.md:100",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "each refers to a research page by path (message 3) and its page is in the mapping's pages, so the whole-page rule of D8 gives an exact new pointer (contents.json#<section>); inashiro.notes.md:1132 is a link whose text the sweep rewrote to research/contents.json#homesteads while its target still reads ../../research/homesteads.md, a file that does not exist - a broken link a reader follows. Restoring damaged text is right; leaving the stale pointer is not"
+   "why": "each refers to a research page by path (message 3) and its page is in the mapping's pages, so the whole-page rule of D8 gives an exact new pointer (contents.json#<section>); inashiro.notes.md:1132 is a link whose text the sweep rewrote to research/contents.json#homesteads while its target still reads ../../research/contents.json#homesteads, a file that does not exist - a broken link a reader follows. Restoring damaged text is right; leaving the stale pointer is not"
   },
   {
    "id": "D8a-3-markdown-era-specs",

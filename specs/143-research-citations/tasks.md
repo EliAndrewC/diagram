@@ -12,49 +12,49 @@ Every task below is `research: physical` (each is about how a place was built, f
 
 _Method per batch is plan.md "Method, per batch": (1) diff the operative doc's inline grounding against the tree and add ledger-B rows; (2) search pass, China-first, Japan corroborating, primary/scholarly first, never Grokipedia; (3) one background `source-reader` dispatch with every claim verbatim; (4) write keys, sources lines, supplements, corrected classes, contradictions; (5) ledger + queue; (6) quick run, commit, push attempt._
 
-- [x] T02 [US2][US3] **`research/archetypes.md`** - 9 open rows; grounds `settlements/archetypes.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T02 [US2][US3] **`research/contents.json#field-archetypes`** - 9 open rows; grounds `settlements/archetypes.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T03 [US2][US3] **`research/buildings.md`** - 9 open rows; grounds `buildings.md + buildings/programs.md (Mode A)`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T03 [US2][US3] **`research/contents.json#compounds`** - 9 open rows; grounds `buildings.md + buildings/programs.md (Mode A)`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T04 [US2][US3] **`research/cities/capitals.md`** - 20 open rows; grounds `settlements/capitals.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T04 [US2][US3] **`research/contents.json#capitals`** - 20 open rows; grounds `settlements/capitals.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T05 [US2][US3] **`research/cities/defenses.md`** - 2 open rows; grounds `settlements/cities/defenses.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T05 [US2][US3] **`research/contents.json#city-defenses`** - 2 open rows; grounds `settlements/cities/defenses.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T06 [US2][US3] **`research/cities/fabric.md`** - 2 open rows; grounds `settlements/cities/fabric.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T06 [US2][US3] **`research/contents.json#urban-fabric`** - 2 open rows; grounds `settlements/cities/fabric.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T07 [US2][US3] **`research/cities/government.md`** - 1 open rows; grounds `settlements/cities/government.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T07 [US2][US3] **`research/contents.json#government`** - 1 open rows; grounds `settlements/cities/government.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T08 [US2][US3] **`research/cities/hinterland.md`** - 1 open rows; grounds `settlements/cities/hinterland.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T08 [US2][US3] **`research/contents.json#outside-the-walls`** - 1 open rows; grounds `settlements/cities/hinterland.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T09 [US2][US3] **`research/cities/river-cities.md`** - 2 open rows; grounds `settlements/cities/river-cities.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T09 [US2][US3] **`research/contents.json#river-cities`** - 2 open rows; grounds `settlements/cities/river-cities.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T10 [US2][US3] **`research/fields.md`** - 6 open rows; grounds `settlements/fields.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T10 [US2][US3] **`research/contents.json#fields`** - 6 open rows; grounds `settlements/fields.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T11 [US2][US3] **`research/homesteads.md`** - 9 open rows; grounds `settlements/homesteads.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T11 [US2][US3] **`research/contents.json#homesteads`** - 9 open rows; grounds `settlements/homesteads.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T12 [US2][US3] **`research/religion-and-death.md`** - 5 open rows; grounds `settlements/religion-and-death.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T12 [US2][US3] **`research/contents.json#religion-and-the-dead`** - 5 open rows; grounds `settlements/religion-and-death.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T13 [US2][US3] **`research/towns.md`** - 5 open rows; grounds `settlements/towns.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T13 [US2][US3] **`research/contents.json#towns`** - 5 open rows; grounds `settlements/towns.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T14 [US2][US3] **`research/urban-features.md`** - 15 open rows; grounds `settlements/urban-features.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T14 [US2][US3] **`research/contents.json#trades-and-services`** - 15 open rows; grounds `settlements/urban-features.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T15 [US2][US3] **`research/vegetation.md`** - 8 open rows; grounds `settlements/vegetation.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T15 [US2][US3] **`research/contents.json#vegetation`** - 8 open rows; grounds `settlements/vegetation.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
-- [x] T16 [US2][US3] **`research/water.md`** - 9 open rows; grounds `settlements/water.md`; inline grounding in that operative doc inventoried first (ledger C).
+- [x] T16 [US2][US3] **`research/contents.json#water`** - 9 open rows; grounds `settlements/water.md`; inline grounding in that operative doc inventoried first (ledger C).
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited
 

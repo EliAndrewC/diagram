@@ -95,7 +95,7 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
 
 - **FR-009 The record files convert in place, and the Markdown is deleted.** The 15 record files and the registry
   become tracked, hand-authored HTML at the same paths with the `.html` extension - `research/contents.json#water`,
-  `research/contents.json#urban-fabric`, `research/sources/` - and `research/water.md` etc. are removed in the same
+  `research/contents.json#urban-fabric`, `research/sources/` - and `research/contents.json#water` etc. are removed in the same
   commit (`git mv` plus the conversion, so history follows the file). From then on a research edit is an HTML
   edit. `research/CLAUDE.md` and `research/README.md` are NOT converted: they are instruction files, not
   reference sections, and the README is the GM's (constitution XVII) - its link table now names files that moved,

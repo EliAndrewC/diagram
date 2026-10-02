@@ -92,7 +92,7 @@ either fail to be placed or land somewhere arbitrary.
 ## Requirements *(mandatory)*
 
 - **FR-001**: The settlement MUST select its kosatsuba placement from the placements ATTESTED in
-  `research/urban-features.md` that the map AFFORDS. Five are attested; three are afforded at these
+  `research/contents.json#trades-and-services` that the map AFFORDS. Five are attested; three are afforded at these
   tiers and are what this feature offers - the center / assembly place, the entrance / approach, and
   the frontage of the official's house. The bridgehead and the shrine precinct are attested but are
   NOT offered at the hamlet and village tiers, for the measured reasons in "Decisions Recorded"; they
@@ -108,7 +108,7 @@ either fail to be placed or land somewhere arbitrary.
   checks and a later reader can all name it, and MUST be classed accurate / deviation / guess with
   its sources, per constitution XII.
 - **FR-006**: A dead-end spur MUST NOT be preferred over a seat answering the selected placement.
-- **FR-007**: This feature proceeds on `research/urban-features.md` AS IT STANDS. A research pass is
+- **FR-007**: This feature proceeds on `research/contents.json#trades-and-services` AS IT STANDS. A research pass is
   NOT a precondition, and the placement question MUST NOT be treated or recorded as unresearched -
   that was the GM's correction. It is not a ban: they said in the same breath *"I don't object to doing
   more research"*, so if a decision arises that the existing record does not answer, the standing rule
@@ -213,12 +213,12 @@ scale today. Recorded so the next reader does not have to discover it.
   commissioned selection logic and tests for two placements FR-001 forbids; rewritten around the
   affordances that exist at these tiers. (2) **The Decisions Recorded section inverted the record**: it
   said a hamlet's board answers to a senior farmer of a village elsewhere, where
-  `research/urban-features.md` puts the senior farmer IN the hamlet, answering upward. That is a data
+  `research/contents.json#trades-and-services` puts the senior farmer IN the hamlet, answering upward. That is a data
   limitation written up as a historical finding, inside the section that feeds the interactive map's
   labeling - the failure constitution XII names. Corrected to the honest ground: the placement is
   withheld because no hamlet manifest records a house for the official, not because the official did
   not exist. The reviewer also adjudicated the narrowing to three placements FAITHFUL, on a stronger
-  basis than I had argued it - `research/urban-features.md:23` carries the doc's own SETTLEMENT-scale
+  basis than I had argued it - `research/contents.json#trades-and-services:23` carries the doc's own SETTLEMENT-scale
   sentence, "by the headman's frontage or the lane junction/entrance", so the five-item list at :26-29
   is the bakufu's general catalog across barriers, ports and bridges, not a roster every village had.
 - **2026-08-29, measurement between rounds.** The proxy the reviewer was willing to accept was retired

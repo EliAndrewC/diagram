@@ -10,7 +10,7 @@ someone else). Two messages, in order.
 > would be really surprised if our existing research was insufficient to that task.
 
 Context: I had recorded Sawada's notice-board finding in `pool/hamlets/sawada.notes.md` as needing a
-research pass before it could become a knob. That was wrong. `research/urban-features.md` already
+research pass before it could become a knob. That was wrong. `research/contents.json#trades-and-services` already
 carries the placement record, READ and cited in feature 133 T13 from four sources.
 
 ## Second - the instruction
@@ -22,7 +22,7 @@ carries the placement record, READ and cited in feature 133 T13 from four source
 objective (busiest node among non-`web` lanes), which on Sawada put it 9.0 ft off an 81.7 ft
 dead-end spur with 7 of 19 dwellings within 250 ft where the busiest point on the web has 13.
 
-## What the existing research says (research/urban-features.md, sources READ 2026-08-26)
+## What the existing research says (research/contents.json#trades-and-services, sources READ 2026-08-26)
 
 > the bakufu set kosatsuba *"at points of heavy passage: barriers and ports, the foot of large
 > bridges, and the entrances and centers of towns and villages"*; in farming villages *"at the

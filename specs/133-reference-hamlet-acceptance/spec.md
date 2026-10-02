@@ -185,7 +185,7 @@ to get things into main outside the context of features"* the GM suspected.
 
 | feature | class | where |
 |---|---|---|
-| the farm privy as an independent outbuilding at the back door / gate / naya (T53) | ACCURATE (READ) | research/homesteads.md "The farmstead's fixtures"; settlements/homesteads.md "Farmstead fixtures" |
+| the farm privy as an independent outbuilding at the back door / gate / naya (T53) | ACCURATE (READ) | research/contents.json#homesteads "The farmstead's fixtures"; settlements/homesteads.md "Farmstead fixtures" |
 | the privy's 6 x 6 ft, the heap's 8 x 6, the bath's 6 x 6, the coop's 5 x 5, the stack's 10 x 3.5, the crown's 18 ft, every share band | GUESS (labeled) | same |
 | the manure heap beyond the privy (T55) | ACCURATE in China (the Han pigsty-privy, READ); SUMMARY-ONLY in Japan | same |
 | only the bath SHED share drawn, the in-house baths undrawn (T56) | ACCURATE (Sugiura's two forms) | same |

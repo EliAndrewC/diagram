@@ -55,7 +55,7 @@ N/A - no diagram-generator code changes (comment-only edits; `ci/delta.py` compa
   failures at merge. No roll, no cohort.
 - **XIV**: the audit's incidental defects are fixed in this work - the broken md->html anchors (moot once the
   md is deleted), the stale engine docstring figures the audit found (`urban_fixtures.py:74` "county tier
-  ~60-80 ft"), `inashiro.notes.md`'s dead `research/homesteads.md` link, the eight `pack_audit.py` paths.
+  ~60-80 ft"), `inashiro.notes.md`'s dead `research/contents.json#homesteads` link, the eight `pack_audit.py` paths.
 - **XVI**: spec reviewed by `spec-fidelity` against `request.md` (round 1: six changes; round 2 pending at the
   time of this plan; the plan is not the review's input).
 - **XVII**: `research/README.md` is not edited; the correction is offered to the GM.

@@ -14,12 +14,12 @@ task - one about how a place was built, farmed or lived in - carries the three r
   - [x] research pass - dispatched 2026-08-29; five claims put to `source-reader` with pointers
   - [x] source-reader confirmed - A and B READ with verbatim quotes; C NOT-FOUND / SUMMARY-ONLY;
     D an inference from an attested cascade; E READ for yatsuda and fukada, the identity NOT confirmed
-  - [x] recorded and cited - `research/fields.md` 'The wettest plots are their own kind of ground';
+  - [x] recorded and cited - `research/contents.json#fields` 'The wettest plots are their own kind of ground';
     five keys in `research/SOURCES.md`; the three failures written into the re-sourcing queue
 
 - [x] T2 Record the two defects the pass turned up (constitution XIV): the unsourced "four to six
   inches" in the shipped `paddy` modal, and "Kishu-school" as the name for the comb layout. Both
-  queued in `research/SOURCES.md`, the second also noted at the claim in `research/fields.md`;
+  queued in `research/SOURCES.md`, the second also noted at the claim in `research/contents.json#fields`;
   both reported to the GM rather than silently changed.
   research: procedure
 

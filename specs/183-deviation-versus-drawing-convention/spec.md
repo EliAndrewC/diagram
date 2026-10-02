@@ -124,18 +124,18 @@ rule is written where the classification is defined.
   the round-4 review (which found five hits a filtered first grep had dropped: an exclusion of the word
   "specs/" swallowed `page.css:4`, and a 230-character cut hid three more) confirms the partition is
   total:
-  - **Reworded to `convention`** - the six reclassified classes' other layers: `research/homesteads.md:708`
+  - **Reworded to `convention`** - the six reclassified classes' other layers: `research/contents.json#homesteads:708`
     and `settlements/homesteads.md:137` (the shrine; the persimmon's vermilion and fruit dots ride in the
     same sentence and are a drawing convention on a `guess`-labeled class - the sentence is reworded for
     both, the persimmon's label is untouched), `farm_fixtures.py:31`, `inashiro.notes.md:1408`;
-    `research/vegetation.md:326` and `:349` (its `Labels:` line, a standing statement of the modal class),
+    `research/contents.json#vegetation:326` and `:349` (its `Labels:` line, a standing statement of the modal class),
     `settlements/vegetation.md:82`, `homestead_parts/stands.py:19`, `inashiro.notes.md:1364` (the two
     bamboos); `tests/settlement/test_water_width_ladder.py:41` (*"Absolute widths are a legibility
     deviation"* - the stream).
   - **Reworded to `convention`** - legibility exaggerations that are not a class of the hamlet vocabulary
-    but describe a drawing the same way: `research/buildings.md:79` and `:87` (the 3 ft compound wall
+    but describe a drawing the same way: `research/contents.json#compounds:79` and `:87` (the 3 ft compound wall
     drawn thicker so the stroke reads; `:87`'s *"Class for the HTML modal: deviation"* is a standing
-    instruction to a future Mode A class and MUST say `convention`); `research/water.md:512`, `:576`
+    instruction to a future Mode A class and MUST say `convention`); `research/contents.json#water:512`, `:576`
     (the drain drawn steep so its flow reads) and `:719` (*"a legibility deviation"* as a term of art);
     `inashiro.notes.md:1217` (the same drain grade); `settlement/fields/features.py:190` (the grave
     island's mound drawn OVER the paddy tiling rather than carved out of it - a drawing simplification;
@@ -143,16 +143,16 @@ rule is written where the classification is defined.
     *"class DEVIATION (specs/134 research.md R2)"*, a saturated gold chosen so the lit class reads
     against every fill on the map: a color chosen for the eye, and the comment's own *"A UI affordance,
     not a claim about the world"* is what makes it a convention and not a deviation - D7).
-  - **Staying a `deviation`** - the setting differing from history: `research/archetypes.md:123` and
+  - **Staying a `deviation`** - the setting differing from history: `research/contents.json#field-archetypes:123` and
     `:133` (the 6:4 pond-to-dike regional reading), `:217` and `:226` (*"a hamlet has no headman of its
     own" is CANON*), `research/SOURCES.md:1954` and `tests/interactive/test_place.py:304` (the same
-    headman canon, in a source's Used-for line and a test docstring), `research/cities/capitals.md:532`
+    headman canon, in a source's Used-for line and a test docstring), `research/contents.json#capitals:532`
     and `:559` (the setting's 30 ft trunk road for the historical 29.5 - D6); the grave island class.
-  - **Ordinary English, untouched**: statistical and geometric uses (`research/homesteads.md:65`,
+  - **Ordinary English, untouched**: statistical and geometric uses (`research/contents.json#homesteads:65`,
     `homestead_parts/yards.py:83`, `:98` and `:109`, `hamletgen/ways/serve.py:100`, `fields/comb.py:567`,
     `tests/settlement/test_homestead_parts.py:482`), *"Deviation comes from TERRAIN"*
     (`capitals.md:349`), *"a deviation carries its reason in writing"* (`:837`), *"Deviation noted"*
-    (`research/urban-features.md:35`), `settlements/archetypes.md:66`,
+    (`research/contents.json#trades-and-services:35`), `settlements/archetypes.md:66`,
     `pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md:69` (*"the option-(c) deviation
     story"*, a Mode A staffing variant).
   - **Statements of the three-way RULE** (FR-007/FR-008/FR-009, not this requirement): `classes.py`,

@@ -48,7 +48,7 @@ researched, and the task is to make the drawing obey them.
         is SUMMARY-ONLY (Journal of Asian Architecture and Building Engineering, Nov 2022)
       - [x] source-reader confirmed - the paper was fetched and READ, and it CONTRADICTED the wind
         hypothesis: toilets went southeast and south for solar warmth to speed fermentation, 72.7% of them
-      - [x] recorded and cited - research/homesteads.md and SOURCES.md `wang-ochiai-2022`
+      - [x] recorded and cited - research/contents.json#homesteads and SOURCES.md `wang-ochiai-2022`
 - [x] T08 FR-002 verification: privies and manure pits within 90 degrees of windward, per map, before and
       after. SC-001: Sawada 12/12 to a minority. *(rendering)*
 
@@ -103,7 +103,7 @@ researched, and the task is to make the drawing obey them.
         priced; both stronger levers were reverted for costing it
       - [x] source-reader confirmed - no new claim was added; `wang-ochiai-2022` already carries the
         sun-side share the heap inherits
-      - [x] recorded and cited - `research/homesteads.md` "The muck heap that reads as the neighbor's"
+      - [x] recorded and cited - `research/contents.json#homesteads` "The muck heap that reads as the neighbor's"
         and `settlements/vegetation.md` "A belt runs off the page"
 - [x] T24 A `settlement-review` pass over the changed maps, paired with the gate. THREE rounds ran; the
       third confirmed all five fixes independently and raised two errors, two questionables and four

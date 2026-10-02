@@ -2,7 +2,7 @@
 
 ## R1. The historical finding, and how it splits
 
-Recorded in full at `.claude/skills/diagram/research/homesteads.md` ("Is every farmhouse reached by
+Recorded in full at `.claude/skills/diagram/research/contents.json#homesteads` ("Is every farmhouse reached by
 a lane, and in what FORM?"). It splits exactly along the two rungs of constitution Principle XII's
 ladder, which is why it is the worked example:
 

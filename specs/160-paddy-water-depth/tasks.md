@@ -11,16 +11,16 @@
   - [x] source-reader confirmed - MAFF and Zennoh READ with verbatim quotes (2-3 cm maintained;
     3-4 cm at rooting; 10/20 cm only as cold contingency; 中干し drain to cracking); Tabayashi 1986
     CONTRADICTED as a citation for depth; no pre-modern figure found
-  - [x] recorded and cited - `research/fields.md` entry + two `SOURCES.md` keys + the queue closed
+  - [x] recorded and cited - `research/contents.json#fields` entry + two `SOURCES.md` keys + the queue closed
 
 ## Phase 1 - the correction
 
 - [x] T2 The seven live sites: `classes.py` `paddy.what` and the four sibling texts, the
-  `waterfields/seams.py` docstring, and the aze finding in `research/fields.md`.
+  `waterfields/seams.py` docstring, and the aze finding in `research/contents.json#fields`.
   research: physical
   - [x] research pass - the 2026-08-29 pass; the record answers it
   - [x] source-reader confirmed - MAFF and Zennoh READ; the old claim CONTRADICTED
-  - [x] recorded and cited - `research/fields.md` 'How deep the water actually stands'
+  - [x] recorded and cited - `research/contents.json#fields` 'How deep the water actually stands'
 
 - [x] T3 The provenance disclosure: `paddy`'s `label_note` and `caveat`, and `paddy` off the
   no-caveat list in `tests/interactive/test_classes.py`. Drop `tabayashi-1986` from the class's

@@ -76,6 +76,8 @@ class Mapping:
         self.number = re.compile(rf"(?<![\w/.-])({alt})[ /](\d{{3}})(?![\d]|-[a-z0-9])")
         dirs = "|".join(re.escape(n) for n in sorted(self.pages, key=len, reverse=True)) or "(?!)"
         #: A retired page directory named without its trailing slash, as code builds a path to it.
+        #: A retired page named by its Markdown file, as the record was before feature 194.
+        self.old_md = re.compile(rf"(?<![\w.-])research/({dirs})\.md\b")
         self.old_dir = re.compile(rf"(?<![\w.-])research/({dirs})(?=[\"'`)\s,;:]|\.(?!\w)|$)")
         pages = "|".join(re.escape(n) for n in sorted(self.pages, key=len, reverse=True)) or "(?!)"
         #: A tool's retired arguments: `PAGE=<page> SECTION=<NNN>` (now `Q=`) and a whole page, `PAGE=<page>` (now `IN=`).
@@ -86,7 +88,7 @@ class Mapping:
         return f"research/contents.json#{section}" if section else "a section of research/contents.json"
 
 
-def problems(text: str, mapping: Mapping, *, fixture: bool = False, refusal_data: bool = False) -> list[str]:
+def problems(text: str, mapping: Mapping, *, fixture: bool = False, refusal_data: bool = False, landed_spec: bool = False) -> list[str]:
     """What is wrong with the research pointers in one line of text. In a fixture a new-form question file need not
     exist; in refusal data a retired form is data."""
     out: list[str] = []
@@ -98,6 +100,8 @@ def problems(text: str, mapping: Mapping, *, fixture: bool = False, refusal_data
             out.append(f"`research/contents.json#{m.group(1)}` - no such section")
     if refusal_data:
         return out
+    for m in mapping.old_md.finditer(text):
+        out.append(f"`{m.group(0)}` - a retired page (feature 303); name {mapping.section_of(m.group(1))}")
     for m in mapping.old_dir.finditer(text):
         out.append(f"`{m.group(0)}` - the page directories are retired (feature 303); name {mapping.section_of(m.group(1))}")
     for m in OLD_FRAGMENT.finditer(text):
@@ -124,6 +128,8 @@ def problems(text: str, mapping: Mapping, *, fixture: bool = False, refusal_data
         new = mapping.numbers.get(key) or mapping.numbers.get(f"rendering/{key}")
         if new:
             out.append(f"`{m.group(0)}` - a retired page argument; name `Q={new}`")
+        elif not landed_spec:
+            out.append(f"`{m.group(0)}` - a retired page argument; name `Q=<NNNN>` (its number names no question: in a landed spec only, as history, it may stand)")
     for m in mapping.number.finditer(text):
         key = f"{m.group(1)} {m.group(2)}"
         new = mapping.numbers.get(key) or mapping.numbers.get(f"rendering/{key}")
@@ -150,6 +156,7 @@ REFUSAL_DATA = (
     "scripts/_hm_record.py",
     "scripts/test-record-edit-hooks.sh",
     "scripts/test-check-bundle-hooks.sh",
+    f"{SKILL}/tests/interactive/test_record.py",
 )
 FIXTURES = (f"{SKILL}/tests/", "scripts/test_", "scripts/test-", "scripts/_fragment_move.py", "scripts/check-entry-headings.py", "scripts/_hm_record.py", "scripts/check-research-pointers.py")
 TEST_DATA = VERBATIM
@@ -178,7 +185,7 @@ def check(root: Path) -> list[str]:
         text = _QUOTED.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # and so does a quotation of them, *"..."*
         fixture, refusal_data = path.startswith(FIXTURES), path in REFUSAL_DATA
         for line_no, line in enumerate(text.splitlines(), 1):
-            bad += [f"{path}:{line_no}: {p}" for p in problems(line, mapping, fixture=fixture, refusal_data=refusal_data)]
+            bad += [f"{path}:{line_no}: {p}" for p in problems(line, mapping, fixture=fixture, refusal_data=refusal_data, landed_spec=path.startswith("specs/"))]
     return bad
 
 
@@ -208,7 +215,9 @@ def selftest() -> int:
         assert problems("water 121, water 120-130, 120 water", mapping) == [], "a number that names no question, a range, and prose"
         assert problems("make check-bundle PAGE=water SECTION=120", mapping)[0].endswith("name `Q=0412`")
         assert "name `IN=water`" in problems("make record-prepass PAGE=water", mapping)[0]
-        assert problems("PAGE=water SECTION=121", mapping) == [], "a retired number names no question"
+        assert problems("PAGE=water SECTION=121", mapping, landed_spec=True) == [], "in a landed spec a retired number names no question"
+        assert "name `Q=<NNNN>`" in problems("PAGE=water SECTION=121", mapping)[0], "anywhere else the retired argument is refused"
+        assert "name research/contents.json#water" in problems("see research/water" + ".md for it", mapping)[0]
         assert problems('glob(REPO / "research/water")', mapping), "a retired directory named without its slash"
         assert problems("research/questions/0499-made-up.html", mapping, fixture=True) == [], "a fixture names its own record"
         assert problems("research/water/120-reservoir-ponds-tameike.html", mapping, fixture=True), "but not a retired form"

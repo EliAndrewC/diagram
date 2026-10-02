@@ -4,7 +4,7 @@
 
 
 For the GM. Nothing here is drawn; every item is a decision the GM makes (FR-007, FR-008). The
-research behind each row is in `research/archetypes.md` "What stands on a dike-pond hamlet that a
+research behind each row is in `research/contents.json#field-archetypes` "What stands on a dike-pond hamlet that a
 paddy hamlet lacks" with its sources; the verdict column says how well the record supports it.
 
 ## A. Candidates - features a silk-and-fish hamlet would carry that a paddy hamlet does not
@@ -43,7 +43,7 @@ paddy hamlet lacks" with its sources; the verdict column says how well the recor
 
 | Family | Reason | Pointer |
 |---|---|---|
-| `dry_plots` (the comb's dry hem) | a polder is a solid diked wet block; no hem | `research/fields.md`; `make family-census` |
+| `dry_plots` (the comb's dry hem) | a polder is a solid diked wet block; no hem | `research/contents.json#fields`; `make family-census` |
 | `field_ditches:branch` (comb deliveries) | a polder is watered by a ring canal and laterals | `waterfields/polder.py` |
 | `field_ponds` (the in-field pocket pond) | open water IS this fabric - no obstacle tiles (research D4) | `settlement/fields/features.py` |
 

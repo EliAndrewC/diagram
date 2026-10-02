@@ -15,7 +15,7 @@ that this question is already researched.
       holds; `entrance` needs a recorded connector; `frontage` needs a house carrying
       `role == "headman"`. Reads the manifest the validator reads, never assumes.
       `research: physical`
-      - [x] research pass - the record already answers it: `research/urban-features.md`, the
+      - [x] research pass - the record already answers it: `research/contents.json#trades-and-services`, the
             kosatsuba bullets, sources READ 2026-08-26 (feature 133 T13)
       - [x] source-reader confirmed - `fuchu-kosatsuba`, `ogose-kosatsuba`, `kosatsu-jawiki`,
             `adachi-kosatsu`, all READ under feature 133 T13; this feature adds none (FR-007)
@@ -27,7 +27,7 @@ that this question is already researched.
       cluster for `entrance`, the headman's house for `frontage`. Lifted and testable with plain
       dicts (GM 2026-08-28), because that is what makes T06 possible without rolling a map.
       `research: physical`
-      - [x] research pass - `research/urban-features.md`: "the entrances and centers", "before the
+      - [x] research pass - `research/contents.json#trades-and-services`: "the entrances and centers", "before the
             gate of the village officials' houses", "the place where villagers assembled"
       - [x] source-reader confirmed - same four sources, READ
       - [x] recorded and cited
@@ -58,7 +58,7 @@ that this question is already researched.
       the board AND its caption, or the fallback is taken and reported). `research: rendering`
 
 - [x] **T08 - close the record.** `sawada.notes.md`'s OPEN entry closed with the measured outcome;
-      the pointer to the knob added at `research/urban-features.md`'s placement bullet and at
+      the pointer to the knob added at `research/contents.json#trades-and-services`'s placement bullet and at
       `settlements/urban-features.md` (FR-008). `research: rendering`
 
 - [x] **T09 - independent review before it ships.** `settlement-review` on the maps whose board moved

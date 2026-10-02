@@ -1,6 +1,6 @@
 # Phase 0 Research: Near-Ring Farmland Density
 
-**Sources (feature 138, 2026-08-28):** Part A names its sources in prose without links (recorded 2026-07); the near-ring findings are cited in `research/fields.md` ("Where dry (hatake) crops go", `satoyama-enwiki`) and "Tract sizes".
+**Sources (feature 138, 2026-08-28):** Part A names its sources in prose without links (recorded 2026-07); the near-ring findings are cited in `research/contents.json#fields` ("Where dry (hatake) crops go", `satoyama-enwiki`) and "Tract sizes".
 
 
 **Feature**: 013-near-ring-farmland | **Date**: 2026-07-22

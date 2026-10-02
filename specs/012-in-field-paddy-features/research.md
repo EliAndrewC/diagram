@@ -1,6 +1,6 @@
 # Phase 0 Research: In-Field & Field-Margin Paddy Features
 
-**Sources (feature 138, 2026-08-28):** D1-D4 carry their own inline links (11); the per-archetype matrix is cited from `research/fields.md` "In-field features".
+**Sources (feature 138, 2026-08-28):** D1-D4 carry their own inline links (11); the per-archetype matrix is cited from `research/contents.json#fields` "In-field features".
 
 
 **This is the Principle XII OPENING BOOKEND.** Grave mounds, feng-shui knolls, rock outcrops, and small

@@ -103,10 +103,10 @@ that batch. A batch is not done until its replacements have each been seen red.
       research: physical
       - [X] research pass - THE RECORD ALREADY ANSWERS IT, and the pointers are the answer. Each of the
             19 dropped rules was checked against a documented home and the home was checked to actually
-            contain its subject: `research/religion-and-death.md` (torii, shrine halls, the funerary
-            clearances, the remote shrine's well), `research/urban-features.md` (tanning yards),
-            `research/cities/river-cities.md` (towpaths, waterside works), `research/cities/fabric.md`
-            (city streets), `research/cities/defenses.md` (in-wall drains), `settlements/ways.md` (roads
+            contain its subject: `research/contents.json#religion-and-the-dead` (torii, shrine halls, the funerary
+            clearances, the remote shrine's well), `research/contents.json#trades-and-services` (tanning yards),
+            `research/contents.json#river-cities` (towpaths, waterside works), `research/contents.json#urban-fabric`
+            (city streets), `research/contents.json#city-defenses` (in-wall drains), `settlements/ways.md` (roads
             on marsh, road beds), `settlements/water.md` (the source pond's feeder, the aqueduct tap, the
             castle moat) and `dev/gate.md` (the two waiver meta-checks). Every pointer is in the
             migration record, per rule, not per class - which is what this task exists to prevent.
@@ -119,7 +119,7 @@ that batch. A batch is not done until its replacements have each been seen red.
       - [X] recorded and cited - the per-rule table in
             `specs/166-retire-the-check-battery/migration-record.md`, whose 19 DROP rows each carry the
             grounding and its pointer. ONE POINTER I WROTE WAS WRONG and was caught by checking rather
-            than by assuming: `ways_clear_of_castle_moat` was pointed at `research/cities/defenses.md`,
+            than by assuming: `ways_clear_of_castle_moat` was pointed at `research/contents.json#city-defenses`,
             which contains no mention of a moat at all; the moat's research is in `settlements/water.md`
             (24 mentions), because a moat is water before it is a defense.
 - [X] **T19** Rewrite `dev/gate.md` to carry the successor doctrine in the GM's own words (FR-010): when

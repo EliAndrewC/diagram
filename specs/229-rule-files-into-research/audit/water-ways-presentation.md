@@ -5,7 +5,7 @@ Independent Opus reader, 2026-09-12. Classes as in `homesteads.md`.
 ## Cross-cutting
 
 1. The retired check battery is quoted throughout as if live: water.md names ~42 checks, ways.md ~12, presentation.md ~22; about half survive as re-implemented rules in `tests/gate/` and `tests/settlement/`, the rest are gone. water.md cites 3 `pool/regressions/*.json` fixtures and 4 `tests/check_village/` tests that do not exist.
-2. Ten of water.md's fifteen deep links into `research/contents.json#water` are broken (the `---` slug rule). `inashiro.notes.md:298` links to `research/water.md`.
+2. Ten of water.md's fifteen deep links into `research/contents.json#water` are broken (the `---` slug rule). `inashiro.notes.md:298` links to `research/contents.json#water`.
 
 ## water.md (86 lines, ~60 units)
 

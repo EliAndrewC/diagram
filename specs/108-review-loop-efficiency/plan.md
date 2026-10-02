@@ -40,7 +40,7 @@ Convert the scriptable core of a settlement-review DELTA pass (scatter base-poin
 - **VIII. Direct Voice**: N/A - no in-world prose.
 - **IX. Setting Integration**: N/A - no setting content.
 - **X. Python Discipline**: PASS - commitments: ruff check + format-check, mypy --strict (module added to `files`), red-green TDD (adjudication tests written against a fixture with known violations BEFORE the adjudicator lands), 100% coverage (module added to coverage `source`; `--omit` gate already enforces non-settlement modules at 100%), no new deps, behavior-named tests, no prints outside the CLI report path (the report IS the product of a CLI diagnostic - printing is its contract, mirroring `site_justice.py`), functions and files well under human-scale bounds.
-- **XII. Historical Grounding Bookends**: N/A - the feature changes no generator assertion about the world; it audits renders against rules whose grounding already lives in `research/vegetation.md`. The doc edits record process rules, not world claims.
+- **XII. Historical Grounding Bookends**: N/A - the feature changes no generator assertion about the world; it audits renders against rules whose grounding already lives in `research/contents.json#vegetation`. The doc edits record process rules, not world claims.
 
 ## Project Structure
 
@@ -66,7 +66,7 @@ specs/108-review-loop-efficiency/
 ├── test_scatter_audit.py      # NEW - 100% coverage, fixture-based
 ├── pyproject.toml             # EDIT - coverage source + mypy files gain scatter_audit
 ├── CLAUDE.md                  # EDIT - review-launch rule sharpened; open-decision sketch convention
-├── research/vegetation.md     # EDIT - cut-bank open-decision entry retro-fitted as the worked example
+├── research/contents.json#vegetation     # EDIT - cut-bank open-decision entry retro-fitted as the worked example
 docs/iteration-loop.md         # EDIT - dated 2026-08-16 profile block + pre-gate rule
 .claude/agents/settlement-review.md  # EDIT - DELTA scatter reviews run scatter_audit.py themselves; catch-rate line
 ```

@@ -119,20 +119,24 @@ the mapping, and neither end of such a range is.
 **D8a - What the sweep and the check met on the way (implementation, 2026-10-01).** (1) A pointer of a retired form was
 also written as a tool's argument, `PAGE=<page> SECTION=<NNN>` and a bare `PAGE=<page>`; these are rewritten to `Q=<NNNN>`
 and `IN=<section>` like any number, and the check refuses them, naming the replacement (a pair whose number names no
-question - one merged away before this feature - names nothing and passes, as a range does). (2) The check reads every tracked file except what FR-017 does not edit: the GM's own words (`request.md`, a SOURCE block,
+question - one merged away before this feature - names nothing and passes in a landed spec, as a range does; anywhere
+else the retired argument is refused, whatever its number, because a live file using it is stale). (2) The check reads every tracked file except what FR-017 does not edit: the GM's own words (`request.md`, a SOURCE block,
 a quotation of the GM in the docs' form `*"..."*`); a README, whose stale references are listed in
 `readme-correction-offered.md` until the GM rules on them (constitution XVII); the mapping (`moved-303.json`,
 `migration.md`); and the guard-replay corpora under `scripts/fixtures/` - verbatim records of commands sessions ran,
-restored to their words after the sweep touched them. Within the rest, five files are REFUSAL DATA (the check and its
-test, the hook helper `_hm_record.py` and the record-edit and check-bundle hook suites), whose retired forms are what they
+restored to their words after the sweep touched them. Within the rest, six files are REFUSAL DATA (the check and its
+test, the hook helper `_hm_record.py`, the record-edit and check-bundle hook suites, and the record test proving a
+Markdown-era token is reported), whose retired forms are what they
 prove refused or re-aimed; and a test, a hook suite or a script's selftest is a FIXTURE, which builds a record of its own,
 so a new-form question file it names need not exist here - but a retired form in a fixture is refused like anywhere
 else, since a test using an old path for any other reason is stale. A retired directory is caught written with or
 without its slash (a page directory's name followed by a slash, by a quote as code builds a path, or by a comma in prose), and four passes of the
 sweep, each from what the check found, rewrote them all. (3) A whole-page pointer the sweep
 turned into a section pointer was checked for sense in code and docs; where the sweep's directory pattern had glued a
-Markdown-era path (`research/cities/capitals.md`) onto a section id, the original text was restored from the commit
-before the sweep (101 places). (4) The sweep's edits to landed features' specs and plans make those features' recorded
+Markdown-era path onto a section id, the original text was restored from the commit before the sweep (101 places); then
+every Markdown-era page path whose page is in the mapping - the record's file names before feature 194 - was rewritten
+to its section like any whole-page pointer (277 places, three of them live links in pool notes), and the check refuses
+the form; a `.md` name that is no page of the record is not touched. (4) The sweep's edits to landed features' specs and plans make those features' recorded
 reviews stale; as feature 301's sweep did (its FR-027), the push passes the review and plan gates with their escapes and
 the reason logged - a mechanical rewrite of pointers, reviewed here, not a change to what those features decided.
 

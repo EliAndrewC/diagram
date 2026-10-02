@@ -15,7 +15,7 @@ research entry is read for a rule, none is edited (spec FR-018).
       verify: DONE. `explanations()` and `place_card()` emit `questions` and drop `refs`/`entry`/`sources`; the `fc.sources` fallback is gone (its one beneficiary, `fallow`, was already hidden); `citations()` deleted with its single test assertion. `FeatureClass.sources` stays in the registry and `test_classes` still asserts it
 - [x] T02a FR-012a: `_ENTRY_FILE` accepts one directory level (the Principle XIV fix the review noticed)
       research: rendering
-      verify: DONE. `_ENTRY_FILE` takes one directory level; `test_sources.py` proves `research/cities/fabric.md - 'Urban commoners built in continuous street walls'` resolves to its URL and its sources. The 51 live entries name only top-level files, so no page changed
+      verify: DONE. `_ENTRY_FILE` takes one directory level; `test_sources.py` proves `research/contents.json#urban-fabric - 'Urban commoners built in continuous street walls'` resolves to its URL and its sources. The 51 live entries name only top-level files, so no page changed
 
 ## The page
 

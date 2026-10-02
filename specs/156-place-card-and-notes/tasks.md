@@ -55,17 +55,17 @@ simplification. The pass is recorded in [`research.md`](research.md).
 - [x] **T10** `interactive/place.py`: `place_card(meta, manifest, notes, present) -> dict | None`.
       Pure. Assembles kind, size, crops and location as separate strings so each can be omitted
       independently. `research: physical` - the settlement kinds it describes
-      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/archetypes.md 'What a settlement IS...'; 8 keys in research/SOURCES.md)
+      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/contents.json#field-archetypes 'What a settlement IS...'; 8 keys in research/SOURCES.md)
 - [x] **T11** The crop table: class key -> (wet | dry | dike | water, display name), covering the
       paddy, the four dry crops, the four crop dikes, the vegetable ground and the fish pond. Derived
       from the CLASSES PRESENT, never from a per-map list, so Kuwabata (no dry plots, four dike
       crops) describes itself with no per-map code. A test asserts every key is a real class.
       `research: physical` - which crops a map grows
-      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/archetypes.md 'What a settlement IS...'; 8 keys in research/SOURCES.md)
+      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/contents.json#field-archetypes 'What a settlement IS...'; 8 keys in research/SOURCES.md)
 - [x] **T12** The size sentence: `~N farmhouses` from the drawn house count and `population ~N` from
       `meta.population` where the tier records one, else `~5 x meta.households`; both tilde-marked,
       both omitted when unavailable. `research: physical` - the population model
-      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/archetypes.md 'What a settlement IS...'; 8 keys in research/SOURCES.md)
+      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/contents.json#field-archetypes 'What a settlement IS...'; 8 keys in research/SOURCES.md)
 - [x] **T13** `finish.py` `title()` tags the placard and its text `cls="place"`; the scale bar keeps
       `cls="-"`. `NOT_HIGHLIGHTED_RULINGS` keeps the 2026-08-27 row and records the overturning
       beside it. `research: rendering`
@@ -75,18 +75,18 @@ simplification. The pass is recorded in [`research.md`](research.md).
 - [x] **T15** The `village lane` default: its `why` gains the sentence, with the GM's reason for the
       class's name at the point of change; `place.py` supplies the district's name when the notes
       record one. `research: physical` - where a hamlet's lanes lead
-      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/archetypes.md 'What a settlement IS...'; 8 keys in research/SOURCES.md)
+      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/contents.json#field-archetypes 'What a settlement IS...'; 8 keys in research/SOURCES.md)
 - [x] **T16** Tests: the card on a hamlet, on a village, on a town and on a map with no notes at all;
       the tilde on both figures; no crop named that the map does not draw; each authored fact omitted
       cleanly when absent.  `research: rendering`
 
 ## Phase 4 - the pool's geography (US4)
 
-- [x] **T17** The research entry: `research/archetypes.md` gains the settlement-kind entry with its
+- [x] **T17** The research entry: `research/contents.json#field-archetypes` gains the settlement-kind entry with its
       `**Sources:**` line, and `research/SOURCES.md` the new keys with URLs. It records BOTH what the
       historical pass found and what it could not find, and names the two places where the setting
       overrules history. `research: physical`
-      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/archetypes.md 'What a settlement IS...'; 8 keys in research/SOURCES.md)
+      - [x] research pass (the `source-reader` run of 2026-08-29, before the spec was finished; specs/156/research.md)  - [x] source-reader confirmed (that run: READ, SUMMARY-ONLY, CONTRADICTED and NOT-FOUND per claim)  - [x] recorded and cited (research/contents.json#field-archetypes 'What a settlement IS...'; 8 keys in research/SOURCES.md)
 - [x] **T18** Akagahara's and Ikegami's `## Map notes` blocks: Hoshigaoka east / north-east, the
       Imperial road directly south, quoting the GM. `research: rendering`
 - [x] **T19** Hoshigaoka's block: north of the Imperial road, Hayakawa county, the town of Hayakawa

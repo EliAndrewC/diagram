@@ -26,7 +26,7 @@ The interactive map's two modals change what they show a reader, and the project
 reader is and how the record is organized for them.
 
 1. **The explanation modal loses its `Record:` line** - the footer that reads *"Record:
-   research/homesteads.md - 'What stood on a farmstead', ..."* (and its variant *"- the research entry
+   research/contents.json#homesteads - 'What stood on a farmstead', ..."* (and its variant *"- the research entry
    records no citation yet"*). It is bookkeeping a reader of the map does not need.
 2. **The references modal lists the QUESTIONS the research asked**, not the sources. Each is the
    heading of a research section the feature's explanation was written from, and each is a link to that
@@ -58,7 +58,7 @@ research entry and renames no heading.
   and the count changes meaning. It MUST be shown when the entry resolves to at least one question and
   hidden otherwise; today it keys on the entry citing at least one source. Measured (round-1 review):
   of the 52 entries (51 classes and the place card), exactly one - `fallow`, whose entry reads
-  *"research/fields.md (no dedicated entry - recorded as silent)"* - resolves to no section, and its
+  *"research/contents.json#fields (no dedicated entry - recorded as silent)"* - resolves to no section, and its
   link is already hidden today because its `sources` is `("not recorded",)`. **No feature loses its
   references link** under the new condition.
 
@@ -120,7 +120,7 @@ research entry and renames no heading.
   `research/([a-z-]+\.md)`, which cannot match a file in a subdirectory, so an entry naming
   `research/contents.json#cities<x>.md` would resolve to no sources and no questions, silently. No class does that
   today (the 51 entries name only the six top-level files), so nothing on a page changes; the pattern
-  MUST accept one directory level, and a test MUST prove an entry naming `research/cities/fabric.md`
+  MUST accept one directory level, and a test MUST prove an entry naming `research/contents.json#urban-fabric`
   resolves. It is fixed now because this feature builds the URL from that same match, and a town or
   city vocabulary will need it.
 - **FR-013** The SVG and the PNG are untouched (feature 134 FR-010); this is a change to the HTML target

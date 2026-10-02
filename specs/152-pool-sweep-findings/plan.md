@@ -42,7 +42,7 @@ inventing a fourth.
 
 **FR-001 marsh modal.** `interactive/classes.py`, the `_c(key="marsh", ...)` record - its `why`,
 `sources` and `entry` fields are what the modal shows. The finding and its seven sources are already in
-`research/water.md` and `research/SOURCES.md` from feature 150.
+`research/contents.json#water` and `research/SOURCES.md` from feature 150.
 
 **FR-006 caption.** `pick_caption_seat` (`settlement/structures/fixtures.py`) filters on `_hug` and
 `_box_clearance`; `_hug` already computes the ROTATED quad, `_box_clearance` measures only drawn ways.

@@ -300,7 +300,7 @@ raggedness preserved, Mizuguchi's re-seated cluster coherent (wells, lanes, kosa
   shared by the drawn stroke, both bank clearances the gate reads, the seam buffer, the carve's burial
   filter and the keep-out corridor. (2) The ladder is parameterized by ARC LENGTH rather than vertex
   index - `waterfields.taper_pieces`. The research, the sources and the disclosed departures are in
-  [`../../research/water.md`](../../research/water.md); the finest DRAWN channel deliberately still
+  [`../../research/contents.json#water`](../../research/contents.json#water); the finest DRAWN channel deliberately still
   STOPS at the ~1 m lateral tier, because below it lie the ~0.3 m field ditch (one pixel here) and,
   in a pre-modern system, plot-to-plot *tagoshi* cascade rather than any channel at all.
 
@@ -1129,7 +1129,7 @@ plots. Two rules were missing, not one.
 The bed now takes the yard's 39 ft corridor (`gardens_unshaded_by_neighbors`), and the belt keeps
 a 50 ft afternoon lane west and southwest of every plot (`village_trees_unshade_from_west`),
 enforced when each is placed. Derivations in
-[`research/contents.json#homesteads`](../../research/homesteads.md), "The garden's sun".
+[`research/contents.json#homesteads`](../../research/contents.json#homesteads), "The garden's sun".
 
 **The belt is thinner on the page, and that is a ruling, not a defect.** Standing off the plots
 puts the belt's near face at about the frame edge; the frame does not open for a windbreak (GM

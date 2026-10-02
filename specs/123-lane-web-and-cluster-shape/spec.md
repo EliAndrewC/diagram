@@ -25,7 +25,7 @@ from any drawn way, with a worst case of 290 ft and an entire SE block touched b
 is 6 of 15 with a worst of 362 ft. The research is decisive that this is wrong - a nucleated
 cluster's compactness exists precisely so that "every house in the nucleated village is accessible
 via the interconnected system of narrow lanes and alleys" (see
-`.claude/skills/diagram/research/homesteads.md`). The back rank being reached "along unfigured
+`.claude/skills/diagram/research/contents.json#homesteads`). The back rank being reached "along unfigured
 footpaths" was a defensible-sounding reading with nothing behind it.
 
 **Independent test**: roll any scripted hamlet; no farmhouse is beyond a lane's reach, and the gate

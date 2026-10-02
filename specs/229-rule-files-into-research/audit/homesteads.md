@@ -98,7 +98,7 @@ Also prose-only: the typing-rule rationales for `cluster_position` / `cluster_sh
 
 ## Inbound references
 
-Real ones: `settlements.md:15,38`; `research/README.md:18`; `research/contents.json#homesteads:15` (visible link), `:225` (comment); `farm_fixtures.py:8,31` (page has equivalents); `shrines_wells/byres.py:224,255` (borrow-or-hire rule - page's byre entry is about wells, not sharing); `dev/pool.md:97` (sun rule - page has it); `future-work/farming-communities.md:1324,1655` (byre share - prose only); `kashikawa.notes.md:267,567`; `.claude/agents/settlement-review.md:49`; `inashiro.notes.md:1129` (BROKEN today: text says html, target says md). False positives: `wip/*.html`, `dev/placement-stages/*.html` (rendered pages with a stale `research/homesteads.md` string), `scripts/fixtures/main-tree-refusals-2026-09.json`.
+Real ones: `settlements.md:15,38`; `research/README.md:18`; `research/contents.json#homesteads:15` (visible link), `:225` (comment); `farm_fixtures.py:8,31` (page has equivalents); `shrines_wells/byres.py:224,255` (borrow-or-hire rule - page's byre entry is about wells, not sharing); `dev/pool.md:97` (sun rule - page has it); `future-work/farming-communities.md:1324,1655` (byre share - prose only); `kashikawa.notes.md:267,567`; `.claude/agents/settlement-review.md:49`; `inashiro.notes.md:1129` (BROKEN today: text says html, target says md). False positives: `wip/*.html`, `dev/placement-stages/*.html` (rendered pages with a stale `research/contents.json#homesteads` string), `scripts/fixtures/main-tree-refusals-2026-09.json`.
 
 ## Disagreements
 

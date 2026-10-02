@@ -25,7 +25,7 @@ apply.
 - [x] T06 `research: rendering` FR-005/006: the untruncated sweep over every file outside `specs/`.
       Corrected: the skill `CLAUDE.md` (3 table rows + 2 doctrine lines), the skill Makefile,
       `tools/CLAUDE.md` (4 index rows), `waterfields/CLAUDE.md`, `dev/loop.md`, `dev/diagnostics.md`,
-      `research/fields.md`, `research/vegetation.md`, `settlements/vegetation.md`,
+      `research/contents.json#fields`, `research/contents.json#vegetation`, `settlements/vegetation.md`,
       `future-work/farming-communities.md`, four engine comment pointers, two kept test comments,
       **and `.specify/memory/constitution.md` + `.specify/templates/tasks-template.md`**, which each
       cited `make sun-audit` as an EXAMPLE of a measuring tool. Records excluded per the ruling:
