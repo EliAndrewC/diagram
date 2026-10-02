@@ -117,8 +117,9 @@ with `make append FILE= LINE=`. And a headless page session carries `container-s
 place of the root CLAUDE.md (about 5,200 tokens a turn).
 
 This file auto-loads when a research entry is being written or changed - which is exactly when the
-rule below applies. The entry FORMAT, the evidence classes, the citing rules and the table of which
-research file grounds which rule file are in [`README.md`](../.claude/skills/diagram/research/README.md); this file carries the one thing
+rule below applies. The entry's presentation is [`STYLE.md`](../.claude/skills/diagram/research/STYLE.md), the citing rules the record's
+`CLAUDE.md`, and the record a reader browses is the built site (the research README was retired by the GM on 2026-10-01);
+this file carries the one thing
 that is not a format rule: who the reader is.
 
 ## Who the record is for, and how it is organized for them (GM 2026-09-05, feature 180)
@@ -162,7 +163,7 @@ reader who asks for them.
   their anchors recomputed (`interactive/sources.py` `github_anchor` of the clean text); `question_text` still
   strips a dated tail defensively. The map's class entries name a heading by PREFIX (`_names`), so a converted
   heading still matches an entry that quotes the old tail.
-- **Its anchor is stable** (already the rule in README's "Adding to the record"): the modal links to the
+- **Its anchor is stable** (the rule since the record began): the modal links to the
   heading's anchor (GitHub's rule, kept), so a rename must fix its inbound links - the rule files, and the class entries
   in `interactive/classes.py` that quote the heading.
 - **A class's explanation names the entries it was written from** (`interactive/classes.py`, the `entry`
@@ -179,7 +180,7 @@ reader who asks for them.
 ## Four labels, and the GM's line between two of them (GM 2026-09-05, feature 183)
 
 An entry's finding, and the class explanation written from it, carries one of FOUR labels (constitution
-XII; `README.md` still lists the original three and is the GM's to update): **accurate**, **deviation**,
+XII): **accurate**, **deviation**,
 **convention**, **guess**. The GM's rule for the two in the middle, verbatim: a deviation is *"our
 fictional setting being different from the actual history and historical places it is based on"*; a map
 drawing convention is *"rendering glyphs on a map which are differently scaled or differently colored than
@@ -444,7 +445,7 @@ page, its derived `citations/<name>.js` before `record.js` - and its body is one
 when the record converted), the registry's entries are `<h3 id="<key>"><code>key</code></h3>`, and a section's
 sources roster is `<p><strong>Sources:</strong> ...</p>`, which the map's modal reads. The maps' "See references"
 opens these pages locally (`../../../research/<name>.html#<id>`). GitHub shows a committed `.html` as source, so
-the reading path is the local page, not GitHub. `README.md` and this file stay Markdown: they are instructions,
+the reading path is the local page, not GitHub. The record's `CLAUDE.md` and this file stay Markdown: they are instructions,
 not the record.
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../.claude/skills/diagram/l7r/diagram/interactive/CLAUDE.md), "The references modal

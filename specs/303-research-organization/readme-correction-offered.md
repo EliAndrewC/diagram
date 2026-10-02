@@ -1,4 +1,7 @@
-# The `research/README.md` correction, offered to the GM (feature 303) - NOT APPLIED
+# The `research/README.md` correction, offered to the GM (feature 303) - SUPERSEDED
+
+*The GM deleted the README on 2026-10-01: "what it was tracking before is now best viewed by a human looking at the
+generated HTML." The references to it in the docs were re-aimed the same day.*
 
 A README is the GM's to write (constitution XVII, NON-NEGOTIABLE): *"If a README is factually wrong, say so and offer
 the correction rather than making it ... a genuine exception is the GM's to make."* Feature 303 flattened the record, so

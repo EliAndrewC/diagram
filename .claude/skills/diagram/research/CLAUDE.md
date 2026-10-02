@@ -3,7 +3,8 @@
 This file auto-loads into every session that reads a research file, on every turn, so it carries the RULES and
 nothing else. Why each is the rule - the GM's words, the incidents, the measurements - is in
 [`docs/research-record-rules.md`](../../../../docs/research-record-rules.md), under the same headings; read it
-before arguing with a rule. The entry format and the evidence classes are in [`README.md`](README.md).
+before arguing with a rule. How an entry is written is [`STYLE.md`](STYLE.md); the four evidence labels (accurate,
+deviation, convention, guess) are in `docs/research-record-rules.md`, "Four labels".
 
 ## Where things are (features 258, 303)
 
@@ -226,7 +227,7 @@ changed entry - two agents, dispatched in the same turn (spec 209 D5). The regis
 The record is hand-authored HTML: the questions under `research/questions/`, the registry's fragments under
 `research/sources/` (feature 303); a page's heading id is its anchor and its file's slug. `make record` builds the site from them (`record/site.py`): each
 page's `<head>` links the site's copy of `assets/record.css`, `site.css`, `glossary.js`, `nav.js`, `site.js` and
-`record.js`. `README.md` and this file stay Markdown. The page mechanics are in
+`record.js`. This file stays Markdown. The page mechanics are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md).
 
 ## The record is the ONE home per topic (GM 2026-09-12, feature 229)

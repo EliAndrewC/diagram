@@ -25,8 +25,8 @@ round-1 finding), and the page includes a sibling paragraph only when BOTH class
 so a hamlet with no woodland commons never claims the windbreak differs from one.
 
 Every explanation is written FROM a `research/` entry and carries that entry's label; where the
-record is silent the entry says GUESS in so many words. `research/README.md`: "an entry that
-presents reasoning as a finding is the one failure".
+record is silent the entry says GUESS in so many words. The record's rule (in its README until the GM retired it,
+2026-10-01): "an entry that presents reasoning as a finding is the one failure".
 
 `NOT_HIGHLIGHTED` is the pseudo-class for ink the GM has ruled OUT of highlighting (FR-002:
 "judgment calls to make about what things get highlighted and which things do not"). It is a

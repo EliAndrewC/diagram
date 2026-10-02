@@ -175,13 +175,13 @@ def _resolves_to_converted(token: str, containing_rel: str) -> bool:
 
 
 def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
-    """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/ and the GM's README.
+    """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/.
     `scripts/fixtures/` is out too (feature 209, found red on main after feature 204 landed): a guard's replay corpus
     is a verbatim census of commands sessions actually ran, some of them from before the record was HTML, and
     rewriting a recorded command to satisfy this test would falsify the corpus it exists to replay."""
     texts: dict[str, str] = {}
     for rel, text in tracked_texts().items():
-        if rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
+        if rel.startswith(("specs/", "scripts/fixtures/")):
             continue
         # A RECORDED FIXTURE IS HISTORY, NOT A POINTER (2026-09-07): `scripts/fixtures/` holds guard firings
         # replayed by the guard suites - the commands sessions actually typed, verbatim, some of them naming
@@ -254,10 +254,7 @@ _RETIRED_STEMS = (
 _RETIRED_PATHS = {f"{_SKILL}/{stem}.md" for stem in _RETIRED_STEMS}
 _RETIRED_BASENAMES = {stem.rsplit("/", 1)[-1] + ".md" for stem in _RETIRED_STEMS}
 #: Recorded history, never a pointer: the guard replay corpus and the frozen pre-189 class fixture keep the
-#: tokens they were recorded with. `research/README.md` WAS exempt here and no longer is - it is the GM's
-#: to write (constitution XVII), it named fourteen retired files, and the GM authorized the correction in
-#: their own words on 2026-09-12 ("I authorize you to fix the research readme"), so it is now held to the
-#: same rule as everything else.
+#: tokens they were recorded with. (`research/README.md` was once held here too; the GM deleted it on 2026-10-01.)
 _RETIRED_EXEMPT_PREFIXES = ("specs/", "scripts/fixtures/")
 #: and this file itself, which necessarily names them: it is where the rule and its own self-test live.
 _RETIRED_EXEMPT_FILES = {f"{_SKILL}/tests/fixtures/classes_before_189.json", f"{_SKILL}/tests/interactive/test_record.py"}

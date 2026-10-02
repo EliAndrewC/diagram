@@ -94,8 +94,8 @@ record lacked (the soybean plant; the well's shaft and curb). Dependent artifact
 repository's CLAUDE.md, the skill's SKILL.md, `interactive/CLAUDE.md`, `research/CLAUDE.md`,
 `interactive/classes.py` (the `Label` type and `ANNOUNCED`), and every research entry, rule file,
 code pointer and pool note that said "a deviation for legibility" (a measured census of 71 uses
-of the word, each adjudicated - `specs/183`). `research/README.md` still states three and is the
-GM's to edit (Principle XVII). An existing principle materially expanded: MINOR.
+of the word, each adjudicated - `specs/183`). `research/README.md` stated three until the GM
+retired it, 2026-10-01. An existing principle materially expanded: MINOR.
 
 
 Version 2.16.0 (amended 2026-09-04, feature 179): Principle VI's band-1 line becomes PER
