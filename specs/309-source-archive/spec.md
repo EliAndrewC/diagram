@@ -27,17 +27,17 @@ Github where we check these in"*. The repository is private on purpose (copyrigh
 
 ### User Story 1 - Every source already cited is archived (Priority: P1)
 
-A one-time backfill walks every URL in every registry entry and stores, in the archive repository, the page or file as the
+A one-time backfill walks every cited URL (FR-001: every URL in a registry entry and every URL a footnote links) and stores, in the archive repository, the page or file as the
 site served it, its readable text, and a record of when and from where it was taken.
 
 **Why this priority**: it is the GM's request; every day before it runs is a day a cited page can vanish unrecorded.
 
-**Independent Test**: after the backfill, a coverage report lists every registry URL with its outcome, and every outcome is
+**Independent Test**: after the backfill, a coverage report lists every cited URL (FR-001) with its outcome, and every outcome is
 one of archived / archived from an earlier snapshot / unreachable (with the reason); a sample of archived copies opens offline.
 
 **Acceptance Scenarios**:
 
-1. **Given** the 2,126 registry entries, **When** the backfill runs, **Then** every URL in them has an archive outcome, and
+1. **Given** the 2,126 registry entries and the footnotes, **When** the backfill runs, **Then** every cited URL (FR-001) has an archive outcome, and
    every reachable one has its served bytes stored (an HTML page as HTML, a PDF as the PDF), its text, and its capture record.
 2. **Given** a Wikipedia article, **When** it is archived, **Then** its capture record names the article revision it was
    taken at, so the copy can be matched to the live history later.
@@ -57,14 +57,14 @@ changed), the page is archived as part of that step, so the archive never falls 
 
 **Why this priority**: without it the archive is a snapshot of 2026-10-02 and begins rotting from the other end.
 
-**Independent Test**: register a source in a scratch run; the archive gains its copy; a registry URL with no archive outcome
+**Independent Test**: register a source in a scratch run; the archive gains its copy; a cited URL (FR-001) with no archive outcome
 fails the record check that runs at the push, naming the command that archives it.
 
 **Acceptance Scenarios**:
 
 1. **Given** a new registry entry, **When** it is reserved with its URL, **Then** its page is archived before the command
    returns, or the command reports the failure and the outcome is recorded as unreachable.
-2. **Given** a registry URL with no archive outcome, **When** `make record CHECK=1` runs (the gate and the push run it),
+2. **Given** a cited URL (FR-001) with no archive outcome, **When** `make record CHECK=1` runs (the gate and the push run it),
    **Then** it fails, naming the URL and the command that archives it.
 3. **Given** two sessions archiving at once, **When** both write, **Then** neither loses the other's copies.
 
@@ -96,8 +96,8 @@ in) opens that source's capture.
 - **A URL that changed after it was cited** (a redirect to a new address): the copy is taken from where the redirect lands,
   and the capture record keeps both addresses.
 - **A page that needs a script to show its text** (the whole-page capture renders it as a browser would),
-  **or refuses an automated reader**: where the source was read from the GM's downloaded copy in
-  `/host-l7r-repo/academic-sources/`, that file is the archived copy (FR-012); otherwise an existing web-archive snapshot
+  **or refuses an automated reader**: where the GM holds a downloaded copy of the source in
+  `/host-l7r-repo/academic-sources/`, that file stands as the source's copy (FR-012, archived in any case); otherwise an existing web-archive snapshot
   (FR-005); only then the served bytes as served, with the page-cache text beside them where their text is empty, and the
   outcome says the copy is partial.
 - **A file larger than the archive host accepts in one file** (GitHub refuses one past 100 MB): stored in parts, with a
@@ -137,9 +137,11 @@ in) opens that source's capture.
   .clones/ having its own copy"*); writes from concurrent sessions MUST be serialized under a host-wide lock, as `make
   reserve` is.
 - **FR-009**: A capture MUST never overwrite an earlier capture of the same URL.
-- **FR-012**: Where a source was read from the GM's downloaded copy in `/host-l7r-repo/academic-sources/` (its registry
-  entry says so), that file MUST be archived as the source's copy, outcome "archived (the GM's downloaded copy)" - it is the
-  text the record quotes, where the live host refuses an automated reader. The file is copied, never moved or changed.
+- **FR-012**: Every file in `/host-l7r-repo/academic-sources/` that is a copy of a cited source MUST be matched to its
+  source key and archived beside that source's captures (copied, never moved or changed) - whether or not the registry
+  entry mentions the file, and IN ADDITION to the cited URL's own capture attempt, never in place of it. The match is
+  measured in the plan: how many files, how many matched, the unmatched listed. The outcome "archived (the GM's downloaded
+  copy)" is used only where the live fetch of that source fails or is refused.
 - **FR-010**: The built record's source pages MUST show an archived-copy link with its capture date beside each live link,
   or say that no copy could be archived.
 - **FR-011**: The GitHub credential MUST be read from the existing secrets loader and never written to a file, a log, a
@@ -171,7 +173,7 @@ This feature draws and states nothing on a map; it changes the research tooling 
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Archive every registry URL, Wikipedia included | the GM's ruling | *"even things which seem at low risk of going away, like wikipedia pages, seem worth storing to me"* | `request.md` |
+| Archive every cited URL (FR-001), Wikipedia included | the GM's ruling | *"even things which seem at low risk of going away, like wikipedia pages, seem worth storing to me"* | `request.md` |
 | The archive is private; nothing is republished | the GM's ruling | copyright: *"for now I just want an archive"*; a public copy waits on the author's permission | `request.md` |
 | A web page is captured whole - images, styles and fonts - as one self-contained offline file, beside the served HTML and the text | the GM's ruling | *"we should download the whole webpage with images and css and such and not just the html content"*; the session had proposed text and HTML only to save space, and the GM chose the whole page. Cost: a larger archive, measured on a sample in the plan before the full run. A PDF is stored whole | `request.md`; the capture module's docstring |
 | A dead page falls back to an existing public web-archive snapshot | tooling decision | a copy someone else took is better than none, and it is labeled as theirs with its date | this spec; the capture module |
@@ -193,3 +195,8 @@ This feature draws and states nothing on a map; it changes the research tooling 
   carries, so FR-001/004/007 and the manifest take every footnote URL too; (2) sources read from the GM's downloaded copy in
   `academic-sources/` archive that file (FR-012, a new outcome, the edge case reordered); (3) the Wayback row's reason no
   longer quotes the GM's hosting answer as a ruling on it. Addressed as stated.
+- Round 2 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 2 items - (1) the user stories, their tests and the Wikipedia
+  decision row still said "registry URL": now "every cited URL (FR-001)"; (2) FR-012 chose the GM's copies by an entry's
+  marker, which misses most (42 files, 5 entries name one): it now matches every file in `academic-sources/` to its key,
+  measured in the plan, archived beside the live capture and in addition to it, the GM-copy outcome used only where the live
+  fetch fails.
