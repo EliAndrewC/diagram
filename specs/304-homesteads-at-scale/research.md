@@ -114,3 +114,16 @@ one). A dispersed hamlet returns early from `stage_web`, so `settle_the_web`, wh
 and `bridges()` raised `UndeckableCrossing`. The fix sets the DRAWN spur's tip on the bund again after the fold cut, and records
 the spur dropped where the kept arm is rice end to end; no rule changed. Seed 905 passes; the cohort 29/30 (Audit-11 alone).
 Two regression tests in `tests/hamletgen/ways/test_track.py`, red with the fix off.
+
+## R9. Audit-11's refusal (observed 2026-10-02, method: a background agent in its own worktree; `make cohort N=1 SEED=11`, then `make cohort N=24`)
+
+The failing lane was the row village's first STREET, a tree lane no settle may cut. It is drawn from its first farm to its last
+plus half a frame (`ways/street.py`, `street_span`), along a straight line fitted to the hard ground's edge (`rows.street_line`).
+On seed 11 that line runs 10.8 degrees off the brook's first reach, the last farm stood 12 ft before the crossing, and the half
+frame took the street over the brook 45.6 ft from the nearest ford (`off_ford`; the law allows `FORD_HALF`, 30 ft). The settle's
+`square_every_crossing` then squared the shallow crossing in place into two turns of about 80 degrees 21 ft apart (`bends`),
+and the last resort drops ordinary lanes only, so the web was refused. The fix (`brook_bounds`): the run past an end farm stops
+`FORD_LANDING_FT` (22 ft, the figure the ways already keep between a way's turn and the brook - a map drawing convention) short
+of a crossing beyond that farm, never short of the farm itself; a crossing between farms is left to the street. The road reads
+the same span and crosses at a ford. Seed 11 passes; the cohort 29/30 (Audit-905 alone, before its own fix). One regression
+test in `tests/hamletgen/ways/test_street.py`. Not yet judged by eye: the road's new jog at the ford (two turns 59 ft apart).
