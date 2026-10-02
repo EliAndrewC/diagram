@@ -412,3 +412,11 @@ def test_a_browser_that_dies_under_one_page_ends_that_read_not_the_lane(tmp_path
     assert got == {"read": 1, "unreadable": 0, "error": 1} and dying.closed
     assert un.needs_fetch(_home(), "https://z.org/9"), "the page that broke the browser is left for the next run, not ruled unreadable"
     assert "Event loop is closed" in capsys.readouterr().out
+
+
+def test_a_part_never_passes_the_read_tools_character_limit() -> None:
+    english = ("A plain English line of a long travel book, about the villages on the river. " * 3 + "\n") * 3000
+    parts = un.split(english)
+    assert len(parts) > 1 and all(len(p) <= un.PART_CHARS for p in parts) and "".join(parts) == english
+    one_line = "x" * (un.PART_CHARS * 2 + 7)
+    assert [len(p) for p in un.split(one_line)] == [un.PART_CHARS, un.PART_CHARS, 7]

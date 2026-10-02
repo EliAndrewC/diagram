@@ -77,6 +77,7 @@ EMPTY = 100
 BUNDLE_CHARS = 150_000
 BUNDLE_TOKENS = 60_000
 PART_TOKENS = 20_000
+PART_CHARS = 50_000  # the Read tool returns about 60,000 characters of a file; a part longer was read in part (feature 312, 2026-10-02)
 _CJK = re.compile(r"[　-鿿가-힯豈-﫿]")
 
 
@@ -419,20 +420,21 @@ def title_of(text: str) -> str:
 
 
 def split(text: str, limit: int = 0) -> list[str]:
-    """A long page in parts of about `limit` (`PART_TOKENS`) estimated tokens, cut at a line where one falls."""
+    """A long page in parts of about `limit` (`PART_TOKENS`) estimated tokens and at most `PART_CHARS` characters, cut at a
+    line where one falls."""
     limit = limit or PART_TOKENS
-    parts, cur, n = [], [], 0
+    parts, cur, n, c = [], [], 0, 0
     for ln in text.splitlines(keepends=True):
         t = tokens(ln)
-        if cur and n + t > limit:
+        if cur and (n + t > limit or c + len(ln) > PART_CHARS):
             parts.append("".join(cur))
-            cur, n = [], 0
-        while t > limit:  # one enormous line
-            cut = max(1, len(ln) * limit // max(t, 1))
+            cur, n, c = [], 0, 0
+        while t > limit or len(ln) > PART_CHARS:  # one enormous line
+            cut = max(1, min(len(ln) * limit // max(t, 1), PART_CHARS))
             parts.append(ln[:cut])
             ln, t = ln[cut:], tokens(ln[cut:])
         cur.append(ln)
-        n += t
+        n, c = n + t, c + len(ln)
     return [*parts, "".join(cur)] if cur else parts
 
 
