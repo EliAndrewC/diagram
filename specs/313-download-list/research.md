@@ -51,7 +51,7 @@ by reason; the plan review re-counted it).
 
 ## R3 - A pre-existing defect the gate surfaced: a seeded cache replayed another clone's coverage (fixed)
 
-Observed 2026-10-02 on this feature's third gate: every test passed (10,695), and the coverage floor failed at 76%, its
+Observed 2026-10-02 on this feature's third gate (method: the gate's coverage table, and the measured files of each `.gencache/*/coverage.data` read with `coverage.CoverageData`): every test passed (10,695), and the coverage floor failed at 76%, its
 table listing each engine module twice, once under `/diagram/.clones/diagram-organization/` at about 70%. Cause: a new
 clone seeds `.gencache` from a sibling at the same commit (`seed_roll_cache` in `sync-with-main.sh`, feature 167). Five
 entries' stored `coverage.data` (inashiro, kashikawa, kuwabata, mizuguchi, sawada) measured the sibling's absolute paths.
