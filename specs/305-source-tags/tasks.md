@@ -16,22 +16,27 @@ reaches a map.
 
 ## Phase 2 - Foundational
 
-- [ ] T02 The data: `research/source-tags.json` (FR-001, FR-002, FR-003: every region's cut-off and its logic in the period explanations, plan D3) and `research/source-sections.json` (FR-006, FR-007, plan D4)
+- [x] T02 The data: `research/source-tags.json` (FR-001, FR-002, FR-003: every region's cut-off and its logic in the period explanations, plan D3) and `research/source-sections.json` (FR-006, FR-007, plan D4)
       research: rendering
-- [ ] T03 `l7r/diagram/interactive/record/source_tags.py`: loaders, marker parse, homing, labels, the `Catalog`; every FR-010 refusal and every file refusal a failing test first in `tests/interactive/test_source_tags.py` (plan D1, D2, D6)
+      verify: DONE. research/source-tags.json: 4 periods, 7 regions, 5 kinds + canon; every period explanation states every region's cut-off and why (test_the_real_vocabulary... asserts 1868/1895/1876/Ryukyu/Vietnam/Taiwan/1800/elsewhere/General); research/source-sections.json: FR-007's 8 sections, every vocabulary combination homed (test_every_combination...)
+- [x] T03 `l7r/diagram/interactive/record/source_tags.py`: loaders, marker parse, homing, labels, the `Catalog`; every FR-010 refusal and every file refusal a failing test first in `tests/interactive/test_source_tags.py` (plan D1, D2, D6)
       research: rendering
+      verify: DONE. record/source_tags.py: loaders, parse, home, labels, Catalog; 33 tests in test_source_tags.py incl. every FR-010 and file refusal; two refusals mutated off turned 2 tests red (written after the code, so the fire was proven by mutation)
 
 ## Phase 3 - User Stories 1 and 2: labels and sections (P1)
 
-- [ ] T04 [US1] [US2] The build: `citations.works_html` groups by section with labels (`l7r/diagram/interactive/citations.py`); `record/site.py` - entry pages with labels and the marker stripped, the registry index and the one-page Sources part grouped, the pager in grouped order, section ids claimed; the fixture record (`tests/_flat_record.py`) tagged; tests in `tests/interactive/test_record_site.py` (FR-008, FR-009; plan D5)
+- [x] T04 [US1] [US2] The build: `citations.works_html` groups by section with labels (`l7r/diagram/interactive/citations.py`); `record/site.py` - entry pages with labels and the marker stripped, the registry index and the one-page Sources part grouped, the pager in grouped order, section ids claimed; the fixture record (`tests/_flat_record.py`) tagged; tests in `tests/interactive/test_record_site.py` (FR-008, FR-009; plan D5)
       research: rendering
-- [ ] T05 [US1] The hover: `research/assets/record.js` gives `span.srctag[data-def]` the tooltip box; `research/assets/site.css` styles the chips and the section headings (FR-009; plan D5)
+      verify: DONE. works_html grouped by section with labels (h3 section, h4 work); site.py entry pages labeled, marker stripped, registry index and all.html grouped, pager in grouped order, section ids claimed; fixture record tagged; 3 new tests in test_record_site.py pass (fixture); real-record tests await T07
+- [x] T05 [US1] The hover: `research/assets/record.js` gives `span.srctag[data-def]` the tooltip box; `research/assets/site.css` styles the chips and the section headings (FR-009; plan D5)
       research: rendering
+      verify: DONE. record.js: span.srctag[data-def] gets the #fntip hover/focus, title dropped under scripts (kept as the no-script tooltip); site.css chips and section headings; looked at in T09
 
 ## Phase 4 - User Story 3: tags cannot go missing or drift (P2)
 
-- [ ] T06 [US3] `make reserve KIND=registry ... TAGS=` in `scripts/reserve-prefix.py` and `.claude/skills/diagram/Makefile`, the placeholder marker without it, with tests; the `source-applicability` contract's Tags rule and its derived vocabulary block, `make source-tags-contract`, and the test that fails while the block is stale; the docs (`research/CLAUDE.md`, `docs/research-doctrine.md`, `container-scripts/page-session-rules.md`, root `CLAUDE.md`) (FR-011, FR-012, FR-013; plan D7, D8, D9)
+- [x] T06 [US3] `make reserve KIND=registry ... TAGS=` in `scripts/reserve-prefix.py` and `.claude/skills/diagram/Makefile`, the placeholder marker without it, with tests; the `source-applicability` contract's Tags rule and its derived vocabulary block, `make source-tags-contract`, and the test that fails while the block is stale; the docs (`research/CLAUDE.md`, `docs/research-doctrine.md`, `container-scripts/page-session-rules.md`, root `CLAUDE.md`) (FR-011, FR-012, FR-013; plan D7, D8, D9)
       research: rendering
+      verify: DONE. reserve-prefix.py --tags (engine parser loaded by path), placeholder marker without it, Makefile TAGS= and source-tags-contract; test_reserve_prefix 9 passed incl. the new tags test; contract Tags rule + derived block, test holds it current; docs: research CLAUDE.md, research-doctrine, page-session-rules, root CLAUDE.md
 
 ## Phase 5 - User Story 4: every work tagged, the write-ups trimmed (P2)
 

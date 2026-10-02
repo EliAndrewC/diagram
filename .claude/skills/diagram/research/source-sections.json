@@ -3,8 +3,16 @@
   {
    "id": "works-canon",
    "title": "Setting canon",
-   "description": "The GM's own campaign notes: the setting's facts, which govern wherever they speak.",
-   "canon": true
+   "description": "The GM's own campaign notes, which govern wherever they speak, and the published game setting they adapt.",
+   "canon": true,
+   "takes": [
+    {
+     "period": "fiction"
+    },
+    {
+     "region": "rokugan"
+    }
+   ]
   },
   {
    "id": "works-premodern-japan",

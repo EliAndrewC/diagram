@@ -3,7 +3,7 @@
   {
    "id": "premodern",
    "name": "Premodern",
-   "description": "Evidence from before the region's industrial era - the period the setting is modeled on, so its forms and its numbers apply most directly. The cut-off is where factory goods, foreign trade and state reform began to reach the countryside: in Japan the Meiji Restoration of 1868; in China about 1895, when treaty-port factories and railways began; in Korea 1876, when its ports were opened; in Vietnam, Ryukyu and Taiwan the start of colonial rule or annexation (the French conquest of about 1860-1885, 1879, 1895); in Europe about 1800, with enclosure, new crops and the first factories; elsewhere, when railways, factory goods or colonial cash crops reached the countryside. The tag follows the evidence, not the publication: a modern study of Edo-period village registers is premodern evidence. A work about no one place (the General region) takes the period of its evidence by the rule of the regions that evidence comes from; one about facts that do not change with the era is Not period-bound."
+   "description": "Evidence from before the region's industrial era - the period the setting is modeled on, so its forms and its numbers apply most directly. The cut-off is where factory goods, foreign trade and state reform began to reach the countryside: in Japan the Meiji Restoration of 1868; in China about 1895, when treaty-port factories and railways began; in Korea 1876, when its ports were opened; in Vietnam, Ryukyu and Taiwan the start of colonial rule or annexation (the French conquest of about 1860-1885, 1879, 1895); in Europe about 1800, with enclosure, new crops and the first factories; elsewhere, when railways, factory goods or colonial cash crops reached the countryside. The tag follows the evidence, not the publication: a modern study of Edo-period village registers is premodern evidence. A work about no one place (the General region) takes the period of its evidence by the rule of the regions that evidence comes from; one about facts that do not change with the era is Not period-bound. An undated or modern account of a traditional form - a dictionary's definition of a village custom, a recent survey of an old village - takes the period of the form it describes, when the record takes that form from it. Evidence that straddles a cut-off (registers kept from 1860 to 1875) carries both periods, the one most of it falls in first."
   },
   {
    "id": "modern-preindustrial",
@@ -19,6 +19,11 @@
    "id": "timeless",
    "name": "Not period-bound",
    "description": "Facts that do not change with the era: how a tree grows, how water holds in a ditch, what a material weighs. They apply to the setting as they apply to any time, and whatever limits remain are the source's own, stated in its write-up. A work about one period's practice is never this tag, even when written in general terms: it takes the period of its evidence."
+  },
+  {
+   "id": "fiction",
+   "name": "Fiction",
+   "description": "Not a real period: the published Legend of the Five Rings setting that the campaign adapts, as its books or its fans summarize it. It says what the game's Rokugan holds, never how real Chinese or Japanese places were, so it backs no historical claim, and the GM's campaign notes govern wherever the two differ."
   }
  ],
  "region": [
@@ -56,6 +61,11 @@
    "id": "general",
    "name": "General",
    "description": "Not about one place: botany, hydraulics, materials, or comparisons across many regions. It applies wherever its facts hold, and any regional limit is stated in the write-up."
+  },
+  {
+   "id": "rokugan",
+   "name": "Rokugan (published)",
+   "description": "The game's own empire as published - not a real place. It stands beside the GM's campaign notes as the setting's background, and the notes govern wherever they speak."
   }
  ],
  "kind": [
