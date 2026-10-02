@@ -57,3 +57,20 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
       verify: DONE. research/CLAUDE.md paragraph + docs/research-doctrine.md section written
 - [ ] T31 `make record CHECK=1` builds cleanly with the manifest complete (SC-004 proven by its test); `make done` green
       research: rendering
+
+## Phase 5 - Amendment 1 (US4-US6; FR-003, FR-013 - FR-016)
+
+- [ ] T40 [US6] The sharded layout (D11): `ROW_GLOB`, `row_path`, `capture_base`, `gm-copies/`; the one-time relayout run on
+      the archive and the manifest
+      research: rendering
+- [ ] T41 [US4] The inbox (D12): `_archive_ops.py inbox`, `make archive-inbox`; tests (archive, confirm, delete; a failed push
+      deletes nothing; the GM's lists stay); run on the GM's directory
+      research: rendering
+- [ ] T42 [US5] Every page read (D13): `archive_reads` from `source-pages` and `source-outcome`, `_archive_ops.py urls`, the
+      test seam; the consulted backfill (`make archive-sources CONSULTED=1`) over the ledger's URLs with no row
+      research: rendering
+- [ ] T43 [US6] The lookup (D14): `make archive-find`; tests
+      research: rendering
+- [ ] T44 [US6] The procedures (FR-016): root `CLAUDE.md`, `docs/research-doctrine.md`, `docs/research-record-rules.md`,
+      `research/CLAUDE.md`, `container-scripts/page-session-rules.md`, the `source-reader` and `quote-check` contracts
+      research: rendering
