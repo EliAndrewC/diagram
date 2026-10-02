@@ -139,7 +139,7 @@ def string_pull_chord_ok(pts: Poly, a: int, b: int, hard: list[Poly], walls: Seq
 
 
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
-    """The LAST pass over the web: take out what feet would never have worn.
+    """A late pass over the web (`settle_the_web` is the last): take out what feet would never have worn.
 
     THE WEB WAS ASSEMBLED FROM FRAGMENTS AND NEVER READ AS LINES (GM 2026-08-27, feature 133 T32:
     *"there's a place where it looks like a loop-de-loop, which isn't how a lane would look. And then
@@ -150,8 +150,9 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     50 ft; lane 1 began with a 15 ft out-and-back; three lanes knotted into a bow-tie where one ran
     on across another for 20 ft. All legal by every gate, because the gates measured reach.
 
-    Three repairs, each on the lane's RECORD with the ink rewritten (`reink_lane`), and each tested
-    against the same footprint legality a junction link gets (`_clear_touch`):
+    Four repairs, each on the lane's RECORD with the ink rewritten (`reink_lane`), and each tested
+    against the same footprint legality a junction link gets (`_clear_touch`) - and between the second and third a
+    shadow drop (2b: a lane whose every vertex lies inside another lane's stroke is dropped):
       1. STRING-PULL - from each vertex, jump to the furthest later vertex the straight line reaches
          without crossing a footprint. This is what `_route` does to its own output; nothing did it to
          the assembled lane. It removes the zigzags and the dense 4 ft stepping in one move.
@@ -161,7 +162,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
          that no farmhouse loses its way and the tip left behind still reaches something.
       3. BOW-TIE - where two lanes cross each other mid-run and one runs on past the crossing for
          less than `_ARM_FT`, that tail is cut back to the crossing, which becomes the junction.
-    Ends are never moved except by cutting an arm, so every junction `_touch_junctions` made holds.
+      4. KNOTS - ends of different lanes within `_KNOT_FT` (25 ft) of one another meet at ONE node.
+    Ends move only where an arm is cut or a knot gathers them, so every junction `_touch_junctions` made holds.
     `lanes_bend_like_paths` holds the line. Returns the number of lanes rewritten."""
     changed = 0
     lanes = s.M.get("lanes") or []

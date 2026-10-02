@@ -311,7 +311,7 @@ FOOTBRIDGE_FORM = register_knob(Knob("footbridge_form", list(FOOTBRIDGE_FORMS), 
 
 def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form: str = "plank") -> str:
     """The SVG of one crossing's deck, centered on (x, y) and running along `rot` for `span` - by its FORM (269 B21,
-    research/water/290). The three draw inside the same `span` x `deck_w` box, so every check that reads the deck's
+    research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html). The three draw inside the same `span` x `deck_w` box, so every check that reads the deck's
     record reads the same geometry whatever the roll:
 
     - `plank`: the planked timber deck, seams across it and a dark rail down each side (the glyph before the knob);
@@ -460,20 +460,22 @@ class BridgesMixin:
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
     def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float = 2.0, seg_caps: Any = None) -> int:  # type: ignore[misc]
-        """Standalone plank FOOTBRIDGES across the irrigation channels, where field-workers cross a ditch while
+        """Standalone plank FOOTBRIDGES across the SUPPLY ditches (main, branch, lateral - never the collector, the drain
+        or the feeder, `SUPPLY_ROLES`), where field-workers cross a ditch while
         walking the paddy bunds - NOT carried by any lane (people reach them along the earthen bunds, so no
         path leads to them). Any ditch stretch longer than `min_len` gets a plank about MIDWAY; a long stretch
         gets one roughly every `spacing` px, evenly spaced along it. Each plank crosses PERPENDICULAR to the
         ditch, spanning its local width plus a short abutment. Call AFTER the field ditches are recorded. Bridges
         draw on the TOP layer (over the water). Records via `bridge()` into M['bridges'] (tagged 'foot'); returns
-        the count. DECK WIDTH (1 px = 2 ft): an itabashi footplank is a single-file crossing (~3-4 ft), so
-        `plank_w=2.0` (~4 ft, GM 2026-07-22: was 2.5) - kept just wide enough to read and NARROWER than a cart
+        the count. DECK WIDTH: an itabashi footplank is a single-file crossing (~3-4 ft); `plank_w=2.0` px is not scaled,
+        so it is ~4 ft at 2 ft a px and 2 ft on a 1 ft/px hamlet (GM 2026-07-22: was 2.5) - kept just wide enough to read
+        and NARROWER than a cart
         lane (~5-6 px); the wider `bridges()` carried-way deck matches the lane it carries, but a footplank does not.
         USEFULNESS: a plank is placed only where BOTH banks reach ground someone walks to - cultivated field,
-        the village, or a dike (via _plank_reaches_useful_ground). A drain/toe stretch whose far bank opens onto
-        marsh/scrub/off-map carries NO plank (GM 2026-07-22, Hikari no Sato: crossings into the reed marsh).
+        the village, or a dike (via _plank_reaches_useful_ground); a stretch whose far bank opens onto marsh/scrub/off-map
+        carries NO plank (GM 2026-07-22, Hikari no Sato: crossings into the reed marsh).
         FORM (269 B21): every crossing this lays takes the settlement's one rolled form - a single log, logs under
-        earth, or a planked deck (`FOOTBRIDGE_FORM`, research/water/290) - declared as `meta.footbridge_form` and on
+        earth, or a planked deck (`FOOTBRIDGE_FORM`, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html) - declared as `meta.footbridge_form` and on
         each deck's record as `form`. The form changes the glyph only, never where or how wide a crossing is laid."""
 
         from l7r.diagram.waterfields import taper_w, worth_planking  # local: the engine packages are peers, imported lazily

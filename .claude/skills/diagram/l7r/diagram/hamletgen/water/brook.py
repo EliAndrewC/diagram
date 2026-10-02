@@ -729,8 +729,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
     approach, searched here as it always was, and `brook_skirt`'s passage down one flank.
 
     THE APPROACH is steered clear of the rice: a fan's head can carry a lobe out to one side and a brook
-    coming straight down the fall line then clips it (`streams_avoid_fields`, which is right to object -
-    a stream does not run through a flooded paddy). Bearings are tried outward from straight-upslope, so
+    coming straight down the fall line then clips it - and a stream does not run through a flooded paddy. Bearings are tried outward from straight-upslope, so
     the brook stays as close to the fall line as the field allows. The last 40 px into the intake is
     legitimately against the crop and is not tested.
 

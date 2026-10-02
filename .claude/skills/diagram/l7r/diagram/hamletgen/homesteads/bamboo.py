@@ -56,10 +56,10 @@ def wind_seat(wlx: float, wly: float, hw: float, hh: float, gap: float, sw: floa
 def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
     """Seat a small bamboo strip beside each farmstead that keeps one, per the `bamboo` knob.
 
-    Seated in `stage_hinterland`, AFTER the web and the notice board (T49): seated with the sheds it
+    Seated in `stage_hinterland`, AFTER the web and before the scrub (T49): seated with the sheds it
     was in the web's way, and the web threaded through it (two lanes on Inashiro) - and putting it in
     the web's fabric instead re-threaded the whole web and broke it. Seated after, the strip keeps 6 ft
-    off every lane and clear of every placed footprint, the board and the wells, and the scrub keeps
+    off every lane and clear of every placed footprint and the wells, and the scrub keeps
     out of it (a soft keep-out, like every wood). Drawn by `stage_bamboo` with the stand glyph. Per house: presence by `HOUSEHOLD_BAMBOO_PREVALENCE`, side by the weighted roll
     above, both from the house's own position (positional randomness). A candidate that lands on a
     footprint, a lane, a paddy, the marsh or the pond is refused and the next side tried; a farmstead

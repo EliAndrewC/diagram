@@ -877,7 +877,7 @@ class HousesMixin:
         waterfields.PADDY_CELL_ACRES / research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html). The targets bracket the calibrated
         norm: `small_irregular` below it, `medium` at it, `large_block` above, `strip` at the norm's area but
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
-        roll_village) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM
+        roll_village and the scripted hamlet's `stage_field`) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM
         asked to leave them untouched, so recalibrating them would only reshuffle vetted maps for no gain."""
         from l7r.diagram.waterfields import PADDY_CELL_ACRES, paddy_grain
 

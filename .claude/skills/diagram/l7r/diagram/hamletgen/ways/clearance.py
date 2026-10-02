@@ -388,7 +388,7 @@ def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None
 def route_around(poly: Poly, path: Poly, margin: float, rounds: int | None = None) -> Poly | None:
     """Bend a drawn way OUT of `poly` by walking its outline round the obstruction.
 
-    `connector_track` sweeps forty bearings and keeps the LEAST-BAD when none is clean, which is the
+    `connector_track` sweeps 41 bearings and keeps the LEAST-BAD dry one when none is clean, which is the
     right call for a track that has to reach the frame somehow - but least-bad can still mean a leg
     cutting straight across a lobe of the fan, which is what the GM saw on Inashiro (2026-08-12).
 

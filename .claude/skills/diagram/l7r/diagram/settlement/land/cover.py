@@ -618,13 +618,14 @@ class GroundCoverMixin:
         scrub + marsh; the woodland patches are per-map. The scrub bands are frame-margin strips OUTSIDE the
         CULTIVATED bbox (paddy + dry hatake), so each recorded centroid clears the paddy (`commons_clear_of_
         paddies` is a centroid test). All scatters skip fields/pond/lanes/buildings AND a **hamlet keep-out**
-        (the cluster bbox, so no cover creeps among the houses), and NONE is a crop anchor (`_CROP_HARD`), so
+        (each farmstead's own grown outline on a nucleated hamlet, so no cover creeps among the houses), and NONE is a
+        crop anchor (`_CROP_HARD`), so
         they BLEED off the frame and the crop stays tight. Call AFTER fields + cluster + pond + dry fields,
         BEFORE crop_to_content. `down_deg` (defaults to meta's) picks which frame side the scrub ring OMITS
         (the toe side) AND orients the marsh itself: the toe is a CONTOUR BAND perpendicular to the fall, so it
         rotates with the map like every other feature (see the comment at the marsh block); the scrub ring is
-        radial. A comb-FAN field leaves the opposite bbox corner open -> the gen fills it (scrub +
-        woodland patches). See research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html."""
+        radial. A comb-FAN field leaves the opposite bbox corner open; the interior fill (`interior_fill`) clothes the
+        voids, and the woodland patches are drawn over them. See research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html."""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys

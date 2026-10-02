@@ -36,9 +36,9 @@ class SinkRefused(RuntimeError):
 def drain_outfall(s: Settlement, name: str) -> Pt | None:
     """The last vertex of the field's drain collector, READ BACK from the manifest.
 
-    Read back rather than remembered, because the manifest is what the gate reads: siting the pond
-    from the same record `pond_connected_to_field` will measure against is the skill's "placement and
-    its check must read the SAME manifest source" rule, one level down."""
+    Read back rather than remembered, because the manifest is what every later reader reads: the pond is
+    sited from the same record the ditch to it is drawn from - "placement and its test read the SAME
+    source", one level down."""
     for ditch in s.M.get("field_ditches", []):
         if ditch.get("role") == "drain" and ditch.get("field") == name:
             pts = ditch["poly"]
@@ -61,8 +61,8 @@ def drain_heading(s: Settlement, name: str, span: float = GATE_FLOW_SPAN) -> Pt 
     MEASURED OVER THE GATE'S 40 px SPAN, NOT OVER THE FINAL VERTEX PAIR, and that distinction is the
     whole defect this function used to carry. A comb's collector ends in a short hook - its last
     segment can be a couple of px long and point anywhere - so "the direction it is running where it
-    ends" read off `poly[-2] -> poly[-1]` is noise, while `drainage_junction_smooth` reads the same
-    corner over 40 px and gets the collector's real bearing. On cohort seed 2 the two disagreed by
+    ends" read off `poly[-2] -> poly[-1]` is noise, while the 40 px span (`GATE_FLOW_SPAN`, the span the retired
+    `drainage_junction_smooth` check read) gets the collector's real bearing. On cohort seed 2 the two disagreed by
     76.1 deg (last-pair 347.1, span 63.3): the placer therefore believed that continuing straight
     along the collector was a PERFECT junction (turn 0.0) when the gate scored that same route a
     76.1 deg kink, and it believed the genuinely smooth route (2.2 deg by the gate) was a 73.9 deg
@@ -138,8 +138,8 @@ def edge_run(plan: SitePlan, frm: Pt) -> float:
 
 
 def pond_clear_of_crop(plan: SitePlan, center: Pt, prx: float, pry: float) -> bool:
-    """The two tests `pond_clear_of_field` makes, on the same envelope: no rim point inside the crop,
-    no crop vertex inside the pond."""
+    """The pond clear of the crop, on the field's envelope: no rim point inside the crop, no crop vertex inside the
+    pond (the two tests `pond_setback` walks with)."""
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
     if any(point_in_poly(center[0] + prx * ux, center[1] + pry * uy, env) for ux, uy in rim):
@@ -151,11 +151,9 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
     """How far DOWNSLOPE of the drain outfall the pond must stand to clear the crop entirely.
 
     Walks outward in small steps and returns the first distance at which no rim point of the ellipse
-    falls inside the field envelope and no envelope vertex falls inside the ellipse - the same two
-    tests `pond_clear_of_field` makes, run against the same envelope, so the siting and the check
-    cannot disagree (the skill's "adjudicate against the gate, never a re-statement of it" rule, in
-    its cheap form: the predicate is copied from the check and measured on the same manifest
-    geometry). A 12 px cushion past the first clear position keeps it off the line."""
+    falls inside the field envelope, no envelope vertex falls inside the ellipse (`pond_clear_of_crop`'s two
+    tests), and the pond's ellipse grown by 12 px clears the brook. A 12 px cushion past the first clear
+    position keeps it off the line."""
     dx, dy = plan.fall
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
@@ -494,15 +492,18 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     The tameike the field drains into - DERIVED from the drain, never placed by hand.
 
     A reservoir below the fields is sited by one fact: it must sit clear of the paddies and low
-    enough that the drain reaches it downhill. So it goes a fixed set-back DOWNSLOPE of the drain's
-    own outfall, wherever that outfall landed, and the drainage ditch is drawn from the outfall to
-    the pond's center so the two are visibly joined. Both scale with the map: a bigger hamlet drains
-    more water into a bigger pond.
+    enough that the drain reaches it downhill. So it stands at the nearest seat DOWNSLOPE of the drain's own
+    outfall - the set-back SOLVED (`pond_setback`), the pond stepped across the fall where it must be (`pond_seat`) -
+    where its rim clears the crop and the brook, and the drainage ditch is drawn from the outfall to the pond
+    (`pond_run`) so the two are visibly joined. Both scale with the map: a bigger hamlet drains more water into a
+    bigger pond. Where no seat fits - past `POND_SETBACK_LIMIT`, or a run that would cross a dike, the brook or
+    forbidden ground - the field drains off the frame instead.
 
-    `water_sink="offmap"` draws the collector's continuation off the frame instead of a pond - a drainage
-    ditch like the pond run (`drain_run`), which is what most valleys do and what the GM's brief allows. Every route it
-    may take is judged by `route_refusals`, and where no searched route passes, `hull_route` constructs one that does
-    (feature 287, water:W10-W12).
+    `water_sink="offmap"` drains the collector off the frame instead of into a pond - first into the passing brook at a
+    confluence where one is in reach (`brook_join`, the researched sink), else a drainage ditch run off the frame
+    (`drain_run`), which is what most valleys do and what the GM's brief allows. Every route it may take is judged by
+    `route_refusals`, and where no searched route passes, `hull_route` constructs one that does (feature 287,
+    water:W10-W12).
 
     THE WATER IS FINISHED HERE (feature 287, M2): the brook is rounded to the course the map draws as this stage's last
     step, so the seat, the houses, the fords' tests and the decks all read one course.
@@ -510,11 +511,14 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.hamletgen.sink.drain_outfall
         l7r.diagram.hamletgen.sink.drain_heading
+        l7r.diagram.hamletgen.sink.pond_setback
+        l7r.diagram.hamletgen.sink.pond_clear_of_crop
+        l7r.diagram.hamletgen.sink.pond_seat
+        l7r.diagram.hamletgen.sink.pond_run
+        l7r.diagram.hamletgen.sink.brook_join
         l7r.diagram.hamletgen.sink.route_refusals
         l7r.diagram.hamletgen.sink.hull_route
         l7r.diagram.hamletgen.sink.drain_run
-        l7r.diagram.hamletgen.sink.pond_setback
-        l7r.diagram.hamletgen.sink.pond_clear_of_crop
         l7r.diagram.settlement.Settlement.pond
         l7r.diagram.settlement.land.wet.pond_fringe_ring
         l7r.diagram.settlement.Settlement.marsh

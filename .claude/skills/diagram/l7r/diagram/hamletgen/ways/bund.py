@@ -204,7 +204,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     """Make sure some way JOINS the paddy's bund (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html). Returns how it is reached, which the stage
     records as `meta.field_path`: "joined" where a lane end already stands on it; "run_on" where the lane end nearest the
     paddy is carried on to it; "branch" where a field path is drawn off the nearest point of the lanes; "none: ..." where
-    every way to it crosses water or the marsh - the reason a reader needs, stated rather than swallowed."""
+    every straight way to it crosses the marsh, a steading, or more than one water - the reason a reader needs, stated
+    rather than swallowed."""
     paddy = paddy_ground(s)
     if paddy.edge is None:
         return "none: no paddy"

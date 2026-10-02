@@ -22,9 +22,9 @@ from .plan import SitePlan, band_extent
 def below_drain(pt: Pt, drain: Poly, dx: float, dy: float, band: float = 150.0) -> bool:
     """Is `pt` on the WET side of the drain collector, within a toe band of it?
 
-    The same question `dwellings_above_field_drain` asks of every dwelling, asked before the
-    dwellings exist. Reading the check's own predicate rather than approximating it with "downhill
-    of the field centroid" is the point: an aggregate cannot stand in for a distributed thing, and
+    The question the retired `dwellings_above_field_drain` check asked of every dwelling, asked before the
+    dwellings exist. Reading the drain itself rather than approximating it with "downhill of the field
+    centroid" is the point: an aggregate cannot stand in for a distributed thing, and
     the drain is a LINE across the low side, not a point."""
     near = min(range(len(drain) - 1), key=lambda i: seg_dist(pt[0], pt[1], drain[i], drain[i + 1]))
     d = seg_dist(pt[0], pt[1], drain[near], drain[near + 1])
@@ -137,12 +137,11 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     high, cold, windward side and its face to the field and its water. That is not decoration, it is
     the reason the windbreak grove has a side to be on, and it is what Ikegami's own docstring cites.
     So the cluster is seated on the field-envelope margin whose OUTWARD NORMAL best points into the
-    wind, tie-broken toward the UPSLOPE end - which is also where the gate needs the dwellings to be
-    (`dwellings_above_field_drain`: the ground below the drainage line is the wettest in the valley
-    and is not building ground). A margin whose normal is more than 45 degrees off the wind is not a
-    candidate at all (`WIND_BACK_MIN_DOT`, feature 261), and neither is one whose belt would fall off
-    the canvas (`BELT_ROOM_MAX_OFF`): the wind is the regional northwest unless declared, and the seat
-    bends to it.
+    wind, scored by the wind (1.0) and by the UPSLOPE end (0.8), with penalties for wet ground, the dry
+    hem, the brook and the belt's room - the ground below the drainage line is the wettest in the valley
+    and is not building ground. A margin whose normal is within 45 degrees of the wind faces it (tier 0);
+    one whose belt would fall off the canvas is not a candidate (`BELT_ROOM_MAX_OFF`): the wind is the
+    regional northwest unless declared, and the seat bends to it.
 
     NO FALLBACK (feature 287, homes H30/H31, plan D3): the off-wind and cramped margins were kept as a
     last resort, recorded as `seat_offwind`; they are gone. A margin whose normal is 45 to 90 degrees off
@@ -156,7 +155,8 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
 
     Returns the seat frame - a center, an ALONG-the-margin unit, an AWAY-from-the-field unit, and
     the band's half-extents - which the lanes, the house seeds, the connector and the windbreak all
-    work in, so every one of them lands correctly at any fall direction."""
+    work in, so every one of them lands correctly at any fall direction; and its `ladder`, the ranked
+    margins the seating falls back to (`seat_every_household`)."""
     env = plan.envelope
     cen = centroid(env)
     dx, dy = plan.fall
