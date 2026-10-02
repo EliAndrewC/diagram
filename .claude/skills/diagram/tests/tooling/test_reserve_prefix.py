@@ -46,7 +46,7 @@ def test_the_next_prefix_passes_every_clone_and_the_ledger(tmp_path) -> None:
     (a / rp.DIRS["glossary"] / "0160-hitoyado.json").unlink()  # reserved but its file gone: the ledger still holds it
     assert rp.reserve("glossary", "kuchiireya", a).name == "0170-kuchiireya.json"
     reg = rp.reserve("registry", "suzhou-enwiki", a)
-    assert reg.name == "0010-suzhou-enwiki.html" and reg.read_text(encoding="utf-8") == ""
+    assert reg.name == "0010-suzhou-enwiki.html" and reg.read_text(encoding="utf-8").endswith(rp.TAGS_PLACEHOLDER + "\n")
     assert rp.main(["registry", "suzhou-enwiki", "--root", str(a), "--check", str(reg)]) == 0
     assert rp.main(["registry", "another-key", "--root", str(a), "--check", str(reg)]) == 1, "the key must match"
     assert rp.main(["registry", "x", "--root", str(a), "--check", "0990-none.html"]) == 1
@@ -140,9 +140,9 @@ def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, cap
     src = rp._sources()
     where = src.home(a)
     path = rp.reserve("registry", "edo-enwiki", a, url="https://en.wikipedia.org/wiki/Edo")
-    assert path.read_text(encoding="utf-8") == '<h3 id="edo-enwiki"><code>edo-enwiki</code></h3>\n<p>(https://en.wikipedia.org/wiki/Edo)</p>\n'
+    assert path.read_text(encoding="utf-8") == '<h3 id="edo-enwiki"><code>edo-enwiki</code></h3>\n<p>(https://en.wikipedia.org/wiki/Edo)</p>\n' + rp.TAGS_PLACEHOLDER + "\n"
     assert [(r["url"], r["outcome"], r["clone"]) for r in src.read(where)] == [("en.wikipedia.org/wiki/Edo", "cited:edo-enwiki", "a")]
-    assert rp.reserve("registry", "plain", a).read_text(encoding="utf-8") == "", "without URL= nothing differs"
+    assert rp.reserve("registry", "plain", a).read_text(encoding="utf-8") == '<h3 id="plain"><code>plain</code></h3>\n' + rp.TAGS_PLACEHOLDER + "\n", "without URL= no pointer"
     assert len(src.read(where)) == 1
     assert rp.main(["glossary", "a term", "--root", str(a), "--url", "https://example.org"]) == 2
     assert "KIND=registry only" in capsys.readouterr().err
@@ -164,3 +164,20 @@ def test_a_question_takes_the_next_number_with_no_gap_and_a_stub_the_build_refus
     assert text.startswith('<h2 id="a-new-question">') and "<!-- tags: subject=<subject>;" in text
     assert rp.reserve("question", "another", a).name == "0245-another.html"
     assert rp.reserved("question", 244, mirror, "a-new-question")
+
+
+def test_registry_tags_are_written_checked_and_refused_by_name(tmp_path, capsys) -> None:
+    """Feature 305 FR-011: TAGS= writes the marker as the stub's last line, checked against the clone's vocabulary; an
+    unknown value is refused naming the allowed ones; tags are for a registry entry only; without them the placeholder
+    marker is written, which the build refuses."""
+    _mirror, a = _world(tmp_path)
+    record = a / rp.RECORD
+    record.mkdir(parents=True)
+    (record / "source-tags.json").write_text((REPO / rp.RECORD / "source-tags.json").read_text(encoding="utf-8"), encoding="utf-8")
+    path = rp.reserve("registry", "kyo-gazetteer", a, url="https://x.org/kyo", tags="kind=primary; period=premodern; region=china,japan")
+    assert path.read_text(encoding="utf-8").endswith("<p>(https://x.org/kyo)</p>\n<!-- tags: period=premodern; region=china,japan; kind=primary -->\n")
+    assert rp.main(["registry", "bad-one", "--root", str(a), "--tags", "period=medieval; region=japan; kind=primary"]) == 2
+    assert "`period=medieval` - not a period value; the values are premodern, modern-preindustrial" in capsys.readouterr().err
+    assert rp.main(["glossary", "a term", "--root", str(a), "--tags", "period=premodern"]) == 2
+    assert "KIND=registry only" in capsys.readouterr().err
+    assert rp.main(["registry", "good-one", "--root", str(a), "--tags", "period=timeless; region=general; kind=reference"]) == 0

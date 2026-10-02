@@ -220,6 +220,28 @@ def section_heading(section: Section, level: int, anchor: str) -> str:
     return f'<h{level} class="works-section" id="{anchor}">{html.escape(section.title)}</h{level}>{desc}'
 
 
+#: The markers of the vocabulary block derived into the `source-applicability` contract (spec FR-012): a defined agent
+#: launches without the record's CLAUDE.md files, so the explanations it judges against are written into its contract,
+#: derived from the one vocabulary by `make source-tags-contract` and held current by a test.
+CONTRACT_OPEN = "<!-- source-tags: DERIVED by make source-tags-contract from research/source-tags.json - edit the vocabulary, never here -->"
+CONTRACT_CLOSE = "<!-- /source-tags -->"
+
+
+def contract_block(vocab: Vocabulary) -> str:
+    """Every value and its explanation, as the contract lists them, between the markers."""
+    rows = [f"- `{f}={lab.id}` - **{lab.name}**: {lab.description}" for f in FACETS for lab in vocab.facets[f]]
+    rows.append(f"- (no marker) - **{vocab.canon.name}**: {vocab.canon.description}")
+    return CONTRACT_OPEN + "\n" + "\n".join(rows) + "\n" + CONTRACT_CLOSE
+
+
+def synced_contract(text: str, vocab: Vocabulary) -> str:
+    """`text` with its derived block rewritten from the vocabulary; refused when the markers are missing."""
+    start, end = text.find(CONTRACT_OPEN), text.find(CONTRACT_CLOSE)
+    if start < 0 or end < start:
+        raise SourceTagError("the contract has no derived source-tags block - its two markers are missing")
+    return text[:start] + contract_block(vocab) + text[end + len(CONTRACT_CLOSE) :]
+
+
 class Catalog:
     """Every registry entry's tags and section, read once per build. `errors` holds every refusal, each naming its
     entry, so one build names them all; an entry refused has no section and is left out of every list."""

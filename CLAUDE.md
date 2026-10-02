@@ -69,7 +69,8 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   section its `Entry:` names. It is written PER ENTRY and BUILT into the site a reader opens
   (features 258, 301, 303): a question is one stem in one flat directory, `research/questions/NNNN-<heading id>.html`
   with how our maps draw it beside it as `.drawing.html`, each page's footnotes in the `.notes.html` beside it; a
-  source is `research/sources/NNNN-<key>.html`. Each question carries TAGS (subjects - the first primary - settings,
+  source is `research/sources/NNNN-<key>.html`, tagged (period of its evidence, region, kind) from `research/source-tags.json`
+  and grouped by `research/source-sections.json` (feature 305). Each question carries TAGS (subjects - the first primary - settings,
   one level) from `research/tags.json`, and `research/contents.json` declares the sections, their order and the tag
   rule each takes: a question lives in the first section that takes it, ordered by level then number, so regrouping
   is an edit to `contents.json` alone. `make record` builds `research/site/` - a page per question with its notes

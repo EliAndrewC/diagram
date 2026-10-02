@@ -65,7 +65,11 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   small page, and every pointer to the research names its fragment (`scripts/check-research-pointers.py`).
   Every cited work's registry entry says what it is and why it applies with its honest limits - two
   write-ups, written once and derived into the works list at the foot of every page that
-  cites the work - and a source is judged by the `source-applicability` agent when its write-ups
+  cites the work. Every work carries TAGS - the period of its evidence, its region, its kind - from
+  `research/source-tags.json`, and the build groups the works by them (`research/source-sections.json`) and shows each tag
+  as a label whose tooltip is the category's standard strengths and limits, so a write-up states only the limits
+  specific to its work (feature 305, GM 2026-10-02: *"it would be much better and more efficient to have a tagging system
+  where the makefile target which assembles these pages automatically applies the correct labels"*) - and a source is judged by the `source-applicability` agent when its write-ups
   land and BEFORE a session integrates its numbers into a map (GM 2026-09-07: *"whatever subagent
   check we create in order to justify whether a source is applicable to be used in the creation of
   our diagrams, that subagent check should also be run when we first begin to make use of the source

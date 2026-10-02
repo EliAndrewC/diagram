@@ -138,6 +138,19 @@
   } else {
     wrapGlossary(main, true);
   }
+  // SOURCE LABELS (feature 305, GM 2026-10-02: labels with tooltips conveying "the standardized explanation of the
+  // strengths and limitations inherent to the category of source"): each label under a work's heading carries its
+  // explanation in data-def, shown in the same box as a note or a glossary term. Its title is the no-script tooltip;
+  // with scripts it is dropped, so the browser's own tooltip does not show beside the box.
+  document.querySelectorAll('span.srctag[data-def]').forEach(function (chip) {
+    chip.removeAttribute('title');
+    chip.setAttribute('tabindex', '0');
+    var open = function () { keep(); tip.textContent = chip.getAttribute('data-def'); place(chip); };
+    chip.addEventListener('mouseenter', open);
+    chip.addEventListener('focus', open);
+    chip.addEventListener('mouseleave', hideSoon);
+    chip.addEventListener('blur', hideSoon);
+  });
   tip.addEventListener('mouseenter', keep);
   tip.addEventListener('mouseleave', hideSoon);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { keep(); tip.hidden = true; } });

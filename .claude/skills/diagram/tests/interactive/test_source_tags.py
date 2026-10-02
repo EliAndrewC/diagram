@@ -189,3 +189,30 @@ def test_the_catalog_refuses_each_fault_by_entry_and_groups_the_rest(rec: pathli
     assert len(cat.errors) == 4
     assert [(s.id, keys) for s, keys in cat.grouped(["now", "untagged", "ok", "canon"])] == [("works-canon", ["canon"]), ("works-premodern-japan", ["ok"]), ("works-present-day", ["now"])]
     assert "Setting canon" in cat.labels("canon") and cat.labels("untagged") == ""
+
+
+# ------------------------------------------------------------------------------------------------- the agent contract (FR-012)
+
+
+def test_the_source_applicability_contract_carries_the_current_vocabulary() -> None:
+    """A defined agent launches without the record's CLAUDE.md files, so its contract carries the explanations it
+    judges tags against; they are derived, and this fails while they are stale."""
+    from l7r.diagram.tools import source_tags_contract as tool  # noqa: PLC0415
+
+    assert tool.main(["--check"]) == 0, "run make source-tags-contract"
+
+
+def test_the_contract_tool_rewrites_a_stale_block_checks_and_refuses_one_with_no_markers(rec: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    from l7r.diagram.tools import source_tags_contract as tool  # noqa: PLC0415
+
+    contract = rec / "agent.md"
+    contract.write_text(f"head\n{st.CONTRACT_OPEN}\nold\n{st.CONTRACT_CLOSE}\ntail\n", encoding="utf-8")
+    args = ["--contract", str(contract), "--research-dir", str(rec)]
+    assert tool.main([*args, "--check"]) == 1 and "stale" in capsys.readouterr().err
+    assert tool.main(args) == 0 and "rewrote" in capsys.readouterr().out
+    text = contract.read_text(encoding="utf-8")
+    assert "- `period=premodern` - **Premodern**: Before the factories." in text and "- (no marker) - **Setting canon**: The GM's notes." in text
+    assert text.startswith("head\n") and text.endswith("tail\n") and "old" not in text
+    assert tool.main([*args, "--check"]) == 0 and "current" in capsys.readouterr().out
+    contract.write_text("no markers\n", encoding="utf-8")
+    assert tool.main(args) == 1 and "two markers are missing" in capsys.readouterr().err

@@ -23,12 +23,14 @@ question in hand, write the unreached items to `$L7R_CONTINUE`, commit and stop 
 next in a fresh session. `KEY_CAP_OK='<reason>'` passes it, logged. Glossary terms are not capped.
 
     reserve-prefix.py glossary "<term>"      -> prints the new glossary file's path
-    reserve-prefix.py registry <key>         -> prints the new registry entry's path
+    reserve-prefix.py registry <key> [--url U] [--tags T]  -> prints the new registry entry's path; its stub ends with
+                                             the tags marker (feature 305), a placeholder until --tags gives them
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import datetime
 import fcntl
 import json
@@ -190,9 +192,39 @@ def _sources():  # noqa: ANN202
     return mod
 
 
-def registry_stub(key: str, url: str) -> str:
-    """A registry entry's opening, naming its pointer the way every entry does (`_check_bundle.url_of` reads it)."""
-    return f'<h3 id="{key}"><code>{key}</code></h3>\n<p>({url})</p>\n'
+#: Where the record keeps its source vocabulary, under the clone (feature 305).
+RECORD = Path(".claude/skills/diagram/research")
+#: A registry stub's tags marker before its tags are given: no value is a real one, so `make record` refuses the entry
+#: until it is filled (feature 305 FR-011) - a source cannot reach the site untagged.
+TAGS_PLACEHOLDER = "<!-- tags: period=<period>; region=<region>; kind=<kind> -->"
+
+
+def _source_tags():  # noqa: ANN202 - the engine's own parser, loaded by path: one grammar for the marker, and stdlib-only
+    spec = importlib.util.spec_from_file_location("_source_tags", HERE.parent / ".claude/skills/diagram/l7r/diagram/interactive/record/source_tags.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod  # a dataclass resolves its module by name while the class is made
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def tags_marker(tags: str, root: Path) -> str:
+    """The marker for `TAGS="period=..; region=..; kind=.."`, checked against the clone's `source-tags.json`; refused,
+    naming the allowed values, when a facet is missing or a value unknown (feature 305 FR-011)."""
+    st = _source_tags()
+    try:
+        parsed = st.parse(f"<!-- tags: {tags} -->", "TAGS", st.load_vocabulary(str(root / RECORD)))
+    except st.SourceTagError as e:
+        raise Refusal(str(e)) from None
+    assert parsed is not None
+    return parsed.marker()
+
+
+def registry_stub(key: str, url: str, marker: str = TAGS_PLACEHOLDER) -> str:
+    """A registry entry's opening, naming its pointer the way every entry does (`_check_bundle.url_of` reads it), and
+    its tags marker as its last line (feature 305) - the placeholder until `TAGS=` gives them."""
+    pointer = f"<p>({url})</p>\n" if url else ""
+    return f'<h3 id="{key}"><code>{key}</code></h3>\n{pointer}{marker}\n'
 
 
 def question_stub(key: str) -> str:
@@ -201,7 +233,7 @@ def question_stub(key: str) -> str:
     return f'<h2 id="{key}">TITLE</h2>\n<!-- tags: subject=<subject>; setting=<setting>; level=<level> -->\n<p></p>\n'
 
 
-def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: str | None = None, timeout: float = 30.0, url: str = "") -> Path:
+def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: str | None = None, timeout: float = 30.0, url: str = "", tags: str = "") -> Path:
     """The new file's path, its prefix reserved and a stub written before the lock is released.
 
     With `url` (a registry entry only, feature 288 FR-005) the stub names the pointer and the sources-consulted ledger
@@ -210,8 +242,10 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
         raise Refusal(f"KIND must be one of {sorted(DIRS)}")
     if url and kind != "registry":
         raise Refusal("URL= names a registry entry's source - it is for KIND=registry only")
-    if url and stub is None:
-        stub = registry_stub(key, url)
+    if tags and kind != "registry":
+        raise Refusal("TAGS= are a registry entry's source tags - they are for KIND=registry only")
+    if kind == "registry" and stub is None:
+        stub = registry_stub(key, url, tags_marker(tags, root) if tags else TAGS_PLACEHOLDER)
     if not key.strip():
         raise Refusal("KEY is required - the glossary term, the registry key, or the question's heading id")
     mirror = mirror_of(root) if mirror is None else mirror
@@ -264,6 +298,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--root", default="", help="the clone (default: the repository this runs in)")
     ap.add_argument("--mirror", default="", help="the mirror (default: the clone's grandparent under .clones/)")
     ap.add_argument("--url", default="", help="a registry entry's source: the stub names it and the sources-consulted ledger marks it cited (feature 288)")
+    ap.add_argument("--tags", default="", help='a registry entry\'s source tags, "period=..; region=..; kind=.." (feature 305)')
     ap.add_argument("--check", default="", help="with a path: exit 0 if its prefix is reserved in the ledger, 1 if not")
     args = ap.parse_args(argv)
     if args.root:
@@ -277,7 +312,7 @@ def main(argv: list[str] | None = None) -> int:
         m = re.match(r"(\d+)-", Path(args.check).name)
         return 0 if m and reserved(args.kind, int(m.group(1)), mirror, args.key or None) else 1
     try:
-        path = reserve(args.kind, args.key, root, mirror, url=args.url)
+        path = reserve(args.kind, args.key, root, mirror, url=args.url, tags=args.tags)
     except Refusal as e:
         print(f"reserve: {e}", file=sys.stderr)
         return 2

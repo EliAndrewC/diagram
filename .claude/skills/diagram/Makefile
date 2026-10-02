@@ -572,6 +572,10 @@ record:         ## [docs] build the record's site, research/site/, from its ques
 	@: "GUARD_EDIT_OK: feature 288 FR-005 - after assembling, a filled registry entry marks its URL cited on the sources-consulted ledger (not under CHECK=1, which writes nothing); a new step, nothing loosened"
 	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" mark-filled)
 
+# GUARD_EDIT_OK: feature 305 FR-012 - a new operation, `source-tags-contract`: derive the source vocabulary into the source-applicability contract; nothing loosened.
+source-tags-contract: ## [docs] derive research/source-tags.json's values and explanations into the source-applicability agent's contract (feature 305) - run after editing the vocabulary; a test fails while the block is stale   CHECK=1: write nothing, exit 1 while stale
+	$(RUN).tools.source_tags_contract $(if $(CHECK),--check,)
+
 
 # GUARD_EDIT_OK: feature 301 FR-015 - a new operation, `fragment-move`: a question's fragment renamed or moved with every
 # pointer to it, so a reorder or a retitle never leaves a pointer behind. Nothing loosened.
@@ -1157,7 +1161,8 @@ append: ## [project] append ONE line to a coordination file without reading or p
 reserve: ## [project] reserve the next glossary, registry-entry or question number under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused; feature 303: a question's stub carries a tags marker to fill)   KIND=glossary|registry|question KEY=<term, key or heading id> [KEY_CAP_OK='<reason>']
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 288 FR-005 - an optional URL=, nothing loosened: a registry stub then names its source and the sources-consulted ledger marks it cited.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",)
+# GUARD_EDIT_OK: feature 305 FR-011 - an optional TAGS=, nothing loosened: a registry stub ends with its source tags marker, a placeholder the build refuses until TAGS= gives them.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",) $(if $(TAGS),--tags "$(TAGS)",)
 
 # GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"

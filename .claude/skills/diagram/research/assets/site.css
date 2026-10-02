@@ -25,7 +25,15 @@ nav.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top
 nav.pager a[rel="next"] { text-align: right; margin-left: auto; }
 nav.toc ul { padding-left: 1.2em; }
 section.part > h1 { border-top: 3px double var(--rule); padding-top: 1rem; margin-top: 3rem; }
-section.works h3 { font-size: 1em; margin-bottom: .2rem; }
+section.works h4 { font-size: 1em; margin-bottom: .2rem; }
+/* Feature 305: the works sections and each work's labels; a label's explanation shows in the note box on hover. */
+h3.works-section { margin-top: 1.6rem; padding-bottom: .15rem; border-bottom: 1px solid var(--rule); }
+p.works-section-desc { margin-top: .3rem; font-size: .92em; opacity: .85; }
+p.srctags { margin: .1rem 0 .4rem; display: flex; flex-wrap: wrap; gap: .3rem; }
+span.srctag { font: 12px/1.5 system-ui, sans-serif; padding: 0 .45rem; border: 1px solid var(--rule); border-radius: .7rem;
+  cursor: help; white-space: nowrap; }
+span.srctag-period { border-color: currentColor; font-weight: 600; }
+span.srctag-canon { font-weight: 600; }
 @media (max-width: 52rem) {
   .layout { display: block; }
   #sidebar { position: static; height: auto; max-height: 45vh; border-right: 0; border-bottom: 1px solid var(--rule); }

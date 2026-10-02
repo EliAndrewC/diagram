@@ -217,6 +217,17 @@ changed entry - two agents, dispatched in the same turn (spec 209 D5). The regis
 - **A registry entry explains its work once**: after the citation line, `<p><em>What it is:</em> ...</p>` and
   `<p><em>Why it applies, and its limits:</em> ...</p>`, each one to three sentences, honest about date, place
   and method. A cited key without both fails the build; every list of works cited is derived from them.
+- **Every entry is TAGGED, and its limits are its own** (feature 305, GM 2026-10-02: labels whose tooltips carry *"the
+  standardized explanation of the strengths and limitations inherent to the category of source, in addition to the
+  specific explanation"*). The entry's last line is `<!-- tags: period=a[,b]; region=x[,y]; kind=k -->`, values from
+  `research/source-tags.json`, the first of each facet primary; the GM's campaign notes carry none. PERIOD follows the
+  evidence the record takes, not the publication (a modern study of Edo registers is `premodern`); the cut-offs by region
+  are in the period explanations. `research/source-sections.json` groups every list of works by the primary tags, so
+  regrouping is an edit there alone. The labels carry the category's standard limits, so "Why it applies, and its limits"
+  states only what is SPECIFIC to the work - never "it is a tertiary article", "a tourism page citing no study", "a
+  present-day count used as an anchor", said generically. `make reserve KIND=registry KEY=<k> URL=<u> TAGS="period=..;
+  region=..; kind=.."` writes the marker; `make record CHECK=1` refuses an entry untagged, tagged with an unknown value,
+  or whose tags no section takes. A vocabulary edit is followed by `make source-tags-contract`.
 - **A source is judged before it is used**: the **`source-applicability`** agent on every new or changed write-up,
   and BEFORE a source's numbers, claims or details reach a map or a rule (a physical task's fifth box). A
   NOT-APPLICABLE source is recorded and listed for the GM, and the assertions resting on it keep their label until the

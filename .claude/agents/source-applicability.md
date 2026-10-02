@@ -103,7 +103,7 @@ definition.
 ## Input
 
 Either (a) one or more REGISTRY KEYS with their `research/sources/` entries - the citation line, the two
-write-ups, the `Used for:` line - and, when given, the research pages and footnotes that cite each (what we use it to
+write-ups, the `Used for:` line, and the TAGS marker on the entry's last line (feature 305) - and, when given, the research pages and footnotes that cite each (what we use it to
 look up); or (b) a NEW source not yet registered: its citation, its URL, and the claim, number or detail a session
 is about to take from it. Two moments, one procedure.
 
@@ -133,12 +133,52 @@ is about to take from it. Two moments, one procedure.
    applies, and its limits:` state the limits you found - **HONEST** (each limit that matters is there),
    **MISSING** (name the limit it omits), or **OVERSTATED** (it disclaims more than is true, or calls a directly
    applicable source a stand-in)? A write-up that says a source stands in because nothing closer could be read is
-   honest only if that is so; say when you know of a closer public source.
+   honest only if that is so; say when you know of a closer public source. **The labels count** (feature 305): each
+   tag shows the reader a label whose standard explanation is in "The labels" below, so a limit a label's explanation
+   states is STATED - judge MISSING against the write-up and its labels together. A sentence or clause that only
+   restates a label's standard explanation (that it is a tertiary article, a tourism page citing no study, a
+   present-day count used as an anchor, said generically) is **RESTATES**: name it, and end with an EDIT deleting it.
+   A limit specific to this work (its one place, its date, its scale, a figure it does not state, a specific error)
+   is never RESTATES.
+5. Judge the TAGS (feature 305): each facet RIGHT or WRONG against the entry and the source. PERIOD follows the
+   evidence the record takes from the work, not the publication date (a modern study of Edo registers is
+   `premodern`), with each region's cut-off as the period explanations below state it; several periods are listed
+   primary first, the one most uses rest on. REGION is where the evidence comes from, not the page's language. KIND
+   is the publication. A WRONG tag names the facet, the right value and why, and ends with an EDIT of the marker line.
+
+## Tags (feature 305)
+
+The GM, 2026-10-02: tags on the sources so the works are grouped by them, and labels with tooltips carrying *"the
+standardized explanation of the strengths and limitations inherent to the category of source, in addition to the
+specific explanation"* - so a write-up does not repeat its category's limits. The marker is the entry's last line,
+`<!-- tags: period=a[,b]; region=x[,y]; kind=k -->`, the first value of a facet primary. The GM's own campaign notes
+carry none. Every value and the explanation its label shows, derived from `research/source-tags.json` by
+`make source-tags-contract` (a test fails while this block is stale):
+
+<!-- source-tags: DERIVED by make source-tags-contract from research/source-tags.json - edit the vocabulary, never here -->
+- `period=premodern` - **Premodern**: Evidence from before the region's industrial era - the period the setting is modeled on, so its forms and its numbers apply most directly. The cut-off is where factory goods, foreign trade and state reform began to reach the countryside: in Japan the Meiji Restoration of 1868; in China about 1895, when treaty-port factories and railways began; in Korea 1876, when its ports were opened; in Vietnam, Ryukyu and Taiwan the start of colonial rule or annexation (the French conquest of about 1860-1885, 1879, 1895); in Europe about 1800, with enclosure, new crops and the first factories; elsewhere, when railways, factory goods or colonial cash crops reached the countryside. The tag follows the evidence, not the publication: a modern study of Edo-period village registers is premodern evidence. A work about no one place (the General region) takes the period of its evidence by the rule of the regions that evidence comes from; one about facts that do not change with the era is Not period-bound.
+- `period=modern-preindustrial` - **Modern, preindustrial**: Evidence from the modern era, recorded while farming was still done by hand and with draft animals: from each region's premodern cut-off until about 1950 (about 1955 in Japan). Village forms, field layouts and building ways carry over from earlier times. But the countryside already had cheap factory iron for tools, kerosene, purchased fertilizer, railways tying it to markets, modern land surveys and state reforms such as Japan's land tax of 1873, and populations were at or near their peak. So densities, plot sizes and yields can run higher than in the setting. The period ends where land reform, collectivization, war or the spread of the tractor and chemical fertilizer remade the village - about 1950 in China, Korea, the rest of East Asia, Europe and most places elsewhere, about 1955 in Japan.
+- `period=present-day` - **Present day**: The landscape since about 1950 (about 1955 in Japan): after land reform, mechanization, chemical fertilizer and the consolidation of fields into large regular plots. A present-day source is good evidence that a form exists and how it is laid out, especially where it survives from earlier times. Its counts and sizes describe a modern economy and a modern population, so the record uses them as anchors, not as measurements of the past.
+- `period=timeless` - **Not period-bound**: Facts that do not change with the era: how a tree grows, how water holds in a ditch, what a material weighs. They apply to the setting as they apply to any time, and whatever limits remain are the source's own, stated in its write-up. A work about one period's practice is never this tag, even when written in general terms: it takes the period of its evidence.
+- `region=japan` - **Japan**: Japan, one of the two models for Rokugan. Its castles, shrines, paddies and farmhouses are drawn on directly. Japan varies by region, from snowy Hokuriku to subtropical Kyushu, so a source about one prefecture speaks for that kind of country first.
+- `region=china` - **China**: China, the other model for Rokugan, especially its walled cities, counties and imperial government. China is vast: the dry wheat and millet north and the wet rice south farm and build very differently. A source about one region speaks for that region first.
+- `region=korea` - **Korea**: Korea, a close analog: East Asian rice farming, village groves and Confucian institutions shared with China and Japan, but with its own building traditions, such as heated floors and its own house plans. The record uses it where the practice is shared, often where no Japanese or Chinese source could be read.
+- `region=east-asia-other` - **Other East Asia**: The wider region: the Ryukyu Islands, Taiwan, Vietnam and the borderlands. These are analogs that share rice farming and many practices with China and Japan, under their own climates and traditions. The record uses them where the practice is shared.
+- `region=europe` - **Europe**: Europe. It has different crops (wheat and the heavy plow rather than rice and the hoe), different building traditions and different law, so it says little about how an East Asian place looked. The record uses it only for constraints that cross cultures: how a moat holds water, how large a tannery's pits are, how far a bell carries.
+- `region=elsewhere` - **Elsewhere**: Outside East Asia and Europe: South and Southeast Asia beyond Vietnam, the Middle East, Africa, the Americas. Like Europe, it is used only for constraints that cross cultures, and its forms are not the setting's.
+- `region=general` - **General**: Not about one place: botany, hydraulics, materials, or comparisons across many regions. It applies wherever its facts hold, and any regional limit is stated in the write-up.
+- `kind=primary` - **Primary**: A document of the time itself: a gazetteer, a register, a land survey, a treatise, a period map or picture. It is the closest the record gets to the facts. But it was written for its own purposes (a tax count, an official's report, an ideal), so it can idealize, under-count or follow conventions of its own. It is often read in translation.
+- `kind=scholarship` - **Scholarship**: A peer-reviewed article, an academic book, a thesis or an excavation report. Its methods and its sources are stated, so its claims can be checked. But it is one study, often of one place, and its conclusions are its author's interpretation.
+- `kind=reference` - **Reference**: An encyclopedia or dictionary, including Wikipedia. It is broad, summarized and usually right about what a thing is. But it is secondhand: Wikipedia is edited by its community and can change, and a figure it gives is only as good as the reference behind it. The record relies on it for what a thing is, and for a number only where its own source carries the number.
+- `kind=institutional` - **Institutional**: A museum, a government office, a preservation society or a university's public page. It is generally careful and often first-hand about its own site or collection. But it is written for visitors, so it can simplify, rarely cites its evidence, and may describe a restoration rather than the original.
+- `kind=popular` - **Popular**: A blog, a tourism board, a travel account or a news story. It is readable, often first-hand, and often has photographs of what it describes. But it rarely cites a study, a promotional page shows its subject at its best, and its numbers are usually round.
+- (no marker) - **Setting canon**: The GM's own campaign notes. They are facts of the setting, not evidence about the real world, so they govern wherever they speak, and no applicability judgment applies to them.
+<!-- /source-tags -->
 
 ## Output
 
 One block per source: `key` - kind / authors / date / place and era described / scale / method - what we use it
 for - verdict (APPLICABLE / APPLICABLE-WITH-LIMITS with each limit / NOT-APPLICABLE with why) - `What it is:`
-ACCURATE or INACCURATE (what is wrong) - limits HONEST / MISSING (which) / OVERSTATED (which). Put every
-NOT-APPLICABLE first, then every MISSING. Then a summary table: counts of each verdict, the hosts that refused.
+ACCURATE or INACCURATE (what is wrong) - limits HONEST / MISSING (which) / OVERSTATED (which) / RESTATES (which) -
+tags RIGHT / WRONG (facet: should be X, why). Put every NOT-APPLICABLE first, then every MISSING, then every WRONG tag. Then a summary table: counts of each verdict, the hosts that refused.
 Never fix anything; never write to a repository file. Report what you found.
