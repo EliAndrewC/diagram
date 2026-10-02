@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-02T14:57:09Z",
+  "target": "entry-gate",
+  "commit": "8e104c130",
+  "why": "the drawing page's mark colors corrected to what is drawn (jade strokes over a light jade wash); no modal of these three states the mark's colors or fill, so none is now wrong"
+}

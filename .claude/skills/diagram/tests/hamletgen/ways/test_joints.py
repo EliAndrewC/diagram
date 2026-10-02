@@ -2,6 +2,8 @@
 
 import math
 
+import pytest
+
 from l7r.diagram.hamletgen.ways.joints import joints, keeps_the_web, oriented, pulled, straighten_joints, tee, unhooked
 
 from ._builders import _webbed
@@ -211,3 +213,50 @@ def test_a_connector_starting_on_the_exit_strip_is_not_moved_off_it_by_a_hairpin
     s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
     s.M["access_exit"] = [[2300.0, 25.3], [2055.3, 25.3]]
     assert fold_the_connector_hairpin(s) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
+
+
+def test_a_joint_moved_back_drops_its_own_vertex_from_either_side() -> None:
+    from l7r.diagram.hamletgen.ways.joints import moved_back
+
+    x, y = [(0.0, 0.0), (10.0, 0.0), (12.0, 5.0)], [(12.0, 5.0), (20.0, 0.0), (30.0, 0.0)]
+    assert moved_back(x, y) == [([(0.0, 0.0), (10.0, 0.0)], [(10.0, 0.0), (20.0, 0.0), (30.0, 0.0)]), ([(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)], [(20.0, 0.0), (30.0, 0.0)])]
+    assert moved_back(x[1:], y[1:]) == [], "two-point lanes give nothing up"
+
+
+def test_a_z_across_a_joint_is_mended_by_moving_the_joint_back_or_left_where_nothing_is_clear(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_joint_moved_back` (feature 308): the first clear move that keeps the web is committed to both records, in their own
+    orientation; a second record refused puts the first back; nothing clear, nothing changed."""
+    from l7r.diagram.hamletgen.ways import joints as J
+
+    x, y = [(0.0, 0.0), (10.0, 0.0), (12.0, 5.0)], [(12.0, 5.0), (20.0, 0.0), (30.0, 0.0)]
+    lanes = [{"pts": [list(q) for q in x[::-1]]}, {"pts": [list(q) for q in y]}]  # lane 0 recorded from the joint out (end 0)
+    commits: list[tuple[int, list]] = []
+    refuse = {"lane": None}
+
+    def commit(lanes_, m, pts, *a, **k):  # type: ignore[no-untyped-def]
+        commits.append((m, pts))
+        return refuse["lane"] != m
+
+    class S:
+        def reink_lane(self, i: int) -> None: ...
+
+    monkeypatch.setattr(J, "commit_lane", commit)
+    monkeypatch.setattr(J, "admits_lane", lambda s: None)
+    monkeypatch.setattr(J, "keeps_the_web", lambda *a: True)
+    monkeypatch.setattr(J, "_clear_link", lambda *a: True)
+    assert J._joint_moved_back(S(), lanes, (0, 0, 1, 0), x, y, [], [], [], [])  # type: ignore[arg-type]
+    assert commits[0][0] == 0 and commits[0][1] == [[10.0, 0.0], [0.0, 0.0]], "lane 0 shortened, in its own orientation"
+    assert commits[1] == (1, [[10.0, 0.0], [20.0, 0.0], [30.0, 0.0]]), "lane 1 started from lane 0's new end"
+    commits.clear()
+    refuse["lane"] = 1
+    assert not J._joint_moved_back(S(), lanes, (0, 0, 1, 0), x, y, [], [], [], [])  # type: ignore[arg-type]
+    assert [m for m, _ in commits].count(0) >= 2, "the first record put back when the second is refused"
+    commits.clear()
+    refuse["lane"] = 0
+    assert not J._joint_moved_back(S(), lanes, (0, 0, 1, 0), x, y, [], [], [], [])  # type: ignore[arg-type]
+    monkeypatch.setattr(J, "keeps_the_web", lambda *a: False)
+    assert not J._joint_moved_back(S(), lanes, (0, 0, 1, -1), x, y, [], [], [], [])  # type: ignore[arg-type]
+    monkeypatch.setattr(J, "_bends_badly", lambda pts: True)
+    assert not J._joint_moved_back(S(), lanes, (0, -1, 1, 0), x, y, [], [], [], []), "a walk still bent: not moved"  # type: ignore[arg-type]
+    monkeypatch.setattr(J, "_clear_link", lambda *a: False)
+    assert not J._joint_moved_back(S(), lanes, (0, -1, 1, 0), x, y, [], [], [], []), "nothing clear: nothing changed"  # type: ignore[arg-type]

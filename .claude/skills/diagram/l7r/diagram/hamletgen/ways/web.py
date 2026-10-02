@@ -193,12 +193,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             # Judging an arm against that says "reaches nothing" about an arm running down the middle
             # of the cluster, because the lanes that would justify it are three passes away. The
             # houses it was derived from are already on the map, and they are what an arm exists for.
-            if len(arm) >= 2:
-                # the skeleton is drawn before anything serves the houses, so its ends are trimmed to the bar the gate
-                # asks of a lane end (feature 227: two of Inashiro's arms ended 81-97 ft from the nearest house)
-                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
-            if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT:
-                arm = []
+            arm = served_arm(s, arm)
         arm = s.trim_off_marsh(arm)
         if len(arm) >= 2:
             if _arm_crossing_accidental(arm, raw_arms[ai], kept):
@@ -366,6 +361,16 @@ def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) 
         if networks(gone | {i}) <= networks(gone):
             gone.add(i)
     return sorted(gone)
+
+
+def served_arm(s: Settlement, arm: Poly) -> Poly:
+    """A skeleton arm with its ends trimmed to service, or none where too little is left. The skeleton is drawn before anything
+    serves the houses, so its ends are trimmed to the bar the gate asks of a lane end (feature 227: two of Inashiro's arms
+    ended 81-97 ft from the nearest house), against the houses alone; an arm left under `_WEB_MIN_FT` is no arm. Lifted from
+    `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs."""
+    if len(arm) >= 2:
+        arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
+    return [] if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT else arm
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
@@ -744,6 +749,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...and its wall-clock seconds stay out of the manifest: a timing written there rewrote all five pool maps on every
     # regeneration with nothing on them moved (287, 2026-09-29); the rounds and the lane counts are the record.
     s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
+    # ...AND THE JOINTS READ AS ONE WAY ONCE MORE, where the settle laid a Z at one (feature 308, Inashiro on the merged engine:
+    # a crossing squared near the field spur's end turned it back against the link joined there - `square_every_crossing`
+    # runs after the joint pass above); a joint it rewrites is settled again
+    if straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water):
+        s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
     # THE CORRIDORS HAVE SERVED (feature 287 M8): every way the seating held them for is drawn, so the registry's reservation
     # of them ends here - the notice board may stand beside a way drawn along one, as beside any way
     s.standing.reserved.release_corridors()

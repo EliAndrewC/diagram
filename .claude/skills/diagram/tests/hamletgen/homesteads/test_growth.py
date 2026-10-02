@@ -1,0 +1,199 @@
+"""Feature 308, plan D1-D2 (FR-003, FR-004, FR-007): a nucleated cluster grown from its first house."""
+
+from __future__ import annotations
+
+import math
+from types import SimpleNamespace
+from typing import Any
+
+import pytest
+
+from l7r.diagram.hamletgen.consts import SUN_CORRIDOR_FT
+from l7r.diagram.hamletgen.homesteads import growth
+from l7r.diagram.hamletgen.homesteads.growth import GROW_LEVELS, box_reach, footprint, grow_gap, grow_the_margin, seat_toward
+
+
+def test_a_box_reaches_from_its_house_to_each_side() -> None:
+    assert box_reach((10.0, 10.0), (12.0, 15.0, 20.0, 30.0)) == (8.0, 12.0, 10.0, 20.0)
+
+
+def test_the_least_distance_parts_the_two_footprints_on_the_nearer_axis() -> None:
+    standing, new = (10.0, 20.0, 30.0, 40.0), (5.0, 6.0, 7.0, 8.0)
+    assert seat_toward((0.0, 0.0), standing, new, 0.0, 2.0) == pytest.approx((27.0, 0.0)), "east: its east reach and the new west"
+    assert seat_toward((0.0, 0.0), standing, new, math.pi, 2.0) == pytest.approx((-18.0, 0.0)), "west"
+    assert seat_toward((0.0, 0.0), standing, new, math.pi / 2, 2.0) == pytest.approx((0.0, 49.0)), "south: the sun's reach and the new north"
+    assert seat_toward((0.0, 0.0), standing, new, -math.pi / 2, 2.0) == pytest.approx((0.0, -40.0)), "north"
+    q = seat_toward((0.0, 0.0), standing, new, math.pi / 4, 0.0)
+    assert q == pytest.approx((25.0, 25.0)), "diagonal: the boxes part when the east axis does (25 / cos 45 along it)"
+
+
+def _s() -> Any:
+    return SimpleNamespace(px=lambda ft: ft)  # one foot a pixel
+
+
+def test_a_footprint_holds_the_envelope_the_wood_and_the_sun_its_yard_and_beds_are_owed() -> None:
+    rec = {
+        "x": 0.0,
+        "y": 0.0,
+        "geom": {"bbox": (0.0, 10.0, 60.0, 60.0), "boxes": {"yard": (0.0, 20.0, 20.0, 10.0), "gardens": [(25.0, 30.0, 10.0, 10.0)]}},
+        "wood_share": {"seats": [[0.0, -50.0], [-40.0, 0.0]]},
+    }
+    w, e, n, so = footprint(_s(), rec)
+    assert (w, e, n) == (52.0, 30.0, 62.0), "the envelope, widened west and north by the wood seats and a clump"
+    assert so == 35.0 + SUN_CORRIDOR_FT + 2.0, "south: the farther south edge (the bed's, 35) plus the sun corridor and 2 ft"
+    bare = {"x": 0.0, "y": 0.0, "geom": {"bbox": (0.0, 0.0, 10.0, 10.0)}}
+    assert footprint(_s(), bare) == (5.0, 5.0, 5.0, 5.0), "no yard, no beds, no wood: the envelope alone"
+
+
+def test_the_gap_between_footprints_is_a_paths_whole_strip() -> None:
+    assert grow_gap(_s()) == 2 * 7.0 + 2.0
+
+
+class _Ground:
+    """A stand-in settlement: a placer that seats any homestead at least `room` from every other and inside `ring`."""
+
+    def __init__(self, room: float, ring: float = 1e9, first: bool = True) -> None:
+        self.room, self.ring = room, ring
+        self.M: dict[str, Any] = {"houses": []}
+        self._seat_search: dict[str, int] = {"candidates": 0}
+        self._seat_region = None
+        self.first = first
+        self.asked: list[tuple[float, float]] = []
+
+    def px(self, ft: float) -> float:
+        return ft
+
+    def _hjit(self, x: float, y: float, salt: float) -> float:
+        return 0.5
+
+    def _bundle_envelope(self, x: float, y: float, w: float, h: float, shed: bool = False) -> tuple[float, float, float, float]:
+        return (x, y, 40.0, 40.0)
+
+    def try_place(self, x: float, y: float, _kind: str) -> bool:
+        self.asked.append((x, y))
+        if math.hypot(x, y) > self.ring or any(math.hypot(x - h["x"], y - h["y"]) < self.room for h in self.M["houses"]):
+            return False
+        self.M["houses"].append({"x": x, "y": y, "geom": {"bbox": (x, y, 40.0, 40.0), "boxes": {}}})
+        return True
+
+
+def _plan(n: int) -> Any:
+    return SimpleNamespace(spec=SimpleNamespace(households=n), seat={"cx": 0.0, "cy": 0.0})
+
+
+def test_the_cluster_grows_from_its_first_house_nearest_the_seat_first(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0), (500.0, 0.0)])
+    s = _Ground(room=40.0)
+    assert grow_the_margin(s, _plan(6), 0, 1e9, (46.0, 28.0)) == 6  # type: ignore[arg-type]
+    assert s.asked[0] == (0.0, 0.0), "the first house on the free ground nearest the seat"
+    near = [math.hypot(h["x"], h["y"]) for h in s.M["houses"][1:]]
+    assert max(near) < 100.0, "every next house a footprint away from one standing, not across the margin"
+    assert s._seat_search["grow_took"] == 6 and s._seat_search["grow_level"] == 0 and s._seat_search["grow_offered"] >= 6
+
+
+def test_a_margin_whose_seats_run_dry_widens_then_is_reported_short(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Ground(room=40.0, ring=120.0)  # the ground ends 120 from the seat
+    got = grow_the_margin(s, _plan(200), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    assert 1 < got < 200, "seated what the ground holds, then short"
+    assert s._seat_search["grow_level"] == len(GROW_LEVELS) - 1, "every widening tried before giving up"
+    s2 = _Ground(room=40.0)
+    assert grow_the_margin(s2, _plan(5), 0, 30.0, (46.0, 28.0)) == 1, "nothing offered beyond the form's bound"  # type: ignore[arg-type]
+
+
+def test_a_margin_with_no_free_ground_or_nothing_owed_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [])
+    s = _Ground(room=40.0)
+    assert grow_the_margin(s, _plan(5), 0, 1e9, (46.0, 28.0)) == 0 and s._seat_search["grow_took"] == 0  # type: ignore[arg-type]
+    assert grow_the_margin(_Ground(room=40.0), _plan(0), 0, 1e9, (46.0, 28.0)) == 0  # type: ignore[arg-type]
+
+
+def test_the_first_seat_asks_the_seat_region(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(900.0, 0.0), (0.0, 0.0)])
+    s = _Ground(room=40.0)
+    s._seat_region = SimpleNamespace(offer=lambda seats: [q[0] < 500.0 for q in seats])  # type: ignore[assignment]
+    grow_the_margin(s, _plan(1), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    assert s.asked == [(0.0, 0.0)], "the seat the region refuses is never offered"
+
+
+def test_a_seat_is_moved_out_until_its_own_envelope_rolled_there_clears_and_dropped_when_it_never_does() -> None:
+    from l7r.diagram.hamletgen.homesteads.growth import SETTLE_TRIES, settled_seat
+
+    standing, guess = (10.0, 10.0, 10.0, 10.0), (5.0, 5.0, 5.0, 5.0)
+    assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, lambda q: guess) == pytest.approx((15.0, 0.0)), "its roll fits the guess"
+    big = (9.0, 5.0, 5.0, 5.0)  # rolled where it stands, it reaches 9 west
+    assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, lambda q: big) == pytest.approx((19.0, 0.0)), "moved out by the four"
+    calls: list[int] = []
+
+    def grows(q: tuple[float, float]) -> tuple[float, float, float, float]:
+        calls.append(1)
+        return (q[0], 5.0, 5.0, 5.0)  # always reaching past where it was placed
+
+    assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, grows) is None and len(calls) == SETTLE_TRIES
+
+
+def test_the_next_households_reach_is_rolled_with_its_own_lot_and_its_parts_taken_down_after() -> None:
+    from l7r.diagram.hamletgen.homesteads.growth import household_reach
+
+    asked: list[tuple[float, float, bool, tuple]] = []
+
+    class Lots:
+        def lot(self, k: int) -> tuple[float, float, bool, bool]:
+            return (1.2, 1.1, True, False)
+
+        def fixtures_of(self, k: int) -> tuple[str, ...]:
+            return ("privy",)
+
+    s = _Ground(room=40.0)
+    s._lots = Lots()  # type: ignore[attr-defined]
+
+    def envelope(x: float, y: float, w: float, h: float, shed: bool = False) -> tuple[float, float, float, float]:
+        asked.append((w, h, shed, tuple(getattr(s, "_household_fixtures", ()) or ())))
+        return (x, y, 40.0, 60.0)
+
+    s._bundle_envelope = envelope  # type: ignore[method-assign]
+    assert household_reach(s, (10.0, 20.0), (99.0, 99.0)) == (20.0, 20.0, 30.0, 30.0)  # type: ignore[arg-type]
+    assert asked == [(46 * 1.2, 28 * 1.1, True, ("privy",))], "its own house from the size ladder, its kura, its fixtures set"
+    assert s._household_fixtures == () and s._household_well is False, "...and taken down after"
+    s2 = _Ground(room=40.0)
+    s2._bundle_envelope = lambda x, y, w, h, shed=False: asked.append((w, h, shed, ())) or (x, y, 10.0, 10.0)  # type: ignore[method-assign]
+    household_reach(s2, (0.0, 0.0), (99.0, 98.0))  # type: ignore[arg-type]
+    assert asked[-1] == (99.0, 98.0, True, ()), "no lots: the largest house, the kura reserved"
+
+
+def test_every_settled_seat_clears_the_standing_footprint_by_the_gap_with_its_own_envelope_there() -> None:
+    """FR-004's "never closer", as a property: in every direction and ring, with an envelope that changes from seat to seat
+    (as a household's rolled yard and parts do), the seat settled on clears the standing footprint by the gap - its own
+    envelope, rolled where it stands, and the standing one part on one axis by at least `gap`."""
+    from l7r.diagram.hamletgen.homesteads.growth import settled_seat
+
+    standing = (30.0, 40.0, 50.0, 90.0)
+    gap = 16.0
+
+    def reach_at(q: tuple[float, float]) -> tuple[float, float, float, float]:
+        k = (int(abs(q[0])) * 7 + int(abs(q[1])) * 13) % 17
+        return (20.0 + k, 25.0 + (k * 3) % 11, 18.0 + (k * 5) % 13, 30.0 + (k * 2) % 9)
+
+    seen = 0
+    for i in range(48):
+        ang = math.radians(7.5 * i)
+        for scale in (1.0, 1.12, 1.5, 2.0):
+            q = settled_seat((0.0, 0.0), standing, (20.0, 25.0, 18.0, 30.0), ang, gap, scale, reach_at)
+            if q is None:
+                continue
+            seen += 1
+            w, e, n, s = reach_at(q)
+            apart_x = max(q[0] - w - standing[1], -standing[0] - (q[0] + e))
+            apart_y = max(q[1] - n - standing[3], -standing[2] - (q[1] + s))
+            assert max(apart_x, apart_y) >= gap - 1e-6, (ang, scale, q)
+    assert seen > 100, "the property held over the seats it settled, and most settled"
+
+
+def test_a_moved_box_keeps_the_growths_distance_from_its_source_or_is_refused() -> None:
+    from l7r.diagram.hamletgen.homesteads.growth import keeps_its_distance
+
+    standing = (10.0, 10.0, 10.0, 30.0)  # reaching 10 west, east, north and 30 south of (0, 0)
+    assert keeps_its_distance((36.0, 0.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0), "16 px east of its east edge"
+    assert not keeps_its_distance((35.0, 0.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0), "15: moved too near"
+    assert keeps_its_distance((0.0, 56.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0), "south, past the sun's reach"
+    assert keeps_its_distance((-36.0, 0.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0) and keeps_its_distance((0.0, -36.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0)
