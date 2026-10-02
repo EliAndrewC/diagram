@@ -1,99 +1,119 @@
 {
  "feature": "304-homesteads-at-scale",
- "plan_sha256": "fb00d9af60f99d700545b395e8cdc23d50447b2b4d2bb66139cac50e61d1e411",
- "reviewed": "2026-10-01",
+ "plan_sha256": "2b1535df8f4ea1f86800567fe5551a6541177ecc93ac80e2a749ec63f0ff26a1",
+ "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "perf_snapshot.measure takes households; SCALING_SIZES (10, 20, 40); scaling rows per (size, seed) with stages, houses, placer_calls, refused",
+   "summary": "perf_snapshot.measure takes households; SCALING_SIZES (10, 20, 40); scaling rows per (size, seed)",
    "class": "within",
-   "why": "FR-001 and the spec's Key Entities (placer_calls counts try_place calls, i.e. seats offered); refusal recorded, seeds never swapped, per the spec's Edge Cases"
+   "why": "FR-001 and Key Entities; unchanged since round 1"
   },
   {
    "id": "D2",
-   "summary": "beyond_the_band() ContextVar entered only by perf_snapshot.measure; tests that 40 is refused outside it and no pool file names it",
+   "summary": "beyond_the_band() entered only by perf_snapshot.measure",
    "class": "within",
-   "why": "FR-003 and US1 scenario 3; the tests only enforce what was asked"
+   "why": "FR-003 and US1 scenario 3; unchanged since round 1"
   },
   {
    "id": "D3",
-   "summary": "evaluate_scaling bands each size against its own history by the reference's rules; no-baseline line for old snapshots; band owed is the max over reference and legs",
+   "summary": "evaluate_scaling bands each size against its own history; no-baseline for old snapshots",
    "class": "within",
-   "why": "FR-002, and US1's purpose that a village-size slowdown cannot land unseen"
+   "why": "FR-002; unchanged since round 1"
   },
   {
    "id": "D4",
-   "summary": "SC-001's seeded quadratic fault as a unit test over synthetic snapshots; live plumbing proven by the 304-scale-base snapshot",
+   "summary": "SC-001's seeded quadratic fault as a unit test",
    "class": "within",
-   "why": "tests the property SC-001 names (the 40 leg's band rises, the reference's does not); a verification method, not a scope change"
+   "why": "verification of SC-001; unchanged since round 1"
   },
   {
    "id": "D5",
-   "summary": "AccessTree.targets answered from a PointGrid ring search with the scan's (distance, position) order; scan fallback",
+   "summary": "AccessTree.targets from a PointGrid ring, exact (as first planned)",
    "class": "within",
-   "why": "FR-004 literally, with the same targets in the same order"
+   "why": "FR-004 literally; superseded by Amendment 1's A1"
   },
   {
    "id": "D6",
-   "summary": "_commons_pocket_clear asks a PointGrid of paddy boxes instead of every paddy outline; same predicate",
+   "summary": "_commons_pocket_clear asks a PointGrid of paddy boxes; same predicate",
    "class": "within",
-   "why": "FR-005 covers the clearance checks the profile names; this feature's seed-47 sampler names it (16.7% of the stage); output-identical, the request's safe lever. It does not run on seed 25 (byre_form courtyard, measured by this reviewer), so it is an addition beside the seed-25 figure, not a substitute that drops something FR-005 requires"
+   "why": "FR-005; kept by Amendment 1 on its measurement (seed 47 55.6 -> 48.8-49.9 s, research R10)"
   },
   {
-   "id": "D7a",
-   "summary": "corridor_bars and _standing_clear left as they are",
+   "id": "D7",
+   "summary": "corridor_bars, _standing_clear, surface_water_dist, FreeGround._samples left alone",
    "class": "within",
-   "why": "both already ask an index (the seats' cell grid; placed_reach), confirmed by reading access.py:287 and wood_share.py:316; FR-005's 'ask an index in place of scanning all of them' is already true of them"
-  },
-  {
-   "id": "D7b",
-   "summary": "surface_water_dist left unindexed",
-   "class": "within",
-   "why": "it is the watering-reach measure behind needs_pocket and the wells, not a standing-ground or corridor clearance check, so FR-005 does not reach it; its per-call cost does not grow with the houses"
-  },
-  {
-   "id": "D7c",
-   "summary": "FreeGround._samples left alone",
-   "class": "within",
-   "why": "numpy sampling of the lines asked, not a scan over all segments; not an FR-005 clearance scan"
+   "why": "ruled in round 1 (D7a-c): the first two already ask an index, the last two are not FR-005 clearance scans"
   },
   {
    "id": "D8",
-   "summary": "equivalence tests with the old body as oracle, a one-roll spy, the pool byte-identical and the cohort counts identical",
+   "summary": "equivalence tests, one-roll spy, pool byte-identical, cohort counts identical",
    "class": "within",
-   "why": "SC-005 and US2's acceptance scenarios; enforcement of what was asked"
+   "why": "SC-005 and US2 scenarios; enforcement of what was asked"
   },
   {
    "id": "D9",
-   "summary": "three forms measured on top of P2: A region re-asked, A' region re-asked with seated homesteads painted, B line-of-sight reach region",
+   "summary": "forms A, A' and B measured on top of P2",
    "class": "within",
-   "why": "A and A' are both FR-006's first named form ('the seat region kept current as houses land', the request's 'update the seat region as houses land'); A' is the most literal reading of US3's 'ground a house just seated now covers'. B is the second named form. No third form"
+   "why": "FR-006's two named forms (A and A' the first, B the second); no third form"
   },
   {
    "id": "D10",
-   "summary": "keep the fastest form at 40 that seats at least the base's households everywhere and is not slower at 15; if none is faster at 40 than P2 alone, withdraw all and land P1 and P2",
+   "summary": "keep the fastest form at 40 by summed time; if none beats P2 alone, withdraw all and land P1 and P2",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-006 says the pass MUST stop offering dead seats, and the last clause lets the feature land with none. Applying FR-006 literally there would defeat the request's own purpose: the GM asked for performance gains, so building a pruning that is no faster only moves maps and buys nothing. The spec already expects this outcome (FR-007 'including any lever withdrawn'; a miss recorded and raised, not pursued). The 15-household condition is SC-004 itself"
+   "why": "ruled in round 1: building a pruning that buys no speed defeats the request's purpose (performance) while moving maps; the 15-household condition is SC-004"
   },
   {
    "id": "D11",
-   "summary": "red-first tests of the built form, and placer calls per house seated below the base's",
+   "summary": "red-first tests of the built form; placer calls per house below the base's",
    "class": "within",
-   "why": "US3 acceptance scenario 1; enforcement"
+   "why": "US3 scenario 1; moot once A3 withdraws every form"
   },
   {
    "id": "D12",
-   "summary": "dev/performance.md section with R1's table, each lever's wall-clock gain, the withdrawn forms",
+   "summary": "dev/performance.md section with each lever's gain and the withdrawn ones",
    "class": "within",
-   "why": "FR-007"
+   "why": "FR-007; present at dev/performance.md line 964, naming both withdrawals"
   },
   {
    "id": "D13",
-   "summary": "memory note on the hamlet profile updated",
+   "summary": "memory note updated",
    "class": "within",
-   "why": "bookkeeping; decides nothing the spec left open"
+   "why": "bookkeeping"
+  },
+  {
+   "id": "A1",
+   "summary": "Amendment 1: D5 withdrawn - the ring index for AccessTree.targets, exact but 1-4% slower than the scan at 40 households on all four seeds (8 of 8 alternated pairs, research R10); the scan restored with the attempt recorded at targets; FR-004's index not shipped; the miss raised with the GM",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-004 is not met, so this narrows the spec. It passes the third test: applying FR-004 literally would defeat the request's own stated purpose, concretely. The GM's question was 'improve the performance of our scripted hamlet generation ... make sure there's no more low hanging fruit', and the lever the GM accepted was proposed as 'index targets ... (output-identical, the safest lever)' - an index offered solely as a speed lever. Shipping it makes every 40-household roll measured slower and the code more complex, i.e. the opposite of the one thing the request asks for; the request carries no purpose (map change, structure, style) that a slower index would still serve. This is not cost-avoidance or completing the GM's thought: the index was built, proven exact (R7), and withdrawn on a wall-clock measurement taken base and clone back to back as FR-007 requires. The spec already contemplates it (FR-007 'including any lever withdrawn'; SC-002/SC-003 misses recorded and raised, not pursued). One item, one class: only targets is withdrawn; FR-005's index (D6) ships. Condition: the GM is told FR-004 was not shipped and why, in the same raise as SC-002/SC-003 (the plan commits to this; CLAUDE.md requires it)."
+  },
+  {
+   "id": "A2",
+   "summary": "Amendment 1: D6 kept",
+   "class": "within",
+   "why": "FR-005 as planned"
+  },
+  {
+   "id": "A3",
+   "summary": "Amendment 1: P3's three forms withdrawn under D10 (summed homesteads at 40: A 113.7, A' 198.6, B 82.7 against P2 77.0 s; research R10); T32-T34 dropped",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "D10 applied as approved in round 1, by the rule fixed before measuring. Checked separately per form: A and A' are slower on the sum and on most seeds. B is faster on three seeds (4, 39, 47) but 2.3x slower on seed 25 (17.90 vs 7.79 s), which loses the sum. That counts as slower: a form that more than doubles one of the fixed reference seeds is the village-size tail the scaling leg exists to catch, and the spec keeps slow seeds in the set on purpose (Edge Cases). Withdrawing B serves the purpose; keeping it would trade a mean gain for a tail. Raise B's split result with the GM, since it is the closest miss."
+  },
+  {
+   "id": "A4",
+   "summary": "Amendment 1: two pre-existing cohort failures fixed (Audit-905 field spur tip, Audit-11 row street run short of the brook; research R8, R9); cohort 28/30 -> 30/30; Kashikawa regenerated with one more lane",
+   "class": "within",
+   "why": "Not a narrowing: it adds nothing the request excludes and removes nothing it asked for. Constitution XIV and the GM's standing ruling (2026-10-01, 'We should definitely fix the pre-existing failure') require it; FR-008 lets maps move within the rules. The map moved by regeneration, not by hand."
+  },
+  {
+   "id": "A5",
+   "summary": "Amendment 1: P1 shipped as planned; 304-scale-base -> 304-end band 0 at every size",
+   "class": "within",
+   "why": "FR-001 to FR-003"
   }
  ],
  "verdict": "CLEAR"

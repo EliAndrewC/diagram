@@ -168,7 +168,7 @@ None.
 
 ## Amendment 1 (2026-10-02): what the measurements withdrew (research R10)
 
-- **D5 withdrawn.** The ring query answered exactly as the scan (74 equivalence cases, the spy's 2,467 comparisons) but was 1-4%
+- **D5 withdrawn.** The ring query answered exactly as the scan (74 equivalence cases, the spy's 1,314 ring comparisons, research R7) but was 1-4%
   SLOWER on the stage at 40 households on all four seeds, alternated runs; a fallback to the scan once the ring outgrew the
   tree's point count did not close the gap. The scan is restored and `access.py` records the attempt at `targets`. FR-004's
   index is therefore not shipped: FR-007 ("including any lever withdrawn") and D10's rule govern, and the miss is raised with

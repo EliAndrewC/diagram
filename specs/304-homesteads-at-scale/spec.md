@@ -144,30 +144,32 @@ and the cohort and check every map passes its rules and seats every household it
 
 ### Measurable Outcomes
 
-- **SC-001**: The perf snapshot reports per-stage times at 10, 15, 20 and 40 households, and a seeded fault that is quadratic in
+- **SC-001** (FR-001, FR-002, FR-003): The perf snapshot reports per-stage times at 10, 15, 20 and 40 households, and a seeded fault that is quadratic in
   the household count raises the 40-household leg's band.
-- **SC-002**: The homesteads stage's seconds per household at 40 households is at most twice its seconds per household at 10
-  (base, observed 2026-10-01, method: the scratch scaling probe in request.md: 0.045 s/household at 10, ~0.19 at 40, a ratio
+- **SC-002** (FR-004, FR-005, FR-006, FR-007): The homesteads stage's seconds per household at 40 households is at most twice its seconds per household at 10
+  (base, observed 2026-10-01, method: the scratch scaling probe in request.md and research R1: 0.045 s/household at 10, ~0.19 at 40, a ratio
   of ~4), measured on the fixed seeds, back to back.
-- **SC-003**: The homesteads stage at 40 households is at least 2x faster than the base by the wall clock (base 7.1-7.7 s on
+- **SC-003** (FR-004, FR-005, FR-006, FR-007): The homesteads stage at 40 households is at least 2x faster than the base by the wall clock (base 7.1-7.7 s on
   seeds 4 and 25).
 - SC-002 and SC-003 are the session's stated goals, not the GM's: nothing has yet measured that the three levers can reach them.
   A miss is recorded in `dev/performance.md` with what each lever bought, and raised with the GM; it is not pursued with levers
   beyond the three accepted.
-- **SC-004**: The 15-household reference does not get slower (perf band 0 or better).
-- **SC-005**: The indexed lookups (User Story 2) leave every pool map and cohort seed's houses, corridors and lanes identical.
-- **SC-006**: Every cohort seed seats at least the households it seated on the base, and the cohort passes as many seeds as it
+- **SC-004** (FR-008): The 15-household reference does not get slower (perf band 0 or better).
+- **SC-005** (FR-004, FR-005, FR-008): The indexed lookups (User Story 2) leave every pool map and cohort seed's houses, corridors and lanes identical.
+- **SC-006** (FR-006, FR-008): Every cohort seed seats at least the households it seated on the base, and the cohort passes as many seeds as it
   did on the base.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
-This feature adds no rendering decision: it changes no glyph, size, distance, density or placement rule. User Story 3 may
+The feature's own levers add no rendering decision: they change no glyph, size, distance, density or placement rule. User Story 3 may
 change which seat a household takes; every seat it takes is one the existing rules accept, so the record's existing placement
 entries stay correct. Any lever that would change a rule (not only a seat) is out of scope and would be raised with the GM.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | Benchmark sizes 10/20/40, not 80 | not a rendering decision (tooling) | 80 households refuses in the field stage on the base (one fan cannot land 104 acres) | this spec; the perf tool's docstring |
+| A row street's run past its end farm stops a ford's landing (`FORD_LANDING_FT`) short of a brook crossing beyond that farm, never short of the farm (task T02, a pre-existing cohort failure fixed under constitution XIV) | map drawing convention | the ways' own figure between a way's turn and the brook; a run past the last farm over the water serves nothing and kinked a tree lane off the ford (research R9) | research R9; `ways/street.py` `brook_bounds` |
+| The field spur's drawn tip is set on the bund again after the threading and the fold cut, or the spur recorded dropped where it is rice end to end (task T03, constitution XIV) | map drawing convention (the existing 269 B04 rule, now held where the threading broke it) | the spur ran across the main ditch onto a bund strip no deck lands on (research R8) | research R8; `ways/track.py` `stage_track` |
 
 ## Assumptions
 
@@ -190,3 +192,5 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
 - Round 2 (spec-fidelity, verify, 2026-10-01): FAITHFUL; all four items resolved, no new contradiction.
 - After acceptance (2026-10-01, a measurement, no requirement changed): seeds 39 and 47 rolled at 10/20/40 households; the
   Context gains their figures (seed 47's homesteads tail at 40) and the bookend's cost is restated from all four seeds.
+- After acceptance (2026-10-02, the plan review's round 2 aside and the gate's spec lint, no requirement changed): every SC names
+  its FRs; the Decisions Recorded table gains the two pre-existing-failure fixes' conventions (research R8, R9).
