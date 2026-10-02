@@ -210,7 +210,10 @@ def test_a_quote_absent_from_the_page_read_is_not_checked_while_another_link_wen
         "key": "k",
         "links": [url, "https://ja.example/missing.pdf"],
         "class": "citation",
-        "passages": [{"quote": f"The {BRIT} of the grove {DASH} dark in winter.", "original": "", "language": ""}, {"quote": "with 10 m high Igune on the prevailing wind side", "original": "", "language": ""}],
+        "passages": [
+            {"quote": f"The {BRIT} of the grove {DASH} dark in winter.", "original": "", "language": ""},
+            {"quote": "with 10 m high Igune on the prevailing wind side", "original": "", "language": ""},
+        ],
     }
     got = qv.judge_note(note, qv.Pages(offline=tmp_path))
     assert [p["quotation"] for p in got["passages"]] == ["VERBATIM", "NOT-CHECKED"] and got["readability"] == "-"

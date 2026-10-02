@@ -1,0 +1,51 @@
+{
+ "feature": "315-bamboo-in-the-sun",
+ "plan_sha256": "925bc3ddcf923fe37eab7adc8f40a93226347692ddca488bdab7d473b76fded8",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "BAMBOO_SHADE_FT its own constant, derived from the timber bamboos' least cited height (10 m, R0/R2) by the canopy reach's derivation: 50 ft",
+   "class": "within",
+   "why": "FR-002 verbatim; the GM's 'the distance away that it would have to be' answered from bamboo's own height; the canopy reach is reckoned at the same 10 m (tree_shade.py line 20), so equal values follow from the derivation, not an alias"
+  },
+  {
+   "id": "D2",
+   "summary": "_sun_keepouts takes a reach parameter, default the canopy reach",
+   "class": "within",
+   "why": "mechanism for FR-002/FR-003; changes no existing caller"
+  },
+  {
+   "id": "D3",
+   "summary": "culm marks in _draw_grove tested against the sun boxes at bamboo's reach; every inked mark recorded in M['bamboo_marks']; the 'maybe bamboo' comment rewritten",
+   "class": "within",
+   "why": "FR-001, FR-003, FR-004 for the grove/windbreak/belt marks, the one placer (groves.py:744) that draws them"
+  },
+  {
+   "id": "D4",
+   "summary": "household_bamboo refuses a strip meeting a sun box (next side tried); bamboo_seats adds sun boxes to its obstacle index; a stand refused everywhere is not drawn",
+   "class": "within",
+   "why": "FR-001, FR-003 for both stand placers (the only callers, hinterland/stages.py:157-158); the unseated stand is the spec's own Edge Case"
+  },
+  {
+   "id": "D5",
+   "summary": "bamboo_shading_plots over marks (discs) and stands (outline boxes); gate test asserts zero with non-vacuity and record count = SVG culm count; cohort audit reads it; new key classified in taxonomy and cover skip",
+   "class": "within",
+   "why": "FR-005, SC-001, SC-002, SC-003; the box for a stand is conservative (stricter, not narrower); the taxonomy entries are bookkeeping for FR-004's key"
+  },
+  {
+   "id": "D6",
+   "summary": "sun page's bamboo bullet rewritten with footnoted heights and yadake placed; tree_shade docstring; ThreshingYard and Garden modals; bamboo pages via entry-drift",
+   "class": "within",
+   "why": "FR-006, SC-004; a grep finds the exemption stated only on 0038's drawing page (line 38), tree_shade.py:10, groves.py:662 and homestead.py:181/221, all named in D3/D6; 0075 states no exemption"
+  },
+  {
+   "id": "CC-VI occasions",
+   "summary": "no review occasion declared because no pool bamboo moves (R0); declared if a regenerated map's bamboo moves",
+   "class": "within",
+   "why": "project process, not a reduction of the request; the rule is held by the D5 gate test on every map"
+  }
+ ],
+ "verdict": "CLEAR"
+}

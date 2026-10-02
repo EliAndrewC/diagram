@@ -10,6 +10,7 @@ from .._geom import CrownIndex, PointGrid, _union_area, boxed_grid, boxed_polys,
 from .._knobs import CITY_TIER_SCALES, Knob, knob_rng, register_knob
 from ._helpers import _belt_axis
 from .grove_sides import GROVE_FLANKS, GROVE_SIDES, GROVE_SIDES_FLOOD, THIN_BAND_FT, grove_faces
+from .tree_shade import BAMBOO_SHADE_FT
 
 #: The grain a grove's clump is rendered at, relative to the town grain the glyphs were calibrated at (`_draw_grove`'s `bs`).
 GROVE_RENDER_GRAIN = 0.82
@@ -659,7 +660,7 @@ class GrovesMixin:
             _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * 1.7 * 1.15 + 1.0)
             krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
             # ...AND EVERY YARD'S AND BED'S SUN GROUND for the crowns (feature 310, GM 2026-10-02: "no canopy trees should be exempt"),
-            # never for the bamboo culm marks below (the GM's "maybe bamboo")
+            # and every culm mark below the same at bamboo's own reach (feature 315: the timber bamboos stand as tall as the tree)
             ksun = krect + self._sun_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
             _near = self._crowns_near(cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
@@ -733,15 +734,21 @@ class GrovesMixin:
             # is the low layer.
             culms: list[str] = []
             _mark_r = 3.0 * bs  # the mark's own reach: two culms 1.2 ft apart and a leafy fork ~2.5 ft round their tops
+            # ...AND NONE IN A YARD'S OR BED'S SUN (feature 315, GM 2026-10-02): a bamboo stand throws the shadow of the timber
+            # bamboos' 10 m, so a culm mark keeps out of every plot's sun ground at `BAMBOO_SHADE_FT`, as the crowns above do at theirs
+            kbam = krect + self._sun_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad), BAMBOO_SHADE_FT)
+            marks: list[tuple[float, float, float]] = []
             for px, py, kind, _s in items:
                 if kind != "bamboo":
                     continue
                 bx, by = cx + px, cy + py
                 if any((bx - ox) ** 2 + (by - oy) ** 2 < orr**2 for ox, oy, orr in (*drawn, *_near)):
                     continue
-                if self._crown_covers(bx, by, _mark_r, krect, kcirc, self.CANOPY_PAD):
+                if self._crown_covers(bx, by, _mark_r, kbam, kcirc, self.CANOPY_PAD):
                     continue
                 culms.append(bamboo_mark(px, py, bs, self._hjit(bx, by, 93.0), self._hjit(bx, by, 94.0)))
+                marks.append((round(bx, 1), round(by, 1), round(_mark_r, 1)))
+            self.M.setdefault("bamboo_marks", []).extend([list(m) for m in marks])  # every inked mark, for the map's check (feature 315)
             g[1:1] = culms
             g.extend(high)
             g.append('</g>')

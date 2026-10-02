@@ -9,6 +9,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom.indexes import BambooObstacles
 from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
+from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT
 from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
@@ -181,6 +182,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     # ...AND THE YARD PERSIMMONS, by their crowns: a take-yabu is a near single-species stand, and once feature 280 seated the
     # thicket behind the back row a dooryard persimmon stood inside it (settlement-review of Kashikawa, round 3)
     rects += [(float(o["x"]), float(o["y"]), 2.0 * float(o["r"]), 2.0 * float(o["r"]), px(2.0)) for o in s.M.get("persimmons", []) if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "r"))]
+    # ...AND EVERY PLOT'S SUN GROUND (feature 315): a take-yabu throws a timber bamboo's shadow, so it keeps out of each yard's
+    # and bed's sun at `BAMBOO_SHADE_FT`, a box like the rest
+    rects += [(bx, by, 2.0 * bw, 2.0 * bh, 0.0) for bx, by, bw, bh in s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT)]
 
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     # ...AND THE WATER (settlement-review of Mizuguchi, feature 261): nothing refused a watercourse, and when the houses moved

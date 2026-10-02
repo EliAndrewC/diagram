@@ -7,8 +7,9 @@ dikes' trees, and the finished map's check (`trees_shading_plots`, run by the ga
 plot from the southeast at nine to the southwest at three, so a tree throws its shadow on the plot from anywhere within the
 reach to its east, its west or its south, from the plot's north edge down; a tree north of that line throws its shadow away
 from it. Measured as a rectangle, the record's knowing simplification of the wedge the moving sun sweeps
-(research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). Bamboo is not held (the GM's "maybe bamboo"), nor the
-coppiced mulberry and the clipped tea hedge, which are not canopy (spec 310's Decisions).
+(research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). Bamboo is held too, at its own reach (`BAMBOO_SHADE_FT`,
+feature 315: the GM asked whether its shade needs the distance, and the timber bamboos stand as tall as the tree the canopy
+reach is reckoned from); the coppiced mulberry and the clipped tea hedge are not, being low (spec 310's Decisions).
 """
 
 from __future__ import annotations
@@ -21,6 +22,14 @@ from typing import Any
 #: 9 am shadow mirrors it west - held as the windbreak's lane is, a rectangle from the plot's north edge to 50 ft below its
 #: south edge, on both sides and below. A GUESS for the height (the record's least; taller trees would reach further).
 CANOPY_SHADE_FT = 50.0
+
+#: BAMBOO'S REACH (GM 2026-10-02, feature 315: "figure out whether it would need to be far away and then make it be the distance
+#: away that it would have to be"). The same derivation as the canopy reach, from the timber bamboos' least cited height: madake
+#: and moso culms of 10-20 m, hachiku 10-15 m (specs/315-bamboo-in-the-sun/research.md R0; the sun page) - 10 m (~33 ft), whose
+#: 3 pm late-autumn shadow reaches about 50 ft east. Yadake, a 2-5 m bamboo grass, stood beside them in the Tonami grove, and a
+#: patch drawn without a kind is held at the tall ones' reach. Its own constant, so a revised height moves only its own reach.
+#: A GUESS for the height (the least; taller stands would reach further), as the canopy reach's is.
+BAMBOO_SHADE_FT = 50.0
 
 Box = Sequence[float]  # (center x, center y, width, height), +y south
 
@@ -63,6 +72,33 @@ def map_trees(M: Mapping[str, Any]) -> list[tuple[str, float, float, float]]:
     out += [("pine", float(t[0]), float(t[1]), float(t[2])) for t in M.get("scrub_pines") or ()]
     out += [(str(run.get("kind", "planted")), float(t[0]), float(t[1]), float(t[2])) for run in M.get("planted_trees") or () for t in run.get("trees") or ()]
     return out
+
+
+def map_bamboo(M: Mapping[str, Any]) -> list[tuple[str, float, float, float, float]]:
+    """Every bamboo the map records, as (kind, x0, y0, x1, y1) - its box: each culm mark (`bamboo_marks`, [x, y, r], a disc
+    of the mark's reach) and each stand (`bamboo_stands`, by its outline's extent, else its recorded box)."""
+    out = [("mark", float(m[0]) - float(m[2]), float(m[1]) - float(m[2]), float(m[0]) + float(m[2]), float(m[1]) + float(m[2])) for m in M.get("bamboo_marks") or ()]
+    for st in M.get("bamboo_stands") or ():
+        ring = st.get("poly") or [(float(st["x"]) - float(st["w"]) / 2, float(st["y"]) - float(st["h"]) / 2), (float(st["x"]) + float(st["w"]) / 2, float(st["y"]) + float(st["h"]) / 2)]
+        xs, ys = [float(p[0]) for p in ring], [float(p[1]) for p in ring]
+        out.append((str(st.get("role", "stand")), min(xs), min(ys), max(xs), max(ys)))
+    return out
+
+
+def box_shades(x0: float, y0: float, x1: float, y1: float, plot: Box, reach: float) -> bool:
+    """Does the box (`x0`, `y0`)-(`x1`, `y1`) overlap `plot`'s sun ground at `reach` (a positive area, not a touch)?"""
+    cx, cy, hw, hh = sun_box(plot, reach)
+    return x0 < cx + hw and x1 > cx - hw and y0 < cy + hh and y1 > cy - hh
+
+
+def bamboo_shading_plots(M: Mapping[str, Any], reach_ft: float) -> list[tuple[str, str, tuple[float, float], tuple[float, float]]]:
+    """Each (plot kind, bamboo kind, bamboo center, plot center) where recorded bamboo - a culm mark or a stand - stands in a
+    threshing yard's or a garden bed's sun ground, `reach_ft` feet (feature 315). A mark is tested by its box, which holds
+    its disc, so the check is the stricter of the two."""
+    meta = M.get("meta") or {}
+    reach = reach_ft / float(meta.get("ftpx", 1.0) or 1.0)
+    plots = [(kind, b) for kind in ("threshing_yards", "gardens") for o in M.get(kind) or () if (b := plot_box(o)) is not None]
+    return [(kind, bk, ((x0 + x1) / 2, (y0 + y1) / 2), (b[0], b[1])) for bk, x0, y0, x1, y1 in map_bamboo(M) for kind, b in plots if box_shades(x0, y0, x1, y1, b, reach)]
 
 
 def trees_shading_plots(M: Mapping[str, Any], reach_ft: float) -> list[tuple[str, str, tuple[float, float], tuple[float, float]]]:

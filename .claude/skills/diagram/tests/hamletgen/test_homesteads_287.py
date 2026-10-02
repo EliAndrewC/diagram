@@ -271,3 +271,25 @@ def test_a_margin_with_no_lawful_field_corridor_seats_no_one(monkeypatch: pytest
     toy, plan = _toy_hamlet(10)
     monkeypatch.setattr(stages, "reserve_field_corridor", lambda s_: False)
     assert stages._seat_households(toy, plan) == (0, 0) and toy.M["houses"] == []
+
+
+def test_a_household_bamboo_strip_whose_every_seat_is_in_a_plots_sun_is_not_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 315: a strip whose seat stands in a yard's or bed's sun ground at bamboo's reach is refused, and where every seat
+    does, none is seated; the test itself, asked directly, is a rect against the sun boxes."""
+    from l7r.diagram.hamletgen.homesteads import bamboo
+
+    assert bamboo.in_the_sun(0.0, 0.0, 16.0, 22.0, [(20.0, 0.0, 15.0, 5.0)]), "overlapping a sun box"
+    assert not bamboo.in_the_sun(0.0, 0.0, 16.0, 22.0, [(23.0, 0.0, 15.0, 5.0)]), "touching it"
+    asked: list[object] = []
+
+    def sunny(*args: object) -> bool:
+        asked.append(args)
+        return True
+
+    monkeypatch.setattr(bamboo, "in_the_sun", sunny)
+    for seed in range(10):
+        s, plan = _toy_hamlet(10, seed=seed)
+        plan.bamboo = "homestead"
+        houses = [{"x": 200.0 + 120.0 * k, "y": 200.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for k in range(8)]
+        assert bamboo.household_bamboo(s, plan, houses) == []
+    assert asked, "non-vacuity: seats reached the sun's question"

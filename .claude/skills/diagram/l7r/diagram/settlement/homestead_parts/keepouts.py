@@ -204,15 +204,15 @@ class KeepoutsMixin:
     _CANOPY_STRUCT_KEYS = _HALO_STRUCT_KEYS + _CANOPY_EXTRA_KEYS + _CANOPY_ROOFED_KEYS
     CEMETERY_CORE = 0.9  # the fraction of a burial ground's half-extent kept clear of crowns: the grave markers reach ~0.8-0.9 of it (cemetery's grid), and at 0.6 a crown hid a whole grave on Kuwabata (settlement-review round 2) - feature 273
 
-    def _sun_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> list[tuple[float, float, float, float]]:  # type: ignore[misc]
+    def _sun_keepouts(self: Settlement, bbox: tuple[float, float, float, float], reach_ft: float = CANOPY_SHADE_FT) -> list[tuple[float, float, float, float]]:  # type: ignore[misc]
         """The SUN GROUND of every threshing yard and garden bed near `bbox`, as (x, y, half-w, half-h) keep-out boxes a canopy
         crown may not meet (GM 2026-10-02, feature 310: "no canopy trees should be exempt"; `tree_shade.sun_box`, the reach
         `CANOPY_SHADE_FT`) - on the map that keeps the sun corridor (the scripted path's opt-in), else none. Read from the drawn
         plots and from every placed homestead's bundle, whose plots a farm grove's arms are drawn before (the flush). Handed to
-        every crown test (`_crown_covers`) and to no bamboo mark's: bamboo is the GM's "maybe" (spec 310)."""
+        every crown test (`_crown_covers`), and at `reach_ft` = `BAMBOO_SHADE_FT` to every bamboo mark's and stand's (feature 315)."""
         if not getattr(self, "_sun_corridor_ft", 0.0):
             return []
-        reach = self.px(CANOPY_SHADE_FT)
+        reach = self.px(reach_ft)
         plots = [b for k in ("threshing_yards", "gardens") for o in self.M.get(k) or () if (b := plot_box(o)) is not None]
         for rec in self.M.get("houses") or ():
             g = rec.get("geom") or {}
