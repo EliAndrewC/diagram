@@ -767,6 +767,19 @@ def cite(root: pathlib.Path, key: str) -> pathlib.Path:
     return dest
 
 
+def unkeep(root: pathlib.Path, raw: str, reasons: list[str], basis: str, note: str) -> None:
+    """A kept page judged again NOT-KEPT (a duplicate found later, a page the filter kept in error): its line leaves the
+    kept list and a not-kept line records why. An entry written for it is retired by `merge`, not here."""
+    path = at.base(root) / KEPT
+    q = json.dumps(raw, ensure_ascii=False)
+    with src.locked(src.home(root), timeout=30.0):
+        lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+        if not any(q in s for s in lines):
+            raise ValueError(f"{raw} is not on the kept list")
+        path.write_text("".join(s for s in lines if q not in s), encoding="utf-8")
+    at.write(root, [line(raw, reasons, basis, note)], NOT_KEPT)
+
+
 def merge(root: pathlib.Path, key: str, into: str) -> pathlib.Path:
     """Two entries for one work (a redirect and its target, a script variant): `key`'s uncited entry is retired and its
     page moves from the kept list to the not-kept list as a duplicate of `into` - an uncited or a cited entry - which stays."""
@@ -782,12 +795,8 @@ def merge(root: pathlib.Path, key: str, into: str) -> pathlib.Path:
     mine = [x for x in kept if x["raw"] in text]
     if not mine:
         raise ValueError(f"{key!r}: no kept page's URL appears in {gone.name}")
-    path = at.base(root) / KEPT
-    drop = {x["raw"] for x in mine}
-    with src.locked(src.home(root), timeout=30.0):
-        lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
-        path.write_text("".join(s for s in lines if not any(json.dumps(r, ensure_ascii=False) in s for r in drop)), encoding="utf-8")
-    at.write(root, [line(x["raw"], ["duplicate"], "source-applicability", f"the same work as {into}") for x in mine], NOT_KEPT)
+    for x in mine:
+        unkeep(root, x["raw"], ["duplicate"], "source-applicability", f"the same work as {into}")
     gone.unlink()
     return gone
 
@@ -813,12 +822,7 @@ def dedupe(root: pathlib.Path, dry: bool = False) -> list[str]:
         elif key:
             merge(root, key, into_key)
         else:
-            path = at.base(root) / KEPT
-            q = json.dumps(raw, ensure_ascii=False)
-            with src.locked(src.home(root), timeout=30.0):
-                lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
-                path.write_text("".join(s for s in lines if q not in s), encoding="utf-8")
-            at.write(root, [line(raw, ["duplicate"], "rule", f"the same work as {into_key}")], NOT_KEPT)
+            unkeep(root, raw, ["duplicate"], "rule", f"the same work as {into_key}")
         done.append(f"{key or raw} -> {into_key}" + (f" ({why})" if why.startswith("similar") else ""))
     return done
 
@@ -870,6 +874,10 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     mg = sub.add_parser("merge")
     mg.add_argument("key")
     mg.add_argument("into")
+    uk = sub.add_parser("unkeep")
+    uk.add_argument("url")
+    uk.add_argument("reasons")
+    uk.add_argument("note")
     sub.add_parser("dedupe").add_argument("--dry", action="store_true")
     args = ap.parse_args(argv)
     root = src.repo_root()
@@ -916,6 +924,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     elif args.cmd == "dedupe":
         done = dedupe(root, args.dry)
         print("\n".join(f"uncited: duplicate retired - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) retired")
+    elif args.cmd == "unkeep":
+        unkeep(root, args.url, args.reasons.split(","), "session", args.note)
+        print(f"uncited: {args.url} moved to the not-kept list ({args.reasons})")
     elif args.cmd == "merge":
         gone = merge(root, args.key, args.into)
         print(f"uncited: {args.key} retired ({gone.name}) as a duplicate of {args.into}; its page is on the not-kept list")
