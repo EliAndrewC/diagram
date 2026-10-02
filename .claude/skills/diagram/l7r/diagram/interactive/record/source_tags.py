@@ -209,10 +209,7 @@ def _chip(facet: str, label: Label) -> str:
 def labels_html(tags: SourceTags | None, vocab: Vocabulary) -> str:
     """A work's labels, one per value in facet order (the canon label alone for a canon work), each carrying its
     standard explanation - shown in the record's tooltip box on hover, and as the native tooltip without scripts."""
-    if tags is None:
-        chips = [_chip("canon", vocab.canon)]
-    else:
-        chips = [_chip(f, vocab.known(f)[v]) for f in FACETS for v in tags.values(f)]
+    chips = [_chip("canon", vocab.canon)] if tags is None else [_chip(f, vocab.known(f)[v]) for f in FACETS for v in tags.values(f)]
     return '<p class="srctags">' + " ".join(chips) + "</p>"
 
 
