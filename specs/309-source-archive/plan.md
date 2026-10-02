@@ -114,8 +114,8 @@ scripts/reserve-prefix.py    --url: archive after the stub
 .claude/skills/diagram/l7r/diagram/interactive/record/archive.py   census, ids, manifest, entry line, refusals
 .claude/skills/diagram/l7r/diagram/interactive/record/site.py      two call sites
 .claude/skills/diagram/research/archive/<id[:2]>/<id>.json, gm-copies.json  the manifest
-scripts/_archive_ops.py      the inbox, every page read (urls, consulted), archive-find, the one-time relayout
-scripts/_sources.py, scripts/_source_pages.py   archive_reads: a page read is handed to the archiver
+scripts/_archive_ops.py      the inbox, archiving at citation (urls), the held consulted run, archive-find, the one-time relayout
+scripts/_sources.py          archive_reads: a cited outcome's page is handed to the archiver (D13)
 .claude/skills/diagram/tests/tooling/test_archive_ops.py
 CLAUDE.md, docs/research-record-rules.md, container-scripts/page-session-rules.md, .claude/agents/source-reader.md, quote-check.md   the archive looked in first
 .claude/skills/diagram/tests/tooling/test_archive.py
@@ -154,4 +154,4 @@ CLAUDE.md, docs/research-record-rules.md, container-scripts/page-session-rules.m
   1.8 GB at the host's low-memory warning, observed 2026-10-02) and the backfill ran at one lane while other sessions
   needed the memory; `gm_copies` raises on a malformed table instead of returning none (an edit had broken the table and the
   first ~1,450 rows were written without the GM's copies; `make archive-sources GM=1` copied them in after - 18 rows).
-- **D16 - `_archive_ops.py`** holds the inbox, the reads, the lookup and the relayout, so `_archive.py` stays the capture.
+- **D16 - `_archive_ops.py`** holds the inbox, archiving at citation and the held consulted run, the lookup and the relayout, so `_archive.py` stays the capture.

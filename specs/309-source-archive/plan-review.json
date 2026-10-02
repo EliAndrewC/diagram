@@ -1,9 +1,15 @@
 {
  "feature": "309-source-archive",
- "plan_sha256": "aa0453b3a243af5ad815fc9800f96f8771734ae5a8a88dde851c5deb5da808b4",
+ "plan_sha256": "9f4b3a669eb389f4cec0903bd9e894e422454c9c0063e31961e14e035a1f13dd",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
+  {
+   "id": "TC-manifest line",
+   "summary": "The manifest holds every cited URL and any page archived at citation (FR-014)",
+   "class": "within",
+   "why": "FR-014 and the Key Entities line as amended."
+  },
   {
    "id": "TC-census-registry",
    "summary": "The registry census takes every URL in a registry entry, its HTML comments included",
@@ -14,7 +20,7 @@
    "id": "TC-census-notes / D6",
    "summary": "A footnote's cited URL is one a notes.html footnote links; comment URLs not taken as cited",
    "class": "within",
-   "why": "Unchanged: FR-001 says every URL a footnote LINKS. Pages read but not cited are now archived anyway by FR-014 / D13."
+   "why": "Unchanged: FR-001 says every URL a footnote LINKS; a page read and not cited is on the ledger, feature 312's (Amendment 2)."
   },
   {
    "id": "D1",
@@ -30,9 +36,9 @@
   },
   {
    "id": "D3",
-   "summary": "One manifest JSON per URL, ~4,900 files once every page read is in, sharded by D11",
+   "summary": "One manifest JSON per URL: ~2,100 for the cited URLs (2,108, measurement/coverage.txt), at most ~4,900 if feature 312 keeps every page read, sharded by D11",
    "class": "within",
-   "why": "The spec's manifest entity: one row per archived URL, cited and read."
+   "why": "The manifest entity as amended (every cited URL plus the three pre-hold uncited rows); the 4,903 ceiling is now stated as conditional on 312, matching Amendment 2."
   },
   {
    "id": "D4",
@@ -96,9 +102,10 @@
   },
   {
    "id": "D13",
-   "summary": "archive_reads from source-pages and source-outcome (reserve already archives); a URL with a row not recaptured; L7R_ARCHIVE_READS=0 only in the test conftest; consulted backfill live first, page-cache text, else unreachable",
-   "class": "within",
-   "why": "FR-014 word for word, including 'a URL that already has a row is not captured again' and the backfill order; the env seam is set by no session (grep: only conftest and the tests)."
+   "summary": "Archived at citation: archive_reads only from source-outcome on a cited:<key> outcome (reserve URL= already archives); source-pages archives nothing; a URL with a row not recaptured; the consulted operation kept unrun for 312; the three pre-hold uncited captures left for 312's filter",
+   "class": "narrowing",
+   "why": "Narrows Amendment 1's 'every page we read', judged per class against request.md. (a) The backfill of earlier uncited reads held: the GM's own words, 'hold up on the backfill', and the uncited works moved to 'its own separate feature'. (b) Forward archive-on-read of uncited pages stopped: implied by the GM's words in Amendment 2 - the uncited works' filtering and write-ups are the new feature, and things judged not valuable are recorded 'but which we don't bother to store the full copy of'; archiving every read meanwhile would store unfiltered copies git cannot later take back, defeating that purpose. The read is still on the ledger and the page cache, so 312 loses nothing. (c) Cited pages still archived by every citing route (reserve, source-outcome cited:, make archive + the record refusal for footnote/entry URLs): FR-001's request untouched. (d) Three pre-hold captures kept: status quo, the open question 312's request names; not a carve-out. (e) consulted op kept unrun: honors 'hold', but its make help line still advertises it as live (see the spec verdict).",
+   "ruling": "LEGITIMATE"
   },
   {
    "id": "D14",
@@ -123,7 +130,7 @@
    "id": "D16",
    "summary": "_archive_ops.py holds the inbox, reads, lookup and relayout",
    "class": "within",
-   "why": "File organization; no fidelity content."
+   "why": "File organization; no fidelity content. (Its 'the reads' and the Project Structure lines describing source-pages handing reads to the archiver are stale under D13 - text, not a decision.)"
   },
   {
    "id": "Docs list",
@@ -136,6 +143,12 @@
    "summary": "The 7 unmatched files are now 'archived all the same under Amendment 1 (FR-013)'; the Summary says every academic-sources file is archived, each matched to the key it copies",
    "class": "within",
    "why": "Round 1's stale lines are rewritten and now agree with FR-013 (the 7 archived and deleted) and FR-012."
+  },
+  {
+   "id": "Project Structure",
+   "summary": "Lists _archive_ops.py 'every page read (urls, consulted)' and _sources.py/_source_pages.py 'archive_reads: a page read is handed to the archiver'",
+   "class": "within",
+   "why": "Not a decision the plan makes anew; the lines predate Amendment 2 and contradict D13 (_source_pages.py no longer calls archive_reads). Rewrite requested in the spec verdict; no narrowing."
   }
  ],
  "verdict": "CLEAR"

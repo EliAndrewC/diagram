@@ -10,9 +10,10 @@ is it deleted from the inbox. `research/archive/gm-copies.json` keeps each proce
 so a copy is still found after its file is gone; a file that copies no cited source is archived all the same (*"store
 sources which we ourselves do not end up citing"*), its keys `[]`.
 
-EVERY PAGE READ (FR-014). `make source-pages` archives what it reads (`_source_pages.py`); `consulted` archives every
-URL on the sources-consulted ledger with no row yet - a whole live capture where the page answers, else the page cache's
-saved text (`partial`), else `unreachable` (the GM chose every page read, the earlier ~4,900 included).
+ARCHIVED AT CITATION (FR-014, Amendment 2). `make source-outcome OUTCOME=cited:<key>` archives its page (`_sources.py`);
+a read that cites nothing is not archived. `consulted` - every URL on the sources-consulted ledger with no row yet, a whole
+live capture else the page cache's saved text (`partial`) else `unreachable` - is HELD, unrun: the GM moved the uncited
+pages to feature 312, whose filter decides which are kept.
 
 THE LOOKUP (FR-015, FR-016; the GM: *"first check to see if we already have something, rather than going out and trying
 to find it on the internet"*): `find` answers by URL, key or words in the archived text, naming each copy's local path.

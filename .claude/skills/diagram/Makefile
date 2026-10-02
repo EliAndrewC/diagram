@@ -1239,7 +1239,7 @@ archive: ## [project] archive ONE cited URL now into the private source archive 
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
 # GUARD_EDIT_OK: feature 309 - new operations, GM=1 (the GM's matched files copied into the archive) and CONSULTED=1 (the ledger's uncited pages - unrun, kept for feature 312's filter); no guard changes.
-archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, every page on the sources-consulted ledger with no copy (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
+archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the ledger's uncited pages - HELD, unrun, for feature 312's filter (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
 	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),); else python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
 
 # GUARD_EDIT_OK: feature 309 Amendment 1 - two new operations (the GM's download directory processed as an inbox; the archive looked in before the web); no guard changes.

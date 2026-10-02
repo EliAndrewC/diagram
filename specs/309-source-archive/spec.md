@@ -188,7 +188,8 @@ path; the research rules, the page-session rules and the reading agents' contrac
   extracted readable text; and a capture record: the URL cited, the URL finally fetched, the time, the HTTP status, the content type, a checksum of
   the bytes, the source key(s) that cite it, and for Wikipedia and other MediaWiki sites, the revision id.
 - **FR-003**: Copies MUST live in the private repository `EliAndrewC/diagram-research`; nothing from the archive is
-  published anywhere public. The layout keeps every directory to a few hundred entries as the archive grows toward every page read (4,903 distinct
+  published anywhere public. The layout keeps every directory to a few hundred entries at its 2,111 rows today (observed 2026-10-02, `make archive-sources
+  REPORT=1` plus the 3 uncited rows) and at most 4,903 if feature 312 keeps every page read (distinct
   URLs on the sources-consulted ledger, observed 2026-10-02, cited ones included)
   (the GM, mid-backfill: *"limit the number of directories in any given directory to no more than a few hundred"*):
   a URL's captures under `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest's rows under
@@ -220,8 +221,9 @@ path; the research rules, the page-session rules and the reading agents' contrac
 - **FR-014** (Amendments 1 and 2): a page is archived when it is cited - by any route that cites it (`make reserve ...
   URL=`, `make source-outcome OUTCOME=cited:<key>`); a row records it, and a URL that already has a row is not captured
   again. A read that cites nothing (`make source-pages`, any other outcome) is recorded on the sources-consulted ledger and
-  not archived; the uncited pages - 2,846 with no archive row (observed 2026-10-02: `_archive_ops.consulted_urls`, the
-  ledger's and the page cache's URLs with no manifest row, after the cited backfill) - are feature 312's (Amendment 2).
+  not archived; the uncited pages are feature 312's (Amendment 2): 2,846 when the consulted backfill began, 3 of them captured before the
+  GM held it, 2,843 with no row (observed 2026-10-02: `_archive_ops.consulted_urls`, the ledger's and the page cache's URLs
+  with no manifest row, before and after the hold).
 - **FR-015** (Amendment 1): `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` answers from the manifest and the archived
   text, without a fetch, naming each copy's local path.
 - **FR-016** (Amendment 1): the research procedure names the archive lookup (`make archive-find`) as the first step for
@@ -272,7 +274,7 @@ This feature draws and states nothing on a map; it changes the research tooling 
 | Every page a session reads is archived, the ~4,900 earlier reads included (SUPERSEDED by Amendment 2, the next row) | the GM's ruling (Amendment 1, chose "Every page we read") | a page read for one fact may answer a later question | `request.md` |
 | The uncited pages move to feature 312: a page is archived here only when it is cited | the GM's ruling (Amendment 2) | a page judged not worth keeping is recorded with why and never stored (the GM: a filter, then write-ups of what is kept); 309 lands what is done first. Archiving every read in the meantime would put into the archive's history copies the filter may reject, which a later delete does not take back out of git | `request.md`; `scripts/_sources.py:archive_reads` |
 | The archive lookup is the first step of a research pass | the GM's ruling (Amendment 1) | *"first check to see if we already have something, rather than going out and trying to find it on the internet"* | `research/CLAUDE.md`, the page-session rules, the reading agents' contracts |
-| Captures sharded `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest sharded alike | the GM's question answered by the session (`request.md`) | GitHub lists only a directory's first 1,000 entries (observed 2026-10-02: the contents API returned 1,000 of the archive's 1,775 top-level entries), and the archive is headed for the ledger's 4,903 URLs (observed 2026-10-02); 256 two-hex buckets hold about 19 each at that size (derived: 4,903 / 256) and stay under 300 a bucket to about 76,800 URLs (derived: 300 x 256); the GM's copies need no bucket (40 entries, the FR-012 match of 2026-10-02, tasks T12). Cost: a key's copies are not browsable by key name - the manifest and `make archive-find` find them | `scripts/_archive.py:capture_base`, `record/archive.py:ROW_GLOB` |
+| Captures sharded `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest sharded alike | the GM's question answered by the session (`request.md`) | GitHub lists only a directory's first 1,000 entries (observed 2026-10-02: the contents API returned 1,000 of the archive's 1,775 top-level entries), the archive holds 2,111 rows (observed 2026-10-02) and at most the ledger's 4,903 URLs (observed 2026-10-02) if feature 312 keeps every page read; 256 two-hex buckets hold about 19 each at that size (derived: 4,903 / 256) and stay under 300 a bucket to about 76,800 URLs (derived: 300 x 256); the GM's copies need no bucket (40 entries, the FR-012 match of 2026-10-02, tasks T12). Cost: a key's copies are not browsable by key name - the manifest and `make archive-find` find them | `scripts/_archive.py:capture_base`, `record/archive.py:ROW_GLOB` |
 
 ## Assumptions
 
