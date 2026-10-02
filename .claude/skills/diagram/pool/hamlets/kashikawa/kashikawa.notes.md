@@ -1069,8 +1069,10 @@ and overlap rule clean; attempt 1.
 Re-measured 2026-10-02 (feature 310, every crown kept out of the plots' sun): household bamboo in 6 groves of 20
 (`meta.household_bamboo_in_grove`). The roll is per farm and positional (`_hjit` at `HOUSEHOLD_BAMBOO_PREVALENCE` 0.6),
 so moving the houses re-draws it; the hash itself measures 60.1% over 200,000 random points and the pool's 82 farms
-draw 46 (56%) - this map's 6 is an unlucky draw for this layout, not a lost stand. Thin east bands: 20, 66 crowns,
-2 to 5 a band, each running on from its north band (widest crown-edge gap at the joint 7.0 ft, inside a band 6.6 ft).
+draw 46 (56%) - this map's 6 is an unlucky draw for this layout, not a lost stand. Thin east bands: 20, 85 crowns,
+3 to 6 a band, counted by the SVG group that drew each crown, each running on from its north band (widest crown-edge gap
+at the joint 6.4 ft on 19 farms and 14.2 ft at (3145,2797), where the north band's own fill leaves its corner bare;
+inside a band 6.7 ft). An earlier count by box (66 crowns, 7.0 ft) gave a band's top crown to the north band.
 
 ## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
 
