@@ -291,7 +291,7 @@ SUN_CORRIDOR_FT = 39.0
 #
 # 75 ft WAS TRIED FIRST AND DECLINED (2026-08-25), and the reason is a ruling, not a taste: 75 is
 # the same geometry at 15 m, the floor of the Sendai "tall tree" class an untended mature
-# sugi/keyaki stand reaches (15-25 m). At 75 the belt has to stand so far off the west rank that it
+# sugi/keyaki stand reaches (15-28 m). At 75 the belt has to stand so far off the west rank that it
 # falls outside the frame the hard features set, and the frame does NOT open for the belt (GM
 # 2026-07-20: the communal windbreak clips at the view edge; `crop_hugs_content`). Measured on
 # Inashiro: 131 clumps -> 38, `village_windbreak_is_continuous` red. At 50 the belt stands whole

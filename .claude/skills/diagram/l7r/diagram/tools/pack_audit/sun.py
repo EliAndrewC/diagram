@@ -38,7 +38,7 @@ SUN_BED_H: float = 6.0  # sun crops - daikon, eggplant, cucumber, beans - want a
 HALF_SHADE_BED_H: float = 3.0  # half-shade crops do with 3 to 4 (homesteads 044)
 BUILDING_FT: float = 20.0  # the farmhouse ridge the record casts a building's shadow from (homesteads 043) - a least height
 WALL_FT: float = 1.6 / 0.3048  # the surviving earth wall's 1.6 m (buildings 490)
-TREE_FT: float = 10.0 / 0.3048  # a working, pruned belt's 10 m (0038); an untended stand is 15-25 m
+TREE_FT: float = 10.0 / 0.3048  # a working, pruned belt's 10 m (0038); an untended stand is 15-28 m
 SMALL_BUILDING_FT: float = 6.0  # a roofed thing under SMALL_BUILDING_SQFT - a privy, a hokora, a covered way - at the least height a person stands under (a guess)
 SMALL_BUILDING_SQFT: float = 100.0
 # What a sheet draws that does not stand up to cast a garden's shadow: ground and water features, a building's own parts (under
