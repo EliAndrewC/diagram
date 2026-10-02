@@ -1,6 +1,6 @@
 ---
 name: source-reader
-description: Reads the sources a research entry cites and reports per claim READ, NOT-FOUND or CONTRADICTED with the verbatim passage - run in every research pass, on the notes it supports.
+description: Reads the sources a research entry cites and reports per claim READ, NOT-FOUND or CONTRADICTED with the verbatim passage - run on the notes `make record-owed` names, or before a note exists on a declared NEW claim.
 model: opus
 effort: high
 omitClaudeMd: true

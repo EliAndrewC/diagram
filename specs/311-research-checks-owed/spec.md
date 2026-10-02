@@ -190,17 +190,20 @@ sees the push pass; edits the note again and sees the refusal return.
 
 ### Measurable Outcomes
 
-- **SC-001**: For the intro-only delta on the parley-room question, the owed list is exactly two units: the new check and
+- **SC-001** (FR-002, FR-004, FR-009): For the intro-only delta on the parley-room question, the owed list is exactly two units: the new check and
   `record-format` on that question.
-- **SC-002**: Replayed over the last 30 record-only commits on main, the owed command names no `source-reader`,
+- **SC-002** (FR-003, FR-004): Replayed over the last 30 record-only commits on main, the owed command names no `source-reader`,
   `quote-check` or `source-applicability` unit for any commit that changed no note, no noted block and no write-up; and the
   count of units each commit owes is reported beside what the doctrine's "every new or changed entry" would have owed.
-- **SC-003**: Every question in the record has been read by the new check once, and every question it ruled in need of an
+- **SC-003** (FR-001, FR-008): Every question in the record has been read by the new check once, and every question it ruled in need of an
   intro has one that it passed.
-- **SC-004**: A dry push of a delta with an unanswered owed unit is refused, and with the unit answered it passes; a bundle
+- **SC-004** (FR-005, FR-006, FR-007): A dry push of a delta with an unanswered owed unit is refused, and with the unit answered it passes; a bundle
   request for a unit not owed is refused without a reason; both are tests run by the gate.
-- **SC-005**: The new check, seeded with questions whose ruling is known (the parley room without its intro; a plain farm
+- **SC-005** (FR-001): The new check, seeded with questions whose ruling is known (the parley room without its intro; a plain farm
   subject; an intro that adds a historical claim its cited body does not carry), returns the known ruling on each, three runs a leg.
+
+- **SC-006** (FR-010): no passage of the research rules, the research doctrine, the page-session rules or the five check
+  contracts says a record check runs on "every new or changed entry" or "every research pass" without naming the owed command.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -234,3 +237,5 @@ sees the push pass; edits the note again and sees the refusal return.
   old rule, and the unmarked-block decision row misstating the proposal's scope. Both applied (SC-005 seeds "an intro that adds
   a historical claim its cited body does not carry"; the row says the proposal gave "record-format only" to all unmarked prose).
 - **Round 3** (`spec-fidelity-verify`, 2026-10-02): **FAITHFUL** - both round-2 items resolved, no new departure.
+- **Lint-only edit after acceptance** (2026-10-02): `spec-lint` required each success criterion to name its FRs; the FR ids
+  were added to SC-001..SC-005 and SC-006 states FR-010's existing requirement as a criterion. No requirement changed.

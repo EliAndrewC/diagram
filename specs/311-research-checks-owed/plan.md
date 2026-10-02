@@ -43,8 +43,9 @@ a changed heading owes `intro-check`; a changed intro owes `intro-check` + `reco
 `record-format`; a changed unmarked non-intro block owes `quote-check:NNNN#unfootnoted` + `record-format`; a write-up whose
 visible text differs from the same key's at the base (or is new) owes `source-applicability`. A new question is just all of
 its content changed. `intro-check` is owed on research pages only; the drawing page is read for context.
-Read at the base with ONE `git ls-tree` + ONE `git cat-file --batch` over `research/questions/` and `research/sources/`
-(about 1,700 files), never a `git show` per file.
+Read at the base with ONE `git ls-tree` + ONE `git cat-file --batch` over `research/questions/` (1,404 files on
+2026-10-02, counted with `ls`) and only the write-ups the delta touched (`git diff --name-only`), never a `git show` per file
+and never the whole registry (2,126 write-ups).
 
 **D3 - The intro paragraph is `<p class="intro">`**, the first block of a research page after its heading and comments; at
 most one; no note mark; it says what Rokugan (or the map) has and that the research follows; it may name the class its cited body or drawing page reaches, and adds no historical claim that body does not carry.
@@ -95,7 +96,8 @@ whole question when `#unfootnoted` is owed). Every question bundle's MANIFEST ca
 MANIFEST does not list it as owed, with `CHECK_NOT_OWED_OK="<reason>"` as the escape. Exempt: `record-style` (owed by a declared
 sweep, feature 292). A `KEY=` bundle is refused like a question bundle: without `WHOLE=1` (the write-up check) unless
 `source-applicability` is owed on the key; with `WHOLE=1` (source-reader) unless a `source-reader` unit is owed on a note citing
-the key, or the read is declared for a claim not yet in the record - `NEW="<the claim, in a few words>"`, recorded in the
+the key, or the read is declared for a claim not yet in the record - `NEW="<the claim, in a few words>"`, held to the same
+reason floor as every escape (two words or more), recorded in the
 guard log and the MANIFEST (a research read precedes the note it supports, so nothing can be owed yet; the declaration is what
 separates it from re-reading an existing note's source). `NOT_OWED_OK` covers the rest, e.g. a source's numbers about to reach a
 map or a rule (FR-004's other half, held on the physical task's box).
@@ -135,8 +137,8 @@ entry" becomes "run on the units `make record-owed` names", and each says to rec
 - IX: PASS - each intro read against `make canon`; the parley room is the GM's own (the GM's draft in `request.md`, and the
   ruling recorded on 0094's drawing page).
 - X: PASS - stdlib Python, ruff, pyrefly where the gate holds scripts, red-green tests, no file near 1,000 lines.
-- XII: PASS - each intro states the class the drawing page already records (accurate, deviation, convention); no new
-  rendering decision; the record of the decisions is the spec's table.
+- XII: PASS - each intro may name the class its cited body or drawing page already reaches (attested, a deliberate
+  deviation, a convention, an invention of the setting) and adds no historical claim; no new rendering decision; the record of the decisions is the spec's table.
 - XIII: PASS - baseline `make quick ALL=1` in a detached worktree before the first script edit; zero new failures.
 - XIV: a defect found on the way is fixed in this work.
 - XVI: PASS - the spec is reviewed by `spec-fidelity`; no exception to the GM's ask is planned.
@@ -168,3 +170,5 @@ None.
   classes; D6 allows a bundle-less record only for `source-reader` notes or with a logged REASON; D9 refuses `KEY=` bundles and
   exempts a read only when declared for a claim not yet in the record; D11 and T09 take the bodies), the stale CSS line removed,
   and the aside taken: SC-005's seeded runs are batches of the backfill's size.
+- **After the review** (2026-10-02, before any tick): the three non-blocking items of plan review 2 applied - XII's wording,
+  D2's file count measured, D9's `NEW=` held to the reason floor.

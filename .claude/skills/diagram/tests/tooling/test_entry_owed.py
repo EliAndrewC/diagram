@@ -173,8 +173,7 @@ def test_an_intro_a_comment_or_a_re_wrap_moves_no_section(tmp_path):  # noqa: AN
     _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base")
     base = subprocess.run(["git", "-C", str(tmp_path), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     (rec / "0010-ponds.html").write_text(
-        '<h2 id="ponds">Ponds</h2>\n<!-- tags: subject=water,farm -->\n<p class="intro">In Rokugan every village digs one.</p>\n'
-        "<p>Dug\n  deep.<!-- seen 2026-10-02 --></p>",
+        '<h2 id="ponds">Ponds</h2>\n<!-- tags: subject=water,farm -->\n<p class="intro">In Rokugan every village digs one.</p>\n<p>Dug\n  deep.<!-- seen 2026-10-02 --></p>',
         encoding="utf-8",
     )
     assert eo.moved_anchors(tmp_path, base, None) == set()

@@ -53,7 +53,7 @@ The next session dispatches the defined agent by name.
 
 ## R4 - What the owed command costs at the push
 
-`make record-owed` on this clone, 2026-10-02: 10.5 s as first written, of which 6.2 s was `_translation_owed.py` reading each
+`make record-owed` on this clone (observed 2026-10-02; method: `time make record-owed` and a per-step `time.time()` split of `_record_owed.units`, one run each): 10.5 s as first written, of which 6.2 s was `_translation_owed.py` reading each
 notes file with its own `git show` and 2.4 s the registry read whole at the base. One `git cat-file --batch` per revision, a
 content-keyed cache of the parsed pairs (`<git dir>/record-checks/translation-pairs.json`) and reading only the write-ups the
 delta touched took it to 2.5 s (translation half 0.6 s warm). The `intro-check` batch bundle, first 2+ minutes for 24
