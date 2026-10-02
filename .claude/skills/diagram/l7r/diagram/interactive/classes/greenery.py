@@ -153,12 +153,12 @@ class HomesteadGrove(Kind):
     44 ft); how often each shape was taken is on no page, so the roll -
     two sides half the time, three sides three times in ten, four sides twice in ten, and four sides four times in ten
     where the farms stand on flood-prone ground - is a GUESS, this project's choice, and so are the thin band's
-    depth (one tree, 17 ft), the kind of trees in it, and the width of the way in through a ring.
+    depth (one tree, 17 ft), the kind of trees in it, the width of the way in through a ring, and, on a map keeping the yards and beds in the sun, a third or fourth side's band closing only the house's own side.
 
     Caveat: how often each shape was taken is on no page, so the roll - two sides half the time, three sides three times
     in ten, four sides twice in ten, and four sides four times in ten where the farms stand on flood-prone ground - is a
     GUESS, this project's choice, and so are the thin band's depth (one tree, 17 ft), the kind of trees in it,
-    and the width of the way in through a ring.
+    the width of the way in through a ring, and, on a map keeping the yards and beds in the sun, a third or fourth side's band closing only the house's own side.
 
     Name: homestead grove
     Covers: `groves`
