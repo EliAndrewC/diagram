@@ -97,7 +97,7 @@ def test_the_floor_would_have_caught_the_KNOWN_dry_runs_and_nothing_else() -> No
     """
     m = _mod()
     rows = []
-    for f in glob.glob(str(SKILL / "dev" / "run-log" / "*.json")):
+    for f in glob.glob(str(SKILL / "dev" / "run-log" / "**" / "*.json"), recursive=True):
         try:
             d = json.loads(Path(f).read_text(encoding="utf-8"))
         except Exception:

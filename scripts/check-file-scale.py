@@ -42,6 +42,16 @@ whose marker carries no real reason and verifies THAT fires - a checker that can
 bites is the failure mode the whole guard exists to prevent. A run that scans ZERO files also fails
 loudly, for the reason check-duplicate-defs.py records: wrong root beats silent success.
 
+THE DIRECTORY CEILING (2026-10-02, the GM: *"whether we should have some kind of a check that is automated
+that looks at the maximum number of files in any directory"*). No directory may hold more than
+MAX_DIR_FILES files of its own. Not for the filesystem (ext4 indexes directories) nor for git (it is
+comfortable far past this), but for the first wall a session actually hits: a shell glob over one folder
+(`grep x dir/*`) expands every name onto one command line, capped at 2 MB - about 25,000-30,000 files at
+this tree's path lengths, met for real by the 35,000-file guard log outside the repository. 5,000 fires
+years ahead of that wall. The largest directory when it was added held 2,202 files (the glossary); the
+two logs that grow without end (`dev/run-log/`, `dev/bypass-log/`) moved into month folders the same day.
+Counted from the same `ls-files` as the line check, so it costs one more index read (~10 ms).
+
 Invoked by: the diagram Makefile's `lint` phase (which `make done` runs first, so an oversize file
 is reported before the map roll is paid for) and scripts/sync-with-main.sh before EVERY push - the
 push guard is the point, because a docs-or-tests-only delta takes the DIRECT route and never runs a
@@ -60,6 +70,8 @@ MARKER = "FILE_SIZE_OK:"
 MIN_REASON = 40
 HEADER_LINES = 40
 SKIP_PARTS = {"legacy-hand-authored-pool", ".clones", "specs", ".git", "__pycache__", "node_modules"}
+MAX_DIR_FILES = 5000
+DIR_SKIP_PARTS = {".clones", ".git", "node_modules"}  # other sessions' trees and git's own: not this tree's directories
 
 GUIDANCE = f"""
   Each file above is past the ~{MAX_LINES:,}-line bar of constitution Principle X clause 13. The clone
@@ -153,6 +165,38 @@ def run(root: str = ".") -> tuple[list[tuple[Path, int]], list[tuple[Path, int, 
     return over, justified, scanned
 
 
+DIR_GUIDANCE = f"""
+  Each directory above holds more than {MAX_DIR_FILES:,} files of its own. Split it into subdirectories by a
+  key the files already carry - a month for a log (`dev/run-log/<YYYY-MM>/`, the worked example), a leading
+  number range or a kind for content - and make every reader search recursively, so nothing written in the old
+  layout is lost. A shell glob over one flat folder fails outright near 25,000 files ("Argument list too long").
+"""
+
+
+def dir_counts(root: str = ".") -> dict[str, int]:
+    """Files directly in each directory: the tracked and not-ignored set when this is a git tree, else a walk."""
+    base = Path(root)
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(base), "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+            capture_output=True, text=True, check=True, timeout=30,
+        ).stdout
+        rels = [p for p in out.split("\0") if p]
+    except (subprocess.SubprocessError, OSError):
+        rels = [str(p.relative_to(base)) for p in base.rglob("*") if p.is_file()]
+    counts: dict[str, int] = {}
+    for rel in dict.fromkeys(rels):
+        parent = rel.rpartition("/")[0] or "."
+        if not DIR_SKIP_PARTS.intersection(parent.split("/")):
+            counts[parent] = counts.get(parent, 0) + 1
+    return counts
+
+
+def crowded(root: str = ".", limit: int = MAX_DIR_FILES) -> list[tuple[str, int]]:
+    """Every directory past the ceiling, largest first."""
+    return sorted(((d, n) for d, n in dir_counts(root).items() if n > limit), key=lambda r: -r[1])
+
+
 def selftest() -> int:
     """Prove the checker bites: oversize fires, justified passes, a token without a reason fires."""
     import tempfile
@@ -180,7 +224,17 @@ def selftest() -> int:
                 file=sys.stderr,
             )
             return 1
-    print("check-file-scale: selftest ok (oversize fires, a justified file passes, a bare marker fires)")
+    with tempfile.TemporaryDirectory() as td:   # the directory ceiling, at a ceiling of 3
+        d = Path(td)
+        for name, n in (("full", 3), ("over", 4)):
+            (d / name).mkdir()
+            for i in range(n):
+                (d / name / f"{i}.json").write_text("{}")
+        got = crowded(str(d), limit=3)
+        if got != [("over", 4)]:
+            print(f"check-file-scale SELFTEST FAILED: expected only over/ (4 files) past a ceiling of 3; got {got}", file=sys.stderr)
+            return 1
+    print("check-file-scale: selftest ok (oversize fires, a justified file passes, a bare marker fires, a crowded directory fires)")
     return 0
 
 
@@ -197,6 +251,8 @@ def main(argv: list[str]) -> int:
             print(f"  {n:5d}  {p}   JUSTIFIED: {why}")
         if not over and not justified:
             print(f"  every one of {scanned} Python files is at or under {MAX_LINES:,} lines")
+        for d, n in sorted(dir_counts(root).items(), key=lambda r: -r[1])[:5]:
+            print(f"  {n:5d} files  {d}/   (ceiling {MAX_DIR_FILES:,})")
         return 0
     if scanned == 0:
         print(
@@ -209,8 +265,13 @@ def main(argv: list[str]) -> int:
         for p, n in sorted(over, key=lambda r: -r[1]):
             print(f"  {n:5d} lines ({n - MAX_LINES:+d})  {p}", file=sys.stderr)
         print(GUIDANCE, file=sys.stderr)
-        return 1
-    return 0
+    dirs = crowded(root)
+    if dirs:
+        print(f"\ncheck-file-scale: {len(dirs)} director(ies) past the {MAX_DIR_FILES:,}-file ceiling\n", file=sys.stderr)
+        for d, n in dirs:
+            print(f"  {n:6d} files ({n - MAX_DIR_FILES:+d})  {d}/", file=sys.stderr)
+        print(DIR_GUIDANCE, file=sys.stderr)
+    return 1 if over or dirs else 0
 
 
 if __name__ == "__main__":

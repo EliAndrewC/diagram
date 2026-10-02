@@ -212,7 +212,7 @@ def bypass_log(root: pathlib.Path, target: str, why: str) -> None:
     """A stated reason, written where `make audit` reads every escape (`dev/bypass-log/`, as `entry-gate.sh` writes it)."""
     import secrets  # noqa: PLC0415
 
-    bl = root / ".claude/skills/diagram/dev/bypass-log"
+    bl = root / ".claude/skills/diagram/dev/bypass-log" / time.strftime("%Y-%m", time.gmtime())  # a month folder (2026-10-02)
     bl.mkdir(parents=True, exist_ok=True)
     head = _git(root, "rev-parse", "--short", "HEAD").strip()
     rec = {"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "target": target, "commit": head, "why": why}

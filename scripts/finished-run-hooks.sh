@@ -329,7 +329,9 @@ report() { # report <clone> <mark|nomark> -> one line per finished run the sessi
   log="$clone/.claude/skills/diagram/dev/run-log"
   [ -d "$log" ] || return 0
   seen="$clone/.git/finished-run.seen"
-  newest=$(ls -t "$log"/*.json 2>/dev/null | head -1)
+  # GUARD_EDIT_OK: 2026-10-02 - the run log is in month folders (dev/run-log/<YYYY-MM>/); `find`, not a glob, so the
+  # newest entry is found however many months the log holds (a glob over them all reaches the argument limit)
+  newest=$(find "$log" -name '*.json' -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
   [ -n "$newest" ] || return 0
   # ALREADY TOLD? The marker holds the newest record's basename at the time of the last report.
   [ -f "$seen" ] && [ "$(cat "$seen" 2>/dev/null)" = "$(basename "$newest")" ] && return 0

@@ -40,7 +40,8 @@ def _logs(cwd: str) -> list[str]:
     mirror = top.split("/.clones/")[0] if "/.clones/" in top else top
     for root in dict.fromkeys((top, mirror)):   # dedupe, order preserved
         if root:
-            out.append(os.path.join(root, ".claude/skills/diagram/dev/run-log/*.json"))
+            # recursive since 2026-10-02: the log is in month folders (dev/run-log/<YYYY-MM>/), flat entries still read
+            out.append(os.path.join(root, ".claude/skills/diagram/dev/run-log/**/*.json"))
     return out
 
 
@@ -57,7 +58,7 @@ def median_seconds(target: str, scope: str | None = None, cwd: str | None = None
     keeps the guard live meanwhile) and it cannot lie."""
     seen: dict[str, dict] = {}
     for pattern in _logs(cwd or os.getcwd()):
-        for path in glob.glob(pattern):
+        for path in glob.glob(pattern, recursive=True):
             try:
                 rec = json.load(open(path))
             except Exception:
@@ -79,7 +80,7 @@ def class_count(target: str, scope: str | None = None, cwd: str | None = None, c
     """How many recent green runs the class holds - what `_ratchet`'s below-sample rule reads."""
     seen: dict[str, dict] = {}
     for pattern in _logs(cwd or os.getcwd()):
-        for path in glob.glob(pattern):
+        for path in glob.glob(pattern, recursive=True):
             try:
                 rec = json.load(open(path))
             except Exception:

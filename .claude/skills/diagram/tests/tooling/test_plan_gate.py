@@ -142,7 +142,7 @@ def test_a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded(tmp_path
     assert not ok and "needs a REASON" in message
     ok, message = gate.tick_permitted(d, tmp_path, "a superseded plan nobody implements")
     assert ok and "BYPASSED" in message
-    entries = list((tmp_path / ".claude" / "skills" / "diagram" / "dev" / "bypass-log").glob("*.json"))
+    entries = list((tmp_path / ".claude" / "skills" / "diagram" / "dev" / "bypass-log").rglob("*.json"))
     assert len(entries) == 1 and "a superseded plan" in entries[0].read_text()
     assert sorted(_log_rules(tmp_path)) == sorted(["plan-review-missing", "PLAN_REVIEW_OK-no-reason", "plan-review-ok"])
     gate.record(d, current([]), "spec-fidelity")

@@ -53,7 +53,7 @@ per term:
 | what you want | where it is | about |
 |---|---|---|
 | does this WORD have a definition, under any term? | `.claude/skills/diagram/research/assets/glossary-variants.txt` - one tab-separated line per variant, and the term that owns it | 22 KB, one read |
-| is this word itself a TERM? | `ls .claude/skills/diagram/l7r/diagram/interactive/assets/glossary/` - the filenames ARE the term list | 14 KB, no file opened |
+| is this word itself a TERM? | `ls .claude/skills/diagram/l7r/diagram/interactive/assets/glossary/*-<word>.json` - the filenames are the terms; ask for the one you want, never list the folder (2,202 names, ~30 KB) | one line, no file opened |
 | what does one term actually say? | that term's own file, `NNNN-<term>.json` | about 154 bytes |
 
 **Read the variant index, not the glossary.** A word in the prose is usually a variant (`towpaths` for

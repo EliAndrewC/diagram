@@ -33,8 +33,10 @@ assembled `assets/glossary.json` and the derived `research/assets/glossary.js` a
 `make glossary` and never hand-edited; `research/assets/glossary-variants.txt` is the derived index -
 one tab-separated line per variant, and the term that owns it.
 
-    ls l7r/diagram/interactive/assets/glossary/       the term list - the filenames ARE it
-    ls l7r/diagram/interactive/assets/glossary/*towpath*   one term, by its word
+    grep -i '^towpath' research/assets/glossary-variants.txt   is this word defined, and by which term
+    ls l7r/diagram/interactive/assets/glossary/*-towpath.json   is it a term itself (the filenames are the terms)
+
+Never list the whole folder: 2,202 names is about 30 KB of context, and every answer above is one line.
 
 A word in prose is usually a VARIANT, and only the index maps it to its term - a grep over the term
 files answers with candidates, because a definition may mention a word another term owns. Adding a term

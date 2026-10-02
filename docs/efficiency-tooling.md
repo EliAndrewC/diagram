@@ -240,7 +240,7 @@ bytes:
 | the question | what answers it | bytes |
 |---|---|---|
 | does this WORD have a definition, under any term? | `research/assets/glossary-variants.txt`, derived | 22,564 |
-| is this word itself a TERM? | the directory listing - the filenames ARE the term list | 13,730 |
+| is this word itself a TERM? | a filename glob, `glossary/*-<word>.json` - never the whole listing, which had grown to ~30,000 bytes by 2026-10-02 | one line |
 | what does one term say? | that term's own file | ~154 |
 
 **The index is not a convenience.** A grep over the term files answers with candidates, not the
