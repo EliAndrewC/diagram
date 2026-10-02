@@ -18,9 +18,9 @@ import html
 import json
 from dataclasses import dataclass
 
-from l7r.diagram.interactive.sources import linkify
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
+from l7r.diagram.interactive.sources import linkify
 
 TITLE = "The research record"
 #: The two halves of the record, in the order they are read. A section is shown in a half only when it, or one of its

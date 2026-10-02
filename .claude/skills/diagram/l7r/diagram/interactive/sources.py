@@ -308,7 +308,9 @@ def link_target(key: str, cite: str, rel: str) -> str:
     carries parentheses keeps them - the defect of 2026-09-06) when it was read, else the registry entry that
     says it was not (`rel` is '' from research/, '../' from cities/ and citations/, '../../' from citations/cities/)."""
     m = _CITE_URL.search(cite)
-    if not_read(cite) or m is None:
+    if not_read(cite) or m is None or _CANON_FILE.search(cite):
+        # the GM's own campaign notes keep their registry link (the GM's ruling, 2026-09-07); since feature 307 the
+        # registry entry they open is what links the notes on GitHub, section by section
         return f"{rel}SOURCES.html#{key}"
     u = m.group(0).rstrip(".,;:")
     while u.endswith(")") and u.count(")") > u.count("("):

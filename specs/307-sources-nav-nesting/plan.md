@@ -6,8 +6,8 @@
 
 The registry's works, already grouped by section (feature 305), are grouped once more by their primary kind. One
 builder method, `Build.shelves`, gives section -> kind -> works, and the sidebar, the sources index, the one-page record
-and the home page all draw from it. Bare URLs in citation lines are made links by one function, `sources.linkify`,
-called where a citation line is rendered. The 16 canon entries' citation lines are rewritten once to cite GitHub, by a
+and the home page all draw from it. Bare URLs anywhere on a page are made links by one function, `sources.linkify`,
+called on every page's content (`site_pages.shell`). The 16 canon entries' citation lines are rewritten once to cite GitHub, by a
 spec-local script that computes each anchor from the notes' headings.
 
 ## Technical Context
@@ -37,7 +37,9 @@ untagged, stands under no kind and its section lists its works directly.
 
 **D3 - The pages.** The sources index: section `h3`, kind `h4` (`works-kind`, its explanation as the tooltip), then the
 works. The one-page record: the same, entries at `h5`, its contents nesting sections and kinds. The home page: the
-"Sources" heading links the index, with the sections and their kinds nested beneath. The registry pager walks
+"Sources" heading links the index, with the sections, their kinds and the works nested beneath, each section and kind a
+block that opens on a click. The one-page record's contents list the works under each kind (the canon's under its
+section), as they list each research section's questions. The registry pager walks
 section -> kind -> registry order.
 
 **D4 - `linkify`** in `sources.py`: a bare `http(s)` URL outside every tag, comment, link, script and style becomes

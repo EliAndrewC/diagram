@@ -347,12 +347,7 @@ class Build:
         for facet in ct.FACETS:
             tags = ", ".join(f'<a href="{sp.tag_file(facet, t.id)}">{html.escape(t.name)}</a>' for t in sp.facet_tags(self.record.vocab, facet))
             body.append(f"<p><em>{sp.FACET_NAMES[facet]}:</em> {tags}</p>")
-        sources = "".join(
-            f'<li><a href="{n["href"]}">{html.escape(n["title"])}</a>'
-            + ("<ul>" + "".join(f'<li><a href="{k["href"]}">{html.escape(k["title"])}</a></li>' for k in n["sections"]) + "</ul>" if n["sections"] else "")
-            + "</li>"
-            for n in self.source_nodes()
-        )
+        sources = "".join(_home_source(n) for n in self.source_nodes())
         body.append(f'<h2><a href="{links.REGISTRY_DIR}/index.html">{sp.REGISTRY_GROUP}</a></h2>\n<ul>{sources}</ul>')
         self.files["index.html"] = sp.shell(TITLE, "index.html", "", "\n".join(body))
 
@@ -426,10 +421,28 @@ def _nav_row(item: sp.Item) -> list[str]:
     return [item.title, f"{links.REGISTRY_DIR}/{item.id}.html"]
 
 
+def _works_list(items: list[sp.Item], href: str) -> str:
+    """Works as a contents list: each its key, linking `href` with the key in place of `{}`."""
+    return "<ul>" + "".join(f'<li><a href="{href.format(i.id)}">{html.escape(i.title)}</a></li>' for i in items) + "</ul>" if items else ""
+
+
 def _toc_section(section: st.Section, kinds: list[tuple[st.Label | None, list[sp.Item]]]) -> str:
-    """A works section's line in the one-page record's contents, its kinds nested beneath it (feature 307)."""
-    subs = "".join(f'<li><a href="#{st.kind_anchor(section, lab)}">{html.escape(lab.name)}</a></li>' for lab, _run in kinds if lab is not None)
-    return f'<li><a href="#{section.id}">{html.escape(section.title)}</a>' + (f"<ul>{subs}</ul>" if subs else "") + "</li>"
+    """A works section's line in the one-page record's contents: its kinds nested beneath it, and the works beneath each
+    kind - or beneath the section, for the canon (feature 307 FR-004)."""
+    subs = "".join(f'<li><a href="#{st.kind_anchor(section, lab)}">{html.escape(lab.name)}</a>{_works_list(run, "#{}")}</li>' for lab, run in kinds if lab is not None)
+    direct = [i for lab, run in kinds if lab is None for i in run]
+    return f'<li><a href="#{section.id}">{html.escape(section.title)}</a>' + _works_list(direct, "#{}") + (f"<ul>{subs}</ul>" if subs else "") + "</li>"
+
+
+def _home_source(node: dict) -> str:
+    """A works section on the home page: its kinds and their works beneath it, each in a block that opens on a click, so
+    the contents stay readable with two thousand works under them (feature 307 FR-004)."""
+
+    def works(rows: list[list[str]]) -> str:
+        return "<ul>" + "".join(f'<li><a href="{href}">{html.escape(title)}</a></li>' for title, href in rows) + "</ul>" if rows else ""
+
+    kinds = "".join(f'<li><details><summary><a href="{k["href"]}">{html.escape(k["title"])}</a></summary>{works(k["items"])}</details></li>' for k in node["sections"])
+    return f'<li><details><summary><a href="{node["href"]}">{html.escape(node["title"])}</a></summary>{works(node["items"])}' + (f"<ul>{kinds}</ul>" if kinds else "") + "</details></li>"
 
 
 def build(record_dir: str = RESEARCH_DIR) -> dict[str, str]:

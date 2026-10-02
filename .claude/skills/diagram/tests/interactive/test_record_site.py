@@ -302,7 +302,10 @@ def test_the_sources_nest_by_section_then_kind_in_the_sidebar_the_contents_and_t
     assert 'data-part="sources/works-canon"' in files["sources/gamma.html"]
     assert index.index('id="works-premodern-japan"') < index.index('id="works-premodern-japan-primary"') < index.index('href="alpha.html"')
     home = files["index.html"]
+    single = files["all.html"]
     assert home.count(">Sources<") == 1 and 'href="sources/index.html#works-premodern-japan-primary">Primary</a>' in home
+    assert home.index(">Primary</a>") < home.index('href="sources/alpha.html">alpha</a>'), "the home page lists the works under their kind"
+    assert single.index('href="#works-premodern-japan-primary"') < single.index('<li><a href="#alpha">alpha</a></li>'), "the contents list the works"
     single = files["all.html"]
     assert '<h4 class="works-kind" id="works-present-day-reference"' in single and 'href="#works-present-day-reference">Reference</a>' in single
     assert 'Alpha, a work (<a href="https://a" target="_blank" rel="noopener">https://a</a>)' in files["sources/alpha.html"], "307 FR-006 on a source's page"

@@ -1,0 +1,72 @@
+{
+ "feature": "307-sources-nav-nesting",
+ "plan_sha256": "3f64d6caf6abeed20e9ad44cef7c5b412aa02c4509916320448d34e1b360a2b6",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Summary",
+   "summary": "Bare URLs in citation lines are made links by linkify, called where a citation line is rendered.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Restates the citation-lines-only scope that round 2 rejected; the GM asked that a displayed URL become a link, and spec FR-006/SC-004 now cover every URL shown on any built page. D4 implements the amended scope, so the Summary contradicts both the request and D4; it must say every page's content (site_pages.shell)."
+  },
+  {
+   "id": "D1",
+   "summary": "Second level is the primary kind in source-tags.json order; untagged canon lists its works directly.",
+   "class": "within",
+   "why": "Settled by FR-002 and the GM's Reference vs Scholarship example."
+  },
+  {
+   "id": "D2",
+   "summary": "Sidebar: works sections directly under the Sources group (no Sources node), keys sources/<section>[/<kind>], links into the sources index, a source page opens its section and kind, ids claimed by the id check.",
+   "class": "within",
+   "why": "Implements FR-001 and FR-003; the key and anchor scheme is mechanism."
+  },
+  {
+   "id": "D3-index",
+   "summary": "Sources index: section h3, kind h4 with its explanation as tooltip, then works; one-page record Sources part the same at h5.",
+   "class": "within",
+   "why": "FR-004 for the index and the one-page Sources part."
+  },
+  {
+   "id": "D3-home-contents",
+   "summary": "Home page: the Sources heading links the index, with the sections and their kinds nested beneath - no works listed.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The accepted spec's Independent Test (amended this very round) says the home page's contents show Sources -> section -> kind -> works with every work exactly once, and FR-004 says section headings, then kind headings, then the works. The GM asked for the table of contents broken into subsections and sub-subsections 'and then list things underneath that'. Not impossible, not implied elsewhere by the GM; matching how the home page treats questions is consistency with existing code, which does not legitimate an exception. List the works, or amend the spec and put the omission to review."
+  },
+  {
+   "id": "D3-onepage-contents",
+   "summary": "One-page record's contents nest sections and kinds only; the works are not listed in its contents.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Same Independent Test names the one-page contents as showing Sources -> section -> kind -> works. The one-page contents already list each research section's questions, so listing works under kinds is the parallel; omitting them narrows the accepted spec without a GM basis."
+  },
+  {
+   "id": "D3-pager",
+   "summary": "The registry pager walks section -> kind -> registry order.",
+   "class": "within",
+   "why": "Follows the requested nesting; adds no behavior the GM did not ask for."
+  },
+  {
+   "id": "D4",
+   "summary": "linkify: bare http(s) URL outside tags, comments, links, scripts and styles becomes a target=_blank rel=noopener self-link, trailing punctuation outside; called on every page's content in site_pages.shell and idempotently on citation lines.",
+   "class": "within",
+   "why": "Implements FR-006 as amended and message 2 (a displayed URL becomes a link opening in a new tab, done by the build)."
+  },
+  {
+   "id": "D5",
+   "summary": "One-time migrate script rewrites the canon citation lines: URL: none -> the file's GitHub URL; each quoted section followed by its heading URL, anchor by GitHub's rule with -1 for repeats; plain text else unique prefix match; unmatched refused.",
+   "class": "within",
+   "why": "Implements FR-007 and the GM's GitHub example; prefix matching is recorded in the spec's Decisions table and refuses a guess."
+  },
+  {
+   "id": "D6",
+   "summary": "research/CLAUDE.md states that a canon entry cites GitHub this way and that a citation line carries its URL as plain text because the build links it.",
+   "class": "within",
+   "why": "Keeps the requested state true for future entries; enforcement/documentation of what was asked, not new behavior."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
