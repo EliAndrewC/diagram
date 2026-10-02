@@ -47,7 +47,7 @@ field rock, grave island, and every field, water, way and building class.
 
 Not canopy: the bamboo culm marks and stands (FR-003); the perimeter dike's and the mulberry dikes' coppiced mulberry, "for the
 most part trained as low bushes" (`research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`);
-and the tea dike's hedge, clipped to about 3 ft wide (`fields/landuse.py`) -
+and the tea dike's hedge, clipped low (`fields/landuse.py`; its width a drawing guess) -
 each a bush of the bank cut back as a crop, which the code calls "not canopy"
 (`land/dikes.py`, `fields/landuse.py`).
 
