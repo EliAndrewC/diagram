@@ -118,3 +118,19 @@ def test_a_source_page_shows_its_archived_copy_and_the_build_refuses_a_missing_o
 def test_the_real_record_carries_its_manifest() -> None:
     """The refusal is skipped for a record with no `archive/` (a test's small record) - so the real one must have it."""
     assert os.path.isfile(os.path.join(RESEARCH_DIR, archive.ARCHIVE_DIR, archive.GM_COPIES))
+
+
+def test_an_entry_with_no_heading_or_no_citation_line_takes_no_archived_copy_line() -> None:
+    """`Build.entry_html`'s two early returns: an entry with no heading is shown as written, and one with a heading but no
+    paragraph gets its labels and nothing else - there is no citation line to hang an archived-copy line under."""
+    from l7r.diagram.interactive.record import site_pages as sp  # noqa: PLC0415
+
+    class Labels:
+        def labels(self, key: str) -> str:
+            return f"<p class=labels>{key}</p>"
+
+    b = site.Build.__new__(site.Build)
+    b.catalog, b.archive = Labels(), {}
+    assert b.entry_html(sp.Item("k", "<div>no heading</div>", "", "")) == "<div>no heading</div>"
+    got = b.entry_html(sp.Item("k", "<h3>Key</h3><ul><li>x</li></ul>", "", ""))
+    assert got == "<h3>Key</h3>\n<p class=labels>k</p><ul><li>x</li></ul>"
