@@ -19,6 +19,8 @@ translated-quotation form.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import pathlib
 import re
 import subprocess
@@ -59,23 +61,57 @@ def _git(root: pathlib.Path, *args: str) -> str:
     return subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, check=False).stdout
 
 
+def _cache_path(root: pathlib.Path) -> pathlib.Path:
+    common = pathlib.Path(_git(root, "rev-parse", "--git-common-dir").strip() or ".git")
+    return (common if common.is_absolute() else root / common) / "record-checks" / "translation-pairs.json"
+
+
+def _parsed(cache: dict[str, list], notes: str, originals: str, page: str) -> list:
+    """[pairs, glosses] of one question's notes and page, from the cache when its content was parsed before: parsing every
+    notes file at both revisions cost 3.3 s of every push's record gate, and almost none of them change (feature 311)."""
+    key = hashlib.sha1("\x00".join((notes, originals, page)).encode("utf-8")).hexdigest()
+    if key not in cache:
+        cache[key] = [pairs(notes, originals), sp.glosses(page) + sp.glosses(notes)]
+    return cache[key]
+
+
 def record_pairs(root: pathlib.Path, rev: str | None) -> dict[tuple[str, str], list[tuple[str, str, str, str]]]:
     """{(translation, original): [(notes file, key, language, ...)]} across the whole record at `rev` (None: the tree)."""
     if rev is None:
         files = _notes_files([str(p.relative_to(root)) for p in (root / RECORD).rglob("*.notes.html")])
         read = lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else ""  # noqa: E731
     else:
-        files = _notes_files(_git(root, "ls-tree", "-r", "--name-only", rev, "--", RECORD).split())
-        read = lambda f: _git(root, "show", f"{rev}:{f}")  # noqa: E731
+        # one `git cat-file --batch` over the questions, not a `git show` per file: 6.2 s -> about 1 (feature 311, where this
+        # report became part of every push's record gate)
+        names = [n for n in _git(root, "ls-tree", "-r", "--name-only", rev, "--", f"{RECORD}/questions").split() if n.endswith(".html")]
+        files = _notes_files(names)
+        from _record_owed import _cat  # noqa: PLC0415
+
+        texts = dict(zip(names, _cat(root, [f"{rev}:{n}" for n in names]), strict=True))
+        read = lambda f: texts.get(f, "")  # noqa: E731
+    cache_file = _cache_path(root)
+    try:
+        cache = json.loads(cache_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cache = {}
+    size = len(cache)
     out: dict[tuple[str, str], list[tuple[str, str, str, str]]] = {}
     for f in files:
         notes = read(f)
-        for key, lang, quote, original in pairs(notes, read(f[: -len(".notes.html")] + ".originals.html")):
+        stem = f[: -len(".notes.html")]
+        found, glosses = _parsed(cache, notes, read(stem + ".originals.html"), read(stem + ".html"))
+        for key, lang, quote, original in found:
             out.setdefault((quote, original), []).append((f, key, lang, quote))
         # a term glossed in our own words (feature 292: `垣根 (kakine, "hedge")`) is a translation too - the meaning
         # against the characters - in the question and in its notes
-        for chars, reading, meaning in sp.glosses(read(f[: -len(".notes.html")] + ".html")) + sp.glosses(notes):
+        for chars, reading, meaning in glosses:
             out.setdefault((f'{meaning} (read {reading})', chars), []).append((f, "a term's gloss", "", meaning))
+    if len(cache) != size:
+        try:
+            cache_file.parent.mkdir(parents=True, exist_ok=True)
+            cache_file.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+        except OSError:
+            pass  # a cache that cannot be written costs time, never a wrong answer
     return out
 
 

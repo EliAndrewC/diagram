@@ -1126,6 +1126,19 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
 
+# GUARD_EDIT_OK: feature 311 - two new operations (the record checks a delta owes, and recording one answered); the push's refusal is entry-gate.sh, not these.
+record-owed: ## [project] every record check this delta owes (intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift), with the command that answers each   [Q=0412] [UNANSWERED=1] [BETWEEN="<a> <b>"]
+##  Q=<NNNN>        only that question's units
+##  UNANSWERED=1    only the units with no current answer record (what the push refuses)
+##  BETWEEN="a b"   the units revision b owes against revision a (a replay; no entry-drift)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
+
+record-checked: ## [project] record that a record check returned on the units it read - what answers an owed unit at the push   CHECK=<check> RESULT="<counts>" (BUNDLE=<dir> | Q=<NNNN> NOTES=<k,k> for source-reader | ... REASON="<why>")
+##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
+##  Q= NOTES= KEY= KIND=  the units the tree owes on that subject, at today's content - source-reader on named notes, or any check with REASON= (written to dev/bypass-log/)
+	@if [ -z "$(CHECK)" ] || [ -z "$(RESULT)" ]; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",)
+
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name

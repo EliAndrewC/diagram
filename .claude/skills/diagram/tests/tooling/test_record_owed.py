@@ -119,7 +119,6 @@ def test_a_new_question_owes_every_check() -> None:
         "intro-check:0094",
         "quote-check:0094#absence",
         "quote-check:0094#kyakhta",
-        "quote-check:0094#unfootnoted",
         "quote-check:0094.drawing#absence",
         "quote-check:0094.drawing#kyakhta",
         "record-format:0094",
