@@ -34,7 +34,7 @@ from itertools import chain
 from typing import Any
 
 from ..farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, PIT_FT, kura_rect
-from .tree_shade import crown_shades
+from .tree_shade import crown_in_ground, sun_ground
 
 Rect = tuple[float, float, float, float]  # (center x, center y, width, height), the house's unturned frame
 
@@ -451,7 +451,7 @@ def sun_turns(lo: float, hi: float) -> tuple[float, ...]:
 
 def _sunlit(ground: Sequence[Rect], shade: float, turns: Sequence[float]) -> Callable[[float, float, float], bool]:
     """Is a crown of radius r at (x, y) clear of every plot's sun ground at every rake? Each rake turns the crown and the
-    plots together about the house's center, the plots' boxes as `turned_box` draws them, and asks `crown_shades` in the
+    plots together about the house's center, the plots' boxes as `turned_box` draws them, and asks `crown_in_ground` (the predicate `crown_shades` reads) in the
     world's axes, where the sun is."""
     if shade <= 0.0 or not ground:
         return lambda x, y, r: True
@@ -459,10 +459,11 @@ def _sunlit(ground: Sequence[Rect], shade: float, turns: Sequence[float]) -> Cal
     for t in turns:
         th = math.radians(t)
         c, s, ac, as_ = math.cos(th), math.sin(th), abs(math.cos(th)), abs(math.sin(th))
-        frames.append((c, s, [(q[0] * c - q[1] * s, q[0] * s + q[1] * c, q[2] * ac + q[3] * as_, q[2] * as_ + q[3] * ac) for q in ground]))
+        # each plot's sun ground taken once per rake (`sun_ground`), not once per crown asked of it
+        frames.append((c, s, [sun_ground((q[0] * c - q[1] * s, q[0] * s + q[1] * c, q[2] * ac + q[3] * as_, q[2] * as_ + q[3] * ac), shade) for q in ground]))
 
     def clear(x: float, y: float, r: float) -> bool:
-        return not any(crown_shades(x * c - y * s, x * s + y * c, r, q, shade) for c, s, plots in frames for q in plots)
+        return not any(crown_in_ground(x * c - y * s, x * s + y * c, r, g) for c, s, grounds in frames for g in grounds)
 
     return clear
 
