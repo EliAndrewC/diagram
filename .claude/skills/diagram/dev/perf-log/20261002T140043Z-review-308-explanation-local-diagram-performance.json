@@ -1,0 +1,390 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "30059fdde",
+    "label": "308-start",
+    "utc": "20261002T121458Z"
+  },
+  "binding": "53fa1fbb15dd660fbd636ff9f0c845103623075b48f3b0bceddbf7c54ce732ea",
+  "control": "perf-control-seed47-20-web-base",
+  "control_record": {
+    "command": "TAG=base|clone ROOT=<tree> python3 stages.py 20 47",
+    "file": "/diagram/.clones/diagram-performance/specs/308-grow-the-cluster/measurements.json",
+    "key": "perf-control-seed47-20-web-base",
+    "quantity": "three alternated runs each, 2026-10-02: the base engine (/tmp/base308, HEAD before the engine change) web 0.37/0.39/0.41 s with 21 access-corridor legs; the clone 1.09/1.22/1.24 s with 31 legs. Profiled: the clone's web runs its router 18 times, 17 of them in _join_orphan_ways (about 1.0 s) re-joining pieces of the longer routed corridors that the lane law cut; the base runs it 9 times (0.25 s). With the routed corridors removed (the base) the web costs 0.39 s: the increase is the routed paths' extra legs",
+    "round": "298403d31",
+    "source": "scratchpad stages.py, HH=20, seed 47, and its cProfile",
+    "subject": "perf bookend, reference spec, seed 47, 20 households, the web stage",
+    "unit": "s, the web stage on the base engine (median of three)",
+    "value": 0.39,
+    "verifies": "the band-2 reading of 308-end against 308-start on seed 47 at 20 households (+18.9%, web +0.8 s)"
+  },
+  "end": {
+    "commit": "298403d31",
+    "label": "308-end",
+    "utc": "20261002T135711Z"
+  },
+  "environment": "local",
+  "explanation": "Seed 47 at 20 households: the web stage +0.8 s (0.39 -> 1.2 s, three alternated runs). The grown cluster's routed access paths (plan D3) carry more legs (31 against 21), and the web re-joins the pieces of them its lane law cuts (_join_orphan_ways: 17 router calls, ~1.0 s, against 9 calls / 0.25 s on the base). Every other leg is faster: the reference total -35%, 10 households -29%, 20 households -19%, 40 households -38%.",
+  "feature": "308-grow-the-cluster",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261002T140043Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -25.9,
+          "39": -32.4,
+          "4": -36.0,
+          "47": -18.8
+        },
+        "total_pct": -29.4
+      },
+      "20": {
+        "seeds": {
+          "25": -28.2,
+          "39": -38.2,
+          "4": -10.9,
+          "47": 18.9
+        },
+        "total_pct": -19.2
+      },
+      "40": {
+        "seeds": {
+          "25": -33.7,
+          "39": -67.1,
+          "4": -14.0,
+          "47": -5.2
+        },
+        "total_pct": -38.0
+      }
+    },
+    "seeds": {
+      "25": -10.8,
+      "39": -50.9,
+      "4": -43.2,
+      "47": -20.0
+    },
+    "total_pct": -35.0
+  },
+  "render": "perf bands [local]: 308-end vs 308-start -> band 2\n  seed   4   -43.2%\n  seed  25   -10.8%\n  seed  39   -50.9%\n  seed  47   -20.0%\n  TOTAL      -35.0%\n  10 households: TOTAL  -29.4% -> band 0\n    seed   4   -36.0%\n    seed  25   -25.9%\n    seed  39   -32.4%\n    seed  47   -18.8%\n  20 households: TOTAL  -19.2% -> band 2\n    seed   4   -10.9%\n    seed  25   -28.2%\n    seed  39   -38.2%\n    seed  47   +18.9%; grew: web +0.8s\n  40 households: TOTAL  -38.0% -> band 0\n    seed   4   -14.0%\n    seed  25   -33.7%\n    seed  39   -67.1%\n    seed  47    -5.2%\n  crossed: 20 households: seed 47 +18.9% > 10%\n  owes: band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.07,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.0
+      ],
+      "field": [
+        0.56,
+        0.57
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.53,
+        0.64
+      ],
+      "homesteads": [
+        1.08,
+        0.73
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.17,
+        0.09
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.04
+      ],
+      "track": [
+        0.06,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.54,
+        0.62
+      ],
+      "windbreak": [
+        0.59,
+        0.37
+      ],
+      "woodland": [
+        0.04,
+        0.04
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.08,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.76,
+        0.43
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.87,
+        0.57
+      ],
+      "homesteads": [
+        1.81,
+        0.69
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.23,
+        0.07
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.01
+      ],
+      "sink": [
+        0.02,
+        0.01
+      ],
+      "track": [
+        0.12,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.72,
+        0.31
+      ],
+      "windbreak": [
+        0.66,
+        0.34
+      ],
+      "woodland": [
+        0.2,
+        0.09
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.07,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.02,
+        0.01
+      ],
+      "field": [
+        0.85,
+        0.72
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        1.14,
+        0.72
+      ],
+      "homesteads": [
+        3.13,
+        1.43
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.17,
+        0.19
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.13,
+        0.14
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.99,
+        0.3
+      ],
+      "windbreak": [
+        0.66,
+        0.42
+      ],
+      "woodland": [
+        0.2,
+        0.15
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.06,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.0
+      ],
+      "field": [
+        0.61,
+        0.47
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.71,
+        0.5
+      ],
+      "homesteads": [
+        1.25,
+        0.9
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.14,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.01
+      ],
+      "sink": [
+        0.04,
+        0.03
+      ],
+      "track": [
+        0.07,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.5,
+        0.66
+      ],
+      "windbreak": [
+        0.54,
+        0.35
+      ],
+      "woodland": [
+        0.05,
+        0.04
+      ]
+    }
+  },
+  "verdict": "pending"
+}

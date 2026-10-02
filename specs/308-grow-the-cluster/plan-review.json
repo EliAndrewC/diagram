@@ -1,0 +1,117 @@
+{
+ "feature": "308-grow-the-cluster",
+ "plan_sha256": "55dc86aa79ec0ab80b3186ac98e14cee50a0c7774d83c2c569b819d937d20a73",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-first",
+   "summary": "The first house is offered the free ground nearest the seat (capacity.free_seats through the seat region, at most DRY_SPELL offers)",
+   "class": "within",
+   "why": "US1 puts the first house at the seed point and the placer decides."
+  },
+  {
+   "id": "D1-next",
+   "summary": "Every standing house offers seats in a jittered ring (+/-12 deg, up to +12%) at the distance where the footprints part plus grow_gap, the gap on the parting axis (seat_toward)",
+   "class": "within",
+   "why": "FR-004 as written; the parting-axis fix makes 'never closer' hold where a slanted bearing gave only gap x cos."
+  },
+  {
+   "id": "D1-footprint",
+   "summary": "Standing footprint (envelope, wood seats, the yard's and beds' south reach + SUN_CORRIDOR_FT + 2 ft, the path out as grow_gap); the new household's reach its own lot's envelope rolled at the seat offered, settled when offered (settled_seat)",
+   "class": "within",
+   "why": "FR-003's terms, each named. Plan D1's MEASURED bullet now matches research R9/R10 on the final engine: 271 grown placements, 19 moved, closest unmoved 17.7 px and closest moved 23.6 px against the 16 px gap; 5 over their reach, all moved, by at most 2.5 px (consistent with R9's table row and R10's bullets). Not re-run here at the caller's instruction; the figures carry R9/R10's one-shot labels."
+  },
+  {
+   "id": "D1-placer-move",
+   "summary": "The placer's one computed move off an overlapping homestead is kept for a grown seat, refused only where the moved box would stand nearer its source's footprint than the gap (keeps_its_distance via _grown_keep in _place_bundle_nucleated)",
+   "class": "within",
+   "why": "Not a carve-out from FR-004: the move is now held to FR-004's own test (never closer than the distance to the house it grew from), checked on the moved box in place.py 269-273, and the placer's rules still decide (US1, FR-006). It enforces the request rather than narrowing it."
+  },
+  {
+   "id": "D1-exact-withdrawn",
+   "summary": "An exact grown seat (no move) measured and withdrawn: 80.4 s vs the base's 79.0 at 40 households, seed 4 on its third margin",
+   "class": "within",
+   "why": "A withdrawn implementation variant recorded with its measurement, as FR-009 asks; both variants satisfy FR-004, so choosing between them narrows nothing the GM asked. Aside: R10's '101.4 / 79.0 s base' phrasing is muddled (two base figures in one clause); the plan states only the 79.0 comparison."
+  },
+  {
+   "id": "D1-roll-bound",
+   "summary": "Bounds from the largest house with parts, and from the roll's own limits, priced and refused in favor of the household's own envelope",
+   "class": "within",
+   "why": "Refusing a looser bound narrows nothing the request asked."
+  },
+  {
+   "id": "D1-order",
+   "summary": "Seats nearest the seat center first, within FORM_BOUND x the 162 ft band's diagonal; each judged by try_place",
+   "class": "within",
+   "why": "The spec's band edge case and FR-006."
+  },
+  {
+   "id": "D1-levels",
+   "summary": "GROW_LEVELS widening; past the last level the margin is reported short",
+   "class": "within",
+   "why": "FR-004 and FR-007; search breadth, not a rule."
+  },
+  {
+   "id": "D1-class",
+   "summary": "Jitter, gap, rings and SETTLE_TRIES labeled guesses or search breadth; the order a map drawing convention",
+   "class": "within",
+   "why": "Matches the spec's Decisions Recorded."
+  },
+  {
+   "id": "D2",
+   "summary": "Front row, lattice ranks and exhaustive pass with rescue removed for nucleated; dispersed and linear untouched",
+   "class": "within",
+   "why": "FR-007 with the spec's round-1 scope rulings."
+  },
+  {
+   "id": "D3-route",
+   "summary": "A* routed corridor where no straight or gable one clears, nucleated only, admitted by tree_admits, reserved leg by leg",
+   "class": "within",
+   "why": "FR-005."
+  },
+  {
+   "id": "D3-tests",
+   "summary": "Each leg held to every corridor test _house_candidates asks, the whole route to leaves_its_yard",
+   "class": "within",
+   "why": "FR-005, FR-006."
+  },
+  {
+   "id": "D3-later",
+   "summary": "The route search asked last (ROUTE_LATER), after the parts' cheap refusals; the same verdict asked later",
+   "class": "within",
+   "why": "An ordering of the same tests; no rule relaxed or skipped (FR-006)."
+  },
+  {
+   "id": "D3-breadth",
+   "summary": "At most 5 legs, a 12 px grid within 320 px, A* weight 1.5",
+   "class": "within",
+   "why": "Search breadth, not a rule."
+  },
+  {
+   "id": "D3-class",
+   "summary": "Routing a map drawing convention recorded at the module docstring; indexed",
+   "class": "within",
+   "why": "Recording and indexing as the project rules require."
+  },
+  {
+   "id": "D4",
+   "summary": "Dispersed and linear unchanged",
+   "class": "within",
+   "why": "The spec's round-1 rulings."
+  },
+  {
+   "id": "GO-and-misses",
+   "summary": "Built only on GO (R7); SC-002/SC-003 missed, a further tuning round on the engine (T06), a surviving miss raised with the GM",
+   "class": "within",
+   "why": "FR-001 and FR-002 as written. R10 shows both goals still missed on the engine (SC-002 on eight seeds, SC-003 on offers), so T06's round and the GM escalation are owed, as the plan says."
+  },
+  {
+   "id": "V-sequence",
+   "summary": "Prototype legs, then Inashiro, pool and cohort against a detached-worktree baseline, then make done and the bookends",
+   "class": "within",
+   "why": "FR-001 and FR-008."
+  }
+ ],
+ "verdict": "CLEAR"
+}

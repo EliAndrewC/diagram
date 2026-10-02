@@ -48,9 +48,9 @@ seated, seats offered, households seated; and a verdict.
 
 ### User Story 2 - The engine grows the cluster (Priority: P2, only on GO)
 
-The engine seats a cluster margin by growth (US1's method), replacing the front row, the lattice ranks and the exhaustive pass
-where the growth replaces them. Every house still passes the same placer rules; the margin ladder remains for a margin the
-growth cannot fill.
+The engine seats a nucleated cluster margin by growth (US1's method); the front row, the lattice ranks and the exhaustive pass
+(with its rescue) are removed for that form. Every house still passes the same placer rules; a margin the growth cannot fill is
+reported short and the margin ladder offers the next.
 
 **Why this priority**: the redesign the GM asked for; built only on the prototype's verdict.
 
@@ -69,9 +69,10 @@ passing, the homesteads stage timed against the base back to back.
 - A direction blocked by the field, water, the canvas or the band's edge: growth continues from another standing house.
 - Growth that runs out of room before every household stands: the margin is reported short and the ladder offers the next (as
   today) - the growth must say how many it could place, so a short margin is known without a second search.
-- The linear form seats its farms along planned streets (`seat_rows`, feature 291) and the dispersed form one farm to its own
-  holding: neither grows a cluster. The growth is the nucleated (cluster) form's; whether either other form should use it is put
-  to `spec-fidelity` with the measurement, not excluded silently here.
+- The linear form is outside the request: it seats every farm along planned streets (`seat_rows`, feature 291) and never ran
+  the three passes the growth replaces. The dispersed form is a ruled exception: its farmsteads stand each amid its own holding,
+  and growing each from a neighbor at the minimum distance would make it a cluster. Both rulings: `spec-fidelity`, round 1,
+  2026-10-02 (LEGITIMATE).
 - The cluster must still draw its rolled shape's band (`drawn_in_band`): growth is held inside the band.
 
 ## Requirements *(mandatory)*
@@ -91,7 +92,9 @@ passing, the homesteads stage timed against the base back to back.
 - **FR-005**: Each house's path to the access tree MUST be laid as it is placed, back to a standing house's path or the tree,
   so reachability holds by construction; the placer's own corridor rules still judge it.
 - **FR-006**: Every house the growth places MUST still pass the placer's full rules (no rule is relaxed or skipped).
-- **FR-007**: On GO the engine MUST seat a cluster margin by growth, replacing the passes it supersedes.
+- **FR-007**: On GO the engine MUST seat a nucleated cluster margin by growth; the front row, the lattice ranks and the
+  exhaustive pass (with its rescue) are removed for that form. A margin the growth cannot fill is reported short and the margin
+  ladder offers the next. Keeping any old pass is an exception put to `spec-fidelity` (MODE 1) with its measurement first.
 - **FR-008**: No pool map or cohort seed may fail a rule it passed before or seat fewer households; maps may move within the
   rules (GM 2026-09-30, feature 297: "They do NOT need to remain identical in output").
 - **FR-009**: Every lever MUST be timed by the wall clock, base and clone back to back, and recorded in `dev/performance.md`,
@@ -116,8 +119,8 @@ passing, the homesteads stage timed against the base back to back.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Households seated by growth from the first house, each from a standing neighbor | map drawing convention (the placement ORDER; every seat passes the same rules) | the GM's *"place another one next to it ... then repeat"* | this spec; the grower's docstring |
-| The jitter of direction and spacing | guess - its magnitude is set in the plan from measurement and labeled | the GM's *"a little randomized jitter ... so that it's not just an unrealistic grid"*; the record gives no spacing variance for a nucleated hamlet | the plan; the constant's comment |
+| Households seated by growth from the first house, each from a standing neighbor | map drawing convention (the placement ORDER; every seat passes the same rules) | the GM's *"once you've placed the first house, you should notionally be able to compute the minimum distance needed to seat a second house, then place it in a direction, then repeat"* | this spec; the grower's docstring |
+| The jitter of direction and spacing | guess - its magnitude is set in the plan from measurement and labeled | the GM's *"a little randomized jitter to the distance and direction so that it's not jhusgt [just] an unrealistic grid"*; the record gives no spacing variance for a nucleated hamlet | the plan; the constant's comment |
 | The minimum distance by direction from the sun rules | historically accurate (the sun rules' own research: `research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html`, `0038-sunlight-and-shade-on-the-farm.drawing.html`) | the GM: shade on a threshing yard sets the distance too | the research pages named; the grower's comment |
 
 ## Assumptions
@@ -125,3 +128,12 @@ passing, the homesteads stage timed against the base back to back.
 - The reference spec at 10/15/20/40 households (feature 304's scaling leg) is the measure; feature 306 R15's three-leg runner
   is reused for back-to-back legs.
 - The 162 ft seating band (feature 306) bounds the growth; the margin's choice, canvas and belt are unchanged.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 3 items - FR-007 and US2 replaced the passes "where the growth
+  replaces them", a circular hedge; the Decisions table misquoted the GM; the linear/dispersed edge case left the scope open.
+  Addressed: FR-007 and US2 commit to removing the front row, the ranks and the exhaustive pass with its rescue for the
+  nucleated form (any kept pass a MODE 1 exception first); the GM quoted verbatim, the typo marked; the round's rulings
+  recorded (linear outside the request, dispersed a LEGITIMATE exception).
+- Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - the three items confirmed against the diff.

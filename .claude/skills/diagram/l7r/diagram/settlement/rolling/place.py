@@ -265,6 +265,12 @@ class PlacerMixin:
                 geom = self._bundle_geom(cx, cy, hw, hh, side, shed)
                 self._seat_search["positions"] += 1
                 hit = True if _fg is not None and _fg.rect_refused(geom["bbox"]) else self._envelope_blocked(geom["bbox"])
+                # ...NEVER NEARER A GROWN SEAT'S SOURCE THAN THE GROWTH'S DISTANCE (feature 308, FR-004): the move off a third
+                # homestead carried one 2.6 px from the house it grew from (research R10); `_grown_keep` is the growth's
+                # test of the moved box (`growth.keeps_its_distance`)
+                keep = getattr(self, "_grown_keep", None)
+                if hit is None and keep is not None and not keep(geom["bbox"]):
+                    hit = True
             if hit is not None:
                 continue
             if (cx, cy) == (x, y):  # the seat's corridor, asked once for all its unmoved sides (a moved side is another seat)

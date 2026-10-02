@@ -16,6 +16,14 @@ from l7r.diagram.settlement import Settlement
 from ._builders import a_plan
 
 
+def _the_passes_the_dispersed_form_keeps(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The front row, the ranks, the rescue and the exhaustive pass, which the DISPERSED form keeps (feature 308, the spec's
+    round-1 rulings), run on this nucleated toy as they ran before the nucleated cluster was grown (`growth.grows`)."""
+    from l7r.diagram.hamletgen.homesteads import stages as _st
+
+    monkeypatch.setattr(_st, "grows", lambda plan: False)
+
+
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
 def test_wells_are_one_per_six_households_or_so(households: int, wells: int) -> None:
     """Inside `wells_sized_to_population`'s 2-20 households-per-well band at hamlet scale."""
@@ -321,6 +329,7 @@ def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatc
     runs up the back of the toy's middle house, whose wood then spreads to its flanks and takes a row seat - measured,
     the row seats 4 - and the row's count, not the wood, is under test (`tests/settlement/test_wood_share.py` is the
     wood's)."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads import stages as st
@@ -342,9 +351,10 @@ def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatc
     assert len(s.M["houses"]) == 10 and ss["front"] == cap and ss["rounds"] >= 1
 
 
-def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds() -> None:
+def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds(monkeypatch: pytest.MonkeyPatch) -> None:
     """The rescue rounds (five to seven) run only while the quota is short after four rounds of ranks; their cloud
     seeds a wider band and skips the seeds outside it. Twenty households on the toy's square field is such a quota."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
     s, plan = _toy_hamlet(20, east=True)
@@ -392,6 +402,7 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
     behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
     40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
     left; the houses past the front row's own count can therefore only have come from them."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.consts import BUNDLE_PITCH, HOMESTEAD_GROUND_FT
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads import stages as _stages
@@ -438,6 +449,7 @@ def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_
     """`stage_homesteads` (feature 261 D22): an `alleys` hamlet's rank seats take the depth jitter, so the ranks behind the
     front row are not all on one line; a `back_lane` hamlet seated the same way keeps its ranks exact. Both seat every
     household."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
     # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
@@ -482,6 +494,7 @@ def test_every_seat_the_prescreens_refuse_the_fit_test_refuses(scenario: str, si
     (a wrongly refused seat can be hidden by an equally good one beside it). This asks the claim itself. The nucleated path
     has no pre-screen but the free-ground cells, whose exactness is `test_every_surely_taken_cell_is_ground_the_fit_test_refuses`
     and `test_a_side_is_not_dropped_for_ground_the_loop_never_judges`."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.settlement import Settlement
 
@@ -639,6 +652,7 @@ def _no_tree(monkeypatch: pytest.MonkeyPatch) -> None:
     the seating's COUNTS: on the toy's tight square band it refuses a corridor meeting its host at a needle or crossing a
     neighbor's (measured on the twelve-household toy: 65 needles, 3 crossings) and so moves the counts, which the tree's own
     tests (`tests/hamletgen/ways/test_tree.py`, `tests/settlement/test_access.py`) hold; the cohort seats as before."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.ways import tree as tree_mod
 
     monkeypatch.setattr(tree_mod, "seating_judge", lambda s: lambda corridor, geom: True)
