@@ -13,6 +13,7 @@ for each non-canon registry entry:
 - lists the consistency flags of research R3 (a host that decides kind, disagreeing; a premodern tag on evidence the
   write-up dates after the cut-off) and every `unsettled` entry;
 
+applies the adjudicated tags in IN_DIR's parent (`adjudicated-*.jsonl`, the entries the lists named, judged again),
 and with `--write` writes the marker as the entry's last line and the passing trims. Without it, a dry run. The report
 goes to stdout as markdown.
 """
@@ -83,6 +84,18 @@ def main() -> int:
                 dupes.append(row["key"])
             row["_at"] = f"{path.name}:{n}"
             results[row["key"]] = row
+    # The adjudicated tags (Opus, plan D10 step 4) replace the first pass's for the entries the lists named.
+    overrides = 0
+    for path in sorted(in_dir.parent.glob("adjudicated-*.jsonl")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                row = json.loads(line)
+                base = results[row["key"]]
+                base.update({f: row[f] for f in FACETS})
+                base["unsettled"] = ""
+                base["_adjudicated"] = True
+                overrides += 1
+    print(f"(adjudicated tags applied: {overrides})", file=sys.stderr)
     bad_tags, refused, flags, unsettled, missing = [], [], [], [], []
     tagged = trimmed = 0
     old_total = new_total = 0
@@ -109,7 +122,7 @@ def main() -> int:
         what = re.search(r"<p><em>What it is:</em>(.*?)</p>", text, re.S)
         used = re.search(r"<p><em>Used for:</em>(.*?)</p>", text, re.S)
         body = (what.group(1) if what else "") + " " + (used.group(1) if used else "")
-        if row["period"][0] == "premodern" and _LATE.search(body):
+        if row["period"][0] == "premodern" and _LATE.search(body) and not row.get("_adjudicated"):
             flags.append(f"`{key}`: premodern, but its write-up names {_LATE.search(body).group(0)}")  # type: ignore[union-attr]
         m = re.search(re.escape(WHY) + r"(.*?)</p>", text, re.S)
         old = m.group(1).strip() if m else ""

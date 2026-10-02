@@ -1,0 +1,100 @@
+{"key":"kurita-2019-igune","period":["present-day"],"region":["japan"],"kind":["scholarship"],"why":"It gives measured heights of Tohoku homestead groves, the anchor for the tall end of this page's grove band."}
+{"key":"minami-2024-igune","period":["present-day"],"region":["japan"],"kind":["scholarship"],"why":"It gives the surveyed height band of a settlement's igune, 9 to 16 m with tall trees and 3 to 6 m without, the band this page's grove heights are drawn within. Its groves are what survives, not the period's."}
+{"key":"daikon-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":"It states the autumn-sown daikon's season, standing in the ground from early autumn into winter, which puts the kitchen bed's binding season in the same month as the rice drying."}
+{"key":"gassho-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It states that a steep thatched roof yields a large loft, the loft these maps' farmhouses carry. Its reasons for the pitch are snow and rain rather than thatch, and it does not call the loft dark."}
+{"key":"kotobank-momisuri","period":["timeless"],"region":["japan"],"kind":["reference"],"why":"It gives the hulling yield, 80% by weight, the conversion between paddy and brown rice this page's yard sizing runs through."}
+{"key":"chang-jiang-zhwiki","period":["timeless"],"region":["china"],"kind":["reference"],"why":"It gives the reach names of the great river in one sentence, the one-river-many-names pattern this page's rivers follow."}
+{"key":"kasenho-jawiki","period":["modern-preindustrial","present-day"],"region":["japan"],"kind":["reference"],"why":"It dates the two statutes under which Japan's rivers were named and managed as single systems, the modern one-name-per-river this page sets against the old per-reach names."}
+{"key":"kaya-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It states that a settlement kept a harvested, yearly burned kaya ground, the village-commons reed bed this page draws. It does not name the iriai tenure."}
+{"key":"yoshi-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It states the reed's uses for roofing and screens, the harvest this page's reed beds yield."}
+{"key":"isawa-senjochi-jawiki","period":["present-day"],"region":["japan"],"kind":["reference"],"why":"It gives the fan's area and standing, the case this page uses for radial canals at fan scale."}
+{"key":"juan-zeki-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It gives the canals' lengths and the ground they watered, the weir-canal irrigation of a fan this page describes. It does not say where on the fan the intake stood."}
+{"key":"songshi-273-wikisource","period":["premodern"],"region":["china"],"kind":["primary"],"why":null}
+{"key":"kotobank-shimogoe","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It states that the villages supplying a city's greens took its night soil in bulk, the suburban vegetable belt this page draws around a town."}
+{"key":"shinden-kaihatsu-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It attests the Edo-period reclamation waves around Osaka, the intensive working of a city's outskirts this page describes. It names the shogunate as sponsor and no wave around Edo itself."}
+{"key":"yusuichi-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":"It defines the flood basin as purposed wet ground, one of the bounded forms wetness took near a city on these maps."}
+{"key":"yodogawa-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It gives the river's three names and where each begins - at a border and at a confluence - the per-reach renaming this page's rivers follow."}
+{"key":"ankyo-jawiki","period":["modern-preindustrial"],"region":["japan"],"kind":["reference"],"why":"It states that watercourses inside a growing city disappear from the surface under building, the reason no relic of a diverted stream's old bed is drawn through a city."}
+{"key":"endorheic-basin-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It states that a closed water body is characteristically a desert arrangement, which is why a terminal moat with no outlet belongs to an arid site and not to rice country."}
+{"key":"standard-step-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It shows that an impoundment lifts the surface upstream only for a finite reach before the channel returns to its own depth, which is why raising a moat cannot lift its whole feeder."}
+{"key":"nanjing-chengqiang-zhwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":"It states that water crossed the wall at gates and through conduits laid in the wall's foundation, the culvert-through-the-wall this page draws for a city drain."}
+{"key":"contour-canal-enwiki","period":["timeless"],"region":["europe"],"kind":["reference"],"why":"It states that a dug canal follows the contour, which is why a channel on these maps may run across the fall of the ground rather than down it. It gives no gradient figure."}
+{"key":"weir-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It states that a weir impounds water, slows the river above it and passes the flow over its crest, the ponding and overflow behavior this page's sluice-fed reaches and set-level moats rest on. It does not describe a head-race's width or say in so many words that a weir holds a level."}
+{"key":"mill-race-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It states that the race is narrow and swift against the broad pond, the distinction this page draws between the ponded reach above a sluice and the race below it."}
+{"key":"himeji-castle-jawiki","period":["premodern","present-day"],"region":["japan"],"kind":["reference"],"why":"It gives the moat widths of the great provincial castle these maps take as their provincial-city moat anchor. The widths are the moats as they survive, and no average is stated."}
+{"key":"aichi-yosui-jawiki","period":["present-day"],"region":["japan"],"kind":["reference"],"why":"It shows a real scheme naming its trunk and branch canals, the tiered vocabulary this page's channel hierarchy uses."}
+{"key":"kangai-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":"It defines plot-to-plot irrigation, the cascade from paddy to paddy that lets interior plots on these maps stand without a ditch of their own."}
+{"key":"contour-trenching-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It states that a trench dug along the contour catches the water flowing down the slope, the interceptor form this page's field-toe ditch takes. Its purpose is infiltration rather than protection."}
+{"key":"fao-irrigation-canals-ch5","period":["timeless"],"region":["general"],"kind":["institutional"],"why":"It states the dug earthen trapezoidal section and the convention for its side slope and freeboard, the shape this page's ditch widths are computed from. It gives no slope for a particular soil."}
+{"key":"aze-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"environmental-impact-irrigation-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It states that a scheme's percolation losses recharge the groundwater and waterlog land, which is the mechanism behind the wet ground below a ditch on these maps."}
+{"key":"soil-salinity-control-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":"It states that irrigation water the aquifer cannot carry away raises the water table and waterlogs the land, the seepage-below-a-command relationship this page draws. It does not localize the waterlogging below the command."}
+{"key":"kisodani-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"mu-land-enwiki","period":["modern-preindustrial"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"kokumori-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It gives the Taiko-survey paddy ladder (upper paddy 1.5 koku, middle 1.3, lower 1.1 per tan, stepping down 0.2 a grade; house plots 1.2; dry field left to the surveyor's discretion), the Edo-period dry-field rule (upper dry field 1.2, stepping down 0.2 a grade), and the mid-Edo reset (house plots and upper dry field set to lower paddy's 1.1, so middle dry field 0.9). It derives the paddy rates from a sampled crop-cut hulled to half. Its limits: these are tax-assessment rates, not measured yields. They were bent by the surveyor's judgment and by politics, and by the later Edo period actual harvests often exceeded them. Dry-field rates are values in rice-equivalent koku, not harvests of millet, barley or soybeans. The paddy and dry-field rungs come from different surveys."}
+{"key":"jori-jawiki","period":["premodern","present-day"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"cultivator-enwiki","period":["modern-preindustrial","premodern"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"tauchiguruma-jawiki","period":["premodern","modern-preindustrial"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"genge-jawiki","period":["modern-preindustrial"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"alluvial-fan-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"fengshui-enwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":null,"unsettled":"The article gives no period for the southern Chinese grave-siting custom, so the table cannot place its evidence."}
+{"key":"temple-of-confucius-enwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":"It gives the Tang decree of 630 that put a Confucian temple in every province's and county's school and the temple's siting at the school, which is the state character of the school-temple this page relies on; it dates the requirement to the Tang, not the Ming."}
+{"key":"chenghuang-zhwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":"It gives the Ming founder's enfeoffment of city gods at the capital, prefecture, department and county levels with the local official leading the sacrifice, which is the state character of the City God temple this page relies on; it does not order the foundations of a county seat."}
+{"key":"fushimi-inari-enwiki","period":["present-day"],"region":["japan"],"kind":["reference"],"why":"It gives the count of about 800 gates along the main path and the ten thousand in total, which are the figures this page's dense regime rests on; it gives the arrangement, about 800 set in a row to form the Senbon Torii, but no run length in meters; the shrine is the head of its cult, the extreme of the donation regime rather than a typical case."}
+{"key":"bunkotsu-jawiki","period":["present-day"],"region":["japan"],"kind":["reference"],"why":"It attests the practice and its procedure, which is what the divided remains on this page rest on; it cannot date the practice at all, and says nothing of a portion going to a head temple."}
+{"key":"osaka-nanabaka-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"sanuki-kokubunji-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"shimotsuke-kokubunji-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"fushimi-inari-jawiki","period":["premodern","present-day"],"region":["japan"],"kind":["reference"],"why":"It dates the custom of dedicating torii to the Edo period, puts the donated gates at about ten thousand on the mountain and describes the dense rows; from which this page generalizes the donation row, and the ten thousand is today's accumulation on the mountain rather than a period density."}
+{"key":"torii-enwiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"hokora-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"kotobank-kyodo-bochi","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"sodo-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"shake-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"danka-system-enwiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"hongwu-emperor-enwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"demographic-transition-enwiki","period":["premodern"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"kegare-enwiki","period":["premodern","present-day"],"region":["japan"],"kind":["reference"],"why":"It states that death is the primary source of defilement, that the kami are kept from it and that priests must avoid it, which is the real-world rule this setting's shrines depart from; a stub whose examples are present-day practice."}
+{"key":"chinju-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"fao-ac264e-ch4","period":["present-day"],"region":["china"],"kind":["institutional"],"why":null}
+{"key":"polder-enwiki","period":["premodern"],"region":["europe","china"],"kind":["reference"],"why":null}
+{"key":"dongting-lake-enwiki","period":["present-day"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"morus-enwiki","period":["modern-preindustrial"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"pollarding-enwiki","period":["premodern"],"region":["europe"],"kind":["reference"],"why":null}
+{"key":"waju-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"willow-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"willow-palisade-enwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"hojo-seibi-jawiki","period":["present-day"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"tanada-jawiki","period":["premodern","present-day"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"nelumbo-nucifera-enwiki","period":["timeless","present-day"],"region":["general","china"],"kind":["reference"],"why":null}
+{"key":"dojo-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It attests practice at a private residence, outdoors or on an earthen floor before the mid-Edo boarded hall, and the great enrolled dojos of Edo, which is the ladder this page's county and city tiers rest on; it frames the change by period, not by town and country (its one urban note, uncited, is that populous places such as Edo grew large halls from small private ones), and gives no floor areas or counts. Its Edo account rests on a single reference, the Japanese Academy of Budo kendo section's 剣道を知る事典 (pp. 122-123), cited on one sentence; it hedges the teachers' settling into fixed halls as only \"thought to\" have happened, and its evidence is chiefly swordsmanship and jujutsu. It also says the Edo-period hall was usually called 稽古場 (keikoba, \"practice place\"), 道場 becoming the common word for it only from Meiji."}
+{"key":"nishimawari-koro-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"kakoimai-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"kureki-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"kotobank-katteguchi","period":["present-day","premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"gokura-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"tsuijibei-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"xuli-zhwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"machi-bugyo-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"kuramai-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"hectare-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"kotobank-karishiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"conservation-headland-enwiki","period":["present-day"],"region":["europe"],"kind":["reference"],"why":null}
+{"key":"cartographic-relief-enwiki","period":["premodern"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"estate-map-enwiki","period":["premodern"],"region":["europe"],"kind":["reference"],"why":null}
+{"key":"chikurin-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"take-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"satoyama-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":"It attests that broadleaf coppice was cut back, leaving the roots, every 10 to 20 years for firewood and charcoal (a figure the article itself does not cite), and separately that leaf litter and undergrowth were carried off every year as fertilizer and fodder, which is the worked floor this page draws; a general tertiary article with no stand densities. For the fields its limits are two: that dry fields lie on the slopes with the satoyama rests on one region's folk classification (the Yoshino mountains of Nara, where the fields count as part of the satoyama), and that most satoyama had become red pine, grass or bare hill by the early modern period is one author's reading (Arioka 2004) of Edo-period gazetteer pictures, which the same article qualifies with sustainable use after the shogunate's forest-protection policy of 1666."}
+{"key":"coppicing-enwiki","period":["timeless"],"region":["europe"],"kind":["reference"],"why":null}
+{"key":"riparian-zone-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"crown-shyness-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"forest-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"kisetsufu-jawiki","period":["timeless"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"katabatic-wind-enwiki","period":["timeless"],"region":["general"],"kind":["reference"],"why":null}
+{"key":"kotobank-yashikirin","period":["timeless"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"tsuijimatsu-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"fengshuilin-zhwiki","period":["present-day","premodern"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"panmen-zhwiki","period":["premodern"],"region":["china"],"kind":["reference"],"why":null}
+{"key":"gangi-kowan-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
+{"key":"floating-dock-enwiki","period":["present-day"],"region":["general"],"kind":["reference"],"why":"It gives the modern marina's answer to a moving water level, which this page sets against the stepped landing."}
+{"key":"takasebune-jawiki","period":["premodern"],"region":["japan"],"kind":["reference"],"why":null}
