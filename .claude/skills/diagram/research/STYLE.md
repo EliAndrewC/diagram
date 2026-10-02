@@ -55,6 +55,17 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   the exact figure, and any caveat on how it was reached, is said once, in its bullet. (inferred - the first pilot's
   opening gave "about 33" without the bullet's caveat that 33 is this page's arithmetic.)
 - **A date a newcomer cannot place is tied once to its period**: "before 1868, in the Edo period". (inferred)
+- **A question a reader would not think to ask opens with an intro saying why it is here.** Where the subject is
+  something our maps or the setting have and history may not - a parley room built across a border, say - a reader
+  meets findings about a thing that did not exist and wonders why they are being told. One short paragraph, marked
+  `<p class="intro">` and placed first, after the heading, says what Rokugan (or the map) has, and that the research
+  below shows what the historical record holds instead. It may name the class the findings below or the drawing page
+  already reach - "an invention of the setting", a deliberate deviation, a convention, attested - and it adds no
+  historical claim those findings do not carry. It cites nothing, so it carries no footnote; the opening account
+  follows it. A subject a reader would ask about unprompted - a grove, a ditch, a threshing yard - takes none. The
+  `intro-check` holds it. (GM, 2026-10-02: *"someone reading this section would have an obvious question, which is,
+  why is this question here? Why am I being told about a thing which does not exist? ... this is the kind of section
+  that needs an introductory paragraph that explains why this section is even here."*)
 
 ## 3. The findings are lead-line bullets
 

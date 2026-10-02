@@ -37,6 +37,8 @@ import subprocess
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import _bundle_owed as bo  # noqa: E402
 RECORD = pathlib.Path(".claude/skills/diagram/research")
 REGISTRY = RECORD / "sources" / "010-works-cited"
 VARIANTS = RECORD / "assets" / "glossary-variants.txt"
@@ -45,6 +47,8 @@ CLASSES = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/classes")
 COMPOUND_KINDS = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/compound_kinds")
 DEFAULT_ROOT = pathlib.Path("/tmp/l7r-check")
 MANIFEST = "MANIFEST.md"
+#: the MANIFEST section feature 311 appends: what may be dispatched on the bundle, and the units it carries
+OWED_HEAD = "## Owed (feature 311)"
 _CITED = re.compile(r'<a href="[^"]*">\s*<code>([a-z0-9][a-z0-9-]*)</code>\s*</a>')
 _URL = re.compile(r"https?://[^\s<\"]+")
 
@@ -132,7 +136,8 @@ def refresh(out: pathlib.Path) -> None:
     text = (out / MANIFEST).read_text(encoding="utf-8")
     title = text.splitlines()[0].removeprefix("# Check bundle - ")
     rows = [(m.group(1), m.group(2), m.group(3)) for m in re.finditer(r"^\| `([^`]+)` \| `([^`]+)` \| (.*) \|$", text, re.M)]
-    (out / MANIFEST).write_text(manifest(out, title, rows), encoding="utf-8")
+    owed = text[text.index(OWED_HEAD):] if OWED_HEAD in text else ""
+    (out / MANIFEST).write_text(manifest(out, title, rows) + owed, encoding="utf-8")
 
 
 def slug(text: str) -> str:
@@ -194,6 +199,7 @@ PARTS = {
     "entry-drift": {"kind"},
     "record-style": {"style", "styleprepass", "variants"},
     "translation-check": {"translations"},
+    "intro-check": {"intro"},
     "all": {"quote", "prepass", "variants", "registry", "kind", "notes"},
 }
 #: FEATURE 292 (GM 2026-09-29, approving the session's proposal): the question's NOTES are a part of their own. The
@@ -212,7 +218,7 @@ STYLE = pathlib.Path(".claude/skills/diagram/research/STYLE.md")
 
 
 def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
-                 notes: frozenset[str] = frozenset(), for_: str = "all") -> int:
+                 notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "") -> int:
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
@@ -286,7 +292,7 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
     for path in extra:
         src = (root / path) if not pathlib.Path(path).is_absolute() else pathlib.Path(path)
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
-    (out / MANIFEST).write_text(manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows), encoding="utf-8")
+    (out / MANIFEST).write_text(manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed, encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -387,7 +393,7 @@ def ledger_part(saved: str) -> str:
     return saved.split("pointer | file | state", 1)[0].strip("\n")
 
 
-def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "") -> int:
+def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", owed: str = "") -> int:
     entry = registry_entry(root, key)
     if entry is None:
         print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
@@ -415,7 +421,7 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
             rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
         if code:
             print(text, file=sys.stderr)
-    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows), encoding="utf-8")
+    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows) + owed, encoding="utf-8")
     print(f"check-bundle: {len(rows)} item(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -434,24 +440,80 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--kind", default="", help="a modal class name, for entry-drift: its docstring is copied in")
     ap.add_argument("--no-quotes", action="store_true", help="skip the quote-verbatim report (it fetches every cited page)")
     ap.add_argument("--root", default=".")
+    ap.add_argument("--qs", default="", help="for intro-check: several questions in one bundle (the backfill's batches)")
+    ap.add_argument("--not-owed-ok", default="", help="build it though nothing owes it: the reason, recorded in the MANIFEST (feature 311)")
+    ap.add_argument("--new", default="", help="with --key --whole: the claim, not yet in the record, the read is for (feature 311)")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
+    escape = args.not_owed_ok or args.new
     if args.key:
-        return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole, args.question)
+        units, checks, refusal = bo.owed_for_key(root, args.key, args.whole, args.not_owed_ok, args.new)
+        if refusal:
+            print(f"check-bundle: REFUSED - {refusal}", file=sys.stderr)
+            return 3
+        return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole, args.question,
+                          bo.manifest_lines(units, checks, escape))
+    if args.for_ == "intro-check":
+        return intro_bundle(root, (args.qs or args.q).split(), args.out, args.not_owed_ok)
     if not args.q:
         ap.error("Q (a question's number), or --key")
     wanted = frozenset(k.strip() for k in args.notes.split(",") if k.strip())
     if args.print_notes:
         return print_notes(root, args.q, wanted)
+    if not fragments_for_q(root, args.q):
+        print(f"check-bundle: Q={args.q!r} names no question - name one by its number, e.g. make check-bundle Q=0041", file=sys.stderr)
+        return 2
+    units, checks, refusal = bo.owed_for_question(root, args.q, args.for_, args.not_owed_ok)
+    if refusal:
+        print(f"check-bundle: REFUSED - {refusal}", file=sys.stderr)
+        return 3
+    if args.for_ == "quote-check" and not wanted and not args.not_owed_ok:
+        wanted = bo.owed_notes(units)  # only the notes owed a check (feature 311, plan D9)
+    owed = bo.manifest_lines(units, checks, args.not_owed_ok)
     out = pathlib.Path(args.out or DEFAULT_ROOT / f"q-{slug(args.q)}{'' if args.for_ == 'all' else '-' + args.for_}")
     q = args.q
     batches = [] if wanted or args.for_ != "quote-check" else note_batches(root, q)
     if len(batches) > 1:
         print(f"check-bundle: the notes are over {NOTES_BUDGET:,} bytes - {len(batches)} quote-check bundles, one agent each:")
-        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_)
+        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_, owed)
                  for i, b in enumerate(batches, start=1)]
         return max(codes)
-    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_)
+    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed)
+
+
+def fragments_for_q(root: pathlib.Path, q: str) -> list[str]:
+    from _hm_record import fragments_for  # noqa: PLC0415
+
+    return fragments_for(q, str(root))
+
+
+def intro_bundle(root: pathlib.Path, questions: list[str], out_arg: str, not_owed_ok: str) -> int:
+    """An intro-check bundle over one question or a batch (plan D4, D10): each question's research page whole, its drawing
+    page and the map elements written from it - and refused for a question nothing owes it on, unless a reason is given."""
+    units: list = []
+    every = bo.ro.units(root)
+    for q in questions:
+        got, _checks, refusal = bo.owed_for_question(root, q, "intro-check", not_owed_ok, every)
+        if refusal:
+            print(f"check-bundle: REFUSED - {refusal}", file=sys.stderr)
+            return 3
+        units += got
+    texts = [(q, bo.intro_bundle_text(root, q)) for q in questions]
+    missing = [q for q, text in texts if not text]
+    if missing:
+        print(f"check-bundle: no research page for {' '.join(missing)}", file=sys.stderr)
+        return 2
+    out = pathlib.Path(out_arg or DEFAULT_ROOT / f"intro-{slug(questions[0])}{'-' + str(len(questions)) if len(questions) > 1 else ''}")
+    fresh(out)
+    rows = []
+    for q, text in texts:
+        name = f"q-{bo.question_of(q)}.txt"
+        (out / name).write_text(text, encoding="utf-8")
+        rows.append((name, f"{bo.ru.QUESTIONS}/{bo.question_of(q)}-*.html", "for intro-check: the research page, its drawing page, the map elements written from it"))
+    title = f"question {questions[0]}, for intro-check" if len(questions) == 1 else f"{len(questions)} questions, for intro-check"
+    (out / MANIFEST).write_text(manifest(out, title, rows) + bo.manifest_lines(units, "intro-check", not_owed_ok), encoding="utf-8")
+    print(f"check-bundle: {len(rows)} question(s) in {out} - hand the agent {out / MANIFEST}")
+    return 0
 
 
 def note_batches(root: pathlib.Path, q: str) -> list[list[str]]:

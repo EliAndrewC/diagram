@@ -13,8 +13,9 @@ The record quotes a foreign source in English translation, with the original kep
 feature 292 the original is stored apart and read by no other check (GM 2026-09-29: *"it makes sense for there to be a
 subagent that checks that our translation is good when either the text being quoted has changed or the translation has
 changed. And then otherwise that check doesn't need to run."*). `make translation-owed` lists the pairs that are new or
-changed since the merge base; dispatch this agent on those, one question's bundle at a time
-(`make check-bundle Q=<NNNN> FOR=translation-check`). Judgment about meaning, so Opus; it never edits.
+changed since the merge base (`make record-owed` names them too, as `translation-check:` units, and the push refuses one
+unanswered - feature 311); dispatch this agent on those, one question's bundle at a time
+(`make check-bundle Q=<NNNN> FOR=translation-check`), and record each answer with `make record-checked`. Judgment about meaning, so Opus; it never edits.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4). -->
 

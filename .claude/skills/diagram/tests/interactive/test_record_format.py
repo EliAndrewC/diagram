@@ -372,3 +372,47 @@ def test_the_forbidden_shapes_fire_and_stay_quiet_on_a_reader_s_sentence() -> No
     assert len(offenses("kept as a GUESS (corrected 2026-09-06, feature 194: the page gives 20 bu) READ 2026-08-28; T41; see specs/209")) >= 5
     assert not offenses("The GM ruled between the two readings on 2026-08-28: the sourced shape everywhere. Searched 2026-09-06: mdpi.com refused; a GUESS.")
     assert not offenses(visible_text("<p>x</p><!-- Grounds: feature 209 T03 corrected 2026-09-07 -->"))
+
+
+# --- the intro paragraph (feature 311) -----------------------------------------------------------------------------------
+
+_QUESTIONS = pathlib.Path(RESEARCH_DIR) / "questions"
+_FIRST_BLOCK = re.compile(r"<(p|li|ul|ol|blockquote|table|dl)\b[^>]*>", re.S)
+
+
+def intro_problems(page: str, drawing: bool) -> list[str]:
+    """What is wrong with a page's intro paragraph, `<p class="intro">` (spec FR-002, `research/STYLE.md` section 2): at most
+    one; only on a research page (a drawing page says how the map draws the thing, which is its own why); the first block
+    after the heading; and it carries no note mark - it cites nothing, which is what spares it every source-reading check."""
+    body = _COMMENT.sub("", page)
+    intros = re.findall(r'<p class="intro"[^>]*>(.*?)</p>', body, re.S)
+    if not intros:
+        return []
+    out = []
+    if drawing:
+        out.append("an intro on a drawing page")
+    if len(intros) > 1:
+        out.append(f"{len(intros)} intros - a page has at most one")
+    first = _FIRST_BLOCK.search(body.split("</h2>", 1)[-1])
+    if first is None or 'class="intro"' not in first.group(0):
+        out.append("the intro is not the first block after the heading")
+    if any("data-note=" in i for i in intros):
+        out.append("the intro carries a note mark - it cites nothing; a cited finding belongs in the opening below it")
+    return out
+
+
+def test_every_intro_paragraph_has_its_shape() -> None:
+    """One test over every question page (a parametrized one added 1,404 tests to the quick suite for a regex each)."""
+    pages = [p for p in sorted(_QUESTIONS.glob("*.html")) if not p.name.endswith((".notes.html", ".originals.html"))]
+    found = [f"{p.name}: {'; '.join(bad)}" for p in pages if (bad := intro_problems(p.read_text(encoding="utf-8"), ".drawing." in p.name))]
+    assert len(pages) > 400, "non-vacuity: every question's two pages are read"
+    assert not found, "intro paragraphs out of shape (research/STYLE.md section 2):\n" + "\n".join(found)
+
+
+def test_the_intro_shape_fires_on_each_fault_and_passes_the_form() -> None:
+    good = '<h2 id="x">X</h2>\n<!-- tags -->\n<p class="intro">In Rokugan, X. This is an invention of the setting.</p>\n<p>Found.<sup class="fn" data-note="k"></sup></p>'
+    assert intro_problems(good, False) == [] and intro_problems("<h2>X</h2><p>Found.</p>", False) == []
+    assert intro_problems(good, True) == ["an intro on a drawing page"]
+    assert "not the first block" in intro_problems('<h2>X</h2><p>Found.</p><p class="intro">Late.</p>', False)[0]
+    assert "2 intros" in intro_problems(good.replace("<p>Found", '<p class="intro">Again</p><p>Found'), False)[0]
+    assert "note mark" in intro_problems('<h2>X</h2><p class="intro">Said.<sup class="fn" data-note="k"></sup></p>', False)[0]

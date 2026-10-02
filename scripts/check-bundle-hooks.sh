@@ -31,7 +31,8 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # GUARD_EDIT_OK: feature 292 - record-style and translation-check are new bundle-reading checks; added to the list, nothing is loosened.
 # GUARD_EDIT_OK: feature 303 - the questions are research/questions/NNNN-<slug>.html; the compliant command is read off
 # that path as `make check-bundle Q=NNNN`. A change of layout; nothing loosened.
-CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check"
+# GUARD_EDIT_OK: feature 311 - intro-check is a new bundle-reading check; added, nothing loosened.
+CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check intro-check"
 
 pretool() {
   local verdict kind detail reason
@@ -52,6 +53,21 @@ esc = re.search(r"CHECK_BUNDLE_OK=\"([^\"]*)\"", prompt)
 if esc:
     print("\x1fescape\x1f" + esc.group(1)); sys.exit(0)
 if "MANIFEST.md" in prompt:
+    # GUARD_EDIT_OK: feature 311 - a NEW refusal: a check the bundle does not owe is not dispatched (the GM, 2026-10-02:
+    # a formatting tweak must not re-run every check). The MANIFEST names what may be dispatched on it (`owed-checks:`,
+    # written by `make check-bundle` from `_record_owed.py`); record-style is owed by a declared sweep, never a delta.
+    nok = re.search(r"CHECK_NOT_OWED_OK=\"([^\"]*)\"", prompt)
+    if nok:
+        print("\x1fnotowed\x1f" + nok.group(1)); sys.exit(0)
+    if atype != "record-style":
+        for mp in re.findall(r"(/[^\s`\"<>)]*MANIFEST\.md)", prompt):
+            try:
+                text = open(mp, encoding="utf-8").read()
+            except OSError:
+                continue
+            owed = re.search(r"^owed-checks: *(.*)$", text, re.M)
+            if owed is None or atype not in owed.group(1).split():
+                print("\x1fnotowed-refuse\x1f" + atype + "\x1e" + mp + "\x1e" + (owed.group(1).strip() if owed else "(none - a bundle from before feature 311: build it again)") or "nothing"); sys.exit(0)
     print("\x1fbundle\x1f" + atype); sys.exit(0)
 paths = re.findall(r"(?:/diagram(?:/\.clones/[\w.-]+)?/)?\.claude/skills/diagram/research/[^\s`\"<>)]+", prompt)
 if not paths:
@@ -76,6 +92,28 @@ print("\x1frefuse\x1f" + atype + "\x1e" + "\x1e".join(cmds))
     "" ) exit 0 ;;
     none )   guard_log check-bundle permitted "$detail names no repository file" no-repo-path; exit 0 ;;
     bundle ) guard_log check-bundle permitted "$detail reads a bundle" bundle-named; exit 0 ;;
+    notowed )
+      # GUARD_EDIT_OK: feature 311 - the escape for the not-owed refusal, held to the same reason floor as every escape
+      if printf '%s' "$detail" | "$CB_HERE/_hm_escape.py" reason-ok >/dev/null 2>&1; then
+        guard_log check-bundle escaped "$detail" check-not-owed-ok
+        exit 0
+      fi
+      guard_log check-bundle blocked "CHECK_NOT_OWED_OK=\"$detail\"" CHECK_NOT_OWED_OK-no-reason
+      printf 'BLOCKED: CHECK_NOT_OWED_OK needs a REASON - two words and eight characters - so the audit says why.\n' >&2
+      exit 2 ;;
+    notowed-refuse )
+      local natype=${detail%%$'\x1e'*} rest=${detail#*$'\x1e'}
+      local mp=${rest%%$'\x1e'*} owedlist=${rest#*$'\x1e'}
+      guard_log check-bundle blocked "$natype not owed on $mp" not-owed
+      {
+        printf '\n\033[1mBLOCKED: `%s` is not owed on this bundle.\033[0m\n\n' "$natype"
+        printf 'Its MANIFEST (%s) owes: %s\n' "$mp" "$owedlist"
+        printf 'A check is owed only where the words it reads changed (`make record-owed` lists every unit, feature 311) -\n'
+        printf 're-running it on words it already passed is the waste the GM named. Dispatch only what is owed;\n'
+        printf 'a check the GM asked for, or a backfill: CHECK_NOT_OWED_OK="<why>" in the prompt.\n'
+        printf '(scripts/check-bundle-hooks.sh; feature 311)\n'
+      } >&2
+      exit 2 ;;
     escape )
       reason="$detail"
       if printf '%s' "$reason" | "$CB_HERE/_hm_escape.py" reason-ok >/dev/null 2>&1; then
