@@ -19,6 +19,7 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.settlement.rolling.access import TARGETS_TRIED
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT, within_field_reach
 
 from ..consts import BUNDLE_PITCH, Pt
@@ -31,6 +32,20 @@ if TYPE_CHECKING:
 #: The exhaustive pass's grid, as a share of `BUNDLE_PITCH`: a third of a pitch (homes H14), so a pocket a homestead's
 #: envelope can stand in holds a grid point within the placer's one computed move.
 FREE_SEAT_STEP = 1.0 / 3.0
+
+#: A margin's exhaustive pass is given up after this many offers in a row seat no one (feature 306, plan D2; a heuristic,
+#: MEASURED: on the margins that filled, the longest run of offers between two takes was 327 (seed 47 at 40 households) and
+#: 235 (seed 39); a margin that falls short takes its last house by offer 128-1,206 and offered on to 1,015-1,742 -
+#: specs/306-seat-by-packing/research.md R5). A margin given up is one the ladder moves past, as one exhausted.
+DRY_SPELL = 400
+
+#: A margin the exhaustive pass leaves at most this many households short is searched again before the ladder gives it up
+#: (feature 306, plan D2, research R6 and R9): seed 47's margins reached 38-39 of 40 and were thrown away whole.
+RESCUE_SHORT = 3
+#: ...on a grid this fine (a sixth of a pitch, the pass's being a third) and with a door's corridor tried to this many of the
+#: tree's nearest points (`AccessTree.tried`; the pass's `TARGETS_TRIED` is 12) - a search breadth, never a rule.
+RESCUE_STEP = 1.0 / 6.0
+RESCUE_TARGETS = 40
 
 
 class SiteRefused(ValueError):
@@ -69,8 +84,9 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None) -> list[Pt]
 
 
 def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:
-    """The exhaustive pass: `free_seats` offered to the placer until `plan.spec.households` stand. Returns the new count;
-    records the seats offered and taken (`seat_search.exhaustive_offered`, `exhaustive_took`)."""
+    """The exhaustive pass: `free_seats` offered to the placer until `plan.spec.households` stand, given up after `DRY_SPELL`
+    offers in a row seat no one; then, where it left at most `RESCUE_SHORT` households, the rescue (`rescue_the_margin`).
+    Returns the new count; records the seats offered and taken (`seat_search.exhaustive_offered`, `exhaustive_took`)."""
     want = plan.spec.households
     if placed >= want:
         return placed
@@ -80,17 +96,53 @@ def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:
     region = getattr(s, "_seat_region", None)
     if region is not None:
         seats = [q for q, ok in zip(seats, region.offer(seats), strict=True) if ok]
+    placed, offered, took = offer_seats(s, seats, placed, want, DRY_SPELL)
+    s._seat_search["exhaustive_offered"], s._seat_search["exhaustive_took"] = offered, took
+    if want - placed <= RESCUE_SHORT:
+        placed = rescue_the_margin(s, plan, placed)
+    return placed
+
+
+def offer_seats(s: Settlement, seats: Sequence[Pt], placed: int, want: int, dry: int | None) -> tuple[int, int, int]:
+    """Offer `seats` in order to the placer until `want` stand (or `dry` offers in a row seat no one): `(placed, offered,
+    took)`. A seat a house this pass seated now stands on is passed over."""
+    offered = took = since = 0
     for q in seats:
-        if placed >= want:
+        if placed >= want or (dry is not None and since >= dry):
             break
         if _near_a_house(s, q):
             continue  # a house this pass seated stands here now
         offered += 1
+        since += 1
         s._seat_search["candidates"] += 1
         if s.try_place(q[0], q[1], "plain"):
             placed += 1
             took += 1
-    s._seat_search["exhaustive_offered"], s._seat_search["exhaustive_took"] = offered, took
+            since = 0
+    return placed, offered, took
+
+
+def rescue_the_margin(s: Settlement, plan: SitePlan, placed: int) -> int:
+    """A NEAR MISS SEARCHED AGAIN (feature 306, plan D2): the margin's free ground on `RESCUE_STEP`'s finer grid, each door's
+    corridor tried to `RESCUE_TARGETS` of the tree's nearest points - the same rules, a wider search, for the last few
+    households a whole margin would otherwise be thrown away for (seed 47 at 40 households: 7 margins -> 3, research R9).
+    The corridor search's memory (`_corridor_memo`) holds candidates found at the narrower breadth, so it is dropped on the
+    way in and out, and the tree's breadth set back. Records `seat_search.rescue_offered`, `rescue_took`."""
+    seats = free_seats(s, (float(plan.seat["cx"]), float(plan.seat["cy"])), RESCUE_STEP)
+    region = getattr(s, "_seat_region", None)
+    if region is not None:
+        seats = [q for q, ok in zip(seats, region.offer(seats), strict=True) if ok]
+    tree = getattr(s, "_access", None)
+    if tree is not None:
+        tree.tried, tree._targets = RESCUE_TARGETS, {}
+    s.__dict__.pop("_corridor_memo", None)
+    try:
+        placed, offered, took = offer_seats(s, seats, placed, plan.spec.households, None)
+    finally:
+        if tree is not None:
+            tree.tried, tree._targets = TARGETS_TRIED, {}
+        s.__dict__.pop("_corridor_memo", None)
+    s._seat_search["rescue_offered"], s._seat_search["rescue_took"] = offered, took
     return placed
 
 

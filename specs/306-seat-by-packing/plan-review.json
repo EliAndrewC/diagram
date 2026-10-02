@@ -1,0 +1,79 @@
+{
+ "feature": "306-seat-by-packing",
+ "plan_sha256": "f369264c9fce7bcdd81c4b461dfba9e2fe159275a00c3c6916caf9519ac9a73e",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Seat band ground per household 162 ft (HOMESTEAD_GROUND_FT), growing seat_room so every hamlet map moves",
+   "class": "within",
+   "why": "FR-010 and the spec's Decisions table settle the figure and its class; maps moving within the rules is FR-008. Note: FR-011 builds FR-010 only on its own verdict; D1 should state that verdict from R7 (faster beyond the spread, every household seated) rather than leave it implied."
+  },
+  {
+   "id": "D2",
+   "summary": "Rescue and dry-spell cap built only if they pay on top of D1, measured on the sixteen-seed set at 40 households",
+   "class": "within",
+   "why": "FR-011 word for word: each lever on its own verdict, NO-GO recorded and withdrawn."
+  },
+  {
+   "id": "D3",
+   "summary": "FR-003 and FR-004 not built on their NO-GO verdicts",
+   "class": "within",
+   "why": "FR-003/FR-004 are 'On GO' requirements and FR-011 bars a lever without its own GO; the GM's request contemplates a redesign that does not pan out and the goal says to document it. Notes, not blocking: R1 measured the free-ground prediction the spec replaced, so FR-003's rules-based form was argued from R2-R3, not prototyped; and 'a margin or two' omits seed 47's seventh margin at 162 alone (R7), a reference-seed miss of SC-002/SC-003 that the spec says is recorded with every round's numbers and raised with the GM."
+  },
+  {
+   "id": "D4-reach",
+   "summary": "Census instrument armed only on settlement/_geom primitives and overlap.py predicates",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006 counts every overlap or proximity check a roll asks; the GM's rule is about ANY check against many things. Per-item scans written with shapely predicates directly are invisible to this instrument, e.g. hamletgen/homesteads/rows.py:214 any(clipped.intersects(box(...)) for ... in boxes), rows.py:292 any(band.intersects(g) for g in lanes + water), cluster.py:115 all(p.distance(ray) ... for p, m in polys). Counting them is not impossible (arm shapely's binary predicates and distance the same way), and nothing in the request implies excluding them. Fix: arm shapely's predicates and distance alongside the _geom ones, and state any remaining reach limit in the plan."
+  },
+  {
+   "id": "D4-threshold",
+   "summary": "CENSUS_FLAG = 5,000 comparisons per call, called the knee of R10",
+   "class": "within",
+   "why": "The spec delegates the threshold to the plan from the measured distribution. Note: R10's stated values do not show a knee at 5,000 (5,048 against 3,859 is 1.3x; the step below 3,859 to the bulk under 1,500 is wider); R10 should list the tail between 1,500 and 5,048 so the knee is shown, not asserted."
+  },
+  {
+   "id": "D4-standing",
+   "summary": "make census; make perf runs it after the snapshot; stages only (the perf tool's roll)",
+   "class": "within",
+   "why": "FR-006's standing check beside make perf; US3 counts the checks a hamlet roll asks."
+  },
+  {
+   "id": "D5-exact",
+   "summary": "Each flagged check fixed only with byte-identical manifests; a check that cannot be indexed exactly is recorded instead",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM's remedy is 'a bounding box or a segmented line to stay on the right side of', which can move an answer, and FR-008 (GM 2026-09-30) says maps need not stay identical. Making 'not exact' a reason to record rather than fix preserves existing output the GM did not ask to preserve. Identical answers is the right oracle for an exact index; where only a box or line that moves the answer serves, it is built and held to FR-008 (every pool map and cohort seed passes every rule and seats as many), not recorded."
+  },
+  {
+   "id": "D5-slower",
+   "summary": "A check slower when indexed is recorded with its measurement, mechanism and sketch",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-007 allows 'recorded with the measurement of why not'; building a slower index would defeat the request's purpose (efficiency), and the measurement is the record."
+  },
+  {
+   "id": "D5-scope",
+   "summary": "D5 fixes 'the nine of R10' (a scratch census, seed 4)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-007 covers every flagged check in any stage; the built census (D4, with its reach fixed) may flag checks the scratch run did not. Fix: every check the D4 census flags, the nine of R10 at least."
+  },
+  {
+   "id": "D6",
+   "summary": "Planted region sliver line fixed and tested (R8)",
+   "class": "within",
+   "why": "Constitution XIV, a defect found in the work; no scope beyond it."
+  },
+  {
+   "id": "VI-occasions",
+   "summary": "Review occasions declared none for D1",
+   "class": "within",
+   "why": "Process under feature 294's occasion table, not a narrowing of what the GM asked."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

@@ -494,7 +494,15 @@ BUNDLE_PITCH = 100.0
 # worktree at 287's HEAD passes seed 18): with the band at 100 the merge held 13 of seed 18's 15 households on its best
 # margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
 # left one farmhouse off the way network on seeds 11 and 43 - measured and not taken.
-HOMESTEAD_GROUND_FT = 104.0
+# 104 -> 162 (feature 306, FR-010; a GUESS with its reasoning - the record gives no figure for a band's ground per household).
+# 104 counted the house, its yard and the row, and NOT the household's wood floor, which 269 B26 added after it
+# (`HOMESTEAD_WOOD_FT2`, 6,000 sq ft at least, within the copse's reach of the house): a band tuned to just fit (seed 18, above)
+# held a village at the edge of its capacity, and whether a margin filled was near chance - seed 47 at 40 households seated
+# sixteen margins before one held everyone (specs/306-seat-by-packing/research.md R2, R6). The band's AREA is the households'
+# SUM, so the figure is the side of a square holding the MEAN homestead: the pool's 82 envelopes' mean (`geom.bbox`, 20,366
+# sq ft) and the least wood floor, sqrt(26,366) = 162. MEASURED (research R7): at 40 households 104 seated the first margin on
+# 1 seed of 12, 128 on 4, 140 on 7, 162 on 11; seeds 1-32 at 162 seated on the first or second margin on 28 of 30.
+HOMESTEAD_GROUND_FT = 162.0
 
 # How far below the drain outfall a tameike may stand before the map is better off without one.
 # Calibrated against the drawn ponds: an ordinary set-back lands well under 200 px, and the case

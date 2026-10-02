@@ -108,3 +108,19 @@ envelope's, and the fit raised `AttributeError`. A line plants nothing: only the
 `fields/comb._comb_record_field` 12,263, `ways/street.street_span` 6,394, `city/bridges.channel_footbridges` 5,485,
 `water/polder.dike_gaps_at_channels` 5,048; the next below at 3,859 (`ways/serve._lay_web_lane`), the bulk under 1,500. The flag
 is set at the knee, 5,000.
+
+## R9. The rescue and the dry cap on top of the band's figure (observed 2026-10-02, method: `rim.py` with `HOMESTEAD_GROUND_FT=162`, `MODE=base` against `MODE=rescue RESCUE=3 DRY=400`, sixteen seeds (1-13, 25, 39, 47) at 40 households, two processes at once)
+
+(Observed 2026-10-02, method: as the heading.) Summed homesteads seconds: 92.7 (the figure alone) -> 72.2 (with both). Every seed
+seated all 40; the rescue saved a margin on seeds 6 (2 -> 1), 25 (2 -> 1) and 47 (7 -> 3; 37.0 -> 22.8 s); no seed slower
+beyond 0.15 s. **GO: both are built** (plan D2).
+
+## R11. The band's figure in the engine: the canvas kept, and what it buys (observed 2026-10-02, method: the clone's engine with `HOMESTEAD_GROUND_FT = 162` and the dry cap and rescue (plan D1, D2); `make cohort N=24`, `make maps SCOPE=all`; the 40-household probe `rim.py MODE=base` over sixteen seeds)
+
+(Observed 2026-10-02, method: as the heading.) With 162 also sizing the canvas's room for the seat (`seat_room`), every canvas grew
+and every field was re-fitted: the cohort fell from 30/30 (the base, `/tmp/base306`) to 27/30 - seed 18 seated 8-13 of 15 on
+all sixteen margins, seed 19's dispersed farms lost their channels (`farm_without_its_channel` x10), the linear pinned seed 903
+was refused by the web - and Sawada was refused (`WebRefused`, its field way's doubled tail). With the canvas's room sized as
+before (`plan.SEAT_ROOM_GROUND_FT = 104`) and the band at 162: the cohort 29/30 (seed 903 still refused - lane 2, the skeleton,
+`bends`), the pool clean, and at 40 households fifteen of sixteen seeds seat on the FIRST margin (seed 47 3.6 s, from 50.0 on
+the base engine; seed 12 the outlier, eleven margins, 31.9 s), 94.9 s summed over the sixteen.

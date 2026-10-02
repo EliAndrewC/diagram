@@ -77,7 +77,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes."""
 
-    __slots__ = ("_along", "_targets", "grid", "half", "segs")
+    __slots__ = ("_along", "_targets", "grid", "half", "segs", "tried")
 
     def __init__(self, half: float) -> None:
         self.half = half
@@ -85,6 +85,9 @@ class AccessTree:
         self.grid = PointGrid(128.0)
         self._targets: dict[Pt, list[Pt]] = {}  # `targets`, remembered while no corridor is added
         self._along: list[list[Pt]] = []  # each corridor's points every `TARGET_STEP_PX`
+        # how many of the tree's nearest points a door's corridor is tried to: `TARGETS_TRIED`, widened for a near miss's rescue
+        # (`capacity.seat_the_rest`, feature 306) and set back after it
+        self.tried = TARGETS_TRIED
 
     def add(self, a: Pt, b: Pt) -> None:
         self.segs.append((a, b))
@@ -123,7 +126,7 @@ class AccessTree:
             pts.append(seg_closest(p[0], p[1], a, b))
             pts += along
         dist = math.dist
-        got = self._targets[p] = heapq.nsmallest(TARGETS_TRIED, pts, key=lambda q: dist(p, q))
+        got = self._targets[p] = heapq.nsmallest(self.tried, pts, key=lambda q: dist(p, q))
         return got
 
 

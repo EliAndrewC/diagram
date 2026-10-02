@@ -346,15 +346,23 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
     return side, side
 
 
-def band_extent(households: int, shape: str | None) -> tuple[float, float]:
+def band_extent(households: int, shape: str | None, ground: float | None = None) -> tuple[float, float]:
     """The seat band's half-depth and length, `(dep, lat)`, from the household count and the cluster shape - the ONE
     derivation `seat_cluster` seats with and `seat_room` sizes the canvas with (feature 287, homes H31). Area is held
     (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect."""
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
-    dep = max(112.0, min(math.sqrt(households * (HOMESTEAD_GROUND_FT**2) / (asp * math.pi)), 300.0))
-    lat = max(240.0, min(households * (HOMESTEAD_GROUND_FT**2) / (math.pi * dep), 1100.0))
+    g = HOMESTEAD_GROUND_FT if ground is None else ground
+    dep = max(112.0, min(math.sqrt(households * (g**2) / (asp * math.pi)), 300.0))
+    lat = max(240.0, min(households * (g**2) / (math.pi * dep), 1100.0))
     return dep, lat
 
+
+#: The ground per household the CANVAS's room for the seat is sized with (`seat_room`), ft - the figure the band had before feature
+#: 306 gave it the homestead's wood floor (`HOMESTEAD_GROUND_FT`, 162). MEASURED, not reasoned (specs/306-seat-by-packing/
+#: research.md R11): sizing the room with 162 as well grew every canvas, re-fitted every field and moved every seat - the cohort
+#: fell from 30/30 to 27/30 (seed 18 seated 8-13 of 15 on every margin, seed 19's farms lost their channels) and Sawada was
+#: refused; with the room as it was and the band at 162 the cohort holds 29/30 and the pool seats clean.
+SEAT_ROOM_GROUND_FT = 104.0
 
 SEAT_STANDOFF = 12.0
 """px from the field margin to the seat band's near edge (`cluster._seat_frame`'s standoff)."""
@@ -379,7 +387,7 @@ def seat_room(households: int, shape: str | None) -> float:
 
     A CLOSED-FORM BOUND FROM THE SEAT'S OWN QUANTITIES, not a tuned margin: the canvas grows by this on every side, so
     whichever margin faces the wind has the room. The frame crops to content, so the room costs no ink."""
-    dep, lat = band_extent(households, shape)
+    dep, lat = band_extent(households, shape, SEAT_ROOM_GROUND_FT)
     return dep + SEAT_STANDOFF + max(lat * 0.5, WIND_BACK_MIN_DOT * lat + dep + BELT_REACH)
 
 
