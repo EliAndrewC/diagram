@@ -127,3 +127,39 @@ and the last resort drops ordinary lanes only, so the web was refused. The fix (
 of a crossing beyond that farm, never short of the farm itself; a crossing between farms is left to the street. The road reads
 the same span and crosses at a ford. Seed 11 passes; the cohort 29/30 (Audit-905 alone, before its own fix). One regression
 test in `tests/hamletgen/ways/test_street.py`. Not yet judged by eye: the road's new jog at the ford (two turns 59 ft apart).
+
+## R10. What the levers bought at 40 households, and the forms withdrawn (observed 2026-10-02, method: the scratch probe `p3.py`, `stage_homesteads` timed through itself, best of three unless said; the machine otherwise idle)
+
+**P3's forms (plan D9), on P2 as first built, summed over the four seeds at 40 households** (homesteads seconds; placer calls):
+
+| form | seed 4 | seed 25 | seed 39 | seed 47 | sum |
+|---|---|---|---|---|---|
+| P2 alone | 6.41 (916) | 7.79 (946) | 9.81 (907) | 53.01 (1,509) | **77.0** |
+| A, the region re-asked after each house | 27.92 (2,035) | 18.23 (919) | 14.64 (919) | 52.87 (1,401) | 113.7 |
+| A', A with each seated homestead's boxes painted | 42.19 (1,277) | 86.73 (1,026) | 14.43 (894) | 55.25 (420) | 198.6 |
+| B, no seat without a clear straight corridor from the smallest layout | 5.69 (383) | 17.90 (552) | 6.86 (403) | 52.23 (769) | 82.7 |
+
+Every form seated all 40 households. At 15 and 20 households (same method) A was 0-7% faster than P2 alone, A' erratic (seed 4
+at 15: 3.70 s against 1.01), B about even at 15 and 5-16% faster at 20 on three seeds. **Plan D10: none is faster at 40, so all
+three are withdrawn** (FR-006, FR-007). Why, in their own numbers: re-asking the region rebuilds its reachable raster (a flood)
+per seated house, and the pass then visits a different, worse order of seats (A on seed 4: 2,035 placer calls against 916);
+painting the homesteads refuses seats the placer's one computed move would have rescued (297's R15 found the same at hamlet
+size); B halves the placer calls but pays a layout and a corridor search for every seat it offers, the costliest question asked
+first (297's R10 lesson, again), and on seed 47 the calls it saves are cheap ones.
+
+**P2's two indexes, measured apart** (one run each, two rounds alternated, 40 households): the access tree's targets from the
+ring (D5) against the scan, with the pocket index in both - seed 4 6.25/6.31 against 5.93/6.30, seed 25 7.88/7.68 against
+7.54/7.65, seed 39 10.00/9.84 against 9.56/9.30, seed 47 51.31/50.82 against 49.89/48.84. **The ring is 1-4% slower on every
+seed: D5 is withdrawn** and the scan restored (`access.py` records why at `targets`). The sampler showed it: the exhaustive
+pass's doors stand far from the tree, the ring doubled across thousands of empty cells (`PointGrid.near` 11.7% SELF of seed 47's
+stage), and a fallback to the scan once the ring outgrew the tree's own point count still left it behind. **The pocket index (D6)
+stays**: `reserve_commons_byres` fell from 16.7% of seed 47's stage to 8.8-9.0% (the sampler, observed 2026-10-02), and seed 47's
+stage from 55.6 s (R1) to 48.8-49.9 s; it does nothing on the three seeds whose byres are not `detached_commons`.
+
+**So the goals are missed** (spec SC-002, SC-003): at 40 households the homesteads stage is ~6-10 s on three seeds and ~49 s on
+seed 47, against 0.40-0.48 s at 10 households - ~0.15-1.2 s a household against ~0.04, where SC-002 asked at most twice. What
+remains, on seed 47 (the sampler on the current engine): the exhaustive pass 64.5% of the stage, the corridor search behind each
+seat (`seat_reaches_tree` -> `_house_candidates`) 33-38%, the four layouts with their fixtures 18.5%, the site raster's sampling
+of every candidate corridor (`prime_site`) 15%. Those are the seat search's own questions asked of ~1,500 seats, 23 of which the
+exhaustive pass seats - not a scan an index replaces. Per the spec this is recorded and raised with the GM, not pursued with
+levers beyond the three accepted.

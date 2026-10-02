@@ -77,7 +77,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes."""
 
-    __slots__ = ("_along", "_extent", "_points", "_spans", "_targets", "grid", "half", "segs")
+    __slots__ = ("_along", "_targets", "grid", "half", "segs")
 
     def __init__(self, half: float) -> None:
         self.half = half
@@ -85,26 +85,14 @@ class AccessTree:
         self.grid = PointGrid(128.0)
         self._targets: dict[Pt, list[Pt]] = {}  # `targets`, remembered while no corridor is added
         self._along: list[list[Pt]] = []  # each corridor's points every `TARGET_STEP_PX`
-        # `targets`' ring query (feature 304, plan D5): each corridor by its own box and each point along it, keyed by their
-        # place in the scan's list; and the extent of everything filed, past which a ring holds the whole tree
-        self._spans = PointGrid(128.0)
-        self._points = PointGrid(128.0)
-        self._extent: list[float] = []
 
     def add(self, a: Pt, b: Pt) -> None:
-        i = len(self.segs)
         self.segs.append((a, b))
         self._targets = {}
         n = int(math.dist(a, b) // TARGET_STEP_PX)
-        along = [(a[0] + (b[0] - a[0]) * k / max(1, n), a[1] + (b[1] - a[1]) * k / max(1, n)) for k in range(n + 1)]
-        self._along.append(along)
+        self._along.append([(a[0] + (b[0] - a[0]) * k / max(1, n), a[1] + (b[1] - a[1]) * k / max(1, n)) for k in range(n + 1)])
         h = self.half
         self.grid.extend([(a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)])
-        x0, y0, x1, y1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
-        self._spans.extend([(i, x0, y0, x1, y1)])
-        self._points.extend([(q, (i, 1 + k), q[0], q[1], q[0], q[1]) for k, q in enumerate(along)])
-        e = self._extent
-        self._extent = [x0, y0, x1, y1] if not e else [min(e[0], x0), min(e[1], y0), max(e[2], x1), max(e[3], y1)]
 
     def covers_box(self, box: Any) -> bool:
         """Does any corridor's strip meet the box `(cx, cy, w, h)`? The ONE test an envelope asks (plan M3: every later
@@ -124,53 +112,19 @@ class AccessTree:
         got = self._targets.get(p)
         if got is not None:
             return got
-        got = self._targets[p] = ring_targets(self, p)
+        # each corridor's points along are the tree's, not the door's: laid out once per corridor (`_along`); the nearest
+        # `TARGETS_TRIED` taken as a stable sort's first ones would be (`heapq.nsmallest`, whose ties keep list order)
+        # A RING QUERY WAS TRIED AND WITHDRAWN (feature 304, plan D5; specs/304 research R10): the targets from a `PointGrid` ring
+        # doubled until it held `TARGETS_TRIED`, exactly this answer, was 1-4% SLOWER on the stage at 40 households on all four
+        # reference seeds - the exhaustive pass's doors stand far from the tree, so the ring grew across many empty cells, and
+        # the scan's list is a few hundred points even then. Do not retry it without a measurement that says the tree outgrew it.
+        pts: list[Pt] = []
+        for (a, b), along in zip(self.segs, self._along, strict=True):
+            pts.append(seg_closest(p[0], p[1], a, b))
+            pts += along
+        dist = math.dist
+        got = self._targets[p] = heapq.nsmallest(TARGETS_TRIED, pts, key=lambda q: dist(p, q))
         return got
-
-
-def scan_targets(tree: AccessTree, p: Pt) -> list[Pt]:
-    """`AccessTree.targets` as the whole tree's scan: every corridor's nearest point to `p` followed by its points along, in
-    corridor order, and the first `TARGETS_TRIED` of a stable sort by distance (`heapq.nsmallest`, whose ties keep list order).
-    The answer `ring_targets` must equal - kept as its oracle (`tests/settlement/test_access_ring_304.py`)."""
-    pts: list[Pt] = []
-    for (a, b), along in zip(tree.segs, tree._along, strict=True):
-        pts.append(seg_closest(p[0], p[1], a, b))
-        pts += along
-    dist = math.dist
-    return heapq.nsmallest(TARGETS_TRIED, pts, key=lambda q: dist(p, q))
-
-
-#: The ring `ring_targets` asks first, doubled until it holds `TARGETS_TRIED` targets: four steps along a corridor.
-RING_START_PX = 4 * TARGET_STEP_PX
-
-
-def ring_targets(tree: AccessTree, p: Pt) -> list[Pt]:
-    """`scan_targets`' answer from a ring round `p` (feature 304, plan D5). The scan measured every point of the tree for every
-    door, and the tree grows with every house seated: quadratic in the households (specs/304 research R3). Here a ring of
-    radius `r` gathers each corridor whose box comes within `r` (its nearest point, at its place `(i, 0)` in the scan's list)
-    and each point along within `r` (at `(i, 1 + k)`); once `TARGETS_TRIED` of them lie within `r`, every target outside it is
-    farther than all of those, so the first `TARGETS_TRIED` by (distance, place) ARE the scan's answer, ties ordered as its
-    stable sort orders them. A ring that reaches past the tree's farthest corner holds every target, however few."""
-    if not tree.segs:
-        return []
-    px, py = p
-    x0, y0, x1, y1 = tree._extent
-    farthest = max(math.dist(p, c) for c in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)))
-    dist = math.dist
-    r = RING_START_PX
-    while True:
-        found: dict[tuple[int, int], tuple[float, Pt]] = {}
-        for i, *_ in tree._spans.near(px, py, r):
-            if (i, 0) not in found:
-                a, b = tree.segs[i]
-                q = seg_closest(px, py, a, b)
-                found[(i, 0)] = (dist(p, q), q)
-        for q, place, *_ in tree._points.near(px, py, r):
-            found[place] = (dist(p, q), q)
-        within = sorted((d, place, q) for place, (d, q) in found.items() if d <= r)
-        if len(within) >= TARGETS_TRIED or r >= farthest:
-            return [q for _d, _place, q in within[:TARGETS_TRIED]]
-        r *= 2.0
 
 
 def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:

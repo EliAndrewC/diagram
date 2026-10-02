@@ -16,14 +16,14 @@ houses, that map is re-examined here before landing and an occasion is added if 
       (`make cohort N=24`)
       research: rendering
       verify: DONE. 304-start 12.3 s total (dev/perf-log/20261002T031740Z-304-start-diagram-performance.json); cohort base 28/30 in /tmp/base304, research R6
-- [ ] T02 The pre-existing cohort failure Audit-11 (`WebRefused`, linear, 10 households; research R6) diagnosed and fixed
+- [x] T02 The pre-existing cohort failure Audit-11 (`WebRefused`, linear, 10 households; research R6) diagnosed and fixed
       (constitution XIV)
       research: rendering
-      verify: `make cohort N=1 SEED=11` passes; the cause and the fix in research.md; the rest of the cohort not worse
-- [ ] T03 The pre-existing cohort failure Audit-905 (`UndeckableCrossing`, dispersed, 20 households; research R6) diagnosed and
+      verify: DONE. cause and fix research R9 (brook_bounds); cohort N=24 30/30 with T03; pool maps clean, Kashikawa one more lane
+- [x] T03 The pre-existing cohort failure Audit-905 (`UndeckableCrossing`, dispersed, 20 households; research R6) diagnosed and
       fixed (constitution XIV)
       research: rendering
-      verify: the seed passes; the cause and the fix in research.md; the rest of the cohort not worse
+      verify: DONE. cause and fix research R8 (spur tip set on the bund again); cohort N=24 30/30 with T02; pool maps clean
 
 ## P1 - the scaling leg (US1; FR-001 - FR-003)
 
