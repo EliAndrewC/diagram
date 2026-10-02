@@ -312,6 +312,30 @@ def test_an_ordinary_lane_beside_another_way_past_a_pitch_goes_where_the_web_kee
     assert settle.settle_shadows(both) == 0, "each lane is a house's only way"
 
 
+def _a_link_beside_a_door_path() -> _S:
+    s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 0.0), (15.0, 20.0), (15.0, 250.0)], [(15.0, 250.0), (200.0, 250.0)]])
+    s.M["lanes"][1]["serves"] = [0.0, 320.0]  # a door path: a tree lane, never the one that goes
+    return s
+
+
+def test_a_shadowing_link_goes_with_the_ordinary_lanes_it_alone_joined(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`settle_shadows` -> `drop_stranding` (feature 304, Kashikawa): an ordinary link beside a door path past a pitch, the
+    only way joining a field path, goes with that path; where that took the field's way, the field path is drawn again
+    (`bund.a_way_onto_the_bund`) and recorded - and not where the field was never reached."""
+    from l7r.diagram.hamletgen.ways import bund
+
+    drawn: list[int] = []
+    monkeypatch.setattr(bund, "a_way_onto_the_bund", lambda s: drawn.append(1) or "branch")
+    reached = iter([False, True])  # reached before the drop, unreached after it
+    monkeypatch.setattr(law, "field_unreached", lambda M: next(reached))
+    s = _a_link_beside_a_door_path()
+    assert settle.settle_shadows(s) == 2 and len(s.M["lanes"]) == 2 and s.M["lanes"][1].get("serves")
+    assert drawn == [1] and s.M["meta"]["field_path"] == "branch"
+    monkeypatch.setattr(law, "field_unreached", lambda M: True)  # never reached: the drop owes nothing new
+    quiet = _a_link_beside_a_door_path()
+    assert settle.settle_shadows(quiet) == 2 and drawn == [1] and "field_path" not in quiet.M["meta"]
+
+
 def test_a_farmhouse_discharges_two_lane_ends_not_three() -> None:
     ends = [[(x, 300.0), (x, 80.0)] for x in (-40.0, 0.0, 40.0)]
     s = _S([CONN, *ends], houses=[(0.0, 50.0)])

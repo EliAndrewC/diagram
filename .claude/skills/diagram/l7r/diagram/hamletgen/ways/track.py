@@ -634,6 +634,17 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # field; otherwise the map says why it has no path to its rice.
         _threaded = _thread_the_fabric(s, plan, _spur_pts)
         _drawn_spur, _swept = spur_cut_at_the_fold(_threaded, plan.envelope) if len(_threaded) >= 2 else (_threaded, "no way to the field clear of the steadings - the field path is the web's")
+        # ...AND THE DRAWN TIP IS SET ON THE BUND AGAIN (269 B04): the tip was set above, but the threading moves the spur's
+        # free bow vertex round the steadings and the fold cut then keeps the arm out to it, so the path drawn can end at a
+        # vertex neither step held to the field's edge. Cohort seed 905 (feature 304 T03, dispersed): a 6 ft spur bowed 14 ft
+        # sideways was threaded out to a bow 20 ft inside a paddy plot, and the arm kept ran across the comb's main ditch at the
+        # field's head onto a 2 ft bund strip - no deck lands dry there (`crossing_deck`), and a dispersed hamlet runs no web
+        # settle to cut it, so `bridges()` raised `UndeckableCrossing`. Pulled back out of the worked ground, the tip stops on
+        # this side of the bund, as the tip set above does.
+        if _swept is None:
+            _drawn_spur = tip_onto_the_bund(_drawn_spur, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
+            if len(_drawn_spur) < 2:
+                _swept = "the threaded spur runs in the worked ground end to end - the field path is the web's"
         if _swept is None and not s.admits_lane(_drawn_spur, SPUR_WIDTH):
             _swept = "the overlap matrix refuses the spur (a dry plot or a steading's part on it) - the field path is the web's"
         if _swept is None:
@@ -654,9 +665,9 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # the gap, and the street was dropped from the network with all ten of its farms (cohort seed 22, 2026-10-01)
     _row = (getattr(s, "_row_streets", None) or [None])[0] if plan.settlement_form == "linear" else None
     if _row and len(_row) >= 2:
-        from .street import drawn_span  # the street module reads the web's settle, laid after this stage
+        from .street import drawn_span, street_run_out  # the street module reads the web's settle, laid after this stage
 
-        _span = drawn_span(s, 0, s.M.get("houses") or [])
+        _span = drawn_span(s, 0, s.M.get("houses") or [], plan.brook or [])
         _out = street_run_out(_span if len(_span) >= 2 else _row, s.W, s.H)
         # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the street's
         # line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
@@ -684,24 +695,6 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         worn=True,
         connector=True,
     )
-
-
-def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> list[Pt]:
-    """The road a row's street runs on as (feature 291 plan D17): from the street's end nearer the sheet's edge, straight on
-    along its last leg until `beyond` past the edge. The end chosen is the one whose run to the edge is shorter."""
-
-    def run(end: Pt, prev: Pt) -> tuple[float, list[Pt]]:
-        dx, dy = end[0] - prev[0], end[1] - prev[1]
-        m = math.hypot(dx, dy) or 1.0
-        ux, uy = dx / m, dy / m
-        tx = (-end[0]) / ux if ux < 0 else (width - end[0]) / ux if ux > 0 else math.inf
-        ty = (-end[1]) / uy if uy < 0 else (height - end[1]) / uy if uy > 0 else math.inf
-        t = max(0.0, min(tx, ty))
-        return t, [end, (end[0] + ux * (t + beyond), end[1] + uy * (t + beyond))]
-
-    a = run(street[0], street[min(8, len(street) - 1)])
-    b = run(street[-1], street[max(-9, -len(street))])
-    return a[1] if a[0] <= b[0] else b[1]
 
 
 def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach: float = 4000.0, wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:

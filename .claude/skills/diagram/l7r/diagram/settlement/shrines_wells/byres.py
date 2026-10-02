@@ -8,6 +8,7 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
+    PointGrid,
     Pt,
     edge_dist,
     point_in_poly,
@@ -103,6 +104,23 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
 POCKET_TREE_CLEAR_FT = 50.0
 
 
+def paddy_index(polys: Any) -> PointGrid:
+    """The paddy outlines filed by their bounding boxes, for `beside_a_paddy` to ask only the ones near a point (feature 304,
+    plan D6). Built once per reservation: the field does not change while the pockets are laid."""
+    grid = PointGrid(128.0)
+    grid.extend([(ff, min(p[0] for p in ff), min(p[1] for p in ff), max(p[0] for p in ff), max(p[1] for p in ff)) for ff in polys if ff])
+    return grid
+
+
+def beside_a_paddy(x: float, y: float, gap: float, polys: Any, index: PointGrid | None = None) -> bool:
+    """Is (x, y) on a paddy or nearer than `gap` to its outline? With `index` (`paddy_index` of the same `polys`) only the
+    outlines whose box comes within `gap` are asked: a point on an outline is inside its box and a point nearer than `gap`
+    to it is within `gap` of the box, so no outline that would answer yes is passed over and the verdict is the scan's. The
+    scan of every outline per candidate was 16.7% of seed 47's homesteads stage at 40 households (specs/304 research R2)."""
+    near = polys if index is None else [ff for ff, *_ in index.near(x, y, gap)]
+    return any(point_in_poly(x, y, ff) or edge_dist(x, y, ff) < gap for ff in near)
+
+
 class DraftByresMixin:
     def reserve_commons_byres(self: Settlement, seat: Mapping[str, Any], households: int) -> list[Pt]:  # type: ignore[misc]
         """THE SHARED SHEDS' POCKETS, reserved in the seat band BEFORE any house (feature 287, homes H06): on a settlement
@@ -119,6 +137,7 @@ class DraftByresMixin:
         ox, oy = seat["out"]
         lat, dep = float(seat["lat"]), float(seat["dep"])
         pockets: list[Pt] = []
+        paddies = paddy_index(self.field_polys)
         for widen in _POCKET_WIDENING:
             nu, nv = max(1, int(lat * widen / bw)), max(1, int(2.0 * dep * widen / bh))
             cands = [
@@ -126,7 +145,7 @@ class DraftByresMixin:
                 for i in range(nu + 1)
                 for j in range(nv + 1)
             ]
-            cands = [q for q in cands if self._commons_pocket_clear(q[0], q[1], bw, bh, pockets)]
+            cands = [q for q in cands if self._commons_pocket_clear(q[0], q[1], bw, bh, pockets, paddies)]
             while cands and len(pockets) < target:
                 q = (
                     min(cands, key=lambda c: (math.hypot(c[0] - cx, c[1] - cy), c))
@@ -135,18 +154,19 @@ class DraftByresMixin:
                 )
                 pockets.append(q)
                 self.placed.append((q[0], q[1], bw + 6.0, bh + 6.0))
-                cands = [c for c in cands if self._commons_pocket_clear(c[0], c[1], bw, bh, pockets)]
+                cands = [c for c in cands if self._commons_pocket_clear(c[0], c[1], bw, bh, pockets, paddies)]
             if len(pockets) >= target:
                 break
         self._byre_pockets = pockets
         return pockets
 
-    def _commons_pocket_clear(self: Settlement, x: float, y: float, bw: float, bh: float, pockets: list[Pt]) -> bool:  # type: ignore[misc]
+    def _commons_pocket_clear(self: Settlement, x: float, y: float, bw: float, bh: float, pockets: list[Pt], paddies: PointGrid | None = None) -> bool:  # type: ignore[misc]
         """May a shared shed's pocket stand at (x, y)? The fit test at its box plus 3 px round, off the paddy by a stall's
-        depth, and `COMMONS_BYRE_GAP` from every pocket laid."""
+        depth, and `COMMONS_BYRE_GAP` from every pocket laid. `paddies` is `paddy_index(self.field_polys)` where the caller
+        asks many candidates (`reserve_commons_byres`)."""
         if any(math.hypot(x - p[0], y - p[1]) <= COMMONS_BYRE_GAP for p in pockets):
             return False
-        if any(point_in_poly(x, y, ff) or edge_dist(x, y, ff) < bh for ff in self.field_polys):
+        if beside_a_paddy(x, y, bh, self.field_polys, paddies):
             return False
         # ...nor on or beside the exit strip or the field's corridor the seating reserved first (feature 287 M8: the registry
         # refuses a shed on an access corridor, and the web draws its way along one). Held off them by half a bundle pitch

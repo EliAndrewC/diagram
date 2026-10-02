@@ -1,0 +1,12 @@
+{
+  "perf-control-scale-base": {
+    "verifies": "the band-1 reading of 304-end against 304-start",
+    "subject": "perf bookend, reference spec, seed 4",
+    "value": -2.4,
+    "unit": "% change, 304-end against 304-scale-base",
+    "quantity": "seed 4's stage total 4.1 s -> 4.0 s with the unmodified engine (304-scale-base, a worktree at 117d38bec) and the clone (304-end) run back to back; the reference total -4.6%, every leg band 0. 304-start was taken on the same unmodified engine hours earlier (3.8 s for seed 4): the +5.3% against it is the machine between the two runs, not the delta",
+    "source": "dev/perf-log/20261002T041948Z-304-scale-base-scale304.json, dev/perf-log/20261002T042209Z-304-end-diagram-performance.json",
+    "command": "make perf-report AGAINST=304-scale-base",
+    "round": "117d38bec"
+  }
+}

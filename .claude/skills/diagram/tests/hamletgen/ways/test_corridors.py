@@ -89,3 +89,15 @@ def test_a_row_street_and_a_door_path_are_tree_lanes() -> None:
     cuts, as a drawn corridor is; an ordinary lane is not."""
     assert co.is_tree({"street": True}) and co.is_tree({"serves": [1.0, 2.0]}) and co.is_tree({"connector": True})
     assert co.is_tree({"role": co.ACCESS_ROLE}) and not co.is_tree({"w": 3})
+
+
+def test_a_lane_whose_drop_strands_only_ordinary_lanes_and_no_house() -> None:
+    """`strands_only_ordinary` (feature 304, Kashikawa): the link that alone joins the field path to the network strands only
+    that path; a lane stranding nothing, a lane stranding a tree lane, or one stranding a farmhouse's only way is not one."""
+    conn = {"pts": [[0.0, 0.0], [-1000.0, 0.0]], "connector": True}
+    link, spur = {"pts": [[0.0, 0.0], [0.0, 300.0]]}, {"pts": [[0.0, 300.0], [100.0, 300.0]]}
+    M = {"lanes": [conn, link, spur], "houses": [], "meta": {}}
+    assert co.strands_only_ordinary(M, 1) and not co.strands_only_ordinary(M, 2), "the spur's drop strands nothing"
+    assert not co.strands_only_ordinary({**M, "lanes": [conn, link, {**spur, "street": True}]}, 1), "a tree lane is never stranded"
+    farm = {"x": 100.0, "y": 330.0, "w": 40.0, "h": 28.0, "rot": 0.0}
+    assert not co.strands_only_ordinary({**M, "houses": [farm], "meta": {"generated_by": "hamletgen"}}, 1), "the farm's only way"

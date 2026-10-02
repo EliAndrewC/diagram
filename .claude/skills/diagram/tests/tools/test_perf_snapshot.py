@@ -157,7 +157,9 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
     monkeypatch.setattr(ps, "_where", lambda: "diagram-tooling")
     monkeypatch.setattr(ps, "_git", lambda *a: "abc1234")
     monkeypatch.setattr(
-        ps, "measure", lambda seeds: [{"seed": s, "seconds": float(s), "form": "nucleated", "shape": "crescent", "houses": 15, "asked": 15, "stages": {"web": float(s)}} for s in seeds]
+        ps,
+        "measure",
+        lambda seeds, households=None: [{"seed": s, "seconds": float(s), "form": "nucleated", "shape": "crescent", "houses": 15, "asked": 15, "stages": {"web": float(s)}} for s in seeds],
     )
 
     path = ps.record("174-end", (2, 4, 6))

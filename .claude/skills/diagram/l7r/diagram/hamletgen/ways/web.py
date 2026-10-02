@@ -567,7 +567,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     belts = [[(float(a), float(b)) for a, b in g["poly"]] for g in s.M.get("village_groves", []) if g.get("poly")]
     drawn_water = drawn_water_segs(s)  # channels AND streams - see the helper for why the streams were missing
     if _rows:
-        lay_row_streets(s, houses, hard_built, walls, list(plan.watercourses) + drawn_water)
+        lay_row_streets(s, houses, hard_built, walls, list(plan.watercourses) + drawn_water, plan.brook or [])
     cands: list[Poly] = []
     for line in lines:
         # FINER SAMPLING AND A WIDER FABRIC MARGIN THAN THE DEFAULTS. A web lane runs among the

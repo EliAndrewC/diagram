@@ -114,6 +114,10 @@ class AccessTree:
             return got
         # each corridor's points along are the tree's, not the door's: laid out once per corridor (`_along`); the nearest
         # `TARGETS_TRIED` taken as a stable sort's first ones would be (`heapq.nsmallest`, whose ties keep list order)
+        # A RING QUERY WAS TRIED AND WITHDRAWN (feature 304, plan D5; specs/304 research R10): the targets from a `PointGrid` ring
+        # doubled until it held `TARGETS_TRIED`, exactly this answer, was 1-4% SLOWER on the stage at 40 households on all four
+        # reference seeds - the exhaustive pass's doors stand far from the tree, so the ring grew across many empty cells, and
+        # the scan's list is a few hundred points even then. Do not retry it without a measurement that says the tree outgrew it.
         pts: list[Pt] = []
         for (a, b), along in zip(self.segs, self._along, strict=True):
             pts.append(seg_closest(p[0], p[1], a, b))

@@ -960,3 +960,26 @@ right above the land so everything in it draws over it. Measured base against ti
 a regeneration 0.2-0.7 s faster, the ground-cover stage 0.83 -> 0.66 s on Inashiro and 0.62 -> 0.38 s on Kashikawa, the
 SVG a quarter of its size or less, the page 13-30% smaller (the rest of it is the embedded picture), the PNG a little larger.
 The blade buckets, their merge (`merge_lines`), the page's mark-cell scrub region and the marsh's re-throw went with the throws.
+
+## Homesteads at scale, and what it bought (feature 304, 2026-10-02)
+
+The GM, before the village tier: *"I want to make sure there's no more low hanging fruit."* At the reference's 15 households
+there was little left; the household count was the problem. The homesteads stage grew 17-24x for 4x the households and 139x on
+seed 47 (10 -> 40 households; specs/304 research R1). What shipped and what the measurement withdrew (research R10):
+
+- **The perf bookend's scaling leg** (`perf_snapshot.SCALING_SIZES`, 10/20/40): every `make perf` rolls the reference at those
+  sizes on the same four seeds and `perf_bands.evaluate` bands each size against its own history - the band owed is the highest.
+  A slowdown that shows only at a village's size can no longer land green. It adds about 2 minutes to a bookend.
+- **The shared sheds' pockets ask only nearby paddies** (`byres.paddy_index`): `reserve_commons_byres` scanned every paddy
+  outline per candidate; seed 47's stage 55.6 -> ~49 s. Only maps whose byre form is `detached_commons` pay it at all.
+- **Withdrawn: the access tree's targets from a ring.** Exact, and 1-4% SLOWER than the scan on every seed at 40 households:
+  the exhaustive pass's doors stand far from the tree, so the ring walked thousands of empty cells. An index is not free;
+  measure it against the scan before believing the profile's share.
+- **Withdrawn: the exhaustive pass pruned three ways** (the region re-asked per house, the same with homesteads painted, a
+  straight-corridor precheck): 113.7 / 198.6 / 82.7 s against 77.0 s summed. Re-asking reorders the seats for the worse;
+  painting refuses seats the placer's computed move rescues; a precheck asks the costliest question first.
+
+**What remains at 40 households is the seat search itself** (seed 47, the R10 sampler): the exhaustive pass 64% of the stage, the
+corridor search behind each seat 33-38%, the four layouts and their fixtures 18%, the site raster's sampling of each candidate
+corridor 15% - asked of ~1,500 seats to seat 23. No index removes that; a village-sized seating wants a different search
+(fewer, better seats offered), which is a design question raised with the GM, not an optimization.

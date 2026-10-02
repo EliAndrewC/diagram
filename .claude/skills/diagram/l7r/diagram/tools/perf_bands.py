@@ -89,6 +89,18 @@ class EnvironmentMismatch(ValueError):
 
 
 @dataclass(frozen=True)
+class Leg:
+    """One household count's verdict in the scaling leg (feature 304, FR-002): the reference's rules on that size's rows alone."""
+
+    total_pct: float
+    seeds: dict[int, float]
+    stage_delta: dict[int, dict[str, tuple[float, float]]]
+    band: int
+    crossed: tuple[str, ...]
+    refused: dict[int, str]  # seed -> the refusal, on either side of the pair: left out of the sums and said
+
+
+@dataclass(frozen=True)
 class Verdict:
     environment: str
     base: dict[str, str]  # label, utc, commit
@@ -96,8 +108,9 @@ class Verdict:
     total_pct: float
     seeds: dict[int, float]
     stage_delta: dict[int, dict[str, tuple[float, float]]]
-    band: int
+    band: int  # the band OWED: the maximum over the reference and every leg
     crossed: tuple[str, ...] = field(default_factory=tuple)
+    legs: dict[int, Leg | None] = field(default_factory=dict)  # households -> its verdict, None where the base has no such rows
 
     @property
     def owes(self) -> str:
@@ -105,8 +118,12 @@ class Verdict:
 
     @property
     def measurements(self) -> dict[str, Any]:
-        """The numbers a review record is bound to (FR-005)."""
-        return {"total_pct": self.total_pct, "seeds": {str(k): v for k, v in sorted(self.seeds.items())}}
+        """The numbers a review record is bound to (FR-005) - the legs only where there are any, so a pair from before feature
+        304 binds to the numbers it always did."""
+        out: dict[str, Any] = {"total_pct": self.total_pct, "seeds": {str(k): v for k, v in sorted(self.seeds.items())}}
+        if self.legs:
+            out["legs"] = {str(h): None if leg is None else {"total_pct": leg.total_pct, "seeds": {str(k): v for k, v in sorted(leg.seeds.items())}} for h, leg in sorted(self.legs.items())}
+        return out
 
 
 def environment_of(snap: dict[str, Any]) -> str:
@@ -131,13 +148,38 @@ def evaluate(base: dict[str, Any], cur: dict[str, Any]) -> Verdict:
         raise EnvironmentMismatch(
             f"{cur.get('label')} is a {e_cur} snapshot and {base.get('label')} is {e_base} - the bands are evaluated per environment, and a cross-environment percentage is indistinguishable from a regression (FR-014)"
         )
-    by_seed = {int(r["seed"]): r for r in base["rows"]}
+    floor = BAND1_PCT.get(e_cur, BAND1_DEFAULT_PCT)
+    ref = _judge(base["rows"], cur["rows"], floor)
+    # THE SCALING LEG (feature 304, FR-002): each household count the current snapshot measured, against the base's rows of
+    # that count - by the same lines - and the band owed is the highest of them all. A base from before the leg has none: "no
+    # baseline", never an error and never a band
+    legs: dict[int, Leg | None] = {}
+    crossed = list(ref.crossed)
+    band = ref.band
+    for h in sorted({int(r["households"]) for r in cur.get("scaling") or ()}):
+        was = [r for r in base.get("scaling") or () if int(r["households"]) == h]
+        if not was:
+            legs[h] = None
+            continue
+        leg = legs[h] = _judge(was, [r for r in cur["scaling"] if int(r["households"]) == h], floor)
+        crossed += [f"{h} households: {c}" for c in leg.crossed]
+        band = max(band, leg.band)
+    return Verdict(environment=e_cur, base=_ident(base), cur=_ident(cur), total_pct=ref.total_pct, seeds=ref.seeds, stage_delta=ref.stage_delta, band=band, crossed=tuple(crossed), legs=legs)
+
+
+def _judge(base_rows: list[dict[str, Any]], cur_rows: list[dict[str, Any]], floor: float) -> Leg:
+    """The GM's matrix on one set of rows, seed against seed. A seed refused on either side is set aside, not compared."""
+    by_seed = {int(r["seed"]): r for r in base_rows}
     seeds: dict[int, float] = {}
     stage_delta: dict[int, dict[str, tuple[float, float]]] = {}
+    refused: dict[int, str] = {}
     was_total = now_total = 0.0
-    for r in cur["rows"]:
+    for r in cur_rows:
         b = by_seed.get(int(r["seed"]))
         if b is None:
+            continue
+        if "refused" in r or "refused" in b:
+            refused[int(r["seed"])] = str(r.get("refused") or f"the base: {b['refused']}")
             continue
         was, now = float(b["seconds"]), float(r["seconds"])
         was_total, now_total = was_total + was, now_total + now
@@ -147,7 +189,6 @@ def evaluate(base: dict[str, Any], cur: dict[str, Any]) -> Verdict:
     total_pct = _pct(was_total, now_total)
     crossed: list[str] = []
     band = 0
-    floor = BAND1_PCT.get(e_cur, BAND1_DEFAULT_PCT)
     if total_pct > floor or any(p > floor for p in seeds.values()):
         band = 1
     if total_pct > BAND2_TOTAL_PCT:
@@ -163,7 +204,7 @@ def evaluate(base: dict[str, Any], cur: dict[str, Any]) -> Verdict:
         if p > BAND3_SEED_PCT:
             crossed.append(f"seed {seed} {p:+.1f}% > {BAND3_SEED_PCT:.0f}%")
             band = 3
-    return Verdict(environment=e_cur, base=_ident(base), cur=_ident(cur), total_pct=total_pct, seeds=seeds, stage_delta=stage_delta, band=band, crossed=tuple(crossed))
+    return Leg(total_pct=total_pct, seeds=seeds, stage_delta=stage_delta, band=band, crossed=tuple(crossed), refused=refused)
 
 
 def _ident(s: dict[str, Any]) -> dict[str, str]:
@@ -178,6 +219,17 @@ def render(v: Verdict) -> str:
         where = ("; grew: " + ", ".join(f"{k} +{d:.1f}s" for d, k in grew)) if grew and p > 0 else ""
         lines.append(f"  seed {seed:>3}  {p:+6.1f}%{where}")
     lines.append(f"  TOTAL     {v.total_pct:+6.1f}%")
+    for h, leg in sorted(v.legs.items()):
+        if leg is None:
+            lines.append(f"  {h} households: no baseline (the base snapshot has no rows of this size)")
+            continue
+        lines.append(f"  {h} households: TOTAL {leg.total_pct:+6.1f}% -> band {leg.band}")
+        for seed, p in sorted(leg.seeds.items()):
+            grew = sorted(((c - b, k) for k, (b, c) in leg.stage_delta[seed].items() if c - b > 0.05), reverse=True)[:3]
+            where = ("; grew: " + ", ".join(f"{k} +{d:.1f}s" for d, k in grew)) if grew and p > 0 else ""
+            lines.append(f"    seed {seed:>3}  {p:+6.1f}%{where}")
+        for seed, why in sorted(leg.refused.items()):
+            lines.append(f"    seed {seed:>3} refused ({why})")
     for c in v.crossed:
         lines.append(f"  crossed: {c}")
     lines.append(f"  owes: {v.owes}")

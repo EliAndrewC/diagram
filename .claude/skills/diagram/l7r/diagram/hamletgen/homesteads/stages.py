@@ -570,7 +570,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # as far as a quarter turn where it is refused straight out; a margin with no lawful way out seats no one here, and
     # the ladder offers the next (`seat_every_household`)
     # ...NOT ON A GROVE FARM'S FORM (feature 291 on 287): a dispersed hamlet's farms are reached by their own paths, and a row
-    # village's by its planned streets, its road running on from the first street's end (`track.street_run_out`) - an exit
+    # village's by its planned streets, its road running on from the first street's end (`street.street_run_out`) - an exit
     # strip from the seat's center was a corridor no way of the row follows, and the settle, drawing it, kinked it across the
     # brook off its ford (cohort seed 903)
     if plan.settlement_form == "nucleated":

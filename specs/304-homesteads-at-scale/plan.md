@@ -165,3 +165,15 @@ exposes no interface beyond `make perf` / `make perf-report`, whose usage does n
 ## Complexity Tracking
 
 None.
+
+## Amendment 1 (2026-10-02): what the measurements withdrew (research R10)
+
+- **D5 withdrawn.** The ring query answered exactly as the scan (74 equivalence cases, the spy's 1,314 ring comparisons, research R7) but was 1-4%
+  SLOWER on the stage at 40 households on all four seeds, alternated runs; a fallback to the scan once the ring outgrew the
+  tree's point count did not close the gap. The scan is restored and `access.py` records the attempt at `targets`. FR-004's
+  index is therefore not shipped: FR-007 ("including any lever withdrawn") and D10's rule govern, and the miss is raised with
+  the GM with SC-002/SC-003's.
+- **D6 kept**: seed 47's stage 55.6 -> 48.8-49.9 s; nothing on the other seeds (no `detached_commons` byres).
+- **P3 withdrawn under D10**: at 40 households A 113.7 s, A' 198.6 s, B 82.7 s against P2's 77.0 s summed; T32-T34 dropped.
+- **Two pre-existing cohort failures fixed** (T02, T03; research R8, R9), the cohort 28/30 -> 30/30; Kashikawa gains one lane.
+- **The scaling bookend (P1) shipped as planned**: `304-scale-base` -> `304-end` back to back, band 0 at every size.
