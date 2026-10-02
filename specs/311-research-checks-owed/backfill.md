@@ -29,4 +29,20 @@ never a source-reading check (`make record-owed`, 20 units for the ten). Their r
 
 ## The written intros' checks
 
-(filled in as each returns)
+Each written intro owed exactly `intro-check` and `record-format` (`make record-owed`: 20 units for the ten), answered with
+`make record-checked BUNDLE=...`.
+
+| question | intro-check round 1 | record-format round 1 | round 2 |
+|---|---|---|---|
+| 0094 parley room | INTRO-OK (noted: the GM's table and tea against the drawing page's mats) | 0/0/0 (the same note) | - |
+| 0003 place names | INTRO-OK | 0/0/0 | - |
+| 0015 chrysanthemum field | INTRO-OK | 0/0/0 | - |
+| 0056 river names | INTRO-OK | 0/0/0 | - |
+| 0110 border court | INTRO-OK | 0/0/0 | - |
+| 0157 firebreaks | INTRO-FIX: "a gap between houses" (the findings: never gaps between single houses), and "real towns" from Edo alone | 0/0/0, the same wording note | rewritten from the drawing page's reason; INTRO-OK, 0/0/0 |
+| 0173 country estates | INTRO-OK | 0/0/0 | - |
+| 0212 pleasure quarters | INTRO-FIX: the serving women's omission hung on the ban, where the drawing page says they worked in the inns | 0/0/0 | rewritten; INTRO-OK, 0/0/0 |
+| 0216 town and city shrines | INTRO-FIX: implied no shrine at all is drawn; the small temple-quarter shrines are | 0/0/0, the same note | rewritten; INTRO-OK, 0/0/0 |
+| 0240 salt heaps | INTRO-OK | 0/0/0 | - |
+
+No written intro needed a third round; `make record-owed UNANSWERED=1` reports nothing owed.
