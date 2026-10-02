@@ -84,7 +84,9 @@ CASES = [
     # times" cannot say which of them is carrying the cost, which is the whole point of the fourth field
     ("shell-check", _payload(command="if true; then"), "blocked", "parse"),
     ("shell-check", _payload(command='echo "use `make quick` first"'), "blocked", "executing-backtick"),
-    ("shell-check", _payload(command='git commit -m "one" -m "two"'), "blocked", "commit-dash-m"),
+    ("shell-check", _payload(command='git commit -m "the pond\'s own "center" thing"'), "blocked", "commit-dash-m"),
+    # an unambiguous message is rewritten into a quoted -F - heredoc rather than refused (2026-10-02, the GM approved it)
+    ("shell-check", _payload(command='git commit -m "one" -m "two"'), "rewrote", "commit-dash-m-heredoc"),
     ("shell-check", _payload(command="git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'"), "blocked", "coauthor-address"),
     ("shell-check", _payload(command='echo "a `span`"  # SHELL_CHECK_OK: quoting a transcript verbatim'), "escaped", "shell-check-ok"),
     # feature 236: a Bash payload is TOLD, and the telling is recorded as its own branch - the audit
