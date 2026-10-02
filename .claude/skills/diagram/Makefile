@@ -1287,6 +1287,11 @@ uncited: ## [project] the uncited pages judged once, and the kept ones written u
 	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|draft|install|report is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_uncited.py" $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle draft,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply install,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",)
 
+# GUARD_EDIT_OK: feature 312 FR-014 - a new operation (an uncited entry moved to the works cited when first cited); no guard changes.
+cite-uncited: ## [project] an uncited source's entry moved to the works cited, keeping its number, when a footnote first cites it - then write its Used for: line (feature 312)   KEY=<registry key>
+	@if [ -z "$(KEY)" ]; then printf 'make cite-uncited: KEY=<the uncited entry'"'"'s key> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_uncited.py" cite "$(KEY)"
+
 # GUARD_EDIT_OK: feature 312 FR-018 - a new operation (print the attempts log for a source or a question); no guard changes.
 attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
 	@if [ -z "$(URL)$(KEY)$(Q)" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi
@@ -1465,6 +1470,8 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@python3 ../../../scripts/check-house-style-delta.py ../../..
 	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
 	@python3 ../../../scripts/check-question-size.py
+	@: "(GUARD_EDIT_OK: feature 312 FR-020 - a footnote citing a source no one can wholly read stands only on a confirmed passage; ~0.3 s)"
+	@python3 ../../../scripts/check-partial-citations.py ../../..
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \

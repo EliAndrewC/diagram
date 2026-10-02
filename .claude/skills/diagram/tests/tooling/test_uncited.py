@@ -314,3 +314,15 @@ def test_an_imported_copy_is_checked_against_the_live_page(tmp_path: pathlib.Pat
     assert un.imported(_home(), "https://w.org/dead") is not None, "an unread page keeps its copy"
     assert un.imported_urls(_home()) == ["https://w.org/dead"]
     assert not un.same_page("", "x")
+
+
+def test_cite_moves_an_uncited_entry_to_the_works_cited_with_a_used_for_line(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "20520-k-one.html").write_text("<h3 id=\"k-one\">x</h3>\n<p>K (https://k.org/1)</p>\n<!-- tags: period=premodern; region=japan; kind=reference -->\n", encoding="utf-8")
+    dest = un.cite(root, "k-one")
+    assert dest == root / un.SOURCES / "010-works-cited" / "20520-k-one.html" and not (root / un.at.UNCITED / "20520-k-one.html").exists()
+    text = dest.read_text()
+    assert text.index("<em>Used for:</em> TODO") < text.index("<!-- tags:"), "the Used for: line before the marker, which stays last"
+    with pytest.raises(ValueError, match="no uncited entry"):
+        un.cite(root, "k-two")

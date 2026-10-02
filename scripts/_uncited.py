@@ -636,6 +636,26 @@ def install(root: pathlib.Path, d: pathlib.Path, reserve) -> dict[str, int]:  # 
     return counts
 
 
+USED_FOR_PLACEHOLDER = '<p><em>Used for:</em> TODO (<a href="contents.json#SECTION">the section it serves</a>)</p>\n'
+
+
+def cite(root: pathlib.Path, key: str) -> pathlib.Path:
+    """FR-014, plan D11: an uncited entry moved to the works cited when a footnote first cites it, keeping its number,
+    with a `Used for:` line placed before its tags marker that the build refuses until it names a real section."""
+    d = at.base(root) / at.UNCITED
+    found = [f for f in (d.glob(f"*-{key}.html") if d.is_dir() else []) if re.fullmatch(rf"\d+-{re.escape(key)}\.html", f.name)]
+    if not found:
+        raise ValueError(f"no uncited entry for {key!r} in {at.UNCITED}")
+    src_file = found[0]
+    dest = at.base(root) / SOURCES / "010-works-cited" / src_file.name
+    text = src_file.read_text(encoding="utf-8")
+    i = text.rfind("<!-- tags:")
+    text = (text[:i] + USED_FOR_PLACEHOLDER + text[i:]) if i >= 0 else text + USED_FOR_PLACEHOLDER
+    dest.write_text(text, encoding="utf-8")
+    src_file.unlink()
+    return dest
+
+
 def report(root: pathlib.Path) -> str:
     nk = at.read(root, NOT_KEPT)
     reasons: dict[str, int] = {}
@@ -676,6 +696,8 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     dr = sub.add_parser("draft")
     dr.add_argument("out")
     dr.add_argument("--start", type=int, default=1)
+    ct = sub.add_parser("cite")
+    ct.add_argument("key")
     ins = sub.add_parser("install")
     ins.add_argument("dirs", nargs="+")
     args = ap.parse_args(argv)
@@ -717,6 +739,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
         print(f"uncited: {json.dumps(verify_all(root, todo, args.workers))}")
     elif args.cmd == "draft":
         print(f"uncited: {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
+    elif args.cmd == "cite":
+        dest = cite(root, args.key)
+        print(f"uncited: {args.key} moved to {dest.relative_to(root)} - write its Used for: line (the build refuses the placeholder), then `git add -A` the move")
     elif args.cmd == "install":
         import importlib.util  # noqa: PLC0415
 
