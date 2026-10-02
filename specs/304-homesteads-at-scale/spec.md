@@ -154,7 +154,7 @@ and the cohort and check every map passes its rules and seats every household it
 - SC-002 and SC-003 are the session's stated goals, not the GM's: nothing has yet measured that the three levers can reach them.
   A miss is recorded in `dev/performance.md` with what each lever bought, and raised with the GM; it is not pursued with levers
   beyond the three accepted.
-- **SC-004** (FR-008): The 15-household reference does not get slower (perf band 0 or better).
+- **SC-004** (FR-004, FR-005, FR-006, FR-007): The 15-household reference does not get slower (perf band 0 or better).
 - **SC-005** (FR-004, FR-005, FR-008): The indexed lookups (User Story 2) leave every pool map and cohort seed's houses, corridors and lanes identical.
 - **SC-006** (FR-006, FR-008): Every cohort seed seats at least the households it seated on the base, and the cohort passes as many seeds as it
   did on the base.
@@ -177,7 +177,7 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
   the homesteads placer is the code a village will reuse.
 - The perf bookend's cost grows by the three new sizes; on the base (observed 2026-10-01, method: the scratch
   scaling probe's stage totals for all four seeds at 10, 20 and 40 households) that is about 132 s of stage time, 66 s of it
-  seed 47 at 40 households alone, paid only where the bookend runs today (`make done FULL=1`, `make perf`), never in `make quick` or the plain gate.
+  seed 47 (61 s at 40 households), paid only where the bookend runs today (`make done FULL=1`, `make perf`), never in `make quick` or the plain gate.
 - The line-of-sight reach region and the live seat region are both candidates for FR-006; feature 297's research (R9-R17)
   lists the levers already withdrawn and is read before either is built.
 - The field's refusal at 80 households is left to the village tier.
