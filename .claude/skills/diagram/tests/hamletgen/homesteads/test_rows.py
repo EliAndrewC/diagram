@@ -226,7 +226,27 @@ def test_the_next_street_is_a_true_parallel_that_never_doubles_back() -> None:
     assert parallel([((5.0, 5.0), (0.0, 1.0)), ((5.0, 5.0), (0.0, 1.0))], 10.0) == [], "a line of no length has no offset"
 
 
-def test_the_longest_part_of_an_offset() -> None:
+def test_the_next_street_is_rounded_on_the_inside_of_a_corner() -> None:
+    """`parallel` with a radius (feature 306, cohort seed 903): set out on the inside of the first street's corner, the next
+    street's corner is as sharp as the first's turn - rounded at `street_bend_radius_ft`, every 40 ft step of it turns well
+    under a kink's 50 degrees; the straight stretches stand where they did."""
+    import math
+
+    from l7r.diagram.hamletgen.homesteads.rows import parallel, street_bend_radius_ft
+
+    first = [((float(x), 0.0), (0.0, 1.0)) for x in range(0, 801, 8)] + [((800.0 - 0.77 * t, 0.64 * t), (0.0, 1.0)) for t in range(8, 401, 8)]
+
+    def worst_turn(pts) -> float:  # type: ignore[no-untyped-def]
+        q = pts[::5]  # the drawn street's 40 ft step
+        turns = [abs(math.degrees(math.atan2(c[1] - b[1], c[0] - b[0]) - math.atan2(b[1] - a[1], b[0] - a[0]))) % 360 for a, b, c in zip(q, q[1:], q[2:], strict=False)]
+        return max(min(t, 360 - t) for t in turns)
+
+    assert 90.0 < street_bend_radius_ft() < 93.0
+    sharp = [p for p, _n in parallel(first, 100.0)]
+    round_ = [p for p, _n in parallel(first, 100.0, street_bend_radius_ft())]
+    assert worst_turn(sharp) > 100.0 and worst_turn(round_) < 35.0, "a 140 degree corner, rounded"
+    assert abs(round_[0][1] - 100.0) < 1e-6 and round_[0][0] == sharp[0][0], "the straight stretch where it was"
+
     from shapely.geometry import LineString, MultiLineString
 
     from l7r.diagram.hamletgen.homesteads.rows import longest_part

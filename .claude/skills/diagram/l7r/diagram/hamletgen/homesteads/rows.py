@@ -327,23 +327,43 @@ def longest_part(geom: Any) -> list[Pt]:
     return [(float(x), float(y)) for x, y in geom.coords]
 
 
-def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
+def street_bend_radius_ft() -> float:
+    """The radius a further street is rounded at on the inside of a corner (`parallel`): twice the radius at which one step of
+    the lane law's bend run (`clearance._ZIGZAG_RUN_FT`, 40 ft - the drawn street keeps a vertex about that often) turns a
+    kink's turn (`_ZIGZAG_DEG`, 50 degrees) - about 92 ft. At it a drawn vertex turns about 25 degrees, and one thinned to
+    48 ft about 30, never two kinks' turns inside a run. A MAP DRAWING CONVENTION derived from the law's figures, not a finding."""
+    from ..ways.clearance import _ZIGZAG_DEG, _ZIGZAG_RUN_FT  # the ways import this package's seats; read where it is used
+
+    return 2.0 * _ZIGZAG_RUN_FT / math.radians(_ZIGZAG_DEG)
+
+
+def parallel(line: Sequence[tuple[Pt, Pt]], d: float, radius: float = 0.0) -> list[tuple[Pt, Pt]]:
     """`line` set out `d` on its outward side (the next street of a row village, plan D15), as a TRUE parallel curve
     (`offset_curve`, rounded at the joins) resampled at the line's own spacing, each sample carrying the outward normal
     of the first street's sample nearest it. Set out sample by sample along each one's own normal, the samples on the
     inside of a bend tighter than `d` crossed over each other and the street drawn through them doubled back: Mizuguchi's
     second street, set out 400 ft beyond a first that curves with the brook's bank, was a 7,208 ft line with 17 turns past
-    140 degrees (settlement-review, 2026-09-30); dropping the samples that ran back still left two folds."""
+    140 degrees (settlement-review, 2026-09-30); dropping the samples that ran back still left two folds.
+
+    ...AND ROUNDED ON THE INSIDE OF A CORNER at `radius` (set out `d + radius`, then back `radius`: a closing, which leaves a
+    straight stretch and the outside of a bend where they were). An offset curve is sharp wherever the first street turns
+    toward its outward side, and turns there by as much as the first street does round the corner: cohort seed 903's edge
+    street ran a Z round the field, its second street came out with a 142 degree corner - a hairpin of the lane law - and a
+    street is a tree lane no settle may cut, so the web was refused (feature 306)."""
     if len(line) < 2 or d == 0.0:
         return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
-    from shapely.geometry import LineString, Point
+    from shapely.geometry import LineString
 
     pts = [p for p, _n in line]
     base = LineString(pts)
-    mid = len(line) // 2
-    probe = Point(pts[mid][0] + line[mid][1][0] * d, pts[mid][1] + line[mid][1][1] * d)
-    off = min((base.offset_curve(d, join_style="round"), base.offset_curve(-d, join_style="round")), key=lambda g: g.distance(probe))
-    coords = longest_part(off)
+    # THE OUTWARD SIDE FROM THE NORMALS THEMSELVES, each sample's normal asked whether it stands left of the line's own
+    # tangent (shapely's positive offset): asked of the one curve nearest a point set out from the middle sample, the side was
+    # wrong wherever the inside offset is trimmed back past that sample - as it is round any corner sharper than the offset
+    left = sum(n[0] * -(b[1] - a[1]) + n[1] * (b[0] - a[0]) for (a, n), (b, _m) in zip(line, line[1:], strict=False))
+    side = (1.0 if left >= 0.0 else -1.0) * (1.0 if d > 0.0 else -1.0)
+    coords = longest_part(base.offset_curve(side * (abs(d) + radius), join_style="round"))
+    if radius > 0.0 and len(coords) >= 2:
+        coords = longest_part(LineString(coords).offset_curve(-side * radius, join_style="round"))  # ...and back: the closing
     if len(coords) < 2:
         return []
     off = LineString(coords)  # in the first street's direction on either side: shapely 2 keeps an offset's direction
@@ -473,7 +493,8 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     offsets = [first_off + (o - offsets[0]) for o in offsets]
     from shapely.geometry import LineString, MultiLineString
 
-    planned = [parallel(first, o - offsets[0]) for o in offsets]
+    # ...EACH ROUNDED ON THE INSIDE OF A CORNER at the radius a drawn street bends through lawfully (`parallel`, feature 306)
+    planned = [parallel(first, o - offsets[0], s.px(street_bend_radius_ft())) for o in offsets]
     all_streets = MultiLineString([LineString([p for p, _n in ln]) for ln in planned if len(ln) >= 2]) if first else None
     # THE STREETS' TREAD IS RESERVED WHILE THEIR FARMS ARE SEATED (`overlap/reserved.py`'s corridor rule): a part a farm lays
     # - a fixture, its well pocket - is admitted only off every planned street's tread, as the frame is (`frame_refused`).
