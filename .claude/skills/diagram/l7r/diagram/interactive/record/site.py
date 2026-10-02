@@ -22,7 +22,7 @@ import re
 import shutil
 import tempfile
 
-from l7r.diagram.interactive.record import archive, store
+from l7r.diagram.interactive.record import archive, blocked, store
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
 from l7r.diagram.interactive.record import site_links as links
@@ -216,6 +216,7 @@ class Build:
         self._single()
         self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.source_nodes()))
         self.errors += archive.refusals(self.record_dir)
+        self.errors += blocked.refusals(self.record_dir)
         if self.errors:
             raise RecordError("\n  ".join([f"the site does not build ({len(self.errors)} refusal(s)):", *self.errors]))
         return self.files

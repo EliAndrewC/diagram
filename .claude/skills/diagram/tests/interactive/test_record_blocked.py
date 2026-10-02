@@ -101,3 +101,25 @@ def test_the_real_list_blocks_grokipedia_with_the_gms_approval() -> None:
     rule = blocked.blocked("https://grokipedia.com/page/Kaifeng")
     assert rule is not None and "Grokopedia" in rule.approved
     assert blocked.patterns() == ()
+
+
+def test_the_build_refuses_a_blocked_or_banned_citation_in_an_entry_or_a_footnote(tmp_path: pathlib.Path) -> None:
+    """FR-003, FR-004 at the build: an entry's URL on a blocked domain, and a footnote's link matching a banned pattern."""
+    from l7r.diagram.interactive.record import site  # noqa: PLC0415
+    from l7r.diagram.interactive.record.store import RecordError  # noqa: PLC0415
+    from tests import _flat_record as fr  # noqa: PLC0415
+
+    rec = fr.write(tmp_path)
+    assert blocked.refusals(str(rec)) == []
+    _lists(
+        rec,
+        [{"domain": "a", "reason": "AI-generated", "approved": APPROVED}],
+        [{"pattern": r"^https://b$", "reason": "fabricated data", "approved": APPROVED}],
+    )
+    got = blocked.refusals(str(rec))
+    assert any(r.startswith("banned citation: https://a (alpha, 0001-lanes.notes.html) is on blocked-domains.json (a - AI-generated)") for r in got)
+    assert any("https://b (beta) is on banned-citations.json" in r for r in got)
+    with pytest.raises(RecordError, match="banned citation: https://a"):
+        site.build(str(rec))
+    blocked.domains.cache_clear()
+    blocked.patterns.cache_clear()

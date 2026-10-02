@@ -118,3 +118,20 @@ def check(url: str, what: str, record_dir: str = RESEARCH_DIR) -> None:
     rule = blocked(url, record_dir)
     if rule:
         raise Blocked(refusal(url, rule, what))
+
+
+def refusals(record_dir: str = RESEARCH_DIR) -> list[str]:
+    """One build refusal per cited URL - a registry entry's (its comments' too) or a footnote's link - on a blocked
+    domain or matching a banned pattern (FR-003, FR-004). The census is the archive's, so what the build calls cited is
+    one thing everywhere."""
+    from l7r.diagram.interactive.record import archive  # noqa: PLC0415 - archive reads the store, which reads the record
+
+    out = []
+    for url, who in archive.cited(record_dir).items():
+        rule = banned(url, record_dir)
+        if rule:
+            where = ", ".join(who.keys + who.notes)
+            listed = DOMAINS if blocked(url, record_dir) else CITATIONS
+            out.append(f"banned citation: {url} ({where}) is on {listed} ({rule.match} - {rule.reason}) - cite the fact "
+                       "from another source, or state its absence (feature 312)")
+    return out

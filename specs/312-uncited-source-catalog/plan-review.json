@@ -1,39 +1,38 @@
 {
  "feature": "312-uncited-source-catalog",
- "plan_sha256": "2f9292006c88171b79998fe5f013acf3d5229812d1011279ed78bb092d762175",
+ "plan_sha256": "4b2ade8ee354e7c59b1c566f6ea249cab8c7142ed5c2490e89aadbe6e514301e",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "one decision function blocked.py; domain matches itself and subdomains, not suffixes; banned patterns as regex over the normalized URL; loader refuses an entry with no GM approval",
+   "summary": "one decision function blocked.py; a domain matches itself and its subdomains, never a suffix; banned patterns a regex over the normalized URL; the loader refuses an entry with no GM approval",
    "class": "within",
    "why": "FR-001, FR-002, FR-004 as written; the approval refusal is FR-001's test"
   },
   {
    "id": "D2",
-   "summary": "the Python fetch routes and stores raise Blocked; the hook refuses WebFetch and Bash fetch invocations (curl, wget, lynx, w3m, httpie, make fetch targets), never a mention",
+   "summary": "the Python fetch routes and every store (ledger, page cache, archive, attempts log, not-kept list, GM-copy match) raise Blocked, each tested; the hook refuses WebFetch and Bash fetch invocations (curl, wget, lynx, w3m, httpie, urllib, make fetch targets), never a mention",
    "class": "within",
-   "why": "FR-002's routes; the Summary commits the one function to every store, so the not-kept list and attempts log (FR-003) are covered by the plan's own commitment and should be named in T10/T20's tests"
+   "why": "FR-002's routes and FR-003's stores, now named store by store (round 1's note resolved)"
   },
   {
    "id": "D3",
-   "summary": "build refuses blocked/banned links, canon links in uncited entries, footnotes on uncited keys; FR-020 is a push-and-gate check against partial-confirmations.jsonl",
+   "summary": "the build refuses blocked or banned links, a canon link in an uncited entry and a footnote on an uncited key; FR-020 a push-and-gate check against partial-confirmations.jsonl over FR-019's full trigger set",
    "class": "within",
-   "why": "FR-003, FR-004, FR-013, FR-014, FR-020 as written"
+   "why": "FR-003, FR-004, FR-013, FR-014, FR-020 as written; the trigger set (paywalled, gm-partial, never-read, a GM mark of paywalled or not found) is FR-019's"
   },
   {
    "id": "D4",
-   "summary": "uncited set = consulted_urls minus URLs with a verdict, minus URLs any registry entry carries, plus keyless manifest rows; no-substance regexes; unreadable fallback cache, browser, Wayback with access state from the failure",
+   "summary": "uncited set = consulted_urls minus verdicted URLs, minus URLs any registry entry carries, plus the keyless pre-hold rows; the no-substance rule by prep.md's two regexes; unreadable after cache, browser and Wayback, access state from the failure",
    "class": "within",
-   "why": "FR-006/FR-007; subtracting registry URLs rather than manifest rows only removes cited sources, which the request exempts; computed, not hand-listed"
+   "why": "FR-006/FR-007, computed, re-runnable. Not a narrowing but an instrument defect to fix in T20 and pin by test: measured this round on the whole ledger, the two regexes miss 44 MediaWiki search pages (index.php?search=..., Special:/特別:検索) and the one Category: listing page, so FR-007's search and listing clauses reach the agent instead of the rule"
   },
   {
    "id": "D5",
-   "summary": "the filter reads at most the first 3,000 characters of each page's saved text, 40 pages a bundle, justified by the token budget",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-008 judges 'from its saved text' and the GM asked for the sources to be reread and assessed; prep.md puts the cached median at 2,415 characters and the 90th percentile at 9,394, so a large share of pages are judged on a front fragment. The only ground given is cost. Purpose test: a page whose premodern evidence sits after modern front matter (a ja.wikipedia place article, the largest host) is exactly the page a front cut would reject as off-topic or modern-only, and a wrong NOT-KEPT is the 'we know not to check them next time' record the GM asked for. Change: the bundle carries each page's whole saved text, batches sized by total characters rather than a page count; any cap below the whole goes to a MODE 1 check with a measurement that it does not move verdicts"
+   "summary": "the filter reads each page's WHOLE saved text; bundles sized by total characters (about 150,000); a page over the budget alone in its own bundle in parts, every part read; verdicts.jsonl validated by apply",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE front cut removed: FR-008's 'from its saved text' and the GM's reread are now carried whole. The budget is a batching parameter, not a cap on any page"
   },
   {
    "id": "D6",
@@ -43,9 +42,9 @@
   },
   {
    "id": "D7",
-   "summary": "NOT-KEPT to not-kept.jsonl, KEEP to specs/312/kept.jsonl as a work list; a not-kept pre-hold capture's manifest row git rm'd",
+   "summary": "NOT-KEPT to not-kept.jsonl, KEEP to specs/312/kept.jsonl as a work list; a not-kept pre-hold capture's manifest row git rm'd, its copy left in the archive's history",
    "class": "within",
-   "why": "FR-010, US2 scenario 4"
+   "why": "FR-010, US2 scenario 4, the GM's 'their disposition should just be whatever the filter ends up saying'"
   },
   {
    "id": "D8",
@@ -55,13 +54,13 @@
   },
   {
    "id": "D9",
-   "summary": "KIND=uncited reserve in one number sequence; sonnet drafts in batches of 15; install with -2 on collision; each entry owed source-applicability through the record gate",
+   "summary": "KIND=uncited reserve in the one number sequence; sonnet drafts in batches of 15 from the same whole saved texts; install with -2 on collision; each entry owed source-applicability through the record gate",
    "class": "within",
-   "why": "FR-012; the accuracy check the GM asked for is the unchanged source-applicability on the source itself. Its drafts are 'from the same excerpts', which should follow D5's fix"
+   "why": "FR-012; drafts follow D5's fix. The accuracy check is source-applicability, whose contract already judges What it is, the limits and the tags (FR-012's three)"
   },
   {
    "id": "D10",
-   "summary": "Uncited part after the works cited, grouped by source-sections.json, canon skipped, in nav and all.html",
+   "summary": "the Uncited part after the works cited, grouped by source-sections.json, canon skipped, in nav and all.html",
    "class": "within",
    "why": "FR-013 and the GM's settled placement"
   },
@@ -72,49 +71,41 @@
    "why": "FR-014"
   },
   {
-   "id": "D12a",
-   "summary": "attempts seed: stems as-is, old ids through moved-303.json, unmappable kept as old:<id>, free-text as what was sought, else unknown - recorded before feature 312; source-pages requires Q= and SOUGHT=; hook appends WebFetch and Bash fetch attempts; source-outcome appends outcomes",
+   "id": "D12",
+   "summary": "attempts seed (stems as-is, old ids through moved-303.json, unmappable kept as old:<id>, free text as what was sought, else unknown - recorded before feature 312); source-pages requires Q= and SOUGHT= and prints first; archive-find prints attempts and verdict for the URL asked and each source a KEY/TERMS lookup returns, then appends; the hook prints for WebFetch and appends for WebFetch and Bash fetches; source-outcome appends outcomes; make attempts",
    "class": "within",
-   "why": "FR-015..FR-017; keeping an unmappable old id is more than FR-016's 'unknown', not less"
-  },
-  {
-   "id": "D12b",
-   "summary": "D12 and T11 give make archive-find only an attempt append; the FR-018 print of earlier attempts and the filter verdict before the read is planned for source-pages and the WebFetch hook only",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-018 names archive-find as a printer, and archive-find is the research pass's first stop (archive before web), so it is where the GM's 'first check to see if we have tried to answer this specific question already using this source' must happen. No ground is offered; it reads as an omission. Change: D12 and T11 say archive-find prints the attempts and verdict for each source it returns, with a test"
+   "why": "FR-015..FR-018. Round 1's NOT LEGITIMATE archive-find omission resolved in D12 and T11. Keeping an unmappable old id or a free-text prompt records more than FR-016's 'unknown', never less"
   },
   {
    "id": "D13",
-   "summary": "FR-005 inventory table in the doctrine with an existence test; 'a mechanical rule found with no tool gets one'; T40 the same",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 also requires a rule that cannot be checked mechanically to get a check the record gate owes on the words it governs; plan and T40 drop that branch, leaving such a rule enforced by remembering, the exact thing the GM ruled out ('our citation rules are enforced by tooling and not just remembering'). Change: D13 and T40 carry FR-005's second branch"
+   "summary": "FR-005 inventory table in the doctrine over the five files FR-005 names, with an existence test; a rule with no tool gets a tested mechanical check where possible, otherwise a record-gate-owed check (_record_units.py owes it, entry-gate.sh refuses the push) written into that agent's contract; T40 the same",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE dropped branch restored in both D13 and T40; FR-005 carried whole"
   },
   {
    "id": "D14",
-   "summary": "FR-019 removal after 313: keys from 313's report, quote-verbatim and quote-check on the readable part, confirmations in partial-confirmations.jsonl, absence note or drop, known-unavailable and not-kept line",
+   "summary": "FR-019 removal after 313: keys from 313's report, quote-verbatim and quote-check on the readable part, confirmations in partial-confirmations.jsonl, absence note or drop, a key left with no footnote leaves the works cited with 313's hand-recorded state and a not-kept line",
    "class": "within",
    "why": "FR-019 as written"
   },
   {
    "id": "D15",
-   "summary": "FR-021 per key on the GM's ingest: check-bundle, source-reader, quote-check, apply-edits",
+   "summary": "FR-021 per key on the GM's ingest: check-bundle, source-reader, quote-check, apply-edits; not found or paywalled removed by T42's procedure",
    "class": "within",
-   "why": "FR-021"
+   "why": "FR-021 (T50 carries the removal branch)"
   },
   {
    "id": "TC-agent",
-   "summary": "source-filter defined agent on Opus at effort medium, omitClaudeMd, tools Read and Write, verdicts written to the bundle",
+   "summary": "source-filter defined agent on Opus at effort medium, omitClaudeMd, tools Read and Write, verdicts written into the bundle",
    "class": "within",
    "why": "FR-008 requires Opus with a pinned tier; effort is left open by the spec and its adequacy is what FR-009's calibration measures"
   },
   {
    "id": "TC-files",
-   "summary": "data files under research/, the two jsonl files merge=union; blocked.py in the engine for 100% coverage",
+   "summary": "data files under research/, the two jsonl files merge=union; blocked.py in the engine for 100% coverage; no perf bookends",
    "class": "within",
-   "why": "FR-010/FR-015 and the spec's recorded decision"
+   "why": "FR-001, FR-004, FR-010, FR-015 paths and the spec's recorded decision; the feature changes no generator"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
