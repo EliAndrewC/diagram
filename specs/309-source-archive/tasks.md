@@ -58,8 +58,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
 - [x] T30 The docs: `research/CLAUDE.md` (the operative rule) and `docs/research-doctrine.md` (the GM's words)
       research: rendering
       verify: DONE. research/CLAUDE.md paragraph + docs/research-doctrine.md section written
-- [ ] T31 `make record CHECK=1` builds cleanly with the manifest complete (SC-004 proven by its test); `make done` green
+- [x] T31 `make record CHECK=1` builds cleanly with the manifest complete (SC-004 proven by its test); `make done` green
       research: rendering
+      verify: DONE. make record CHECK=1 clean with the manifest complete (SC-004 by its test); make done green on the tree merged with main (142 s)
 
 ## Phase 5 - Amendment 1 (US4-US6; FR-003, FR-013 - FR-016)
 
