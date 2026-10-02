@@ -294,3 +294,85 @@ def test_a_rank_round_stops_offering_seats_once_the_quota_is_seated(monkeypatch:
     monkeypatch.setattr(s, "try_place", seat)
     placed, _cloud = stages._seat_households(s, plan)
     assert placed == 10 and len(offered) == 10, "ten offered, ten seated, the rest of the round never asked"
+
+
+# ---- feature 306: the dry-spell cap and the near-miss rescue (plan D2) -------------------------------------------------------
+
+
+class _Seater:
+    """A stand-in for the settlement `offer_seats` reads: a placer that takes the seats listed in `takes`."""
+
+    def __init__(self, takes: set[tuple[float, float]]) -> None:
+        self.takes = takes
+        self.M: dict[str, object] = {"houses": []}
+        self._seat_search = {"candidates": 0}
+        self.asked: list[tuple[float, float]] = []
+
+    def try_place(self, x: float, y: float, _kind: str) -> bool:
+        self.asked.append((x, y))
+        return (x, y) in self.takes
+
+
+def test_the_pass_gives_a_margin_up_after_a_dry_spell_and_a_take_restarts_it() -> None:
+    seats = [(float(1000 * i), 0.0) for i in range(10)]
+    s = _Seater({seats[2]})
+    placed, offered, took = capacity.offer_seats(s, seats, 0, 5, 3)  # type: ignore[arg-type]
+    assert (placed, took) == (1, 1) and offered == 6, "two dry, a take, then three dry: given up after the sixth"
+    s = _Seater(set())
+    assert capacity.offer_seats(s, seats, 0, 5, None) == (0, 10, 0), "no cap: every seat offered"  # type: ignore[arg-type]
+    assert capacity.offer_seats(_Seater({seats[0]}), seats, 0, 1, 3)[:2] == (1, 1), "the want met: no more offered"  # type: ignore[arg-type]
+
+
+def test_a_near_miss_is_rescued_on_a_finer_grid_with_a_wider_corridor_search(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`seat_the_rest` hands a margin left at most `RESCUE_SHORT` households to `rescue_the_margin`, which offers the finer
+    grid with the tree's breadth widened for the rescue and set back after it (the corridor memo dropped both ways)."""
+    from l7r.diagram.settlement.rolling.access import TARGETS_TRIED, AccessTree
+
+    tree = AccessTree(7.0)
+    tree.add((0.0, 0.0), (100.0, 0.0))
+    steps: list[float | None] = []
+    breadth: list[int] = []
+
+    def seats(s: object, center: object, step: float | None = None) -> list[tuple[float, float]]:
+        steps.append(step)
+        return [(1.0, 1.0)] if step is None else [(2.0, 2.0), (3.0, 3.0)]
+
+    def offer(s: object, seats: list, placed: int, want: int, dry: int | None) -> tuple[int, int, int]:
+        breadth.append(tree.tried)
+        took = (want - placed) if dry is None else 0  # the pass seats none; the rescue seats the rest
+        return placed + took, len(seats), took
+
+    monkeypatch.setattr(capacity, "free_seats", seats)
+    monkeypatch.setattr(capacity, "offer_seats", offer)
+    s = Settlement(1000, 1000, seed=1)
+    s._seat_search = {}
+    s._access = tree
+    s.__dict__["_corridor_memo"] = ("state", {})
+
+    class Region:
+        def offer(self, pts: list) -> list[bool]:
+            return [True] * len(pts)
+
+    s._seat_region = Region()
+    plan = a_plan(households=10)
+    plan.seat = {"cx": 500.0, "cy": 500.0}
+    assert seat_the_rest(s, plan, 10 - capacity.RESCUE_SHORT) == 10
+    assert steps == [None, capacity.RESCUE_STEP] and breadth == [TARGETS_TRIED, capacity.RESCUE_TARGETS]
+    assert tree.tried == TARGETS_TRIED and "_corridor_memo" not in s.__dict__, "the breadth set back, the memo dropped"
+    assert s._seat_search["rescue_took"] == capacity.RESCUE_SHORT
+    steps.clear()
+    assert seat_the_rest(s, plan, 10 - capacity.RESCUE_SHORT - 1) == 10 - capacity.RESCUE_SHORT - 1, "too far short: no rescue"
+    assert steps == [None]
+
+
+def test_a_rescue_with_no_tree_and_no_region_still_offers_the_finer_grid(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(capacity, "free_seats", lambda s, center, step=None: [(5.0, 5.0)])
+    s = Settlement(1000, 1000, seed=1)
+    s._seat_search = {"candidates": 0}
+    s._access = None
+    s._seat_region = None
+    taken = _Seater({(5.0, 5.0)})
+    s.try_place = taken.try_place  # type: ignore[method-assign]
+    plan = a_plan(households=10)
+    plan.seat = {"cx": 500.0, "cy": 500.0}
+    assert capacity.rescue_the_margin(s, plan, 9) == 10
