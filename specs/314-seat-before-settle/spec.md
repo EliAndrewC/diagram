@@ -70,9 +70,9 @@ recorded.
 
 ### Edge Cases
 
-- A seat refused at the house's first settled position might have cleared the ground had the settle moved it outward: dropping it
-  is a change of search breadth, not of a rule. Whether it costs a household is measured (US1 scenario 2); a margin short for it
-  is offered the next margin as today.
+- A seat refused on its own ground at any position the settle would lay its household out at might have cleared the ground had the
+  settle moved it on: dropping it is a change of search breadth, not of a rule. Whether it costs a household is measured (US1
+  scenario 2); a margin short for it is offered the next margin as today.
 - The linear and dispersed forms do not grow (feature 308's rulings); US1 changes only the grown seating. A later round may touch
   them where the cost it attacks is theirs too.
 
@@ -125,4 +125,4 @@ recorded.
 - Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - both items and the aside confirmed against the diff.
 - Amendment (the plan review's round 1, item 2, 2026-10-02): the Decisions row said the seat was dropped "at its first settled
   position"; the settle drops it at any position it would lay the household out at (each move is a layout, the GM's "before
-  the household layout"). The row now says so; the review count restarts.
+  the household layout"). The row and the Edge Cases entry now say so; the review count restarts.

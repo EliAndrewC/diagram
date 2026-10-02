@@ -78,7 +78,7 @@ household out at, in place of the house box:
 | 15 (seeds 1-16) | 19.4 s | 20.2 s | +4% |
 | 40 (ten seeds) | 34.5 s | 38.2 s | +11% |
 
-By round 4 the seats refused for no garden side fitting were 26-51 a seed at 40 households (the base's 70-744): the seats that
+By round 4 the seats refused for no garden side fitting were 34-52 a seed at 40 households (the base's 70-744): the seats that
 reach the placer are mostly good ones, so there was little left to catch. And the larger box refused positions the settle
 would have moved past onto clear ground: seed 4 popped 1,721 seats against 290, seed 9 753 against 300. Withdrawn; the house
 box alone stays (plan D1).

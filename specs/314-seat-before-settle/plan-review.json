@@ -1,40 +1,39 @@
 {
  "feature": "314-seat-before-settle",
- "plan_sha256": "dfa6df7befc2cf19b7ece9d82c974a943c199fe7be4f88d43c7a4fe778164496",
+ "plan_sha256": "fe40b7ae722799c9fee7b46b06c75fbbdc3f687a93990a3b8ef2484257c8bee8",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "settled_seat asks seat_refused (field reach, house box vs canvas/corridors/two placed homesteads, refused-ground grid) of every position before laying the household out; water not asked; a refused position drops the seat",
+   "summary": "settled_seat asks seat_refused (field reach, house box vs canvas/corridors/two placed homesteads, refused-ground grid) of every position it would lay the household out at; water not asked; a refused position drops the seat",
    "class": "within",
-   "why": "FR-001 and the GM's 'before the household layout' taken literally (each settle move is a layout). Water omitted because watered(q) holds at the seat where the household is sought (well = needs_pocket at that point); r1-new-40 shows reach/water refusals 0 of 0 on every seed after the pre-check. Dropping at any settle position, not only the first, is the same search-breadth class as the spec's Decisions row, but the row says 'first settled position' and should be aligned."
+   "why": "FR-001 and the GM's 'before the household layout' taken literally (each settle move is a layout). Round-1 item 2 resolved: the spec's Decisions row now says 'any position the settle would lay its household out at', matching D1 (the spec's Edge Cases line still says 'first settled position' - raised on the spec amendment, not a plan finding). Water omitted because a household sought at a seat carries a pocket where none is in reach; r4-40-new shows reach/water 0 on every seed."
   },
   {
    "id": "D2",
-   "summary": "no placed-homesteads pre-check beyond the two-boxes test inside _house_box_refused; declared no cheaper test exists; measurement only 'if a later round prices one'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-002 says 'the measurement decides which'; the GM's request names 'the placed houses where it's cheap'. D2 decides by argument and makes the measurement conditional on a later round that may never happen. The refused-by-standing-homesteads bucket is the largest pre-layout bucket (3,556 seats, 15% at 40). Candidates exist that are not obviously dearer than the layout (a lower-bound envelope from the house box and the least garden reach, or the cached unraked layout's extents, against two placed boxes) and must be priced and recorded before being declined. Not physically impossible, not implied by the GM's words, and the literal reading defeats nothing."
+   "summary": "the placed homesteads asked of the house box (in D1); the house-and-yard core box check PRICED in research R5 (+4% at 15, +11% at 40, alternated against round 4) and withdrawn on those numbers",
+   "class": "within",
+   "why": "Round-1 item 1 resolved: FR-002 says 'the measurement decides which', and it now does. Re-summed from the logs: r5-15 19.40 -> 20.25 s, r5-40 34.52 -> 38.23 s, every seed one margin, all households seated; seed 4 popped 1,721 seats against 290 and seed 9 753 against 300, the measured mechanism (a larger box drops positions the settle would have moved onto clear ground) that applies to any box larger than the house's. The GM asked for the placed houses 'where it's cheap'; measured, it is not. One recorded count is wrong: R5 says round 4's no-garden-side refusals were '26-51 a seed at 40 households', the logs (r4-40-new, r5-40-base) give 34-52; 26 is the with-check leg's minimum. Correct the figure; the decision stands on it either way."
   },
   {
    "id": "D3",
-   "summary": "route search keeps off own parts, judges first step and last leg by the taut pull's tests, heuristic once a cell; map grid tried and withdrawn",
+   "summary": "route search keeps off own parts, first step judged by house_clear/fixtures_clear/parts_clear, last leg by standing_ground, heuristic once a cell; door's grid kept, map grid withdrawn (R4)",
    "class": "within",
-   "why": "A US2 round on the corridor cost; same lane law; withdrawn lever recorded per FR-004. Kept status must still follow its alternated timing (R3 pending)."
+   "why": "Round-1 item 3 resolved for D3: kept on R4's alternated numbers, re-summed from the logs (15 households 21.33 -> 17.47 s, 40 households 49.10 -> 30.06 s, every seed one margin, 240/400 seated); the map grid's withdrawal is measured (R3: 48.40 -> 50.98 s with seed 6 at three margins; R4 four-seed door vs map). FR-004 recorded both."
   },
   {
    "id": "D4",
-   "summary": "sun ground once per rake; surface water indexed with PointGrid",
+   "summary": "sun ground once per rake; surface water indexed with PointGrid; kept within R4's rounds",
    "class": "within",
-   "why": "Exact speedups in US2; tests against the replaced predicates; keep status follows FR-004 timing."
+   "why": "Round-1 item 3: now timed, cumulatively - R3 (rounds 1-3) and R4 (rounds 1-4) each alternated base against clone, which is FR-004's literal 'timed ... base and clone back to back, before being kept'. Exact, answer-preserving, tested against the predicates they replace. Its own increment is not isolated (no leg with and without D4 alone), so the Constitution Check's 'every lever timed' holds only cumulatively - an observation, not a narrowing of the request."
   },
   {
    "id": "D5",
-   "summary": "iterate on profile until record names each remaining cost, the efficient process, and that the stage does it or a measured reason it cannot",
+   "summary": "iterate on profile until the record names each remaining cost, the efficient process, and that the stage does it or a measured reason it cannot",
    "class": "within",
-   "why": "US2 acceptance scenario 2 verbatim; the GM's 'keep iterating until we get there'."
+   "why": "US2 acceptance scenario 2 verbatim; the GM's 'keep iterating until we get there'. T06 carries it."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

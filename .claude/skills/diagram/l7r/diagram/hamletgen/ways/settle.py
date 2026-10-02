@@ -887,13 +887,16 @@ def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
     return q
 
 
-def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = ACCESS_WIDTH) -> bool:
+def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = ACCESS_WIDTH, lawful: Lawful | None = None) -> bool:
     """THE SEATING'S QUESTION (feature 287, plan M3): would a corridor along `run`, squared at its water crossings
     (`square_run`), stand on lawful ground (`Lawful.on_lawful_ground`) on the manifest as it stands? One predicate, asked by
-    the seating before it admits a house and by the web before it draws the corridor."""
+    the seating before it admits a house and by the web before it draws the corridor. A caller asking many runs of one standing
+    manifest hands in its `Lawful(SimpleNamespace(M=M))`, whose ground is indexed once (feature 314: the field's corridor asked
+    145 runs on one map, each indexing it again - 3.0 of the homesteads stage's 5.8 s at 15 households)."""
     import types
 
-    return Lawful(types.SimpleNamespace(M=M)).on_lawful_ground(square_run(M, run), width)
+    ix = lawful or Lawful(types.SimpleNamespace(M=M))
+    return ix.on_lawful_ground(ix.squared(run), width)  # `squared`: `square_run`, skipped where no water comes near the run
 
 
 def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) -> None:
