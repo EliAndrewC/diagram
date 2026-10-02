@@ -50,34 +50,43 @@ ROUTE_LEGS = 5
 Cell = tuple[int, int]
 
 
-def search(is_open: Callable[[Cell], bool], goal_of: Callable[[Cell], Pt | None], aims: Sequence[tuple[float, float]], n: int, weight: float) -> tuple[list[Cell], Pt] | None:
-    """Weighted A* from cell (0, 0) over the cells within `n` of it on each axis, eight neighbors: the first cell `goal_of`
+def search(
+    is_open: Callable[[Cell], bool], goal_of: Callable[[Cell], Pt | None], aims: Sequence[tuple[float, float]], n: int, weight: float, start: Cell = (0, 0)
+) -> tuple[list[Cell], Pt] | None:
+    """Weighted A* from cell `start` over the cells within `n` of it on each axis, eight neighbors: the first cell `goal_of`
     answers (other than the start), as the path of cells from the start and the goal's point; None where none is reached.
-    `aims` are the goal's likely cells (the heuristic's targets, in cell units)."""
-    aims = list(aims) or [(0.0, 0.0)]
+    `aims` are the goal's likely cells (the heuristic's targets, in cell units). A cell's heuristic is computed once
+    (feature 314: it was asked again at every push and pop, a third of the search)."""
+    aims = list(aims) or [(float(start[0]), float(start[1]))]
+    hypot = math.hypot
+    hs: dict[Cell, float] = {}
 
     def h(c: Cell) -> float:
-        return weight * min(math.hypot(c[0] - a[0], c[1] - a[1]) for a in aims)
+        v = hs.get(c)
+        if v is None:
+            v = hs[c] = weight * min([hypot(c[0] - a[0], c[1] - a[1]) for a in aims])
+        return v
 
-    dist: dict[Cell, float] = {(0, 0): 0.0}
+    si, sj = start
+    dist: dict[Cell, float] = {start: 0.0}
     prev: dict[Cell, Cell] = {}
     opened: dict[Cell, bool] = {}
-    heap = [(h((0, 0)), (0, 0))]
+    heap = [(h(start), start)]
     while heap:
         f, c = heapq.heappop(heap)
         if f > dist[c] + h(c) + 1e-9:
             continue
-        if c != (0, 0):
+        if c != start:
             q = goal_of(c)
             if q is not None:
                 cells = [c]
-                while cells[-1] != (0, 0):
+                while cells[-1] != start:
                     cells.append(prev[cells[-1]])
                 return cells[::-1], q
         for di in (-1, 0, 1):
             for dj in (-1, 0, 1):
                 nc = (c[0] + di, c[1] + dj)
-                if nc == c or abs(nc[0]) > n or abs(nc[1]) > n:
+                if nc == c or abs(nc[0] - si) > n or abs(nc[1] - sj) > n:
                     continue
                 if nc not in opened:
                     opened[nc] = is_open(nc)
@@ -139,30 +148,49 @@ def _route_from(
     """One door's routed path (`routed_corridors`), or None."""
     from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard, seg_box_within
 
-    x0, y0 = door
+    from .access import _standing_memo
+
+    # ONE GRID FOR THE MAP, NOT ONE PER DOOR (feature 314): the cells are the map's own multiples of `step`, the search starting
+    # at the one nearest the door, so what a cell's standing ground answers - the site's raster, the placed homesteads, the wood
+    # seats - and whether it meets the tree is asked once while nothing standing changes and read by every search after
+    # (`_standing_memo`); laid from each door, no two searches shared a cell. The house's own box is asked per search.
+    memo = _standing_memo(s)[1]
 
     def at(c: Cell) -> Pt:
-        return (x0 + c[0] * step, y0 + c[1] * step)
+        return (c[0] * step, c[1] * step)
+
+    def standing_open(c: Cell) -> bool:
+        key = ("route-open", step, c)
+        hit = memo.get(key)
+        if hit is None:
+            p = at(c)
+            hit = memo[key] = not (
+                (fg is not None and fg.point_taken(p[0], p[1]))
+                or any(seg_box_within(p, p, (it[0], it[1], it[2], it[3]), half) for it in placed.near(p[0], p[1], half))
+                or (wood is not None and wood.corridor_bars(p, p))
+            )
+        return bool(hit)
 
     def is_open(c: Cell) -> bool:
-        p = at(c)
-        if fg is not None and fg.point_taken(p[0], p[1]):
-            return False
-        if seg_box_within(p, p, own, hgap):
-            return False
-        if any(seg_box_within(p, p, (it[0], it[1], it[2], it[3]), half) for it in placed.near(p[0], p[1], half)):
-            return False
-        return not (wood is not None and wood.corridor_bars(p, p))
+        return standing_open(c) and not seg_box_within(at(c), at(c), own, hgap)
 
     def goal_of(c: Cell) -> Pt | None:
+        key = ("route-goal", step, c)
+        if key in memo:
+            got: Pt | None = memo[key]
+            return got
         p = at(c)
+        got = None
         for a, b, *_ in tree.grid.near(p[0], p[1], step + half):
             if seg_dist(p[0], p[1], a, b) <= step:
-                return seg_closest(p[0], p[1], a, b)
-        return None
+                got = seg_closest(p[0], p[1], a, b)
+                break
+        memo[key] = got
+        return got
 
-    aims = [((q[0] - x0) / step, (q[1] - y0) / step) for q in tree.targets(door)]
-    found = search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT)
+    start = (round(door[0] / step), round(door[1] / step))
+    aims = [(q[0] / step, q[1] / step) for q in tree.targets(door)]
+    found = search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, start)
     if found is None:
         return None
     cells, q = found
