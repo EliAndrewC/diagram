@@ -52,6 +52,15 @@ def test_the_planted_region_is_the_envelope_less_its_water_and_what_it_cannot_co
     assert len(pt.region_rings(_box(0, 0, 10, 10))) == 1, "a single polygon has its one ring"
 
 
+def test_a_sliver_line_in_the_region_is_not_a_ring() -> None:
+    """Feature 304's scaling leg (seed 7, 40 households): the difference that makes the region left a LineString beside its
+    polygons, and reading its exterior raised. A line plants nothing; only the polygons are rings."""
+    from shapely.geometry import GeometryCollection, LineString
+
+    mixed = GeometryCollection([_box(0, 0, 10, 10), LineString([(20.0, 0.0), (30.0, 0.0)])])
+    assert pt.region_rings(mixed) == pt.region_rings(_box(0, 0, 10, 10))
+
+
 def test_extend_pushes_both_ends_out_along_their_own_directions() -> None:
     assert pt._extend([(0.0, 0.0), (10.0, 0.0)], 2.0) == [(-2.0, 0.0), (0.0, 0.0), (10.0, 0.0), (12.0, 0.0)]
     assert pt._extend([(0.0, 0.0)], 2.0) == [(0.0, 0.0)], "a single point has no direction"

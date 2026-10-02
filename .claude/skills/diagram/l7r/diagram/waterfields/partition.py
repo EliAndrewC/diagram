@@ -87,8 +87,11 @@ def planted_region(F: _Frame, envelope: Poly, channels: list[dict[str, Any]], a_
 
 
 def region_rings(region: Any) -> list[Poly]:
-    """The region's outer rings - what stands for the plots' extent where the fit's legality reads it before any plot is cut."""
-    return [list(p.exterior.coords)[:-1] for p in getattr(region, "geoms", [region]) if not p.is_empty]
+    """The region's outer rings - what stands for the plots' extent where the fit's legality reads it before any plot is cut.
+    Its POLYGONS only: the difference that makes it can leave a sliver LINE where the water's edge runs along the envelope's
+    (feature 304's scaling leg, seed 7 at 40 households: `'LineString' object has no attribute 'exterior'`), and a line
+    plants nothing."""
+    return [list(p.exterior.coords)[:-1] for p in getattr(region, "geoms", [region]) if p.geom_type == "Polygon" and not p.is_empty]
 
 
 def _extend(pts: list[Pt], by: float) -> list[Pt]:

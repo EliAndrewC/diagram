@@ -129,20 +129,26 @@ flagged. It stays a standing check, run beside `make perf`, so a future scan of 
   rules (GM 2026-09-30, feature 297: "They do NOT need to remain identical in output").
 - **FR-009**: Every lever MUST be timed by the wall clock, base and clone back to back, and recorded in `dev/performance.md`
   with what it bought, including any withdrawn.
+- **FR-010**: The seat band MUST hold the ground a homestead actually takes - the GM's *"start off larger"* (request.md) and
+  the GM's *"a bounding box that will contain a homestead and the things in the homestead"*: its envelope and its wood floor -
+  derived from measured homesteads, not tuned to just fit.
+- **FR-011**: Each lever (FR-003, FR-004, FR-010 and any later round's) is built in the engine only on its OWN prototype verdict
+  (faster beyond the spread, every household seated); a lever measured NO-GO is recorded with its numbers (FR-009) and not
+  built, and the goals SC-002/SC-003 are judged on the levers that are.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
 - **SC-001** (FR-001, FR-002): The harness verdict is recorded with both methods' times and seated counts per seed and size.
-- **SC-002** (FR-003, FR-004, FR-005): The homesteads stage at 40 households takes under 0.1 s per household (4 s) on every
+- **SC-002** (FR-003, FR-004, FR-005, FR-010): The homesteads stage at 40 households takes under 0.1 s per household (4 s) on every
   reference seed (a target; the base observed 2026-10-02, method: the Context probe and feature 304 research R10 - 6.2-10.1 s
   on seeds 4, 25, 39 and 50.0 s on seed 47).
 - **SC-003** (FR-003, FR-004): At most two margins are seated per roll, and the placer is offered at most five seats per house
   kept, on every reference seed at 10/20/40 households.
 - **SC-004** (FR-008): The cohort passes as many seeds as the base (30/30) and every pool map passes its rules.
 - **SC-005** (FR-006, FR-007): The census lists every check of the pool's rolls; every flagged check is resolved or recorded.
-- **SC-006** (FR-003, FR-004, FR-009): The 15-household reference is not slower (perf band 0 or better).
+- **SC-006** (FR-003, FR-004, FR-009, FR-010, FR-011): The 15-household reference is not slower (perf band 0 or better).
 - SC-002 and SC-003 are the session's goals, set from the GM's *"not a full second per box"*: a miss is met with FR-002's further
   round; one that survives it is recorded with every round's numbers and raised with the GM.
 
@@ -154,6 +160,7 @@ the implementation finds it needs is recorded here with its class before it land
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
+| The seat band's ground per household (observed 2026-10-02, method: the pool's manifests, research R6): 162 ft, the side of a square holding the pool's MEAN homestead envelope (20,366 sq ft) and the least wood floor (6,000 sq ft) - the band's area is the households' sum, so the mean | derived quantity (from measured homesteads and the researched wood floor; was 104, which left the wood floor out) | FR-010; research R6-R7 | research R7; `hamletgen/consts.py` `HOMESTEAD_GROUND_FT` |
 | Homesteads packed adjacent, nearest the seat's center first | map drawing convention (the placement ORDER, not a rule) | the GM's *"place another one next to it"*; the rules decide whether a seat may stand | this spec; the packing's docstring |
 
 ## Assumptions
@@ -172,3 +179,6 @@ the implementation finds it needs is recorded here with its class before it land
 - Round 2 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 1 item - US1 (a), US2 and the first Edge Case still described
   the capacity by packing that R1 disproved. Addressed: both stories state the capacity in FR-003's terms, packing only where
   FR-004 proposes seats; the Edge Case gives no direction for a wrong prediction.
+- Amendment 1 (2026-10-02, after prototype rounds 1-7, research R1-R7): FR-010 (the band holds the homestead's whole ground -
+  the GM's mid-work *"have them start off larger"*) and FR-011 (each lever on its own verdict) added; the Decisions table gains
+  the band's figure. Rounds 1-4 measured FR-003's capacity prediction and FR-004's packed proposals NO-GO.

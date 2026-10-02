@@ -10,6 +10,92 @@ homestead envelope over the seats the exhaustive pass would offer, on the seat r
 |---|---|---|---|
 | 16 margins | 11-18 | 220-305 | 15, 18, 20-33, 38, 40 (the 16th) |
 
-**So the free ground is not what fills.** Within the field's reach the ground holds two hundred-odd homestead boxes; the
+**So the free ground is not what fills** (observed 2026-10-02, method: the same run). Within the field's reach the ground holds two hundred-odd homestead boxes; the
 placer refuses most seats on it for other reasons. A pack of boxes cannot predict a margin's capacity; whatever limits it is a
-rule the placer asks of a seat (R2 measures which). Predicting took 409 ms over seed 47's sixteen margins.
+rule the placer asks of a seat (R2 measures which). Predicting took 0.41 s over seed 47's sixteen margins (the same run).
+
+## R2. What refuses the placer's offers (observed 2026-10-02, method: a scratch census wrapping each of the placer's questions, the first refusing one per call, through `stage_homesteads` at 40 households, seed 47)
+
+(Observed 2026-10-02, method: as the heading.) Of ~25,000 placer calls over seed 47's sixteen margins, the first refusal:
+
+| phase, first refusal | calls |
+|---|---|
+| exhaustive pass: no straight corridor from any door to the access tree (`seat_reaches_tree`) | 13,391 |
+| exhaustive pass: no garden side's envelope fits | 2,568 |
+| exhaustive pass: the part rules, the corridor among them (`access_corridor`) | 2,110 + 2,321 |
+| exhaustive pass: a reserved wood-floor seat covered (`covers_a_seat`) | 706 |
+| lattice rounds: no corridor / no envelope / part rules | 801 / 687 / 873 |
+| seated | 249 (lattice) + the exhaustive pass's |
+
+Per garden side, `access_corridor` refuses 8,570 times in the exhaustive pass and the wood seats 2,507. **The cap on a margin is
+reachability**: each house needs a straight corridor from its door to the tree, clear of every homestead, part and wood seat,
+and a cluster filling in blocks the lines its later seats would need. The 213-305 boxes of R1 are free ground no corridor reaches.
+
+## R3. Rounds 2 and 3, and a wider corridor search: the search order is not the cap (observed 2026-10-02, method: `prototype.py tree|grow 40 4,...`, and `TARGETS_TRIED` raised by monkeypatch, the reference at 40 households)
+
+(Observed 2026-10-02, method: as the heading.)
+
+- **Round 2, seats beside the tree** (both sides of every leg at 0.55/0.8/1.05 pitches, every half pitch): seed 4 tried all 55
+  margins, seating 10-32 each, and was refused. The offers fell on the legs' own strips (the house box refused 9,405 times), past
+  the field's reach (5,811) and on neighbors' envelopes (10,722).
+- **Round 3, seats grown from the houses** (each standing envelope's eight neighbor positions, nearest the center first): seed
+  4 again all 55 margins, 10-28 each - the neighbor positions are taken by reserved corridors, wood seats and envelopes.
+- **The corridor search widened** (observed 2026-10-02, method: the probe with `TARGETS_TRIED` set; `TARGETS_TRIED` 12 -> 30 / 80, a search breadth, not a rule): the margin that succeeds moves
+  (seed 4 rung 3 / 1, seed 39 rung 7 / 4, seed 47 rung 10 / 2) and each call costs more (seed 25 10.9 / 21.8 s against 8.3).
+  Whether a margin reaches 40 is near chance: 40 households is about what an unplanned cluster with straight corridors holds.
+
+## R4. Round 4: frontage lanes laid first (observed 2026-10-02, method: `prototype.py` modes `lanes` and `comb` with the front row and lattice rounds disabled, the fallback to the exhaustive pass off, the reference at 40 households, seeds 4 and 47, three margins)
+
+(Observed 2026-10-02, method: as the heading.) Lanes laid as legs of the access tree before the houses, homesteads offered along
+them: a spine from the strip's end with lanes across it seated 1-5 a margin until each leg was put to the tree's own test
+(`tree.admits`, oriented toward the tree as a corridor is) - the spine is a corner at the strip's end the lane law refuses, so no
+lane was laid; lanes as T-junctions along the exit strip seated 2-5 (the strip runs away from the field, past its reach). Every
+lane the law admits is reserved ground a house may not stand on; laying a village's streets is a layout of its own (the
+village tier's), not a seat order. Withdrawn.
+
+## R5. Round 5: a failing margin's exhaustive pass given up after a dry spell (observed 2026-10-02, method: `prototype.py takes`, each take's offer index logged, then `DRY=400`, the reference at 40 households, four seeds)
+
+(Observed 2026-10-02, method: as the heading.) On a margin that falls short the pass seats its last house by offer 128-1,206 and
+offers on to 1,015-1,742; on the margins that succeeded the longest run of offers without a take was 327 (seed 47) and 235 (seed
+39). Giving a margin up after 400 dry offers kept every seed's margin and seated count and cut the stage: seed 4 6.2 -> 4.8 s,
+25 7.8 -> 6.8, 39 10.1 -> 8.3, 47 50.0 -> 39.9. A heuristic: a margin whose next take lies past 400 dry offers is given up.
+
+## R6. Round 6: the band holds the homestead's whole ground, and a near miss is rescued (observed 2026-10-02, method: `HOMESTEAD_GROUND_FT` set by monkeypatch, `prototype.py rescue` with `RESCUE=3` and `DRY=400`, the reference at 40 households)
+
+(Observed 2026-10-02, method: as the heading.) Seed 47's margins seat 38-39 of 40 and are thrown away. Two levers:
+
+- **The band's ground per household** (observed 2026-10-02, method: the pool's five manifests read for `geom.bbox`). `HOMESTEAD_GROUND_FT = 104` sizes the seat band from the house, yard and row (consts.py);
+  it leaves out the household's wood floor (`HOMESTEAD_WOOD_FT2`, 6,000 sq ft at least, within 90 ft of the house), added later.
+  The pool's 82 homesteads' envelopes (`geom.bbox`): median 10,521 sq ft, mean 20,366; with the wood floor's least, a homestead's
+  ground is sqrt(16,521) = 128.5 ft (median) to sqrt(26,366) = 162.4 ft (mean).
+- **The rescue**: a margin left at most three short is searched again before the ladder moves on - the seat grid at a sixth of
+  a pitch (the pass's is a third) and the corridor search over 40 tree points (12 in the pass); a search breadth, no rule.
+
+| homesteads s (margins) at 40 hh | seed 4 | seed 25 | seed 39 | seed 47 |
+|---|---|---|---|---|
+| the engine (104) | 6.2 (2) | 7.8 (3) | 10.1 (4) | 50.0 (16) |
+| 104 + rescue + dry | 4.8 (2) | 6.8 (3) | 8.3 (4) | 30.5 (12) |
+| 128 + rescue + dry | 3.8 (1) | 1.7 (1) | 10.6 (5) | 7.4 (3) |
+| 140 + rescue + dry | 3.0 (1) | 3.0 (1) | 2.0 (1) | 5.9 (2) |
+| 162 + rescue + dry | 2.9 (1) | 3.7 (1) | 2.0 (1) | 17.1 (3) |
+
+Four seeds do not separate a figure from luck (which margin fills is near chance at the edge of capacity); a twelve-seed sweep
+follows (R7).
+
+## R7. The band's figure swept, and its rim (observed 2026-10-02, method: `rim.py` - the probe with `HOMESTEAD_GROUND_FT` set and, for `rim`, the shared sheds' pockets laid farthest from the band's middle - the reference at 40 households, run as four or six processes at once, so the seconds are a loaded machine's)
+
+(Observed 2026-10-02, method: as the heading.) Twelve seeds (1-13 but 4) at 40 households, margins seated before every household
+stood: the engine (104) seated on the first margin on 1 seed of 12 (2.9-118 s, seed 7 crashed - see R8); 128 with the rescue on
+4; 140 with the rescue on 7; **162 with the rescue on 11** (2.2-5.5 s). 162 ALONE (no rescue, no dry cap), sixteen seeds (1-13,
+25, 39, 47): fifteen on the first or second margin in 1.9-6.1 s, seed 47 on the seventh in 23.5 s; at 15 households the four
+reference seeds 0.5-1.0 s against 1.0-1.3 s at 104, at 20 households 1.0-1.4 s against 1.0-5.7 s. Seeds 1-32 at 162 (but 4,
+25): 20 on the first margin, 8 on the second, 1 on the third, 1 on the fourth; seed 28 is refused by the field (`FieldRefused`,
+52 acres). The shared sheds laid at the band's rim instead of spread: no better (seeds 3 and 7 worse, 24 better) - withdrawn;
+the round-3 seats grown from the houses at 162: worse on three of four seeds - withdrawn.
+
+## R8. A crash the scaling leg found (observed 2026-10-02, method: the R7 sweep at 104, seed 7, 40 households; the traceback)
+
+(Observed 2026-10-02, method: as the heading.) `waterfields/partition.region_rings` read `.exterior` of every part of the
+planted region; the difference that makes it (`planted_region`) left a sliver LineString where the water's edge ran along the
+envelope's, and the fit raised `AttributeError`. A line plants nothing: only the region's polygons are rings now
+(`tests/waterfields/test_partition.py::test_a_sliver_line_in_the_region_is_not_a_ring`). Constitution XIV.
