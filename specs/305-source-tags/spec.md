@@ -237,20 +237,24 @@ to it.
 
 ### Measurable Outcomes
 
-- **SC-001**: Every keyed registry entry carries valid tags on all three facets, or is canon. The build check passes
+- **SC-001** (FR-004, FR-005, FR-014): Every keyed registry entry carries valid tags on all three facets, or is canon. The build check passes
   with no exemption.
-- **SC-002**: The build check fails on each of three seeded faults: a missing facet, an unknown value, and a combination
+- **SC-002** (FR-010): The build check fails on each of three seeded faults: a missing facet, an unknown value, and a combination
   no section takes. Each failure names the entry.
-- **SC-003**: On every question page, the single page and the registry index, every listed work is under exactly one
+- **SC-003** (FR-006, FR-007, FR-008, FR-009): On every question page, the single page and the registry index, every listed work is under exactly one
   section heading, the headings follow the rule file's order, and every work in full shows a label per tag, each with
   its explanation as hover text.
-- **SC-004**: An independent `source-applicability` check of a stratified sample of at least 60 entries, covering every
+- **SC-004** (FR-001, FR-002, FR-003, FR-004): An independent `source-applicability` check of a stratified sample of at least 60 entries, covering every
   period and region value, rules at least 19 in 20 of the sampled tags correct. Every wrong tag found is fixed, and the
   sample's error pattern is checked across the rest of the registry.
-- **SC-005**: After the trim, the same sample shows no write-up restating a category limit its labels state, and no
+- **SC-005** (FR-015): After the trim, the same sample shows no write-up restating a category limit its labels state, and no
   write-up lost a source-specific limit or its reason for applying.
-- **SC-006**: Measured over the whole registry, the total length of the limits paragraphs falls. The figure is
+- **SC-006** (FR-015): Measured over the whole registry, the total length of the limits paragraphs falls. The figure is
   reported, not targeted.
+
+- **SC-007** (FR-011, FR-012, FR-013): `make reserve KIND=registry ... TAGS=` writes a valid marker and refuses an
+  unknown value by name; the `source-applicability` contract's vocabulary block matches the vocabulary, and a test fails
+  while it does not; the research `CLAUDE.md`, the research doctrine and the page-session rules state the tagging rule.
 
 ## Decisions Recorded
 
@@ -276,6 +280,10 @@ This feature draws nothing on a map and states nothing new about one. It labels 
 - Attested instances (the anchors table) are not keyed works and are not tagged.
 
 ## Review history
+
+- Amendment 1 (2026-10-02, during implementation): traceability only, for spec-lint's check once tasks.md exists -
+  SC-001..SC-006 name the FRs they verify, and SC-007 is added for FR-011..FR-013, which no criterion named. No
+  requirement changed.
 
 - Round 1 (spec-fidelity, 2026-10-02): FAITHFUL. Two asides, not findings, both taken: the 2,126 count now says how it
   was counted, and FR-010's message names the combination for an untaken combination rather than "the allowed values".
