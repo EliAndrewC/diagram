@@ -120,6 +120,7 @@ class TreeStandsMixin:
         # no crown is drawn on a roof or a wellhead - and by flush time that means EVERY one of them
         reach = rad * 1.4
         krect, kcirc = self._canopy_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))
+        krect += self._sun_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))  # every plot's sun ground (feature 310)
         # ...and no trunk stands on a lane's tread (feature 287, woods W21 - `trunk_on_tread`, the rule's one predicate): the
         # stand is drawn at crop time, after every way, so a lane through the wood is known and the trees keep off it
         trees = trees_off_the_treads(trees, self.M.get("lanes") or [])

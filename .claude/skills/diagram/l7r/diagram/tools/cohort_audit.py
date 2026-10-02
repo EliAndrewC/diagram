@@ -38,9 +38,8 @@ if HERE not in sys.path:
 from l7r.diagram import hamletgen as hg  # noqa: E402
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, row_rules, water_rules  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
-from l7r.diagram.settlement.farm_fixtures import PERSIMMON_SHADE_FT  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
-from l7r.diagram.settlement.homestead_parts.tree_shade import persimmons_shading_plots  # noqa: E402
+from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT, trees_shading_plots  # noqa: E402
 
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
 
@@ -143,7 +142,7 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
         ("row_rules", row_rules(_M)),
         ("water_rules", water_rules(_M)),
         ("bamboo_mismatch", bamboo_mismatch(_M)),
-        ("persimmons_shading_plots", persimmons_shading_plots(_M, PERSIMMON_SHADE_FT)),  # GM 2026-10-02
+        ("trees_shading_plots", trees_shading_plots(_M, CANOPY_SHADE_FT)),  # GM 2026-10-02, feature 310
     ):
         if found:
             report.fail_lines.append(f"FAIL {name} -> {len(found)}, e.g. {found[:2]}")

@@ -68,6 +68,8 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
 
 
 WOODLAND_MIN_CROWNS = 5
+#: a scrub pine's crown for the sun rule (feature 310): its lowest, widest branch, drawn 3.6 bs out, and the stroke's slack
+PINE_SPREAD_BS = 4.6
 """The fewest crowns a woodland commons may record (`test_a_woodland_commons_is_visibly_stocked`, feature 287 woods W13):
 a parcel claiming a wood draws one - under five crowns it reads as a few trees on grass, not a worked wood. A map drawing
 convention on legibility, the rule's own figure; the parcel's real stocking is `COMMONS_SPACING_FT`."""
@@ -80,7 +82,25 @@ holes in it - the margins are meant to form a continuous ring of worked and unwo
 #: The manifest's TREADS - a way or a watercourse is a polyline with a width, not a ring: (key, points key, width key).
 BARE_TREADS = (("lanes", "pts", "w"), ("streams", "poly", "w"), ("channels", "poly", "w"), ("field_ditches", "poly", "w"), ("drawn_channels", "pts", "w0"))
 #: Keys that record no ground: the page's furniture, the render's bookkeeping, a lone connector's raw points.
-_BARE_SKIP = frozenset({"meta", "labels", "title", "scalebar", "ink_classes", "site_boundary", "comb_floors", "pond_layer", "tree_crowns", "wet_plots", "flooded_plots", "field_chains", "lane"})
+_BARE_SKIP = frozenset(
+    {
+        "meta",
+        "labels",
+        "title",
+        "scalebar",
+        "ink_classes",
+        "site_boundary",
+        "comb_floors",
+        "pond_layer",
+        "tree_crowns",
+        "scrub_pines",
+        "planted_trees",
+        "wet_plots",
+        "flooded_plots",
+        "field_chains",
+        "lane",
+    }
+)
 
 
 def ring_center(poly: Any) -> tuple[float, float]:
@@ -472,6 +492,9 @@ class GroundCoverMixin:
                 # 540 sq ft at 13-23 ft across, the hill wood's figures (0080) that no page gave for a coppice.
                 _wd_target = int(area / self.px(self.COMMONS_SPACING_FT) ** 2)
                 _r_lo, _r_hi = (self.px(v) for v in self.COMMONS_CROWN_R_FT)
+                # ...AND NO CROWN IN A YARD'S OR BED'S SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"), throws and
+                # the room's grid alike: the commons are laid after every plot, so the keep-out is whole here
+                _wd_sun = self._sun_keepouts((x0 - _r_hi, y0 - _r_hi, x1 + _r_hi, y1 + _r_hi))
                 # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
                 # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
                 _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
@@ -483,6 +506,8 @@ class GroundCoverMixin:
                     if _sparse(cx, cy, 0.6, _r_hi):  # lean = the largest crown radius, so no canopy overhangs a crop
                         continue
                     r = random.uniform(_r_lo, _r_hi)
+                    if self._crown_covers(cx, cy, r, _wd_sun, (), self.CANOPY_PAD):
+                        continue
                     col = random.choice(("#6E8B4A", "#7C9856", "#87A45C"))
                     # RECORD the crown (known-open ledger 2026-08-16, both review rounds
                     # independently): these used to be SVG ink only, so no manifest check could
@@ -505,7 +530,7 @@ class GroundCoverMixin:
                 if _wd_crowns < WOODLAND_MIN_CROWNS:
                     del self.M["tree_crowns"][_tc0:]
                     del g[_g0:]
-                    room = self.woodland_room(poly)[: max(_wd_target, WOODLAND_MIN_CROWNS)]
+                    room = [t for t in self.woodland_room(poly) if not self._crown_covers(t[0], t[1], t[2], _wd_sun, (), self.CANOPY_PAD)][: max(_wd_target, WOODLAND_MIN_CROWNS)]
                     for cx, cy, r in room:
                         self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
                         g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9856" stroke="#4C6234" stroke-width="0.7"/>')
@@ -540,6 +565,12 @@ class GroundCoverMixin:
                             continue
                         if _sparse(px, py, 0.5, 14 * bs) or _in_soft(px, py):  # lean = the tallest pine's tip reach, so no pine leans over a crop; and never in the bog
                             continue
+                        # ...NOR IN A YARD'S OR BED'S SUN (feature 310): a pine is a tree, its crown its widest branch's reach; recorded
+                        # apart (`scrub_pines`) so the map's check sees it, since `tree_crowns` is read as canopy discs elsewhere
+                        _pr = PINE_SPREAD_BS * bs
+                        if self._crown_covers(px, py, _pr, self._sun_keepouts((px - _pr, py - _pr, px + _pr, py + _pr)), (), self.CANOPY_PAD):
+                            continue
+                        self.M.setdefault("scrub_pines", []).append([round(px, 1), round(py, 1), round(_pr, 1)])
                         th = random.uniform(9, 14) * bs
                         marks.append(
                             (px - bs, py - th - bs, px + bs, py + bs, f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')

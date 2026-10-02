@@ -184,3 +184,74 @@ def test_ring_offset_takes_a_hairpin_on_its_first_edge() -> None:
     hairpin = [(0.0, 0.0), (100.0, 0.0), (0.0, 0.0), (0.0, 100.0)]
     ring = ring_offset(hairpin, 10.0, 5.0)
     assert len(ring) >= 8 and all(math.isfinite(c) for q in ring for c in q)
+
+
+# ---- feature 310: no canopy tree in a yard's or bed's sun (GM 2026-10-02) ----------------------------------------
+
+
+def _sunny(seed: int = 1) -> Settlement:
+    s = Settlement(1000, 1000, seed=seed)
+    s.meta(name="S", scale="hamlet", ftpx=1)
+    s.sun_corridor(39)
+    return s
+
+
+def test_the_sun_keepouts_are_every_plots_sun_ground_near_the_box_on_a_map_that_keeps_the_sun() -> None:
+    """The drawn plots and every placed bundle's, as `sun_box` boxes, those meeting the box only; none where the map keeps no
+    sun corridor."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT, sun_box
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="S", scale="hamlet", ftpx=1)
+    s.M["threshing_yards"] = [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 20.0}]
+    assert s._sun_keepouts((0.0, 0.0, 1000.0, 1000.0)) == [], "off without the sun corridor"
+    s.sun_corridor(39)
+    yard = sun_box((500.0, 500.0, 40.0, 20.0), CANOPY_SHADE_FT)
+    assert s._sun_keepouts((0.0, 0.0, 1000.0, 1000.0)) == [yard]
+    s.M["houses"].append({"x": 200.0, "y": 200.0, "w": 40.0, "h": 30.0, "geom": {"boxes": {"yard": (200.0, 240.0, 30.0, 20.0), "gardens": [(250.0, 200.0, 14.0, 20.0)]}}})
+    s.M["houses"].append({"x": 900.0, "y": 900.0, "w": 40.0, "h": 30.0, "geom": {"yard": None, "gardens": [(940.0, 900.0, 14.0, 20.0)]}})
+    got = s._sun_keepouts((0.0, 0.0, 1000.0, 1000.0))
+    assert len(got) == 4 and sun_box((200.0, 240.0, 30.0, 20.0), CANOPY_SHADE_FT) in got, "a bundle's yard and beds, a yardless bundle's bed"
+    assert s._sun_keepouts((0.0, 0.0, 100.0, 100.0)) == [], "none meets a box far off"
+
+
+def test_a_planted_dikes_trees_in_a_plots_sun_are_taken_out_once_the_plots_stand() -> None:
+    """`_plant_run` records the trees with the string's place; `thin_planted_trees` rewrites the string without each tree in a
+    plot's sun, keeps every bush and tag, and records what it kept. A run with no tree is left as it was."""
+    s = _sunny()
+    near, far = (560.0, 500.0, 5.0), (900.0, 100.0, 5.0)
+    pieces = ["<g>", "<circle near/>", "<circle bush/>", "<circle far/>", "</g>"]
+    z = s._plant_run("willow", pieces, [None, near, None, far, None], "perimeter dike")
+    bare = s._plant_run("fruit", ["<g>", "</g>"], [None, None], "fruit dike")
+    assert s.M["planted_trees"][0]["trees"] == [[560.0, 500.0, 5.0], [900.0, 100.0, 5.0]]
+    s.M["threshing_yards"] = [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 20.0}]
+    assert s.thin_planted_trees() == 1
+    assert s.out[z] == "<g><circle bush/><circle far/></g>" and s.out[bare] == "<g></g>"
+    assert s.M["planted_trees"][0]["trees"] == [[900.0, 100.0, 5.0]]
+
+
+def test_a_fixture_is_held_off_a_band_as_its_record_will_read() -> None:
+    """Cohort seed 5 (2026-10-02): the check reads a fixture's turned box from its record, rounded to 0.1 - so the placer asks
+    the same box (`recorded_box`), and a turn that clears at full precision but meets in the record is refused."""
+    from l7r.diagram.settlement.rolling.fit import recorded_box
+
+    x, y, w, h = recorded_box((2264.94, 1014.83, 24.0, 12.0), 13.8)
+    assert (x, y) == (2264.9, 1014.8) and abs(h - (24.0 * math.sin(math.radians(13.8)) + 12.0 * math.cos(math.radians(13.8)))) < 1e-9
+
+
+def test_every_crown_site_keeps_out_of_a_plots_sun() -> None:
+    """A windbreak planted over a garden draws no crown in the garden's sun ground, and a wood beside a yard none in the yard's -
+    the crown tests read `_sun_keepouts` (feature 310)."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT, trees_shading_plots
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    s.sun_corridor(39)
+    s.M["gardens"] = [{"x": 500.0, "y": 500.0, "w": 30.0, "h": 20.0}]
+    s.village_grove([(380, 380), (620, 380), (620, 620), (380, 620)], role="windbreak")
+    assert len(s.M["tree_crowns"]) > 0, "non-vacuity: the windbreak drew crowns"
+    assert trees_shading_plots(s.M, CANOPY_SHADE_FT) == []
+    w = _sunny(2)
+    w.M["threshing_yards"] = [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 20.0}]
+    w._draw_stand([(420, 420), (600, 420), (600, 600), (420, 600)], 3, True)  # drawn as at crop time
+    assert len(w.M["tree_crowns"]) > 0 and trees_shading_plots(w.M, CANOPY_SHADE_FT) == []

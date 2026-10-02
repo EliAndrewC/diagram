@@ -17,7 +17,9 @@ from ..homestead_parts.grove_sides import E, N, S, Turn, W, turn_face, turns_axe
 # THE GARDEN'S MORNING SUN: no grove band stands within this reach east of a garden across its height - the reach
 # `_east_trees` reads (px at the village grain, scaled by `bscale`; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html).
 EAST_SHADE_REACH = 22.0
-# THE YARD'S DRYING SUN: the strip south of a threshing yard no grove may stand in - `_yard_sun_conflict`'s 22 px strip.
+# THE YARD'S DRYING SUN, AS A SEATING PREFERENCE: the strip south of a threshing yard a grove BAND is kept out of when a farm is
+# seated (`_yard_sun_conflict`'s 22 px strip), which keeps bands whole; the sun rule itself is the crown's - no crown in any
+# plot's sun ground, `CANOPY_SHADE_FT` (feature 310, `KeepoutsMixin._sun_keepouts`).
 YARD_SUN_STRIP = 22.0
 # THE WAY IN THROUGH A RING. A grove round all four sides must still let the farm be reached: its front band is broken
 # once, at the yard's middle, for a way wide enough that a lane can be ROUTED through it - the router keeps a footpath's

@@ -121,6 +121,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     so the woodland patches draw on top of the scrub they stand in.
 
     Steps:
+        l7r.diagram.settlement.Settlement.thin_planted_trees
         l7r.diagram.hamletgen.hinterland.belt.belt_polygon
         l7r.diagram.hamletgen.hinterland.frame.scatter_frame
         l7r.diagram.settlement.Settlement.hinterland
@@ -130,6 +131,10 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.hinterland.stages.plant_the_belt
         l7r.diagram.hamletgen.hinterland.frame.frame_for
     """
+    # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
+    # perimeter dike's willows and a fruit dike's trees were drawn in the field stage, before any yard or bed; every plot
+    # stands now, so each tree in a plot's sun is taken out of its string
+    s.thin_planted_trees()
     # THE BELT IS COMPUTED HERE, two stages before it is drawn, so the scrub can keep out of it
     # (T34): the belt derives from the houses alone, which are final by now, and `stage_woodland`
     # recomputes the same polygon. Woody scatter stops at the belt's line; grass grades into it.

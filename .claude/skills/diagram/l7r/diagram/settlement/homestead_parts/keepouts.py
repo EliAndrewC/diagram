@@ -5,6 +5,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import boxed_seg_hit, seg_dist
+from .tree_shade import CANOPY_SHADE_FT, plot_box, sun_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -202,6 +203,50 @@ class KeepoutsMixin:
     )
     _CANOPY_STRUCT_KEYS = _HALO_STRUCT_KEYS + _CANOPY_EXTRA_KEYS + _CANOPY_ROOFED_KEYS
     CEMETERY_CORE = 0.9  # the fraction of a burial ground's half-extent kept clear of crowns: the grave markers reach ~0.8-0.9 of it (cemetery's grid), and at 0.6 a crown hid a whole grave on Kuwabata (settlement-review round 2) - feature 273
+
+    def _sun_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> list[tuple[float, float, float, float]]:  # type: ignore[misc]
+        """The SUN GROUND of every threshing yard and garden bed near `bbox`, as (x, y, half-w, half-h) keep-out boxes a canopy
+        crown may not meet (GM 2026-10-02, feature 310: "no canopy trees should be exempt"; `tree_shade.sun_box`, the reach
+        `CANOPY_SHADE_FT`) - on the map that keeps the sun corridor (the scripted path's opt-in), else none. Read from the drawn
+        plots and from every placed homestead's bundle, whose plots a farm grove's arms are drawn before (the flush). Handed to
+        every crown test (`_crown_covers`) and to no bamboo mark's: bamboo is the GM's "maybe" (spec 310)."""
+        if not getattr(self, "_sun_corridor_ft", 0.0):
+            return []
+        reach = self.px(CANOPY_SHADE_FT)
+        plots = [b for k in ("threshing_yards", "gardens") for o in self.M.get(k) or () if (b := plot_box(o)) is not None]
+        for rec in self.M.get("houses") or ():
+            g = rec.get("geom") or {}
+            boxes = g.get("boxes") or {}
+            yard = boxes.get("yard", g.get("yard"))
+            plots += [p for p in ([yard] if yard is not None else []) + list(boxes.get("gardens", g.get("gardens")) or ())]
+        bx0, by0, bx1, by1 = bbox
+        return [b for b in (sun_box(p, reach) for p in plots) if b[0] + b[2] >= bx0 and b[0] - b[2] <= bx1 and b[1] + b[3] >= by0 and b[1] - b[3] <= by1]
+
+    def _plant_run(self: Settlement, kind: str, pieces: Sequence[str], trees: Sequence[tuple[float, float, float] | None], cls: Any) -> int:  # type: ignore[misc]
+        """Emit a dike's planted string - `pieces`, of which those with a `trees` entry (x, y, r) are canopy trees (a willow, a
+        fruit tree) and the rest its group tags and bushes - and record its trees (`planted_trees`, of `kind`) with the
+        string's place in the stream, so `thin_planted_trees` can take out, once the plots stand, each tree in a plot's sun
+        (feature 310: the dikes are drawn in the field stage, before any yard or bed exists). The stream index."""
+        z = self.add("".join(pieces), cls=cls)
+        self.__dict__.setdefault("_planted_runs", []).append((z, list(pieces), list(trees)))
+        self.M.setdefault("planted_trees", []).append({"kind": kind, "trees": [[round(t[0], 1), round(t[1], 1), round(t[2], 1)] for t in trees if t is not None]})
+        return z
+
+    def thin_planted_trees(self: Settlement) -> int:  # type: ignore[misc]
+        """Rewrite each planted string (`_plant_run`) without the trees that stand in a yard's or bed's sun ground
+        (`_sun_keepouts`) and record the trees it keeps; how many it took out. Called once the homesteads are seated."""
+        dropped = 0
+        for k, (z, pieces, trees) in enumerate(self.__dict__.get("_planted_runs") or ()):
+            seats = [t for t in trees if t is not None]
+            if not seats:
+                continue
+            reach = max(t[2] for t in seats)
+            sun = self._sun_keepouts((min(t[0] for t in seats) - reach, min(t[1] for t in seats) - reach, max(t[0] for t in seats) + reach, max(t[1] for t in seats) + reach))
+            keep = [t is None or not self._crown_covers(t[0], t[1], t[2], sun, (), self.CANOPY_PAD) for t in trees]
+            dropped += keep.count(False)
+            self.out[z] = "".join(p for p, kept in zip(pieces, keep, strict=True) if kept)
+            self.M["planted_trees"][k]["trees"] = [[round(t[0], 1), round(t[1], 1), round(t[2], 1)] for t, kept in zip(trees, keep, strict=True) if kept and t is not None]
+        return dropped
 
     def _canopy_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> tuple[list[tuple[float, float, float, float]], list[tuple[float, float, float]]]:  # type: ignore[misc]
         """Every drawn BUILDING footprint (as x, y, half-w, half-h) and WELLHEAD (as x, y, r) near `bbox` -
