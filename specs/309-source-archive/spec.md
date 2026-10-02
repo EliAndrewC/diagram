@@ -149,7 +149,7 @@ in) opens that source's capture.
 
 ### Measurable Outcomes
 
-- **SC-001**: After the backfill, 100% of registry URLs have an outcome in the manifest, and the share archived (live or from
+- **SC-001**: After the backfill, every registry URL has an outcome in the manifest, and the share archived (live or from
   an earlier snapshot) is reported; every unreachable one carries a reason.
 - **SC-002**: A random sample of 20 archived copies - at least 5 Wikipedia, 5 PDFs, 5 small sites - each opens offline from a
   fresh clone of the archive repository and contains the passage its registry entry quotes (where the entry quotes one).
