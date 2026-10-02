@@ -1,6 +1,6 @@
 {
  "feature": "305-source-tags",
- "plan_sha256": "74f690d040f4881d362ecf6c7dc7069d606cdea55a1f1236d31d63cc498a66dd",
+ "plan_sha256": "a7a6213d388807efbc9cd55df7965292202e93d45cacbf22aabde9ac32f7c601",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -24,9 +24,9 @@
   },
   {
    "id": "D4",
-   "summary": "FR-007's eight sections in order; Not period-bound (before the last) takes primary timeless works of any region",
+   "summary": "FR-007's nine sections in order (amendment 2 added The published game setting, second); Not period-bound (before the last) takes primary timeless works of any region",
    "class": "within",
-   "why": "FR-007 order plus FR-006 first-match; the last section's 'whatever its period' clause still guarantees every combination a home."
+   "why": "FR-007 (as amended, nine sections) in its order plus FR-006 first-match; the last section's 'whatever its period' clause still guarantees every combination a home. The only change since the CLEAR record (daa4696cb -> c18206a08) is this count; D1's canon section with no takes matches the restored load_sections/home."
   },
   {
    "id": "D5",
