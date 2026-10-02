@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-organization`)
 **Created**: 2026-10-02
-**Status**: Draft
+**Status**: FAITHFUL at round 1 (2026-10-02)
 **Request**: [`request.md`](request.md) - the GM's words verbatim. A source's write-up today explains, entry by entry, the
 limits that come with its *category*: a tourism page cites no study, a present-day page gives modern counts. The GM asks
 for tags on the sources, so that (1) the works cited are *"put into sections based on their tags, like `Present day` or
@@ -20,7 +20,7 @@ the kind of publication, and asked for the feature to be implemented start to fi
 
 ## Summary
 
-Every keyed work in the registry (2,126 entries, measured 2026-10-02) carries tags on three facets:
+Every keyed work in the registry (2,126 entries, counted 2026-10-02 by listing the files in `010-works-cited/`) carries tags on three facets:
 
 - **Period**: when the evidence the record takes from the work dates from. This is not when the work was published.
   A 2004 article on Edo-period field registers is premodern evidence.
@@ -184,7 +184,10 @@ to it.
   5. Not period-bound
   6. Modern preindustrial East Asia
   7. Present-day East Asia
-  8. Beyond East Asia
+  8. Beyond East Asia, and general works
+
+  The last section takes every work whose primary region is Europe, elsewhere or general, whatever its period, so
+  every combination of tags has a section.
 
   The order is the weight the record gives each group. Canon governs. Premodern East Asian evidence is the setting's
   model, Japan and China first since Rokugan draws on both. Physical facts transfer whole. Modern preindustrial
@@ -197,7 +200,7 @@ to it.
 - **FR-009**: Every work, wherever it is shown in full, shows one label per tag it carries. That means a question
   page's works, the single page and its own registry page. A label's hover shows its vocabulary explanation in the
   record's existing tooltip box, and without scripts its native tooltip carries the same text.
-- **FR-010**: The record's build check refuses, naming the entry, the facet and the allowed values, in three cases:
+- **FR-010**: The record's build check refuses, naming the entry and what is wrong (for a missing or unknown value, the facet and its allowed values; for an untaken combination, the combination), in three cases:
   - an entry missing a facet;
   - an entry carrying a value the vocabulary does not hold;
   - an entry whose primary tags no section takes.
@@ -271,3 +274,9 @@ This feature draws nothing on a map and states nothing new about one. It labels 
   works to a modal, it reuses the same labels.
 - The 16 canon entries stay where they are in the registry; only their display section changes.
 - Attested instances (the anchors table) are not keyed works and are not tagged.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-02): FAITHFUL. Two asides, not findings, both taken: the 2,126 count now says how it
+  was counted, and FR-010's message names the combination for an untaken combination rather than "the allowed values".
+  FR-007's last section now takes general-region works of any period, so a premodern general work has a home.
