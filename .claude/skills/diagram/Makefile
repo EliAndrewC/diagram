@@ -669,6 +669,24 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	  if bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; then n=$$((n+1)); \
 	  else printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)\033[0m\n' "$$uh"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
 	fi; \
+	: "(GUARD_EDIT_OK: 2026-10-02 - THE PYTEST FILES THAT TEST scripts/ RUN HERE TOO, so the hooks stamp the DIRECT route"; \
+	: " demands means they passed. A scripts-only push ran only the suites above, and a shell-check change that its own"; \
+	: " suite passed broke tests/tooling/test_guard_firing_log.py in every other session gate. The GM: the tooling must"; \
+	: " do the correct thing, never a session remembering to. The files are DERIVED - every tests/**/test_*.py naming"; \
+	: " scripts/ as code - and skipped while scripts/ and they hash to their last green run (58 files, 74 s at 4 workers); under"; \
+	: " make done (FROM_DONE) test-full runs them anyway.)"; \
+	if [ -z "$(FROM_DONE)" ]; then \
+	  : "(GUARD_EDIT_OK: the same new step - a file that BUILDS a path into scripts/, not one whose docstring mentions a"; \
+	  : " script: the mention form took in the browser tests, and on a full container the OOM killer took their Chrome)"; \
+	  pyt=$$(grep -rlE '/ *"scripts"|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' | sort | tr '\n' ' '); \
+	  psha=$$( { find "$$root/scripts" -type f | sort | xargs cat; cat $$pyt; } 2>/dev/null | sha256sum | cut -c1-16); \
+	  if [ -n "$$pyt" ] && { [ -n "$(HOOKS_ALL)" ] || [ "$$(cat "$$gitdir/hooks-test/pytest-scripts" 2>/dev/null)" != "$$psha" ]; }; then \
+	    : "(GUARD_EDIT_OK: four workers, not the gate count - the hook suites above run beside it on a shared 10 GB container)"; \
+	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$pyt > "$$work/pytest-scripts.log" 2>&1; then \
+	      mkdir -p "$$gitdir/hooks-test"; echo "$$psha" > "$$gitdir/hooks-test/pytest-scripts"; n=$$((n+1)); \
+	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
+	  else skipped=$$((skipped+1)); fi; \
+	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
