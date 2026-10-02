@@ -136,3 +136,16 @@ def test_the_copse_is_trimmed_back_to_its_goal_and_never_below_its_reserved_seat
     assert seats[9] in out and len(out) == 3, "the reserved seat, then the shortest run nearest the goal"
     assert trim_to_goal(seats, kept, 10.0, 1.0, 0.0) == [seats[9]]
     assert len(trim_to_goal(seats, kept, 10.0, 1.0, 3.6 * one)) == 4
+
+
+def test_the_woodland_commons_seats_no_crown_in_a_plots_sun():
+    """Feature 310 (GM 2026-10-02: "no canopy trees should be exempt"): a commons beside a yard throws no crown into the
+    yard's sun ground, and stands elsewhere."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT, trees_shading_plots
+
+    s = _hamlet()
+    s.sun_corridor(39)
+    s.M["threshing_yards"] = [{"x": 400.0, "y": 280.0, "w": 40.0, "h": 20.0}]  # its sun ground runs 270..340 deep into the wood
+    s.commons([(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)], role="woodland")
+    assert s.M["tree_crowns"], "non-vacuity: the wood stands"
+    assert trees_shading_plots(s.M, CANOPY_SHADE_FT) == []
