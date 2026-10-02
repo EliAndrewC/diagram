@@ -63,7 +63,11 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 
 ## Agents
 
-- The defined checks (`source-reader`, `quote-check`, `record-format`, `source-applicability`, `entry-drift`) run on
-  their pinned tiers; dispatch them in the background, each naming its bundle's MANIFEST.
+- The defined checks (`source-reader`, `quote-check`, `record-format`, `source-applicability`, `entry-drift`,
+  `intro-check`) run on their pinned tiers; dispatch them in the background, each naming its bundle's MANIFEST.
+- A check runs only where the words it reads changed (feature 311): `make record-owed` names every unit your edits owe,
+  and `make check-bundle` refuses a bundle for a check nothing owes. When a check returns, record it -
+  `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<counts>"` - or the push refuses the unit. A source-reader
+  read before its note exists is declared on its bundle: `NEW="<the claim>"`.
 - An ad-hoc agent always names a `model`: `sonnet` to read, fetch, translate or extract, `opus` for anything that
   judges.

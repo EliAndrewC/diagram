@@ -619,8 +619,9 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
+	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/entry-gate.sh $$root/scripts/plan-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
+	  : "(GUARD_EDIT_OK: feature 311 - entry-gate.sh and plan-gate.sh join it: both refuse at the push, both had companions that nothing ran, and entry-gate's had rotted)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/scripts/$$t" ]; then \
@@ -668,6 +669,24 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	if [ -f "$$uh" ]; then \
 	  if bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; then n=$$((n+1)); \
 	  else printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)\033[0m\n' "$$uh"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
+	fi; \
+	: "(GUARD_EDIT_OK: 2026-10-02 - THE PYTEST FILES THAT TEST scripts/ RUN HERE TOO, so the hooks stamp the DIRECT route"; \
+	: " demands means they passed. A scripts-only push ran only the suites above, and a shell-check change that its own"; \
+	: " suite passed broke tests/tooling/test_guard_firing_log.py in every other session gate. The GM: the tooling must"; \
+	: " do the correct thing, never a session remembering to. The files are DERIVED - every tests/**/test_*.py naming"; \
+	: " scripts/ as code - and skipped while scripts/ and they hash to their last green run (58 files, 74 s at 4 workers); under"; \
+	: " make done (FROM_DONE) test-full runs them anyway.)"; \
+	if [ -z "$(FROM_DONE)" ]; then \
+	  : "(GUARD_EDIT_OK: the same new step - a file that BUILDS a path into scripts/, not one whose docstring mentions a"; \
+	  : " script: the mention form took in the browser tests, and on a full container the OOM killer took their Chrome)"; \
+	  pyt=$$(grep -rlE '/ *"scripts"|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' | sort | tr '\n' ' '); \
+	  psha=$$( { find "$$root/scripts" -type f | sort | xargs cat; cat $$pyt; } 2>/dev/null | sha256sum | cut -c1-16); \
+	  if [ -n "$$pyt" ] && { [ -n "$(HOOKS_ALL)" ] || [ "$$(cat "$$gitdir/hooks-test/pytest-scripts" 2>/dev/null)" != "$$psha" ]; }; then \
+	    : "(GUARD_EDIT_OK: four workers, not the gate count - the hook suites above run beside it on a shared 10 GB container)"; \
+	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$pyt > "$$work/pytest-scripts.log" 2>&1; then \
+	      mkdir -p "$$gitdir/hooks-test"; echo "$$psha" > "$$gitdir/hooks-test/pytest-scripts"; n=$$((n+1)); \
+	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
+	  else skipped=$$((skipped+1)); fi; \
 	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
@@ -1126,6 +1145,19 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
 
+# GUARD_EDIT_OK: feature 311 - two new operations (the record checks a delta owes, and recording one answered); the push's refusal is entry-gate.sh, not these.
+record-owed: ## [project] every record check this delta owes (intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift), with the command that answers each   [Q=0412] [UNANSWERED=1] [BETWEEN="<a> <b>"]
+##  Q=<NNNN>        only that question's units
+##  UNANSWERED=1    only the units with no current answer record (what the push refuses)
+##  BETWEEN="a b"   the units revision b owes against revision a (a replay; no entry-drift)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
+
+record-checked: ## [project] record that a record check returned on the units it read - what answers an owed unit at the push   CHECK=<check> RESULT="<counts>" (BUNDLE=<dir> | Q=<NNNN> NOTES=<k,k> for source-reader | ... REASON="<why>")
+##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
+##  Q= NOTES= KEY= KIND=  the units the tree owes on that subject, at today's content - source-reader on named notes, or any check with REASON= (written to dev/bypass-log/)
+	@if [ -z "$(CHECK)" ] || [ -z "$(RESULT)" ]; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",)
+
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name
@@ -1209,11 +1241,17 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  Q=<NNNN>         one question (both pages; a page's file name for one): pages, notes, prepass, quote-verbatim, cited registry entries, the variant index
 ##  KEY=<key>        one source: its registry entry and its saved page
 ##  OUT=<dir>        default /tmp/l7r-check/q-<question> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches   KIND=<modal class> adds its docstring, for entry-drift   NOTES=<key,key> a RE-check of those notes only   FOR=quote-check|record-format|entry-drift only that check's parts   WHOLE=1 with KEY= the whole page in parts, for source-reader (D19)
-	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>) is required - e.g. make check-bundle Q=0087\n' >&2; exit 2; fi
+# GUARD_EDIT_OK: feature 311 - the argument check moved below, widened only to admit QS= for an intro-check batch.
 ##  QUESTION=<q>     with KEY= WHOLE=1: the research question the page is read for, on the sources-consulted ledger (feature 288)
 # GUARD_EDIT_OK: feature 288 D3 - an optional QUESTION=, nothing loosened: a WHOLE=1 read is a research read and is ledgered with it.
 # GUARD_EDIT_OK: feature 303 - the question is passed as Q, not PAGE --section; nothing loosened.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(Q)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",)
+##  FEATURE 311 - a bundle for a check nothing owes is REFUSED (`make record-owed` lists what is owed); FOR=quote-check with no NOTES= holds only the owed notes
+##  NOT_OWED_OK="<why>"  build it anyway (a backfill, an audit the GM asked for), recorded in the MANIFEST
+##  NEW="<the claim>"    with KEY= WHOLE=1: a source-reader read for a claim not yet in the record
+##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
+# GUARD_EDIT_OK: feature 311 - the bundle refuses a check nothing owes (QS=, NOT_OWED_OK=, NEW= passed through); this tightens, it loosens nothing.
+	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
