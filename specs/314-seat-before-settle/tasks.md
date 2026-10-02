@@ -23,8 +23,9 @@
 - [x] T05 the rounds alternated against the base at 15 and 40 households, recorded (SC-001, SC-003, SC-004; research R3, R5)
       research: rendering
       verify: DONE. research R4: rounds 1-4 alternated against the base, 15 hh 21.3 -> 17.5 s (-18%), 40 hh 49.1 -> 30.1 s (-39%), every seed one margin; R5 the house-and-yard check priced and withdrawn
-- [ ] T06 the next costs named and attacked until the stopping rule holds (D5; US2 scenario 2)
+- [x] T06 the next costs named and attacked until the stopping rule holds (D5; US2 scenario 2)
       research: rendering
+      verify: DONE. research R9 names every remaining cost of the 15-household stage with what an efficient process would do; R6 and R8 kept, R7 explained, R10 tried and withdrawn; the remaining lever (lanes planned before the houses) changes the GM's growth and is put to the GM
 - [ ] T07 the pool and the cohort against the base (FR-005, SC-002)
       research: rendering
 - [ ] T08 `make done`, the `314-end` bookend and `perf-report` (SC-005), `dev/performance.md`
