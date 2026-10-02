@@ -29,7 +29,7 @@ start on the feature"*. Nothing here is a decision the GM has not made; the GM's
   most of those are cited.
 - On the ledger: **2,787** name the question they were read for; outcomes are thin - 2,646 `unknown-outcome` (the
   feature-288 import), 133 `pending`, 74 `nothing-found`, 60 `rejected` with a reason, 57 `unreadable`, 33 not on the
-  ledger at all (page-cache only). Old ids in `questions` predate feature 303's flat stems (`vegetation/150`);
+  ledger at all (page-cache only). Old ids in `questions` predate feature 303's flat stems (a page name and an old number, e.g. the vegetation page's 150, now question 0075);
   `research/moved-303.json` maps them.
 - **Mechanically "no substance"** (a rule, no agent): **107** search-result pages (DuckDuckGo, Baidu `s?wd=`,
   `archive.org/advancedsearch`, `?q=` and the like) and **62** API or raw URLs (`/api/`, `action=raw`, `output=json`).
