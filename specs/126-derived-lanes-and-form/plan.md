@@ -119,7 +119,7 @@ the reasoning that we are applying and the specific research that you did."*
 
 Three destinations, three different jobs:
 
-1. **`research/homesteads.md`** - the durable, skill-level historical record, where the existing
+1. **`research/contents.json#homesteads`** - the durable, skill-level historical record, where the existing
    lane-form entry already lives. Gets the DISPERSED (R2) and LINEAR (R3) findings written to the
    same standard as the existing entry, with sources.
 2. **`specs/126-.../research.md`** - this feature's decision reasoning: what was chosen, why, and
