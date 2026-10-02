@@ -10,7 +10,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
+from l7r.diagram.settlement import PointGrid, Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import CREST_REACH, DIKE_GAP_HW, GAP_REACH, course_breaches, dike_band, dike_crest
 from l7r.diagram.sitegen.geom import net_acres, poly_area
 from l7r.diagram.waterfields import build_polder, clean_polder_parcels
@@ -72,13 +72,29 @@ def dike_gaps_at_channels(ring: list[Any], channels: Any, sluices: Any) -> list[
     """The perimeter dike's gaps: the two sluices `build_polder` names, plus a gap WHEREVER a channel actually
     crosses the ring - a dug gap is what lets water through an earthwork, and a dike drawn straight over a running
     channel is the defect `polder_dike_gapped_at_sluices` named. A crossing within 30 ft of a gap already listed
-    is that gap. Lifted out of `stage_polder` by feature 219 (a unit test on a square and two channels)."""
+    is that gap. Lifted out of `stage_polder` by feature 219 (a unit test on a square and two channels).
+
+    THE RING'S EDGES ARE BOXED ONCE (feature 306: every channel segment was asked of every edge of the ring, ~5,000
+    crossing tests on a polder map, where a segment can cross only the few edges whose box meets its own). Each edge is
+    filed in a `PointGrid` by its box grown a foot - a crossing `segments_cross` finds, and the point `seg_intersect` then
+    bounds to both segments, lies inside both boxes, so the foot only absorbs rounding - and a segment asks only the
+    edges whose grown box meets its own, IN RING ORDER, so the gaps come out in the order the full scan found them.
+    `tests/hamletgen/test_dike_gaps_index.py` holds the full scan as the oracle."""
     gaps = list(sluices)
+    n = len(ring)
+    grid = PointGrid(64.0)
+    grid.extend(
+        (k, min(ring[k][0], ring[(k + 1) % n][0]) - 1.0, min(ring[k][1], ring[(k + 1) % n][1]) - 1.0, max(ring[k][0], ring[(k + 1) % n][0]) + 1.0, max(ring[k][1], ring[(k + 1) % n][1]) + 1.0)
+        for k in range(n)
+    )
     for ch in channels:
         pts = ch["pts"]
         for i in range(len(pts) - 1):
-            for k in range(len(ring)):
-                a, b = ring[k], ring[(k + 1) % len(ring)]
+            sx0, sx1 = min(pts[i][0], pts[i + 1][0]), max(pts[i][0], pts[i + 1][0])
+            sy0, sy1 = min(pts[i][1], pts[i + 1][1]), max(pts[i][1], pts[i + 1][1])
+            near = {e for e in grid.near((sx0 + sx1) / 2.0, (sy0 + sy1) / 2.0, max(sx1 - sx0, sy1 - sy0) / 2.0) if e[1] <= sx1 and e[3] >= sx0 and e[2] <= sy1 and e[4] >= sy0}
+            for k in sorted(e[0] for e in near):
+                a, b = ring[k], ring[(k + 1) % n]
                 if segments_cross(tuple(pts[i]), tuple(pts[i + 1]), a, b):
                     hit = seg_intersect(tuple(pts[i]), tuple(pts[i + 1]), a, b)
                     if hit is not None and not any(math.hypot(hit[0] - g[0], hit[1] - g[1]) < 30 for g in gaps):

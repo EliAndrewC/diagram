@@ -16,8 +16,9 @@ fill finds and the path it returns answer the same question, and the result is c
 from __future__ import annotations
 
 import math
+from bisect import bisect_right
 from collections import deque
-from collections.abc import Sequence, Set
+from collections.abc import Iterator, Sequence, Set
 from functools import lru_cache
 
 from l7r.diagram.settlement import edge_dist, point_in_poly, seg_dist
@@ -35,31 +36,74 @@ EXIT_OVERSHOOT_FT = 400.0
 connector's own rule: a track that overshoots is trimmed by the view, one that stops short reads as a dead end)."""
 
 
+def _span(lo: float, hi: float, n: int, org: float, cell: float) -> range:
+    """The grid's indices whose cell centers can lie in [lo, hi], with a cell to spare above (the scan's own range)."""
+    return range(max(0, int((lo - org) // cell)), min(n, int((hi - org) // cell) + 2))
+
+
+def _near_cells(a: Pt, b: Pt, r: float, x0: float, y0: float, nx: int, ny: int, cell: float) -> Iterator[tuple[int, int]]:
+    """Every cell whose center COULD stand within `r` of the segment ab, a row at a time (feature 306): a point within r of
+    the segment has its nearest point on the segment within r of it in y AND in x, so a row's cells are those within r in
+    x of the part of the segment within r of the row's center line in y. A millionth of a foot is added to r, so rounding
+    in the slice never drops a cell the exact `seg_dist` test would keep - the test still decides."""
+    rr = r + 1e-6
+    for j in _span(min(a[1], b[1]) - r, max(a[1], b[1]) + r, ny, y0, cell):
+        cy = y0 + (j + 0.5) * cell
+        if a[1] == b[1]:
+            lo, hi = min(a[0], b[0]), max(a[0], b[0])
+        else:
+            t0, t1 = (cy - rr - a[1]) / (b[1] - a[1]), (cy + rr - a[1]) / (b[1] - a[1])
+            t0, t1 = max(0.0, min(t0, t1)), min(1.0, max(t0, t1))
+            if t0 > t1:
+                continue
+            lo, hi = sorted((a[0] + (b[0] - a[0]) * t0, a[0] + (b[0] - a[0]) * t1))
+        for i in _span(lo - rr, hi + rr, nx, x0, cell):
+            yield i, j
+
+
 def _blocked_cells(walls: Sequence[tuple[Poly, float]], lines: Sequence[tuple[Pt, Pt]], x0: float, y0: float, nx: int, ny: int, cell: float) -> set[tuple[int, int]]:
     """The cells a point of which could stand inside a wall, within its margin of one, or on a water line: a cell whose
     CENTER stands within the margin plus half the cell's diagonal of a wall, or within one cell of a water line. So every
-    point of a walkable cell keeps the margin, which is what makes the pulled path clear by construction."""
+    point of a walkable cell keeps the margin, which is what makes the pulled path clear by construction.
+
+    RASTERIZED, NOT SCANNED (feature 306, the GM's rule that an overlap check against more than a few things means the
+    box or the line to stay on the right side of was never drawn). This asked every cell of a wall's box `point_in_poly`
+    and `edge_dist` - each a walk of the WHOLE ring - so a 71-vertex field envelope over a 322-cell canvas was ~100,000
+    ring walks a call (1.5 s of Kuwabata's track stage). The same two questions are asked of the same numbers in two
+    cheaper orders: INSIDE a row at a time - the ray test's crossings of that row, each the very expression
+    `point_in_poly` evaluates, sorted once, and a cell is inside when an odd number of them lie past its center (the ray
+    test counts exactly the crossings with `cx < x`); WITHIN THE MARGIN an edge at a time - `edge_dist < r` is "some edge's
+    `seg_dist` is under r", and only the cells of that edge's own box grown by r can be. Identical cells, by construction;
+    `tests/hamletgen/ways/test_dry_exit_raster.py` holds the old scan as the oracle. An edge's or a water line's cells are
+    asked a row at a time (`_near_cells`), so a long diagonal asks the strip beside it and not its whole box."""
     out: set[tuple[int, int]] = set()
     pad = cell * math.sqrt(0.5)
-
-    def span(lo: float, hi: float, n: int, org: float) -> range:
-        return range(max(0, int((lo - org) // cell)), min(n, int((hi - org) // cell) + 2))
-
     for poly, margin in walls:
         if len(poly) < 3:
             continue
+        reach = margin + pad
+        n = len(poly)
         bx0, by0 = min(p[0] for p in poly) - margin - pad, min(p[1] for p in poly) - margin - pad
         bx1, by1 = max(p[0] for p in poly) + margin + pad, max(p[1] for p in poly) + margin + pad
-        for i in span(bx0, bx1, nx, x0):
-            for j in span(by0, by1, ny, y0):
-                cx, cy = x0 + (i + 0.5) * cell, y0 + (j + 0.5) * cell
-                if point_in_poly(cx, cy, poly) or edge_dist(cx, cy, poly) < margin + pad:
+        cols = _span(bx0, bx1, nx, x0, cell)
+        # `point_in_poly`'s edges as it pairs them - vertex i with the one before it - so each crossing is its own number
+        ray = [(poly[k][0], poly[k][1], poly[k - 1][0], poly[k - 1][1]) for k in range(n)]
+        for j in _span(by0, by1, ny, y0, cell):
+            cy = y0 + (j + 0.5) * cell
+            xs = sorted((xj - xi) * (cy - yi) / (yj - yi + 1e-9) + xi for xi, yi, xj, yj in ray if (yi > cy) != (yj > cy))
+            if xs:
+                for i in cols:
+                    if (len(xs) - bisect_right(xs, x0 + (i + 0.5) * cell)) & 1:
+                        out.add((i, j))
+        for k in range(n):
+            a, b = poly[k], poly[(k + 1) % n]  # `edge_dist`'s own pairing, so `seg_dist` reads the same endpoints in the same order
+            for i, j in _near_cells(a, b, reach, x0, y0, nx, ny, cell):
+                if (i, j) not in out and seg_dist(x0 + (i + 0.5) * cell, y0 + (j + 0.5) * cell, a, b) < reach:
                     out.add((i, j))
     for a, b in lines:
-        for i in span(min(a[0], b[0]) - cell, max(a[0], b[0]) + cell, nx, x0):
-            for j in span(min(a[1], b[1]) - cell, max(a[1], b[1]) + cell, ny, y0):
-                if seg_dist(x0 + (i + 0.5) * cell, y0 + (j + 0.5) * cell, a, b) < cell:
-                    out.add((i, j))
+        for i, j in _near_cells(a, b, cell, x0, y0, nx, ny, cell):
+            if (i, j) not in out and seg_dist(x0 + (i + 0.5) * cell, y0 + (j + 0.5) * cell, a, b) < cell:
+                out.add((i, j))
     return out
 
 

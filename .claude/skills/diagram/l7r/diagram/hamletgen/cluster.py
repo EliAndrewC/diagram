@@ -10,6 +10,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect
+from l7r.diagram.settlement._geom import seg_reach_index
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from .consts import WIND_BACK_MIN_DOT, Poly, Pt
@@ -29,6 +30,13 @@ def below_drain(pt: Pt, drain: Poly, dx: float, dy: float, band: float = 150.0) 
     d = seg_dist(pt[0], pt[1], drain[near], drain[near + 1])
     proj = seg_closest(pt[0], pt[1], drain[near], drain[near + 1])
     return (pt[0] - proj[0]) * dx + (pt[1] - proj[1]) * dy > 18.0 and d <= band
+
+
+def nearest_within(index: Any, px: float, py: float, reach: float) -> float:
+    """The distance from (px, py) to the nearest segment of a `seg_reach_index` built at `reach`, exactly as a scan of
+    every segment finds it, when that is under `reach`; otherwise `reach` (feature 306). A segment whose grown box does not
+    hold the point stands at least `reach` off, so the minimum under `reach` is always among those `near` returns."""
+    return min((seg_dist(px, py, a, b) for a, b, _r, bx0, by0, bx1, by1 in index.near(px, py) if bx0 <= px <= bx1 and by0 <= py <= by1), default=reach)
 
 
 def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reach: float = 2.6, samples: int = 7) -> float:
@@ -173,6 +181,13 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     # `CLUSTER_BAND_ASPECT` for the census that showed the knob was dead. Area is held, so a
     # round hamlet is a compact blob and an elongated one a long string of the same ground.
     dep, lat = band_extent(plan.spec.households, plan.cluster_shape)
+    # THE DRY PLOTS' EDGES AND THE BROOK, INDEXED ONCE (feature 306: every margin asked every edge of every dry plot for
+    # its hem and every brook segment for each of fifteen band points - ~30,000 distance tests a seat). The hem only
+    # scores while it is under two band depths, and the brook only while a point is within 30 ft of it, so each is filed
+    # in a `seg_reach_index` grown by that reach and a margin asks only the segments whose grown box holds it. The nearest
+    # one under the reach is the same number the full scan's minimum was; past it the penalty is 0 either way.
+    hem_index = seg_reach_index([([*p, p[0]], 0.0) for p in dry_plots if len(p)], 2.0 * dep) if dry_plots else None
+    brook_index = seg_reach_index([(list(brook), 0.0)], 30.0) if brook else None
 
     ranked: list[tuple[float, Pt, Pt]] = []  # the wind-facing margins with room for their belt, in the order met
     turned: list[tuple[float, Pt, Pt]] = []  # margins whose back is turned to the wind off a flank (`margin_candidates`)
@@ -245,7 +260,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # around the field to the free shoulder. Nothing here says WHICH shoulder - the geometry
         # does, which is why this works on a fan that came out a different shape.
         if dry_plots:
-            hem = min(min(seg_dist(mid[0], mid[1], p[i], p[(i + 1) % len(p)]) for i in range(len(p))) for p in dry_plots)
+            hem = nearest_within(hem_index, mid[0], mid[1], 2.0 * dep)
             score -= 1.6 * max(0.0, 1.0 - hem / (2.0 * dep))
             score -= 2.5 * back_fouled(mid, (nx, ny), dep, dry_plots)
         # ...AND MINUS THE BROOK ON THE BAND. A band whose sample points stand on the water is ground the houses cannot
@@ -266,7 +281,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # not give.
         if brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
-            crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
+            crossed = sum(1 for q in _bp if nearest_within(brook_index, q[0], q[1], 30.0) < 30.0) / len(_bp)
             score -= 3.0 * crossed
         # ...AND A BELT WITH GROUND TO STAND ON (settlement-review of Mizuguchi, feature 261, two rounds). The windbreak
         # stands 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the
