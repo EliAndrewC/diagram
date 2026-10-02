@@ -1,0 +1,22 @@
+{
+  "perf-control-seed4-15-base": {
+    "verifies": "the band-1/2 readings of 306-end against 306-start on seed 4 at 15 households (+9.3%, homesteads +1.2 s)",
+    "subject": "perf bookend, reference spec, seed 4, 15 households, the homesteads stage",
+    "value": 1.09,
+    "unit": "s, the homesteads stage on the base engine (median of three)",
+    "quantity": "three alternated runs each: the base engine (/tmp/base306, 8d15b8a27) 1.06/1.09/1.12 s, 1 margin, 459 offers; the seating's band alone (SEATING_GROUND_FT 162, dry cap and rescue off) 5.88/6.47/6.21 s, 3 margins, 3,300 offers; the band with both (as shipped) 2.34/2.39/2.44 s, 1 margin, 1,461 offers. With the band's spread removed (the base) the seed seats on its first margin in ~1.1 s: the increase is the wider spread at a small count, which the rescue mostly takes back",
+    "source": "scratchpad legs.py, HH=15, seed 4",
+    "command": "HH=15 ROOT=<tree> LEG=base|band|band+both python3 legs.py 4",
+    "round": "d8740002b"
+  },
+  "perf-control-seed39-40-band-alone": {
+    "verifies": "the band-2 reading of 306-end against 306-start on seed 39 at 40 households (+10.3%, homesteads +3.3 s)",
+    "subject": "perf bookend, reference spec, seed 39, 40 households, the homesteads stage",
+    "value": 7.45,
+    "unit": "s, the homesteads stage with the dry cap and rescue off",
+    "quantity": "research R15 back to back: base 10.18 s (4 margins), the band alone 7.45 s (3 margins, 2,883 offers), the band with both 13.96 s (3 margins, 5,655 offers) - with the rescue removed the seed is faster than the base; the rescue searches this seed's near miss and the next margin seats it anyway",
+    "source": "specs/306-seat-by-packing/research.md R15",
+    "command": "ROOT=<tree> LEG=base|band|band+both python3 legs.py 39",
+    "round": "177069610"
+  }
+}

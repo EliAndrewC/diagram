@@ -201,3 +201,14 @@ corner rounded (the earlier seed-903 fix, `homesteads/rows.py`): the pool clean,
 could not roll at all), every household seated, the first margin on 9 of 16 against 1 of 15 (11 of 16 with D2). **D2 on top of D1: GO** - 100.0 -> 83.3 s; it saves
 margins on seeds 25 (8 -> 1), 8 (3 -> 1) and 6 (5 -> 4) and costs seed 39 (7.45 -> 13.96 s: the rescue searched a near miss that
 the next margin seated anyway); no seed seats fewer.
+
+## R16. The goals judged (observed 2026-10-02, method: R15's back-to-back run; the 306-start / 306-end bookends, `make perf-report AGAINST=306-start`)
+
+(Observed 2026-10-02, method: as the heading.) **SC-002 (under 4 s at 40 households on every reference seed): MISSED** on seeds
+2 (8.0 s), 6 (12.0), 7 (5.0), 12 (12.6) and 39 (14.0) of R15's sixteen; met on the other eleven (2.2-3.7 s). **SC-003 (at most
+two margins, at most five offers a house): MISSED** - two margins or fewer on 13 of 16, but 383-5,927 offers for 40 households
+(about 10-148 a house). **SC-004**: the cohort 30/30, the pool clean. **SC-005**: the census flags none. **SC-006 (the
+15-household reference not slower): the total is 13.8% faster** (10 households -8.8%, 20 -46.4%, 40 -66.8%), with seed 4 at 15
+households +9.3% (the band's spread; perf-control-seed4-15-base) and seed 39 at 40 +10.3% (the rescue;
+perf-control-seed39-40-band-alone) - band 2, explained and audited (dev/perf-log/). FR-002's further rounds were run (rounds
+2-7, R2-R7) and the misses survive them: raised with the GM.

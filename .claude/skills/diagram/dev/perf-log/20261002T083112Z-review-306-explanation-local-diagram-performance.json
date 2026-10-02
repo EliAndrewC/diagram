@@ -1,0 +1,390 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "8d15b8a27",
+    "label": "306-start",
+    "utc": "20261002T071251Z"
+  },
+  "binding": "0b075b64b17f0f48c409003cd89f73a5ebe17990d103a2e7fe1bf10209938e89",
+  "control": "perf-control-seed4-15-base",
+  "control_record": {
+    "command": "HH=15 ROOT=<tree> LEG=base|band|band+both python3 legs.py 4",
+    "file": "/diagram/.clones/diagram-performance/specs/306-seat-by-packing/measurements.json",
+    "key": "perf-control-seed4-15-base",
+    "quantity": "three alternated runs each: the base engine (/tmp/base306, 8d15b8a27) 1.06/1.09/1.12 s, 1 margin, 459 offers; the seating's band alone (SEATING_GROUND_FT 162, dry cap and rescue off) 5.88/6.47/6.21 s, 3 margins, 3,300 offers; the band with both (as shipped) 2.34/2.39/2.44 s, 1 margin, 1,461 offers. With the band's spread removed (the base) the seed seats on its first margin in ~1.1 s: the increase is the wider spread at a small count, which the rescue mostly takes back",
+    "round": "d8740002b",
+    "source": "scratchpad legs.py, HH=15, seed 4",
+    "subject": "perf bookend, reference spec, seed 4, 15 households, the homesteads stage",
+    "unit": "s, the homesteads stage on the base engine (median of three)",
+    "value": 1.09,
+    "verifies": "the band-1/2 readings of 306-end against 306-start on seed 4 at 15 households (+9.3%, homesteads +1.2 s)"
+  },
+  "end": {
+    "commit": "0966873d3",
+    "label": "306-end",
+    "utc": "20261002T082817Z"
+  },
+  "environment": "local",
+  "explanation": "Two seeds slower, every size faster in total (10 hh -8.8%, 15 hh -13.8%, 20 hh -46.4%, 40 hh -66.8%). Seed 4 at 15 households (+9.3%, homesteads +1.2 s): the seating's band (SEATING_GROUND_FT 162) spreads a small cluster wider, more seats lose their straight corridor and the first margin falls short alone (6.2 s, 3 margins); the rescue takes most of it back (2.4 s, 1 margin) against the base's 1.1 s. Seed 39 at 40 households (+10.3%, homesteads +3.3 s): the rescue searches a near miss the next margin seats anyway; with the rescue off the seed is faster than the base (7.45 s against 10.18). Both levers are each GO on their own sixteen-seed verdicts (research R15: 427.7 -> 95.0 -> 83.3 s).",
+  "feature": "306-seat-by-packing",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261002T083112Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -21.2,
+          "39": 3.3,
+          "4": 9.4,
+          "47": -26.7
+        },
+        "total_pct": -8.8
+      },
+      "20": {
+        "seeds": {
+          "25": -61.5,
+          "39": -25.9,
+          "4": -23.4,
+          "47": -53.2
+        },
+        "total_pct": -46.4
+      },
+      "40": {
+        "seeds": {
+          "25": -57.9,
+          "39": 10.3,
+          "4": -74.7,
+          "47": -86.6
+        },
+        "total_pct": -66.8
+      }
+    },
+    "seeds": {
+      "25": -32.6,
+      "39": -21.1,
+      "4": 9.3,
+      "47": -17.4
+    },
+    "total_pct": -13.8
+  },
+  "render": "perf bands [local]: 306-end vs 306-start -> band 2\n  seed   4    +9.3%; grew: homesteads +1.2s, web +0.1s\n  seed  25   -32.6%\n  seed  39   -21.1%\n  seed  47   -17.4%\n  TOTAL      -13.8%\n  10 households: TOTAL   -8.8% -> band 1\n    seed   4    +9.4%; grew: web +0.2s, homesteads +0.2s, hinterland +0.1s\n    seed  25   -21.2%\n    seed  39    +3.3%; grew: notice +0.5s\n    seed  47   -26.7%\n  20 households: TOTAL  -46.4% -> band 0\n    seed   4   -23.4%\n    seed  25   -61.5%\n    seed  39   -25.9%\n    seed  47   -53.2%\n  40 households: TOTAL  -66.8% -> band 2\n    seed   4   -74.7%\n    seed  25   -57.9%\n    seed  39   +10.3%; grew: homesteads +3.3s\n    seed  47   -86.6%\n  crossed: 40 households: seed 39 +10.3% > 10%\n  owes: band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.0
+      ],
+      "field": [
+        0.65,
+        0.5
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.68,
+        0.52
+      ],
+      "homesteads": [
+        0.9,
+        0.79
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.22,
+        0.09
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.06,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.13,
+        0.48
+      ],
+      "windbreak": [
+        0.41,
+        0.31
+      ],
+      "woodland": [
+        0.03,
+        0.03
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.08,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.57,
+        0.43
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.65,
+        0.47
+      ],
+      "homesteads": [
+        0.91,
+        0.86
+      ],
+      "labels": [
+        0.02,
+        0.02
+      ],
+      "notice": [
+        0.13,
+        0.19
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.01
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.05,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.66,
+        0.4
+      ],
+      "windbreak": [
+        0.54,
+        0.38
+      ],
+      "woodland": [
+        0.17,
+        0.11
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.09,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.05,
+        0.01
+      ],
+      "field": [
+        0.74,
+        0.7
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        1.17,
+        0.73
+      ],
+      "homesteads": [
+        1.38,
+        2.57
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.22,
+        0.11
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.13,
+        0.14
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.82,
+        0.93
+      ],
+      "windbreak": [
+        0.59,
+        0.4
+      ],
+      "woodland": [
+        0.13,
+        0.15
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.08,
+        0.06
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.62,
+        0.56
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.67,
+        0.72
+      ],
+      "homesteads": [
+        1.15,
+        1.16
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.2,
+        0.13
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.08,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.05,
+        0.56
+      ],
+      "windbreak": [
+        0.59,
+        0.41
+      ],
+      "woodland": [
+        0.08,
+        0.04
+      ]
+    }
+  },
+  "verdict": "pending"
+}
