@@ -389,6 +389,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.fabric._margin_frame
         l7r.diagram.hamletgen.ways.web._lay_skeleton
         l7r.diagram.settlement._knobs.web_cuts
+        l7r.diagram.hamletgen.ways.web.lay_reachable_runs
         l7r.diagram.hamletgen.ways.web._reachable_runs
         l7r.diagram.hamletgen.ways.serve._lay_web_lane
         l7r.diagram.hamletgen.ways.sweeps._join_orphan_ways
@@ -581,8 +582,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # lane is drawn there is no clean way to take it back, and the version that judged each run as it
     # went could only ever refuse the ones it had not reached yet. Growing the component from the
     # skeleton outward also lets a run join THROUGH another web run, which is what a framework is.
-    for run in _reachable_runs(cands, _net_segs(s)):
-        _lay_web_lane(s, run, hard, walls, list(plan.watercourses) + drawn_water, belts=belts, houses=[(float(h["x"]), float(h["y"])) for h in houses])
+    lay_reachable_runs(s, cands, hard, walls, list(plan.watercourses) + drawn_water, belts, [(float(h["x"]), float(h["y"])) for h in houses])
     # A WEB LANE STOPS WHERE IT STOPS SERVING. Clipping ends an arm wherever the crop or a steading
     # happens to begin, which can leave a tail running on into bare grass - `lanes_reach_something`
     # is right to call that a tread that serves nobody. The engine already owns this trim; the web
@@ -760,6 +760,12 @@ def kept_connector(pts: Poly, pulled: Poly, solid: Sequence[tuple[float, float, 
     unless a leg of that runs through a building (`law.breaks_through` over `solid`), where the connector stays as placed
     (`pts`) - the pull-back is a tidy-up, and the connector's placer decided it runs through nothing (ways: break-mid-run)."""
     return list(pts) if law.breaks_through(pulled, solid) else pulled
+
+
+def lay_reachable_runs(s: Settlement, cands: Sequence[Poly], hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], belts: Sequence[Poly], houses: Sequence[Pt]) -> int:
+    """Draw every candidate run the way network can reach (`_reachable_runs`), each through `_lay_web_lane`; how many it
+    drew. Lifted from `stage_web` (feature 146's rule) when the pool's maps stopped laying a web lane at all (2026-10-02)."""
+    return sum(1 for run in _reachable_runs(cands, _net_segs(s)) if _lay_web_lane(s, run, hard, walls, water, belts=belts, houses=houses))
 
 
 def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -> list[Poly]:
