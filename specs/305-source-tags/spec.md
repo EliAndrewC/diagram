@@ -242,7 +242,7 @@ to it.
   section heading, the headings follow the rule file's order, and every work in full shows a label per tag, each with
   its explanation as hover text.
 - **SC-004**: An independent `source-applicability` check of a stratified sample of at least 60 entries, covering every
-  period and region value, rules at least 95% of the sampled tags correct. Every wrong tag found is fixed, and the
+  period and region value, rules at least 19 in 20 of the sampled tags correct. Every wrong tag found is fixed, and the
   sample's error pattern is checked across the rest of the registry.
 - **SC-005**: After the trim, the same sample shows no write-up restating a category limit its labels state, and no
   write-up lost a source-specific limit or its reason for applying.
