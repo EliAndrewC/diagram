@@ -58,7 +58,8 @@ TIERS: dict[str, tuple[str, str]] = {
     "glyph-check": ("opus", "high"),  # feature 294: the element-in-place check, owed on its occasion
     "fix-check": ("sonnet", "high"),  # feature 294: the GM-complaint fix check; T34: Opus + 3/3 Sonnet found the unfired fix
     "perf-audit": ("opus", "high"),
-    "effort-grader": ("opus", "high"),  # feature 293: one fixed grader for both tasks of the effort experiment (FR-010)
+    "effort-grader": ("opus", "high"),
+    "source-filter": ("opus", "medium"),  # feature 312: judges a source with no question in hand; calibrated three runs a leg (R2)  # feature 293: one fixed grader for both tasks of the effort experiment (FR-010)
 }
 
 

@@ -92,7 +92,11 @@ def host(url: str) -> str:
     u = url.strip()
     if not re.match(r"^[a-z][a-z0-9+.-]*://", u, re.I):
         u = "https://" + u
-    return (urllib.parse.urlsplit(u).hostname or "").lower().strip(".")
+    try:
+        return (urllib.parse.urlsplit(u).hostname or "").lower().strip(".")
+    except ValueError:  # a malformed URL on the ledger (`[` in its host, measured 2026-10-02) - its host by pattern
+        m = re.match(r"^[a-z][a-z0-9+.-]*://([^/?#:]+)", u, re.I)
+        return (m.group(1) if m else "").lower().strip(".[]")
 
 
 def blocked(url: str, record_dir: str = RESEARCH_DIR) -> Rule | None:

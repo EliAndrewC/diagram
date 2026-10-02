@@ -139,8 +139,8 @@ def consulted_urls(root: pathlib.Path) -> list[str]:
             urls.setdefault(src.norm(url), rec.clean(url))
     for row in src.read(home):
         n = row.get("url", "")
-        if n:
-            urls.setdefault(n, "https://" + n)
+        if n:  # its spelling as read: the normalized form drops `www.`, which some hosts need (J-STAGE, feature 312)
+            urls.setdefault(n, rec.clean(row["raw"]) if str(row.get("raw", "")).startswith("http") else "https://" + n)
     return sorted(u for n, u in urls.items() if n not in seen_norm)
 
 

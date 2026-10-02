@@ -36,8 +36,13 @@ def _home() -> pathlib.Path:
     return pathlib.Path(os.environ["L7R_SOURCES_HOME"])
 
 
+@pytest.fixture(autouse=True)
+def _attempts_here(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The conftest's seam pointed at this test's own tree, so a test's log is the tree it builds."""
+    monkeypatch.setenv("L7R_ATTEMPTS_ROOT", str(tmp_path))
+
+
 def _root(tmp_path: pathlib.Path) -> pathlib.Path:
-    os.environ["L7R_ATTEMPTS_ROOT"] = str(tmp_path)  # the conftest's seam, pointed at this test's tree
     (tmp_path / ".git").mkdir()
     r = tmp_path / at.RESEARCH
     r.mkdir(parents=True)

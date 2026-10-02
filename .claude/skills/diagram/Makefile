@@ -1280,6 +1280,11 @@ source-outcome: ## [project] record what came of reading a source page on the ho
 # GUARD_EDIT_OK: feature 312 FR-017 - an optional SOUGHT=, nothing loosened: the outcome is also written to the attempts log.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
 
+# GUARD_EDIT_OK: feature 312 FR-006 - FR-011 - a new operation (the uncited pages judged once: the set, the rule, the fetch, the filter's bundles, its verdicts, the calibration's score); no guard changes.
+uncited: ## [project] the uncited pages judged once - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=<dir> [LIMIT=n] [START=n] | apply DIRS="<bundle> ..." | score DIR=<bundle> ANSWERS=<labels.json> | report (feature 312)   DO=<step>
+	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|report is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_uncited.py" $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",)
+
 # GUARD_EDIT_OK: feature 312 FR-018 - a new operation (print the attempts log for a source or a question); no guard changes.
 attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
 	@if [ -z "$(URL)$(KEY)$(Q)" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi

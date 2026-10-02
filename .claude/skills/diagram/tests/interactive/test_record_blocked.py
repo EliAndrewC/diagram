@@ -38,6 +38,8 @@ def _lists(tmp_path: pathlib.Path, domains: list[dict] | None = None, patterns: 
         ("https://notai-wiki.example/x", False),
         ("https://ai-wiki.example.org/x", False),
         ("https://other.example/ai-wiki.example", False),
+        ("https://[ai-wiki.example/x", True),
+        ("https://[bad/x", False),
     ],
 )
 def test_a_domain_blocks_itself_and_its_subdomains_only(tmp_path: pathlib.Path, url: str, hit: bool) -> None:
