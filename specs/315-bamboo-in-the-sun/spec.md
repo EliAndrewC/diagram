@@ -19,12 +19,17 @@ a neighbor's farmhouse, reckoned at a 20 ft ridge, keeps the south strip; a cano
 record gives a working windbreak's tree, keeps the canopy reach east, west and south. Bamboo was left out on the GM's
 earlier "maybe bamboo", which the GM now says was not a ruling.
 
-**What the research says.** Bamboo is not low. Madake, the timber bamboo a farm kept for its baskets and its building, has
-culms of 10-20 m, and hachiku 10-15 m (to be cited from the pages read in the plan's research pass); the record's bamboo page
-already has madake reaching "roughly 20 m" and growing in close thickets that shade out almost everything else
-(`research/questions/0075-bamboo-groves-chikurin.html`). A bamboo stand at its least height is as tall as the tree the
-canopy reach is worked out from, so the same derivation gives it the same reach. Bamboo therefore does not deserve the
-exempt list, and its distance is the one its height gives.
+**What the research says (to be confirmed by the record's checks in the plan).** Bamboo is not low. A bamboo maker's
+page (https://www.taketora.co.jp/c/special/bamboo, saved and grepped 2026-10-02) gives madake, the timber bamboo a farm
+kept for its baskets and its building, culms of 10-20 m; hachiku 10-15 m; moso, the largest, 10-20 m. The record's bamboo
+page already has madake reaching "roughly 20 m" in close thickets that shade out almost everything else, and its Tonami
+passage lists a farm grove's bamboo stands as madake, moso, hachiku and yadake
+(`research/questions/0075-bamboo-groves-chikurin.html`). Yadake is shorter, 2-5 m, and is classed as a bamboo grass (sasa),
+not a bamboo (Kotobank, https://kotobank.jp/word/%E7%9F%A2%E7%AB%B9-648513; a regional plant survey,
+https://mikawanoyasou.org/data/yadake.htm), so in the Tonami grove it stood beside three timber bamboos, not in their
+place. The ministry's bamboo page (https://www.maff.go.jp/j/pr/aff/1301/spe1_02.html) refused the fetch (403) and is not
+relied on. What the plan's reading must confirm: the timber bamboos' least height, and so whether a bamboo stand's reach
+equals the canopy reach.
 
 **Where bamboo stands on our maps** (one-shot count, observed 2026-10-02; method: the recorded stands' outlines and the
 culm marks parsed from each SVG, each tested against every plot's sun ground at the canopy reach):
@@ -95,8 +100,10 @@ modal still calls bamboo exempt from the sun rule.
 
 - **FR-001**: No bamboo - a household's stand, a shared thicket, or a culm mark in a farm grove, a windbreak or a belt -
   MUST stand in a threshing yard's or garden bed's sun ground at bamboo's reach, on any scripted map.
-- **FR-002**: Bamboo's reach MUST be worked out from its least cited height by the same derivation the canopy reach uses
-  (the late-autumn sun at the map's latitude), and stated beside the rule with the heights it comes from.
+- **FR-002**: Bamboo's reach MUST be worked out, by the same derivation the canopy reach uses (the late-autumn sun at the
+  map's latitude), from the least cited height of the bamboo our stands and culm marks stand for - the timber bamboos
+  (madake, hachiku, moso), the kinds the record puts in a farm's stands and grove - and stated beside the rule with the
+  heights it comes from. A grove's bamboo, drawn without a kind, is held at the timber bamboos' reach.
 - **FR-003**: Every bamboo placer MUST test a mark's or a stand's seat against the sun ground before drawing it, as every
   crown placer does.
 - **FR-004**: Every drawn bamboo mark and stand MUST be recorded on the manifest, so the finished map's check reads them.
@@ -129,7 +136,8 @@ modal still calls bamboo exempt from the sun rule.
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | Bamboo is held to the sun rule, not exempt | historically accurate for the heights; the rule itself a guess, as feature 310's is | the GM asked to look it up and keep the exemption only if bamboo deserves it; the timber bamboos a farm kept stand at least as tall as the tree the canopy reach is reckoned from, in thickets that shade out almost everything else | the sun page; `tree_shade.py` |
-| Bamboo's reach is worked out from its least cited height, by the canopy reach's own derivation | guess (the least height, as for trees; taller stands would reach further) | the GM expected a different distance for different things; the derivation gives each thing its own, and bamboo's least height is the tree's | the sun page; the plan |
+| Bamboo's reach is worked out from the timber bamboos' least cited height, by the canopy reach's own derivation | guess (the least height, as for trees; taller stands would reach further) | the GM expected a different distance for different things; the derivation gives each thing its own distance from its own height, and what that height comes to is for the plan's reading to confirm | the sun page; the plan |
+| A grove's bamboo, drawn without a kind, is held at the timber bamboos' reach, not yadake's | guess | the Tonami grove held madake, moso and hachiku beside yadake, a shorter bamboo grass; a patch drawn without a kind may hold any of them, and the tall ones decide its shade | the sun page; the bamboo drawing page |
 | The coppiced mulberry and the tea hedge stay outside the rule | as feature 310 recorded | not tall; unchanged here | feature 310's spec |
 
 ## Assumptions
@@ -142,3 +150,4 @@ modal still calls bamboo exempt from the sun rule.
 
 | round | reviewer | verdict | what it found |
 |---|---|---|---|
+| spec 1 | spec-fidelity | CHANGES REQUIRED | the height setting the reach left out yadake, a kind the record puts in the grove, and was stated as settled before the reading |
