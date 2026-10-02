@@ -168,3 +168,9 @@ Settled:
 `high-risk-sources.md` also lists the 7 cited URLs still unreachable after a retry on 2026-10-02 (the other 7 of 14
 came back: 6 archived, two of them the GM's own notes on GitHub, and 1 partial).
 
+## Split (GM, 2026-10-02)
+
+The download-list system AND the access tags moved to feature 313 (`specs/313-download-list/request.md`), which lands
+first so the GM can begin downloading early. The GM: "Yes, I think I do want you to split the download list system into
+its own small feature" and "do include the access tags thing as part of uh, feature 313." This feature builds on both.
+
