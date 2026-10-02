@@ -111,11 +111,11 @@ no placer keeps a different reach for a canopy crown.
 
 ### Measurable Outcomes
 
-- **SC-001**: On the five pool hamlets, zero canopy crowns stand in a plot's sun ground (from 95, 78, 98, 10 and 143).
-- **SC-002**: On a cohort of at least 24 rolled seeds, zero canopy crowns stand in a plot's sun ground, and every seed that
+- **SC-001** (FR-001, FR-002, FR-004, FR-005): On the five pool hamlets, zero canopy crowns stand in a plot's sun ground (from 95, 78, 98, 10 and 143).
+- **SC-002** (FR-001, FR-004, FR-005): On a cohort of at least 24 rolled seeds, zero canopy crowns stand in a plot's sun ground, and every seed that
   produced a map before the change produces one after (no regression).
-- **SC-003**: The record names exactly one exemption among canopy trees, bamboo, as the GM's choice, and states the coppiced mulberry and the tea hedge as not canopy, each with its class and reason.
-- **SC-004**: Each pool hamlet's drawn household wood and windbreak are measured before and after, and any drop is
+- **SC-003** (FR-003, FR-006, FR-007): The record names exactly one exemption among canopy trees, bamboo, as the GM's choice, and states the coppiced mulberry and the tea hedge as not canopy, each with its class and reason.
+- **SC-004** (FR-001, FR-004): Each pool hamlet's drawn household wood and windbreak are measured before and after, and any drop is
   reported with the ground the sun rule took.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*

@@ -46,7 +46,7 @@ field rock, grave island, and every field, water, way and building class.
 | the persimmon | `homestead_parts/fixture_seats.py` | one tree a household | seats itself out of the sun ground | `tree_crowns` |
 
 Not canopy: the bamboo culm marks and stands (FR-003); the perimeter dike's and the mulberry dikes' coppiced mulberry, "for the
-most part trained as low bushes ... pruned once a year to 1.5 to 1.8 m" (`research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`);
+most part trained as low bushes" (`research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`);
 and the tea dike's hedge, clipped to about 3 ft wide (`fields/landuse.py`) -
 each a bush of the bank cut back as a crop, which the code calls "not canopy"
 (`land/dikes.py`, `fields/landuse.py`).
