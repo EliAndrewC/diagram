@@ -1,7 +1,7 @@
 {
- "captured": "2026-10-02T13:32:32+00:00",
+ "captured": "2026-10-02T18:32:28+00:00",
  "final_url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md",
- "first": "",
+ "first": "b8/b8fdbcdbdae2/20261002T183226Z",
  "gm_copies": [],
  "keys": [
   "l7r-median-domain",
@@ -21,10 +21,10 @@
   "l7r-estates-toward-capital"
  ],
  "notes": [],
- "outcome": "unreachable",
- "path": "",
- "reason": "HTTP 503",
+ "outcome": "archived",
+ "path": "b8/b8fdbcdbdae2/20261002T183226Z",
+ "reason": "",
  "revision": "",
- "sha256": "5ea81d0616df061a931781c3bd05697a347da318f9871b9ca82e04a6b2467e0f",
+ "sha256": "d05b5c44fd6679d341ea565df8f39715caae43a451f26876def71c38100a810d",
  "url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md"
 }

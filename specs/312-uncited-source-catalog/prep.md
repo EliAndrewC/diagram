@@ -67,3 +67,8 @@ publisher pages (doi.org x4, ScienceDirect x2, SAGE, PMC12935246, PMC7048742), m
 Zhihu, l5r.fandom Seido, the Soka repository PDF, and a Wayback copy of an IRRI page. Five of the 15 are already on the
 GM's `TO-DOWNLOAD.md` (by URL); the other ten are not. Coverage after the retry: 2,017 archived, 25 earlier snapshot, 16
 GM copy, 36 partial, 14 unreachable (`make archive-sources REPORT=1`).
+
+The 14 unreachable cited URLs were retried the same way the same day: 7 came back (6 archived, two of them the GM's own
+notes on GitHub; 1 partial), 7 are still unreachable (four timeouts on Chinese government and university sites, which
+may answer a browser in the GM's region; two 404s; one TLS failure) and are on `high-risk-sources.md`. Coverage after
+both retries: 2,023 archived, 25 earlier snapshot, 16 GM copy, 37 partial, 7 unreachable (`make archive-sources REPORT=1`).

@@ -1,16 +1,16 @@
 {
- "captured": "2026-10-02T13:32:01+00:00",
+ "captured": "2026-10-02T18:30:03+00:00",
  "final_url": "https://github.com/EliAndrewC/l7r/blob/master/setting/budgets.md",
- "first": "",
+ "first": "8d/8de7b814d3e2/20261002T183001Z",
  "gm_copies": [],
  "keys": [
   "l7r-budgets"
  ],
  "notes": [],
- "outcome": "unreachable",
- "path": "",
- "reason": "HTTP 503",
+ "outcome": "archived",
+ "path": "8d/8de7b814d3e2/20261002T183001Z",
+ "reason": "",
  "revision": "",
- "sha256": "5ea81d0616df061a931781c3bd05697a347da318f9871b9ca82e04a6b2467e0f",
+ "sha256": "000743430b32a895d5f295e71497c07904146db3a4bc612d729053237300500e",
  "url": "https://github.com/EliAndrewC/l7r/blob/master/setting/budgets.md"
 }

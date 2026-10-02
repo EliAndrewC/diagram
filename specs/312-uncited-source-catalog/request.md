@@ -110,3 +110,61 @@ well as at citation, write-up, ledger and archive. It is a list other domains ca
 a session finds to be similarly AI-generated, added with the GM's approval), not a rule for Grokipedia alone. Sources
 forbidden for other reasons are banned at the citation, by URL or pattern.
 
+## High-risk sources (GM, 2026-10-02, verbatim; still not to start)
+
+The session reported that 15 cited sources still refuse an automated fetch after a retry (`prep.md`), 10 of them not on
+the GM's download list, and offered to add those 10 to it.
+
+The GM:
+
+I actually don't think that we should just add those 10 to the list of things for me to download because if we are not able to access them now, then we must at least consider the possibility that we never actually did and what we think those sources said is hallucinated. So I think that we actually need those 10 to be in their own special separate category, which is a much higher priority than the regular to download list. So I would like those to be part of their own special section in which you prepare a separate list of what they are in the same format as our regular to download list. And then save that in the spec kit feature directory. And then before this feature can be complete, then I must download those 10 items or report that I have not been able to find some of them. And then we must confirm that they say what we think they said. because we have definitely encountered situations in the past where what a source actually says differed from our summary of it. And that is why we implemented the subagent checks that we now have. But these 10 sources that we cannot find right now should be treated as being at an unusually high risk. of this being the case. Because all of our other sources were checked, to my knowledge, by our current subagents. But if we can't find these 10 now, then that implies that they might not have been. So our feature should be updated to include that. Thanks.
+
+Settled for the spec: `high-risk-sources.md` in this directory lists them in the download list's format, ahead of the
+regular list. Feature 312 is not complete until the GM has downloaded each (or reported one cannot be found) and a
+`source-reader` and `quote-check` have confirmed each says what the record says. The session put all 15 on it, not only
+the 10: the GM's reasoning applies to the 5 already on the download list as well, since they too are cited and cannot be
+fetched now. The list is in two tiers (7 a footnote rests on, 8 that back no claim); whether tier 2 is required for completion was put to the GM (answered below).
+
+## Never-read sources and the download list (GM, 2026-10-02, verbatim; still not to start)
+
+The GM:
+
+I suppose that we might also want to update this feature to include a categorization of sources that we have seen referenced but were unreachable. I mean, I don't know what that would imply about what we do in the future, but um, I don't know, just that does seem like its own category that is worthy of its own type of tagging, right? And then to be honest, our list of stuff to be downloaded should also probably be copied and checked in. Somewhere. Now, the copy that I am using should be an actual copy and not the canonical source, but this file is now large enough and it is important enough that it deserves to be in source control somewhere, and I would think that our private repository of diagram research seems like an appropriate place for it. Though, I don't know, maybe it should actually just go into the main diagram repo? What do you think?
+
+The session's answer (summary): a never-read state as a tag (today only free text in entries' comments), which makes
+the high-risk list a query rather than a hand-made file; three states kept apart - read, never read but referenced,
+unreachable now though once read. The download list in the MAIN diagram repository, not the archive: it holds no
+copyrighted text, sessions write to it like the rest of the record and the pointer check can hold its "Rests on it"
+lines; the high-risk list its top section; the GM's file in `academic-sources/` a copy generated from it.
+
+The GM:
+
+to answer your question about the decision for me, then yes, tier two should be required before feature 312 closes. And moreover, if we cannot find these sources because we cited something that is paywalled, then we must, as part of this feature, update our research findings to remove those as sources. And we could move them into our list of things that we kind of know are unavailable, which actually, now that I think about it, then saying that something is paywalled is probably its own tag, because it is useful for us to record what things in the past you were able to get versus things that timed out versus things that I was able to get, which would then be stored, versus things that I was able to get only a like partial summary of, like in cases where I'm able to copy the abstract but not anything else, versus things that I found require a paid login like through a university system thing or, you know, paying for the paper itself or whatever. Um, like those, you know, kind of are all different cases and we should make sure that the tagging system that we are implementing in feature 312 accounts for all of these so that in the future when we are doing other research and then we say, hey, I just saw this paper that came up, we can check and then we will see if, for example, we know to rule it out because it is restricted access. And of course, perhaps a later feature could go and check whether restricted access papers have opened up, because that does happen eventually. I mean, sometimes things start off paywalled, and then after a certain number of years, they become open. But that wouldn't be something that we would check anytime soon, like I wouldn't bother checking that for the remainder of this year and probably not even bother checking it next year either. But, you know, maybe in a few years we would do another pass just to see if anything that was paywalled is now uh, open access. And that is the kind of future work that this kind of extra tagging would do for us. So we should make sure that that is part of the system.
+
+And yes, your proposal does sound right for how to handle the list of things to download. Though I think I probably do want the format of that file to change slightly, where it would be useful for me to be able to have a space that is already set aside, where I can either check a box (i.e. turning `[ ]` into `[x]`) indicating that the file has now been downloaded, or check another box indicating that it has been found to be paywalled, or check a third box indicating that I was able to download some portion of it. Like, you know, for papers where the abstract is freely available, but the full text of the paper is not. And then maybe a fourth option for me finding something, but that whatever I found, whether it's the full paper or a partial summary, was found elsewhere, like through a Google search or something, that was different than the Google search that you linked, and that this would supplement one of the other checkboxes. So like if I any time I checked this one, then I would have checked one of the other boxes as well. Something like that. And then that is something that I would want to edit. So I don't know. We need some procedure for me to have a file where I am marking my work as I go, because that is helpful for me. But I understand what you're saying about some version of this file being kept in sync where no one edits it. So maybe this is just a case where I make a copy myself, and then I would inform you when it's ready to ingest, and then you would pull down my copy or something, and then you know, you could update the canonical version and then sync that, and then I could sync your version to mine when I am ready to do so or whatever. I don't know, something like that. Um, I don't really care that much about the specifics, except insofar as this system, like coming up with this system should be part of this feature, even if actually going through and then running through this list is something that we do as part of a different feature. But I want implementing this system to be maybe like the first thing that we do as part of this new feature so that I could begin work on this downloading before this feature is complete if I end up having the time to do so. Which I probably won't, but it would be nice to have the option. How does that sound?
+
+Settled:
+- Tier 2 of `high-risk-sources.md` is required before 312 closes, as tier 1 is.
+- A cited source that cannot be got because it is paywalled is removed as a source from the research findings in this
+  feature, and recorded as known-unavailable. (The session's refinement, offered to the GM: a citation is removed where
+  the passage it quotes cannot be confirmed from what IS readable - a footnote quoting a freely readable abstract stands;
+  the claim keeps an absence note where that source was its only support.)
+- An ACCESS tag on every source, with the date last checked - the states the GM named and the session's: read by us
+  (open); open in a browser but refused to us (bot-refused); timed out or a server error (down); 404 with no copy
+  (gone); the GM's full copy; the GM's partial copy (an abstract or excerpt); paywalled (a paid or institutional login);
+  never read (referenced only). A later feature re-checks paywalled sources for open access - future work, not before
+  2028 by the GM's estimate.
+- The download list in the main diagram repository, canonical; the GM keeps a COPY to mark as the GM works, with per
+  entry the boxes downloaded / partial (abstract or excerpt) / paywalled / not found, and found elsewhere (ticked with
+  one of the others, with where) - "not found" the session's addition, from the GM's earlier "report that I have not been
+  able to find some of them". On the GM's word "ingest", the tooling reads the ticks (entries matched by key), updates
+  the canonical list and the tags, and archives the files dropped in `academic-sources/`; the GM's copy is replaced only
+  on the GM's "sync".
+- This system is built FIRST, so the GM can begin downloading before the rest is done. The session's proposal, put to
+  the GM: split it into its own small feature (313: the access tags and the download-list system) that lands on main
+  first, since a feature with an open task lands nothing - the system built as 312's first task would not reach main
+  until all of 312 was done.
+
+`high-risk-sources.md` also lists the 7 cited URLs still unreachable after a retry on 2026-10-02 (the other 7 of 14
+came back: 6 archived, two of them the GM's own notes on GitHub, and 1 partial).
+

@@ -1,6 +1,6 @@
 {
- "captured": "2026-10-02T14:29:08+00:00",
- "final_url": "",
+ "captured": "2026-10-02T18:26:51+00:00",
+ "final_url": "https://dfz.gd.gov.cn/index/dqyj/content/post_4237091.html",
  "first": "66/66c57174bcd0/20261002T142908Z",
  "gm_copies": [],
  "keys": [
@@ -11,10 +11,10 @@
   "0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.notes.html",
   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.notes.html"
  ],
- "outcome": "unreachable",
- "path": "66/66c57174bcd0/20261002T142908Z",
- "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "outcome": "partial",
+ "path": "66/66c57174bcd0/20261002T182650Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
  "revision": "",
- "sha256": "",
+ "sha256": "9e0315b6f026aab6c3a53d20bd1d2968af25ceb38da9abbe623067daebc836c9",
  "url": "https://dfz.gd.gov.cn/index/dqyj/content/post_4237091.html"
 }

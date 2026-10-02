@@ -1,6 +1,6 @@
 {
- "captured": "2026-10-02T14:24:42+00:00",
- "final_url": "",
+ "captured": "2026-10-02T18:28:30+00:00",
+ "final_url": "https://blog.sina.com.cn/s/blog_4eebd24b0102z7hq.html",
  "first": "6f/6f09dc4443a9/20261002T142442Z",
  "gm_copies": [],
  "keys": [
@@ -10,10 +10,10 @@
   "0201-pawnshops-shichiya.drawing.notes.html",
   "0201-pawnshops-shichiya.notes.html"
  ],
- "outcome": "unreachable",
- "path": "6f/6f09dc4443a9/20261002T142442Z",
- "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "outcome": "archived",
+ "path": "6f/6f09dc4443a9/20261002T182828Z",
+ "reason": "",
  "revision": "",
- "sha256": "",
+ "sha256": "3969d6bdc1ea6ad09dd2b0d14cd3bef29530546e417cece90a53a8d56f8fa743",
  "url": "https://blog.sina.com.cn/s/blog_4eebd24b0102z7hq.html"
 }

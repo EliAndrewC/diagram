@@ -1,6 +1,6 @@
 {
- "captured": "2026-10-02T14:23:02+00:00",
- "final_url": "",
+ "captured": "2026-10-02T18:22:24+00:00",
+ "final_url": "http://archina.com/index.php?a=show&g=portal&id=4563&m=index",
  "first": "22/2250767f8b62/20261002T142301Z",
  "gm_copies": [],
  "keys": [
@@ -11,10 +11,10 @@
   "0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.notes.html",
   "0134-the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends.notes.html"
  ],
- "outcome": "unreachable",
- "path": "22/2250767f8b62/20261002T142301Z",
- "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "outcome": "archived",
+ "path": "22/2250767f8b62/20261002T182221Z",
+ "reason": "",
  "revision": "",
- "sha256": "",
+ "sha256": "1f6d51b60fa0db53a1fe533862ea1fcc5cfd29729f3abd0f116c9a9ca3d1dbfb",
  "url": "https://archina.com/index.php?a=show&g=portal&id=4563&m=index"
 }

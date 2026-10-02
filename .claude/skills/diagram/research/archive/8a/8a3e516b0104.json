@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T15:33:51+00:00",
+ "captured": "2026-10-02T18:29:55+00:00",
  "final_url": "https://www.geog.com.cn/article/2017/1007-6301/1007-6301-36-9-1067.shtml",
  "first": "8a/8a3e516b0104/20261002T153351Z",
  "gm_copies": [],
@@ -9,10 +9,10 @@
  "notes": [
   "0035-villages-beside-their-stream-one-bank-or-both.notes.html"
  ],
- "outcome": "unreachable",
- "path": "8a/8a3e516b0104/20261002T153351Z",
- "reason": "HTTP 500",
+ "outcome": "archived",
+ "path": "8a/8a3e516b0104/20261002T182954Z",
+ "reason": "",
  "revision": "",
- "sha256": "0ba7a095783ee220c3be0eb4795214961ba0d83b3c267d525a31533b7f56672d",
+ "sha256": "9bb2ff034846ceeedc480d71d991e067233299e1460bdaefeb28fc4408594983",
  "url": "https://www.geog.com.cn/article/2017/1007-6301/1007-6301-36-9-1067.shtml"
 }
