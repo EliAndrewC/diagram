@@ -186,3 +186,19 @@ Three things worth knowing beyond the mechanics:
 - **The rule that a check reads the fragment lives in the agent CONTRACTS**, because a defined agent
   launches without this repository's `CLAUDE.md` files (feature 256). It is the whole saving; an agent
   that still opens the page collects nothing from the split.
+
+## Every cited source is archived, privately (feature 309, GM 2026-10-02)
+
+The GM asked for *"backup copies of all of the content we are referencing"*, against *"websites going offline, failing
+to be maintained"* and *"changing URLs in a website redesign"*: every web page and every PDF the record cites, *"even
+things which seem at low risk of going away, like wikipedia pages"*, a web page *"whole ... with images and css and such
+and not just the html content"*. A citation is a verbatim quote from a page the reader can open; a page that dies or is
+edited under its quote leaves the footnote uncheckable, so the record keeps its own copy of every cited page.
+
+The copies live in the private repository `EliAndrewC/diagram-research`, private on purpose: *"If someone's copyrighted
+work goes offline then having a private copy allows me to contact the author and ask whether they are okay with me
+hosting a copy publicly, but for now I just want an archive."* Nothing from it is linked or copied anywhere public. The
+host keeps one working copy of it, pushed straight to GitHub - no clone of it per session (the GM). The GM's own
+downloaded files in `academic-sources/` that copy a cited source are archived beside its captures. The mechanism, the
+fallback order for a dead or a refused page and the measurements: `specs/309-source-archive/`; the operative rule:
+`.claude/skills/diagram/research/CLAUDE.md`.

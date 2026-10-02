@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:33:24+00:00",
+ "final_url": "https://ja.wikipedia.org/wiki/%E6%89%8B%E4%BB%A3",
+ "first": "tedai-jawiki/db1bbf32403c/20261002T123323Z",
+ "gm_copies": [],
+ "keys": [
+  "tedai-jawiki"
+ ],
+ "notes": [
+  "0113-the-office-hall-and-its-clerks-goyakusho.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "tedai-jawiki/db1bbf32403c/20261002T123323Z",
+ "reason": "the page showed no text",
+ "revision": "102055758",
+ "sha256": "b1f26f70ef67d64580a64a4cd6b11845fb8557d9ec2965d946e891076263936e",
+ "url": "https://ja.wikipedia.org/wiki/手代"
+}

@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T12:35:11+00:00",
+ "final_url": "https://onlinelibrary.wiley.com/doi/10.1002/2475-8876.12146",
+ "first": "ushijima-2020-manchu/ee1982447580/20261002T123511Z",
+ "gm_copies": [],
+ "keys": [
+  "ushijima-2020-manchu"
+ ],
+ "notes": [
+  "0081-village-lanes.drawing.notes.html",
+  "0081-village-lanes.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "ushijima-2020-manchu/ee1982447580/20261002T123511Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "1badb47978045ab217a3f97d000d9672ac281d364f2f9fc3405f464828d40402",
+ "url": "https://doi.org/10.1002/2475-8876.12146"
+}

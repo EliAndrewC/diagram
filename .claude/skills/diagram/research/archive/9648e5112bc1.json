@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:23:13+00:00",
+ "final_url": "https://web.archive.org/web/20260116141216id_/https://www.jstage.jst.go.jp/article/jjhg1948/51/5/51_5_433/_pdf",
+ "first": "imazato-1999/9648e5112bc1/20261002T122313Z",
+ "gm_copies": [],
+ "keys": [
+  "imazato-1999"
+ ],
+ "notes": [
+  "0035-villages-beside-their-stream-one-bank-or-both.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "imazato-1999/9648e5112bc1/20261002T122313Z",
+ "reason": "APIRequestContext.get: aborted",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://www.jstage.jst.go.jp/article/jjhg1948/51/5/51_5_433/_pdf"
+}

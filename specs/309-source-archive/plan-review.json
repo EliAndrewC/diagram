@@ -1,95 +1,93 @@
 {
  "feature": "309-source-archive",
- "plan_sha256": "a9dc8a6a30e607d2e86b96c9b61abb72f716dd5572a8710ba5da549b200ebc22",
+ "plan_sha256": "92151a0737ed89148b7b8230d4c6563b9975d0064f8351ee289c7479c4bdf6e4",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "TC-census-registry",
-   "summary": "Technical Context: the cited-URL census takes the registry's VISIBLE URLs only - 'HTML comments are session notes, not citations' - applied to registry entries",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-001 says every URL in a registry entry. Measured 2026-10-02 (a regex over the 2,126 entries, comments stripped vs comment-only): 23 entries carry a URL only in a comment, and most are '<!-- READ <date> at <url> -->', 'the article page is <url>' or 'the plain-text edition' - the page the quoted passage was actually read from, which differs from the visible pointer (J-STAGE article page vs the _pdf; archive.org/details vs the djvu text; doi.org vs PMC). 5830-irripro-jiegao-lulu has NO visible URL, so it would be archived as 'no online copy' though it was read online. The GM asked for 'backup copies of all of the content we are referencing'; dropping the page the quote came from defeats that purpose, and SC-002 (the copy contains the quoted passage) would fail on such entries. Fix: the registry census takes every URL in the entry, comments included (23 more URLs)."
+   "summary": "The registry census takes every URL in a registry entry, its HTML comments included",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item, cleared: FR-001 says every URL in a registry entry; the plan now counts the comment URLs (the page actually read, and the one entry whose only URL is in a comment), and archive.py `cited`/`entry_line` call urls_in(comments=True) for entries."
   },
   {
    "id": "TC-census-notes / D6",
-   "summary": "A footnote's cited URL is an href in research/questions/*.notes.html; URLs inside HTML comments in the notes files (search trails, 'also read and not cited', unreadable PDFs) are not taken",
+   "summary": "A footnote's cited URL is one a notes.html footnote links; URLs in notes comments are not taken",
    "class": "within",
-   "why": "FR-001 says every URL a footnote LINKS; a URL in a session-note comment is not a link, and the measured comment-only notes URLs (18 over 14 files) are read-and-rejected or unreadable pages, which the request ('every webpage we cite') and the spec's Context (the cache holds rejected pages as well as cited ones) do not ask to archive."
+   "why": "FR-001 says every URL a footnote LINKS; a session-note comment is not a link, and those URLs are search trails and pages read and not cited (round 1 ruling stands)."
   },
   {
    "id": "D1",
-   "summary": "The whole page is a Chromium MHTML snapshot; SingleFile and monolith priced and rejected; Firefox needs an add-on",
+   "summary": "Whole page as a Chromium MHTML snapshot",
    "class": "within",
-   "why": "FR-002 asks for images, stylesheets and fonts in one self-contained file that opens offline in a browser; MHTML is that and opens in every Chromium browser."
+   "why": "FR-002: images, stylesheets and fonts in one self-contained file that opens offline in a browser."
   },
   {
    "id": "D2",
-   "summary": "One fallback order for every failed live fetch: live -> Wayback -> GM copy (outcome) -> partial -> unreachable; every matched GM file copied regardless",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The spec gives two orders for two unlike classes: a DEAD page (Acceptance US1-3) goes to the Wayback snapshot, else unreachable WITH the page-cache text stored as the fallback; a page that REFUSES an automated reader or needs a script (Edge Cases) takes the GM's downloaded copy as the source's copy first, Wayback only otherwise. D2 merges both into one order with Wayback ahead of the GM copy, so for a refused page the outcome and the source page's archived-copy link point at a Wayback capture (often the same bot wall) instead of the GM's file the citation was read from; and step 5 'unreachable' drops the page-cache text the acceptance scenario requires. Neither is impossible or implied by the GM's words. Fix: for a refused/script-empty live fetch, GM copy before Wayback; for a dead page, Wayback first; an unreachable outcome stores the page-cache text where the cache holds one."
+   "summary": "Live fetch first, then by failure class: DEAD -> Wayback, GM copy, unreachable with page-cache text; REFUSED/no text -> GM copy, Wayback, partial with page-cache text; every matched GM file copied regardless; a source page lists every copy of every URL it cites",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item, cleared. The refused branch is the spec's Edge Cases order (GM copy, then snapshot, then partial with the cache text). The dead branch is US1 scenario 3 (snapshot, else unreachable with the cache text stored), with the GM copy between them, which FR-012 itself provides: the GM-copy outcome is used where the live fetch 'fails or is refused'. Listing every copy of every URL is FR-010. scripts/_archive.py `capture` implements both orders as written."
   },
   {
    "id": "D3",
-   "summary": "One manifest JSON per URL, id = 12 hex of SHA-256 of the URL as cited, fragment dropped",
+   "summary": "One manifest JSON per URL",
    "class": "within",
-   "why": "The spec's manifest entity, one row per cited URL; a fragment does not change the page fetched."
+   "why": "The spec's manifest, one row per cited URL."
   },
   {
    "id": "D4",
-   "summary": "Capture time is the version directory; the row points at the latest and keeps the first",
+   "summary": "Capture time is the version directory",
    "class": "within",
    "why": "FR-009 and the re-archiving edge case."
   },
   {
    "id": "D5",
-   "summary": "Reserve never blocks; a failed push writes pending-upload, covered 7 days then refused",
+   "summary": "Reserve never blocks; failed push writes pending-upload, 7-day grace",
    "class": "within",
-   "why": "FR-006 and the spec's 'set grace period' edge case."
+   "why": "FR-006 and the grace-period edge case."
   },
   {
    "id": "D7",
    "summary": "Revision id from wgRevisionId",
    "class": "within",
-   "why": "FR-002, every MediaWiki site."
+   "why": "FR-002."
   },
   {
    "id": "D8",
-   "summary": "Politeness: one request per host at a time, 1 s apart, one retry on 429/503",
+   "summary": "Politeness: one request per host, 1 s apart, one retry on 429/503",
    "class": "within",
-   "why": "Implementation of FR-004; narrows nothing."
+   "why": "Implementation of FR-004."
   },
   {
    "id": "D9",
    "summary": "Backfill pushes every 200 MB",
    "class": "within",
-   "why": "Implementation of FR-004 resumability and FR-008."
+   "why": "FR-004 resumability and FR-008."
   },
   {
    "id": "D10",
-   "summary": "Dead page = 4xx/5xx, network error, or a redirect to the site root from a deeper path",
+   "summary": "REFUSED = 401/403/406/429/451 or a web page that rendered no text; DEAD = any other 4xx/5xx, network error, empty body, redirect to the site root from a deeper path",
    "class": "within",
-   "why": "The same three cases US1-3 names."
+   "why": "Splits the spec's two classes: DEAD carries US1 scenario 3's three cases (error status, dead host, front-page redirect); REFUSED carries the Edge Cases' 'refuses an automated reader' and 'needs a script to show its text'. Every failure lands in one of the two spec-named orders, so nothing is dropped."
   },
   {
    "id": "Layout",
-   "summary": "<key>/<id>/<time>/ served, page.mhtml, text, capture.json; gm-copy/; notes/<id>/ for footnote-only URLs; a shared URL archived once under the first key; >95 MB split in parts with a whole-file checksum",
+   "summary": "<key>/<id>/<time>/ layout, gm-copy/, notes/<id>/, shared URL archived once, >95 MB split with checksum",
    "class": "within",
-   "why": "FR-003 and the edge cases (archived once, linked from each; split with a checksum)."
+   "why": "FR-003 and the edge cases."
   },
   {
    "id": "FR-012 match",
-   "summary": "42 entries in academic-sources: 33 matched over 31 keys and copied; 7 copy no cited source and are listed, not archived; the 2 GM lists skipped",
+   "summary": "academic-sources matched file by file; unmatched listed; the 2 GM lists skipped",
    "class": "within",
-   "why": "FR-012 covers copies of CITED sources and asks the unmatched to be listed. Spot-checked 2026-10-02: the DOIs of FenshuiForests.txt (10.1016/j.ufug.2017.12.011) and FactorsOfSpatialDistribution.txt (10.1016/j.landurbplan.2018.03.015) appear nowhere in the record, and Goossaert 2011 is named only in an absence note's comment in 0228, not cited."
+   "why": "FR-012 covers copies of cited sources and asks the unmatched to be listed (round 1 spot check stands)."
   },
   {
-   "id": "Engine/tooling split, Makefile targets, reserve --url hook, working copy and lock, PAT via GIT_CONFIG_* env, 4 worker processes",
-   "summary": "How the feature is built",
+   "id": "Build mechanics",
+   "summary": "Engine/tooling split, Makefile targets, reserve URL hook, working copy and lock, PAT via env, 4 workers",
    "class": "within",
-   "why": "FR-006, FR-007, FR-008, FR-011 carried as written; the 40-URL sample and extrapolation are the spec's 'measured on a sample before the full run'."
+   "why": "FR-006, FR-007, FR-008, FR-011 as written."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

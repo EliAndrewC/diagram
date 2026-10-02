@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T12:36:01+00:00",
+ "final_url": "https://www.tandfonline.com/doi/full/10.1179/pma.1996.002",
+ "first": "northampton-tannery-1996/f22db14a6448/20261002T123601Z",
+ "gm_copies": [],
+ "keys": [
+  "northampton-tannery-1996"
+ ],
+ "notes": [
+  "0193-tanning-yards.drawing.notes.html",
+  "0193-tanning-yards.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "northampton-tannery-1996/f22db14a6448/20261002T123601Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "fa42e4a76ae025b1f140dac40db657179ee29d30750594383fd9c7560724e029",
+ "url": "https://doi.org/10.1179/pma.1996.002"
+}

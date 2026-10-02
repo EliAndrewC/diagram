@@ -22,6 +22,7 @@ import re
 import shutil
 import tempfile
 
+from l7r.diagram.interactive.record import archive
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
 from l7r.diagram.interactive.record import site_links as links
@@ -186,6 +187,7 @@ class Build:
                 if self.record.holds(section, half):
                     self.index.add_section(section.id, half)
         self.entries = registry_entries(record_dir)
+        self.archive = archive.load(record_dir)
         self.notes: dict[str, dict[str, str]] = {}
         self.files: dict[str, str] = {}
         self.errors: list[str] = list(self.catalog.errors)
@@ -214,6 +216,7 @@ class Build:
         self._home()
         self._single()
         self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.source_nodes()))
+        self.errors += archive.refusals(self.record_dir)
         if self.errors:
             raise RecordError("\n  ".join([f"the site does not build ({len(self.errors)} refusal(s)):", *self.errors]))
         return self.files
@@ -337,10 +340,20 @@ class Build:
 
     def entry_html(self, item: sp.Item) -> str:
         """A registry entry as the reader sees it: its marker gone, its labels under its heading, and the URLs of its
-        citation line - the paragraph after the heading - made links (feature 307 FR-006)."""
+        citation line - the paragraph after the heading - made links (feature 307 FR-006), and under it the line linking
+        each of its URLs' archived copies (feature 309 FR-010)."""
         text = st.strip_marker(item.html)
         m = _HEADING_END.search(text)
-        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + _FIRST_P.sub(lambda p: linkify(canon_list(p.group(0))), text[m.end() :], count=1)
+        if m is None:
+            return text
+        rest = text[m.end() :]
+        first = _FIRST_P.search(rest)
+        if first is None:
+            return text[: m.end()] + "\n" + self.catalog.labels(item.id) + rest
+        cite = first.group(0)
+        line = archive.entry_line(item.html, self.archive)
+        tail = rest[: first.start()] + linkify(canon_list(cite)) + ("\n" + line if line else "") + rest[first.end() :]
+        return text[: m.end()] + "\n" + self.catalog.labels(item.id) + tail
 
     def _registry(self) -> None:
         reg = self.registry

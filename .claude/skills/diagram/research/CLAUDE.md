@@ -65,6 +65,14 @@ OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable [QUESTION=<NNNN>]`; 
 KEY=<k> URL=<u>` marks a new entry's source `cited:<k>` itself. `make sources-consulted URL=<u>` (or `KEY=<regex>`)
 looks a page up without fetching it.
 
+**Every cited page is archived** (feature 309, the GM 2026-10-02: a hedge against *"websites going offline"*): every URL
+in a registry entry (its comments' too) and every URL a footnote links has a copy - served bytes, the whole page as MHTML,
+its text - in the PRIVATE repository `EliAndrewC/diagram-research`, and a row in `research/archive/<id>.json`. `make
+reserve KIND=registry ... URL=<u>` archives the new entry's URL itself; a URL cited any other way (a footnote's direct
+link, a URL added to an entry) is archived with `make archive URL=<u>`, and `make record` refuses a cited URL with no
+row, naming that command. `make archive-sources REPORT=1` prints the coverage. Never link or copy the archive anywhere
+public: much of it is copyrighted.
+
 **A write session takes at most four questions and ten new registry keys** (feature 274). Measured over 282
 sessions (its research R1): a write session's cost follows its turn count (r = 0.92) and grows roughly with the square
 of its length - median 74 turns, peak context 246 K against 250's 102-171 K, one of 109 turns cost 24.5 M. The runner

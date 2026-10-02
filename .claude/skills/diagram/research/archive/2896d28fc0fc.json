@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T12:35:53+00:00",
+ "final_url": "https://www.tandfonline.com/doi/full/10.1080/23729988.2019.1639463",
+ "first": "inexhaustible-treasuries/2896d28fc0fc/20261002T123553Z",
+ "gm_copies": [],
+ "keys": [
+  "inexhaustible-treasuries"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "inexhaustible-treasuries/2896d28fc0fc/20261002T123553Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "0653291aca38cd01335ce5dbe722e6ba459af29f49be4bf0d2de78af2bd71351",
+ "url": "https://doi.org/10.1080/23729988.2019.1639463"
+}
