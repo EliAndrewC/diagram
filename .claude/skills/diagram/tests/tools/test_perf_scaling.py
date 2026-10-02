@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram.hamletgen import HamletSpec
-from l7r.diagram.hamletgen import plan as hplan
+from l7r.diagram.hamletgen.plan import beyond_the_band
 from l7r.diagram.tools import perf_bands as pb
 from l7r.diagram.tools import perf_snapshot as ps
 
@@ -26,7 +26,7 @@ SKILL = pathlib.Path(ps.SKILL)
 def test_a_spec_past_the_hamlet_band_is_refused_outside_the_measuring_tool_and_admitted_inside_it() -> None:
     with pytest.raises(ValueError, match="outside the hamlet band"):
         HamletSpec("Probe", seed=4, households=40)
-    with hplan.beyond_the_band():
+    with beyond_the_band():
         assert HamletSpec("Probe", seed=4, households=40).households == 40
     with pytest.raises(ValueError, match="outside the hamlet band"):
         HamletSpec("Probe", seed=4, households=40)
