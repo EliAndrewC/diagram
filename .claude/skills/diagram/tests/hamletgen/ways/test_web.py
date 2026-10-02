@@ -235,3 +235,16 @@ def test_lay_reachable_runs_draws_each_run_the_network_reaches(monkeypatch: pyte
     island = [(900.0, 900.0), (950.0, 900.0)]
     assert web.lay_reachable_runs(s, [touching, island], [], [], [], [], []) == 1
     assert laid == [touching]
+
+
+def test_a_skeleton_arm_trimmed_under_the_web_floor_is_no_arm(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`served_arm` (feature 308, lifted from `_lay_skeleton`): the arm trimmed to service, and none where it falls short."""
+    from l7r.diagram.hamletgen.ways import web
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 0.0, "y": 0.0}]
+    monkeypatch.setattr(web, "_trim_to_service", lambda arm, *a, **k: arm[:2])
+    assert web.served_arm(s, [(0.0, 0.0), (5.0, 0.0), (500.0, 0.0)]) == [], "trimmed to 5 ft: under the floor"
+    assert web.served_arm(s, [(0.0, 0.0), (400.0, 0.0), (500.0, 0.0)]) == [(0.0, 0.0), (400.0, 0.0)]
+    assert web.served_arm(s, [(0.0, 0.0)]) == [(0.0, 0.0)], "a point is passed through untrimmed"

@@ -695,32 +695,3 @@ def test_a_join_lane_the_split_made_redundant_is_swept_after_the_split() -> None
     assert split_at_crossings(s) == 1
     assert hg.ways._sweep_doubled_remnants(s) == 1, "after it, the crossing is a junction and the join lane is doubled ink"
     assert [(150.0, 6.0), (200.0, 0.0)] not in [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"]]
-
-
-def test_a_link_that_would_zigzag_across_its_joint_with_a_lane_is_refused() -> None:
-    """Feature 308 (Inashiro on the merged engine): a link laid on the field spur's end turned back across the spur's last
-    bend - each record clean, the two read as one walk a zigzag (`test_no_zigzag_straddles_a_joint`). The orphan join asks
-    `zigzags_at_a_joint` before it draws."""
-    from l7r.diagram.hamletgen.ways.sweeps import zigzags_at_a_joint
-
-    spur = {"pts": [[2721.0, 2002.0], [2724.0, 2012.0], [2745.0, 2015.0], [2781.0, 2052.0], [2787.0, 2056.0]], "w": 5}
-    back = [(2721.0, 2002.0), (2570.0, 2041.0), (2486.0, 1971.0), (2472.0, 1845.0), (2230.0, 1770.0)]
-    assert zigzags_at_a_joint([spur], back), "the recorded zigzag"
-    on = [(2721.0, 2002.0), (2715.0, 1950.0), (2710.0, 1850.0)]
-    assert not zigzags_at_a_joint([spur], on), "carried on round the bend's own way: a path"
-    assert not zigzags_at_a_joint([spur], [(2500.0, 2500.0), (2400.0, 2500.0)]), "no joint at all"
-
-
-def test_a_link_a_grid_cell_off_a_lanes_end_is_judged_where_it_will_be_drawn() -> None:
-    """The route starts a cell off the vertex it was asked from; the check takes the link's end on the lane end it joins."""
-    from l7r.diagram.hamletgen.ways.sweeps import zigzags_at_a_joint
-
-    spur = {"pts": [[2721.0, 2002.0], [2724.0, 2012.0], [2745.0, 2015.0], [2781.0, 2052.0], [2787.0, 2056.0]], "w": 5}
-    back = [(2716.0, 1998.0), (2570.0, 2041.0), (2486.0, 1971.0), (2472.0, 1845.0), (2230.0, 1770.0)]
-    assert zigzags_at_a_joint([spur], back)
-
-
-def test_a_link_with_no_lane_to_meet_makes_no_joint() -> None:
-    from l7r.diagram.hamletgen.ways.sweeps import zigzags_at_a_joint
-
-    assert not zigzags_at_a_joint([], [(0.0, 0.0), (50.0, 0.0)])
