@@ -20,9 +20,9 @@ from l7r.diagram.settlement._geom.indexes import PointGrid
 from ..consts import Poly, Pt
 from . import law
 from .bund import BRANCH_STEP_FT, BRANCH_WIDTH, run_on_target
-from .checks import ford_crossing
+from .checks import ford_crossing, unreached_houses
 from .fabric import _homestead_polys
-from .geom import WorkedGround, polyline_len
+from .geom import WorkedGround, _components, polyline_len
 from .route import _route
 
 ACCESS_ROLE = "access"
@@ -61,6 +61,36 @@ def is_tree(ln: Mapping[str, Any]) -> bool:
     past, and the street's tail as a dangling end, so the settle trimmed Mizuguchi's street back farm by farm and left four
     farms unreached."""
     return bool(ln.get("connector")) or ln.get("role") in TREE_ROLES or bool(ln.get("street")) or bool(ln.get("serves"))
+
+
+def _on_the_connector(lanes: Sequence[Mapping[str, Any]], idx: Sequence[int]) -> set[int]:
+    """The lanes of `idx` joined to the connector's network at the ink tolerance (`law.JOIN_TOL`)."""
+    live = [k for k in idx if len(lanes[k].get("pts") or []) >= 2]
+    labels = _components([law.lane_pts(lanes[k]) for k in live], law.JOIN_TOL)
+    roots = {labels[n] for n, k in enumerate(live) if lanes[k].get("connector")}
+    return {k for n, k in enumerate(live) if labels[n] in roots}
+
+
+def strands_only_ordinary(M: Mapping[str, Any], i: int) -> bool:
+    """Would taking lane `i` away leave off the connector's network only ORDINARY lanes, and no farmhouse unreached that the
+    web reaches now? Those lanes are then what the settle drops as off the network (`settle.settle_network`), and the reach
+    they carried, if the map owes it, is drawn again as the tree (`settle.settle_reach`). False where nothing is stranded:
+    `settle.keeps_the_network` answers that case.
+
+    WHY (feature 304, on T03): a lane running beside another way past a pitch is taken away by the settle only where the web
+    keeps its networks without it (`settle_shadows`). Kashikawa's field path, kept once its tip was set on the bund again,
+    was joined to the street by a 350 ft link (`sweeps._join_orphan_ways`, the first join pass); the farm door path laid
+    after it (`serve.lay_door_paths`, a tree lane bound for its own street) ran 204 ft within 30 ft of it, and the squared
+    ford at the path's head made a Z across its joint with the link. The link was the only way joining the path, so it
+    stayed - a doubled band the settle could see and not mend. Refusing the link where it would shadow was tried first and
+    could not fire: the door path it doubles is laid after it."""
+    lanes = M.get("lanes") or []
+    before = _on_the_connector(lanes, range(len(lanes)))
+    lost = before - _on_the_connector(lanes, [k for k in range(len(lanes)) if k != i]) - {i}
+    if not lost or any(is_tree(lanes[k]) for k in lost):
+        return False
+    trial = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i and k not in lost]}
+    return len(unreached_houses(trial)) <= len(unreached_houses(M))
 
 
 def _pt(q: Sequence[float]) -> Pt:

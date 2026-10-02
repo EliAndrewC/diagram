@@ -58,6 +58,7 @@ from .corridors import (
     is_tree,
     round_the_gable,
     spur_runs,
+    strands_only_ordinary,
     through_a_building,
 )
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
@@ -543,7 +544,22 @@ def settle_shadows(s: Any) -> int:
             for k in sorted({i, j} & ordinary, key=lambda n: polyline_len(ways[n])):
                 if keeps_the_network(s.M, k, []):
                     return apply_pieces(s, {k: []})
+                if strands_only_ordinary(s.M, k):  # ...or with the ordinary lanes it alone joined (`strands_only_ordinary`)
+                    return drop_stranding(s, k)
     return 0
+
+
+def drop_stranding(s: Any, k: int) -> int:
+    """Lane `k` taken away with the ordinary lanes it alone joined to the network (`settle_network`); where that took the
+    web's way to the field, the field path is drawn again as `stage_web` drew it (`bund.a_way_onto_the_bund`, 269 B04), and
+    the rounds settle it - Kashikawa's field path left with its link, and the field had no way (feature 304)."""
+    from .bund import a_way_onto_the_bund  # bund.py reads this module's neighbors; imported where it is used
+
+    reached = not law.field_unreached(s.M)
+    n = apply_pieces(s, {k: []}) + settle_network(s)
+    if reached and law.field_unreached(s.M):
+        s.M.setdefault("meta", {})["field_path"] = a_way_onto_the_bund(s)
+    return n
 
 
 def settle_street_ends(s: Any) -> int:

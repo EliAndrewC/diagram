@@ -235,7 +235,8 @@ def _censused_names() -> set[str]:
             continue
         found.update(re.findall(r"\bhg\.([A-Za-z_][A-Za-z0-9_]*)", text))
         for group in re.findall(r"^from l7r\.diagram\.hamletgen import (.+)$", text, re.M):
-            found.update(n.strip() for n in group.split("#")[0].split(","))
+            # the NAME reached, not its local alias (`import plan as hplan` reaches `plan`, a submodule - feature 304 P1)
+            found.update(n.split(" as ")[0].strip() for n in group.split("#")[0].split(","))
     return {n for n in found if n}
 
 
