@@ -6,7 +6,8 @@
   "refused_by_the_check": 2,
   "refused_that_also_failed_at_run_time": 2,
   "false_positives": 0,
-  "refused_by_the_commit_ban": 23,
+  "refused_by_the_commit_ban": 22,
+  "refused_by_the_commit_ban_note": "23 until 2026-10-02, when the GM approved the rewrite: one of the 23 (an unambiguous -m in a command with no heredoc) is now rewritten to a -F - heredoc and runs; the other 22 carry a heredoc and still refuse",
   "refused_by_the_backtick_rule": 0,
   "refused_by_the_coauthor_rule": 0,
   "note": "the parse figures are research.md R6's, reproduced; the other rules' figures are what the SAME corpus shows they catch - every one a multi-line or misquoted `-m` message of the kind item 3 bans, which is the ban's own measurement"
