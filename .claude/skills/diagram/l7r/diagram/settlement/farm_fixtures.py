@@ -49,6 +49,15 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
 # radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, pfaf-kaki;
 # 269 B14) - the full-grown size, which fits the "old giant persimmon in the dooryard" the record remembers. It was 9.0.
 PERSIMMON_CROWN_FT = 11.5
+# THE PERSIMMON KEEPS OUT OF A YARD'S AND A BED'S SUN as every other tree does (GM 2026-10-02: "we are very diligent
+# about keeping trees away from our threshing yards and gardens, with the exception of persimmon trees"). The yard-edge
+# seat it took was a GUESS, and its exemption ("the farm's own fruit trees are not held back") rested on where the Tonami
+# fruit trees stood, not on a tree beside a drying yard; Sato's Shonai front yard is planted with fruit trees where its
+# drying function is "extremely weak". The reach is the windbreak's (`WEST_SUN_FT`): a 10 m (~33 ft) tree, the least
+# height the record draws a tree at, throws about 50 ft of its 3 pm shadow east, and the 9 am shadow mirrors it west -
+# held as the windbreak's lane is, a rectangle from the plot's north edge to 50 ft below its south edge, on both sides
+# and below (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html).
+PERSIMMON_SHADE_FT = 50.0
 
 FIXTURE_KINDS = tuple(FIXTURE_FT)
 
