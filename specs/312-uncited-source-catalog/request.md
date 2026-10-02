@@ -101,3 +101,12 @@ at every fetch route too, given its hallucinations - a page found through it can
 sources are banned at the CITATION, by URL or pattern, not by domain, since they may share a domain with sources that
 are allowed.
 
+The GM (verbatim):
+
+I accept your recommendation about blocking Grokopedia entirely. And that may end up applying to other domains as well if we, for example, determine that another domain is similarly AI generated. Then we would treat it the same as Grokopedia. So like, it's not that we are putting Grokopedia into its own special category that could only ever apply to it. It's just that Grokopedia is in a category for which I do not personally know of other things that are in that category. but other things may join it in time, and that should be made part of feature 312.
+
+Settled: a BLOCKED-DOMAIN category - AI-generated sites, Grokipedia its first member - blocked at every fetch route as
+well as at citation, write-up, ledger and archive. It is a list other domains can join (for example, one the filter or
+a session finds to be similarly AI-generated, added with the GM's approval), not a rule for Grokipedia alone. Sources
+forbidden for other reasons are banned at the citation, by URL or pattern.
+
