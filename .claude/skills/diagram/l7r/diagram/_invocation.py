@@ -224,6 +224,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
     "l7r.diagram.tools.glossary_asset": ("glossary", "cheap"),  # feature 209: the record's derived glossary asset
     "l7r.diagram.tools.building_programs": ("building-programs", "cheap"),  # feature 254: the Mode A catalog tables, rendered from the type declaration
+    "l7r.diagram.tools.source_tags_contract": ("source-tags-contract", "cheap"),  # feature 305: the vocabulary derived into the source-applicability contract
     "l7r.diagram.tools.record_asset": ("record", "cheap"),  # features 258, 301: the record's site, built from its per-entry fragments (about 4 s over the whole record)
     "l7r.diagram.tools.page_lit": ("page-lit", "expensive"),  # feature 231: it opens a browser on the page
     "l7r.diagram.tools.picture_diff": ("picture-diff", "cheap"),  # feature 231: two renders, and resvg for an SVG argument

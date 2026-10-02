@@ -34,7 +34,7 @@ def record(tmp_path: pathlib.Path) -> pathlib.Path:
 def test_the_registry_reads_back_as_one_page(record: pathlib.Path) -> None:
     """The happy path first, so the refusals below are refusals and not a broken fixture."""
     page = store.read_fragments(store.REGISTRY, str(record))
-    assert [s.id for s in page.sections] == ["works-cited"] and [e.id for e in page.sections[0].entries] == ["alpha", "beta"]
+    assert [s.id for s in page.sections] == ["works-cited"] and [e.id for e in page.sections[0].entries] == ["alpha", "beta", "gamma"]
     html = store.registry_html(str(record))
     assert html.startswith("<!DOCTYPE html>") and html.index("alpha") < html.index("beta") and html.endswith("</html>\n")
     assert store.entry_level(store.REGISTRY) == 3 and store.entry_level("x.html") is None

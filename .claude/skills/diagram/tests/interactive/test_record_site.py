@@ -124,7 +124,7 @@ def test_a_small_page_numbers_its_notes_from_one_and_its_foot_lists_what_it_cite
         notes = [int(n) for n in _FN.findall(page)]
         assert notes == list(range(1, len(notes) + 1)), name
         assert sorted(set(refs)) == notes, f"{name}: the foot lists exactly the notes the page cites"
-        works = re.findall(r'<h3 id="work-([a-z0-9-]+)">', page)
+        works = re.findall(r'<h4 id="work-([a-z0-9-]+)">', page)
         assert set(works) == set(re.findall(r'href="#work-([a-z0-9-]+)"', page)), f"{name}: the works at the foot are exactly the ones its notes cite"
         checked += bool(notes)
     assert checked > 300, "non-vacuity: most questions carry notes"

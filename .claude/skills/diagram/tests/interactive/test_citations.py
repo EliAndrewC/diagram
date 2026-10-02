@@ -13,18 +13,28 @@ import pathlib
 
 import pytest
 
+import json
+
 from l7r.diagram.interactive.citations import WORKS_CLOSE, WORKS_OPEN, cited_keys, works_html
-from l7r.diagram.interactive.record import store
-from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, record_text, registry_entries
+from l7r.diagram.interactive.record import site, store
+from l7r.diagram.interactive.record import source_tags as st
+from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, canon_keys, record_text, registry_entries
+from tests import _flat_record as fr
 
 _PAGES = store.load(RESEARCH_DIR).pages()
 
 
+@pytest.fixture(scope="module")
+def catalog() -> st.Catalog:
+    """The real registry's tags and sections (feature 305), read once."""
+    return st.Catalog(RESEARCH_DIR, {i.id: i.html for i in site.Registry(RESEARCH_DIR).items()}, canon_keys(), store.REGISTRY_DIR)
+
+
 @pytest.mark.parametrize("page", _PAGES, ids=lambda p: p.file)
-def test_every_cited_work_has_both_write_ups(page: store.qs.Page) -> None:
+def test_every_cited_work_has_both_write_ups(page: store.qs.Page, catalog: st.Catalog) -> None:
     """The works block is derived from the registry; a cited key whose entry lacks a write-up fails here."""
     keys = cited_keys(list(store.page_notes(page.file).items()))
-    _block, missing = works_html(keys, registry_entries(), "")
+    _block, missing = works_html(keys, registry_entries(), "", catalog)
     assert not missing, f"{page.file}: cited keys whose registry entry has no `{WHAT_LABEL}` / `{WHY_LABEL}` write-up (feature 211: a source is not cited without one): {missing}"
 
 
@@ -51,17 +61,21 @@ def test_keys_are_deduplicated_in_first_citation_order() -> None:
     assert cited_keys(_NOTES) == ["k-1", "canon"] and cited_keys([]) == []
 
 
-def test_the_works_block_reports_a_key_with_no_write_up_and_links_a_key_as_feature_190_does() -> None:
+def test_the_works_block_reports_a_key_with_no_write_up_and_links_a_key_as_feature_190_does(tmp_path: pathlib.Path) -> None:
     entries = {
         "k-1": {"cite": "Paper X (https://x.y/z)", "line": "Paper X (https://x.y/z) READ", "what": "A paper.", "why": "It applies.", "used": "u"},
         "k-2": {"cite": "Paper Y (https://a.b; SUMMARY-ONLY)", "line": "Paper Y (https://a.b; SUMMARY-ONLY)", "what": "A paper.", "why": "It applies.", "used": "u"},
         "k-3": {"cite": "Paper Z", "line": "Paper Z", "what": "", "why": "", "used": "u"},
     }
-    block, missing = works_html(["k-1", "k-2", "k-3", "k-4"], entries, "../")
+    (tmp_path / st.VOCABULARY).write_text(json.dumps(fr.SOURCE_TAGS), encoding="utf-8")
+    (tmp_path / st.SECTIONS).write_text(json.dumps(fr.SOURCE_SECTIONS), encoding="utf-8")
+    tagged = {"k-1": "<!-- tags: period=premodern; region=japan; kind=primary -->", "k-2": "<!-- tags: period=present-day; region=china; kind=reference -->"}
+    block, missing = works_html(["k-2", "k-1", "k-3", "k-4"], entries, "../", st.Catalog(str(tmp_path), tagged, set(), "sources"))
     assert missing == ["k-3", "k-4"]
     assert block.startswith(WORKS_OPEN) and block.endswith(WORKS_CLOSE)
-    assert '<h3 id="work-k-1"><a href="https://x.y/z"><code>k-1</code></a></h3>\n<p>Paper X (https://x.y/z)</p>' in block
-    assert '<h3 id="work-k-2"><a href="../SOURCES.html#k-2"><code>k-2</code></a></h3>' in block, "a not-read document links its registry entry"
+    assert '<h4 id="work-k-1"><a href="https://x.y/z"><code>k-1</code></a></h4>\n<p class="srctags">' in block and "</p>\n<p>Paper X (https://x.y/z)</p>" in block
+    assert '<h4 id="work-k-2"><a href="../SOURCES.html#k-2"><code>k-2</code></a></h4>' in block, "a not-read document links its registry entry"
+    assert block.index("Premodern Japan") < block.index("work-k-1") < block.index('id="page-works-present-day"') < block.index("work-k-2"), "grouped by section, not by citation order"
     assert f"<p><em>{WHY_LABEL}</em> It applies.</p>" in block and "k-3" not in block
 
 
