@@ -167,8 +167,9 @@ every list entry with no registry key: one of eight states with the date last ch
   2. Otherwise the most open of the key's manifest rows.
   3. Otherwise a dated `READ` comment in its registry entry gives open.
   4. Otherwise never-read.
-  A state recorded by hand, with its date and a reason, is kept as evidence and wins when its date is the same as or later
-  than the derived state's. The paywall
+  A state recorded by hand, with its date and a reason, is kept as evidence. It wins over rules 2 to 4 when its date is
+  the same as or later than theirs, and never over a GM mark (rule 1): the GM's own tick is the latest word on what can be
+  got. The paywall
   knowledge the repository already holds in prose - a list entry's "Blocked by" saying paywalled or subscription, a
   registry entry's comment or write-up saying so - is seeded as hand-recorded states by this feature, each read and
   confirmed, each citing the line it rests on. The states, their order and their meanings are stated in one file.
@@ -202,8 +203,8 @@ every list entry with no registry key: one of eight states with the date last ch
   sync allowed.
 - **SC-005** (FR-011, FR-012): The report gives every one of the 2,126 registry keys, and every keyless list entry, a state
   with a date (never-read excepted, which may have none). Its per-state counts are recorded in this feature. A gate test pins
-  one key per derivation rule, the mark mapping for each allowed combination, the several-entries rule, and one seeded
-  paywalled key.
+  one key per derivation rule, the mark mapping for each allowed combination, the several-entries rule, one seeded
+  paywalled key, and a seeded paywalled key whose entry the GM then marks downloaded showing gm-full.
 - **SC-006** (FR-013): No rule file still tells a session to append to `TO-DOWNLOAD.md` by hand.
 
 ## Decisions Recorded
@@ -243,3 +244,6 @@ Classes are those of `docs/research-doctrine.md`. Nothing on a map changes, so n
   first-sync refusal says how to bring the named entries in (the review's wording point). Also changed by the session: a
   hand-recorded state wins on the same date as the derived one, not only a later date, so a state seeded on the day of an
   archive capture is not silently outranked by it.
+- **Round 3** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - both round-2 items resolved; one new item from the session's
+  change: a hand state could outrank the GM's ingested mark. Applied, more simply than the review's wording: a hand state
+  never wins over a GM mark, and wins over rules 2 to 4 on the same date or later; SC-005 pins the seeded-then-downloaded case.
