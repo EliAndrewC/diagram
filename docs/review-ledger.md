@@ -412,3 +412,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-02 | glyph-check | homestead grove on kashikawa (feature 310, round 4, past the cap on the GM's word) | PASS | the notes' band figures still the box-based count | paperwork | yes | notes corrected to the by-group count | 300 s | 1285k in (1214k cached) / 25.0k out |
 | 2026-10-02 | glyph-check | copse on inashiro (feature 310, round 4) | PASS | - | nothing | - | - | 210 s | 834k in (783k cached) / 14.6k out |
 | 2026-10-02 | fix-check | inashiro, no canopy tree exempt from the sun (feature 310, round 4) | PASS | - | nothing | - | - | 167 s | 777k in (718k cached) / 14.6k out |
+| 2026-10-02 | escalation-check | feature 310 report for the GM | 6 keep, 1 rewrite, 1 cut | the bamboo item omitted the madake height T41 owes; the review-rounds item was process narrative | judgment | yes | rewritten and cut | 40 s | 63k in (47k cached) / 3.4k out |

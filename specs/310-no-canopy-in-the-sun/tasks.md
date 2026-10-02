@@ -64,7 +64,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
       explained; the closing bookend - the rendered Inashiro and Kashikawa re-read against research R0
       research: rendering
       verify: DONE. DONE. make done green (258 s) at 7e5bcf354; reviews round 4 all PASS (grove past the cap on the GM's word; copse; fix-check); perf band 1 against a start re-taken at the post-merge merge base, explained (CONTROL perf-310-control) and confirmed consistent by perf-audit; renders of Inashiro and Kashikawa re-read against R0: groves north and west, yards and beds south in the open, persimmons behind the houses
-- [ ] T41 Raise with the GM: the bamboo allowance (the stands counted, the culm marks uncounted, the bamboo page's madake height)
+- [x] T41 Raise with the GM: the bamboo allowance (the stands counted, the culm marks uncounted, the bamboo page's madake height)
       and SC-004's wood figures
       research: rendering
-      verify: the closing report, through escalation-check
+      verify: DONE. DONE. The closing report passed escalation-check (6 keep, 1 rewrite: the madake height added; 1 cut); delivered in the session's closing message
