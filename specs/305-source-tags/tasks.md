@@ -52,8 +52,9 @@ reaches a map.
 - [x] T09 The site looked at in a browser - a question page's grouped works and a label's hover, the registry index, the single page - and SC-003 checked by a script over the built site; SC-006's figure (the total limits-paragraph length before and after)
       research: rendering
       verify: DONE. Chromium (Playwright): yashikirin drawing page's works grouped with chips and the period tooltip in the note box; visit-toyama-sankyoson entry with Present day/Japan/Popular and the kind tooltip; registry index grouped. check_site.py over the built site: 471 question pages, 4,308 works, all.html 9 sections/2,126 works, index 9 sections, every check passed (SC-003). SC-006: limits paragraphs 1,244,183 -> 1,197,456 characters
-- [ ] T10 Verify and land: SC-002 as tests; `make record CHECK=1`; `make record` timed against T01; `make done` compared with T01's baseline; closing notes in `plan.md`; pushed
+- [x] T10 Verify and land: SC-002 as tests; `make record CHECK=1`; `make record` timed against T01; `make done` compared with T01's baseline; closing notes in `plan.md`; pushed
       research: rendering
+      verify: DONE. SC-002 as tests (test_source_tags Catalog test, test_record_site refusal test); make record CHECK=1 clean (2687 pages); make record 3.2-3.6 s warm vs 4.6-5.2 s at T01; make done green (126 s, 10,425 tests) against T01's green baseline - zero new failures; closing notes in closing.md (plan.md's CLEAR digest kept); SC-004 re-graded against the new vocabulary: 174/180, six fixes applied
 
 ## Dependencies
 
