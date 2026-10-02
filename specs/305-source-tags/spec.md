@@ -234,7 +234,7 @@ to it.
 
 ### Measurable Outcomes
 
-- **SC-001**: 100% of keyed registry entries carry valid tags on all three facets, or are canon. The build check passes
+- **SC-001**: Every keyed registry entry carries valid tags on all three facets, or is canon. The build check passes
   with no exemption.
 - **SC-002**: The build check fails on each of three seeded faults: a missing facet, an unknown value, and a combination
   no section takes. Each failure names the entry.
