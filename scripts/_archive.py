@@ -71,6 +71,7 @@ for _p in (str(HERE), str(SKILL)):
 import _sources as src  # noqa: E402
 
 from l7r.diagram.interactive.record import archive as rec  # noqa: E402
+from l7r.diagram.interactive.record import blocked  # noqa: E402
 
 REMOTE = rec.REPO + ".git"
 WORKDIR = "source-archive"
@@ -268,7 +269,9 @@ class Browser:
 
 
 def fetch(browser, url: str) -> Fetched:  # noqa: ANN001 - a Browser, or a test's stand-in with get and render
-    """One URL's bytes, and for a web page its render; a PDF's text from the PDF, a text file's from itself."""
+    """One URL's bytes, and for a web page its render; a PDF's text from the PDF, a text file's from itself. A URL on a
+    blocked domain is refused before any request (feature 312 FR-002)."""
+    blocked.check(url, "an archive fetch")
     got = browser.get(url)
     if got.error or got.status is None or got.status >= 400:
         return got
@@ -674,6 +677,7 @@ def archive_url(
 ) -> dict:  # noqa: ANN001
     """Archive one cited URL, copy its keys' GM files, write its manifest row, and push when asked. Returns the row."""
     url = rec.clean(url)
+    blocked.check(url, "the archive")
     copies, table = gm_copies(root), gm_table(root)
     mine = sorted({n for k in who.keys for n in copies.get(k, [])})
     cache = src.cached(src.home(root), url, max_age_days=CACHE_ANY_AGE_DAYS)
@@ -929,6 +933,7 @@ def archive_one(
         )
     finally:
         browser.close()
+    src._attempts_mod().add(root, url, "unknown", f"archived{' for ' + key if key else ''} (make archive)", route="archive", key=key)
     print(
         f"archive: {row['outcome']} - {url}"
         + (f" ({row['reason']})" if row["reason"] else "")

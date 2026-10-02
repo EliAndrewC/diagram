@@ -71,8 +71,23 @@ def test_save_writes_pages_and_a_manifest(tmp_path: pathlib.Path) -> None:
 
 
 def test_main(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
-    assert sp.main([str(tmp_path / "o"), "https://ok.example/a"], pages=sp.qv.Pages(opener=_opener)) == 0
-    assert "saved 1 of 1" in capsys.readouterr().out
+    assert sp.main([str(tmp_path / "o"), "https://ok.example/a"], pages=sp.qv.Pages(opener=_opener)) == 2
+    assert 'SOUGHT="<what you are looking for on the page>"' in capsys.readouterr().err, "feature 312 FR-017: a read says what it is for"
+    assert sp.main([str(tmp_path / "o"), "https://ok.example/a", "--question", "0042"], pages=sp.qv.Pages(opener=_opener)) == 2
+    capsys.readouterr()
+    args = [str(tmp_path / "o"), "https://ok.example/a", "--question", "0042", "--sought", "the dike width"]
+    assert sp.main(args, pages=sp.qv.Pages(opener=_opener)) == 0
+    out = capsys.readouterr().out
+    assert "saved 1 of 1" in out and "attempts: https://ok.example/a - no earlier attempt" in out
+    assert sp.main([str(tmp_path / "o2"), *args[1:-1], "the pond depth"], pages=sp.qv.Pages(opener=_opener)) == 0
+    assert "Q 0042: unknown - the dike width" in capsys.readouterr().out, "the earlier attempt is printed before the read"
+    lines = sp.attempts.read(sp.src.repo_root())
+    assert [(x["question"], x["sought"], x["route"]) for x in lines] == [("0042", "the dike width", "source-pages"), ("0042", "the pond depth", "source-pages")]
+    assert sp.main([str(tmp_path / "n"), "https://ok.example/b", "--question", "none", "--sought", "x"], pages=sp.qv.Pages(opener=_opener)) == 0
+    assert sp.attempts.read(sp.src.repo_root())[-1]["question"] == "unknown"
+    assert sp.main([str(tmp_path / "g"), "https://grokipedia.com/page/X", "--question", "0042", "--sought", "x"]) == 0
+    assert "blocked list" in (tmp_path / "g" / "MANIFEST.txt").read_text(encoding="utf-8")
+    assert len(sp.attempts.read(sp.src.repo_root())) == 3, "a blocked read is never recorded"
     assert sp.main([str(tmp_path / "o")]) == 2
     assert "no pointer given" in capsys.readouterr().err
 
@@ -187,8 +202,8 @@ def test_a_second_save_is_served_from_the_cache_until_refresh(tmp_path: pathlib.
     real = sp.qv.Pages
     monkeypatch.setattr(sp.qv, "Pages", lambda: real(opener=opener))
     url = "https://ok.example/a"
-    assert sp.main([str(tmp_path / "one"), url, "--question", "ways/010"]) == 0
-    assert sp.main([str(tmp_path / "two"), url]) == 0
+    assert sp.main([str(tmp_path / "one"), url, "--question", "ways/010", "--sought", "x"]) == 0
+    assert sp.main([str(tmp_path / "two"), url, "--question", "none", "--sought", "x"]) == 0
     assert len(calls) == 1, "the second save made no request"
     assert (tmp_path / "one" / "01-ok.example.txt").read_text(encoding="utf-8") == (tmp_path / "two" / "01-ok.example.txt").read_text(encoding="utf-8")
     assert "from the page cache (fetched " in (tmp_path / "two" / "MANIFEST.txt").read_text(encoding="utf-8")

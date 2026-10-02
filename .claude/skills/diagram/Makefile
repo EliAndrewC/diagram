@@ -1270,13 +1270,20 @@ source-pages: ## [project] save the full visible text of the named pointers, wit
 # GUARD_EDIT_OK: feature 288 - two optional variables, nothing loosened: QUESTION= reaches the ledger line the save now
 # appends (each URL's earlier reads are printed first), and REFRESH=1 is read from make's exported environment by the cache.
 	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(QUESTION),--question "$(QUESTION)",)
+# GUARD_EDIT_OK: feature 312 FR-017 - SOUGHT= (and Q= for QUESTION=) passed to the script, which now refuses a ledgered read without a question and what it seeks, printing this command; the refusal is the script's, nothing loosened here.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(or $(QUESTION),$(Q)),--question "$(or $(QUESTION),$(Q))",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
 
 # GUARD_EDIT_OK: feature 288 - three new operations (the sources-consulted ledger's outcome, its lookup, and the one-time seed and page-cache import); no guard changes.
 # GUARD_EDIT_OK: feature 303 - help text only: QUESTION= names a question's number now.
-source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger - every page a research pass reads (feature 288)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>]
+source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger and the attempts log - every page a research pass reads (features 288, 312)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>] [SOUGHT=<what was looked for>]
 	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",)
+# GUARD_EDIT_OK: feature 312 FR-017 - an optional SOUGHT=, nothing loosened: the outcome is also written to the attempts log.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
+
+# GUARD_EDIT_OK: feature 312 FR-018 - a new operation (print the attempts log for a source or a question); no guard changes.
+attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
+	@if [ -z "$(URL)$(KEY)$(Q)" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_attempts.py" show $(if $(URL),--url "$(URL)",$(if $(KEY),--key "$(KEY)",--q "$(Q)"))
 
 # GUARD_EDIT_OK: feature 309 - two new operations (archive one cited URL now; archive every cited URL with no copy, or report the coverage); no guard changes.
 archive: ## [project] archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)   URL=<u> [KEY=<registry key not yet written>]

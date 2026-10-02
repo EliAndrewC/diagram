@@ -1,0 +1,15 @@
+{
+ "_about": "Blocked domains (feature 312, FR-001): AI-generated sites, refused at every fetch route and never cited, written up, put on the ledger or the not-kept list, or archived. A category any domain can join with the GM's approval; read by l7r/diagram/interactive/record/blocked.py, which refuses an entry with no approval.",
+ "domains": [
+  {
+   "domain": "grokipedia.com",
+   "category": "ai-generated",
+   "reason": "an AI-generated encyclopedia - machine-rewritten from other sources, no editorial community, no provenance a reader can follow, and many hallucinations",
+   "added": "2026-10-02",
+   "approved": {
+    "date": "2026-10-02",
+    "words": "I accept your recommendation about blocking Grokopedia entirely."
+   }
+  }
+ ]
+}

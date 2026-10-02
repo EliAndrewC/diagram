@@ -114,8 +114,10 @@ def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(t
     out = io.StringIO()
     assert ops.find(root, store, key="alpha", out=out) == 0
     assert "the GM's copy:" in out.getvalue() and "the GM's copy of alpha" in out.getvalue()
+    assert "attempts: https://a - " in out.getvalue(), "feature 312 FR-018: a key's source shows its attempts"
     out = io.StringIO()
     assert ops.find(root, store, terms="sixty mats|straw", out=out) == 0 and "url: https://a" in out.getvalue()
+    assert "attempts: https://a - " in out.getvalue()
     out = io.StringIO()
     assert ops.find(root, store, terms="sixty mats|rice", out=out) == 1 and "search the web" in out.getvalue()
 
@@ -155,3 +157,15 @@ def test_the_ledgers_writers_hand_their_urls_to_the_archiver_but_never_in_a_test
     assert src.archive_reads(tmp_path, ["https://a", "https://b"], runner) == 1
     assert calls[0][1].endswith("_archive_ops.py") and calls[0][2:] == ["urls", "https://a", "https://b"]
     assert src.archive_reads(tmp_path, [], runner) == 0
+
+
+def test_find_prints_the_attempts_and_records_the_look(tmp_path: pathlib.Path) -> None:
+    """Feature 312 FR-017, FR-018: an archive look by URL prints what was tried before, then is itself an attempt."""
+    import io  # noqa: PLC0415
+
+    att = ops.src._attempts_mod()
+    att.add(tmp_path, "https://a.org/1", "0042", "the dike width", "not-found")
+    out = io.StringIO()
+    ops.find(tmp_path, type("S", (), {"dir": tmp_path})(), url="https://a.org/1", out=out)
+    assert "Q 0042: not-found - the dike width" in out.getvalue()
+    assert att.read(tmp_path)[-1]["route"] == "archive-find"

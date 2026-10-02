@@ -50,6 +50,23 @@ def _src():  # noqa: ANN202
 src = _src()
 
 
+def _attempts():  # noqa: ANN202
+    spec = importlib.util.spec_from_file_location("_attempts", HERE / "_attempts.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+attempts = _attempts()
+
+#: The refusal's compliant command (feature 312 FR-017): every consult records what it sought.
+NEEDS_SOUGHT = (
+    "source-pages: say what this read is for - every consult is recorded on the attempts log (feature 312 FR-017):\n"
+    '    make source-pages OUT=<dir> URL=<u> QUESTION=<NNNN, or none> SOUGHT="<what you are looking for on the page>"'
+)
+
+
 def file_for(index: int, url: str) -> str:
     host = re.sub(r"[^a-z0-9.-]+", "-", urllib.parse.urlsplit(url).netloc.lower()).strip("-") or "page"
     return f"{index:02d}-{host}.txt"
@@ -129,7 +146,9 @@ def next_number(out: pathlib.Path) -> int:
 
 def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None, ledger: dict | None = None) -> list[dict]:  # noqa: ANN001
     """Save each pointer's page into `out`. With `ledger` (`{"where", "ctx", "questions"}`, feature 288 FR-003), each
-    URL's earlier ledger lines are printed BEFORE it is fetched, and a `pending` line is appended for each page saved."""
+    URL's earlier ledger lines are printed BEFORE it is fetched, and a `pending` line is appended for each page saved.
+    With `ledger["root"]` and `ledger["sought"]` (feature 312 FR-017, FR-018), the URL's earlier attempts and the filter's
+    verdict are printed first too, and an attempt is appended for each pointer asked for."""
     out.mkdir(parents=True, exist_ok=True)
     rows = saved_rows(out)
     start = max(len(rows) + 1, next_number(out))  # past every earlier row and file, so a new page never takes an old one's number
@@ -141,7 +160,12 @@ def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = N
             print(f"sources-consulted: {url} - " + (f"read {len(seen)} time(s) before:" if seen else "no earlier read on the ledger"))
             for r in seen:
                 print(src.show(r))
+            if ledger.get("sought"):
+                print("\n".join(attempts.report(ledger["root"], url=url)))
         got = pages.get(url)
+        if ledger is not None and ledger.get("sought") and not got.get("blocked"):
+            q = next(iter(ledger["questions"]), "unknown")
+            attempts.add(ledger["root"], url, q, ledger["sought"], route="source-pages")
         row = {"pointer": url, "file": "-", "state": got["state"], "why": got.get("why", "")}
         if got["state"] == "FETCHED":
             name = file_for(index, url)
@@ -171,15 +195,21 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
     ap.add_argument("urls", nargs="*", help="the pointers to save")
     ap.add_argument("--quotes", default="", help="a JSON list of the passages the record quotes from these pages: a long page is saved as an excerpt around them (D19)")
     ap.add_argument("--question", default="", help="the research question the pages are read for (its number, NNNN), recorded on the ledger")
+    ap.add_argument("--sought", default="", help="what the read looks for on the page (feature 312 FR-017) - required with the ledger")
     ap.add_argument("--no-ledger", action="store_true", help="a re-verification save (an excerpt bundle): the cache, but no ledger lines (feature 288 D1)")
     args = ap.parse_args(argv)
     if not args.urls:
         print("source-pages: no pointer given - URL=<u1> [URL=<u2> ...]", file=sys.stderr)
         return 2
+    if not args.no_ledger and (not args.question or not args.sought.strip()):
+        print(NEEDS_SOUGHT, file=sys.stderr)
+        return 2
     out = pathlib.Path(args.out)
     quotes = json.loads(pathlib.Path(args.quotes).read_text(encoding="utf-8")) if args.quotes else None
     where = src.home()
-    ledger = None if args.no_ledger else {"where": where, "ctx": src.context(src.repo_root()), "questions": [args.question] if args.question else []}
+    questions = [] if args.question.lower() in ("", "none") else [args.question]
+    ledger = None if args.no_ledger else {"where": where, "ctx": src.context(src.repo_root()), "questions": questions,
+                                          "root": src.repo_root(), "sought": args.sought.strip()}
     rows = save(args.urls, out, pages or src.CachedPages(qv.Pages(), where, refresh=src.refresh_wanted()), quotes, ledger)
     print((out / "MANIFEST.txt").read_text(encoding="utf-8"), end="")
     print(f"  saved {sum(r['state'] == 'FETCHED' for r in rows)} of {len(rows)} to {out} - hand source-reader the manifest")

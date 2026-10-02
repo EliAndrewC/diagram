@@ -410,7 +410,8 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
         # claim - a research read, so its earlier reads are printed and a `pending` line appended, as `make source-pages`
         # does; the excerpt re-checks passages already quoted, and writes no ledger line. Both read the page cache.
         if whole:
-            code, text = run_script("_source_pages.py", [str(out / "pages"), url, *(["--question", question] if question else [])], root)
+            code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--question", question or "none",
+                                                  "--sought", f"source-reader: the passage behind a new claim on {key}"], root)
             if ledger_part(text):
                 print(ledger_part(text))
             rows.append(("pages/", url, "the page's whole visible text, saved - a long page in PARTS; grep them all, read the part a hit is in"))

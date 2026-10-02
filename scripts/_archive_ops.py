@@ -217,6 +217,10 @@ def find(
     hits = 0
     rows = [json.loads(p.read_text(encoding="utf-8")) for p in ar.row_files(root)]
     want = src.norm(url) if url else ""
+    if url:  # feature 312 FR-017, FR-018: what was tried before, then this look recorded
+        log = src._attempts_mod()
+        print("\n".join(log.report(root, url=url)), file=out)
+        log.add(root, url, "unknown", "is it in the archive (make archive-find)", route="archive-find")
     for row in rows:
         if (want and src.norm(row["url"]) == want) or (
             key and key in row.get("keys", [])
@@ -229,6 +233,8 @@ def find(
             )
             for gm in row.get("gm_copies", []):
                 print(f"  the GM's copy: {store.dir / gm}", file=out)
+            if not want:  # feature 312 FR-018: a source found by its key shows what it was tried for, too
+                print("\n".join(src._attempts_mod().report(root, url=row["url"])), file=out)
     if key:
         for name, entry in sorted(ar.gm_table(root).items()):
             if key in entry.get("keys", []) and entry.get("archived"):
@@ -266,6 +272,8 @@ def find(
                 + (f"\n  url: {url_of[d]}" if d in url_of else ""),
                 file=out,
             )
+            if d in url_of:  # feature 312 FR-018
+                print("\n".join(src._attempts_mod().report(root, url=url_of[d])), file=out)
     if not hits:
         print(
             "archive: nothing held - search the web (a page you cite is archived by `make source-outcome OUTCOME=cited:<key>`)",

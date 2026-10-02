@@ -1,0 +1,4 @@
+{
+ "_about": "Banned citations (feature 312, FR-004): sources forbidden for a reason other than being AI-generated, banned at the CITATION by a regular expression over the URL - never at the fetch, since they may share a domain with allowed sources. Each entry: pattern, reason, added, approved {date, words}. The build refuses a registry entry or footnote whose URL matches.",
+ "patterns": []
+}
