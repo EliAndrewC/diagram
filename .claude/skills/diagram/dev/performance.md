@@ -983,3 +983,31 @@ seed 47 (10 -> 40 households; specs/304 research R1). What shipped and what the 
 corridor search behind each seat 33-38%, the four layouts and their fixtures 18%, the site raster's sampling of each candidate
 corridor 15% - asked of ~1,500 seats to seat 23. No index removes that; a village-sized seating wants a different search
 (fewer, better seats offered), which is a design question raised with the GM, not an optimization.
+
+## Seat by packing, and what it bought (feature 306, 2026-10-02)
+
+The GM, on 6-50 s to seat 40 households: *"basically draw a bounding box that will contain a homestead and the things in the
+homestead, and then place it on the map, and then place another one next to it ... not something that I would expect to take a
+full second per box."* The time was not a slow check - one placer call is ~1.5 ms - but the SHAPE of the search: a margin's
+capacity was found by seating it, and seed 47 seated sixteen margins (25,279 placer calls) to keep the sixteenth's 40 houses
+(specs/306 research R2, R5). What shipped, each on its own measured verdict (back to back, R15; sixteen seeds at 40 households):
+
+- **The seating's band holds a homestead's whole ground** (`consts.SEATING_GROUND_FT = 162`): `HOMESTEAD_GROUND_FT`'s 104 counted
+  the house, yard and row and not the wood floor added after it, so a 40-household cluster sat at the edge of its capacity and
+  whether a margin filled was near chance. 162 is the side of a square holding the pool's MEAN homestead envelope plus the least
+  wood floor. It sizes only the seating's lattice and seat bound - the margin, canvas and belt keep 104: growing the canvas too
+  re-fitted every field and refused sites (R11), and the canvas grown alone made 40 households worse (R12). **427.7 -> 95.0 s**
+  over the fifteen seeds the base could roll (seed 7 crashed in the base, R8); the first margin on 9 of 16 against 1 of 15.
+- **A margin's exhaustive pass gives up after 400 dry offers, and a near miss (three short or fewer) is searched again** on a
+  finer grid with a wider corridor search (`capacity.DRY_SPELL`, `RESCUE_SHORT`): 100.0 -> **83.3 s** over the sixteen; the first
+  margin on 11 of 16.
+- **The overlap census** (`make census`, run by `make perf`): comparisons per call of every check the pool's rolls run, shapely's
+  predicates included; a check over 5,000 is flagged. Its first run flagged nine (5,048-111,700); each was indexed with identical
+  answers (`_clear_of_fabric` 111,700 -> 69, `_blocked_cells` 101,229 -> 5,485 and Sawada's seat stage 1.1-1.9 s -> 0.1 s,
+  `seat_cluster` 30,604 -> 572, the crossings stage 0.27 -> 0.08 s); after them no check is flagged (R10, R13).
+
+**Withdrawn, with their numbers (R1-R4, R7):** capacity predicted by packing boxes (the free ground holds 213-305 boxes where
+15-40 seat - the cap is a straight corridor to the access tree, not ground); seats proposed beside the tree, grown from the
+houses, along planned frontage lanes (each seated FEWER a margin - every lane the law admits is reserved ground); a wider
+corridor search alone (moves which margin succeeds, not whether); the shared sheds at the band's rim. **Lesson worth carrying:**
+when a search's success is near chance, the lever is the capacity it is searching in, not the order it searches.
