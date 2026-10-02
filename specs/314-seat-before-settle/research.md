@@ -202,3 +202,25 @@ seats popped); seeds 4, 12 and 10 at 40 were a little faster (5.06 -> 3.89, 3.83
 slower; at 15 households seed 13 1.58 against 2.03 s, the other three level. A lost margin outweighs the rest; withdrawn. The
 pre-check stays at every position (plan D1).
 (observed 2026-10-02, method: as the heading.)
+
+## R15 - The shipped engine: the cohort and where the 15-household stage goes (observed 2026-10-02, method: `make cohort N=24 JOBS=4` in the clone and in `/tmp/start314b` (origin/main 0f6501262, with feature 310); `split.py 15 1,...,16` in the clone)
+
+The cohort is 25/30 on the clone and 25/30 on main, the same five failures on both: seeds 14, 15 and 906 (dispersed, the tree
+shade checks feature 310 added) and seeds 22 and 23 (linear, `WebRefused`). Before 310's merge both legs were 28/30 (R11).
+Neither form grows, and the failures are main's; the session that owns feature 310 has been told, with the logs.
+
+The 15-household stage on the shipped engine (the own parts withdrawn, R12): 18.7 s over seeds 1-16, 1.17 s a map - the growth
+64%, the field's corridor 13%, the site boundary 10%, the rest 13%. R9's shares were taken before R12 at 1.04 s a map; the
+growth's share rose by what the withdrawn lever had saved. R9's account of what an efficient process would do stands, with
+the growth's ceiling now about 45% of the stage (64% of the stage, the path search and the lane law about 70% of the growth).
+(observed 2026-10-02, method: as the heading.)
+
+## R16 - The bookend's band 1, audited (observed 2026-10-02, method: the perf-audit agent's counterfactual - four worktrees (main, the end, the end with `growth.py` and `route.py` reverted, the end with the pre-check off), every stage timed at 10, 15 and 40 households in two or three alternated runs, the map hashed after the homesteads and the web)
+
+With the growth and the route reverted the maps are byte-identical to main's and every stage that grew returns to main's time
+(10 households seed 4: web 0.59 / 0.58 / 1.14 s for main / reverted / end, notice 0.08 / 0.08 / 0.25 s; 40 households seed 4:
+hinterland 2.12 / 2.11 / 3.20 s): the downstream growth is the moved map, not slower code. The homesteads growth on seed 4 at 40
+households (4.56 -> 5.10 s) is about 0.34 s the pre-check (4.76 s with it off) and about 0.2 s the route (plan D3). Seed 47 at 15
+households carries about +0.1 s in the homesteads (73 -> 105 seats offered), below what the bookend picked up. Verdict:
+consistent (`dev/perf-log/*-review-314-confirmation-*.json`).
+(observed 2026-10-02, method: as the heading.)

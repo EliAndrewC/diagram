@@ -29,5 +29,6 @@
 - [x] T07 the pool and the cohort against the base (FR-005, SC-002)
       research: rendering
       verify: DONE. research R11: cohort 28/30 on base and clone, the same two failures (seeds 5, 903; fixed on main by feature 310); make done green on the merged engine, every pool map regenerated and passing
-- [ ] T08 `make done`, the `314-end` bookend and `perf-report` (SC-005), `dev/performance.md`
+- [x] T08 `make done`, the `314-end` bookend and `perf-report` (SC-005), `dev/performance.md`
       research: rendering
+      verify: DONE. make done green on the merged engine; 314-start/314-end back to back, band 1 (reference -8.5%), explanation recorded and confirmed consistent by perf-audit (research R16); dev/performance.md
