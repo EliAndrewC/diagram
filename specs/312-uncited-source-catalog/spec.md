@@ -161,7 +161,7 @@ in User Story 6.
   for the blocked list, never add one. It reads batches of pages from a bundle outside the repository.
 - **FR-009**: The filter is calibrated before any verdict is applied: three runs a leg on a POSITIVE control (cited
   pages, which it should keep) and a NEGATIVE control (a labeled set of junk pages from the uncited set, each label with its
-  reason). It is trusted at 95% agreement or more on each leg in every run; below that its contract is amended and the
+  reason). It is trusted at 95% agreement or more on each leg in every run (`research.md` R1); below that its contract is amended and the
   calibration re-run. The record of the runs is in this directory.
 - **FR-010**: A not-kept page is a line of `research/not-kept.jsonl` (union-merged): its URL, reasons, note, access state
   where unreadable, the basis (`rule` or `source-filter`), the date and the feature. It is never archived. A pre-hold capture
@@ -229,7 +229,7 @@ in User Story 6.
 - **SC-003** (FR-005): the inventory names a tool for every citation rule; each mechanical rule's tool has a test.
 - **SC-004** (FR-006, FR-007, FR-010, FR-011): every URL of the uncited set has exactly one verdict; 0 not-kept URLs have
   a manifest row; every kept URL has one.
-- **SC-005** (FR-008, FR-009): the calibration record shows three runs a leg at 95% agreement or more on each.
+- **SC-005** (FR-008, FR-009): the calibration record shows three runs a leg at 95% agreement or more on each (`research.md` R1).
 - **SC-006** (FR-012, FR-013, FR-014): every kept URL has an uncited entry that `source-applicability` has answered;
   `make record` builds the "Uncited sources" part; the fixtures for a canon link and a cited uncited entry fail the build.
 - **SC-007** (FR-015, FR-016, FR-017, FR-018): every ledger row naming a question has an attempt line; `make source-pages`
