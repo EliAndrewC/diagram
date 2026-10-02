@@ -317,7 +317,7 @@ def link_target(key: str, cite: str, rel: str) -> str:
 
 
 #: Where a bare URL may stand in a fragment of markup: outside every tag and comment, and outside a link's text.
-_MARKUP_PART = re.compile(r"(<!--.*?-->|<a\b[^>]*>.*?</a>|<[^>]+>)", re.S)
+_MARKUP_PART = re.compile(r"(<!--.*?-->|<a\b[^>]*>.*?</a>|<script\b.*?</script>|<style\b.*?</style>|<[^>]+>)", re.S)
 
 
 def _url_end(u: str) -> str:
@@ -332,7 +332,8 @@ def _url_end(u: str) -> str:
 def linkify(fragment: str) -> str:
     """Every bare URL in `fragment` made a link to itself that opens in a new tab (feature 307, GM 2026-10-02: *"when we
     display a URL, it should become a link ... that would open the source in a new tab"*), done by the build so nothing
-    is typed into the registry. A URL already inside a link, a tag or a comment is left as it is."""
+    is typed into the registry. A URL already inside a link, a tag, a comment, a script or a style is left as it is. The
+    site calls it on every page's content (`site_pages.shell`), so a URL shown anywhere on a page is a link."""
 
     def text(part: str) -> str:
         out, at = [], 0

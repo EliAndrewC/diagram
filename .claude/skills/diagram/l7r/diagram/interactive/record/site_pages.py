@@ -18,6 +18,7 @@ import html
 import json
 from dataclasses import dataclass
 
+from l7r.diagram.interactive.sources import linkify
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
 
@@ -67,7 +68,7 @@ def shell(title: str, here: str, open_keys: str, body: str, *, lazy_glossary: bo
         f'<body class="site" data-root="{root}" data-part="{html.escape(open_keys)}" data-page="{html.escape(here)}"{" data-lazy-glossary" if lazy_glossary else ""}>\n'
         '<div class="layout">\n<nav id="sidebar" aria-label="Contents">'
         f'<noscript><p><a href="{root}index.html">Contents</a> - <a href="{root}all.html">the whole record on one page</a></p></noscript></nav>\n'
-        f"<main>\n{body}\n</main>\n</div>\n</body>\n</html>\n"
+        f"<main>\n{linkify(body)}\n</main>\n</div>\n</body>\n</html>\n"
     )
 
 

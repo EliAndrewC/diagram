@@ -24,7 +24,8 @@ beneath it in their order, the way the research group's top-level sections sit b
 ("Primary", "Scholarship", "Reference", ...), and each kind to its works. The record's home page (its table of contents), the one-page record's
 contents and the sources index page nest the same way.
 
-**Independent Test**: build the record; the sidebar's data, the one-page contents and the sources index each show
+**Independent Test**: build the record; the sidebar's data, the home page's contents, the one-page contents and the
+sources index each show
 Sources -> section -> kind -> works, and every work appears exactly once, under its own section and its primary kind.
 
 **Acceptance Scenarios**:
@@ -46,7 +47,7 @@ Sources -> section -> kind -> works, and every work appears exactly once, under 
 A reader checking a source clicks the URL in its citation line and the source opens in a new tab. The GM's campaign-note
 entries cite the notes on GitHub, each named section linked to its heading.
 
-**Independent Test**: build the record; no citation line shows a bare URL, and every canon entry links GitHub.
+**Independent Test**: build the record; no page shows a bare URL, and every canon entry links GitHub.
 
 **Acceptance Scenarios**:
 
@@ -76,9 +77,10 @@ entries cite the notes on GitHub, each named section linked to its heading.
 - **FR-004**: The record's home page (its table of contents), the sources index page and the one-page record's Sources part, and its table of contents, use the same
   nesting: section headings, then kind headings, then the works.
 - **FR-005**: The grouping is derived from the tags and the two files; nothing about it is written elsewhere.
-- **FR-006**: Every bare URL in a citation line the record shows - on a question page's works, a source's page and the
-  one-page record - is built into a link to itself that opens in a new tab. A URL already inside a link or a comment is
-  left alone. Nothing is typed into the registry for it.
+- **FR-006**: Every URL shown as text on a built page - question pages, source pages, the sources index, the home page
+  and the one-page record, wherever it appears (a citation line, a write-up, a note) - is built into a link to itself
+  that opens in a new tab. A URL already inside a link, a tag, a comment, a script or a style is left alone. Nothing is
+  typed into the registry or the questions for it.
 - **FR-007**: Each campaign-note entry's citation line names the notes' file on GitHub
   (`https://github.com/EliAndrewC/l7r/blob/master/setting/<file>.md`) in place of "URL: none", and each section it
   quotes is followed by its heading's URL, the anchor computed from the file's headings by GitHub's rule. A quoted name
@@ -87,15 +89,16 @@ entries cite the notes on GitHub, each named section linked to its heading.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-002, FR-005): in the built navigation data, the Sources node's children are the non-empty
-  sections in file order; every work appears exactly once in the tree, under its section and its primary kind; kinds
-  follow the vocabulary's order.
+- **SC-001** (FR-001, FR-002, FR-005): in the built navigation data, the Sources group's top-level entries are the
+  non-empty works sections in `source-sections.json` order, and no entry beneath the heading is labeled "Sources";
+  every work appears exactly once in the tree, under its section and its primary kind; kinds follow the vocabulary's
+  order.
 - **SC-002** (FR-003): every section and kind node's link lands on an id that exists on the sources index; a source
   page's open keys name its section and kind.
 - **SC-003** (FR-004): the home page, the sources index and the one-page record show section then kind in the same
   order as the navigation, "Sources" appears once in each, and the contents nest them.
-- **SC-004** (FR-006): on the built site, no citation line carries a bare `http(s)://` URL outside a link; every link
-  made from one opens in a new tab.
+- **SC-004** (FR-006): on the built site, no `http(s)://` URL appears as text outside a link; every link made from one
+  opens in a new tab.
 - **SC-005** (FR-007): every canon entry's citation line links its file on GitHub and every quoted section to an anchor
   of that file's headings; none says "URL: none".
 
@@ -126,3 +129,7 @@ This feature draws nothing on a map; it organizes the record's navigation.
   table of contents left out; the request's first sentence carried nowhere. Addressed: FR-001 and scenario 1 put the
   sections directly under the one "Sources" heading; the home page joins FR-004/SC-003; an assumption records the first
   sentence as met by feature 305. Message 2's two requests added as User Story 2, FR-006, FR-007, SC-004, SC-005.
+- Round 2 (spec-fidelity-verify, 2026-10-02): CHANGES REQUIRED, 2 items - SC-001 still tested a "Sources" node; FR-006
+  covered citation lines only, while the GM asked that a displayed URL become a link (11 other bare URLs on the site).
+  Addressed: SC-001 tests "Sources" once with the sections directly beneath; the Independent Test names the home page;
+  FR-006 and SC-004 cover every URL shown as text on any built page.

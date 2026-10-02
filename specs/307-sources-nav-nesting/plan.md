@@ -40,10 +40,11 @@ works. The one-page record: the same, entries at `h5`, its contents nesting sect
 "Sources" heading links the index, with the sections and their kinds nested beneath. The registry pager walks
 section -> kind -> registry order.
 
-**D4 - `linkify`** in `sources.py`: a bare `http(s)` URL outside every tag, comment and link becomes
+**D4 - `linkify`** in `sources.py`: a bare `http(s)` URL outside every tag, comment, link, script and style becomes
 `<a href=URL target="_blank" rel="noopener">URL</a>`, its sentence punctuation and an unopened parenthesis left outside
-(the rule `link_target` already follows). Called on the citation line in `works_html` and in `Build.entry_html` (the
-first paragraph after the heading), so a source's page and the one-page record carry it too.
+(the rule `link_target` already follows). `site_pages.shell` calls it on every page's content, so a URL shown anywhere
+on a page is a link (FR-006 as amended); `works_html` and `Build.entry_html` also call it on the citation line, which
+is idempotent.
 
 **D5 - The canon rewrite** (`migrate/canon_links.py`, one-time): each quoted section on a canon citation line is found
 among its file's headings - by plain text (markdown emphasis dropped), else by a unique prefix - and followed by

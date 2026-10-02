@@ -308,16 +308,16 @@ def test_the_sources_nest_by_section_then_kind_in_the_sidebar_the_contents_and_t
     assert 'Alpha, a work (<a href="https://a" target="_blank" rel="noopener">https://a</a>)' in files["sources/alpha.html"], "307 FR-006 on a source's page"
 
 
-def test_no_citation_line_on_the_built_site_shows_a_bare_url(built: dict[str, str]) -> None:
-    """307 SC-004: every citation line the site shows - a question page's works, a source's page, the one-page record -
-    carries its URLs as links; linking it again would change nothing."""
+def test_no_page_of_the_built_site_shows_a_bare_url(built: dict[str, str]) -> None:
+    """307 SC-004: no `http(s)://` URL appears as text outside a link on any page of the site - linking a page's content
+    again would change nothing - and a citation line's URL is among those linked."""
     from l7r.diagram.interactive.sources import linkify  # noqa: PLC0415
 
-    cite = re.compile(r'<p class="srctags">.*?</p>\n<p>(.*?)</p>', re.S)
-    lines = [m.group(1) for name, page in built.items() if name.endswith(".html") for m in cite.finditer(page)]
-    assert len(lines) > 4000, "non-vacuity"
-    bare = [line for line in lines if linkify(line) != line]
-    assert not bare, bare[:3]
+    mains = {name: page.split("<main>", 1)[1].split("</main>", 1)[0] for name, page in built.items() if name.endswith(".html") and "<main>" in page}
+    assert len(mains) > 2000, "non-vacuity"
+    bare = [name for name, main in mains.items() if linkify(main) != main]
+    assert not bare, bare[:5]
+    assert 'target="_blank" rel="noopener">https://' in built["sources/visit-toyama-sankyoson.html"]
 
 
 def test_the_build_refuses_a_work_with_no_tags_an_unknown_one_or_no_section_and_a_missing_rule_file(tmp_path: pathlib.Path) -> None:
