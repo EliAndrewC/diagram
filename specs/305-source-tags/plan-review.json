@@ -1,6 +1,6 @@
 {
  "feature": "305-source-tags",
- "plan_sha256": "daa8c568c437be534e35d2816cc4dabfd61e8f23b7b9b4dffba94e8c8547abfe",
+ "plan_sha256": "74f690d040f4881d362ecf6c7dc7069d606cdea55a1f1236d31d63cc498a66dd",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,10 +18,9 @@
   },
   {
    "id": "D3",
-   "summary": "Period cut-offs by region: Japan, China, Korea stated in full; Europe premodern before ~1800 with modern-preindustrial and present-day left '-'; east-asia-other given no cut-off; elsewhere left to the classifier's judgment 'and say so in the batch notes' (R5)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "GM message 2 delegates the cut-offs on one condition: 'as long as you explain the logic in the tooltips'; FR-003 makes every cut-off set by region and stated in the period explanation. The plan states cut-offs for three of the seven region values, leaves Europe after ~1800 unstated, gives east-asia-other (Ryukyu, Taiwan, Vietnam) nothing at all, and moves the elsewhere logic into batch notes no reader sees. Nothing makes stating them impossible; it is an omission that narrows the GM's one stated condition."
+   "summary": "Period cut-offs stated for every region value: Japan, China, Korea, Other East Asia (Vietnam, Ryukyu, Taiwan by colonial rule or annexation), Europe (before ~1800 / ~1800-1950 / after ~1950), Elsewhere (by railways, factory goods or colonial cash cropping; ~1950), General (the rule of its evidence's region, or not period-bound); every cell written into the period explanations in source-tags.json; an unsettled source is listed for the session, never judged in a batch note",
+   "class": "within",
+   "why": "Round 1's item resolved: GM message 2 delegates the cut-offs on the condition that the logic is explained in the tooltips, and FR-003 requires each to be set by region and stated in the period explanation. Every region value now has a cut-off or a stated rule, all of it is placed in the tooltips, and no cut-off reasoning is left to batch notes no reader sees."
   },
   {
    "id": "D4",
@@ -93,7 +92,7 @@
    "id": "R5",
    "summary": "Classification rules: period by evidence, present-day sites describing premodern forms, not period-bound for physical facts, region placement, kind definitions, canon untagged",
    "class": "within",
-   "why": "Restates the spec's edge cases and FR-004; the cut-off clause is ruled under D3."
+   "why": "Restates the spec's edge cases and FR-004; the cut-off clause now points at plan D3's table and routes unsettled sources to the session, so it carries no narrowing."
   },
   {
    "id": "R6",
@@ -108,5 +107,5 @@
    "why": "Project process; no scope change."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
