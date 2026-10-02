@@ -420,3 +420,27 @@ def test_a_part_never_passes_the_read_tools_character_limit() -> None:
     assert len(parts) > 1 and all(len(p) <= un.PART_CHARS for p in parts) and "".join(parts) == english
     one_line = "x" * (un.PART_CHARS * 2 + 7)
     assert [len(p) for p in un.split(one_line)] == [un.PART_CHARS, un.PART_CHARS, 7]
+
+
+def test_boilerplate_is_what_four_pages_of_a_host_share_and_similar_reads_past_it() -> None:
+    nav = un.body_grams("Main menu navigation box of the site " * 20)
+    pages = [un.body_grams(f"Main menu navigation box of the site {'x' * i} article number {i} " * 20) for i in range(4)]
+    common = un.boilerplate(pages)
+    assert nav & common and not un.boilerplate(pages[:3]), "a gram on four pages is boilerplate, on three it is not"
+    a = un.body_grams("The levee is a ridge of earth along a river, raised by floods. " * 30)
+    b = un.body_grams("Levee - redirect. The levee is a ridge of earth along a river, raised by floods. " * 30)
+    c = un.body_grams("A fan-shaped plain of gravel spread where a mountain stream leaves its valley. " * 30)
+    assert un.similar(a, b) and not un.similar(a, c) and not un.similar(a, frozenset())
+    assert un.overlap(frozenset(), a) == 0.0
+
+
+def test_dedupe_finds_one_work_saved_in_two_forms_on_one_host(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    article = " ".join(f"Cremation note {i}: the pyre of year {1600 + i} burned {i * 7 % 13} hours." for i in range(150))
+    src.put(_home(), "https://w.org/Cremains", "Jump to content Main menu " + article)
+    src.put(_home(), "https://w.org/Cremation", "Cremation - Wiki " + article + " Retrieved from")
+    src.put(_home(), "https://w.org/Levee", "A levee is a ridge of earth along a river. " * 60)
+    (root / un.SOURCES / "010-works-cited" / "20100-cremation-w.html").write_text("<p>C (https://w.org/Cremation)</p>\n", encoding="utf-8")
+    un.kept(root, ["https://w.org/Cremains", "https://w.org/Levee"], "source-filter")
+    dups = un.duplicate_works(root)
+    assert [(raw, into) for raw, into, _ in dups] == [("https://w.org/Cremains", "cremation-w")] and dups[0][2].startswith("similar")

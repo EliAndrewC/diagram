@@ -147,23 +147,76 @@ def fingerprint(text: str | None) -> str:
     return "" if len(body) < 1000 else hashlib.sha1(body[200:].encode()).hexdigest()
 
 
-def duplicate_works(root: pathlib.Path) -> list[tuple[str, str]]:
+BOILERPLATE_DOCS = 4
+SIMILAR = 0.65  # measured 2026-10-02 over the kept pages: one article under two URLs (redirects, variants, an import and a fetch) 0.69-1.00; two pages of one site or one property sharing its template (two magistrate offices, two Yokota buildings, two blog posts) 0.51-0.59. Two true pairs fall below (生垣, 庙会, 0.57) - left to source-applicability
+
+
+def body_grams(text: str | None) -> frozenset[str]:
+    """Character 4-grams of a page's first 30,000 characters; what the host repeats is set aside by `boilerplate`."""
+    t = re.sub(r"\s+", " ", text or "")[:30000]
+    return frozenset(t[i : i + 4] for i in range(max(0, len(t) - 3)))
+
+
+def overlap(a: frozenset[str], b: frozenset[str]) -> float:
+    return len(a & b) / len(a | b) if a and b else 0.0
+
+
+def similar(a: frozenset[str], b: frozenset[str]) -> bool:
+    """One work saved twice in different forms (an imported copy against a fetch, a redirect): `SIMILAR` of the 4-grams."""
+    return overlap(a, b) >= SIMILAR
+
+
+def boilerplate(docs: list[frozenset[str]]) -> frozenset[str]:
+    """The 4-grams a host repeats on four pages or more (navigation, a category's navbox, a database's template). One
+    work saved as two or three spellings (a redirect, a variant, an import) shares its own text on at most three; short
+    articles of one category share only their navbox, and without this scored as one work (寺内町 and 宿場, 2026-10-02)."""
+    from collections import Counter  # noqa: PLC0415
+
+    df = Counter(g for d in docs for g in d)
+    return frozenset(g for g, n in df.items() if n >= BOILERPLATE_DOCS)
+
+
+def duplicate_works(root: pathlib.Path) -> list[tuple[str, str, str]]:
     """Kept pages that are one work with a cited entry's URL or an earlier kept page - by URL under another spelling
-    (`work`) or by the same saved text (`fingerprint`): each as (the kept page's raw URL, what it duplicates)."""
+    (`work`), by the same saved text (`fingerprint`), or by a body `SIMILAR` to a page on the same host once the host's
+    boilerplate is set aside: each as (the kept page's raw URL, what it duplicates, why)."""
     seen: dict[str, str] = {}
+    where = src.home(root)
+    cited: list[tuple[str, str, frozenset[str]]] = []
     for f in sorted((at.base(root) / SOURCES).glob("*/[0-9]*-*.html")):
         if f.parent.name != at.UNCITED.name:
+            key = f.stem.split("-", 1)[1]
             for u in src._URL.findall(f.read_text(encoding="utf-8")):
-                seen.setdefault(work(src.norm(u)), f.stem.split("-", 1)[1])
-    where = src.home(root)
+                u = u.rstrip(").,;:")  # the citation's closing parenthesis, which the URL pattern takes in
+                seen.setdefault(work(src.norm(u)), key)
+                cited.append((src.norm(u).split("/")[0], key, body_grams(text_of(where, u))))
+    kept = [(x, text_of(where, x["raw"])) for x in at.read(root, KEPT)]
+    kept_g = [body_grams(t) for _, t in kept]
+    by_host: dict[str, list[frozenset[str]]] = {}
+    for host, _, g in cited:
+        by_host.setdefault(host, []).append(g)
+    for (x, _), g in zip(kept, kept_g, strict=True):
+        by_host.setdefault(x["url"].split("/")[0], []).append(g)
+    common = {h: boilerplate(d) for h, d in by_host.items()}
+    bodies: dict[str, list[tuple[frozenset[str], str]]] = {}
+    for host, key, g in cited:
+        if g:
+            bodies.setdefault(host, []).append((g - common[host], key))
     out = []
-    for x in at.read(root, KEPT):
-        marks = [m for m in (work(x["url"]), fingerprint(text_of(where, x["raw"]))) if m]
-        hit = next((seen[m] for m in marks if m in seen), None)
+    for (x, text), g in zip(kept, kept_g, strict=True):
+        host = x["url"].split("/")[0]
+        g = g - common.get(host, frozenset())
+        marks = [m for m in (work(x["url"]), fingerprint(text)) if m]
+        hit, why = next(((seen[m], "same URL or text") for m in marks if m in seen), (None, ""))
+        if not hit:
+            score, key = max(((overlap(g, b), k) for b, k in bodies.get(host, [])), default=(0.0, None))
+            hit, why = (key, f"similar {score:.2f}") if score >= SIMILAR else (None, "")
         if hit:
-            out.append((x["raw"], hit))
+            out.append((x["raw"], hit, why))
         else:
             seen.update(dict.fromkeys(marks, x["raw"]))
+            if g:
+                bodies.setdefault(host, []).append((g, x["raw"]))
     return out
 
 
@@ -326,7 +379,11 @@ def _lane(args: tuple[str, list[str]]) -> dict[str, int]:  # pragma: no cover - 
     try:
         return fetch(root, urls, browser)
     finally:
-        browser.close()
+        try:
+            browser.close()
+        except Exception:  # noqa: BLE001, S110 - the lane's first browser may be one `fetch` already replaced or that died
+            # (Playwright "Event loop is closed!" here ended two whole runs, 2026-10-02); its counts are what matter
+            pass
 
 
 def fetch_all(root: pathlib.Path, urls: list[str], workers: int) -> dict[str, int]:  # pragma: no cover - the live run
@@ -748,7 +805,7 @@ def dedupe(root: pathlib.Path, dry: bool = False) -> list[str]:
     """Every duplicate `duplicate_works` finds retired: a written entry by `merge`, an unwritten kept page by moving its
     line to the not-kept list. What it duplicates stays (a cited entry, or the first kept page)."""
     done = []
-    for raw, into in duplicate_works(root):
+    for raw, into, why in duplicate_works(root):
         into_key = into if not into.startswith("http") else (entry_holding(root, into) or into)
         key = entry_holding(root, raw)
         if dry:
@@ -762,7 +819,7 @@ def dedupe(root: pathlib.Path, dry: bool = False) -> list[str]:
                 lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
                 path.write_text("".join(s for s in lines if q not in s), encoding="utf-8")
             at.write(root, [line(raw, ["duplicate"], "rule", f"the same work as {into_key}")], NOT_KEPT)
-        done.append(f"{key or raw} -> {into_key}")
+        done.append(f"{key or raw} -> {into_key}" + (f" ({why})" if why.startswith("similar") else ""))
     return done
 
 
