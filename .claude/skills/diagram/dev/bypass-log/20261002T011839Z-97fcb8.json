@@ -1,6 +1,0 @@
-{
-  "utc": "2026-10-02T01:18:39Z",
-  "target": "plan-gate push",
-  "commit": "9d083d50d",
-  "why": "feature 303's mechanical pointer sweep: research pointers in a long-abandoned feature's plan rewritten to the flat layout, none of its decisions changed"
-}
