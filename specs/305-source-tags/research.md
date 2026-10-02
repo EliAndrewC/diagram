@@ -59,7 +59,7 @@ changed write-up", and the trim changes most of 2,126. Running it on all of them
 judgments, each fetching its source. The trim only REMOVES text that restates a label, and the label now carries that
 limit, so the honesty judgment the agent exists for is unchanged in substance. The 60-entry stratified sample, plus
 the mechanical no-new-content check of R4, stands in for the full pass. Alternatives priced: the full pass (about 2,126
-judgments); a 10% sample (213 judgments). The 60-entry sample was chosen because it covers every value with several
+judgments); a sample of one entry in ten (213 judgments). The 60-entry sample was chosen because it covers every value with several
 entries each, and SC-004 sweeps any pattern it finds across the whole registry.
 
 ## R4 - The trim, mechanically held to FR-015
