@@ -89,6 +89,67 @@ in) opens that source's capture.
 
 ---
 
+### User Story 4 - The GM's download directory is an inbox (Priority: P1, Amendment 1)
+
+The GM downloads a file a bot cannot fetch into `/host-l7r-repo/academic-sources/`. Once it is in the archive repository
+and pushed, it is deleted from that directory, so whatever is still there has not been processed yet (the GM: *"looking
+at that directory is just a good way to know whether there is something that we have not processed yet"*).
+
+**Why this priority**: the GM asked for it in this feature, and it changes where a session reads a downloaded copy.
+
+**Independent Test**: drop a file in a scratch inbox; `make archive-inbox` archives it, verifies the push, deletes it, and
+the file is found again by `make archive-find`; a file whose push fails stays in the inbox.
+
+**Acceptance Scenarios**:
+
+1. **Given** a file in the inbox matched to a cited key, **When** the inbox is processed, **Then** it is archived beside
+   that key's captures, pushed, confirmed on GitHub, and only then deleted from the inbox; its match row keeps where it went.
+2. **Given** a file in the inbox that copies no cited source, **When** the inbox is processed, **Then** it is archived
+   all the same (Amendment 1: *"store sources which we ourselves do not end up citing"*), under `consulted/`, and deleted.
+3. **Given** the GM's two lists (`TO-DOWNLOAD.md`, `for-the-gm-fetch-list.md`), **When** the inbox is processed, **Then**
+   they stay: they are the GM's notes, not sources.
+4. **Given** a push that fails, **When** the inbox is processed, **Then** nothing is deleted.
+
+---
+
+### User Story 5 - Every page a session reads is archived, cited or not (Priority: P2, Amendment 1)
+
+A page a research session reads and does not cite is archived too, so a later question can consult it again from the
+archive (the GM: *"When we check a paper for one fact, it may not have what we need ... we may end up wanting to check the
+paper later for a different fact"*). The GM chose every page read, the earlier reads included.
+
+**Independent Test**: `make source-pages` on a URL archives it; the earlier reads on the sources-consulted ledger are
+archived by a backfill, from a live fetch where the page answers and from the page cache's saved text where it does not.
+
+**Acceptance Scenarios**:
+
+1. **Given** a page read with `make source-pages`, **When** the read finishes, **Then** the page has an archived copy and a
+   manifest row, cited or not.
+2. **Given** the ~4,900 URLs on the sources-consulted ledger (observed 2026-10-02: 4,903 distinct, 3,072 with saved text),
+   **When** the consulted backfill runs, **Then** each has a row: a whole live capture where the page answers, else the
+   saved text, else unreachable with its reason.
+
+---
+
+### User Story 6 - A session looks in the archive before the web (Priority: P1, Amendment 1)
+
+The research procedure's first step for a source is to check whether we already have it (the GM: *"our research procedure
+should include a step where we first check to see if we already have something, rather than going out and trying to find it
+on the internet"*). `make archive-find` answers by URL, by registry key, or by words in the archived text, naming the local
+copy to read.
+
+**Independent Test**: `make archive-find TERMS="..."` finds an archived page by a phrase in its text and prints its local
+path; the research rules, the page-session rules and the reading agents' contracts name the step.
+
+**Acceptance Scenarios**:
+
+1. **Given** an archived source, **When** a session asks by URL, key or a phrase in it, **Then** it is told the copy's local
+   path and its row, without a fetch.
+2. **Given** the procedure documents, **When** a session starts a research pass, **Then** the first step they name is the
+   archive lookup, and a copy the GM downloaded is read from the archive once the inbox has moved it.
+
+---
+
 ### Edge Cases
 
 - **One source, several URLs**: every URL is archived; the entry links each copy.
@@ -142,6 +203,19 @@ in) opens that source's capture.
   entry mentions the file, and IN ADDITION to the cited URL's own capture attempt, never in place of it. The match is
   measured in the plan: how many files, how many matched, the unmatched listed. The outcome "archived (the GM's downloaded
   copy)" is used only where the live fetch of that source fails or is refused.
+- **FR-013** (Amendment 1): `/host-l7r-repo/academic-sources/` is an INBOX. Every file or saved-page folder in it except
+  the GM's two lists is archived - beside its key where it copies a cited source, under `consulted/` where it copies none -
+  and deleted from the inbox only after the push is confirmed on GitHub. The match table keeps every processed file's
+  name, keys and archive path, so a copy stays findable after its file is gone. The 7 files that copy no cited source today
+  are archived and deleted too.
+- **FR-014** (Amendment 1): every page `make source-pages` reads is archived as it is read, cited or not; a row records it.
+  A one-time consulted backfill archives every URL on the sources-consulted ledger with no row: a whole live capture where
+  the page answers, else the page cache's saved text (`partial`), else `unreachable` with its reason.
+- **FR-015** (Amendment 1): `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` answers from the manifest and the archived
+  text, without a fetch, naming each copy's local path.
+- **FR-016** (Amendment 1): the research procedure names the archive lookup as the first step for any source - in
+  `research/CLAUDE.md`, `container-scripts/page-session-rules.md` and the `source-reader` and `quote-check` contracts - and
+  a downloaded copy is read from the archive once the inbox has moved it.
 - **FR-010**: The built record's source pages MUST show an archived-copy link with its capture date beside each live link,
   or say that no copy could be archived.
 - **FR-011**: The GitHub credential MUST be read from the existing secrets loader and never written to a file, a log, a
@@ -178,6 +252,9 @@ This feature draws and states nothing on a map; it changes the research tooling 
 | A web page is captured whole - images, styles and fonts - as one self-contained offline file, beside the served HTML and the text | the GM's ruling | *"we should download the whole webpage with images and css and such and not just the html content"*; the session had proposed text and HTML only to save space, and the GM chose the whole page. Cost: a larger archive, measured on a sample in the plan before the full run. A PDF is stored whole | `request.md`; the capture module's docstring |
 | A dead page falls back to an existing public web-archive snapshot | tooling decision | a copy someone else took is better than none, and it is labeled as theirs with its date | this spec; the capture module |
 | No submission to a public web archive, no change to how citations link | scope | not in the GM's request; offered by the session and not taken up | this spec |
+| `academic-sources/` is an inbox: a file is deleted once its archived copy is pushed and confirmed | the GM's ruling (Amendment 1) | *"once something has been added to the diagram research repository and then pushed, then we can delete it"*; the deletion waits on a confirmed push so nothing exists only locally. The directory is in the GM's own repository, so the deletions show in that tree for the GM to commit; nothing here runs git there | `request.md`; `scripts/_archive.py` |
+| Every page a session reads is archived, the ~4,900 earlier reads included | the GM's ruling (Amendment 1, chose "Every page we read") | a page read for one fact may answer a later question | `request.md` |
+| The archive lookup is the first step of a research pass | the GM's ruling (Amendment 1) | *"first check to see if we already have something, rather than going out and trying to find it on the internet"* | `research/CLAUDE.md`, the page-session rules, the reading agents' contracts |
 
 ## Assumptions
 
@@ -204,3 +281,7 @@ This feature draws and states nothing on a map; it changes the research tooling 
   entry marker, put them ahead of the live fetch, and lacked FR-012's match measurement. Addressed in `plan.md`: the live
   fetch first, every matched file copied in addition, and the measured match (42 entries, 33 matched over 30 keys, 7 copy no
   cited source).
+- Amendment 1 (2026-10-02, the GM mid-backfill, verbatim in `request.md`): User Stories 4-6 and FR-013 - FR-016 - the
+  download directory as an inbox emptied once a copy is pushed, every page a session reads archived (the GM chose all of
+  them, the earlier reads included), and the archive looked in before the web. FR-012's 7 unmatched files, listed and not
+  archived before, are archived under FR-013.

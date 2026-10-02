@@ -43,3 +43,13 @@ For webpages which are not PDFs I imagine we should download the whole webpage w
 The GM (goal set):
 
 Please crate and implement feature 309 from start to finish and land the diagram changes on main - the diagram-research repo does not reqire the same forking/cloning rules so you can just push directly to it without each of our diagram .clones/ having its own copy which needs to be synced.
+
+## Amendment 1 (GM, 2026-10-02, verbatim)
+
+One request that I would make to be added to this feature is that we currently have a directory of academic sources that I have downloaded for you to look at. And this is where we put the files where uh, you are blocked as a bot, but where I as a human just using a regular browser am able to get them. And I think that it would be great now that we are storing this kind of stuff in the diagram research GitHub repository to basically use this directory as a queue of sorts, by which I mean once something has been added to the diagram research repository and then pushed, then we can delete it from the academic sources directory. And in that way, looking at that directory is just a good way to know whether there is something that we have not processed yet.
+
+Now, with this in mind, I guess it also probably makes sense to store sources which we ourselves do not end up citing because we might need to consult them later for a couple of reasons. One reason is that When we check a paper for one fact, it may not have what we need for the question that we are asking, but then we may end up wanting to check the paper later for a different fact. And it will be easier to just look it up where we already have it. I suppose this also means that our research procedure should include a step where we first check to see if we already have something, rather than going out and trying to find it on the internet. I don't know if this is something that we have already done, but honestly, updating our procedures to include this should probably be made part of this very feature that we are working on right now.
+
+The session asked which uncited sources to store - every page a research session reads (cited or not, the ~3,000 earlier
+reads archived from their saved text now and re-fetched whole where the page is still up), only the GM's downloaded files,
+or every page from now on only. The GM chose: "Every page we read (Recommended)".
