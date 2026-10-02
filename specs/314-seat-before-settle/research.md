@@ -167,6 +167,7 @@ access lanes the web's last resort could not mend, needle loops) where main roll
 and the last leg's test were not the cause; the search kept off the household's own parts was - with it off, the seed rolled (35
 corridors, as main's) and seeds 4 and 39 drew their web in 0.96 and 1.34 s. Withdrawn (plan D3): the search keeps off its own house
 only, as before; its first step and its last leg keep their tests.
+(observed 2026-10-02, method: as the heading.)
 
 A DEFECT THIS FOUND, NOT FIXED HERE: the seating admits a corridor by the lane law over the whole tree (`tree_admits`, feature 287
 wave 6, whose promise is that the web can always draw what was reserved), and three corridors it admitted on seed 13 broke the
@@ -183,6 +184,7 @@ form), which is a change to `ways/tree.py:admits` and the web's passes - beyond 
 | 15 | 1-16 | 20.3 s | 19.2 s | -5% | one on every seed, both legs |
 | 40 | 1, 2, 4, 6, 8, 9, 10, 12, 13, 39 | 46.5 s | 36.1 s | -22% | one on every seed, both legs |
 | 20 | 1, 2, 4, 5, 13, 25, 39, 47 | homesteads 12.25 s, web 9.04 s | homesteads 11.01 s, web 8.32 s | -10%, -8% | seed 13 rolled on both |
+(observed 2026-10-02, method: as the heading.)
 
 With the own parts withdrawn (R12) the 15-household gain falls from R4's -18% to -5%: the own parts were most of what the search
 saved there, and the web paid it back. At 40 households seeds 4, 8 and 12 are slower on this run (4.57 -> 5.11, 2.57 -> 5.85,
