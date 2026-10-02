@@ -1,0 +1,6 @@
+{
+  "utc": "20261002T081854Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the F1-F4 the guard ties to this unit are feature 302's PAIDDY glyph-check findings (subject glyph-check--paddy, answers 0171c4adc694), verified in specs/302-field-by-construction/measurements.json; the alder unit passed on 2026-10-01 with no findings (docs/review-ledger.md) - the link is a shared engine key, not this unit's"
+}
