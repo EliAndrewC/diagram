@@ -48,3 +48,15 @@ entries:
 Never-read is mostly the keyless entries: works asked for and never read. The rows archived `partial` because the page
 "would not render whole" keep their served text and count as open. That is 22 rows (2026-10-02, a count of the manifest
 by reason; the plan review re-counted it).
+
+## R3 - A pre-existing defect the gate surfaced: a seeded cache replayed another clone's coverage (fixed)
+
+Observed 2026-10-02 on this feature's third gate: every test passed (10,695), and the coverage floor failed at 76%, its
+table listing each engine module twice, once under `/diagram/.clones/diagram-organization/` at about 70%. Cause: a new
+clone seeds `.gencache` from a sibling at the same commit (`seed_roll_cache` in `sync-with-main.sh`, feature 167). Five
+entries' stored `coverage.data` (inashiro, kashikawa, kuwabata, mizuguchi, sawada) measured the sibling's absolute paths.
+`gencache._coverage_is_current` asked only whether those files exist, and in the sibling they do, so each hit replayed
+foreign coverage into this gate's combine. Fix (constitution XIV): stored coverage that measures a file outside this
+skill root is stale, so the entry regenerates once and records its own. Test:
+`tests/tooling/pipeline/test_gencache.py::test_stored_coverage_measuring_ANOTHER_CLONES_files_is_stale`, red before the
+fix and green after. This makes the push GATED (an engine file).
