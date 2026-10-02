@@ -91,7 +91,7 @@ no placer keeps a different reach for a canopy crown.
   whatever stand it belongs to (windbreak, copse, a farm's own grove, a neighbor's grove, a wood, a shrine grove, a fruit
   tree, any later kind).
 - **FR-002**: The sun ground is the persimmon's: the plot widened by the reach east and west and deepened by it to the
-  south, from the plot's north edge; the reach is the one the record gives a working windbreak's tree (50 ft). One predicate serves every
+  south, from the plot's north edge; the reach is the one the record gives a working windbreak's tree (the sun page's west-lane reach). One predicate serves every
   placer and the check.
 - **FR-003**: Bamboo - a bamboo stand and the culm marks drawn among a grove's crowns - is exempt.
 - **FR-004**: Each placer refuses or drops a crown in a plot's sun as it seats it; no stage after may draw one there.
@@ -124,7 +124,7 @@ no placer keeps a different reach for a canopy crown.
 |---|---|---|---|
 | Every canopy tree, the farm's own grove included, keeps out of every yard's and bed's sun ground | deviation - the GM's ruling | *"no canopy trees should be exempt"*; the record has farm groves on the south and west of a house on the Tonami plain, so a grove close by a sunlit plot is attested there; our maps follow the GM's rule instead | `research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`; the shared predicate's docstring |
 | Bamboo is exempt | the GM's ruling, with the reason the GM gave | *"maybe bamboo since it doesbn't create much shade"* | the same page |
-| One reach for every canopy tree: the working windbreak tree's 50 ft | guess, carried | the record already reckons every shadow at the least height it gives a tree (a working windbreak's, stated on the sun page); taller trees would reach further | the same page, the predicate's constant |
+| One reach for every canopy tree: the working windbreak tree's west-lane reach | guess, carried | the record already reckons every shadow at the least height it gives a tree (a working windbreak's, stated on the sun page); taller trees would reach further | the same page, the predicate's constant |
 | The sun ground is a rectangle east, west and south of the plot, from its north edge | reconstruction, carried | the 9-to-3 sun crosses from the southeast to the southwest; the record's knowing simplification of the wedge | the same page |
 | A copse whose roll the freed ground cannot hold is drawn short, never moved into the sun | this project's decision | the plot's sun is the rule; the wood is the remainder | the plan; the wood-goal module |
 
