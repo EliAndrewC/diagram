@@ -194,9 +194,10 @@ every list entry with no registry key: one of eight states with the date last ch
 - **SC-001** (FR-001, FR-002, FR-003, FR-004): The canonical list holds the 22 high-risk entries first, then all 306 imported
   entries in their order. Each has its mark lines. Its text outside the mark lines matches the import's sources, which a
   test checks.
-- **SC-002** (FR-005, FR-007): A gate test drives a temporary copy through sync, a GM tick, a GM text edit, a session edit
+- **SC-002** (FR-005, FR-006, FR-007): A gate test drives a temporary copy through sync, a GM tick, a GM text edit, a session edit
   and ingest. It asserts the marks recorded, the text edit held for an instruction, the session's edit kept, and sync refused
-  before the ingest and allowed after.
+  before the ingest and allowed after. A gate test resolves an entry id given at the inbox to that entry's keys, and a
+  saved-as name to its file in the inbox.
 - **SC-003** (FR-008, FR-010): Gate tests show two adds taking distinct numbers, and the push check refusing each of the five
   violations.
 - **SC-004** (FR-009): The guard's test companion shows an Edit, a Write and a shell redirect to the GM's copy refused, and
@@ -247,3 +248,5 @@ Classes are those of `docs/research-doctrine.md`. Nothing on a map changes, so n
 - **Round 3** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - both round-2 items resolved; one new item from the session's
   change: a hand state could outrank the GM's ingested mark. Applied, more simply than the review's wording: a hand state
   never wins over a GM mark, and wins over rules 2 to 4 on the same date or later; SC-005 pins the seeded-then-downloaded case.
+- **Lint-only edit after acceptance** (2026-10-02): `spec-lint` required FR-006 to be named by a success criterion; SC-002
+  now names it, with the two inbox cases its tests already pin. No requirement changed.

@@ -299,7 +299,11 @@ def test_a_saved_as_name_matches_its_file_when_the_file_is_there(tmp_path: pathl
 
 
 def test_marks_parse_with_either_case_and_spacing() -> None:
-    lines = ["- Mark: [X] downloaded | [ x ] partial (abstract or excerpt) | [] paywalled | [ ] not found", "- [x] Found elsewhere (only with downloaded or partial) - where: a library", "- Saved as (optional, the file's name): f.pdf"]
+    lines = [
+        "- Mark: [X] downloaded | [ x ] partial (abstract or excerpt) | [] paywalled | [ ] not found",
+        "- [x] Found elsewhere (only with downloaded or partial) - where: a library",
+        "- Saved as (optional, the file's name): f.pdf",
+    ]
     assert dl.parse_marks(lines) == dl.Marks(downloaded=True, partial=True, elsewhere=True, where="a library", saved="f.pdf")
     assert dl.parse_marks(lines[:2]) is None and dl.parse_marks(["x", *lines[1:]]) is None
 
@@ -312,3 +316,21 @@ def test_the_inbox_resolves_an_entry_id_to_that_entrys_keys(tmp_path: pathlib.Pa
     assert match == {"a.pdf": ["alpha"], "b.pdf": [], "c.pdf": ["beta", "gamma"]} and downloads == {"a.pdf": "H1", "b.pdf": "3"}
     with pytest.raises(SystemExit, match="no download-list entry 9"):
         ops.resolve_matches(tmp_path, ["d.pdf=#9"])
+
+
+def test_ingest_reports_the_access_tag_of_each_source_it_changed(tmp_path: pathlib.Path) -> None:
+    root, copy = _world(tmp_path)
+    access = root / dl.SKILL / "research" / "source-access.json"
+    access.write_text((REPO / dl.SKILL / "research" / "source-access.json").read_text(encoding="utf-8"), encoding="utf-8")
+    reg = root / dl.SKILL / "research" / "sources" / "010-works-cited"
+    reg.mkdir(parents=True)
+    (reg / "0010-alpha.html").write_text('<h3 id="alpha"><code>alpha</code></h3>\n', encoding="utf-8")
+    dl.sync(root, copy, "2026-10-03")
+    _tick(copy, "H1", partial=True)
+    _tick(copy, "2", paywalled=True)
+    out = dl.ingest(root, copy, set(), set(), "2026-10-04")
+    assert dl.changed_tags(root, out.recorded) == [
+        "alpha: gm-partial (2026-10-04) - the GM's mark on entry H1, recorded 2026-10-04",
+        "download:2: paywalled (2026-10-04) - the GM's mark on entry 2, recorded 2026-10-04",
+    ]
+    assert dl.changed_tags(root, []) == []

@@ -586,6 +586,17 @@ def _run(a: argparse.Namespace, root: pathlib.Path) -> int:
     return code or done.returncode
 
 
+def changed_tags(root: pathlib.Path, ids: list[str]) -> list[str]:
+    """The access tag of every source an entry whose marks were recorded names (plan D4), one line each."""
+    if not ids:
+        return []
+    import _access_tags as at
+
+    w = at.load(root)
+    keys = sorted({k for eid in ids for k in (w.entry_keys.get(f"download:{eid}") or {f"download:{eid}"})})
+    return [f"{k}: {t.state} ({t.date or 'no date'}) - {t.basis}" for k in keys for t in [at.tag(w, k)]]
+
+
 def inbox_matches(saved: dict[str, str], inbox: pathlib.Path) -> dict[str, str]:
     """entry id -> the file its saved-as line names, for the files present in the inbox (plan D7): the GM's naming
     matches a download to its entry without a question. A name that is not there is left for the session."""
@@ -604,6 +615,8 @@ def report_ingest(out: IngestResult, root: pathlib.Path) -> int:
         print(f"  text kept: {', '.join(out.kept) or '-'}; dropped: {', '.join(out.dropped) or '-'}")
     if out.saved:
         print("  saved-as files named: " + ", ".join(f"{k}={v}" for k, v in out.saved.items()))
+    for line in changed_tags(root, out.recorded):
+        print(f"  access {line}")
     print(f"  commit {CANON} and {STATE}" + ("" if out.clean() else "; sync stays refused until nothing is pending"))
     return 0 if out.clean() else 1
 
