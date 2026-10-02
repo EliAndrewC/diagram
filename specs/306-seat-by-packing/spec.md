@@ -160,7 +160,7 @@ the implementation finds it needs is recorded here with its class before it land
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The seat band's ground per household (observed 2026-10-02, method: the pool's manifests, research R6): 162 ft, the side of a square holding the pool's MEAN homestead envelope (20,366 sq ft) and the least wood floor (6,000 sq ft) - the band's area is the households' sum, so the mean | derived quantity (from measured homesteads and the researched wood floor; was 104, which left the wood floor out) | FR-010; research R6-R7 | research R7; `hamletgen/consts.py` `HOMESTEAD_GROUND_FT` |
+| The seat band's ground per household (observed 2026-10-02, method: the pool's manifests, research R6): 162 ft, the side of a square holding the pool's MEAN homestead envelope (20,366 sq ft) and the least wood floor (6,000 sq ft) - the band's area is the households' sum, so the mean | guess - the record gives no figure for a seat band's ground per household; 162 ft is reasoned from the pool's measured envelopes (the mean, because the band's area is the households' sum) plus the researched least wood floor (`HOMESTEAD_WOOD_FT2`, 6,000 sq ft); was 104, which left the wood floor out | FR-010; research R6-R7 | research R7; `hamletgen/consts.py` `HOMESTEAD_GROUND_FT` |
 | Homesteads packed adjacent, nearest the seat's center first | map drawing convention (the placement ORDER, not a rule) | the GM's *"place another one next to it"*; the rules decide whether a seat may stand | this spec; the packing's docstring |
 
 ## Assumptions
@@ -182,3 +182,5 @@ the implementation finds it needs is recorded here with its class before it land
 - Amendment 1 (2026-10-02, after prototype rounds 1-7, research R1-R7): FR-010 (the band holds the homestead's whole ground -
   the GM's mid-work *"have them start off larger"*) and FR-011 (each lever on its own verdict) added; the Decisions table gains
   the band's figure. Rounds 1-4 measured FR-003's capacity prediction and FR-004's packed proposals NO-GO.
+- Amendment 1, round 1 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 1 item - the band figure's class was not one of the
+  four; it is a labeled guess with its reasoning.
