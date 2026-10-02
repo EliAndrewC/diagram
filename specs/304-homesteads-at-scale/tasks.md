@@ -12,10 +12,10 @@ houses, that map is re-examined here before landing and an occasion is added if 
 
 ## Baseline (constitution XIII)
 
-- [ ] T01 The `304-start` bookend on unmodified code, and the cohort baseline in the detached worktree `/tmp/base304`
+- [x] T01 The `304-start` bookend on unmodified code, and the cohort baseline in the detached worktree `/tmp/base304`
       (`make cohort N=24`)
       research: rendering
-      verify: the snapshot file exists; the cohort's per-seed result recorded in research.md
+      verify: DONE. 304-start 12.3 s total (dev/perf-log/20261002T031740Z-304-start-diagram-performance.json); cohort base 28/30 in /tmp/base304, research R6
 - [ ] T02 The pre-existing cohort failure Audit-11 (`WebRefused`, linear, 10 households; research R6) diagnosed and fixed
       (constitution XIV)
       research: rendering
@@ -27,15 +27,15 @@ houses, that map is re-examined here before landing and an occasion is added if 
 
 ## P1 - the scaling leg (US1; FR-001 - FR-003)
 
-- [ ] T10 [US1] Red: tests for `beyond_the_band()` (40 households refused outside, admitted inside; no `pool/` file names it),
+- [x] T10 [US1] Red: tests for `beyond_the_band()` (40 households refused outside, admitted inside; no `pool/` file names it),
       for `measure(households=)` rows and a refused row, and for `evaluate_scaling` (per-size verdicts, "no baseline" on an old
       base, the quadratic seeded fault of D4 reaching band 2+ on the 40 leg with the reference at band 0)
       research: rendering
-      verify: `make test-file` on the new tests fails for the missing code, not for a typo
-- [ ] T11 [US1] Green: D2 in `hamletgen/plan.py`; D1 in `perf_snapshot.py` (`SCALING_SIZES`, `scaling` rows, `placer_calls`,
+      verify: DONE. test_perf_scaling.py: 11 of 13 failed red on missing code (beyond_the_band, SCALING_SIZES, Verdict.legs)
+- [x] T11 [US1] Green: D2 in `hamletgen/plan.py`; D1 in `perf_snapshot.py` (`SCALING_SIZES`, `scaling` rows, `placer_calls`,
       `refused`); D3 in `perf_bands.py`, `perf_snapshot.report` and `perf_review` / `perf-gate` (the band owed is the maximum)
       research: rendering
-      verify: `make quick` green; the new tests pass; coverage of the touched tools 100%
+      verify: DONE. D1-D3 built; 85 perf tool tests pass; make quick green
 - [ ] T12 [US1] The `304-scale-base` snapshot with the new tool on the UNMODIFIED engine; its four seeds x three sizes in
       research.md beside R1
       research: rendering
