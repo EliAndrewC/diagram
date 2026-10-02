@@ -356,7 +356,7 @@ def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
     assert spurs, "a worn width-5 way besides the connector: the spur to the field"
 
 
-def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> None:
+def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 227 D8: the seats a pitch beyond each end of the rank are offered ONLY in a round that seated nothing
     behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
     40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
@@ -364,6 +364,12 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> 
     from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
+    from l7r.diagram.hamletgen.consts import HOMESTEAD_GROUND_FT
+    from l7r.diagram.hamletgen.homesteads import stages as _stages
+
+    # the seating's band at the band's own figure: the rule under test is the rank's ends, measured on this toy's strip before
+    # feature 306 gave the seating the homestead's whole ground (`SEATING_GROUND_FT`), which seats all 13 here
+    monkeypatch.setattr(_stages, "SEATING_GROUND_FT", HOMESTEAD_GROUND_FT)
     s, plan = _toy_hamlet(13)  # 13: feature 280's geometry (M26, M18) fits twelve on the strip
     ax, ay = plan.seat["along"]
     ox, oy = plan.seat["out"]
