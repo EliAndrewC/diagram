@@ -28,7 +28,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
       research: rendering
 - [ ] T11 [US5] `make source-pages` requires `Q=` and `SOUGHT=` and prints attempts and verdict first; `make
       source-outcome` appends the outcome; the hook prints them as context for a WebFetch and appends an attempt for a
-      WebFetch or a Bash fetch; `make archive` and `archive-find` append one; tests
+      WebFetch or a Bash fetch; `make archive` appends one; `make archive-find` prints the attempts and verdict of each
+      source it returns and appends one; tests
       research: rendering
 - [ ] T12 [US5] seed `source-attempts.jsonl` from the ledger; SC-007 count recorded in `research.md`
       research: rendering
@@ -65,7 +66,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 
 ## Phase 5 - citation rules and sources no one can read (US6; FR-005, FR-019, FR-020)
 
-- [ ] T40 [US6] FR-005: the inventory table in the doctrine and its test; a tool for each mechanical rule without one
+- [ ] T40 [US6] FR-005: the inventory table in the doctrine and its test; a tool for each mechanical rule without one,
+      a gate-owed check for each non-mechanical rule without one
       research: rendering
 - [ ] T41 [US6] the push and the gate refuse a footnote citing a source FR-019 names with no recorded confirmation
       (needs 313's report)

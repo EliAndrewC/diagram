@@ -40,7 +40,8 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   (`notgrokipedia.com`). A banned pattern is a regular expression over the normalized URL (`_sources.norm`). An entry
   with no `approved` (date and words) is refused by the loader, so a list cannot grow without the GM.
 - **D2 - The fetch routes.** In Python: `_sources.CachedPages.get`, `_sources.put`, `_sources.append` (the ledger),
-  `_archive.fetch`, `_archive.archive_url` and the GM-copy match raise `Blocked` with the list's reason; `make
+  `_archive.fetch`, `_archive.archive_url`, the attempts log (`_attempts.write`), the not-kept list (`_uncited.py`) and the
+  GM-copy match raise `Blocked` with the list's reason (each store tested); `make
   quote-verbatim` and `make reserve ... URL=` reach these. Outside Python: the hook, matched on `WebFetch` and `Bash`.
   WebFetch: its `url`. Bash: a URL on a blocked domain as an argument of `curl`, `wget`, `lynx`, `w3m`, `http`/`https`
   (httpie), `python3 -m urllib`, or a `make` target that fetches (`source-pages`, `archive*`, `reserve`, `source-outcome`,
@@ -57,12 +58,15 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   `CachedPages` with the archive's browser, then an archived snapshot (`_archive.wayback`); a page none of them reads is
   `unreadable` with an access state from the failure: 401/402/a login wall -> `paywalled`, 403/406/429 -> `bot-refused`,
   timeout/5xx/TLS -> `down`, 404/410 -> `gone` (313's vocabulary).
-- **D5 - The filter's input.** A bundle of up to 40 pages in `/tmp/l7r-check/312-filter-<n>/`: `MANIFEST.md` holding, per
-  page, its id, URL, title and the first 3,000 characters of saved text (`_source_pages.excerpt` with no quotes, which keeps
-  the front matter), and a note when the page is longer. 40 x 3,000 characters is about 40,000 tokens, under a quarter of
-  the agent's window. The agent writes `verdicts.jsonl` beside it: `{"id", "verdict": "KEEP"|"NOT-KEPT", "reasons": [...],
-  "note", "propose_block": "<domain>"?}`. `_uncited.py apply` refuses a bundle whose verdicts are missing an id, carry an
-  unknown reason, or a NOT-KEPT with no reason.
+- **D5 - The filter's input.** A bundle in `/tmp/l7r-check/312-filter-<n>/`: `MANIFEST.md` listing, per page, its id, URL,
+  title and the file holding its WHOLE saved text (the page cache's `text.txt`, never a front cut: a page that opens with
+  modern matter and reaches its premodern evidence later must be judged on the evidence - plan review, 2026-10-02).
+  Bundles are sized by total characters, about 150,000 a bundle (the median page is 2,415 characters, the 90th
+  percentile 9,394 - `prep.md`, observed 2026-10-02, method: the page cache's `meta.json` sizes); a page over that
+  budget goes alone in its own bundle, saved in parts, and the agent reads every part. The agent writes
+  `verdicts.jsonl` beside it: `{"id", "verdict": "KEEP"|"NOT-KEPT", "reasons": [...], "note", "propose_block":
+  "<domain>"?}`. `_uncited.py apply` refuses a bundle whose verdicts are missing an id, carry an unknown reason, or a
+  NOT-KEPT with no reason.
 - **D6 - Calibration** (FR-009, `research.md` R1). A control bundle mixes 40 POSITIVES (cited pages with saved text, a
   seeded random sample of the archive) and 40 NEGATIVES (uncited pages this session labels junk, each with its reason, in
   `measurement/negatives.json`), shuffled, ids opaque; three runs. Scored by `_uncited.py score`; the runs are R2.
@@ -74,7 +78,7 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   CONSULTED=1` archives the URLs of `kept.jsonl` and of `040-uncited-works/` only.
 - **D9 - Write-ups.** `reserve-prefix.py` gains `KIND=uncited`, writing into `040-uncited-works/` with the registry's one
   number sequence (both directories are read for the highest prefix, so a moved entry keeps its number). Drafts are written
-  by `sonnet` agents in batches of 15 kept pages, from the same excerpts plus the entry form, the tag vocabulary and three
+  by `sonnet` agents in batches of 15 kept pages, from the same whole saved texts plus the entry form, the tag vocabulary and three
   model entries, into the bundle; `_uncited.py install DIR=` reserves each key (refusing a key already in the registry and
   appending `-2`), writes the entry, and records `cited` nothing. Each entry is then owed `source-applicability`
   (`_record_units.py` learns the new directory), checked in bundles of up to 10 keys (`make check-bundle KEY="a b ..."`).
@@ -89,12 +93,16 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   prompt there - 7,994 mentions) as what was sought, its question `unknown`; a row with none, question `unknown`. Where
   nothing says what was sought: `unknown - recorded before feature 312`. `make source-pages` requires `Q=` and `SOUGHT=`,
   prints the URL's attempts and verdict before fetching, and appends an attempt with outcome `unknown` (not yet known);
-  `make source-outcome` appends the outcome line.
+  `make source-outcome` appends the outcome line. `make archive-find` prints, for the URL it is asked about and for
+  each source a KEY or TERMS lookup returns, the earlier attempts and the filter's verdict, then appends its attempt.
   The WebFetch hook adds the same print as context and appends an attempt (its `prompt` as what was sought); the Bash
   side of the hook appends one for a `curl`/`wget`-style fetch (the command as what was sought). `make archive` and `make
   archive-find` append one. `make attempts URL=|KEY=|Q=` prints them.
-- **D13 - FR-005 inventory** is a table in `docs/research-doctrine.md` - rule, where it is stated, what enforces it - with a
-  test that every script, hook or agent file the table names exists; a mechanical rule found with no tool gets one here.
+- **D13 - FR-005 inventory** is a table in `docs/research-doctrine.md` - rule, where it is stated (the five files FR-005
+  names), what enforces it - with a test that every script, hook or agent file the table names exists. A rule found with
+  no tool gets one: a mechanical check, tested, where it can be checked mechanically; otherwise a check the record gate
+  owes on the words the rule governs (`_record_units.py` owes it, `entry-gate.sh` refuses the push until it is answered),
+  added to that check agent's contract.
 - **D14 - FR-019 removal** runs after feature 313 lands: the keys FR-019 names, from 313's report JSON; for each footnote
   citing one, `make quote-verbatim` and `quote-check` against the readable part (the open page, an open abstract, the
   GM's partial copy); a confirmed footnote gets a line in `research/partial-confirmations.jsonl` (key, note id, where the
