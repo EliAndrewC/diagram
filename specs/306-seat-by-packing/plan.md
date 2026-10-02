@@ -41,8 +41,8 @@ lanes) did not move that edge; giving the band the ground a homestead actually t
   sum): the pool's 82 envelopes' mean (20,366 sq ft, R6) plus the least wood floor (`HOMESTEAD_WOOD_FT2[0]`, 6,000). It sizes
   only `_seat_households`' lattice and seat bound; the margin's choice, the canvas's room and the belt keep `HOMESTEAD_GROUND_FT`'s
   104 - growing those too re-fitted every field and refused sites the base seated (R11), and the canvas grown alone made 40
-  households worse (R12). Its own verdict (FR-011), the back-to-back run of R15: GO - the band ALONE (the dry cap and rescue off) 427.7 -> 100.0 s over
-  the fifteen seeds the base rolled at 40 households, the first margin on 10 of 16 against 1 of 15, every household seated; the
+  households worse (R12). Its own verdict (FR-011), the back-to-back run of R15: GO - the band ALONE (the dry cap and rescue off) 427.7 -> 95.0 s over
+  the fifteen seeds the base rolled at 40 households (100.0 over all sixteen), the first margin on 9 of 16 against 1 of 15, every household seated; the
   cohort 30/30. The pool's two regressions under it (Inashiro's access lane, Sawada's doubled way) went to their root causes (R14).
 - **D2 The rescue and the dry-spell cap are built only if they pay on top of D1** (FR-011): R15's third leg, on the final D1 -
   100.0 -> 83.3 s, margins saved on seeds 25, 8 and 6, seed 39 slower (7.45 -> 13.96 s), no seed seating fewer: GO, built.

@@ -1,54 +1,52 @@
 {
  "feature": "306-seat-by-packing",
- "plan_sha256": "5c69f6c28a8a59c4c6f97fe375bb0bf730c7f1338363cea89b56c4a656ae1125",
+ "plan_sha256": "cbbafa403e2edcd02e1de72c309e834fe56931e9968d7f173ffb6650582301fa",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1-figure",
-   "summary": "SEATING_GROUND_FT = 162, the side of a square holding the pool's mean envelope plus the least wood floor, sizing _seat_households' lattice and seat bound",
+   "summary": "SEATING_GROUND_FT = 162, the side of a square holding the pool's mean envelope plus the least wood floor, sizing only _seat_households' lattice and seat bound",
    "class": "within",
-   "why": "FR-010 (both the accepted and the amended text) and the spec's Decisions table settle the figure, its derivation from measured homesteads and its class (a labeled guess)."
+   "why": "FR-010 and the spec's Decisions table settle the figure, its derivation from measured homesteads and its class (a labeled guess)."
   },
   {
    "id": "D1-scope",
    "summary": "The margin's choice, the canvas's room and the belt keep HOMESTEAD_GROUND_FT's 104; maps do not start larger",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The GM's larger-maps line is conditional in its own words ('If the thing that is stopping us ... is the margin in the sense of being the edge of the map'). R12 measured the condition false (the canvas grown alone with the band at 104 made 40 households worse: seed 39, 42 margins, 216 s), and growing canvas, margin and belt with the band refused sites the base seated (R11: cohort 30/30 -> 27/30, Sawada refused), which FR-008 forbids. The exception is implied by the GM's own condition, not by cost."
+   "why": "Unchanged since round 2. The GM's larger-maps line is conditional in its own words ('If the thing that is stopping us ... is the margin in the sense of being the edge of the map'); R12 measured the condition false (the canvas grown alone made 40 households worse) and growing canvas, margin and belt refused sites the base seated (R11), which FR-008 forbids. Implied by the GM's own condition, not by cost."
   },
   {
    "id": "D1-verdict",
-   "summary": "D1's own FR-011 verdict stated as GO from R12 (11 of 16 on the first margin, 84.2 s summed against the base's ~449)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-011 builds each lever only on its OWN verdict. R12 was measured on the clone's engine with the dry cap and the rescue already in it (commit 9dc315843, before R12's d9c27b02f; capacity.py DRY_SPELL=400, RESCUE_SHORT=3), so 84.2 s is D1 plus D2, not D1. The ~449 base sum is not back to back with it (R7's sweep ran four to six processes at once; FR-009 asks base and clone back to back) and no per-seed base appears in research. Fix: on the final form, run the sixteen-seed set at 40 households back to back - base, D1 alone (dry cap and rescue off), D1 with both - record it as a new research entry, and state D1's verdict from the D1-alone leg."
+   "summary": "D1's FR-011 verdict GO from R15's band-alone leg, back to back with the base",
+   "class": "within",
+   "why": "Round 2's item is fixed: R15 runs base (worktree at 8d15b8a27), the band with DRY_SPELL/RESCUE_SHORT disabled (legs.py rebinds the module globals capacity.seat_the_rest reads at call time), and the band with both, one after the other; legs.log matches the table row for row, houses=40 on every rolled seed. A verdict on its own leg is FR-011 as written. Two figures in D1 (and R15) are stated other than measured and must be corrected, neither moving the ruling: (a) '427.7 -> 100.0 s over the fifteen seeds the base rolled' - 100.0 is the sixteen-seed sum including seed 7's 5.00; over the fifteen it is 95.0 (and D2's leg 78.3); (b) 'the first margin on 10 of 16' - legs.log's band leg has rung=1 on 9 of 16 (seeds 1,3,4,5,9,10,11,13,47); with both it is 11 of 16."
   },
   {
    "id": "D2",
-   "summary": "Rescue and dry-spell cap built only if they pay on top of D1, the evidence named R9",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The rule is FR-011, but the measurement it names is not of it: R9 measured both on top of HOMESTEAD_GROUND_FT=162 grown everywhere, the form of D1 that R11-R12 withdrew because the canvas's room changes the outcome materially (R12). Both levers are already in the engine. Under the final D1 (11 of 16 on the first margin) whether a near-miss rescue still pays is unmeasured; building on a premise nobody measured on the configuration being built narrows FR-011. Fix: the D1-alone vs D1-with-both legs of the same back-to-back run; build or withdraw each lever from it (each separately if they differ)."
+   "summary": "Rescue and dry-spell cap built on R15's third leg on the final D1: 100.0 -> 83.3 s, margins saved on seeds 25, 8 and 6, seed 39 slower, no seed seating fewer",
+   "class": "within",
+   "why": "Round 2's item is fixed: the evidence is now the lever on top of the final D1, back to back. The gain is structural rather than timing noise (offers on seed 25 9,911 -> 1,682, seed 8 2,704 -> 1,364; identical-offer seeds differ by ~0.1 s), so faster beyond the spread; every household seated. Building a lever on its own GO is FR-011. Seed 39's cost (7.45 -> 13.96 s) is stated, not hidden."
   },
   {
    "id": "D3",
-   "summary": "FR-003 and FR-004 not built: FR-004 prototyped NO-GO (R3, R4); FR-003's free-ground form disproved (R1), its rules-based form argued and not prototyped; reference-seed misses recorded and raised",
+   "summary": "FR-003 and FR-004 not built (R1, R3, R4 NO-GO; FR-003's rules-based form argued, not prototyped); seed 47 restated from R15; misses recorded and raised",
    "class": "within",
-   "why": "FR-011 builds no lever without its own GO, and FR-002's further rounds were run (R5-R7, R9, R11, R12). Round 1's notes are addressed. Note: 'under D1's final form on the first (R12)' for seed 47 is not in R12, which gives only 11 of 16 and the worst 14.1 s; R11 gives seed 47 at 3.6 s on a different form. Restate from the new run."
+   "why": "FR-011 builds no lever without its own GO and FR-002's further rounds were run. Round 2's note is fixed: seed 47 at 2.99 s alone and 3.11 s with D2, first margin, matches legs.log."
   },
   {
    "id": "D4-reach",
    "summary": "Census armed on _geom primitives, overlap.py predicates and shapely's binary predicates and distance; comparisons in C over arrays not seen",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 1's fix is in the tool (overlap_census.py _SHAPELY). The stated remaining limit is real for sys.monitoring, and the engine's vectorized shapely calls checked (boundary.py 321-337 raster blocks and cells, indexes.py and yards.py intersects_xy/contains_xy grids, tint.py one distance per plot computed once, partition.py) are rasters being built or each item's own measurement - the boxes and rasters the GM's rule asks for, not scans standing in for them."
+   "why": "Unchanged since round 2: the remaining limit is real for sys.monitoring, and the engine's vectorized calls are the rasters and boxes the GM's rule asks for, not scans standing in for them."
   },
   {
    "id": "D4-threshold",
    "summary": "CENSUS_FLAG = 5,000, the tail listed down to the bulk",
    "class": "within",
-   "why": "The spec delegates the threshold to the plan from the measured distribution. Note: the tail values the plan now lists (2,631, 2,624, 1,857, 1,799, 1,725) are attributed to R10 but R10 does not contain them; add them to R10 from its run."
+   "why": "The spec delegates the threshold to the plan from the measured distribution; round 2's note is fixed - R10 now carries 3,859, 2,631, 2,624, 1,857, 1,799 and 1,725 from its run."
   },
   {
    "id": "D4-standing",
@@ -60,7 +58,7 @@
    "id": "D5",
    "summary": "Every check the census flags, starting with R10's nine, gets its index, box or line; identical answers preferred, a moved answer held to FR-008",
    "class": "within",
-   "why": "FR-007 and FR-008 as written; round 1's D5-exact and D5-scope items are fixed, and tasks.md T22 now says the same."
+   "why": "FR-007 and FR-008 as written."
   },
   {
    "id": "D5-slower",
@@ -73,11 +71,11 @@
    "id": "D6",
    "summary": "The planted region's sliver line fixed and tested (R8)",
    "class": "within",
-   "why": "Constitution XIV, a defect found in the work."
+   "why": "Constitution XIV, a defect found in the work (it is also why the base cannot roll seed 7 in R15)."
   },
   {
    "id": "D1-regressions",
-   "summary": "Inashiro's access lane and Sawada's doubled way taken to their root causes before D1 lands (R14)",
+   "summary": "Inashiro's access lane and Sawada's doubled way taken to their root causes (R14)",
    "class": "within",
    "why": "FR-008: no pool map may fail a rule it passed; the fixes change no rule."
   },
@@ -88,5 +86,5 @@
    "why": "Process under feature 294's occasion table, not a narrowing of the request."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
