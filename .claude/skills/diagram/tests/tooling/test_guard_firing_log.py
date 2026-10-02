@@ -352,6 +352,16 @@ _ESCAPES = {
     ),
     "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 265 FR-010)"),
     "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
+    "CHECK_NOT_OWED_OK": (
+        "command",
+        "matched in a record-check dispatch PROMPT only (`CHECK_NOT_OWED_OK=\"...\"` read off the prompt's own text in "
+        "check-bundle-hooks.sh, feature 311), CHECK_BUNDLE_OK's exclusion - a prompt is prose; reason via _hm_escape.py reason-ok",
+    ),
+    "NOT_OWED_OK": (
+        "environment",
+        "a make variable passed as --not-owed-ok to _check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
+    ),
+    "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/entry-gate.sh (feature 311), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
     "CHECK_BUNDLE_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "

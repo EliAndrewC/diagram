@@ -1,6 +1,6 @@
 ---
 name: record-format
-description: Checks a research entry as its casual reader meets it - VOCABULARY, SESSION NOTE, HISTORY, every prepass candidate ruled on - run beside quote-check on every new or changed entry, from a check bundle.
+description: Checks a research entry as its casual reader meets it - VOCABULARY, SESSION NOTE, HISTORY, every prepass candidate ruled on - run on the questions whose visible words `make record-owed` says changed, from a check bundle.
 model: opus
 effort: medium
 omitClaudeMd: true
@@ -9,7 +9,7 @@ tools: Read, Grep
 
 ## When to dispatch this agent
 
-Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on every new or changed research entry before its feature lands, beside quote-check, and over every page in a sweep. Verification, not judgment about the map - Opus at medium effort, handed `make record-prepass` (tier table, GM 2026-09-19: medium held on recorded runs at about half the input; Sonnet, at medium and at high, missed the findings no pattern can find); it never decides a rule and never edits, it reports what a reader would see.
+Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on the questions `make record-owed` names (their visible words changed - feature 311, GM 2026-10-02: a check runs only where the words it reads changed), before their feature lands, beside quote-check where both are owed; the session records each answer with `make record-checked`. Verification, not judgment about the map - Opus at medium effort, handed `make record-prepass` (tier table, GM 2026-09-19: medium held on recorded runs at about half the input; Sonnet, at medium and at high, missed the findings no pattern can find); it never decides a rule and never edits, it reports what a reader would see.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted - `spec-fidelity` FAITHFUL, round 3 (2026-10-02)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): *"I think we probably need a new subagent check to run on research
 sections in order to see whether an explanation such as this is warranted for a section"*; *"do we have a way to exempt
@@ -14,7 +14,8 @@ proposal, *"Yes, please implement that as a spec kit feature and then work the f
 
 ## Context (observed 2026-10-02)
 
-The record holds 237 questions, each a research page with a drawing page beside it, each with its notes. What the record's
+The record holds 237 questions (a count of the question pages in `research/questions/`, leaving out the `.drawing`,
+`.notes` and `.originals` files), each a research page with a drawing page beside it, each with its notes. What the record's
 checks are owed, and what holds a session to it, today:
 
 | check | what decides it is owed | what holds it |
@@ -112,13 +113,16 @@ sees the push pass; edits the note again and sees the refusal return.
 - **A question moved between numbers or merged** (`make fragment-move`): a note or a translation pair that exists anywhere in
   the record at the merge base owes nothing; the heading change owes the new check alone.
 - **A new question** owes every check: the new check, `record-format`, and `source-reader` and `quote-check` on every note.
-- **A note deleted** owes nothing; an assertion that lost its only note is caught by `quote-check`'s unfootnoted-assertion half
-  only if the block changed, which it did, so that block owes `quote-check`.
+- **A note deleted** owes nothing itself; the block that lost its mark changed in its words, so that block owes what FR-004
+  gives a changed block (the assertion may now stand uncited).
+- **A formatting-only change** - whitespace, line breaks, bold, a tag's attributes other than a note mark - changes no
+  block's words and owes nothing.
 - **A changed block with no note marks** that is not an intro: it owes `quote-check`'s unfootnoted-assertion reading of that
   question (a historical claim may have been added uncited), and `record-format`.
-- **An intro paragraph** is marked as one, so the owed command can tell it from prose that should carry a footnote; it may state
-  only what the setting has and that the research follows, never a historical finding (the new check and `record-format` hold
-  that).
+- **An intro paragraph** is marked as one, so the owed command can tell it from prose that should carry a footnote. It states
+  what the setting or the map has and that the research follows, and it may name the class the question's own cited body or its
+  drawing page already reaches - "an invention of the setting", as the GM's draft does; it adds no historical claim that body
+  does not carry (the new check verifies the match).
 - **A drawing page**: the new check reads it for context (it is where the map's choice is said) but is owed only on research
   pages; a drawing page's prose and notes owe `record-format`, `source-reader` and `quote-check` as a research page's do.
 - **A source write-up** (`research/sources/`) new or changed in visible text owes `source-applicability` on it.
@@ -132,14 +136,18 @@ sees the push pass; edits the note again and sees the refusal return.
 
 - **FR-001**: A new defined check judges one research question as its casual reader meets it - its heading, its opening, the
   drawing page's account of what the map does, and the map elements written from it - and rules NO-INTRO-NEEDED, NEEDS-INTRO
-  (with what the intro must say: what the setting or the map has, and whether it is attested, a deliberate deviation or a
-  convention) or INTRO-PRESENT-OK / INTRO-PRESENT-FIX (an intro exists; it does or does not do its job, and asserts nothing
-  historical). It is pinned to a tier like every defined check and launches without the project's auto-loaded files.
+  (with what the intro must say: what the setting or the map has, and the class the question's cited body or drawing page
+  already reaches - attested, a deliberate deviation, a convention, an invention of the setting) or INTRO-PRESENT-OK /
+  INTRO-PRESENT-FIX (an intro exists; it does or does not say why the question is asked, and it does or does not add a
+  historical claim the cited body does not carry). It is pinned to a tier like every defined check and launches without the project's auto-loaded files.
 - **FR-002**: The record has a marked intro paragraph form, placed after the heading and the "Not to be confused with" block,
-  stated in the style guide and in the research directory's rules, styled on the built site, and recognized by the owed command.
+  stated in the style guide and in the research directory's rules, and recognized by the owed command. The mark carries no
+  styling of its own; the reader sees an ordinary opening paragraph.
 - **FR-003**: One command names every unit the record delta owes, against the merge base with main, one unit per line with the
   check, the subject (a question, a note of a question, a source, a modal class, a translation pair) and the occasion.
-- **FR-004**: What owes what:
+- **FR-004**: What owes what. A heading, a block or a note is CHANGED only when its words change - its text with HTML
+  comments, markup and whitespace normalized away, its note marks kept - and only when those words stand nowhere in the record
+  at the merge base (so a move, a renumbering or a merge owes nothing):
 
   | what changed since the merge base | owes |
   |---|---|
@@ -182,17 +190,20 @@ sees the push pass; edits the note again and sees the refusal return.
 
 ### Measurable Outcomes
 
-- **SC-001**: For the intro-only delta on the parley-room question, the owed list is exactly two units: the new check and
+- **SC-001** (FR-002, FR-004, FR-009): For the intro-only delta on the parley-room question, the owed list is exactly two units: the new check and
   `record-format` on that question.
-- **SC-002**: Replayed over the last 30 record-only commits on main, the owed command names no `source-reader`,
+- **SC-002** (FR-003, FR-004): Replayed over the last 30 record-only commits on main, the owed command names no `source-reader`,
   `quote-check` or `source-applicability` unit for any commit that changed no note, no noted block and no write-up; and the
   count of units each commit owes is reported beside what the doctrine's "every new or changed entry" would have owed.
-- **SC-003**: Every question in the record has been read by the new check once, and every question it ruled in need of an
+- **SC-003** (FR-001, FR-008): Every question in the record has been read by the new check once, and every question it ruled in need of an
   intro has one that it passed.
-- **SC-004**: A dry push of a delta with an unanswered owed unit is refused, and with the unit answered it passes; a bundle
+- **SC-004** (FR-005, FR-006, FR-007): A dry push of a delta with an unanswered owed unit is refused, and with the unit answered it passes; a bundle
   request for a unit not owed is refused without a reason; both are tests run by the gate.
-- **SC-005**: The new check, seeded with questions whose ruling is known (the parley room without its intro; a plain farm
-  subject; an intro that asserts a historical finding), returns the known ruling on each, three runs a leg.
+- **SC-005** (FR-001): The new check, seeded with questions whose ruling is known (the parley room without its intro; a plain farm
+  subject; an intro that adds a historical claim its cited body does not carry), returns the known ruling on each, three runs a leg.
+
+- **SC-006** (FR-010): no passage of the research rules, the research doctrine, the page-session rules or the five check
+  contracts says a record check runs on "every new or changed entry" or "every research pass" without naming the owed command.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -200,6 +211,8 @@ sees the push pass; edits the note again and sees the refusal return.
 |---|---|---|---|
 | The parley room on a border is introduced as an invention of the setting | deliberate deviation, already recorded | the drawing page records it as this setting's own; no page we read has two parties meeting on the line | `research/questions/0094-rooms-for-a-parley-across-a-border.html` (the intro); its drawing page |
 | The new check is owed on a new question, a changed heading or a changed intro, not on every edit to a question | this project's decision, on the GM's acceptance of the proposal | a question's purpose changes with its subject, which its heading names; owing it on every edit is the waste the GM named. Declined: owing it whenever the opening paragraph changes (a sweep's wording edits would owe it on most questions) | this spec; the owed command's docstring |
+| A changed block that carries note marks owes `quote-check` on those notes, beyond the proposal's "a changed note owes quote-check on that note" | this project's decision, a departure from the accepted proposal recorded here | rewording an assertion can make a faithful quotation stop supporting it (the check's SUPPORTS half), and only the words count, so a formatting sweep owes nothing | this spec; the owed command's docstring |
+| A changed block with no note mark, other than an intro, owes `quote-check`'s unfootnoted-assertion reading, beyond the proposal's "record-format only" | this project's decision, a departure from the accepted proposal recorded here | the proposal gave "record-format only" to all prose with no footnote marks, the intro being its example; this spec keeps it for the marked intro alone, because new uncited prose may carry a historical claim | this spec; the owed command's docstring |
 | An intro paragraph is marked, and cites nothing | this project's decision | the GM: an intro is *"definitionally something that is not citing any research"*; marking it is what lets the owed command spare the source-reading checks | the style guide; the research directory's rules |
 | Answer records live in the pushing clone, keyed to content | this project's decision, following the review records (feature 294) | a record committed beside the question would churn every file a check touches and conflict across parallel clones | the gate's comment |
 
@@ -211,3 +224,18 @@ sees the push pass; edits the note again and sees the refusal return.
   write-up half is owed by the delta.
 - The intros the backfill calls for are written by this session or by page sessions it starts, from the setting's canon read
   through `make canon`; none invents a setting detail the GM's notes contradict.
+
+## Review history
+
+- **Round 1** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - six items: "changed" undefined (a formatting sweep would owe
+  quote-check everywhere); the intro's class versus "asserts nothing historical"; rows 5 and 6 departing from the accepted
+  proposal unrecorded; "styled on the built site" not asked for; the deleted-note edge case contradicting itself; the 237 with
+  no method. All six applied: FR-004 defines CHANGED by words, with the formatting-only edge case; FR-001 and the intro edge
+  case let the intro name the class its cited body reaches; two rows added to Decisions Recorded; FR-002 carries no styling;
+  the deleted-note case rewritten; the count's method stated.
+- **Round 2** (`spec-fidelity-verify`, 2026-10-02): all six round-1 items RESOLVED; two new: SC-005's third seed still on the
+  old rule, and the unmarked-block decision row misstating the proposal's scope. Both applied (SC-005 seeds "an intro that adds
+  a historical claim its cited body does not carry"; the row says the proposal gave "record-format only" to all unmarked prose).
+- **Round 3** (`spec-fidelity-verify`, 2026-10-02): **FAITHFUL** - both round-2 items resolved, no new departure.
+- **Lint-only edit after acceptance** (2026-10-02): `spec-lint` required each success criterion to name its FRs; the FR ids
+  were added to SC-001..SC-005 and SC-006 states FR-010's existing requirement as a criterion. No requirement changed.
