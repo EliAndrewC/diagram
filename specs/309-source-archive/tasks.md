@@ -71,9 +71,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
       deletes nothing; the GM's lists stay); run on the GM's directory
       research: rendering
       verify: DONE. process_inbox + MATCH/NONE; 7 ops tests pass; ran on academic-sources: 40 entries archived to gm-copies/, confirmed in origin/main, removed - the two GM lists remain
-- [ ] T42 [US5] Archived at citation (D13, Amendment 2): `archive_reads` from `source-outcome` on a `cited:` outcome only,
+- [x] T42 [US5] Archived at citation (D13, Amendment 2): `archive_reads` from `source-outcome` on a `cited:` outcome only,
       none from `source-pages`; tests (a cited outcome archives, a read or any other outcome does not)
       research: rendering
+      verify: DONE. archive_reads only on a cited: outcome, none from source-pages; test_only_a_cited_outcome_archives_its_page passes; spec-fidelity FAITHFUL, plan CLEAR (Amendment 2)
 - [x] T43 [US6] The lookup (D14): `make archive-find`; tests
       research: rendering
       verify: DONE. make archive-find: KEY=forests-2020 names the capture and the GM copy; TERMS=Tonami|sankyoson finds the Visit Toyama text; test passes

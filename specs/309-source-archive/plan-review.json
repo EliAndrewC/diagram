@@ -1,6 +1,6 @@
 {
  "feature": "309-source-archive",
- "plan_sha256": "9f4b3a669eb389f4cec0903bd9e894e422454c9c0063e31961e14e035a1f13dd",
+ "plan_sha256": "ec8ffd771b4206354016a39f6cf4963fd27111a8ae3259c62152949d486a4e1d",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -104,7 +104,7 @@
    "id": "D13",
    "summary": "Archived at citation: archive_reads only from source-outcome on a cited:<key> outcome (reserve URL= already archives); source-pages archives nothing; a URL with a row not recaptured; the consulted operation kept unrun for 312; the three pre-hold uncited captures left for 312's filter",
    "class": "narrowing",
-   "why": "Narrows Amendment 1's 'every page we read', judged per class against request.md. (a) The backfill of earlier uncited reads held: the GM's own words, 'hold up on the backfill', and the uncited works moved to 'its own separate feature'. (b) Forward archive-on-read of uncited pages stopped: implied by the GM's words in Amendment 2 - the uncited works' filtering and write-ups are the new feature, and things judged not valuable are recorded 'but which we don't bother to store the full copy of'; archiving every read meanwhile would store unfiltered copies git cannot later take back, defeating that purpose. The read is still on the ledger and the page cache, so 312 loses nothing. (c) Cited pages still archived by every citing route (reserve, source-outcome cited:, make archive + the record refusal for footnote/entry URLs): FR-001's request untouched. (d) Three pre-hold captures kept: status quo, the open question 312's request names; not a carve-out. (e) consulted op kept unrun: honors 'hold', but its make help line still advertises it as live (see the spec verdict).",
+   "why": "Narrows Amendment 1's 'every page we read', judged per class against request.md. (a) The backfill of earlier uncited reads held: the GM's own words, 'hold up on the backfill', and the uncited works moved to 'its own separate feature'. (b) Forward archive-on-read of uncited pages stopped: implied by the GM's words in Amendment 2 - the uncited works' filtering and write-ups are the new feature, and things judged not valuable are recorded 'but which we don't bother to store the full copy of'; archiving every read meanwhile would store unfiltered copies git cannot later take back, defeating that purpose. The read is still on the ledger and the page cache, so 312 loses nothing. (c) Cited pages still archived by every citing route (reserve, source-outcome cited:, make archive + the record refusal for footnote/entry URLs): FR-001's request untouched. (d) Three pre-hold captures kept: status quo, the open question 312's request names; not a carve-out. (e) consulted op kept unrun: honors \"hold\"; its make help line, docs/make-targets.html and the _archive_ops.py module text now all say it is HELD, unrun, for feature 312 (commit 5f3bc7ce0), and archive-find's nothing-held message and the urls usage line name only the cited:<key> route (51e39b4be, f469d5de6).",
    "ruling": "LEGITIMATE"
   },
   {
@@ -128,9 +128,9 @@
   },
   {
    "id": "D16",
-   "summary": "_archive_ops.py holds the inbox, reads, lookup and relayout",
+   "summary": "_archive_ops.py holds the inbox, archiving at citation and the held consulted run, the lookup and the relayout",
    "class": "within",
-   "why": "File organization; no fidelity content. (Its 'the reads' and the Project Structure lines describing source-pages handing reads to the archiver are stale under D13 - text, not a decision.)"
+   "why": "File organization; no fidelity content. Its wording now agrees with D13 (5f3bc7ce0)."
   },
   {
    "id": "Docs list",
@@ -146,9 +146,9 @@
   },
   {
    "id": "Project Structure",
-   "summary": "Lists _archive_ops.py 'every page read (urls, consulted)' and _sources.py/_source_pages.py 'archive_reads: a page read is handed to the archiver'",
+   "summary": "Lists _archive_ops.py as the inbox, archiving at citation (urls), the held consulted run, archive-find and the relayout, and _sources.py archive_reads as handing a cited outcome's page to the archiver (D13)",
    "class": "within",
-   "why": "Not a decision the plan makes anew; the lines predate Amendment 2 and contradict D13 (_source_pages.py no longer calls archive_reads). Rewrite requested in the spec verdict; no narrowing."
+   "why": "Not a decision the plan makes anew; rewritten in 5f3bc7ce0 and now agrees with D13 (_source_pages.py dropped from the archive_reads line, matching the code: only _sources.py outcome on cited: calls it). No narrowing."
   }
  ],
  "verdict": "CLEAR"
