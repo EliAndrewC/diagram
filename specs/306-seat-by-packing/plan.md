@@ -41,18 +41,18 @@ lanes) did not move that edge; giving the band the ground a homestead actually t
   sum): the pool's 82 envelopes' mean (20,366 sq ft, R6) plus the least wood floor (`HOMESTEAD_WOOD_FT2[0]`, 6,000). It sizes
   only `_seat_households`' lattice and seat bound; the margin's choice, the canvas's room and the belt keep `HOMESTEAD_GROUND_FT`'s
   104 - growing those too re-fitted every field and refused sites the base seated (R11), and the canvas grown alone made 40
-  households worse (R12). Its own verdict (FR-011): GO - at 40 households 11 of 16 seeds on the first margin, 84.2 s summed
-  against the base's ~449, every household seated (R12); the cohort 30/30. The pool's two regressions under it (Inashiro's
-  access lane, Sawada's doubled way) go to their root causes (R14) before it lands.
-- **D2 The rescue and the dry-spell cap are built only if they pay on top of D1** (FR-011): measured on the sixteen-seed set
-  at 40 households, D1 alone against D1 with both (research R9); built where faster beyond the spread with every household
-  seated, else recorded and withdrawn.
+  households worse (R12). Its own verdict (FR-011), the back-to-back run of R15: GO - the band ALONE (the dry cap and rescue off) 427.7 -> 100.0 s over
+  the fifteen seeds the base rolled at 40 households, the first margin on 10 of 16 against 1 of 15, every household seated; the
+  cohort 30/30. The pool's two regressions under it (Inashiro's access lane, Sawada's doubled way) went to their root causes (R14).
+- **D2 The rescue and the dry-spell cap are built only if they pay on top of D1** (FR-011): R15's third leg, on the final D1 -
+  100.0 -> 83.3 s, margins saved on seeds 25, 8 and 6, seed 39 slower (7.45 -> 13.96 s), no seed seating fewer: GO, built.
+  (R9 measured them on D1's withdrawn form; R15 is their verdict.)
 - **D3 FR-003 (capacity predicted before seating) and FR-004 (packed proposals) are not built.** FR-004's packed proposals
   were prototyped and measured NO-GO (R3: beside the tree, grown from the houses; R4: along planned lanes). FR-003's
   free-ground prediction was measured and disproved (R1); its rules-based form was argued from R2-R3 (the cap is reachability,
   not ground) and NOT prototyped - with D1 a margin's capacity is no longer the edge it was. Seed 47 still seats on the seventh
-  margin at 162 alone (R7); with the rescue on the third (R9) and under D1's final form on the first (R12) - every reference
-  seed's miss against SC-002/SC-003 is recorded with every round's numbers and raised with the GM.
+  margin at 162 alone (R7), on the third with the rescue (R9); under the final D1 on the first, 2.99 s alone and 3.11 s with D2
+  (R15) - every reference seed's miss against SC-002/SC-003 is recorded with every round's numbers and raised with the GM.
 - **D4 The overlap census** (FR-006): `tools/overlap_census.py`. `sys.monitoring` armed on every pairwise measure - the
   geometry package's (`_geom/primitives.py`, `_geom/overlap.py`'s public predicates) AND shapely's binary predicates and
   `distance` on its geometries; each comparison charged to the nearest named function outside both (comprehensions and lambdas

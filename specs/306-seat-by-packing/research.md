@@ -172,3 +172,32 @@ reserved corridor was never drawn because the stray lane reached the house first
 network needs. Fixed: `tree.left_to_the_tree` lets it drop such a lane where the houses it leaves unreached have reserved
 corridors, which the settle then draws. Two tests in `tests/hamletgen/ways/test_tree.py`. With both, and the row street's inside
 corner rounded (the earlier seed-903 fix, `homesteads/rows.py`): the pool clean, `test_pool_261.py` 31/31, the cohort 30/30.
+
+## R15. The three legs back to back: the base, the seating's band alone, the band with the dry cap and the rescue (observed 2026-10-02, method: `legs.py` (scratchpad) - the reference at 40 households through `stage_homesteads`, seeds 1-13, 25, 39, 47; the base engine in the worktree `/tmp/base306` at 8d15b8a27, then the clone's engine with `DRY_SPELL`/`RESCUE_SHORT` disabled, then the clone's as built; one leg after the other on an otherwise idle machine)
+
+(Observed 2026-10-02, method: as the heading.) Homesteads seconds (margins seated, placer offers):
+
+| seed | base | the band alone (D1) | the band with both (D1 + D2) |
+|---|---|---|---|
+| 1 | 14.14 (5, 7,020) | 2.11 (1, 552) | 2.20 (1, 552) |
+| 2 | 98.97 (30, 49,801) | 9.01 (3, 4,498) | 8.04 (3, 3,625) |
+| 3 | 21.86 (6, 8,748) | 3.44 (1, 1,231) | 3.50 (1, 1,231) |
+| 4 | 6.81 (2, 2,690) | 2.85 (1, 834) | 2.99 (1, 834) |
+| 5 | 9.02 (3, 3,937) | 2.27 (1, 383) | 2.35 (1, 383) |
+| 6 | 86.23 (27, 42,906) | 14.51 (5, 7,051) | 11.96 (4, 5,569) |
+| 7 | crashed (R8) | 5.00 (2, 1,511) | 5.01 (2, 1,471) |
+| 8 | 35.83 (12, 17,131) | 7.10 (3, 2,704) | 3.69 (1, 1,364) |
+| 9 | 16.85 (6, 7,613) | 3.11 (1, 1,019) | 3.20 (1, 1,019) |
+| 10 | 19.40 (6, 9,019) | 2.45 (1, 683) | 2.58 (1, 683) |
+| 11 | 6.39 (2, 2,686) | 2.20 (1, 398) | 2.30 (1, 398) |
+| 12 | 39.34 (15, 20,124) | 13.18 (6, 6,544) | 12.55 (6, 5,927) |
+| 13 | 2.67 (1, 773) | 2.47 (1, 655) | 2.54 (1, 655) |
+| 25 | 8.42 (3, 3,774) | 19.90 (8, 9,911) | 3.35 (1, 1,682) |
+| 39 | 10.18 (4, 4,521) | 7.45 (3, 2,883) | 13.96 (3, 5,655) |
+| 47 | 51.54 (16, 25,279) | 2.99 (1, 782) | 3.11 (1, 782) |
+| **sum** | **427.7 (15 seeds)** | **100.0** | **83.3** |
+
+**D1 on its own verdict: GO** - 427.7 -> 100.0 s on the fifteen seeds the base rolled (4.3x; seed 7 the base could not roll at
+all), every household seated, the first margin on 10 of 16 against 1 of 15. **D2 on top of D1: GO** - 100.0 -> 83.3 s; it saves
+margins on seeds 25 (8 -> 1), 8 (3 -> 1) and 6 (5 -> 4) and costs seed 39 (7.45 -> 13.96 s: the rescue searched a near miss that
+the next margin seated anyway); no seed seats fewer.
