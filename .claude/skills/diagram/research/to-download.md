@@ -365,7 +365,7 @@ neither.
 
 ## What was actually measured, because the number in the closing report was an estimate
 
-Every one of the 495 URLs in `research/SOURCES.html` was probed from the container twice - once with the
+Every one of the 495 URLs in the registry (then the built page `SOURCES.html`, now `research/sources/`) was probed from the container twice - once with the
 default client, once with a desktop browser user agent. The result:
 
 - **450 open normally.** (147 of those answered `429 Too Many Requests` on the first pass purely because the

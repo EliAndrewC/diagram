@@ -42,5 +42,160 @@
    "description": "Referenced only: no read of it is recorded and no capture of it is open."
   }
  ],
- "recorded": {}
+ "recorded": {
+  "download:113": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 113: 'Blocked by: a paywalled chapter.'"
+   }
+  ],
+  "download:158": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 158: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:161": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 161: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:163": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 163: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:164": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 164: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:168": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 168: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:170": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 170: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:178": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 178: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:187": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 187: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:189": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 189: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:191": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 191: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:219": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 219: 'Blocked by: paywalled.'"
+   }
+  ],
+  "download:32": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 32: 'Blocked by: Springer redirected the fetch to an institutional login.'"
+   }
+  ],
+  "inexhaustible-treasuries": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "list entry 272: 'Blocked by: the publisher returns 403 (paywall)'"
+   }
+  ],
+  "kotobank-machibugyosho": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry write-up: 'a reference-work extract (the full entry is behind a paywall)'"
+   }
+  ],
+  "kotobank-oimawashi": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry write-up: 'The entries are excerpts behind a paywall's teaser'"
+   }
+  ],
+  "miles-2003": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry comment: 'unsupported by any readable page (paywalled; the search summary gives the subject...)'"
+   }
+  ],
+  "northampton-tannery-1996": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry comment: 'the article body is closed - Unpaywall and OpenAlex both report no open copy'; list entry 9: '(Taylor and Francis; subscription)'"
+   }
+  ],
+  "shixue-yuekan-louzeyuan": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry comment: 'abstract READ 2026-09-06, the CNKI full text behind a paywall'"
+   }
+  ],
+  "skinner-marketing": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry write-up of skinner-2002-etudes-rurales: 'The 1964 Journal of Asian Studies article ... is genuinely closed - Unpaywall reports no open location'"
+   }
+  ],
+  "tedori-fan-pwe": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry comment: 'unsupported by any readable page 2026-09-06 - Springer login wall'"
+   }
+  ],
+  "woods-westbrook-2006": [
+   {
+    "state": "paywalled",
+    "date": "2026-10-02",
+    "reason": "registry write-up: 'Only the abstract and the summary sections are on a public page, the full paper being behind a subscription'"
+   }
+  ]
+ }
 }

@@ -65,8 +65,9 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
 - A citation is a footnote at the assertion quoting the passage verbatim from a public page the
   reader can open, in English translation marked as one. A source that cannot be read is not cited;
   the claim may stand with an absence note saying what was searched. The GM's own campaign notes are
-  canon, not evidence, and need no citation. A source only the GM can fetch goes at the END of
-  `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in their format.
+  canon, not evidence, and need no citation. A source only the GM can fetch is appended to the canonical
+  download list `research/to-download.md` with `make download-add FILE=<draft>` (feature 313); the GM's
+  `academic-sources/TO-DOWNLOAD.md` is their marked copy, written only by `make downloads-sync`.
 - The record is HTML under `research/`, each heading the question a reader would ask from the map,
   each entry written for a casual reader: glossary tooltips for terms, session notes in HTML
   comments, nothing about what the entry used to say. A modal's explanation is written from a research
@@ -218,6 +219,7 @@ doctrine for writing a guard: `docs/guards.md`.
 |---|---|---|
 | `repo-safety-hooks.sh` | no force push, no history rewrite; no git writes to `/host-l7r-repo` | none; `HOST_GIT_OK` |
 | `source-block-hooks.sh`, `readme-hooks.sh` | the GM's SOURCE blocks and READMEs are theirs to write | - |
+| `download-copy-hooks.sh` | a write to the GM's copy of the download list (`academic-sources/TO-DOWNLOAD.md`) is refused with `make download-add` / `make downloads-sync` (feature 313) | `DOWNLOAD_COPY_OK` |
 | `house-style-hooks.sh` + `check-house-style-delta.py` | corrects dashes and spellings in Edit, Write and Bash payloads; `make quick` fails on one in the delta | - |
 | `make-only-hooks.sh` | refuses a bare interpreter or pytest; rewrites a targeted pytest to `make test-file` | - |
 | `guard-file-hooks.sh` | a guard-file edit carries `GUARD_EDIT_OK` and a reason; a Makefile recipe comment must not run | - |
@@ -246,7 +248,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `stall-watchdog-hooks.sh` | one loop outside every session: a session silent an hour with unfinished work, not waiting on the GM, gets its tab marked and the bell, and a nudge typed when its own input line is empty (once per stall); a paneless one is marked on its host's tab, never nudged | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
-| at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` (the record gate: every record check a delta owes answered, feature 311), `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `make record CHECK=1` (the record builds cleanly), `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal; at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
+| at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` (the record gate: every record check a delta owes answered, feature 311), `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `_downloads.py check` (the download list append-only), `make record CHECK=1` (the record builds cleanly), `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal; at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
 | the gate | the 100% floor, the 1,000-line bar, `_ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file |
 
 Every escape states a reason of two words or more, and every firing is recorded (`make audit`,

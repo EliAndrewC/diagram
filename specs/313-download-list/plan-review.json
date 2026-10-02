@@ -1,6 +1,6 @@
 {
  "feature": "313-download-list",
- "plan_sha256": "62a19bbfe44f1510564703157e16eb765120728e639f9f871275cec85350ce13",
+ "plan_sha256": "2f2bd26dd0549c6c137dc724da21a40afcd8e0a75d5a58a779ebe826c1436ef7",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,41 +18,33 @@
   },
   {
    "id": "D3",
-   "summary": "One-time import: header, high-risk section first, the GM's file unchanged; 1-6, 8, 12-16 downloaded and 7, 9, 10, 11 not found from the 2026-09-13 table",
+   "summary": "One-time import: header, high-risk section first, the GM's file unchanged; 1-6, 8, 12-16 downloaded and 7, 9, 10, 11 not found from the 2026-09-13 table; byte-for-byte re-derivation test",
    "class": "within",
-   "why": "FR-001, FR-004; checked against the GM's status table (7, 9, 10, 11 CLOSED - unavailable; 16 'You already saved a PDF')"
+   "why": "FR-001, FR-004, SC-001"
   },
   {
    "id": "D4-compare",
-   "summary": "Ingest as a three-way comparison against synced.commit; marks recorded while text edits wait for KEEP=/DROP=; unknown ids named and pending; refused before the first sync",
+   "summary": "Ingest as a three-way comparison against synced.commit; marks recorded while text edits wait for KEEP=/DROP=; conflicts shown three ways; unknown ids named and pending; refused before the first sync; then the inbox",
    "class": "within",
    "why": "FR-005, US2 scenarios 3-4, edge cases"
   },
   {
    "id": "D4-contradiction",
-   "summary": "Ingest refuses found-elsewhere without downloaded or partial, and not-found with 'either' (downloaded or partial) - paywalled left out",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 and US2 scenario 2 refuse not-found with downloaded, partial OR paywalled (widened in spec round 1). The plan's refusal lets not-found plus paywalled through, a combination FR-011 rule 1 gives no state for. Nothing makes the spec's rule impossible. Fix: 'not-found with downloaded, partial or paywalled'."
+   "summary": "Ingest refuses found-elsewhere without downloaded or partial, and not-found with downloaded, partial or paywalled",
+   "class": "within",
+   "why": "Amended to FR-005 and US2 scenario 2 word for word; round 1's NOT LEGITIMATE narrowing is gone"
   },
   {
    "id": "D5",
-   "summary": "Sync refuses unless the copy's sha matches imported/synced/ingested or the copy is absent; refuses on an uncommitted canonical list; records sha, date, commit",
+   "summary": "Sync refuses unless the copy's sha matches imported/synced/ingested or the copy is absent, naming entries; refuses on an uncommitted canonical list; records sha, date, commit",
    "class": "within",
    "why": "FR-007, US3; the uncommitted-list refusal binds only the session and keeps the base a commit"
   },
   {
    "id": "D6-add",
-   "summary": "make download-add from a draft; checks link, fallback, an existing record pointer, blocked-by; next number under the host-wide lock over mirror, clones and a ledger; appended at the end",
+   "summary": "make download-add from a draft; checks link, fallback, an existing record pointer, blocked-by; next number under the host-wide lock over mirror, clones and a ledger; appended at the end. HIGH_RISK=1 removed",
    "class": "within",
-   "why": "FR-008, US4 scenario 1"
-  },
-  {
-   "id": "D6-high-risk",
-   "summary": "HIGH_RISK=1 takes the next H<n> and inserts it at the end of the high-risk section, which D11's push check allows",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-008 appends at the end and FR-010 refuses an entry inserted anywhere but the end; the request moves the 'goes at the END' rule to the canonical list, enforced by tooling. Neither the request nor 312's spec grows the high-risk list (312 FR-021: the 22 sources; 312's request makes the high-risk list a query). The carve-out serves no case asked for, and it defeats the END rule's purpose: the GM, working down the copy, would miss an entry inserted in a section already done. Fix: drop HIGH_RISK=1 and D11's H-insertion allowance."
+   "why": "FR-008, US4 scenario 1; round 1's high-risk-section insertion is dropped"
   },
   {
    "id": "D7",
@@ -68,23 +60,15 @@
   },
   {
    "id": "D9-rules",
-   "summary": "Rule 1 mark mapping and several-entries rule; manifest outcome mapping (404/410 gone, timeout/5xx down, else bot-refused) and the openness order; READ gives open; hand state wins over 2-4 on same date or later, never over a mark",
+   "summary": "Rule 1 mark mapping and several-entries rule; manifest rows: archived/earlier-snapshot open, gm-copy gm-full, a partial row whose page would not render whole but whose served text is kept open, other partial/unreachable to gone (404/410), down (timeout, network, 5xx), else bot-refused; most open row wins; no row with READ open, else never-read; hand state wins over 2-3 on same date or later, never over a mark that gives a state",
    "class": "within",
-   "why": "FR-011 rules 1, 2, 4 and the hand-state rule as accepted; the outcome mapping and order define what the spec says is stated in one file"
-  },
-  {
-   "id": "D9-rule3",
-   "summary": "New rule 3: a manifest-derived bot-refused, down or gone becomes never-read when the registry entry has no READ comment",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-011 says the most open manifest row decides, then READ, then never-read; US5 scenario 2 requires a key whose only row is a 403 partial to be bot-refused, with no READ condition. The plan's justification ('three states kept apart') is the session's own summary in 312's request, not the GM's words. Measured 2026-10-02 (registry <h3> ids vs any READ comment vs archive/*/*.json outcomes): 8 works-cited keys have no READ comment and only partial/unreachable rows, so the rule would tag cited sources 'never read (referenced only)'. Fix: drop rule 3; amend the spec through review if the distinction is wanted."
+   "why": "FR-011 rules 1-4 and the hand-state rule as accepted; round 1's never-read override (old rule 3) is removed. The new partial mapping applies the request's own definition of open, 'read by us': measured 2026-10-02 (archive/*/*.json outcome and reason), 22 of 37 partial rows carry reason 'the page would not render whole: its served HTML and text are kept', i.e. the text was served to us and kept, not refused; the 15 others are HTTP 403 (13), 406, 429 and stay bot-refused, so US5 scenario 2 holds. This is the mapping the spec leaves to the states file, not a carve-out"
   },
   {
    "id": "D9-keyless",
-   "summary": "A keyless list entry (download:<id>) takes rule 1, else never-read",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-011 gives every keyless entry a state under the same rules, hand-recorded states included, and seeds list entries whose Blocked by says paywalled as hand states. Most of those are keyless (248 of 306 entries are), so 'else never-read' throws away the seeds D9a records. Fix: rule 1, then a hand state, then never-read."
+   "summary": "A keyless list entry (download:<id>) takes rule 1, then a hand-recorded state, else never-read",
+   "class": "within",
+   "why": "Amended to FR-011's rules for keyless entries, so D9a's list-entry seeds take effect; round 1's narrowing is gone"
   },
   {
    "id": "D9a",
@@ -100,15 +84,15 @@
   },
   {
    "id": "D10",
-   "summary": "Guard download-copy-hooks.sh refusing Edit/Write/shell writes to the GM's copy with the add/sync commands; escape DOWNLOAD_COPY_OK, logged",
+   "summary": "Guard download-copy-hooks.sh refusing Edit/Write/shell writes to the GM's copy with the add/sync commands; escape DOWNLOAD_COPY_OK, logged; companion test proven red",
    "class": "within",
    "why": "FR-009, SC-004; a logged escape with a reason is the project's standing guard form"
   },
   {
    "id": "D11",
-   "summary": "Push check against origin/main: lost id, reorder, new id not at end or not above main's highest, reused id, malformed marks; selftest first; passes while absent on main",
+   "summary": "Push check against origin/main: lost id, reorder, a new id not after every main id, not numeric or not above main's highest, reused id, malformed marks; selftest first; passes while absent on main",
    "class": "within",
-   "why": "FR-010 (its H-section allowance is ruled under D6-high-risk)"
+   "why": "FR-010; the H-section insertion allowance is removed, so every new entry is at the end"
   },
   {
    "id": "D12",
@@ -118,10 +102,10 @@
   },
   {
    "id": "TC-route",
-   "summary": "Tooling only, DIRECT route, no perf bookends or map reviews; reuse of Lock, inbox and guard-log helpers",
+   "summary": "Tooling only, DIRECT route, no perf bookends or map reviews; reuse of Lock, inbox and guard-log helpers; make targets forwarded from the root Makefile",
    "class": "within",
    "why": "nothing on a map changes (spec Decisions)"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

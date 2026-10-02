@@ -30,7 +30,7 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   records what it costs, the alternatives that were priced, and who chose.
 - A citation is a footnote at the assertion quoting the passage verbatim from a public page a reader can open, in
   English translation marked as one (the original after). A source that cannot be read is not cited. A source only
-  the GM can fetch goes at the END of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in its format.
+  the GM can fetch is appended with `make download-add FILE=<draft>` to `research/to-download.md` (never the GM's copy).
 - Look in the archive before the web (feature 309): start the pass with `make archive-inbox` (the GM's downloads
   archived and moved out of `academic-sources/`; a NEW download is listed WAITING until you read its first page and give
   its keys - `MATCH='<file>=<key>'`, or `NONE='<file>'` if it copies no cited source), then `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` for every
