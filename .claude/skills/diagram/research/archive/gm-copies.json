@@ -1,5 +1,5 @@
 {
- "_about": "Feature 309 FR-012: each file in /host-l7r-repo/academic-sources/ matched to the registry key(s) of the cited source it is a copy of (keys [] = it copies no cited source; listed, not archived). Matched 2026-10-02 by title, DOI or URL (method: specs/309-source-archive/plan.md, "The GM's downloaded copies").",
+ "_about": "Feature 309 FR-012: each file in /host-l7r-repo/academic-sources/ matched to the registry key(s) of the cited source it is a copy of (keys [] = it copies no cited source; listed, not archived). Matched 2026-10-02 by title, DOI or URL (method: specs/309-source-archive/plan.md, section The GM's downloaded copies).",
  "files": {
   "1-s2.0-S1389934121000836-main.pdf": {
    "keys": [

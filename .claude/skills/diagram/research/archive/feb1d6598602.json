@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:49:54+00:00",
+ "final_url": "https://web.archive.org/web/20250413215501id_/https://pmc.ncbi.nlm.nih.gov/articles/PMC5723622/",
+ "first": "pmc5723622-bamboo-range/feb1d6598602/20261002T124954Z",
+ "gm_copies": [],
+ "keys": [
+  "pmc5723622-bamboo-range"
+ ],
+ "notes": [
+  "0075-bamboo-groves-chikurin.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "pmc5723622-bamboo-range/feb1d6598602/20261002T124954Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5723622/"
+}

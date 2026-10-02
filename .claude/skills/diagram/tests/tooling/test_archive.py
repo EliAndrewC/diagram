@@ -259,8 +259,38 @@ def test_an_unreachable_url_with_nothing_to_store_keeps_its_reason_and_writes_no
     assert row["outcome"] == "unreachable" and row["path"] == "" and row["reason"] == "net::ERR_NAME_NOT_RESOLVED"
 
 
-def test_an_unreadable_row_or_match_table_is_none(tmp_path: pathlib.Path) -> None:
+def test_an_unreadable_row_is_none_and_a_malformed_match_table_is_an_error(tmp_path: pathlib.Path) -> None:
     assert ar.read_row(tmp_path, "https://a") is None and ar.gm_copies(tmp_path) == {}
+    (tmp_path / ar.MANIFEST).mkdir(parents=True)
+    (tmp_path / ar.MANIFEST / rec.GM_COPIES).write_text('{"_about": "a "quoted" word"}', encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        ar.gm_copies(tmp_path)
+
+
+def test_the_real_match_table_parses_and_names_cited_keys() -> None:
+    copies = ar.gm_copies(REPO)
+    cited = {k for w in rec.cited(str(REPO / ar.MANIFEST.parent)).values() for k in w.keys}
+    assert len(copies) >= 25 and set(copies) <= cited
+
+
+def test_the_gm_copies_are_synced_into_rows_already_written(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    gm = tmp_path / "academic-sources"
+    gm.mkdir()
+    (gm / "alpha.pdf").write_bytes(b"%PDF the GM's copy")
+    monkeypatch.setattr(ar, "GM_DIR", gm)
+    root, remote = _root(tmp_path), _remote(tmp_path)
+    ar.write_row(root, "https://a", {"url": "https://a", "keys": ["alpha"], "outcome": "partial", "gm_copies": []})
+    ar.write_row(root, "https://b", {"url": "https://b", "keys": ["beta"], "outcome": "archived", "gm_copies": []})
+    store = ar.Archive(tmp_path / "home", remote=remote)
+    assert ar.sync_gm_copies(root, store) == 1
+    row = ar.read_row(root, "https://a")
+    assert row["outcome"] == "archived-gm-copy" and row["gm_copies"] == ["alpha/gm-copy/alpha.pdf"]
+    assert ar.read_row(root, "https://b")["gm_copies"] == []
+    assert ar.sync_gm_copies(root, store) == 0, "a second sync changes nothing"
+    store.git("remote", "set-url", "origin", str(tmp_path / "nowhere.git"))
+    store.put("x", {"f": b"1"}, "x")
+    with pytest.raises(RuntimeError, match="push failed"):
+        ar.sync_gm_copies(root, store)
 
 
 def test_a_clone_that_fails_is_reported(tmp_path: pathlib.Path) -> None:

@@ -2,7 +2,9 @@
  "captured": "2026-10-02T12:35:25+00:00",
  "final_url": "https://link.springer.com/10.1007/s12685-022-00302-1",
  "first": "kabu-ido-commons/af948a8f3c9f/20261002T123525Z",
- "gm_copies": [],
+ "gm_copies": [
+  "kabu-ido-commons/gm-copy/s12685-022-00302-1.pdf"
+ ],
  "keys": [
   "kabu-ido-commons"
  ],

@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T12:42:25+00:00",
+ "final_url": "https://web.archive.org/web/20220429223932id_/https://www.sciencedirect.com/science/article/pii/S1389934121000836",
+ "first": "kweon-youn-2021/c812cad3f466/20261002T124224Z",
+ "gm_copies": [
+  "kweon-youn-2021/gm-copy/1-s2.0-S1389934121000836-main.pdf"
+ ],
+ "keys": [
+  "kweon-youn-2021"
+ ],
+ "notes": [
+  "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "kweon-youn-2021/c812cad3f466/20261002T124224Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "32786f1d0a08f4e69c2bb765ccf0d55ee2d27dbd5f5e0d4766a54595f50573b9",
+ "url": "https://www.sciencedirect.com/science/article/pii/S1389934121000836"
+}

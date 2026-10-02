@@ -31,9 +31,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
       research: rendering
       verify: DONE. archive_at_cite + its test; make archive / archive-sources; .gitignore; check-research-pointers.py clean
 - [x] T12 [US1] FR-012: the GM's `academic-sources/` matched to keys, `research/archive/gm-copies.json` (42 entries, 33
-      matched over 31 keys, 7 copy no cited source - plan.md)
+      matched over 30 keys, 7 copy no cited source - plan.md)
       research: rendering
-      verify: DONE. gm-copies.json committed: 40 matched entries + 2 GM lists, 33 matched over 31 keys, 7 unmatched listed
+      verify: DONE. gm-copies.json committed: 40 matched entries + 2 GM lists, 33 matched over 30 keys, 7 unmatched listed
 
 ## Phase 3 - the backfill (US1; SC-001, SC-002, SC-005)
 

@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:59:51+00:00",
+ "final_url": "https://www.visitbeijing.com.cn/article/47QsCmrXIS9",
+ "first": "visitbeijing-caiyuan/38320493bb9d/20261002T125951Z",
+ "gm_copies": [],
+ "keys": [
+  "visitbeijing-caiyuan"
+ ],
+ "notes": [
+  "0174-fields-and-gardens-inside-a-citys-wall.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "visitbeijing-caiyuan/38320493bb9d/20261002T125951Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "599a92ed635b4c93c8d3de34431239f21b0c05f63e2ef00202768c55e5ad40c1",
+ "url": "https://www.visitbeijing.com.cn/article/47QsCmrXIS9"
+}

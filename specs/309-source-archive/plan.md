@@ -52,7 +52,7 @@ committed as `research/archive/gm-copies.json`).
 
 - **42 entries**: 2 are the GM's lists (`TO-DOWNLOAD.md`, `for-the-gm-fetch-list.md`), not sources; 38 files and 2 `_files`
   folders (each belongs with its saved `.html` page) are the 40 matched.
-- **33 match a cited source** (31 files and the 2 folders), over 31 keys. Only 8 registry entries mention `academic-sources`
+- **33 match a cited source** (31 files and the 2 folders), over 30 keys (counted 2026-10-02 from the committed table: three keys hold two entries each - `yuan-liu-2009` two text files, each `wagner-*` key a saved page and its folder). Only 8 registry entries mention `academic-sources`
   at all, so a marker-based rule would have missed most (spec-fidelity round 2).
 - **7 copy no cited source** and are listed, not archived: `FactorsOfSpatialDistribution.txt` (Kim et al. 2018),
   `FenshuiForests.txt` (Chen, Coggins, Minor and Zhang), `asie_0766-1177_2011_num_20_1_1377.pdf` (Goossaert 2011 - named in

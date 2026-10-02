@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T12:55:45+00:00",
+ "final_url": "https://www.visitbeijing.com.cn/article/47QoO7ycoec",
+ "first": "visitbeijing-jimingyi/19dd231c44d7/20261002T125545Z",
+ "gm_copies": [],
+ "keys": [
+  "visitbeijing-jimingyi"
+ ],
+ "notes": [
+  "0120-towns-the-county-seat-and-the-post-town-and-who-lives-in-them-machi.notes.html",
+  "0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.notes.html",
+  "0134-the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "visitbeijing-jimingyi/19dd231c44d7/20261002T125545Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "a718c4a671aad59e21eb4bdbec60998a78f0abc7873931e8a137370df2df6ffb",
+ "url": "https://www.visitbeijing.com.cn/article/47QoO7ycoec"
+}

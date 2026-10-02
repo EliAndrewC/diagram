@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T12:42:03+00:00",
+ "final_url": "https://web.archive.org/web/20240415002303id_/https://www.sciencedirect.com/science/article/abs/pii/S0925857417304548",
+ "first": "ma-2017-fengshui-carbon/59695940ab4c/20261002T124203Z",
+ "gm_copies": [
+  "ma-2017-fengshui-carbon/gm-copy/PatternsOfEcoDensity.txt"
+ ],
+ "keys": [
+  "ma-2017-fengshui-carbon"
+ ],
+ "notes": [
+  "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "ma-2017-fengshui-carbon/59695940ab4c/20261002T124203Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://www.sciencedirect.com/science/article/abs/pii/S0925857417304548"
+}

@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T12:47:41+00:00",
+ "final_url": "https://web.archive.org/web/20220620051636id_/https://www.mdpi.com/2076-3263/11/8/352",
+ "first": "mdpi-sho-fan-groundwater/cfa6b3ea0ff5/20261002T124741Z",
+ "gm_copies": [
+  "mdpi-sho-fan-groundwater/gm-copy/geosciences-11-00352-v2.pdf"
+ ],
+ "keys": [
+  "mdpi-sho-fan-groundwater"
+ ],
+ "notes": [
+  "0031-clustered-and-scattered-villages-shuson-sanson.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "mdpi-sho-fan-groundwater/cfa6b3ea0ff5/20261002T124741Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "03b8ce9d054d56a7381eee6731b2cfe627a5186b8f376572f145cc7a5608f031",
+ "url": "https://www.mdpi.com/2076-3263/11/8/352"
+}

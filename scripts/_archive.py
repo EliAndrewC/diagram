@@ -33,6 +33,7 @@ THE MANIFEST, one row per cited URL in this repository (`research/archive/<id>.j
     _archive.py url <u> [--key K]          archive one URL now (`make archive URL=`; `make reserve ... URL=` calls it)
     _archive.py backfill [--workers N]     archive every cited URL with no row, resumably (`make archive-sources`)
     _archive.py report                     the coverage table, fetching nothing (`make archive-sources REPORT=1`)
+    _archive.py gm-copies                  the GM's matched files copied in, their rows told (`make archive-sources GM=1`)
 """
 
 from __future__ import annotations
@@ -80,6 +81,10 @@ PART = 95 * 2**20
 #: The backfill pushes once this much is committed and unpushed (plan D9: far under GitHub's 2 GB push limit, and a
 #: stopped run loses at most one batch's push - the captures stay in the working copy for the next run).
 PUSH_EVERY = 200 * 2**20
+#: A backfill lane starts a fresh browser this often, so a lane's memory stays bounded: the containers share a 10 GB cap,
+#: and two lanes' browsers had grown to 1.8 GB (one renderer 0.7 GB) partway through the first backfill (observed
+#: 2026-10-02 at the host's low-memory warning).
+RECYCLE_EVERY = 25
 #: Politeness (plan D8): one request at a time per host, this long between them; a 429 or 503 waits RETRY_WAIT once.
 HOST_GAP_S = 1.0
 RETRY_WAIT_S = 30.0
@@ -489,11 +494,13 @@ def write_row(root: pathlib.Path, url: str, row: dict) -> None:
 
 
 def gm_copies(root: pathlib.Path) -> dict[str, list[str]]:
-    """key -> the GM's files that copy it (FR-012), from `research/archive/gm-copies.json`."""
-    try:
-        files = json.loads((root / MANIFEST / rec.GM_COPIES).read_text(encoding="utf-8"))["files"]
-    except (OSError, json.JSONDecodeError, KeyError):
+    """key -> the GM's files that copy it (FR-012), from `research/archive/gm-copies.json`. No table, no copies; a
+    table that will not parse is an error, never an empty table - the first backfill ran on a malformed one and copied
+    none of the GM's files while every row looked normal (2026-10-02)."""
+    path = root / MANIFEST / rec.GM_COPIES
+    if not path.is_file():
         return {}
+    files = json.loads(path.read_text(encoding="utf-8"))["files"]
     out: dict[str, list[str]] = {}
     for name, entry in sorted(files.items()):
         for key in entry.get("keys", []):
@@ -553,6 +560,37 @@ def archive_url(root: pathlib.Path, url: str, who: rec.Cited, browser, store: Ar
     return row
 
 
+def sync_gm_copies(root: pathlib.Path, store: Archive) -> int:
+    """Every GM file `gm-copies.json` matches copied into the archive, and every row of its key told so - without fetching
+    anything (FR-012). A row the live fetch left `partial` or `unreachable` becomes `archived-gm-copy` (plan D2: the GM's
+    copy stands in where the live page failed). Returns the rows changed."""
+    copies = gm_copies(root)
+    rows = {p: json.loads(p.read_text(encoding="utf-8")) for p in sorted((root / MANIFEST).glob("[0-9a-f]*.json"))}
+    changed = 0
+    with store.locked():
+        store.ensure()
+        for key, names in copies.items():
+            paths = []
+            for name in names:
+                if (GM_DIR / name).exists():
+                    store.copy_in(f"{key}/gm-copy/{name}", GM_DIR / name)
+                    paths.append(f"{key}/gm-copy/{name}")
+            for row in rows.values():
+                if key not in row.get("keys", []) or not paths:
+                    continue
+                before = dict(row)
+                row["gm_copies"] = sorted(set(row.get("gm_copies", [])) | set(paths))
+                if row["outcome"] in ("partial", "unreachable"):
+                    row["outcome"] = "archived-gm-copy"
+                if row != before:
+                    write_row(root, row["url"], row)
+                    changed += 1
+        failure = store.push()
+    if failure:
+        raise RuntimeError(f"the GM's copies are committed but the push failed: {failure}")
+    return changed
+
+
 def owed(root: pathlib.Path) -> dict[str, rec.Cited]:
     """Every cited URL with no row, or a row still waiting on its upload."""
     rows = rec.load(str(root / ".claude/skills/diagram/research"))
@@ -581,7 +619,10 @@ def _lane(args: tuple[str, list[str], str]) -> list[dict]:  # pragma: no cover -
     browser = Browser()
     out = []
     try:
-        for url in urls:
+        for n, url in enumerate(urls, 1):
+            if n % RECYCLE_EVERY == 0:  # a long-lived browser grows: two lanes held 1.8 GB after ~600 pages (2026-10-02)
+                browser.close()
+                browser = Browser()
             row = archive_url(root, url, who.get(url, rec.Cited()), browser, store, push=False)
             out.append(row)
             print(f"{row['outcome']:26} {url}", flush=True)
@@ -661,10 +702,14 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     back = sub.add_parser("backfill")
     back.add_argument("--workers", type=int, default=4)
     sub.add_parser("report")
+    sub.add_parser("gm-copies")
     args = ap.parse_args(argv)
     root = src.repo_root()
     if args.cmd == "report":
         return report(root)
+    if args.cmd == "gm-copies":
+        print(f"archive: {sync_gm_copies(root, Archive(home_of(root), env=git_env(token(root))))} row(s) given the GM's copies")
+        return 0
     if args.cmd == "backfill":
         return backfill(root, args.workers)
     return archive_one(root, args.url, args.key)

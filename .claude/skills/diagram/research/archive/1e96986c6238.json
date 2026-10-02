@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:45:35+00:00",
+ "final_url": "https://www.mdpi.com/2071-1050/10/11/3860",
+ "first": "mdpi-3860/1e96986c6238/20261002T124535Z",
+ "gm_copies": [
+  "mdpi-3860/gm-copy/sustainability-10-03860.pdf"
+ ],
+ "keys": [
+  "mdpi-3860"
+ ],
+ "notes": [],
+ "outcome": "archived-gm-copy",
+ "path": "mdpi-3860/1e96986c6238/20261002T124535Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "3d7161af14e099aac0184fc4cc79b3bb5de0148e9ba5a950836ecf489aa42cf6",
+ "url": "https://www.mdpi.com/2071-1050/10/11/3860"
+}

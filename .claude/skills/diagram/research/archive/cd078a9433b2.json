@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T12:39:06+00:00",
+ "final_url": "https://www.maff.go.jp/j/seisan/gijutsuhasshin/techinfo/attach/pdf/suitou-2.pdf",
+ "first": "maff-suitou-mizu/cd078a9433b2/20261002T123906Z",
+ "gm_copies": [
+  "maff-suitou-mizu/gm-copy/suitou-2.pdf"
+ ],
+ "keys": [
+  "maff-suitou-mizu"
+ ],
+ "notes": [
+  "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.notes.html"
+ ],
+ "outcome": "archived-gm-copy",
+ "path": "maff-suitou-mizu/cd078a9433b2/20261002T123906Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "77bcce30c05a682b795f11017ef618997a33397111bfd381b3438db29a8a87fa",
+ "url": "https://www.maff.go.jp/j/seisan/gijutsuhasshin/techinfo/attach/pdf/suitou-2.pdf"
+}

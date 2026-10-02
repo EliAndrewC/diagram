@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:53:41+00:00",
+ "final_url": "https://www.visitbeijing.com.cn/article/47QkXx9caZ2",
+ "first": "visitbeijing-zhalan/816d0b4e0eb5/20261002T125341Z",
+ "gm_copies": [],
+ "keys": [
+  "visitbeijing-zhalan"
+ ],
+ "notes": [
+  "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "visitbeijing-zhalan/816d0b4e0eb5/20261002T125341Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "53fb6053c440852718b70eae497a0dee70442bb7628094c02521c6aa178e098a",
+ "url": "https://www.visitbeijing.com.cn/article/47QkXx9caZ2"
+}

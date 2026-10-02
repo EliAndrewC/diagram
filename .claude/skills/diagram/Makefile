@@ -1238,8 +1238,9 @@ archive: ## [project] archive ONE cited URL now into the private source archive 
 	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
-archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching (feature 309)   [WORKERS=4] [REPORT=1]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,backfill --workers $(or $(WORKERS),4))
+# GUARD_EDIT_OK: feature 309 - a new operation, GM=1 (the GM's matched files copied into the archive); no guard changes.
+archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched academic-sources files copied in (feature 309)   [WORKERS=4] [REPORT=1] [GM=1]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4)))
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi

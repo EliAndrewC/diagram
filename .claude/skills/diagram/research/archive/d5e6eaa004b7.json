@@ -2,7 +2,9 @@
  "captured": "2026-10-02T12:35:56+00:00",
  "final_url": "https://journals.sagepub.com/doi/10.1177/13540661221133206",
  "first": "mukoyama-linear-borders/d5e6eaa004b7/20261002T123556Z",
- "gm_copies": [],
+ "gm_copies": [
+  "mukoyama-linear-borders/gm-copy/mukoyama-2022-the-eastern-cousins-of-european-sovereign-states-the-development-of-linear-borders-in-early-modern-japan.pdf"
+ ],
  "keys": [
   "mukoyama-linear-borders"
  ],
@@ -10,7 +12,7 @@
   "0083-clan-borders-and-their-markers.drawing.notes.html",
   "0083-clan-borders-and-their-markers.notes.html"
  ],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "mukoyama-linear-borders/d5e6eaa004b7/20261002T123556Z",
  "reason": "HTTP 403",
  "revision": "",

@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T12:48:12+00:00",
+ "final_url": "https://www.sohu.com/a/647521251_121607363",
+ "first": "sohu-pingjiang-suzhou/0a91337eaa25/20261002T124812Z",
+ "gm_copies": [],
+ "keys": [
+  "sohu-pingjiang-suzhou"
+ ],
+ "notes": [
+  "0178-city-canals-horikawa.drawing.notes.html",
+  "0178-city-canals-horikawa.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "sohu-pingjiang-suzhou/0a91337eaa25/20261002T124812Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "201b80eba6eb305b9ba1cf6f541ccfa3ae24c02356e4b5f2e791823b54c728da",
+ "url": "https://www.sohu.com/a/647521251_121607363"
+}

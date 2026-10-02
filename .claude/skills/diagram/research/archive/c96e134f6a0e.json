@@ -2,12 +2,14 @@
  "captured": "2026-10-02T12:35:52+00:00",
  "final_url": "https://www.tandfonline.com/doi/full/10.1080/13467581.2021.1972810",
  "first": "wang-ochiai-2022/c96e134f6a0e/20261002T123552Z",
- "gm_copies": [],
+ "gm_copies": [
+  "wang-ochiai-2022/gm-copy/13467581.2021.1972810.pdf"
+ ],
  "keys": [
   "wang-ochiai-2022"
  ],
  "notes": [],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "wang-ochiai-2022/c96e134f6a0e/20261002T123552Z",
  "reason": "HTTP 403",
  "revision": "",
