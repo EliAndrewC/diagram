@@ -84,7 +84,9 @@ CASES = [
     # times" cannot say which of them is carrying the cost, which is the whole point of the fourth field
     ("shell-check", _payload(command="if true; then"), "blocked", "parse"),
     ("shell-check", _payload(command='echo "use `make quick` first"'), "blocked", "executing-backtick"),
-    ("shell-check", _payload(command='git commit -m "one" -m "two"'), "blocked", "commit-dash-m"),
+    ("shell-check", _payload(command='git commit -m "the pond\'s own "center" thing"'), "blocked", "commit-dash-m"),
+    # an unambiguous message is rewritten into a quoted -F - heredoc rather than refused (2026-10-02, the GM approved it)
+    ("shell-check", _payload(command='git commit -m "one" -m "two"'), "rewrote", "commit-dash-m-heredoc"),
     ("shell-check", _payload(command="git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'"), "blocked", "coauthor-address"),
     ("shell-check", _payload(command='echo "a `span`"  # SHELL_CHECK_OK: quoting a transcript verbatim'), "escaped", "shell-check-ok"),
     # feature 236: a Bash payload is TOLD, and the telling is recorded as its own branch - the audit
@@ -350,6 +352,16 @@ _ESCAPES = {
     ),
     "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 265 FR-010)"),
     "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
+    "CHECK_NOT_OWED_OK": (
+        "command",
+        "matched in a record-check dispatch PROMPT only (`CHECK_NOT_OWED_OK=\"...\"` read off the prompt's own text in "
+        "check-bundle-hooks.sh, feature 311), CHECK_BUNDLE_OK's exclusion - a prompt is prose; reason via _hm_escape.py reason-ok",
+    ),
+    "NOT_OWED_OK": (
+        "environment",
+        "a make variable passed as --not-owed-ok to _check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
+    ),
+    "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/entry-gate.sh (feature 311), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
     "CHECK_BUNDLE_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "

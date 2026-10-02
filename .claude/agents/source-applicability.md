@@ -1,6 +1,6 @@
 ---
 name: source-applicability
-description: Judges whether a source fits the premodern East Asian setting and whether its registry write-ups state its limits honestly - run on every new or changed write-up and before a source's numbers reach a map or a rule.
+description: Judges whether a source fits the premodern East Asian setting and whether its registry write-ups state its limits honestly - run on the write-ups `make record-owed` names and before a source's numbers reach a map or a rule.
 model: opus
 effort: high
 omitClaudeMd: true

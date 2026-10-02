@@ -343,8 +343,10 @@ class DraftByresMixin:
         GUESS: a minority of shared sheds (`fraction` of the households) spread among the homesteads, each spiralled out
         from its owner's house to the nearest clear gap past its reserved footprint (via `_fits`), `gap` px apart.
         HOUSE-DRIVEN on every form: the wealthier homesteads in turn; a homestead boxed in on all sides is skipped
-        and the next one asked. Call AFTER farmsteads() (homesteads fixed) and BEFORE the grove (which then skips the
-        byres). Records M['byres']."""
+        and the next one asked. WHERE THE HOUSEHOLDS WERE SEATED WITH THEIR LOTS (every scripted hamlet, feature 287), nothing
+        is sought: each stall the seating reserved in a keeper's bundle, or each shared shed's pocket reserved before the
+        houses, is drawn where it stands; the search above is the path of a settlement seated without lots. Call AFTER
+        farmsteads() (homesteads fixed) and BEFORE the grove (which then skips the byres). Records M['byres']."""
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->
         # ~16 x 11 ft ~ 15 m2, well under the ~120 m2 farmhouse. To-scale tiers carry it in FEET (drawn at ftpx);

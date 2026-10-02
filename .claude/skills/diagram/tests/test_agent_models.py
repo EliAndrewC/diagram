@@ -46,7 +46,8 @@ TIERS: dict[str, tuple[str, str]] = {
     "quote-check": ("opus", "medium"),
     "entry-drift": ("opus", "medium"),
     "record-style": ("opus", "high"),
-    "translation-check": ("opus", "medium"),  # feature 292: judgment of meaning; no seeded downgrade run yet  # feature 292: judgment about prose, no seeded downgrade run yet
+    "translation-check": ("opus", "medium"),  # feature 292: judgment of meaning; no seeded downgrade run yet
+    "intro-check": ("opus", "medium"),  # feature 311: judgment about a reader; seeded runs on Opus only (plan D4)
     "escalation-check": ("opus", "medium"),
     "spec-fidelity-verify": ("opus", "high"),  # medium tried and missed: research R5
     "spec-fidelity": ("opus", "high"),

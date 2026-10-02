@@ -109,7 +109,7 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   `Evidence:`, a feature number, a task id, an engine identifier, a fetch verdict - is an HTML
   comment; and nothing in the entry says what it used to say or when it was corrected (*"we can look
   it up in our version control history"*). The `record-format` agent checks all three on every
-  changed entry beside `quote-check`; `tests/interactive/test_record_format.py` holds the mechanical
+  question whose visible words changed (`make record-owed`, feature 311) beside `quote-check`; `tests/interactive/test_record_format.py` holds the mechanical
   shapes. The sensibility in full: the research directory's `CLAUDE.md`, "Who the record is for".
 - **Record a decision to ACCEPT a limitation, and the alternatives that were declined (REQUIRED)**
   (GM 2026-08-17: *"we should always document this kind of decision... that way if we look it up

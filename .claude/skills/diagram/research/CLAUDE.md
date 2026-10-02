@@ -213,7 +213,8 @@ what rests on it, and what blocked the fetch - BOTH links, always.
 
 `tests/interactive/test_footnotes.py` holds the mechanical half. The **`quote-check`** agent holds the rest -
 per note VERBATIM / SUPPORTS, per section the assertions with no footnote - after `make quote-verbatim`, on
-every new or changed entry, its verdicts recorded in the task (`quote-check confirmed`).
+the units `make record-owed` names (a note new or changed, a block carrying it reworded, new unmarked prose), its
+verdicts recorded with `make record-checked` and in the task (`quote-check confirmed`).
 
 ## Written for the reader (GM 2026-09-07, feature 209)
 
@@ -227,8 +228,30 @@ every new or changed entry, its verdicts recorded in the task (`quote-check conf
    `key`") is an HTML comment inside its `<li>`.
 
 `tests/interactive/test_record_format.py` holds the mechanical half; the **`record-format`** agent (after
-`make record-prepass`) the rest - VOCABULARY, SESSION NOTE, HISTORY - beside `quote-check` on every new or
-changed entry - two agents, dispatched in the same turn (spec 209 D5). The registry is not under rules 2 and 3.
+`make record-prepass`) the rest - VOCABULARY, SESSION NOTE, HISTORY - on the questions whose visible words
+`make record-owed` says changed, beside `quote-check` where both are owed (spec 209 D5). The registry is not under rules
+2 and 3.
+
+4. **A question a reader would not think to ask says why it is here** (GM 2026-10-02, feature 311): an intro paragraph,
+   `<p class="intro">`, first after the heading - what Rokugan or the map has, and that the research below shows what the
+   historical record holds instead. It cites nothing and adds no claim the findings below do not carry. The rule and its
+   form: `STYLE.md` section 2; the **`intro-check`** agent judges it, on a question new to the record, a heading or an intro
+   changed; `test_record_format.py` holds its shape.
+
+## Which check is owed, and when it is answered (GM 2026-10-02, feature 311)
+
+A check is owed only where the words it reads changed - *"it would be a waste of time and tokens for us to add the kind of
+paragraph that I just explained and then rerun all of the other subagent checks"* - and owed means it runs:
+*"not just do the correct thing, to kind of enforce us doing the correct thing."* So `make record-owed` names every unit a
+delta owes, against main: a question's heading -> `intro-check`; its intro -> `intro-check`, `record-format`; a note ->
+`source-reader`, `quote-check` on it, `record-format`; a reworded block carrying notes -> `quote-check` on those notes; new
+unmarked prose -> `quote-check`'s unfootnoted reading; a write-up -> `source-applicability`; a translated pair ->
+`translation-check`; a section a modal was written from -> `entry-drift`. Only WORDS count: a comment, a tag marker, markup
+or a re-wrap owes nothing, and a move or a merge owes nothing either. `make check-bundle` refuses a bundle for a check nothing
+owes, and holds a `quote-check` to the owed notes; the dispatch hook refuses a check its bundle's MANIFEST does not owe.
+When a check returns: `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<counts>"`. The push (`scripts/entry-gate.sh`)
+refuses a unit with no answer at the content pushed. A fix that applies a check's findings is owed its second round; a
+`NOT_OWED_OK`, `CHECK_NOT_OWED_OK`, `RECORD_CHECKS_OK` or `REASON=` goes to the audit with its reason.
 
 ## A question's notes stand at its foot; every cited work says what it is (GM 2026-09-07, feature 211; feature 301)
 
@@ -255,8 +278,8 @@ changed entry - two agents, dispatched in the same turn (spec 209 D5). The regis
   present-day count used as an anchor", said generically. `make reserve KIND=registry KEY=<k> URL=<u> TAGS="period=..;
   region=..; kind=.."` writes the marker; `make record CHECK=1` refuses an entry untagged, tagged with an unknown value,
   or whose tags no section takes. A vocabulary edit is followed by `make source-tags-contract`.
-- **A source is judged before it is used**: the **`source-applicability`** agent on every new or changed write-up,
-  and BEFORE a source's numbers, claims or details reach a map or a rule (a physical task's fifth box). A
+- **A source is judged before it is used**: the **`source-applicability`** agent on every write-up `make record-owed`
+  names (new, or its visible words changed), and BEFORE a source's numbers, claims or details reach a map or a rule (a physical task's fifth box). A
   NOT-APPLICABLE source is recorded and listed for the GM, and the assertions resting on it keep their label until the
   GM rules.
 
@@ -282,7 +305,8 @@ points at the anchor. Nothing names a retired
 ## When a section a modal was written FROM moves (GM 2026-09-12, feature 234)
 
 A modal IS its `Kind` class's docstring (`interactive/classes/`), written from the section its `Entry:` names.
-`scripts/_entry_owed.py` names every class whose section's BODY changed while its prose did not; the push refuses
-until each pair is answered - an `entry-drift` check and a rewrite of what it calls DRIFTED, or one recorded
+`scripts/_entry_owed.py` names every class whose section's FINDINGS changed while its prose did not (its words, less the
+intro: feature 311); the push refuses until each pair is answered - an `entry-drift` check and a rewrite of what it calls
+DRIFTED (`make record-checked CHECK=entry-drift ...` when it returns IN-STEP), or one recorded
 `ENTRY_DRIFT_OK="<what moved, and why no modal is now wrong>"`. `record-format` and `quote-check` are NOT this
 check: neither opens a modal.

@@ -140,6 +140,11 @@ _RECORD_ATTRS = (
     "_label_queue",
     "_lane_ink",
     "_scatter_frames",
+    # ...AND THE DEFERRED WATER (the page audit, 2026-10-02): the brook, the ditches, the drain and the pond's fill are queued
+    # in `water` / `late_water` and inked by the finish into a block reserved in `out`, so a step that drew only water counted
+    # no ink, got no plate and named none of its features - "a step with no plate drew nothing" was false of `pond`
+    "water",
+    "late_water",
 )
 
 
@@ -262,6 +267,13 @@ def features_between(s: Settlement, lo: dict[tuple[str, str], int], hi: dict[tup
         for key, c in counts.items():
             if key and key != "-":  # `"-"` is ink ruled NOT highlighted, so a reader cannot click it
                 found[key] = found.get(key, 0) + c
+    for layer in ("water", "late_water"):  # the deferred water carries its class on each entry (`Settlement._tag`)
+        entries = getattr(s, layer, None)
+        if isinstance(entries, list):
+            for e in entries[lo.get(("attr", layer), 0) : hi.get(("attr", layer), len(entries))]:
+                key = e.get("cls") if isinstance(e, dict) else None
+                if isinstance(key, str) and key and key != "-":  # a water entry's class is a plain key
+                    found[key] = found.get(key, 0) + 1
     return sorted(found)
 
 
@@ -277,22 +289,24 @@ def elsewhere_in_the_pool(named: set[str], skill: str) -> list[tuple[str, str]]:
     then find out where the privies are being laid out?"* So a class no Inashiro roll draws is still named,
     beside a map that has it, and a search finds it.
 
-    DERIVED, never listed: a class is present on a map when its key appears in that map's own interactive
-    page, which is the page that explains only the classes actually on it. Four classes are drawn by no
-    shipped map at all (alternate dike crops the polder's roll did not pick, and the field rock); they are
-    named as such rather than omitted, because a reader can still meet them in the vocabulary."""
+    DERIVED, never listed: a class is present on a map when its MANIFEST counts its ink (`ink_classes`, written by every
+    roll). It read the maps' interactive pages until the page audit of 2026-10-02: the gate evicts those pages, so a page
+    built after a gate named seventeen classes - Kuwabata's pig sties and fish ponds among them - as drawn by no shipped
+    map. A class no shipped map draws is named as such rather than omitted, because a reader can still meet it in the
+    vocabulary."""
     import glob
+    import json
 
     where: dict[str, str] = {}
-    for page in sorted(glob.glob(os.path.join(skill, "pool", "hamlets", "*", "*.html"))):
+    for manifest in sorted(glob.glob(os.path.join(skill, "pool", "hamlets", "*", "*.json"))):
         try:
-            with open(page, encoding="utf-8") as fh:
-                body = fh.read()
-        except OSError:  # pragma: no cover - a page that cannot be read names nothing
+            with open(manifest, encoding="utf-8") as fh:
+                drawn = json.load(fh).get("ink_classes") or {}
+        except OSError, ValueError, AttributeError:  # a manifest that cannot be read names nothing
             continue
-        stem = os.path.basename(page)[: -len(".html")]
+        stem = os.path.basename(manifest)[: -len(".json")]
         for key in _hoverable():
-            if key not in named and f'"{key}"' in body:
+            if key not in named and drawn.get(key):
                 where.setdefault(key, stem)
     return sorted((k, where.get(k, "")) for k in _hoverable() if k not in named)
 
@@ -306,7 +320,7 @@ def _hoverable() -> list[str]:
 
 def _ink_total(marks: dict[tuple[str, str], int]) -> int:
     """The ink a watermark stands at - the same five layers `_ink` counts, read off the watermark."""
-    return sum(n for (kind, name), n in marks.items() if kind == "attr" and name in ("out", "top", "walls", "toplabels", "ground"))
+    return sum(n for (kind, name), n in marks.items() if kind == "attr" and name in _INK_LAYERS)
 
 
 def _ink(s: Settlement) -> int:
@@ -317,7 +331,11 @@ def _ink(s: Settlement) -> int:
     invisible at plate scale, and that is not the case being detected here."""
     # ...and the DEFERRED ground features - the lanes, streets and roads a way stage lays - live in `ground` until the
     # finish inks them (feature 227: the web stage, which draws nothing else, read as "no ink" and got a card, not a plate)
-    return sum(len(getattr(s, name, [])) for name in ("out", "top", "walls", "toplabels", "ground"))
+    return sum(len(getattr(s, name, [])) for name in _INK_LAYERS)
+
+
+_INK_LAYERS = ("out", "top", "walls", "toplabels", "ground", "water", "late_water")
+"""The record lists that are ink: the four layers, the deferred ground (the ways) and the deferred water."""
 
 
 def _decisions(s: Settlement) -> dict[str, object]:
@@ -331,7 +349,7 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
     `overlay` (feature 227): the site boundary the homesteads were seated against - its chords, outline rings and
     corridor segments from the manifest's `site_boundary` - drawn over the plate in three colors, mapped through the
     finished copy's `meta.view`, because that boundary is the thing the GM asked about and no plate showed it."""
-    from PIL import Image, ImageDraw
+    from PIL import Image
 
     base = os.path.join(out_dir, stem)
     # THE PLATE IS THE PNG, SO ONLY THE PNG IS RENDERED (feature 208, GM 2026-09-07: "a whole lot of rasterizing
@@ -349,15 +367,8 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
         if overlay:
             x0, y0, vw, _vh = snap.M["meta"].get("view") or (0.0, 0.0, float(snap.W), float(snap.H))  # a mid-roll copy is uncropped: the plate is the whole canvas
             sc = w / float(vw)
-            im = draw_reservations(im.convert("RGB"), overlay, x0, y0, sc)
-            draw = ImageDraw.Draw(im)
-            for ring in overlay.get("rings", []) + overlay.get("holes", []):
-                pts = [((x - x0) * sc, (y - y0) * sc) for x, y in ring]
-                draw.line([*pts, pts[0]], fill=(200, 30, 30), width=max(2, round(sc * 3)))
-            for a, b, *_rest in overlay.get("chords", []):
-                draw.line([((a[0] - x0) * sc, (a[1] - y0) * sc), ((b[0] - x0) * sc, (b[1] - y0) * sc)], fill=(30, 60, 220), width=max(2, round(sc * 4)))
-            for a, b, *_rest in overlay.get("water", []) + overlay.get("corridors", []):
-                draw.line([((a[0] - x0) * sc, (a[1] - y0) * sc), ((b[0] - x0) * sc, (b[1] - y0) * sc)], fill=(20, 150, 150), width=max(2, round(sc * 3)))
+            im = draw_boundary(im.convert("RGB"), overlay, x0, y0, sc)
+            im = draw_reservations(im, overlay, x0, y0, sc)
         if w > width:
             im = im.resize((width, max(1, round(h * width / w))), Image.LANCZOS)
         # PALETTISED, because these are flat-color maps and this page is COMMITTED. At full render
@@ -390,6 +401,86 @@ def homestead_overlay(s: Settlement) -> dict[str, Any]:
     out["access_half"] = s.px(ACCESS_HALF_FT)
     out["wood"] = [[float(p[0]), float(p[1]), float((h.get("wood_share") or {}).get("r") or 0.0)] for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
     return out
+
+
+BOUNDARY_COLORS = {"chords": (30, 60, 220, 255), "rings": (200, 30, 30, 255), "water": (20, 150, 150, 255), "taken": (215, 40, 40, 70), "veil": (251, 247, 240, 165), "edge": (60, 50, 40, 255)}
+"""The boundary's inks on the homesteads plate: the paddy's facing chords blue, the no-build outline red, the water's and the
+registered corridors' lines teal, the ground the seating refuses a translucent red, the ground it never asks veiled in the
+page's own paper color, and the edge of the seating window a dark rule."""
+
+
+def window_mask(size: tuple[int, int], overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
+    """Where the seating may offer a house, as an 8-bit mask over a plate: within the window's `bound` of the seat AND within
+    its `reach` of the paddy's facing chords (`within_field_reach`), the two limits every grown seat is held to
+    (`growth.grow_the_margin`). None where the manifest records no window (a form that is not grown)."""
+    from PIL import Image, ImageChops, ImageDraw
+
+    win = overlay.get("window")
+    if not win:
+        return None
+    cx, cy, bound, reach = (float(v) for v in win)
+    circle = Image.new("L", size, 0)
+    px, py, pr = (cx - x0) * sc, (cy - y0) * sc, bound * sc
+    ImageDraw.Draw(circle).ellipse((px - pr, py - pr, px + pr, py + pr), fill=255)
+    near = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(near)
+    rr = reach * sc
+    for a, b, *_n in overlay.get("chords") or []:
+        pa, pb = ((a[0] - x0) * sc, (a[1] - y0) * sc), ((b[0] - x0) * sc, (b[1] - y0) * sc)
+        draw.line([pa, pb], fill=255, width=max(1, round(2 * rr)))
+        for q in (pa, pb):
+            draw.ellipse((q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr), fill=255)
+    return ImageChops.multiply(circle, near) if overlay.get("chords") else circle
+
+
+def refused_ground(overlay: dict[str, Any]) -> Any:
+    """The ground the seating refuses a homestead without asking the fit test, rebuilt from the recorded boundary exactly as
+    the seating built it (`boundary.FreeGround` over the window's box): its surely-taken cells. None without a window."""
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    win = overlay.get("window")
+    if not win:
+        return None
+    cx, cy, bound, _reach = (float(v) for v in win)
+    chains = [[((a[0], a[1]), (b[0], b[1]), (n[0], n[1])) for a, b, n in overlay.get("chords") or []]]
+    corridors = ([((a[0], a[1]), (b[0], b[1]), c) for a, b, c in overlay.get("water") or []], [((a[0], a[1]), (b[0], b[1]), c) for a, b, c in overlay.get("corridors") or []])
+    outline = ([[(x, y) for x, y in r] for r in overlay.get("rings") or []], [[(x, y) for x, y in h] for h in overlay.get("holes") or []])
+    return FreeGround(chains, corridors, outline, (cx - bound, cy - bound, cx + bound, cy + bound))
+
+
+def draw_boundary(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
+    """Draw the ground the homesteads were seated against over a plate (features 227, 308). Where the seating recorded its
+    window, only what it asks is shown: outside the window is veiled; inside, the ground it refuses is tinted and the
+    boundary's lines are drawn, clipped to the window, and the window's edge is ruled. Without a window, every line of the
+    boundary is drawn, as recorded."""
+    from PIL import Image, ImageChops, ImageDraw, ImageFilter
+
+    lines = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(lines)
+    fg = refused_ground(overlay)
+    if fg is not None:
+        c = fg.cell * sc
+        for i, j in fg.taken:
+            x, y = (fg.x0 + i * fg.cell - x0) * sc, (fg.y0 + j * fg.cell - y0) * sc
+            draw.rectangle((x, y, x + c, y + c), fill=BOUNDARY_COLORS["taken"])
+    for ring in (overlay.get("rings") or []) + (overlay.get("holes") or []):
+        pts = [((x - x0) * sc, (y - y0) * sc) for x, y in ring]
+        draw.line([*pts, pts[0]], fill=BOUNDARY_COLORS["rings"], width=max(2, round(sc * 3)))
+    for a, b, *_rest in overlay.get("chords") or []:
+        draw.line([((a[0] - x0) * sc, (a[1] - y0) * sc), ((b[0] - x0) * sc, (b[1] - y0) * sc)], fill=BOUNDARY_COLORS["chords"], width=max(2, round(sc * 4)))
+    for a, b, *_rest in (overlay.get("water") or []) + (overlay.get("corridors") or []):
+        draw.line([((a[0] - x0) * sc, (a[1] - y0) * sc), ((b[0] - x0) * sc, (b[1] - y0) * sc)], fill=BOUNDARY_COLORS["water"], width=max(2, round(sc * 3)))
+    mask = window_mask(im.size, overlay, x0, y0, sc)
+    base = im.convert("RGBA")
+    if mask is None:
+        return Image.alpha_composite(base, lines).convert("RGB")
+    veil = Image.new("RGBA", im.size, BOUNDARY_COLORS["veil"])
+    base = Image.composite(base, Image.alpha_composite(base, veil), mask)
+    lines.putalpha(ImageChops.multiply(lines.getchannel("A"), mask))  # the lines and the tint clipped to the window
+    base = Image.alpha_composite(base, lines)
+    edge = mask.filter(ImageFilter.FIND_EDGES).point(lambda v: 255 if v > 0 else 0)
+    base.paste(Image.new("RGBA", im.size, BOUNDARY_COLORS["edge"]), (0, 0), edge)
+    return base.convert("RGB")
 
 
 RESERVATION_COLORS = {"access": (235, 135, 20, 110), "exit": (190, 40, 190, 150), "wood": (25, 110, 35, 255)}
@@ -475,6 +566,8 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
             jobs: list[tuple[Any, dict[tuple[str, str], int] | None, str, dict[str, Any] | None, int]] = []
             if drew:
                 overlay = homestead_overlay(s) if not had_boundary and "site_boundary" in s.M else None
+                if overlay and overlay.get("window"):  # the window's two limits, in feet, for the plate's legend
+                    row["window_ft"] = (float(overlay["window"][2]) / s.px(1.0), float(overlay["window"][3]) / s.px(1.0))
                 jobs.append((row, None, stem, overlay, 2600))
             else:
                 row["decided"] = [(k, str(v)) for k, v in now.items() if known.get(k) != v]
@@ -559,6 +652,29 @@ def _make_plates(s: Settlement, jobs: list[Any], out_dir: str, width: int) -> No
                 target.update(img=img, iw=iw, ih=ih)
 
 
+def homestead_legend(window_ft: tuple[float, float] | None) -> str:
+    """The homesteads plate's legend: what `draw_boundary` and `draw_reservations` drew over it, and - where the seating
+    recorded its window - the window's two limits in feet."""
+    reserved = (
+        "Over that, the ground the seating reserved as it seated them: each house's access corridor in orange (bending where it was "
+        "routed round what stands), the exit strip the corridors start from in magenta, and each household's wood-share seats as "
+        "dark green rings."
+    )
+    if window_ft is None:
+        return (
+            "Drawn over this plate: the site boundary the homesteads were seated against - the paddy's facing chords in blue, the "
+            "outline of the no-build ground in red, the water and corridor segments in teal. " + reserved
+        )
+    bound, reach = window_ft
+    return (
+        f"Drawn over this plate: what the seating asked of the ground. It offers a house only inside the dark rule - within "
+        f"{bound:,.0f} ft of the margin's seat and {reach:,.0f} ft of the paddy - and everything outside it is veiled, because no seat "
+        "there is ever asked. Inside, the red tint is the ground it refuses a homestead outright, rasterized once and looked up per "
+        "seat: the paddy's side of its facing chords (blue), the no-build ground's outline (red: the hem, the marshes, the ponds, the "
+        "dry plots, the reed toe) and the water's clearance (teal). " + reserved
+    )
+
+
 def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> str:
     """The tail of `build_page`: prune the orphan plates, write the index page, return its path."""
     # PRUNE EVERY PLATE THIS RUN DID NOT WRITE. The per-stage removal above only catches a stage that
@@ -572,7 +688,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
     # built from the stage rows alone deleted every per-step plate the moment after it was rendered.
     keep = {r["img"] for r in rows if r["img"]} | {e["img"] for r in rows for e in r["steps"] if e["img"]} | {"hamlet-placement.html"}
     for name in sorted(os.listdir(out_dir)):
-        if name not in keep and name.endswith(".png"):
+        if name not in keep and name.endswith((".png", ".svg", ".json", ".html")):  # ...and what a plate left half-made
             os.remove(os.path.join(out_dir, name))
             print(f"  pruned stale plate {name}")
     parts = [
@@ -582,7 +698,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         ':root:not([data-theme="light"]){}',
         "@media (prefers-color-scheme: dark){:root:not([data-theme=\"light\"]){--ink:#ece3d6;--dim:#a2957f;--rule:#3b332a;--bg:#171310;--card:#201a15;--step:#2a231c}}",
         ':root[data-theme="dark"]{--ink:#ece3d6;--dim:#a2957f;--rule:#3b332a;--bg:#171310;--card:#201a15;--step:#2a231c}',
-        "body{margin:0;padding:2.5rem 1.25rem 4rem;background:var(--bg);color:var(--ink);",
+        "body{margin:0;padding:1.25rem;background:var(--bg);color:var(--ink);",
         "font:16px/1.6 Georgia,'Times New Roman',serif}",
         ".wrap{max-width:1180px;margin:0 auto}",
         "h1{font-size:1.9rem;margin:0 0 .3rem}",
@@ -613,6 +729,12 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         "padding:.15rem 0;font:.87rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}",
         ".kv .k{color:var(--dim)}.kv .v{color:var(--ink);font-weight:700;text-align:right}",
         ".legend{font-size:.85rem;color:var(--dim);margin:.4rem 0 0}",
+        ".toc{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:.9rem 1.25rem;margin:0 0 1.6rem}",
+        ".toc .cap{font:700 .8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem}",
+        ".toc ol{list-style:none;margin:0;padding:0;columns:2 22rem;column-gap:2rem}",
+        ".toc li{break-inside:avoid;margin:.15rem 0}",
+        ".toc a{color:var(--ink);text-decoration:none}.toc a:hover{text-decoration:underline}",
+        ".toc .n{margin-right:.55rem}",
         "</style>",
         '<div class="wrap">',
         "<h1>Hamlet placement order</h1>",
@@ -625,9 +747,19 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         "as the code, and the gate fails a stage that explains nothing. Read <code>dev/placement.md</code> for the rules "
         "across stages. Regenerated by <code>make placement-stages</code>, and by every landing that changes the engine.</p>",
     ]
+    # THE CONTENTS (GM 2026-10-02: "it would be really helpful for me to be able to start at the top and then jump to the part
+    # that I care about"): every stage, and the closing list, linked by its anchor
+    _named = {k for r in rows for k in r["features"]} | {k for r in rows for e in r["steps"] for k in e["features"]}
+    _rest = elsewhere_in_the_pool(_named, SKILL)
+    parts += [
+        '<nav class="toc"><div class="cap">Contents</div><ol>',
+        *(f'<li><a href="#s{r["i"]:02d}"><span class="n">{r["i"]:02d}</span>{escape(r["title"])}</a></li>' for r in rows),
+        *(['<li><a href="#missing">Features this map does not have</a></li>'] if _rest else []),
+        "</ol></nav>",
+    ]
     for r in rows:
         parts += [
-            '<section class="stage">',
+            f'<section class="stage" id="s{r["i"]:02d}">',
             f'<div class="hd"><span class="n">{r["i"]:02d}</span><span class="t">{escape(r["title"])}</span><span class="fn">{escape(r["fn"])}</span></div>',
             *(f'<p class="why">{escape(p)}</p>' for p in r["paras"]),
         ]
@@ -650,9 +782,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         if r["img"]:
             parts.append(f'<img src="{escape(r["img"])}" width="{r["iw"]}" height="{r["ih"]}" alt="{escape(r["title"])}" loading="lazy">')
             if r["fn"] == "stage_homesteads":
-                parts.append(
-                    '<p class="legend">Drawn over this plate: the site boundary the homesteads were seated against - the paddy\'s facing chords in blue, the outline of everything else (the hem, the marshes, the ponds, the reed toe) in red, the water and corridor segments in teal - and the ground the seating reserved as it seated them: each house\'s access corridor in orange, the exit strip the corridors start from in magenta, and each household\'s wood-share seats as dark green rings.</p>'
-                )
+                parts.append(f'<p class="legend">{escape(homestead_legend(r.get("window_ft")))}</p>')
         else:
             parts += [
                 '<div class="noink">',
@@ -664,11 +794,9 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         parts.append("</section>")
     # EVERY CLICKABLE THING IS NAMED SOMEWHERE ON THIS PAGE (GM 2026-09-12). The stage lists above name what
     # this map draws; this names the rest, so a reader searching for any feature they can click finds it.
-    _named = {k for r in rows for k in r["features"]} | {k for r in rows for e in r["steps"] for k in e["features"]}
-    _rest = elsewhere_in_the_pool(_named, SKILL)
     if _rest:
         parts += [
-            '<section class="stage">',
+            '<section class="stage" id="missing">',
             '<div class="hd"><span class="t">Features this map does not have</span></div>',
             f'<p class="why">The {len(_named)} features listed under the stages above are the ones {escape(spec.name)} actually draws, read from the ink '
             "itself rather than from any list. The interactive map's vocabulary covers other kinds of place too, and those features are named here with a "
@@ -693,7 +821,8 @@ def main(argv: list[str] | None = None) -> int:
     # cheap to make and does not show what was asked for is not cheaper, it is useless).
     ap.add_argument("--no-steps", dest="steps", action="store_false", help="stage plates only - skip the per-step plates")
     a = ap.parse_args(argv)
-    spec = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated")
+    # THE POOL'S OWN SPEC (pool/hamlets/inashiro/inashiro.gen.py), its fixture floor included: the page says it is Inashiro
+    spec = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated", fixtures_min={"shrine": 1})
     page = build_page(a.out, a.width, spec, a.steps)
     print(f"\nwrote {page}")
     return 0

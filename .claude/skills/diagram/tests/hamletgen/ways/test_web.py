@@ -220,3 +220,31 @@ def test_the_late_pass_keeps_the_connector_as_placed_where_its_pulled_back_end_w
     box = (40.0, 140.0, 60.0, 160.0)  # the middle of the pulled end's new 141 ft leg
     assert kept_connector(placed, pulled, [box]) == placed
     assert kept_connector(placed, pulled, []) == pulled
+
+
+def test_lay_reachable_runs_draws_each_run_the_network_reaches(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`stage_web`'s drawing loop, lifted (2026-10-02): every reachable run goes through `_lay_web_lane`, an island does
+    not, and the count is of the lanes it drew."""
+    import l7r.diagram.hamletgen.ways.web as web
+
+    s = Settlement(1000, 1000, seed=1)
+    s.lane([(0.0, 500.0), (400.0, 500.0)], width=5, clearance=11, worn=True)
+    laid: list[object] = []
+    monkeypatch.setattr(web, "_lay_web_lane", lambda s, run, *a, **k: laid.append(run) or True)
+    touching = [(400.0, 500.0), (400.0, 700.0)]
+    island = [(900.0, 900.0), (950.0, 900.0)]
+    assert web.lay_reachable_runs(s, [touching, island], [], [], [], [], []) == 1
+    assert laid == [touching]
+
+
+def test_a_skeleton_arm_trimmed_under_the_web_floor_is_no_arm(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`served_arm` (feature 308, lifted from `_lay_skeleton`): the arm trimmed to service, and none where it falls short."""
+    from l7r.diagram.hamletgen.ways import web
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 0.0, "y": 0.0}]
+    monkeypatch.setattr(web, "_trim_to_service", lambda arm, *a, **k: arm[:2])
+    assert web.served_arm(s, [(0.0, 0.0), (5.0, 0.0), (500.0, 0.0)]) == [], "trimmed to 5 ft: under the floor"
+    assert web.served_arm(s, [(0.0, 0.0), (400.0, 0.0), (500.0, 0.0)]) == [(0.0, 0.0), (400.0, 0.0)]
+    assert web.served_arm(s, [(0.0, 0.0)]) == [(0.0, 0.0)], "a point is passed through untrimmed"

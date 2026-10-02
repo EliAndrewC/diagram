@@ -141,9 +141,12 @@ def test_a_plate_this_run_did_not_write_is_PRUNED(tmp_path: Path, monkeypatch: p
 
     monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (_touch(tmp_path, stem), 10, 10))
     (tmp_path / "04-stage_ways.png").write_bytes(b"stale")
+    (tmp_path / "02-08-comb_draw_beads.svg").write_bytes(b"half-made")  # what a plate that failed part-way left (the page audit)
+    (tmp_path / ".stamp").write_text("kept")  # not a plate's file
     _stub_stages(monkeypatch, stage_draws)
     ps.build_page(str(tmp_path), 200, _SPEC)
     assert not (tmp_path / "04-stage_ways.png").exists(), "the orphan is gone"
+    assert not (tmp_path / "02-08-comb_draw_beads.svg").exists() and (tmp_path / ".stamp").exists(), "a half-made plate too, nothing else"
     assert "pruned stale plate 04-stage_ways.png" in capsys.readouterr().out, "and it said so"
 
 
@@ -241,7 +244,7 @@ def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path:
         s.out.append("<rect/>")
 
     def stage_bounds(s: Any, _plan: Any) -> None:
-        s.M["site_boundary"] = {"chords": [[[0, 0], [1, 0], [0, -1]]], "rings": [], "holes": [], "water": [], "corridors": []}
+        s.M["site_boundary"] = {"chords": [[[0, 0], [1, 0], [0, -1]]], "rings": [], "holes": [], "water": [], "corridors": [], "window": [5.0, 5.0, 120.0, 90.0]}
         s.out.append("<rect/>")
 
     monkeypatch.setattr(ps, "_plate", fake_plate)
@@ -249,6 +252,54 @@ def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path:
     ps.build_page(str(tmp_path), 200, _SPEC)
     got = {stem: o is not None for stem, o in seen}  # the plates render in a thread pool: judge by stem, not by completion order
     assert got == {"01-stage_draws": False, "02-stage_bounds": True, "03-stage_draws": False}
+    page = (tmp_path / "hamlet-placement.html").read_text()
+    assert 'href="#s02"' in page and 'id="s02"' in page and 'href="#missing"' in page and 'id="missing"' in page, "the contents link every stage"
+
+
+def _window_overlay() -> dict[str, Any]:
+    """A seating window at (150, 150), 100 px across and within 60 px of a chord along y = 200, the field below it."""
+    return {
+        "chords": [[[50.0, 200.0], [250.0, 200.0], [0.0, -1.0]]],
+        "rings": [[[60.0, 90.0], [90.0, 90.0], [90.0, 120.0], [60.0, 120.0]]],
+        "holes": [],
+        "water": [[[150.0, 0.0], [150.0, 300.0], 4.0]],
+        "corridors": [],
+        "window": [150.0, 150.0, 100.0, 60.0],
+    }
+
+
+def test_the_seating_window_is_the_seats_bound_where_it_meets_the_fields_reach() -> None:
+    """Feature 308 (the GM: "fix that page to show what we are actually doing"): the window a grown seat may stand in is
+    within `bound` of the seat AND within `reach` of the paddy's chords; a manifest with no window has none."""
+    m = ps.window_mask((300, 300), _window_overlay(), 0.0, 0.0, 1.0)
+    assert m.getpixel((150, 160)) == 255, "near the seat and the field"
+    assert m.getpixel((150, 100)) == 0, "within the bound but 100 px from the field"
+    assert m.getpixel((150, 240)) == 255 and m.getpixel((150, 290)) == 0, "past the field the bound ends it"
+    bare = {**_window_overlay(), "chords": []}
+    assert ps.window_mask((300, 300), bare, 0.0, 0.0, 1.0).getpixel((150, 100)) == 255, "no chords: the bound alone"
+    assert ps.window_mask((300, 300), {"chords": []}, 0.0, 0.0, 1.0) is None
+    assert ps.refused_ground({"chords": []}) is None
+
+
+def test_the_boundary_is_drawn_only_where_the_seating_asks_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 308: outside the window the plate is veiled in the page's paper; inside it the ground the seating refuses
+    (the field's side of the chord, here) is tinted red and the lines are drawn, clipped to the window, which is ruled."""
+    from PIL import Image
+
+    im = ps.draw_boundary(Image.new("RGB", (300, 300), (255, 255, 255)), _window_overlay(), 0.0, 0.0, 1.0)
+    inside_field, inside_free = im.getpixel((120, 230)), im.getpixel((120, 170))
+    assert inside_field[0] > inside_field[1] + 20, f"the field's side of the chord, in the window, refused: {inside_field}"
+    assert inside_free == (255, 255, 255), "free ground in the window, untouched"
+    assert im.getpixel((20, 20)) != (255, 255, 255) and im.getpixel((20, 20))[0] > 240, "outside the window, veiled in paper"
+    assert im.getpixel((75, 90)) == im.getpixel((20, 20)), "the ring outside the window is not drawn"
+    assert im.getpixel((150, 30)) == im.getpixel((20, 20)), "nor the water's line"
+    whole = ps.draw_boundary(Image.new("RGB", (300, 300), (255, 255, 255)), {k: v for k, v in _window_overlay().items() if k != "window"}, 0.0, 0.0, 1.0)
+    assert whole.getpixel((75, 90))[0] > 150 and whole.getpixel((75, 90))[1] < 90, "no window: every line drawn, as recorded"
+
+
+def test_the_homesteads_legend_states_the_window_it_drew() -> None:
+    assert "within 743 ft of the margin's seat and 700 ft of the paddy" in ps.homestead_legend((743.2, 700.0))
+    assert "the site boundary the homesteads were seated against" in ps.homestead_legend(None)
 
 
 @pytest.mark.renders  # the ONE test here that spawns a renderer (feature 213 FR-006; the roll census holds it to that)
@@ -279,7 +330,7 @@ def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path, monkey
     img, iw, ih = ps._plate(s, str(tmp_path), "06-stage_homesteads", 300, overlay)
     with Image.open(tmp_path / img) as im:
         rgb = im.convert("RGB")
-        px = list(rgb.getdata())
+        px = list(rgb.get_flattened_data())
         corridor, strip = rgb.getpixel((160, 75)), rgb.getpixel((245, 170))
         seat = max((rgb.getpixel((x, 60)) for x in range(254, 262)), key=lambda c: c[1] - c[0])  # the ring's thin edge, however it resampled
     assert any(r > 150 and g < 90 and b < 90 for r, g, b in px), "a red ring"
@@ -571,6 +622,21 @@ def test_features_between_reads_the_classes_whose_ink_appeared() -> None:
     assert ps.features_between(_NoLayers(), {}, {}) == []  # type: ignore[arg-type]
 
 
+def test_the_deferred_water_is_ink_and_names_its_features() -> None:
+    """The page audit (2026-10-02): the brook, the ditches, the drain and the pond's fill are queued in `water` /
+    `late_water` and inked by the finish, so a step that drew only water read as "no ink" and named nothing. The
+    watermark counts them, and each entry's class is named; a structured or ruled-out class is not."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    lo = ps._watermark(s)
+    s.water += [{"cls": "stream"}, {"cls": "-"}, {"cls": None}, "not an entry"]  # type: ignore[list-item]
+    s.late_water.append({"cls": "irrigation ditch"})
+    hi = ps._watermark(s)
+    assert ps._ink_total(hi) - ps._ink_total(lo) == 5 and ps._ink(s) >= 5, "every queued water record is ink"
+    assert ps.features_between(s, lo, hi) == ["irrigation ditch", "stream"]
+
+
 def _classed_stage() -> Any:
     """A stub stage that draws CLASSED ink through a declared step, so the page prints both feature lines."""
 
@@ -598,7 +664,7 @@ def test_the_page_names_the_features_a_stage_and_its_step_put_on_the_map(tmp_pat
 
 def test_the_closing_section_names_what_this_map_cannot_draw(tmp_path: Path) -> None:
     """One map's ink can only name what that map has, and the pool draws five kinds of place - so every other
-    clickable class is named beside a shipped map that has it, read from that map's own interactive page.
+    clickable class is named beside a shipped map that has it, read from that map's manifest (`ink_classes`).
 
     ON ITS OWN FIXTURE, NOT ON THE REAL POOL, and that is the point rather than tidiness: the gate rolls every
     pool generator with rendering skipped and the cache then EVICTS the `.html` pages (the mechanism recorded in
@@ -609,14 +675,18 @@ def test_the_closing_section_names_what_this_map_cannot_draw(tmp_path: Path) -> 
 
     pool = tmp_path / "pool" / "hamlets"
     (pool / "alpha").mkdir(parents=True)
-    (pool / "alpha" / "alpha.html").write_text('<div data-x=\'"byre"\'>a page that names the byre</div>')
+    (pool / "alpha" / "alpha.json").write_text('{"ink_classes": {"byre": 3, "privy": 0}}')
     (pool / "beta").mkdir(parents=True)
-    (pool / "beta" / "beta.html").write_text('<div>"byre" again, and "well" too</div>')
+    (pool / "beta" / "beta.json").write_text('{"ink_classes": {"byre": 2, "well": 1}}')
+    (pool / "gamma").mkdir(parents=True)
+    (pool / "gamma" / "gamma.json").write_text("not json")  # a manifest that cannot be read names nothing
+    (pool / "delta").mkdir(parents=True)
+    (pool / "delta" / "delta.json").write_text("[1, 2]")  # nor one that is not a record
 
     rest = dict(ps.elsewhere_in_the_pool({"farmhouse"}, str(tmp_path)))
     assert len(rest) == len(CLASSES) - 1, "everything but the one named class is accounted for"
     assert rest["byre"] == "alpha", "the FIRST map that draws it, in name order"
     assert rest["well"] == "beta"
-    assert rest["privy"] == "", "a class no map here draws is named with no map rather than omitted"
+    assert rest["privy"] == "", "a class no map here draws (a zero count) is named with no map rather than omitted"
     assert ps.elsewhere_in_the_pool(set(CLASSES), str(tmp_path)) == [], "nothing is left when every class is named"
     assert ps.elsewhere_in_the_pool({"farmhouse"}, str(tmp_path / "nothing-here")) != [], "a missing pool names everything"

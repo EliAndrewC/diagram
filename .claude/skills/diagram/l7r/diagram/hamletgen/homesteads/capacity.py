@@ -6,7 +6,8 @@ offers only the seats its shape proposes. A quota those rounds left short was a 
 EXHAUSTIVE one: every point of the legal ground within the field's reach, on a grid a third of a pitch apart,
 center-out from the seat, is offered to the same placer (`try_place`) until the quota is met. The placer's own tests
 decide fit; this adds no rule of its own. It runs only while the quota is short, so a map the rounds seated is
-untouched.
+untouched. A NUCLEATED cluster no longer comes here: it is grown from its first house (`growth.py`, feature 308); the
+dispersed form keeps this pass and its rescue.
 
 What it cannot seat, no seat within reach of this margin can. `stage_homesteads` then takes the next margin of
 `seat_cluster`'s ranking (`seat["ladder"]`), and past the last it refuses the site (`SiteRefused`), naming it - D2's

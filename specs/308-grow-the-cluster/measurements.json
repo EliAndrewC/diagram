@@ -1,0 +1,12 @@
+{
+  "perf-control-seed47-20-web-base": {
+    "verifies": "the band-2 reading of 308-end against 308-start on seed 47 at 20 households (+18.9%, web +0.8 s)",
+    "subject": "perf bookend, reference spec, seed 47, 20 households, the web stage",
+    "value": 0.39,
+    "unit": "s, the web stage on the base engine (median of three)",
+    "quantity": "three alternated runs each, 2026-10-02: the base engine (/tmp/base308, HEAD before the engine change) web 0.37/0.39/0.41 s with 21 access-corridor legs; the clone 1.09/1.22/1.24 s with 31 legs. Profiled: the clone's web runs its router 18 times, 17 of them in _join_orphan_ways (about 1.0 s) re-joining pieces of the longer routed corridors that the lane law cut; the base runs it 9 times (0.25 s). With the routed corridors removed (the base) the web costs 0.39 s: the increase is the routed paths' extra legs",
+    "source": "scratchpad stages.py, HH=20, seed 47, and its cProfile",
+    "command": "TAG=base|clone ROOT=<tree> python3 stages.py 20 47",
+    "round": "298403d31"
+  }
+}

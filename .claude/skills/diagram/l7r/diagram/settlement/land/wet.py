@@ -78,9 +78,10 @@ def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, 
     1. Scatter the fringe only AFTER the water it must keep off is recorded. `draw_comb_field` drew it
        before the field's channels existed, so the reed keep-out had nothing to keep off and three blades
        were drawn across the inlet hairline.
-    2. Let the pond's own no-build rect (`block_polys`) follow the fringe, never precede it. The reed
-       scatter reads `block_polys`, which exists to stop BUILDINGS standing on water; appended first it
-       covers the shore band and costs 45% of the annulus - 32 of 54 tufts, measured.
+    2. (Retired by feature 298.) The pond's own no-build rect (`block_polys`) once had to follow the fringe,
+       because the reed scatter read it and, appended first, it cost 45% of the annulus. The reeds are a tile
+       now, and the marsh cuts the pond's own ellipse (`pond_cut`) rather than its box, so the order no longer
+       thins them.
     """
     return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
 
@@ -302,23 +303,20 @@ def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
 
 class WetGroundMixin:
     def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = ()) -> None:  # type: ignore[misc]
-        """REED MARSH / WET MEADOW - wet reed ground drawn WET and SPARSE, FEATHERED to nothing at the margin like
-        the commons (no hard fill edge): a faint blue-green wet tint (soft translucent patches), reed / sedge tufts,
-        and a few standing-water glints - a distinctly WET palette, unlike the dry tan scrub commons. Points falling
-        IN a paddy or ON the open pond water are skipped, so a generous region ABUTS the field's low edge (the polder
-        embankment) or the pond's shore and only fills the wet ground beyond. `role`: 'toe' (default) = the LOW,
-        undrained valley toe below the managed paddy, where wet-rice cultivation stops (wet rice is reclaimed FROM
-        marsh - polders diked out into marsh/lake; where reclamation stops it stays reed wetland; `marsh_on_low_ground`
-        checks this sits downhill); 'pond_fringe' = the reedy shallow MARGIN of a pond (a water-edge fringe, exempt
-        from the low-ground rule); 'defense' = an ENGINEERED defensive wet belt maintained outside a fortified
-        perimeter (Song Hebei frontier marsh belt, numajiro "marsh castles", the flooded-paddy glacis) - it hugs
-        the wall/moat wherever the circuit runs, so it is exempt from the low-ground rule and from
-        `roads_clear_of_marsh` (an approach road through the belt is a CAUSEWAY - the corridor skip keeps its
-        tread bare - and few, constricted approaches are the belt's military purpose); `defense_marsh_girds_the_walls`
-        owns its placement instead; 'waterside' = the un-reclaimed wet WILD outside a polder's perimeter dike on its
-        WATERWARD flanks (the fluctuating lake/creek/marsh the dike holds back - exempt from the low-ground rule
-        because a polder floor sits BELOW the outside water level, so the wet fringe surrounds it regardless of the
-        fall direction; `polder_waterward_flanks_wet` owns its placement, driven by `meta.waterward`). WHY:
+        """REED MARSH / WET MEADOW - wet reed ground drawn as a TILE (feature 298): a wet tint, standing-water glints and
+        reeds, filling the outline - its strips' corners rounded and edges waved (`natural_outline`, feature 299) - less
+        the paddies, the pond's ellipse (`pond_cut`), the mounds, the banks and the water, at the bottom of the stack; a
+        fringe tile where it meets the scrub. A generous region therefore ABUTS the field's low edge (the polder
+        embankment) or the pond's shore and only fills the wet ground beyond. `role`: 'toe' (default) = the LOW, undrained
+        valley toe below the managed paddy, where wet-rice cultivation stops (wet rice is reclaimed FROM marsh - polders
+        diked out into marsh/lake; where reclamation stops it stays reed wetland); 'pond_fringe' = the reedy shallow
+        MARGIN of a pond (a water-edge fringe); 'defense' = an ENGINEERED defensive wet belt maintained outside a fortified
+        perimeter (Song Hebei frontier marsh belt, numajiro "marsh castles", the flooded-paddy glacis) - it hugs the
+        wall/moat wherever the circuit runs (an approach road through the belt is a CAUSEWAY - the corridor skip keeps its
+        tread bare - and few, constricted approaches are the belt's military purpose); 'waterside' = the un-reclaimed wet
+        WILD outside a polder's perimeter dike on its WATERWARD flanks (the fluctuating lake/creek/marsh the dike holds
+        back - a polder floor sits BELOW the outside water level, so the wet fringe surrounds it regardless of the fall
+        direction; placed by `stage_waterward` from `meta.waterward`). WHY:
         research/questions/0058-ground-too-wet-to-build-on.html + 'Defensive marshland - the engineered wet belt' + research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
@@ -506,10 +504,10 @@ class WetGroundMixin:
 
         A path does not run into a reed bed: it stops on the dry side of it. Only the ENDS are
         walked back, because a way whose MIDDLE crosses wet ground has a routing problem that
-        trimming cannot fix - that one has to be re-routed, and `roads_clear_of_marsh` says so.
+        trimming cannot fix - that one has to be re-routed (the router keeps off the toe band, `toe_band`).
         Marsh drawn so far is what is checked, so this only helps a way laid AFTER its water; the
-        `defense` belt is exempt for the same reason it is exempt from the check (its approach IS a
-        causeway, and few constricted approaches are the point of it)."""
+        `defense` belt is exempt (its approach IS a causeway, and few constricted approaches are the point
+        of it)."""
         wet = marsh_ground(self.M, but=("defense",))
         if not wet or len(pts) < 2:  # a caller may hand over an already-clipped stub; there is nothing to walk back
             return pts
@@ -541,7 +539,7 @@ class WetGroundMixin:
         return out
 
     def toe_band(self: Settlement, down_deg: Any = None, pad: float = 90.0) -> list[Pt]:  # type: ignore[misc]
-        """The reed-marsh TOE: the contour band below the crop's lowest point, in canvas coordinates.
+        """The reed-marsh TOE: the wet band below the fan's toe, in canvas coordinates.
 
         FACTORED OUT so it can be asked for BEFORE it is drawn (2026-08-12). `hinterland()` lays the
         marsh late, after the structures, but a WAY has to be routed early - and the GM's rule is
@@ -550,10 +548,11 @@ class WetGroundMixin:
         call "placement and its check must read the SAME source", so there is one derivation and both
         callers use it.
 
-        It is a CONTOUR band, not a bbox: wet ground is defined by HEIGHT, so the inner edge is
-        perpendicular to the `down_deg` vector like every other height-resolved feature here. An
-        axis-aligned rectangle is only an honest contour at a 0/90/180/270 fall, and at a diagonal it
-        slices across the slope - which is the bug this shape was given to fix."""
+        It follows the TOE, not a bbox: wet ground is defined by HEIGHT, so the band is laid across the `down_deg`
+        vector, and since feature 133 T30 its inner edge follows the fan's toe as an arc - at each cross-slope station
+        `pad` above the local lowest paddy point, smoothed over three stations - as wide as the fan plus `pad`. An
+        axis-aligned rectangle is only an honest contour at a 0/90/180/270 fall, and at a diagonal it slices across
+        the slope - which is the bug this shape was given to fix."""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys

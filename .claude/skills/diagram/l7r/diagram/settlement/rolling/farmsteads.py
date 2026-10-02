@@ -18,7 +18,8 @@ if TYPE_CHECKING:
 class FarmsteadFlushMixin:
     def farmsteads(self: Settlement) -> int:  # type: ignore[misc]
         """Draw every farmstead. The to-scale tiers (villages/hamlets/towns) draw the reserved homestead
-        BUNDLES; cities use the shipped house-first path. Call LAST in the gen so every obstacle is known. Returns the farmhouse count."""
+        BUNDLES; cities use the shipped house-first path. Call once every homestead is seated - a hamlet's homestead stage -
+        so the bundles are final. Returns the farmhouse count."""
         with self.rng_scope("farmsteads"):
             # ONE scope for the whole rural flush: yards, gardens, groves and kura sides are one
             # phase, and splitting them would only make a change to one perturb the others.

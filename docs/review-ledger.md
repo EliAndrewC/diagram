@@ -337,3 +337,40 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-01 | glyph-check | grave island on inashiro (new to the map, round 1) | PASS | the third stone stood off a small mound (questionable); stones drawn large (convention) | geometric | yes | each stone held inside the mound (stone_steps) | 228 s | 613k in (563k cached) / 16.3k out |
 | 2026-10-01 | glyph-check | homestead bamboo on sawada (round 2) | PASS | round 1's errors fixed; not confused with gardens; a hard-edged rectangle (nitpick); lee side still questionable | judgment | - | put to the GM | 201 s | 569k in (516k cached) / 15.1k out |
 | 2026-10-01 | glyph-check | grave island on inashiro (round 2) | PASS | all stones on the mound; the clamp set the third level with the second (nitpick) | geometric | yes | the whole stagger scaled to fit, each stone further back | 139 s | 315k in (287k cached) / 10.8k out |
+| 2026-10-02 | fix-check | inashiro, the GM's persimmon complaint (round 1) | PASS | 0 of 12 crowns in a plot's sun after, 11 of 12 before, counted on the PNG's own plot pixels; the knob persimmon_front_share no longer realized (nitpick); the whole hamlet re-seated (nitpick) | geometric | no | recorded; the front share put to the GM | 144 s | 919k in (857k cached) / 14.2k out |
+| 2026-10-02 | glyph-check | persimmon on inashiro (placement changed, round 1) | PASS | in the grove its fill is 7.8 CIELAB from the lighter grove crown, told apart by the dots and size (questionable); 10 of 12 seats on one back-corner diagonal (nitpick); 3 crowns at the flank's edge (nitpick) | judgment | yes | the color put to the GM; the seat pattern recorded | 196 s | 789k in (720k cached) / 16.3k out |
+| 2026-10-02 | spec-fidelity | 311 spec (round 1) | CHANGES REQUIRED | six items: CHANGED undefined, the intro's class, two departures unrecorded, styling, a self-contradicting edge case, the 237 unmeasured | paperwork | yes | all six applied | 105 s | 213k in (172k cached) / 9.1k out |
+| 2026-10-02 | spec-fidelity-verify | 311 spec (round 2) | CHANGES REQUIRED | SC-005's seed on the old rule; a decision row misstating the proposal | paperwork | yes | both applied | 67 s | 113k in (81k cached) / 5.5k out |
+| 2026-10-02 | spec-fidelity-verify | 311 spec (round 3) | FAITHFUL | none | nothing | - | - | 24 s | 31k in (19k cached) / 1.8k out |
+| 2026-10-02 | spec-fidelity | 311 plan (review 1) | BLOCKED | five narrowings: the intro bundle without the body, an unlogged bundle-less record, a blanket source-reader exemption, KEY= bundles never refused, contract bodies untouched | judgment | yes | all five applied | 139 s | 220k in (159k cached) / 12.6k out |
+| 2026-10-02 | spec-fidelity | 311 plan (review 2) | CLEAR | three non-blocking: XII wording, D2's file count, NEW='s reason floor | paperwork | yes | applied | 94 s | 284k in (229k cached) / 8.3k out |
+| 2026-10-02 | spec-fidelity | 311 plan (review 3) | CLEAR | none | nothing | - | - | 52 s | 356k in (300k cached) / 3.9k out |
+| 2026-10-02 | intro-check | seeded batch of 24, run 1 (SC-005) | 3/3 seeds | 0094 NEEDS-INTRO, 0036 none, planted 0083 INTRO-FIX | judgment | - | - | 48 s | 377k in (299k cached) / 2.9k out |
+| 2026-10-02 | intro-check | seeded batch of 24, run 2 (SC-005) | 3/3 seeds | as run 1, and 0003 flagged | judgment | - | - | 60 s | 657k in (576k cached) / 3.7k out |
+| 2026-10-02 | intro-check | seeded batch of 24, run 3 (SC-005) | 3/3 seeds | as run 1, and 0003, 0110 flagged | judgment | - | - | 96 s | 876k in (790k cached) / 5.8k out |
+| 2026-10-02 | intro-check | backfill batch 00 | NO-INTRO-NEEDED/NEEDS-INTRO 22/2 | flagged 0003 0015 | judgment | - | intro written | 58 s | 518k in (459k cached) / 4.0k out |
+| 2026-10-02 | intro-check | backfill batch 01 | NO-INTRO-NEEDED/NEEDS-INTRO 24/0 | none | nothing | - | - | 35 s | 442k in (378k cached) / 1.9k out |
+| 2026-10-02 | intro-check | backfill batch 02 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0056 | judgment | - | intro written | 40 s | 444k in (387k cached) / 2.1k out |
+| 2026-10-02 | intro-check | backfill batch 03 | NO-INTRO-NEEDED/NEEDS-INTRO 24/0 | none | nothing | - | - | 31 s | 308k in (258k cached) / 1.8k out |
+| 2026-10-02 | intro-check | backfill batch 04 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0110 | judgment | - | intro written | 37 s | 472k in (364k cached) / 2.1k out |
+| 2026-10-02 | intro-check | backfill batch 05 | NO-INTRO-NEEDED/NEEDS-INTRO 24/0 | none | nothing | - | - | 32 s | 391k in (326k cached) / 1.8k out |
+| 2026-10-02 | intro-check | backfill batch 06 | NO-INTRO-NEEDED/NEEDS-INTRO 23/1 | flagged 0157 | judgment | - | intro written | 47 s | 424k in (374k cached) / 2.8k out |
+| 2026-10-02 | intro-check | backfill batch 07 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0173 | judgment | - | intro written | 41 s | 368k in (314k cached) / 2.7k out |
+| 2026-10-02 | intro-check | backfill batch 08 | NO-INTRO-NEEDED/NEEDS-INTRO 22/2 | flagged 0212 0216 | judgment | - | intro written | 31 s | 312k in (250k cached) / 2.0k out |
+| 2026-10-02 | intro-check | backfill batch 09 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0240 | judgment | - | intro written | 38 s | 311k in (254k cached) / 2.5k out |
+| 2026-10-02 | intro-check | 0094 written intro | INTRO-OK | the GM's table and tea against the drawing page's mats (put to the GM) | judgment | no | put to the GM | 18 s | 88k in (57k cached) / 1.3k out |
+| 2026-10-02 | record-format | 0094 written intro | 0/0/0 | the same table and doors note | nothing | - | - | 23 s | 44k in (27k cached) / 1.7k out |
+| 2026-10-02 | intro-check | nine written intros (round 1) | INTRO-FIX 3 | 0157 a gap between houses; 0212 the serving women's reason; 0216 the drawn temple-quarter shrines | judgment | yes | rewritten | 36 s | 156k in (102k cached) / 2.8k out |
+| 2026-10-02 | record-format | 0003 written intro (round 1) | 0/0/0 | none | nothing | - | - | 20 s | 63k in (45k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0015 written intro (round 1) | 0/0/0 | none | nothing | - | - | 25 s | 54k in (31k cached) / 2.0k out |
+| 2026-10-02 | record-format | 0056 written intro (round 1) | 0/0/0 | none | nothing | - | - | 18 s | 50k in (38k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0110 written intro (round 1) | 0/0/0 | none | nothing | - | - | 13 s | 43k in (35k cached) / 0.9k out |
+| 2026-10-02 | record-format | 0157 written intro (round 1) | 0/0/0 | a wording note matching intro-check | nothing | - | - | 22 s | 41k in (33k cached) / 1.6k out |
+| 2026-10-02 | record-format | 0173 written intro (round 1) | 0/0/0 | none | nothing | - | - | 15 s | 93k in (73k cached) / 1.1k out |
+| 2026-10-02 | record-format | 0212 written intro (round 1) | 0/0/0 | none | nothing | - | - | 26 s | 83k in (66k cached) / 1.9k out |
+| 2026-10-02 | record-format | 0216 written intro (round 1) | 0/0/0 | a wording note matching intro-check | nothing | - | - | 24 s | 65k in (45k cached) / 2.0k out |
+| 2026-10-02 | record-format | 0240 written intro (round 1) | 0/0/0 | none | nothing | - | - | 12 s | 42k in (34k cached) / 0.9k out |
+| 2026-10-02 | intro-check | three rewritten intros (round 2) | INTRO-OK 3 | none | nothing | - | - | 17 s | 95k in (57k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0157 rewritten intro (round 2) | 0/0/0 | none | nothing | - | - | 9 s | 25k in (18k cached) / 0.6k out |
+| 2026-10-02 | record-format | 0212 rewritten intro (round 2) | 0/0/0 | none | nothing | - | - | 22 s | 83k in (66k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0216 rewritten intro (round 2) | 0/0/0 | none | nothing | - | - | 17 s | 92k in (73k cached) / 1.2k out |

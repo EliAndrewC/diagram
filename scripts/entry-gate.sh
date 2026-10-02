@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-# entry-gate.sh - a modal whose research section moved underneath it does not land unexamined.
+# entry-gate.sh - the RECORD GATE: no record check a delta owes lands unanswered (feature 311), the modal half
+# of which is where it began - a modal whose research section moved underneath it does not land unexamined.
+#
+# GUARD_EDIT_OK: feature 311 - THE GATE NOW HOLDS EVERY RECORD CHECK (GM 2026-10-02: *"not just do the correct thing, to
+# kind of enforce us doing the correct thing"*). `scripts/_record_owed.py --unanswered` names each unit the delta owes -
+# intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift - that has
+# no answer record at the content being pushed (`make record-checked` writes one when a check returns). Before this,
+# quote-check and record-format were doctrine with no mechanism at the push. Nothing is loosened: the entry-drift units
+# are the ones `_entry_owed.py` named before, less the intro and comment edits that moved no finding (spec FR-004), and
+# ENTRY_DRIFT_OK still discharges exactly them. RECORD_CHECKS_OK discharges every unit, with a reason, to the bypass log.
+#
 #
 # WHY IT REFUSES AT ALL (feature 234, GM 2026-09-12). What a modal says about a feature IS the docstring
 # of its `Kind` class, written FROM a research section the class names in its `Entry:` tag - and nothing
@@ -32,21 +42,21 @@ EG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$EG_HERE/_guardlog.sh"
 
-if [ -n "${ENTRY_DRIFT_OK:-}" ]; then
-  if ! python3 "$EG_HERE/_hm_escape.py" reason-ok <<<"$ENTRY_DRIFT_OK" >/dev/null; then
-    guard_log entry-gate blocked "$ENTRY_DRIFT_OK" ENTRY_DRIFT_OK-no-reason
-    printf 'entry-gate: ENTRY_DRIFT_OK needs a REASON, not just a value - two words and eight characters.\n' >&2
-    printf 'It ships with the push and is what a later audit reads: say what the sections moved and why\n' >&2
-    printf 'no modal written from them now says the wrong thing.\n' >&2
-    exit 1
+# GUARD_EDIT_OK: feature 311 - one writer of a reason to dev/bypass-log/, for either escape.
+record_bypass() {  # $1 the escape's name, $2 its reason
+  if ! python3 "$EG_HERE/_hm_escape.py" reason-ok <<<"$2" >/dev/null; then
+    guard_log entry-gate blocked "$2" "$1-no-reason"
+    printf 'entry-gate: %s needs a REASON, not just a value - two words and eight characters.\n' "$1" >&2
+    printf 'It ships with the push and is what a later audit reads: say what moved and why no check is owed.\n' >&2
+    return 1
   fi
-  guard_log entry-gate escaped "$ENTRY_DRIFT_OK" entry-drift-ok
+  guard_log entry-gate escaped "$2" "$(printf '%s' "$1" | tr 'A-Z_' 'a-z-')"
   # AND to dev/bypass-log/, which is what `make audit` reads and what the spec promises a later reader
   # (SC-013). The guard log is per-host and gitignored; a reason that ships with the push has to be in
   # the repository, like every other bypass this project records.
   BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
   mkdir -p "$BL" 2>/dev/null || true
-  python3 - "$BL" "$ENTRY_DRIFT_OK" <<'PYBL' || true
+  python3 - "$BL" "$1: $2" <<'PYBL' || true
 import json, os, pathlib, secrets, subprocess, sys, time
 bl, why = pathlib.Path(sys.argv[1]), sys.argv[2]
 head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
@@ -56,22 +66,29 @@ stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     encoding="utf-8",
 )
 PYBL
-  printf 'entry-gate: BYPASSED - %s\n' "$ENTRY_DRIFT_OK"
-  printf '  recorded in dev/bypass-log/ - `make audit` lists it\n'
+  printf 'entry-gate: BYPASSED (%s) - %s\n  recorded in dev/bypass-log/ - `make audit` lists it\n' "$1" "$2"
+}
+
+if [ -n "${RECORD_CHECKS_OK:-}" ]; then
+  record_bypass RECORD_CHECKS_OK "$RECORD_CHECKS_OK" || exit 1
   exit 0
 fi
+SKIP=""
+if [ -n "${ENTRY_DRIFT_OK:-}" ]; then
+  record_bypass ENTRY_DRIFT_OK "$ENTRY_DRIFT_OK" || exit 1
+  SKIP="--skip-check entry-drift"
+fi
 
-NAMED="$(python3 "$EG_HERE/_entry_owed.py" --root "$ROOT" 2>/dev/null || true)"
-[ -z "$NAMED" ] && exit 0
+# shellcheck disable=SC2086
+# GUARD_EDIT_OK: feature 311 - no bytecode: the push's own suite runs this in fixture trees whose `git status` must stay clean
+OWED="$(PYTHONDONTWRITEBYTECODE=1 python3 "$EG_HERE/_record_owed.py" --root "$ROOT" --unanswered $SKIP 2>/dev/null || true)"
+case "$OWED" in ""|"record-owed: no record check is owed"*) exit 0 ;; esac
 
-guard_log entry-gate blocked "$(printf '%s' "$NAMED" | head -c 400)" entry-owed
-printf '\n\033[1mENTRY GATE: a research section moved and the modal written from it did not.\033[0m\n' >&2
-printf '%s\n' "$NAMED" | sed 's/^/  /' >&2
-printf '\nWhat a modal says IS the class docstring, written FROM the section its `Entry:` names. Dispatch the\n' >&2
-printf '`entry-drift` agent at each pair above - it reads the explanation prose against the section as it\n' >&2
-printf 'now stands and returns IN-STEP, DRIFTED or CANNOT-TELL - then rewrite the prose it calls DRIFTED.\n' >&2
-printf '\nIf the sections moved without any FINDING moving - a footnote relocated, a session note turned into\n' >&2
-printf 'a comment, a citation re-pointed, a passage translated - that is one line, not one dispatch per\n' >&2
-printf 'class: ENTRY_DRIFT_OK="<what moved, and why no modal is now wrong>" and the reason ships with the\n' >&2
-printf 'push for `make audit` to list.\n\n' >&2
+guard_log entry-gate blocked "$(printf '%s' "$OWED" | head -c 400)" record-owed
+printf '\n\033[1mRECORD GATE: the delta owes record checks that have no answer at the content being pushed.\033[0m\n' >&2
+printf '%s\n' "$OWED" | sed 's/^/  /' >&2
+printf '\nEach unit is owed because the words its check reads changed (`make record-owed` says why). Build the bundle the\n' >&2
+printf 'line names, dispatch the check on its MANIFEST, then `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<counts>"`.\n' >&2
+printf 'A modal'"'"'s entry-drift is also answered by rewriting its prose. If a section moved without any FINDING moving,\n' >&2
+printf 'ENTRY_DRIFT_OK="<why no modal is now wrong>" discharges the entry-drift units; RECORD_CHECKS_OK="<why>" every unit.\n\n' >&2
 exit 1

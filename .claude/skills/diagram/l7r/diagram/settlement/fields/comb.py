@@ -269,9 +269,9 @@ class CombMixin:
         the roll-from-seed entrypoint (which cannot hand-place any of it) but is reusable by any comb gen.
         `source` describes where the water comes from: {"kind":"pond", "pond":(cx,cy,rx,ry)} draws a tameike at
         the sluice and feeds from it; {"kind":"stream", "stream":[(x,y),...]} runs a brook in from a canvas edge
-        to the sluice. Records the field envelope/bbox/vis_bbox, every channel as a field_ditch, and a hairline
-        SOURCE->field feed channel so the water-topology checks (fields_show_water_source, field_ditches_reach_
-        source_and_sink) see a source. Returns the field envelope polygon. `inwall_drain_moat_bias` marks an
+        to the sluice, and with `to` on past it and off the map (the scripted hamlet's case). Records the field
+        envelope/bbox/vis_bbox, every channel as a field_ditch, and a hairline SOURCE->field feed channel, so the
+        manifest's water topology names the field's source. Returns the field envelope polygon. `inwall_drain_moat_bias` marks an
         IN-WALL city fan: the drain is trimmed through inwall_drain_outfall (cut off short of the ring road,
         sluice-gated, underground conduit to the moat) before anything is drawn or recorded."""
 

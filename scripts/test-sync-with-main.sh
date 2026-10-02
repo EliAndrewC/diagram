@@ -221,5 +221,44 @@ OUT=$(syncmain "$D" sync-in); check "sync-in on an unrelated history" 1 $?
 expect_out "shares no commit with main"
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$before" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone merged the unrelated history"; FAIL=$((FAIL+1)); }
 
+echo "12. the prompt hook's path: render-sync detached, one runner at a time, a bounded lock wait (2026-10-02)"
+# GUARD_EDIT_OK: new test cases for the hook's --background-render path; nothing existing loosened
+D=$(topology bg)
+mkdir -p "$D/main/.claude/skills/diagram"
+MARK="$D/rendered"
+printf 'render-sync:\n\t@sleep 2; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/.claude/skills/diagram/Makefile"
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+start=$(date +%s)
+OUT=$(syncmain "$D" sync-in --background-render); check "sync-in --background-render" 0 $?
+[ $(( $(date +%s) - start )) -lt 2 ] && [ ! -f "$MARK" ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited for the render"; FAIL=$((FAIL+1)); }
+expect_out "render-sync started in the background"
+[ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone did not merge"; FAIL=$((FAIL+1)); }
+# a second start while the first runs exits at once and does not render twice
+( cd "$D/main/.clones/c" && CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" render-sync-runner >/dev/null 2>&1 ); check "a second runner exits at once" 0 $?
+for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
+[ "$(wc -l < "$MARK" 2>/dev/null)" = 1 ] && PASS=$((PASS+1)) || { echo "FAIL  expected one background render, got: $(cat "$MARK" 2>/dev/null)"; FAIL=$((FAIL+1)); }
+grep -q '^ok .* at '"$(git -C "$D/main" rev-parse --short HEAD)" "$D/main/.clones/.render-sync.status" && PASS=$((PASS+1)) || { echo "FAIL  status: $(cat "$D/main/.clones/.render-sync.status" 2>/dev/null)"; FAIL=$((FAIL+1)); }
+# an earlier failure is reported on the next sync
+echo "FAILED 2026-10-02 exit 2 at abc1234" > "$D/main/.clones/.render-sync.status"
+OUT=$(syncmain "$D" sync-in --background-render); check "sync-in after a failed render" 0 $?
+expect_out "last background render-sync FAILED"
+for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
+# a busy lock: the mirror is skipped this turn, the clone still merges, and the call returns inside the wait
+( cd "$D/seed" && echo again > h && git add -A && git commit -qm upstream2 && git push -q "$D/github.git" HEAD:main )
+flock "$D/main/.clones/.sync.lock" sleep 6 & HOLDER=$!
+sleep 0.3
+mirror_before=$(git -C "$D/main" rev-parse HEAD)
+start=$(date +%s)
+OUT=$(cd "$D/main/.clones/c" && SYNC_LOCK_WAIT=1 CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" sync-in --background-render 2>&1); check "sync-in with the lock held" 0 $?
+[ $(( $(date +%s) - start )) -lt 5 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in did not give up on the lock"; FAIL=$((FAIL+1)); }
+expect_out "mirror lock stayed busy"
+[ "$(git -C "$D/main" rev-parse HEAD)" = "$mirror_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the mirror moved without the lock"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone did not merge while the mirror was busy"; FAIL=$((FAIL+1)); }
+kill "$HOLDER" 2>/dev/null; wait "$HOLDER" 2>/dev/null
+# a hand commit in the mirror still stops the hook's path, as it stops the synchronous one
+( cd "$D/main" && echo rogue > rogue && git add -A && git commit -qm "committed in main by hand" )
+OUT=$(syncmain "$D" sync-in --background-render); check "a mirror commit -> refused on the hook's path" 1 $?
+expect_out "cannot fast-forward"
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

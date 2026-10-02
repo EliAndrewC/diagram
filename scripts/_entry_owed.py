@@ -149,9 +149,20 @@ def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001, 
         old_text = _git(root, "show", f"{base}:{rel}") or _renamed_from(root, base, rel, m.group(2), m.group(3) or "")
         if old_text is None:
             continue  # a new question: no older body for a modal to have been written from
-        if old_text != new.read_text(encoding="utf-8"):
+        if findings(old_text) != findings(new.read_text(encoding="utf-8")):
             moved.add(m.group(1))
     return moved
+
+
+def findings(page: str) -> list[str]:
+    """What a modal is written FROM: the page's words with its intro dropped (feature 311, spec FR-004 last row). An intro
+    cites nothing and says only why the question is asked; a comment, a tag marker or a re-wrap changes no words - none of
+    them is a finding moving under a modal. The words are `_record_units`'s, the one reader of them."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import _record_units as ru  # noqa: PLC0415
+
+    p = ru.read_page(page)
+    return [p.heading, *(b.words for b in p.blocks if not b.intro)]
 
 
 def _renamed_from(root: Path, base: str, rel: str, slug: str, drawing: str = "") -> str | None:

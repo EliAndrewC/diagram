@@ -23,6 +23,10 @@ rc() { cat "$T/rc"; }
 logged() { grep -rlq "$1" "$GUARD_LOG_ROOT" 2>/dev/null; }
 Q=/diagram/.clones/x/.claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html
 S=/diagram/.claude/skills/diagram/research/sources/010-works-cited/4220-edo-enwiki.html
+# GUARD_EDIT_OK: feature 311 - the bundles the suite names are its own, written here with the owed section a bundle carries
+mkdir -p "$T/q-0087" "$T/q-old"
+printf '# Check bundle - question 0087\n\n## Owed (feature 311)\n\nowed-checks: record-format\nunit: record-format:0087 abc\n' > "$T/q-0087/MANIFEST.md"
+printf '# Check bundle - question 0087\n' > "$T/q-old/MANIFEST.md"
 
 echo "1. what is refused"
 dispatch record-format "Check ONE entry: $Q and its notes."
@@ -49,7 +53,7 @@ dispatch record-format "CHECK_BUNDLE_OK=\"x\" read $Q"
 [ "$(rc)" -eq 2 ] && logged CHECK_BUNDLE_OK-no-reason && ok "an escape with no real reason is refused and recorded" || no "a bare escape passed" "(rc=$(rc))"
 
 echo "2. what passes"
-dispatch record-format "Read /tmp/l7r-check/q-0087/MANIFEST.md and the files it lists. Origin: $Q"
+dispatch record-format "Read $T/q-0087/MANIFEST.md and the files it lists. Origin: $Q"
 [ "$(rc)" -eq 0 ] && [ ! -s "$T/err" ] && ok "a dispatch naming a bundle passes, silently, even beside an origin path" || no "a bundle dispatch was refused" "(rc=$(rc))"
 logged bundle-named && ok "...recorded permitted/bundle-named" || no "bundle-named not recorded"
 dispatch source-reader "Report per claim whether https://en.wikipedia.org/wiki/Edo says it."
@@ -65,7 +69,21 @@ out=$(printf '{"session_id":"t","tool_name":"Bash","tool_input":{"command":"make
 out=$(printf 'not json' | ( cd "$T" && "$HOOK" pretool 2>/dev/null )); r=$?
 [ "$r" -eq 0 ] && ok "a payload that is not JSON never blocks" || no "a broken payload blocked" "(rc=$r)"
 
-echo "3. the guard and the contracts agree"
+echo "3. what is not owed (feature 311)"
+dispatch quote-check "Read $T/q-0087/MANIFEST.md."
+[ "$(rc)" -eq 2 ] && grep -q "owes: record-format" "$T/err" && logged not-owed && ok "a check the MANIFEST does not owe is refused, naming what it owes" || no "an unowed check passed" "(rc=$(rc))"
+dispatch record-format "Read $T/q-old/MANIFEST.md."
+[ "$(rc)" -eq 2 ] && grep -q "build it again" "$T/err" && ok "a bundle with no owed section (from before 311) is refused" || no "an old bundle passed" "(rc=$(rc))"
+dispatch quote-check "CHECK_NOT_OWED_OK=\"the GM asked for an audit\" Read $T/q-0087/MANIFEST.md."
+[ "$(rc)" -eq 0 ] && logged check-not-owed-ok && ok "CHECK_NOT_OWED_OK with a reason passes and is recorded" || no "a reasoned escape was refused" "(rc=$(rc))"
+dispatch quote-check "CHECK_NOT_OWED_OK=\"x\" Read $T/q-0087/MANIFEST.md."
+[ "$(rc)" -eq 2 ] && logged CHECK_NOT_OWED_OK-no-reason && ok "a bare CHECK_NOT_OWED_OK is refused" || no "a bare escape passed" "(rc=$(rc))"
+dispatch record-style "Read $T/q-old/MANIFEST.md."
+[ "$(rc)" -eq 0 ] && ok "record-style is owed by its sweep, never refused here" || no "record-style was refused" "(rc=$(rc))"
+dispatch intro-check "Check $Q"
+[ "$(rc)" -eq 2 ] && ok "intro-check is a bundle-reading check too" || no "intro-check read the tree" "(rc=$(rc))"
+
+echo "4. the guard and the contracts agree"
 ROOT="$(dirname "$HERE")"
 for a in quote-check record-format source-applicability source-reader entry-drift; do
   grep -q 'Read the BUNDLE you are given' "$ROOT/.claude/agents/$a.md" && ! grep -q '^tools: .*Write' "$ROOT/.claude/agents/$a.md" \

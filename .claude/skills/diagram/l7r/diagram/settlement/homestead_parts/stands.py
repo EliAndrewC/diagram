@@ -225,8 +225,8 @@ class StandsMixin:
         a distinct bamboo-grove symbol beside the broadleaf and conifer ones, so a reader can tell the three
         apart at map scale. Each mark is a pair of culm strokes with a leafy fork, in bamboo's pale
         yellow-green, on a jittered grid dense enough to read as one block at fit zoom - laid once in the bamboo tile and the
-        stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (the damp N/W strip of the cluster) or
-        "thicket" (the take-yabu at the field margin). Recorded in M['bamboo_stands'] (bbox + role + poly);
+        stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (a strip beside a farmstead that keeps one) or
+        "thicket" (the take-yabu behind the back row). Recorded in M['bamboo_stands'] (bbox + role + poly);
         the marks are decoration keyed to the stand (positional randomness)."""
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
@@ -426,10 +426,11 @@ class StandsMixin:
         # belt clump within `_west_sun_ft` of a plot's west edge, from the plot's north edge down to
         # `_west_sun_ft` below its south edge (the southwest, where the 3pm shadow starts), takes the
         # afternoon. Measured as a SQUARE, not a solar wedge, the same knowing departure the yard's
-        # south corridor takes. WINDBREAK MIX ONLY: a copse clump is the dooryard's persimmon or
-        # bamboo (3-10 m in the Sendai igune classes), and the record puts exactly those IN the
-        # sunlit yard ("a persimmon in the yard center", Tonami model homestead) - so a dooryard
-        # scatter is not held to a lane that a 10 m belt is. Opt-in via `west_sun_lane` (off on the
+        # south corridor takes. WINDBREAK MIX ONLY: a copse clump is lesser dooryard wood (3-10 m in
+        # the Sendai igune classes), and it is not held to the lane a 10 m belt is - a GUESS. It was
+        # justified by "a persimmon in the yard center" (a Tonami model homestead), a passage the
+        # record does not hold and the cited Tonami page does not carry (checked 2026-10-02); the
+        # yard persimmon itself is held to its own sun rule (`PERSIMMON_SHADE_FT`). Opt-in via `west_sun_lane` (off on the
         # frozen pool); `village_trees_unshade_from_west` gates it. Derivation: research/contents.json#homesteads.
         wl = float(getattr(self, "_west_sun_ft", 0.0)) if mix == "windbreak" else 0.0
         west = [(o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["y"] + o["h"] / 2) for k in ("threshing_yards", "gardens") for o in self.M.get(k, [])] if wl else []

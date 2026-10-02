@@ -690,7 +690,7 @@ def settle_fragments(s: Any) -> int:
     ft, stayed drawn while the tree was exempt - research R9). Dropping it cuts nothing another way needs, so the
     termination argument stands: the drop shortens the web, and `short_fragments` names only a lane whose loss leaves no
     house, target or field newly unreached, so step 4 does not draw it again."""
-    gone = law.short_fragments(s.M)[:1]
+    gone = law.short_fragments(s.M, memo_ground(s, "worked", worked_ground))[:1]  # the web's one ground (the perf-audit of 308)
     if gone:
         s.drop_lanes(gone)
     return len(gone)

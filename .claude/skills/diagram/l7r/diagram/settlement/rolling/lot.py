@@ -163,9 +163,10 @@ def watered(s: Any, x: float, y: float, well: bool) -> bool:
 
 def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None, bool]:
     """What the household about to be seated at (x, y) carries (plan M5): its lot (the k-th plain household takes lot
-    k), the byre form its bundle reserves a stall for (a keeper on a household form), and whether it carries a well
-    pocket. Set on the settlement for the seat search (`_household_byre`, `_household_well`), where `_bundle_layout` lays
-    the parts inside the envelope; `seat_parts_done` takes them down."""
+    k), the byre form its bundle reserves a stall for (a keeper on a household form), whether it carries a well pocket, and
+    its farmstead fixtures (the lot's kinds). Set on the settlement for the seat search (`_household_byre`,
+    `_household_well`, `_household_fixtures`, and `_household_watered`, which holds its candidates to `watered`), where
+    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down."""
     lots = getattr(s, "_lots", None)
     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
     lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None
@@ -183,8 +184,9 @@ def seat_parts_done(s: Any) -> None:
 
 def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:
     """The reserved parts a seated household's record carries: its stall (`byre`: where it is drawn, its turn, its box),
-    its well pocket (`well_pocket`, the wellhead's center), which the seating also remembers (`_pockets`), and its share of
-    the wood floor (`wood_share`: the copse seats it reserved, their crowns' radius and the ground they cover in sq ft)."""
+    its well pocket (`well_pocket`, the wellhead's center), which the seating also remembers (`_pockets`), its farmstead
+    fixtures (`fixtures`: each laid in the bundle), and its share of the wood floor (`wood_share`: the copse seats it
+    reserved, their crowns' radius and the ground they cover in sq ft)."""
     cx, cy = rec["x"], rec["y"]
     if form and geom.get("byre") is not None:  # the reserved stall, drawn where it was reserved (`draft_byres`)
         bx, by = geom["byre"][0], geom["byre"][1]

@@ -242,6 +242,22 @@ OTHER=$T/other-tree; mkdir -p "$OTHER"; git init -q "$OTHER"; DEAD2=$T/deadlog2.
 sleep 2
 check "another tree's dead-producer waiter is not reported for this clone" no "$(has "$("$HOOK" stale "$CLONE")" "$DEAD2")"
 check "...while this clone's own still is" yes "$(has "$("$HOOK" stale "$CLONE")" "$DEAD")"
+# GUARD_EDIT_OK: 2026-10-02, fixing a guard that fires on correct work - THE HARNESS'S OWN SHAPE. Claude Code runs every
+# Bash command as `source <shell snapshot> && eval '<command>'`, and the census took the FIRST existing path as the file
+# watched: the snapshot, old and held by nobody, so every live waiter was a "dead producer" - 727 of the 728 reports of
+# September, each telling the session to kill a loop that was working. The proof-of-life helper `no-poll` writes into a
+# loop (`_writer-alive.sh`) is the same trap. Neither is a file anything watches.
+SNAPD=$T/shell-snapshots; mkdir -p "$SNAPD"; SNAP=$SNAPD/snapshot-bash-1.sh; echo ': snapshot' > "$SNAP"; touch -d "3 hours ago" "$SNAP"
+LIVEH=$T/livelog-harness.txt; : > "$LIVEH"
+( cd "$CLONE" && setsid nohup bash -c "source $SNAP && eval 'exec 9>>$LIVEH; until grep -q $NEVER $LIVEH || ! $(dirname "$HOOK")/_writer-alive.sh $LIVEH; do sleep 3; done'" </dev/null >/dev/null 2>&1 & )
+DEADH=$T/deadlog-harness.txt; echo stub > "$DEADH"; touch -d "2 hours ago" "$DEADH"
+( cd "$CLONE" && setsid nohup bash -c "source $SNAP && eval 'until grep -q $NEVER $DEADH; do sleep 3; done'" </dev/null >/dev/null 2>&1 & )
+sleep 2
+STALE_NOW=$("$HOOK" stale "$CLONE")
+check "a harness-shaped waiter on a live log is NOT reported for its snapshot" no "$(has "$STALE_NOW" "$SNAP")"
+check "...nor for the proof-of-life helper" no "$(has "$STALE_NOW" "_writer-alive.sh")"
+check "...nor at all" no "$(has "$STALE_NOW" "$LIVEH")"
+check "a harness-shaped waiter on a DEAD log is reported, naming the log" yes "$(has "$STALE_NOW" "$DEADH")"
 # GUARD_EDIT_OK: scoped to the fixture clone - unscoped, this cleanup killed EVERY dead-producer waiter on the machine,
 # other sessions' included (found 2026-09-26, when the unscoped census here reported a real session's loop).
 for p in $("$HOOK" stale "$CLONE" | cut -d' ' -f1); do kill -TERM "$p" 2>/dev/null; done

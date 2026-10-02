@@ -19,8 +19,9 @@ to keep walking."*
 - A HOOK AT A LANE'S END - a last leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more - is taken off: the lane
   ends at the vertex before it, or where the leg before first reaches the way the hook was bending back onto.
 
-It runs LAST in the web stage, after every pass that can lay a joint, so no rewrite may break what those passes
-settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
+It runs after the web's sweeps, and once more after `settle_the_web` (feature 308): the settle squares a crossing after
+the first run and can lay a Z across a joint, which the second mends - a Z becomes a T like a fold, or, where no T fits,
+the joint moves back one vertex (`_joint_moved_back`). No rewrite may break what the passes before it settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
 and every farmhouse a way served still has one within `_SERVE_FT` (`keeps_the_web`) - and `commit_lane` still
 refuses anything that splits the web.
 """
@@ -34,7 +35,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
-from .clearance import _HAIRPIN_DEG, _clear_link, _clear_touch
+from .clearance import _HAIRPIN_DEG, _bends_badly, _clear_link, _clear_touch
 from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, _seg_cross, _turn_deg
 from .smooth import _JOG_FT, admits_lane, commit_lane, web_pieces
 from .sweeps import _SERVE_FT
@@ -202,13 +203,17 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         old = [*x, *y[1:]]
-        if _turn_deg(x[-2], x[-1], y[1]) >= _HAIRPIN_DEG:
+        # a fold at the joint - or a Z across it, two clean records one zigzag to the walker (feature 308: the settle squares a
+        # crossing after the pass above ran, `test_no_zigzag_straddles_a_joint`) - becomes a T
+        if _turn_deg(x[-2], x[-1], y[1]) >= _HAIRPIN_DEG or (not _bends_badly(x) and not _bends_badly(y) and _bends_badly(old)):
             # the arriving lane that makes the SHORTER clear link becomes the T's stem
             tees = [(m, t) for m, t in ((i, tee(x, y, hard, walls, water)), (j, tee(y[::-1], x[::-1], hard, walls, water))) if t is not None]
             for m, t in sorted(tees, key=lambda mt: math.dist(mt[1][-2], mt[1][-1])):
                 other = y if m == i else x[::-1]
                 if keeps_the_web(lanes, {i, j}, old, [*t, *other], houses) and commit_lane(lanes, m, _rounded(t), hard, walls, water, s.reink_lane, admits_lane(s)):
                     return True
+            if _turn_deg(x[-2], x[-1], y[1]) < _HAIRPIN_DEG and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
+                return True
             continue
         if lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web")):
             continue  # a cart route and a footpath meeting end to end are two ways
@@ -225,6 +230,41 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         if commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)
             return True
+    return False
+
+
+def moved_back(x: Poly, y: Poly) -> list[tuple[Poly, Poly]]:
+    """The joint of `x` (ending there) and `y` (starting there) moved one vertex back along either: `x` shortened by its last
+    vertex and `y` started from its new end, or `y` shortened by its first and `x` carried on to its new start - the walk
+    without the joint's own vertex. Only a lane of three points or more gives one up."""
+    out: list[tuple[Poly, Poly]] = []
+    if len(x) >= 3:
+        out.append((x[:-1], [x[-2], *y[1:]]))
+    if len(y) >= 3:
+        out.append(([*x[:-1], y[1]], y[1:]))
+    return out
+
+
+def _joint_moved_back(
+    s: Settlement, lanes: list[dict[str, Any]], joint: tuple[int, int, int, int], x: Poly, y: Poly, houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]
+) -> bool:
+    """A Z across a joint no T mends (feature 308, Inashiro: the settle squared a crossing 10 ft from the field spur's end and
+    the link joined there turned back across it) mended by moving the joint one vertex back (`moved_back`), where the new
+    leg is clear, the walk then bends like a path and the web keeps every house it served. Both records are rewritten;
+    the first is put back if the second is refused."""
+    i, ei, j, ej = joint
+    old = [*x, *y[1:]]
+    for nx, ny in moved_back(x, y):
+        if not _clear_link(nx[-1], ny[1], hard, walls, water) or _bends_badly([*nx, *ny[1:]]):
+            continue
+        if not keeps_the_web(lanes, {i, j}, old, [*nx, *ny[1:]], houses):
+            continue
+        was = [list(q) for q in lanes[i]["pts"]]
+        if not commit_lane(lanes, i, _rounded(nx[::-1] if ei == 0 else nx), hard, walls, water, s.reink_lane, admits_lane(s)):
+            continue
+        if commit_lane(lanes, j, _rounded(ny[::-1] if ej == -1 else ny), hard, walls, water, s.reink_lane, admits_lane(s)):
+            return True
+        commit_lane(lanes, i, was, hard, walls, water, s.reink_lane)
     return False
 
 
@@ -277,7 +317,8 @@ def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, f
 
 def center_lane_ends(s: Settlement) -> int:
     """Every lane end that stops on another lane's tread is set where `centered_end` says, record and ink together.
-    Runs after `straighten_joints`, the last pass that moves a lane end. Returns the number of ends moved."""
+    Runs after the first `straighten_joints`; the trims, the bund run-on, the settle and the second joint pass can still
+    move an end, and are not re-centered. Returns the number of ends moved."""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     moved = 0
     for i, ln in enumerate(lanes):

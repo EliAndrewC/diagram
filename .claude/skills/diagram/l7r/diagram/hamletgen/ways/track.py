@@ -80,11 +80,12 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
     It also had a concrete cost the moment the track moved after the houses: a band-derived gateway
     can sit INSIDE the house cloud, and a track starting there has to leave through the settlement.
     One house on the reference hamlet ended up within 14 px of the connector's centerline - the
-    threshold `houses_off_corridors` measures - and no amount of routing around the fabric fixed it,
+    threshold the retired `houses_off_corridors` check measured - and no amount of routing around the fabric fixed it,
     because the route's own start was in the middle of it.
 
-    So: take the cloud's own extent along the seat axes and put the gateway on its DOWNSLOPE edge,
-    clear of the last house. The fallback is the old band point, for the case where no house has been
+    So: where the seating reserved an exit strip, the gateway is ON it - along the strip from its start, past the
+    farthest house and corridor that hangs on it (feature 287 M4b; `gate_on_the_strip`). Where there is none, take the
+    cloud's own extent along the seat axes and put the gateway on its DOWNSLOPE edge, clear of the last house. The fallback is the old band point, for the case where no house has been
     placed yet - which cannot happen in the shipped order, but a helper that assumes its caller is
     the failure mode this file has met repeatedly.
     """
@@ -228,8 +229,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     THE OBLIGATION INVERTS WITH THE ORDER, and this is the half a reorder alone does not supply.
     While a lane was laid FIRST it was a no-build corridor and the HOUSES avoided it. Laid last,
     nothing stops the track being drawn straight through a farmstead - and nothing did: moving the
-    connector and spur after the houses turned the reference hamlet red on
-    `features_do_not_overlap`, `houses_clear_of_lanes` and `houses_off_corridors` in one go.
+    connector and spur after the houses put a track through farmsteads on the reference hamlet - the retired checks
+    `features_do_not_overlap`, `houses_clear_of_lanes` and `houses_off_corridors` all failed in one go.
 
     Feature 126 learned exactly this when it moved the skeleton (see `_lay_skeleton`), and the lesson
     generalizes: reordering the stages is not enough on its own, because every rule that pointed one
@@ -237,9 +238,9 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
 
     THE GAP IS NOT THE WEB'S GAP, and the difference is measured rather than chosen. The web threads
     BETWEEN plots and is barely more than the space between two walls, so `WEB_FABRIC_GAP` is 7 px.
-    A track clipped at 7 px from a footprint still leaves the house CENTER inside the 14 px the gate
-    measures (`houses_off_corridors` counts a hit at `seg_dist(center, lane) < 14`), and it did: 3 of
-    15 houses on the reference hamlet. A connector or a spur also has no business hugging a wall - it
+    A track clipped at 7 px from a footprint still leaves the house CENTER inside 14 px of it (the retired
+    `houses_off_corridors` check counted a hit at `seg_dist(center, lane) < 14`), and it did: 3 of 15 houses on the
+    reference hamlet. A connector or a spur also has no business hugging a wall - it
     runs past the settlement, not through its gaps.
 
     ROUTE, then CLIP, and both are needed. `_route` threads the gap - a trodden way goes ROUND a wall
@@ -363,13 +364,15 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     is how the connector and spur were left reserving ground before a single house existed.
 
     Split, the dependency and the drawing go to opposite sides of the houses. Nothing here calls
-    `s.lane`, and `tests/hamletgen/test_ways.py` asserts it: no lane and no corridor may exist when
-    this returns.
+    `s.lane`: no lane and no corridor exists when this returns. Before the seat is chosen, the brook's fords are
+    opened and the cost every later route pays to cross the brook is set.
 
     Steps:
-        l7r.diagram.hamletgen.cluster.seat_cluster
+        l7r.diagram.hamletgen.ways.checks.brook_fords
+        l7r.diagram.hamletgen.ways.route.set_crossing
         l7r.diagram.sitegen.geom.crop_polys
         l7r.diagram.settlement.Settlement.toe_band
+        l7r.diagram.hamletgen.cluster.seat_cluster
     """
     drain = None
     for ditch in s.M.get("field_ditches", []):
@@ -440,8 +443,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
 
     ANY. There is no exogenous class and no connector exception. A road can predate a settlement in
     the world, but this generator does not import one - it DRAWS one, and a lane drawn before the
-    houses registers a no-build corridor (`settlement/water_ways.py:514`) that `_fits` then refuses
-    seats against (`settlement/houses.py:309-311`). It takes ground the houses cannot have, which is
+    houses registers a no-build corridor (`settlement/water_ways/lanes.py`, `Settlement.lane`) that the seating then
+    refuses seats against. It takes ground the houses cannot have, which is
     exactly what the GM reported: *"the lanes being there was the thing that was making it difficult
     to lay out the farmhouses."*
 
@@ -460,7 +463,6 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.track.connector_track
         l7r.diagram.hamletgen.ways.track._cluster_gateway
         l7r.diagram.hamletgen.ways.track._thread_the_fabric
-        l7r.diagram.hamletgen.cluster._fork_spur
         l7r.diagram.hamletgen.ways.bund.tip_onto_the_bund
         l7r.diagram.hamletgen.ways.clearance.route_around
         l7r.diagram.hamletgen.ways.clearance.clip_to_clear
@@ -702,9 +704,10 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
 
     Bearings are tried outward from "away from the field, leaning downslope" - the direction a real
     track leaves by, since the wider world is downstream and the paddy is not walkable - and the
-    first that reaches the frame without crossing the field envelope wins. Sweeping alternate sides
-    at growing angles keeps the chosen bearing as close to the ideal as the geometry allows instead
-    of jumping to whatever happens to be clear.
+    first that is clean of wet ground, the steadings and every crop, pond and water wins. Sweeping alternate sides
+    at growing angles (41 bearings) keeps the chosen bearing as close to the ideal as the geometry allows instead
+    of jumping to whatever happens to be clear. Where none is clean, the least-bad bearing is kept only where it is
+    dry and clear of every steading; otherwise the dry exit's flood fill finds the way out (`connector_dry_exit`).
 
     The track is drawn PAST the canvas edge, not up to it: the gate wants an endpoint at the frame,
     and the crop is set later from the hard features, so a track that overshoots is trimmed by the

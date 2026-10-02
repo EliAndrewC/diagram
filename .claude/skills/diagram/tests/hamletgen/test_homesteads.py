@@ -16,6 +16,14 @@ from l7r.diagram.settlement import Settlement
 from ._builders import a_plan
 
 
+def _the_passes_the_dispersed_form_keeps(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The front row, the ranks, the rescue and the exhaustive pass, which the DISPERSED form keeps (feature 308, the spec's
+    round-1 rulings), run on this nucleated toy as they ran before the nucleated cluster was grown (`growth.grows`)."""
+    from l7r.diagram.hamletgen.homesteads import stages as _st
+
+    monkeypatch.setattr(_st, "grows", lambda plan: False)
+
+
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
 def test_wells_are_one_per_six_households_or_so(households: int, wells: int) -> None:
     """Inside `wells_sized_to_population`'s 2-20 households-per-well band at hamlet scale."""
@@ -81,6 +89,23 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
     assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)], "...but a pocket is always drawn"  # type: ignore[arg-type]
 
 
+def test_a_lattice_well_keeps_170_px_off_a_pocket_well() -> None:
+    """`wells_not_clustered`: with a household's pocket well standing, the lattice's seat 117 px from it - one the engine
+    would allow - is passed over, and no second well is dug near the first. Asserted directly since the pool's maps
+    stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
+    from types import SimpleNamespace
+
+    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0)  # two wells wanted
+    east = (1110.0, 1000.0)
+    pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
+    wells: list[tuple[float, float]] = []
+    fake = _only_seat(*east)
+    fake.well = lambda x, y: wells.append((x, y))  # type: ignore[attr-defined]
+    fake._crop_boxes = lambda city=False: []  # type: ignore[attr-defined]
+    assert math.hypot(east[0] - 1000.0, east[1] - 1040.0) < 170.0
+    assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)]  # type: ignore[arg-type]
+
+
 def test_the_well_gap_reads_the_turned_wall_and_passes_over_a_derelict() -> None:
     """The predicate measures each dwelling on its drawn quad (a house turned a quarter lies along the other axis) and
     reads no abandoned house as a dwelling; with no dwelling at all, no well stands among any."""
@@ -112,6 +137,20 @@ def test_strip_blocked_refuses_the_canvas_edge_a_crossing_lane_and_a_drawn_crown
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, lane) is True
     s.M["tree_crowns"] = [500.0, 500.0, 12.0]
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a crown drawn two stages earlier"
+
+
+def test_strip_blocked_refuses_a_well_or_a_shed_seated_before_it() -> None:
+    """The T49 arm: a wellhead (by its radius) or a shed (by its box) within 6 ft of the strip blocks it - asserted directly
+    since the pool's maps stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    s.M["wells"] = [{"x": 520.0, "y": 500.0, "r": 4.0}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a wellhead at the strip's end"
+    s.M["wells"] = []
+    s.M["farm_sheds"] = [{"x": 500.0, "y": 515.0, "w": 20.0, "h": 12.0}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a shed overlapping its long side"
+    s.M["farm_sheds"] = [{"x": 500.0, "y": 560.0, "w": 20.0, "h": 12.0}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False, "a shed well clear"
 
 
 def test_farmstead_fixtures_on_a_houseless_map_place_nothing() -> None:
@@ -290,6 +329,7 @@ def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatc
     runs up the back of the toy's middle house, whose wood then spreads to its flanks and takes a row seat - measured,
     the row seats 4 - and the row's count, not the wood, is under test (`tests/settlement/test_wood_share.py` is the
     wood's)."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads import stages as st
@@ -311,9 +351,10 @@ def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatc
     assert len(s.M["houses"]) == 10 and ss["front"] == cap and ss["rounds"] >= 1
 
 
-def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds() -> None:
+def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds(monkeypatch: pytest.MonkeyPatch) -> None:
     """The rescue rounds (five to seven) run only while the quota is short after four rounds of ranks; their cloud
     seeds a wider band and skips the seeds outside it. Twenty households on the toy's square field is such a quota."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
     s, plan = _toy_hamlet(20, east=True)
@@ -361,6 +402,7 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
     behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
     40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
     left; the houses past the front row's own count can therefore only have come from them."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.consts import BUNDLE_PITCH, HOMESTEAD_GROUND_FT
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads import stages as _stages
@@ -407,6 +449,7 @@ def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_
     """`stage_homesteads` (feature 261 D22): an `alleys` hamlet's rank seats take the depth jitter, so the ranks behind the
     front row are not all on one line; a `back_lane` hamlet seated the same way keeps its ranks exact. Both seat every
     household."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
     # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
@@ -451,6 +494,7 @@ def test_every_seat_the_prescreens_refuse_the_fit_test_refuses(scenario: str, si
     (a wrongly refused seat can be hidden by an equally good one beside it). This asks the claim itself. The nucleated path
     has no pre-screen but the free-ground cells, whose exactness is `test_every_surely_taken_cell_is_ground_the_fit_test_refuses`
     and `test_a_side_is_not_dropped_for_ground_the_loop_never_judges`."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.settlement import Settlement
 
@@ -608,6 +652,7 @@ def _no_tree(monkeypatch: pytest.MonkeyPatch) -> None:
     the seating's COUNTS: on the toy's tight square band it refuses a corridor meeting its host at a needle or crossing a
     neighbor's (measured on the twelve-household toy: 65 needles, 3 crossings) and so moves the counts, which the tree's own
     tests (`tests/hamletgen/ways/test_tree.py`, `tests/settlement/test_access.py`) hold; the cohort seats as before."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     from l7r.diagram.hamletgen.ways import tree as tree_mod
 
     monkeypatch.setattr(tree_mod, "seating_judge", lambda s: lambda corridor, geom: True)

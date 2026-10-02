@@ -34,13 +34,14 @@ from itertools import chain
 from typing import Any
 
 from ..farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, PIT_FT, kura_rect
+from .tree_shade import crown_shades
 
 Rect = tuple[float, float, float, float]  # (center x, center y, width, height), the house's unturned frame
 
 #: The order the kinds are laid in: the retirement house first - a second roof of the family, off the back wall or a flank
 #: (269 B42), the largest part after the kura; then the two whose rule IS the seat - the bath room on a wall of the house,
 #: the wood shed a ken off a wall of the steading - so the walls are theirs before the free-standing kinds take the ground
-#: by them; then the late placer's order; the persimmon last - its crown may overhang the yard and the beds, never a roof.
+#: by them; then the late placer's order; the persimmon last - its crown over no roof and out of the yard's and beds' sun.
 FIXTURE_ORDER = ("retirement", "bath", "woodpile", "privy", "manure", "coop", "shrine", "persimmon")
 
 WALL_GAP_FT = 3.5  # a fixture's edge off the wall or part it stands by: the review measured -0.3 ft at 3.0 against the drawn wall
@@ -85,6 +86,7 @@ SHRINE_CORNER_FT = 14.0  # the household shrine a plot corner off the house's co
 TRUNK_FT = 4.0  # the persimmon's trunk box
 CANOPY_PAD = 0.6  # the crown's placement clearance off a roof (`Settlement.CANOPY_PAD`)
 PERSIMMON_STEPS_FT = (10.0, 20.0)  # the persimmon's ring a step out, and two
+SHADE_MARGIN_FT = 2.0  # the seat stricter than the map's check by a hair, as the sun corridor's placer is (`fit._sun_corridor_ok`)
 
 SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
 CORNER_SIGNS = {"NW": (-1.0, -1.0), "NE": (1.0, -1.0), "SW": (-1.0, 1.0)}
@@ -230,10 +232,14 @@ def lay_fixtures(
     px: Callable[[float], float],
     annex: Rect | None = None,
     notes: dict[str, Any] | None = None,
+    shade: float = 0.0,
+    turns: Sequence[float] = (0.0,),
 ) -> dict[str, Rect]:
     """Each of `kinds` laid beside the parts already laid, in the house's unturned frame centered on it: `{kind: (x, y, w,
     h)}`, the box AS LAID (a flank seat turned to lie along its flank). `roofs` are the built parts - the house first, the
-    kura, the byre, the well-house - and `ground` the open ones, the yard and the beds, which a persimmon's crown may shade;
+    kura, the byre, the well-house - and `ground` the open ones, the yard and the beds, whose sun a persimmon's crown keeps
+    out of: `shade` px east, west and south of each (`PERSIMMON_SHADE_FT`), at every rake in `turns` (degrees - the house
+    is turned after its parts are laid, and the sun is not);
     `yard` is the threshing yard, `kura` whether the house keeps one on its north wall, `annex` the byre where the household
     keeps one (its walls take a wood shed too); `roll` the household's position roll (`Settlement._hjit` at its seat).
     `notes`, where given, receives what the drawing needs beyond the box: each rolled size in feet (`ft`, `fixture_ft`) and
@@ -250,7 +256,7 @@ def lay_fixtures(
         w, d = px(ft[kind][0]), px(ft[kind][1])
         u = roll(SALT[kind] + 0.5)
         if kind == "persimmon":
-            seat = _persimmon(hw, hh, yard, taken, built, u < forms.persimmon_front, px)
+            seat = _persimmon(hw, hh, taken, built, u < forms.persimmon_front, px, _sunlit(ground, shade, turns))
         elif kind == "woodpile":
             walls = steading_rects(hw, hh, "N" if kura else None, px(1.0)) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
             seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
@@ -432,22 +438,57 @@ def _seats(
     return [corner[first]] + [corner[k] for k, _ in SHRINE_CORNERS if k != first]
 
 
-def _persimmon(hw: float, hh: float, yard: Rect | None, taken: Sequence[Rect], roofs: Sequence[Rect], front_first: bool, px: Callable[[float], float]) -> Rect:
-    """The yard persimmon (269 B14): the dooryard in front - at the work yard's side edges, then the front corners and
-    straight out - or behind the house, rolled against the hamlet's front share; its trunk clear of every part, its crown
-    over no roof (it may shade the yard and the beds). Stepped out until it stands."""
+#: The rakes a persimmon's seat is tested at, every `SUN_TURN_STEP_DEG` across the map's range: the sun ground is the
+#: world's, the seat the house's unturned frame, and the house is turned after its template is laid (`_bundle_geom`).
+SUN_TURN_STEP_DEG = 5.0
+
+
+def sun_turns(lo: float, hi: float) -> tuple[float, ...]:
+    """The rakes from `lo` to `hi` degrees, both ends and every `SUN_TURN_STEP_DEG` between."""
+    n = max(1, math.ceil((hi - lo) / SUN_TURN_STEP_DEG))
+    return tuple(lo + (hi - lo) * k / n for k in range(n + 1))
+
+
+def _sunlit(ground: Sequence[Rect], shade: float, turns: Sequence[float]) -> Callable[[float, float, float], bool]:
+    """Is a crown of radius r at (x, y) clear of every plot's sun ground at every rake? Each rake turns the crown and the
+    plots together about the house's center, the plots' boxes as `turned_box` draws them, and asks `crown_shades` in the
+    world's axes, where the sun is."""
+    if shade <= 0.0 or not ground:
+        return lambda x, y, r: True
+    frames = []
+    for t in turns:
+        th = math.radians(t)
+        c, s, ac, as_ = math.cos(th), math.sin(th), abs(math.cos(th)), abs(math.sin(th))
+        frames.append((c, s, [(q[0] * c - q[1] * s, q[0] * s + q[1] * c, q[2] * ac + q[3] * as_, q[2] * as_ + q[3] * ac) for q in ground]))
+
+    def clear(x: float, y: float, r: float) -> bool:
+        return not any(crown_shades(x * c - y * s, x * s + y * c, r, q, shade) for c, s, plots in frames for q in plots)
+
+    return clear
+
+
+def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect], front_first: bool, px: Callable[[float], float], sunlit: Callable[[float, float, float], bool]) -> Rect:
+    """The yard persimmon (269 B14): the dooryard in front - the front corners and straight out - or behind the house,
+    rolled against the hamlet's front share; its trunk clear of every part, its crown over no roof and out of every yard's
+    and bed's sun (`sunlit`, GM 2026-10-02), so a farm that dries its grain in a front yard keeps its persimmon behind the
+    house. Stepped out until it stands."""
     r = px(PERSIMMON_CROWN_FT)
     trunk = px(TRUNK_FT)
     reach = math.hypot(hw / 2, hh / 2) + r + CANOPY_PAD + 1.0
     front = [(sx * reach * 0.75, reach * 0.75) for sx in (1.0, -1.0)] + [(0.0, reach)]
     back = [(sx * reach * 0.75, -reach * 0.75) for sx in (1.0, -1.0)] + [(0.0, -reach)]
-    edge = [] if yard is None else [(yard[0] + sx * (yard[2] / 2 + trunk / 2 + 3.0), yard[1] + oy) for oy in (0.0, yard[3] / 2) for sx in (1.0, -1.0)]
     ring = front + back if front_first else back + front
-    pts = (edge + ring) if front_first else (ring + edge)
     steps = [px(s) for s in PERSIMMON_STEPS_FT] + [px(STEP_FT) * k + px(PERSIMMON_STEPS_FT[-1]) for k in range(1, OUT_STEPS + 1)]
     paced = ((lx * (reach + st) / reach, ly * (reach + st) / reach) for st in steps for lx, ly in ring)
-    seat = next(((lx, ly, 2 * r, 2 * r) for lx, ly in chain(pts, paced) if clears((lx, ly, trunk, trunk), taken, 2.0) and clears((lx, ly, 2 * r, 2 * r), roofs, CANOPY_PAD)), None)
-    assert seat is not None, "the persimmon's paces reach free ground"  # noqa: S101 - finite parts, 200 ft of paces
+    seat = next(
+        (
+            (lx, ly, 2 * r, 2 * r)
+            for lx, ly in chain(ring, paced)
+            if clears((lx, ly, trunk, trunk), taken, 2.0) and clears((lx, ly, 2 * r, 2 * r), roofs, CANOPY_PAD) and sunlit(lx, ly, r + px(SHADE_MARGIN_FT))
+        ),
+        None,
+    )
+    assert seat is not None, "the persimmon's paces reach free ground"  # noqa: S101 - finite parts, 200 ft of paces behind the house
     return seat
 
 

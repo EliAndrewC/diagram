@@ -15,6 +15,14 @@ from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT, within_field_reac
 from tests.hamletgen._builders import CROWN, a_plan
 
 
+def _the_passes_the_dispersed_form_keeps(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The front row, the ranks, the rescue and the exhaustive pass, which the DISPERSED form keeps (feature 308, the spec's
+    round-1 rulings), run on this nucleated toy as they ran before the nucleated cluster was grown (`growth.grows`)."""
+    from l7r.diagram.hamletgen.homesteads import stages as _st
+
+    monkeypatch.setattr(_st, "grows", lambda plan: False)
+
+
 def _toy(households: int) -> tuple[Settlement, hg.SitePlan]:
     plan = a_plan(households=households)
     plan.envelope = list(CROWN)  # three wind-facing margins: a ladder to climb (the square has one)
@@ -258,6 +266,7 @@ def test_the_cloud_alone_seats_the_hamlet_when_the_rows_offer_nothing(monkeypatc
     """Feature 287, homes wave 5 (the soak's `test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing`,
     on a constructed site): with the front row and the frontage both silent, the ranks and the cloud behind them seat every
     household, and the record says the cloud did."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     s, plan = _toy(10)
     monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: [])
     stages.stage_homesteads(s, plan)
@@ -282,6 +291,7 @@ def test_no_writer_of_a_household_grain_plot_is_left_in_the_engine() -> None:
 def test_a_rank_round_stops_offering_seats_once_the_quota_is_seated(monkeypatch: pytest.MonkeyPatch) -> None:
     """The rank rounds offer many seats; once every household has a house the rest of the round goes unoffered - with a
     placer that seats every seat it is offered, the front row silent, the first round fills the quota part-way through."""
+    _the_passes_the_dispersed_form_keeps(monkeypatch)
     s, plan = _toy(10)
     monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: [])
     offered: list[tuple[float, float]] = []

@@ -25,6 +25,7 @@ from ..plan import SitePlan, _roll, band_extent
 from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
+from .growth import grow_the_margin, grows
 from .holds import hold_laid_parts
 from .region import SeatRegion, seat_window
 from .retirement import retirement_houses, retirement_quota
@@ -124,34 +125,34 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     positioned from where these houses actually landed.
 
     The ground is asked ONCE. Before the first seat, the site boundary is computed from everything the map holds:
-    the paddy's outline as a few facing chords, everything else - the hem, the marshes, the ponds, the reed toe that
-    will be drawn later, the no-build ground - as one outline with holes, and the water courses and registered
-    corridors as segments. A candidate rectangle is judged at nine points against those and nothing else.
+    the paddy's outline as a few facing chords, everything else - the hem, the marshes, the ponds, the dry plots, the reed
+    toe that will be drawn later, the no-build ground - as one outline with holes, and the water courses and registered
+    corridors as segments. It is rasterized once over the ground within the field's reach (`FreeGround`), so a seat on
+    ground a cell surely refuses is refused by one lookup; a candidate rectangle is judged at nine points against the
+    boundary only where its cells are not already decided. The plate shows the window the growth offers seats in and the
+    ground it refuses there.
 
-    The seats are proposed where a house can stand. The FRONT ROW walks the paddy's chords at the bundle pitch, each
-    seat at a computed standoff - the wall rule's distance plus the reach of the homestead's core (the house, its
-    yard, its kura) toward that chord - pushed once further where the boundary's outline lies beyond the chord (a
-    dike's bank), and takes about the square root of (households times the rolled shape's aspect) houses, so a
-    crescent fronts the field with more of its houses than a round cluster does. The RANKS BEHIND are proposed behind
-    every standing house, one homestead's depth further from the field (and the yard's sun corridor where the ranks
-    climb north), in a brick pattern; only when a round seats nothing behind does the cluster grow along the field,
-    by the seats a pitch beyond each end of the rank. Only while the quota is still short after four rounds do the RESCUE rounds run: the old random cloud
-    over a wider band, seeded a third of a pitch apart, spending guesses on purpose. A re-roll after a stranded
-    farmhouse draws a different cloud.
+    A NUCLEATED CLUSTER IS GROWN (feature 308, `growth.py`): its first house on the free ground nearest the seat's center,
+    within the field's reach (`FIELD_REACH_FT`); each next house offered from a house already standing, in a ring of
+    directions round it, at the distance where the two homesteads' footprints part - the envelope, the woodlot, the path
+    out, and to the south the sun its yard and beds are owed - jittered by a hash of the standing house's position; wider
+    rings while households are left. A grown house's path to the access tree is laid as it is placed, straight where one
+    clears and routed round what stands where none does (`settlement/rolling/route.py`). A DISPERSED hamlet keeps the older
+    passes - the front row along the paddy's chords, the ranks behind in a brick pattern, the rescue cloud, then the
+    exhaustive pass - and a row village seats its rows (`rows.seat_rows`); neither runs on this map, so neither is a step here.
 
-    Each seat is one placer call, and a call tests one rectangle first: the box around the homestead's
-    configurations, against the boundary and the placed boxes; where that is refused, each configuration's own box
-    in turn, with at most one computed move away from a single overlapping neighbor. The parts - the garden's side,
-    its beds, the kura - are laid inside a box the ground admitted, and the rules that read the parts (the wall rule,
-    the eave gap, the sun corridors) are asked once. No spiral of offsets, no sliding: a seat that does not fit is
-    refused and the next seat is offered. `meta.seat_search` counts every guess - candidates, placer calls,
-    rectangles, part layouts, the front row's share and the rounds - so the search is measured, never assumed.
+    A nucleated seat is one placer call (`_place_bundle_nucleated`), and a call tests one rectangle first: the box around
+    the homestead's configurations, against the boundary and the placed boxes; where that is refused, each configuration's
+    own box in turn, with at most one computed move away from a single overlapping neighbor - never nearer a grown seat's
+    source than the growth's distance. The parts - the garden's side, its beds, the kura, the fixtures - are laid inside a
+    box the ground admitted, and the rules that read the parts are asked once (`_parts_fit`). A seat that does not fit is
+    refused and the next seat is offered. (The dispersed and row forms keep the spiral placer, `_place_bundle_dispersed`.)
+    `meta.seat_search` counts every guess - candidates, placer calls, rectangles, part layouts, the growth's offers - so the
+    search is measured.
 
-    `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
-    depicts essentially every household (research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html) -
-    and the stage aims at one apiece: EVERY declared household is seated, or the site is refused (feature 287, homes
-    H14 and plan D2; `seat_every_household`) - the exhaustive pass over the ground within reach, then the next margin,
-    never a shortfall shipped and never a whole-map re-roll.
+    A to-scale map depicts essentially every household (research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html):
+    EVERY declared household is seated, or the site is refused (feature 287, homes H14 and plan D2; `seat_every_household`)
+    - the growth's widest rings, then the next margin - never a shortfall shipped and never a whole-map re-roll.
 
     Steps:
         l7r.diagram.hamletgen.homesteads.stages.seat_every_household
@@ -159,20 +160,21 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.homesteads.boundary.site_boundary
         l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares
         l7r.diagram.settlement.rolling.access.start_tree
+        l7r.diagram.hamletgen.homesteads.stages.reserve_field_corridor
+        l7r.diagram.hamletgen.homesteads.growth.grow_the_margin
         l7r.diagram.settlement.rolling.lot.household_parts
-        l7r.diagram.hamletgen.homesteads.seats.front_row
-        l7r.diagram.hamletgen.homesteads.seats._front_row_from_chains
-        l7r.diagram.hamletgen.homesteads.rows.seat_rows
         l7r.diagram.settlement.Settlement.try_place
         l7r.diagram.settlement.Settlement._place_bundle_nucleated
         l7r.diagram.settlement.Settlement._bundle_envelope
         l7r.diagram.settlement.Settlement._envelope_blocked
         l7r.diagram.settlement.Settlement._parts_fit
         l7r.diagram.settlement.rolling.access.access_corridor
+        l7r.diagram.settlement.rolling.route.routed_corridors
         l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share
         l7r.diagram.settlement.rolling.lot.record_parts
         l7r.diagram.settlement.rolling.access.reserve
-        l7r.diagram.settlement.Settlement.cluster_seeds
+        l7r.diagram.hamletgen.homesteads.stages.declare_cluster_shape
+        l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating
         l7r.diagram.settlement.Settlement.farmsteads
     """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
@@ -259,7 +261,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # ...and this stays a SEPARATE record, keyed on what actually seated the houses rather than on
     # whether the shape got stamped. It used to be derived from the presence of `cluster_shape`,
     # which stopped meaning anything the moment the shape was always declared.
-    s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
+    s.M["meta"]["cluster_seeding"] = "grown" if "grow_took" in s._seat_search else "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
     s._household_bamboo = plan.bamboo in ("homestead", "both")  # type: ignore[attr-defined]  # a grove farm draws the bamboo it rolls (feature 291)
     plan.placed = s.farmsteads()
     # A ROW VILLAGE'S FAR-ROW HOLDINGS, reserved at seating (feature 291 plan D16), drawn now - before the track and the web,
@@ -332,13 +334,15 @@ def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, s
 def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Every declared household seated, or the site refused (feature 287, homes H14 and plan D2).
 
-    The chosen margin is seated first (`_seat_households`, whose last round is the exhaustive pass). Where even that
-    leaves a household without a house, the ground within reach of this margin is full, and the houses it seated are
-    taken back and the next margin of `seat_cluster`'s ranking is seated instead (`margin_ladder`; on a polder only the
-    margins on the chosen flank, the waterward fringe being drawn already). The seating kept is the one pass that
-    seated everyone - no second roll of anything. Past the last margin the site is refused, naming it: `SiteRefused`,
-    raised HERE rather than at `stage_seat` where plan D2 places it, because a margin's capacity is known only by
-    seating it. `meta.seat_margin` records which rung seated the hamlet (1: the chosen margin)."""
+    The chosen margin is seated first (`_seat_households`: a nucleated cluster grown, `growth.grow_the_margin`; a
+    dispersed hamlet's last round the exhaustive pass; a row village's rows). Where that leaves a household without a
+    house - the growth's widest rings offer no more seats, or the exhaustive pass finds the ground full - the houses it
+    seated are taken back and the next margin of `seat_cluster`'s ranking is seated instead (`margin_ladder`; on a polder
+    only the margins on the chosen flank, the waterward fringe being drawn already), and so is a seating whose houses draw
+    no cluster shape's band (`drawn_in_band`). The seating kept is the one pass that seated everyone - no second roll of
+    anything. Past the last margin the site is refused, naming it: `SiteRefused`, raised HERE rather than at `stage_seat`
+    where plan D2 places it, because a margin's capacity is known only by seating it. A margin with no dry way out is
+    skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin)."""
     want = plan.spec.households
     mark = seating_mark(s)
     placed, cloud = _seat_households(s, plan)
@@ -459,9 +463,10 @@ def reserve_field_corridor(s: Settlement) -> bool:
 
 
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
-    """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the front row, the ranks, the
-    rescue rounds, then the exhaustive pass over the legal ground within reach (homes H14). Returns `(placed, the
-    cloud's share)`; the boundary stays installed for the stage to take down."""
+    """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
+    corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
+    the ranks, the rescue rounds and the exhaustive pass over the legal ground within reach (homes H14), or - a row
+    village - its rows. Returns `(placed, the cloud's share)`; the boundary stays installed for the stage to take down."""
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
@@ -584,7 +589,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
         if _out is None:
             return 0, 0
-        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length)
+        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length).routed = grows(plan)  # a grown house's path may be routed (308 D3)
         if not reserve_field_corridor(s):
             return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
@@ -650,6 +655,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # CONNECTOR, which `stage_track` lays only after the houses, so at this moment it offers nothing. A linear hamlet's row
     # takes every household it can seat along its field, and the track is then laid along the row (`stage_track`).
     _linear = plan.settlement_form == "linear"
+    # A NUCLEATED CLUSTER IS GROWN (feature 308, plan D1-D2; FR-007): no front row, no ranks, no exhaustive pass - `growth.py`
+    _grown = grows(plan)
     _rows_seated = False  # a row village whose streets were planned takes no ranks (feature 291 plan D15)
     if _linear:
         front_cap = plan.spec.households
@@ -754,7 +761,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         placed += seat_rows(s, plan, _g0["bbox"])
         front_cap = placed
         _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): a margin whose streets cannot hold every farm is left for the next
-    for _rung in (0,):
+    for _rung in () if _grown else (0,):
         for (fx, fy), _n in front_row(
             plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw
         ):
@@ -833,7 +840,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
     _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
     for attempt in range(7):
-        if placed >= plan.spec.households or _rows_seated:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
+        if placed >= plan.spec.households or _rows_seated or _grown:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
             break
         s._seat_search["rounds"] = attempt + 1  # the rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
@@ -944,7 +951,12 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # THE EXHAUSTIVE PASS (feature 287, homes H14): while the quota is short, every free point of the legal ground within
     # the field's reach, a third of a pitch apart, is offered to the same placer - cohort seed 32 seated 13 of 14 when the
     # rounds above alone decided.
-    if not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
+    if _grown:
+        # ...and where it may offer a seat, recorded with the boundary for the walk-through's plate: within `bound` of the seat and
+        # `FIELD_REACH_FT` of the field's chords (`within_field_reach`), as (cx, cy, bound, reach)
+        s.M["site_boundary"]["window"] = [round(float(seat["cx"]), 1), round(float(seat["cy"]), 1), round(bound, 1), round(s.px(FIELD_REACH_FT), 1)]
+        placed = grow_the_margin(s, plan, placed, bound, _house_max)
+    elif not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
         placed = seat_the_rest(s, plan, placed)
     return placed, _cloud_placed
 
@@ -953,18 +965,16 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
 
 
 def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
-    """Yards, gardens, byres, wells, sheds.
+    """Byres, wells, the farmstead fixtures and the retirement houses.
 
-    The rest of each steading, plus the shared fixtures. Kept as its own stage after the houses because several
-    of them are sited RELATIVE to a house that must already exist - a threshing yard south of its own farmhouse,
-    a byre off the frontage, a well between steadings.
+    The rest of each steading, plus the shared fixtures (the yards and gardens were drawn with their houses, stage 06).
+    Kept as its own stage after the houses because each is drawn against a house that must already exist - a byre at
+    its house, a well between steadings, a privy by its yard.
 
-    Communal wells and shared draft byres, dropped into the courtyards the homesteads left.
-
-    AFTER the houses (they slot into the gaps the final layout produced, which is a thing only the
-    finished layout knows) and BEFORE the grove (whose canopy then skips them). Both are sized off
-    the houses that actually landed, not off the declared household count: a byre is roughly one per
-    four or five households, and the wells cover the cluster's real extent.
+    The wells and byres the seating reserved - each household's stall and well pocket in its bundle, the shared sheds'
+    pockets before any house - are drawn here, and the communal wells beyond the pockets are seated among the houses.
+    Their counts are the declared households' (`well_target`, `commons_byre_target`), which every seating now meets.
+    AFTER the houses and BEFORE the grove (whose canopy then skips them).
 
     Steps:
         l7r.diagram.hamletgen.homesteads.wells.place_wells

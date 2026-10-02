@@ -22,11 +22,18 @@ the pair is current; the only extra guard needed is "png exists", which catches 
 present-but-corrupted png is the one thing caching cannot heal - an accepted tradeoff for the
 short-circuit (a hand-deleted png still self-heals; delete it to force a rerun). (GM 2026-07-22.)
 
-Mode A magistracy plans are exempt: their svg is tracked SOURCE (only the png is gitignored), so
-regenerating must reproduce it byte-for-byte and it is never stamped (a comment would dirty a
-tracked file). They are simply always re-run - there are few, and the point is the gitignored png.
-The Mode A/B split is read from git itself (`git check-ignore` on the predicted svg), so it tracks
-the .gitignore's source/derived boundary automatically instead of duplicating it here.
+Mode A plans (the hand-drawn sheets) are stamped BESIDE the svg, not in it: their svg is tracked
+SOURCE (only the png and page are gitignored), so a comment in it would dirty a tracked file. Their
+stamp is a gitignored sidecar, `.<stem>.render-cache`, holding the map's input hash with the sheet's
+own bytes folded in - for a sheet the svg is the INPUT the gen reads. They were simply always re-run
+until 2026-10-02, when four of them cost 17-28 s on every render-sync, and render-sync ran inside the
+prompt hook of every session under one lock: three sessions queued past the hook's 60 s and it was
+killed. The Mode A/B split is read from git itself (`git check-ignore` on the predicted svg), so it
+tracks the .gitignore's source/derived boundary automatically instead of duplicating it here.
+
+A map's PAGE also shows the heading of every research question its classes name (`sources.
+research_questions`), so the fingerprint a stamp is taken under covers the questions' headings too
+(`record_headings_fingerprint`) - their headings only, so a body edit to the record re-renders nothing.
 """
 
 from __future__ import annotations
@@ -47,7 +54,7 @@ SKILL_DIR = os.path.abspath(
 
 # Bump to force a one-time full refresh after any change to how the stamp is computed: an old
 # stamp computed under a different version can never equal a new input_hash, so every map reruns.
-STAMP_ALGO_VERSION = b"v1"
+STAMP_ALGO_VERSION = b"v2"  # v2 (2026-10-02): the record's headings and the engine's data files joined the fingerprint
 
 # The stamp sits right after the "<svg ...>" opening tag; optional leading newline so a re-stamp
 # strips the whole line cleanly rather than leaving a blank one.
@@ -99,13 +106,41 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
             # each asset into the entry's data files and hashes them - spec 187 D3.)
             # EVERY file in interactive/assets/ is an asset (feature 207): the stylesheet and script, and the
             # page's content files (`*.json`) - a glossary edit must regenerate the pages on landing too.
+            # THE ENGINE'S DATA FILES TOO (2026-10-02): `buildings/types.json` decides the building kinds a sheet's page
+            # writes up (`interactive/compound_kinds`), and nothing hashed it while every sheet re-ran each time anyway.
+            # Every `.json`, `.css` and `.js` under `l7r/` - a superset again (the pool index's own files ride along).
             is_asset = os.path.basename(dirpath) == "assets" and os.path.basename(os.path.dirname(dirpath)) == "interactive"
+            is_asset = is_asset or (rel_dir.split(os.sep)[0] == "l7r" and name.endswith((".json", ".css", ".js")))
             if not is_asset and (not name.endswith(".py") or name.startswith("test_") or name == os.path.basename(__file__)):
                 continue
             rel = os.path.normpath(os.path.join(rel_dir, name))
             with open(os.path.join(dirpath, name), "rb") as fh:
                 parts.append(rel.encode() + b"\0" + _sha256(fh.read()).encode())
     return _sha256(b"\n".join(parts))
+
+
+# A question's heading: the first heading tag of its file, comments stripped - what `sources.research_questions` shows.
+_HEADING_RE = re.compile(r"<h([1-6])\b[^>]*>.*?</h\1>", re.S)
+_COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
+
+
+def record_headings_fingerprint(skill_dir: str = SKILL_DIR) -> str:
+    """Hash of every research question's file name and heading (id and text): the part of the record a map's page
+    shows. A tree with no record (a test fixture) hashes the empty list."""
+    qdir = os.path.join(skill_dir, "research", "questions")
+    parts: list[bytes] = []
+    for name in sorted(os.listdir(qdir)) if os.path.isdir(qdir) else []:
+        if not name.endswith(".html"):
+            continue
+        with open(os.path.join(qdir, name), "rb") as fh:
+            m = _HEADING_RE.search(_COMMENT_RE.sub("", fh.read().decode("utf-8", "replace")))
+        parts.append(name.encode() + b"\0" + (m.group(0).encode() if m else b""))
+    return _sha256(b"\n".join(parts))
+
+
+def render_fingerprint(skill_dir: str = SKILL_DIR) -> str:
+    """What every map's stamp is taken under: the engine and the record's headings."""
+    return _sha256((engine_fingerprint(skill_dir) + record_headings_fingerprint(skill_dir)).encode())
 
 
 def input_hash(gen_path: str, fingerprint: str) -> str:
@@ -160,6 +195,35 @@ def _is_fresh(gen_path: str, fingerprint: str) -> bool:
     return read_stamp(svg) == input_hash(gen_path, fingerprint)
 
 
+def _sidecar(gen_path: str) -> str:
+    """A Mode A sheet's stamp file: `.<stem>.render-cache` beside the gen, gitignored."""
+    d, base = os.path.split(gen_path[: -len(".gen.py")])
+    return os.path.join(d, "." + base + ".render-cache")
+
+
+def sheet_hash(gen_path: str, fingerprint: str) -> str | None:
+    """A Mode A sheet's stamp value: its input hash with the tracked svg's bytes folded in (the svg is what the gen
+    reads). None when the svg is not there."""
+    try:
+        with open(_predicted_svg(gen_path), "rb") as fh:
+            svg_h = _sha256(fh.read())
+    except FileNotFoundError:
+        return None
+    return _sha256(input_hash(gen_path, fingerprint).encode() + b"\0" + svg_h.encode())
+
+
+def _is_fresh_sheet(gen_path: str, fingerprint: str) -> bool:
+    base = gen_path[: -len(".gen.py")]
+    if not (os.path.exists(base + ".png") and os.path.exists(base + ".html")):
+        return False
+    try:
+        with open(_sidecar(gen_path), encoding="utf-8") as fh:
+            stamped = fh.read().strip()
+    except FileNotFoundError:
+        return False
+    return stamped == sheet_hash(gen_path, fingerprint)
+
+
 def regen_pool(
     skill_dir: str,
     main_repo: str,
@@ -178,7 +242,7 @@ def regen_pool(
     outputs, so the only safe cwd for both is the gen's own. GM_ASSISTANT_ALLOW_MAIN is set for the
     subprocesses (not this process): the generators import the engine, whose main-tree guard must
     stand down for this one sanctioned regen-in-main."""
-    fingerprint = engine_fingerprint(skill_dir)
+    fingerprint = render_fingerprint(skill_dir)
     gens = poolmaps.gens(skill_dir=skill_dir)
     to_run: list[tuple[str, bool]] = []
     skipped: list[str] = []
@@ -193,7 +257,7 @@ def regen_pool(
             frozen.append(gen)
             continue
         cacheable = is_cacheable(gen, main_repo)
-        if cacheable and _is_fresh(gen, fingerprint):
+        if _is_fresh(gen, fingerprint) if cacheable else _is_fresh_sheet(gen, fingerprint):
             skipped.append(gen)
         else:
             to_run.append((gen, cacheable))
@@ -213,6 +277,9 @@ def regen_pool(
         )
         if cacheable:
             stamp_svg(_predicted_svg(gen), input_hash(gen, fingerprint))
+        elif (value := sheet_hash(gen, fingerprint)) is not None:
+            with open(_sidecar(gen), "w", encoding="utf-8") as fh:
+                fh.write(value + "\n")
         return gen
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs or (os.cpu_count() or 4)) as ex:

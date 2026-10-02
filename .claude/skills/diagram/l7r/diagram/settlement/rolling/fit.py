@@ -10,6 +10,8 @@ from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edg
 from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
+from ..farm_fixtures import PERSIMMON_CROWN_FT, PERSIMMON_SHADE_FT
+from ..homestead_parts.tree_shade import crown_shades
 from .access import access_corridor, legs
 from .lot import bundle_admitted, watered
 
@@ -42,6 +44,9 @@ def house_extent(rec: Any) -> tuple[float, float, float, float]:
     for part in part_box(g, "gardens") or ():
         x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
         x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
+    tree = (g.get("fixtures") or {}).get("persimmon")  # its crown, which may stand paces out (`_persimmon_sun_conflict` reads it)
+    if tree is not None:
+        x0, y0, x1, y1 = min(x0, tree[0] - tree[2] / 2), min(y0, tree[1] - tree[2] / 2), max(x1, tree[0] + tree[2] / 2), max(y1, tree[1] + tree[2] / 2)
     return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
 
 
@@ -362,7 +367,8 @@ class BundleFitMixin:
 
         Returns None when the envelope stands clear; True when the ground refuses it (the canvas margin, the bounding
         ring, the site boundary through `_rect_blocked` - the nine-point boundary test when one is installed, the
-        old battery otherwise) or when two or more placed boxes overlap it; and the ONE placed box `(cx, cy, w, h)`
+        old battery otherwise), when a reserved access corridor runs through it (`AccessTree.covers_box`) or when two or
+        more placed boxes overlap it; and the ONE placed box `(cx, cy, w, h)`
         when that box alone overlaps it on clear ground, so the placer can make its single computed move. The
         placed-box margin is the 2 px `_bundle_side_fits` always kept."""
         self._seat_search["rects"] += 1
@@ -398,8 +404,12 @@ class BundleFitMixin:
 
     def _parts_fit(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
-        (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
-        yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
+        (feature 227): the field's reach and the household's water; no part over another household's reserved wood seat;
+        the yard's and the gardens' sun; the corridor from its door to the access tree (`access_corridor` - routed round
+        what stands where the tree routes); the house's wall rule against the paddy; no part across a stream; the exact
+        tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
+        ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its
+        share of the wood floor (`WoodShares.share`)."""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -427,7 +437,7 @@ class BundleFitMixin:
         wood = self._wood
         if wood is not None and wood.covers_a_seat(geom):
             return False
-        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom) or not self._gardens_sun_ok(geom):
+        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom) or not self._gardens_sun_ok(geom) or self._persimmon_sun_conflict(geom):
             return False
         # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
         # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
@@ -846,12 +856,43 @@ class BundleFitMixin:
             return False
         if any(self._rect_blocked(g, fields=True) for g in part_box(geom, "gardens")):
             return False
-        if not self._gardens_sun_ok(geom):
+        if not self._gardens_sun_ok(geom) or self._persimmon_sun_conflict(geom):
             return False
         # FROM THE PLACED INDEX (feature 276): a box within the 2 px margin of this bbox has its reach box meet the square
         # queried; the comparison decides, as before.
         near = self._reach_index(self.placed, "placed_reach").near(cx, cy, max(W, H) / 2 + 2)
         return all(not (abs(cx - px) < (W + pw) / 2 + 2 and abs(cy - py) < (H + ph) / 2 + 2) for px, py, pw, ph, *_ in near)
+
+    def _persimmon_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does this household's persimmon stand in a yard's or bed's sun, or a standing neighbor's persimmon in this
+        household's (GM 2026-10-02, `PERSIMMON_SHADE_FT`, `tree_shade.crown_shades`)? Its own plots are kept by its seat
+        (`fixture_seats._persimmon`, at every rake the map allows), asked again here as drawn; a neighbor's are this test
+        alone, in both directions, as the sun corridor is (`_sun_corridor_ok`). On the map that keeps the sun corridor."""
+        if not getattr(self, "_sun_corridor_ft", 0.0):
+            return False
+        reach, r = self.px(PERSIMMON_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)  # a foot past the crown: the map's check reads the drawn quads
+        tree = (geom.get("fixtures") or {}).get("persimmon")
+        plots = [p for p in (part_box(geom, "yard"), *(part_box(geom, "gardens") or ())) if p is not None]
+        if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in plots):
+            return True
+        # FROM THE INDEX (feature 276's houses grid): a plot this crown shades meets the crown's box grown by the reach (not
+        # to the south), and a neighbor's crown shading one of these plots meets a plot's sun ground grown by the crown
+        boxes = [] if tree is None else [(tree[0] - r - reach, tree[1] - r - reach, tree[0] + r + reach, tree[1] + r)]
+        boxes += [(p[0] - p[2] / 2 - reach - r, p[1] - p[3] / 2 - r, p[0] + p[2] / 2 + reach + r, p[1] + p[3] / 2 + reach + r) for p in plots]
+        seen: set[int] = set()
+        for box in boxes:
+            for rec in houses_meeting(self.M["houses"], box):
+                g = rec.get("geom")
+                if not g or g is geom or id(rec) in seen:
+                    continue
+                seen.add(id(rec))
+                theirs = [p for p in (part_box(g, "yard"), *(part_box(g, "gardens") or ())) if p is not None]
+                if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in theirs):
+                    return True
+                other = (g.get("fixtures") or {}).get("persimmon")
+                if other is not None and any(crown_shades(other[0], other[1], r, p, reach) for p in plots):
+                    return True
+        return False
 
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A threshing yard dries rice in the southern sun, so no grove may sit in the ~22px strip directly
