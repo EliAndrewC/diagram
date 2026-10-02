@@ -44,7 +44,7 @@ and the style guide before you write.
    (`git -C /diagram/.clones/diagram-reorg rev-parse --short HEAD`) - the handoff names it as BASE.
 3. **Write each topic** as a research fragment and, where the folded sections say anything about how our maps draw
    the thing, a rendering fragment:
-   - **The research fragment** is `research/questions/<NNNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
+   - **The research fragment** is `research/questions/<NNNN>-<id>.html`, `<NNNN>` the lead folded question's number and
      `<id>` the title's anchor (lowercase; letters, digits and spaces kept; spaces to hyphens: "Threshing and drying
      yards at farmhouses (niwa)" is `threshing-and-drying-yards-at-farmhouses-niwa`). It opens with
      `<h2 id="<id>"><title></h2>`, then the comments: `<!-- feature 292 sweep, 2026-09-30: folded from <the old ids> -->`,

@@ -1,6 +1,6 @@
 {
  "feature": "303-research-organization",
- "plan_sha256": "abe5183e251a8d2210ae3eec720e018ba49e8120830e3b415567238208a063a3",
+ "plan_sha256": "e6a6b3160f2a18263afae234bebde09c2f4199900544e49d849ca800ec89a03d",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -92,6 +92,13 @@
    "why": "exactly FR-017 amendment 1's exceptions; measured test_record.py's only retired forms are lines 226-227, the test proving a .md token is reported"
   },
   {
+   "id": "D8a-2-plan-review-exempt",
+   "summary": "the check skips a recorded review verdict (any plan-review.json), as the reviewer's words",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Not in FR-017's list, so a narrowing; legitimate because a verdict that reports a stale pointer must quote it, and rewriting it falsifies the record (this round's commit did exactly that: the round-4 finding now describes the fix as the defect). It is the same class FR-017 already exempts, a verbatim record (the replay corpora), and no reader follows it to a research file, which is what message 3 asks to land. Measured: of 61 tracked plan-review.json files, only 303's own carries any retired form, so the exemption hides no live reference"
+  },
+  {
    "id": "D8a-2-fixture-leniency",
    "summary": "in tests, hook suites and script selftests a new-form question file need not exist (retired forms still refused)",
    "class": "narrowing",
@@ -105,11 +112,16 @@
    "why": "round 3's items (1) and (2) resolved - measured: the only research/<page>.md left are request.md, scripts/fixtures/ corpora and test_record.py's refusal lines"
   },
   {
+   "id": "D8a-3-pool-note-links",
+   "summary": "three pool-note links that were a directory short before this feature now reach the record (../../../research/...); Ubame's two links that both became the trades-and-services section merged into one",
+   "class": "within",
+   "why": "FR-020 and constitution XIV; verified: both notes files sit three levels under .claude/skills/diagram/, so ../../../research/contents.json resolves"
+  },
+  {
    "id": "D8a-3-sense-check-scope",
-   "summary": "the sense-check of sweep-made section pointers covered code and docs only; landed specs were not checked, and the restore of glued text was keyed on .md",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-017 lists landed specs and requires each reference rewritten to the new form. Measured: 85 lines in landed specs carry a section id with the rest of an old path glued on, invisible to the check (the section id is valid): 60 in specs/292 briefs (research/buildings/<NNN>-<id>.html -> research/questions/<NNNN>-<id>.html), 16 in specs/250 briefs (#compounds*.html etc.), specs/180/spec.md:121 (#cities<x>.md, was research/cities/<x>.md), specs/209, 211, 229, 266, 285. A garbled pointer is not the new form and was not the old text; nothing makes a check impossible (one grep finds them)"
+   "summary": "the sense-check of sweep-made section pointers now covers landed specs: glued forms (#compounds<NNN>-<id>.html in the 292 briefs, #cities*.html, #cities<x>.md, ...) rewritten - a fragment placeholder to research/questions/<NNNN>-<id>.html or .drawing.html, a glob or page path to the bare section - and the check's GLUED rule refuses a section id with path text after it",
+   "class": "within",
+   "why": "FR-017 (landed specs) and FR-018. Round 5, measured: the round-4 grep over tracked files (plan-review.json aside) returns only the check's own selftest lines; the check passes over the whole repository (rc=0) and its selftest passes, including the glued cases. Spot-read 180, 229, 250, 266 and 292 rewrites: each names the bare section or a new-form question placeholder"
   },
   {
    "id": "D8a-4",
@@ -143,5 +155,5 @@
    "why": "FR-018, the peer Edge Case"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
