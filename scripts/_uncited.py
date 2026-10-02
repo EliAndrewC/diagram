@@ -120,13 +120,20 @@ def cited_marks(root: pathlib.Path) -> set[str]:
     return {r["url"] for r in src.read(src.home(root)) if r.get("outcome", "").startswith("cited:") and r["outcome"][6:].strip() in keys}
 
 
+_GITHUB_RAW = re.compile(r"^raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/")
+HOST_ALIASES = (("mdpi-res.com/", "res.mdpi.com/"), ("online.bunka.go.jp/", "bunka.nii.ac.jp/"))
 _ZH_VARIANT = re.compile(r"^zh\.wikipedia\.org/(?:zh-(?:hans|hant|cn|tw|hk|sg|mo)|wiki)/")
 
 
 def work(n: str) -> str:
     """One work under one key: a normalized URL with Chinese Wikipedia's script variants folded into `/wiki/` - the same
     article served as `/zh-hans/X`, `/zh-tw/X` and `/wiki/X` was judged and written up twice (Pingyao's wall, 2026-10-02)."""
-    return _ZH_VARIANT.sub("zh.wikipedia.org/wiki/", n)
+    n = _ZH_VARIANT.sub("zh.wikipedia.org/wiki/", n)
+    n = _GITHUB_RAW.sub(r"github.com/\1/\2/blob/\3/", n)  # a file by its raw URL and its page URL (daizhige, 2026-10-02)
+    for alias, host in HOST_ALIASES:  # one file server under two names (Yannopoulos 2015 on both, 2026-10-02)
+        if n.startswith(alias):
+            return host + n[len(alias):]
+    return n
 
 
 def uncited_set(root: pathlib.Path) -> list[str]:

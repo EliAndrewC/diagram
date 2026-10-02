@@ -444,3 +444,10 @@ def test_dedupe_finds_one_work_saved_in_two_forms_on_one_host(tmp_path: pathlib.
     un.kept(root, ["https://w.org/Cremains", "https://w.org/Levee"], "source-filter")
     dups = un.duplicate_works(root)
     assert [(raw, into) for raw, into, _ in dups] == [("https://w.org/Cremains", "cremation-w")] and dups[0][2].startswith("similar")
+
+
+def test_work_folds_one_file_servers_two_names_and_a_github_raw_url() -> None:
+    assert un.work("mdpi-res.com/d_attachment/water/x.pdf") == un.work("res.mdpi.com/d_attachment/water/x.pdf")
+    assert un.work("online.bunka.go.jp/heritages/detail/1") == "bunka.nii.ac.jp/heritages/detail/1"
+    assert un.work("raw.githubusercontent.com/u/r/master/a/b.txt") == "github.com/u/r/blob/master/a/b.txt"
+    assert un.work("github.com/u/r/blob/master/a/b.txt") == "github.com/u/r/blob/master/a/b.txt"
