@@ -49,7 +49,7 @@ Read at the base with ONE `git ls-tree` + ONE `git cat-file --batch` over `resea
 **D3 - The intro paragraph is `<p class="intro">`**, the first block of a research page after its heading and comments; at
 most one; no note mark; it says what Rokugan (or the map) has and that the research follows; it may name the class its cited body or drawing page reaches, and adds no historical claim that body does not carry.
 The site inserts the "Not to be confused with" block straight after the heading, so the intro stands after it with no engine
-change (verified on the built page, T04). It carries no styling (spec FR-002). Stated in `research/STYLE.md` section 2 and the research `CLAUDE.md`; `tests/interactive/test_record_format.py`
+change (verified on the built page, T05). It carries no styling (spec FR-002). Stated in `research/STYLE.md` section 2 and the research `CLAUDE.md`; `tests/interactive/test_record_format.py`
 holds the mechanical shape (position, one, no mark).
 
 **D4 - `intro-check`, the defined agent.** `.claude/agents/intro-check.md`: Opus at medium effort (it judges; the project's
@@ -109,7 +109,7 @@ entry" becomes "run on the units `make record-owed` names", and each says to rec
   `RECORD_CHECKS_OK` and silent cases (SC-004). `test-check-bundle-hooks.sh` gains the not-owed dispatch and its escape;
   `test_check_bundle.py` the refused bundle, the escape and the owed-notes default.
 - SC-005: `intro-check` seeded with three known questions (the parley room without its intro -> NEEDS-INTRO; a plain farm
-  subject -> NO-INTRO-NEEDED; an intro asserting a historical finding -> INTRO-FIX), three runs a leg, before the backfill.
+  subject -> NO-INTRO-NEEDED; an intro adding a historical claim its cited body does not carry -> INTRO-FIX), three runs a leg, before the backfill.
 - SC-002: `make record-owed` `--between` over the last 30 record-only commits, tabulated in `research.md`.
 - `make quick` while iterating, `make done` once at the end (no engine change, but the tests and static checks are owed);
   `make record CHECK=1`; `make hooks-test`.

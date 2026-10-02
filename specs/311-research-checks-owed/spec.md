@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted - `spec-fidelity` FAITHFUL, round 3 (2026-10-02)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): *"I think we probably need a new subagent check to run on research
 sections in order to see whether an explanation such as this is warranted for a section"*; *"do we have a way to exempt
@@ -233,3 +233,4 @@ sees the push pass; edits the note again and sees the refusal return.
 - **Round 2** (`spec-fidelity-verify`, 2026-10-02): all six round-1 items RESOLVED; two new: SC-005's third seed still on the
   old rule, and the unmarked-block decision row misstating the proposal's scope. Both applied (SC-005 seeds "an intro that adds
   a historical claim its cited body does not carry"; the row says the proposal gave "record-format only" to all unmarked prose).
+- **Round 3** (`spec-fidelity-verify`, 2026-10-02): **FAITHFUL** - both round-2 items resolved, no new departure.
