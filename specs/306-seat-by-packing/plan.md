@@ -46,7 +46,9 @@ lanes) did not move that edge; giving the band the ground a homestead actually t
   cohort 30/30. The pool's two regressions under it (Inashiro's access lane, Sawada's doubled way) went to their root causes (R14).
 - **D2 The rescue and the dry-spell cap are built only if they pay on top of D1** (FR-011): R15's third leg, on the final D1 -
   100.0 -> 83.3 s, margins saved on seeds 25, 8 and 6, seed 39 slower (7.45 -> 13.96 s), no seed seating fewer: GO, built.
-  (R9 measured them on D1's withdrawn form; R15 is their verdict.)
+  (R9 measured them on D1's withdrawn form; R15 is their verdict.) The perf-audit found the rescue running on full margins and
+  with no dry cap of its own; it now runs only on a margin one to three short and gives up after 600 dry offers - every
+  successful rescue took its houses by offer 512 (R17: seed 39 15.1 -> 9.3 s, fifteen seeds unchanged).
 - **D3 FR-003 (capacity predicted before seating) and FR-004 (packed proposals) are not built.** FR-004's packed proposals
   were prototyped and measured NO-GO (R3: beside the tree, grown from the houses; R4: along planned lanes). FR-003's
   free-ground prediction was measured and disproved (R1); its rules-based form was argued from R2-R3 (the cap is reachability,

@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "8d15b8a27",
+    "label": "306-start",
+    "utc": "20261002T071251Z"
+  },
+  "binding": "0b075b64b17f0f48c409003cd89f73a5ebe17990d103a2e7fe1bf10209938e89",
+  "end": {
+    "commit": "0966873d3",
+    "label": "306-end",
+    "utc": "20261002T082817Z"
+  },
+  "environment": "local",
+  "feature": "306-seat-by-packing",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261002T084539Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -21.2,
+          "39": 3.3,
+          "4": 9.4,
+          "47": -26.7
+        },
+        "total_pct": -8.8
+      },
+      "20": {
+        "seeds": {
+          "25": -61.5,
+          "39": -25.9,
+          "4": -23.4,
+          "47": -53.2
+        },
+        "total_pct": -46.4
+      },
+      "40": {
+        "seeds": {
+          "25": -57.9,
+          "39": 10.3,
+          "4": -74.7,
+          "47": -86.6
+        },
+        "total_pct": -66.8
+      }
+    },
+    "seeds": {
+      "25": -32.6,
+      "39": -21.1,
+      "4": 9.3,
+      "47": -17.4
+    },
+    "total_pct": -13.8
+  },
+  "note": "The two named causes match the data: seed 4 at 15 hh is the seating band (reviewer counterfactual at 0966873d3 with SEATING_GROUND_FT set to 104: the base's 459 offers return, homesteads 1.19 s against 2.37 shipped and 1.11 base, three alternated runs); seed 39 at 40 hh is the rescue (RESCUE_SHORT off alone 7.4 s against 14.6 shipped and 10.1 base; the dry cap off alone changes nothing). But the explanation says two seeds slower and is silent on the other two band-1 rows the report lists: 10 hh seed 4 +9.4% (web +0.19, homesteads +0.17, hinterland +0.13 s) and 10 hh seed 39 +3.3% (notice +0.49 s, a stage it never names). Reviewer full-pipeline runs at 10 hh, three alternated: seed 4 2.4 -> 2.8 s, seed 39 1.8 -> 2.4 s (notice 0.06 -> 0.52 s); the band at 104 removes both (2.4 s, 1.8 s, notice 0.06). Rewrite naming all four rows, the 10-hh pair as the seating band too, with a recorded band-at-104 control.",
+  "verdict": "inconsistent"
+}

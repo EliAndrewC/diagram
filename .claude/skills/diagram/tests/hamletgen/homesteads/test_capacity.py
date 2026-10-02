@@ -332,6 +332,7 @@ def test_a_near_miss_is_rescued_on_a_finer_grid_with_a_wider_corridor_search(mon
     tree.add((0.0, 0.0), (100.0, 0.0))
     steps: list[float | None] = []
     breadth: list[int] = []
+    fill = [0]
 
     def seats(s: object, center: object, step: float | None = None) -> list[tuple[float, float]]:
         steps.append(step)
@@ -339,7 +340,7 @@ def test_a_near_miss_is_rescued_on_a_finer_grid_with_a_wider_corridor_search(mon
 
     def offer(s: object, seats: list, placed: int, want: int, dry: int | None) -> tuple[int, int, int]:
         breadth.append(tree.tried)
-        took = (want - placed) if dry is None else 0  # the pass seats none; the rescue seats the rest
+        took = (want - placed) if dry == capacity.RESCUE_DRY_SPELL else fill[0] * (want - placed)  # the pass seats `fill`; the rescue the rest
         return placed + took, len(seats), took
 
     monkeypatch.setattr(capacity, "free_seats", seats)
@@ -363,6 +364,9 @@ def test_a_near_miss_is_rescued_on_a_finer_grid_with_a_wider_corridor_search(mon
     steps.clear()
     assert seat_the_rest(s, plan, 10 - capacity.RESCUE_SHORT - 1) == 10 - capacity.RESCUE_SHORT - 1, "too far short: no rescue"
     assert steps == [None]
+    steps.clear()
+    fill[0] = 1
+    assert seat_the_rest(s, plan, 8) == 10 and steps == [None], "a pass that fills the margin calls no rescue (the perf-audit's defect)"
 
 
 def test_a_rescue_with_no_tree_and_no_region_still_offers_the_finer_grid(monkeypatch: pytest.MonkeyPatch) -> None:

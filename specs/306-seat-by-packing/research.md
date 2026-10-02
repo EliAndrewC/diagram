@@ -212,3 +212,15 @@ two margins, at most five offers a house): MISSED** - two margins or fewer on 13
 households +9.3% (the band's spread; perf-control-seed4-15-base) and seed 39 at 40 +10.3% (the rescue;
 perf-control-seed39-40-band-alone) - band 2, explained and audited (dev/perf-log/). FR-002's further rounds were run (rounds
 2-7, R2-R7) and the misses survive them: raised with the GM.
+
+## R17. The rescue on a full margin, and its own dry cap (observed 2026-10-02, method: the perf-audit of the 306-start / 306-end pair - three alternated rounds, the end leg in a detached worktree at 0966873d3, the base in `/tmp/base306`; its harnesses `audit_rescue.py`, `audit_hs.py`, `audit_full.py` in the scratchpad)
+
+(Observed 2026-10-02, method: as the heading.) Two faults in R15's rescue. `seat_the_rest` called it when the pass had filled the
+margin (`want - placed <= RESCUE_SHORT` holds at 0), so every seed built a 2,400-3,900-point grid for nothing; and it offered with
+no dry cap, so seed 39 at 40 households, two short, offered 2,772 of its 2,784 grid points to take one house and still fell
+short - the margin thrown away, the seed landing on the same third margin as with the rescue off. Every rescue that seated its
+houses on the sixteen seeds took them by offer 512. Fixed: no rescue on a full margin; the rescue's own dry cap
+(`RESCUE_DRY_SPELL = 600`). Measured: fifteen seeds keep identical offers, margins and houses; seed 39 15.10 -> 9.29 s (below the
+base's ~10.1), still on margin 3 with all 40; the sixteen-seed total 89.4 -> 82.8 s. The audit also attributed the two
+10-household increases of the bookend pair to the seating's band (the band at 104 restores them: seed 4's full run 2.8 -> 2.4 s;
+seed 39's notice stage 0.52 -> 0.06 s).

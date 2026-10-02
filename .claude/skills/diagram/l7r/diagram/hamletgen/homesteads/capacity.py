@@ -46,6 +46,11 @@ RESCUE_SHORT = 3
 #: tree's nearest points (`AccessTree.tried`; the pass's `TARGETS_TRIED` is 12) - a search breadth, never a rule.
 RESCUE_STEP = 1.0 / 6.0
 RESCUE_TARGETS = 40
+#: ...and given up after this many offers in a row seat no one (the perf-audit of feature 306: every rescue that seated its houses
+#: on the sixteen reference seeds at 40 households took them by offer 512; seed 39's, two short, offered 2,772 of 2,784 grid
+#: points to take one house and still fall short - 7 s that bought no change of margin. With the cap seed 39 is 15.1 -> 9.3 s and
+#: the other fifteen seat as before - specs/306-seat-by-packing/research.md R17)
+RESCUE_DRY_SPELL = 600
 
 
 class SiteRefused(ValueError):
@@ -98,8 +103,8 @@ def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:
         seats = [q for q, ok in zip(seats, region.offer(seats), strict=True) if ok]
     placed, offered, took = offer_seats(s, seats, placed, want, DRY_SPELL)
     s._seat_search["exhaustive_offered"], s._seat_search["exhaustive_took"] = offered, took
-    if want - placed <= RESCUE_SHORT:
-        placed = rescue_the_margin(s, plan, placed)
+    if 0 < want - placed <= RESCUE_SHORT:  # a margin that holds everyone already needs no rescue (the perf-audit: every seed built
+        placed = rescue_the_margin(s, plan, placed)  # its 2,400-3,900-point grid for nothing)
     return placed
 
 
@@ -137,7 +142,7 @@ def rescue_the_margin(s: Settlement, plan: SitePlan, placed: int) -> int:
         tree.tried, tree._targets = RESCUE_TARGETS, {}
     s.__dict__.pop("_corridor_memo", None)
     try:
-        placed, offered, took = offer_seats(s, seats, placed, plan.spec.households, None)
+        placed, offered, took = offer_seats(s, seats, placed, plan.spec.households, RESCUE_DRY_SPELL)
     finally:
         if tree is not None:
             tree.tried, tree._targets = TARGETS_TRIED, {}

@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "8d15b8a27",
+    "label": "306-start",
+    "utc": "20261002T071251Z"
+  },
+  "binding": "0b075b64b17f0f48c409003cd89f73a5ebe17990d103a2e7fe1bf10209938e89",
+  "criteria": {
+    "commensurate": "At the feature level the trade is large and favorable (40 hh total -66.8%, 15 hh -13.8%, research R15 427.7 -> 83.3 s), but the cost that crossed buys nothing: about 7.2 s idle (14.6 against 7.4 s, reviewer runs) and 2,772 offers for a margin that is rejected anyway. A cost with no functionality behind it is not commensurate, however good the rest of the feature is.",
+    "necessary": "Not the part that crossed. The rescue (plan D2, research R6, R9, R15) is asked-for work and earns its keep where it seats: on seeds 25, 6 and 8 at 40 hh it saves margins. But seed 39's +10.3% is a rescue that FAILS: 2 short, it offered 2,772 seats of its 2,784-point sixth-pitch grid, took one at offer 2,555, still fell short, and the margin was thrown away; the seed lands on the same margin 3 with the rescue off (7.4 s). That search changes no outcome.",
+    "no_way_around": "There is a cheaper way, measured. Every successful rescue on the sixteen seeds took its houses by offer 512 (seed 25 at 58, 169, 437; seed 6 at 491, 492, 512; seed 8 at 331), so the rescue can take its own dry cap (offer_seats with dry 600 rather than None). Separately, seat_the_rest calls rescue_the_margin when the margin is already full (want - placed <= RESCUE_SHORT holds at 0), building a 2,400-3,900-point grid for nothing on every seed. Reviewer A/B at 0966873d3, sixteen seeds at 40 hh, alternated: the two changes leave fifteen seeds' offers, margins and houses identical and take seed 39 from 15.10 to 9.29 s (5,655 -> 3,483 offers, still margin 3, 40 seated), below the base's 10.1 s; the sixteen-seed sum 89.4 -> 82.8 s."
+  },
+  "end": {
+    "commit": "0966873d3",
+    "label": "306-end",
+    "utc": "20261002T082817Z"
+  },
+  "environment": "local",
+  "feature": "306-seat-by-packing",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261002T084547Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -21.2,
+          "39": 3.3,
+          "4": 9.4,
+          "47": -26.7
+        },
+        "total_pct": -8.8
+      },
+      "20": {
+        "seeds": {
+          "25": -61.5,
+          "39": -25.9,
+          "4": -23.4,
+          "47": -53.2
+        },
+        "total_pct": -46.4
+      },
+      "40": {
+        "seeds": {
+          "25": -57.9,
+          "39": 10.3,
+          "4": -74.7,
+          "47": -86.6
+        },
+        "total_pct": -66.8
+      }
+    },
+    "seeds": {
+      "25": -32.6,
+      "39": -21.1,
+      "4": 9.3,
+      "47": -17.4
+    },
+    "total_pct": -13.8
+  },
+  "note": "band 2 crossed by 40 households seed 39 +10.3% (homesteads +3.3 s); reviewer harnesses audit_hs.py, audit_full.py, audit_rescue.py in the session scratchpad, end leg in a detached worktree at 0966873d3, base leg in /tmp/base306 at 8d15b8a27",
+  "verdict": "not-justified"
+}
