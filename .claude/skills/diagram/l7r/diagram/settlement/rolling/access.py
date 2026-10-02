@@ -77,7 +77,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes."""
 
-    __slots__ = ("_along", "_targets", "grid", "half", "segs", "tried")
+    __slots__ = ("_along", "_targets", "grid", "half", "routed", "segs", "tried")
 
     def __init__(self, half: float) -> None:
         self.half = half
@@ -88,6 +88,9 @@ class AccessTree:
         # how many of the tree's nearest points a door's corridor is tried to: `TARGETS_TRIED`, widened for a near miss's rescue
         # (`capacity.seat_the_rest`, feature 306) and set back after it
         self.tried = TARGETS_TRIED
+        # ...and whether a door no straight corridor clears is routed round what stands (`route.py`, feature 308 plan D3): the
+        # nucleated seating's tree only
+        self.routed = False
 
     def add(self, a: Pt, b: Pt) -> None:
         self.segs.append((a, b))
@@ -418,6 +421,9 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
                 return None
             seen.append(nxt)
         corridor = seen[k]
+        if corridor is ROUTE_LATER:
+            k += 1
+            continue
         # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
         last = len(corridor) - 2
         # ...and the ways' ground test of each leg the search asked, after its own fixtures and beds (`standing_ground`)
@@ -557,6 +563,18 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
             # ...never back past the house it went round (`doubles_back`): the web could not draw it (cohort seed 32)
             if math.dist(turn, q) < 1e-6 or (not doubles_back(door, turn, q) and clear(turn, q) and leaves_its_yard((door, turn, q), yard, gap)):
                 yield (door, turn, q)
+    if tree.routed:  # ...then the path routed round what stands (feature 308, plan D3; FR-005)
+        from .route import routed_corridors
+
+        yield ROUTE_LATER  # the seat MAY be reached by a route: `seat_reaches_tree` says so without searching for one
+        yield from routed_corridors(s, tree, geom)
+
+
+#: The marker `_house_candidates` yields between its straight corridors and its routed ones (feature 308): the seat's own
+#: question (`seat_reaches_tree`) takes it as a YES - a route may be found - so the route's search, the dearest of the seat's
+#: questions, is asked only by `access_corridor`, after the parts' cheap refusals (the wood's seats, the sun). The verdict is
+#: the same, asked later: a seat no route reaches is refused there. `access_corridor` passes over it.
+ROUTE_LATER: tuple[Pt, ...] = ((math.inf, math.inf),)  # one object, asked by identity; no corridor is it
 
 
 def leaves_its_yard(corridor: tuple[Pt, ...], yard: Any, gap: float, step: float = 2.0) -> bool:
