@@ -1883,4 +1883,7 @@ merged with main's persimmon and canopy-shade rules): 15 houses on the first mar
 front row, ranks and exhaustive pass offered 599; `cluster_seeding` `grown` (main: `frontage`); declared crescent at a drawn
 aspect of 2.17 (main: round at 1.29); 18 lanes against 14; 28 access-corridor legs against 20. A Z the settle's squared
 crossing laid across the field spur's joint with an orphan link is mended by moving the joint back a vertex
-(`joints._joint_moved_back`). The farmhouse and village-lane glyph checks passed (2026-10-02).
+(`joints._joint_moved_back`). The farmhouse and village-lane glyph checks passed (2026-10-02). Questionable, recorded
+(the village-lane check, round 2): a staggered junction south of the house at (2422, 2119), where lane 14 joins lane 12
+8.1 ft from lane 12's own join with lane 9, whose door end runs 8.6 ft past it and stops 10.6 ft short of its yard; and a
+V where the exit strip meets the field way at (2705, 1906), a 59-degree turn in open scrub. Both pass the lane law.

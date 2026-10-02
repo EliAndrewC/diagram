@@ -128,3 +128,12 @@ passing, the homesteads stage timed against the base back to back.
 - The reference spec at 10/15/20/40 households (feature 304's scaling leg) is the measure; feature 306 R15's three-leg runner
   is reused for back-to-back legs.
 - The 162 ft seating band (feature 306) bounds the growth; the margin's choice, canvas and belt are unchanged.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 3 items - FR-007 and US2 replaced the passes "where the growth
+  replaces them", a circular hedge; the Decisions table misquoted the GM; the linear/dispersed edge case left the scope open.
+  Addressed: FR-007 and US2 commit to removing the front row, the ranks and the exhaustive pass with its rescue for the
+  nucleated form (any kept pass a MODE 1 exception first); the GM quoted verbatim, the typo marked; the round's rulings
+  recorded (linear outside the request, dispersed a LEGITIMATE exception).
+- Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - the three items confirmed against the diff.

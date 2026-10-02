@@ -1030,7 +1030,7 @@ straight one clears (`settlement/rolling/route.py`).
   17.5 -> 15.6 s. The bookend reference total went 20.6 -> 11.5 s (-44%).
 
 **What did not, measured.**
-- *Straight paths only* (R1-R3): growth stalled at 3-21 houses a margin. A house grown behind another has no straight run to the
+- *Straight paths only* (R1-R3): growth seated 3-15 houses a margin (8-28 on seed 25) and filled none reliably (R1-R3). A house grown behind another has no straight run to the
   access tree past it and its woodlot.
 - *An exact grown seat*, with no computed move (R10): it cost capacity, 79.0 base against 80.4 s at 40 households, with seed 4
   on its third margin. The move is kept and refused only where it would carry a seat nearer its source than the gap
