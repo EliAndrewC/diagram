@@ -260,3 +260,17 @@ def test_a_z_across_a_joint_is_mended_by_moving_the_joint_back_or_left_where_not
     assert not J._joint_moved_back(S(), lanes, (0, -1, 1, 0), x, y, [], [], [], []), "a walk still bent: not moved"  # type: ignore[arg-type]
     monkeypatch.setattr(J, "_clear_link", lambda *a: False)
     assert not J._joint_moved_back(S(), lanes, (0, -1, 1, 0), x, y, [], [], [], []), "nothing clear: nothing changed"  # type: ignore[arg-type]
+
+
+def test_a_z_no_t_mends_is_mended_by_moving_the_joint_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_one_joint` (feature 308): a Z across a joint - each record clean, their walk bent - that no T mends is handed to
+    `_joint_moved_back`, and the joint pass reports the rewrite."""
+    from l7r.diagram.hamletgen.ways import joints as J
+
+    s = _webbed([{"pts": [[0.0, 0.0], [100.0, 0.0], [104.0, 10.0]], "w": 3}, {"pts": [[104.0, 10.0], [200.0, 0.0], [300.0, 0.0]], "w": 3}])
+    monkeypatch.setattr(J, "tee", lambda *a: None)
+    monkeypatch.setattr(J, "_bends_badly", lambda pts: len(pts) > 3)
+    moved: list[tuple[int, int, int, int]] = []
+    monkeypatch.setattr(J, "_joint_moved_back", lambda s_, lanes, joint, *a: moved.append(joint) or True)
+    assert J._one_joint(s, s.M["lanes"], [], [], [], [])  # type: ignore[arg-type]
+    assert moved == [(0, -1, 1, 0)], "the Z's joint moved back"
