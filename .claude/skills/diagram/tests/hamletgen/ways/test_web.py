@@ -220,3 +220,18 @@ def test_the_late_pass_keeps_the_connector_as_placed_where_its_pulled_back_end_w
     box = (40.0, 140.0, 60.0, 160.0)  # the middle of the pulled end's new 141 ft leg
     assert kept_connector(placed, pulled, [box]) == placed
     assert kept_connector(placed, pulled, []) == pulled
+
+
+def test_every_run_the_network_reaches_is_laid_as_a_web_lane_and_no_other(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`lay_reachable_runs` (feature 308, lifted from `stage_web`): a run touching the drawn network is laid, an island is
+    not, and each laid run is handed the houses' centers."""
+    from l7r.diagram.hamletgen.ways import web
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["lanes"] = [{"pts": [[0.0, 0.0], [100.0, 0.0]], "w": 6}]
+    laid: list[tuple] = []
+    monkeypatch.setattr(web, "_lay_web_lane", lambda s_, run, *a, **k: laid.append((run, k["houses"])))
+    joined, island = [(50.0, 0.0), (50.0, 80.0)], [(500.0, 500.0), (600.0, 500.0)]
+    n = web.lay_reachable_runs(s, [joined, island], [], [], [], [], [{"x": 1, "y": 2}])
+    assert n == 1 and laid == [(joined, [(1.0, 2.0)])]

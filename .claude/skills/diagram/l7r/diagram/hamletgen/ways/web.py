@@ -368,6 +368,16 @@ def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) 
     return sorted(gone)
 
 
+def lay_reachable_runs(s: Settlement, cands: list[Poly], hard: Any, walls: Any, water: Any, belts: Any, houses: Any) -> int:
+    """Lay every candidate run the network reaches (`_reachable_runs`, from the ways already drawn) as a web lane
+    (`_lay_web_lane`); returns how many were laid. Lifted from `stage_web` (feature 308): a grown cluster's corridors leave
+    the rolled maps no reachable run, so the loop is tested on plain inputs."""
+    runs = _reachable_runs(cands, _net_segs(s))
+    for run in runs:
+        _lay_web_lane(s, run, hard, walls, water, belts=belts, houses=[(float(h["x"]), float(h["y"])) for h in houses])
+    return len(runs)
+
+
 def stage_web(s: Settlement, plan: SitePlan) -> None:
     """The lanes the settlement wore.
 
@@ -581,8 +591,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # lane is drawn there is no clean way to take it back, and the version that judged each run as it
     # went could only ever refuse the ones it had not reached yet. Growing the component from the
     # skeleton outward also lets a run join THROUGH another web run, which is what a framework is.
-    for run in _reachable_runs(cands, _net_segs(s)):
-        _lay_web_lane(s, run, hard, walls, list(plan.watercourses) + drawn_water, belts=belts, houses=[(float(h["x"]), float(h["y"])) for h in houses])
+    lay_reachable_runs(s, cands, hard, walls, list(plan.watercourses) + drawn_water, belts, houses)
     # A WEB LANE STOPS WHERE IT STOPS SERVING. Clipping ends an arm wherever the crop or a steading
     # happens to begin, which can leave a tail running on into bare grass - `lanes_reach_something`
     # is right to call that a tread that serves nobody. The engine already owns this trim; the web
