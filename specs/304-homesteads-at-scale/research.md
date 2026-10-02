@@ -78,3 +78,15 @@ scan of every paddy outline ~9% (`seg_dist` 3.9 + `seg_closest` 3.5 + the genera
 
 `FieldRefused: no fan at any of 5 aspects is legal ... and lands 104.0 acres within 15%` on seeds 4 and 25. A single fan cannot land
 the acreage; a village needs several fields or several fans. Out of scope (spec Edge Cases); the bookend stops at 40.
+
+## R6. The cohort at the base (observed 2026-10-02, method: `make cohort N=24` in the detached worktree `/tmp/base304` at 505bcf0c9)
+
+28/30 pass the whole gate (forms rolled: dispersed 9, linear 10, nucleated 11). The two failures are pre-existing, of the class
+302's research R3 recorded (23/30 at its base, the failing seeds moving with the geometry):
+
+- Audit-11 (10 households, linear): `WebRefused` - the web's last resort cannot mend lane 1 (skeleton) without dropping a tree
+  lane; the web still breaks `bends`, `off_ford`.
+- Audit-905 (20 households, dispersed): `UndeckableCrossing` - no deck seats where a way crosses water at (3036, 2756).
+
+Neither is in the homesteads stage. Constitution XIV and the GM's ruling of 2026-10-01 ("We should definitely fix the
+pre-existing failure"): fixed in this work (tasks T02, T03), each diagnosed here first.
