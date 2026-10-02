@@ -119,15 +119,51 @@ def cited_marks(root: pathlib.Path) -> set[str]:
     return {r["url"] for r in src.read(src.home(root)) if r.get("outcome", "").startswith("cited:") and r["outcome"][6:].strip() in keys}
 
 
+_ZH_VARIANT = re.compile(r"^zh\.wikipedia\.org/(?:zh-(?:hans|hant|cn|tw|hk|sg|mo)|wiki)/")
+
+
+def work(n: str) -> str:
+    """One work under one key: a normalized URL with Chinese Wikipedia's script variants folded into `/wiki/` - the same
+    article served as `/zh-hans/X`, `/zh-tw/X` and `/wiki/X` was judged and written up twice (Pingyao's wall, 2026-10-02)."""
+    return _ZH_VARIANT.sub("zh.wikipedia.org/wiki/", n)
+
+
 def uncited_set(root: pathlib.Path) -> list[str]:
-    skip = judged(root) | registry_norms(root) | cited_marks(root)
+    skip = {work(n) for n in judged(root) | registry_norms(root) | cited_marks(root)}
     blocked = src._blocked()
     out: dict[str, str] = {}
     for u in [*ops.consulted_urls(root), *prehold(root)]:
-        n = src.norm(u)
+        n = work(src.norm(u))
         if n not in skip and not blocked.blocked(u) and not CANON.search(n):
             out.setdefault(n, u)
     return sorted(out.values())
+
+
+def fingerprint(text: str | None) -> str:
+    """The saved text of one revision, whatever URL reached it: two redirects to one article (杖刑 and 笞刑, 2026-10-02)
+    save the same body. The head is skipped (the title a redirect may carry); a page too short to tell gives none."""
+    body = re.sub(r"\s+", " ", text or "")
+    return "" if len(body) < 1000 else hashlib.sha1(body[200:].encode()).hexdigest()
+
+
+def duplicate_works(root: pathlib.Path) -> list[tuple[str, str]]:
+    """Kept pages that are one work with a cited entry's URL or an earlier kept page - by URL under another spelling
+    (`work`) or by the same saved text (`fingerprint`): each as (the kept page's raw URL, what it duplicates)."""
+    seen: dict[str, str] = {}
+    for f in sorted((at.base(root) / SOURCES).glob("*/[0-9]*-*.html")):
+        if f.parent.name != at.UNCITED.name:
+            for u in src._URL.findall(f.read_text(encoding="utf-8")):
+                seen.setdefault(work(src.norm(u)), f.stem.split("-", 1)[1])
+    where = src.home(root)
+    out = []
+    for x in at.read(root, KEPT):
+        marks = [m for m in (work(x["url"]), fingerprint(text_of(where, x["raw"]))) if m]
+        hit = next((seen[m] for m in marks if m in seen), None)
+        if hit:
+            out.append((x["raw"], hit))
+        else:
+            seen.update(dict.fromkeys(marks, x["raw"]))
+    return out
 
 
 # ---- the rule ----
@@ -657,14 +693,15 @@ def cite(root: pathlib.Path, key: str) -> pathlib.Path:
 
 
 def merge(root: pathlib.Path, key: str, into: str) -> pathlib.Path:
-    """Two uncited entries for one work (a redirect and its target, found by `source-applicability`): `key`'s entry is
-    retired and its page moves from the kept list to the not-kept list as a duplicate of `into`, which stays."""
-    d = at.base(root) / at.UNCITED
-    files = {k: [f for f in d.glob(f"*-{k}.html") if re.fullmatch(rf"\d+-{re.escape(k)}\.html", f.name)] for k in (key, into)}
-    for k, found in files.items():
-        if not found:
-            raise ValueError(f"no uncited entry for {k!r} in {at.UNCITED}")
-    gone = files[key][0]
+    """Two entries for one work (a redirect and its target, a script variant): `key`'s uncited entry is retired and its
+    page moves from the kept list to the not-kept list as a duplicate of `into` - an uncited or a cited entry - which stays."""
+    def entry(k: str, where: str) -> list[pathlib.Path]:
+        return [f for f in (at.base(root) / SOURCES).glob(f"{where}/*-{k}.html") if re.fullmatch(rf"\d+-{re.escape(k)}\.html", f.name)]
+
+    for k, where in ((key, at.UNCITED.name), (into, "*")):
+        if not entry(k, where):
+            raise ValueError(f"no {'uncited ' if where != '*' else ''}entry for {k!r} under {SOURCES}")
+    gone = entry(key, at.UNCITED.name)[0]
     text = gone.read_text(encoding="utf-8")
     kept = at.read(root, KEPT)
     mine = [x for x in kept if x["raw"] in text]
@@ -678,6 +715,37 @@ def merge(root: pathlib.Path, key: str, into: str) -> pathlib.Path:
     at.write(root, [line(x["raw"], ["duplicate"], "source-applicability", f"the same work as {into}") for x in mine], NOT_KEPT)
     gone.unlink()
     return gone
+
+
+def entry_holding(root: pathlib.Path, raw: str) -> str | None:
+    """The key of the uncited entry whose citation carries this URL, if one was written."""
+    d = at.base(root) / at.UNCITED
+    for f in sorted(d.glob("[0-9]*-*.html") if d.is_dir() else []):
+        if raw in f.read_text(encoding="utf-8"):
+            return f.stem.split("-", 1)[1]
+    return None
+
+
+def dedupe(root: pathlib.Path, dry: bool = False) -> list[str]:
+    """Every duplicate `duplicate_works` finds retired: a written entry by `merge`, an unwritten kept page by moving its
+    line to the not-kept list. What it duplicates stays (a cited entry, or the first kept page)."""
+    done = []
+    for raw, into in duplicate_works(root):
+        into_key = into if not into.startswith("http") else (entry_holding(root, into) or into)
+        key = entry_holding(root, raw)
+        if dry:
+            pass
+        elif key:
+            merge(root, key, into_key)
+        else:
+            path = at.base(root) / KEPT
+            q = json.dumps(raw, ensure_ascii=False)
+            with src.locked(src.home(root), timeout=30.0):
+                lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+                path.write_text("".join(s for s in lines if q not in s), encoding="utf-8")
+            at.write(root, [line(raw, ["duplicate"], "rule", f"the same work as {into_key}")], NOT_KEPT)
+        done.append(f"{key or raw} -> {into_key}")
+    return done
 
 
 def report(root: pathlib.Path) -> str:
@@ -727,6 +795,7 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     mg = sub.add_parser("merge")
     mg.add_argument("key")
     mg.add_argument("into")
+    sub.add_parser("dedupe").add_argument("--dry", action="store_true")
     args = ap.parse_args(argv)
     root = src.repo_root()
     if args.cmd == "set":
@@ -765,10 +834,13 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
         print(f"uncited: verifying {len(todo)} imported cop(ies) in up to {args.workers} lane(s)", flush=True)
         print(f"uncited: {json.dumps(verify_all(root, todo, args.workers))}")
     elif args.cmd == "draft":
-        print(f"uncited: {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
+        print(f"uncited: {len(dedupe(root))} duplicate(s) retired first; {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
     elif args.cmd == "cite":
         dest = cite(root, args.key)
         print(f"uncited: {args.key} moved to {dest.relative_to(root)} - write its Used for: line (the build refuses the placeholder), then `git add -A` the move")
+    elif args.cmd == "dedupe":
+        done = dedupe(root, args.dry)
+        print("\n".join(f"uncited: duplicate retired - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) retired")
     elif args.cmd == "merge":
         gone = merge(root, args.key, args.into)
         print(f"uncited: {args.key} retired ({gone.name}) as a duplicate of {args.into}; its page is on the not-kept list")

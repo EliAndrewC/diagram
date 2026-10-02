@@ -344,3 +344,38 @@ def test_merge_retires_a_duplicate_entry_and_moves_its_page_to_not_kept(tmp_path
     (root / un.at.UNCITED / "20540-k-three.html").write_text("<p>no kept URL here</p>\n", encoding="utf-8")
     with pytest.raises(ValueError, match="no kept page"):
         un.merge(root, "k-three", "k-two")
+
+
+def test_work_folds_chinese_wikipedia_script_variants_and_nothing_else() -> None:
+    assert un.work("zh.wikipedia.org/zh-hans/平遥城墙") == un.work("zh.wikipedia.org/wiki/平遥城墙") == "zh.wikipedia.org/wiki/平遥城墙"
+    assert un.work("zh.wikipedia.org/zh-tw/X") == "zh.wikipedia.org/wiki/X"
+    assert un.work("ja.wikipedia.org/wiki/X") == "ja.wikipedia.org/wiki/X" and un.work("a.org/zh-hans/X") == "a.org/zh-hans/X"
+
+
+def test_fingerprint_is_the_body_past_its_head_and_none_for_a_short_page() -> None:
+    body = "x" * 2000
+    assert un.fingerprint("Title one " * 20 + body) == un.fingerprint("Title two " * 20 + body) != ""
+    assert un.fingerprint("short") == "" and un.fingerprint(None) == ""
+    assert un.fingerprint("t" * 200 + body) != un.fingerprint("t" * 200 + body + "y")
+
+
+def test_dedupe_retires_variants_redirects_and_cited_works_and_keeps_the_first(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.SOURCES / "010-works-cited" / "20100-cited-k.html").write_text("<p>C (https://c.org/cited)</p>\n", encoding="utf-8")
+    (root / un.at.UNCITED / "20520-k-hans.html").write_text("<p>K (https://zh.wikipedia.org/zh-hans/X)</p>\n", encoding="utf-8")
+    (root / un.at.UNCITED / "20530-k-wiki.html").write_text("<p>K (https://zh.wikipedia.org/wiki/X)</p>\n", encoding="utf-8")
+    same = "head " * 50 + "the one article's body " * 100
+    src.put(_home(), "https://r.org/redirect-a", "Title A " + same)
+    src.put(_home(), "https://r.org/redirect-b", "Title B " + same)
+    urls = ["https://zh.wikipedia.org/wiki/X", "https://zh.wikipedia.org/zh-hans/X", "https://r.org/redirect-a", "https://r.org/redirect-b", "https://www.c.org/cited"]
+    un.kept(root, urls, "source-filter")
+    assert un.dedupe(root, dry=True) and len(un.at.read(root, un.KEPT)) == 5, "a dry run changes nothing"
+    done = un.dedupe(root)
+    assert done == ["k-hans -> k-wiki", "https://r.org/redirect-b -> https://r.org/redirect-a", "https://www.c.org/cited -> cited-k"]
+    assert [x["raw"] for x in un.at.read(root, un.KEPT)] == ["https://zh.wikipedia.org/wiki/X", "https://r.org/redirect-a"]
+    assert not (root / un.at.UNCITED / "20520-k-hans.html").exists() and (root / un.at.UNCITED / "20530-k-wiki.html").exists()
+    assert {x["raw"] for x in un.at.read(root, un.NOT_KEPT) if x["reasons"] == ["duplicate"]} == set(urls) - {"https://zh.wikipedia.org/wiki/X", "https://r.org/redirect-a"}
+    assert un.dedupe(root) == []
+    with pytest.raises(ValueError, match="no entry for 'nowhere'"):
+        un.merge(root, "k-wiki", "nowhere")
