@@ -1829,6 +1829,7 @@ kamiza	kamiza
 kan	kan
 kan'ei	Kan'ei
 kan'ei period	Kan'ei
+kan'en	Kan'en
 kanagashi	kanagashi
 kanbun	Kanbun
 kanden	kanden
@@ -4123,6 +4124,7 @@ yashikichi	yashikichi
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
 yashikirin	yashikirin
+yashikiyama	yashikiyama
 yato	yato
 yatoda	yato
 yatsu	yato

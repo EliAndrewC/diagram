@@ -479,12 +479,22 @@ case $MODE in
     # GUARD_EDIT_OK: 2026-10-02 - `--background-render`: this hook has 60 s, and a synchronous render-sync under the
     # shared lock queued past it; the render goes to a detached runner and the lock wait is bounded (sync-with-main.sh,
     # SYNC_LOCK_WAIT). Its NOTE / WARNING lines - a busy lock, a failed earlier render - are passed on.
+    # GUARD_EDIT_OK: 2026-10-02, feature 310 - A RUN IN THE CLONE IS MID-TASK TOO. A committed clone with a gate running
+    # in the background was merged under the gate: main's commits landed while `make done` tested, and the run failed on a
+    # test file the merge rewrote half way (tests/tools/test_placement_stages.py), its verdict belonging to neither tree.
+    # A live make in the clone (`_own-make.sh`, any target) now skips the merge exactly as uncommitted work does.
+    midtask=""
     if [ -n "$(git -C "$clone" status --porcelain 2>/dev/null)" ]; then
+      midtask="has uncommitted work (mid-task)"
+    elif (cd "$clone" && "$(dirname "${BASH_SOURCE[0]}")/_own-make.sh" "") 2>/dev/null; then
+      midtask="has a make run going (a gate or a roll)"
+    fi
+    if [ -n "$midtask" ]; then
       if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --mirror-only --background-render 2>&1); then
-        echo "clone-sync: $clone has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done"
+        echo "clone-sync: $clone $midtask - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done"
         printf '%s\n' "$out" | grep -E '^sync-with-main: (NOTE|WARNING)' || true
       else
-        echo "clone-sync: $clone has uncommitted work (mid-task) - clone merge skipped; mirror refresh FAILED: $(printf '%s' "$out" | tail -1)"
+        echo "clone-sync: $clone $midtask - clone merge skipped; mirror refresh FAILED: $(printf '%s' "$out" | tail -1)"
       fi
       exit 0
     fi

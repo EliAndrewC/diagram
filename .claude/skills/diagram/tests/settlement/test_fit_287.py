@@ -103,6 +103,7 @@ def test_a_grove_farm_is_refused_on_the_access_tree_or_with_a_fixture_in_a_band(
     s.meta(name="T", scale="hamlet", ftpx=1)
     geom = {
         "boxes": {"house": (500.0, 500.0, 40.0, 30.0), "yard": (500.0, 540.0, 30.0, 20.0), "gardens": [], "fixtures": {"privy": (560.0, 500.0, 10.0, 8.0)}},
+        "fixtures": {"privy": (560.0, 500.0, 10.0, 8.0)},  # as laid; turn 0, so the record's box is the same
         "groves": [(500.0, 440.0, 200.0, 40.0)],
         "bbox": (500.0, 500.0, 220.0, 160.0),
     }
@@ -114,11 +115,11 @@ def test_a_grove_farm_is_refused_on_the_access_tree_or_with_a_fixture_in_a_band(
     tree.add((560.0, 0.0), (560.0, 1000.0))
     assert s._on_the_access(geom), "the privy stands on the corridor"
     assert not s._fixtures_in_bands(geom)
-    geom["boxes"]["fixtures"]["privy"] = (560.0, 455.0, 10.0, 8.0)
+    geom["boxes"]["fixtures"]["privy"] = geom["fixtures"]["privy"] = (560.0, 455.0, 10.0, 8.0)
     assert s._fixtures_in_bands(geom), "in its own band"
-    geom["boxes"]["fixtures"] = {}
+    geom["boxes"]["fixtures"] = geom["fixtures"] = {}
     assert not s._fixtures_in_bands(geom), "no fixture"
-    geom["boxes"]["fixtures"] = {"coop": (800.0, 800.0, 6.0, 6.0)}
+    geom["boxes"]["fixtures"] = geom["fixtures"] = {"coop": (800.0, 800.0, 6.0, 6.0)}
     s.M["houses"].append({"x": 800.0, "y": 780.0, "w": 40.0, "h": 30.0, "geom": {"groves": [(800.0, 800.0, 100.0, 30.0)], "bbox": (800.0, 790.0, 120.0, 60.0)}})
     geom["bbox"] = (650.0, 650.0, 400.0, 400.0)
     assert s._fixtures_in_bands(geom), "in a neighbor's band"

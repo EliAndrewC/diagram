@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T19:43:40Z",
+  "target": "review-accept",
+  "commit": "be1cdcda6",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--homestead-grove F3: a confirmation, not a defect: round 2 measured it holding"
+}

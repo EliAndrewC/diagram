@@ -15306,5 +15306,17 @@
    "Reihendorf",
    "Reihendörfer"
   ]
+ },
+ "Kan'en": {
+  "def": "A Japanese era name, 1748 to 1751, in the middle of the Edo period.",
+  "variants": [
+   "Kan'en"
+  ]
+ },
+ "yashikiyama": {
+  "def": "\"Homestead hill-wood\": the word a 1684 register of hill land in the Mito domain uses for a household's wood, which the paper quoting it takes to be a homestead grove (yashikirin).",
+  "variants": [
+   "yashikiyama"
+  ]
  }
 }

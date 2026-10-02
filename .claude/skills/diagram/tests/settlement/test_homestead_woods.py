@@ -136,3 +136,33 @@ def test_the_copse_is_trimmed_back_to_its_goal_and_never_below_its_reserved_seat
     assert seats[9] in out and len(out) == 3, "the reserved seat, then the shortest run nearest the goal"
     assert trim_to_goal(seats, kept, 10.0, 1.0, 0.0) == [seats[9]]
     assert len(trim_to_goal(seats, kept, 10.0, 1.0, 3.6 * one)) == 4
+
+
+def test_the_woodland_commons_seats_no_crown_in_a_plots_sun():
+    """Feature 310 (GM 2026-10-02: "no canopy trees should be exempt"): a commons beside a yard throws no crown into the
+    yard's sun ground, and stands elsewhere."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT, trees_shading_plots
+
+    s = _hamlet()
+    s.sun_corridor(39)
+    s.M["threshing_yards"] = [{"x": 400.0, "y": 280.0, "w": 40.0, "h": 20.0}]  # its sun ground runs 270..340 deep into the wood
+    s.commons([(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)], role="woodland")
+    assert s.M["tree_crowns"], "non-vacuity: the wood stands"
+    assert trees_shading_plots(s.M, CANOPY_SHADE_FT) == []
+
+
+def test_a_thin_dooryard_band_runs_its_trees_its_whole_length() -> None:
+    """Feature 310 (the homestead grove's glyph-check): a band at least twice as long as wide in the dooryard mix spreads its
+    few trees along its whole length - no stretch of it left bare - lying either way."""
+    for w, h in ((17.0, 54.0), (54.0, 17.0)):
+        s = _hamlet()
+        s._draw_grove(400.0, 400.0, w, h, (1, 0), mix="dooryard", cls="homestead grove", bamboo=False)
+        tc = s.M["tree_crowns"]
+        along = sorted(tc[i + 1] if h > w else tc[i] for i in range(0, len(tc), 3))
+        assert len(along) >= 3, "non-vacuity: the band drew its trees"
+        lo, hi = 400.0 - max(w, h) / 2, 400.0 + max(w, h) / 2
+        steps = [along[0] - lo, *(b - a for a, b in zip(along, along[1:], strict=False)), hi - along[-1]]
+        assert max(steps) < max(w, h) / 2, (w, h, steps)
+        discs = [(tc[i + 1] if h > w else tc[i], tc[i + 2]) for i in range(0, len(tc), 3)]
+        bare = (min(c - r for c, r in discs) - lo, hi - max(c + r for c, r in discs))
+        assert max(bare) <= 0.0, ("a crown reaches each end of the band, where it joins the belt", w, h, bare)

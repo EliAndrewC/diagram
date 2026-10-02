@@ -489,6 +489,7 @@ class LandUseMixin:
         # loose crowns at fit zoom. Fruit (lychee, longan, citrus): standard trees at ~18 ft on the band's centerline.
         # The pitches are drawing calibrations from each plant's habit, not surveyed dikes (nothing read gives a
         # spacing along a dike, research/contents.json#field-archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)') - labeled so in the class entries.
+        fruit: dict[int, tuple[float, float, float]] = {}  # a fruit dike's trees by their piece's place in `g` (feature 310)
         if crop == "mulberry":
             for t in mulberry_row_ts(DIKEPOND_WATER_INSET):  # the planted rows across the band
                 for x, y in walk(s_w + t * (s_b - s_w), 4.4):
@@ -513,9 +514,13 @@ class LandUseMixin:
                 if near and chan_dist(x, y) < 5.5:
                     continue
                 r = rng.uniform(4.0, 5.0)
+                fruit[len(g)] = (x, y, r)  # a standard tree, canopy: thinned out of a plot's sun once the plots stand (feature 310)
                 g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{rng.choice(("#5E7C40", "#4F6E33"))}" stroke="#3C5526" stroke-width="0.8" opacity="0.92"/>')
         g.append("</g>")
-        self.add("".join(g), cls=Planted(DIKE_CROP_CLASS[crop]))  # the crowns, canes or fans are the dike's planting - lit WITH the dike, in their own tone (feature 153)
+        if crop == "fruit":  # the trees recorded with the string's place, for `thin_planted_trees` (feature 310)
+            self._plant_run("fruit", g, [fruit.get(i) for i in range(len(g))], Planted(DIKE_CROP_CLASS[crop]))
+        else:  # the crowns, canes or fans are the dike's planting - lit WITH the dike, in their own tone (feature 153)
+            self.add("".join(g), cls=Planted(DIKE_CROP_CLASS[crop]))
 
     @staticmethod
     def _pick_overlay_plots(eligible: list[Any], take: int, clustered: bool, rng: random.Random) -> list[Any]:

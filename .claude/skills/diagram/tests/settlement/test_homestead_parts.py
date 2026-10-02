@@ -117,7 +117,8 @@ def test_village_grove_south_sun_strip_follows_the_declared_corridor():
 
 def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
     """Feature 133 T10: with `west_sun_lane` on, a windbreak clump never stands in the lane (50 ft
-    in the generator; any value here) west/southwest of a yard or bed; a copse is exempt, and the
+    in the generator; any value here) west/southwest of a yard or bed; nor a copse clump (feature 310, GM 2026-10-02: "no
+    canopy trees should be exempt"), and the
     rule is off by default."""
     # A NARROWER BAND (feature 158): a dense belt's cost is its AREA, and this test's question is
     # whether one fixed lane strip is kept clear. x is narrowed to 250..400 and y to 320..580, which
@@ -142,7 +143,7 @@ def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
     copse.M["gardens"] = [plot]
     copse.west_sun_lane(75)
     copse.village_grove(poly, role="copse", dense=False)
-    assert lane_hit(copse), "a copse is the dooryard's own trees and is not held to the belt's lane"
+    assert not lane_hit(copse), "the copse is held to the lane as the belt is (feature 310)"
 
 
 def test_village_grove_keeps_every_clump_and_set_view_decides_which_are_on_the_page():

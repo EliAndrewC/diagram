@@ -238,7 +238,7 @@ def lay_fixtures(
     """Each of `kinds` laid beside the parts already laid, in the house's unturned frame centered on it: `{kind: (x, y, w,
     h)}`, the box AS LAID (a flank seat turned to lie along its flank). `roofs` are the built parts - the house first, the
     kura, the byre, the well-house - and `ground` the open ones, the yard and the beds, whose sun a persimmon's crown keeps
-    out of: `shade` px east, west and south of each (`PERSIMMON_SHADE_FT`), at every rake in `turns` (degrees - the house
+    out of: `shade` px east, west and south of each (`CANOPY_SHADE_FT`), at every rake in `turns` (degrees - the house
     is turned after its parts are laid, and the sun is not);
     `yard` is the threshing yard, `kura` whether the house keeps one on its north wall, `annex` the byre where the household
     keeps one (its walls take a wood shed too); `roll` the household's position roll (`Settlement._hjit` at its seat).

@@ -291,7 +291,7 @@ SUN_CORRIDOR_FT = 39.0
 #
 # 75 ft WAS TRIED FIRST AND DECLINED (2026-08-25), and the reason is a ruling, not a taste: 75 is
 # the same geometry at 15 m, the floor of the Sendai "tall tree" class an untended mature
-# sugi/keyaki stand reaches (15-25 m). At 75 the belt has to stand so far off the west rank that it
+# sugi/keyaki stand reaches (15-28 m). At 75 the belt has to stand so far off the west rank that it
 # falls outside the frame the hard features set, and the frame does NOT open for the belt (GM
 # 2026-07-20: the communal windbreak clips at the view edge; `crop_hugs_content`). Measured on
 # Inashiro: 131 clumps -> 38, `village_windbreak_is_continuous` red. At 50 the belt stands whole
@@ -471,7 +471,8 @@ POLDER_CELL_FT = 110.0
 # implementation of a rule the checker owns:
 #   - `_sun_corridor_ok` keeps SUN_CORRIDOR_FT (39) of open ground SOUTH of every threshing yard,
 #     in BOTH directions between neighbors, and `yards_unshaded_by_neighbors` gates it;
-#   - `_yard_sun_conflict` and `_garden_shaded` extend the same rule to groves and dooryard gardens;
+#   - `_yard_sun_conflict` and `_garden_shaded` prefer seats that keep groves and houses off the plots' sun, and every
+#     canopy crown is held out of every plot's sun ground where it is drawn (`_sun_keepouts`, feature 310);
 #   - feature 121 retired the circumscribed-circle spacing for real rotated footprints, and
 #     `_house_too_near_a_neighbor` is an eave-drip rule of a couple of feet, not a sun rule.
 # So THIS number is a ROW-PLANNING pitch and nothing else: nothing pays 100 ft east-west. See

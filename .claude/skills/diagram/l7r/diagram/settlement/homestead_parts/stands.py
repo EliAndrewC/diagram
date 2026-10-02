@@ -426,13 +426,11 @@ class StandsMixin:
         # belt clump within `_west_sun_ft` of a plot's west edge, from the plot's north edge down to
         # `_west_sun_ft` below its south edge (the southwest, where the 3pm shadow starts), takes the
         # afternoon. Measured as a SQUARE, not a solar wedge, the same knowing departure the yard's
-        # south corridor takes. WINDBREAK MIX ONLY: a copse clump is lesser dooryard wood (3-10 m in
-        # the Sendai igune classes), and it is not held to the lane a 10 m belt is - a GUESS. It was
-        # justified by "a persimmon in the yard center" (a Tonami model homestead), a passage the
-        # record does not hold and the cited Tonami page does not carry (checked 2026-10-02); the
-        # yard persimmon itself is held to its own sun rule (`PERSIMMON_SHADE_FT`). Opt-in via `west_sun_lane` (off on the
-        # frozen pool); `village_trees_unshade_from_west` gates it. Derivation: research/contents.json#homesteads.
-        wl = float(getattr(self, "_west_sun_ft", 0.0)) if mix == "windbreak" else 0.0
+        # south corridor takes. EVERY MIX (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the copse was
+        # exempt on a passage the record did not hold; every crown is now held to the full sun ground at the crown too
+        # (`_sun_keepouts`), and this lane keeps the copse's clump SEATS out of it as the belt's are. Opt-in via
+        # `west_sun_lane` (off on the frozen pool). Derivation: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html.
+        wl = float(getattr(self, "_west_sun_ft", 0.0))
         west = [(o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["y"] + o["h"] / 2) for k in ("threshing_yards", "gardens") for o in self.M.get(k, [])] if wl else []
         water_lines = [(st_["poly"], st_.get("w", 9) / 2) for st_ in self.M.get("streams", [])]
         water_lines += [(c_["poly"], c_.get("w", 2.5) / 2) for c_ in self.M.get("channels", [])]

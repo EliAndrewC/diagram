@@ -333,3 +333,16 @@ def test_a_well_pocket_stands_clear_of_its_own_house_beside_a_shallow_yard() -> 
     assert canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (30.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, well=22.0)["well"][1] == 14.0 + 3.0 + 15.0, (
         "beside a deep yard, at its middle, under the house or not"
     )
+
+
+def test_on_a_map_keeping_the_sun_the_east_band_closes_the_house_side_only() -> None:
+    """Feature 310 (GM 2026-10-02: "no canopy trees should be exempt"): with `sun_band`, the garden stands beside the yard and
+    the thin east band ends at the house's front line - north of every plot's sun ground - so no band runs on beside a plot
+    and the frontage is no wider than the plain layout's."""
+    plain = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=3, garden_by_yard=True, thin=17.0, sun_east=22.0, way_in=12.0)
+    sunny = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=3, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, sun_band=True)
+    east = next(r for r, face, _d in sunny["groves"] if face == (1, 0))
+    assert east[1] + east[3] / 2 == 14.0, "the band ends at the house's front wall (ch / 2)"
+    assert sunny["garden"][1] == sunny["yard"][1], "the garden stands beside the yard"
+    width = lambda c: max(r[0] + r[2] / 2 for r, _f, _d in c["groves"]) - min(r[0] - r[2] / 2 for r, _f, _d in c["groves"])  # noqa: E731
+    assert width(sunny) == width(plain)

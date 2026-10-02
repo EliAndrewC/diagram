@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T15:10:52Z",
+  "target": "review-accept",
+  "commit": "bddba3a1e",
+  "outcome": "permitted",
+  "why": "review-accept fix-check--inashiro 4: re-seating moves a chaotic layout by construction; the rules hold on every pool map and the cohort, and feature 308 has since re-grown the cluster anyway"
+}
