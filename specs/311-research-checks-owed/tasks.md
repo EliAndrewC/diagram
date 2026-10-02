@@ -25,7 +25,7 @@ research already reaches: nothing a map draws changes and no new finding is made
       research: rendering
 - [ ] T08 [US1] The backfill: `intro-check` over every question in batches; `backfill.md`; every NEEDS-INTRO and INTRO-FIX written or fixed from the drawing page and `make canon`; each written intro's owed units answered, two rounds at most (FR-008, SC-003; plan D10)
       research: rendering
-- [ ] T09 [US2] The doctrine follows the command: research `CLAUDE.md`, `docs/research-doctrine.md`, `container-scripts/page-session-rules.md`, the root `CLAUDE.md` guard table, `docs/guards.md`, the five check contracts' descriptions (FR-010; plan D11)
+- [ ] T09 [US2] The doctrine follows the command: research `CLAUDE.md`, `docs/research-doctrine.md`, `container-scripts/page-session-rules.md`, the root `CLAUDE.md` guard table, `docs/guards.md`, the five check contracts (descriptions and bodies) (FR-010; plan D11)
       research: rendering
 - [ ] T10 [US2] SC-002: `--between` over the last 30 record-only commits on main, tabulated in `research.md` beside what the doctrine's wording owed
       research: rendering

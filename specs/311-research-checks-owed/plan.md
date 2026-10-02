@@ -12,7 +12,7 @@ question, the intros it calls for are written, and the parley-room question gets
 
 ## Technical Context
 
-- Tooling only: `scripts/` (Python 3, stdlib, git), one agent file, the record's CSS, docs, the record's question pages.
+- Tooling only: `scripts/` (Python 3, stdlib, git), one agent file, docs, the record's question pages.
   No engine module (`l7r/**`) changes, so the delta takes the DIRECT route; no map changes, so no perf bookends and no map
   review occasion.
 - Existing pieces reused, never copied: `_entry_owed.base_of` and its modal scan; `_translation_owed.owed`; the block reader
@@ -55,10 +55,13 @@ holds the mechanical shape (position, one, no mark).
 **D4 - `intro-check`, the defined agent.** `.claude/agents/intro-check.md`: Opus at medium effort (it judges; the project's
 rule - a downgrade stands only after seeded runs, and the backfill is about ten dispatches, so the saving does not repay the
 experiment), `omitClaudeMd: true`, tools Read and Grep, reads a bundle. Verdicts per question: NO-INTRO-NEEDED,
-NEEDS-INTRO (what the intro must say and the drawing page's class for it - attested, deviation, convention), INTRO-OK,
+NEEDS-INTRO (what the intro must say, and the class the question's cited body or its drawing page already reaches - attested,
+a deliberate deviation, a convention, an invention of the setting; spec FR-001), INTRO-OK,
 INTRO-FIX (what is wrong: no "why", or a historical claim the cited body does not carry). Its bundle (`make check-bundle Q=NNNN FOR=intro-check`, or
-`QS="NNNN NNNN ..."` for a batch) holds, per question: the research page's heading, intro and opening paragraph and its lead
-lines; the drawing page's heading and opening; the `Name:` and `Label:` of each modal whose `Entry:` names the question.
+`QS="NNNN NNNN ..."` for a batch) holds, per question: the research page's whole visible text, comments stripped (the
+check confirms an intro adds no claim that body does not carry, so it reads the body); the drawing page's visible text; the
+`Name:` and `Label:` of each modal whose `Entry:` names the question. Notes are not copied: the check judges the page's own
+words against each other, never a quotation against its source.
 Added to `test_agent_models.py`'s tier table and to `_ledger_lint.py`'s check list.
 
 **D5 - The owed command.** `scripts/_record_owed.py` (CLI, git) over `scripts/_record_units.py` (pure: blocks, notes,
@@ -69,9 +72,11 @@ re-implemented. Each script stays well under the 1,000-line bar.
 
 **D6 - The answer record.** `make record-checked CHECK=<check> (BUNDLE=<dir> | Q=NNNN [NOTES=k,k] | KEY=<key> | KIND=<modal>) RESULT="<counts>"`
 writes `$(git rev-parse --git-common-dir)/record-checks/<slug>.json` per unit: slug, fingerprint, counts, utc. With BUNDLE= the
-fingerprints are those the bundle recorded in its MANIFEST when it was built (what the check actually read); without, the
-tree's now - the form for `source-reader` (it reads before the note exists) and for fixes that apply the check's own
-findings. A record is current while its fingerprint equals the unit's now. In the pushing clone, as the review records are
+fingerprints are those the bundle recorded in its MANIFEST when it was built (what the check actually read). Without a
+bundle the tree's fingerprints are recorded, and only in two forms: `CHECK=source-reader Q= NOTES=` for notes whose source the
+reader read (it reads before the note exists, so no question bundle can carry them), and any check with `REASON="<why>"`, two
+words or more, written to `dev/bypass-log/` like every escape (spec FR-007). A fix that applies a check's findings changes the
+content, so the unit is owed again and gets its second round (the two-round cap), or is discharged by such a reason. A record is current while its fingerprint equals the unit's now. In the pushing clone, as the review records are
 (spec decision); a headless page session works in the clone its brief names, which is the clone that pushes.
 
 **D7 - The push.** `scripts/entry-gate.sh` becomes the record gate (its name kept: it is wired into both routes and four docs):
@@ -87,9 +92,13 @@ of that check owed on the question is refused (exit 3) with the owed list, unles
 recorded in the guard log and in the MANIFEST). A `FOR=quote-check` bundle with no `NOTES=` holds only the owed notes (the
 whole question when `#unfootnoted` is owed). Every question bundle's MANIFEST carries `owed-checks:` and one
 `unit: <slug> <fingerprint>` line per owed unit. `check-bundle-hooks.sh` refuses a dispatch of a record check whose
-MANIFEST does not list it as owed, with `CHECK_NOT_OWED_OK="<reason>"` as the escape. Exempt: `source-reader` (a research read
-precedes the note it supports, so nothing is owed yet) and `record-style` (owed by a declared sweep, feature 292). A KEY=
-bundle is not refused (its readers are source-reader and the write-up check).
+MANIFEST does not list it as owed, with `CHECK_NOT_OWED_OK="<reason>"` as the escape. Exempt: `record-style` (owed by a declared
+sweep, feature 292). A `KEY=` bundle is refused like a question bundle: without `WHOLE=1` (the write-up check) unless
+`source-applicability` is owed on the key; with `WHOLE=1` (source-reader) unless a `source-reader` unit is owed on a note citing
+the key, or the read is declared for a claim not yet in the record - `NEW="<the claim, in a few words>"`, recorded in the
+guard log and the MANIFEST (a research read precedes the note it supports, so nothing can be owed yet; the declaration is what
+separates it from re-reading an existing note's source). `NOT_OWED_OK` covers the rest, e.g. a source's numbers about to reach a
+map or a rule (FR-004's other half, held on the physical task's box).
 
 **D10 - The backfill.** Ten `intro-check` dispatches of about 24 questions each, bundles built with
 `NOT_OWED_OK="feature 311 backfill"`; rulings tabulated in `specs/311-research-checks-owed/backfill.md`; every NEEDS-INTRO and
@@ -97,8 +106,9 @@ INTRO-FIX written or fixed by this session from the drawing page and `make canon
 written intro then owes `intro-check` + `record-format` by D2 and is answered in at most two rounds.
 
 **D11 - The doctrine follows the command.** The research `CLAUDE.md`, `STYLE.md`, `docs/research-doctrine.md`,
-`container-scripts/page-session-rules.md`, the root `CLAUDE.md` guard table, `docs/guards.md`, and the descriptions of
-`quote-check`, `record-format`, `source-applicability`, `source-reader` and `translation-check`: "run on every new or changed
+`container-scripts/page-session-rules.md`, the root `CLAUDE.md` guard table, `docs/guards.md`, and the descriptions AND
+contract bodies of `quote-check`, `record-format`, `source-applicability`, `source-reader` and `translation-check` (each
+"Use on every new or changed research entry" or "every research pass" line): "run on every new or changed
 entry" becomes "run on the units `make record-owed` names", and each says to record the answer with `make record-checked`.
 
 ## Verification
@@ -109,7 +119,9 @@ entry" becomes "run on the units `make record-owed` names", and each says to rec
   `RECORD_CHECKS_OK` and silent cases (SC-004). `test-check-bundle-hooks.sh` gains the not-owed dispatch and its escape;
   `test_check_bundle.py` the refused bundle, the escape and the owed-notes default.
 - SC-005: `intro-check` seeded with three known questions (the parley room without its intro -> NEEDS-INTRO; a plain farm
-  subject -> NO-INTRO-NEEDED; an intro adding a historical claim its cited body does not carry -> INTRO-FIX), three runs a leg, before the backfill.
+  subject -> NO-INTRO-NEEDED; an intro adding a historical claim its cited body does not carry -> INTRO-FIX), three runs a leg,
+  before the backfill - each run a BATCH bundle of the backfill's size with the three seeds placed among ordinary questions, so
+  the seeded runs test the check in the form the backfill uses it.
 - SC-002: `make record-owed` `--between` over the last 30 record-only commits, tabulated in `research.md`.
 - `make quick` while iterating, `make done` once at the end (no engine change, but the tests and static checks are owed);
   `make record CHECK=1`; `make hooks-test`.
@@ -147,3 +159,12 @@ docs/, CLAUDE.md, container-scripts/page-session-rules.md    D11
 ## Complexity Tracking
 
 None.
+
+## Review history
+
+- **Plan review 1** (`spec-fidelity` MODE 4, 2026-10-02): BLOCKED - five narrowings: D4's bundle lacked the body the check must
+  read and the class list of FR-001; D6's bundle-less record was an unlogged bypass; D9 exempted `source-reader` wholesale and
+  never refused a `KEY=` bundle; D11 left the contract bodies. All five applied (D4 bundles the visible text and FR-001's four
+  classes; D6 allows a bundle-less record only for `source-reader` notes or with a logged REASON; D9 refuses `KEY=` bundles and
+  exempts a read only when declared for a claim not yet in the record; D11 and T09 take the bodies), the stale CSS line removed,
+  and the aside taken: SC-005's seeded runs are batches of the backfill's size.

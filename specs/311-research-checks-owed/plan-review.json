@@ -1,0 +1,140 @@
+{
+ "feature": "311-research-checks-owed",
+ "plan_sha256": "a6c545b2f8c7f1d157fe9b48ae0dfa0618a3cbda70c0baeb428255ed11f57bcb",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "TC-route",
+   "summary": "Tooling only, DIRECT route, no perf bookends, no map review occasion",
+   "class": "within",
+   "why": "Spec Assumptions: map review checks untouched; no engine change."
+  },
+  {
+   "id": "TC-css",
+   "summary": "Technical Context lists 'the record's CSS' among touched files",
+   "class": "within",
+   "why": "D3 and FR-002 say the intro carries no styling and Project Structure lists no CSS; a stale term to delete, not a decision."
+  },
+  {
+   "id": "D1",
+   "summary": "Units as check:subject with word-normalized fingerprints per unit",
+   "class": "within",
+   "why": "Implements FR-004's definition of CHANGED and FR-006's content the check read."
+  },
+  {
+   "id": "D2",
+   "summary": "CHANGED = normalized text present nowhere in the record at the base; FR-004 table applied mechanically; base read in one ls-tree + cat-file batch",
+   "class": "within",
+   "why": "Restates FR-004 and the move/merge Edge Cases; the read method is implementation."
+  },
+  {
+   "id": "D3",
+   "summary": "Intro is <p class=\"intro\">, first block after heading and comments, at most one, no mark, no styling; shape test",
+   "class": "within",
+   "why": "FR-002 and the intro Edge Case; position after the confusables block is achieved by the site's insertion, to be verified in T05."
+  },
+  {
+   "id": "D4-tier",
+   "summary": "intro-check pinned Opus at medium effort, omitClaudeMd, Read+Grep, tier table and ledger lint",
+   "class": "within",
+   "why": "FR-001 requires a pinned tier and launch without auto-loaded files; Opus for judgment per project rule."
+  },
+  {
+   "id": "D4-verdicts",
+   "summary": "Verdicts renamed INTRO-OK / INTRO-FIX for INTRO-PRESENT-OK / INTRO-PRESENT-FIX",
+   "class": "within",
+   "why": "Naming only; same four rulings as FR-001."
+  },
+  {
+   "id": "D4-bundle",
+   "summary": "intro-check's bundle holds only the research page's heading, intro, opening paragraph and lead lines, the drawing page's heading and opening, and modal Name/Label; NEEDS-INTRO names 'the drawing page's class' from attested/deviation/convention",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 and the intro Edge Case require the check to verify the intro adds no historical claim the CITED BODY does not carry, and to name the class 'the question's cited body or drawing page' reaches, including 'an invention of the setting'. A bundle without the cited body cannot do the INTRO-FIX half it is for (spec item 6: the mechanism cannot reach its stated purpose), and sourcing the class from the drawing page alone drops half of FR-001. Fix: the bundle carries the research page's visible body (comments stripped), and the class list and source match FR-001."
+  },
+  {
+   "id": "D5",
+   "summary": "_record_owed.py over pure _record_units.py; make record-owed [Q=]; --unanswered; --between for SC-002; reuses _entry_owed/_translation_owed",
+   "class": "within",
+   "why": "FR-003, SC-002."
+  },
+  {
+   "id": "D6-bundle",
+   "summary": "make record-checked BUNDLE= records the fingerprints the bundle's MANIFEST captured, in the pushing clone's git dir",
+   "class": "within",
+   "why": "FR-006 and the spec's decision that answer records live in the pushing clone."
+  },
+  {
+   "id": "D6-selfattest",
+   "summary": "Without BUNDLE=, record-checked records the tree's CURRENT fingerprints, for source-reader and 'for fixes that apply the check's own findings', with no reason required or logged",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006: the record carries 'the content the check read' and is stale once it changes; FR-007: the only other discharge is a stated reason written to the bypass log. Recording content the check never read after a fix is an unlogged discharge open to any check at any time, and contradicts FR-008's 'each written intro passes the check in at most two rounds'. Not impossible, not implied by the request. Fix: without BUNDLE= the record requires a stated reason (two words or more) written to the bypass log, or is limited to source-reader on a note whose source it read; a fix that applies findings is re-checked (within the two-round cap) or discharged by a logged reason."
+  },
+  {
+   "id": "D7",
+   "summary": "entry-gate.sh becomes the record gate on both routes; RECORD_CHECKS_OK discharges all; ENTRY_DRIFT_OK kept for entry-drift units; prose rewrite still clears an entry-drift unit",
+   "class": "within",
+   "why": "FR-007 folds entry-drift's refusal and reason into the one gate; FR-004 keeps entry-drift 'as today'."
+  },
+  {
+   "id": "D8",
+   "summary": "_entry_owed.moved_anchors compares the body with comments and the intro removed",
+   "class": "within",
+   "why": "FR-004 last row."
+  },
+  {
+   "id": "D9-refusal",
+   "summary": "check-bundle refuses a not-owed FOR= bundle (NOT_OWED_OK reason, logged), owed-notes default for quote-check, MANIFEST owed lines, dispatch hook refusing a check the MANIFEST does not owe (CHECK_NOT_OWED_OK)",
+   "class": "within",
+   "why": "FR-005 and US2 ('builds no bundle and dispatches no check that is not owed'); enforcement of the requested behavior."
+  },
+  {
+   "id": "D9-record-style",
+   "summary": "record-style exempt from the not-owed refusal",
+   "class": "within",
+   "why": "Spec Assumptions: record-style stays a sweep check owed by a declared sweep (feature 292), outside the owed table."
+  },
+  {
+   "id": "D9-source-reader",
+   "summary": "source-reader wholly exempt from the bundle refusal and the dispatch hook",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 owes source-reader on a new or changed note and FR-005 refuses a not-owed bundle. The pre-note research read is a real case where nothing is owed yet, but the wholesale exemption also lets a session re-run source-reader over every existing note for a formatting sweep - the GM's named fear ('whether the research accurately characterizes its source ... for all 2,000 something'). Adjudicated separately from the pre-note case: exempting only a read for a note not yet in the record (e.g. a KEY= bundle for a source no existing note cites, or the new note's id absent at the base and in the tree) would be legitimate; the blanket exemption is not."
+  },
+  {
+   "id": "D9-key-bundle",
+   "summary": "A KEY= bundle is never refused (source-reader and source-applicability)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 owes source-applicability on a write-up whose visible text changed, so a KEY= bundle on an unchanged source is not owed and FR-005 refuses it. The exemption reopens exactly the whole-source re-run the GM worried about. Its one non-delta occasion (before a source's numbers reach a map or rule, kept on the task box by the spec's Assumptions) is served by NOT_OWED_OK with a stated reason, so the exemption is not necessary."
+  },
+  {
+   "id": "D10-backfill",
+   "summary": "Backfill in about ten intro-check dispatches of about 24 questions each under NOT_OWED_OK='feature 311 backfill'; rulings in backfill.md; intros written by this session from the drawing page and make canon; each answered in at most two rounds",
+   "class": "within",
+   "why": "FR-008, the backfill Edge Case and the Assumptions (this session or page sessions; canon via make canon). Batch size is design, not fidelity."
+  },
+  {
+   "id": "D11",
+   "summary": "Doctrine files and 'the descriptions of' quote-check, record-format, source-applicability, source-reader, translation-check say 'run on the units make record-owed names'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-010 requires each check's own CONTRACT to carry no wording readable as every check on every edit. The bodies of quote-check.md, record-format.md, source-applicability.md and source-reader.md (line 12 of each) also say 'Use on every new or changed research entry' / 'during every research pass'; changing the frontmatter descriptions alone leaves it. Fix: the contract bodies change too (T09 likewise)."
+  },
+  {
+   "id": "Verification",
+   "summary": "Red-first tests per FR-004 row and Edge Case, gate tests for SC-004, SC-005 seeded three a leg before the backfill, SC-002 tabulated in research.md, make done / record CHECK=1 / hooks-test",
+   "class": "within",
+   "why": "SC-002, SC-004, SC-005."
+  },
+  {
+   "id": "ConstitutionCheck",
+   "summary": "Constitution check rows; XII 'each intro states the class the drawing page already records'",
+   "class": "within",
+   "why": "Restates D4's class source; the narrowing is ruled under D4-bundle."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
