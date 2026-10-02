@@ -21,9 +21,10 @@ FOUR RULES, each measured before it was written (`specs/236-catch-mistakes-early
      done real damage (`cd /diagram`, `git init --bare`). This project writes substitution as
      `$(...)`, so the refusal costs nothing and names that form.
 
-  3. `-m` FOR A MESSAGE THAT NEEDS A HEREDOC (FR-005). A refusal rather than a rewrite: the failing
-     class parses CLEANLY into the WRONG message - an inner quote closes the string early - so any
-     rewrite would faithfully preserve the wrong message.
+  3. `-m` FOR A MESSAGE THAT NEEDS A HEREDOC (FR-005). The failing class parses CLEANLY into the WRONG
+     message - an inner quote closes the string early - so a rewrite of THAT would faithfully preserve
+     the wrong message, and it is refused. Since 2026-10-02 (the GM approved it) an unambiguous message
+     is rewritten into a quoted `-F -` heredoc instead (`commit_dash_m_rewrite`).
 
   4. A CO-AUTHOR ADDRESS THAT IS NOT OURS (FR-006). The instance on record put a placeholder address
      into a trailer through an `||` fallback and it went to main. The KEY is matched
@@ -170,7 +171,7 @@ def _dash_m_words(seg: list[Word]) -> list[Word]:
             out.append(w)
             take_next = False
             continue
-        if w.value in ("-m", "--message"):
+        if w.value in ("-m", "--message") or re.fullmatch(r"-[a-zA-Z]*m", w.value):  # `-am` takes the next word too
             take_next = True
         elif w.value.startswith("--message="):
             out.append(Word(w.value.split("=", 1)[1], w.raw.split("=", 1)[-1], w.chunks, w.quoted))
@@ -203,6 +204,69 @@ def commit_dash_m_problem(cmd: str) -> str | None:
                         + ") - the shell closes the first quote early, so git receives a message "
                           "nobody wrote")
     return None
+
+
+def _literal(w: Word) -> bool:
+    """True when the word's value is exactly what its one quoted piece says: single quotes, or double quotes with nothing
+    the shell would expand or unescape in them."""
+    if w.chunks != 1 or len(w.raw) < 2:
+        return False
+    if w.raw[0] == w.raw[-1] == "'":
+        return True
+    return w.raw[0] == w.raw[-1] == '"' and not any(c in w.raw for c in "$`\\")
+
+
+def commit_dash_m_rewrite(cmd: str) -> str | None:
+    """The command with its `-m` messages moved into a quoted `-F -` heredoc, or None when that cannot be done EXACTLY.
+
+    THE REWRITE THE GM ASKED FOR (2026-10-02: *"I do indeed want that git commit rewrite"*), after the guard log showed
+    209 of the rule's 220 September refusals were a newline inside one cleanly quoted `-m` - a round trip that prevented
+    nothing, because that message was never ambiguous. The refusal stands wherever the message IS ambiguous: a message
+    built from several quoted pieces (the inner quote that closes a string early - rule 3's reason), a double-quoted one
+    the shell would expand, a command already carrying a heredoc (whose body order a second one would have to respect),
+    or more than one commit. Several `-m` are joined with a blank line, which is how git joins them.
+    """
+    if "<<" in cmd:
+        return None
+    commits = [seg for seg in segments(cmd) if _is_git_commit(seg)]
+    if len(commits) != 1:
+        return None
+    seg = commits[0]
+    if any(w.value in ("-F", "--file") or w.value.startswith(("--file=", "--message=")) for w in seg):
+        return None
+    pairs: list[tuple[str, Word]] = []  # (the flag as written, its message)
+    take = ""
+    for w in seg:
+        if take:
+            pairs.append((take, w))
+            take = ""
+        elif w.value in ("-m", "--message") or re.fullmatch(r"-[a-zA-Z]*m", w.value):
+            take = w.raw
+        elif re.match(r"^-[a-zA-Z]*m.", w.value) and not w.value.startswith("--"):
+            return None  # `-m"text"` glued to its flag: rare, and not worth a second shape
+    if not pairs or take or not all(_literal(w) for _, w in pairs):
+        return None
+    out, first = cmd, None
+    for flag, w in pairs:
+        found = list(re.finditer(re.escape(flag) + r"[ \t]+" + re.escape(w.raw), out))
+        if len(found) != 1:
+            return None
+        m = found[0]
+        keep = flag[:-1] + " " if flag.startswith("-") and not flag.startswith("--") and len(flag) > 2 else ""  # `-am` keeps `-a`
+        if first is None:
+            out, first = out[: m.start()] + keep + "-F - <<'@@HEREDOC@@'" + out[m.end():], m.start()
+        else:
+            out = out[: m.start()].rstrip(" \t") + (" " + keep.strip() if keep else "") + out[m.end():]
+    body = "\n\n".join(w.value for _, w in pairs)
+    delim = "EOF"
+    while delim in body.split("\n"):
+        delim += "_"
+    out = out.replace("@@HEREDOC@@", delim, 1)
+    nl = out.find("\n", first)
+    out = out + "\n" + body + "\n" + delim if nl < 0 else out[:nl] + "\n" + body + "\n" + delim + out[nl:]
+    if parse_error(out) or commit_dash_m_problem(out) or backtick_problem(out):
+        return None
+    return out
 
 
 def _messages(cmd: str, cwd: str = "") -> list[str]:
@@ -318,6 +382,19 @@ def selftest() -> None:
     assert coauthor_problem("git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'")
     assert coauthor_problem("git commit -F - <<'EOF'\nx\n\nClaude-Session: https://example\nEOF") is None
     assert verdict("echo ok") is None
+    assert commit_dash_m_problem('git commit -am "line one\nline two"'), "a bundled -am takes the next word"
+    rw = commit_dash_m_rewrite('git add x && git commit -q -m "one\ntwo" -m \'Co-Authored-By: C <noreply@anthropic.com>\' && git log -1')
+    assert rw == ("git add x && git commit -q -F - <<'EOF' && git log -1\none\ntwo\n\nCo-Authored-By: C <noreply@anthropic.com>\nEOF"), rw
+    assert commit_dash_m_rewrite('git commit -am "a\nb"') == "git commit -a -F - <<'EOF'\na\nb\nEOF"
+    assert commit_dash_m_rewrite("git commit -m 'say \"hi\"\nEOF'") == "git commit -F - <<'EOF_'\nsay \"hi\"\nEOF\nEOF_"
+    assert commit_dash_m_rewrite('git commit -m "a\nb"\necho next') == "git commit -F - <<'EOF'\na\nb\nEOF\necho next"
+    for refused in ('git commit -m "the pond\'s own "center" thing"',   # several quoted pieces: the ambiguous case
+                    'git commit -m "costs $5\nnow"',                    # the shell would expand it
+                    'git commit -m "a\nb" && cat <<\'X\'\nx\nX',          # a heredoc already in the command
+                    'git commit -m "a\nb"; git commit -m "c\nd"',        # more than one commit
+                    'git commit -m "a\nb" -F f',                        # a message file besides
+                    'git commit -m"a\nb"'):                             # glued to its flag
+        assert commit_dash_m_rewrite(refused) is None, refused
     print("_hm_shell selftest ok")
 
 
@@ -331,7 +408,12 @@ if __name__ == "__main__":
     except Exception:
         PAYLOAD = {}
     TI = PAYLOAD.get("tool_input", {}) or {}
-    OUT = verdict(TI.get("command", "") or "", PAYLOAD.get("cwd", "") or "")
+    CMD, CWD = TI.get("command", "") or "", PAYLOAD.get("cwd", "") or ""
+    OUT = verdict(CMD, CWD)
+    if OUT and OUT[0] == "commit-dash-m":  # rewritten when it can be done exactly, and only when the result passes every rule
+        RW = commit_dash_m_rewrite(CMD)
+        if RW is not None and verdict(RW, CWD) is None:
+            OUT = ("rewrite", RW)
     if OUT:
         print(OUT[0])
         print(OUT[1])
