@@ -72,7 +72,7 @@ whether open ground is a real feature), and land the research/doc tasks T14-T17 
 
 ## Phase 5: Docs - the "why" (REQUIRED, not optional)
 
-- [ ] T14 Land research.md findings 1-4 into `research/religion-and-death.md` and finding 5 into `research/urban-features.md`, in the four-field entry format; register the 13 new keys in `research/SOURCES.md` with what each was used FOR.
+- [ ] T14 Land research.md findings 1-4 into `research/contents.json#religion-and-the-dead` and finding 5 into `research/contents.json#trades-and-services`, in the four-field entry format; register the 13 new keys in `research/SOURCES.md` with what each was used FOR.
 - [ ] T15 FR-017: add the Fox eight-precinct program to `settlements/religion-and-death.md` as the **fourth** recognized justification for more than two major temples - including (a) that the eight-precinct form is inside the attested band and our two-complex default is the liberty, so nobody "corrects" it back, (b) the celibacy canon driving the housing inversion, and (c) why `city_graveyard_count` deliberately does NOT scale with precinct count.
 - [ ] T16 FR-018: record the temple knobs and their derivation in `settlements/cities/sizing.md`, next to the existing civic-program bullet.
 - [x] T17 FR-019: add Minami to the `SKILL.md` references list as Mode B example G, stating what it is the worked example OF (the eight-precinct Fox program, the peaceful tier, the first non-3,000 population, the first `extras` city).

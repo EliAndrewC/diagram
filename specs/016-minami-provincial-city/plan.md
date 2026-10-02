@@ -108,8 +108,8 @@ specs/016-minami-provincial-city/
 ├── test_villages.py                       # picks up the new map automatically
 ├── settlements/religion-and-death.md      # FR-017 the Fox program + why the graveyard ceiling holds
 ├── settlements/cities/sizing.md           # FR-018 the temple knobs and their derivation
-├── research/religion-and-death.md         # research.md findings 1-4 land here
-├── research/urban-features.md             # research.md finding 5 lands here
+├── research/contents.json#religion-and-the-dead         # research.md findings 1-4 land here
+├── research/contents.json#trades-and-services             # research.md finding 5 lands here
 ├── research/SOURCES.md                    # 13 new source keys
 ├── SKILL.md                               # FR-019 Mode B example G
 └── pool/
