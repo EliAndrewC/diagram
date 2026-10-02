@@ -232,3 +232,62 @@ def test_verdicts_are_applied_and_a_prehold_capture_loses_its_row(tmp_path: path
 def test_a_calibration_run_is_scored_per_leg(tmp_path: pathlib.Path) -> None:
     d = _bundle(tmp_path, [{"id": "p00001", "verdict": "KEEP"}, {"id": "p00002", "verdict": "KEEP"}, {"id": "p00003", "verdict": "NOT-KEPT", "reasons": ["off-topic"]}])
     assert un.score(d, {"p00001": "KEEP", "p00002": "NOT-KEPT", "p00003": "NOT-KEPT"}) == {"KEEP": {"agreed": 1, "total": 1}, "NOT-KEPT": {"agreed": 1, "total": 2}}
+
+
+# ---- the write-ups (FR-012) ----
+
+VOCAB = {"period": [{"id": "premodern", "name": "Premodern", "description": "old"}], "region": [{"id": "japan", "name": "Japan", "description": "j"}],
+         "kind": [{"id": "reference", "name": "Reference", "description": "r"}], "canon": {"id": "canon", "name": "Canon", "description": "c"}}
+
+
+def _vocab(root: pathlib.Path) -> None:
+    (root / un.at.RESEARCH / "source-tags.json").write_text(json.dumps(VOCAB), encoding="utf-8")
+
+
+def test_draft_bundles_hold_the_kept_pages_with_no_entry_and_the_contract(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    _vocab(root)
+    for n in (1, 2, 3):
+        src.put(_home(), f"https://k.org/{n}", f"Page {n} text.")
+    un.kept(root, ["https://k.org/1", "https://k.org/2", "https://k.org/3"], "source-filter")
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "0010-k-two.html").write_text("<p>K (https://k.org/2)</p>", encoding="utf-8")
+    (dr,) = un.draft_bundles(root, tmp_path / "drafts")
+    assert json.loads((dr / "ids.json").read_text()) == {"p00001": "https://k.org/1", "p00002": "https://k.org/3"}, "a page written up is not drafted again"
+    contract = (dr / "CONTRACT.md").read_text()
+    assert contract.startswith("# Writing up kept uncited sources") and "`period=premodern` - **Premodern**" in contract
+    assert (dr / "MANIFEST.md").read_text().startswith("# write-up draft bundle") and "entries.jsonl" in (dr / "MANIFEST.md").read_text()
+    assert "Keys already taken" in (dr / "MANIFEST.md").read_text() and "k-two" in (dr / "MANIFEST.md").read_text()
+
+
+def test_install_writes_each_good_entry_and_refuses_the_rest(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture) -> None:
+    root = _root(tmp_path)
+    _vocab(root)
+    (root / un.SOURCES / "010-works-cited" / "0010-taken.html").write_text("<p>x</p>", encoding="utf-8")
+    d = tmp_path / "d1"
+    un.write_bundle(d, [("p00001", "https://k.org/1", "A"), ("p00002", "https://k.org/2", "B"), ("p00003", "https://k.org/3", "C")])
+    good = {"citation": "Kotobank, 'x' (in Japanese; https://k.org/1)", "what": "What it is: A dictionary entry.", "why": "Why it applies, and its limits: It defines a term.", "tags": "period=premodern; region=japan; kind=reference"}
+    lines = [
+        {"id": "p00001", "key": "taken", **good},
+        {"id": "p00002", "key": "Bad Key", **good},
+        {"id": "p00003", "key": "k-three", **{**good, "tags": "period=nonsense; region=japan; kind=reference"}},
+    ]
+    (d / "entries.jsonl").write_text("".join(json.dumps(x) + "\n" for x in lines) + "not json\n", encoding="utf-8")
+    made = []
+
+    def reserve(kind: str, key: str, root_: pathlib.Path, url: str = "") -> pathlib.Path:
+        p = root_ / un.at.UNCITED / f"{(len(made) + 2) * 10:04d}-{key}.html"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        made.append((kind, key, url))
+        return p
+
+    assert un.install(root, d, reserve) == {"written": 1, "refused": 3}
+    assert made == [("uncited", "taken-2", "https://k.org/1")], "a taken key gets -2"
+    text = (root / un.at.UNCITED / "0020-taken-2.html").read_text()
+    assert text.startswith('<h3 id="taken-2"><code>taken-2</code></h3>') and "<p><em>What it is:</em> A dictionary entry.</p>" in text, "a label the drafter wrote is not doubled"
+    assert "<p><em>Why it applies, and its limits:</em> It defines a term.</p>" in text
+    assert text.rstrip().endswith("<!-- tags: period=premodern; region=japan; kind=reference -->")
+    err = capsys.readouterr().err
+    assert "refused p00002" in err and "period" in err
+    (d / "entries.jsonl").unlink()
+    assert un.install(root, d, reserve) == {"written": 0, "refused": 0}, "a bundle the agent wrote nothing for installs nothing"

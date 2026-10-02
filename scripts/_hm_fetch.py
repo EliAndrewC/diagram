@@ -46,6 +46,18 @@ def clone_of(cwd: str) -> pathlib.Path | None:
     return None
 
 
+def archived(root: pathlib.Path, url: str) -> bool:
+    """Whether the source archive holds a row for `url` (a manifest file under the record, by its id)."""
+    import hashlib  # noqa: PLC0415
+    import html  # noqa: PLC0415
+
+    clean = html.unescape(url).split("#")[0]  # `record/archive.py:clean`, restated: the hook stays off the engine's imports
+    while clean.endswith((".", ",", ";", ":")) or (clean.endswith(")") and clean.count(")") > clean.count("(")):
+        clean = clean[:-1]
+    uid = hashlib.sha256(clean.encode("utf-8")).hexdigest()[:12]
+    return (root / at.RESEARCH / "archive" / uid[:2] / f"{uid}.json").is_file()
+
+
 def decide(payload: dict) -> dict:
     tool, inp = payload.get("tool_name", ""), payload.get("tool_input") or {}
     blocked = src._blocked()
@@ -73,6 +85,8 @@ def decide(payload: dict) -> dict:
         report = at.report(root, url=u)
         if len(report) > 1:
             lines += report
+        if archived(root, u):  # the record's rule: look in the archive before the web (feature 309; FR-005)
+            lines.append(f"archive: a copy of {u} is archived - read it with `make archive-find URL='{u}'` before the web")
         if record:
             try:
                 at.add(root, u, "unknown", sought[:SOUGHT_CHARS] or "(no prompt)", route=tool.lower())

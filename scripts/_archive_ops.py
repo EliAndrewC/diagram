@@ -181,14 +181,31 @@ def consulted_urls(root: pathlib.Path) -> list[str]:
     return sorted(u for n, u in urls.items() if n not in seen_norm)
 
 
+def kept_urls(root: pathlib.Path) -> list[str]:
+    """The pages feature 312's filter kept: its work list and every uncited entry's URL (plan D8)."""
+    import _uncited as un  # noqa: PLC0415 - _uncited imports this module
+
+    out = [x["raw"] for x in un.at.read(root, un.KEPT)]
+    d = un.at.base(root) / un.at.UNCITED
+    for f in sorted(d.glob("*.html")) if d.is_dir() else []:
+        out += [u for u in src._URL.findall(f.read_text(encoding="utf-8"))]
+    return out
+
+
+def kept_only(root: pathlib.Path, urls: list[str]) -> list[str]:
+    """FR-011: of `urls`, the kept ones with no archive row - a page the filter did not keep is never archived."""
+    keep = {src.norm(u) for u in kept_urls(root)}
+    return [u for u in unarchived(root, urls) if src.norm(u) in keep]
+
+
 def consulted(
     root: pathlib.Path, limit: int = 0
 ) -> (
     int
 ):  # pragma: no cover - the live run; `consulted_urls` and `archive_url` are tested
-    todo = consulted_urls(root)
+    todo = kept_only(root, consulted_urls(root) + kept_urls(root))
     todo = todo[:limit] if limit else todo
-    print(f"archive: {len(todo)} consulted URL(s) with no copy yet", flush=True)
+    print(f"archive: {len(todo)} kept uncited URL(s) with no copy yet (feature 312: only what the filter kept)", flush=True)
     store = ar.Archive(ar.home_of(root), env=ar.git_env(ar.token(root)))
     browser = ar.Browser()
     try:

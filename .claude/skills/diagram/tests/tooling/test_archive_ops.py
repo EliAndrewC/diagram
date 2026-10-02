@@ -171,3 +171,17 @@ def test_find_prints_the_attempts_and_records_the_look(tmp_path: pathlib.Path) -
     ops.find(tmp_path, type("S", (), {"dir": tmp_path})(), url="https://a.org/1", out=out)
     assert "Q 0042: not-found - the dike width" in out.getvalue()
     assert att.read(tmp_path)[-1]["route"] == "archive-find"
+
+
+def test_only_the_kept_uncited_pages_are_archived(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 312 FR-011, plan D8: the consulted backfill archives what the filter kept, and nothing else."""
+    import _uncited as un  # noqa: PLC0415
+
+    root, _store, _inbox = _world(tmp_path, monkeypatch)
+    monkeypatch.setenv("L7R_ATTEMPTS_ROOT", str(root))
+    un.kept(root, ["https://kept.org/a"], "source-filter")
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "0010-k.html").write_text("<p>K (https://written.org/b)</p>", encoding="utf-8")
+    ar.write_row(root, "https://written.org/b", {"url": "https://written.org/b", "outcome": "archived"})
+    got = ops.kept_only(root, ["https://kept.org/a", "https://rejected.org/c", *ops.kept_urls(root)])
+    assert got == ["https://kept.org/a"], "the rejected page is never archived, the written-up one already is"

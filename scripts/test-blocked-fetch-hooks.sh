@@ -63,6 +63,12 @@ call Bash '{"command":"cd .claude/skills/diagram && make source-pages OUT=/tmp/x
 call WebFetch '{"url":"https://example.org/c","prompt":"x"}' "$T/mirror"
 [ "$(lines)" -eq "$before" ] && ok "nothing is written from outside a clone (the mirror)" || no "written from the mirror"
 
+echo "4. a page the archive holds is pointed at the archive first (the record's rule, feature 312 FR-005)"
+uid=$(python3 -c 'import hashlib;print(hashlib.sha256(b"https://held.org/p").hexdigest()[:12])')
+mkdir -p "$T/.clones/c/.claude/skills/diagram/research/archive/${uid:0:2}" && echo '{}' > "$T/.clones/c/.claude/skills/diagram/research/archive/${uid:0:2}/$uid.json"
+call WebFetch '{"url":"https://held.org/p","prompt":"x"}'
+grep -q "make archive-find URL='https://held.org/p'" "$T/out" && ok "an archived page names archive-find" || no "no archive notice" "$(cat "$T/out")"
+
 echo
 echo "blocked-fetch-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

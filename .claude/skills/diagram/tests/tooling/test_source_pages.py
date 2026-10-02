@@ -215,3 +215,17 @@ def test_a_second_save_is_served_from_the_cache_until_refresh(tmp_path: pathlib.
     assert len(calls) == 2, "REFRESH=1 fetches again"
     assert len(sp.src.read(_where())) == 2, "--no-ledger writes no line"
     assert "sources-consulted:" not in capsys.readouterr().out, "and prints none"
+
+
+def test_a_page_already_judged_for_the_question_is_read_again_only_with_a_reason(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
+    """Feature 312 FR-005: the record's rule "a page already rejected for the same question is not re-read without a
+    reason", held by the tool."""
+    root = sp.src.repo_root()
+    sp.attempts.add(root, "https://ok.example/a", "0042", "the dike width", "not-found")
+    args = [str(tmp_path / "o"), "https://ok.example/a", "--question", "0042", "--sought", "the pond depth"]
+    assert sp.main(args, pages=sp.qv.Pages(opener=_opener)) == 2
+    err = capsys.readouterr().err
+    assert "already read for question 0042" in err and 'REREAD="<what changed' in err
+    assert sp.main([*args, "--reread", "ok"], pages=sp.qv.Pages(opener=_opener)) == 2, "a reason is two words"
+    assert sp.main([*args, "--reread", "the pond depth was not sought then"], pages=sp.qv.Pages(opener=_opener)) == 0
+    assert sp.main([str(tmp_path / "p"), "https://ok.example/a", "--question", "0099", "--sought", "x y"], pages=sp.qv.Pages(opener=_opener)) == 0, "another question"

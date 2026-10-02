@@ -60,6 +60,22 @@ def _attempts():  # noqa: ANN202
 
 attempts = _attempts()
 
+#: A page already judged for this question (feature 312 FR-005, the record's rule "a page already rejected for the same
+#: question is not re-read without a reason"): the outcomes that close a question for a page.
+CLOSED = ("not-found", "not-applicable")
+
+
+def judged_before(root: pathlib.Path, url: str, question: str) -> list[dict]:
+    """The attempts that already closed `question` for `url`."""
+    n = src.norm(url)
+    return [x for x in attempts.read(root) if x.get("url") == n and x.get("question") == question and x.get("outcome") in CLOSED]
+
+
+def reason_ok(reason: str) -> bool:
+    """Two words and eight characters: the project's bar for an escape's reason."""
+    return len(reason.strip()) >= 8 and len(reason.split()) >= 2
+
+
 #: The refusal's compliant command (feature 312 FR-017): every consult records what it sought.
 NEEDS_SOUGHT = (
     "source-pages: say what this read is for - every consult is recorded on the attempts log (feature 312 FR-017):\n"
@@ -196,6 +212,7 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
     ap.add_argument("--quotes", default="", help="a JSON list of the passages the record quotes from these pages: a long page is saved as an excerpt around them (D19)")
     ap.add_argument("--question", default="", help="the research question the pages are read for (its number, NNNN), recorded on the ledger")
     ap.add_argument("--sought", default="", help="what the read looks for on the page (feature 312 FR-017) - required with the ledger")
+    ap.add_argument("--reread", default="", help="why a page already judged for this question is read again (feature 312 FR-005)")
     ap.add_argument("--no-ledger", action="store_true", help="a re-verification save (an excerpt bundle): the cache, but no ledger lines (feature 288 D1)")
     args = ap.parse_args(argv)
     if not args.urls:
@@ -204,6 +221,14 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
     if not args.no_ledger and (not args.question or not args.sought.strip()):
         print(NEEDS_SOUGHT, file=sys.stderr)
         return 2
+    if not args.no_ledger and args.question.lower() not in ("", "none") and not reason_ok(args.reread):
+        closed = [(u, x) for u in args.urls for x in judged_before(src.repo_root(), u, args.question)]
+        if closed:
+            for u, x in closed:
+                print(f"source-pages: {u} was already read for question {args.question} on {x.get('date')}: {x.get('outcome')} - {x.get('sought')}", file=sys.stderr)
+            print('source-pages: a page already judged for this question is read again only with a reason:\n'
+                  '    make source-pages ... REREAD="<what changed, or what you look for now that was not looked for then>"', file=sys.stderr)
+            return 2
     out = pathlib.Path(args.out)
     quotes = json.loads(pathlib.Path(args.quotes).read_text(encoding="utf-8")) if args.quotes else None
     where = src.home()

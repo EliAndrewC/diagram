@@ -41,6 +41,8 @@ sys.path.insert(0, str(HERE))
 import _bundle_owed as bo  # noqa: E402
 RECORD = pathlib.Path(".claude/skills/diagram/research")
 REGISTRY = RECORD / "sources" / "010-works-cited"
+#: The uncited sources' write-ups (feature 312 FR-012), bundled for `source-applicability` as a cited work's are.
+UNCITED = RECORD / "sources" / "040-uncited-works"
 VARIANTS = RECORD / "assets" / "glossary-variants.txt"
 CLASSES = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/classes")
 # Mode A sheets carry modals too (feature 262): a compound kind is a modal class as much as a settlement one
@@ -76,7 +78,7 @@ def registry_entry(root: pathlib.Path, key: str) -> pathlib.Path | None:
     """The one registry file of a key. A glob on `*-<key>.html` also finds `NNNN-fires-in-<key>.html`, which
     is another work's entry; the name is the four-digit prefix and the key, nothing between."""
     exact = re.compile(rf"\d+-{re.escape(key)}\.html")
-    return next((p for p in sorted((root / REGISTRY).glob(f"*{key}.html")) if exact.fullmatch(p.name)), None)
+    return next((p for d in (REGISTRY, UNCITED) for p in sorted((root / d).glob(f"*{key}.html")) if exact.fullmatch(p.name)), None)
 
 
 def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
@@ -394,11 +396,20 @@ def ledger_part(saved: str) -> str:
 
 
 def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", owed: str = "") -> int:
-    entry = registry_entry(root, key)
-    if entry is None:
+    if registry_entry(root, key) is None:
         print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
         return 2
     fresh(out)
+    rows = key_rows(root, key, out, whole, question)
+    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows) + owed, encoding="utf-8")
+    print(f"check-bundle: {len(rows)} item(s) in {out} - hand the agent {out / MANIFEST}")
+    return 0
+
+
+def key_rows(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", pages: str = "pages") -> list[tuple[str, str, str]]:
+    """One key's copies in `out` - its entry, and its page saved under `pages` - as a MANIFEST's rows."""
+    entry = registry_entry(root, key)
+    assert entry is not None
     rows = [(copy(entry, out, f"sources/{key}.html"), str(entry.relative_to(root)), f"the registry entry of `{key}`: its two write-ups")]
     url = url_of(entry.read_text(encoding="utf-8"))
     if url:
@@ -410,27 +421,27 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
         # claim - a research read, so its earlier reads are printed and a `pending` line appended, as `make source-pages`
         # does; the excerpt re-checks passages already quoted, and writes no ledger line. Both read the page cache.
         if whole:
-            code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--question", question or "none",
+            code, text = run_script("_source_pages.py", [str(out / pages), url, "--question", question or "none",
                                                   "--sought", f"source-reader: the passage behind a new claim on {key}"], root)
             if ledger_part(text):
                 print(ledger_part(text))
-            rows.append(("pages/", url, "the page's whole visible text, saved - a long page in PARTS; grep them all, read the part a hit is in"))
+            rows.append((f"{pages}/", url, "the page's whole visible text, saved - a long page in PARTS; grep them all, read the part a hit is in"))
         else:
-            qfile = out / "quotes.json"
+            qfile = out / ("quotes.json" if pages == "pages" else f"{pages}.quotes.json")
+            qfile.parent.mkdir(parents=True, exist_ok=True)
             qfile.write_text(json.dumps(quoted_passages(root, key), ensure_ascii=False), encoding="utf-8")
-            code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--quotes", str(qfile), "--no-ledger"], root)
-            rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
+            code, text = run_script("_source_pages.py", [str(out / pages), url, "--quotes", str(qfile), "--no-ledger"], root)
+            rows.append((f"{pages}/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
         if code:
             print(text, file=sys.stderr)
-    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows) + owed, encoding="utf-8")
-    print(f"check-bundle: {len(rows)} item(s) in {out} - hand the agent {out / MANIFEST}")
-    return 0
+    return rows
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("q", nargs="?", default="", help="one question: its number (0412) or a page's file name (feature 303)")
     ap.add_argument("--key", default="", help="one registry key, for a source bundle")
+    ap.add_argument("--keys", default="", help="several registry keys, one source-applicability bundle (feature 312: the uncited write-ups in batches)")
     ap.add_argument("--whole", action="store_true", help="with --key: the whole page in parts, not the excerpt - for source-reader (D19)")
     ap.add_argument("--question", default="", help="with --whole: the research question the page is read for, recorded on the sources-consulted ledger (feature 288)")
     ap.add_argument("--out", default="", help=f"the bundle directory (default under {DEFAULT_ROOT})")
@@ -447,6 +458,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
     escape = args.not_owed_ok or args.new
+    if args.keys:
+        return keys_bundle(root, args.keys.split(), args.out, args.not_owed_ok)
     if args.key:
         units, checks, refusal = bo.owed_for_key(root, args.key, args.whole, args.not_owed_ok, args.new)
         if refusal:
@@ -486,6 +499,28 @@ def fragments_for_q(root: pathlib.Path, q: str) -> list[str]:
     from _hm_record import fragments_for  # noqa: PLC0415
 
     return fragments_for(q, str(root))
+
+
+def keys_bundle(root: pathlib.Path, keys: list[str], out_arg: str, not_owed_ok: str) -> int:
+    """A source-applicability bundle over several keys (feature 312: about a thousand uncited write-ups, checked in
+    batches as intro-check's backfill was): each key's entry and its page as `key_bundle` saves them, every owed unit in
+    one MANIFEST - and refused for a key nothing owes, unless a reason is given."""
+    units: list = []
+    for key in keys:
+        if registry_entry(root, key) is None:
+            print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
+            return 2
+        got, _checks, refusal = bo.owed_for_key(root, key, False, not_owed_ok, "")
+        if refusal:
+            print(f"check-bundle: REFUSED - {key}: {refusal}", file=sys.stderr)
+            return 3
+        units += got
+    out = pathlib.Path(out_arg or DEFAULT_ROOT / f"keys-{keys[0]}-{len(keys)}")
+    fresh(out)
+    rows = [row for key in keys for row in key_rows(root, key, out, pages=f"pages/{key}")]
+    (out / MANIFEST).write_text(manifest(out, f"{len(keys)} sources, for source-applicability", rows) + bo.manifest_lines(units, "source-applicability", not_owed_ok), encoding="utf-8")
+    print(f"check-bundle: {len(keys)} source(s) in {out} - hand the agent {out / MANIFEST}")
+    return 0
 
 
 def intro_bundle(root: pathlib.Path, questions: list[str], out_arg: str, not_owed_ok: str) -> int:

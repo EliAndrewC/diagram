@@ -42,6 +42,9 @@ from dataclasses import dataclass, field
 RECORD = ".claude/skills/diagram/research"
 QUESTIONS = f"{RECORD}/questions"
 SOURCES = f"{RECORD}/sources/010-works-cited"
+#: Every directory of registry write-ups a record check can be owed on: the works cited, and the uncited sources kept by
+#: feature 312's filter, each written up and checked as a cited work is (FR-012).
+SOURCE_DIRS = (SOURCES, f"{RECORD}/sources/040-uncited-works")
 
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _MARK = re.compile(r'<sup class="fn" data-note="([^"]+)"></sup>')

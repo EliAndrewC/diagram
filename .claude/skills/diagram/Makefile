@@ -1257,8 +1257,10 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  NEW="<the claim>"    with KEY= WHOLE=1: a source-reader read for a claim not yet in the record
 ##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
 # GUARD_EDIT_OK: feature 311 - the bundle refuses a check nothing owes (QS=, NOT_OWED_OK=, NEW= passed through); this tightens, it loosens nothing.
-	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
+# GUARD_EDIT_OK: feature 312 FR-012 - an optional KEYS="<k> <k> ...", nothing loosened: one source-applicability bundle over several keys, each refused unless owed, as QS= is for intro-check.
+##  KEYS="<k> <k> ..."  several sources in one source-applicability bundle (the uncited write-ups, feature 312)
+	@if [ -z "$(KEY)" ] && [ -z "$(KEYS)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, KEYS="<k> <k>", or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$(KEYS)",) $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
@@ -1271,7 +1273,7 @@ source-pages: ## [project] save the full visible text of the named pointers, wit
 # appends (each URL's earlier reads are printed first), and REFRESH=1 is read from make's exported environment by the cache.
 	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 312 FR-017 - SOUGHT= (and Q= for QUESTION=) passed to the script, which now refuses a ledgered read without a question and what it seeks, printing this command; the refusal is the script's, nothing loosened here.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(or $(QUESTION),$(Q)),--question "$(or $(QUESTION),$(Q))",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(or $(QUESTION),$(Q)),--question "$(or $(QUESTION),$(Q))",) $(if $(SOUGHT),--sought "$(SOUGHT)",) $(if $(REREAD),--reread "$(REREAD)",)
 
 # GUARD_EDIT_OK: feature 288 - three new operations (the sources-consulted ledger's outcome, its lookup, and the one-time seed and page-cache import); no guard changes.
 # GUARD_EDIT_OK: feature 303 - help text only: QUESTION= names a question's number now.
@@ -1281,9 +1283,9 @@ source-outcome: ## [project] record what came of reading a source page on the ho
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
 
 # GUARD_EDIT_OK: feature 312 FR-006 - FR-011 - a new operation (the uncited pages judged once: the set, the rule, the fetch, the filter's bundles, its verdicts, the calibration's score); no guard changes.
-uncited: ## [project] the uncited pages judged once - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=<dir> [LIMIT=n] [START=n] | apply DIRS="<bundle> ..." | score DIR=<bundle> ANSWERS=<labels.json> | report (feature 312)   DO=<step>
-	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|report is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_uncited.py" $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",)
+uncited: ## [project] the uncited pages judged once, and the kept ones written up - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=<dir> [LIMIT=n] [START=n] | apply DIRS="<bundle> ..." | score DIR=<bundle> ANSWERS=<labels.json> | draft OUT=<dir> [START=n] | install DIRS="<draft> ..." | report (feature 312)   DO=<step>
+	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|draft|install|report is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_uncited.py" $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle draft,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply install,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",)
 
 # GUARD_EDIT_OK: feature 312 FR-018 - a new operation (print the attempts log for a source or a question); no guard changes.
 attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
@@ -1296,7 +1298,8 @@ archive: ## [project] archive ONE cited URL now into the private source archive 
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
 # GUARD_EDIT_OK: feature 309 - new operations, GM=1 (the GM's matched files copied into the archive) and CONSULTED=1 (the ledger's uncited pages - unrun, kept for feature 312's filter); no guard changes.
-archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the ledger's uncited pages - HELD, unrun, for feature 312's filter (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
+# GUARD_EDIT_OK: feature 312 FR-011 - help text only: CONSULTED=1 now archives the filter's kept pages alone; nothing loosened.
+archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the uncited pages feature 312's filter KEPT, and no other (features 309, 312)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
 	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),); else python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
 
 # GUARD_EDIT_OK: feature 309 Amendment 1 - two new operations (the GM's download directory processed as an inbox; the archive looked in before the web); no guard changes.

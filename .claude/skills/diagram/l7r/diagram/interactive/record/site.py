@@ -107,6 +107,19 @@ def _item(text: str, heading_id: str, page: qs.Page | None = None) -> sp.Item:
     return sp.Item(id=heading_id, html=text, title=title, lead=lead_of(text), page=page)
 
 
+#: The registry group of the pages read, judged worth keeping and never cited (feature 312 FR-013): written up like a
+#: cited work and grouped by the same works sections, under its own heading. Its anchors carry `UNCITED_PREFIX`, because
+#: the same sections stand under the works cited on the same pages.
+UNCITED_GROUP = "uncited-works"
+UNCITED_PREFIX = "uncited-"
+UNCITED_TITLE = "Uncited sources"
+
+
+def group_prefix(gid: str) -> str:
+    """The anchor prefix of a registry group's sections and kinds: none for the works cited."""
+    return UNCITED_PREFIX if gid == UNCITED_GROUP else ""
+
+
 class Registry:
     """The registry, taken apart into its groups and their entries."""
 
@@ -180,7 +193,10 @@ class Build:
             self.catalog = st.Catalog(record_dir, {i.id: i.html for i in self.registry.items()}, canon_keys(record_dir), store.REGISTRY_DIR)
         except st.SourceTagError as e:
             raise RecordError(str(e)) from None
-        self.index = build_index(self.items, self.registry, tuple(self.catalog.anchors()))
+        anchors = tuple(self.catalog.anchors())
+        uncited = any(gid == UNCITED_GROUP and items for gid, _h, items in self.registry.groups)
+        self.index = build_index(self.items, self.registry, anchors + (tuple(UNCITED_PREFIX + a for a in anchors) if uncited else ()))
+        self.group_of = {i.id: gid for gid, _h, items in self.registry.groups for i in items}
         for half, _ in sp.HALVES:
             for section in ct.walk(self.record.sections):
                 if self.record.holds(section, half):
@@ -190,6 +206,8 @@ class Build:
         self.notes: dict[str, dict[str, str]] = {}
         self.files: dict[str, str] = {}
         self.errors: list[str] = list(self.catalog.errors)
+        canon = canon_keys(record_dir)
+        self.errors += [f"{store.REGISTRY_DIR}/ {k}: an uncited entry links the GM's own campaign notes - canon is never an uncited source (feature 312 FR-013)" for k, g in self.group_of.items() if g == UNCITED_GROUP and k in canon]
 
     def rewrite(self, markup: str, own: str | None, here: str, where: str, *, single: bool = False) -> str:
         out, errs = links.rewrite(markup, own=own, index=self.index, here=here, single=single, where=where, registry_title=self.registry.title_id)
@@ -230,6 +248,7 @@ class Build:
         keys = cited_keys([(str(p.number), p.body) for p in placed])
         block, missing = works_html(keys, self.entries, "", self.catalog)
         self.errors += [f"{where}: cites `{k}`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)" for k in missing]
+        self.errors += [f"{where}: cites `{k}`, an uncited source's entry - `make cite-uncited KEY={k}` moves it to the works cited, then give it its `Used for:` line (feature 312 FR-014)" for k in keys if self.group_of.get(k) == UNCITED_GROUP]
         return self.rewrite(block, None, here, where)
 
     def _question(self, item: sp.Item, half: str, section: ct.Section, run: list[sp.Item], at: int) -> None:
@@ -314,28 +333,34 @@ class Build:
         return [i for _g, _h, items in self.registry.groups for _s, kinds in self.shelves(items) for _k, run in kinds for i in run]
 
     def open_keys_of(self, key: str) -> str:
-        """The sidebar nodes a source's own page opens: its section's and its kind's."""
+        """The sidebar nodes a source's own page opens: its group's (the uncited ones), its section's and its kind's."""
         section, tags = self.catalog.section.get(key), self.catalog.tags.get(key)
         if section is None:
             return "sources"
-        return f"sources/{section.id}" + (f" sources/{section.id}/{tags.primary('kind')}" if tags is not None else "")
+        pre = group_prefix(self.group_of.get(key, ""))
+        keys = f"sources/{pre}{section.id}" + (f" sources/{pre}{section.id}/{tags.primary('kind')}" if tags is not None else "")
+        return ("sources/uncited " if pre else "") + keys
 
     def source_nodes(self) -> list[dict]:
         """The Sources group of the sidebar: each works section, its kinds beneath it, the works beneath those - each node
-        linking its place on the sources index (feature 307 FR-001..FR-003)."""
+        linking its place on the sources index (feature 307 FR-001..FR-003); the uncited sources as one node holding the
+        same sections (feature 312 FR-013)."""
         index = f"{links.REGISTRY_DIR}/index.html"
-        nodes = []
-        for _g, _h, items in self.registry.groups:
+        nodes, uncited = [], []
+        for gid, _h, items in self.registry.groups:
+            pre = group_prefix(gid)
             for section, kinds in self.shelves(items):
                 if section is None:
                     continue
                 subs = [
-                    {"key": f"sources/{section.id}/{lab.id}", "title": lab.name, "href": f"{index}#{st.kind_anchor(section, lab)}", "sections": [], "items": [_nav_row(i) for i in run]}
+                    {"key": f"sources/{pre}{section.id}/{lab.id}", "title": lab.name, "href": f"{index}#{pre}{st.kind_anchor(section, lab)}", "sections": [], "items": [_nav_row(i) for i in run]}
                     for lab, run in kinds
                     if lab is not None
                 ]
                 direct = [_nav_row(i) for lab, run in kinds if lab is None for i in run]
-                nodes.append({"key": f"sources/{section.id}", "title": section.title, "href": f"{index}#{section.id}", "sections": subs, "items": direct})
+                (uncited if pre else nodes).append({"key": f"sources/{pre}{section.id}", "title": section.title, "href": f"{index}#{pre}{section.id}", "sections": subs, "items": direct})
+        if uncited:
+            nodes.append({"key": "sources/uncited", "title": UNCITED_TITLE, "href": f"{index}#{UNCITED_GROUP}", "sections": uncited, "items": []})
         return nodes
 
     def entry_html(self, item: sp.Item) -> str:
@@ -367,12 +392,13 @@ class Build:
         body = sp.crumbs(here, []) + f'<h1 id="{reg.title_id}">{html.escape(reg.title)}</h1>\n' + self.rewrite(reg.intro, None, here, f"{store.REGISTRY_DIR}/_front.html") + "\n"
         for gid, ghtml, items in reg.groups:
             body += self.rewrite(ghtml, None, here, f"{store.REGISTRY_DIR}/ group {gid}")
+            pre = group_prefix(gid)
             for section, kinds in self.shelves(items):
                 if section is not None:
-                    body += st.section_heading(section, 3, section.id) + "\n"
+                    body += st.section_heading(section, 3, pre + section.id) + "\n"
                 for lab, entries in kinds:
                     if section is not None and lab is not None:
-                        body += st.kind_heading(section, lab, 4) + "\n"
+                        body += st.kind_heading(section, lab, 4, pre) + "\n"
                     body += '<ul class="questions">\n' + "\n".join(f'<li><a href="{i.id}.html">{html.escape(i.title)}</a></li>' for i in entries) + "\n</ul>\n"
         self.files[here] = sp.shell(reg.title, here, "sources", body)
 
@@ -439,7 +465,7 @@ class Build:
             f'<li><a href="#{reg.title_id}">{html.escape(reg.title)}</a><ul>'
             + "".join(
                 f'<li><a href="#{gid}">{html.escape(_text(_HEAD.search(gh).group(3)) if _HEAD.search(gh) else gid)}</a>'
-                + ("<ul>" + "".join(_toc_section(s, kinds) for s, kinds in self.shelves(gi) if s is not None) + "</ul>" if gi else "")
+                + ("<ul>" + "".join(_toc_section(s, kinds, group_prefix(gid)) for s, kinds in self.shelves(gi) if s is not None) + "</ul>" if gi else "")
                 + "</li>"
                 for gid, gh, gi in reg.groups
             )
@@ -449,12 +475,13 @@ class Build:
         out.append(self.rewrite(reg.intro, None, "all.html", f"{store.REGISTRY_DIR}/_front.html", single=True))
         for gid, ghtml, items in reg.groups:
             out.append(self.rewrite(ghtml, None, "all.html", f"{store.REGISTRY_DIR}/ group {gid}", single=True))
+            pre = group_prefix(gid)
             for section, kinds in self.shelves(items):
                 if section is not None:
-                    out.append(st.section_heading(section, 3, section.id) + "\n")
+                    out.append(st.section_heading(section, 3, pre + section.id) + "\n")
                 for lab, entries in kinds:
                     if section is not None and lab is not None:
-                        out.append(st.kind_heading(section, lab, 4) + "\n")
+                        out.append(st.kind_heading(section, lab, 4, pre) + "\n")
                     out += [_ENTRY_H3.sub(r"<h5\1</h5>", self.rewrite(self.entry_html(i), None, "all.html", f"{store.REGISTRY_DIR}/ {i.id}", single=True), count=1) for i in entries]
         out.append("</section>\n")
         toc.append("</ul></nav>\n")
@@ -472,23 +499,24 @@ def _works_list(items: list[sp.Item], href: str) -> str:
     return "<ul>" + "".join(f'<li><a href="{href.format(i.id)}">{html.escape(i.title)}</a></li>' for i in items) + "</ul>" if items else ""
 
 
-def _toc_section(section: st.Section, kinds: list[tuple[st.Label | None, list[sp.Item]]]) -> str:
+def _toc_section(section: st.Section, kinds: list[tuple[st.Label | None, list[sp.Item]]], pre: str = "") -> str:
     """A works section's line in the one-page record's contents: its kinds nested beneath it, and the works beneath each
-    kind - or beneath the section, for the canon (feature 307 FR-004)."""
-    subs = "".join(f'<li><a href="#{st.kind_anchor(section, lab)}">{html.escape(lab.name)}</a>{_works_list(run, "#{}")}</li>' for lab, run in kinds if lab is not None)
+    kind - or beneath the section, for the canon (feature 307 FR-004); `pre` scopes the anchors to the uncited group."""
+    subs = "".join(f'<li><a href="#{pre}{st.kind_anchor(section, lab)}">{html.escape(lab.name)}</a>{_works_list(run, "#{}")}</li>' for lab, run in kinds if lab is not None)
     direct = [i for lab, run in kinds if lab is None for i in run]
-    return f'<li><a href="#{section.id}">{html.escape(section.title)}</a>' + _works_list(direct, "#{}") + (f"<ul>{subs}</ul>" if subs else "") + "</li>"
+    return f'<li><a href="#{pre}{section.id}">{html.escape(section.title)}</a>' + _works_list(direct, "#{}") + (f"<ul>{subs}</ul>" if subs else "") + "</li>"
 
 
 def _home_source(node: dict) -> str:
     """A works section on the home page: its kinds and their works beneath it, each in a block that opens on a click, so
-    the contents stay readable with two thousand works under them (feature 307 FR-004)."""
+    the contents stay readable with two thousand works under them (feature 307 FR-004); a node holding sections (the
+    uncited sources, feature 312) nests them the same way."""
 
     def works(rows: list[list[str]]) -> str:
         return "<ul>" + "".join(f'<li><a href="{href}">{html.escape(title)}</a></li>' for title, href in rows) + "</ul>" if rows else ""
 
-    kinds = "".join(f'<li><details><summary><a href="{k["href"]}">{html.escape(k["title"])}</a></summary>{works(k["items"])}</details></li>' for k in node["sections"])
-    return f'<li><details><summary><a href="{node["href"]}">{html.escape(node["title"])}</a></summary>{works(node["items"])}' + (f"<ul>{kinds}</ul>" if kinds else "") + "</details></li>"
+    kids = "".join(_home_source(k) for k in node["sections"])
+    return f'<li><details><summary><a href="{node["href"]}">{html.escape(node["title"])}</a></summary>{works(node["items"])}' + (f"<ul>{kids}</ul>" if kids else "") + "</details></li>"
 
 
 def build(record_dir: str = RESEARCH_DIR) -> dict[str, str]:

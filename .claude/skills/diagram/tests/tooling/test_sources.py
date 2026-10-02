@@ -62,6 +62,11 @@ def _registry(root: pathlib.Path, entries: dict[str, str]) -> None:
 # ---- normalization, context, home ----
 
 
+def test_a_colon_after_a_url_in_parentheses_is_not_the_url() -> None:
+    """Feature 312: "(https://...?id=18666): 「...」" in a registry entry cited the page the filter then judged uncited."""
+    assert src.norm("https://1073shoso.jp/www/sankyo/detail.jsp?id=18666):") == "1073shoso.jp/www/sankyo/detail.jsp?id=18666"
+
+
 @pytest.mark.parametrize(
     "spelling",
     ["https://www.example.org/a/b/", "http://example.org/a/b#part", "https://example.org/A/B", "example.org/a/%62"],

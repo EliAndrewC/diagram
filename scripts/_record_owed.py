@@ -61,9 +61,9 @@ def changed_sources(root: pathlib.Path, base: str, head: str | None) -> set[str]
     """The write-ups that differ between `base` and `head` (None: the working tree, untracked files included) - the only
     ones a source-applicability unit can be owed on, so the other two thousand are never read (plan D2)."""
     if head is None:
-        names = _git(root, "diff", "--name-only", base, "--", ru.SOURCES).split() + _git(root, "ls-files", "--others", "--exclude-standard", "--", ru.SOURCES).split()
+        names = _git(root, "diff", "--name-only", base, "--", *ru.SOURCE_DIRS).split() + _git(root, "ls-files", "--others", "--exclude-standard", "--", *ru.SOURCE_DIRS).split()
     else:
-        names = _git(root, "diff", "--name-only", base, head, "--", ru.SOURCES).split()
+        names = _git(root, "diff", "--name-only", base, head, "--", *ru.SOURCE_DIRS).split()
     return {n.rsplit("/", 1)[1] for n in names}
 
 
@@ -71,15 +71,16 @@ def read_at(root: pathlib.Path, rev: str | None, sources: set[str] | None = None
     """The record at `rev` (None: the working tree), read with ONE ls-tree and ONE cat-file batch (plan D2); of the source
     write-ups, only those named in `sources` (None: all)."""
     if rev is None:
-        qdir, sdir = root / ru.QUESTIONS, root / ru.SOURCES
+        qdir = root / ru.QUESTIONS
         files = {p.name: p.read_text(encoding="utf-8") for p in qdir.glob("*.html")} if qdir.is_dir() else {}
-        src = {p.name: p.read_text(encoding="utf-8") for p in sdir.glob("*.html") if sources is None or p.name in sources} if sdir.is_dir() else {}
+        src = {p.name: p.read_text(encoding="utf-8") for d in ru.SOURCE_DIRS for p in (root / d).glob("*.html") if sources is None or p.name in sources}
     else:
-        names = _git(root, "ls-tree", "-r", "--name-only", rev, "--", ru.QUESTIONS, ru.SOURCES).split("\n")
-        names = [n for n in names if n.endswith(".html") and (sources is None or not n.startswith(ru.SOURCES + "/") or n.rsplit("/", 1)[1] in sources)]
+        names = _git(root, "ls-tree", "-r", "--name-only", rev, "--", ru.QUESTIONS, *ru.SOURCE_DIRS).split("\n")
+        is_src = lambda n: n.startswith(tuple(d + "/" for d in ru.SOURCE_DIRS))  # noqa: E731
+        names = [n for n in names if n.endswith(".html") and (sources is None or not is_src(n) or n.rsplit("/", 1)[1] in sources)]
         blobs = _cat(root, [f"{rev}:{n}" for n in names])
         files = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if n.startswith(ru.QUESTIONS + "/")}
-        src = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if n.startswith(ru.SOURCES + "/")}
+        src = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if is_src(n)}
     sources = {m.group(1): text for name, text in src.items() if (m := _SOURCE_FILE.match(name))}
     return ru.Record.of(files, sources)
 

@@ -61,7 +61,7 @@ def norm(u: str) -> str:
     """The measurement's normalization (`specs/288-*/measurement/extract_norm.py`), so the ledger's URLs and the
     measurement's are one set: scheme, `www.`, the mobile host, a fragment and a trailing slash dropped;
     percent-decoded; lower-cased, except a Wikipedia path, whose case is the article's name."""
-    u = u.strip().strip("'\"<>),.;")
+    u = u.strip().strip("'\"<>),.;:")  # a colon too: prose after a URL in parentheses, "(https://...): 「...」" (feature 312)
     u = urllib.parse.unquote(u)
     u = u.split("#")[0]
     u = re.sub(r"^https?://", "", u)

@@ -439,6 +439,118 @@ def score(d: pathlib.Path, answers: dict[str, str]) -> dict[str, dict[str, int]]
     return out
 
 
+# ---- the write-ups (FR-012, plan D9) ----
+
+WRITEUP = HERE.parent / "specs" / "312-uncited-source-catalog" / "writeup-contract.md"
+DRAFT_PAGES = 15
+_KEY = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+#: A field's own label written into its text by the drafter (the pilot, 2026-10-02: "What it is: A database entry...") - the
+#: entry writes the label itself, so a leading one is dropped rather than doubled.
+_LABEL = re.compile(r"^(?:What it is|Why it applies, and its limits)\s*:\s*", re.I)
+
+
+def vocabulary_block(root: pathlib.Path) -> str:
+    """Every tag value with its explanation, from the record's own vocabulary (the source-applicability contract's form)."""
+    st = sys.modules.get("_source_tags") or _load_source_tags()
+    return st.contract_block(st.load_vocabulary(str(at.base(root) / at.RESEARCH)))
+
+
+def _load_source_tags():  # noqa: ANN202
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("_source_tags", HERE.parent / ".claude/skills/diagram/l7r/diagram/interactive/record/source_tags.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def written(root: pathlib.Path) -> set[str]:
+    """The kept URLs that already have an uncited entry."""
+    d = at.base(root) / at.UNCITED
+    return {src.norm(u) for f in (sorted(d.glob("*.html")) if d.is_dir() else []) for u in src._URL.findall(f.read_text(encoding="utf-8"))}
+
+
+def registry_keys(root: pathlib.Path) -> set[str]:
+    return {m.group(1) for f in (at.base(root) / SOURCES).glob("*/[0-9]*-*.html") if (m := re.fullmatch(r"\d+-(.+)\.html", f.name))}
+
+
+DRAFT_HEAD = """# write-up draft bundle {name}
+
+{n} kept page(s). Read CONTRACT.md, then EVERY file listed below, whole - a page in parts is every part - and draft each
+page's registry write-up as the contract says. Write `entries.jsonl` in THIS directory, one JSON line per id, then reply
+with one count line.
+
+"""
+
+
+def draft_bundles(root: pathlib.Path, out: pathlib.Path, start: int = 1) -> list[pathlib.Path]:
+    """The kept pages with no entry yet, DRAFT_PAGES a bundle (within the token budget), each with the drafting contract."""
+    where, done = src.home(root), written(root)
+    todo = [(x["raw"], t) for x in at.read(root, KEPT) if x["url"] not in done and (t := text_of(where, x["raw"]))]
+    contract = WRITEUP.read_text(encoding="utf-8") + vocabulary_block(root) + "\n"
+    taken = registry_keys(root)
+    dirs, n, k = [], 0, start
+    for group in groups(todo):
+        for i in range(0, len(group), DRAFT_PAGES):
+            d = out / f"312-draft-{k:04d}"
+            items = []
+            for url, text in group[i : i + DRAFT_PAGES]:
+                n += 1
+                items.append((f"p{n:05d}", url, text))
+            write_bundle(d, items)
+            (d / "CONTRACT.md").write_text(contract, encoding="utf-8")
+            head = MANIFEST_HEAD.format(name=d.name, n=len(items))
+            (d / "MANIFEST.md").write_text(DRAFT_HEAD.format(name=d.name, n=len(items)) + (d / "MANIFEST.md").read_text(encoding="utf-8")[len(head):], encoding="utf-8")
+            with open(d / "MANIFEST.md", "a", encoding="utf-8") as fh:
+                fh.write(f"## Keys already taken - choose none of these\n\n{' '.join(sorted(taken))}\n")
+            dirs.append(d)
+            k += 1
+    return dirs
+
+
+def entry_html(key: str, citation: str, what: str, why: str, marker: str) -> str:
+    return (f'<h3 id="{key}"><code>{key}</code></h3>\n<p><!-- WRITTEN {today()} from the page as saved, by feature 312\'s '
+            f'write-up pass; KEPT by source-filter -->{citation}</p>\n<p><em>What it is:</em> {what}</p>\n'
+            f"<p><em>Why it applies, and its limits:</em> {why}</p>\n{marker}\n")
+
+
+def install(root: pathlib.Path, d: pathlib.Path, reserve) -> dict[str, int]:  # noqa: ANN001 - reserve-prefix's `reserve`, a seam
+    """A draft bundle's entries reserved and written into `040-uncited-works/`. A line is refused (and counted) when it
+    names no known id, has an empty field, a key that is not one, or tags the vocabulary refuses; a key already taken gets
+    `-2`, `-3`... The citation must carry the page's URL exactly."""
+    ids = json.loads((d / "ids.json").read_text(encoding="utf-8"))
+    st = sys.modules.get("_source_tags") or _load_source_tags()
+    vocab = st.load_vocabulary(str(at.base(root) / at.RESEARCH))
+    taken = registry_keys(root)
+    counts = {"written": 0, "refused": 0}
+    for raw in (d / "entries.jsonl").read_text(encoding="utf-8").splitlines() if (d / "entries.jsonl").is_file() else []:
+        try:
+            e = json.loads(raw)
+            url = ids[e["id"]]
+            key, cite, what, why = (str(e[f]).strip() for f in ("key", "citation", "what", "why"))
+            what, why = _LABEL.sub("", what), _LABEL.sub("", why)
+            marker = st.parse(f"<!-- tags: {e['tags']} -->", e["id"], vocab).marker()
+        except (json.JSONDecodeError, KeyError, TypeError, AttributeError, st.SourceTagError) as err:
+            print(f"uncited: {d.name}: refused - {err}: {raw[:120]}", file=sys.stderr)
+            counts["refused"] += 1
+            continue
+        if not (_KEY.match(key) and cite and what and why and url in cite):
+            print(f"uncited: {d.name}: refused {e.get('id')} - a bad key, an empty field, or a citation without its URL", file=sys.stderr)
+            counts["refused"] += 1
+            continue
+        base, n = key, 1
+        while key in taken:
+            n += 1
+            key = f"{base}-{n}"
+        path = reserve("uncited", key, root, url=url)
+        path.write_text(entry_html(key, cite, what, why, marker), encoding="utf-8")
+        taken.add(key)
+        counts["written"] += 1
+    return counts
+
+
 def report(root: pathlib.Path) -> str:
     nk = at.read(root, NOT_KEPT)
     reasons: dict[str, int] = {}
@@ -471,6 +583,11 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     c.add_argument("dir")
     c.add_argument("answers")
     sub.add_parser("report")
+    dr = sub.add_parser("draft")
+    dr.add_argument("out")
+    dr.add_argument("--start", type=int, default=1)
+    ins = sub.add_parser("install")
+    ins.add_argument("dirs", nargs="+")
     args = ap.parse_args(argv)
     root = src.repo_root()
     if args.cmd == "set":
@@ -495,6 +612,17 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
             print(f"uncited: {d} - {json.dumps(apply(root, pathlib.Path(d)))}")
     elif args.cmd == "score":
         print(json.dumps(score(pathlib.Path(args.dir), json.loads(pathlib.Path(args.answers).read_text(encoding="utf-8")))))
+    elif args.cmd == "draft":
+        print(f"uncited: {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
+    elif args.cmd == "install":
+        import importlib.util  # noqa: PLC0415
+
+        spec = importlib.util.spec_from_file_location("reserve_prefix", HERE / "reserve-prefix.py")
+        assert spec and spec.loader
+        rp = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(rp)
+        for d in args.dirs:
+            print(f"uncited: {d} - {json.dumps(install(root, pathlib.Path(d), rp.reserve))}")
     else:
         print(report(root))
     return 0
