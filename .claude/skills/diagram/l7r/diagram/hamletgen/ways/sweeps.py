@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross
 
@@ -303,6 +304,10 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
                 # left for the web's last pass (`settle_the_web`: dropped off the network, its houses redrawn a way).
                 if brook_crossings(_try, s) and brook_crossings(_try, s) % 2 == 0:
                     continue
+                # ...NOR A Z ACROSS THE JOINT IT MAKES (feature 308, on Inashiro: a link laid on the field spur's end turned back
+                # across the spur's last bend - two clean records, one zigzag to the walker, `test_no_zigzag_straddles_a_joint`)
+                if zigzags_at_a_joint(s.M.get("lanes", []), _try):
+                    continue
                 link, best = _try, cand
                 break
         if link is None or best is None:
@@ -323,6 +328,22 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         _draw_web(s, link, int(_w))
         made += 1
     return made  # pragma: no cover - six links is far more than any hamlet needs
+
+
+def zigzags_at_a_joint(lanes: Sequence[Any], link: Sequence[Pt]) -> bool:
+    """Would `link`, drawn beside `lanes`, meet one of them END TO END in a joint that bends badly read as one walk, where
+    neither record does alone (`_bends_badly`, `joints.joints` and `oriented` - the predicate `lanes_bend_like_paths` asks of
+    a joint)?"""
+    from .joints import joints, oriented  # joints imports this module
+
+    trial = [*lanes, {"pts": [list(q) for q in link]}]
+    n = len(trial) - 1
+    for i, ei, j, ej in joints(trial):
+        if n in (i, j):
+            x, y = oriented(trial, i, ei, j, ej)
+            if not _bends_badly(x) and not _bends_badly(y) and _bends_badly([*x, *y[1:]]):
+                return True
+    return False
 
 
 _FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need
