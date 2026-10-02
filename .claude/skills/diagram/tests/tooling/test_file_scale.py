@@ -147,3 +147,53 @@ def test_the_repository_itself_is_under_the_bar() -> None:
     over, _, scanned = cfs.run(str(REPO))
     assert scanned > 100, "the scan found almost nothing - wrong root?"
     assert over == [], "over the bar: " + ", ".join(f"{p} ({n})" for p, n in over)
+
+
+# THE DIRECTORY CEILING (2026-10-02): no directory holds more than MAX_DIR_FILES files of its own.
+
+
+def test_the_ceiling_fires_past_the_limit_and_the_limit_itself_passes(tmp_path: pathlib.Path) -> None:
+    root = _tree(tmp_path, {**{f"full/{i}.json": "{}" for i in range(3)}, **{f"over/{i}.json": "{}" for i in range(4)}})
+    assert cfs.crowded(str(root), limit=3) == [("over", 4)]
+
+
+def test_a_file_counts_only_in_its_own_directory(tmp_path: pathlib.Path) -> None:
+    """A log split into month folders is under the ceiling however long it runs: files in a SUBdirectory are not the
+    parent's - which is the whole point of splitting."""
+    root = _tree(tmp_path, {f"log/2026-0{m}/{i}.json": "{}" for m in (8, 9) for i in range(3)})
+    assert cfs.dir_counts(str(root)) == {"log/2026-08": 3, "log/2026-09": 3}
+    assert cfs.crowded(str(root), limit=3) == []
+
+
+def test_other_sessions_trees_are_not_counted(tmp_path: pathlib.Path) -> None:
+    root = _tree(tmp_path, {f".clones/peer/{i}.json": "{}" for i in range(4)})
+    assert cfs.crowded(str(root), limit=3) == []
+
+
+def test_a_crowded_directory_fails_the_check_with_the_procedure(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:
+    root = _tree(tmp_path, {"a.py": LINE, **{f"logs/{i}.json": "{}" for i in range(4)}})
+    monkeypatch.setattr(cfs, "MAX_DIR_FILES", 3)
+    monkeypatch.setattr(cfs, "crowded", lambda r, limit=3: [("logs", 4)])
+    assert cfs.main([str(root)]) == 1
+    err = capsys.readouterr().err
+    assert "logs/" in err and "recursively" in err and "Argument list too long" in err
+
+
+def test_the_repository_itself_is_under_the_ceiling() -> None:
+    assert cfs.crowded(str(REPO)) == [], "past the directory ceiling"
+
+
+def test_both_logs_write_into_a_month_folder(tmp_path: pathlib.Path) -> None:
+    """The two logs that grow without end write into dev/<log>/<YYYY-MM>/ (l7r/diagram/ci/runlog.month_dir), and their
+    readers find an entry in either layout - a clone not yet synced past the move still writes flat."""
+    import time
+
+    from l7r.diagram.ci import runlog
+
+    skill = tmp_path / "skill"
+    path = runlog.write_would_have(skill, "ci-check", "reference", 1.0, "a reason")
+    assert path.parent == skill / runlog.RUN_LOG / time.strftime("%Y-%m", time.gmtime())
+    (skill / runlog.RUN_LOG / "20200101T000000000000-1.json").write_text('{"where": "would-have-dispatched"}')
+    files = runlog.log_files(skill, runlog.RUN_LOG)
+    assert [pathlib.Path(f).name for f in files][0] == "20200101T000000000000-1.json", "sorted by stamp across layouts"
+    assert len(runlog.would_have_entries(skill)) == 2

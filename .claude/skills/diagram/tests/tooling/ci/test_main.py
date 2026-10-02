@@ -71,7 +71,7 @@ def test_check_and_merge_run_the_dispatcher(roots: Path, capsys: pytest.CaptureF
     commit(roots, S + "l7r/diagram/m.py", "x = 2\n")
     state.write(roots, state.GREEN, "quick")
     assert cli.main(["check"]) == 0
-    logs = list((roots / S / "dev" / "run-log").glob("*.json"))
+    logs = list((roots / S / "dev" / "run-log").rglob("*.json"))
     assert len(logs) == 1 and json.loads(logs[0].read_text(encoding="utf-8"))["target"] == "ci-check"
     assert cli.main(["merge"]) == 1, "no complete feature named: the merge refuses"
     assert "feature-complete" in capsys.readouterr().out
@@ -85,7 +85,7 @@ def test_a_cheap_operation_is_refused_as_a_remote_target_and_an_expensive_one_di
     assert "only an EXPENSIVE operation" in capsys.readouterr().out
     assert cli.main(["check", "--target", "not-a-target"]) == 1
     assert cli.main(["check", "--target", "cohort N=48", "--compute", "BUILD_GENERAL1_2XLARGE"]) == 0
-    entry = json.loads(next((roots / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
+    entry = json.loads(next((roots / S / "dev" / "run-log").rglob("*.json")).read_text(encoding="utf-8"))
     assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48" and entry["compute"] == "BUILD_GENERAL1_2XLARGE"
 
 

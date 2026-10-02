@@ -16,10 +16,11 @@ visible in the diff: the bar feature 127 set for every remaining bypass.
 
 from __future__ import annotations
 
-import glob
 import json
 import subprocess
 from pathlib import Path
+
+from l7r.diagram.ci import runlog
 
 
 def _is_ancestor(root: Path, commit: str, ref: str) -> bool:
@@ -29,7 +30,7 @@ def _is_ancestor(root: Path, commit: str, ref: str) -> bool:
 def check(root: Path, skill: Path, base_ref: str = "origin/main") -> tuple[bool, str]:
     """(may the full scope run, why)."""
     seen = 0
-    for f in sorted(glob.glob(str(skill / "dev" / "bypass-log" / "*.json")), reverse=True):
+    for f in reversed(runlog.log_files(skill, runlog.BYPASS_LOG)):
         try:
             e = json.loads(Path(f).read_text(encoding="utf-8"))
         except ValueError:

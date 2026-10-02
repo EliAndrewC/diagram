@@ -752,13 +752,15 @@ audit:          ## [project] how the gate has actually been used - every run, ev
 # schema, so the audit the constitution requires as a feature's closing step has been unrunnable since
 # the day pair-hooks landed - and it failed AFTER printing the run log, which is why it read as a
 # normal tail of output. Both schemas are read now; neither is rewritten.
-	@python3 -c "import json,glob,collections,os; \
-rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/*.json')),key=lambda r:r.get('utc','')); \
+	@: "GUARD_EDIT_OK: 2026-10-02 - both logs are read recursively: the month folders and any entry a clone not yet synced wrote flat"; \
+	python3 -c "import json,glob,collections,os; \
+rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
 [print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}  {(r.get('mode','')+' '+r.get('selected','')).strip()}\") for r in rows[-25:]] or print('  (none yet)'); \
 c=collections.Counter(r['scope'] for r in rows); \
 print(f\"  {len(rows)} runs: \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))) if rows else None; \
-b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/*.json')),key=lambda r:r.get('utc','')); \
+b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
+'GUARD_EDIT_OK: recursive, as above'; \
 print(chr(10)+'\033[1mBypasses\033[0m (dev/bypass-log/) - a FULL run is only justified at the END of a feature'); \
 'GUARD_EDIT_OK: feature 162 - read BOTH bypass-log schemas (see the note above this recipe)'; \
 [print(f\"  {r['utc']}  {(r.get('outcome') or r.get('guard') or '?'):<10} {(r.get('why') or r.get('reason') or r.get('what') or '')[:76]}\") for r in b[-15:]] or print('  (none yet)'); \
@@ -901,7 +903,9 @@ ci-merge:       ## [remote] the push's gated route (PAID) - runs the SOAK suite;
 
 # the operator's `permitted` answer becomes a commit, so the build finds it in the tree it tests (FR-025)
 commit-permitted: ## [project] commit the most recent bypass-log entry, which is how a paid FULL run is authorized
-	@f=$$(ls -t dev/bypass-log/*.json | head -1); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
+	@: "GUARD_EDIT_OK: 2026-10-02 - the newest entry across the month folders (and any flat one)"; \
+	: "GUARD_EDIT_OK: find, not a glob - a glob over every month reaches the argument limit within a year"; \
+	f=$$(find dev/bypass-log -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
 	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
 
 # GUARD_EDIT_OK: feature 177 - ONE prompt opens the FULL door here, deliberately. LOGBYPASS writes the
@@ -980,20 +984,23 @@ ci-image:       ## [remote] rebuild the CodeBuild image from Dockerfile.ci and p
 #
 # `make audit` reads it back. Elapsed time is recorded too, so a target that has quietly got slower
 # shows up in the history rather than in someone's memory.
+# GUARD_EDIT_OK: 2026-10-02 - both logs write into a month folder, dev/<log>/<YYYY-MM>/ (l7r/diagram/ci/runlog.month_dir):
+# they gain about a thousand entries a week between them, and no tracked directory may pass 5,000 files (check-file-scale.py).
 LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
-  os.makedirs('dev/run-log',exist_ok=True); \
-  open(f'dev/run-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {})},indent=2)+chr(10))"
+  d='dev/run-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
+  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {})},indent=2)+chr(10))"
 
 # THE TARGET RECORDS THE SCOPE (feature 130 - GUARD_EDIT_OK: the build-side door keys on it). `done`
 # with FULL=1 logs as `done FULL`, `ci-merge FULL=1` as `ci-merge FULL`: the entry is what the build
 # reads to decide whether the full scope was authorized, and "done" alone could not say.
+# GUARD_EDIT_OK: 2026-10-02 - into the month folder, as LOGRUN above.
 LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
-  os.makedirs('dev/bypass-log',exist_ok=True); \
-  open(f'dev/bypass-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
+  d='dev/bypass-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
+  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
 
 # GUARD_EDIT_OK: feature 170 - REF_OK IS AN ESCAPE, SO IT REACHES THE FIRING LOG TOO. It recorded to
 # `dev/bypass-log/` only, and `make audit` reads `~/.claude/guard-log/`, so the one escape that skips

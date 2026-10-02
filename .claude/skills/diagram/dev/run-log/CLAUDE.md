@@ -6,6 +6,13 @@ One JSON file per gate run: target, scope, ELAPSED SECONDS, result, commit. Read
 **A CLAUDE.md rather than a README, deliberately**: this is a rule a session has to KNOW, and a
 README is never loaded. See [`../perf-log/CLAUDE.md`](../perf-log/CLAUDE.md) for what that cost.
 
+## Why a folder per month
+
+Each entry goes in `<YYYY-MM>/`, named from its own UTC stamp (2026-10-02). Both logs gain an entry per gate run
+or escape, about a thousand files a week between them, with no end; no tracked directory may pass 5,000 files
+(`scripts/check-file-scale.py`), and a shell glob over one flat folder would reach the argument limit within a
+year. Every reader searches recursively, so an entry a clone wrote flat before syncing past the move still counts.
+
 ## Why a directory and not one log file
 
 **The same reason as [`../perf-log/`](../perf-log/README.md), and this file exists because that

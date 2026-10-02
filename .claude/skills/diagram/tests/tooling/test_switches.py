@@ -83,7 +83,7 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     (root / "docs" / "note.md").write_text("only documentation\n")
     p = make(fixture_skill, "done")
     assert p.returncode == 0 and "already verified" in p.stdout, p.stdout + p.stderr
-    assert any(json.loads(f.read_text())["result"] == "already-verified" for f in (fixture_skill / "dev" / "run-log").glob("*.json"))
+    assert any(json.loads(f.read_text())["result"] == "already-verified" for f in (fixture_skill / "dev" / "run-log").rglob("*.json"))
     # the GM's second amendment: a Makefile / pyproject / scripts edit does NOT owe the gate (there is no flag in either direction - FR-022)
     (fixture_skill / "pyproject.toml").write_text((fixture_skill / "pyproject.toml").read_text() + "\n# edited\n")
     (fixture_skill / "Makefile").write_text((fixture_skill / "Makefile").read_text() + "\n# edited\n")
