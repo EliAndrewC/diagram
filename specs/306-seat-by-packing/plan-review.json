@@ -1,6 +1,6 @@
 {
  "feature": "306-seat-by-packing",
- "plan_sha256": "8e31f71832a2979c4d9ab963f109088c05d6df6c8f058aff38e3488cda5a8cc5",
+ "plan_sha256": "b6d9d57749b9f96091a484aa16aed379782efcc187cfb804611b12564d012a36",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -25,9 +25,9 @@
   },
   {
    "id": "D2",
-   "summary": "Rescue and dry-spell cap built on R15's third leg on the final D1: 100.0 -> 83.3 s, margins saved on seeds 25, 8 and 6, seed 39 slower, no seed seating fewer",
+   "summary": "Rescue and dry-spell cap built on R15's third leg on the final D1 (100.0 -> 83.3 s, margins saved on seeds 25, 8 and 6, no seed seating fewer); since round 4 the rescue runs only on a margin one to three short and gives up after 600 dry offers (R17)",
    "class": "within",
-   "why": "Round 2's item is fixed: the evidence is now the lever on top of the final D1, back to back. The gain is structural rather than timing noise (offers on seed 25 9,911 -> 1,682, seed 8 2,704 -> 1,364; identical-offer seeds differ by ~0.1 s), so faster beyond the spread; every household seated. Building a lever on its own GO is FR-011. Seed 39's cost (7.45 -> 13.96 s) is stated, not hidden."
+   "why": "Round 5: the added sentence is a defect fix inside the built lever, and it carries FR-011's terms on its own measurement - R17 (one-shot labeled: 2026-10-02, the perf-audit's three alternated rounds) has fifteen seeds with identical offers, margins and houses and seed 39 15.10 -> 9.29 s with all 40 seated, so faster beyond the spread and every household seated; FR-008 holds. The code at de6c9759a matches the sentence (0 < want - placed <= RESCUE_SHORT = 3; RESCUE_DRY_SPELL = 600 on the rescue's offer_seats). The cap narrows nothing the GM asked: no household is given up (every successful rescue took its houses by offer 512) and it serves the request's purpose of not spending seconds per house. FR-006 (the census) is untouched by it. R15's original GO stands as stated."
   },
   {
    "id": "D3",
