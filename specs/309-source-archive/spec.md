@@ -96,8 +96,10 @@ in) opens that source's capture.
 - **A URL that changed after it was cited** (a redirect to a new address): the copy is taken from where the redirect lands,
   and the capture record keeps both addresses.
 - **A page that needs a script to show its text** (the whole-page capture renders it as a browser would),
-  **or refuses an automated reader**: the served bytes are stored as served; where
-  their text is empty the page-cache text is stored beside them, and the outcome says the copy is partial.
+  **or refuses an automated reader**: where the source was read from the GM's downloaded copy in
+  `/host-l7r-repo/academic-sources/`, that file is the archived copy (FR-012); otherwise an existing web-archive snapshot
+  (FR-005); only then the served bytes as served, with the page-cache text beside them where their text is empty, and the
+  outcome says the copy is partial.
 - **A file larger than the archive host accepts in one file** (GitHub refuses one past 100 MB): stored in parts, with a
   checksum of the whole so the parts can be joined and verified.
 - **A URL cited by several entries**: archived once, linked from each.
@@ -111,8 +113,10 @@ in) opens that source's capture.
 
 ### Functional Requirements
 
-- **FR-001**: Every URL named in a registry entry MUST have exactly one archive outcome: archived (live), archived (earlier
-  web-archive snapshot), partial, unreachable (with reason), pending upload, or no online copy.
+- **FR-001**: Every URL the record cites - every URL in a registry entry and every URL a footnote in
+  `research/questions/*.notes.html` links - MUST have exactly one archive outcome: archived (live), archived (earlier
+  web-archive snapshot), archived (the GM's downloaded copy), partial, unreachable (with reason), pending upload, or no
+  online copy.
 - **FR-002**: An archived copy MUST hold the bytes as served (HTML document or file, unaltered); for a web page, ALSO the
   whole page as a reader saw it - its images, stylesheets and fonts - as one self-contained file that opens offline in a
   browser (the GM: *"download the whole webpage with images and css and such and not just the html content"*); the
@@ -120,19 +124,22 @@ in) opens that source's capture.
   the bytes, the source key(s) that cite it, and for Wikipedia and other MediaWiki sites, the revision id.
 - **FR-003**: Copies MUST live in the private repository `EliAndrewC/diagram-research`, laid out by source key so a key finds
   its copies by path; nothing from the archive is published anywhere public.
-- **FR-004**: A one-time backfill MUST archive every URL in the registry as of the run, resumably, reporting a coverage table
+- **FR-004**: A one-time backfill MUST archive every cited URL (FR-001) as of the run, resumably, reporting a coverage table
   (counts per outcome, and each unreachable URL with its reason).
 - **FR-005**: Where the live page cannot be fetched, the backfill MUST try the newest snapshot a public web archive already
   holds and store that, marked with its source and date.
 - **FR-006**: Registering a source with a URL MUST archive that URL in the same command; a failure is recorded as an outcome,
   never silently dropped, and never blocks the registration.
-- **FR-007**: `make record CHECK=1` MUST fail on a registry URL with no outcome, naming the URL and the command that
+- **FR-007**: `make record CHECK=1` MUST fail on a cited URL (FR-001) with no outcome, naming the URL and the command that
   archives it; it MUST read a manifest committed in this repository, so the check needs no network.
 - **FR-008**: The archive repository has ONE working copy on the host, shared by every session and pushed straight to
   GitHub - no per-clone copy, no sync-in/done route (the GM: *"you can just push directly to it without each of our diagram
   .clones/ having its own copy"*); writes from concurrent sessions MUST be serialized under a host-wide lock, as `make
   reserve` is.
 - **FR-009**: A capture MUST never overwrite an earlier capture of the same URL.
+- **FR-012**: Where a source was read from the GM's downloaded copy in `/host-l7r-repo/academic-sources/` (its registry
+  entry says so), that file MUST be archived as the source's copy, outcome "archived (the GM's downloaded copy)" - it is the
+  text the record quotes, where the live host refuses an automated reader. The file is copied, never moved or changed.
 - **FR-010**: The built record's source pages MUST show an archived-copy link with its capture date beside each live link,
   or say that no copy could be archived.
 - **FR-011**: The GitHub credential MUST be read from the existing secrets loader and never written to a file, a log, a
@@ -141,7 +148,7 @@ in) opens that source's capture.
 ### Key Entities
 
 - **Capture**: one URL fetched once - bytes, text, capture record; identified by URL and capture time.
-- **Archive manifest**: committed in this repository; one row per registry URL - source key(s), outcome, path of the latest
+- **Archive manifest**: committed in this repository; one row per cited URL (FR-001) - source key(s) or citing note(s), outcome, path of the latest
   capture in the archive repository, its date and checksum. The record check and the source pages read it.
 - **Archive repository**: `EliAndrewC/diagram-research`, private; holds the captures.
 
@@ -149,13 +156,13 @@ in) opens that source's capture.
 
 ### Measurable Outcomes
 
-- **SC-001**: After the backfill, every registry URL has an outcome in the manifest, and the share archived (live or from
+- **SC-001**: After the backfill, every cited URL (FR-001) has an outcome in the manifest, and the share archived (live or from
   an earlier snapshot) is reported; every unreachable one carries a reason.
 - **SC-002**: A random sample of 20 archived copies - at least 5 Wikipedia, 5 PDFs, 5 small sites - each opens offline from a
   fresh clone of the archive repository and contains the passage its registry entry quotes (where the entry quotes one).
 - **SC-003**: A source registered after the feature lands has its copy in the archive repository with no step beyond the
   registration command.
-- **SC-004**: The record check fails on a registry URL with no manifest row, proven by a test that removes one row.
+- **SC-004**: The record check fails on a cited URL with no manifest row, proven by a test that removes one row.
 - **SC-005**: Re-running the backfill on a complete archive fetches nothing.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
@@ -168,15 +175,21 @@ This feature draws and states nothing on a map; it changes the research tooling 
 | The archive is private; nothing is republished | the GM's ruling | copyright: *"for now I just want an archive"*; a public copy waits on the author's permission | `request.md` |
 | A web page is captured whole - images, styles and fonts - as one self-contained offline file, beside the served HTML and the text | the GM's ruling | *"we should download the whole webpage with images and css and such and not just the html content"*; the session had proposed text and HTML only to save space, and the GM chose the whole page. Cost: a larger archive, measured on a sample in the plan before the full run. A PDF is stored whole | `request.md`; the capture module's docstring |
 | A dead page falls back to an existing public web-archive snapshot | tooling decision | a copy someone else took is better than none, and it is labeled as theirs with its date | this spec; the capture module |
-| No submission to a public web archive, no change to how citations link | scope | the GM asked for an archive *"for now"*; both were offered by the session and not taken up | this spec |
+| No submission to a public web archive, no change to how citations link | scope | not in the GM's request; offered by the session and not taken up | this spec |
 
 ## Assumptions
 
-- The registry is the complete list of what the record cites: a footnote names a registry key, never a bare URL (feature
-  301's notes link `SOURCES.html#<key>`). A URL that appears only in a question page's prose is not a citation and is out of
-  scope; the plan measures how many there are.
+- The registry is NOT the complete list of what the record cites (spec-fidelity round 1, measured 2026-10-02): about a
+  dozen URLs that footnotes in `questions/*.notes.html` link directly appear in no registry entry, so FR-001 takes both.
 - The GM's own campaign notes (github.com/EliAndrewC/gm-assistant links) are archived like any other URL - they are cheap,
   and the literal request is every cited page.
 - Fetching ~2,200 URLs politely (a delay per host) takes hours, not days; the backfill runs in the background on the host.
 - The archive's size is expected to be a few hundred MB to low GB; the plan measures it on a sample before the full run.
 - GitHub's per-repository soft limit (several GB) is not reached; if the measured estimate says otherwise, the plan raises it.
+
+## Review
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 3 items - (1) footnotes link about a dozen URLs no registry entry
+  carries, so FR-001/004/007 and the manifest take every footnote URL too; (2) sources read from the GM's downloaded copy in
+  `academic-sources/` archive that file (FR-012, a new outcome, the edge case reordered); (3) the Wayback row's reason no
+  longer quotes the GM's hosting answer as a ruling on it. Addressed as stated.
