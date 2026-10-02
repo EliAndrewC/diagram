@@ -1,10 +1,14 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
 import math
+import random
 
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.ways import touch
+from l7r.diagram.settlement import seg_dist
+from l7r.diagram.settlement._geom.indexes import PointGrid
 
 from ._builders import _StubSettlement
 
@@ -332,3 +336,47 @@ def test_an_end_a_SPLICE_has_just_put_on_another_tread_is_not_linked_onward() ->
     assert n == 1, "one end is closed: lane 2's, spliced onto lane 1's start"
     assert [tuple(q) for q in s.M["lanes"][2]["pts"]] == [(160.0, 10.0), (0.0, 0.0)], "the splice this test stands on"
     assert [tuple(q) for q in s.M["lanes"][1]["pts"]] == [(0.0, 0.0), (40.0, 0.0)], "the far end already on lane 2's tread is not linked onward"
+
+
+def _old_clear(run, fab):
+    """`_join_piece`'s `_clear_of_fabric` as it stood before feature 306: every fabric vertex against every run segment."""
+    if len(run) < 2 or not fab:
+        return float("inf")
+    return min(seg_dist(q[0], q[1], a2, b2) for poly in fab for q in poly for a2, b2 in zip(run, run[1:], strict=False))
+
+
+def _ring(rng: random.Random) -> list[tuple[float, float]]:
+    cx, cy, k = rng.uniform(0, 600), rng.uniform(0, 600), rng.randint(3, 40)
+    return [(cx + rng.uniform(10, 60) * math.cos(2 * math.pi * i / k), cy + rng.uniform(10, 60) * math.sin(2 * math.pi * i / k)) for i in range(k)]
+
+
+def test_the_indexed_clearance_is_the_old_scan_capped_at_the_bar() -> None:
+    """Feature 306: the run asks only the fabric vertices within the bar of it, and the answer is the old scan's wherever it
+    is under the bar, the bar where it is not - which is all `_join_piece` reads (`min(_was, _bar)`, and a splice judged
+    against a figure under the bar). Long diagonal legs, runs through the fabric, a vertex exactly on the run."""
+    rng = random.Random(306)
+    for _ in range(300):
+        fab = [_ring(rng) for _ in range(rng.randint(0, 12))]
+        run = [(rng.uniform(-50, 650), rng.uniform(-50, 650)) for _ in range(rng.randint(0, 6))]
+        cap = rng.choice((4.0, 4.5, 6.0, 30.0))
+        assert touch._clear_within(run, touch._fabric_vertices(fab), cap) == min(_old_clear(run, fab), cap)
+    square = [(100.0, 100.0), (200.0, 100.0), (200.0, 200.0), (100.0, 200.0)]
+    assert touch._clear_within([(0.0, 96.5), (400.0, 96.5)], touch._fabric_vertices([square]), 4.0) == 3.5
+    assert touch._clear_within([(0.0, 0.0), (400.0, 400.0)], touch._fabric_vertices([square]), 4.0) == 0.0
+
+
+class _Dropping(PointGrid):
+    """A vertex index that loses (100, 100) - the fault the oracle above must catch."""
+
+    def near(self, px, py, pad=0.0):
+        return [it for it in super().near(px, py, pad) if it[0] != (100.0, 100.0)]
+
+
+def test_the_clearance_oracle_catches_a_dropped_vertex() -> None:
+    """The comparison above has teeth: an index that drops the nearest vertex answers differently from the old scan."""
+    square = [(100.0, 100.0), (200.0, 100.0), (200.0, 200.0), (100.0, 200.0)]
+    run = [(0.0, 97.0), (99.0, 97.0)]
+    lossy = _Dropping(touch._VERTEX_CELL)
+    lossy.extend((q, q[0], q[1], q[0], q[1]) for q in square)
+    assert touch._clear_within(run, touch._fabric_vertices([square]), 4.5) == min(_old_clear(run, [square]), 4.5) < 4.5
+    assert touch._clear_within(run, lossy, 4.5) != min(_old_clear(run, [square]), 4.5)

@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
-from l7r.diagram.hamletgen.ways.street import drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
-from l7r.diagram.settlement import Settlement
+import math
+import random
+
+from l7r.diagram.hamletgen.ways.street import _line_chunks, _nearest_within, brook_bounds, drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
+from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 LINE = [(float(x), 500.0) for x in range(0, 1201, 8)]
 
@@ -214,3 +217,79 @@ def test_the_run_past_an_end_farm_stops_short_of_the_brook() -> None:
     s = Settlement(1400, 1400, seed=3)
     s._row_streets = [LINE]
     assert 710.0 <= drawn_span(s, 0, [{"x": x, "y": y} for x, y in farms], shallow)[-1][0] <= 718.0, "the road and the web read the same span"
+
+
+def _old_nearest(h, line):
+    """`street_span`'s farm-to-line measure as it stood before feature 306: every segment of the line, the first on a tie."""
+    return min(((seg_dist(h[0], h[1], a, b), i) for i, (a, b) in enumerate(zip(line, line[1:], strict=False))), key=lambda t: t[0])
+
+
+def _old_span(line, houses, reach, pad, brook=()):
+    """`street_span` as it stood before feature 306 - the oracle the indexed form is held to."""
+    if len(line) < 2:
+        return []
+    arc = [0.0]
+    for a, b in zip(line, line[1:], strict=False):
+        arc.append(arc[-1] + math.dist(a, b))
+    along = []
+    for h in houses:
+        best = _old_nearest(h, line)
+        if best[0] > reach:
+            continue
+        i = best[1]
+        q = seg_closest(h[0], h[1], line[i], line[i + 1])
+        along.append(arc[i] + math.dist(line[i], q))
+    if not along:
+        return []
+    lo, hi = brook_bounds(line, arc, min(along), max(along), max(0.0, min(along) - pad), min(arc[-1], max(along) + pad), brook)
+    idx = [i for i, u in enumerate(arc) if lo <= u <= hi]
+    kept = []
+    for i in idx:
+        if not kept or arc[i] - arc[kept[-1]] >= 40.0:
+            kept.append(i)
+    if idx and kept[-1] != idx[-1]:
+        kept.append(idx[-1])
+    return [line[i] for i in kept]
+
+
+def test_the_indexed_span_is_the_old_scan() -> None:
+    """Feature 306: each farm asks only the segments whose box widened by `reach` holds it, and the span is the old scan's -
+    bent lines, a farm exactly `reach` off the line, and a farm equidistant from two segments (the lower index, as `min`
+    chose)."""
+    rng = random.Random(306)
+    for _ in range(200):
+        x, y, line = rng.uniform(0, 300), rng.uniform(300, 700), []
+        for _k in range(rng.randint(2, 120)):
+            line.append((x, y))
+            x, y = x + rng.uniform(4, 12), y + rng.uniform(-6, 6)
+        houses = [(rng.uniform(-50, 1500), rng.uniform(200, 800)) for _ in range(rng.randint(0, 40))]
+        reach, pad = rng.choice((60.0, 120.0, 150.0)), rng.choice((20.0, 50.0))
+        assert street_span(line, houses, reach, pad) == _old_span(line, houses, reach, pad)
+    # a line that wanders and doubles back: a run's box stands near a farm its own segments do not, so the nearest box is not
+    # the nearest run, and pruning the next box at the best distance so far is what is held exact
+    for _ in range(200):
+        x, y, line = 500.0, 500.0, []
+        for _k in range(rng.randint(2, 200)):
+            line.append((x, y))
+            ang = rng.uniform(0, 2 * math.pi)
+            x, y = x + 10 * math.cos(ang), y + 10 * math.sin(ang)
+        hs = [(rng.uniform(380, 620), rng.uniform(380, 620)) for _ in range(30)]
+        kept = [n if n[0] <= 150.0 else None for n in (_nearest_within(h, line, _line_chunks(line), 150.0) for h in hs)]
+        assert kept == [n if n[0] <= 150.0 else None for n in (_old_nearest(h, line) for h in hs)], "the same farms kept, at the same segment"
+        assert street_span(line, hs, 150.0, 20.0) == _old_span(line, hs, 150.0, 20.0)
+    assert street_span(LINE, [(300.0, 650.0)], 150.0, 50.0) == _old_span(LINE, [(300.0, 650.0)], 150.0, 50.0) != []
+    chunks = _line_chunks(LINE)
+    # (512, 520) stands over the vertex shared by segments 63 and 64, which close two different boxes: the tie across them
+    assert _nearest_within((512.0, 520.0), LINE, chunks, 150.0) == _old_nearest((512.0, 520.0), LINE) == (20.0, 63)
+    assert _nearest_within((304.0, 520.0), LINE, chunks, 150.0) == _old_nearest((304.0, 520.0), LINE) == (20.0, 37)
+    assert _nearest_within((300.0, 2000.0), LINE, chunks, 150.0) == (math.inf, -1)
+
+
+def test_the_oracle_catches_a_dropped_segment() -> None:
+    """The comparison above has teeth: boxes that lose the run holding the nearest segment answer differently from the old
+    scan."""
+    chunks = _line_chunks(LINE)
+    lossy = [c for c in chunks if not c[0] <= 37 < c[1]]
+    h = (300.0, 520.0)  # over segment 37, (296, 500)-(304, 500)
+    assert _nearest_within(h, LINE, chunks, 150.0) == _old_nearest(h, LINE)
+    assert _nearest_within(h, LINE, lossy, 150.0) != _old_nearest(h, LINE)

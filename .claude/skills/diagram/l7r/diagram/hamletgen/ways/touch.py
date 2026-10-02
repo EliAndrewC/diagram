@@ -7,6 +7,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
+from l7r.diagram.settlement._geom.indexes import PointGrid
 
 from ..consts import (
     WEB_FABRIC_GAP,
@@ -440,11 +441,15 @@ def _join_piece(
     # generous, so a lane already tight is never made worse and is not required to fix itself.
     _fab = [poly for poly in walls if len(poly) >= 3]
     _bar = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
+    # ASKED OF AN INDEX, CAPPED AT THE BAR (feature 306): the clearance was every fabric vertex against every segment of
+    # the run - 111,700 distances in one call on the pool. Both of its uses read it only through `min(_was, _bar)`, so the
+    # value above `_bar` is never needed, and a vertex farther than `_bar` from the run cannot be the answer: the vertices
+    # are filed once and each segment asks only those within `_bar` of it (`_clear_within`). Exact - the pool's manifests
+    # regenerate byte-identical, and `tests/hamletgen/ways/test_touch.py` holds it to the old scan.
+    _verts = _fabric_vertices(_fab)
 
     def _clear_of_fabric(run: Poly) -> float:
-        if len(run) < 2 or not _fab:
-            return float("inf")
-        return min(seg_dist(q[0], q[1], a2, b2) for poly in _fab for q in poly for a2, b2 in zip(run, run[1:], strict=False))
+        return _clear_within(run, _verts, _bar)
 
     _was = _clear_of_fabric(pts)
 
@@ -474,6 +479,38 @@ def _join_piece(
             _draw_web(s, link, int(float(lanes[i].get("w", 3))), joins=True)
     else:
         _draw_web(s, link, int(float(lanes[i].get("w", 3))), joins=True)
+
+
+_VERTEX_CELL = 16.0  # px: the fabric-vertex grid's cell - a few times the bar (4-5 ft), so a query reads a handful of cells
+
+
+def _fabric_vertices(fab: Sequence[Poly]) -> PointGrid:
+    """Every vertex of `fab`, filed once as `(vertex, x, y, x, y)` for `_clear_within` (feature 306)."""
+    grid = PointGrid(_VERTEX_CELL)
+    grid.extend((q, q[0], q[1], q[0], q[1]) for poly in fab for q in poly)
+    return grid
+
+
+def _clear_within(run: Poly, verts: PointGrid, cap: float) -> float:
+    """The least distance from a filed fabric vertex to the polyline `run`, or `cap` where none is nearer - the old scan's
+    `min(seg_dist(vertex, segment))` over every vertex and segment, clamped at `cap` (feature 306).
+
+    Exact below `cap`: a vertex within `cap` of a segment is within `cap` of its nearest point on it, which lies within half
+    a sample step (at most half a cell) of a sample taken every `<= cell` along the segment - so the query padded by
+    `cap + cell / 2` (and a pixel for rounding) at each sample cannot omit it, and the same `seg_dist` on the same floats
+    decides. A vertex returned twice only repeats a distance."""
+    best = cap
+    pad = cap + verts.cell / 2.0 + 1.0
+    for a, b in zip(run, run[1:], strict=False):
+        n = max(1, math.ceil(math.dist(a, b) / verts.cell))
+        seen: set[int] = set()
+        for k in range(n + 1):
+            for item in verts.near(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n, pad):
+                if id(item) not in seen:
+                    seen.add(id(item))
+                    q = item[0]
+                    best = min(best, seg_dist(q[0], q[1], a, b))
+    return best
 
 
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is

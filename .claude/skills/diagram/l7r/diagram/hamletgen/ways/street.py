@@ -68,6 +68,47 @@ def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: fl
     return a[1] if a[0] <= b[0] else b[1]
 
 
+_CHUNK = 16
+"""Segments per box in `_line_chunks`: a planned line sampled every 8 ft is a few hundred segments, so a few dozen boxes -
+measured on the pool's four streets against a `PointGrid` of the segments, which cost more to file each call than the
+scan it saved (18.0 ms against the scan's 15.6 ms, feature 306)."""
+
+_BOX_SLACK = 1e-6
+"""A box's gap is a lower bound on any segment in it, but `seg_dist` rounds; a box is passed over only when its gap
+exceeds the bound by more than this, so a rounding can never prune the segment that decides (feature 306)."""
+
+
+def _line_chunks(line: Sequence[Pt]) -> list[tuple[int, int, float, float, float, float]]:
+    """`line`'s segments in runs of `_CHUNK`, each as `(first, end, x0, y0, x1, y1)` - its segment indices `first..end-1` and
+    the box of their vertices (feature 306)."""
+    out = []
+    for k0 in range(0, len(line) - 1, _CHUNK):
+        k1 = min(k0 + _CHUNK, len(line) - 1)
+        xs, ys = [p[0] for p in line[k0 : k1 + 1]], [p[1] for p in line[k0 : k1 + 1]]
+        out.append((k0, k1, min(xs), min(ys), max(xs), max(ys)))
+    return out
+
+
+def _nearest_within(h: Pt, line: Sequence[Pt], chunks: Sequence[tuple[int, int, float, float, float, float]], reach: float) -> tuple[float, int]:
+    """`(distance, index)` of the segment of `line` nearest `h`, the lower index on a tie as `min` over the whole line
+    returned; where none is within `reach`, a distance over it - `(inf, -1)` when no box is near (feature 306). The boxes of `chunks` are read nearest first and
+    one farther off than the best distance so far (or than `reach`) is passed over: no segment in it can be nearer, so
+    none that decides is missed."""
+    hx, hy = h
+    gaps = []
+    for k0, k1, x0, y0, x1, y1 in chunks:
+        gap = math.hypot(max(x0 - hx, 0.0, hx - x1), max(y0 - hy, 0.0, hy - y1))
+        if gap - _BOX_SLACK <= reach:
+            gaps.append((gap, k0, k1))
+    best = (math.inf, -1)
+    for gap, k0, k1 in sorted(gaps):
+        if gap - _BOX_SLACK > best[0]:
+            break
+        for i in range(k0, k1):
+            best = min(best, (seg_dist(hx, hy, line[i], line[i + 1]), i))
+    return best
+
+
 def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: float, brook: Sequence[Pt] = ()) -> list[Pt]:
     """The stretch of a planned street its farms stand along: from the first farm's projection less `pad` to the last's
     plus `pad`, over the farms within `reach` of the line, its run past an end farm stopped a ford's landing short of where
@@ -78,9 +119,15 @@ def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: flo
     arc = [0.0]
     for a, b in zip(line, line[1:], strict=False):
         arc.append(arc[-1] + math.dist(a, b))
+    # EACH FARM ASKS ONLY THE STRETCH OF LINE NEAR IT (feature 306): it measured every segment of a line sampled every 8 ft -
+    # 6,394 distances a call on the pool - when only the nearest within `reach` is kept. The line is boxed once in runs of
+    # segments (`_line_chunks`) and a farm measures only the runs whose box could hold its nearest (`_nearest_within`). The
+    # nearest is chosen as before, the lower index on a tie, so the pool's manifests regenerate byte-identical
+    # (`tests/hamletgen/ways/test_street.py` holds it to the old scan).
+    chunks = _line_chunks(line)
     along: list[float] = []
     for h in houses:
-        best = min(((seg_dist(h[0], h[1], a, b), i) for i, (a, b) in enumerate(zip(line, line[1:], strict=False))), key=lambda t: t[0])
+        best = _nearest_within(h, line, chunks, reach)
         if best[0] > reach:
             continue
         i = best[1]
