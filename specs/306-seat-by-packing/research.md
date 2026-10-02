@@ -143,7 +143,7 @@ ways side by side past a pitch - each sent to its root cause (R13).
 (Observed 2026-10-02, method: as the heading.) Every fix exact - byte-identical pool manifests, an equivalence test with the old
 scan as its oracle, red when the index drops a candidate:
 
-| check | comparisons a call, before -> after | its own time, before -> after |
+| check (observed 2026-10-02, method: the agents' alternated runs) | comparisons a call, before -> after | its own time, before -> after |
 |---|---|---|
 | `ways/touch._clear_of_fabric` | 111,700 -> 69 | 103-128 ms -> 3.0-3.5 ms |
 | `ways/dry_exit._blocked_cells` | 101,229 -> 5,485 (the exact deciding tests left) | 1.4-2.8 s -> 0.07-0.09 s; Sawada's seat stage 1.1-1.9 -> 0.09-0.12 s |
