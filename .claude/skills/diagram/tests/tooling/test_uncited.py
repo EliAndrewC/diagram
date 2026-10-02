@@ -326,3 +326,21 @@ def test_cite_moves_an_uncited_entry_to_the_works_cited_with_a_used_for_line(tmp
     assert text.index("<em>Used for:</em> TODO") < text.index("<!-- tags:"), "the Used for: line before the marker, which stays last"
     with pytest.raises(ValueError, match="no uncited entry"):
         un.cite(root, "k-two")
+
+
+def test_merge_retires_a_duplicate_entry_and_moves_its_page_to_not_kept(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "20520-k-one.html").write_text("<p>K (https://k.org/redirect)</p>\n", encoding="utf-8")
+    (root / un.at.UNCITED / "20530-k-two.html").write_text("<p>K (https://k.org/target)</p>\n", encoding="utf-8")
+    un.kept(root, ["https://k.org/redirect", "https://k.org/target"], "source-filter")
+    gone = un.merge(root, "k-one", "k-two")
+    assert gone.name == "20520-k-one.html" and not gone.exists() and (root / un.at.UNCITED / "20530-k-two.html").exists()
+    assert [x["raw"] for x in un.at.read(root, un.KEPT)] == ["https://k.org/target"]
+    (nk,) = un.at.read(root, un.NOT_KEPT)
+    assert nk["raw"] == "https://k.org/redirect" and nk["reasons"] == ["duplicate"] and "k-two" in nk["note"]
+    with pytest.raises(ValueError, match="no uncited entry"):
+        un.merge(root, "k-one", "k-two")
+    (root / un.at.UNCITED / "20540-k-three.html").write_text("<p>no kept URL here</p>\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="no kept page"):
+        un.merge(root, "k-three", "k-two")

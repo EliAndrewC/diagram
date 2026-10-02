@@ -656,6 +656,30 @@ def cite(root: pathlib.Path, key: str) -> pathlib.Path:
     return dest
 
 
+def merge(root: pathlib.Path, key: str, into: str) -> pathlib.Path:
+    """Two uncited entries for one work (a redirect and its target, found by `source-applicability`): `key`'s entry is
+    retired and its page moves from the kept list to the not-kept list as a duplicate of `into`, which stays."""
+    d = at.base(root) / at.UNCITED
+    files = {k: [f for f in d.glob(f"*-{k}.html") if re.fullmatch(rf"\d+-{re.escape(k)}\.html", f.name)] for k in (key, into)}
+    for k, found in files.items():
+        if not found:
+            raise ValueError(f"no uncited entry for {k!r} in {at.UNCITED}")
+    gone = files[key][0]
+    text = gone.read_text(encoding="utf-8")
+    kept = at.read(root, KEPT)
+    mine = [x for x in kept if x["raw"] in text]
+    if not mine:
+        raise ValueError(f"{key!r}: no kept page's URL appears in {gone.name}")
+    path = at.base(root) / KEPT
+    drop = {x["raw"] for x in mine}
+    with src.locked(src.home(root), timeout=30.0):
+        lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+        path.write_text("".join(s for s in lines if not any(json.dumps(r, ensure_ascii=False) in s for r in drop)), encoding="utf-8")
+    at.write(root, [line(x["raw"], ["duplicate"], "source-applicability", f"the same work as {into}") for x in mine], NOT_KEPT)
+    gone.unlink()
+    return gone
+
+
 def report(root: pathlib.Path) -> str:
     nk = at.read(root, NOT_KEPT)
     reasons: dict[str, int] = {}
@@ -700,6 +724,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     ct.add_argument("key")
     ins = sub.add_parser("install")
     ins.add_argument("dirs", nargs="+")
+    mg = sub.add_parser("merge")
+    mg.add_argument("key")
+    mg.add_argument("into")
     args = ap.parse_args(argv)
     root = src.repo_root()
     if args.cmd == "set":
@@ -742,6 +769,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     elif args.cmd == "cite":
         dest = cite(root, args.key)
         print(f"uncited: {args.key} moved to {dest.relative_to(root)} - write its Used for: line (the build refuses the placeholder), then `git add -A` the move")
+    elif args.cmd == "merge":
+        gone = merge(root, args.key, args.into)
+        print(f"uncited: {args.key} retired ({gone.name}) as a duplicate of {args.into}; its page is on the not-kept list")
     elif args.cmd == "install":
         import importlib.util  # noqa: PLC0415
 
