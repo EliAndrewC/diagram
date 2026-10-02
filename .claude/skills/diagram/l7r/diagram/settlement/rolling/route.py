@@ -171,13 +171,11 @@ def _route_from(
     def at(c: Cell) -> Pt:
         return (x0 + c[0] * step, y0 + c[1] * step)
 
-    # ...AND OFF THE HOUSEHOLD'S OWN PARTS, each by the gap its leg test keeps (`parts_clear`, `fixtures_clear`): a grid point
-    # on its own bed or privy is one no leg through it can take, and searched over, the path was found and then refused when
-    # pulled taut - 1,016 of 1,189 routes on one map once the grid stopped starting at the door (research R2)
-    boxes = geom.get("boxes") or {}
-    pgap, trunk = s.px(TREAD_HALF_FT + PART_MARGIN_FT), s.px(4.0)
-    mine = [(own, hgap)] + [(b, pgap) for b in [boxes.get(k) for k in ("shed", "byre", "well")] + list(boxes.get("gardens") or ()) if b is not None]
-    mine += [(b if kind != "persimmon" else (b[0], b[1], trunk, trunk), half) for kind, b in (boxes.get("fixtures") or {}).items()]
+    # ...OFF THE HOUSE'S OWN BOX ONLY. Kept off the household's beds, sheds and fixtures too (feature 314 research R2: a path
+    # searched over its own beds was found and then refused when pulled taut), the paths it found wound round those parts and
+    # the web could not draw three of them on one map - seed 13 at 20 households refused (`WebRefused`, needle loops) where
+    # the base rolled it; withdrawn (research R12). The first step and the last leg keep their tests (below).
+    mine = [(own, hgap)]
 
     def is_open(c: Cell) -> bool:
         p = at(c)

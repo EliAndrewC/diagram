@@ -141,19 +141,14 @@ def test_a_search_starts_where_it_is_told_and_its_first_steps_are_judged() -> No
     assert search(lambda c: True, goal, [], 10, 1.5, (5, 5)) is not None, "no aim: the start's own"
 
 
-def test_a_route_keeps_off_its_own_parts_and_its_last_leg_off_what_stands(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 314: the grid points on the household's own beds, sheds and fixtures are shut, each by its leg test's gap, and a
-    goal whose last leg onto the tree the standing ground refuses is no goal."""
+def test_a_routes_last_leg_onto_the_tree_is_judged_where_it_is_searched(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 314: a goal whose last leg onto the tree the standing ground refuses is no goal - the search goes on, and where
+    every last leg is refused, no route. (The search kept off the household's own parts too until research R12 withdrew it.)"""
     monkeypatch.setattr(access, "parts_clear", lambda *a: True)
     s = _open()
     geom = _hemmed(s)
     s._access.routed = True
-    geom["boxes"]["fixtures"] = {"privy": (640.0, 640.0, 6.0, 6.0), "persimmon": (760.0, 640.0, 20.0, 20.0)}
-    geom["boxes"]["shed"] = (700.0, 660.0, 10.0, 10.0)
-    got = access_corridor(s, geom)
-    assert got is not None, "routed round its own parts"
-    for a, b in zip(got, got[1:], strict=False):
-        assert not access.seg_box_within(a, b, (640.0, 640.0, 6.0, 6.0), s._access.half), "...off its privy"
+    assert access_corridor(s, geom) is not None, "routed while the last legs stand clear"
     s = _open()
     geom = _hemmed(s)
     s._access.routed = True

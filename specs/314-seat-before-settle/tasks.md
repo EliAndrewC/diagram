@@ -26,7 +26,8 @@
 - [x] T06 the next costs named and attacked until the stopping rule holds (D5; US2 scenario 2)
       research: rendering
       verify: DONE. research R9 names every remaining cost of the 15-household stage with what an efficient process would do; R6 and R8 kept, R7 explained, R10 tried and withdrawn; the remaining lever (lanes planned before the houses) changes the GM's growth and is put to the GM
-- [ ] T07 the pool and the cohort against the base (FR-005, SC-002)
+- [x] T07 the pool and the cohort against the base (FR-005, SC-002)
       research: rendering
+      verify: DONE. research R11: cohort 28/30 on base and clone, the same two failures (seeds 5, 903; fixed on main by feature 310); make done green on the merged engine, every pool map regenerated and passing
 - [ ] T08 `make done`, the `314-end` bookend and `perf-report` (SC-005), `dev/performance.md`
       research: rendering
