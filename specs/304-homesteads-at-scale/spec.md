@@ -142,7 +142,8 @@ and the cohort and check every map passes its rules and seats every household it
 - **SC-001**: The perf snapshot reports per-stage times at 10, 15, 20 and 40 households, and a seeded fault that is quadratic in
   the household count raises the 40-household leg's band.
 - **SC-002**: The homesteads stage's seconds per household at 40 households is at most twice its seconds per household at 10
-  (base: 0.045 s/household at 10, ~0.19 at 40, a ratio of ~4), measured on the fixed seeds, back to back.
+  (base, observed 2026-10-01, method: the scratch scaling probe in request.md: 0.045 s/household at 10, ~0.19 at 40, a ratio
+  of ~4), measured on the fixed seeds, back to back.
 - **SC-003**: The homesteads stage at 40 households is at least 2x faster than the base by the wall clock (base 7.1-7.7 s on
   seeds 4 and 25).
 - **SC-004**: The 15-household reference does not get slower (perf band 0 or better).
