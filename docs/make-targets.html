@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 106 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 110 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -112,6 +112,10 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make agent-census</td><td class=a><div class=ad><span class=an>SINCE=&lt;date&gt;</span><span class=aw>only the runs that started on or after it</span></div><div class=ad><span class=an>OUT=&lt;json&gt;</span><span class=aw>also write the rows to this file</span></div></td><td>what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=&lt;json&gt;]</td></tr>
 <tr><td class=n>make append</td><td class=a>FILE LINE</td><td>append ONE line to a coordination file without reading or printing it (feature 274)</td></tr>
 <tr><td class=n>make apply-edits</td><td class=a>DRY FROM SKIP</td><td>apply a quote-check or record-format report&#x27;s EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)</td></tr>
+<tr><td class=n>make archive</td><td class=a>KEY URL</td><td>archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)</td></tr>
+<tr><td class=n>make archive-find</td><td class=a>KEY TERMS URL</td><td>does the archive already hold it? by URL, registry key, or words in the archived text - names each copy&#x27;s local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)</td></tr>
+<tr><td class=n>make archive-inbox</td><td class=a>MATCH NONE</td><td>the GM&#x27;s downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH=&quot;&lt;file&gt;=&lt;key&gt;[,&lt;key&gt;] ...&quot;] [NONE=&quot;&lt;file&gt; ...&quot;]</td></tr>
+<tr><td class=n>make archive-sources</td><td class=a>CONSULTED GM LIMIT REPORT WORKERS</td><td>archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM&#x27;s matched files copied in; CONSULTED=1, every page on the sources-consulted ledger with no copy (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=&lt;n&gt;]]</td></tr>
 <tr><td class=n>make audit</td><td class=a>&ndash;</td><td>how the gate has actually been used - every run, every bypass, and remote spend</td></tr>
 <tr><td class=n>make bypass-audit</td><td class=a>&ndash;</td><td>every escape token taken, with the reason its user gave   (the FULL prompt reads this)</td></tr>
 <tr><td class=n>make canon</td><td class=a>TERMS</td><td>search the GM&#x27;s setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)</td></tr>

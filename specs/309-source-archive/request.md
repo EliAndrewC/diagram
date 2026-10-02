@@ -61,3 +61,13 @@ Since we're adding so many thousands of sources, then do we need to organize the
 The session's answer: yes, now - GitHub's web view lists only the first 1,000 entries of a directory and the archive's top
 level already held ~1,700; shard by the URL id's first two hex digits (256 buckets, ~20 entries each at 5,000 URLs), the
 GM's copies flat under `gm-copies/` (~40), the manifest sharded the same way; lookups go through the manifest.
+
+## Amendment 2 (GM, 2026-10-02, verbatim)
+
+Actually, can you hold up on the backfill for now? Because I have something that I want to explain about how it should work and what we should do with it before we actually jump into it.
+
+The GM then described source write-ups, a usefulness filter and a log of what each source was tried for (verbatim in
+`specs/312-uncited-source-catalog/request.md`). The session proposed landing this feature first, with the uncited pages
+left to that new feature, and the GM agreed:
+
+Okay, yeah, I do like the idea of landing what we've done in main prior to starting this as its own separate feature. So how about you do that and finish the feature that we are already in the middle of with this new feature about filtering and cataloging and tagging and doing source write-ups of our uncited works being its own separate feature, which you can also file now. But then we don't actually start that until the previous feature has landed in main.

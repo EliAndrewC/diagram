@@ -34,8 +34,8 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 - Look in the archive before the web (feature 309): start the pass with `make archive-inbox` (the GM's downloads
   archived and moved out of `academic-sources/`; a NEW download is listed WAITING until you read its first page and give
   its keys - `MATCH='<file>=<key>'`, or `NONE='<file>'` if it copies no cited source), then `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` for every
-  source before searching or fetching - it names the local copy to read. Every page you read through `make
-  source-pages` or record with `make source-outcome` is archived for the next session.
+  source before searching or fetching - it names the local copy to read. A page you record
+  `make source-outcome OUTCOME=cited:<key>` is archived for the next session; an uncited read stays on the ledger.
 - The record is written for a casual reader: glossary tooltips for terms, session notes in HTML comments, nothing
   about what an entry used to say. Never edit a built page; edit the question's file (`research/questions/NNNN-<id>.html`, its `.drawing.html`, its
   `.notes.html`), keep its tags marker filled from `research/tags.json`, and run `make record`.

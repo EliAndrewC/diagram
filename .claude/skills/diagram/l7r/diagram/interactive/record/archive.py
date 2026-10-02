@@ -125,7 +125,7 @@ def refusals(research_dir: str, today: datetime.date | None = None) -> list[str]
     with no `archive/` directory has no archive to hold it to (a test's small record); the real one always has it."""
     if not os.path.isdir(os.path.join(research_dir, ARCHIVE_DIR)):
         return []
-    today = today or datetime.datetime.now(datetime.timezone.utc).date()
+    today = today or datetime.datetime.now(datetime.UTC).date()
     rows = load(research_dir)
     out = []
     for url, who in cited(research_dir).items():

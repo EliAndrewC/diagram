@@ -22,14 +22,13 @@ import re
 import shutil
 import tempfile
 
-from l7r.diagram.interactive.record import archive
+from l7r.diagram.interactive.record import archive, store
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
 from l7r.diagram.interactive.record import site_links as links
 from l7r.diagram.interactive.record import site_notes as sn
 from l7r.diagram.interactive.record import site_pages as sp
 from l7r.diagram.interactive.record import source_tags as st
-from l7r.diagram.interactive.record import store
 from l7r.diagram.interactive.record.notes import NoteError, Placed, render_note
 from l7r.diagram.interactive.record.split import split
 from l7r.diagram.interactive.record.store import RecordError

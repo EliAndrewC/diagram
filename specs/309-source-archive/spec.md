@@ -112,22 +112,24 @@ the file is found again by `make archive-find`; a file whose push fails stays in
 
 ---
 
-### User Story 5 - Every page a session reads is archived, cited or not (Priority: P2, Amendment 1)
+### User Story 5 - A page is archived when it is cited; an uncited read is recorded, not archived (Priority: P2, Amendments 1 and 2)
 
-A page a research session reads and does not cite is archived too, so a later question can consult it again from the
-archive (the GM: *"When we check a paper for one fact, it may not have what we need ... we may end up wanting to check the
-paper later for a different fact"*). The GM chose every page read, the earlier reads included.
+Amendment 1 archived every page a session reads, cited or not. Amendment 2 (the GM, 2026-10-02, verbatim in `request.md`)
+moved the uncited pages to feature 312, which filters them for usefulness and writes up the ones kept: a page that is not
+worth keeping is recorded, with why, and never stored. So here a page is archived when it is CITED - by any route that
+cites it - and every read stays a line on the sources-consulted ledger (feature 288), as before.
 
-**Independent Test**: `make source-pages` on a URL archives it; the earlier reads on the sources-consulted ledger are
-archived by a backfill, from a live fetch where the page answers and from the page cache's saved text where it does not.
+**Independent Test**: `make source-outcome OUTCOME=cited:<key>` archives the page; `make source-pages` and an outcome other
+than `cited:` record the read and archive nothing.
 
 **Acceptance Scenarios**:
 
-1. **Given** a page read with `make source-pages`, **When** the read finishes, **Then** the page has an archived copy and a
-   manifest row, cited or not.
-2. **Given** the ~4,900 URLs on the sources-consulted ledger (observed 2026-10-02: 4,903 distinct, 3,072 with saved text),
-   **When** the consulted backfill runs, **Then** each has a row: a whole live capture where the page answers, else the
-   saved text, else unreachable with its reason.
+1. **Given** a page cited with `make source-outcome OUTCOME=cited:<key>` or `make reserve KIND=registry ... URL=`, **When**
+   the command finishes, **Then** the page has an archived copy and a manifest row.
+2. **Given** a page read with `make source-pages`, or recorded `rejected:`, `nothing-found`, `unreadable` or `pending`,
+   **When** the command finishes, **Then** its ledger line is written and nothing is archived.
+3. The three uncited pages the consulted backfill archived before the GM held it (2026-10-02) stay in the archive for
+   feature 312's filter to judge.
 
 ---
 
@@ -185,7 +187,7 @@ path; the research rules, the page-session rules and the reading agents' contrac
   extracted readable text; and a capture record: the URL cited, the URL finally fetched, the time, the HTTP status, the content type, a checksum of
   the bytes, the source key(s) that cite it, and for Wikipedia and other MediaWiki sites, the revision id.
 - **FR-003**: Copies MUST live in the private repository `EliAndrewC/diagram-research`; nothing from the archive is
-  published anywhere public. The layout keeps every directory to a few hundred entries as the archive grows to every page read (4,903 distinct
+  published anywhere public. The layout keeps every directory to a few hundred entries as the archive grows toward every page read (4,903 distinct
   URLs on the sources-consulted ledger, observed 2026-10-02, cited ones included)
   (the GM, mid-backfill: *"limit the number of directories in any given directory to no more than a few hundred"*):
   a URL's captures under `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest's rows under
@@ -214,10 +216,10 @@ path; the research rules, the page-session rules and the reading agents' contrac
   empty where it copies none - and deleted from the inbox only after the push is confirmed on GitHub. The match table keeps every processed file's
   name, keys and archive path, so a copy stays findable after its file is gone. The 7 files that copy no cited source today
   are archived and deleted too.
-- **FR-014** (Amendment 1): every page a session reads is archived when the read is recorded, cited or not - by any route
-  onto the sources-consulted ledger (`make source-pages`, `make source-outcome`, `make reserve ... URL=`); a row records
-  it, and a URL that already has a row is not captured again. A one-time consulted backfill archives every URL on the sources-consulted ledger with no row: a whole live capture where
-  the page answers, else the page cache's saved text (`partial`), else `unreachable` with its reason.
+- **FR-014** (Amendments 1 and 2): a page is archived when it is cited - by any route that cites it (`make reserve ...
+  URL=`, `make source-outcome OUTCOME=cited:<key>`); a row records it, and a URL that already has a row is not captured
+  again. A read that cites nothing (`make source-pages`, any other outcome) is recorded on the sources-consulted ledger and
+  not archived; the uncited pages, the ~4,900 earlier reads among them, are feature 312's (Amendment 2).
 - **FR-015** (Amendment 1): `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` answers from the manifest and the archived
   text, without a fetch, naming each copy's local path.
 - **FR-016** (Amendment 1): the research procedure names the archive lookup (`make archive-find`) as the first step for
@@ -234,8 +236,8 @@ path; the research rules, the page-session rules and the reading agents' contrac
 ### Key Entities
 
 - **Capture**: one URL fetched once - bytes, text, capture record; identified by URL and capture time.
-- **Archive manifest**: committed in this repository; one row per archived URL - every cited URL (FR-001) and every page
-  read (FR-014) - with its source key(s) or citing note(s) where it is cited, outcome, path of the latest capture in the
+- **Archive manifest**: committed in this repository; one row per archived URL - every cited URL (FR-001) and the few
+  uncited pages archived before Amendment 2 - with its source key(s) or citing note(s) where it is cited, outcome, path of the latest capture in the
   archive repository, its date and checksum; beside it `gm-copies.json`, every GM file processed (FR-012, FR-013) with
   its keys and archive path. The record check and the source pages read it; the lookup searches it.
 - **Archive repository**: `EliAndrewC/diagram-research`, private; holds the captures.
@@ -265,7 +267,8 @@ This feature draws and states nothing on a map; it changes the research tooling 
 | A dead page falls back to an existing public web-archive snapshot | tooling decision | a copy someone else took is better than none, and it is labeled as theirs with its date | this spec; the capture module |
 | No submission to a public web archive, no change to how citations link | scope | not in the GM's request; offered by the session and not taken up | this spec |
 | `academic-sources/` is an inbox: a file is deleted once its archived copy is pushed and confirmed | the GM's ruling (Amendment 1) | *"once something has been added to the diagram research repository and then pushed, then we can delete it"*; the deletion waits on a confirmed push so nothing exists only locally. The directory is in the GM's own repository, so the deletions show in that tree for the GM to commit; nothing here runs git there | `request.md`; `scripts/_archive.py` |
-| Every page a session reads is archived, the ~4,900 earlier reads included | the GM's ruling (Amendment 1, chose "Every page we read") | a page read for one fact may answer a later question | `request.md` |
+| Every page a session reads is archived, the ~4,900 earlier reads included (SUPERSEDED by Amendment 2, the next row) | the GM's ruling (Amendment 1, chose "Every page we read") | a page read for one fact may answer a later question | `request.md` |
+| The uncited pages move to feature 312: a page is archived here only when it is cited | the GM's ruling (Amendment 2) | a page judged not worth keeping is recorded with why and never stored (the GM: a filter, then write-ups of what is kept); 309 lands what is done first. Archiving every read in the meantime would put into the archive's history copies the filter may reject, which a later delete does not take back out of git | `request.md`; `scripts/_sources.py:archive_reads` |
 | The archive lookup is the first step of a research pass | the GM's ruling (Amendment 1) | *"first check to see if we already have something, rather than going out and trying to find it on the internet"* | `research/CLAUDE.md`, the page-session rules, the reading agents' contracts |
 | Captures sharded `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest sharded alike | the GM's question answered by the session (`request.md`) | GitHub lists only a directory's first 1,000 entries (observed 2026-10-02: the contents API returned 1,000 of the archive's 1,775 top-level entries), and the archive is headed for the ledger's 4,903 URLs (observed 2026-10-02); 256 two-hex buckets hold about 19 each at that size (derived: 4,903 / 256) and stay under 300 a bucket to about 76,800 URLs (derived: 300 x 256); the GM's copies need no bucket (40 entries, the FR-012 match of 2026-10-02, tasks T12). Cost: a key's copies are not browsable by key name - the manifest and `make archive-find` find them | `scripts/_archive.py:capture_base`, `record/archive.py:ROW_GLOB` |
 
@@ -305,3 +308,5 @@ This feature draws and states nothing on a map; it changes the research tooling 
   root `CLAUDE.md` and `docs/research-doctrine.md`. Also folded in: the GM's sharding question (FR-003, a Decisions row).
 - Amendment 1, round 2 (spec-fidelity, verify, 2026-10-02; a NOT-REVIEWABLE return before it, for unlabeled figures, now
   labeled): FAITHFUL. Noted for the plan: its layout lines predate the sharding and are rewritten with the plan's amendment.
+- Amendment 2 (2026-10-02, the GM, verbatim in `request.md`): the backfill of uncited pages held, then moved to feature
+  312 (filter, write-ups, a log of what each source was tried for); User Story 5 and FR-014 narrowed to archive at citation.

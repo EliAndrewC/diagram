@@ -208,6 +208,8 @@ research repository and then pushed, then we can delete it from the academic sou
 at that directory is just a good way to know whether there is something that we have not processed yet."* Sources read
 and not cited are archived too - *"When we check a paper for one fact, it may not have what we need for the question that
 we are asking, but then we may end up wanting to check the paper later for a different fact"* - every page a session
-reads, the earlier reads included (the GM's choice). And the research pass looks in the archive first: *"our research
+reads, the earlier reads included (the GM's choice). Then, the same day, the GM held that backfill and moved the
+uncited pages to their own feature (312): a page not worth keeping is recorded with why and never stored, and a page kept
+gets a write-up like any cited source; until it lands, a page is archived when it is cited. And the research pass looks in the archive first: *"our research
 procedure should include a step where we first check to see if we already have something, rather than going out and
 trying to find it on the internet"* - `make archive-inbox`, then `make archive-find`, before any search.

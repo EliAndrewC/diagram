@@ -26,7 +26,7 @@ one-time backfill archives what is already cited; `make reserve ... URL=` archiv
   on what is cited by construction. `scripts/reserve-prefix.py --url` calls it after writing the stub.
 - **Makefile**: `make archive URL=<u> [KEY=<k>]` (one URL, now), `make archive-sources` (the backfill, resumable;
   `REPORT=1` prints the coverage table and fetches nothing).
-- **The manifest**: `.claude/skills/diagram/research/archive/<id[:2]>/<id>.json` (D11), one file per archived URL - every cited URL and every page read (FR-014) - (`id` = the first 12 hex of
+- **The manifest**: `.claude/skills/diagram/research/archive/<id[:2]>/<id>.json` (D11), one file per archived URL - every cited URL and any page archived at citation (FR-014) - (`id` = the first 12 hex of
   the SHA-256 of the URL as cited, entity-unescaped and without its fragment): `{url, final_url, keys, notes, outcome, path,
   captured, first, sha256, revision, reason, gm_copies}`. Beside it `gm-copies.json`, the FR-012 match (below).
 - **The archive layout** (in diagram-research, D11): `<id[:2]>/<id>/<UTC capture time>/` holding `served.<ext>`, `page.mhtml`
@@ -75,7 +75,7 @@ committed as `research/archive/gm-copies.json`).
   INDEPENDENTLY of that order, every file `gm-copies.json` matches to a key is copied to `gm-copies/` whatever the live
   fetch's outcome (FR-012: in addition, never in place). A source page's archived line lists every copy of every URL the
   entry cites (FR-010; 21 entries cite several).
-- **D3 - One manifest file per URL**, so concurrent sessions never conflict; about 4,900 small files once every page read is in (the ledger's 4,903 distinct URLs, observed 2026-10-02), sharded by D11.
+- **D3 - One manifest file per URL**, so concurrent sessions never conflict; about 2,100 small files for the cited URLs, at most ~4,900 if feature 312 keeps every page read (the ledger's 4,903 distinct URLs, observed 2026-10-02), sharded by D11.
 - **D4 - Capture time is the version key**: a later capture is a new directory (FR-009); the row points at the latest and
   keeps the first in `first`.
 - **D5 - At reserve time a failure never blocks** (FR-006): the outcome is written as it is; a push that fails writes
@@ -139,11 +139,12 @@ CLAUDE.md, docs/research-record-rules.md, container-scripts/page-session-rules.m
   MATCH='<file>=<key>'`, or `NONE='<file>'` for one judged to copy no cited source (`keys: []`, archived all the same). A
   waiting file stays in the inbox, so the directory still shows it as unprocessed (plan review, Amendment 1). The table records `archived` for every processed file, which is how a copy
   is found once its file is gone (`place_gm`).
-- **D13 - Every page read** (FR-014): `_sources.archive_reads` runs `_archive_ops.py urls` from `make source-pages` (its
-  ledgered reads) and `make source-outcome`; `make reserve ... URL=` already archives. A URL with a row is not captured
-  again (`unarchived`, by `_sources.norm`). `L7R_ARCHIVE_READS=0` is the test suite's seam (`tests/tooling/conftest.py`),
-  as `L7R_SOURCES_HOME` is. The one-time `consulted` backfill takes the page cache's own URLs and the ledger's (scheme
-  restored as https) with no row, live first, the page cache's text where the page will not come back.
+- **D13 - Archived at citation** (FR-014, Amendment 2): `_sources.archive_reads` runs `_archive_ops.py urls` from
+  `make source-outcome` when the outcome is `cited:<key>`; `make reserve ... URL=` already archives. `make source-pages`
+  records its reads and archives nothing. A URL with a row is not captured again (`unarchived`, by `_sources.norm`).
+  `L7R_ARCHIVE_READS=0` is the test suite's seam (`tests/tooling/conftest.py`), as `L7R_SOURCES_HOME` is. The `consulted`
+  operation (`make archive-sources CONSULTED=1`) stays, unrun: feature 312 archives the uncited pages its filter keeps, and
+  the three it captured before the GM held it (2026-10-02) wait for that filter.
 - **D14 - The lookup** (FR-015): `make archive-find` reads the rows (by `_sources.norm` of the URL, or a key) and greps the
   archived texts (`text.txt`, a GM PDF's `.txt`) for every term; exit 1 with nothing held, saying to go to the web.
 - **D15 - Found while running the backfill, fixed in the work** (constitution XIV): a render that failed under load is tried

@@ -71,8 +71,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
       deletes nothing; the GM's lists stay); run on the GM's directory
       research: rendering
       verify: DONE. process_inbox + MATCH/NONE; 7 ops tests pass; ran on academic-sources: 40 entries archived to gm-copies/, confirmed in origin/main, removed - the two GM lists remain
-- [ ] T42 [US5] Every page read (D13): `archive_reads` from `source-pages` and `source-outcome`, `_archive_ops.py urls`, the
-      test seam; the consulted backfill (`make archive-sources CONSULTED=1`) over the ledger's URLs with no row
+- [ ] T42 [US5] Archived at citation (D13, Amendment 2): `archive_reads` from `source-outcome` on a `cited:` outcome only,
+      none from `source-pages`; tests (a cited outcome archives, a read or any other outcome does not)
       research: rendering
 - [x] T43 [US6] The lookup (D14): `make archive-find`; tests
       research: rendering

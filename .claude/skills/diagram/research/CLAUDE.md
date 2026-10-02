@@ -73,11 +73,12 @@ page, finds the source it copies (`TO-DOWNLOAD.md` names what each download was 
 archive-inbox MATCH='<file>=<key>'` (`NONE='<file>'` for one that copies no cited source) - and asks `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` of
 every source before searching or fetching; it names the local copy to read (exit 1: nothing held, go to the web).
 
-**Every cited and every read page is archived** (a hedge against *"websites going offline"*): every URL in a registry
-entry (its comments' too), every URL a footnote links, and every page a session reads, cited or not, has a copy - served
+**Every cited page is archived** (a hedge against *"websites going offline"*): every URL in a registry
+entry (its comments' too) and every URL a footnote links has a copy - served
 bytes, the whole page as MHTML, its text - in the PRIVATE repository `EliAndrewC/diagram-research` (the host's one
 working copy: `<mirror>/.specify/source-archive/`), and a row in `research/archive/<id[:2]>/<id>.json`. `make reserve
-KIND=registry ... URL=<u>`, `make source-pages` and `make source-outcome` archive their URLs themselves; a URL cited any
+KIND=registry ... URL=<u>` and `make source-outcome OUTCOME=cited:<key>` archive their URLs themselves (a page read and
+not cited is on the ledger, not in the archive: which uncited pages to keep is feature 312's); a URL cited any
 other way (a footnote's direct link, a URL added to an entry) is archived with `make archive URL=<u>`, and `make record`
 refuses a cited URL with no row, naming that command. `make archive-sources REPORT=1` prints the coverage. Never link or
 copy the archive anywhere public: much of it is copyrighted.
