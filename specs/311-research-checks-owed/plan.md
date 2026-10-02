@@ -21,8 +21,8 @@ question, the intros it calls for are written, and the parley-room question gets
 ## Decisions
 
 **D1 - What a unit is, and its fingerprint.** A unit is `<check>:<subject>`. Each has a fingerprint, a hash of exactly what
-its check reads, normalized (HTML comments removed, whitespace collapsed), so a comment, a tag marker or a re-wrap changes
-nothing:
+its check reads, normalized to its WORDS (HTML comments and markup removed, whitespace collapsed, each note mark kept as a
+`[^key]` token), so a comment, a tag marker, a bold or a re-wrap changes nothing (spec FR-004):
 
 | unit | subject | fingerprint over |
 |---|---|---|
@@ -47,17 +47,16 @@ Read at the base with ONE `git ls-tree` + ONE `git cat-file --batch` over `resea
 (about 1,700 files), never a `git show` per file.
 
 **D3 - The intro paragraph is `<p class="intro">`**, the first block of a research page after its heading and comments; at
-most one; no note mark; it says what Rokugan (or the map) has and that the research follows, and asserts no historical finding.
+most one; no note mark; it says what Rokugan (or the map) has and that the research follows; it may name the class its cited body or drawing page reaches, and adds no historical claim that body does not carry.
 The site inserts the "Not to be confused with" block straight after the heading, so the intro stands after it with no engine
-change (verified on the built page, T04). Styled in `research/assets/record.css`, set apart from the findings like the
-confusables block. Stated in `research/STYLE.md` section 2 and the research `CLAUDE.md`; `tests/interactive/test_record_format.py`
+change (verified on the built page, T04). It carries no styling (spec FR-002). Stated in `research/STYLE.md` section 2 and the research `CLAUDE.md`; `tests/interactive/test_record_format.py`
 holds the mechanical shape (position, one, no mark).
 
 **D4 - `intro-check`, the defined agent.** `.claude/agents/intro-check.md`: Opus at medium effort (it judges; the project's
 rule - a downgrade stands only after seeded runs, and the backfill is about ten dispatches, so the saving does not repay the
 experiment), `omitClaudeMd: true`, tools Read and Grep, reads a bundle. Verdicts per question: NO-INTRO-NEEDED,
 NEEDS-INTRO (what the intro must say and the drawing page's class for it - attested, deviation, convention), INTRO-OK,
-INTRO-FIX (what is wrong: no "why", or a historical assertion). Its bundle (`make check-bundle Q=NNNN FOR=intro-check`, or
+INTRO-FIX (what is wrong: no "why", or a historical claim the cited body does not carry). Its bundle (`make check-bundle Q=NNNN FOR=intro-check`, or
 `QS="NNNN NNNN ..."` for a batch) holds, per question: the research page's heading, intro and opening paragraph and its lead
 lines; the drawing page's heading and opening; the `Name:` and `Label:` of each modal whose `Entry:` names the question.
 Added to `test_agent_models.py`'s tier table and to `_ledger_lint.py`'s check list.
@@ -117,7 +116,7 @@ entry" becomes "run on the units `make record-owed` names", and each says to rec
 
 ## Constitution Check
 
-- I, II: N/A - no UI; the record's CSS gains one rule for a paragraph form.
+- I, II: N/A - no UI; the intro carries no styling (FR-002).
 - III, VII, VIII: N/A - no pool content; the intros are expository, not in-world voice.
 - IV, V: PASS - no SOURCE block touched.
 - VI: PASS - verification above; no map changes, so no map review occasion (`## Occasions: none`).
@@ -139,7 +138,7 @@ scripts/_entry_owed.py, scripts/_check_bundle.py             D8, D9
 scripts/check-bundle-hooks.sh, scripts/test-check-bundle-hooks.sh   D9
 .claude/agents/intro-check.md                                new
 .claude/skills/diagram/Makefile                              record-owed, record-checked, check-bundle QS=/NOT_OWED_OK=
-.claude/skills/diagram/research/{STYLE.md,CLAUDE.md,assets/record.css}
+.claude/skills/diagram/research/{STYLE.md,CLAUDE.md}
 .claude/skills/diagram/research/questions/*.html             the intros
 .claude/skills/diagram/tests/tooling/test_record_owed.py     new
 docs/, CLAUDE.md, container-scripts/page-session-rules.md    D11

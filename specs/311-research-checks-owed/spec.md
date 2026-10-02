@@ -200,7 +200,7 @@ sees the push pass; edits the note again and sees the refusal return.
 - **SC-004**: A dry push of a delta with an unanswered owed unit is refused, and with the unit answered it passes; a bundle
   request for a unit not owed is refused without a reason; both are tests run by the gate.
 - **SC-005**: The new check, seeded with questions whose ruling is known (the parley room without its intro; a plain farm
-  subject; an intro that asserts a historical finding), returns the known ruling on each, three runs a leg.
+  subject; an intro that adds a historical claim its cited body does not carry), returns the known ruling on each, three runs a leg.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -209,7 +209,7 @@ sees the push pass; edits the note again and sees the refusal return.
 | The parley room on a border is introduced as an invention of the setting | deliberate deviation, already recorded | the drawing page records it as this setting's own; no page we read has two parties meeting on the line | `research/questions/0094-rooms-for-a-parley-across-a-border.html` (the intro); its drawing page |
 | The new check is owed on a new question, a changed heading or a changed intro, not on every edit to a question | this project's decision, on the GM's acceptance of the proposal | a question's purpose changes with its subject, which its heading names; owing it on every edit is the waste the GM named. Declined: owing it whenever the opening paragraph changes (a sweep's wording edits would owe it on most questions) | this spec; the owed command's docstring |
 | A changed block that carries note marks owes `quote-check` on those notes, beyond the proposal's "a changed note owes quote-check on that note" | this project's decision, a departure from the accepted proposal recorded here | rewording an assertion can make a faithful quotation stop supporting it (the check's SUPPORTS half), and only the words count, so a formatting sweep owes nothing | this spec; the owed command's docstring |
-| A changed block with no note mark, other than an intro, owes `quote-check`'s unfootnoted-assertion reading, beyond the proposal's "record-format only" | this project's decision, a departure from the accepted proposal recorded here | new uncited prose may carry a historical claim; the proposal's "record-format only" was said of the intro, which is marked so that it alone is spared | this spec; the owed command's docstring |
+| A changed block with no note mark, other than an intro, owes `quote-check`'s unfootnoted-assertion reading, beyond the proposal's "record-format only" | this project's decision, a departure from the accepted proposal recorded here | the proposal gave "record-format only" to all prose with no footnote marks, the intro being its example; this spec keeps it for the marked intro alone, because new uncited prose may carry a historical claim | this spec; the owed command's docstring |
 | An intro paragraph is marked, and cites nothing | this project's decision | the GM: an intro is *"definitionally something that is not citing any research"*; marking it is what lets the owed command spare the source-reading checks | the style guide; the research directory's rules |
 | Answer records live in the pushing clone, keyed to content | this project's decision, following the review records (feature 294) | a record committed beside the question would churn every file a check touches and conflict across parallel clones | the gate's comment |
 
@@ -230,3 +230,6 @@ sees the push pass; edits the note again and sees the refusal return.
   no method. All six applied: FR-004 defines CHANGED by words, with the formatting-only edge case; FR-001 and the intro edge
   case let the intro name the class its cited body reaches; two rows added to Decisions Recorded; FR-002 carries no styling;
   the deleted-note case rewritten; the count's method stated.
+- **Round 2** (`spec-fidelity-verify`, 2026-10-02): all six round-1 items RESOLVED; two new: SC-005's third seed still on the
+  old rule, and the unmarked-block decision row misstating the proposal's scope. Both applied (SC-005 seeds "an intro that adds
+  a historical claim its cited body does not carry"; the row says the proposal gave "record-format only" to all unmarked prose).
