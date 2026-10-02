@@ -13,7 +13,7 @@
 Feature 018 shipped the capital space budget. Every rule this feature draws against was settled with the GM across 2026-08-08 and is recorded, with its historical basis, in:
 
 - [`.claude/skills/diagram/settlements/capitals.md`](../../.claude/skills/diagram/settlements/capitals.md) - the tier's operational rules
-- [`.claude/skills/diagram/research/contents.json#capitals`](../../.claude/skills/diagram/research/contents.json#capitals) - the findings and disclosed departures
+- [`.claude/skills/diagram/research/cities/capitals.md`](../../.claude/skills/diagram/research/cities/capitals.md) - the findings and disclosed departures
 - [`specs/018-capital-space-budget/research.md`](../018-capital-space-budget/research.md) - the Phase 0 findings this feature's closing gate must be judged against
 
 **Read all three before planning. Do not re-litigate them.**
