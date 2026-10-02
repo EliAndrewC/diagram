@@ -200,6 +200,24 @@ def test_a_page_that_was_read_and_lacks_the_passage_is_not_readable(tmp_path):
     assert gone["passages"][0]["quotation"] == "UNFETCHABLE" and gone["readability"] == "-"
 
 
+def test_a_quote_absent_from_the_page_read_is_not_checked_while_another_link_went_unread(tmp_path):
+    """A two-link note: each quote is its own link's. One the page read carries nothing like, beside a link that could
+    not be read, is NOT-CHECKED - not NOT-ON-PAGE, which would sink a sound note to NOT-READABLE (feature 310)."""
+    url = "https://ja.example/page"
+    _offline(tmp_path, url, f"<p>The {BRIT} of the grove {DASH} dark in winter.</p>")
+    note = {
+        "id": "fn-1",
+        "key": "k",
+        "links": [url, "https://ja.example/missing.pdf"],
+        "class": "citation",
+        "passages": [{"quote": f"The {BRIT} of the grove {DASH} dark in winter.", "original": "", "language": ""}, {"quote": "with 10 m high Igune on the prevailing wind side", "original": "", "language": ""}],
+    }
+    got = qv.judge_note(note, qv.Pages(offline=tmp_path))
+    assert [p["quotation"] for p in got["passages"]] == ["VERBATIM", "NOT-CHECKED"] and got["readability"] == "-"
+    alone = qv.judge_note({**note, "links": [url]}, qv.Pages(offline=tmp_path))
+    assert alone["passages"][1]["quotation"] == "NOT-ON-PAGE", "with every link read, a missing passage is still NOT-ON-PAGE"
+
+
 class _Resp(io.BytesIO):
     def __init__(self, body: bytes, ctype: str) -> None:
         super().__init__(body)

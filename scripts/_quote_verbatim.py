@@ -396,6 +396,12 @@ def judge_note(note: dict, pages: Pages) -> dict:
         if fetched:
             per_page = [verdict(target, t) for t in fetched]
             best = next((v for v in per_page if v["quotation"] == "VERBATIM"), None) or next((v for v in per_page if v["quotation"] == "DIFFERS"), per_page[0])
+            unread = [u for u, s in zip(note["links"], states, strict=True) if s["state"] != "FETCHED"]
+            if best["quotation"] == "NOT-ON-PAGE" and unread:
+                # NOTHING ON THE PAGES READ RESEMBLES IT, AND A LINK WENT UNREAD: in a two-link note each quote belongs to
+                # its own link (feature 310's quote-check, 2026-10-02: the Kashima figure was VERBATIM on its page and the
+                # minami summary on its PDF, and the PDF's quote judged against the other page sank the note to NOT-READABLE)
+                best = {"quotation": "NOT-CHECKED", "why": f"not on the pages read; it may be on {unread[0]}, which could not be read here"}
         else:
             first = states[0]
             best = {"quotation": "UNFETCHABLE" if first["state"] == "UNFETCHABLE" else "NOT-CHECKED", "why": first["why"]}
