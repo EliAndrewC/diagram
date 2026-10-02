@@ -15,9 +15,11 @@ one-time backfill archives what is already cited; `make reserve ... URL=` archiv
 
 - **Language**: Python 3.14, Playwright with its pinned Chromium (already installed for the browser tests), `pdftotext`
   (poppler, installed) for a PDF's text.
-- **The ENGINE half** - `l7r/diagram/interactive/record/archive.py` (100% coverage owed): the cited-URL census (the
-  registry's visible URLs and the footnotes' `href`s - HTML comments are session notes, not citations), a URL's manifest
-  id, the manifest reader, a registry entry's archived-copy line, and the refusals for a cited URL with no row. `site.py`
+- **The ENGINE half** - `l7r/diagram/interactive/record/archive.py` (100% coverage owed): the cited-URL census (every
+  URL in a registry entry, its HTML comments included - 23 entries record there the page actually read, the `_pdf`
+  behind a J-STAGE article page or the PMC copy behind a DOI, and one entry's only URL is in a comment (plan review
+  2026-10-02); and every URL a footnote in `questions/*.notes.html` links, its comments excluded - there they are search
+  trails and pages read and not cited), a URL's manifest id, the manifest reader, a registry entry's archived-copy line, and the refusals for a cited URL with no row. `site.py`
   calls it at two points (`Build.entry_html`, `Build.run`); `site.py` is 513 lines and gains ~10.
 - **The TOOLING half** - `scripts/_archive.py` (tested in `tests/tooling/test_archive.py` with saved fixtures and a fake
   fetcher that returns them - never a live fetch in a test): the capture, the GM copies, the working copy, the lock and push,
@@ -64,11 +66,16 @@ committed as `research/archive/gm-copies.json`).
   (`CloseEvent is not defined`, observed 2026-10-02) and would add an npm dependency that moves; `monolith` is not packaged
   here and runs no scripts, so a script-built page would archive empty. Cost: Firefox opens an MHTML only with an add-on.
   Chosen by the session.
-- **D2 - Order for every cited URL**: (1) the live fetch, always first; (2) where it fails or is refused, the newest Wayback
-  snapshot (the availability API, then the raw `id_` capture and its MHTML), outcome `archived-earlier-snapshot`; (3) where
-  the source has a GM copy, outcome `archived-gm-copy`; (4) `partial` - whatever the live site served, with the page-cache
-  text beside it; (5) `unreachable` with the reason. INDEPENDENTLY of that order, every file `gm-copies.json` matches to a
-  key is copied to `<key>/gm-copy/` whatever the live fetch's outcome (FR-012: in addition, never in place).
+- **D2 - Order for every cited URL** - the live fetch always first, then by how it failed (D10):
+  - a DEAD page (spec US1 scenario 3): the newest Wayback snapshot (the availability API, then the raw `id_` capture and
+    its MHTML), outcome `archived-earlier-snapshot`; else the GM's copy, `archived-gm-copy`; else `unreachable` with the
+    reason, the page-cache text stored as the fallback copy where the cache holds one;
+  - a REFUSED page or one that rendered no text (the spec's Edge Cases): the GM's copy first, `archived-gm-copy` (with
+    whatever the site served beside it); else the Wayback snapshot; else `partial` - what the site served, with the
+    page-cache text beside it.
+  INDEPENDENTLY of that order, every file `gm-copies.json` matches to a key is copied to `<key>/gm-copy/` whatever the live
+  fetch's outcome (FR-012: in addition, never in place). A source page's archived line lists every copy of every URL the
+  entry cites (FR-010; 21 entries cite several).
 - **D3 - One manifest file per URL**, so concurrent sessions never conflict; ~2,110 small files.
 - **D4 - Capture time is the version key**: a later capture is a new directory (FR-009); the row points at the latest and
   keeps the first in `first`.
@@ -82,8 +89,9 @@ committed as `research/archive/gm-copies.json`).
   retries once.
 - **D9 - The backfill pushes every 200 MB** of new captures, so no push nears GitHub's 2 GB push limit and a stopped run
   loses at most one unpushed batch (it stays in the working copy; the next run pushes it).
-- **D10 - Live dead-page test**: a 4xx/5xx status, a network error, or a redirect that lands on the site's root from a deeper
-  path counts as a failed live fetch (D2 step 2).
+- **D10 - How a live fetch failed**: REFUSED is a 401, 403, 406, 429 or 451 (the site is there and turns an automated
+  reader away), or a web page that rendered no text; DEAD is any other 4xx/5xx, a network error, an empty body, or a
+  redirect that lands on the site's root from a deeper path.
 
 ## Constitution Check
 
