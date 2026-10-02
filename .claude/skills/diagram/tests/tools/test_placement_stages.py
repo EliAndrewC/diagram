@@ -637,6 +637,24 @@ def test_the_deferred_water_is_ink_and_names_its_features() -> None:
     assert ps.features_between(s, lo, hi) == ["irrigation ditch", "stream"]
 
 
+def test_the_ways_and_the_tiled_covers_name_their_features() -> None:
+    """The page audit (2026-10-02): the lanes queue in `ground` and the marsh and scrub tiles in `_covers`, all inked
+    into slots reserved before the stage that filled them - so no stage named the village lane, the marsh or the scrub,
+    and the closing list called them features Inashiro does not have. Each entry's class is named, a `Split` by both
+    sides and a `Parts` by every classed piece."""
+    from l7r.diagram.interactive.tags import Split
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.land.tiles import Cover
+
+    s = Settlement(W=400, H=400, seed=1)
+    lo = ps._watermark(s)
+    s.ground += [{"cls": "village lane"}, {"cls": Split("bund", "bund beans")}, {"cls": (("privy", "<a/>"), (None, "<b/>"))}]
+    s._covers += [Cover("reed", "marsh", [(0, 0), (1, 0), (1, 1)]), Cover("grass", None, [])]
+    hi = ps._watermark(s)
+    assert ps.features_between(s, lo, hi) == ["bund", "bund beans", "marsh", "privy", "village lane"]
+    assert ps.tag_keys("-") == [] and ps.tag_keys(None) == [] and ps.tag_keys(("not a piece",)) == []
+
+
 def _classed_stage() -> Any:
     """A stub stage that draws CLASSED ink through a declared step, so the page prints both feature lines."""
 

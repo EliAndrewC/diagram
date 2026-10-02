@@ -10,8 +10,8 @@ threshing yard also contributes."*
   so the cluster starts against its field, where the front row started.
 - EACH NEXT HOUSE is offered from a house already standing, in a ring of directions round it, at the distance in that direction
   where the two homesteads' FOOTPRINTS part (`seat_toward`), plus a path's room (`grow_gap`). Direction and distance are jittered
-  from the map's seed (`_hjit`, positional). A standing homestead's footprint (`footprint`) is its envelope, its reserved
-  woodlot seats, and to the SOUTH the sun its threshing yard and its beds are owed (`SUN_CORRIDOR_FT` and the placer's 2 ft,
+  by a hash of the standing house's position (`_hjit`, no random draw), so a map grows the same way every roll. A standing
+  homestead's footprint (`footprint`) is its envelope, its reserved woodlot seats, and to the SOUTH the sun its threshing yard and its beds are owed (`SUN_CORRIDOR_FT` and the placer's 2 ft,
   the reach of `_sun_corridor_ok` and `_gardens_sun_ok`). The new household's own reach is its envelope rolled AT THE SEAT
   offered, exactly as the placer will lay it there - its own house, kura, fixtures, byre and well pocket from its lot
   (`household_reach`, `settled_seat`): its yard and beds are rolled from where it stands, so
