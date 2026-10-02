@@ -250,14 +250,20 @@ path; the research rules, the page-session rules and the reading agents' contrac
 
 ### Measurable Outcomes
 
-- **SC-001**: After the backfill, every cited URL (FR-001) has an outcome in the manifest, and the share archived (live or from
+- **SC-001** (FR-001, FR-004, FR-005, FR-012): After the backfill, every cited URL (FR-001) has an outcome in the manifest, and the share archived (live or from
   an earlier snapshot) is reported; every unreachable one carries a reason.
-- **SC-002**: A random sample of 20 archived copies - at least 5 Wikipedia, 5 PDFs, 5 small sites - each opens offline from a
+- **SC-002** (FR-002, FR-003): A random sample of 20 archived copies - at least 5 Wikipedia, 5 PDFs, 5 small sites - each opens offline from a
   fresh clone of the archive repository and contains the passage its registry entry quotes (where the entry quotes one).
-- **SC-003**: A source registered after the feature lands has its copy in the archive repository with no step beyond the
+- **SC-003** (FR-006, FR-014): A source registered after the feature lands has its copy in the archive repository with no step beyond the
   registration command.
-- **SC-004**: The record check fails on a cited URL with no manifest row, proven by a test that removes one row.
-- **SC-005**: Re-running the backfill on a complete archive fetches nothing.
+- **SC-004** (FR-007, FR-010): The record check fails on a cited URL with no manifest row, proven by a test that removes one row.
+- **SC-005** (FR-004, FR-009): Re-running the backfill on a complete archive fetches nothing.
+- **SC-006** (FR-013): After `make archive-inbox`, every file it removed from `academic-sources/` has a copy confirmed on
+  GitHub, and the GM's own lists remain.
+- **SC-007** (FR-015, FR-016): `make archive-find` answers a key, a URL and a set of terms without a fetch, and every
+  research procedure FR-016 names puts it before the web.
+- **SC-008** (FR-008, FR-011): Captures by two lanes land in the one working copy without conflict, and the GitHub
+  credential is passed by environment only, proven by the tooling tests (a bare remote on disk).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
