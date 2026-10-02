@@ -1,0 +1,38 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "69cacdade",
+    "label": "304-start",
+    "utc": "20261002T031740Z"
+  },
+  "binding": "7140a6742c7a60796cdc4254cd53538ecad5b13117888574de4116d3d25736a7",
+  "end": {
+    "commit": "e8bcf032a",
+    "label": "304-end",
+    "utc": "20261002T042209Z"
+  },
+  "environment": "local",
+  "feature": "304-homesteads-at-scale",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261002T042319Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": null,
+      "20": null,
+      "40": null
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 0.0,
+      "4": 5.3,
+      "47": 0.0
+    },
+    "total_pct": 1.6
+  },
+  "note": "seed 4's growth vs 304-start is homesteads 1.03->1.14 s and web 0.61->0.66 s; the control 304-scale-base (117d38bec, engine identical to 304-start for 15 households - its only l7r change, plan.py's beyond_the_band ContextVar, short-circuits in band) already reads homesteads 1.14 and web 0.66 on seed 4, the same as 304-end, and every seed 2-6% slower than 304-start - machine drift, not the diff (byres paddy_index is a speedup; the street/track brook_bounds adds no measurable web time)",
+  "verdict": "consistent"
+}

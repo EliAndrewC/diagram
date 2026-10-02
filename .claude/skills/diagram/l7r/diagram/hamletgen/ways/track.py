@@ -665,7 +665,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # the gap, and the street was dropped from the network with all ten of its farms (cohort seed 22, 2026-10-01)
     _row = (getattr(s, "_row_streets", None) or [None])[0] if plan.settlement_form == "linear" else None
     if _row and len(_row) >= 2:
-        from .street import drawn_span  # the street module reads the web's settle, laid after this stage
+        from .street import drawn_span, street_run_out  # the street module reads the web's settle, laid after this stage
 
         _span = drawn_span(s, 0, s.M.get("houses") or [], plan.brook or [])
         _out = street_run_out(_span if len(_span) >= 2 else _row, s.W, s.H)
@@ -695,24 +695,6 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         worn=True,
         connector=True,
     )
-
-
-def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> list[Pt]:
-    """The road a row's street runs on as (feature 291 plan D17): from the street's end nearer the sheet's edge, straight on
-    along its last leg until `beyond` past the edge. The end chosen is the one whose run to the edge is shorter."""
-
-    def run(end: Pt, prev: Pt) -> tuple[float, list[Pt]]:
-        dx, dy = end[0] - prev[0], end[1] - prev[1]
-        m = math.hypot(dx, dy) or 1.0
-        ux, uy = dx / m, dy / m
-        tx = (-end[0]) / ux if ux < 0 else (width - end[0]) / ux if ux > 0 else math.inf
-        ty = (-end[1]) / uy if uy < 0 else (height - end[1]) / uy if uy > 0 else math.inf
-        t = max(0.0, min(tx, ty))
-        return t, [end, (end[0] + ux * (t + beyond), end[1] + uy * (t + beyond))]
-
-    a = run(street[0], street[min(8, len(street) - 1)])
-    b = run(street[-1], street[max(-9, -len(street))])
-    return a[1] if a[0] <= b[0] else b[1]
 
 
 def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach: float = 4000.0, wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:

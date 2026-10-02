@@ -49,6 +49,25 @@ def drawn_span(s: Settlement, k: int, houses: Sequence[Mapping[str, Any]], brook
     return street_span(lines[k], own[k] if k < len(own) else centers, reach, pad, brook)
 
 
+def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> list[Pt]:
+    """The road a row's street runs on as (feature 291 plan D17): from the street's end nearer the sheet's edge, straight on
+    along its last leg until `beyond` past the edge. The end chosen is the one whose run to the edge is shorter. (Here, beside
+    the street's span, since feature 304 took `track.py` over the 1,000-line bar; `track.stage_track` calls it.)"""
+
+    def run(end: Pt, prev: Pt) -> tuple[float, list[Pt]]:
+        dx, dy = end[0] - prev[0], end[1] - prev[1]
+        m = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / m, dy / m
+        tx = (-end[0]) / ux if ux < 0 else (width - end[0]) / ux if ux > 0 else math.inf
+        ty = (-end[1]) / uy if uy < 0 else (height - end[1]) / uy if uy > 0 else math.inf
+        t = max(0.0, min(tx, ty))
+        return t, [end, (end[0] + ux * (t + beyond), end[1] + uy * (t + beyond))]
+
+    a = run(street[0], street[min(8, len(street) - 1)])
+    b = run(street[-1], street[max(-9, -len(street))])
+    return a[1] if a[0] <= b[0] else b[1]
+
+
 def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: float, brook: Sequence[Pt] = ()) -> list[Pt]:
     """The stretch of a planned street its farms stand along: from the first farm's projection less `pad` to the last's
     plus `pad`, over the farms within `reach` of the line, its run past an end farm stopped a ford's landing short of where
@@ -189,7 +208,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
 
 MEET_THE_ROAD_FT = 60.0
 """How far short of the road's start a row's first street may end and be carried on to it rather than joined by a lane of its
-own (a map drawing convention: the road runs on from the street's end, `track.street_run_out`)."""
+own (a map drawing convention: the road runs on from the street's end, `street.street_run_out`)."""
 
 
 def meet_the_road(street: Sequence[Pt], road: Sequence[Pt], reach: float = MEET_THE_ROAD_FT) -> list[Pt]:

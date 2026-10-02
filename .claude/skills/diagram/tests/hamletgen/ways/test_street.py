@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from l7r.diagram.hamletgen.ways.street import drawn_span, join_to, lay_row_streets, row_reach, street_span, thread
-from l7r.diagram.hamletgen.ways.track import street_run_out
+from l7r.diagram.hamletgen.ways.street import drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
 from l7r.diagram.settlement import Settlement
 
 LINE = [(float(x), 500.0) for x in range(0, 1201, 8)]
