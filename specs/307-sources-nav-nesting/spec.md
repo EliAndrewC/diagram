@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-organization`)
 **Created**: 2026-10-02
-**Status**: Draft
+**Status**: FAITHFUL at round 3 (2026-10-02); plan CLEAR at round 2; implemented
 **Request**: [`request.md`](request.md) - the GM's words verbatim. The record's left-hand navigation and its table of
 contents list the sources as one flat run of 2,126 keys under "Sources" (and "Sources" twice). The GM asks for "Sources"
 as a top-level section, each works section of feature 305 ("Setting canon", "Premodern Japan", ...) as a subsection of
@@ -133,3 +133,5 @@ This feature draws nothing on a map; it organizes the record's navigation.
   covered citation lines only, while the GM asked that a displayed URL become a link (11 other bare URLs on the site).
   Addressed: SC-001 tests "Sources" once with the sections directly beneath; the Independent Test names the home page;
   FR-006 and SC-004 cover every URL shown as text on any built page.
+- Round 3 (spec-fidelity-verify, 2026-10-02): FAITHFUL - both round-2 items fixed (SC-001 tests "Sources" once with the
+  sections directly beneath; FR-006/SC-004 cover every URL shown on any built page).
