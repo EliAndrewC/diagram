@@ -36,10 +36,10 @@ houses, that map is re-examined here before landing and an occasion is added if 
       `refused`); D3 in `perf_bands.py`, `perf_snapshot.report` and `perf_review` / `perf-gate` (the band owed is the maximum)
       research: rendering
       verify: DONE. D1-D3 built; 85 perf tool tests pass; make quick green
-- [ ] T12 [US1] The `304-scale-base` snapshot with the new tool on the UNMODIFIED engine; its four seeds x three sizes in
+- [x] T12 [US1] The `304-scale-base` snapshot with the new tool on the UNMODIFIED engine; its four seeds x three sizes in
       research.md beside R1
       research: rendering
-      verify: the snapshot has 12 scaling rows (or a recorded refusal per missing one); `make perf-report` prints the legs
+      verify: DONE. 304-scale-base taken in a worktree at 117d38bec (the tool, the engine unmodified): 12 scaling rows, none refused; research R10
 
 ## P2 - the indexed scans (US2; FR-004, FR-005; SC-005)
 
@@ -89,12 +89,12 @@ houses, that map is re-examined here before landing and an occasion is added if 
 
 ## Closing
 
-- [ ] T40 The `304-end` bookend; `make perf-report AGAINST=304-start` and against `304-scale-base`; any band diagnosed in writing
+- [x] T40 The `304-end` bookend; `make perf-report AGAINST=304-start` and against `304-scale-base`; any band diagnosed in writing
       research: rendering
-      verify: the bands printed; SC-002/SC-003/SC-004 judged in research.md (a miss recorded and raised with the GM)
-- [ ] T41 `dev/performance.md` section "Homesteads at scale (feature 304)" (D12); the memory note updated (D13)
+      verify: DONE. 304-end vs 304-scale-base back to back: band 0 at every size (40 hh -7.2%, reference -4.6%); vs 304-start band 1 (seed 4 +5.3%) explained with CONTROL=perf-control-scale-base, perf-audit CONSISTENT; SC-002/SC-003 missed, recorded R10
+- [x] T41 `dev/performance.md` section "Homesteads at scale (feature 304)" (D12); the memory note updated (D13)
       research: rendering
-      verify: the section names each lever's wall-clock gain and every withdrawn form
-- [ ] T42 `make done` green; push
+      verify: DONE. dev/performance.md 'Homesteads at scale (feature 304)'; memory project_homesteads_at_scale_304
+- [x] T42 `make done` green; push
       research: rendering
-      verify: the gate's verdict; `sync-with-main.sh done` lands
+      verify: DONE. make done green (10,389+ passed, coverage 100%, roll census clean)
