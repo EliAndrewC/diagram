@@ -1,6 +1,6 @@
 {
  "feature": "303-research-organization",
- "plan_sha256": "ae4323c3d2e28eb99b6e717683833b9e174c36c11a6113f26b2f1ad202d0bcc0",
+ "plan_sha256": "abe5183e251a8d2210ae3eec720e018ba49e8120830e3b415567238208a063a3",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,31 +8,31 @@
    "id": "D1",
    "summary": "Flat research/questions/ layout, stem NNNN-<slug>, numbers allocated once in initial contents order, later by make reserve KIND=question",
    "class": "within",
-   "why": "FR-001/FR-002, message 2; unchanged since the last CLEAR"
+   "why": "FR-001/FR-002, message 2"
   },
   {
    "id": "D2",
    "summary": "tags marker after the heading; second drawing pages own stems with about:; paired about: removed; Presentation drawing-only stems",
    "class": "within",
-   "why": "FR-006, FR-007, FR-012, the measured Edge Case; unchanged"
+   "why": "FR-006, FR-007, FR-012, the measured Edge Case"
   },
   {
    "id": "D3",
    "summary": "notes resolve per page; 19 cross-question notes copied; all.html numbers notes by (page, key)",
    "class": "within",
-   "why": "consequence of FR-001; content unchanged (FR-003); unchanged"
+   "why": "consequence of FR-001; content unchanged (FR-003)"
   },
   {
    "id": "D4",
    "summary": "in-record links relative to questions/, resolved with the old index; build refuses a link landing nowhere",
    "class": "within",
-   "why": "FR-017 cross-links, FR-020; unchanged"
+   "why": "FR-017 cross-links, FR-020"
   },
   {
    "id": "D5",
    "summary": "tags.json and contents.json shapes; takes clauses over any facet; first match depth-first",
    "class": "within",
-   "why": "FR-005, FR-009, FR-010, FR-013; unchanged"
+   "why": "FR-005, FR-009, FR-010, FR-013"
   },
   {
    "id": "D6",
@@ -44,7 +44,7 @@
    "id": "D7",
    "summary": "part openings into section descriptions, recorded in research.md; per-part files retired",
    "class": "within",
-   "why": "FR-016; unchanged"
+   "why": "FR-016"
   },
   {
    "id": "D8",
@@ -80,17 +80,16 @@
    "why": "measured: 0 of the 333 distinct pairs named a question file at base 8ef670632 (git ls-tree), so none has a correct new number (message 3) and none is in the mapping; the same class as the ranges"
   },
   {
-   "id": "D8a-1-dead-pairs-live",
-   "summary": "the same pass rule reaching live files: tests/tooling/test_page_session.py:76 writes a brief carrying PAGE=vegetation SECTION=010",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "a test using the retired tool argument for a reason other than proving refusal; FR-017 lists tests and requires the retired argument rewritten to Q=<NNNN>, and its refusal-data exception does not cover it; the plan's own D8a(2) says a retired form in a fixture is refused. The brief's number is incidental to the test, so Q=<any NNNN> is possible. Rewrite the line; confine the dead-pair pass to landed specs"
+   "id": "D8a-1-retired-argument-live",
+   "summary": "outside specs/ a PAGE=/SECTION= pair is refused whatever its number; test_page_session.py now writes Q=0071",
+   "class": "within",
+   "why": "FR-017 rewrite of the retired argument; round 3's item (3) resolved - measured: no PAGE=<page> outside specs/, scripts/fixtures/ and the check's own selftest; check exits 0"
   },
   {
    "id": "D8a-2-exemptions",
-   "summary": "check skips request.md, SOURCE blocks, *\"...\"* quotations, READMEs (listed in readme-correction-offered.md), the mapping, scripts/fixtures/ corpora; five refusal-data files",
+   "summary": "check skips request.md, SOURCE blocks, *\"...\"* quotations, READMEs (listed in readme-correction-offered.md), the mapping, scripts/fixtures/ corpora; six refusal-data files (test_record.py added)",
    "class": "within",
-   "why": "exactly FR-017 amendment 1's exceptions; _hm_record.py's retired forms measured as selftest data (line 176). Measured: the *\"...\"* pattern reaches one non-GM span holding a record path, specs/180-references-as-questions/spec.md:61 (research/contents.json#fields) - covered by D8a-3-specs"
+   "why": "exactly FR-017 amendment 1's exceptions; measured test_record.py's only retired forms are lines 226-227, the test proving a .md token is reported"
   },
   {
    "id": "D8a-2-fixture-leniency",
@@ -100,18 +99,17 @@
    "why": "a fixture builds its own record; requiring its questions to exist in the real one is impossible without planting files, and they are not references a reader follows; retired forms stay refused there"
   },
   {
-   "id": "D8a-3-markdown-era-live",
-   "summary": "Markdown-era page paths left as written in live files: pool/hamlets/inashiro/inashiro.notes.md:303 and :1132, legacy-hand-authored-pool/towns/ubame/ubame.notes.md:100",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "each refers to a research page by path (message 3) and its page is in the mapping's pages, so the whole-page rule of D8 gives an exact new pointer (contents.json#<section>); inashiro.notes.md:1132 is a link whose text the sweep rewrote to research/contents.json#homesteads while its target still reads ../../research/contents.json#homesteads, a file that does not exist - a broken link a reader follows. Restoring damaged text is right; leaving the stale pointer is not"
+   "id": "D8a-3-markdown-era",
+   "summary": "every research/<page>.md whose page is in the mapping rewritten to its section (277, pool notes and specs/180:61 included); the check refuses the form; non-page .md names untouched",
+   "class": "within",
+   "why": "round 3's items (1) and (2) resolved - measured: the only research/<page>.md left are request.md, scripts/fixtures/ corpora and test_record.py's refusal lines"
   },
   {
-   "id": "D8a-3-markdown-era-specs",
-   "summary": "Markdown-era page paths (research/<page>.md) left in landed specs, including the 101 restored after the sweep glued them onto section ids",
+   "id": "D8a-3-sense-check-scope",
+   "summary": "the sense-check of sweep-made section pointers covered code and docs only; landed specs were not checked, and the restore of glued text was keyed on .md",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "measured 277 occurrences naming a page in moved-303.json pages (archetypes 36, fields 40, homesteads 49, cities/capitals 34, urban-features 28, vegetation 29, water 22, ...); FR-017 includes landed specs and SC-007 allows no old page name outside the enumerated exceptions, which do not include an older suffix. The plan already rewrites research/<page>.html and research/<page>/ in landed specs to sections; .md is the same reference to the same page. Pre-existing staleness is not a ground (behavior the GM did not ask to preserve). The 12 non-page names (research/none.md, farms.md, plan, audit/x) are test data or not the record and are out of scope"
+   "why": "FR-017 lists landed specs and requires each reference rewritten to the new form. Measured: 85 lines in landed specs carry a section id with the rest of an old path glued on, invisible to the check (the section id is valid): 60 in specs/292 briefs (research/buildings/<NNN>-<id>.html -> research/contents.json#compounds<NNN>-<id>.html), 16 in specs/250 briefs (#compounds*.html etc.), specs/180/spec.md:121 (#cities<x>.md, was research/cities/<x>.md), specs/209, 211, 229, 266, 285. A garbled pointer is not the new form and was not the old text; nothing makes a check impossible (one grep finds them)"
   },
   {
    "id": "D8a-4",
@@ -130,7 +128,7 @@
    "summary": "split.py, write_fragments, write_notes_fragments, SPLIT=, COLLECTIONS deleted rather than ported",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "no whole page exists to split in either layout; prior ruling stands"
+   "why": "no whole page exists to split in either layout"
   },
   {
    "id": "D11",
