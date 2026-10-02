@@ -290,6 +290,79 @@ def fetch_all(root: pathlib.Path, urls: list[str], workers: int) -> dict[str, in
     return total
 
 
+# ---- the imported copies (research.md R5) ----
+
+MISFILED = pathlib.Path("specs/312-uncited-source-catalog/import-check.jsonl")
+
+
+def imported(where: pathlib.Path, url: str) -> str | None:
+    """The page's saved text when it came from feature 288's one-time import of old saves, which filed some pages' text
+    under another URL (observed 2026-10-02: `ja.wikipedia.org/wiki/村` held 砂利道's article) - else None."""
+    hit = src.cached(where, url, max_age_days=10_000)
+    return hit["text"] if hit and str(hit.get("origin", "")).startswith("import") else None
+
+
+def grams(text: str, n: int = 4) -> set[str]:
+    t = re.sub(r"\s+", " ", text)[:5000]
+    return {t[i : i + n] for i in range(max(0, len(t) - n + 1))}
+
+
+def same_page(a: str, b: str) -> bool:
+    """Two texts of one page: their character 4-grams over the first 5,000 characters overlap by a third or more (a page
+    re-fetched later differs by its edits and its navigation, never by its subject)."""
+    ga, gb = grams(a), grams(b)
+    return bool(ga and gb) and len(ga & gb) / len(ga | gb) >= 1 / 3
+
+
+def verify(root: pathlib.Path, urls: list[str], browser) -> dict[str, int]:  # noqa: ANN001
+    """Each URL whose saved text is an imported copy, read live: the copy replaced by the live text, and a line in
+    `import-check.jsonl` saying whether the copy was this page (`same`), another page's (`misfiled`), or could not be
+    told (`unread`). A misfiled page's verdict is then judged again from the live text."""
+    where = src.home(root)
+    counts = {"same": 0, "misfiled": 0, "unread": 0}
+    for u in urls:
+        old = imported(where, u)
+        if old is None:
+            continue
+        got = ar.fetch(browser, u)
+        live = got.text.strip() if got.text and not got.error and got.status and got.status < 400 else ""
+        result = "unread" if len(live) < EMPTY else ("same" if same_page(old, live) else "misfiled")
+        if live and result != "unread":
+            src.put(where, u, live, origin="fetch")
+        at.write(root, [{"url": src.norm(u), "raw": u, "result": result, "date": today()}], MISFILED)
+        counts[result] += 1
+        print(f"{result:10} {u}", flush=True)
+    return counts
+
+
+def _verify_lane(args: tuple[str, list[str]]) -> dict[str, int]:  # pragma: no cover - one worker with a live browser; `verify` is tested
+    root, urls = pathlib.Path(args[0]), args[1]
+    browser = ar.Browser()
+    try:
+        return verify(root, urls, browser)
+    finally:
+        browser.close()
+
+
+def verify_all(root: pathlib.Path, urls: list[str], workers: int) -> dict[str, int]:  # pragma: no cover - the live run
+    jobs = [(str(root), lane) for lane in ar.lanes(urls, workers)]
+    total = {"same": 0, "misfiled": 0, "unread": 0}
+    with ar.multiprocessing.get_context("spawn").Pool(len(jobs) or 1) as pool:
+        for got in pool.imap_unordered(_verify_lane, jobs):
+            total = {k: total[k] + got[k] for k in total}
+    return total
+
+
+def imported_urls(where: pathlib.Path) -> list[str]:
+    """Every page-cache entry that came from the one-time import - cited and uncited alike (the defect is the cache's)."""
+    out = []
+    for meta in sorted(where.glob(f"{src.CACHE}/*/*/meta.json")):
+        m = json.loads(meta.read_text(encoding="utf-8"))
+        if str(m.get("origin", "")).startswith("import") and str(m.get("url", "")).startswith("http"):
+            out.append(m["url"])
+    return out
+
+
 # ---- the bundles ----
 
 
@@ -524,7 +597,8 @@ def install(root: pathlib.Path, d: pathlib.Path, reserve) -> dict[str, int]:  # 
     st = sys.modules.get("_source_tags") or _load_source_tags()
     vocab = st.load_vocabulary(str(at.base(root) / at.RESEARCH))
     taken = registry_keys(root)
-    counts = {"written": 0, "refused": 0}
+    done = written(root)
+    counts = {"written": 0, "refused": 0, "already": 0}
     for raw in (d / "entries.jsonl").read_text(encoding="utf-8").splitlines() if (d / "entries.jsonl").is_file() else []:
         try:
             e = json.loads(raw)
@@ -540,13 +614,24 @@ def install(root: pathlib.Path, d: pathlib.Path, reserve) -> dict[str, int]:  # 
             print(f"uncited: {d.name}: refused {e.get('id')} - a bad key, an empty field, or a citation without its URL", file=sys.stderr)
             counts["refused"] += 1
             continue
+        if src.norm(url) in done:  # a bundle installed twice writes nothing twice
+            counts["already"] += 1
+            continue
         base, n = key, 1
-        while key in taken:
-            n += 1
-            key = f"{base}-{n}"
-        path = reserve("uncited", key, root, url=url)
+        while True:
+            while key in taken:
+                n += 1
+                key = f"{base}-{n}"
+            try:
+                path = reserve("uncited", key, root, url=url)
+                break
+            except Exception as err:  # reserve-prefix's Refusal: a key another clone holds is taken too
+                if "already" not in str(err):
+                    raise
+                taken.add(key)
         path.write_text(entry_html(key, cite, what, why, marker), encoding="utf-8")
         taken.add(key)
+        done.add(src.norm(url))
         counts["written"] += 1
     return counts
 
@@ -583,6 +668,11 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     c.add_argument("dir")
     c.add_argument("answers")
     sub.add_parser("report")
+    vf = sub.add_parser("verify")
+    vf.add_argument("--limit", type=int, default=0)
+    vf.add_argument("--sample", type=int, default=0)
+    vf.add_argument("--all-imported", action="store_true", help="every imported cache entry, cited ones too (R5)")
+    vf.add_argument("--workers", type=int, default=3)
     dr = sub.add_parser("draft")
     dr.add_argument("out")
     dr.add_argument("--start", type=int, default=1)
@@ -612,6 +702,19 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
             print(f"uncited: {d} - {json.dumps(apply(root, pathlib.Path(d)))}")
     elif args.cmd == "score":
         print(json.dumps(score(pathlib.Path(args.dir), json.loads(pathlib.Path(args.answers).read_text(encoding="utf-8")))))
+    elif args.cmd == "verify":
+        import random  # noqa: PLC0415
+
+        judged_urls = [x["raw"] for x in at.read(root, KEPT)] + [x["raw"] for x in at.read(root, NOT_KEPT) if x.get("basis") == "source-filter"]
+        done = {x["url"] for x in at.read(root, MISFILED)}
+        pool_urls = imported_urls(src.home(root)) if args.all_imported else judged_urls
+        todo = [u for u in dict.fromkeys(pool_urls) if src.norm(u) not in done and imported(src.home(root), u) is not None and wellformed(u)]
+        if args.sample:
+            random.seed(312)
+            todo = random.sample(todo, min(args.sample, len(todo)))
+        todo = todo[: args.limit] if args.limit else todo
+        print(f"uncited: verifying {len(todo)} imported cop(ies) in up to {args.workers} lane(s)", flush=True)
+        print(f"uncited: {json.dumps(verify_all(root, todo, args.workers))}")
     elif args.cmd == "draft":
         print(f"uncited: {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
     elif args.cmd == "install":

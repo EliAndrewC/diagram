@@ -276,18 +276,41 @@ def test_install_writes_each_good_entry_and_refuses_the_rest(tmp_path: pathlib.P
     made = []
 
     def reserve(kind: str, key: str, root_: pathlib.Path, url: str = "") -> pathlib.Path:
+        if key == "taken-2":
+            raise RuntimeError("'taken-2' is already being defined in another clone")
         p = root_ / un.at.UNCITED / f"{(len(made) + 2) * 10:04d}-{key}.html"
         p.parent.mkdir(parents=True, exist_ok=True)
         made.append((kind, key, url))
         return p
 
-    assert un.install(root, d, reserve) == {"written": 1, "refused": 3}
-    assert made == [("uncited", "taken-2", "https://k.org/1")], "a taken key gets -2"
-    text = (root / un.at.UNCITED / "0020-taken-2.html").read_text()
-    assert text.startswith('<h3 id="taken-2"><code>taken-2</code></h3>') and "<p><em>What it is:</em> A dictionary entry.</p>" in text, "a label the drafter wrote is not doubled"
+    assert un.install(root, d, reserve) == {"written": 1, "refused": 3, "already": 0}
+    assert made == [("uncited", "taken-3", "https://k.org/1")], "a taken key gets -2, and -3 when another clone holds -2"
+    text = (root / un.at.UNCITED / "0020-taken-3.html").read_text()
+    assert text.startswith('<h3 id="taken-3"><code>taken-3</code></h3>') and "<p><em>What it is:</em> A dictionary entry.</p>" in text, "a label the drafter wrote is not doubled"
     assert "<p><em>Why it applies, and its limits:</em> It defines a term.</p>" in text
     assert text.rstrip().endswith("<!-- tags: period=premodern; region=japan; kind=reference -->")
     err = capsys.readouterr().err
     assert "refused p00002" in err and "period" in err
+    assert un.install(root, d, reserve)["already"] == 1, "installed twice, written once"
     (d / "entries.jsonl").unlink()
-    assert un.install(root, d, reserve) == {"written": 0, "refused": 0}, "a bundle the agent wrote nothing for installs nothing"
+    assert un.install(root, d, reserve) == {"written": 0, "refused": 0, "already": 0}, "a bundle the agent wrote nothing for installs nothing"
+
+
+# ---- the imported copies (R5) ----
+
+
+def test_an_imported_copy_is_checked_against_the_live_page(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    village = "Mura is a village. " * 40
+    src.put(_home(), "https://w.org/mura", "Gravel road is a road. " * 40, origin="import:/tmp/x")
+    src.put(_home(), "https://w.org/same", village, origin="import:/tmp/x")
+    src.put(_home(), "https://w.org/dead", village, origin="import:/tmp/x")
+    src.put(_home(), "https://w.org/fetched", village)
+    pages = {"https://w.org/mura": _page("https://w.org/mura", body=village), "https://w.org/same": _page("https://w.org/same", body=village + " Edited.")}
+    got = un.verify(root, ["https://w.org/mura", "https://w.org/same", "https://w.org/dead", "https://w.org/fetched"], Stand(pages))
+    assert got == {"same": 1, "misfiled": 1, "unread": 1}, "a fetched copy is never checked"
+    assert {x["raw"]: x["result"] for x in at.read(root, un.MISFILED)} == {"https://w.org/mura": "misfiled", "https://w.org/same": "same", "https://w.org/dead": "unread"}
+    assert un.text_of(_home(), "https://w.org/mura") == village.strip() and un.imported(_home(), "https://w.org/mura") is None, "the live text replaces the copy"
+    assert un.imported(_home(), "https://w.org/dead") is not None, "an unread page keeps its copy"
+    assert un.imported_urls(_home()) == ["https://w.org/dead"]
+    assert not un.same_page("", "x")

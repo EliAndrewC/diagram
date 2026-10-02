@@ -60,3 +60,20 @@ entry cites, of the `_article` page read), `daozuofang` (`zh.wikipedia.org/wiki/
 `):` stuck to it and is not on the set. One is NOT covered: `minzoku-kinkyu-chosa-jawiki` names a key no registry entry
 holds - the mark was made and the entry never written - so `ja.wikipedia.org/wiki/民俗資料緊急調査` is uncited and is judged by
 the filter like any other page. `_uncited.cited_marks` keeps the six out of the set by rule.
+
+## R5. The page cache's imported copies: some are another page's text
+
+Found 2026-10-02 by two write-up drafters (a page whose saved text was another article) and confirmed: the page cache's
+entry for `https://ja.wikipedia.org/wiki/村` held the article 砂利道 (gravel road), its origin
+`import:/tmp/l7r-check/271-w1-pages` - feature 288's one-time import of the saves earlier sessions left under
+`/tmp/l7r-check`, which filed some saved files under the wrong pointer. Measured: 1,122 cache entries are imported copies;
+of the filter's verdicts, 690 kept and 282 not-kept pages were judged from one. A seeded sample of 40 of those, each read
+live and compared by character 4-gram overlap over its first 5,000 characters (`_uncited.same_page`, a third or more =
+the same page; method: `make uncited DO=verify`, observed 2026-10-02): 38 the same page, 2 another page's text (5%).
+
+What it cost and what holds the record: a quotation check never read an imported copy (`_quote_verbatim` asks the cache
+with `exact=True`, which an import never serves - feature 288's own rule), so no footnote's VERBATIM verdict rests on one;
+but a check bundle's saved page, a source-reader's or a source-applicability's, is served from the cache without that
+rule, and so was the filter. The fix (constitution XIV, the defect is the cache's): every imported entry is read live and
+replaced (`verify --all-imported`), each recorded `same`, `misfiled` or `unread` in `import-check.jsonl`; a page found
+misfiled loses its verdict and its write-up and is judged again from the live text.
