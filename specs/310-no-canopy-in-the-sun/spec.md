@@ -64,7 +64,7 @@ no placer keeps a different reach for a canopy crown.
 **Acceptance Scenarios**:
 
 1. **Given** the record's page on keeping yards and gardens in the sun, **When** a reader looks for an exemption, **Then**
-   the only one is bamboo, stated as the GM's choice, never as a fact that bamboo casts little shade.
+   the one exemption among canopy trees is bamboo, stated as the GM's choice, never as a fact that bamboo casts little shade; the coppiced mulberry and the tea hedge are stated as not canopy, with their class and reason.
 2. **Given** the modals of the windbreak, copse, farm grove, yard and garden, **When** each is read against the record,
    **Then** none says a tree may stand in a plot's sun.
 
@@ -105,7 +105,7 @@ no placer keeps a different reach for a canopy crown.
 
 - **Plot**: a threshing yard or a garden bed, as drawn.
 - **Sun ground**: the area east, west and south of a plot, within the reach, from its north edge.
-- **Canopy crown**: any drawn tree crown; bamboo is not one.
+- **Canopy crown**: any drawn tree crown; bamboo, the coppiced mulberry and the tea dike's clipped hedge are not ones (Decisions).
 
 ## Success Criteria *(mandatory)*
 
@@ -114,7 +114,7 @@ no placer keeps a different reach for a canopy crown.
 - **SC-001**: On the five pool hamlets, zero canopy crowns stand in a plot's sun ground (from 95, 78, 98, 10 and 143).
 - **SC-002**: On a cohort of at least 24 rolled seeds, zero canopy crowns stand in a plot's sun ground, and every seed that
   produced a map before the change produces one after (no regression).
-- **SC-003**: The record names exactly one exemption, bamboo, as the GM's choice.
+- **SC-003**: The record names exactly one exemption among canopy trees, bamboo, as the GM's choice, and states the coppiced mulberry and the tea hedge as not canopy, each with its class and reason.
 - **SC-004**: Each pool hamlet's drawn household wood and windbreak are measured before and after, and any drop is
   reported with the ground the sun rule took.
 
@@ -124,7 +124,7 @@ no placer keeps a different reach for a canopy crown.
 |---|---|---|---|
 | Every canopy tree, the farm's own grove included, keeps out of every yard's and bed's sun ground | guess - the GM's rule over a silent record | *"no canopy trees should be exempt"*. The record gives a grove's SIDES (Tonami: tall trees from the south round to the west of a house) but no distance from a farm's plots to its trees - the sun page says "No source measures how far a farm's plots stood from its trees" - so the rule is the GM's, not a departure from anything attested | `research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`; the shared predicate's docstring |
 | Bamboo is exempt | guess - the GM's tentative allowance (*"maybe bamboo"*) | *"maybe bamboo since it doesbn't create much shade"*. The record's bamboo page gives madake as a tall culm in thickets "shading out almost everything else" (`research/questions/0075-bamboo-groves-chikurin.html`), so the exemption is recorded as the GM's choice, not as little shade. Its cost on today's maps is nil for the 2 recorded stands on the five pool hamlets, neither in a plot's sun (one-shot count, 2026-10-02); the culm marks drawn in grove clumps are not recorded apart and were not counted, and that gap is raised with the GM beside the count. Raised with the GM, with the count and the bamboo page's madake height, once the implementation works | the sun page |
-| Coppiced mulberry (the perimeter dike's and the mulberry dikes' rows) and the tea dike's clipped hedge are not canopy, so not held | accurate for the mulberry (the record's low bushes); guess for the tea hedge's height | the GM narrowed "ANY trees" to "canopy trees", naming bamboo as what "doesn't create much shade"; the mulberry was "for the most part trained as low bushes", pruned once a year (`research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`), and the tea hedge is clipped low (its width a guess in the drawing); at the record's shadow ratio such a bush throws a small fraction of the reach. Ruled legitimate by the plan review (2026-10-02); raised with the GM once the implementation works | the sun page; `research.md` R1 |
+| Coppiced mulberry (the perimeter dike's and the mulberry dikes' rows) and the tea dike's clipped hedge are not canopy, so not held | accurate for the mulberry (the record's low bushes); guess for the tea hedge's form, low height and width (the record says nothing of how it stood) | the GM narrowed "ANY trees" to "canopy trees", naming bamboo as what "doesn't create much shade"; the mulberry was "for the most part trained as low bushes", pruned once a year (`research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`), and the tea hedge is clipped low (its width a guess in the drawing); at the record's shadow ratio such a bush throws a small fraction of the reach. The coppiced mulberry ruled legitimate by the plan review (D3-mulberry, 2026-10-02); the tea hedge by the plan review's round 3 and the spec amendment review (2026-10-02), as a clipped shrub rather than a tree. Both raised with the GM once the implementation works | the sun page; `research.md` R1 |
 | One reach for every canopy tree: the working windbreak tree's west-lane reach | guess | the record already reckons every shadow at the least height it gives a tree (a working windbreak's, stated on the sun page); taller trees would reach further | the sun page, the predicate's constant |
 | The sun ground is a rectangle east, west and south of the plot, from its north edge | deliberate deviation | the 9-to-3 sun sweeps a wedge from the southeast to the southwest; the sun page takes the rectangle "a simplification, taken knowingly" | the sun page |
 | A copse whose roll the freed ground cannot hold is drawn short, never moved into the sun | guess | the plot's sun is the rule and the wood the remainder; what it costs - the drawn wood against its roll - is measured before and after (SC-004) | the plan; the wood-goal module |
@@ -137,3 +137,13 @@ no placer keeps a different reach for a canopy crown.
 - The settlement form, house seats and plots stay where the seating puts them; only trees give way. Re-seating is not
   required, though a placer whose bands move may move a bundle's extent.
 - Bamboo's exemption covers the household bamboo strip, the shared bamboo grove and the culm marks in groves.
+
+## Review history
+
+| round | reviewer | verdict | what it found |
+|---|---|---|---|
+| spec 1 | spec-fidelity | CHANGES REQUIRED | bamboo as a firm ruling on a premise the record contradicts; row 1's attestation; labels outside the four classes |
+| spec 2 | spec-fidelity-verify | CHANGES REQUIRED | the bamboo cost "nil" while the culm marks were uncounted |
+| spec 3 | spec-fidelity-verify | FAITHFUL | - |
+| spec 4 (spec-lint wording) | spec-fidelity-verify | FAITHFUL | no meaning changed |
+| amendment 1 (the not-canopy row) | spec-fidelity | CHANGES REQUIRED | the tea hedge's ruling overstated; three passages contradicting the row |
