@@ -1878,8 +1878,9 @@ What else the re-pack moved: the connector leaves to the north-west, 327 ft to a
 The nucleated cluster is now GROWN (`hamletgen/homesteads/growth.py`): its first house on the free ground nearest the seat,
 each next one from a standing house at the distance their footprints part - the envelope, the woodlot seats, a path's strip,
 and to the south the sun the yard and beds are owed - jittered from the map's seed. A house no straight path reaches has its
-path routed round what stands (`settlement/rolling/route.py`). Measured against main's manifest (2026-10-02): 15 houses on the
-first margin as before; 272 seats offered where main's front row, ranks and exhaustive pass offered 599; `cluster_seeding`
-`grown` (main: `frontage`); the drawn aspect 1.81 against 1.29, still round's band; 15 lanes against 14; 27 access-corridor
-legs against 20, five of the house paths routed (the lane glyph check, 2026-10-02: PASS, one path - lane 13 - ringing a
-neighbor's grove for 420 ft where the straight way crosses that neighbor's dooryard).
+path routed round what stands (`settlement/rolling/route.py`). Measured against main's manifest (2026-10-02, on the engine
+merged with main's persimmon and canopy-shade rules): 15 houses on the first margin as before; 105 seats offered where main's
+front row, ranks and exhaustive pass offered 599; `cluster_seeding` `grown` (main: `frontage`); declared crescent at a drawn
+aspect of 2.17 (main: round at 1.29); 18 lanes against 14; 28 access-corridor legs against 20. A Z the settle's squared
+crossing laid across the field spur's joint with an orphan link is mended by moving the joint back a vertex
+(`joints._joint_moved_back`). The farmhouse and village-lane glyph checks passed (2026-10-02).
