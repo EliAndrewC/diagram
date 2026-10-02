@@ -147,7 +147,9 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
     assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
-    assert any(q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "q/groves-around-a-southern-chinese-village") for q in data["windbreak"]["questions"])
+    assert any(
+        q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "q/groves-around-a-southern-chinese-village") for q in data["windbreak"]["questions"]
+    )
     assert not {"sources", "refs", "entry"} & set(data["windbreak"]), "dropped from the page data (spec FR-011)"
 
 
