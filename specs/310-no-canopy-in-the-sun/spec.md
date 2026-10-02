@@ -25,7 +25,7 @@ edge down (the reach is 50 ft, the shadow the record gives a working windbreak's
 
 Measured on the five pool hamlets with the persimmon's predicate (every recorded crown, attributed to the stand it lies in):
 Inashiro 95 copse crowns in a plot's sun (20 of 32 plots), Kashikawa 78 farm-grove crowns (24 of 40), Kuwabata 98 copse (18
-of 35), Mizuguchi 10 farm-grove (4 of 24), Sawada 142 copse and 1 windbreak (26 of 43). Bamboo was not counted.
+of 35), Mizuguchi 10 farm-grove (4 of 24), Sawada 142 copse and 1 windbreak (26 of 43). Bamboo, counted the same way (observed 2026-10-02, a one-shot count of the recorded stands against the same ground): 2 bamboo stands on the five maps, neither in a plot's sun; the culm marks inside grove clumps are not recorded apart and were not counted.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -64,7 +64,7 @@ no placer keeps a different reach for a canopy crown.
 **Acceptance Scenarios**:
 
 1. **Given** the record's page on keeping yards and gardens in the sun, **When** a reader looks for an exemption, **Then**
-   the only one is bamboo, with its reason.
+   the only one is bamboo, stated as the GM's choice, never as a fact that bamboo casts little shade.
 2. **Given** the modals of the windbreak, copse, farm grove, yard and garden, **When** each is read against the record,
    **Then** none says a tree may stand in a plot's sun.
 
@@ -99,7 +99,7 @@ no placer keeps a different reach for a canopy crown.
   cohort audit, and fails on any; it is red on today's pool before the fix.
 - **FR-006**: The copse's west-lane exemption and its unsupported justification are removed; the farm grove's narrower strips
   are replaced by the one rule.
-- **FR-007**: The record's sun page and the modals written from it state the one rule and the bamboo exemption.
+- **FR-007**: The record's sun page and the modals written from it state the one rule and the bamboo exemption as the GM's choice; the bamboo page's madake of about 20 m is not contradicted.
 
 ### Key Entities
 
@@ -114,7 +114,7 @@ no placer keeps a different reach for a canopy crown.
 - **SC-001**: On the five pool hamlets, zero canopy crowns stand in a plot's sun ground (from 95, 78, 98, 10 and 143).
 - **SC-002**: On a cohort of at least 24 rolled seeds, zero canopy crowns stand in a plot's sun ground, and every seed that
   produced a map before the change produces one after (no regression).
-- **SC-003**: The record names exactly one exemption, bamboo.
+- **SC-003**: The record names exactly one exemption, bamboo, as the GM's choice.
 - **SC-004**: Each pool hamlet's drawn household wood and windbreak are measured before and after, and any drop is
   reported with the ground the sun rule took.
 
@@ -122,11 +122,11 @@ no placer keeps a different reach for a canopy crown.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Every canopy tree, the farm's own grove included, keeps out of every yard's and bed's sun ground | deviation - the GM's ruling | *"no canopy trees should be exempt"*; the record has farm groves on the south and west of a house on the Tonami plain, so a grove close by a sunlit plot is attested there; our maps follow the GM's rule instead | `research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`; the shared predicate's docstring |
-| Bamboo is exempt | the GM's ruling, with the reason the GM gave | *"maybe bamboo since it doesbn't create much shade"* | the same page |
-| One reach for every canopy tree: the working windbreak tree's west-lane reach | guess, carried | the record already reckons every shadow at the least height it gives a tree (a working windbreak's, stated on the sun page); taller trees would reach further | the same page, the predicate's constant |
-| The sun ground is a rectangle east, west and south of the plot, from its north edge | reconstruction, carried | the 9-to-3 sun crosses from the southeast to the southwest; the record's knowing simplification of the wedge | the same page |
-| A copse whose roll the freed ground cannot hold is drawn short, never moved into the sun | this project's decision | the plot's sun is the rule; the wood is the remainder | the plan; the wood-goal module |
+| Every canopy tree, the farm's own grove included, keeps out of every yard's and bed's sun ground | guess - the GM's rule over a silent record | *"no canopy trees should be exempt"*. The record gives a grove's SIDES (Tonami: tall trees from the south round to the west of a house) but no distance from a farm's plots to its trees - the sun page says "No source measures how far a farm's plots stood from its trees" - so the rule is the GM's, not a departure from anything attested | `research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html`; the shared predicate's docstring |
+| Bamboo is exempt | guess - the GM's tentative allowance (*"maybe bamboo"*) | *"maybe bamboo since it doesbn't create much shade"*. The record's bamboo page gives madake at about 20 m in thickets "shading out almost everything else" (`research/questions/0075-bamboo-groves-chikurin.html`), so the exemption is recorded as the GM's choice, not as little shade. Its cost on today's maps is nil: 2 stands on the five pool hamlets, neither in a plot's sun (one-shot count, 2026-10-02). Raised with the GM, with the count and the 20 m, once the implementation works | the sun page |
+| One reach for every canopy tree: the working windbreak tree's west-lane reach | guess | the record already reckons every shadow at the least height it gives a tree (a working windbreak's, stated on the sun page); taller trees would reach further | the sun page, the predicate's constant |
+| The sun ground is a rectangle east, west and south of the plot, from its north edge | deliberate deviation | the 9-to-3 sun sweeps a wedge from the southeast to the southwest; the sun page takes the rectangle "a simplification, taken knowingly" | the sun page |
+| A copse whose roll the freed ground cannot hold is drawn short, never moved into the sun | guess | the plot's sun is the rule and the wood the remainder; what it costs - the drawn wood against its roll - is measured before and after (SC-004) | the plan; the wood-goal module |
 
 ## Assumptions
 
