@@ -83,10 +83,13 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   sources"; the nav tree gains it. The single page (`all.html`) carries it too.
 - **D11 - `make cite-uncited KEY=<k>`** moves an entry to `010-works-cited/` (`git mv`) and appends a `Used for:` line
   placeholder the build already refuses until it names a section.
-- **D12 - Attempts.** `_attempts.py seed` maps each ledger row naming a question (old ids through `moved-303.json`; an id
-  it cannot map is kept as written, prefixed `old:`) to a line `{url, key, question, sought, outcome, date, feature}`, with
-  `sought` = `unknown - recorded before feature 312`. `make source-pages` requires `Q=` and `SOUGHT=`, prints the URL's
-  attempts and verdict before fetching, and appends `pending` attempts; `make source-outcome` appends the outcome line.
+- **D12 - Attempts.** `_attempts.py seed` maps every ledger row to a line `{url, key, question, sought, outcome, date,
+  feature, route}`: a four-digit stem as it is; an old id through `moved-303.json`'s numbers (an id it cannot map kept as
+  `old:<id>` - 249 of 629 old-id mentions, measured 2026-10-02); a free-text entry (the feature-288 seed kept the reading
+  prompt there - 7,994 mentions) as what was sought, its question `unknown`; a row with none, question `unknown`. Where
+  nothing says what was sought: `unknown - recorded before feature 312`. `make source-pages` requires `Q=` and `SOUGHT=`,
+  prints the URL's attempts and verdict before fetching, and appends an attempt with outcome `unknown` (not yet known);
+  `make source-outcome` appends the outcome line.
   The WebFetch hook adds the same print as context and appends an attempt (its `prompt` as what was sought); the Bash
   side of the hook appends one for a `curl`/`wget`-style fetch (the command as what was sought). `make archive` and `make
   archive-find` append one. `make attempts URL=|KEY=|Q=` prints them.
