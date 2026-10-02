@@ -43,6 +43,16 @@ if [ -n "${CLONE_MAIN:-}" ]; then MAIN=$CLONE_MAIN
 elif [ "$(basename "$(dirname "$ROOT")")" = ".clones" ]; then MAIN=$(dirname "$(dirname "$ROOT")")
 else MAIN=$ROOT; fi
 LOCK=$MAIN/.clones/.sync.lock   # keep this NAME: it is the cross-session lock convention in CLAUDE.md - renaming it stops serializing against sessions still on the old name (renamed ONCE, 2026-08-28, from the "ritual" name the GM retired; a clone syncs in every turn, so the window was minutes)
+# THE PROMPT HOOK WAITS A BOUNDED TIME AND RENDERS IN THE BACKGROUND (2026-10-02; GUARD_EDIT_OK: the hook's own path
+# gains a wait ceiling and a detached render, nothing refused is loosened). The hook runs sync-in on every message under
+# a 60 s timeout, and render-sync held the lock 17-28 s per run (four sheets re-ran every time), so three sessions
+# queued behind one another past 60 s and Claude Code killed the hook. `--background-render` (the hook's flag) waits at
+# most SYNC_LOCK_WAIT seconds for the lock - busy past that, the mirror is skipped this turn and the clone still merges
+# from GitHub - and hands render-sync to one detached runner that re-renders until main's tip holds still.
+SYNC_LOCK_WAIT=${SYNC_LOCK_WAIT:-30}
+RENDER_RUNNING=$MAIN/.clones/.render-sync.running   # the runner's own lock: one background render-sync at a time
+RENDER_LOG=$MAIN/.clones/.render-sync.log
+RENDER_STATUS=$MAIN/.clones/.render-sync.status     # "ok <when> at <tip>" or "FAILED <when> exit <rc> at <tip>"
 POOL=.claude/skills/diagram/pool
 # The FROZEN tree is checked alongside it: render-sync must never rewrite an exhibit, and the
 # dirty-pool warning below is what would say so (feature 161).
@@ -131,8 +141,12 @@ ensure_github_origin
 # THE MIRROR IS REFRESHED FROM GITHUB MAIN, UNDER THE LOCK, FAST-FORWARD ONLY (FR-030). It is
 # nobody's workspace, so a refusal here means someone committed in main by hand - the procedure stops
 # and says so rather than merging in the mirror. Render-sync follows, cache-short-circuited.
-mirror_refresh() {
-  flock "$LOCK" git -C "$MAIN" pull -q --ff-only origin main \
+mirror_refresh() { # [wait-seconds]: with one, returns 75 when the lock stays busy that long (the prompt hook's path)
+  local rc=0
+  if [ -n "${1:-}" ]; then flock -E 75 -w "$1" "$LOCK" git -C "$MAIN" pull -q --ff-only origin main || rc=$?
+  else flock "$LOCK" git -C "$MAIN" pull -q --ff-only origin main || rc=$?; fi
+  [ "$rc" = 75 ] && [ -n "${1:-}" ] && return 75
+  [ "$rc" = 0 ] \
     || die "mirror $MAIN cannot fast-forward to GitHub main - someone committed there by hand (main is a MIRROR, nobody's workspace). Inspect 'git -C $MAIN log origin/main..HEAD' and move that work into a clone."
   # GUARD_EDIT_OK: feature 169 - `--ff-only` DOES NOT CATCH THE COMMON CASE, and the documentation
   # said it did. It fails on DIVERGENCE; a mirror that is merely AHEAD of GitHub - one stray commit
@@ -194,13 +208,21 @@ refuse_unrelated_history() {
   die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, docs/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
 }
 
-sync_in() {
+sync_in() { # [--mirror-only] [--background-render]
+  local mirror_only="" background="" a
+  for a in "$@"; do case "$a" in --mirror-only) mirror_only=1 ;; --background-render) background=1 ;; esac; done
   git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"
   refuse_unrelated_history
-  mirror_refresh
-  render_sync
+  if [ -z "$background" ]; then
+    mirror_refresh
+    render_sync
+  elif mirror_refresh "$SYNC_LOCK_WAIT"; then
+    render_sync_background
+  else
+    echo "sync-with-main: NOTE - the mirror lock stayed busy for ${SYNC_LOCK_WAIT}s (a push or a render-sync holds it), so the mirror was not refreshed this turn; the next message retries"
+  fi
   seed_roll_cache
-  if [ "${1:-}" = "--mirror-only" ]; then clone_index_refresh; echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
+  if [ -n "$mirror_only" ]; then clone_index_refresh; echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
   git pull --no-rebase origin main
   clone_index_refresh
   clone_page_refresh
@@ -456,7 +478,9 @@ render_sync() {
   # could linger in main). l7r/diagram/pipeline/render_cache.py runs each generator FROM ITS OWN DIRECTORY (the Mode A
   # cwd trap) and short-circuits on a content hash stamped into each derived svg: an unconditional
   # post-push regen is therefore cheap - only maps whose source actually changed re-run, so a push
-  # that touched no map's inputs costs ~0.3s while still self-healing every render from tip.
+  # that touched no map's inputs costs little while still self-healing every render from tip. (It said ~0.3s; measured
+  # 17-28 s on 2026-10-02 because the hand-drawn sheets were never cached - they are now, beside their tracked svg.)
+  # GUARD_EDIT_OK: comment correction only
   #
   # Under the procedure LOCK for the whole regen: main is a push-to-checkout target (updateInstead),
   # so another session's push mid-regen would rewrite the engine under us and mix tips across maps.
@@ -486,12 +510,42 @@ render_sync() {
   fi
 }
 
+# THE BACKGROUND RENDER (the prompt hook's path; see SYNC_LOCK_WAIT above). Detached from the hook - its own session,
+# no inherited stdout - so the hook's `$(...)` returns at once and a killed hook cannot take the render down with it.
+render_sync_background() {
+  if [ ! -f "$MAIN/$SKILL_DIR/Makefile" ]; then echo "sync-with-main: no $SKILL_DIR/Makefile in $MAIN - render-sync skipped"; return 0; fi
+  if grep -q '^FAILED' "$RENDER_STATUS" 2>/dev/null; then
+    echo "sync-with-main: WARNING - the last background render-sync FAILED ($(cat "$RENDER_STATUS")), so main's renders may be stale; see $RENDER_LOG"
+  fi
+  setsid "$0" render-sync-runner </dev/null >>"$RENDER_LOG" 2>&1 &
+  echo "sync-with-main: render-sync started in the background (log: $RENDER_LOG)"
+}
+
+# ONE RUNNER AT A TIME, AND IT CHASES THE TIP: a second start while one runs exits at once, so the running one re-checks
+# main's tip after each pass and goes again if a later sync moved it. The one gap - a tip moved after that last check
+# and before the runner lets go - is closed by the next message of any session.
+render_sync_runner() {
+  exec 9>"$RENDER_RUNNING"
+  flock -n 9 || exit 0
+  [ "$(stat -c %s "$RENDER_LOG" 2>/dev/null || echo 0)" -gt 1000000 ] && : > "$RENDER_LOG"
+  local tip rc
+  while :; do
+    tip=$(git -C "$MAIN" rev-parse --short HEAD)
+    echo "== $(date -Is) render-sync at $tip"
+    rc=0; render_sync || rc=$?
+    if [ "$rc" != 0 ]; then echo "FAILED $(date -Is) exit $rc at $tip" > "$RENDER_STATUS"; exit "$rc"; fi
+    [ "$(git -C "$MAIN" rev-parse --short HEAD)" = "$tip" ] && break
+  done
+  echo "ok $(date -Is) at $tip" > "$RENDER_STATUS"
+}
+
 # `done FULL=1` / `push FULL=1`: the full sweep on CodeBuild, its prompt answered locally first
 for arg in "$@"; do case "$arg" in FULL=1) export FULL=1 ;; esac; done
 case "${1:-}" in
-  sync-in)     sync_in "${2:-}" ;;
+  sync-in)     shift; sync_in "$@" ;;
   push)        push_cmd ;;
   render-sync) render_sync ;;
+  render-sync-runner) render_sync_runner ;;
   done)        push_cmd; render_sync ;;
-  *)           die "usage: sync-with-main.sh sync-in | push | render-sync | done" ;;
+  *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] | push | render-sync | done" ;;
 esac

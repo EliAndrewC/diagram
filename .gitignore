@@ -86,6 +86,8 @@ __pycache__
 .claude/skills/diagram/pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg
 !.claude/skills/diagram/pool/country-shrines/*/*.svg
 .claude/skills/diagram/pool/*/*/*.html
+# A hand-drawn sheet's render-cache stamp (its svg is tracked, so the stamp sits beside it - render_cache._sidecar).
+.claude/skills/diagram/pool/*/*/.*.render-cache
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.svg
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.png
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.html
