@@ -44,7 +44,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [x] T24 [US1] Inashiro regenerated (the copse), then Kashikawa (the farm groves): the gate test green on each; SC-004's figures
       after, against R2
       research: rendering
-      verify: DONE. Inashiro and Kashikawa regenerated, gate test green; SC-004: copse 365 to 340 clumps, wood drawn = rolled, belts unchanged
+      verify: DONE. Inashiro and Kashikawa regenerated, gate test green; SC-004: copse clumps fell (the figures current at the close are research.md R2a), wood drawn = rolled, belts unchanged
 - [x] T25 [US1] The pool (`make maps`) and the cohort (`make cohort N=24`): the gate test green on all five, zero crowns in a
       plot's sun on every seed, no seed lost against T01's baseline
       research: rendering

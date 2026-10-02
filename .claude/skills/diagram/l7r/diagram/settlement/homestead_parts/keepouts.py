@@ -240,7 +240,7 @@ class KeepoutsMixin:
             seats = [t for t in trees if t is not None]
             if not seats:
                 continue
-            reach = max(t[2] for t in seats)
+            reach = max(t[2] for t in seats) + self.CANOPY_PAD  # the crown AND the pad `_crown_covers` asks - a margin of the radius alone missed a box in the pad
             sun = self._sun_keepouts((min(t[0] for t in seats) - reach, min(t[1] for t in seats) - reach, max(t[0] for t in seats) + reach, max(t[1] for t in seats) + reach))
             keep = [t is None or not self._crown_covers(t[0], t[1], t[2], sun, (), self.CANOPY_PAD) for t in trees]
             dropped += keep.count(False)

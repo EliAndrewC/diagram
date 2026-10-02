@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T19:57:56Z",
+  "target": "review-accept",
+  "commit": "3845e432e",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--copse F2: a confirmation, not a defect: round 3 passed the copse, identical to round 2"
+}

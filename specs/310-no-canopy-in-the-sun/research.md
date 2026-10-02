@@ -64,3 +64,19 @@ A plot's sun ground is the box from `x0 - reach` to `x1 + reach` and `y0` to `y1
 | Sawada | 11,486 / 11,493 | 460 | 228 | 1,624 |
 
 Crowns in a plot's sun (spec Context): 95, 78, 98, 10, 143.
+
+## R2a After figures (SC-004; read 2026-10-02 from main at the merge base 5d2562bb7 and the clone at 3845e432e, same moment)
+
+Main moved after R2 was read (feature 308 re-grew the cluster), so the before column here is main as it stands, not R2.
+Crowns in sun are `tree_shade.trees_shading_plots` at `CANOPY_SHADE_FT` - (plot, tree) pairs.
+
+| map | household wood rolled / drawn (sq ft), main -> 310 | copse clumps | windbreak clumps | recorded crowns | crowns in sun |
+|---|---|---|---|---|---|
+| Inashiro | 15,699 / 15,709 -> 14,995 / 14,987 | 359 -> 321 | 387 -> 387 | 2,750 -> 2,651 | 145 -> 0 |
+| Kashikawa | - (grove farms) | - | - | 2,685 -> 3,071 | 84 -> 0 |
+| Kuwabata | 12,597 / 12,600 -> 11,960 / 11,968 | 395 -> 358 | 233 -> 233 | 1,319 -> 1,209 | 143 -> 0 |
+| Mizuguchi | - (grove farms) | - | - | 2,069 -> 1,807 | 10 -> 0 |
+| Sawada | 9,414 / 9,418 -> 8,791 / 8,791 | 460 -> 421 | 140 -> 140 | 1,354 -> 1,202 | 183 -> 0 |
+
+The rolled wood falls 4.5 to 6.6% because the sun ground takes part of the ground the copse could hold (`wood_goal.attainable_band`);
+drawn stays within 8 sq ft of rolled. Kashikawa draws more crowns because its east bands now run end to end.

@@ -230,6 +230,18 @@ def test_a_planted_dikes_trees_in_a_plots_sun_are_taken_out_once_the_plots_stand
     assert s.M["planted_trees"][0]["trees"] == [[900.0, 100.0, 5.0]]
 
 
+def test_a_planted_tree_within_the_pad_of_a_plots_sun_is_taken_out() -> None:
+    """The sun ground is fetched over the reach the crown test asks - the crown AND `CANOPY_PAD` - so a tree whose crown stops
+    0.3 px short of a yard's sun box, inside the pad, is taken out (fetched over the radius alone, that box was never asked)."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT
+
+    s = _sunny()
+    s.M["threshing_yards"] = [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 20.0}]
+    edge = 500.0 + 20.0 + CANOPY_SHADE_FT  # the sun box's east edge
+    z = s._plant_run("willow", ["<g>", "<circle t/>", "</g>"], [None, (edge + 5.3, 500.0, 5.0), None], "perimeter dike")
+    assert s.thin_planted_trees() == 1 and s.out[z] == "<g></g>"
+
+
 def test_a_fixture_is_held_off_a_band_as_its_record_will_read() -> None:
     """Cohort seed 5 (2026-10-02): the check reads a fixture's turned box from its record, rounded to 0.1 - so the placer asks
     the same box (`recorded_box`), and a turn that clears at full precision but meets in the record is refused."""

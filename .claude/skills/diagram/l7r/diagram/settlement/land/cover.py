@@ -494,7 +494,9 @@ class GroundCoverMixin:
                 _r_lo, _r_hi = (self.px(v) for v in self.COMMONS_CROWN_R_FT)
                 # ...AND NO CROWN IN A YARD'S OR BED'S SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"), throws and
                 # the room's grid alike: the commons are laid after every plot, so the keep-out is whole here
-                _wd_sun = self._sun_keepouts((x0 - _r_hi, y0 - _r_hi, x1 + _r_hi, y1 + _r_hi))
+                _wd_sun = self._sun_keepouts(
+                    (x0 - _r_hi - self.CANOPY_PAD, y0 - _r_hi - self.CANOPY_PAD, x1 + _r_hi + self.CANOPY_PAD, y1 + _r_hi + self.CANOPY_PAD)
+                )  # the reach the crown test asks: radius AND pad
                 # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
                 # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
                 _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
@@ -559,6 +561,11 @@ class GroundCoverMixin:
                 if pond:
                     _cover_bare.append(shapely.affinity.scale(Point(pond[0], pond[1]).buffer(1.0), pond[2], pond[3]))
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
+                    # the plots' sun ground near this throw, gathered ONCE: nothing seats a yard or bed during the scatter, and a
+                    # box beyond a pine's reach never meets its crown (the perf-audit, feature 310: it was re-read per pine)
+                    _pr = PINE_SPREAD_BS * bs
+                    _ps = _pr + self.CANOPY_PAD  # the reach `_crown_covers` asks - the crown AND its pad (a margin of the radius alone missed a box in the pad)
+                    _pine_sun = self._sun_keepouts((x0 - _ps, y0 - _ps, x1 + _ps, y1 + _ps))
                     for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
                         px, py = random.uniform(x0 + 6, x1 - 6), random.uniform(y0 + 6, y1 - 6)
                         if _fr is not None and not (_fr[0] <= px <= _fr[2] and _fr[1] <= py <= _fr[3]):
@@ -567,8 +574,7 @@ class GroundCoverMixin:
                             continue
                         # ...NOR IN A YARD'S OR BED'S SUN (feature 310): a pine is a tree, its crown its widest branch's reach; recorded
                         # apart (`scrub_pines`) so the map's check sees it, since `tree_crowns` is read as canopy discs elsewhere
-                        _pr = PINE_SPREAD_BS * bs
-                        if self._crown_covers(px, py, _pr, self._sun_keepouts((px - _pr, py - _pr, px + _pr, py + _pr)), (), self.CANOPY_PAD):
+                        if self._crown_covers(px, py, _pr, _pine_sun, (), self.CANOPY_PAD):
                             continue
                         self.M.setdefault("scrub_pines", []).append([round(px, 1), round(py, 1), round(_pr, 1)])
                         th = random.uniform(9, 14) * bs

@@ -118,7 +118,7 @@ class TreeStandsMixin:
                 xx += step
             yy += step
         # no crown is drawn on a roof or a wellhead - and by flush time that means EVERY one of them
-        reach = rad * 1.4
+        reach = rad * 1.4 + self.CANOPY_PAD  # the largest crown AND the pad `_crown_covers` asks: a box within the pad of a crown was never fetched
         krect, kcirc = self._canopy_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))
         krect += self._sun_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))  # every plot's sun ground (feature 310)
         # ...and no trunk stands on a lane's tread (feature 287, woods W21 - `trunk_on_tread`, the rule's one predicate): the
