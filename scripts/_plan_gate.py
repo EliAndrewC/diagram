@@ -96,8 +96,9 @@ def bypass_record(root: pathlib.Path, where: str, why: str) -> None:
     log = root / ".claude" / "skills" / "diagram" / "dev" / "bypass-log"
     if not log.parent.is_dir():
         return
-    log.mkdir(exist_ok=True)
     now = datetime.datetime.now(datetime.UTC)
+    log = log / f"{now:%Y-%m}"  # a month folder (2026-10-02)
+    log.mkdir(parents=True, exist_ok=True)
     head = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"], capture_output=True,
                           text=True).stdout.strip()
     (log / f"{now:%Y%m%dT%H%M%SZ}-{hashlib.sha256(why.encode()).hexdigest()[:6]}.json").write_text(

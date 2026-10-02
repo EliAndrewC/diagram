@@ -1,0 +1,22 @@
+{
+ "captured": "2026-10-02T15:19:48+00:00",
+ "final_url": "https://www.artic.edu/artworks/37716",
+ "first": "57/577efadf76f9/20261002T151948Z",
+ "gm_copies": [
+  "gm-copies/1971.867 - Model of a Pigsty and Latrines.jpg"
+ ],
+ "keys": [
+  "artic-pigsty-latrine"
+ ],
+ "notes": [
+  "0042-manure-heaps-and-compost-kyuhi.drawing.notes.html",
+  "0047-farm-privies-and-their-night-soil-benjo.drawing.notes.html",
+  "0047-farm-privies-and-their-night-soil-benjo.notes.html"
+ ],
+ "outcome": "archived-gm-copy",
+ "path": "57/577efadf76f9/20261002T151948Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "15d8c2aed7e3f79093c60cef3ada8fff3b674f31f7623ff4594495647de4aea2",
+ "url": "https://www.artic.edu/artworks/37716"
+}

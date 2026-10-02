@@ -1,0 +1,22 @@
+{
+ "captured": "2026-10-02T12:41:22+00:00",
+ "final_url": "https://www.sciencedirect.com/science/article/abs/pii/S0006320711000450",
+ "first": "7f/7f816c1d8d54/20261002T124122Z",
+ "gm_copies": [
+  "gm-copies/S0006320711000450"
+ ],
+ "keys": [
+  "hu-2011-fengshui-patches"
+ ],
+ "notes": [
+  "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.notes.html",
+  "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.notes.html",
+  "0072-shelter-belts-on-a-villages-windward-side-bofurin.notes.html"
+ ],
+ "outcome": "archived-gm-copy",
+ "path": "7f/7f816c1d8d54/20261002T124122Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "754900018f245bd569ffb1d4f4abcd449f4477d10b994bd002679960199264a3",
+ "url": "https://www.sciencedirect.com/science/article/abs/pii/S0006320711000450"
+}

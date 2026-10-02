@@ -160,7 +160,7 @@ def test_check_dispatches_exactly_one_build_and_records_it(repo: Path, monkeypat
     # start_build overrides decided just before the call.
     assert c.events == ["static:0", "push:0", "image:stock", "cache:reference", f"start_build:{out.build_id}", "reference:0", "go", "go:cleaned"]
     assert "imageOverride" not in kw, "no image marker in the bucket: the stock image bootstraps"
-    logs = [json.loads(p.read_text(encoding="utf-8")) for p in (repo / S / "dev" / "run-log").glob("*.json")]
+    logs = [json.loads(p.read_text(encoding="utf-8")) for p in (repo / S / "dev" / "run-log").rglob("*.json")]
     assert len(logs) == 1 and logs[0]["where"] == "codebuild" and logs[0]["build_id"] == out.build_id and logs[0]["result"] == "SUCCEEDED" and logs[0]["minutes"] == 1.0
     assert any(ln.startswith("  | ") for ln in lines), "the build log streams into the output"
     assert state.read(repo).event == state.GREEN  # type: ignore[union-attr]
@@ -208,7 +208,7 @@ def test_local_reference_failure_stops_OUR_build_and_records_the_abort(repo: Pat
     assert stops == [out.build_id], "only the id this dispatcher got back is ever stopped"
     assert "put_object" not in client.names(), "no go signal"
     assert state.read(repo).event == state.FAILED  # type: ignore[union-attr]
-    entry = json.loads(next((repo / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
+    entry = json.loads(next((repo / S / "dev" / "run-log").rglob("*.json")).read_text(encoding="utf-8"))
     assert entry["result"] == "aborted-local-reference" and entry["minutes"] == 1.0
     assert any("stopped" in ln for ln in lines)
 
@@ -233,7 +233,7 @@ def test_skip_verified_pushes_nothing_and_logs_the_build(repo: Path) -> None:
     c, lines = ctx(repo, client=client)
     out = dispatch.run(c)
     assert out.rc == 0 and out.verdict == "SKIP-VERIFIED" and "start_build" not in client.names()
-    entry = json.loads(next((repo / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
+    entry = json.loads(next((repo / S / "dev" / "run-log").rglob("*.json")).read_text(encoding="utf-8"))
     assert entry["result"] == "skip-verified" and entry["build_id"] == "gm-assistant-check:earlier" and entry["cost_usd"] == 0
     # a reference-scope record does NOT satisfy a FULL dispatch (FR-027)
     (repo / S / "dev" / "bypass-log" / "p.json").write_text(
@@ -354,7 +354,7 @@ def test_the_compute_knob_reaches_the_build_and_prices_the_run(repo: Path) -> No
     kw = next(k for n, k in client.calls if n == "start_build")
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
     assert kw["computeTypeOverride"] == "BUILD_GENERAL1_2XLARGE" and env["COMPUTE_TYPE"] == "BUILD_GENERAL1_2XLARGE"
-    entry = json.loads(next((repo / S / "dev" / "run-log").glob("*.json")).read_text(encoding="utf-8"))
+    entry = json.loads(next((repo / S / "dev" / "run-log").rglob("*.json")).read_text(encoding="utf-8"))
     assert entry["compute"] == "BUILD_GENERAL1_2XLARGE" and entry["cost_usd"] == round(1.0 * config.RATES["BUILD_GENERAL1_2XLARGE"], 4)
     assert any("on BUILD_GENERAL1_2XLARGE" in ln for ln in lines)
 

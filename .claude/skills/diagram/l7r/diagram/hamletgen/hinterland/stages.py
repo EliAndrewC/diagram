@@ -106,30 +106,32 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     """The marsh, then scrub and rough grazing.
 
     Ground cover fills what is left, so it runs after everything it must avoid; it reads the drawn features as
-    obstacles rather than reserving anything from them. Three moves, in order: the reed marsh at the wet toe,
-    its inner edge following the fan's foot along the collector (T30); then the coppice patches are SCANNED (not
-    yet drawn) and the shelter belt is computed, both from the houses as they stand; then the scrub is scattered
-    with every wood as a soft keep-out - brush and pine stop at a wood's line and at the marsh, grass grades
-    into them over one shared feather (T12, T34, T35). The floor of a worked village wood was kept clear, so no
-    scrub stands under its crowns.
+    obstacles rather than reserving anything from them. In order: the reed marsh at the wet toe (T30); then the
+    coppice patches are SCANNED (not yet drawn); then the late farmstead fixtures are drawn and the bamboo seated;
+    then the shelter belt is planted and the map's view decided; then the scrub is scattered within that view with
+    every wood as a soft keep-out - brush and pine stop at a wood's line and at the marsh, grass grades into them over
+    one shared feather (T12, T34, T35) - and the bare ground left inside the view is clothed as rough grazing. The
+    floor of a worked village wood was kept clear, so no scrub stands under its crowns.
 
     The non-arable ground: reed marsh at the wet toe, cut-over scrub everywhere else.
 
-    One engine call, because the engine already knows the doctrine (China-first: the south-China rice
-    hills were stripped for fuel and timber over centuries, so the DOMINANT cover past the fields is
-    scrub, not forest). It runs after the structures so the scatter skips them, and before the woods
-    so the woodland patches draw on top of the scrub they stand in.
+    Two engine calls - the marsh, then the scrub - because the engine already knows the doctrine (China-first: the
+    south-China rice hills were stripped for fuel and timber over centuries, so the DOMINANT cover past the fields is
+    scrub, not forest). It runs after the structures so the scatter skips them, and before the woods so the woodland
+    patches draw on top of the scrub they stand in.
 
     Steps:
         l7r.diagram.settlement.Settlement.thin_planted_trees
         l7r.diagram.hamletgen.hinterland.belt.belt_polygon
         l7r.diagram.hamletgen.hinterland.frame.scatter_frame
         l7r.diagram.settlement.Settlement.hinterland
+        l7r.diagram.hamletgen.hinterland.parcels.open_ground_patches
         l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures
         l7r.diagram.hamletgen.homesteads.bamboo.household_bamboo
         l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats
         l7r.diagram.hamletgen.hinterland.stages.plant_the_belt
         l7r.diagram.hamletgen.hinterland.frame.frame_for
+        l7r.diagram.settlement.Settlement.fill_the_holes
     """
     # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
     # perimeter dike's willows and a fruit dike's trees were drawn in the field stage, before any yard or bed; every plot
@@ -179,7 +181,7 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
     A take-yabu is a clonal thicket with a hard edge - a stand, not a seasoning - and a culm is inches across,
     so at this scale bamboo is drawn as a STAND-LEVEL glyph: the stand's position and extent to scale, the marks
     inside symbolic (the convention of Japan's own topographic legend, which gives bamboo its own symbol beside
-    broadleaf and conifer). Seated by the previous stage in the farmsteads or at the settlement's edge behind its
+    broadleaf and conifer). Seated by `stage_hinterland` in the farmsteads or at the settlement's edge behind its
     back row (feature 280 M49: not at the field margin), per the `bamboo` knob; drawn here, after the belt, over scrub that already kept out of it. Before
     this stage existed bamboo was 20% of the belt's crowns, one six-foot culm at a time, and invisible.
 
@@ -275,11 +277,11 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
     The communal fengshui belt behind the cluster, shaped to the houses that actually landed.
 
     A nucleated settlement shelters behind ONE grove rather than per-house belts, and the belt must
-    do two things the gate measures: stand on the WINDWARD side of the house centroid, and EMBRACE
-    the cluster (a substantial belt within 150 px of a farmhouse - "far corner masses alone are
-    decoration"). Both fall out of deriving it from the houses: the belt is a band offset into the
-    wind from the cluster's own centroid, spanning the cluster's width across the wind, ragged along
-    its edges because a grove hugs the land and is not a ruled wall.
+    do two things: stand on the WINDWARD side of the houses, and EMBRACE the cluster (a substantial belt
+    within 150 px of a farmhouse - "far corner masses alone are decoration"). Both fall out of deriving it
+    from the houses (`belt_polygon`): a band of constant depth whose near face follows the cluster's windward
+    fringe, column by column, spanning the cluster's width across the wind, ragged along its edges because a
+    grove hugs the land and is not a ruled wall.
     """
     if not plan.belt:
         return

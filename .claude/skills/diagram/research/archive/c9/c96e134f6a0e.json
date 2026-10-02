@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T12:35:52+00:00",
+ "final_url": "https://www.tandfonline.com/doi/full/10.1080/13467581.2021.1972810",
+ "first": "c9/c96e134f6a0e/20261002T123552Z",
+ "gm_copies": [
+  "gm-copies/13467581.2021.1972810.pdf"
+ ],
+ "keys": [
+  "wang-ochiai-2022"
+ ],
+ "notes": [],
+ "outcome": "archived-gm-copy",
+ "path": "c9/c96e134f6a0e/20261002T123552Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "40deacccdd76f60b3ff22ac9372b6c54689b1a268a24fd221fb958d61c88dcd3",
+ "url": "https://doi.org/10.1080/13467581.2021.1972810"
+}

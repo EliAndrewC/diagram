@@ -225,8 +225,8 @@ class StandsMixin:
         a distinct bamboo-grove symbol beside the broadleaf and conifer ones, so a reader can tell the three
         apart at map scale. Each mark is a pair of culm strokes with a leafy fork, in bamboo's pale
         yellow-green, on a jittered grid dense enough to read as one block at fit zoom - laid once in the bamboo tile and the
-        stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (the damp N/W strip of the cluster) or
-        "thicket" (the take-yabu at the field margin). Recorded in M['bamboo_stands'] (bbox + role + poly);
+        stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (a strip beside a farmstead that keeps one) or
+        "thicket" (the take-yabu behind the back row). Recorded in M['bamboo_stands'] (bbox + role + poly);
         the marks are decoration keyed to the stand (positional randomness)."""
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]

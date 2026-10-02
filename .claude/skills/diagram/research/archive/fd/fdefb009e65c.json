@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T18:13:51+00:00",
+ "final_url": "https://www.sciencedirect.com/science/article/abs/pii/S1001627920300706",
+ "first": "fd/fdefb009e65c/20261002T124203Z",
+ "gm_copies": [],
+ "keys": [
+  "offtake-angle-studies"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "fd/fdefb009e65c/20261002T181349Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "362f99fd9db457f35dc177f5711a100ece6acc5621be5150c8d4400635b9015d",
+ "url": "https://www.sciencedirect.com/science/article/abs/pii/S1001627920300706"
+}

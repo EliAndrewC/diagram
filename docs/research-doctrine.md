@@ -186,3 +186,30 @@ Three things worth knowing beyond the mechanics:
 - **The rule that a check reads the fragment lives in the agent CONTRACTS**, because a defined agent
   launches without this repository's `CLAUDE.md` files (feature 256). It is the whole saving; an agent
   that still opens the page collects nothing from the split.
+
+## Every cited source is archived, privately (feature 309, GM 2026-10-02)
+
+The GM asked for *"backup copies of all of the content we are referencing"*, against *"websites going offline, failing
+to be maintained"* and *"changing URLs in a website redesign"*: every web page and every PDF the record cites, *"even
+things which seem at low risk of going away, like wikipedia pages"*, a web page *"whole ... with images and css and such
+and not just the html content"*. A citation is a verbatim quote from a page the reader can open; a page that dies or is
+edited under its quote leaves the footnote uncheckable, so the record keeps its own copy of every cited page.
+
+The copies live in the private repository `EliAndrewC/diagram-research`, private on purpose: *"If someone's copyrighted
+work goes offline then having a private copy allows me to contact the author and ask whether they are okay with me
+hosting a copy publicly, but for now I just want an archive."* Nothing from it is linked or copied anywhere public. The
+host keeps one working copy of it, pushed straight to GitHub - no clone of it per session (the GM). The GM's own
+downloaded files in `academic-sources/` that copy a cited source are archived beside its captures. The mechanism, the
+fallback order for a dead or a refused page and the measurements: `specs/309-source-archive/`; the operative rule:
+`.claude/skills/diagram/research/CLAUDE.md`.
+
+**Amendment (the GM, 2026-10-02).** The download directory is a queue: *"once something has been added to the diagram
+research repository and then pushed, then we can delete it from the academic sources directory. And in that way, looking
+at that directory is just a good way to know whether there is something that we have not processed yet."* Sources read
+and not cited are archived too - *"When we check a paper for one fact, it may not have what we need for the question that
+we are asking, but then we may end up wanting to check the paper later for a different fact"* - every page a session
+reads, the earlier reads included (the GM's choice). Then, the same day, the GM held that backfill and moved the
+uncited pages to their own feature (312): a page not worth keeping is recorded with why and never stored, and a page kept
+gets a write-up like any cited source; until it lands, a page is archived when it is cited. And the research pass looks in the archive first: *"our research
+procedure should include a step where we first check to see if we already have something, rather than going out and
+trying to find it on the internet"* - `make archive-inbox`, then `make archive-find`, before any search.

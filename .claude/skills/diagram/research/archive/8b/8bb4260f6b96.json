@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T14:30:12+00:00",
+ "final_url": "https://docs.mapbox.com/mapbox-gl-js/example/variable-label-placement/",
+ "first": "8b/8bb4260f6b96/20261002T143012Z",
+ "gm_copies": [],
+ "keys": [
+  "mapbox-variable-label-placement"
+ ],
+ "notes": [
+  "0242-labels-on-maps-cartographic-label-placement.drawing.notes.html"
+ ],
+ "outcome": "archived",
+ "path": "8b/8bb4260f6b96/20261002T143012Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "32d391622f072e9dd4e1fb56b980ce7c0f075cb2424fa0a9de53fb082c0bdafe",
+ "url": "https://docs.mapbox.com/mapbox-gl-js/example/variable-label-placement/"
+}

@@ -36,6 +36,7 @@ import fcntl
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -317,7 +318,19 @@ def main(argv: list[str] | None = None) -> int:
         print(f"reserve: {e}", file=sys.stderr)
         return 2
     print(path)
+    if args.url and args.kind == "registry":
+        archive_at_cite(root, args.url, args.key)
     return 0
+
+
+def archive_at_cite(root: Path, url: str, key: str, runner=subprocess.run) -> int:  # noqa: ANN001 - the seam a test replaces
+    """A source cited from now on is archived as it is cited (feature 309 FR-006): `_archive.py url` runs on the new
+    entry's URL, its report on stderr so stdout stays the path a caller reads. A failure never blocks the reservation -
+    the archiver records its own outcome, and the record build names a URL still owed a copy."""
+    done = runner([sys.executable, str(HERE / "_archive.py"), "url", url, "--key", key], cwd=root, stdout=sys.stderr, stderr=sys.stderr, check=False)
+    if done.returncode != 0:
+        print(f"reserve: archiving {url} failed (exit {done.returncode}) - `make archive URL='{url}' KEY={key}` retries it", file=sys.stderr)
+    return done.returncode
 
 
 if __name__ == "__main__":

@@ -752,13 +752,15 @@ audit:          ## [project] how the gate has actually been used - every run, ev
 # schema, so the audit the constitution requires as a feature's closing step has been unrunnable since
 # the day pair-hooks landed - and it failed AFTER printing the run log, which is why it read as a
 # normal tail of output. Both schemas are read now; neither is rewritten.
-	@python3 -c "import json,glob,collections,os; \
-rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/*.json')),key=lambda r:r.get('utc','')); \
+	@: "GUARD_EDIT_OK: 2026-10-02 - both logs are read recursively: the month folders and any entry a clone not yet synced wrote flat"; \
+	python3 -c "import json,glob,collections,os; \
+rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
 [print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}  {(r.get('mode','')+' '+r.get('selected','')).strip()}\") for r in rows[-25:]] or print('  (none yet)'); \
 c=collections.Counter(r['scope'] for r in rows); \
 print(f\"  {len(rows)} runs: \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))) if rows else None; \
-b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/*.json')),key=lambda r:r.get('utc','')); \
+b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
+'GUARD_EDIT_OK: recursive, as above'; \
 print(chr(10)+'\033[1mBypasses\033[0m (dev/bypass-log/) - a FULL run is only justified at the END of a feature'); \
 'GUARD_EDIT_OK: feature 162 - read BOTH bypass-log schemas (see the note above this recipe)'; \
 [print(f\"  {r['utc']}  {(r.get('outcome') or r.get('guard') or '?'):<10} {(r.get('why') or r.get('reason') or r.get('what') or '')[:76]}\") for r in b[-15:]] or print('  (none yet)'); \
@@ -901,7 +903,9 @@ ci-merge:       ## [remote] the push's gated route (PAID) - runs the SOAK suite;
 
 # the operator's `permitted` answer becomes a commit, so the build finds it in the tree it tests (FR-025)
 commit-permitted: ## [project] commit the most recent bypass-log entry, which is how a paid FULL run is authorized
-	@f=$$(ls -t dev/bypass-log/*.json | head -1); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
+	@: "GUARD_EDIT_OK: 2026-10-02 - the newest entry across the month folders (and any flat one)"; \
+	: "GUARD_EDIT_OK: find, not a glob - a glob over every month reaches the argument limit within a year"; \
+	f=$$(find dev/bypass-log -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
 	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
 
 # GUARD_EDIT_OK: feature 177 - ONE prompt opens the FULL door here, deliberately. LOGBYPASS writes the
@@ -980,20 +984,23 @@ ci-image:       ## [remote] rebuild the CodeBuild image from Dockerfile.ci and p
 #
 # `make audit` reads it back. Elapsed time is recorded too, so a target that has quietly got slower
 # shows up in the history rather than in someone's memory.
+# GUARD_EDIT_OK: 2026-10-02 - both logs write into a month folder, dev/<log>/<YYYY-MM>/ (l7r/diagram/ci/runlog.month_dir):
+# they gain about a thousand entries a week between them, and no tracked directory may pass 5,000 files (check-file-scale.py).
 LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
-  os.makedirs('dev/run-log',exist_ok=True); \
-  open(f'dev/run-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {})},indent=2)+chr(10))"
+  d='dev/run-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
+  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {})},indent=2)+chr(10))"
 
 # THE TARGET RECORDS THE SCOPE (feature 130 - GUARD_EDIT_OK: the build-side door keys on it). `done`
 # with FULL=1 logs as `done FULL`, `ci-merge FULL=1` as `ci-merge FULL`: the entry is what the build
 # reads to decide whether the full scope was authorized, and "done" alone could not say.
+# GUARD_EDIT_OK: 2026-10-02 - into the month folder, as LOGRUN above.
 LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
-  os.makedirs('dev/bypass-log',exist_ok=True); \
-  open(f'dev/bypass-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
+  d='dev/bypass-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
+  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
 
 # GUARD_EDIT_OK: feature 170 - REF_OK IS AN ESCAPE, SO IT REACHES THE FIRING LOG TOO. It recorded to
 # `dev/bypass-log/` only, and `make audit` reads `~/.claude/guard-log/`, so the one escape that skips
@@ -1270,6 +1277,24 @@ source-pages: ## [project] save the full visible text of the named pointers, wit
 source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger - every page a research pass reads (feature 288)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>]
 	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",)
+
+# GUARD_EDIT_OK: feature 309 - two new operations (archive one cited URL now; archive every cited URL with no copy, or report the coverage); no guard changes.
+archive: ## [project] archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)   URL=<u> [KEY=<registry key not yet written>]
+	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
+
+# GUARD_EDIT_OK: feature 309 - new operations, GM=1 (the GM's matched files copied into the archive) and CONSULTED=1 (the ledger's uncited pages - unrun, kept for feature 312's filter); no guard changes.
+archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the ledger's uncited pages - HELD, unrun, for feature 312's filter (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
+	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),); else python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
+
+# GUARD_EDIT_OK: feature 309 Amendment 1 - two new operations (the GM's download directory processed as an inbox; the archive looked in before the web); no guard changes.
+# GUARD_EDIT_OK: feature 309 plan review - MATCH= and NONE= added to archive-inbox (a new download's keys); nothing loosened.
+archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
+
+archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b"
+	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi

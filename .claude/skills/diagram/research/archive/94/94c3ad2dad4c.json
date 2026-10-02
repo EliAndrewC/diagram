@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T18:30:47+00:00",
+ "final_url": "",
+ "first": "94/94c3ad2dad4c/20261002T143457Z",
+ "gm_copies": [],
+ "keys": [
+  "wanli-fishpond-summary"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "94/94c3ad2dad4c/20261002T183046Z",
+ "reason": "APIRequestContext.get: Client network socket disconnected before secure TLS connection was established",
+ "revision": "",
+ "sha256": "",
+ "url": "https://gzdaily.dayoo.com/h5/html5/2023-07/05/content_871_829964.htm"
+}

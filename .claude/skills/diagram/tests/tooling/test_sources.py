@@ -374,6 +374,17 @@ def test_the_outcome_command_records_and_refuses(capsys: pytest.CaptureFixture[s
     assert rows[0]["outcome"] == "rejected: only prices" and rows[0]["questions"] == ["0005"] and rows[1]["questions"] == []
 
 
+def test_only_a_cited_outcome_archives_its_page(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    archived = []
+    monkeypatch.setattr(src, "archive_reads", lambda root, urls: archived.extend(urls) or 0)
+    for outcome in ("rejected: only prices", "nothing-found", "unreadable", "pending"):
+        assert src.main(["outcome", "https://example.org/r", outcome]) == 0
+    assert archived == [], "feature 309 Amendment 2: an uncited read is recorded, never archived"
+    assert src.main(["outcome", "https://example.org/c", "cited:edo-enwiki"]) == 0
+    assert archived == ["https://example.org/c"]
+    capsys.readouterr()
+
+
 def test_the_lookup_command(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     root = tmp_path / "clone"
     (root / ".git").mkdir(parents=True)

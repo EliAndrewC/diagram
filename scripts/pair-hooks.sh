@@ -321,6 +321,7 @@ log_bypass() { # the override's reason, where `make bypass-audit` reads it
   local why="$1" what="$2"
   local dir="${CLONE_ROOT}/.claude/skills/diagram/dev/bypass-log"
   [ -d "$dir" ] || return 0
+  dir="$dir/$(date -u +%Y-%m)"; mkdir -p "$dir" 2>/dev/null || return 0   # GUARD_EDIT_OK: 2026-10-02 - a month folder, as every log writer
   python3 - "$dir" "$why" "$what" <<'PY' 2>/dev/null || true
 import datetime, hashlib, json, pathlib, sys
 d, why, what = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3]

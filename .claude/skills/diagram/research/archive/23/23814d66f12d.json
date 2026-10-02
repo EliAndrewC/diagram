@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T18:23:31+00:00",
+ "final_url": "",
+ "first": "",
+ "gm_copies": [],
+ "keys": [
+  "chen-2016-song-yamen"
+ ],
+ "notes": [
+  "0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.notes.html",
+  "0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.notes.html"
+ ],
+ "outcome": "unreachable",
+ "path": "",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://xbgjxt.swu.edu.cn/data/article/preview-pdf?doi=10.13718/j.cnki.xdsk.2016.05.023"
+}

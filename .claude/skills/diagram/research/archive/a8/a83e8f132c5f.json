@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T18:11:41+00:00",
+ "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12935246/",
+ "first": "a8/a83e8f132c5f/20261002T124909Z",
+ "gm_copies": [],
+ "keys": [
+  "plos-transition-zone-drought"
+ ],
+ "notes": [
+  "0196-communal-wells-ido.drawing.notes.html",
+  "0196-communal-wells-ido.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "a8/a83e8f132c5f/20261002T181140Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "415ff807abb2fd49ce840d67bf14cb4d647e78afa9ab115c2b2dd8c8614928dd",
+ "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12935246/"
+}

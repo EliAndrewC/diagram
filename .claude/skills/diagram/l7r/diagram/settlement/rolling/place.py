@@ -198,19 +198,22 @@ class PlacerMixin:
         (`_bundle_geom`'s bbox) - against the site boundary at its nine points and against the placed boxes
         (`_envelope_blocked`). Only when the envelope fits are the parts inside it judged - the rules that read the
         PARTS, asked once at that spot (`_parts_fit`: the wall rule against the paddy, the eave gap, the tread, the sun
-        corridors) - and among the configurations that fit, the sun rules choose (fewest shaded beds, then the
-        preference order: the sunny south corners, then the walls). The ground is not asked again for a part: every
-        part lies inside a box the ground already admitted. Four configurations at most, one rectangle each.
+        corridors, the corridor to the access tree, the wood share) - and among the configurations that fit, the sun rules
+        choose (fewest shaded beds, then the preference order: the sunny south corners, then the walls). The envelope's
+        nine points clear the ground for every part; only what they can miss is asked of a part exactly (`_parts_fit`: the
+        yard and fixtures off the paddy, the beds off the ditches). Four configurations at most, one rectangle each.
 
         WHAT THIS REPLACES, measured (specs/227 research R1): a spiral of up to 73 offsets with the full battery at
         each, then two 2 px slides - toward the paddy and along the neighbors - re-running the battery at every
         step: 26-60 positions and 100-220 rectangles per call, 70-85% of them on calls that failed outright because
         a house-sized pre-test had passed a seat the whole homestead could not use. The slide had no recorded
         reason (commit ed0e884e): it stepped because the stop was whichever of eight rules fired first. Now the
-        seat arrives at its standoff and its pitch (`_front_row_from_chains`), and the one move a call may make is
-        COMPUTED: an envelope overlapping exactly one placed box is shifted once by the measured overlap, away from
-        that neighbor, and tested once more (the GM: *"measuring the distance to the neighbor and then moving
-        however much the correct amount is"*). Anything else is refused and the proposer offers the next seat."""
+        seat arrives where its proposer computed it - a grown seat where the two homesteads' footprints part
+        (`growth.seat_toward`, feature 308) - and the one move a call may make is COMPUTED: an envelope overlapping exactly
+        one placed box is shifted once by the measured overlap, away from that neighbor, and tested once more (the GM:
+        *"measuring the distance to the neighbor and then moving however much the correct amount is"*) - never nearer a
+        grown seat's source than the growth's distance (`growth.keeps_its_distance`). Anything else is refused and the
+        proposer offers the next seat."""
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
         # open ground of most seats - every configuration's box fits inside it and no other rectangle is tested; the

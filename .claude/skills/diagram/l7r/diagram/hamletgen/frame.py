@@ -82,8 +82,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     hamlet's senior farmer, answering to the village headman). `place_kosatsuba` sites it itself,
     deterministically, from the same route records the validator reads.
 
-    IT RUNS LAST - stage 17 of 17, after the woods, the ground cover, the crop and the title (GM
-    2026-08-29). This docstring used to say the opposite, and the reason it gave was real at the time:
+    IT IS THE LAST FEATURE STAGE - after the woods, the ground cover, the crop and the title, with only the label phase
+    (`stage_labels`) after it (GM 2026-08-29). This docstring used to say the opposite, and the reason it gave was real at the time:
     sited after the cover it "silently found nowhere to go on one cohort map in six". What made that
     true was the board AVOIDING the woods - it needed a clear verge, and by then there was none. The
     board no longer avoids anything: its `village_grove` keep-out is retired and it may stand under a
@@ -190,8 +190,9 @@ def waterward_to_the_frame(s: Settlement) -> None:
     edge is scattered too (`marsh`, with every keep-out it honors) and joined to the strip's record, so the reed fringe
     runs off the picture rather than stopping in it - a lake with a ruled edge. Here, because the strip is laid at the
     seat and the view is not final until the title has grown its band; the band depth stays as feature 150 T55 set it,
-    and only the ground a view actually shows is added. A strip already reaching the edge is untouched; the extension is
-    one ground with its strip (`unary_union`), or its own record where the two cannot join."""
+    and only the ground a view actually shows is added - in practice only where the title's band grew the view, since the
+    view otherwise stops at the strip (`to_the_strips`). A strip already reaching the edge is untouched; the extension is
+    always one ground and one record with its strip (`unary_union`)."""
     from shapely.geometry import Polygon  # noqa: PLC0415 - bound on first use
     from shapely.ops import unary_union  # noqa: PLC0415
 

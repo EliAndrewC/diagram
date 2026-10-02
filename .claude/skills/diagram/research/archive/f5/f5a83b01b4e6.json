@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T18:12:53+00:00",
+ "final_url": "https://zhuanlan.zhihu.com/p/660442182",
+ "first": "f5/f5a83b01b4e6/20261002T163137Z",
+ "gm_copies": [],
+ "keys": [
+  "liufang-yamen"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "f5/f5a83b01b4e6/20261002T181252Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "d1240a887b0fa52589f637fe0978397fb99152424c7d11a99d3d52bc28d0f5e5",
+ "url": "https://zhuanlan.zhihu.com/p/660442182"
+}

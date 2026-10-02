@@ -394,8 +394,9 @@ def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
 def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
     """The corridor this homestead would be admitted with: from a dooryard door to the first of the tree's nearest points
     that a clear strip reaches (`corridor_clear`) - straight, or, where the tree lies behind the house, from a flank door
-    carried past the gable first (`round_the_gable`), two legs. None when no target is clear - the seat is refused (the ONE
-    predicate the placer reads and its test reads).
+    carried past the gable first (`round_the_gable`), two legs, or - on a tree that routes (`AccessTree.routed`, the
+    nucleated seating's) - routed round what stands (`route.routed_corridors`), at most `ROUTE_LEGS` legs. None when none
+    of these is admitted - the seat is refused (the ONE predicate the placer reads and its test reads).
 
     THE SEARCH IS SHARED BY THE HOMESTEADS THAT SHARE ITS HOUSE AND YARD, while nothing standing changes (`_standing_memo`):
     the four garden sides of one seat have the same doors, the same gable and the same house, and differ only in their

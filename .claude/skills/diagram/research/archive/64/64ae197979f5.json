@@ -1,0 +1,22 @@
+{
+ "captured": "2026-10-02T14:58:09+00:00",
+ "final_url": "https://repository.kulib.kyoto-u.ac.jp/server/api/core/bitstreams/3ffc3bcb-2b8a-4727-96b6-7c76dd5e6f0a/content",
+ "first": "64/64ae197979f5/20261002T145809Z",
+ "gm_copies": [
+  "gm-copies/13467581.2021.1972810.pdf"
+ ],
+ "keys": [
+  "wang-ochiai-2022"
+ ],
+ "notes": [
+  "0042-manure-heaps-and-compost-kyuhi.drawing.notes.html",
+  "0047-farm-privies-and-their-night-soil-benjo.drawing.notes.html",
+  "0047-farm-privies-and-their-night-soil-benjo.notes.html"
+ ],
+ "outcome": "archived",
+ "path": "64/64ae197979f5/20261002T145809Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "fb75f3c7269987cedff4fe836dc9373c03cb5eadecad425e2399227d050a49ac",
+ "url": "https://repository.kulib.kyoto-u.ac.jp/server/api/core/bitstreams/3ffc3bcb-2b8a-4727-96b6-7c76dd5e6f0a/content"
+}

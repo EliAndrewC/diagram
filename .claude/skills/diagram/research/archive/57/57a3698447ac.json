@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T14:58:02+00:00",
+ "final_url": "https://repository.geologyscience.ru/server/api/core/bitstreams/291d9d2d-5b7a-43a8-a7b5-55c436b4c931/content",
+ "first": "57/57a3698447ac/20261002T145802Z",
+ "gm_copies": [],
+ "keys": [
+  "lacey-regime"
+ ],
+ "notes": [
+  "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.notes.html",
+  "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.notes.html",
+  "0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.notes.html"
+ ],
+ "outcome": "archived",
+ "path": "57/57a3698447ac/20261002T145802Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "34138bd029c68e345a992c9d95f9d65841c111840648395b1fa12e06d947720a",
+ "url": "https://repository.geologyscience.ru/bitstream/handle/123456789/34521/Save_03.pdf?sequence=1"
+}

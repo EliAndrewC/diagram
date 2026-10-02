@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T13:48:27+00:00",
+ "final_url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/parish-danka-terauke-system-japan",
+ "first": "5c/5c7e9939fd31/20261002T134827Z",
+ "gm_copies": [],
+ "keys": [
+  "danka-terauke-encyclopedia"
+ ],
+ "notes": [
+  "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.notes.html",
+  "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "5c/5c7e9939fd31/20261002T134827Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "20a58b1a6922bcc083ed2088b19c40dc713e27dce09d8e30dc0ab8056c5b7b8c",
+ "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/parish-danka-terauke-system-japan"
+}

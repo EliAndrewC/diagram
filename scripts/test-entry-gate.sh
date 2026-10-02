@@ -26,7 +26,7 @@ restore() {
   # any bypass-log entry this suite created goes too, however it exited - the log is a record of real
   # bypasses and a test's fixtures have no business in it
   while [ "$(find "$BL" -name '*.json' | wc -l)" -gt "$BL_BEFORE" ]; do
-    rm -f "$(find "$BL" -name '*.json' -print0 | xargs -0 ls -t | head -1)"
+    rm -f "$(find "$BL" -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"   # GUARD_EDIT_OK: 2026-10-02 - no SIGPIPE'd ls across month folders
   done
 }
 trap restore EXIT
@@ -83,7 +83,7 @@ before=$(find "$BL" -name '*.json' | wc -l)
 ( cd "$ROOT" && RECORD_CHECKS_OK="a probe sentence, no check owed" "$GATE" >/dev/null 2>&1 ); ok $? 0 "a reason discharges it"
 after=$(find "$BL" -name '*.json' | wc -l)
 ok "$after" "$((before+1))" "the reason is recorded in dev/bypass-log/"
-grep -lq "a probe sentence, no check owed" "$BL"/*.json; ok $? 0 "the recorded entry carries the reason"
+grep -rlq --include='*.json' "a probe sentence, no check owed" "$BL"; ok $? 0 "the recorded entry carries the reason"   # GUARD_EDIT_OK: 2026-10-02 - the entry is in its month folder
 
 # 8. restoring the page goes quiet again - the guard tracks the tree, not a latch
 cp "$BAK" "$PAGE"

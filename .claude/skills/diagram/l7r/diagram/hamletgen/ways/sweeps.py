@@ -238,8 +238,9 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     while the check measured distance to any polyline - and it is fixed here rather than ledgered,
     per Principle XIV.
 
-    The link is a routed path, so it threads the steadings like any other; if no route exists the
-    component stays orphaned and the gate says so, which is the honest outcome."""
+    The link is a routed path, so it threads the steadings like any other; where no route exists the
+    component is left for `settle_the_web`, which drops it off the network and draws its houses a way, or refuses the
+    map (`WebRefused`)."""
     made = 0
     for _ in range(6):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -407,8 +408,9 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     of lane 8, sawada a 37.6 ft one that left lane 11 and died 11.4 ft from it (settlement-review, 152).
 
     TWO CLAUSES, AND THE SECOND IS WHAT MAKES THE FIRST SAFE. `shadowing_lane` asks whether both ends land
-    on one other way; this then asks whether dropping the lane would strand a farmhouse, using the same
-    reach figure the gate uses. A ring road that genuinely fronts its own houses answers yes to the first
+    on one other way (or whether the lane runs within 8 ft of another for half its length); this then asks whether
+    dropping the lane would strand a farmhouse, using the shared reach figure - and a drop that would split the network
+    is refused. A ring road that genuinely fronts its own houses answers yes to the first
     and no to the second and is kept. Measured on the two maps that motivated it, the pair selects exactly
     the two remnants and no other lane of the twenty-six.
 
@@ -469,8 +471,8 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
 def _sweep_steading_fouls(s: Settlement) -> int:
     """Pull back any lane end whose ink lands on a farmhouse, and empty what is left if nothing survives.
 
-    RUNS LAST, BESIDE `_sweep_debris` AND `_drop_end_nubs`, FOR THE SAME REASON THEY DO: every earlier pass
-    can leave one. The straggler pass routes clear of the steadings and the joiner brushes a fence at
+    RUNS LATE, BESIDE `_sweep_debris` AND `_drop_end_nubs`, FOR THE SAME REASON THEY DO: every earlier pass
+    can leave one. The joiner and the bridge pass route clear of the steadings and the joiner brushes a fence at
     `_TOUCH_GAP` on purpose, but the passes AFTER them - the touch, the smoothing's cuts, the nub drop -
     each rewrite a lane's ends without re-asking whether the result still clears a house. Measured
     2026-08-29 on main: sawada shipped an 8.6 ft two-point stub 2 ft inside the farmhouse at (1826, 2438)
@@ -512,7 +514,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
 
 
 def _drop_end_nubs(s: Settlement, hard: Sequence[Poly] = ()) -> int:
-    """`drop_end_nubs` over the settlement's lanes, re-inking each one it changes. Runs LAST, beside
+    """`drop_end_nubs` over the settlement's lanes, re-inking each one it changes. Runs late, beside
     `_sweep_debris`, for the same reason: every earlier pass can leave one."""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
@@ -740,8 +742,8 @@ def _sweep_debris(s: Settlement) -> int:
     """Drop a lane the passes have whittled below `_WEB_MIN_FT` and left standing on its own.
 
     THE DEBRIS RULE WAS APPLIED ONCE, AT DRAW TIME, AND EVERY LATER PASS CAN SHORTEN A LANE (feature
-    134 T50, 2026-08-28). `draw_web_lane` refuses to draw anything under `_WEB_MIN_FT` - 20 ft of
-    tread fronts nobody and reads as a speck of clipping debris - but after it, a trim pulls an end
+    134 T50, 2026-08-28). `_draw_web` refuses a run under `_WEB_MIN_FT` (30 ft) that brings no house within reach - a
+    join link is exempt - because such a tread fronts nobody and reads as a speck of clipping debris; but after it, a trim pulls an end
     back, a hairpin cut takes an arm, `_stop_at_network` cuts a link at the first way it meets. None
     of them re-asks whether what is left is still a lane, so a fragment can be whittled to under the
     minimum and kept. Measured on tripwire seed 27: a 20.5 ft two-point stub at (237, 1571) standing

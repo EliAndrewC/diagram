@@ -43,9 +43,9 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     author picks a number, looks at the render, and adjusts; Ikegami's 1150 is such a number, and it
     lands 24% under the acreage its own docstring asks for.
 
-    A script does not have to guess. `carve_comb` is pure and deterministic, so this bisects a
+    A script does not have to guess. `carve_comb` is pure and deterministic, so this searches a
     single SIZE multiplier - applied to the fall length AND both canal lengths together, so the fan
-    scales without changing shape - until the drawn plot area is within `tolerance` of the target.
+    scales without changing shape - across the fan's aspects, until the planted area is within `tolerance` of the target.
     Returns the best net found that is legal and lands the acreage band (`fan_admissible`); where the widened search
     finds none, the site is refused (`FieldRefused`, feature 287) - never the closest miss.
 
@@ -58,9 +58,10 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     and three shape operations. The best carve is kept and `finish_comb` runs once on it.
 
     The multiplier is bracketed rather than solved because acreage is monotone in it but stepwise:
-    a small change can add or drop a whole plot row, so the curve has small flats and the bisection
-    is on a monotone-but-lumpy function. Nine rounds resolves the multiplier to ~0.3%, far finer
-    than one plot row; the cost is the carves (specs/220 research R2 has the measured figure)."""
+    a small change can add or drop a whole plot row, so the curve has small flats. Each round predicts the
+    multiplier from the carves so far (a power law) within a narrowing bracket; the search stops at the first legal
+    fan within `tolerance` (6%), or once the bracket is narrower than one plot row (0.03). The cost is the carves
+    (specs/220 research R2 has the measured figure)."""
     best: tuple[tuple[bool, float], CombCarve] | None = None
     # THE ASPECT IS PART OF THE SEARCH, not just a roll. A fan's legality - whether its supply canal
     # dies among the plots, whether its collector folds back on itself - depends on its SHAPE as much

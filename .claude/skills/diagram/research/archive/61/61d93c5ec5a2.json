@@ -1,0 +1,21 @@
+{
+ "captured": "2026-10-02T12:57:48+00:00",
+ "final_url": "https://www.visitbeijing.com.cn/article/47QrmalSb31",
+ "first": "61/61d93c5ec5a2/20261002T125748Z",
+ "gm_copies": [],
+ "keys": [
+  "jimingyi-visitbeijing"
+ ],
+ "notes": [
+  "0186-lodgings-for-lords-and-officials-on-the-road-honjin.drawing.notes.html",
+  "0186-lodgings-for-lords-and-officials-on-the-road-honjin.notes.html",
+  "0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.drawing.notes.html",
+  "0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "61/61d93c5ec5a2/20261002T125748Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "68159bd15fee84594794d2c5ad6b79a3f093b14e373ac725020197c56afa1961",
+ "url": "https://www.visitbeijing.com.cn/article/47QrmalSb31"
+}

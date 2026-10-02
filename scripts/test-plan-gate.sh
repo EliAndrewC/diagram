@@ -53,7 +53,7 @@ ok "$(run)" 1 "a BLOCKED review refuses"
 # 8. the escape must SAY WHY, and a reason discharges it and is recorded in the repository's bypass log
 ok "$(run_with x)" 1 "a bare token is refused"
 ok "$(run_with 'a superseded plan nobody will implement')" 0 "a reason discharges it"
-ls "$FIX/repo/.claude/skills/diagram/dev/bypass-log/"*.json >/dev/null 2>&1; ok $? 0 "the reason lands in dev/bypass-log/"
+[ -n "$(find "$FIX/repo/.claude/skills/diagram/dev/bypass-log/" -name '*.json' 2>/dev/null)" ]; ok $? 0 "the reason lands in dev/bypass-log/"   # GUARD_EDIT_OK: 2026-10-02 - in its month folder now
 grep -lq '"rule": "plan-review-ok"' "$GUARD_LOG_DIR"/*.json 2>/dev/null; ok $? 0 "the escape is recorded"
 
 printf 'test-plan-gate: %d passed, %d failed\n' "$pass" "$fail"

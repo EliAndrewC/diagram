@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T18:10:23+00:00",
+ "final_url": "https://baike.baidu.com/item/%E6%9D%91%E5%BA%99/3494869",
+ "first": "7f/7fe7f58f0f08/20261002T124400Z",
+ "gm_copies": [],
+ "keys": [
+  "cunmiao-baike"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "7f/7fe7f58f0f08/20261002T181022Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "a3cc42541a0d47cfc65f57db72f8fdaaf0df28e4152f89e6f905e964205f68f1",
+ "url": "https://baike.baidu.com/item/%E6%9D%91%E5%BA%99/3494869"
+}

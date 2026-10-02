@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T15:34:29+00:00",
+ "final_url": "https://web.archive.org/web/20250409163215id_/https://www.gujianchina.cn/news/show-5949.html",
+ "first": "fa/fa07710c9acb/20261002T153428Z",
+ "gm_copies": [],
+ "keys": [
+  "gujianchina-taipinggang"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "fa/fa07710c9acb/20261002T153428Z",
+ "reason": "HTTP 520",
+ "revision": "",
+ "sha256": "ea4045a08e1e2984474d932a08f3953bfa661d8ac6af8e6ad7632fac60068077",
+ "url": "https://www.gujianchina.cn/news/show-5949.html"
+}

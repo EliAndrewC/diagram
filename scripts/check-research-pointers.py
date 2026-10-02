@@ -42,8 +42,9 @@ OLD_FRAGMENT = re.compile(r"(?<![\w.-])research/((?:[a-z][a-z-]*/)+)(\d{3}-[^\s\
 #: A retired page directory, and a retired built page.
 OLD_DIRECTORY = re.compile(r"(?<![\w.-])research/((?:[a-z][a-z-]*/)*[a-z][a-z-]*)/(?![\w.-])")  # a directory, not a path into a file
 OLD_PAGE = re.compile(r"(?<![\w.-])research/(citations/)?((?:[a-z][a-z-]*/)*[A-Za-z][A-Za-z-]*)\.html(?:#[^\s\"'`)\]<>,;|]+)?(?![\w/-])")
-#: What lives under `research/` and is not a retired form.
-CURRENT_DIRS = ("questions", "sources", "assets", "site")
+#: What lives under `research/` and is not a retired form. `archive/` is the source archive's manifest (feature 309).
+# GUARD_EDIT_OK: feature 309 - a new current directory, the archive manifest; nothing loosened for the retired forms.
+CURRENT_DIRS = ("questions", "sources", "assets", "site", "archive")
 #: Files the check does not read: the GM's own words (`request.md`), a README (the GM's to write; its stale references
 #: are listed in `specs/303-research-organization/readme-correction-offered.md` until the GM rules on them), and the
 #: mapping and the generated mapping table.

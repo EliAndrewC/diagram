@@ -90,8 +90,9 @@ STY_RESERVE_REACH_FT = (
 def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | None:
     """THE STY'S SEAT, RESERVED BEFORE THE HOUSES (feature 287, water W50): a dike-pond hamlet keeps at least one sty, and the
     homesteads seated before `stage_pond_stock` could take every near bank seat. Once `stage_seat` has decided the flank,
-    the grow-out pond nearest the seat's center gives its nearest bank seat on the near half (`sty_on_near_half`) that
-    clears the sluices (`pond_fixture_fits`), and a disc about it - the sty's own reach plus the largest footprint's
+    the grow-out ponds are walked nearest the seat's center first, and the first with a bank seat on its near half
+    (`sty_on_near_half`) that clears the sluices (`pond_fixture_fits`) and stands within reach of the seat (`sty_in_reach`)
+    gives it; a disc about it - the sty's own reach plus the largest footprint's
     half-diagonal (`STY_RESERVE_REACH_FT`) - goes into `block_polys`, which every homestead placer refuses. Recorded on
     the settlement for `stage_pond_stock`; returns (seat, rotation, pond), or None where the hamlet keeps no grow-out pond
     (no sty is owed). A hamlet with grow-out ponds and no seat on any of them is refused, naming it (`StyRefused`, feature
@@ -139,7 +140,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     """Pig sties on the ponds.
 
     A dike-pond hamlet's livestock fixture (feature 150 A3): pig sties on the dikes of the grow-out ponds nearest
-    the houses. It runs after the appurtenances because each sty is sited relative to the houses as placed, and
+    the houses. It runs after the appurtenances because each sty is sited relative to the houses as placed - the first
+    taking the seat reserved for it before the houses (`reserve_sty_seat`) wherever that still qualifies - and
     before the lane web because it reserves ground the web must thread around, like the byres and wells before it.
     Nothing on a valley hamlet, hence the card. The duck pen this stage once drew is retired (269 B32; the module
     docstring).

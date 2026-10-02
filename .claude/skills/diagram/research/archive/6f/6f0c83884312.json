@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T13:53:37+00:00",
+ "final_url": "https://www.gz.gov.cn/zt/lmgzssst/content/post_10195754.html",
+ "first": "6f/6f0c83884312/20261002T135337Z",
+ "gm_copies": [],
+ "keys": [
+  "wanli-fishpond-summary"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "6f/6f0c83884312/20261002T135337Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "4168230a17828684a96d67cee2a9daab3ffedfd4838827b26e2d38d877bf5114",
+ "url": "https://www.gz.gov.cn/zt/lmgzssst/content/post_10195754.html"
+}

@@ -375,7 +375,8 @@ class BundleFitMixin:
 
         Returns None when the envelope stands clear; True when the ground refuses it (the canvas margin, the bounding
         ring, the site boundary through `_rect_blocked` - the nine-point boundary test when one is installed, the
-        old battery otherwise) or when two or more placed boxes overlap it; and the ONE placed box `(cx, cy, w, h)`
+        old battery otherwise), when a reserved access corridor runs through it (`AccessTree.covers_box`) or when two or
+        more placed boxes overlap it; and the ONE placed box `(cx, cy, w, h)`
         when that box alone overlaps it on clear ground, so the placer can make its single computed move. The
         placed-box margin is the 2 px `_bundle_side_fits` always kept."""
         self._seat_search["rects"] += 1
@@ -411,8 +412,12 @@ class BundleFitMixin:
 
     def _parts_fit(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
-        (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
-        yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
+        (feature 227): the field's reach and the household's water; no part over another household's reserved wood seat;
+        the yard's and the gardens' sun; the corridor from its door to the access tree (`access_corridor` - routed round
+        what stands where the tree routes); the house's wall rule against the paddy; no part across a stream; the exact
+        tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
+        ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its
+        share of the wood floor (`WoodShares.share`)."""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households

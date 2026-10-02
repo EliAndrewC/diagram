@@ -1,0 +1,155 @@
+{
+ "feature": "309-source-archive",
+ "plan_sha256": "ec8ffd771b4206354016a39f6cf4963fd27111a8ae3259c62152949d486a4e1d",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "TC-manifest line",
+   "summary": "The manifest holds every cited URL and any page archived at citation (FR-014)",
+   "class": "within",
+   "why": "FR-014 and the Key Entities line as amended."
+  },
+  {
+   "id": "TC-census-registry",
+   "summary": "The registry census takes every URL in a registry entry, its HTML comments included",
+   "class": "within",
+   "why": "Unchanged since the CLEAR record: FR-001 every URL in a registry entry."
+  },
+  {
+   "id": "TC-census-notes / D6",
+   "summary": "A footnote's cited URL is one a notes.html footnote links; comment URLs not taken as cited",
+   "class": "within",
+   "why": "Unchanged: FR-001 says every URL a footnote LINKS; a page read and not cited is on the ledger, feature 312's (Amendment 2)."
+  },
+  {
+   "id": "D1",
+   "summary": "Whole page as a Chromium MHTML snapshot",
+   "class": "within",
+   "why": "FR-002."
+  },
+  {
+   "id": "D2",
+   "summary": "Live fetch first; DEAD -> Wayback, GM copy, unreachable; REFUSED -> GM copy, Wayback, partial; GM files copied to gm-copies/ regardless",
+   "class": "within",
+   "why": "Unchanged order (US1 scenario 3, Edge Cases, FR-012); only the destination moved to gm-copies/, which FR-003 and FR-013 name."
+  },
+  {
+   "id": "D3",
+   "summary": "One manifest JSON per URL: ~2,100 for the cited URLs (2,108, measurement/coverage.txt), at most ~4,900 if feature 312 keeps every page read, sharded by D11",
+   "class": "within",
+   "why": "The manifest entity as amended (every cited URL plus the three pre-hold uncited rows); the 4,903 ceiling is now stated as conditional on 312, matching Amendment 2."
+  },
+  {
+   "id": "D4",
+   "summary": "Capture time is the version directory",
+   "class": "within",
+   "why": "FR-009."
+  },
+  {
+   "id": "D5",
+   "summary": "Reserve never blocks; failed push writes pending-upload, 7-day grace",
+   "class": "within",
+   "why": "FR-006."
+  },
+  {
+   "id": "D7",
+   "summary": "Revision id from wgRevisionId",
+   "class": "within",
+   "why": "FR-002."
+  },
+  {
+   "id": "D8",
+   "summary": "Politeness: one request per host, 1 s apart, one retry on 429/503",
+   "class": "within",
+   "why": "Implementation of FR-004."
+  },
+  {
+   "id": "D9",
+   "summary": "Backfill pushes every 200 MB",
+   "class": "within",
+   "why": "FR-004, FR-008."
+  },
+  {
+   "id": "D10",
+   "summary": "REFUSED / DEAD classification",
+   "class": "within",
+   "why": "Unchanged; every failure lands in a spec-named order."
+  },
+  {
+   "id": "Layout (rewritten, D11)",
+   "summary": "<id[:2]>/<id>/<time>/ captures, capture.json naming keys and notes, gm-copies/<file> with a PDF's .txt, shared URL archived once, >95 MB split",
+   "class": "within",
+   "why": "FR-003 as amended names exactly <id[:2]>/<id>/ and gm-copies/; the dropped <key>/ and notes/ directories are what the sharding replaces."
+  },
+  {
+   "id": "D11",
+   "summary": "Shard captures and manifest rows by the URL id's first two hex digits; GM copies flat in gm-copies/; one-time relayout by git mv",
+   "class": "within",
+   "why": "FR-003 (Amendment 1) and its Decisions row, word for word; the GM asked for a few hundred entries a directory, and 256 buckets of ~19 and a 40-entry gm-copies/ meet it."
+  },
+  {
+   "id": "D12-inbox",
+   "summary": "Every inbox entry but the two GM lists copied to gm-copies/, pushed, deleted only where origin/main's tree lists it after the push; a failed push deletes nothing; the table records archived",
+   "class": "within",
+   "why": "FR-013 and US4 scenarios 1, 3, 4: a successful push is GitHub accepting the tree, and ls-tree of the pushed ref confirms the path in it."
+  },
+  {
+   "id": "D12-keys",
+   "summary": "A NEW inbox file (not in gm-copies.json) waits in the inbox, listed WAITING, until the session reads it and gives its keys (MATCH='<file>=<key>') or judges it to copy no cited source (NONE='<file>', keys []); then it is archived, pushed and deleted",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item is cleared: no new file is now archived keyless by default. FR-012 requires every copy of a cited source to be matched to its key, and FR-013 that it be archived with its key's rows naming it, keys empty only where it copies none; matching before archiving is the order those two requirements together impose. The wait is not a carve-out from FR-013: the file is still archived and deleted once matched, it stays visible in the inbox while it waits (the inbox's purpose: what is there is unprocessed), and the match step has a trigger - research/CLAUDE.md and page-session-rules.md both put it in the archive-inbox step at the start of every research pass. process_inbox and the Makefile target carry it."
+  },
+  {
+   "id": "D13",
+   "summary": "Archived at citation: archive_reads only from source-outcome on a cited:<key> outcome (reserve URL= already archives); source-pages archives nothing; a URL with a row not recaptured; the consulted operation kept unrun for 312; the three pre-hold uncited captures left for 312's filter",
+   "class": "narrowing",
+   "why": "Narrows Amendment 1's 'every page we read', judged per class against request.md. (a) The backfill of earlier uncited reads held: the GM's own words, 'hold up on the backfill', and the uncited works moved to 'its own separate feature'. (b) Forward archive-on-read of uncited pages stopped: implied by the GM's words in Amendment 2 - the uncited works' filtering and write-ups are the new feature, and things judged not valuable are recorded 'but which we don't bother to store the full copy of'; archiving every read meanwhile would store unfiltered copies git cannot later take back, defeating that purpose. The read is still on the ledger and the page cache, so 312 loses nothing. (c) Cited pages still archived by every citing route (reserve, source-outcome cited:, make archive + the record refusal for footnote/entry URLs): FR-001's request untouched. (d) Three pre-hold captures kept: status quo, the open question 312's request names; not a carve-out. (e) consulted op kept unrun: honors \"hold\"; its make help line, docs/make-targets.html and the _archive_ops.py module text now all say it is HELD, unrun, for feature 312 (commit 5f3bc7ce0), and archive-find's nothing-held message and the urls usage line name only the cited:<key> route (51e39b4be, f469d5de6).",
+   "ruling": "LEGITIMATE"
+  },
+  {
+   "id": "D14",
+   "summary": "make archive-find by URL, key or terms over the rows and archived texts; exit 1 saying to go to the web",
+   "class": "within",
+   "why": "FR-015 and US6."
+  },
+  {
+   "id": "D15-render",
+   "summary": "A render that fails is retried once; a page that still will not render keeps its served HTML and text as partial",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows FR-002's whole page for the pages concerned, but the whole page is physically unavailable after two renders of a page that was fetched, the outcome says partial rather than archived, the served bytes FR-002 asks for first are kept, sync_gm_copies upgrades the row where a GM copy exists, and FR-009's later capture can complete it. Not a case FR-005 covers (the live page WAS fetched)."
+  },
+  {
+   "id": "D15-ops",
+   "summary": "Browser restarted every 25 URLs, one lane under memory pressure, gm_copies raises on a malformed table, GM=1 re-sync of 18 rows",
+   "class": "within",
+   "why": "Defect fixes found in the work (constitution XIV); no requested behavior changed."
+  },
+  {
+   "id": "D16",
+   "summary": "_archive_ops.py holds the inbox, archiving at citation and the held consulted run, the lookup and the relayout",
+   "class": "within",
+   "why": "File organization; no fidelity content. Its wording now agrees with D13 (5f3bc7ce0)."
+  },
+  {
+   "id": "Docs list",
+   "summary": "CLAUDE.md, research-record-rules.md, page-session-rules.md, source-reader, quote-check, plus research/CLAUDE.md and research-doctrine.md",
+   "class": "within",
+   "why": "FR-016's six files are all named (research-record-rules.md is an extra home of the same passage, enforcing FR-016)."
+  },
+  {
+   "id": "FR-012 match section / Summary (rewritten)",
+   "summary": "The 7 unmatched files are now 'archived all the same under Amendment 1 (FR-013)'; the Summary says every academic-sources file is archived, each matched to the key it copies",
+   "class": "within",
+   "why": "Round 1's stale lines are rewritten and now agree with FR-013 (the 7 archived and deleted) and FR-012."
+  },
+  {
+   "id": "Project Structure",
+   "summary": "Lists _archive_ops.py as the inbox, archiving at citation (urls), the held consulted run, archive-find and the relayout, and _sources.py archive_reads as handing a cited outcome's page to the archiver (D13)",
+   "class": "within",
+   "why": "Not a decision the plan makes anew; rewritten in 5f3bc7ce0 and now agrees with D13 (_source_pages.py dropped from the archive_reads line, matching the code: only _sources.py outcome on cited: calls it). No narrowing."
+  }
+ ],
+ "verdict": "CLEAR"
+}

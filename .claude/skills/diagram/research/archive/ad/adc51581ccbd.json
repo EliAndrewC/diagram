@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T14:38:02+00:00",
+ "final_url": "https://web.archive.org/web/20220704091253id_/https://japantoday.com/category/features/travel/kitsuki-castle-town-on-the-sea",
+ "first": "ad/adc51581ccbd/20261002T143802Z",
+ "gm_copies": [],
+ "keys": [
+  "kitsuki-castle"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "ad/adc51581ccbd/20261002T143802Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "7e31023712d05adc2f545fd0e59b836cec9b3004c7650bbd60bf677a727dd93c",
+ "url": "https://japantoday.com/category/features/travel/kitsuki-castle-town-on-the-sea"
+}

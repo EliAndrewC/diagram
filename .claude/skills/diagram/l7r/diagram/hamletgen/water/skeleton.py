@@ -15,15 +15,16 @@ from ..plan import SitePlan
 
 
 def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
-    """Settle the drainage bearing and the land's fall BEFORE anything is placed.
+    """Record the drainage bearing and the land's fall BEFORE anything is placed.
 
     This is first because the skill says it is first, at every tier: "before a single feature is
     placed, decide the map's drainage bearing and, separately, the land's fall". Everything
     downstream reads them - which end of the fan is the head, which margin the cluster can stand on,
-    which way the drain runs, where the marsh is allowed to be.
+    which way the drain runs, where the marsh is allowed to be. They were settled by `plan_site`, which
+    `generate` runs before the first stage; this stage writes them to the manifest and pins the knobs the
+    plan resolved.
 
     Steps:
-        l7r.diagram.hamletgen.plan.plan_site
         l7r.diagram.settlement.Settlement.pin_knob
     """
     # WHICH MAPS HAVE A BROOK AT ALL: the comb archetypes tap a stream (`stage_field` -> `feed_brook`), the polders

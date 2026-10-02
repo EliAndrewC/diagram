@@ -29,6 +29,7 @@ CARRIED = {
     },
     "Research": {
         "A question about how a place was built": "Search before deciding",
+        "The search pass looks in the ARCHIVE before the web": "make archive-find URL=<u>",
         "Where the research supports more than one form": "KNOB rolled per settlement",
         "Every rendering decision is recorded": "four classes",
         "Record the why of every research-driven rule": "Record the why of every research-driven rule",

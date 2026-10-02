@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T14:06:12+00:00",
+ "final_url": "http://cn.chinagate.cn/product/2013-04/09/content_28487282.htm",
+ "first": "0d/0d38e7abd8a9/20261002T140612Z",
+ "gm_copies": [],
+ "keys": [
+  "chinagate-tongxiang"
+ ],
+ "notes": [
+  "0015-flower-growing-and-the-chrysanthemum-kiku.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "0d/0d38e7abd8a9/20261002T140612Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "48cccdf3ae93b281c972da9759b3fb58ad6eb08cfc3f6fb05fbdd433eb4edf4a",
+ "url": "http://cn.chinagate.cn/product/2013-04/09/content_28487282.htm"
+}

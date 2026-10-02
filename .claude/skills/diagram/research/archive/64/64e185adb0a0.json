@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T13:35:05+00:00",
+ "final_url": "https://k.sina.cn/article_6582636570_1885b101a00100t9j4.html",
+ "first": "64/64e185adb0a0/20261002T133505Z",
+ "gm_copies": [],
+ "keys": [
+  "sina-neixiang-xianya"
+ ],
+ "notes": [
+  "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.notes.html",
+  "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.notes.html",
+  "0167-offices-of-the-six-ministries-liubu.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "64/64e185adb0a0/20261002T133505Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "54c98fa061b4d7b9a75b0e3d3dddd3683594bd691f8bbc0012d267e925300464",
+ "url": "https://k.sina.cn/article_6582636570_1885b101a00100t9j4.html"
+}

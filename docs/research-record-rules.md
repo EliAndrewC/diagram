@@ -33,8 +33,10 @@ assembled `assets/glossary.json` and the derived `research/assets/glossary.js` a
 `make glossary` and never hand-edited; `research/assets/glossary-variants.txt` is the derived index -
 one tab-separated line per variant, and the term that owns it.
 
-    ls l7r/diagram/interactive/assets/glossary/       the term list - the filenames ARE it
-    ls l7r/diagram/interactive/assets/glossary/*towpath*   one term, by its word
+    grep -i '^towpath' research/assets/glossary-variants.txt   is this word defined, and by which term
+    ls l7r/diagram/interactive/assets/glossary/*-towpath.json   is it a term itself (the filenames are the terms)
+
+Never list the whole folder: 2,202 names is about 30 KB of context, and every answer above is one line.
 
 A word in prose is usually a VARIANT, and only the index maps it to its term - a grep over the term
 files answers with candidates, because a definition may mention a word another term owns. Adding a term
@@ -287,7 +289,8 @@ footnotes, every one without a recorded SEEN verdict re-fetched - is `specs/195-
 **A page the container cannot fetch is not thereby unreadable.** mdpi.com, Wiley, Springer, ScienceDirect and others
 refuse automated fetches while serving a person; when a source matters, the GM downloads it (2026-09-07: *"I can try to
 download them myself as a human and then save them somewhere that you can see them"*) into `l7r/academic-sources/`,
-mounted here at `/host-l7r-repo/academic-sources/`. The session reads the copy (an Opus reader per paper, passages
+mounted here at `/host-l7r-repo/academic-sources/`, and `make archive-inbox` moves it into the source archive once it is
+pushed (feature 309; `make archive-find` names the copy). The session reads the copy (an Opus reader per paper, passages
 verbatim with page or section), the footnote links the PUBLIC page and says the copy was read, and the quote-check runs
 against the copy. A paywalled full text whose abstract is public is cited for the abstract's words only. **Whether a page is public is the GM's
 test, not the container's**: the GM has no academic subscription, so a page they can open is open to anyone (GM 2026-09-07: *"if it is

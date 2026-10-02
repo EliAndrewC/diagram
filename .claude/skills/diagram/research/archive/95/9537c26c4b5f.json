@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T14:30:04+00:00",
+ "final_url": "https://dlc.dlib.indiana.edu/dlcrest/api/core/bitstreams/9ab5e34b-064b-4fd2-b16f-b397a9170834/content",
+ "first": "95/9537c26c4b5f/20261002T143004Z",
+ "gm_copies": [],
+ "keys": [
+  "endo-2013-kabu-ido"
+ ],
+ "notes": [
+  "0196-communal-wells-ido.notes.html"
+ ],
+ "outcome": "archived",
+ "path": "95/9537c26c4b5f/20261002T143004Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "6a5c717c5b81de5401619b73cfc4e433aa15f22f270e4702c304cb1d42325788",
+ "url": "https://dlc.dlib.indiana.edu/dlc/bitstream/handle/10535/8876/ENDO_0894.pdf"
+}

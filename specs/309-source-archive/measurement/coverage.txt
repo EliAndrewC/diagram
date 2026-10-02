@@ -1,0 +1,63 @@
+# SC-001 coverage, observed 2026-10-02 after the cited backfill (method: make archive-sources REPORT=1)
+archive coverage: 2108 cited URL(s)
+  archived                    2017
+  archived-earlier-snapshot     19
+  archived-gm-copy              16
+  partial                       42
+  unreachable                   14
+  partial     http://web.archive.org/web/20230624043456/http://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm - HTTP 429
+  unreachable https://www.geog.com.cn/article/2017/1007-6301/1007-6301-36-9-1067.shtml - HTTP 500
+  partial     https://doi.org/10.2307/2050412 - HTTP 403
+  partial     https://www.visitbeijing.com.cn/article/47QkXx9caZ2 - the page would not render whole: its served HTML and text are kept
+  unreachable https://xbgjxt.swu.edu.cn/data/article/preview-pdf?doi=10.13718/j.cnki.xdsk.2016.05.023 - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://k.sina.cn/article_6582636570_1885b101a00100t9j4.html - the page would not render whole: its served HTML and text are kept
+  unreachable https://www.nwcg.gov/publications/pms437/crown-fire/spotting-fire-behavior - an empty response
+  partial     https://doi.org/10.1080/23729988.2019.1639463 - HTTP 403
+  partial     https://zhuanlan.zhihu.com/p/660442182 - HTTP 403
+  partial     https://www.cambridge.org/core/books/animals-through-chinese-history/where-did-the-animals-go/E281204414087F0A9ACCDDCEF5358C08 - the page would not render whole: its served HTML and text are kept
+  unreachable https://dfz.gd.gov.cn/index/dqyj/content/post_4237091.html - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://doi.org/10.1179/014703703788762953 - HTTP 403
+  partial     https://english.henan.gov.cn/2023/11-23/2853070.html - the page would not render whole: its served HTML and text are kept
+  partial     https://doi.org/10.1179/pma.1996.002 - HTTP 403
+  partial     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7048742/ - HTTP 403
+  unreachable http://www.irripro.net/en/nd.jsp?id=113 - HTTP 404
+  partial     https://www.sciencedirect.com/science/article/abs/pii/S1001627920300706 - HTTP 403
+  partial     https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/ - HTTP 403
+  partial     https://pmc.ncbi.nlm.nih.gov/articles/PMC7898781/ - HTTP 403
+  partial     https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706 - HTTP 403
+  unreachable https://gzdaily.dayoo.com/h5/html5/2023-07/05/content_871_829964.htm - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://www.gz.gov.cn/zt/lmgzssst/content/post_10195754.html - the page would not render whole: its served HTML and text are kept
+  partial     https://www.ecoagri.ac.cn/article/doi/10.12357/cjea.20240340?viewType=HTML - the page would not render whole: its served HTML and text are kept
+  partial     https://journals.sagepub.com/doi/abs/10.1177/036319909502000302 - HTTP 403
+  unreachable https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md - HTTP 503
+  unreachable https://sxyk.henu.edu.cn/info/1014/7333.htm - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://pmc.ncbi.nlm.nih.gov/articles/PMC12935246/ - HTTP 403
+  unreachable http://nyncj.gz.gov.cn/attachment/8/8037/8037125/10854794.pdf - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://pmc.ncbi.nlm.nih.gov/articles/PMC6459177/ - HTTP 403
+  partial     https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/parish-danka-terauke-system-japan - the page would not render whole: its served HTML and text are kept
+  partial     https://www.suzhou.gov.cn/szwgjyhsj/yhsjjbgk/202110/3ad7341d62c24548bd075701ca6bbeda.shtml - the page would not render whole: its served HTML and text are kept
+  unreachable https://www.jgcm.ac.cn/jah/cn/article/pdf/preview/10.12329/20969368.2026.02011.pdf - APIRequestContext.get: Timeout 60000ms exceeded.
+  unreachable https://github.com/EliAndrewC/l7r/blob/master/setting/budgets.md - HTTP 503
+  partial     https://baike.baidu.com/item/%E6%9D%91%E5%BA%99/3494869 - HTTP 403
+  partial     https://www.sagatv.co.jp/kachiplus/media/archives/903653 - the page would not render whole: its served HTML and text are kept
+  partial     https://www.mapple.net/article/48327/ - the page would not render whole: its served HTML and text are kept
+  partial     https://museumcollection.tokyo/works/6531424/ - HTTP 403
+  partial     https://pfaf.org/user/plant.aspx?latinname=Diospyros+kaki - HTTP 403
+  partial     https://whc.unesco.org/en/list/1002/ - HTTP 403
+  partial     http://cn.chinagate.cn/product/2013-04/09/content_28487282.htm - the page would not render whole: its served HTML and text are kept
+  partial     https://www.visitbeijing.com.cn/article/47QrmalSb31 - the page would not render whole: its served HTML and text are kept
+  partial     https://www.visitbeijing.com.cn/article/47QoO7ycoec - the page would not render whole: its served HTML and text are kept
+  unreachable https://archina.com/index.php?a=show&g=portal&id=4563&m=index - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://l5r.fandom.com/wiki/Seid%C5%8D - HTTP 403
+  partial     https://l5r.fandom.com/wiki/Shinden_(TCG) - HTTP 403
+  partial     https://www.gz.gov.cn/zlgz/whgz/content/post_8754576.html - the page would not render whole: its served HTML and text are kept
+  partial     https://soka.repo.nii.ac.jp/record/35917/files/sokahogaku28_1_2.pdf - HTTP 406
+  partial     https://www.sohu.com/a/647521251_121607363 - the page would not render whole: its served HTML and text are kept
+  partial     https://kazusa.jpn.org/b/archives/2883 - the page would not render whole: its served HTML and text are kept
+  unreachable https://tabiiro.jp/leisure/s/200247-takayama-takayamajinya/ - HTTP 404
+  partial     https://culture.qianggen.net/2012/0222/22552.html - the page would not render whole: its served HTML and text are kept
+  partial     http://www.daj.suzhou.gov.cn/detail/135849.html - the page would not render whole: its served HTML and text are kept
+  unreachable https://blog.sina.com.cn/s/blog_4eebd24b0102z7hq.html - APIRequestContext.get: Timeout 60000ms exceeded.
+  partial     https://www.kemingbaike.com/baike/2024121325051.html - the page would not render whole: its served HTML and text are kept
+  partial     https://www.visitbeijing.com.cn/article/47QsCmrXIS9 - the page would not render whole: its served HTML and text are kept
+  partial     https://lyzz.visitbeijing.com.cn/news/detail?id=17810 - the page would not render whole: its served HTML and text are kept

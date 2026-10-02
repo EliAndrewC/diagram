@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T15:23:16+00:00",
+ "final_url": "https://www.cambridge.org/core/books/animals-through-chinese-history/where-did-the-animals-go/E281204414087F0A9ACCDDCEF5358C08",
+ "first": "13/13948b3feeb7/20261002T152316Z",
+ "gm_copies": [],
+ "keys": [
+  "cambridge-animals-china"
+ ],
+ "notes": [
+  "0045-chickens-and-chicken-coops.drawing.notes.html",
+  "0045-chickens-and-chicken-coops.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "13/13948b3feeb7/20261002T152316Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "63ad27a2da3293ecb11cd39490cead3c4dc4a8bbb573cce8b5d80d1ee7cb83d5",
+ "url": "https://www.cambridge.org/core/books/animals-through-chinese-history/where-did-the-animals-go/E281204414087F0A9ACCDDCEF5358C08"
+}

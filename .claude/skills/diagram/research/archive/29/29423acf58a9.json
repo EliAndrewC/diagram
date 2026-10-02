@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T14:13:42+00:00",
+ "final_url": "http://www.daj.suzhou.gov.cn/detail/135849.html",
+ "first": "29/29423acf58a9/20261002T141342Z",
+ "gm_copies": [],
+ "keys": [
+  "xiangcheng-yulince"
+ ],
+ "notes": [
+  "0022-parcels-and-bunds-inside-a-polder-aze.drawing.notes.html",
+  "0022-parcels-and-bunds-inside-a-polder-aze.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "29/29423acf58a9/20261002T141342Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "cd0d1481fa4e054a9e0d92268288a1147354590c52d07fdc21f269188fd928e1",
+ "url": "http://www.daj.suzhou.gov.cn/detail/135849.html"
+}

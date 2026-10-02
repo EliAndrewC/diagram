@@ -132,10 +132,12 @@ def test_a_write_session_s_eleventh_registry_key_is_refused_with_the_continuatio
     assert rp.session_keys(mirror, "sid-w") == 0
 
 
-def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, capsys) -> None:
+def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, capsys, monkeypatch) -> None:
     """Feature 288 FR-005 (SC-003): with URL= the registry stub names its pointer the way every entry does and the
     sources-consulted ledger marks it `cited:<key>` at once; without it the stub is empty, as before; a glossary term
-    takes no URL."""
+    takes no URL. And the new entry's URL is handed to the archiver (feature 309), here a recorder."""
+    archived = []
+    monkeypatch.setattr(rp, "archive_at_cite", lambda root, url, key: archived.append((url, key)) or 0)
     _mirror, a = _world(tmp_path)
     src = rp._sources()
     where = src.home(a)
@@ -148,6 +150,7 @@ def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, cap
     assert "KIND=registry only" in capsys.readouterr().err
     assert rp.main(["registry", "kyo-jawiki", "--root", str(a), "--url", "https://ja.wikipedia.org/wiki/Kyo"]) == 0
     assert src.read(where)[-1]["outcome"] == "cited:kyo-jawiki"
+    assert archived == [("https://ja.wikipedia.org/wiki/Kyo", "kyo-jawiki")]
 
 
 def test_a_question_takes_the_next_number_with_no_gap_and_a_stub_the_build_refuses_until_tagged(tmp_path) -> None:
@@ -181,3 +184,25 @@ def test_registry_tags_are_written_checked_and_refused_by_name(tmp_path, capsys)
     assert rp.main(["glossary", "a term", "--root", str(a), "--tags", "period=premodern"]) == 2
     assert "KIND=registry only" in capsys.readouterr().err
     assert rp.main(["registry", "good-one", "--root", str(a), "--tags", "period=timeless; region=general; kind=reference"]) == 0
+
+
+def test_a_registry_entry_reserved_with_its_url_is_archived_and_a_failure_never_blocks(tmp_path: pathlib.Path, capsys) -> None:
+    """Feature 309 FR-006: the archiver runs on the new entry's URL; a failure is reported with the retry, never raised."""
+    calls = []
+
+    class Done:
+        def __init__(self, code: int) -> None:
+            self.returncode = code
+
+    def runner(code: int):  # noqa: ANN202
+        def run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
+            calls.append((cmd, kw["cwd"]))
+            return Done(code)
+
+        return run
+
+    assert rp.archive_at_cite(tmp_path, "https://a.org/p", "a-key", runner(0)) == 0
+    cmd, cwd = calls[0]
+    assert cmd[1].endswith("_archive.py") and cmd[2:] == ["url", "https://a.org/p", "--key", "a-key"] and cwd == tmp_path
+    assert rp.archive_at_cite(tmp_path, "https://a.org/p", "a-key", runner(1)) == 1
+    assert "make archive URL='https://a.org/p' KEY=a-key" in capsys.readouterr().err

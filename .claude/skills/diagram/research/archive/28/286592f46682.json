@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T18:24:33+00:00",
+ "final_url": "",
+ "first": "",
+ "gm_copies": [],
+ "keys": [
+  "shixue-yuekan-louzeyuan"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://sxyk.henu.edu.cn/info/1014/7333.htm"
+}

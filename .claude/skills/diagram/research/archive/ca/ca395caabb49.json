@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T16:19:31+00:00",
+ "final_url": "https://www.sagatv.co.jp/kachiplus/media/archives/903653",
+ "first": "ca/ca395caabb49/20261002T161931Z",
+ "gm_copies": [],
+ "keys": [
+  "yutoku-inari-sagatv"
+ ],
+ "notes": [
+  "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.notes.html",
+  "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "ca/ca395caabb49/20261002T161931Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "69c83472ccec63f8ffeca892afe6ed620d2ad14c3c31aa5483b58c85ab33be5e",
+ "url": "https://www.sagatv.co.jp/kachiplus/media/archives/903653"
+}

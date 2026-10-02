@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T13:51:35+00:00",
+ "final_url": "https://www.gz.gov.cn/zlgz/whgz/content/post_8754576.html",
+ "first": "87/87069175e679/20261002T135134Z",
+ "gm_copies": [],
+ "keys": [
+  "gz-gov-citang"
+ ],
+ "notes": [
+  "0050-ancestral-halls-in-south-china-villages-citang.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "87/87069175e679/20261002T135134Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "970807176f7e49f3306baeafd3e4da889d4ffee4399460cff129058398051a7f",
+ "url": "https://www.gz.gov.cn/zlgz/whgz/content/post_8754576.html"
+}

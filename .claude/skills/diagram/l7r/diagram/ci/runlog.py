@@ -19,6 +19,22 @@ from typing import Any
 from l7r.diagram.ci import config
 
 RUN_LOG = "dev/run-log"
+BYPASS_LOG = "dev/bypass-log"
+
+
+def month_dir(skill: Path, log: str) -> Path:
+    """Where an entry written now goes: `<log>/<YYYY-MM>/` (2026-10-02). Both logs gain an entry per gate run or
+    escape, about a thousand files a week between them, forever; month folders keep any one directory from growing
+    toward the 5,000-file ceiling `check-file-scale.py` holds every tracked directory to."""
+    d = skill / log / time.strftime("%Y-%m", time.gmtime())
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def log_files(skill: Path, log: str) -> list[str]:
+    """Every entry of a log, oldest first: the month folders and anything written flat by a clone not yet synced past
+    the move. Sorted by NAME - the write-order stamp - not by path, so the two layouts interleave correctly."""
+    return sorted(glob.glob(str(skill / log / "**" / "*.json"), recursive=True), key=os.path.basename)
 
 
 def _stamp() -> str:
@@ -40,7 +56,6 @@ def _short_head(skill: Path) -> str:
 def write_remote(
     skill: Path, target: str, scope: str, seconds: int, result: str, build_id: str, minutes: float, reason: str = "", rate: float = config.RATE_PER_MIN, compute: str = config.COMPUTE_TYPE
 ) -> Path:
-    os.makedirs(skill / RUN_LOG, exist_ok=True)
     ts = _stamp()
     entry = {
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -56,7 +71,7 @@ def write_remote(
         "compute": compute,
         "reason": reason,
     }
-    path = skill / RUN_LOG / f"{ts}-{os.getpid()}.json"
+    path = month_dir(skill, RUN_LOG) / f"{ts}-{os.getpid()}.json"
     path.write_text(json.dumps(entry, indent=2) + "\n", encoding="utf-8")
     return path
 
@@ -71,7 +86,6 @@ def write_would_have(skill: Path, target: str, scope: str, minutes: float, reaso
     many hours and many dollars of tests."* Same file shape as a remote entry, `where` set to
     `would-have-dispatched`, and NEVER counted as spend (`remote_entries` filters on `codebuild`).
     The period's audit (FR-005) reads these back and asks, for each, whether it should have run."""
-    os.makedirs(skill / RUN_LOG, exist_ok=True)
     ts = _stamp()
     entry = {
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -87,14 +101,14 @@ def write_would_have(skill: Path, target: str, scope: str, minutes: float, reaso
         "compute": config.COMPUTE_TYPE,
         "reason": reason,
     }
-    path = skill / RUN_LOG / f"{ts}-{os.getpid()}.json"
+    path = month_dir(skill, RUN_LOG) / f"{ts}-{os.getpid()}.json"
     path.write_text(json.dumps(entry, indent=2) + "\n", encoding="utf-8")
     return path
 
 
 def would_have_entries(skill: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for f in sorted(glob.glob(str(skill / RUN_LOG / "*.json"))):
+    for f in log_files(skill, RUN_LOG):
         try:
             r = json.loads(Path(f).read_text(encoding="utf-8"))
         except ValueError:
@@ -118,7 +132,7 @@ def would_have_report(skill: Path) -> str:
 
 def remote_entries(skill: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for f in sorted(glob.glob(str(skill / RUN_LOG / "*.json"))):
+    for f in log_files(skill, RUN_LOG):
         try:
             r = json.loads(Path(f).read_text(encoding="utf-8"))
         except ValueError:

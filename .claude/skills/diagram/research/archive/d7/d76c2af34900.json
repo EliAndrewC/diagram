@@ -1,0 +1,22 @@
+{
+ "captured": "2026-10-02T14:33:00+00:00",
+ "final_url": "https://english.henan.gov.cn/2023/11-23/2853070.html",
+ "first": "d7/d76c2af34900/20261002T143300Z",
+ "gm_copies": [],
+ "keys": [
+  "henan-neixiang"
+ ],
+ "notes": [
+  "0090-magistrates-compounds-jinya-and-yamen.drawing.notes.html",
+  "0090-magistrates-compounds-jinya-and-yamen.notes.html",
+  "0096-holding-cells-agariya-and-roya.notes.html",
+  "0218-the-compounds-own-shrine-yashikigami.drawing.notes.html",
+  "0218-the-compounds-own-shrine-yashikigami.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "d7/d76c2af34900/20261002T143300Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "8bd652b5448a69a5235b60fca98de25ecc942ca64afa18ed7e9796d00171c4f0",
+ "url": "https://english.henan.gov.cn/2023/11-23/2853070.html"
+}
