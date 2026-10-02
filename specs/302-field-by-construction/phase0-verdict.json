@@ -1,0 +1,322 @@
+{
+ "current": {
+  "inashiro": {
+   "best_s": 1.0353,
+   "runs": [
+    1.1011,
+    1.0353,
+    1.0539
+   ]
+  },
+  "kashikawa": {
+   "best_s": 1.1689,
+   "runs": [
+    1.1689,
+    1.1992,
+    1.1828
+   ]
+  },
+  "mizuguchi": {
+   "best_s": 0.6276,
+   "runs": [
+    0.6754,
+    0.6276,
+    0.628
+   ]
+  },
+  "sawada": {
+   "best_s": 1.858,
+   "runs": [
+    1.8635,
+    1.8851,
+    1.858
+   ]
+  },
+  "inashiro-h10": {
+   "best_s": 0.649,
+   "runs": [
+    0.6732,
+    0.649,
+    0.6645
+   ]
+  },
+  "inashiro-h20": {
+   "best_s": 1.2191,
+   "runs": [
+    1.2191,
+    1.2546,
+    1.2676
+   ]
+  }
+ },
+ "prototype": {
+  "inashiro": {
+   "best_s": 0.4117,
+   "runs": [
+    0.4117,
+    0.4154,
+    0.4188
+   ],
+   "acres": 19.48,
+   "target_acres": 19.5,
+   "in_band": true,
+   "bare_share": 0.00081,
+   "unshared_px": 0.0,
+   "rule_breaking_plots": 0,
+   "rules_broken": [],
+   "plots": 599,
+   "invalid_outlines": 0,
+   "dry_plots": 4,
+   "trials": 3,
+   "stuck": 1,
+   "toe_only": 0,
+   "raw_cells": 620,
+   "admissible": true,
+   "flooded": 4,
+   "low": 68,
+   "scraps_left_bare": 1,
+   "scrap_area_px": 602.8,
+   "scraps": [
+    [
+     [
+      "toe"
+     ],
+     602.8,
+     5
+    ]
+   ],
+   "times": {
+    "partition": 0.0398,
+    "settle": 0.1299,
+    "tint": 0.0391,
+    "dry_and_beans": 0.121,
+    "search": 0.0797
+   },
+   "breakers": []
+  },
+  "kashikawa": {
+   "best_s": 0.396,
+   "runs": [
+    0.4087,
+    0.396,
+    0.3986
+   ],
+   "acres": 24.93,
+   "target_acres": 26.0,
+   "in_band": true,
+   "bare_share": 0.00011,
+   "unshared_px": 0.0,
+   "rule_breaking_plots": 0,
+   "rules_broken": [],
+   "plots": 712,
+   "invalid_outlines": 0,
+   "dry_plots": 25,
+   "trials": 3,
+   "stuck": 0,
+   "toe_only": 0,
+   "raw_cells": 730,
+   "admissible": true,
+   "flooded": 4,
+   "low": 68,
+   "scraps_left_bare": 0,
+   "scrap_area_px": 0,
+   "scraps": [],
+   "times": {
+    "partition": 0.0544,
+    "settle": 0.154,
+    "tint": 0.0485,
+    "dry_and_beans": 0.0339,
+    "search": 0.096
+   },
+   "breakers": []
+  },
+  "mizuguchi": {
+   "best_s": 0.3335,
+   "runs": [
+    0.3335,
+    0.3711,
+    0.3437
+   ],
+   "acres": 16.1,
+   "target_acres": 15.6,
+   "in_band": true,
+   "bare_share": 0.00356,
+   "unshared_px": 0.0,
+   "rule_breaking_plots": 0,
+   "rules_broken": [],
+   "plots": 473,
+   "invalid_outlines": 0,
+   "dry_plots": 3,
+   "trials": 3,
+   "stuck": 1,
+   "toe_only": 0,
+   "raw_cells": 486,
+   "admissible": true,
+   "flooded": 5,
+   "low": 57,
+   "scraps_left_bare": 1,
+   "scrap_area_px": 2427.7,
+   "scraps": [
+    [
+     [
+      "toe"
+     ],
+     2427.7,
+     4
+    ]
+   ],
+   "times": {
+    "partition": 0.0349,
+    "settle": 0.1074,
+    "tint": 0.0333,
+    "dry_and_beans": 0.1001,
+    "search": 0.06
+   },
+   "breakers": []
+  },
+  "sawada": {
+   "best_s": 0.5654,
+   "runs": [
+    0.5686,
+    0.5865,
+    0.5654
+   ],
+   "acres": 23.84,
+   "target_acres": 24.7,
+   "in_band": true,
+   "bare_share": 0.00056,
+   "unshared_px": 0.0,
+   "rule_breaking_plots": 0,
+   "rules_broken": [],
+   "plots": 937,
+   "invalid_outlines": 0,
+   "dry_plots": 32,
+   "trials": 4,
+   "stuck": 2,
+   "toe_only": 0,
+   "raw_cells": 996,
+   "admissible": true,
+   "flooded": 8,
+   "low": 98,
+   "scraps_left_bare": 2,
+   "scrap_area_px": 452.8,
+   "scraps": [
+    [
+     [
+      "area",
+      "toe"
+     ],
+     59.4,
+     13
+    ],
+    [
+     [
+      "toe"
+     ],
+     393.4,
+     13
+    ]
+   ],
+   "times": {
+    "partition": 0.0742,
+    "settle": 0.2764,
+    "tint": 0.0612,
+    "dry_and_beans": 0.0327,
+    "search": 0.1066
+   },
+   "breakers": []
+  },
+  "inashiro-h10": {
+   "best_s": 0.2162,
+   "runs": [
+    0.2165,
+    0.2162,
+    0.223
+   ],
+   "acres": 13.22,
+   "target_acres": 13.0,
+   "in_band": true,
+   "bare_share": 0.00015,
+   "unshared_px": 0.0,
+   "rule_breaking_plots": 0,
+   "rules_broken": [],
+   "plots": 265,
+   "invalid_outlines": 0,
+   "dry_plots": 2,
+   "trials": 3,
+   "stuck": 0,
+   "toe_only": 0,
+   "raw_cells": 270,
+   "admissible": true,
+   "flooded": 1,
+   "low": 34,
+   "scraps_left_bare": 0,
+   "scrap_area_px": 0,
+   "scraps": [],
+   "times": {
+    "partition": 0.0207,
+    "settle": 0.0595,
+    "tint": 0.0192,
+    "dry_and_beans": 0.0736,
+    "search": 0.0448
+   },
+   "breakers": []
+  },
+  "inashiro-h20": {
+   "best_s": 0.4911,
+   "runs": [
+    0.5056,
+    0.4911,
+    0.4981
+   ],
+   "acres": 26.01,
+   "target_acres": 26.0,
+   "in_band": true,
+   "bare_share": 9e-05,
+   "unshared_px": 0.0,
+   "rule_breaking_plots": 0,
+   "rules_broken": [],
+   "plots": 608,
+   "invalid_outlines": 0,
+   "dry_plots": 6,
+   "trials": 3,
+   "stuck": 0,
+   "toe_only": 0,
+   "raw_cells": 617,
+   "admissible": true,
+   "flooded": 2,
+   "low": 58,
+   "scraps_left_bare": 0,
+   "scrap_area_px": 0,
+   "scraps": [],
+   "times": {
+    "partition": 0.0566,
+    "settle": 0.124,
+    "tint": 0.0421,
+    "dry_and_beans": 0.1758,
+    "search": 0.0889
+   },
+   "breakers": []
+  }
+ },
+ "runs": {
+  "current": [
+   6.7012048329925165,
+   6.650920834043063,
+   6.6549614709219895
+  ],
+  "prototype": [
+   2.4445538780419156,
+   2.4762636270024814,
+   2.4476627690601163
+  ]
+ },
+ "verdict": {
+  "current_total_s": 6.558,
+  "prototype_total_s": 2.414,
+  "ratio": 2.72,
+  "spread_s": 0.05,
+  "go": true,
+  "stubbed": []
+ }
+}

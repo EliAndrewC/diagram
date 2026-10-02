@@ -137,6 +137,27 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
     hold_ring_rules(plots, ctx, only=[*touched, *range(len(plots) - len(added), len(plots))])
 
 
+STONE_INSET = 0.8
+"""A grave stone's base stands within this share of the mound's half-height at its x, so it reads as standing ON the mound."""
+
+
+def stone_steps(n: int, rx: float, ry: float) -> list[float]:
+    """How far above the mound's center each of `n` grave stones stands (its base): the stagger's own step back (3 ft, then 3.5 ft
+    more a stone, at `stone_dx` across), the WHOLE stagger scaled down until every base stands inside the mound's ellipse at its x
+    (`STONE_INSET`) - so each stone still steps back from the last. Glyph check, Inashiro (feature 302): the fixed step put the
+    third stone's base 2 ft off a mound under 10 ft tall, in the rice; a clamp per stone then set the third level with the
+    second, which the stagger rule refuses (round 2)."""
+    steps = [3.0 + i * 3.5 for i in range(n)]
+    room = [ry * math.sqrt(max(0.0, 1.0 - (stone_dx(i) / rx) ** 2)) * STONE_INSET if rx > 0 else 0.0 for i in range(n)]
+    scale = min([1.0] + [r / st for r, st in zip(room, steps, strict=True)])
+    return [st * scale for st in steps]
+
+
+def stone_dx(i: int) -> float:
+    """Stone `i`'s offset across the mound from its center (the stagger's step to one side)."""
+    return -4.0 + i * 4.5
+
+
 def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str, Any]]) -> bool:
     """Whether a grave's mound (its disc) would stand in a field pond: the disc's outline meets the pond's rim, or either
     center lies inside the other - an island is dry ground, never drawn in open water."""
@@ -420,10 +441,12 @@ class FieldFeaturesMixin:
         # side by side in the upper half of an egg-shaped mound read, at every zoom, as a pair of eyes - a face on Mizuguchi's
         # field. A family's grave markers are set one behind another as they were added, and differ in size, so each stone
         # steps back and to one side of the last and none repeats the height of the first.
-        for i in range(rng.randint(2, 3)):
-            mx = cx - 4.0 + i * 4.5
+        n = rng.randint(2, 3)
+        for i, up in enumerate(stone_steps(n, rx, ry)):
+            mx = cx + stone_dx(i)
             h = (8.0, 5.0, 6.5)[i]
-            markers += f'<rect x="{mx - 1.3:.1f}" y="{cy - 3.0 - i * 3.5 - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
+            by = cy - up
+            markers += f'<rect x="{mx - 1.3:.1f}" y="{by - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
         self._field_feature_ink(ink, f'<g>{markers}</g>', "grave island")
         self.M.setdefault("field_graves", []).append({"x": cx, "y": cy})
         return True

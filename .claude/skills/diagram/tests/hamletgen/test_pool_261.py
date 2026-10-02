@@ -191,7 +191,10 @@ def test_every_bamboo_stand_is_on_the_sheet(gen: str) -> None:
     m = _manifest(gen)
     x, y, w, h = m["meta"]["view"]
     stands = [st for st in m.get("bamboo_stands", []) if st.get("poly") or st.get("outline")]
-    assert bool(stands) == (m["meta"].get("bamboo") in ("thicket", "both")), "non-vacuity: a hamlet whose knob asks for a thicket has one, and no other"
+    # the knob is read of the THICKETS: a homestead strip (`role` "homestead") is what the "homestead" knob asks for, and Sawada
+    # seated two once feature 302 moved its houses - the earlier form counted every stand and read them as a thicket
+    thickets = [st for st in stands if st.get("role") == "thicket"]
+    assert bool(thickets) == (m["meta"].get("bamboo") in ("thicket", "both")), "non-vacuity: a hamlet whose knob asks for a thicket has one, and no other"
     for st in stands:
         ring = st.get("poly") or st.get("outline")
         assert all(x <= q[0] <= x + w and y <= q[1] <= y + h for q in ring), f"a {st.get('role')} stand runs off the sheet"

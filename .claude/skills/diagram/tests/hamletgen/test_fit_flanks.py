@@ -45,7 +45,7 @@ def _fake_fit(monkeypatch, *, ceiling: float = 10.0, net_of=None, finish_scale=N
         acres = acres_of(k) if acres_of else min(9.0 * k**2, ceiling)
         net = dict(net_of(aspect) if net_of else _net(130.0))
         net.update(acres=acres, aspect=aspect)
-        return SimpleNamespace(net=net, planted_area=lambda acres=acres: acres * SQ_FT_PER_ACRE)
+        return SimpleNamespace(net=net, region=SimpleNamespace(area=acres * SQ_FT_PER_ACRE))
 
     def finish(c: SimpleNamespace) -> dict:
         finishes.append(c.net["aspect"])

@@ -729,6 +729,17 @@ def test_strip_blocked_refuses_another_farmhouse_as_drawn() -> None:
     assert blocked(s, 500, 500, 30, 20, 500, 500, [], [], None, []) is False, "its own house is excused"
 
 
+def test_a_household_strip_stands_on_its_houses_side_of_every_lane() -> None:
+    """Glyph check, Sawada (feature 302): a strip stood 6.7 ft past a 3 ft lane from its own house - the placer asked the stream
+    and never the lanes. The Sawada case: the house's east wall at about x = 4541, the lane at x = 4555, the strip at 4571."""
+    from l7r.diagram.hamletgen.homesteads.bamboo import across_a_lane
+
+    lane = ([(4555.0, 2800.0), (4555.0, 3050.0)], 1.5 + 6.0)
+    assert across_a_lane((4521.6, 2925.9), (4571.2, 2920.5), [lane]), "the lane runs between them"
+    assert not across_a_lane((4521.6, 2925.9), (4500.0, 2925.0), [lane]), "a strip on the house's side"
+    assert not across_a_lane((0.0, 0.0), (10.0, 0.0), []), "no lanes"
+
+
 def test_a_household_strip_keeps_out_of_the_windbreak_belt() -> None:
     """Feature 280 (settlement-review of Inashiro): a strip seated in the belt painted its culms over the conifers."""
     from l7r.diagram.hamletgen.homesteads.bamboo import in_belt

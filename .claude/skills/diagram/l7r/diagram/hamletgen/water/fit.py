@@ -49,18 +49,13 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     Returns the best net found that is legal and lands the acreage band (`fan_admissible`); where the widened search
     finds none, the site is refused (`FieldRefused`, feature 287) - never the closest miss.
 
-    THE SEARCH CARVES; ONLY THE WINNER IS FINISHED (feature 220, GM 2026-09-09). Each guess used to
-    run the whole `build_comb` - and seam closing, added after this docstring first promised a build
-    "well under a second", had grown to two thirds of one: on the reference hamlet four full builds
-    at 1.35 s each made a 5.4 s stage, three of them thrown away. The scorers below read only the
-    carved plots and the channels, so each guess is a `carve_comb` (about a third of a build), the
-    best carve is kept, and `finish_comb` runs once on it. The acreage each guess is scored on is the
-    carve's PREDICTION of the finished acreage (`CombCarve.planted_area`: the plots plus the bare
-    ground the seam pass will plant) - the carve alone under-reads it by the pockets, 11-21% on the
-    reference fan, and a first cut that scored the bare carve overshot the target by 12% (specs/220
-    research R2). The prediction is within 0.05% of the finish, so the search lands on the size the
-    full build landed on; a map on which it does not is a map that moved, judged by the gate and a
-    settlement-review like any other change.
+    THE SEARCH LAYS SKELETONS; ONLY THE WINNER IS FINISHED (feature 220, GM 2026-09-09; feature 302). Each
+    guess is a `carve_comb`: the skeleton and the PLANTED REGION - the ground the finish will tile with plots
+    - and no plot at all. The acreage each guess is scored on is the region's own area, because the finish
+    tiles exactly that ground (`partition.cut`), less the scraps it leaves bare (at most 0.36% of a pool
+    fan, specs/302 research R2). Before feature 302 each guess carved its plots and PREDICTED what a repair
+    pass would add to them (11-21%, specs/220 research R2), by shape unions; a trial now costs the skeleton
+    and three shape operations. The best carve is kept and `finish_comb` runs once on it.
 
     The multiplier is bracketed rather than solved because acreage is monotone in it but stepwise:
     a small change can add or drop a whole plot row, so the curve has small flats and the bisection
@@ -116,9 +111,9 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
 
 def _finish_first_admissible(found: list[tuple[tuple[bool, float], CombCarve]], fan_middle: str, plan: SitePlan) -> dict[str, Any] | None:
     """Finish the best admissible carve of `found` and return it if the FINISHED net is still inside the rules; else the
-    next. THE BAND IS JUDGED ON THE FINISHED NET, which is what the map records: the carve's prediction is within 0.05% of
-    the finish (`CombCarve.planted_area`), so the first admissible carve is the one finished on every map measured - ONE
-    finish per roll, on the winner - and a second is finished only if the seam pass moved the first out of the rules."""
+    next. THE BAND IS JUDGED ON THE FINISHED NET, which is what the map records: the region's area is the finish's acreage
+    but for the scraps left bare, so the first admissible carve is the one finished on every map measured - ONE finish per
+    roll, on the winner - and a second is finished only if the finish moved the first out of the rules."""
     for _score, carve in sorted((f for f in found if _admissible(f[0])), key=lambda f: f[0]):
         carve.fan_middle = fan_middle  # where the dry band lies is the finish's question, not the search's (`fan_toe_hem`)
         net = finish_comb(carve)
@@ -200,7 +195,7 @@ def _fit_at_aspect(
     # it: the size is not the cause. Both were defects the new size merely landed on. The needle was a hairline spur
     # `_unjog`'s guards could not see, because they judged only the deduped ring while the gate reads the ring as
     # recorded (`_is_a_needle` in waterfields/seams/plots.py). The missing blue was a sample the map's exhibit rested
-    # on one survivor of, whichever size was drawn (the promotion at the end of `close_seams`).
+    # on one survivor of, whichever size was drawn (the promotion at the end of the tint pass, `waterfields/tint.py`).
     _lever = math.sqrt(2.0 / (1.0 + BROOK_FAN_TRIM)) if (_trim_a < 1.0 or _trim_b < 1.0) else 1.0
     lo, hi = lo * _lever, hi * _lever
     k = 1.0 * _lever
@@ -227,8 +222,8 @@ def _fit_at_aspect(
             head_len=plan.head_lead,
             supply_banks=True,  # bunds hem onto the supply strokes' banks (GM 2026-08-15); scripted tier only, see paddy_bunds_clear_the_supply_channels
         )
-        net = carve.net  # the two keys the scorers read: the carved plots and the channels
-        acres = carve.planted_area() * plan.ftpx * plan.ftpx / SQ_FT_PER_ACRE  # what the finish will plant, predicted (see `fit_field`); `net_acres`'s own conversion
+        net = carve.net  # what the scorers read: the region's outline for the plots' extent, and the channels
+        acres = carve.region.area * plan.ftpx * plan.ftpx / SQ_FT_PER_ACRE  # the ground the finish tiles (see `fit_field`); `net_acres`'s own conversion
         err = abs(acres - plan.target_acres) / plan.target_acres
 
         # A DANGLING CANAL TAIL disqualifies a fan before its acreage is even considered. Whatever

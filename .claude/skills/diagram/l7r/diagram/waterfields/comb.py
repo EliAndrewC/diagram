@@ -4,14 +4,9 @@ import math
 import random
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
-    from shapely.geometry import Polygon
-    from shapely.ops import unary_union
-
-from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_rings_to_bank, is_chevron, pointed_ring, round_channel_joints
-from .carve import _carve
+from .banks import cell_area, dedup_ring, floor_overhang, round_channel_joints
 from .frame import (
     CANAL_A_FT,
     CANAL_B_FT,
@@ -30,49 +25,25 @@ from .frame import (
     _Frame,
     _point_along,
     _poly_area,
-    _poly_perim,
     _seg_x,
-    _signed_area,
     _Thread,
     chan_px,
 )
 from .hem import _comb_dry_and_beans  # the dry hem and the wild middle's reserve, split out at the 1,000-line bar (feature 287, W36)
-from .ring_rules import simple_outline
-from .seams import close_seams
-from .seams.pockets import _outside_command, _water
+from .palette import RICE_GREENS
+from .partition import Sectors, cut, planted_region, region_rings
+from .ring_rules import fan_context, simple_outline
+from .settle import ring_of, settle_cells
+from .tint import judge_tint, mark_low
 from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends, drop_stub_pieces
 from .twins import drop_twin_deliveries
-
-_SHAPELY_LOADED = False
-
-
-def _load_shapely() -> None:
-    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
-
-    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
-    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
-    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
-
-    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
-    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
-    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
-    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
-    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
-    """
-    global _SHAPELY_LOADED, Polygon, unary_union  # binding this module's own names is the point
-    if _SHAPELY_LOADED:
-        return
-    from shapely.geometry import Polygon
-    from shapely.ops import unary_union
-
-    _SHAPELY_LOADED = True
 
 
 @dataclass
 class CombCarve:
-    """A comb between its carve and its finish (feature 220) - the plots as carved, the channels,
-    the envelope, the random generator where the carve left it, and every input the finish needs.
-    `fit_field` scores these (`net`: the two keys its scorers read) and finishes only the winner."""
+    """A comb between its carve and its finish (feature 220) - the skeleton, the channels, the envelope and the PLANTED
+    REGION (feature 302: the ground the finish will tile with plots), the random generator where the carve left it, and every
+    input the finish needs. `fit_field` scores these (`net`, `region.area`) and finishes only the winner."""
 
     R: random.Random
     F: _Frame
@@ -84,7 +55,7 @@ class CombCarve:
     brook: Any
     drain_bank: Any
     channels: list[dict[str, Any]]
-    plots: list[dict[str, Any]]
+    region: Any
     envelope: Poly
     W: float
     H: float
@@ -98,27 +69,15 @@ class CombCarve:
     grain_drift: float
     grain: float
     fan_middle: str = "cleared"  # 269 B07: see `fan_toe_hem`
-    supply_banks: bool = False  # the carve hemmed its bunds onto the supply strokes, so the seam pass holds them to the stroke rule
+    supply_banks: bool = False  # the stroke rule (W16) holds the plots' bunds off the supply strokes, not only the drain
+    seed: int = 0  # the row wander's own stream (`seed ^ 0x12005`), separate so the skeleton is unmoved
 
     @property
     def net(self) -> dict[str, Any]:
-        """What the fit's scorers read of a carve: the plots and the channels."""
-        return {"plots": self.plots, "channels": self.channels}
-
-    def planted_area(self) -> float:
-        """The plot area the FINISH will leave, in px^2, predicted from the carve: the carved plots plus
-        every scrap of bare ground inside the command area, because `close_seams` plants or absorbs all
-        of it (its module docstring: "every square foot inside the command area ends up planted, water,
-        or outside the fan"). The finish does NOT conserve the carved area - it GROWS it by the pockets,
-        11-21% on the reference fan (specs/220 research R2) - so a search that scored the carve alone
-        overshot the target by that much. This asks the same three geometries the seam pass asks first
-        (`field`, `_water`, `_outside_command`), so the estimate and the finish read one source; measured
-        against the finished acreage at six sizes it was within 0.05%, at a fifteenth of the finish's cost."""
-        _load_shapely()
-        field = Polygon(self.envelope).buffer(0)
-        keep = [Polygon(p["poly"]).buffer(0) for p in self.plots if len(p["poly"]) >= 3]
-        bare = field.difference(unary_union(keep)).difference(_water(self.channels, self.grain)).difference(_outside_command(self.F, self.a_pts, self.dpts, field, self.grain, self.drain_bank))
-        return sum(_poly_area(p["poly"]) for p in self.plots) + bare.area
+        """What the fit's scorers read of a carve before any plot is cut: the channels, and the planted region's outline standing
+        for the plots' extent - the only thing the legality tests read of them (`tail_dangles`' bounding box,
+        `flanks_commanded`'s offsets across the fall; feature 302, plan D2)."""
+        return {"plots": [{"poly": r} for r in region_rings(self.region)], "channels": self.channels}
 
 
 def carve_comb(
@@ -181,31 +140,11 @@ def carve_comb(
     # PLACEMENT AND ITS CHECK MUST READ THE SAME SOURCE, AND THE SOURCE IS WHAT GETS PAINTED.
     round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
 
-    # `supply_banks` hands the carve the very strokes assembled above, so the bunds hem onto the
-    # banks that will actually be painted - placer and paint reading the same source. OPT-IN
-    # (default False) so every legacy comb gen re-runs byte-identical; the scripted tier passes
-    # True and the gate holds it there (paddy_bunds_clear_the_supply_channels, gated on
-    # meta.generated_by per the migration doctrine - legacy maps inherit the rule at conversion).
-    plots = _carve(
-        R,
-        F,
-        threads,
-        a_pts,
-        dpts,
-        W,
-        H,
-        plot_across,
-        row_step,
-        grain,
-        seed,
-        drain_bank,
-        supply=[c for c in channels if c.get("role") != "drain"] if supply_banks else None,
-    )
-
-    envelope = _comb_floor_and_winding(plots, threads, a_pts, dpts, F)
+    # THE PLANTED REGION, NOT THE PLOTS (feature 302): the envelope less its water and the ground it cannot command - the ground
+    # the finish tiles with plots (`partition.py`), and whose area IS the acreage the fit scores. No plot is cut here.
+    envelope = _comb_envelope(threads, a_pts, dpts, F)
     anchor_trunk_ends(channels, envelope, W, H)  # no main or collector end left in bare ground (feature 287, water W15)
-
-    _comb_toe_and_hem(plots, dpts, down_deg, plot_across, row_step, grain)
+    region = planted_region(F, envelope, channels, a_pts, dpts, grain, drain_bank)
     return CombCarve(
         R=R,
         F=F,
@@ -217,7 +156,7 @@ def carve_comb(
         brook=brook,
         drain_bank=drain_bank,
         channels=channels,
-        plots=plots,
+        region=region,
         envelope=envelope,
         W=W,
         H=H,
@@ -232,36 +171,29 @@ def carve_comb(
         grain=grain,
         fan_middle=fan_middle,
         supply_banks=supply_banks,
+        seed=seed,
     )
 
 
 def finish_comb(c: CombCarve) -> dict[str, Any]:
-    """The FINISH half of `build_comb` (feature 220): close the seams, measure the acreage, lay the
-    dry plots and the bund beans, and assemble the net. Consumes the carve's own random generator
-    from where the carve left it - each build seeds its own `R`, so a carve kept during a search and
-    finished later sees the state an inline finish would have seen."""
-    R, F, plots, channels, envelope, a_pts, dpts, drain_bank, grain = c.R, c.F, c.plots, c.channels, c.envelope, c.a_pts, c.dpts, c.drain_bank, c.grain
+    """The FINISH half of `build_comb` (feature 220): tile the planted region with plots, hold them to the ring rules, mark the
+    low ground and its tint, measure the acreage, lay the dry plots and the bund beans, and assemble the net. Consumes the
+    carve's own random generator from where the carve left it - each build seeds its own `R`, so a carve kept during a search
+    and finished later sees the state an inline finish would have seen."""
+    R, F, channels, envelope, a_pts, dpts, grain = c.R, c.F, c.channels, c.envelope, c.a_pts, c.dpts, c.grain
     W, H, down_deg, plot_across, row_step, fork, bc, threads, brook = c.W, c.H, c.down_deg, c.plot_across, c.row_step, c.fork, c.bc, c.threads, c.brook
     dry_keepout, dry_band, bean_frac, furrow_spread, grain_drift = c.dry_keepout, c.dry_band, c.bean_frac, c.furrow_spread, c.grain_drift
-    # Sweep the channel bends BEFORE the seam pass, not after: rounding a joint moves the drawn
-    # water sideways by a few px, and `close_seams` holds its new basins off the water it is shown.
-    # Called last (as it was) the pass reconciled the fan against a course the map does not draw,
-    # and 9 basins came out with a bund inside a swept branch bend - placement and its check must
-    # read the same source, and the source is what will actually be painted.
-    # SEAM CLOSING, LAST. The carve leaves awkward ground wherever ditch threads diverge, the
-    # closing geometry misses, or a guard drops a quad - and a real cascade fan wasted nothing:
-    # fork wedges were terraced into small IRREGULAR paddies, and the odd unplantable scrap was
-    # simply taken into the basin beside it rather than walled off on its own. `close_seams` does
-    # exactly that, so every square foot inside the command area ends up planted, water, or
-    # outside the fan, and every bund is SHARED with whatever lies across it (its module docstring
-    # carries the research and the defect it replaced; the gate is `paddy_plot_seams_shared`).
-    #
-    # It runs AFTER `_comb_toe_and_hem` on purpose: the toe pass drops slivers too acute to bund
-    # and re-hems every bund onto the drain bank, both of which open fresh bare ground - anything
-    # reconciling the fan before it would have its work undone. Ungated: the hand-authored pool is
-    # FROZEN since 2026-08-16, so a new rule no longer needs a byte-stability escape (the retired
-    # `grain != 1.0` gate on the old wedge filler was exactly that).
-    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank, supply_banks=c.supply_banks)
+    # THE PLOTS BY CONSTRUCTION (feature 302). The region is cut by every bund at once (`partition.cut`), so the plots tile it
+    # with every bund SHARED as laid - what `close_seams` used to reach by finding each scrap the carve left and planting or
+    # absorbing it: a real cascade fan wasted nothing, its fork wedges terraced into small IRREGULAR paddies and the odd
+    # unplantable scrap taken into the basin beside it (`settle`: split, merged, or left bare - research/contents.json#fields, the fabric).
+    sectors = Sectors(F, threads, c.region, R, random.Random(c.seed ^ 0x12005), plot_across, row_step, grain)
+    cell = cell_area(plot_across, row_step)
+    ctx = fan_context(channels if c.supply_banks else [ch for ch in channels if ch.get("role") == "drain"], grain, cell)
+    cells, _scraps = settle_cells(cut(sectors), ctx, plot_across, cell)
+    plots: list[dict[str, Any]] = [{"poly": ring_of(q), "fill": R.choice(RICE_GREENS)} for q in cells]
+    mark_low(plots, dpts, plot_across, row_step, R)
+    judge_tint(plots, dpts, plot_across, grain)
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
 
     dry_plots, dry_acres, bund_bean_runs, dry_reserve = _comb_dry_and_beans(
@@ -397,87 +329,6 @@ def build_comb(
             supply_banks=supply_banks,
         )
     )
-
-
-def _comb_toe_and_hem(plots: list[dict[str, Any]], dpts: Poly, down_deg: float, plot_across: float, row_step: tuple[float, float], grain: float) -> None:
-    """The fan's toe discipline: drop unbundable slivers, then hold every bund off the drain."""
-    # THE FAN'S TOE IS A HEADLAND, NOT A ROW OF FAKE BASINS (settlement-review 2026-07-26; GM
-    # 2026-07-27). Where the fan narrows to its collector vertex, the carve and the wedge filler
-    # both emit cells that taper to a point - Ubame's west comb ended in ~8 acute triangles
-    # radiating from the vertex, and Hoshizora shows the same. A paddy is a LEVEL BASIN: it is
-    # bunded and holds standing water to a uniform depth, so a sliver that acute cannot be leveled
-    # or bunded at any sane cost, and real fan and terrace systems end in a headland or simply
-    # leave the odd corner unpaddied rather than pretend. Dropping them is also visually free: the
-    # fan carries a base floor under the plots (`comb_base_fill`, enforced by paddy_fan_has_floor),
-    # so the ground reads as the fan's own toe rather than as a hole.
-    #
-    # TWO INDEPENDENT WAYS TO BE UNBUNDABLE, and a plot only has to fail one.
-    #
-    # THICKNESS - the inradius proxy 2*Area/Perimeter, not an area, because an acute sliver can
-    # carry a respectable area while being too narrow anywhere to hold water. Scaled to
-    # `plot_across` so it means the same thing at every grain.
-    #
-    # APEX - added 2026-08-17 on the GM's realism ruling, because thickness alone let the fan-toe
-    # SUNBURST through. A needle that is LONG passes the inradius test while still tapering to a
-    # point: Inashiro carried eight to ten bunds 130-254 ft long converging on a ~10 ft stretch of
-    # collector bank at 7.5-14.3 deg, and the last yards of a wedge that acute are an aze on each
-    # side with no floor between them. The radial convergence itself is authentic and is NOT what
-    # this drops - a cascade fan genuinely narrows to its outfall, and narrow strips are real
-    # (Shiroyone Senmaida, the Cordilleras); what no real basin does is taper to zero. `_TOE_MIN_APEX`
-    # carries the calibration and the arithmetic.
-    #
-    # DROPPING IS THE WHOLE FIX, because `close_seams` runs after this and absorbs the ground into
-    # the basin beside it - which is exactly what its own research says a real fan did with an
-    # unplantable scrap ("taken into the basin beside it rather than walled off on its own"). So
-    # the toe pass does not need to truncate a corner or leave bare floor: it says which rings are
-    # not basins, and the seam pass re-plants what that frees. Do NOT move this after `close_seams`
-    # - that would open bare ground nothing reconciles, and fight `paddy_plot_seams_shared`.
-    # HEM FIRST, THEN JUDGE - the order matters and it was wrong until 2026-08-17. The drop used to
-    # run before the hem, so it judged a ring that the very next loop rewrote: `hem_to_bank` pulls
-    # vertices onto the drain bank, and pulling one vertex of an already-tapering plot onto the bank
-    # SHARPENS its apex. Six of Inashiro's needles were made by the hem, in a row along the
-    # collector at y~1521, and no amount of dropping beforehand could reach them. Judge the geometry
-    # that actually gets recorded. (Same rule as "placement and its check must read the SAME
-    # source", one level down: here both were the same code, reading two different moments.)
-    #
-    # THE INVARIANT, held uniformly across all four field engines: no basin's wall stands in the
-    # ditch. The comb hems onto the bank BY CONSTRUCTION (see `_drain_bank`), so this pass is a
-    # no-op on all but one vertex in the whole pool - and that one is worth naming, because it says
-    # what the pass is really for. At Ubame's west corner the boundary thread is clipped at the
-    # collector's HEAD, so `bnd` hands back the same clamped point for every fall below it and the
-    # sector's closing quads come out inverted; an INTERIOR sub-bund of that degenerate sector then
-    # interpolates to within 0.3px of the ditch. The real answer there is for the carve to stop
-    # opening a sector whose boundary has already collapsed onto the drain, which is a change to the
-    # carve's sector geometry and not to this rule - so until that is done, the corner is held to
-    # the invariant here rather than left standing in the water.
-    for pl, ring in zip(plots, hem_rings_to_bank([pl["poly"] for pl in plots], dpts, down_deg, chan_px(DRAIN_FT[0], grain), chan_px(DRAIN_FT[1], grain)), strict=True):
-        pl["poly"] = ring  # every plot's corners asked of the drain at once (feature 297, `hem_rings_to_bank`)
-    # THREE WAYS TO BE UNBUNDABLE, and they are genuinely independent measurements - each constant's
-    # own comment in `banks.py` says what it is answering. Thinness catches the sliver too narrow to
-    # hold water anywhere; the apex catches the long wedge that is workable through its middle and a
-    # needle at its tip; AREA catches the fragment that is neither - a boundary offcut with honest
-    # angles and honest width that is simply not worth a perimeter of aze when the basin beside it
-    # can take it in. The GM read that third one off a hamlet sheet as "a few very small triangles"
-    # (2026-08-17), which is what a clipped corner of the lattice looks like: the triangularity is
-    # the symptom and the size is the cause, so the rule is written on size.
-    _cell = cell_area(plot_across, row_step)
-    _thin = [
-        q
-        for q in plots
-        if _poly_perim(q["poly"]) <= 0
-        or 2 * _poly_area(q["poly"]) / _poly_perim(q["poly"]) < _TOE_MIN_THICKNESS * plot_across
-        or _poly_area(q["poly"]) < _TOE_MIN_AREA * _cell
-        or pointed_ring(dedup_ring([(float(_p[0]), float(_p[1])) for _p in q["poly"]], 1.0), _TOE_MIN_APEX)
-        # ...and a FOURTH way, which is the conjunction of two the list already tests separately and
-        # is therefore invisible to both: an ARROWHEAD, pointed at one end and bitten out of one side.
-        # `is_chevron` carries the measurement and why neither half alone can see one. Dropped here so
-        # `close_seams` re-tiles the pocket at the fan's own grain, which is what it does for every
-        # other refusal above - a chevron of 2.5 cells comes back as two or three honest basins.
-        or is_chevron(q["poly"])
-    ]
-    if _thin:
-        _drop = {id(q) for q in _thin}
-        plots[:] = [q for q in plots if id(q) not in _drop]
 
 
 def _canal_ft(tier: tuple[float, float], i: int, n: int) -> float:
@@ -866,8 +717,8 @@ def _comb_canal_pieces(F: _Frame, threads: list[_Thread], bc: _Thread, a_pts: Po
     drop_twin_deliveries(channels, first, 2.0 / grain)
 
 
-def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread], a_pts: Poly, dpts: Poly, F: _Frame) -> Poly:
-    """The fan's envelope, its floor trimmed to the command area, and the bowtie drop."""
+def _comb_envelope(threads: list[_Thread], a_pts: Poly, dpts: Poly, F: _Frame) -> Poly:
+    """The fan's envelope - the canal, the outer threads, the drain - its floor trimmed to the command area."""
     envelope = [p for p in a_pts] + [p for p in threads[-1].pts] + list(reversed(dpts)) + list(reversed(threads[0].pts))
 
     # TRIM THE FLOOR TO THE COMMAND AREA (known-open ledger 2026-08-16, Mizuguchi's SE needle -
@@ -886,26 +737,4 @@ def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread],
     # boundary (merged-roll review 2026-08-16, Kashikawa: ~12 points with reversals in a ~5 px
     # span at the trim corner) - data hygiene for every later consumer of the ring.
     envelope = simple_outline(dedup_ring(envelope, 1.0))  # ...which cannot merge a fold of points 1-3 px apart (feature 287)
-
-    # A BASIN IS SIMPLE AND POSITIVELY WOUND (settlement-review, 2026-08-08). At the fan's corner
-    # the outer thread has been clipped at the collector, so `bnd` hands the same clamped point back
-    # for every fall below it and the sector the carve is still opening no longer exists. Most of
-    # what comes out there is harmless - a quad with a collapsed 4th vertex, i.e. a real triangular
-    # toe parcel, which is an ordinary thing for a paddy that ran out of ground on one side. But one
-    # comes out INVERTED, its winding flipped because the two boundaries crossed: on Hoshizora that
-    # was a 143 ft needle, 25 ft at the base, carrying the FLOODED tint, and it read as a wedge of
-    # standing water at the head of the ditch. A paddy that turned inside out is not a paddy at any
-    # size, so it is dropped rather than measured - the thickness test further down cannot catch it,
-    # because a bowtie can be respectably thick. The collapsed vertices are merged away first, so a
-    # triangle is recorded as a triangle rather than as a quad with a 0.4px edge.
-    #
-    # THIS RUNS BEFORE THE WEDGE FILLER, and that ordering is load-bearing: a bowtie still COVERS
-    # ground, so dropping one leaves a hole the filler has to plant. Run after it instead and
-    # `paddy_fan_gapless` fires on the two city fans (nagahara fs1 8/297 bare, minami fs1 14/492).
-    for pl in plots:
-        _ring = pl["poly"]
-        _merged = [q for i, q in enumerate(_ring) if math.dist(q, _ring[i - 1]) > 1.0]
-        if len(_merged) >= 3:
-            pl["poly"] = _merged
-    plots[:] = [pl for pl in plots if _signed_area(pl["poly"]) > 0]
     return envelope

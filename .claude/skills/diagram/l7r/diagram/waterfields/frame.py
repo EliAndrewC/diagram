@@ -2,8 +2,7 @@
 
 import math
 import random
-from collections.abc import Callable, Sequence
-from typing import Any
+from collections.abc import Callable
 
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
@@ -251,41 +250,10 @@ class _Thread:
         return self.u + (self.drift * k + R.uniform(-0.10, 0.10)) * DF
 
 
-# THE FALL OF EVERY VERTEX, PROJECTED ONCE PER POLYLINE WHILE A CARVE RUNS (feature 278, FR-007). `_at_f` re-projected
-# every vertex of the polyline it was asked about on every call - 118,836 calls over Kashikawa and Sawada's carves, each
-# walking a thread or the drain that does not change while the carve runs. `at_f_cache()` holds each polyline's falls
-# for the length of one carve: keyed by the object, the entry keeping the object itself so no other list can take its id
-# while cached, and dropped when the carve ends. Outside a carve nothing is cached.
-_AT_F: dict[int, tuple[Poly, list[float]]] | None = None
-# ...AND THE CONTOUR COORDINATE OF EVERY VERTEX, FOR `_f_at_u` (feature 287 perf): the carve asks the drain's fall at a
-# vertex's contour coordinate once per plot vertex (`_spills_drain`, 15,462 calls on cohort seed 44), and each call
-# projected every vertex of the drain again. Held and keyed as `_AT_F` is, for the same block.
-_AT_U: dict[tuple[int, int], tuple[Any, Poly, list[float], list[float]]] | None = None
-
-
-class at_f_cache:
-    """`with at_f_cache():` - the fall values `_at_f` reads, and the contour coordinates and falls `_f_at_u` reads, are
-    projected once per polyline for the block's length."""
-
-    def __enter__(self) -> None:
-        global _AT_F, _AT_U  # the caches are the module's, for `_at_f` and `_f_at_u` to read without a parameter every caller would carry
-        self._outer = (_AT_F, _AT_U)
-        _AT_F = {} if _AT_F is None else _AT_F
-        _AT_U = {} if _AT_U is None else _AT_U
-
-    def __exit__(self, *_exc: object) -> None:
-        global _AT_F, _AT_U  # restored, so a nested block leaves the outer one's caches in place
-        _AT_F, _AT_U = self._outer
-
-
 def _falls(F: _Frame, pts: Poly) -> list[float]:
-    cache = _AT_F
-    if cache is None:
-        return [F.to_uf(*p)[1] for p in pts]
-    hit = cache.get(id(pts))  # the entry holds `pts` itself, so while it is cached no other object can carry this id
-    if hit is None:
-        hit = cache[id(pts)] = (pts, [F.to_uf(*p)[1] for p in pts])
-    return hit[1]
+    """The fall of every vertex of `pts`. Feature 278 cached it per polyline for the length of a carve (`at_f_cache`); the carve
+    went with feature 302, and nothing asks it often enough now to want the cache."""
+    return [F.to_uf(*p)[1] for p in pts]
 
 
 def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
@@ -303,17 +271,8 @@ def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
 
 def _f_at_u(F: _Frame, pts: Poly, u: float) -> float | None:
     """Fall of a u-monotone polyline at contour coordinate u (clamped; None outside range)."""
-    cache = _AT_U
-    if cache is None:
-        uf = [F.to_uf(*p) for p in pts]
-        us, fs = [q[0] for q in uf], [q[1] for q in uf]
-    else:
-        key = (id(F), id(pts))
-        hit = cache.get(key)  # the entry holds `F` and `pts` themselves, so while it is cached no other object can carry these ids
-        if hit is None:
-            uf = [F.to_uf(*p) for p in pts]
-            hit = cache[key] = (F, pts, [q[0] for q in uf], [q[1] for q in uf])
-        us, fs = hit[2], hit[3]
+    uf = [F.to_uf(*p) for p in pts]
+    us, fs = [q[0] for q in uf], [q[1] for q in uf]
     if not (min(us[0], us[-1]) - 20 <= u <= max(us[0], us[-1]) + 20):
         return None
     for i in range(len(pts) - 1):
@@ -515,8 +474,3 @@ def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
         out.append((ux * scale, uy * scale))
     out.append(cn[-1])
     return out
-
-
-def plot_boxes(plots: Sequence[dict[str, Any]]) -> list[tuple[dict[str, Any], float, float, float, float]]:
-    """`(plot, x0, y0, x1, y1)` - each plot filed by its ring's box (feature 278)."""
-    return [(pl, min(q[0] for q in pl["poly"]), min(q[1] for q in pl["poly"]), max(q[0] for q in pl["poly"]), max(q[1] for q in pl["poly"])) for pl in plots]

@@ -373,6 +373,14 @@ def test_a_constructed_route_from_outside_the_hull_starts_on_its_nearest_edge() 
     assert math.dist(route[1], (1012.0, 700.0)) < 1.0
 
 
+def test_a_constructed_route_beside_a_brook_it_never_crosses_is_judged_as_a_twin() -> None:
+    """A brook the constructed route does not cross goes to `join_beside`: kept at its distance, the route runs off the map."""
+    plan = a_plan()
+    plan.W, plan.H = 3000, 3000
+    route, to = hg.sink.hull_route(plan, (1200.0, 700.0), (1.0, 0.0), [(2900.0, 0.0), (2950.0, 3000.0)])
+    assert to == "offmap" and hg.sink.runs_downhill(route, plan.fall)
+
+
 def test_the_route_refusals_name_each_rule() -> None:
     plan = a_plan()
     out = (700.0, 990.0)

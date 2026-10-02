@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
-from .rolling.access import reserve
+from .rolling.access import TREAD_WALL_FT, reserve
 from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 
@@ -31,12 +31,6 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
-#: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7): GUESS, anchored on the research's three-shaku
-#: (~3 ft) eaves strip before a townhouse (research/contents.json#compounds) with a margin for the eaves themselves; the recorded defect was a
-#: tread 3.85 ft from a wall, and every pool map measured 4.9 ft or more when the rule was written (rules-recon.md item 8).
-TREAD_WALL_FT = 4.0
-
-
 class HousesMixin:
     # ---- houses
     def house(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "plain", rot: float = 0, shed: bool = False, shed_side: str = "W") -> None:  # type: ignore[misc]
@@ -55,7 +49,7 @@ class HousesMixin:
         # kura footprint (ox, oy center; sw, sh) in the house's local frame, per side. WEST = a tall block on the
         # west wall (dispersed farms, where the west is free); NORTH = a wide block on the shaded back wall
         # (nucleated farms, where the garden takes the sunnier walls). Shared by the draw + the record below.
-        # THE NORTH ANNEX'S PROPORTIONS (feature 280 M18, research/questions/0052-farm-sheds-and-barns-naya.html): the sheds dated to the end of the Edo period
+        # THE NORTH ANNEX'S PROPORTIONS (feature 280 M18, research/homesteads/440): the sheds dated to the end of the Edo period
         # run about 18-27 ft long and 1.5-1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m) - 0.46 of an ordinary
         # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one; the 1.8-2.4 of the Meiji-Taisho barns is not
         # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined. `kura_rect` is the one table, and
@@ -597,7 +591,7 @@ class HousesMixin:
         cleared rect on Inashiro), which was the whole of the drawn-versus-placed divergence.
 
         POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
-        before it commits. A hamlet sets `_house_bearing` (269 B18, research/questions/0029-farmhouses-minka.html): the common bearing and the
+        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/400): the common bearing and the
         lane's turn (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
         if self._house_bearing is None:
             return self._hjit(cx, cy, 11.0) * 10.0 - 5.0

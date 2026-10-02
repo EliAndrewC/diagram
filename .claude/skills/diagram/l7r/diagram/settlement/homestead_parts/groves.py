@@ -220,6 +220,14 @@ def _boxes_meet(a: Any, b: Any) -> bool:
     return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
 
 
+#: A bamboo stand's culms and leaves (a map drawing convention): the cool jade green of living culms, which no grass, reed or
+#: crown on the map uses. They were the scrub grass's yellow-greens (#9AAE3C / #B9CC5A against #94A063 / #A7A860), and the
+#: stand read as a denser patch of grass (glyph checks: Sawada's homestead bamboo, feature 302; the belt's, Sawada F3 and
+#: Mizuguchi N1 before it).
+BAMBOO_CULM = "#2F8F4E"
+BAMBOO_LEAF = "#4BA35F"
+
+
 def bamboo_mark(x: float, y: float, bs: float, tall: float, lean: float) -> str:
     """ONE bamboo mark - two culms leaning together and a leafy fork at the top of the taller one - the stand glyph's
     map drawing convention (`bamboo_stand`; a culm is inches across and cannot be drawn to scale). `tall` and `lean`
@@ -228,8 +236,8 @@ def bamboo_mark(x: float, y: float, bs: float, tall: float, lean: float) -> str:
     ln = (lean - 0.5) * 1.6 * bs
     tx, ty = x - 1.2 * bs + ln, y - h
     return (
-        f'<path d="M{x - 1.2 * bs:.1f},{y:.1f} l{ln:.1f},{-h:.1f} M{x + 1.2 * bs:.1f},{y:.1f} l{-ln * 0.6:.1f},{-h * 0.8:.1f}" stroke="#9AAE3C" stroke-width="{0.9 * bs:.2f}" fill="none" stroke-linecap="round"/>'
-        f'<path d="M{tx:.1f},{ty:.1f} l{-2.2 * bs:.1f},{-1.6 * bs:.1f} M{tx:.1f},{ty:.1f} l{2.4 * bs:.1f},{-1.2 * bs:.1f} M{tx:.1f},{ty:.1f} l{0.4 * bs:.1f},{-2.6 * bs:.1f}" stroke="#B9CC5A" stroke-width="{0.8 * bs:.2f}" fill="none" stroke-linecap="round"/>'
+        f'<path d="M{x - 1.2 * bs:.1f},{y:.1f} l{ln:.1f},{-h:.1f} M{x + 1.2 * bs:.1f},{y:.1f} l{-ln * 0.6:.1f},{-h * 0.8:.1f}" stroke="{BAMBOO_CULM}" stroke-width="{0.9 * bs:.2f}" fill="none" stroke-linecap="round"/>'
+        f'<path d="M{tx:.1f},{ty:.1f} l{-2.2 * bs:.1f},{-1.6 * bs:.1f} M{tx:.1f},{ty:.1f} l{2.4 * bs:.1f},{-1.2 * bs:.1f} M{tx:.1f},{ty:.1f} l{0.4 * bs:.1f},{-2.6 * bs:.1f}" stroke="{BAMBOO_LEAF}" stroke-width="{0.8 * bs:.2f}" fill="none" stroke-linecap="round"/>'
     )
 
 

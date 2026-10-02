@@ -159,8 +159,9 @@ engine fixes; the round-2 reviews re-measure them.
 - **Eaves woodpiles standing off the wall** (Mizuguchi F2): 5 of 10 stacks 10.5-27.8 ft from any building (7 of 10 at 10.9-16.3 ft on the round-2 roll), placed by the
   feature-261 outward rungs. Sketch: for the eaves form try every wall of the steading's own buildings (shed, byre,
   retirement house) at the wall gap before stepping out.
-- **Belt bamboo reads as grass** (Sawada F3, Mizuguchi N1): the culm marks share the scrub grass's size and yellow-green.
-  Sketch: draw the belt's bamboo as a small clustered stand, or in a culm color no grass uses.
+- **Belt bamboo reads as grass** (Sawada F3, Mizuguchi N1) - CLOSED by feature 302: the culm marks shared the scrub grass's
+  size and yellow-green; every bamboo mark, the belt's and the stands', is now drawn in a jade culm green no grass uses
+  (`groves.BAMBOO_CULM`), and a stand on a faint shade of it.
 - **Coppice lots read as stamped discs** (Kashikawa F5, Sawada F4): the new stocking fills a near-round 12-sided outline
   edge to edge. Sketch: bound a lot by what research/contents.json#vegetation 140 names (a path, a stream, the slope) and roughen it.
 - **The burial ground beside the title placard** (Kashikawa F2): the glyph stood 23 ft left of the placard on its center

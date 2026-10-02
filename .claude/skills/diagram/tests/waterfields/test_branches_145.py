@@ -73,15 +73,6 @@ def _comb(**over):
     return build_comb(**base)
 
 
-def test_a_sector_too_short_to_hold_a_row_plants_nothing_rather_than_a_degenerate_one() -> None:
-    """A row that straddles the spawn point has zero width and never plants, and a sector shorter than
-    24 grain units cannot hold one at all. Both arms return an empty sector rather than a strip of
-    nothing - the acreage bisection in `hamletgen/water/fit.py` reads the result and moves on."""
-    assert _comb()["plots"], "the reference-shaped fan carves"
-    tiny = _comb(field_fall=60.0, canal_a_len=(120.0, 60.0), canal_b_len=(120.0, 60.0))
-    assert tiny["plots"] == [], "there is no room for a single row"
-
-
 def test_a_closer_quad_that_would_run_off_the_sheet_is_dropped() -> None:
     """The canal closers fill the wedges the tessellation leaves at a fork or an outfall. One whose
     corner falls within 8 px of the frame would be drawn half off the sheet, so it is dropped - only a
@@ -97,13 +88,6 @@ def test_a_sector_the_drain_cuts_short_plants_nothing() -> None:
     here rather than planting a row the drain runs through."""
     net = _comb(sluice=(100.0, 700.0), down_deg=90.0, field_fall=900.0, canal_a_len=(1100.0, 700.0), canal_b_len=(1100.0, 700.0))
     assert isinstance(net["plots"], list)
-
-
-def test_a_closer_quad_that_would_run_off_the_sheet_is_dropped_at_an_oblique_fall() -> None:
-    """The frame guard on the canal closers. It needs a fan whose wedges reach the margin, which on this
-    canvas means a large fan sluiced at the west edge falling on the diagonal."""
-    net = _comb(sluice=(100.0, 700.0), down_deg=135.0, field_fall=900.0, canal_a_len=(1100.0, 700.0), canal_b_len=(1100.0, 700.0))
-    assert all(all(8 <= x <= 1392 and 8 <= y <= 1392 for x, y in p["poly"]) for p in net["plots"])
 
 
 def test_a_hem_one_boundary_wide_has_no_shared_normal_and_says_so() -> None:

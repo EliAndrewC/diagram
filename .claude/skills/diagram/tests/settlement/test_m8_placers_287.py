@@ -52,9 +52,10 @@ def test_a_corridor_keeps_off_its_own_beds_and_house_and_leaves_its_yard_once() 
     assert access.parts_clear(s, (bed[0] + 200.0, 0.0), (bed[0] + 200.0, 1400.0), geom)
     hx, hy, hw, hh = geom["boxes"]["house"]
     gap = access.house_gap(s)
-    assert gap == 1.5 + 2.0 + 0.5
+    assert gap == 1.5 + access.TREAD_WALL_FT + 0.5, "the tread's edge the B7 rule's 4 ft off its own wall, and the margin"
     edge = hx + hw / 2
-    assert not access.house_clear((edge + gap - 0.5, 0.0), (edge + gap - 0.5, 1400.0), geom, gap), "within the web's bar of its wall"
+    assert not access.house_clear((edge + gap - 0.5, 0.0), (edge + gap - 0.5, 1400.0), geom, gap), "within the rule's bar of its wall"
+    assert not access.house_clear((edge + 1.5 + 3.8, 0.0), (edge + 1.5 + 3.8, 1400.0), geom, gap), "Inashiro's corridor: a tread 3.80 ft off"
     assert access.house_clear((edge + gap + 0.5, 0.0), (edge + gap + 0.5, 1400.0), geom, gap)
     yard = (0.0, 0.0, 20.0, 10.0)
     assert access.leaves_its_yard(((0.0, 0.0), (0.0, 50.0)), yard, 2.0)

@@ -2,28 +2,18 @@
 
 from __future__ import annotations
 
-import math
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
-    from shapely.errors import GEOSException
     from shapely.geometry import LineString, Point, Polygon
     from shapely.geometry.base import BaseGeometry
     from shapely.ops import unary_union
 
 from ..banks import (
-    _GATE_MIN_APEX,
-    _WELD_MIN_APEX,
-    _WELD_MIN_SOLIDITY,
-    dedup_ring,
-    is_chevron,
-    jog_steps,
     polyline_cum,
 )
 from ..frame import BANK_MARGIN, Poly, _f_at_u, _Frame, taper_w
-from ..ring_rules import arrowhead, staircase
-from .geoms import GeomTree
 
 _SHAPELY_LOADED = False
 
@@ -47,25 +37,13 @@ def _load_shapely() -> None:
     100% floor, since with several call sites per module only the first one to run ever executes its
     `_load_shapely()` line and the rest are unreachable.
     """
-    global _SHAPELY_LOADED, GEOSException, LineString, Point, Polygon, unary_union  # binding this module's own names is the point
+    global _SHAPELY_LOADED, LineString, Point, Polygon, unary_union  # binding this module's own names is the point
     if _SHAPELY_LOADED:
         return
-    from shapely.errors import GEOSException
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import unary_union
 
     _SHAPELY_LOADED = True
-
-
-# The carve's own "too narrow to plant" side (`_sector_body_rows` / `_sector_canal_closers` both
-# refuse an edge under 6 * grain), reused here so a pocket this pass plants is exactly a pocket the
-# carve would have planted had its grid reached there. Below it the ground is a seam, not a basin.
-MIN_PLOT_SIDE = 6.0
-
-# Boolean geometry leaves hairline artifacts where two boundaries nearly graze; this is the width
-# below which a feature is one of them rather than ground. A fifth of a drawn aze (AZE_FT 1.5, and
-# never under 0.5 px), so the opening it drives cannot move anything the map can show.
-_SPIKE = 0.25
 
 
 def _parts(geom: BaseGeometry) -> list[Polygon]:
@@ -73,67 +51,6 @@ def _parts(geom: BaseGeometry) -> list[Polygon]:
     _load_shapely()
     out = [g for g in getattr(geom, "geoms", [geom]) if isinstance(g, Polygon) and not g.is_empty and g.is_valid]
     return sorted(out, key=lambda g: (round(g.bounds[0], 1), round(g.bounds[1], 1)))
-
-
-def _despike(geom: BaseGeometry) -> BaseGeometry:
-    """Open the geometry by a fraction of a pixel to shed hairline spurs.
-
-    Subtracting one polygon from another that nearly grazes it leaves zero-width spikes: a vertex
-    pair that runs out and straight back along the same line. On Inashiro one such spur reached
-    5.5 px ACROSS a delivery ditch off a pocket that was correctly clipped to the ditch's bank, and
-    the recorded ring failed `paddy_bunds_clear_the_supply_channels` - a bund vertex in the middle
-    of the water that no bund was ever placed at. An opening (erode then dilate by the same amount)
-    deletes anything narrower than 2 x SPIKE and restores every straight edge exactly, so a shared
-    seam stays shared.
-
-    MITRE JOINS, not the default round ones. A rounded opening is not idempotent on a real corner:
-    it arcs every convex corner at SPIKE radius and samples the arc, which on the first run here
-    turned 4-vertex basins into 130-vertex rings of near-duplicate points.
-
-    AND THE RESULT IS INTERSECTED BACK WITH THE INPUT, so the opening can only ever REMOVE ground.
-    A mitred offset extends an acute corner by up to `mitre_limit` times the offset in each of its
-    two passes, and at the acute wedges where a pocket runs out between a ditch bank and a plot
-    edge that was enough to push a corner ~5 px past the bank - putting a new basin's bund inside
-    a delivery ditch, which is the very rule (`paddy_bunds_clear_the_supply_channels`) the pocket
-    had been clipped to satisfy. Intersecting makes the pass monotone: whatever the offsets do,
-    the output is a subset of the bare ground that was handed in.
-
-    AND IT NEVER RAISES. Clipping a pocket to a grid cell can produce a ring carrying a zero-length
-    edge, and GEOS refuses to offset one - `TopologyException: found non-noded intersection`, thrown
-    from the middle of a map generation (`test_build_comb_supply_banks_hems_bunds_onto_the_channel_
-    banks`, 2026-08-17). `buffer(0)` nodes the input first, which handles most of them; for the rest
-    the honest answer is that this is a TIDYING step, so a geometry GEOS will not offset goes on
-    un-tidied rather than taking the map down. Nothing downstream trusts it: every ring this pass
-    records is round-tripped for validity before it is kept."""
-    _load_shapely()
-    cleaned = geom.buffer(0)
-    if cleaned.is_empty:
-        return cleaned
-    try:
-        opened = cleaned.buffer(-_SPIKE, join_style="mitre", mitre_limit=2.0).buffer(_SPIKE, join_style="mitre", mitre_limit=2.0)
-        return cleaned.intersection(opened)
-    except GEOSException:
-        return cleaned
-
-
-def _despike_many(geoms: list[BaseGeometry]) -> list[BaseGeometry]:
-    """`_despike` over a list, as shapely 2 ARRAY calls - one call per step for all of them instead of four calls per
-    geometry (feature 276, FR-004). The same opening by `_SPIKE`, mitred, intersected back with the cleaned input; and the
-    same refusal to raise: GEOS may refuse to offset one geometry of the batch, and then the batch is redone one at a time
-    through `_despike` itself, which leaves only that one un-tidied - exactly what it did alone."""
-    _load_shapely()
-    if not geoms:
-        return []
-    import shapely
-
-    try:
-        cleaned = shapely.buffer(geoms, 0)
-        opened = shapely.buffer(shapely.buffer(cleaned, -_SPIKE, join_style="mitre", mitre_limit=2.0), _SPIKE, join_style="mitre", mitre_limit=2.0)
-        out = shapely.intersection(cleaned, opened)
-    except GEOSException:
-        return [_despike(g) for g in geoms]
-    empty = shapely.is_empty(cleaned)
-    return [c if e else o for c, o, e in zip(cleaned.tolist(), out.tolist(), empty.tolist(), strict=True)]
 
 
 def _ring(poly: Polygon) -> Poly:
@@ -253,272 +170,3 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
     below = _band(F, us, [drain_f(u) - bank(u) for u in us], fhi + span)
     above = _band(F, us, [canal_f(u) for u in us], flo - span)
     return unary_union([below, above])
-
-
-def _open_to(pocket: Polygon, w: float) -> Polygon | None:
-    """`pocket` with everything narrower than `w` removed, or None if nothing survives.
-
-    THE TAPERING-SCRAP ESCAPE. A scrap that needles every basin it could join is almost always a
-    TAPERING strip: wide enough to be real at one end, running out to nothing at the other. Welding
-    all of it draws the host out to a point; welding none of it leaves a doubled bund. Neither is
-    what a farmer does - they take the strip as far as it is worth walling and let the last sliver
-    go, which is this function.
-
-    The width to stop at is not a guess: `paddy_plot_seams_shared` ignores a gap under 3 ft on its
-    own stated reasoning ("two bunds that close draw as one line"), so a tail left below that is
-    invisible to the doubled-bund rule by the rule's OWN definition rather than by a tolerance
-    tuned until the pool passed. So the weld gets the workable part and the sub-3-ft tail stays
-    bare, which is also the "odd corner left unpaddied" the research describes.
-
-    Mechanically this is `_despike`'s opening at a larger radius, with the same two safeguards and
-    for the same reasons: MITRE joins (a rounded opening arcs every convex corner and explodes the
-    vertex count) and INTERSECTING the result back with the input (a mitred offset can push an
-    acute corner outward, and this pass must only ever REMOVE ground)."""
-    _load_shapely()
-    try:
-        opened = pocket.buffer(-w / 2, join_style="mitre", mitre_limit=2.0).buffer(w / 2, join_style="mitre", mitre_limit=2.0)
-    except GEOSException:
-        return None
-    parts = _parts(pocket.intersection(opened.buffer(0)))
-    if not parts:
-        return None
-    return max(parts, key=lambda p: p.area)
-
-
-def _weld_apex(ring: Poly) -> float:
-    """How sharp a weld's recorded ring is, read the way the gate reads it - which is TWO ways.
-
-    The deduped ring is the measurement `paddy_plots_are_workable_basins` makes, and the weld is held to a stricter
-    THRESHOLD on it (`_WELD_MIN_APEX`, 18 against 15). But the shipped-hamlet test (retired by feature 287)
-    (`tests/gate/test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point`) reads the ring AS
-    RECORDED, the rule `_is_a_needle` already applies to every repair in `_unjog`. This guard read only the deduped ring
-    (it used to say that one was the gate's only reading), so a weld recording a hairline spur - a vertex 0.5 px out and
-    straight back, 0.88 deg on the raw ring and 80 deg once deduped - passed it and shipped on Kashikawa (feature 276,
-    measured when the seam pass's reordered geometry first produced one). So the raw ring's apex counts too, at the
-    GATE's floor rather than the weld's: a raw apex under 15 deg is a needle whatever the dedup says, and one above it is
-    left to the deduped reading, which is the finer judgment of shape."""
-    apex = _min_apex(dedup_ring(ring, 1.0))
-    raw = _min_apex(ring)
-    return min(apex, raw) if raw < _GATE_MIN_APEX else apex
-
-
-def _min_apex(ring: Poly) -> float:
-    """The sharpest interior angle in `ring`, in degrees (180.0 for a ring too short to have one).
-
-    `pointed_ring` answers the yes/no; this answers "how sharp", which is what lets `_absorb` RANK
-    imperfect welds instead of only accepting or refusing them."""
-    n = len(ring)
-    if n < 3:
-        return 180.0
-    out = 180.0
-    for i in range(n):
-        a, v, c = ring[i - 1], ring[i], ring[(i + 1) % n]
-        v1 = (a[0] - v[0], a[1] - v[1])
-        v2 = (c[0] - v[0], c[1] - v[1])
-        d1 = math.hypot(*v1) or 1.0
-        d2 = math.hypot(*v2) or 1.0
-        cs = max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (d1 * d2)))
-        out = min(out, math.degrees(math.acos(cs)))
-    return out
-
-
-def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, g: float, tree: GeomTree | None = None) -> bool:
-    """Fold a too-thin pocket into the basin it shares the most bund with - the weld that turns two
-    walls with a strip between them into the one wall a real aze is. The neighbor is chosen by
-    SHARED BOUNDARY LENGTH rather than by distance or area: the basin whose wall actually forms
-    most of this strip is the one whose farmer would have taken it in."""
-    _load_shapely()
-    tree = tree or GeomTree(into)  # the pocket pass shares one across a round (feature 220); a lone call builds its own
-    reach = pocket.buffer(0.4)
-    import shapely
-
-    # RANKED IN ONE ARRAY CALL, AND THE POCKET GROWN ONCE (feature 276, FR-004, plan D11/D12): each nearby basin's shared
-    # boundary with the pocket was measured one call at a time, and `pocket.buffer(0.02)` was rebuilt for every basin
-    # tried. The same lengths, the same order, the same grown pocket.
-    near = list(tree.near(pocket.bounds, pad=1.0))  # the basins whose envelope comes within a px of the pocket's - the old gate, from the tree
-    shared_all = shapely.length(shapely.intersection(shapely.boundary([into[j] for j in near]), reach)).tolist() if near else []
-    ranked: list[tuple[float, int]] = [(-shared, j) for j, shared in zip(near, shared_all, strict=True) if shared > 0.0]
-    grown_pocket = pocket.buffer(0.02)
-    # EVERY candidate in turn, not just the best one. A union comes back as a MultiPolygon (the
-    # strip meets that basin only at a point) or with a hole (it wraps the basin) often enough to
-    # matter - 64 of 255 welds on Inashiro - and each failure leaves the doubled bund it was there
-    # to close. The runner-up basin borders the same strip and usually takes it cleanly.
-    _fallback: tuple[float, int, Polygon] | None = None
-    _lumpy: tuple[float, int, Polygon] | None = None
-    _chev: tuple[float, int, Polygon] | None = None
-    _jogged: tuple[int, int, Polygon] | None = None
-    for _neg, j in sorted(ranked):
-        # dilate the scrap by a hair before the union. A scrap and the basin beside it only TOUCH
-        # (they were cut from each other), and a union of two merely-touching polygons comes back
-        # as a MultiPolygon or an invalid ring as often as not - which used to abandon the weld and
-        # leave the doubled bund. 0.02 px is two orders below the 0.1 px the manifest records, so
-        # it changes the geometry by nothing and the overlap by enough.
-        merged = into[j].union(grown_pocket).buffer(0)
-        if not isinstance(merged, Polygon) or merged.interiors:
-            continue
-        # SIMPLIFY CAN INVALIDATE. Douglas-Peucker moves vertices independently, and on the long
-        # thin unions this pass makes that is enough to fold a ring back through itself: Inashiro
-        # shipped a 10-vertex bow-tie basin whose outline crossed its neighbor's twice and read as
-        # a doubled bund at the fan toe. Simplification here is only tidying, so a result that is
-        # not a clean simple polygon is discarded in favor of the union it came from.
-        simplified = merged.simplify(0.05)
-        candidate = simplified if isinstance(simplified, Polygon) and simplified.is_valid and not simplified.interiors else merged
-        # AND JUDGE THE RING THE MANIFEST WILL ACTUALLY CARRY. Validating the shapely polygon is
-        # not enough: `_ring` rounds to 0.1 px afterwards, and on a near-degenerate weld that last
-        # rounding is itself enough to cross two edges (settlement-review, Inashiro 2026-08-17,
-        # basin #570 - a valid union recorded as a 13-vertex ring that folded back on itself into
-        # an 875 sq ft lobe plus a 46 x 1.1 ft sliver). A crossing ring is invisible in ink under a
-        # 1.5 px stroke, which is exactly why it has to be caught here rather than by eye: every
-        # downstream consumer that measures basin geometry gets a MultiPolygon where it expects a
-        # basin. So the recorded ring is round-tripped and the weld declined if it does not survive
-        # - the runner-up basin takes the scrap instead.
-        _cring = _ring(candidate)  # the candidate's ring, derived once (feature 276): four readers below
-        if not Polygon(_cring).is_valid:
-            continue
-        # AND A WELD MUST NOT MAKE A NEEDLE OUT OF THE BASIN THAT TAKES THE SCRAP. Measured by
-        # provenance on Inashiro (2026-08-17): with the carve and `_plant` both refusing needles,
-        # EVERY surviving one was `carved_grown` - a perfectly good basin that welding a toe strip
-        # into it drew out to a point. Absorbing is meant to turn two walls into one, not to trade
-        # a doubled bund for an unworkable apex, so this is judged in the same ladder as the
-        # MultiPolygon, hole and bow-tie rejections above and for the same reason: the runner-up
-        # basin borders the same strip and usually takes it cleanly.
-        #
-        # AND IF NO NEIGHBOR CAN TAKE IT, THE SCRAP STAYS BARE, WHICH IS THE HONEST ANSWER. A
-        # strip that needles every basin it touches is the "odd corner left unpaddied" that the
-        # research describes at a real fan toe - the fan's base floor (`comb_base_fill`) draws
-        # under it, so it reads as the toe's own ground rather than as a hole, exactly as it does
-        # for the slivers `_comb_toe_and_hem` drops.
-        # MEASURE THE RINGS THE GATE MEASURES - see `_weld_apex`.
-        _apex = _weld_apex(_cring)
-        if _apex < _WELD_MIN_APEX:
-            # NOT GOOD ENOUGH, BUT REMEMBER IT - refusing outright is its own defect. Measured on
-            # the 24-seed cohort: declining every needling weld traded two needles for two doubled
-            # bunds (seeds 9 and 11) and took the cohort 22 -> 20, because a scrap that needles the
-            # basin it would join is often a TAPERING strip whose only alternative is to lie bare
-            # between two walls. Neither outcome is realistic, so the choice is not decline-or-
-            # accept: it is WHICH NEIGHBOR takes it. The ranking above is by shared bund length,
-            # which is the right first preference (the farmer whose wall already forms most of the
-            # strip); when none of those is clean, the honest fallback is the neighbor that takes
-            # the strip BEST rather than the one that shares the most of it.
-            # BEFORE GIVING UP ON THIS NEIGHBOR, TRY THE WORKABLE PART OF THE SCRAP. `_open_to`
-            # drops the tapering tail that is narrower than the doubled-bund rule's own 3 ft floor,
-            # so the host takes the part worth walling and what is left is a sliver that rule
-            # already treats as one line rather than two. This is what resolves cohort seeds 9 and
-            # 11, where welding the whole scrap needled the host and welding none of it doubled a
-            # bund - the choice was never between those two.
-            _part = _open_to(pocket, thin)
-            if _part is not None:
-                _m2 = into[j].union(_part.buffer(0.02)).buffer(0)
-                if isinstance(_m2, Polygon) and not _m2.interiors:
-                    _s2 = _m2.simplify(0.05)
-                    _c2 = _s2 if isinstance(_s2, Polygon) and _s2.is_valid and not _s2.interiors else _m2
-                    _r2 = _ring(_c2)
-                    # ...and the partial weld faces the arrowhead test too. This path had only the
-                    # apex guard, and a provenance probe found it was where the survivors came from:
-                    # ZERO chevrons entered `close_seams` on Inashiro and Mizuguchi and three left,
-                    # because welding the workable PART of a scrap is exactly how a basin acquires a
-                    # point at one end and a bite in its side.
-                    if Polygon(_r2).is_valid and _weld_apex(_r2) >= _WELD_MIN_APEX and not is_chevron(_r2):
-                        into[j] = _c2
-                        tree.replaced(j)
-                        grown.add(j)
-                        return True
-            if _fallback is None or _apex > _fallback[0]:
-                _fallback = (_apex, j, candidate)
-            continue
-        # AND A WELD MUST NOT MAKE A LUMP OUT OF THE HOST EITHER. The ranking above is by shared
-        # bund length, which is blind to the SHAPE the union comes out as, and both guards it has
-        # already passed measure an apex - so a union that grows a blunt-cornered lobe or an
-        # out-and-back prong sails through them (settlement-review, Mizuguchi and Sawada
-        # 2026-08-17; see `_WELD_MIN_SOLIDITY` for the measurements and for why solidity rather
-        # than an angle). Treated exactly like a needling weld, and for the same reason: the
-        # runner-up borders the same strip and usually takes it in a shape a farmer would
-        # recognize, but refusing every host outright would trade the lump for a doubled bund.
-        # A WELD MUST NOT MAKE AN ARROWHEAD EITHER, and this is a third measurement rather than a
-        # tighter one: a chevron is pointed AND notched, and this ladder's apex guard (18 deg) and
-        # solidity guard (0.85) each pass a ring at 39 deg / 0.878 that is plainly an arrowhead. See
-        # `_CHEVRON_MIN_APEX` for the measured population. Same treatment as a lump - remembered, not
-        # refused outright, so the scrap still finds a host when no clean one exists.
-        _sol = candidate.area / (candidate.convex_hull.area or 1.0)
-        if is_chevron(_cring):
-            # ...AND REMEMBERED ONLY IF IT CLEARS THE GATE LINE (feature 287, water W25): caught at 40 / 0.90, the chevron
-            # is still an arrowhead to the rule at 35 / 0.85 (`ring_rules.arrowhead`), and a fallback that welds one in
-            # emits the very shape it exists to avoid - so such a host is not remembered, as the needle fallback is held to
-            # the gate line below. With no other host the scrap stays bare: the odd corner left unpaddied.
-            if not arrowhead(_cring) and (_chev is None or _sol > _chev[0]):
-                _chev = (_sol, j, candidate)
-            continue
-        if _sol < _WELD_MIN_SOLIDITY:
-            if _lumpy is None or _sol > _lumpy[0]:
-                _lumpy = (_sol, j, candidate)
-            continue
-        # AND A WELD MUST NOT MAKE THE HOST'S WALL STEP SIDEWAYS. This is the third shape complaint
-        # in the same ladder and it is blind to the two above it by construction: a scrap welded on
-        # flush at both its own ends but a few feet PAST the host's leaves the host a rectangular
-        # tab, which is a right-angled 90/270 corner pair (no apex to fail) at solidity ~0.8 (no lump
-        # to fail) - and reads as an earthen wall randomly zigzagging, which is how the GM found it
-        # (2026-08-18, `jog_steps`). It arises because `_plant` grids a pocket at ITS OWN pitch, so
-        # the offcuts it hands back are cut where neither the row above nor the row below has a seam;
-        # welding one alternately up and down builds the staircase. Judged as a DELTA against the
-        # host's current ring rather than as an absolute, for the reason the apex guard gives about
-        # measuring what the rule measures: a host that already carries a step must not be barred
-        # from taking in the scrap beside it because of a step that was there first.
-        _jog = jog_steps(_cring, g) - jog_steps(_ring(into[j]), g)
-        if _jog > 0:
-            # ...REMEMBERED ONLY IF IT STAYS A NUDGE (feature 287, water W23): the fallback below takes the least-jogged
-            # weld, and it used to take one even when the host came out with three steps - the staircase the GM reported
-            # on Inashiro. A weld leaving the host a flight of steps (`ring_rules.staircase`, the gate's own predicate)
-            # is no fallback at all; the runner-up, the lump, or bare ground takes the scrap instead.
-            if not staircase(_cring, g) and (_jogged is None or _jog < _jogged[0]):
-                _jogged = (_jog, j, candidate)
-            continue
-        into[j] = candidate
-        tree.replaced(j)
-        grown.add(j)
-        return True
-    # THE LEAST-JOGGING WELD, ahead of both. When no host takes the scrap without complaint, a wall
-    # standing a few feet off line is the mildest of the three: the basin is still a basin a farmer
-    # would build, which is more than the lump or the needle can say. Ranked by how many steps the
-    # weld ADDS, so a host that takes the scrap with one step beats one that takes it with three.
-    if _jogged is not None:
-        _, j, candidate = _jogged
-        into[j] = candidate
-        tree.replaced(j)
-        grown.add(j)
-        return True
-    # THE LEAST-LUMPY WELD, ahead of the needle fallback below. A lobe is a milder defect than an
-    # unworkable apex - it is a basin a farmer would call awkward rather than one they could not
-    # flood - so when no host takes the scrap cleanly, the shape complaint yields before the
-    # workability one does.
-    if _lumpy is not None:
-        _, j, candidate = _lumpy
-        into[j] = candidate
-        tree.replaced(j)
-        grown.add(j)
-        return True
-    # ...then the least-bad CHEVRON, behind the lump - one the placer's 40 / 0.90 line catches and the gate's 35 / 0.85
-    # line passes, since no other is remembered (feature 287, W25). A chevron is the worse read of the two - a
-    # lump is an awkward basin, an arrowhead does not read as a basin at all - so it is the last
-    # shape the ladder will accept, and only when no other host will take the scrap. (Merged
-    # 2026-08-18: this tier and the jog tier above were added independently by two sessions to the
-    # same ladder. Order is by how badly the shape reads - jog, then lump, then arrowhead - so the
-    # mildest complaint yields first, which is the ordering rule the two tiers above already state.)
-    if _chev is not None:
-        _, j, candidate = _chev
-        into[j] = candidate
-        tree.replaced(j)
-        grown.add(j)
-        return True
-    # THE LEAST-BAD WELD, and only if it still clears the GATE. `_WELD_MIN_APEX` is the placer's
-    # margin, not the rule; a union between the gate line and that margin is a basin the gate
-    # ACCEPTS, so welding it is strictly better than leaving a doubled bund. Below the gate line it
-    # is a real needle and the scrap stays bare instead - the "odd corner left unpaddied" the
-    # research describes, which the Sawada review confirmed is invisible in ink (the fan's base
-    # floor is drawn in the same fill as a plot interior, measured at the pixel).
-    if _fallback is not None and _fallback[0] >= _GATE_MIN_APEX + 1.0:
-        _, j, candidate = _fallback
-        into[j] = candidate
-        tree.replaced(j)
-        grown.add(j)
-        return True
-    return False

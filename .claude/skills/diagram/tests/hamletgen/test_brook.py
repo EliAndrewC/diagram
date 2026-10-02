@@ -458,3 +458,16 @@ def test_the_mouth_leaves_the_canvas_however_far_across_the_fall_the_course_head
     span = (H - out[-1][1]) + 260.0
     assert legs[-3][1] + 0.26 * span < H, "the case: the unlengthened leg ended on the sheet"
     assert "mouth" in wb.brook_violations([(700.0, -100.0), (700.0, 200.0), TAP, (700.0, 400.0), (1100.0, 900.0), (1150.0, 1300.0)], a_plan(), TAP)
+
+
+def test_a_straight_mid_leg_confluence_is_not_read_as_a_ruled_run() -> None:
+    """Feature 302 (water:W03): a confluence held mid-leg adds a vertex on a straight line - it changes no stroke drawn, but the
+    ruled rule's chord test, which leaves one straight leg alone, counted the leg as a three-vertex run. The rule reads the drawn
+    course without such a vertex; a join on a bend, or off the line, is kept."""
+    from l7r.diagram.hamletgen.water.brook_rules import without_straight_joins
+
+    fin = [(0.0, 0.0), (100.0, 0.0), (300.0, 0.0), (300.0, 200.0)]
+    assert without_straight_joins(fin, [(100.0, 0.0)], 1.0) == [(0.0, 0.0), (300.0, 0.0), (300.0, 200.0)], "the collinear join dropped"
+    assert without_straight_joins(fin, [(300.0, 0.0)], 1.0) == fin, "a join on the bend is kept"
+    assert without_straight_joins(fin, [], 1.0) == fin, "no join: the course as drawn"
+    assert without_straight_joins(fin[:1], [(0.0, 0.0)], 1.0) == fin[:1] and without_straight_joins([], [], 1.0) == []

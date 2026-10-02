@@ -36,6 +36,21 @@ def test_a_laid_rectangle_is_rounded_and_waved_within_itself() -> None:
     assert outline.natural_outline(laid, seed=300) != shaped
 
 
+def test_no_seed_draws_a_straight_run_along_a_long_laid_edge() -> None:
+    """The wave's lead (`WAVE_LEAD_FT`): three equal components could all roll long and draw a 165 ft ruled stretch (Inashiro's
+    toe under feature 302). On a long laid edge, no seed's simplified outline has a chord of two thirds the shortest length."""
+    laid = [(0.0, 0.0), (300.0, 0.0), (300.0, 1800.0), (0.0, 1800.0)]
+    bar = outline.WAVE_LENGTH_FT[0] * 2 / 3
+    edge = LineString([(0.0, 120.0), (0.0, 1680.0)]).buffer(45.0)  # the long laid side, clear of its corners
+    worst = 0.0
+    for seed in range(40):
+        shaped = outline.natural_outline(laid, seed=seed)
+        for a, b in zip(shaped, [*shaped[1:], shaped[0]], strict=True):
+            if edge.contains(LineString([a, b])):
+                worst = max(worst, math.dist(a, b))
+    assert 0.0 < worst < bar, worst
+
+
 def test_a_narrow_band_keeps_what_rounding_it_can_and_a_degenerate_ring_is_returned_as_it_is() -> None:
     narrow = [(0.0, 0.0), (800.0, 0.0), (800.0, 40.0), (0.0, 40.0)]
     shaped = Polygon(outline.natural_outline(narrow, seed=1))

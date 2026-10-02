@@ -1,14 +1,13 @@
-# `seams/` - closing a carved comb fan into one shared-bund fabric
+# `seams/` - what is left of the seam pass
 
-Split from the 1,069-line `seams.py` by feature 173 (constitution Principle X clause 13 - the cost being managed is context-window tokens, and the bar is now GATED by `scripts/check-file-scale.py`). **Load only the file the task calls for**; this index is the map.
-
-Its modules are LAYERS, emitted bottom-up: every cross-module reference points backwards, so the package cannot have an import cycle. Read the last row first if you want the entry point.
-
-## Look here when
+`close_seams` reconciled a CARVED comb fan into one shared-bund fabric. Feature 302 lays the plots as a partition of the planted
+region instead (`../partition.py`, which carries the shared-bund research), and deleted the pass and everything only it reached
+(`plots.py` whole, the pocket machinery, `_absorb`, `_plant`, `_unjog`, `_shed_necks`, `_visible_parts`, ...). **Load only the
+file the task calls for.**
 
 | file | look here when |
 |---|---|
-| `pockets.py` (416) | a pocket's geometry: despiking, rings, the water body, the outside-command band, and `_absorb` - the merge of a thin pocket into its neighbors |
-| `plots.py` (377) | what becomes of a pocket: `_plant` lays plots in it, `_tab_cut`/`_unjog` straighten their edges, `_trade` hands a corner to the neighbor that can use it |
-| `close.py` (262) | the driver - `close_seams`, which runs the pass end to end and is the only name the engine calls - and its last word, `hold_ring_rules` (feature 287): every ring that still breaks a `ring_rules` rule is split (a staircase, cut on its hop), welded, or left bare |
-| `__init__.py` | the composed surface only - the re-exports that keep every existing importer working. Never add logic here |
+| `pockets.py` | the water body and its banks (`_water`) or the band a fan cannot command (`_outside_command`) - the planted region is the envelope less both; `_parts` / `_ring`, read by the grave cut |
+| `close.py` | `hold_ring_rules` - every ring a later cut leaves breaking a rule is split (a staircase, cut on its hop: `_split_steps`, which `../settle.py` also uses), welded, or left bare; the grave cut in `settlement/fields/features.py` is its caller |
+| `geoms.py` | `ring_polygons`, `GeomTree` |
+| `__init__.py` | the composed surface only. Never add logic here |

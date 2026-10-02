@@ -1,0 +1,111 @@
+{
+ "feature": "302-field-by-construction",
+ "plan_sha256": "15305e8e1ab3a34db73c509e13c84e4f48894ef26480678246e3266c5133fa78",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Inputs captured from fit_field's arguments, deep-copied per method; skeleton steps reused",
+   "class": "within",
+   "why": "FR-002; spec Assumptions."
+  },
+  {
+   "id": "D2",
+   "summary": "Planted region = envelope less water less outside-command; its area the acreage; trials scored on it",
+   "class": "within",
+   "why": "FR-007; round 1/2 verified the predicates read only the extent."
+  },
+  {
+   "id": "D3",
+   "summary": "Partition by row and column bunds per sector, polygonize of the noded union",
+   "class": "within",
+   "why": "FR-006, FR-009."
+  },
+  {
+   "id": "D4",
+   "summary": "Cells judged by ring_violations and the toe discipline; staircases split, others merged; a cell neither fixes is LEFT BARE as hold_ring_rules' third way leaves it today, under SC-003's bound",
+   "class": "within",
+   "why": "Amended since round 2. Not a narrowing: SC-003 itself bounds residual bare ground (<0.5%), the Decision 'every scrap planted' is 'unchanged' from today's state, which includes the third way, and US2-3's 'without first leaving the ground bare' is about order (no bare-then-repair pass), which a decision at construction honors. R2 measured at most 0.36%."
+  },
+  {
+   "id": "D5",
+   "summary": "Dry hem, beans, net assembly on the prototype's plots, inside its time",
+   "class": "within",
+   "why": "SC-004, FR-009."
+  },
+  {
+   "id": "D6",
+   "summary": "Harness computes the verdict",
+   "class": "within",
+   "why": "SC-001, FR-004, FR-005, SC-003."
+  },
+  {
+   "id": "D7",
+   "summary": "Phase 1 replaces the carve's plot cutting, the toe drop, close_seams and planted_area for comb fields; polder and hill unchanged",
+   "class": "within",
+   "why": "FR-006, FR-007, FR-011, Edge Cases."
+  },
+  {
+   "id": "D8",
+   "summary": "Fit scores each trial on its region; fan_admissible judges the built net",
+   "class": "within",
+   "why": "FR-007."
+  },
+  {
+   "id": "D9",
+   "summary": "Union prediction retired; trial count re-measured, kept or cut by measurement",
+   "class": "within",
+   "why": "FR-010."
+  },
+  {
+   "id": "Phase1-amendment",
+   "summary": "Phase 1 design amended in after Phase 0's GO",
+   "class": "within",
+   "why": "FR-005 order; this round reviews it."
+  },
+  {
+   "id": "Occasion",
+   "summary": "Paddy glyph check on Inashiro declared as the delta's occasion",
+   "class": "within",
+   "why": "Verification of a changed placement rule; not new scope."
+  },
+  {
+   "id": "D10",
+   "summary": "Three new modules (partition, settle, tint) under the 1,000-line bar; _split_steps moved, tint judgment moved verbatim",
+   "class": "within",
+   "why": "Structure for FR-006/FR-008; tint verbatim keeps FR-009's flooded/low marking; file bar is a standing rule."
+  },
+  {
+   "id": "D11",
+   "summary": "carve_comb returns the skeleton and region, no plots; finish_comb partitions, settles, tints, hems, assembles; build_comb unchanged in shape",
+   "class": "within",
+   "why": "FR-006 (plots laid once on the winner), FR-007 (search reads the region), FR-009 (water first)."
+  },
+  {
+   "id": "D12",
+   "summary": "Fit scores carve.region.area; planted_area and its union deleted (area-sum lever dropped, nothing left to predict); trial count unchanged because a trial now costs ~0.02 s",
+   "class": "within",
+   "why": "FR-010's own drop clause: both levers acted on what the redesign removes - the union prediction is gone, and a trial no longer carves plots (R2: the search 0.07 s for three trial sizes, Inashiro). The GM conditioned the small fixes on 'mak[ing] sense in the context of the redesign'. The decision stands on that measured cost; the feature-284 sentence is evidence from the OLD pipeline and is a supporting remark, not the ground."
+  },
+  {
+   "id": "D13",
+   "summary": "Carve plot-cutting, sector_rows, _comb_toe_and_hem, close_seams and its exclusive helpers deleted; hold_ring_rules/_weld_within_rules kept for the grave cut; tests of deleted functions deleted, rules carried by ring_rules tests, settle's toe tests and a new seam-sharing test",
+   "class": "within",
+   "why": "FR-006 (deleted where nothing else calls it - checked: grave cut in settlement/fields/features.py is the other caller, kept; polder/hill import nothing from carve or sector_rows), FR-011. The tint test moves with the tint (D10), which FR-011's 'moved' clause covers."
+  },
+  {
+   "id": "D14",
+   "summary": "Open quality items (some larger/longer cells; 10-30% fewer plots on three inputs) judged on the regenerated maps by the gate and the glyph check, fixed before the push",
+   "class": "within",
+   "why": "SC-006 plus the declared occasion and constitution XIV; nothing in FR-009 is relaxed - a finding is fixed, not waived."
+  },
+  {
+   "id": "D15",
+   "summary": "Red-green order: modules with unit tests, switch, deletions, coverage floor; Inashiro then the pool",
+   "class": "within",
+   "why": "SC-008, FR-011; the motivating map first is standing practice."
+  }
+ ],
+ "verdict": "CLEAR"
+}

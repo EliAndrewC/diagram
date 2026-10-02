@@ -189,21 +189,27 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     return house_clear(a, b, own, house_gap(s)) and fixtures_clear(s, a, b, own) and parts_clear(s, a, b, own) and standing_clear(s, a, b)
 
 
-#: How far off a house's wall the web's tread keeps, in feet, beyond its half-width: the ways' `house_hit` pad (2 ft), which
-#: this package cannot import; `tests/settlement/test_access.py` holds the two equal.
-HOUSE_PAD_FT = 2.0
+#: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7): GUESS, anchored on the research's three-shaku
+#: (~3 ft) eaves strip before a townhouse (research/contents.json#compounds) with a margin for the eaves themselves; the recorded defect was a
+#: tread 3.85 ft from a wall, and every pool map measured 4.9 ft or more when the rule was written (rules-recon.md item 8). The
+#: house seating holds a house off every tread by it (`houses._on_a_tread`, which imports it from here) and a corridor holds its
+#: tread off its own house by it (`house_gap`).
+TREAD_WALL_FT = 4.0
 
 
 def house_clear(a: Pt, b: Pt, own: Any, gap: float = 0.5) -> bool:
-    """Does a corridor a-b keep `gap` off its own house (`own`'s)? The seating asks it at the web's own bar (`house_gap`): a
-    corridor grazing its house's corner by less than the tread and `house_hit`'s pad was reserved and then refused by the
-    web when it came to draw it (cohort seed 44, feature 287 M8), leaving the house with no way."""
+    """Does a corridor a-b keep `gap` off its own house (`own`'s)? The seating asks it at `house_gap`: a corridor grazing its
+    house's corner by less than the tread and `house_hit`'s pad was reserved and then refused by the web when it came to draw
+    it (cohort seed 44, feature 287 M8), leaving the house with no way."""
     return not seg_box_within(a, b, own.get("boxes", {}).get("house") or own["house"], gap)
 
 
 def house_gap(s: Settlement) -> float:
-    """The gap a corridor's line keeps off its own house: the web's tread half-width, `house_hit`'s pad and the margin."""
-    return s.px(TREAD_HALF_FT + HOUSE_PAD_FT + PART_MARGIN_FT)
+    """The gap a corridor's line keeps off its own house: the tread's half-width, the tread-to-wall rule (`TREAD_WALL_FT`) and
+    the margin. It kept the web's `house_hit` pad (2 ft) until feature 302 found a corridor 3.80 ft from its own house's wall
+    (Inashiro, B7): feature 294 raised the house seating's clearance to 4 ft and not this one. The 4 ft rule is the stricter,
+    so a corridor it admits the web's pad admits too."""
+    return s.px(TREAD_HALF_FT + TREAD_WALL_FT + PART_MARGIN_FT)
 
 
 def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:

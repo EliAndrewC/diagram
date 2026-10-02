@@ -54,6 +54,7 @@ from .brook_rules import (
     tap_index,
     to_edge,
     turn_deg,
+    without_straight_joins,
 )
 
 # THE WEIR'S FORM (269 B22; research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
@@ -518,7 +519,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     fin = drawn_course(course, [sluice], joins)
     W, H = float(plan.W), float(plan.H)
     box = reserved_box(course, plan)
-    run, bound, _a, _b = ruled_excess(fin, W, H, box)
+    run, bound, _a, _b = ruled_excess(without_straight_joins(fin, joins, JOIN_ON_COURSE), W, H, box)
     checks = {
         "fold": max_turn_deg(fin) > BROOK_MAX_TURN_DEG,
         "level": bool(level_runs_any_view(fin, W, H, box)),

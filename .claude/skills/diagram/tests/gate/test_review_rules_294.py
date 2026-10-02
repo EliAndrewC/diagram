@@ -27,13 +27,19 @@ from shapely.geometry import LineString, Point, Polygon, box
 from shapely.ops import unary_union
 from shapely.strtree import STRtree
 
+from l7r.diagram.settlement.rolling.bearing import BEARING_JITTER_DEG
+
 _SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _HAMLETS = sorted(glob.glob(os.path.join(_SKILL, "pool", "hamlets", "*", "*.gen.py")))
 
 FOOTBRIDGE_GAP_FT = 60.0  # GUESS (plan D11): the recorded case was two decks side by side (feature 269, rounds 1-2)
 BEARING_BAND_DEG = 33.75  # research homesteads/240: the commonest compass point and the two either side
 PILE_AT_LIMIT = 2  # no more than two houses within a degree of the widest turn (the 9-of-16 pile, 269 E round 1)
-PILE_FLOOR_DEG = 5.0  # a turn this small is the common bearing itself, not a clamp
+# A pile is a CLAMP only past what the by-eye spread reaches alone: inside the engine's +-12 degree triangular spread
+# (`BEARING_JITTER_DEG`) the soft limit is nearly linear, so houses bunched near the widest turn are chance, not a clamp.
+# It was 5 degrees, which fired on Kashikawa under feature 302: 20 houses spread -8.2 to +7.6, five within a degree of
+# the widest (2026-10-01) - a spread, with the band's edge at 33.75 and the soft limit's at 30 nowhere near
+PILE_FLOOR_DEG = BEARING_JITTER_DEG
 SHED_TURN_TOL_DEG = 2.0
 HIT_SHARE_FLOOR = 0.8  # GUESS (plan D11): a class answers the pointer over at least 80% of its own visible ink
 HIT_MIN_PIXELS = 50  # a class with less visible ink than this is a few pixels of edge, not a region to hover
@@ -99,6 +105,8 @@ def test_a_pile_at_the_clamp_and_a_house_out_of_the_band_fire() -> None:
     assert bearing_faults([{"rot": 30.0}] * 9 + [{"rot": 3.0}] * 7, 0.0) == ["9 houses piled at 30.0 deg"]
     assert bearing_faults([{"rot": 40.0}, {"rot": 0.0}], 0.0) == ["house 0 turned 40.0 deg"]
     assert bearing_faults([{"rot": 0.0}] * 10, 0.0) == [], "every house on the common bearing is no pile"
+    spread = [-8.2, -7.8, -7.5, -7.4, -4.1, -2.8, -2.4, -1.0, -0.8, -0.6, 0.1, 0.2, 0.5, 1.5, 2.1, 2.3, 3.8, 4.7, 6.1, 7.6]
+    assert bearing_faults([{"rot": t} for t in spread], 0.0) == [], "Kashikawa's spread inside the by-eye range is no pile"
 
 
 # ---- B12: the brook crosses the view as one piece ---------------------------------------------------------

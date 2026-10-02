@@ -1,0 +1,90 @@
+{
+  "paddy-F1": {
+    "verifies": "F1",
+    "subject": "glyph-check--paddy",
+    "answers": "0171c4adc694",
+    "value": 0,
+    "unit": "sq ft",
+    "quantity": "bare ground within 40 ft of the east sector head (3646, 2589), the comb floor less the plots and the engine's water opened 3 ft (was 7,218 on the reviewed manifest); the whole field's bare share 0.07% (was 0.906%)",
+    "source": "pool/hamlets/inashiro/inashiro.json comb_floors, fields[0].plot_rings, drawn_channels; the reviewed manifest from 1249742be",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_field_302.py",
+    "round": "0b2ab1553"
+  },
+  "paddy-F2": {
+    "verifies": "F2",
+    "subject": "glyph-check--paddy",
+    "answers": "0171c4adc694",
+    "value": 2.05,
+    "unit": "design cells",
+    "quantity": "the largest plot ring over the field's design cell (was 4.18, plot 228); plots over RECUT_OVER 2.5: 0 (was 1)",
+    "source": "pool/hamlets/inashiro/inashiro.json fields[0].plot_rings and cell",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/waterfields/test_settle.py",
+    "round": "0b2ab1553"
+  },
+  "paddy-F3": {
+    "verifies": "F3",
+    "subject": "glyph-check--paddy",
+    "answers": "0171c4adc694",
+    "value": 0,
+    "unit": "cells",
+    "quantity": "cells the settle leaves bare for a toe fault from a toothed or folded row (was 4 near the east head, each with a 1-2 px sawtooth on its row edge); a row's vertices are now only where a kept column runs, and a row never folds back (the partition test)",
+    "source": "the settle's scrap list on Inashiro's field (debug harness, specs/302 research R5)",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/waterfields/test_partition.py",
+    "round": "0b2ab1553"
+  },
+  "paddy-F4": {
+    "verifies": "F4",
+    "subject": "glyph-check--paddy",
+    "answers": "0171c4adc694",
+    "value": 0,
+    "unit": "sq ft",
+    "quantity": "bare ground within 40 ft of the fan apex (2977, 1834), opened 3 ft (was 410)",
+    "source": "pool/hamlets/inashiro/inashiro.json, as paddy-F1",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_field_302.py",
+    "round": "0b2ab1553"
+  },
+  "bamboo-F1": {
+    "verifies": "F1",
+    "subject": "glyph-check--homestead-bamboo",
+    "answers": "74fa064b7bc3",
+    "value": 0,
+    "unit": "marks",
+    "quantity": "bamboo marks inked in the scrub grass's yellow-greens (#9AAE3C / #B9CC5A) on Sawada (was every one); 65 strokes now in the jade culm green BAMBOO_CULM, which no grass, reed or crown uses, the stand on a faint shade of it",
+    "source": "pool/hamlets/sawada/sawada.svg",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_tiles_298.py",
+    "round": "f1d34de85"
+  },
+  "bamboo-F2": {
+    "verifies": "F2",
+    "subject": "glyph-check--homestead-bamboo",
+    "answers": "74fa064b7bc3",
+    "value": 0,
+    "unit": "strips",
+    "quantity": "homestead strips with a lane centerline between the strip and its own house (was 1 of 2: the strip at (4571, 2920)); the placer asks across_a_lane beside the stream test, and that house now seats none",
+    "source": "pool/hamlets/sawada/sawada.json bamboo_stands[role=homestead].of against lanes",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_homesteads.py",
+    "round": "f1d34de85"
+  },
+  "grave-F1": {
+    "verifies": "F1",
+    "subject": "glyph-check--grave-island",
+    "answers": "74fa064b7bc3",
+    "value": 3,
+    "unit": "stones",
+    "quantity": "grave stones on Inashiro's island whose base stands inside the mound's ellipse: 3 of 3 (was 2 of 3); each step back held inside the ellipse at its x (stone_step)",
+    "source": "pool/hamlets/inashiro/inashiro.svg, the grave island's ellipse and its stone rects",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_field_guarantees.py",
+    "round": "f1d34de85"
+  },
+  "grave-F2": {
+    "verifies": "F2",
+    "subject": "glyph-check--grave-island",
+    "answers": "95c7fdbe857e",
+    "value": 3,
+    "unit": "stones",
+    "quantity": "grave stones on Inashiro's island standing on the mound AND each further back than the last: bases at y 2554.4, 2552.2, 2550.1 (round 2 found the third 0.4 ft in front of the second under the per-stone clamp); the whole stagger is scaled to fit (stone_steps)",
+    "source": "pool/hamlets/inashiro/inashiro.svg, the grave island's ellipse and its stone rects",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_field_guarantees.py",
+    "round": "after f1d34de85"
+  }
+}
