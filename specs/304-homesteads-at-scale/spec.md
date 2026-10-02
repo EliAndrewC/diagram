@@ -103,7 +103,8 @@ and the cohort and check every map passes its rules and seats every household it
 - 80 households and up: the field refuses before the homesteads run (`FieldRefused`). That is a village-design question (one fan
   cannot land 104 acres), out of scope here; the benchmark stops at 40 and says why.
 - A seed that refuses at a benchmark size on the base engine (a `WebRefused` or `FieldRefused`): the snapshot records the
-  refusal for that row, not a time, and does not fail the run; the seed list is chosen on the base so every row rolls.
+  refusal for that row, not a time, and does not fail the run. The four reference seeds are kept at every size; a refusing
+  seed is never swapped out (seeds 39 and 47 have not yet been rolled above 15 households).
 - Seed variance: seed 25 at 20 households took 5.0 s in homesteads where seed 4 took 1.5 s. The benchmark keeps the reference's
   fixed seeds so a slow seed stays in the set, as perf_snapshot's own docstring requires.
 - Machine load: every before/after comparison is the base and the clone run back to back (feature 297's method), never against
@@ -122,9 +123,9 @@ and the cohort and check every map passes its rules and seats every household it
   the same targets in the same order as the whole-tree scan.
 - **FR-005**: The standing-ground and corridor clearance checks that the profile names MUST ask an index for nearby segments
   in place of scanning all of them, with the same verdicts.
-- **FR-006**: The exhaustive seating pass MUST stop offering seats a placement would refuse for a reason known before the
-  placer runs; the form is chosen in the plan by measurement, and a form that seats fewer households on any cohort seed is
-  withdrawn.
+- **FR-006**: The exhaustive seating pass MUST stop offering dead seats by one of the two named forms - the seat region kept
+  current as houses land, or the line-of-sight reach region priced in feature 297's research - chosen in the plan by
+  measurement; a form that seats fewer households on any cohort seed is withdrawn. Any other pruning goes to the GM first.
 - **FR-007**: Every lever MUST be measured by the wall clock, base and clone back to back, and recorded in
   `dev/performance.md` with what it bought and what it did not, including any lever withdrawn.
 - **FR-008**: No pool map or cohort seed may fail a rule it passed before; maps may move within the rules (GM 2026-09-30,
@@ -146,6 +147,9 @@ and the cohort and check every map passes its rules and seats every household it
   of ~4), measured on the fixed seeds, back to back.
 - **SC-003**: The homesteads stage at 40 households is at least 2x faster than the base by the wall clock (base 7.1-7.7 s on
   seeds 4 and 25).
+- SC-002 and SC-003 are the session's stated goals, not the GM's: nothing has yet measured that the three levers can reach them.
+  A miss is recorded in `dev/performance.md` with what each lever bought, and raised with the GM; it is not pursued with levers
+  beyond the three accepted.
 - **SC-004**: The 15-household reference does not get slower (perf band 0 or better).
 - **SC-005**: The indexed lookups (User Story 2) leave every pool map and cohort seed's houses, corridors and lanes identical.
 - **SC-006**: Every cohort seed seats at least the households it seated on the base, and the cohort passes as many seeds as it
@@ -165,8 +169,9 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
 
 - 40 households stands in for a small village's household count; the village tier's own generator may change the stages, but
   the homesteads placer is the code a village will reuse.
-- The perf bookend's cost grows by the three new sizes; at the base figures that is about 70 s of stage time over four seeds,
-  paid only where the bookend runs today (`make done FULL=1`, `make perf`), never in `make quick` or the plain gate.
+- The perf bookend's cost grows by the three new sizes; an estimate (observed 2026-10-01, method: the scratch scaling
+  probe's stage totals for seeds 4 and 25 at 10, 20 and 40 households, 19.1-25.1 s a seed) of 76-100 s of stage time over the
+  four seeds, the two unprobed seeds (39, 47) unmeasured, paid only where the bookend runs today (`make done FULL=1`, `make perf`), never in `make quick` or the plain gate.
 - The line-of-sight reach region and the live seat region are both candidates for FR-006; feature 297's research (R9-R17)
   lists the levers already withdrawn and is read before either is built.
 - The field's refusal at 80 households is left to the village tier.
