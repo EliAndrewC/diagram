@@ -163,3 +163,6 @@ def test_a_thin_dooryard_band_runs_its_trees_its_whole_length() -> None:
         lo, hi = 400.0 - max(w, h) / 2, 400.0 + max(w, h) / 2
         steps = [along[0] - lo, *(b - a for a, b in zip(along, along[1:], strict=False)), hi - along[-1]]
         assert max(steps) < max(w, h) / 2, (w, h, steps)
+        discs = [(tc[i + 1] if h > w else tc[i], tc[i + 2]) for i in range(0, len(tc), 3)]
+        bare = (min(c - r for c, r in discs) - lo, hi - max(c + r for c, r in discs))
+        assert max(bare) <= 0.0, ("a crown reaches each end of the band, where it joins the belt", w, h, bare)

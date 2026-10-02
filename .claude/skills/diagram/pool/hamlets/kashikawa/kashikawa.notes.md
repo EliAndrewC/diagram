@@ -1066,6 +1066,12 @@ Measured on this roll (2026-09-30): 20 houses, all on one street, 20 grove farms
 shrine 1 - every declared fixture seated; household bamboo in 15 groves; 25 lanes; every row, water, door, bamboo, grove
 and overlap rule clean; attempt 1.
 
+Re-measured 2026-10-02 (feature 310, every crown kept out of the plots' sun): household bamboo in 6 groves of 20
+(`meta.household_bamboo_in_grove`). The roll is per farm and positional (`_hjit` at `HOUSEHOLD_BAMBOO_PREVALENCE` 0.6),
+so moving the houses re-draws it; the hash itself measures 60.1% over 200,000 random points and the pool's 82 farms
+draw 46 (56%) - this map's 6 is an unlucky draw for this layout, not a lost stand. Thin east bands: 20, 66 crowns,
+2 to 5 a band, each running on from its north band (widest crown-edge gap at the joint 7.0 ft, inside a band 6.6 ft).
+
 ## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
 
 Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every

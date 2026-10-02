@@ -620,13 +620,17 @@ class GrovesMixin:
             # A THIN BAND'S FEW TREES RUN ITS WHOLE LENGTH (feature 310, the homestead grove's glyph-check on Kashikawa): a farm
             # grove's thin side (the dooryard mix, a band at least twice as long as it is wide) carries four or five items, and
             # thrown anywhere in the box they left the band's end bare on 2 farms in 20 - a tree standing 20-30 ft clear of the
-            # north band it joins. So each item takes its own equal stretch of the long axis, jittered inside it.
+            # north band it joins. So the items are spread END TO END along the long axis, the first and last at the band's
+            # two ends and the rest jittered round their even steps: an item in each of n equal stretches still left the
+            # first crown up to a stretch from the joint (12.7 and 17.1 ft clear of the north band on Kashikawa, the
+            # homestead grove's third glyph-check round), where the band must run on from the north band's corner.
             strata = mix == "dooryard" and max(w, h) >= 2.0 * min(w, h)
             for k in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
                 py = random.uniform(-h / 2 + 2, h / 2 - 2)
                 if strata:
-                    t = (k + random.random()) / n  # the k-th of n equal stretches
+                    jig = random.random() - 0.5
+                    t = 0.5 if n == 1 else (k if k in (0, n - 1) else k + 0.6 * jig) / (n - 1)  # ends pinned, the rest near their steps
                     if h >= w:
                         py = -h / 2 + 2 + t * (h - 4)
                     else:
