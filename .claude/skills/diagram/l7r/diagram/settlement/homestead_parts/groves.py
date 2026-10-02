@@ -6,7 +6,7 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import CrownIndex, PointGrid, _union_area, point_in_poly, seg_dist
+from .._geom import CrownIndex, PointGrid, _union_area, boxed_grid, boxed_polys, boxes_meeting, nearest_seg_dist, point_in_poly, seg_dist, seg_reach_index
 from .._knobs import CITY_TIER_SCALES, Knob, knob_rng, register_knob
 from ._helpers import _belt_axis
 from .grove_sides import GROVE_FLANKS, GROVE_SIDES, GROVE_SIDES_FLOOD, THIN_BAND_FT, grove_faces
@@ -281,8 +281,12 @@ class GrovesMixin:
         the marsh (`wet`, where the belt is alder), and where the crown covers no building or wellhead and stands under no
         other crown - the tests every crown of `_draw_grove` answers, asked of indexes built once here."""
         line = belt_centerline(seated, self.px(RANK_BIN_FT))
-        segs = list(zip(line, line[1:], strict=False))
-        half = max(min(seg_dist(x, y, a, b) for a, b in segs) for x, y in seated) + clump / 2
+        # THE BELT'S HALF-DEPTH FROM THE CENTERLINE'S NEAR SEGMENTS (feature 306, the GM: a check against many things means
+        # a line was not drawn to stay beside). Each seat measured its distance to EVERY centerline segment - nearly all of
+        # the 15,005 comparisons a call on the pool - to take the nearest; the segments are filed once and each seat asks
+        # outward from a clump's width (`nearest_seg_dist`), which returns the same minimum.
+        axis = seg_reach_index([(line, 0.0)], 0.0)
+        half = max(nearest_seg_dist(axis, x, y, clump) for x, y in seated) + clump / 2
         ground = PointGrid(clump)
         ground.extend([(x - clump / 2 + 2, y - clump / 2 + 2, x + clump / 2 - 2, y + clump / 2 - 2) for x, y in seated])
         bb = (min(p[0] for p in seated) - clump, min(p[1] for p in seated) - clump, max(p[0] for p in seated) + clump, max(p[1] for p in seated) + clump)
@@ -291,6 +295,10 @@ class GrovesMixin:
         rects.extend([(cx, cy, hw, hh, cx - hw, cy - hh, cx + hw, cy + hh) for cx, cy, hw, hh in krect])
         circs.extend([(wx, wy, wr, wx - wr, wy - wr, wx + wr, wy + wr) for wx, wy, wr in kcirc])
         crowns = CrownIndex(self._crowns_near(*bb))
+        # THE MARSH FROM ITS BOXES (feature 306, the GM: a check against many things means a box was not drawn): a point
+        # outside a ring's box is outside the ring, so the rings whose box (a pixel wider) holds the row point are the only
+        # ones `point_in_poly` can find it in, and it decides as before.
+        marsh = boxed_grid(boxed_polys(wet, 1.0))
         jit, base = self.px(RANK_JITTER_FT), self.px(self.CANOPY_R_FT) * 1.15
         lo, hi = RANK_CONIFER_S
         drawn: list[tuple[float, float, float]] = []
@@ -298,7 +306,7 @@ class GrovesMixin:
         for rx, ry in rank_points(line, half, self.px(RANK_ALONG_FT), self.px(RANK_APART_FT)):
             if not any(b[0] <= rx <= b[2] and b[1] <= ry <= b[3] for b in ground.near(rx, ry)):
                 continue
-            if any(point_in_poly(rx, ry, w) for w in wet):
+            if any(point_in_poly(rx, ry, it[0]) for it in boxes_meeting(marsh, rx, ry, rx, ry)):
                 continue
             x = rx + (self._hjit(rx, ry, 95.0) - 0.5) * 2 * jit
             y = ry + (self._hjit(rx, ry, 96.0) - 0.5) * 2 * jit

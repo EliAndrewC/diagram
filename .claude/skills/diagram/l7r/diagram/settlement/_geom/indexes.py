@@ -350,6 +350,46 @@ def seg_reach_index(lines: Any, extra: float) -> PointGrid:
     return grid
 
 
+def within_reach(grid: PointGrid, x: float, y: float, reach: float) -> bool:
+    """Does any segment filed by `seg_reach_index` stand within `reach` of (x, y), inclusive - the scan
+    `min(seg_dist over every segment) <= reach` asked of the index (feature 306). Exact when each item's box was widened
+    by at least `reach`: a point outside a widened box stands farther than `reach` from that segment, so the box-checked
+    items `near` returns hold every segment the scan could find within reach, and `seg_dist` decides as before."""
+    return any(it[3] <= x <= it[5] and it[4] <= y <= it[6] and seg_dist(x, y, it[0], it[1]) <= reach for it in grid.near(x, y))
+
+
+def nearest_seg_dist(grid: PointGrid, x: float, y: float, r: float) -> float:
+    """`min(seg_dist(x, y, a, b))` over every segment filed in `grid` (a `seg_reach_index`; only each item's `a`, `b`
+    and box are read), asked of the segments near (x, y) rather than all of them (feature 306). The search starts at
+    radius `r` and doubles until some segment stands within it: a segment within `r` has its nearest point - inside its
+    own box - within `r` of (x, y) on each axis, so its box meets the query box (a pixel wider, so a rounding cannot drop
+    one); once the nearest candidate is within `r`, every segment left out stands farther than `r`, so the candidates'
+    minimum is the minimum over all, the same float. An empty grid raises as `min` of nothing does."""
+    if not grid.n:
+        raise ValueError("nearest_seg_dist of an empty grid")
+    while True:
+        ds = [seg_dist(x, y, it[0], it[1]) for it in boxes_meeting(grid, x - r - 1.0, y - r - 1.0, x + r + 1.0, y + r + 1.0)]
+        if ds and min(ds) <= r:
+            return min(ds)
+        r *= 2.0
+
+
+def boxes_meeting(grid: PointGrid, x0: float, y0: float, x1: float, y1: float) -> list[Any]:
+    """The items of `grid` (box in their last four fields) whose box meets the box `x0..x1, y0..y1`, inclusive, each once
+    (feature 306: the GM's rule that a check against many things means a box was not drawn). PREFILTER: a polygon or a
+    segment whose box misses the query's box cannot meet a shape inside it, so the caller's exact test over these items
+    gives the answer it gave over every item. The order is the grid's, not the filing order - a caller whose answer
+    depends on order sorts them."""
+    seen: set[int] = set()
+    out: list[Any] = []
+    # the cells a pixel past the box, so a center and half-extent that round a hair inside it cannot skip an edge cell
+    for it in grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2 + 1.0):
+        if it[-4] <= x1 and it[-2] >= x0 and it[-3] <= y1 and it[-1] >= y0 and id(it) not in seen:
+            seen.add(id(it))
+            out.append(it)
+    return out
+
+
 def _parity_region(idx: Any) -> Any:
     """The area `RingIndex.inside` counts as inside a ring that is not a valid polygon: its edges noded and polygonized
     into faces, each face kept when its interior point is inside by the ring's even-odd count - which is constant across a

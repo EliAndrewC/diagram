@@ -14,6 +14,9 @@ from .._geom import (
     PLANK_VILLAGE_REACH,
     PointGrid,
     Pt,
+    boxed_grid,
+    boxed_polys,
+    boxes_meeting,
     point_in_poly,
     quad_hits_poly,
     quad_hits_seg,
@@ -49,6 +52,12 @@ def _deck_quad(cx: float, cy: float, w: float, h: float, deg: float) -> list[Pt]
     a = math.radians(deg)
     ca, sa = math.cos(a), math.sin(a)
     return [(cx + dx * ca - dy * sa, cy + dx * sa + dy * ca) for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
+
+
+def _quad_box(quad: Any) -> tuple[float, float, float, float]:
+    """A deck quad's box (x0, y0, x1, y1) - what `boxes_meeting` asks the keep-outs (feature 306)."""
+    xs, ys = [q[0] for q in quad], [q[1] for q in quad]
+    return min(xs), min(ys), max(xs), max(ys)
 
 
 def _quads_overlap(p: Any, q: Any) -> bool:  # separating-axis rect overlap (a deck must not sit on a home; the placer is the guarantee since feature 158)
@@ -381,44 +390,36 @@ class BridgesMixin:
         `roads_bridge_water` re-derives the same crossings from the
         manifest. Anything this pass finds is aligned by construction; hand-place a deck only for a
         crossing this pass genuinely cannot see, and expect the alignment check to test it."""
-        carried = bridge_carried_ways(self.M)
-        waters = bridge_crossed_waters(self.M)
         wet = flooded_ground(self.M)
         n = 0
-        for rpts, rw in carried:
-            for i in range(len(rpts) - 1):
-                ra, rb = tuple(rpts[i]), tuple(rpts[i + 1])
-                for wpts, ww in waters:
-                    for j in range(len(wpts) - 1):
-                        wa, wb = tuple(wpts[j]), tuple(wpts[j + 1])
-                        if segments_cross(ra, rb, wa, wb):
-                            # the crossing SOLVED, never eyeballed - lifted to `crossing_deck` (feature 287) so the lane law asks the same question
-                            p, _rot_used, _span, _seated = crossing_deck(ra, rb, rw, wa, wb, ww, wpts, self.ftpx, wet)
-                            # A CROSSING ALREADY DECKED IS NOT DECKED AGAIN - judged by whether a standing deck COVERS it
-                            # (`deck_covers`, feature 287 ways W02), not by whether it lies within half the NEW deck's span:
-                            # that radius skipped a plank crossing 12 ft along the brook from a 30 ft deck that did not reach
-                            # it, and the lane crossed unbridged.
-                            if any(deck_covers(b2, p[0], p[1]) for b2 in self.M.get("bridges", [])):
-                                continue
-                            # NO UNDERSIZED DECK IS DRAWN (feature 287, ways W12, FR-005). `seat_deck` hands back the
-                            # original span when nothing seats; this pass drew it and `bridges_span_their_water` named it.
-                            # The web's last pass now cuts every crossing no deck seats before any deck is laid, so a way
-                            # that reaches here unseated is an engine defect, raised rather than drawn.
-                            if not _seated or not deck_admitted(self.M, p, _rot_used, _span, rw):
-                                raise UndeckableCrossing(f"no deck seats where a way crosses water at ({p[0]:.0f}, {p[1]:.0f})")
-                            # ...AND A DECK THAT WOULD STAND ON ANOTHER is merged into it: the standing deck is re-seated
-                            # long enough to cover both crossings, rather than the second being skipped (and left
-                            # unbridged) or drawn on top of the first (`features_do_not_overlap`).
-                            near = [b2 for b2 in self.M.get("bridges", []) if not b2.get("foot") and math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5]
-                            if near:
-                                self._reseat_to_cover(near[0], p)
-                                continue
-                            # ONE DECK PER CROSSING PLACE (feature 126: two decks drawn on top of one another on four
-                            # cohort seeds once orphan links ran alongside existing ways). A real crossing is a PLACE, not
-                            # a per-way entitlement: two tracks converging on the same plank use the plank - the covered
-                            # skip and the merge above are that rule, each now leaving no crossing undecked.
-                            self.bridge(p[0], p[1], _rot_used, _span, rw)
-                            n += 1
+        for ra, rb, rw, wa, wb, ww, wpts in way_water_crossings(bridge_carried_ways(self.M), bridge_crossed_waters(self.M)):
+            # the crossing SOLVED, never eyeballed - lifted to `crossing_deck` (feature 287) so the lane law asks the same question
+            p, _rot_used, _span, _seated = crossing_deck(ra, rb, rw, wa, wb, ww, wpts, self.ftpx, wet)
+            # A CROSSING ALREADY DECKED IS NOT DECKED AGAIN - judged by whether a standing deck COVERS it
+            # (`deck_covers`, feature 287 ways W02), not by whether it lies within half the NEW deck's span:
+            # that radius skipped a plank crossing 12 ft along the brook from a 30 ft deck that did not reach
+            # it, and the lane crossed unbridged.
+            if any(deck_covers(b2, p[0], p[1]) for b2 in self.M.get("bridges", [])):
+                continue
+            # NO UNDERSIZED DECK IS DRAWN (feature 287, ways W12, FR-005). `seat_deck` hands back the
+            # original span when nothing seats; this pass drew it and `bridges_span_their_water` named it.
+            # The web's last pass now cuts every crossing no deck seats before any deck is laid, so a way
+            # that reaches here unseated is an engine defect, raised rather than drawn.
+            if not _seated or not deck_admitted(self.M, p, _rot_used, _span, rw):
+                raise UndeckableCrossing(f"no deck seats where a way crosses water at ({p[0]:.0f}, {p[1]:.0f})")
+            # ...AND A DECK THAT WOULD STAND ON ANOTHER is merged into it: the standing deck is re-seated
+            # long enough to cover both crossings, rather than the second being skipped (and left
+            # unbridged) or drawn on top of the first (`features_do_not_overlap`).
+            near = [b2 for b2 in self.M.get("bridges", []) if not b2.get("foot") and math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5]
+            if near:
+                self._reseat_to_cover(near[0], p)
+                continue
+            # ONE DECK PER CROSSING PLACE (feature 126: two decks drawn on top of one another on four
+            # cohort seeds once orphan links ran alongside existing ways). A real crossing is a PLACE, not
+            # a per-way entitlement: two tracks converging on the same plank use the plank - the covered
+            # skip and the merge above are that rule, each now leaving no crossing undecked.
+            self.bridge(p[0], p[1], _rot_used, _span, rw)
+            n += 1
         return n
 
     def cut_undeckable_lanes(self: Settlement) -> int:  # type: ignore[misc]
@@ -508,6 +509,12 @@ class BridgesMixin:
         ground_quads = [
             _deck_quad(g["x"], g["y"], g["w"] + 2.0, g["h"] + 2.0, g.get("rot", 0)) for key in ("gardens", "groves") for g in self.M.get(key, []) if all(k in g for k in ("x", "y", "w", "h"))
         ]
+        # EACH KEEP-OUT FROM ITS BOX (feature 306, the GM: a check against many things means a box was not drawn). Every
+        # deck candidate was tested against every dry plot and every garden and grove - 5,485 `quad_hits_poly` a call on the
+        # pool. A deck meets a polygon only inside both their boxes (containment either way, or edges crossing), so the
+        # polygons whose box - a pixel wider - meets the deck's box hold every one it can meet, and `quad_hits_poly`
+        # decides as before; `any` over them is `any` over all. The homes are boxed the same way for `_quads_overlap`.
+        dry_grid, ground_grid, house_grid = (boxed_grid(boxed_polys(q, 1.0)) for q in (dry_quads, ground_quads, houses))
         DEFAULT_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 4.2}
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the
@@ -622,14 +629,14 @@ class BridgesMixin:
                         # ALONGSIDE this one, and the answer there is to cross somewhere else. (The fine
                         # arc-length slide above is what makes "somewhere else" reliably available.)
                     quad = _deck_quad(px, py, span_here, plank_w, deck)
-                    if any(_quads_overlap(quad, hc) for hc in houses):
+                    if any(_quads_overlap(quad, it[0]) for it in boxes_meeting(house_grid, *_quad_box(quad))):
                         continue
                     # ...nor touching it: the overlap matrix reads a deck on a plot's edge as on the plot (Mizuguchi, on main too:
                     # a log plank's corner on a millet plot's corner, zero area) - tested half a foot wider all round
                     _touch = _deck_quad(px, py, span_here + 1.0, plank_w + 1.0, deck)
-                    if any(quad_hits_poly(_touch, dp) for dp in dry_quads):
+                    if any(quad_hits_poly(_touch, it[0]) for it in boxes_meeting(dry_grid, *_quad_box(_touch))):
                         continue  # no plank laid across the hem crop
-                    if any(quad_hits_poly(quad, gp) for gp in ground_quads):
+                    if any(quad_hits_poly(quad, it[0]) for it in boxes_meeting(ground_grid, *_quad_box(quad))):
                         continue  # ...nor landing on a garden's beds or in a farm's grove
                     if any(_quads_overlap(quad, _deck_quad(b["x"], b["y"], b.get("span", 8.0), b.get("w", 4.0), b.get("rot", 0.0))) for b in self.M.get("bridges", [])):
                         continue  # ...nor on top of another deck
@@ -774,3 +781,25 @@ def water_segment_index(water: Any) -> PointGrid:
         for i in range(len(wl) - 1)
     )
     return grid
+
+
+def way_water_crossings(carried: Any, waters: Any) -> Any:
+    """Every place a carried way's segment CROSSES a watercourse's segment (`segments_cross`), as `(ra, rb, rw, wa, wb, ww,
+    wpts)` in the order the scan over every pair meets them: way by way, segment by segment, then water by water.
+
+    THE WATER'S SEGMENTS FROM AN INDEX (feature 306, the GM: a check against many things means a box was not drawn).
+    `bridges()` tested every way segment against every water segment - 16,190 tests a call on the pool, nearly all of
+    them a lane and a brook a canvas apart. Two segments that cross meet inside both their boxes, so the water segments
+    whose box meets the way segment's box (a pixel wider, so a rounding at a touching end cannot drop one) hold every
+    crossing; `segments_cross` decides as before, and the candidates are taken in (water, segment) order, because
+    `bridges()` lays and merges decks as it meets the crossings and the order is part of its answer."""
+    grid = water_segment_index(waters)
+    for rpts, rw in carried:
+        for i in range(len(rpts) - 1):
+            ra, rb = tuple(rpts[i]), tuple(rpts[i + 1])
+            near = boxes_meeting(grid, min(ra[0], rb[0]) - 1.0, min(ra[1], rb[1]) - 1.0, max(ra[0], rb[0]) + 1.0, max(ra[1], rb[1]) + 1.0)
+            for wi, j, *_ in sorted(near, key=lambda it: (it[0], it[1])):
+                wpts, ww = waters[wi]
+                wa, wb = tuple(wpts[j]), tuple(wpts[j + 1])
+                if segments_cross(ra, rb, wa, wb):
+                    yield ra, rb, rw, wa, wb, ww, wpts

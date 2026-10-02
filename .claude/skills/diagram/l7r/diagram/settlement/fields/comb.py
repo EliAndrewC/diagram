@@ -21,6 +21,7 @@ from .._geom import (
     seg_closest,
     seg_dist,
     seg_reach_index,
+    within_reach,
 )
 from .._knobs import _centroid, _sharp_corners, _toward, resolve_knob
 from ..land.wet import pond_fringe_ring
@@ -683,10 +684,15 @@ class CombMixin:
             _band = 30.0 + max(_dch["w"], _dch.get("w_tail", _dch["w"]))
             _dx0, _dy0 = min(q[0] for q in _dpp) - _band, min(q[1] for q in _dpp) - _band
             _dx1, _dy1 = max(q[0] for q in _dpp) + _band, max(q[1] for q in _dpp) + _band
+            # THE DRAIN'S SEGMENTS FROM AN INDEX (feature 306, the GM: a check against many things means a line was not
+            # drawn to stay beside). Each vertex of each plot near the drain measured its distance to EVERY drain segment -
+            # 12,263 `seg_dist` a call on the pool - for a yes/no that only the segments within `_band` can answer. Each
+            # segment is filed by its box widened by the band (and a pixel, so a rounding cannot drop one), the vertex asks
+            # the ones whose widened box holds it, and `seg_dist <= _band` decides as before: the minimum over every
+            # segment is within the band exactly when some segment is.
+            _hem = seg_reach_index([(_dpp, 1.0)], _band)
             for p in net["plots"]:
-                if any(_dx0 <= vx <= _dx1 and _dy0 <= vy <= _dy1 for vx, vy in p["poly"]) and any(
-                    min(seg_dist(vx, vy, _dpp[i], _dpp[i + 1]) for i in range(len(_dpp) - 1)) <= _band for vx, vy in p["poly"]
-                ):
+                if any(_dx0 <= vx <= _dx1 and _dy0 <= vy <= _dy1 for vx, vy in p["poly"]) and any(within_reach(_hem, vx, vy, _band) for vx, vy in p["poly"]):
                     _hem_rings.append([[round(vx, 1), round(vy, 1)] for vx, vy in p["poly"]])
         _fld: dict[str, Any] = {
             "name": name,
