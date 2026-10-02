@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted (spec-fidelity, round 2)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): *"figure out whether it would need to be far away and then make
 it be the distance away that it would have to be if that is appropriate. On the other hand, if you look it up and you find
@@ -151,3 +151,4 @@ modal still calls bamboo exempt from the sun rule.
 | round | reviewer | verdict | what it found |
 |---|---|---|---|
 | spec 1 | spec-fidelity | CHANGES REQUIRED | the height setting the reach left out yadake, a kind the record puts in the grove, and was stated as settled before the reading |
+| spec 2 | spec-fidelity-verify | FAITHFUL | - |
