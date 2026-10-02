@@ -185,7 +185,8 @@ path; the research rules, the page-session rules and the reading agents' contrac
   extracted readable text; and a capture record: the URL cited, the URL finally fetched, the time, the HTTP status, the content type, a checksum of
   the bytes, the source key(s) that cite it, and for Wikipedia and other MediaWiki sites, the revision id.
 - **FR-003**: Copies MUST live in the private repository `EliAndrewC/diagram-research`; nothing from the archive is
-  published anywhere public. The layout keeps every directory to a few hundred entries as the archive grows past 5,000 URLs
+  published anywhere public. The layout keeps every directory to a few hundred entries as the archive grows to every page read (4,903 distinct
+  URLs on the sources-consulted ledger, observed 2026-10-02, cited ones included)
   (the GM, mid-backfill: *"limit the number of directories in any given directory to no more than a few hundred"*):
   a URL's captures under `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest's rows under
   `research/archive/<id[:2]>/`; a key finds its copies through the manifest and `make archive-find` (FR-015).
@@ -266,7 +267,7 @@ This feature draws and states nothing on a map; it changes the research tooling 
 | `academic-sources/` is an inbox: a file is deleted once its archived copy is pushed and confirmed | the GM's ruling (Amendment 1) | *"once something has been added to the diagram research repository and then pushed, then we can delete it"*; the deletion waits on a confirmed push so nothing exists only locally. The directory is in the GM's own repository, so the deletions show in that tree for the GM to commit; nothing here runs git there | `request.md`; `scripts/_archive.py` |
 | Every page a session reads is archived, the ~4,900 earlier reads included | the GM's ruling (Amendment 1, chose "Every page we read") | a page read for one fact may answer a later question | `request.md` |
 | The archive lookup is the first step of a research pass | the GM's ruling (Amendment 1) | *"first check to see if we already have something, rather than going out and trying to find it on the internet"* | `research/CLAUDE.md`, the page-session rules, the reading agents' contracts |
-| Captures sharded `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest sharded alike | the GM's question answered by the session (`request.md`) | GitHub lists only a directory's first 1,000 entries and the archive passes 5,000 URLs; 256 two-hex buckets hold ~20 each at that size and stay under a few hundred to ~50,000; the GM's ~40 copies need no bucket. Cost: a key's copies are not browsable by key name - the manifest and `make archive-find` find them | `scripts/_archive.py:capture_base`, `record/archive.py:ROW_GLOB` |
+| Captures sharded `<id[:2]>/<id>/`, the GM's copies under `gm-copies/`, the manifest sharded alike | the GM's question answered by the session (`request.md`) | GitHub lists only a directory's first 1,000 entries (observed 2026-10-02: the contents API returned 1,000 of the archive's 1,775 top-level entries), and the archive is headed for the ledger's 4,903 URLs (observed 2026-10-02); 256 two-hex buckets hold about 19 each at that size (derived: 4,903 / 256) and stay under 300 a bucket to about 76,800 URLs (derived: 300 x 256); the GM's copies need no bucket (40 entries, the FR-012 match of 2026-10-02, tasks T12). Cost: a key's copies are not browsable by key name - the manifest and `make archive-find` find them | `scripts/_archive.py:capture_base`, `record/archive.py:ROW_GLOB` |
 
 ## Assumptions
 
