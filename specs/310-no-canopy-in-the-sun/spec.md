@@ -97,7 +97,7 @@ no placer keeps a different reach for a canopy crown.
 - **FR-004**: Each placer refuses or drops a crown in a plot's sun as it seats it; no stage after may draw one there.
 - **FR-005**: A check on the finished map counts every canopy crown in a plot's sun, on every shipped hamlet and in the
   cohort audit, and fails on any; it is red on today's pool before the fix.
-- **FR-006**: The copse's west-lane exemption and its unsupported justification are removed; the farm grove's 22 px strips
+- **FR-006**: The copse's west-lane exemption and its unsupported justification are removed; the farm grove's narrower strips
   are replaced by the one rule.
 - **FR-007**: The record's sun page and the modals written from it state the one rule and the bamboo exemption.
 
