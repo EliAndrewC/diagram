@@ -57,6 +57,24 @@ The GM:
 
 Okay, yeah, I do like the idea of landing what we've done in main prior to starting this as its own separate feature. So how about you do that and finish the feature that we are already in the middle of with this new feature about filtering and cataloging and tagging and doing source write-ups of our uncited works being its own separate feature, which you can also file now. But then we don't actually start that until the previous feature has landed in main.
 
-Open for the spec (raised by the session, not yet answered by the GM): whether kept uncited sources appear in the built
-record (for example a "Consulted, not cited" section) or only in the archive; what becomes of the 3 uncited pages 309
-captured if the filter rejects them (the archive's git history keeps them either way).
+## The open questions (GM, 2026-10-02, after 309 landed; still not to start)
+
+The GM (verbatim; "unsighted" is voice-to-text for "uncited"):
+
+Uh, let's resolve those two open questions on feature 312, even though I do not actually want to start on it yet.
+
+I think I do want unsighted pages ( Side note, you should update your memory of words that speech to text tends to get wrong by saying that unsighted should generally be read as uncited ) to appear in a separate section. Like maybe under sources, then in addition to all of the categories we have, we have a uncited section which just then has the same structure where there will be like a pre-modern Japan or pre-modern China sub-subsection under the uncited sub-subsection. Or maybe it could just be its own top level section underneath Sourtces called Uncited Sources. if that makes more sense. I don't know whether it would end up making sense to include my own L7R setting notes in the unsighted section. So we should probably never do that, just as a general rule. Uh, however, I do think it makes sense that if we ever have any original L5R setting notes from like the L5R wiki, which we actually do cite in a few places, then that could go there.
+
+Now, can you remind me what the three pages are that you're talking about that we have an open question about? I'm guessing they are three pages that we are no longer able to find or something?
+
+Settled: kept uncited sources appear in the built record, in their own "Uncited sources" part of Sources, grouped by the
+same sections as the cited works (Premodern Japan, Premodern China, ...). The GM's L7R setting notes never go there; L5R
+setting-wiki pages may.
+
+The three pages (answered by the session): not lost - all three were captured whole and are archived. They are the
+consulted backfill's first three captures before the GM held it, all from the Chinese Academy of Sciences agricultural
+history site (agri-history.ihns.ac.cn): a short history of Chinese fish farming by Hu Hsing-hua, the classical
+fish-farming text 養魚經 (attributed to Fan Li), and an essay on the Song agricultural treatise 陳旉農書. The question was
+only what happens to them if the filter rejects them. The session's proposal, for the GM to confirm: they go through the
+filter like every other uncited page; a rejected one loses its manifest row and gets a not-kept line, and its copy stays
+in the archive's git history, since the project never rewrites history.
