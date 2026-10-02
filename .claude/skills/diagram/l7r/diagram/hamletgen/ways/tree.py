@@ -442,8 +442,11 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
         if is_tree(lanes[i]):
             from .sweeps import _DOUBLED_DEG, along_tail
 
+            # ...EITHER END, as `law.doubled_tails` asks it (feature 293 on 291): asked of the tree lane's last end only, a field way
+            # whose FIRST end ran 38 ft beside an ordinary lane named no lane to cut, the tree lane alone broke the rule, and the
+            # web was refused (perf reference, seed 39, feature 306)
             for j, o in enumerate(ways):
-                if j != i and not is_tree(lanes[j]) and len(o) >= 2 and along_tail(ways[i], o, deg=_DOUBLED_DEG) is not None:
+                if j != i and not is_tree(lanes[j]) and len(o) >= 2 and any(along_tail(r, o, deg=_DOUBLED_DEG) is not None for r in (ways[i], ways[i][::-1])):
                     q = min((ways[i][0], ways[i][-1]), key=lambda e: min(seg_dist(e[0], e[1], a, b) for a, b in zip(o, o[1:], strict=False)))
                     out.append((j, q))
     for face, bounding in law.needle_loops(M):

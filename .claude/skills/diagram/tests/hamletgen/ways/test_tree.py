@@ -236,6 +236,9 @@ def test_an_ordinary_lane_breaking_a_rule_against_a_tree_lane_is_cut_never_the_t
     doubled = _tree(houses=[], access_corridors=[])
     doubled["lanes"] += [{"pts": [[0.0, 100.0], [300.0, 100.0]], "w": 3, "role": ACCESS_ROLE}, {"pts": [[250.0, 106.0], [600.0, 106.0], [600.0, 400.0]], "w": 3}]
     assert [i for i, _q in tree.tree_faults(doubled)] == [2], "the tree lane's tail beside it: the ordinary lane defers"
+    first = _tree(houses=[], access_corridors=[])  # the same tail at the tree lane's FIRST end (feature 306, perf seed 39)
+    first["lanes"] += [{"pts": [[300.0, 100.0], [0.0, 100.0]], "w": 3, "role": ACCESS_ROLE}, {"pts": [[250.0, 106.0], [600.0, 106.0], [600.0, 400.0]], "w": 3}]
+    assert 1 in law.doubled_tails(first) and [i for i, _q in tree.tree_faults(first)] == [2], "either end: the ordinary lane defers"
     crowded = _tree(houses=[_house(300.0, 100.0)], access_corridors=[])
     crowded["lanes"] += [{"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE}] + [{"pts": [[x, 85.0], [x, 20.0]], "w": 3} for x in (250.0, 350.0)]
     assert sorted(i for i, _q in tree.tree_faults(crowded)) == [2, 3], "three ends at a house: the ordinary ones"
