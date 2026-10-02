@@ -167,7 +167,15 @@ FIXTURES = (f"{SKILL}/tests/", "scripts/test_", "scripts/test-", "scripts/_fragm
 TEST_DATA = VERBATIM
 
 
+#: TEMPORARY (feature 303's landing): six features left in progress long ago - open boxes in their tasks.md - whose specs
+#: carry old pointers. The push refuses any delta touching a feature in progress unless it is that feature's specs/
+#: directory alone, so their rewrites land as six pushes of their own right after 303; this list goes in the push after.
+PENDING_303 = tuple(f"specs/{d}/" for d in ("016-minami-provincial-city", "019-capital-skeleton-castle", "021-capital-housing", "119-l7r-diagram-namespace", "121-placer-drawn-footprint", "126-derived-lanes-and-form"))
+
+
 def exempt(path: str) -> bool:
+    if path.startswith(PENDING_303):
+        return True
     if path.startswith(TEST_DATA) or path.endswith("/plan-review.json"):  # a recorded review verdict: its words are a record
         return True
     return path in EXEMPT or path.rsplit("/", 1)[-1] in ("request.md", "README.md") or path.endswith((".png", ".webp", ".jpg", ".pdf", ".gz"))

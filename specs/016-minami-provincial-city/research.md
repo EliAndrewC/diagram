@@ -2,7 +2,7 @@
 
 *Principle XII opening bookend. For each element this feature adds or changes: what the historical reality was (China first, Japan corroborating), whether the proposed design matches it, and what DETERMINES the element in reality. Findings that led to rejecting or revising a design are recorded too. The closing bookend - re-examining the rendered PNG against these findings - is the last task in `tasks.md`.*
 
-Entries below follow the `research/README.md` four-field format and are destined for `research/contents.json#religion-and-the-dead` (temple program) and `research/contents.json#trades-and-services` (timber works) once implemented.
+Entries below follow the `research/README.md` four-field format and are destined for `research/religion-and-death.md` (temple program) and `research/urban-features.md` (timber works) once implemented.
 
 ---
 
@@ -18,7 +18,7 @@ Entries below follow the `research/README.md` four-field format and are destined
 
 *What the research found.* The expectation going in was that eight temples in a 2,600-person seat would be a stretch requiring a disclosed liberty. **The opposite is true.** Japanese castle towns concentrated their temples into a designated *teramachi* quarter at the outer rim of the *jokamachi*, where the spacious precincts formed part of the city's defenses. The attested counts are large: **Kanazawa ~70 temples** in its Teramachi, **Kyoto ~80** in its temple street, **Takada ~25 relocated in a single 1614 wave**, and - the anchor that matters for our tier - **Takayama's Teramachi is "over 10 temples and shrines"** in a small castle town. On the China side, the standard Ming county-seat kit carried the Confucian school-temple (*wenmiao*) and the City God temple (*chenghuangmiao*) as separate mandatory foundations before any Buddhist or Daoist house was counted, and Pingyao's City God temple is itself **a complex of three distinct temples** (City God proper, Caishen the god of wealth, Zaojun the kitchen god) on one site.
 
-*The decision it drove.* Eight modest precincts in a provincial city is **inside the attested band, not a liberty** - Takayama is the size-matched anchor at 10+. The existing "two major complexes" default is where the real liberty sits, and `research/contents.json#religion-and-the-dead` already admits as much from the other direction ("L7R deliberately over-sizes - every city temple is a major complex in a way history would usually lack," clergy at 2-5x historical density). **So Minami is not an exception that strains history; it is the pool's first city that moves TOWARD it.** The doctrine wording must say this plainly, or a future reader will "correct" Minami back toward the default.
+*The decision it drove.* Eight modest precincts in a provincial city is **inside the attested band, not a liberty** - Takayama is the size-matched anchor at 10+. The existing "two major complexes" default is where the real liberty sits, and `research/religion-and-death.md` already admits as much from the other direction ("L7R deliberately over-sizes - every city temple is a major complex in a way history would usually lack," clergy at 2-5x historical density). **So Minami is not an exception that strains history; it is the pool's first city that moves TOWARD it.** The doctrine wording must say this plainly, or a future reader will "correct" Minami back toward the default.
 
 *Deliberate departure, disclosed.* We keep the two-complex default for non-Fox cities anyway, because it is a game-legibility choice (a few named, visitable temples beat a dozen anonymous ones) rather than a historical claim - and because it is already load-bearing for the two shipped maps. Minami's eight is licensed by setting canon rather than by a decision to become more accurate everywhere.
 
@@ -84,7 +84,7 @@ Entries below follow the `research/README.md` four-field format and are destined
 
 **Evidence:** attested (prior pass), setting-canon
 
-**Sources:** carried from `research/contents.json#trades-and-services` "TRADE WORKS"
+**Sources:** carried from `research/urban-features.md` "TRADE WORKS"
 
 *What the record already holds.* The 2026-07-24 trade-works pass established the lumber dealer (*zaimokuya*) as needing **a ~3,000-8,000 sq ft open yard with a river landing, at the edge of town near the downstream gate or wharf**, and gated `city_river_port_has_lumber_yard` on `meta(river_port=True)` precisely because "timber is the one trade that genuinely needs water transport at scale." It also established that **charcoal kilns are pushed outside the walls** by fire law and smoke, alongside tile, pottery and lime kilns.
 
@@ -100,7 +100,7 @@ Entries below follow the `research/README.md` four-field format and are destined
 
 **Evidence:** setting-canon
 
-**Sources:** `l7r.md` clan population table; `budgets.md` provincial-city tier; `research/contents.json#city-defenses` (tier definitions, prior pass)
+**Sources:** `l7r.md` clan population table; `budgets.md` provincial-city tier; `research/cities/defenses.md` (tier definitions, prior pass)
 
 *The arithmetic.* `l7r.md` gives the Fox 150,000 humans in one domain over four provinces = ~37,500 per province, against the median province's ~42,000; `budgets.md` puts a provincial city at 2,000-4,000, average ~3,000. Scaling gives ~2,700; 2,600 is taken as the round figure inside the band. **No historical research is involved** - this is setting arithmetic, and is classed `setting-canon` rather than dressed up as a finding.
 

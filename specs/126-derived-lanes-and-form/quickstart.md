@@ -83,5 +83,5 @@ re-render alone would leave the page confidently describing the old order.
 - cohort pass rate at or above baseline, every new failure diagnosed
 - three forms present in the cohort, none dominant
 - settlement-review clean on every re-rolled map, covering all three forms
-- research written to `research/contents.json#homesteads`, not only to this feature's `research.md`
+- research written to `research/homesteads.md`, not only to this feature's `research.md`
 - `dev/placement.md` STAGES table and `hamlet-placement.html` both updated to the new order
