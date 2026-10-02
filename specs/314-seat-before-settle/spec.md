@@ -114,3 +114,12 @@ recorded.
 
 - `request.md`'s measurement harness (`specs/314-seat-before-settle/refusals.py`, copied from the scratchpad) is the measure;
   feature 308's sixteen reference seeds are the 15-household measure.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 2 items - US2's 5%-a-round stopping rule narrowed the GM's "keep
+  iterating until we get there"; the GM's case is 15 homesteads and US1's success was defined only at 40. Addressed: the only
+  stopping rule is the record naming each remaining cost, what an efficient process would do and that the stage does it or a
+  measured reason it cannot; SC-003 records the breakdown and US1's gain at 15 households, seeds 1-16. The aside (the Decisions
+  row's unmeasured claim) answered: the cost is measured (FR-005), not assumed.
+- Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - both items and the aside confirmed against the diff.
