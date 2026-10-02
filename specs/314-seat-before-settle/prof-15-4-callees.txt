@@ -1,0 +1,157 @@
+stage 0.00 s, 15 houses
+         5816055 function calls (5685983 primitive calls) in 3.283 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1507 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    3.301    3.301 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:120(stage_homesteads)
+        1    0.000    0.000    3.171    3.171 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:335(seat_every_household)
+        1    0.001    0.001    3.170    3.170 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:469(_seat_households)
+        1    0.002    0.002    2.274    2.274 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py:193(grow_the_margin)
+       54    0.000    0.000    1.901    0.035 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/houses.py:634(try_place)
+       54    0.001    0.000    1.901    0.035 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/houses.py:643(_try_place_bundle)
+       54    0.001    0.000    1.872    0.035 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/place.py:142(_place_bundle)
+       54    0.002    0.000    1.872    0.035 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/place.py:190(_place_bundle_nucleated)
+      128    0.004    0.000    1.724    0.013 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py:405(_parts_fit)
+ 1026/933    0.001    0.000    1.699    0.002 {built-in method builtins.next}
+       73    0.002    0.000    1.568    0.021 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:394(access_corridor)
+      261    0.004    0.000    1.370    0.005 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:539(_house_candidates)
+       25    0.001    0.000    1.214    0.049 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:130(routed_corridors)
+       34    0.003    0.000    1.213    0.036 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:155(_route_from)
+       34    0.229    0.007    0.983    0.029 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:53(search)
+607810/480209    0.135    0.000    0.412    0.000 {built-in method builtins.min}
+    19149    0.075    0.000    0.412    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:182(is_open)
+        1    0.000    0.000    0.347    0.347 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:417(reserve_field_corridor)
+   195644    0.109    0.000    0.330    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:52(seg_dist)
+      850    0.017    0.000    0.277    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py:132(_bundle_geom)
+        2    0.000    0.000    0.275    0.138 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:457(<genexpr>)
+       91    0.001    0.000    0.273    0.003 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py:121(settled_seat)
+    13800    0.033    0.000    0.258    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+      152    0.000    0.000    0.247    0.002 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py:213(reach_at)
+      152    0.001    0.000    0.247    0.002 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py:148(household_reach)
+      153    0.002    0.000    0.241    0.002 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py:125(_bundle_envelope)
+       19    0.002    0.000    0.241    0.013 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py:242(admits)
+       83    0.000    0.000    0.240    0.003 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:371(lawful_ground)
+       83    0.000    0.000    0.240    0.003 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:410(ground)
+      850    0.004    0.000    0.234    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py:202(_bundle_template)
+      497    0.005    0.000    0.229    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py:232(_bundle_layout)
+       27    0.000    0.000    0.226    0.008 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:113(taut)
+      155    0.001    0.000    0.225    0.001 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:122(<genexpr>)
+     1195    0.002    0.000    0.224    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:144(leg_ok)
+   150393    0.093    0.000    0.220    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:60(seg_box_within)
+9054/7294    0.009    0.000    0.215    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+      497    0.007    0.000    0.215    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py:366(_lay_fixtures)
+        2    0.000    0.000    0.214    0.107 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py:446(candidates)
+        1    0.002    0.002    0.214    0.214 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py:232(field_runs)
+       37    0.000    0.000    0.205    0.006 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:524(tree_admits)
+       18    0.000    0.000    0.204    0.011 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py:671(judge)
+      488    0.016    0.000    0.202    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py:222(lay_fixtures)
+   200003    0.139    0.000    0.193    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:43(seg_closest)
+        1    0.001    0.001    0.167    0.167 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py:125(reserve_commons_byres)
+      756    0.004    0.000    0.165    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py:163(_commons_pocket_clear)
+
+
+         5816055 function calls (5685983 primitive calls) in 3.283 seconds
+
+   Ordered by: internal time
+   List reduced from 1507 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       34    0.229    0.007    0.983    0.029 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:53(search)
+   200003    0.139    0.000    0.193    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:43(seg_closest)
+607810/480209    0.135    0.000    0.412    0.000 {built-in method builtins.min}
+   195644    0.109    0.000    0.330    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:52(seg_dist)
+   579134    0.102    0.000    0.102    0.000 {built-in method math.hypot}
+   150393    0.093    0.000    0.220    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:60(seg_box_within)
+   482761    0.084    0.000    0.100    0.000 {built-in method builtins.max}
+    47472    0.084    0.000    0.110    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:265(near)
+    49637    0.078    0.000    0.127    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:71(h)
+     2270    0.075    0.000    0.135    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:252(extend)
+   379166    0.075    0.000    0.075    0.000 {method 'get' of 'dict' objects}
+    19149    0.075    0.000    0.412    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:182(is_open)
+    18393    0.073    0.000    0.122    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py:316(corridor_bars)
+       24    0.060    0.003    0.060    0.003 /home/agent/.local/lib/python3.14/site-packages/shapely/set_operations.py:463(union_all)
+   483696    0.053    0.000    0.053    0.000 {built-in method builtins.abs}
+   143227    0.046    0.000    0.157    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:186(<genexpr>)
+        1    0.046    0.046    0.104    0.104 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/region.py:110(cells)
+     1655    0.044    0.000    0.054    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/constructive.py:136(buffer)
+      421    0.044    0.000    0.104    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py:346(lines_edge_points)
+    67046    0.042    0.000    0.072    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:113(segments_cross)
+      842    0.035    0.000    0.050    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py:375(_samples)
+    13800    0.033    0.000    0.258    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+   161766    0.030    0.000    0.030    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:114(ccw)
+     1586    0.027    0.000    0.042    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py:351(_first)
+      683    0.025    0.000    0.031    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py:173(crown_cells)
+       45    0.024    0.001    0.092    0.002 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py:262(share)
+    43730    0.022    0.000    0.093    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:166(<genexpr>)
+    17029    0.022    0.000    0.099    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:192(goal_of)
+    25641    0.021    0.000    0.021    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py:339(point_taken)
+    60192    0.019    0.000    0.114    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py:102(<lambda>)
+
+
+   Ordered by: cumulative time
+   List reduced from 1507 to 1 due to restriction <'_route_from'>
+
+Function                                                                                                              called...
+                                                                                                                          ncalls  tottime  cumtime
+/diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:155(_route_from)  ->      79    0.000    0.000  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/core.py:525(px)
+                                                                                                                              34    0.000    0.000  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:114(targets)
+                                                                                                                              34    0.000    0.000  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:285(_standing_memo)
+                                                                                                                              11    0.001    0.001  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:581(leaves_its_yard)
+                                                                                                                              34    0.229    0.983  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:53(search)
+                                                                                                                              27    0.000    0.226  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:113(taut)
+                                                                                                                             578    0.000    0.000  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:217(<genexpr>)
+                                                                                                                              68    0.000    0.000  <frozen importlib._bootstrap>:648(parent)
+                                                                                                                              34    0.000    0.000  <frozen importlib._bootstrap>:1409(_handle_fromlist)
+                                                                                                                             204    0.000    0.000  {method 'get' of 'dict' objects}
+                                                                                                                              34    0.000    0.000  {method 'items' of 'dict' objects}
+
+
+   Ordered by: cumulative time
+   List reduced from 1507 to 4 due to restriction <'search'>
+
+Function                                                                                                        called...
+                                                                                                                    ncalls  tottime  cumtime
+/diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:53(search)  ->   49637    0.078    0.127  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:71(h)
+                                                                                                                     19149    0.075    0.412  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:182(is_open)
+                                                                                                                     17029    0.022    0.099  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:192(goal_of)
+                                                                                                                       522    0.001    0.012  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:209(first_ok)
+                                                                                                                     23623    0.011    0.011  {built-in method _heapq.heappop}
+                                                                                                                     25980    0.007    0.007  {built-in method _heapq.heappush}
+                                                                                                                    272887    0.033    0.033  {built-in method builtins.abs}
+                                                                                                                    127225    0.026    0.026  {built-in method math.hypot}
+                                                                                                                       551    0.000    0.000  {method 'append' of 'list' objects}
+                                                                                                                    127225    0.025    0.025  {method 'get' of 'dict' objects}
+/home/agent/.local/lib/python3.14/site-packages/numpy/_core/fromnumeric.py:1459(searchsorted)                   ->     421    0.000    0.001  /home/agent/.local/lib/python3.14/site-packages/numpy/_core/fromnumeric.py:48(_wrapfunc)
+{method 'searchsorted' of 'numpy.ndarray' objects}                                                              -> 
+/home/agent/.local/lib/python3.14/site-packages/numpy/_core/fromnumeric.py:1455(_searchsorted_dispatcher)       -> 
+
+
+   Ordered by: cumulative time
+   List reduced from 1507 to 1 due to restriction <'goal_of'>
+
+Function                                                                                                          called...
+                                                                                                                      ncalls  tottime  cumtime
+/diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:192(goal_of)  ->   17029    0.028    0.034  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:265(near)
+                                                                                                                          44    0.000    0.000  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:43(seg_closest)
+                                                                                                                       11753    0.008    0.025  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:52(seg_dist)
+                                                                                                                          44    0.000    0.014  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py:264(standing_ground)
+                                                                                                                       17029    0.004    0.004  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:171(at)
+                                                                                                                          44    0.000    0.000  {built-in method math.dist}
+
+
+   Ordered by: cumulative time
+   List reduced from 1507 to 1 due to restriction <'is_open'>
+
+Function                                                                                                          called...
+                                                                                                                      ncalls  tottime  cumtime
+/diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:182(is_open)  ->   19149    0.016    0.016  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py:339(point_taken)
+                                                                                                                       17882    0.022    0.027  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:265(near)
+                                                                                                                       17270    0.063    0.095  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py:316(corridor_bars)
+                                                                                                                       19149    0.005    0.005  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:171(at)
+                                                                                                                      143227    0.046    0.157  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:186(<genexpr>)
+                                                                                                                       29080    0.009    0.037  /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/route.py:188(<genexpr>)
+
+
+

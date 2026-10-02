@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T22:29:58Z",
+  "target": "perf-explain",
+  "commit": "841232aea",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no control run isolates the moved maps' downstream stages from the feature's own levers; the bookends were taken back to back under the load of other sessions (research R13)"
+}

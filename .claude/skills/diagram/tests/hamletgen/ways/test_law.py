@@ -416,3 +416,15 @@ def test_a_short_lane_that_holds_another_lanes_end_earns_its_place() -> None:
     beside = _lane((200.0, 0.0), (200.0, 20.0))  # the same, mid-street: holds no end
     M2 = {"lanes": [conn, street, path, beside], "houses": [_house(400.0, 70.0), _house(200.0, 70.0)], "meta": {"generated_by": "hamletgen"}}
     assert law.short_fragments(M2) == [3]
+
+
+def test_two_boxes_meet_within_their_pad_and_an_empty_line_meets_nothing() -> None:
+    """Feature 314: `boxes_meet` and `_bbox`, read by the squaring and the oblique test to skip a course out of reach - and an
+    empty lane's box is none, so `oblique_at` passes it."""
+    from l7r.diagram.hamletgen.ways import law as L
+
+    a, b = [(0.0, 0.0), (10.0, 0.0)], [(15.0, 0.0), (20.0, 5.0)]
+    assert L.boxes_meet(a, b, 5.0) and not L.boxes_meet(a, b, 4.9), "five apart: within a pad of five, not of 4.9"
+    assert not L.boxes_meet([], b, 100.0) and L._bbox([]) is None
+    M = {"streams": [{"poly": [[50.0, -10.0], [50.0, 10.0]]}], "lanes": [{"pts": []}, {"pts": [[0.0, 0.0], [100.0, 2.0]]}]}
+    assert [i for i, _k, _x, _off in L.oblique_at(M)] == [] or all(i == 1 for i, _k, _x, _off in L.oblique_at(M)), "the empty lane passed"

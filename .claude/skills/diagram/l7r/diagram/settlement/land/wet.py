@@ -664,10 +664,25 @@ def surface_water_dist(M: Any, x: float, y: float) -> float:
     # the minimax objective and the coverage pass finally have the clients the doctrine says they
     # have. The GM may reverse this; it is recorded in `future-work/`.
     d = 1e9
-    for ln in [c["poly"] for c in M.get("canals", []) if c.get("poly")] + [st["poly"] for st in M.get("streams", [])] + ([M["moat"]] if M.get("moat") else []):
+    for ln in water_lines(M):
         for i in range(len(ln) - 1):
             d = min(d, seg_dist(x, y, ln[i], ln[i + 1]))
     pond = M.get("pond")
     if pond:
         d = min(d, abs(math.hypot(x - pond[0], y - pond[1]) - max(pond[2], pond[3])))
     return d
+
+
+def water_lines(M: Any) -> list[Any]:
+    """The polylines `surface_water_dist` measures to: the canals, the streams and the moat (never an irrigation ditch)."""
+    return [c["poly"] for c in M.get("canals", []) if c.get("poly")] + [st["poly"] for st in M.get("streams", [])] + ([M["moat"]] if M.get("moat") else [])
+
+
+def surface_water_within(M: Any, x: float, y: float, reach: float, index: Any) -> bool:
+    """Is `surface_water_dist(M, x, y) <= reach`, asked of `index` - a `PointGrid` of `water_lines(M)`'s segments as
+    `(a, b, x0, y0, x1, y1)` - instead of every segment (feature 314: a seat search asks it of every seat it lays out, and the
+    scan was 400,000 distances on one map)? The same distances decide; the index only leaves out the segments too far to."""
+    if any(seg_dist(x, y, it[0], it[1]) <= reach for it in index.near(x, y, reach)):
+        return True
+    pond = M.get("pond")
+    return bool(pond) and abs(math.hypot(x - pond[0], y - pond[1]) - max(pond[2], pond[3])) <= reach

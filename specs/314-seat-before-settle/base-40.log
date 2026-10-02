@@ -1,0 +1,22 @@
+seed  stage_s  houses margins popped | outcome: n / s ...
+   2    5.97     40       1   1979 | dropped=394 settle=0/2.48 seated=40/1.23 house-box=445/0.02 reach/water=155/0.01 envelope=670/0.22 corridor=0/0.00 parts=275/1.30
+   6    5.47     40       1   1064 | dropped=213 settle=0/1.78 seated=40/1.06 house-box=195/0.01 reach/water=105/0.01 envelope=302/0.09 corridor=0/0.00 parts=209/1.90
+   8    3.00     40       1    297 | dropped=72 settle=0/0.40 seated=40/1.35 house-box=24/0.00 reach/water=38/0.00 envelope=70/0.03 corridor=0/0.00 parts=53/0.37
+   9    4.90     40       1    926 | dropped=175 settle=0/1.28 seated=40/1.22 house-box=153/0.01 reach/water=105/0.01 envelope=239/0.08 corridor=0/0.00 parts=214/1.21
+  10    6.91     40       1   1970 | dropped=339 settle=0/2.72 seated=40/1.24 house-box=363/0.02 reach/water=170/0.01 envelope=744/0.26 corridor=0/0.00 parts=314/1.65
+  12    4.35     40       1    723 | dropped=130 settle=0/1.15 seated=40/1.32 house-box=156/0.01 reach/water=41/0.00 envelope=220/0.09 corridor=0/0.00 parts=136/0.92
+  13    5.74     40       1    973 | dropped=194 settle=0/1.78 seated=40/1.37 house-box=203/0.01 reach/water=97/0.01 envelope=266/0.12 corridor=0/0.00 parts=173/1.41
+  39    7.82     40       1   1736 | dropped=328 settle=0/3.09 seated=40/1.40 house-box=355/0.03 reach/water=146/0.02 envelope=549/0.28 corridor=0/0.00 parts=318/2.14
+   1    4.51     40       1    808 | dropped=125 settle=0/1.22 seated=40/1.41 house-box=150/0.01 reach/water=74/0.00 envelope=250/0.10 corridor=0/0.00 parts=169/0.88
+   4    5.10     40       1    841 | dropped=151 settle=0/1.27 seated=40/1.31 house-box=176/0.01 reach/water=68/0.01 envelope=246/0.10 corridor=0/0.00 parts=160/1.04
+
+ALL: homesteads stage 53.8 s
+  settle       n=     0    17.16 s  (31.9% of the stage)
+  seated       n=   400    12.92 s  (24.0% of the stage)
+  house-box    n=  2220     0.12 s  ( 0.2% of the stage)
+  reach/water  n=   999     0.08 s  ( 0.2% of the stage)
+  envelope     n=  3556     1.39 s  ( 2.6% of the stage)
+  corridor     n=     0     0.00 s  ( 0.0% of the stage)
+  parts        n=  2021    12.82 s  (23.8% of the stage)
+  settle time by what the seat came to: envelope=6.65 house-box=4.05 parts=3.75 reach/water=1.95 seated=0.76 dropped~=0.00
+  placer sub-tests (all calls, s): _parts_fit=20.75 access_corridor=17.69 _bundle_geom=16.73 tree_admits=5.04 seat_reaches_tree=3.24 _envelope_blocked=0.82 _house_box_refused=0.17 within_field_reach=0.09

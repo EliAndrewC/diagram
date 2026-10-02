@@ -50,38 +50,57 @@ ROUTE_LEGS = 5
 Cell = tuple[int, int]
 
 
-def search(is_open: Callable[[Cell], bool], goal_of: Callable[[Cell], Pt | None], aims: Sequence[tuple[float, float]], n: int, weight: float) -> tuple[list[Cell], Pt] | None:
-    """Weighted A* from cell (0, 0) over the cells within `n` of it on each axis, eight neighbors: the first cell `goal_of`
+def search(
+    is_open: Callable[[Cell], bool],
+    goal_of: Callable[[Cell], Pt | None],
+    aims: Sequence[tuple[float, float]],
+    n: int,
+    weight: float,
+    start: Cell = (0, 0),
+    first_ok: Callable[[Cell], bool] | None = None,
+) -> tuple[list[Cell], Pt] | None:
+    """Weighted A* from cell `start` over the cells within `n` of it on each axis, eight neighbors: the first cell `goal_of`
     answers (other than the start), as the path of cells from the start and the goal's point; None where none is reached.
-    `aims` are the goal's likely cells (the heuristic's targets, in cell units)."""
-    aims = list(aims) or [(0.0, 0.0)]
+    `aims` are the goal's likely cells (the heuristic's targets, in cell units). A cell's heuristic is computed once
+    (feature 314: it was asked again at every push and pop, a third of the search). `first_ok` judges each step off the
+    start (a step there may span two cells)."""
+    aims = list(aims) or [(float(start[0]), float(start[1]))]
+    hypot = math.hypot
+    hs: dict[Cell, float] = {}
 
     def h(c: Cell) -> float:
-        return weight * min(math.hypot(c[0] - a[0], c[1] - a[1]) for a in aims)
+        v = hs.get(c)
+        if v is None:
+            v = hs[c] = weight * min([hypot(c[0] - a[0], c[1] - a[1]) for a in aims])
+        return v
 
-    dist: dict[Cell, float] = {(0, 0): 0.0}
+    si, sj = start
+    dist: dict[Cell, float] = {start: 0.0}
     prev: dict[Cell, Cell] = {}
     opened: dict[Cell, bool] = {}
-    heap = [(h((0, 0)), (0, 0))]
+    heap = [(h(start), start)]
     while heap:
         f, c = heapq.heappop(heap)
         if f > dist[c] + h(c) + 1e-9:
             continue
-        if c != (0, 0):
+        if c != start:
             q = goal_of(c)
             if q is not None:
                 cells = [c]
-                while cells[-1] != (0, 0):
+                while cells[-1] != start:
                     cells.append(prev[cells[-1]])
                 return cells[::-1], q
-        for di in (-1, 0, 1):
-            for dj in (-1, 0, 1):
+        # ...THE FIRST STEP REACHES TWO CELLS (feature 314): the start is the door on a grid that is the map's, and the grid points
+        # beside its nearest one can all stand within the house's own clearance - the search then never left the door
+        reach = (-2, -1, 0, 1, 2) if c == start else (-1, 0, 1)
+        for di in reach:
+            for dj in reach:
                 nc = (c[0] + di, c[1] + dj)
-                if nc == c or abs(nc[0]) > n or abs(nc[1]) > n:
+                if nc == c or abs(nc[0] - si) > n or abs(nc[1] - sj) > n:
                     continue
                 if nc not in opened:
                     opened[nc] = is_open(nc)
-                if not opened[nc]:
+                if not opened[nc] or (c == start and first_ok is not None and not first_ok(nc)):
                     continue
                 nd = dist[c] + math.hypot(di, dj)
                 if nd < dist.get(nc, math.inf):
@@ -128,27 +147,41 @@ def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tup
     for door in A.doors_of(geom, half)[:2]:
         key = ("routed", door, tuple(own), tuple((geom.get("boxes") or {}).get("yard") or ()))
         if key not in memo:
-            memo[key] = _route_from(s, tree, door, own, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok)
+            memo[key] = _route_from(s, tree, door, own, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok, geom)
         if memo[key] is not None:
             yield memo[key]
 
 
 def _route_from(
-    s: Settlement, tree: AccessTree, door: Pt, own: Any, yard: Any, half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, leg_ok: Callable[[Pt, Pt], bool]
+    s: Settlement, tree: AccessTree, door: Pt, own: Any, yard: Any, half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, leg_ok: Callable[[Pt, Pt], bool], geom: Any
 ) -> tuple[Pt, ...] | None:
     """One door's routed path (`routed_corridors`), or None."""
+    from . import access as A
     from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard, seg_box_within
 
+    memo = A._standing_memo(s)[1]
+
+    # THE GRID IS THE DOOR'S (feature 314, research R4): laid on the map's own multiples of the step, so that what a point's
+    # standing ground answers could be shared between searches, the narrow ways between homesteads held no grid point and seed 6
+    # at 40 households threw two margins away (16.4 s against the base's 5.9); laid from the door, it seated on one in 2.2 s.
+    # What made the search cheap was not the sharing but the tests below, which refuse a path where it is searched and not
+    # after it is found.
     x0, y0 = door
 
     def at(c: Cell) -> Pt:
         return (x0 + c[0] * step, y0 + c[1] * step)
 
+    # ...OFF THE HOUSE'S OWN BOX ONLY. Kept off the household's beds, sheds and fixtures too (feature 314 research R2: a path
+    # searched over its own beds was found and then refused when pulled taut), the paths it found wound round those parts and
+    # the web could not draw three of them on one map - seed 13 at 20 households refused (`WebRefused`, needle loops) where
+    # the base rolled it; withdrawn (research R12). The first step and the last leg keep their tests (below).
+    mine = [(own, hgap)]
+
     def is_open(c: Cell) -> bool:
         p = at(c)
         if fg is not None and fg.point_taken(p[0], p[1]):
             return False
-        if seg_box_within(p, p, own, hgap):
+        if any(seg_box_within(p, p, b, g) for b, g in mine):
             return False
         if any(seg_box_within(p, p, (it[0], it[1], it[2], it[3]), half) for it in placed.near(p[0], p[1], half)):
             return False
@@ -156,13 +189,26 @@ def _route_from(
 
     def goal_of(c: Cell) -> Pt | None:
         p = at(c)
+        got = None
         for a, b, *_ in tree.grid.near(p[0], p[1], step + half):
             if seg_dist(p[0], p[1], a, b) <= step:
-                return seg_closest(p[0], p[1], a, b)
-        return None
+                got = seg_closest(p[0], p[1], a, b)
+                break
+        # ...and the last leg onto the tree standing on ground the standing tests admit (`standing_ground`), as the taut pull
+        # will ask it: a goal whose last leg grazed a placed homestead was found and then refused (research R2)
+        if got is not None and math.dist(p, got) > 1e-6 and not A.standing_ground(s, p, got, memo):
+            got = None
+        return got
 
     aims = [((q[0] - x0) / step, (q[1] - y0) / step) for q in tree.targets(door)]
-    found = search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT)
+
+    # ...ITS FIRST STEP OFF ITS OWN PARTS, by the leg tests that read only the household (`house_clear`, `fixtures_clear`,
+    # `parts_clear`) - the refusals a first leg met (research R2); the standing ground's tests, the dearest, are the taut pull's
+    def first_ok(c: Cell) -> bool:
+        p = at(c)
+        return A.house_clear(door, p, geom, hgap) and A.fixtures_clear(s, door, p, geom) and A.parts_clear(s, door, p, geom)
+
+    found = search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, (0, 0), first_ok)
     if found is None:
         return None
     cells, q = found

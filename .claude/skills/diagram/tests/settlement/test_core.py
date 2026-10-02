@@ -780,6 +780,28 @@ def test_dedup_ring_collapses_the_trim_corner_reversals():
     assert dedup_ring([*clean, (0.4, 0.2)], 1.0) == clean
 
 
+def test_the_indexed_water_answers_as_the_distance_does():
+    """Feature 314: `surface_water_within`, asked of an index of the water's segments, says what `surface_water_dist <= reach`
+    says - the streams, the canals, the moat and the pond's rim; an irrigation ditch never."""
+    from l7r.diagram.settlement._geom.indexes import PointGrid
+    from l7r.diagram.settlement.land.wet import surface_water_within, water_lines
+
+    M = {
+        "channels": [{"poly": [[0, 0], [100, 0]]}],
+        "streams": [{"poly": [[0, 200], [100, 200], [180, 260]]}],
+        "canals": [{"poly": [[400, 0], [400, 100]]}],
+        "moat": [[0, 300], [100, 300]],
+        "pond": [500.0, 500.0, 30.0, 20.0],
+    }
+    grid = PointGrid()
+    grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in water_lines(M) for a, b in zip(ln, ln[1:], strict=False))
+    for x in range(-50, 650, 37):
+        for y in range(-50, 650, 41):
+            for reach in (15.0, 60.0):
+                assert surface_water_within(M, x, y, reach, grid) == (surface_water_dist(M, x, y) <= reach), (x, y, reach)
+    assert surface_water_within(M, 532, 500, 5.0, grid) and not surface_water_within({}, 532, 500, 5.0, PointGrid()), "the pond's rim"
+
+
 def test_surface_water_dist_reads_the_checks_own_sources():
     """DOMESTIC water only: streams, canals, the moat and the pond rim - never an irrigation ditch.
 

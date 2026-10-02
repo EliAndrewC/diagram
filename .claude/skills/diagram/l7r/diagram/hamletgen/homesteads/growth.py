@@ -11,11 +11,15 @@ threshing yard also contributes."*
 - EACH NEXT HOUSE is offered from a house already standing, in a ring of directions round it, at the distance in that direction
   where the two homesteads' FOOTPRINTS part (`seat_toward`), plus a path's room (`grow_gap`). Direction and distance are jittered
   by a hash of the standing house's position (`_hjit`, no random draw), so a map grows the same way every roll. A standing
-  homestead's footprint (`footprint`) is its envelope, its reserved woodlot seats, and to the SOUTH the sun its threshing yard and its beds are owed (`SUN_CORRIDOR_FT` and the placer's 2 ft,
-  the reach of `_sun_corridor_ok` and `_gardens_sun_ok`). The new household's own reach is its envelope rolled AT THE SEAT
+  homestead's footprint (`footprint`) is its envelope, its reserved woodlot seats, and to the SOUTH the sun its threshing yard
+  and its beds are owed (`SUN_CORRIDOR_FT` and the placer's 2 ft, the reach of `_sun_corridor_ok` and `_gardens_sun_ok`). The new household's own reach is its envelope rolled AT THE SEAT
   offered, exactly as the placer will lay it there - its own house, kura, fixtures, byre and well pocket from its lot
   (`household_reach`, `settled_seat`): its yard and beds are rolled from where it stands, so
   the seat is moved out until its own envelope there clears - no seat is offered closer than its own footprint allows.
+- A SEAT THE GROUND REFUSES IS NEVER LAID OUT (feature 314): before the household's envelope is rolled at a seat, the questions
+  that need no layout are asked of the house there (`seat_refused`) - the field's reach, and its own box against the canvas, the
+  reserved corridors, the placed homesteads and the refused-ground grid, exactly as the placer asks them - and a seat they refuse
+  is dropped. Laying out the household was 11% of the stage on seats the placer then refused for one of these in a lookup.
 - Seats are offered nearest the seat first, within the form's bound, and each is judged by the placer's full rules
   (`try_place`). Its path is laid as it is placed - straight, or routed round what stands (`settlement/rolling/route.py`).
 - WHEN THE SEATS RUN DRY with households left, every standing house offers again at the next of `GROW_LEVELS`: more directions,
@@ -35,6 +39,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT
+from l7r.diagram.settlement.rolling.fit import within_field_reach
 from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done
 
 from ..consts import SUN_CORRIDOR_FT, Pt
@@ -113,14 +118,17 @@ def union(a: Reach, b: Reach) -> Reach:
     return max(a[0], b[0]), max(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])
 
 
-def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: float, scale: float, reach_at: Any) -> Pt | None:
+def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: float, scale: float, reach_at: Any, refused: Any = None) -> Pt | None:
     """The seat along `angle` from `center`, `scale` times its least distance, where the new homestead - its reach rolled AT
     THE SEAT (`reach_at`) - clears the standing one (FR-004's "never closer"): from `guess`, moved out while the reach rolled
-    there exceeds the reach it was placed for, each move to the union of the two; None after `SETTLE_TRIES` moves."""
+    there exceeds the reach it was placed for, each move to the union of the two; None after `SETTLE_TRIES` moves, or as soon
+    as a seat it would roll at is one `refused` refuses (feature 314: the ground is asked before the layout)."""
     new = guess
     for _ in range(SETTLE_TRIES):
         base = seat_toward(center, standing, new, angle, gap)
         q = (center[0] + (base[0] - center[0]) * scale, center[1] + (base[1] - center[1]) * scale)
+        if refused is not None and refused(q):
+            return None
         got = reach_at(q)
         if all(g <= n + 1e-9 for g, n in zip(got, new, strict=True)):
             return q
@@ -150,6 +158,30 @@ def household_reach(s: Settlement, q: Pt, largest: tuple[float, float]) -> Reach
         return box_reach(q, s._bundle_envelope(q[0], q[1], hw, hh, shed=shed))
     finally:
         seat_parts_done(s)
+
+
+def seat_refused(s: Settlement, q: Pt, house: tuple[float, float]) -> bool:
+    """Would the placer refuse a house of `house` (w, h) seated at `q` before laying out any part of its homestead (feature 314)?
+    Its own questions, asked as it asks them (`_place_bundle_nucleated`): the field's reach, then the house's own box as drawn
+    there against the canvas, the reserved corridors and the placed homesteads (`_house_box_refused`) and the refused-ground grid
+    (`FreeGround.rect_refused`: every garden side's box holds the house's, so a refused cell under it refuses them all). The
+    water is not asked: a household seated where it is sought carries a pocket wherever none is in reach (`watered`)."""
+    if not within_field_reach(s, q[0], q[1]):
+        return True
+    box = s._house_box(q[0], q[1], house[0], house[1])
+    if s._house_box_refused(box):
+        return True
+    fg = getattr(s, "_free_ground", None)
+    return bool(fg is not None and fg.rect_refused(box))
+
+
+def next_house(s: Settlement, largest: tuple[float, float]) -> tuple[float, float]:
+    """The house (w, h) the next plain household will build: its lot's rung of the size ladder (`household_parts` reads the
+    same lot), or the largest the roll can take where no lots are installed."""
+    lots = getattr(s, "_lots", None)
+    k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
+    lot = lots.lot(k) if lots is not None else None
+    return (s.px(46) * lot[0], s.px(28) * lot[1]) if lot is not None else largest
 
 
 def grow_gap(s: Settlement) -> float:
@@ -215,7 +247,8 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                 level, done = level + 1, 0  # DRY: every standing house offers again, wider
                 continue
             center, reach, ang, scale = heapq.heappop(heap)[3]
-            got = settled_seat(center, reach, start, ang, gap, scale, reach_at)
+            house = next_house(s, largest)
+            got = settled_seat(center, reach, start, ang, gap, scale, reach_at, lambda q, h=house: seat_refused(s, q, h))
             if got is not None:  # the next settle starts from the reach this one settled on (fewer rolls a seat)
                 start = union(guess, last[0])
             if got is None or _near_a_house(s, got) or math.hypot(got[0] - cx, got[1] - cy) > bound:

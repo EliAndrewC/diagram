@@ -749,11 +749,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...and its wall-clock seconds stay out of the manifest: a timing written there rewrote all five pool maps on every
     # regeneration with nothing on them moved (287, 2026-09-29); the rounds and the lane counts are the record.
     s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
-    # ...AND THE JOINTS READ AS ONE WAY ONCE MORE, where the settle laid a Z at one (feature 308, Inashiro on the merged engine:
-    # a crossing squared near the field spur's end turned it back against the link joined there - `square_every_crossing`
-    # runs after the joint pass above); a joint it rewrites is settled again
-    if straighten_joints(s, hard_built, walls, list(plan.watercourses) + drawn_water):
-        s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
+    resettle_straightened(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # THE CORRIDORS HAVE SERVED (feature 287 M8): every way the seating held them for is drawn, so the registry's reservation
     # of them ends here - the notice board may stand beside a way drawn along one, as beside any way
     s.standing.reserved.release_corridors()
@@ -837,3 +833,12 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
                 reached.add(j)
                 frontier.append(j)
     return [runs[i] for i in sorted(reached)]
+
+
+def resettle_straightened(s: Settlement, hard: list[Any], walls: Sequence[Any], water: list[Any]) -> None:
+    """THE JOINTS READ AS ONE WAY ONCE MORE, where the settle laid a Z at one (feature 308, Inashiro on the merged engine: a
+    crossing squared near the field spur's end turned it back against the link joined there - `square_every_crossing` runs
+    after the web's joint pass); a joint it rewrites is settled again, and the settle's record replaced. Its wall-clock seconds
+    stay out of the manifest (287, 2026-09-29)."""
+    if straighten_joints(s, hard, walls, water):
+        s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}

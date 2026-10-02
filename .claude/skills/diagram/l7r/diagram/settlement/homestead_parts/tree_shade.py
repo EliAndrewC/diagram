@@ -28,8 +28,20 @@ Box = Sequence[float]  # (center x, center y, width, height), +y south
 def crown_shades(cx: float, cy: float, r: float, plot: Box, reach: float) -> bool:
     """Does a crown of radius `r` at (`cx`, `cy`) meet `plot`'s sun ground - the plot widened by `reach` east and west and
     deepened by `reach` to the south, from its north edge?"""
+    return crown_in_ground(cx, cy, r, sun_ground(plot, reach))
+
+
+def sun_ground(plot: Box, reach: float) -> tuple[float, float, float, float]:
+    """`plot`'s sun ground as `(x0, x1, y0, y1)`: the plot widened by `reach` east and west and deepened by `reach` to the south,
+    from its north edge. Taken once per plot by a caller asking many crowns of the same plots (feature 314: the persimmon's
+    seat asked it of every plot at every rake for every pace, a tenth of the homesteads stage)."""
     px, py, pw, ph = (float(v) for v in plot[:4])
-    x0, x1, y0, y1 = px - pw / 2 - reach, px + pw / 2 + reach, py - ph / 2, py + ph / 2 + reach
+    return px - pw / 2 - reach, px + pw / 2 + reach, py - ph / 2, py + ph / 2 + reach
+
+
+def crown_in_ground(cx: float, cy: float, r: float, ground: tuple[float, float, float, float]) -> bool:
+    """Does a crown of radius `r` at (`cx`, `cy`) meet the sun ground `(x0, x1, y0, y1)` (`sun_ground`)?"""
+    x0, x1, y0, y1 = ground
     dx = cx - min(max(cx, x0), x1)
     dy = cy - min(max(cy, y0), y1)
     return dx * dx + dy * dy < r * r
@@ -38,8 +50,7 @@ def crown_shades(cx: float, cy: float, r: float, plot: Box, reach: float) -> boo
 def sun_box(plot: Box, reach: float) -> tuple[float, float, float, float]:
     """`plot`'s sun ground as a (center x, center y, half-width, half-height) box - the keep-out form `_crown_covers` reads,
     against which a crown's disc meets it exactly when `crown_shades` says so."""
-    px, py, pw, ph = (float(v) for v in plot[:4])
-    x0, x1, y0, y1 = px - pw / 2 - reach, px + pw / 2 + reach, py - ph / 2, py + ph / 2 + reach
+    x0, x1, y0, y1 = sun_ground(plot, reach)
     return ((x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2)
 
 
