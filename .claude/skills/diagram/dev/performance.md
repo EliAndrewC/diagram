@@ -1027,7 +1027,7 @@ straight one clears (`settlement/rolling/route.py`).
 - *When the seats run dry*, the growth widens (more directions, farther rings).
 - *The front row, the ranks and the exhaustive pass* are now the dispersed form's only.
 - *The measure*, back to back over the sixteen reference seeds (R10): at 40 households 101.4 -> 84.8 s; at 15 households
-  17.5 -> 15.6 s. The bookend reference total went 20.6 -> 13.4 s (-35%).
+  17.5 -> 15.6 s. The bookend reference total went 20.6 -> 11.5 s (-44%).
 
 **What did not, measured.**
 - *Straight paths only* (R1-R3): growth stalled at 3-21 houses a margin. A house grown behind another has no straight run to the
@@ -1043,9 +1043,16 @@ straight one clears (`settlement/rolling/route.py`).
   parts' cheap refusals.
 - *The gap goes on the axis that parts two boxes, never along a slanted bearing.* A unit test found gap x cos.
 
-**What it cost.** The web stage on one seed (seed 47 at 20 households: 0.39 -> 1.2 s). The routed paths carry more legs (31
-against 21), and `_join_orphan_ways` re-joins the pieces the lane law cut from them: 17 router calls, ~1.0 s. Explained with a
-control (`specs/308-grow-the-cluster/measurements.json`) and audited.
+**What it cost, and what the audit found.** The first end bookend read band 2: the web stage on one seed (seed 47 at 20
+households) went 0.39 -> 1.2 s. The perf-audit agent refuted the first explanation (routing alone) by its own counterfactual,
+with routing off and the growth kept:
+- about half was the routed paths' extra legs, which `_join_orphan_ways` re-joins;
+- the other half was `law.short_fragments` rebuilding the worked ground for every lane it asked about, though a lane taken
+  away changes no ground.
+
+The ground is now built once and handed in from the web's memo (`settle_fragments`); the map is byte-identical. The bookend
+retaken on the final engine is band 0 on every leg: the reference total 20.6 -> 11.5 s (-44%), and 10 / 20 / 40 households
+-43 / -34 / -44%.
 
 **Missed goals.** Eight seeds still take over 4 s at 40 households, and 5.8-62 offers are made per house kept. The placer's other
 rules (the woodlots, the corridors) still refuse most offered seats. A village tier that plans its paths, rather than finding
