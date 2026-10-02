@@ -40,15 +40,18 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Measurement: [`measureme
 - [x] T20 [US1] One URL end to end (`make archive URL=` on visit-toyama-sankyoson): captured, pushed, its row written
       research: rendering
       verify: DONE. make archive URL=visit-toyama sankyoson: archived, pushed to diagram-research (page.mhtml 5.2 MB, served.html, text.txt, capture.json), row 6852fcd492a9.json
-- [ ] T21 [US1] The backfill (`make archive-sources WORKERS=4`) over every cited URL; the coverage report recorded in
+- [x] T21 [US1] The backfill (`make archive-sources WORKERS=4`) over every cited URL; the coverage report recorded in
       `measurement/coverage.txt` (SC-001); every unreachable URL with its reason
       research: rendering
-- [ ] T22 [US1] SC-002: 20 archived copies drawn at random (5+ Wikipedia, 5+ PDFs, 5+ small sites) from a fresh clone of the
+      verify: DONE. cited backfill complete: 2,108 URLs all with an outcome (2,017 archived, 19 snapshot, 16 GM copy, 42 partial, 14 unreachable with reasons) - measurement/coverage.txt
+- [x] T22 [US1] SC-002: 20 archived copies drawn at random (5+ Wikipedia, 5+ PDFs, 5+ small sites) from a fresh clone of the
       archive repository - each opens (MHTML parses, PDF has pages) and holds its entry's quoted passage where it quotes one;
       recorded in `measurement/sc002.txt`
       research: rendering
-- [ ] T23 [US1] SC-005: the backfill run again on the complete archive fetches nothing
+      verify: DONE. SC-002: 20/20 sampled copies open from a fresh clone; the one quoted passage found; the other hit was a citation title, not a passage - measurement/sc002.txt
+- [x] T23 [US1] SC-005: the backfill run again on the complete archive fetches nothing
       research: rendering
+      verify: DONE. SC-005: make archive-sources on the complete archive: 0 cited URL(s) owed a copy - nothing fetched
 
 ## Phase 4 - close
 

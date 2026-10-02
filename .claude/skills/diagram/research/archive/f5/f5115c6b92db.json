@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T16:23:18+00:00",
+ "final_url": "https://www.suzhou.gov.cn/szwgjyhsj/yhsjjbgk/202110/3ad7341d62c24548bd075701ca6bbeda.shtml",
+ "first": "f5/f5115c6b92db/20261002T162318Z",
+ "gm_copies": [],
+ "keys": [
+  "suzhou-panmen-gov"
+ ],
+ "notes": [
+  "0145-city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang.notes.html",
+  "0179-water-gates-and-sluices-shuimen.drawing.notes.html",
+  "0179-water-gates-and-sluices-shuimen.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "f5/f5115c6b92db/20261002T162318Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "30a130ddceb7eefc1975a2bedb91a474648eb69a1da024c49ad0c36aae6d579d",
+ "url": "https://www.suzhou.gov.cn/szwgjyhsj/yhsjjbgk/202110/3ad7341d62c24548bd075701ca6bbeda.shtml"
+}

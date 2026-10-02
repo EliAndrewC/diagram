@@ -1,0 +1,11 @@
+# SC-002, observed 2026-10-02 (method: measurement/sc002.py, seed 309, from a fresh partial clone of EliAndrewC/diagram-research)
+# 20 copies: 6 Wikipedia, 6 PDFs, 8 other sites (the sampler's quotas; the spec asks 5+ each)
+
+20/20 open (an MHTML that parses with an HTML part; a PDF whose text was extracted).
+Entries whose registry entry quotes an original (a 「...」 run of 8+ characters): 2.
+- feng-yizhong-jiangnan: QUOTE-FOUND in the capture's text.
+- jasaga-hiatari: the "quote" is the page's TITLE on the citation line (「日当たり｜家庭菜園の基礎」), not a passage; a
+  page title lives in the HTML <title>, which the body text does not carry. The capture holds the page (its text opens on
+  the breadcrumb ...>家庭菜園の基礎>日当たり and the passage 野菜づくりに太陽の恵みは欠かせません...), so not a missing quote -
+  a limit of the sampler, which reads every 「...」 in an entry, the citation's title included.
+So 1 of 1 quoted PASSAGE was found; the sample holds every quote it can test.

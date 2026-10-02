@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T16:16:28+00:00",
+ "final_url": "https://www.persee.fr/docAsPDF/asie_0766-1177_1988_num_4_1_915.pdf",
+ "first": "94/94dd15b5d444/20261002T161628Z",
+ "gm_copies": [
+  "gm-copies/asie_0766-1177_1988_num_4_1_915.pdf"
+ ],
+ "keys": [
+  "lagerwey-1988-taoist-lineages"
+ ],
+ "notes": [
+  "0232-temple-clergy-their-families-and-how-a-temple-earned-its-keep.notes.html"
+ ],
+ "outcome": "archived-gm-copy",
+ "path": "94/94dd15b5d444/20261002T161628Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "70977659d9fcd11fbadc14493c5cf10c0f8a0b81c608b2ab8480ebd73e51fce4",
+ "url": "https://www.persee.fr/docAsPDF/asie_0766-1177_1988_num_4_1_915.pdf"
+}

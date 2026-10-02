@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T16:20:48+00:00",
+ "final_url": "https://web.archive.org/web/20260129044152id_/https://www.sizes.com/units/koku.htm",
+ "first": "65/65ae8644f262/20261002T162048Z",
+ "gm_copies": [],
+ "keys": [
+  "sizes-koku"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "65/65ae8644f262/20261002T162048Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://www.sizes.com/units/koku.htm"
+}
