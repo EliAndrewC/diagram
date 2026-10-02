@@ -542,6 +542,14 @@ _ROUTE_MIN_W = 5.0  # a cart way; anything under this is a footpath and may legi
 _ROUTE_JOIN_FT = 30.0  # the same reach the toucher uses - this closes what it declined, not more
 
 
+def joined_at_width(q: Pt, b: Pt, ways: Sequence[Poly]) -> bool:
+    """Do two lane ends already meet through a cart-width way - one of `ways` passing within `_TOUCH_GAP` of both? Then the
+    route between them is already wide, and `_keep_the_route_wide` has nothing to close (cohort seed 903, 2026-10-02: the
+    connector's end stood on the skeleton's start, the skeleton ran on through another wide lane's end 23 ft away, and the
+    pass carried the connector up the skeleton to it - a doubled tail and a needle no settle could mend on tree lanes)."""
+    return any(len(w) >= 2 and _reach(q, w) <= _TOUCH_GAP and _reach(b, w) <= _TOUCH_GAP for w in ways)
+
+
 def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """Join two CART-WIDTH lane ends that stand within reach of each other but meet only through a
     narrower way.
@@ -580,6 +588,9 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
                     d = math.dist(q, b)
                     if not (_TOUCH_GAP < d <= _ROUTE_JOIN_FT) or not _clear_touch(q, b, hard, walls, water):
                         continue
+                    wide = [[(float(x), float(y)) for x, y in (w.get("pts") or [])] for w in lanes if float(w.get("w") or 0.0) >= _ROUTE_MIN_W]
+                    if joined_at_width(q, b, wide):
+                        continue  # ...already one wide way: nothing necks here
                     new = [b, *pts] if end == 0 else [*pts, b]
                     if _bends_badly(new) or not s.reshape_lane(lanes[i], new):  # ...and the matrix admits it (feature 287 M8)
                         continue

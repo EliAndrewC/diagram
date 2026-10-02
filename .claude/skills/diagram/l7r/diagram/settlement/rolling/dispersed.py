@@ -147,6 +147,7 @@ def dispersed_layout(
     thin: float,
     sun_east: float,
     way_in: float,
+    yard_sun: float = YARD_SUN_STRIP,
     pad: float = 0.0,
     back: float = 0.0,
     well: float = 0.0,
@@ -159,7 +160,7 @@ def dispersed_layout(
     the house's north wall or its west, where the house takes its sun."""
     moved = turn != (1, 0, 0, 1)
     cw, ch = (hh, hw) if turns_axes(turn) else (hw, hh)
-    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in, back=back, well=well)
+    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, yard_sun=yard_sun, way_in=way_in, back=back, well=well)
     yard_r = _carried(can["yard"], turn, hx, hy)
     garden_r = _carried(can["garden"], turn, hx, hy)
     well_r = _carried(can["well"], turn, hx, hy) if can["well"] is not None else None
