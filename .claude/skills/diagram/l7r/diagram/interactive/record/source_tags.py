@@ -239,6 +239,16 @@ def synced_contract(text: str, vocab: Vocabulary) -> str:
     return text[:start] + contract_block(vocab) + text[end + len(CONTRACT_CLOSE) :]
 
 
+def kind_anchor(section: Section, kind: Label) -> str:
+    """The id of one kind's run inside a section, on the sources index and the one-page record (feature 307)."""
+    return f"{section.id}-{kind.id}"
+
+
+def kind_heading(section: Section, kind: Label, level: int) -> str:
+    """A kind's heading inside a section's run of works, its explanation as the heading's tooltip."""
+    return f'<h{level} class="works-kind" id="{kind_anchor(section, kind)}" title="{html.escape(kind.description, quote=True)}">{html.escape(kind.name)}</h{level}>'
+
+
 class Catalog:
     """Every registry entry's tags and section, read once per build. `errors` holds every refusal, each naming its
     entry, so one build names them all; an entry refused has no section and is left out of every list."""
@@ -273,6 +283,17 @@ class Catalog:
 
     def labels(self, key: str) -> str:
         return labels_html(self.tags[key], self.vocab) if key in self.section else ""
+
+    def by_kind(self, keys: list[str]) -> list[tuple[Label | None, list[str]]]:
+        """`keys` under their primary KIND in the vocabulary's order, each keeping the order it was given (feature 307:
+        the sources nested by section, then kind); untagged keys - the canon - under no kind."""
+        kinds = [(lab, [k for k in keys if (tags := self.tags.get(k)) is not None and tags.primary("kind") == lab.id]) for lab in self.vocab.facets["kind"]]
+        untagged = [k for k in keys if self.tags.get(k) is None]
+        return ([(None, untagged)] if untagged else []) + [(lab, run) for lab, run in kinds if run]
+
+    def anchors(self) -> list[str]:
+        """Every id the nested sources may use: each section's, and each section-and-kind's (`kind_anchor`)."""
+        return [a for s in self.sections for a in (s.id, *(kind_anchor(s, lab) for lab in self.vocab.facets["kind"]))]
 
     def grouped(self, keys: list[str]) -> list[tuple[Section, list[str]]]:
         """`keys` under their sections in the sections' order, each keeping the order it was given; an empty section

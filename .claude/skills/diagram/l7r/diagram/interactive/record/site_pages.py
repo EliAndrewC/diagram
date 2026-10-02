@@ -134,8 +134,9 @@ def tags_line(tags: ct.Tags, vocab: ct.Vocabulary, here: str) -> str:
     return '<p class="tags"><em>Tags:</em> ' + ", ".join(links) + "</p>\n"
 
 
-def nav_tree(record: qs.Record, items: dict[str, Item], registry_title: str, registry_items: list[Item]) -> dict:
-    """The navigation as data: each half's sections nested with their questions, the tags, the sources."""
+def nav_tree(record: qs.Record, items: dict[str, Item], sources: list[dict]) -> dict:
+    """The navigation as data: each half's sections nested with their questions, the tags, and the sources - their works
+    sections straight under the Sources heading, each with its kinds and works beneath (feature 307)."""
 
     def node(half: str, section: ct.Section) -> dict:
         return {
@@ -152,12 +153,7 @@ def nav_tree(record: qs.Record, items: dict[str, Item], registry_title: str, reg
         for facet in ct.FACETS
     ]
     groups.append({"label": TAGS_GROUP, "sections": tag_nodes})
-    groups.append(
-        {
-            "label": REGISTRY_GROUP,
-            "sections": [{"key": "sources", "title": registry_title, "href": "sources/index.html", "sections": [], "items": [[i.title, f"sources/{i.id}.html"] for i in registry_items]}],
-        }
-    )
+    groups.append({"label": REGISTRY_GROUP, "sections": sources})
     return {"title": TITLE, "home": "index.html", "all": "all.html", "groups": groups}
 
 

@@ -178,7 +178,11 @@ A note is one of THREE forms:
   reason; using one of the four not yet exemplified on an existing note takes a written argument at that note's page. A note converted
   from an absence note keeps its search in an HTML comment.
 
-The one exception, by the GM's ruling: the GM's own campaign notes are canon and keep their registry link. A page
+The one exception, by the GM's ruling: the GM's own campaign notes are canon and keep their registry link; the registry
+entry they open cites the notes on GitHub (feature 307, GM 2026-10-02): the file at
+`https://github.com/EliAndrewC/l7r/blob/master/setting/<file>.md`, and each quoted section followed by its heading's URL,
+its anchor by GitHub's rule (`sources.github_anchor`). The build makes every bare URL on a citation line a link that
+opens in a new tab, so a citation line is written with its URL in plain text. A page
 the container cannot fetch is not thereby unreadable - if the GM can open it, anyone can; a source only the GM
 can fetch is downloaded by them to `/host-l7r-repo/academic-sources/` - the session reads the copy, the footnote
 links the PUBLIC page and says the copy was read, and the quote-check runs against the copy; a paywalled text with a

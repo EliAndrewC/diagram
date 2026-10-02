@@ -26,6 +26,7 @@ nav.pager a[rel="next"] { text-align: right; margin-left: auto; }
 nav.toc ul { padding-left: 1.2em; }
 section.part > h1 { border-top: 3px double var(--rule); padding-top: 1rem; margin-top: 3rem; }
 section.works h4 { font-size: 1em; margin-bottom: .2rem; }
+h4.works-kind { margin: 1rem 0 .2rem; font-size: .95em; text-transform: uppercase; letter-spacing: .04em; opacity: .85; }
 /* Feature 305: the works sections and each work's labels; a label's explanation shows in the note box on hover. */
 h3.works-section { margin-top: 1.6rem; padding-bottom: .15rem; border-bottom: 1px solid var(--rule); }
 p.works-section-desc { margin-top: .3rem; font-size: .92em; opacity: .85; }

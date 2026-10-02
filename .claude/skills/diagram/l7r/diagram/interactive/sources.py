@@ -316,6 +316,35 @@ def link_target(key: str, cite: str, rel: str) -> str:
     return u
 
 
+#: Where a bare URL may stand in a fragment of markup: outside every tag and comment, and outside a link's text.
+_MARKUP_PART = re.compile(r"(<!--.*?-->|<a\b[^>]*>.*?</a>|<[^>]+>)", re.S)
+
+
+def _url_end(u: str) -> str:
+    """A URL as a sentence leaves it, trimmed of the punctuation after it and of a closing parenthesis it did not open
+    (the rule `link_target` follows)."""
+    u = u.rstrip(".,;:")
+    while u.endswith(")") and u.count(")") > u.count("("):
+        u = u[:-1].rstrip(".,;:")
+    return u
+
+
+def linkify(fragment: str) -> str:
+    """Every bare URL in `fragment` made a link to itself that opens in a new tab (feature 307, GM 2026-10-02: *"when we
+    display a URL, it should become a link ... that would open the source in a new tab"*), done by the build so nothing
+    is typed into the registry. A URL already inside a link, a tag or a comment is left as it is."""
+
+    def text(part: str) -> str:
+        out, at = [], 0
+        for m in _CITE_URL.finditer(part):
+            u = _url_end(m.group(0))
+            out.append(part[at : m.start()] + f'<a href="{u}" target="_blank" rel="noopener">{u}</a>')
+            at = m.start() + len(u)
+        return "".join(out) + part[at:]
+
+    return "".join(p if i % 2 else text(p) for i, p in enumerate(_MARKUP_PART.split(fragment)))
+
+
 def _labeled(body: str, label: str) -> str:
     """The inner HTML of the entry's `<p><em>label</em> ...</p>` paragraph, '' when it has none."""
     m = re.search(r"<p><em>" + re.escape(label) + r"</em>\s*(.*?)</p>", body, re.S)
