@@ -107,7 +107,7 @@ survived their own feature's gate:
 | `tools/make_regressions.py:116` | `open(HERE/"check_village.py")` | feature 024 made it a package |
 | `tools/timings.py:85` | `[PY, "hamletgen.py", ...]` | feature 111 made it a package |
 | `wip/shiro-daika.gen.py:50` | `while not exists(_D/"settlement.py")` | feature 025 made it a package |
-| `research/contents.json#compounds` | a malformed `](../pack_audit.py)` link spanning prose | never resolved |
+| `research/buildings.md` | a malformed `](../pack_audit.py)` link spanning prose | never resolved |
 
 The common shape is worth naming for whoever picks these up: **a module path written as a string
 literal is invisible to every check the project runs** - it is not an import, so nothing resolves it;
