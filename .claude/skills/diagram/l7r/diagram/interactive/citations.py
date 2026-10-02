@@ -3,8 +3,9 @@
 The GM, feature 211 (2026-09-07): the notes are written once and loaded by every page that shows them, and a work's
 write-up - its citation line, what it is, why it applies and its limits - is written once, in its registry entry
 (*"we do not want to have multiple different write ups of a single paper"*). What is DERIVED from those two stores is
-the WORKS block at the foot of a question's page in the record's site: for each work the page's notes cite, in order of
-first citation, its citation line and the two write-ups (`works_html`, called by `record/site.py`).
+the WORKS block at the foot of a question's page in the record's site: for each work the page's notes cite, under the
+section its tags put it in (feature 305) and in order of first citation within it, its labels, its citation line and the
+two write-ups (`works_html`, called by `record/site.py`).
 
 Feature 211's per-page citations pages went with the page directories (feature 303): a question's notes are in its own
 notes file and shown at the foot of its own page, and the single page carries every note.
@@ -18,6 +19,7 @@ from __future__ import annotations
 import re
 
 from l7r.diagram.interactive.record import absence
+from l7r.diagram.interactive.record.source_tags import Catalog, section_heading
 from l7r.diagram.interactive.sources import WHAT_LABEL, WHY_LABEL, link_target
 
 _KEY_LINK = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
@@ -39,21 +41,23 @@ def cited_keys(page_notes: list[tuple[str, str]]) -> list[str]:
     return keys
 
 
-def works_html(keys: list[str], entries: dict[str, dict[str, str]], rel: str) -> tuple[str, list[str]]:
+def works_html(keys: list[str], entries: dict[str, dict[str, str]], rel: str, catalog: Catalog) -> tuple[str, list[str]]:
     """The works section's derived block for `keys`, and the keys whose entry lacks a write-up (a gate failure - a
-    new source cannot be cited without one, spec FR-003). Each work: its key linked as feature 190 links it (the
-    document when read, the registry entry when not), its citation line, and the two write-ups."""
+    new source cannot be cited without one, spec FR-003). The works stand under the sections their tags put them in
+    (feature 305), each section headed and described, each keeping the page's order of first citation within it. Each
+    work: its key linked as feature 190 links it (the document when read, the registry entry when not), its labels,
+    its citation line, and the two write-ups. A work the catalog refused is already a build error and is left out."""
     parts = [WORKS_OPEN]
-    missing: list[str] = []
-    for key in keys:
-        e = entries.get(key)
-        if e is None or not e["what"] or not e["why"]:
-            missing.append(key)
-            continue
-        parts.append(f'<h3 id="work-{key}"><a href="{link_target(key, e["line"], rel)}"><code>{key}</code></a></h3>')
-        parts.append(f"<p>{e['cite']}</p>")
-        parts.append(f"<p><em>{WHAT_LABEL}</em> {e['what']}</p>")
-        parts.append(f"<p><em>{WHY_LABEL}</em> {e['why']}</p>")
+    missing = [k for k in keys if k not in entries or not entries[k]["what"] or not entries[k]["why"]]
+    for section, run in catalog.grouped([k for k in keys if k not in missing]):
+        parts.append(section_heading(section, 3, f"page-{section.id}"))
+        for key in run:
+            e = entries[key]
+            parts.append(f'<h4 id="work-{key}"><a href="{link_target(key, e["line"], rel)}"><code>{key}</code></a></h4>')
+            parts.append(catalog.labels(key))
+            parts.append(f"<p>{e['cite']}</p>")
+            parts.append(f"<p><em>{WHAT_LABEL}</em> {e['what']}</p>")
+            parts.append(f"<p><em>{WHY_LABEL}</em> {e['why']}</p>")
     parts.append(WORKS_CLOSE)
     return "\n".join(parts), missing
 

@@ -262,6 +262,49 @@ def test_a_registry_without_its_title_is_refused(tmp_path: pathlib.Path) -> None
         site.build(str(rec))
 
 
+def test_works_stand_under_their_sections_with_their_labels_everywhere(tmp_path: pathlib.Path) -> None:
+    """305 US1, US2, SC-003: a question's works, the registry index, each entry's page and the single page group the
+    works by section in the rules' order, show each work's labels with their explanations, and never the raw marker."""
+    files = site.build(str(fr.write(tmp_path)))
+    lanes, bridges = files["q/lanes.html"], files["q/bridges.html"]
+    assert '<h3 class="works-section" id="page-works-premodern-japan">Premodern Japan</h3>' in lanes and '<h4 id="work-alpha">' in lanes
+    assert 'data-def="Before the factories." title="Before the factories.">Premodern</span>' in lanes and ">China</span>" in lanes, "both regions show"
+    assert '<h3 class="works-section" id="page-works-present-day">Present day</h3>' in bridges and "Premodern Japan" not in bridges, "an empty section is not shown"
+    index = files["sources/index.html"]
+    assert index.index("Setting canon") < index.index("Premodern Japan") < index.index('id="works-present-day"') and "General works" not in index
+    assert index.index('href="gamma.html"') < index.index('href="alpha.html"') < index.index('href="beta.html"')
+    alpha = files["sources/alpha.html"]
+    assert '<p class="srctags">' in alpha and "<!-- tags: period=" not in alpha and 'rel="prev" href="../sources/gamma.html"' in alpha, "the pager walks the grouped order"
+    assert "Setting canon</span>" in files["sources/gamma.html"]
+    single = files["all.html"]
+    assert '<h3 class="works-section" id="works-canon">' in single and '<h4 id="alpha">' in single and "<!-- tags: period=" not in single
+    assert single.index('<h4 id="gamma">') < single.index('<h4 id="alpha">') < single.index('<h4 id="beta">')
+    assert 'href="#works-premodern-japan">Premodern Japan</a>' in single, "the contents name the sections"
+
+
+def test_the_build_refuses_a_work_with_no_tags_an_unknown_one_or_no_section_and_a_missing_rule_file(tmp_path: pathlib.Path) -> None:
+    """305 FR-010, SC-002: each refusal names the entry; a rule file gone refuses the build by name."""
+    rec = fr.write(tmp_path)
+    fr.edit_entry(rec, "0020-beta.html", "<!-- tags: period=present-day; region=china; kind=reference -->\n", "")
+    fr.edit_entry(rec, "0010-alpha.html", "kind=primary", "kind=rumor")
+    with pytest.raises(RecordError) as e:
+        site.build(str(rec))
+    assert "beta: no tags" in str(e.value) and "alpha: `kind=rumor` - not a kind value; the values are primary, reference" in str(e.value)
+    fr.edit_entry(rec, "0010-alpha.html", "period=premodern; region=japan,china; kind=rumor", "period=timeless; region=china; kind=primary")
+    with pytest.raises(RecordError, match="alpha: no section of source-sections.json takes the primary tags period=timeless, region=china, kind=primary"):
+        site.build(str(rec))
+    (rec / "source-sections.json").unlink()
+    with pytest.raises(RecordError, match="source-sections.json: missing"):
+        site.build(str(rec))
+
+
+def test_a_section_id_a_question_already_uses_is_refused(tmp_path: pathlib.Path) -> None:
+    rec = fr.write(tmp_path)
+    fr.edit(rec, "0003-rows.html", "<p>Shops", '<p id="works-canon">Shops')
+    with pytest.raises(RecordError, match="the id `works-canon` is used in"):
+        site.build(str(rec))
+
+
 def test_the_site_is_written_whole_and_swapped_in(tmp_path: pathlib.Path) -> None:
     out = tmp_path / "research" / "site"
     site.write({"index.html": "one", "a/b.html": "two"}, str(out))

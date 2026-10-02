@@ -1,0 +1,102 @@
+{
+ "sections": [
+  {
+   "id": "works-canon",
+   "title": "Setting canon",
+   "description": "The GM's own campaign notes: the setting's facts, which govern wherever they speak.",
+   "canon": true
+  },
+  {
+   "id": "works-premodern-japan",
+   "title": "Premodern Japan",
+   "description": "Evidence from Japan before 1868 - one of the setting's two models, at its own period.",
+   "takes": [
+    {
+     "period": "premodern",
+     "region": "japan"
+    }
+   ]
+  },
+  {
+   "id": "works-premodern-china",
+   "title": "Premodern China",
+   "description": "Evidence from imperial China before about 1895 - the setting's other model, at its own period.",
+   "takes": [
+    {
+     "period": "premodern",
+     "region": "china"
+    }
+   ]
+  },
+  {
+   "id": "works-premodern-korea-east-asia",
+   "title": "Premodern Korea and East Asia",
+   "description": "Evidence from premodern Korea, Ryukyu, Taiwan and Vietnam - close analogs, used where the practice is shared.",
+   "takes": [
+    {
+     "period": "premodern",
+     "region": [
+      "korea",
+      "east-asia-other"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "works-timeless",
+   "title": "Not period-bound",
+   "description": "Facts that do not change with the era - how a tree grows, how water holds - which apply as they stand.",
+   "takes": [
+    {
+     "period": "timeless"
+    }
+   ]
+  },
+  {
+   "id": "works-modern-preindustrial-east-asia",
+   "title": "Modern preindustrial East Asia",
+   "description": "East Asia recorded in the modern era while still farmed by hand: the forms carry over, the numbers can run high.",
+   "takes": [
+    {
+     "period": "modern-preindustrial",
+     "region": [
+      "japan",
+      "china",
+      "korea",
+      "east-asia-other"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "works-present-day-east-asia",
+   "title": "Present-day East Asia",
+   "description": "East Asia as it stands today: evidence that a form exists and how it is laid out; its numbers are anchors.",
+   "takes": [
+    {
+     "period": "present-day",
+     "region": [
+      "japan",
+      "china",
+      "korea",
+      "east-asia-other"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "works-beyond-east-asia",
+   "title": "Beyond East Asia, and general works",
+   "description": "Europe, the rest of the world, and works about no one place: used for constraints that cross cultures.",
+   "takes": [
+    {
+     "region": [
+      "europe",
+      "elsewhere",
+      "general"
+     ]
+    }
+   ]
+  }
+ ]
+}

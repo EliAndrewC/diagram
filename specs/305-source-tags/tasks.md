@@ -6,12 +6,13 @@ reaches a map.
 
 ## Occasions
 
-- none: no map, glyph or placement changes; the record site's labels and grouping are checked by tests and by eye (T07)
+- none: no map, glyph or placement changes; the record site's labels and grouping are checked by tests and by eye (T09)
 
 ## Phase 1 - Setup
 
-- [ ] T01 Baseline: `make done` on unmodified main in a detached worktree (`/tmp/base305`); `make record` timed before any edit (constitution XIII, plan Performance bookends)
+- [x] T01 Baseline: `make done` on unmodified main in a detached worktree (`/tmp/base305`); `make record` timed before any edit (constitution XIII, plan Performance bookends)
       research: rendering
+      verify: DONE. Baseline make done green on unmodified main (291fa9433, specs only ahead of origin) in detached worktree /tmp/base305; make record before any edit 4.6-5.2 s over 3 runs, 2,687 pages (2026-10-02, wall clock)
 
 ## Phase 2 - Foundational
 

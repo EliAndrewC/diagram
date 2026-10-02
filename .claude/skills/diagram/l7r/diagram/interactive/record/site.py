@@ -9,8 +9,9 @@ halves with the one structure.
 
 What `make record` writes, under `research/site/` (gitignored; built on the main checkout by render-sync), is listed in
 `site_pages.py`. Nothing is read back from what this writes, and nothing in the engine reads it: the fragments are the
-record. A link that lands nowhere, an id used twice, a note nothing cites or a cited work with no write-up refuses the
-build, naming the fragment.
+record. A link that lands nowhere, an id used twice, a note nothing cites, a cited work with no write-up or a work whose
+tags are missing or no section takes refuses the build, naming the fragment. The works stand under the sections their
+tags put them in, each with its labels (feature 305, `source_tags.py`).
 """
 
 from __future__ import annotations
@@ -26,11 +27,12 @@ from l7r.diagram.interactive.record import questions as qs
 from l7r.diagram.interactive.record import site_links as links
 from l7r.diagram.interactive.record import site_notes as sn
 from l7r.diagram.interactive.record import site_pages as sp
+from l7r.diagram.interactive.record import source_tags as st
 from l7r.diagram.interactive.record import store
 from l7r.diagram.interactive.record.notes import NoteError, Placed, render_note
 from l7r.diagram.interactive.record.split import split
 from l7r.diagram.interactive.record.store import RecordError
-from l7r.diagram.interactive.sources import RESEARCH_DIR, clear_caches, page_text, registry_entries
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, clear_caches, page_text, registry_entries
 
 SITE = "site"
 #: The assets the site carries, copied from `research/assets/` - the hand-written ones. The glossary is derived.
@@ -38,6 +40,9 @@ ASSETS = ("record.css", "record.js", "site.css", "site.js")
 TITLE = sp.TITLE
 _H1 = re.compile(r'<h1 id="([^"]+)">(.*?)</h1>', re.S)
 _HEAD = re.compile(r"<h([23]) id=\"([^\"]+)\">(.*?)</h\1>", re.S)
+#: A registry entry's heading, which the one-page record sets a level below its works section's.
+_ENTRY_H3 = re.compile(r"<h3( id=\"[^\"]+\">.*?)</h3>", re.S)
+_HEADING_END = re.compile(r"</h[1-4]>")
 _MAIN = re.compile(r"<main>\s*", re.S)
 _TRAILING_RULE = re.compile(r"\s*<hr>\s*$")
 _P = re.compile(r"<p>(.*?)</p>", re.S)
@@ -86,7 +91,7 @@ class Registry:
         return [i for _g, _h, items in self.groups for i in items]
 
 
-def build_index(items: dict[str, sp.Item], registry: Registry) -> links.Index:
+def build_index(items: dict[str, sp.Item], registry: Registry, section_ids: tuple[str, ...] = ()) -> links.Index:
     """Every id in the record, and the ids the build refuses: one used twice anywhere, because the single page holds
     them all (feature 301 FR-007), or one the site's own pages use."""
     index = links.Index()
@@ -112,6 +117,8 @@ def build_index(items: dict[str, sp.Item], registry: Registry) -> links.Index:
             index.add_registry(item.id, item.html)
             for found in [item.id, *links.ids_in(item.html)]:
                 claim(found, f"{store.REGISTRY_DIR}/ {item.id}")
+    for sid in section_ids:
+        claim(sid, st.SECTIONS)
     for reserved in RESERVED:
         if reserved in seen:
             errors.append(f"the id `{reserved}` (in {seen[reserved]}) is one the site's own pages use")
@@ -136,11 +143,15 @@ class Build:
         self.record = store.load(record_dir)
         self.items = {p.file: _item(store.page_html(self.record, p, record_dir), p.heading_id, p) for p in self.record.pages()}
         self.registry = Registry(record_dir)
-        self.index = build_index(self.items, self.registry)
+        try:
+            self.catalog = st.Catalog(record_dir, {i.id: i.html for i in self.registry.items()}, canon_keys(record_dir), store.REGISTRY_DIR)
+        except st.SourceTagError as e:
+            raise RecordError(str(e)) from None
+        self.index = build_index(self.items, self.registry, tuple(s.id for s in self.catalog.sections))
         self.entries = registry_entries(record_dir)
         self.notes: dict[str, dict[str, str]] = {}
         self.files: dict[str, str] = {}
-        self.errors: list[str] = []
+        self.errors: list[str] = list(self.catalog.errors)
 
     def rewrite(self, markup: str, own: str | None, here: str, where: str, *, single: bool = False) -> str:
         out, errs = links.rewrite(markup, own=own, index=self.index, here=here, single=single, where=where, registry_title=self.registry.title_id)
@@ -165,7 +176,7 @@ class Build:
         self._registry()
         self._home()
         self._single()
-        self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.registry.title, self.registry.items()))
+        self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.registry.title, self.registry_run()))
         if self.errors:
             raise RecordError("\n  ".join([f"the site does not build ({len(self.errors)} refusal(s)):", *self.errors]))
         return self.files
@@ -177,7 +188,7 @@ class Build:
         from l7r.diagram.interactive.citations import cited_keys, works_html  # noqa: PLC0415 - citations imports the record
 
         keys = cited_keys([(str(p.number), p.body) for p in placed])
-        block, missing = works_html(keys, self.entries, "")
+        block, missing = works_html(keys, self.entries, "", self.catalog)
         self.errors += [f"{where}: cites `{k}`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)" for k in missing]
         return self.rewrite(block, None, here, where)
 
@@ -237,19 +248,40 @@ class Build:
                 body += '<ul class="questions">\n' + "\n".join(rows) + "\n</ul>\n" if rows else "<p>No question carries this tag yet.</p>\n"
                 self.files[here] = sp.shell(f"{sp.FACET_NAMES[facet]}: {tag.name}", here, f"tags/{facet}", body)
 
+    def grouped(self, items: list[sp.Item]) -> list[tuple[st.Section | None, list[sp.Item]]]:
+        """A registry group's entries under their works sections, in the sections' order and the registry's within
+        each; an entry the catalog refused (already a build error) follows, under no section."""
+        by_key = {i.id: i for i in items}
+        out: list[tuple[st.Section | None, list[sp.Item]]] = [(s, [by_key[k] for k in keys]) for s, keys in self.catalog.grouped(list(by_key))]
+        refused = [i for i in items if i.id not in self.catalog.section]
+        return out + ([(None, refused)] if refused else [])
+
+    def registry_run(self) -> list[sp.Item]:
+        """Every registry entry in the order its pages are chained and listed: group by group, section by section."""
+        return [i for _g, _h, items in self.registry.groups for _s, run in self.grouped(items) for i in run]
+
+    def entry_html(self, item: sp.Item) -> str:
+        """A registry entry as the reader sees it: its marker gone, its labels under its heading."""
+        text = st.strip_marker(item.html)
+        m = _HEADING_END.search(text)
+        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + text[m.end() :]
+
     def _registry(self) -> None:
         reg = self.registry
-        run = reg.items()
+        run = self.registry_run()
         for at, item in enumerate(run):
             here = f"{links.REGISTRY_DIR}/{item.id}.html"
-            body = self.rewrite(item.html, None, here, f"{store.REGISTRY_DIR}/ {item.id}")
+            body = self.rewrite(self.entry_html(item), None, here, f"{store.REGISTRY_DIR}/ {item.id}")
             content = sp.crumbs(here, [(reg.title, f"{links.REGISTRY_DIR}/index.html")]) + _as_title(body) + sp.pager(run, at, here, links.REGISTRY_DIR)
             self.files[here] = sp.shell(f"{item.title} - {reg.title}", here, "sources", content)
         here = f"{links.REGISTRY_DIR}/index.html"
         body = sp.crumbs(here, []) + f'<h1 id="{reg.title_id}">{html.escape(reg.title)}</h1>\n' + self.rewrite(reg.intro, None, here, f"{store.REGISTRY_DIR}/_front.html") + "\n"
         for gid, ghtml, items in reg.groups:
             body += self.rewrite(ghtml, None, here, f"{store.REGISTRY_DIR}/ group {gid}")
-            body += '<ul class="questions">\n' + "\n".join(f'<li><a href="{i.id}.html">{html.escape(i.title)}</a></li>' for i in items) + "\n</ul>\n"
+            for section, entries in self.grouped(items):
+                if section is not None:
+                    body += st.section_heading(section, 3, section.id) + "\n"
+                body += '<ul class="questions">\n' + "\n".join(f'<li><a href="{i.id}.html">{html.escape(i.title)}</a></li>' for i in entries) + "\n</ul>\n"
         self.files[here] = sp.shell(reg.title, here, "sources", body)
 
     def _home(self) -> None:
@@ -312,14 +344,22 @@ class Build:
         reg = self.registry
         toc.append(
             f'<li><a href="#{reg.title_id}">{html.escape(reg.title)}</a><ul>'
-            + "".join(f'<li><a href="#{gid}">{html.escape(_text(_HEAD.search(gh).group(3)) if _HEAD.search(gh) else gid)}</a></li>' for gid, gh, _i in reg.groups)
+            + "".join(
+                f'<li><a href="#{gid}">{html.escape(_text(_HEAD.search(gh).group(3)) if _HEAD.search(gh) else gid)}</a>'
+                + ("<ul>" + "".join(f'<li><a href="#{s.id}">{html.escape(s.title)}</a></li>' for s, _r in self.grouped(gi) if s is not None) + "</ul>" if gi else "")
+                + "</li>"
+                for gid, gh, gi in reg.groups
+            )
             + "</ul></li>"
         )
         out.append(f'<section class="part">\n<h1 id="{reg.title_id}">{html.escape(reg.title)}</h1>\n')
         out.append(self.rewrite(reg.intro, None, "all.html", f"{store.REGISTRY_DIR}/_front.html", single=True))
         for gid, ghtml, items in reg.groups:
             out.append(self.rewrite(ghtml, None, "all.html", f"{store.REGISTRY_DIR}/ group {gid}", single=True))
-            out += [self.rewrite(i.html, None, "all.html", f"{store.REGISTRY_DIR}/ {i.id}", single=True) for i in items]
+            for section, entries in self.grouped(items):
+                if section is not None:
+                    out.append(st.section_heading(section, 3, section.id) + "\n")
+                out += [_ENTRY_H3.sub(r"<h4\1</h4>", self.rewrite(self.entry_html(i), None, "all.html", f"{store.REGISTRY_DIR}/ {i.id}", single=True), count=1) for i in entries]
         out.append("</section>\n")
         toc.append("</ul></nav>\n")
         head = f'<h1 id="record">{TITLE}</h1>\n<p><em>Every question the maps were researched from, every note behind them and every source they cite, on one page. The same record, a page per question: <a href="index.html">the contents</a>.</em></p>\n'
