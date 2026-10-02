@@ -118,10 +118,10 @@ every list entry with no registry key: one of eight states with the date last ch
   and the entry's id recorded beside it, so the copy is found again when the entry's work enters the registry.
 - A key with several manifest rows: the most open state wins (below); the date is that row's.
 - A key named by several entries (H7 and entry 9 both name `northampton-tannery-1996`; H2 and entry 10 both name
-  `irri-drying-floor`): the most recently recorded mark decides; on the same date, the most open state.
+  `irri-drying-floor`): the most recently recorded mark that gives a state decides; on the same date, the most open state.
 - The GM's file changed between the import and the first sync (a GM edit, or an entry a session appended by hand before the
-  new rule reached it): the first sync refuses and names the changed or added entries, so they are brought into the
-  canonical list first.
+  new rule reached it): the first sync refuses and names the changed or added entries, and says how to bring them into the
+  canonical list (an added entry through the add command, a changed one by hand) before syncing again.
 
 ## Requirements *(mandatory)*
 
@@ -159,14 +159,16 @@ every list entry with no registry key: one of eight states with the date last ch
   GM's full copy), gm-partial (the GM's partial copy: an abstract or excerpt), paywalled (a paid or institutional login) or
   never-read (referenced only). Each comes with the date last checked and what it rests on. It is derived from what the
   repository records, in this order:
-  1. A GM mark recorded on an entry naming the key decides. Downloaded gives gm-full; partial (with or without paywalled)
-     gives gm-partial; paywalled alone gives paywalled. Not found alone gives no state: the next rules decide, and the
-     basis says the GM did not find it. Found elsewhere changes no state. Where several entries name the key, the most
-     recently recorded mark decides; on the same date, the most open state.
+  1. A GM mark recorded on an entry naming the key decides. Downloaded gives gm-full, whatever else is ticked; partial
+     without downloaded (with or without paywalled) gives gm-partial; paywalled alone gives paywalled. Not found alone gives
+     no state: the next rules decide, and the basis says the GM did not find it. Found elsewhere changes no state. Where
+     several entries name the key, the most recently recorded mark that gives a state decides, and on the same date the
+     most open state; a not-found mark only adds to the basis and never overrides another entry's state.
   2. Otherwise the most open of the key's manifest rows.
   3. Otherwise a dated `READ` comment in its registry entry gives open.
   4. Otherwise never-read.
-  A state recorded by hand, with its date and a reason, is kept as evidence and wins when it is newer. The paywall
+  A state recorded by hand, with its date and a reason, is kept as evidence and wins when its date is the same as or later
+  than the derived state's. The paywall
   knowledge the repository already holds in prose - a list entry's "Blocked by" saying paywalled or subscription, a
   registry entry's comment or write-up saying so - is seeded as hand-recorded states by this feature, each read and
   confirmed, each citing the line it rests on. The states, their order and their meanings are stated in one file.
@@ -235,3 +237,9 @@ Classes are those of `docs/research-doctrine.md`. Nothing on a map changes, so n
   sync had no baseline. All four applied: FR-011's ordered rules with the mark mapping and the several-entries rule, the
   seeding of the existing paywall knowledge, FR-005's not-found refusal widened to paywalled, FR-007's import baseline, two
   edge cases, US3 scenario 3, and SC-005 widened to keyless entries (the review's aside).
+- **Round 2** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - items 3 and 4 resolved; two gaps in rule 1: a newer
+  not-found mark on one entry could hide another entry's state, and downloaded with partial had two answers. Applied: the
+  newest mark that gives a state decides, not-found never overrides; downloaded gives gm-full whatever else is ticked; the
+  first-sync refusal says how to bring the named entries in (the review's wording point). Also changed by the session: a
+  hand-recorded state wins on the same date as the derived one, not only a later date, so a state seeded on the day of an
+  archive capture is not silently outranked by it.
