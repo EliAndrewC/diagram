@@ -53,3 +53,11 @@ Now, with this in mind, I guess it also probably makes sense to store sources wh
 The session asked which uncited sources to store - every page a research session reads (cited or not, the ~3,000 earlier
 reads archived from their saved text now and re-fetched whole where the page is still up), only the GM's downloaded files,
 or every page from now on only. The GM chose: "Every page we read (Recommended)".
+
+The GM (mid-amendment):
+
+Since we're adding so many thousands of sources, then do we need to organize the diagram research repo in a different way than we are organizing it now? I mean, I know that a directory in Linux can have literally thousands of subdirectories within it, and Linux handles that fairly gracefully, although at a certain point it begins to make sense to start deeply nesting things. And since we are now going from a few thousand to more thousands of things, then since we plan to look up whether a thing already exists, then should we do something where we make that a bit hierarchical, perhaps? You know, to limit the number of directories in any given directory to no more than a few hundred? I mean, I know that there are some fairly typical ways to do that. Like if you're storing by UUID, then you have the first two digits of the UUID be the name of the directory, and then that way you don't have more than 256 entries in a top-level directory, and then you do the same thing for subdirectories, kind of to however many levels of nesting you need given the amount of data that you're storing and the number of files. Again, I'm not suggesting that as the specific choice here. I'm just asking whether this general type of optimization is something that we may as well do now as part of this feature while we are still figuring this out.
+
+The session's answer: yes, now - GitHub's web view lists only the first 1,000 entries of a directory and the archive's top
+level already held ~1,700; shard by the URL id's first two hex digits (256 buckets, ~20 entries each at 5,000 URLs), the
+GM's copies flat under `gm-copies/` (~40), the manifest sharded the same way; lookups go through the manifest.
