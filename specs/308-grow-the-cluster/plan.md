@@ -64,19 +64,22 @@ numbers and raised with the GM.
       `SUN_CORRIDOR_FT` and the placer's 2 ft (`_sun_corridor_ok` and `_gardens_sun_ok`, computed, not assumed);
     - its PATH OUT. The gap (`grow_gap`) is a corridor's whole strip (2 x `ACCESS_HALF_FT`) plus 2 px, so a path fits between two
       footprints, and a standing house's own reserved path is refused to every envelope by the placer.
-  - *The new household's reach* is its envelope ROLLED AT THE SEAT OFFERED (`settled_seat`).
-    - It is `_bundle_envelope` at that very seat with the largest house the roll can take (the front row's `_house_max`,
-      kura reserved). A homestead's yard and beds are rolled from where it stands: a seat search keys the rolls on the seat
-      offered (`_household_seat`), and outside one they key on the position. The house's size raises the yard (the tilt) and
-      the beds (0.48 and 0.85 of the house), so the largest house's envelope at a seat holds every household's envelope there.
+  - *The new household's reach* is its envelope ROLLED AT THE SEAT OFFERED, exactly as the placer will lay it there
+    (`household_reach`, `settled_seat`).
+    - The household is the next one: the k-th plain household takes lot k. Its parts are set as the seat search sets them
+      (`household_parts`: its fixtures, its byre, its well pocket), and then taken down. Its house comes from the lot's size
+      ladder and its kura from the lot (`_try_place_bundle`'s own reading). The rolls key on the seat, as the seat search
+      keys them on `_household_seat`.
     - The seat is first placed with a first guess (the reach at the first house). Where the reach rolled at that seat
-      exceeds the guess on any side, it is moved out to the union of the two, and asked again. After `SETTLE_TRIES` (4) moves
-      without settling, it is not offered.
-    - So every seat offered clears the standing footprint by its OWN envelope there (FR-004's "never closer"). A unit test
-      holds both the move and the drop.
-    - A bound from the roll's own limits was priced and refused. The yard's lognormal has a bounded tail (z at most 4.24,
-      Irwin-Hall), and with the largest house's tilt it reaches about 13 times the median area: a footprint every seat would
-      carry for a yard almost no household rolls.
+      exceeds the guess on any side, the seat is moved out to the union of the two and asked again. After `SETTLE_TRIES` (4)
+      moves without settling, it is not offered. A unit test holds the move, the drop and the household's own lot.
+    - MEASURED (research R9): no unmoved placement exceeds the reach its seat was spaced for. All 12 of 234 that do were
+      moved by the placer's existing one computed move off an overlapping neighbor, by at most 5.5 px.
+    - Two bounds were priced and refused.
+      - The largest house with the household's parts left 33 of 272 placements over, by up to 21 px: the fixtures are
+        sought round the household's own walls, so a larger house does not bound them.
+      - The roll's own limits (the yard's lognormal reaching about 13 times the median area) would give a footprint every
+        seat carries for a yard almost no household rolls.
   - *The order.* Seats are offered nearest the seat center first, within the form's bound (`FORM_BOUND` times the 162 ft
     seating band's diagonal). Each is judged by `try_place`, which relaxes and skips no rule (FR-006).
   - *When the seats run dry.* With households left, every standing house offers again at the next level of `GROW_LEVELS`:

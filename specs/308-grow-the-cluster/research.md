@@ -160,3 +160,25 @@ The footprint the plan review asked for (plan D1):
   pair ran back to back.
 - **Still GO.** The wider spacing costs offers: seed 1 offers 1,394 for 40 houses, where it offered 757 in R6. So SC-003 is
   missed by more than before.
+
+## R9 - Each seat settled on the household's own envelope (observed 2026-10-02, method: `reach_check.py`, the clone's engine, reference spec at 40 households, seeds 1, 3, 4, 8, 13 and 25)
+
+**The check.** For each house the growth seated, the drawn homestead's reach is compared with the reach its seat was spaced
+for. The spaced-for reach is `household_reach`, asked at the seat offered, before the placer ran.
+
+**Three forms, compared.**
+
+| reach the seat was spaced for | placements exceeding it | worst excess (w, e, n, s) |
+|---|---|---|
+| the largest house, no household parts (the plan review's round-3 harness) | 240 of 302 | 8.3, 7.3, 35.9, 26.3 px |
+| the largest house, with the household's parts | 33 of 272 | -0.4, -0.4, 21.1, 14.9 px |
+| the household's OWN lot: its house, kura and parts | **12 of 234** | 5.0, 0.0, 3.6, 5.5 px |
+
+- **Why the largest house bounds nothing.** A homestead's fixtures (the manure heap, the privy, the woodpile, the persimmon)
+  are sought round its own walls. A larger house moves them, so the largest house's layout does not bound a smaller
+  household's layout.
+- **The 12 that still exceed.** All are among the 30 placements the placer MOVED: its one computed move off a single
+  overlapping neighbor (feature 227), after which the homestead is turned at its new spot. None of the 204 unmoved placements
+  exceeds its seat's reach. So every seat the growth offers clears the standing footprints by the household's own envelope
+  there (FR-004). The placer's existing move then carries a few households up to 5.5 px, away from the neighbor they would
+  overlap.

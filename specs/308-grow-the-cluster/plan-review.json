@@ -1,6 +1,6 @@
 {
  "feature": "308-grow-the-cluster",
- "plan_sha256": "170d2065958089251294a04f6fe8d676a8ce87aa1607d4f19580370a51ac0256",
+ "plan_sha256": "ecb2064c4ff5ab5ac92d2dd106c4f7c764f27a61eeff42ffa0ac5fcc34698d82",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,21 +8,26 @@
    "id": "D1-first",
    "summary": "The first house is offered the free ground nearest the seat (capacity.free_seats through the seat region, at most DRY_SPELL offers)",
    "class": "within",
-   "why": "Unchanged from round 1: US1 puts the first house at the seed point and the placer decides; one house, not FR-007's exhaustive pass."
+   "why": "Unchanged: US1 puts the first house at the seed point and the placer decides; one house, not FR-007's exhaustive pass."
   },
   {
    "id": "D1-next",
-   "summary": "Every standing house offers seats in a jittered ring (+/-12 deg, up to +12%) at the distance where the footprints part plus GROW_GAP - stated at plan line 58 as 'GROW_GAP (6 px)'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Line 58 still states the gap as 6 px, the value round 1 ruled NOT LEGITIMATE because it leaves no room for the path out; line 64 states the fixed value (a corridor's whole strip plus 2 px, 16 px at the reference scale; growth.py grow_gap computes 2 x px(ACCESS_HALF_FT) + 2 = 16.0, measured here). The plan states both, and the stale one is the rejected narrowing. Fix: line 58 says 'plus GROW_GAP (a corridor's whole strip plus 2 px, below)' and drops '6 px'."
+   "summary": "Every standing house offers seats in a jittered ring (+/-12 deg, up to +12%) at the distance where the footprints part plus the path's room (grow_gap)",
+   "class": "within",
+   "why": "Round 2's item is fixed: the stale 'GROW_GAP (6 px)' is gone (grep finds neither GROW_GAP nor '6 px' in plan.md, tasks.md or growth.py); the line now points at grow_gap, a corridor's whole strip plus 2 px. FR-004 as written."
   },
   {
    "id": "D1-footprint",
-   "summary": "A standing homestead's footprint: envelope, reserved woodlot seats, the south reach of the yard's AND beds' south edges plus SUN_CORRIDOR_FT + 2 ft; the path out as GROW_GAP; the new household's reach the envelope of the LARGEST homestead the roll can take (_bundle_envelope at _house_max)",
+   "summary": "Standing footprint: envelope, wood seats, the yard's and beds' south reach + SUN_CORRIDOR_FT + 2 ft, the path out as grow_gap; the new household's reach its envelope ROLLED AT THE SEAT with the largest house (settled_seat), moved out until it clears, claimed to hold every household's envelope there",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Two of round 1's three items are fixed and confirmed: the path out (GROW_GAP = the corridor's strip + 2 px) and the garden shade (the beds' south edges + SUN_CORRIDOR_FT + 2 ft, the reach _gardens_sun_ok measures, fit.py:722). The third is not. The plan says the new household's reach is 'the envelope of the LARGEST homestead the roll can take' and that so 'no seat is offered closer than the household's own footprint allows'. That premise was not measured, and it is false. _bundle_envelope at _house_max is the largest HOUSE, but the yard and bed rolls key on the position, and the prototype and growth.py take them at house 0's position only. Measured here (300 positions, _house_max, shed=True): the envelope's west reach runs 140.0-172.1 px and its south reach 60.2-100.5 px, while east (79.9) and north (106.8) are constant. So house 0's envelope is one draw, and a later household can reach up to 40 px further south and 32 px further west than the distance offered for it. That is FR-004's 'never closer than FR-003's distance' unmet, and exactly the 'proxy shown to be the largest' round 1 asked for. Fix: the new household's reach on each side is the MAXIMUM the roll can produce (computed from the yard and bed distributions' bounds, or the per-side maximum over the roll's extremes), or the envelope rolled for that household at the candidate seat. Then state the measurement that shows it is never smaller than any household's envelope. (Checked and NOT a finding: the new household's own sun is not in its reach, but a seat grown north is held off by the standing envelope's north reach, which is 91 px past the house wall against a 41 ft corridor. On seeds 1, 25 and 4 the north sector drew 0 sun_corridor and 0 yard_grove refusals, measured here on the clone's growth.py.)"
+   "why": "The standing side and the settle mechanism are as round 2 asked, and test_growth.py holds the move and the drop. But the plan's premise - 'the largest house's envelope at a seat holds every household's envelope there', so 'every seat offered clears the standing footprint by its OWN envelope there' - is false when measured. reach_at (growth.py:140) calls _bundle_envelope outside the placer, where _household_fixtures, _household_byre and _household_well are unset; household_parts (rolling/lot.py:174-176) sets them only inside try_place, and _bundle_template lays them inside the bbox. So the seat is spaced without the household's privy, manure pile, woodpile, persimmon, coop, byre and well pocket, while the standing footprint (its geom bbox) carries them. Measured here (observed 2026-10-02, method: a scratch harness wrapping s.try_place on the clone's engine, reference Inashiro form, 40 households, seeds 1, 3, 4, 8, 13, 25; each grown placement's drawn bbox reach from its house against reach_at at the seat offered): 240 of 302 grown placements exceed it, worst by 35.9 px north, 26.3 south, 8.3 west and 7.3 east; the drivers are the fixtures (seed 1: manure, privy, woodpile and persimmon reaching 34-51 px north against a 28 px reach). FR-004's 'never closer than FR-003's distance' is unmet, as in round 2, by a different cause. Fix: lay the reach at the seat with the next household's OWN parts - its lot k (the plain houses standing) is known at seat order, so set household_parts for that seat (or the byre, well and fixtures_of(k)) around the _bundle_envelope call and take them down after, or take the union over every part set the lots can carry - then re-measure and record in research.md that no grown placement's drawn envelope exceeds the reach its seat was spaced for."
+  },
+  {
+   "id": "D1-roll-bound",
+   "summary": "A bound from the roll's own limits (lognormal tail, about 13x the median yard area) priced and refused in favor of the per-seat roll",
+   "class": "within",
+   "why": "Choosing the roll at the seat over a worst-case bound is one of the two fixes round 2 named; refusing the bound narrows nothing the request asked."
   },
   {
    "id": "D1-order",
@@ -32,33 +37,33 @@
   },
   {
    "id": "D1-levels",
-   "summary": "GROW_LEVELS widening (8 dirs ring 1; 12 dirs rings 1, 1.5; 16 dirs rings 1.25, 1.75, 2); past the last level the margin is reported short",
+   "summary": "GROW_LEVELS widening; past the last level the margin is reported short",
    "class": "within",
-   "why": "Unchanged: every seat is anchored on a standing house at a multiple of at least 1 of the footprint distance. That is FR-004 growth, and the short report is FR-007."
+   "why": "Unchanged: growth from standing houses at multiples of at least 1 of the footprint distance (FR-004); the short report is FR-007."
   },
   {
    "id": "D1-class",
-   "summary": "Jitter, gap and rings labeled guesses at the constants; the order a map drawing convention",
+   "summary": "Jitter, gap, rings and SETTLE_TRIES labeled guesses or search breadth at the constants; the order a map drawing convention",
    "class": "within",
    "why": "Matches the spec's Decisions Recorded."
   },
   {
    "id": "D2",
-   "summary": "Front row, lattice ranks and exhaustive pass with rescue removed for nucleated; grow_the_margin in their place; dispersed keeps them, linear's seat_rows untouched",
+   "summary": "Front row, lattice ranks and exhaustive pass with rescue removed for nucleated; grow_the_margin in their place; dispersed and linear untouched",
    "class": "within",
-   "why": "Unchanged: FR-007 literally for the nucleated form, with the spec's round-1 scope rulings."
+   "why": "Unchanged: FR-007 for the nucleated form, with the spec's round-1 scope rulings."
   },
   {
    "id": "D3-route",
    "summary": "A* routed corridor where no straight or gable one clears, nucleated seating only, admitted by tree_admits, reserved leg by leg",
    "class": "within",
-   "why": "Unchanged: FR-005, with straight candidates tried first."
+   "why": "Unchanged: FR-005, straight candidates first."
   },
   {
    "id": "D3-tests",
-   "summary": "Each leg is held to house_clear, fixtures_clear, parts_clear, standing_ground, lawful_leg and doubles_back, and the whole route to leaves_its_yard (feature 287 M8), stated as every test _house_candidates asks",
+   "summary": "Each leg held to every corridor test _house_candidates asks, the whole route to leaves_its_yard",
    "class": "within",
-   "why": "Round 1's item is fixed. The plan (lines 89-90) now asks leaves_its_yard of every routed path, and the prototype (prototype.py:410) and the clone's route.py:170 both ask it. That is every corridor test _house_candidates asks (access.py:553, 561), so no corridor rule is skipped (FR-005, FR-006)."
+   "why": "Unchanged since round 2's confirmation (FR-005, FR-006)."
   },
   {
    "id": "D3-breadth",
@@ -80,15 +85,15 @@
   },
   {
    "id": "GO-and-misses",
-   "summary": "The engine is built only on GO, with the verdict recorded (R7, GO at every size). SC-002 and SC-003 are missed (R6), and R8 is a further prototyped round. A tuning round on the engine (T06) follows, and a surviving miss is recorded and raised with the GM",
+   "summary": "Built only on GO (R7); SC-002 and SC-003 missed (R6), R8 a further round, T06 a tuning round, a surviving miss recorded and raised with the GM",
    "class": "within",
-   "why": "This is US1/FR-001's GO gate and FR-002 as written: R8 is a further round, prototyped and measured, and every round's numbers are recorded. A note, not a ruling: the plan's 'every seed offers 6.4-35.6 per house' (line 25) has no row in research.md, whose R7 says 'Most seeds offer 5-35 per house'. One of the two is wrong, so correct it to the measured figure."
+   "why": "FR-001 and FR-002 as written. Round 2's note is resolved: the plan's SC-003 figure now cites R6's offers line in research.md (224-3,427 a seed, 5.6-85.7 per house kept; 224/40 and 3,427/40 check)."
   },
   {
    "id": "V-sequence",
    "summary": "Prototype legs, then Inashiro, pool and cohort against a detached-worktree baseline, then make done and the bookends",
    "class": "within",
-   "why": "FR-001 and FR-008, with the GO verdict recorded before the engine build."
+   "why": "FR-001 and FR-008."
   }
  ],
  "verdict": "BLOCKED"
