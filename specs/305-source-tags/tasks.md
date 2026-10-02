@@ -40,8 +40,9 @@ reaches a map.
 
 ## Phase 5 - User Story 4: every work tagged, the write-ups trimmed (P2)
 
-- [ ] T07 [US4] The migration under `specs/305-source-tags/migrate/`: `extract.py` batches, the 22 Sonnet classifications (rules: research R5 and plan D3), `apply.py` with R4's trim checks and R3's consistency lists, the lists worked by hand, every unsettled source settled by the vocabulary first; the build check passing with no exemption (FR-014, FR-015; SC-001; plan D10)
+- [x] T07 [US4] The migration under `specs/305-source-tags/migrate/`: `extract.py` batches, the 22 Sonnet classifications (rules: research R5 and plan D3), `apply.py` with R4's trim checks and R3's consistency lists, the lists worked by hand, every unsettled source settled by the vocabulary first; the build check passing with no exemption (FR-014, FR-015; SC-001; plan D10)
       research: rendering
+      verify: DONE. extract.py 2,110 non-canon entries in 22 batches; 22 Sonnet classifications; apply.py: 0 bad tags, 0 unclassified, 910 trims passed R4, 1 refused (suido-ishizue-minuma, done by hand: deleted only 'without footnotes'); 35 unsettled + 98 late-date flags adjudicated by two Opus agents (41 changed); vocabulary gained fiction/rokugan and the undated/straddling rules (FR-002, FR-003); make record builds with no exemption (SC-001); report.md and results/ committed
 - [ ] T08 [US4] The check: a stratified sample of at least 60 entries bundled (`make check-bundle KEY=`) and judged by `source-applicability`; every wrong tag and every repeated or lost limit fixed; any pattern swept across the registry (SC-004, SC-005; plan D11)
       research: rendering
 
