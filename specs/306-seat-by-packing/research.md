@@ -197,7 +197,7 @@ corner rounded (the earlier seed-903 fix, `homesteads/rows.py`): the pool clean,
 | 47 | 51.54 (16, 25,279) | 2.99 (1, 782) | 3.11 (1, 782) |
 | **sum** | **427.7 (15 seeds)** | **100.0** | **83.3** |
 
-**D1 on its own verdict: GO** - 427.7 -> 100.0 s on the fifteen seeds the base rolled (4.3x; seed 7 the base could not roll at
+**D1 on its own verdict** (observed 2026-10-02, method: the table's run)**: GO** - 427.7 -> 100.0 s on the fifteen seeds the base rolled (4.3x; seed 7 the base could not roll at
 all), every household seated, the first margin on 10 of 16 against 1 of 15. **D2 on top of D1: GO** - 100.0 -> 83.3 s; it saves
 margins on seeds 25 (8 -> 1), 8 (3 -> 1) and 6 (5 -> 4) and costs seed 39 (7.45 -> 13.96 s: the rescue searched a near miss that
 the next margin seated anyway); no seed seats fewer.
