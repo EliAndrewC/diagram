@@ -1,0 +1,100 @@
+{
+ "feature": "304-homesteads-at-scale",
+ "plan_sha256": "fb00d9af60f99d700545b395e8cdc23d50447b2b4d2bb66139cac50e61d1e411",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "perf_snapshot.measure takes households; SCALING_SIZES (10, 20, 40); scaling rows per (size, seed) with stages, houses, placer_calls, refused",
+   "class": "within",
+   "why": "FR-001 and the spec's Key Entities (placer_calls counts try_place calls, i.e. seats offered); refusal recorded, seeds never swapped, per the spec's Edge Cases"
+  },
+  {
+   "id": "D2",
+   "summary": "beyond_the_band() ContextVar entered only by perf_snapshot.measure; tests that 40 is refused outside it and no pool file names it",
+   "class": "within",
+   "why": "FR-003 and US1 scenario 3; the tests only enforce what was asked"
+  },
+  {
+   "id": "D3",
+   "summary": "evaluate_scaling bands each size against its own history by the reference's rules; no-baseline line for old snapshots; band owed is the max over reference and legs",
+   "class": "within",
+   "why": "FR-002, and US1's purpose that a village-size slowdown cannot land unseen"
+  },
+  {
+   "id": "D4",
+   "summary": "SC-001's seeded quadratic fault as a unit test over synthetic snapshots; live plumbing proven by the 304-scale-base snapshot",
+   "class": "within",
+   "why": "tests the property SC-001 names (the 40 leg's band rises, the reference's does not); a verification method, not a scope change"
+  },
+  {
+   "id": "D5",
+   "summary": "AccessTree.targets answered from a PointGrid ring search with the scan's (distance, position) order; scan fallback",
+   "class": "within",
+   "why": "FR-004 literally, with the same targets in the same order"
+  },
+  {
+   "id": "D6",
+   "summary": "_commons_pocket_clear asks a PointGrid of paddy boxes instead of every paddy outline; same predicate",
+   "class": "within",
+   "why": "FR-005 covers the clearance checks the profile names; this feature's seed-47 sampler names it (16.7% of the stage); output-identical, the request's safe lever. It does not run on seed 25 (byre_form courtyard, measured by this reviewer), so it is an addition beside the seed-25 figure, not a substitute that drops something FR-005 requires"
+  },
+  {
+   "id": "D7a",
+   "summary": "corridor_bars and _standing_clear left as they are",
+   "class": "within",
+   "why": "both already ask an index (the seats' cell grid; placed_reach), confirmed by reading access.py:287 and wood_share.py:316; FR-005's 'ask an index in place of scanning all of them' is already true of them"
+  },
+  {
+   "id": "D7b",
+   "summary": "surface_water_dist left unindexed",
+   "class": "within",
+   "why": "it is the watering-reach measure behind needs_pocket and the wells, not a standing-ground or corridor clearance check, so FR-005 does not reach it; its per-call cost does not grow with the houses"
+  },
+  {
+   "id": "D7c",
+   "summary": "FreeGround._samples left alone",
+   "class": "within",
+   "why": "numpy sampling of the lines asked, not a scan over all segments; not an FR-005 clearance scan"
+  },
+  {
+   "id": "D8",
+   "summary": "equivalence tests with the old body as oracle, a one-roll spy, the pool byte-identical and the cohort counts identical",
+   "class": "within",
+   "why": "SC-005 and US2's acceptance scenarios; enforcement of what was asked"
+  },
+  {
+   "id": "D9",
+   "summary": "three forms measured on top of P2: A region re-asked, A' region re-asked with seated homesteads painted, B line-of-sight reach region",
+   "class": "within",
+   "why": "A and A' are both FR-006's first named form ('the seat region kept current as houses land', the request's 'update the seat region as houses land'); A' is the most literal reading of US3's 'ground a house just seated now covers'. B is the second named form. No third form"
+  },
+  {
+   "id": "D10",
+   "summary": "keep the fastest form at 40 that seats at least the base's households everywhere and is not slower at 15; if none is faster at 40 than P2 alone, withdraw all and land P1 and P2",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-006 says the pass MUST stop offering dead seats, and the last clause lets the feature land with none. Applying FR-006 literally there would defeat the request's own purpose: the GM asked for performance gains, so building a pruning that is no faster only moves maps and buys nothing. The spec already expects this outcome (FR-007 'including any lever withdrawn'; a miss recorded and raised, not pursued). The 15-household condition is SC-004 itself"
+  },
+  {
+   "id": "D11",
+   "summary": "red-first tests of the built form, and placer calls per house seated below the base's",
+   "class": "within",
+   "why": "US3 acceptance scenario 1; enforcement"
+  },
+  {
+   "id": "D12",
+   "summary": "dev/performance.md section with R1's table, each lever's wall-clock gain, the withdrawn forms",
+   "class": "within",
+   "why": "FR-007"
+  },
+  {
+   "id": "D13",
+   "summary": "memory note on the hamlet profile updated",
+   "class": "within",
+   "why": "bookkeeping; decides nothing the spec left open"
+  }
+ ],
+ "verdict": "CLEAR"
+}

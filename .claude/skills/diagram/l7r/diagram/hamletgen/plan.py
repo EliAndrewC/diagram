@@ -6,7 +6,9 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -63,6 +65,23 @@ from .consts import (
 )
 
 # ---- the spec and the derived plan --------------------------------------------------------------
+
+#: Set while the perf bookend measures a size past the hamlet band (feature 304, plan D2).
+_BEYOND_THE_BAND: ContextVar[bool] = ContextVar("_BEYOND_THE_BAND", default=False)
+
+
+@contextmanager
+def beyond_the_band() -> Iterator[None]:
+    """Admit a spec of any household count while this is entered - THE MEASURING TOOL ALONE (feature 304, FR-003).
+
+    The perf bookend times the reference spec at 40 households so a slowdown that only shows at a village's size cannot land
+    unseen (`tools/perf_snapshot.SCALING_SIZES`); a GM-written hamlet stays held to `HOUSEHOLD_BAND`, and a test holds every
+    pool generator off this (`tests/tools/test_perf_scaling.py`)."""
+    token = _BEYOND_THE_BAND.set(True)
+    try:
+        yield
+    finally:
+        _BEYOND_THE_BAND.reset(token)
 
 
 @dataclass(frozen=True)
@@ -134,7 +153,7 @@ class HamletSpec:
                 f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html)"
             )
         lo, hi = HOUSEHOLD_BAND
-        if not lo <= self.households <= hi:
+        if not lo <= self.households <= hi and not _BEYOND_THE_BAND.get():
             raise ValueError(
                 f"{self.households} households is outside the hamlet band {lo}-{hi} - a smaller place is an outlying farmstead, a larger one is a village (which needs a headman, a shrine and tax-free plots this generator does not draw)"
             )

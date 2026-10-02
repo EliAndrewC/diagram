@@ -98,35 +98,61 @@ def _where() -> str:
     return os.path.basename(top) if top else "unknown"
 
 
-def measure(seeds: tuple[int, ...]) -> list[dict[str, Any]]:
-    """Roll the reference hamlet on each seed, timing every stage."""
+# THE SCALING LEG (feature 304, FR-001): the reference spec at these household counts too, on the same seeds, each banded
+# against its own history (`perf_bands.evaluate`). The homesteads stage grew 17-24x for 4x the households, and 139x on seed 47,
+# while every guard timed 15 (specs/304-homesteads-at-scale/research.md R1). 80 is not here: one fan cannot land its 104
+# acres and the field refuses (R5) - the village tier's question, not this tool's.
+SCALING_SIZES = (10, 20, 40)
+
+
+def measure(seeds: tuple[int, ...], households: int | None = None) -> list[dict[str, Any]]:
+    """Roll the reference hamlet on each seed, timing every stage - at `households` when given (the scaling leg), the band lifted
+    for this roll alone (`beyond_the_band`). A roll the generator refuses is recorded as `refused`, never swapped for another
+    seed: a seed that refuses at a size is that size's finding (spec Edge Cases)."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
     from l7r.diagram.hamletgen.driver import STAGES, roll_scope
+    from l7r.diagram.hamletgen.plan import beyond_the_band
     from l7r.diagram.settlement import Settlement
 
     rows: list[dict[str, Any]] = []
+    spec = dict(REFERENCE, **({} if households is None else {"households": households}))
     for seed in seeds:
-        plan = plan_site(HamletSpec(seed=seed, **REFERENCE))
+        with beyond_the_band():
+            plan = plan_site(HamletSpec(seed=seed, **spec))
         s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
         stages: dict[str, float] = {}
+        refused: str | None = None
         with roll_scope(plan.spec):  # a roll like any other: the memo cleared and the heap trimmed when it ends (feature 210), the census written (213)
             for st in STAGES:
                 t0 = time.time()
-                with redirect_stdout(io.StringIO()):
-                    st(s, plan)
-                stages[st.__name__.replace("stage_", "")] = round(time.time() - t0, 2)
-        rows.append(
-            {
-                "seed": seed,
-                "seconds": round(sum(stages.values()), 1),
-                "form": getattr(plan, "settlement_form", "n/a"),
-                "shape": plan.cluster_shape,
-                "houses": len(s.M.get("houses", [])),
-                "asked": plan.spec.households,
-                "stages": stages,
-            }
-        )
-        print(f"  seed {seed:>3}  {rows[-1]['seconds']:>6.1f}s  {rows[-1]['form']:<10} houses={rows[-1]['houses']}/{plan.spec.households}", flush=True)
+                try:
+                    with redirect_stdout(io.StringIO()):
+                        st(s, plan)
+                except (ValueError, RuntimeError) as e:  # the generator's refusals (`WebRefused`, `FieldRefused`, ...) are ValueError/RuntimeError
+                    if households is None:
+                        raise  # the REFERENCE refusing is a defect the bookend must stop on (specs/297 research R8), as it always did
+                    refused = f"{type(e).__name__}: {str(e)[:200]}"
+                    break
+                finally:
+                    stages[st.__name__.replace("stage_", "")] = round(time.time() - t0, 2)
+        row: dict[str, Any] = {
+            "seed": seed,
+            "form": getattr(plan, "settlement_form", "n/a"),
+            "shape": plan.cluster_shape,
+            "houses": len(s.M.get("houses", [])),
+            "asked": plan.spec.households,
+            "stages": stages,
+        }
+        if households is not None:
+            # how many seats the placer was offered: the counter that shows a pruning lever's effect without a profile (plan D1)
+            row.update(households=households, placer_calls=int((getattr(s, "_seat_search", None) or {}).get("placer_calls", 0)))
+        if refused is None:
+            row["seconds"] = round(sum(stages.values()), 1)
+        else:
+            row["refused"] = refused
+        rows.append(row)
+        took = f"{row['seconds']:>6.1f}s" if refused is None else f"REFUSED ({refused[:60]})"
+        print(f"  seed {seed:>3}  {took}  {row['form']:<10} houses={row['houses']}/{plan.spec.households}", flush=True)
     return rows
 
 
@@ -156,6 +182,10 @@ def record(label: str, seeds: tuple[int, ...]) -> str:
     os.makedirs(LOG_DIR, exist_ok=True)
     print(f"reference hamlet ({REFERENCE['name']} spec) across seeds {list(seeds)}:", flush=True)
     rows = measure(seeds)
+    scaling: list[dict[str, Any]] = []
+    for size in SCALING_SIZES:
+        print(f"...at {size} households (the scaling leg):", flush=True)
+        scaling += measure(seeds, households=size)
     totals = [float(r["seconds"]) for r in rows]
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     clone = _where()
@@ -174,6 +204,7 @@ def record(label: str, seeds: tuple[int, ...]) -> str:
         "median_seconds": round(statistics.median(totals), 1),
         "worst_seconds": round(max(totals), 1),
         "rows": rows,
+        "scaling": scaling,
     }
     path = os.path.join(LOG_DIR, f"{stamp}-{label}-{clone}.json")
     with open(path, "w") as fh:

@@ -44,6 +44,12 @@ The segment distances by caller (observed 2026-10-01, method: the sampler's leaf
 scan of every paddy outline ~9% (`seg_dist` 3.9 + `seg_closest` 3.5 + the generators); `targets`' `seg_closest` 1.4%;
 `corridor_bars` ~2.8%; `surface_water_dist` from `needs_pocket` ~1.7%.
 
+**Seed 25's `seg_dist` calls by caller** (observed 2026-10-01, method: the plan review's cProfile probe around `stage_homesteads`
+at 40 households, one run): `corridor_bars` ~579,000; `surface_water_dist` 448,539; `seg_box_within` / `_seg_box_gap` (in
+`_standing_clear` and `covers_box`) ~337,000; `law._min_dist` via `fronting_ends` 237,004; `chain_distance` 73,923. None is a
+whole-map clearance scan without an index, so R3's reading holds on the request's own seed. `law.fronting_ends` compares every
+lane end with every other way (0.70 s of an 18.8 s profiled stage) - a lane rule, outside FR-005, noted for the GM.
+
 ## R3. The scans behind those shares (read 2026-10-01)
 
 - (Shares observed 2026-10-01, method: R2's sampler.) **`AccessTree.targets`** (`settlement/rolling/access.py`): for each door it lists EVERY corridor's nearest point and every point
