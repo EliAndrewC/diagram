@@ -43,25 +43,25 @@ houses, that map is re-examined here before landing and an occasion is added if 
 
 ## P2 - the indexed scans (US2; FR-004, FR-005; SC-005)
 
-- [ ] T20 [US2] Red: equivalence tests with the old bodies as oracles - D5 (random trees and doors, ties, a tree under
+- [x] T20 [US2] Red: equivalence tests with the old bodies as oracles - D5 (random trees and doors, ties, a tree under
       `TARGETS_TRIED` points, a door far outside the tree) and D6 (random outlines and candidates, a candidate inside an outline,
       one within `bh` of an edge only)
       research: rendering
-      verify: the tests fail against a stub index that drops a far candidate (proving they can fire)
-- [ ] T21 [US2] Green: D5 in `settlement/rolling/access.py` (`AccessTree` ring query); D6 in `settlement/shrines_wells/byres.py`
+      verify: DONE. test_access_ring_304.py, 74 cases; 50 red with either index's query radius cut to a quarter (research R7)
+- [x] T21 [US2] Green: D5 in `settlement/rolling/access.py` (`AccessTree` ring query); D6 in `settlement/shrines_wells/byres.py`
       research: rendering
-      verify: `make quick` green; T20 passes
-- [ ] T22 [US2] The one-roll spy (D8b) on the reference at 40 households: every 97th indexed answer equals the oracle's
+      verify: DONE. D5 ring_targets in access.py, D6 paddy_index/beside_a_paddy in byres.py; make quick green
+- [x] T22 [US2] The one-roll spy (D8b) on the reference at 40 households: every 97th indexed answer equals the oracle's
       research: rendering
-      verify: the spy's count of compared calls and zero mismatches, in research.md
-- [ ] T23 [US2] Inashiro regenerated (`make map GEN="--no-cache pool/hamlets/inashiro/inashiro.gen.py"`): SVG and manifest
+      verify: DONE. spy at 40 hh seeds 47+25: 1,314 ring + 984 pocket answers compared, 0 differ (research R7)
+- [x] T23 [US2] Inashiro regenerated (`make map GEN="--no-cache pool/hamlets/inashiro/inashiro.gen.py"`): SVG and manifest
       byte-identical
       research: rendering
-      verify: `git status` over `pool/hamlets/inashiro/` shows no change
-- [ ] T24 [US2] The pool (`make maps SCOPE=all`) and the cohort (`make cohort N=24`): every pool hamlet byte-identical; the
+      verify: DONE. Inashiro regenerated (REGENERATED 15.3 s): inashiro.json byte-identical
+- [x] T24 [US2] The pool (`make maps SCOPE=all`) and the cohort (`make cohort N=24`): every pool hamlet byte-identical; the
       cohort's per-seed houses and results equal to T01's
       research: rendering
-      verify: `git status` over `pool/hamlets/` empty; the cohort compared seed by seed in research.md
+      verify: DONE. make maps SCOPE=all: 5 hamlets REGENERATED, every manifest byte-identical; cohort N=24 28/30, the same two refusals as the base (Audit-11, Audit-905)
 - [ ] T25 [US2] What P2 bought: the scaling legs on the clone against `304-scale-base`, back to back (base worktree, then clone)
       research: rendering
       verify: per-size homesteads seconds before/after in research.md

@@ -96,3 +96,21 @@ the acreage; a village needs several fields or several fans. Out of scope (spec 
 
 Neither is in the homesteads stage. Constitution XIV and the GM's ruling of 2026-10-01 ("We should definitely fix the
 pre-existing failure"): fixed in this work (tasks T02, T03), each diagnosed here first.
+
+## R7. The indexed scans against their oracles on real rolls (observed 2026-10-02, method: a scratch spy wrapping `ring_targets` and `beside_a_paddy` through `stage_homesteads` at 40 households, comparing every 97th answer with `scan_targets` / the scan of every outline)
+
+Seed 47 (`detached_commons`, so the pockets are laid): 111,881 ring queries, 1,153 compared, 0 differ; 95,531 pocket tests, 984
+compared, 0 differ. Seed 25 (`courtyard`, no pockets): 15,606 more ring queries, 161 compared, 0 differ. With the equivalence
+tests (`tests/settlement/test_access_ring_304.py`: 74 cases, 50 of them red when either query's radius is cut to a quarter) this
+is plan D8a and D8b. The timings of these spy runs are not readings: two cohorts were running beside them.
+
+## R8. Audit-905's refusal (observed 2026-10-02, method: a background agent in its own worktree; `make hamlet ARGS="--name Audit-905 --seed 905 --households 20 --form dispersed --farm-water channel --no-render"`, then `make cohort N=24`)
+
+The way across the water was the FIELD SPUR (`hamletgen/ways/track.py`, `stage_track`). Its tip was set on the bund
+(`tip_onto_the_bund`), then `_thread_the_fabric` moved its free bow vertex 20 ft into a paddy plot and `spur_cut_at_the_fold`
+kept the arm out to it - across the comb's main ditch (2.8 ft) at the field's head, onto a bund strip about 2.4 ft wide. Both
+deck forms in `crossing_deck` clear the water but fail "lands dry" (the carried deck's corners in two plots, the plank's in
+one). A dispersed hamlet returns early from `stage_web`, so `settle_the_web`, which cuts a crossing no deck seats, never ran,
+and `bridges()` raised `UndeckableCrossing`. The fix sets the DRAWN spur's tip on the bund again after the fold cut, and records
+the spur dropped where the kept arm is rice end to end; no rule changed. Seed 905 passes; the cohort 29/30 (Audit-11 alone).
+Two regression tests in `tests/hamletgen/ways/test_track.py`, red with the fix off.
