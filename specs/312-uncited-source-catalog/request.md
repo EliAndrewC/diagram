@@ -78,3 +78,9 @@ fish-farming text 養魚經 (attributed to Fan Li), and an essay on the Song agr
 only what happens to them if the filter rejects them. The session's proposal, for the GM to confirm: they go through the
 filter like every other uncited page; a rejected one loses its manifest row and gets a not-kept line, and its copy stays
 in the archive's git history, since the project never rewrites history.
+
+The GM (verbatim):
+
+Yes, I agree that they should go through the filter like any other unsighted page, and then their disposition should just be whatever the filter ends up saying.
+
+Settled: the three pages go through the filter like every other uncited page, and the filter's verdict is their disposition.
