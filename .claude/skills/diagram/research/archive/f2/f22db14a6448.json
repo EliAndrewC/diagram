@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T12:36:01+00:00",
+ "captured": "2026-10-02T18:12:49+00:00",
  "final_url": "https://www.tandfonline.com/doi/full/10.1179/pma.1996.002",
  "first": "f2/f22db14a6448/20261002T123601Z",
  "gm_copies": [],
@@ -11,9 +11,9 @@
   "0193-tanning-yards.notes.html"
  ],
  "outcome": "partial",
- "path": "f2/f22db14a6448/20261002T123601Z",
+ "path": "f2/f22db14a6448/20261002T181248Z",
  "reason": "HTTP 403",
  "revision": "",
- "sha256": "fa42e4a76ae025b1f140dac40db657179ee29d30750594383fd9c7560724e029",
+ "sha256": "120414d31f516524ab118ba730666e407520d85231adc479399a458e0e815772",
  "url": "https://doi.org/10.1179/pma.1996.002"
 }

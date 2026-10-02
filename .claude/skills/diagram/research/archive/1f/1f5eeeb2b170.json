@@ -1,6 +1,6 @@
 {
- "captured": "2026-10-02T15:15:20+00:00",
- "final_url": "https://whc.unesco.org/en/list/1002/",
+ "captured": "2026-10-02T18:09:30+00:00",
+ "final_url": "https://web.archive.org/web/20260917135159id_/https://whc.unesco.org/en/list/1002/",
  "first": "1f/1f5eeeb2b170/20261002T151520Z",
  "gm_copies": [],
  "keys": [
@@ -10,10 +10,10 @@
   "0035-villages-beside-their-stream-one-bank-or-both.drawing.notes.html",
   "0035-villages-beside-their-stream-one-bank-or-both.notes.html"
  ],
- "outcome": "partial",
- "path": "1f/1f5eeeb2b170/20261002T151520Z",
+ "outcome": "archived-earlier-snapshot",
+ "path": "1f/1f5eeeb2b170/20261002T180928Z",
  "reason": "HTTP 403",
  "revision": "",
- "sha256": "98bcfd57b853b26473df6b3d63c8621a0160a624d1b853f4d032811923b91494",
+ "sha256": "8a2ea2159f0965b641b3b75ba5b295f3c8ec049f75fc406a40cbc5ef3bd57c74",
  "url": "https://whc.unesco.org/en/list/1002/"
 }

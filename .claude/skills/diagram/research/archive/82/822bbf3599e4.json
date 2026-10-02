@@ -1,19 +1,20 @@
 {
- "captured": "2026-10-02T14:55:44+00:00",
- "final_url": "https://pfaf.org/user/plant.aspx?latinname=Diospyros+kaki",
+ "captured": "2026-10-02T18:11:14+00:00",
+ "final_url": "https://web.archive.org/web/20260511090242id_/https://pfaf.org/USER/plant.aspx?latinname=Diospyros+kaki",
  "first": "82/822bbf3599e4/20261002T145544Z",
  "gm_copies": [],
  "keys": [
   "pfaf-kaki"
  ],
  "notes": [
+  "0038-sunlight-and-shade-on-the-farm.drawing.notes.html",
   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.notes.html",
   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.notes.html"
  ],
- "outcome": "partial",
- "path": "82/822bbf3599e4/20261002T145544Z",
+ "outcome": "archived-earlier-snapshot",
+ "path": "82/822bbf3599e4/20261002T181112Z",
  "reason": "HTTP 403",
  "revision": "",
- "sha256": "ad77b8667a532aad9181e515b39c43e506b601f9365125ee8e620d60d0015ff1",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
  "url": "https://pfaf.org/user/plant.aspx?latinname=Diospyros+kaki"
 }

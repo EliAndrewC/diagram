@@ -1,6 +1,6 @@
 {
- "captured": "2026-10-02T13:37:16+00:00",
- "final_url": "https://l5r.fandom.com/wiki/Shinden_(TCG)",
+ "captured": "2026-10-02T18:13:47+00:00",
+ "final_url": "https://web.archive.org/web/20230614193059id_/https://l5r.fandom.com/wiki/Shinden_(TCG)",
  "first": "f6/f60add2460b8/20261002T133716Z",
  "gm_copies": [],
  "keys": [
@@ -9,10 +9,10 @@
  "notes": [
   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.notes.html"
  ],
- "outcome": "partial",
- "path": "f6/f60add2460b8/20261002T133716Z",
+ "outcome": "archived-earlier-snapshot",
+ "path": "f6/f60add2460b8/20261002T181346Z",
  "reason": "HTTP 403",
- "revision": "",
- "sha256": "d10dfc893e09c3efa20f2a1bc5f61da3799be4af284a102918e1daf4501a28b6",
+ "revision": "300811",
+ "sha256": "069a0b57f08500943b58ee3f69af641db1bc1a98470e32670726c6231979f93e",
  "url": "https://l5r.fandom.com/wiki/Shinden_(TCG)"
 }

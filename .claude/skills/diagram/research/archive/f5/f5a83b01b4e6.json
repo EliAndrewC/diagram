@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T16:31:37+00:00",
+ "captured": "2026-10-02T18:12:53+00:00",
  "final_url": "https://zhuanlan.zhihu.com/p/660442182",
  "first": "f5/f5a83b01b4e6/20261002T163137Z",
  "gm_copies": [],
@@ -8,9 +8,9 @@
  ],
  "notes": [],
  "outcome": "partial",
- "path": "f5/f5a83b01b4e6/20261002T163137Z",
+ "path": "f5/f5a83b01b4e6/20261002T181252Z",
  "reason": "HTTP 403",
  "revision": "",
- "sha256": "65878028af00627d6a9b7883a1b7725e16d2fff004e53b9896b08772f8519fd2",
+ "sha256": "d1240a887b0fa52589f637fe0978397fb99152424c7d11a99d3d52bc28d0f5e5",
  "url": "https://zhuanlan.zhihu.com/p/660442182"
 }

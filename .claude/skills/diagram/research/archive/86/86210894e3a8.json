@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T14:39:28+00:00",
+ "captured": "2026-10-02T18:11:17+00:00",
  "final_url": "https://journals.sagepub.com/doi/abs/10.1177/036319909502000302",
  "first": "86/86210894e3a8/20261002T143928Z",
  "gm_copies": [],
@@ -8,9 +8,9 @@
  ],
  "notes": [],
  "outcome": "partial",
- "path": "86/86210894e3a8/20261002T143928Z",
+ "path": "86/86210894e3a8/20261002T181115Z",
  "reason": "HTTP 403",
  "revision": "",
- "sha256": "a363eee87f571af9680c82677a3641af5c4ba5d047e007cf9cb0f3d6ef623d98",
+ "sha256": "c394166d1266bc2a177ac88bbac4aead7389ff1612c5b4c17cbaa2c477cac18c",
  "url": "https://journals.sagepub.com/doi/abs/10.1177/036319909502000302"
 }

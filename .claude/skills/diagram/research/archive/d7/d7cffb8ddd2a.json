@@ -1,6 +1,6 @@
 {
- "captured": "2026-10-02T12:50:56+00:00",
- "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/",
+ "captured": "2026-10-02T18:12:46+00:00",
+ "final_url": "https://web.archive.org/web/20250424133859id_/https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/",
  "first": "d7/d7cffb8ddd2a/20261002T125056Z",
  "gm_copies": [],
  "keys": [
@@ -15,10 +15,10 @@
   "0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.notes.html",
   "0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.notes.html"
  ],
- "outcome": "partial",
- "path": "d7/d7cffb8ddd2a/20261002T125056Z",
+ "outcome": "archived-earlier-snapshot",
+ "path": "d7/d7cffb8ddd2a/20261002T181244Z",
  "reason": "HTTP 403",
  "revision": "",
- "sha256": "415ff807abb2fd49ce840d67bf14cb4d647e78afa9ab115c2b2dd8c8614928dd",
+ "sha256": "0de26f09bf16d177bb414b5b7d6010c41437086b274f1c9e2162138681fe354f",
  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/"
 }
