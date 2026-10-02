@@ -344,7 +344,7 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-02 | spec-fidelity-verify | 311 spec (round 3) | FAITHFUL | none | nothing | - | - | 24 s | 31k in (19k cached) / 1.8k out |
 | 2026-10-02 | spec-fidelity | 311 plan (review 1) | BLOCKED | five narrowings: the intro bundle without the body, an unlogged bundle-less record, a blanket source-reader exemption, KEY= bundles never refused, contract bodies untouched | judgment | yes | all five applied | 139 s | 220k in (159k cached) / 12.6k out |
 | 2026-10-02 | spec-fidelity | 311 plan (review 2) | CLEAR | three non-blocking: XII wording, D2's file count, NEW='s reason floor | paperwork | yes | applied | 94 s | 284k in (229k cached) / 8.3k out |
-| 2026-10-02 | spec-fidelity | 311 plan (review 3) | CLEAR | none | nothing | - | - | 52 s | - (not read: the cost cell is the agent's own report, 58.9k tokens) |
+| 2026-10-02 | spec-fidelity | 311 plan (review 3) | CLEAR | none | nothing | - | - | 52 s | 356k in (300k cached) / 3.9k out |
 | 2026-10-02 | intro-check | seeded batch of 24, run 1 (SC-005) | 3/3 seeds | 0094 NEEDS-INTRO, 0036 none, planted 0083 INTRO-FIX | judgment | - | - | 48 s | 377k in (299k cached) / 2.9k out |
 | 2026-10-02 | intro-check | seeded batch of 24, run 2 (SC-005) | 3/3 seeds | as run 1, and 0003 flagged | judgment | - | - | 60 s | 657k in (576k cached) / 3.7k out |
 | 2026-10-02 | intro-check | seeded batch of 24, run 3 (SC-005) | 3/3 seeds | as run 1, and 0003, 0110 flagged | judgment | - | - | 96 s | 876k in (790k cached) / 5.8k out |
