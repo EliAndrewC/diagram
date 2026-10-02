@@ -76,7 +76,9 @@ REMOTE = rec.REPO + ".git"
 WORKDIR = "source-archive"
 LOCK = "source-archive.lock"
 UNPUSHED = "source-archive.unpushed"
-GM_DIR = pathlib.Path(os.environ.get("L7R_GM_SOURCES", "/host-l7r-repo/academic-sources"))
+GM_DIR = pathlib.Path(
+    os.environ.get("L7R_GM_SOURCES", "/host-l7r-repo/academic-sources")
+)
 MANIFEST = pathlib.Path(".claude/skills/diagram/research") / rec.ARCHIVE_DIR
 #: A file past this is stored in parts: GitHub refuses a file past 100 MB, and 95 leaves room.
 PART = 95 * 2**20
@@ -136,7 +138,9 @@ def pdf_text(body: bytes) -> str:
     with tempfile.TemporaryDirectory() as tmp:
         path = pathlib.Path(tmp) / "f.pdf"
         path.write_bytes(body)
-        done = subprocess.run(["pdftotext", "-layout", str(path), "-"], capture_output=True, check=False)
+        done = subprocess.run(
+            ["pdftotext", "-layout", str(path), "-"], capture_output=True, check=False
+        )
     return done.stdout.decode("utf-8", "replace") if done.returncode == 0 else ""
 
 
@@ -145,7 +149,15 @@ _TAGS = re.compile(r"<(script|style|noscript)\b.*?</\1>|<[^>]+>", re.S | re.I)
 
 def served_text(body: bytes) -> str:
     """A served HTML document's text without a browser - the text of a page that would not render whole."""
-    return re.sub(r"\s+\n", "\n", re.sub(r"[ \t]+", " ", html.unescape(_TAGS.sub(" ", body.decode("utf-8", "replace"))))).strip()
+    return re.sub(
+        r"\s+\n",
+        "\n",
+        re.sub(
+            r"[ \t]+",
+            " ",
+            html.unescape(_TAGS.sub(" ", body.decode("utf-8", "replace"))),
+        ),
+    ).strip()
 
 
 def revision(body: bytes) -> str:
@@ -212,14 +224,26 @@ class Browser:
         for attempt in (1, 2):
             self._wait(url)
             try:
-                r = self._ctx.request.get(url, timeout=60_000, headers={"Accept": "*/*", "Accept-Language": "en,ja;q=0.8,zh;q=0.6"}, max_redirects=10)
+                r = self._ctx.request.get(
+                    url,
+                    timeout=60_000,
+                    headers={
+                        "Accept": "*/*",
+                        "Accept-Language": "en,ja;q=0.8,zh;q=0.6",
+                    },
+                    max_redirects=10,
+                )
             except Exception as e:  # noqa: BLE001 - every failure of the transport is an outcome, recorded with its reason
                 return Fetched(url, error=str(e).splitlines()[0][:200])
             if r.status in (429, 503) and attempt == 1:
                 time.sleep(RETRY_WAIT_S)
                 continue
-            return Fetched(url, r.status, r.url, r.headers.get("content-type", ""), r.body())
-        raise AssertionError("unreachable")  # pragma: no cover - the loop returns on its second pass
+            return Fetched(
+                url, r.status, r.url, r.headers.get("content-type", ""), r.body()
+            )
+        raise AssertionError(
+            "unreachable"
+        )  # pragma: no cover - the loop returns on its second pass
 
     def render(self, url: str) -> tuple[str, str]:
         """The page's MHTML and visible text, as Chromium shows it; ('', '') where it will not render. Tried twice: in
@@ -232,7 +256,9 @@ class Browser:
                 page.goto(url, wait_until="load", timeout=60_000)
                 with contextlib.suppress(Exception):
                     page.wait_for_load_state("networkidle", timeout=10_000)
-                mhtml = page.context.new_cdp_session(page).send("Page.captureSnapshot", {"format": "mhtml"})["data"]
+                mhtml = page.context.new_cdp_session(page).send(
+                    "Page.captureSnapshot", {"format": "mhtml"}
+                )["data"]
                 return mhtml, page.inner_text("body")
             except Exception:  # noqa: BLE001, S112 - a page that will not render keeps its served bytes; the outcome says so
                 continue
@@ -263,12 +289,18 @@ def wayback(browser, url: str) -> tuple[str, str] | None:  # noqa: ANN001
     if got.error or got.status != 200:
         return None
     try:
-        closest = json.loads(got.body.decode("utf-8")).get("archived_snapshots", {}).get("closest", {})
+        closest = (
+            json.loads(got.body.decode("utf-8"))
+            .get("archived_snapshots", {})
+            .get("closest", {})
+        )
     except (json.JSONDecodeError, UnicodeDecodeError):
         return None
     if not closest.get("available") or not closest.get("url"):
         return None
-    return closest["url"].replace("http://", "https://", 1), closest.get("timestamp", "")
+    return closest["url"].replace("http://", "https://", 1), closest.get(
+        "timestamp", ""
+    )
 
 
 # ---- one capture -------------------------------------------------------------------------------------------------
@@ -319,7 +351,12 @@ def from_snapshot(browser, url: str, reason: str) -> Capture | None:  # noqa: AN
     if old.is_html:
         old.mhtml, shown = browser.render(snap[0])
         old.text = shown or old.text
-    return Capture("archived-earlier-snapshot", files_of(old), {**record_of(url, old, f"wayback {snap[1]}"), "live_failure": reason}, reason)
+    return Capture(
+        "archived-earlier-snapshot",
+        files_of(old),
+        {**record_of(url, old, f"wayback {snap[1]}"), "live_failure": reason},
+        reason,
+    )
 
 
 def capture(browser, url: str, has_gm_copy: bool, cache_text: str = "") -> Capture:  # noqa: ANN001
@@ -330,13 +367,31 @@ def capture(browser, url: str, has_gm_copy: bool, cache_text: str = "") -> Captu
     live = fetch(browser, url)
     kind, reason = failure(url, live)
     if not kind and live.is_html and not live.mhtml:
-        return Capture("partial", files_of(live), record_of(url, live, "live"), "the page would not render whole: its served HTML and text are kept")
+        return Capture(
+            "partial",
+            files_of(live),
+            record_of(url, live, "live"),
+            "the page would not render whole: its served HTML and text are kept",
+        )
     if not kind:
         return Capture("archived", files_of(live), record_of(url, live, "live"))
     served = files_of(live) if live.body else {}
     cached = {"page-cache-text.txt": cache_text.encode("utf-8")} if cache_text else {}
-    base = {**record_of(url, live, "live"), "live_failure": reason} if live.body else {"url": url, "live_failure": reason}
-    gm = Capture("archived-gm-copy", served, {**base, "origin": "the GM's downloaded copy"}, reason) if has_gm_copy else None
+    base = (
+        {**record_of(url, live, "live"), "live_failure": reason}
+        if live.body
+        else {"url": url, "live_failure": reason}
+    )
+    gm = (
+        Capture(
+            "archived-gm-copy",
+            served,
+            {**base, "origin": "the GM's downloaded copy"},
+            reason,
+        )
+        if has_gm_copy
+        else None
+    )
     if kind == "refused":
         found = gm or from_snapshot(browser, url, reason)
         return found or Capture("partial", {**served, **cached}, base, reason)
@@ -344,7 +399,9 @@ def capture(browser, url: str, has_gm_copy: bool, cache_text: str = "") -> Captu
     return found or Capture("unreachable", cached, base, reason)
 
 
-def split_large(files: dict[str, bytes], part: int = PART) -> tuple[dict[str, bytes], dict[str, dict]]:
+def split_large(
+    files: dict[str, bytes], part: int = PART
+) -> tuple[dict[str, bytes], dict[str, dict]]:
     """Files past `part` bytes cut into `<name>.partN`, with each whole file's SHA-256 and part count to join it by."""
     out: dict[str, bytes] = {}
     parts: dict[str, dict] = {}
@@ -355,7 +412,11 @@ def split_large(files: dict[str, bytes], part: int = PART) -> tuple[dict[str, by
         pieces = [body[i : i + part] for i in range(0, len(body), part)]
         for n, piece in enumerate(pieces, 1):
             out[f"{name}.part{n}"] = piece
-        parts[name] = {"parts": len(pieces), "sha256": hashlib.sha256(body).hexdigest(), "bytes": len(body)}
+        parts[name] = {
+            "parts": len(pieces),
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "bytes": len(body),
+        }
     return out, parts
 
 
@@ -371,7 +432,14 @@ def git_env(token: str) -> dict[str, str]:
     """The environment that authenticates git to GitHub with the PAT as an extra header (FR-011)."""
     basic = base64.b64encode(f"x-access-token:{token}".encode()).decode()
     env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_CONFIG_")}
-    env.update({"GIT_CONFIG_COUNT": "1", "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader", "GIT_CONFIG_VALUE_0": f"AUTHORIZATION: basic {basic}", "GIT_TERMINAL_PROMPT": "0"})
+    env.update(
+        {
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
+            "GIT_CONFIG_VALUE_0": f"AUTHORIZATION: basic {basic}",
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+    )
     return env
 
 
@@ -384,7 +452,12 @@ def token(root: pathlib.Path) -> str:
 class Archive:
     """The host's one working copy of the archive repository, written and pushed under the host-wide lock."""
 
-    def __init__(self, home: pathlib.Path, remote: str = REMOTE, env: dict[str, str] | None = None) -> None:
+    def __init__(
+        self,
+        home: pathlib.Path,
+        remote: str = REMOTE,
+        env: dict[str, str] | None = None,
+    ) -> None:
         self.home, self.remote, self.env = home, remote, env
         self.dir = home / WORKDIR
 
@@ -400,23 +473,39 @@ class Archive:
                     break
                 except BlockingIOError:
                     if time.monotonic() >= deadline:
-                        raise TimeoutError(f"could not take {self.home / LOCK} within {timeout:g}s") from None
+                        raise TimeoutError(
+                            f"could not take {self.home / LOCK} within {timeout:g}s"
+                        ) from None
                     time.sleep(0.05)
             yield
         finally:
             os.close(fd)
 
     def git(self, *args: str, check: bool = True) -> subprocess.CompletedProcess:
-        return subprocess.run(["git", "-C", str(self.dir), *args], env=self.env, capture_output=True, text=True, check=check)
+        return subprocess.run(
+            ["git", "-C", str(self.dir), *args],
+            env=self.env,
+            capture_output=True,
+            text=True,
+            check=check,
+        )
 
     def ensure(self) -> None:
         """Clone the repository once; an empty one is initialized on `main` with its remote."""
         if (self.dir / ".git").is_dir():
             return
         self.dir.parent.mkdir(parents=True, exist_ok=True)
-        done = subprocess.run(["git", "clone", "-q", self.remote, str(self.dir)], env=self.env, capture_output=True, text=True, check=False)
+        done = subprocess.run(
+            ["git", "clone", "-q", self.remote, str(self.dir)],
+            env=self.env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
         if done.returncode != 0:
-            raise RuntimeError(f"could not clone the archive: {done.stderr.strip()[:300]}")
+            raise RuntimeError(
+                f"could not clone the archive: {done.stderr.strip()[:300]}"
+            )
         if self.git("rev-parse", "--verify", "-q", "HEAD", check=False).returncode != 0:
             self.git("checkout", "-q", "-b", "main")
         self.git("config", "user.name", "diagram source archive")
@@ -459,7 +548,14 @@ class Archive:
             shutil.copy2(source, dest)
         self.git("add", "--", rel)
         self.git("commit", "-q", "-m", f"the GM's downloaded copy: {rel}")
-        self._count(self.unpushed() + sum(p.stat().st_size for p in ([dest] if dest.is_file() else dest.rglob("*")) if p.is_file()))
+        self._count(
+            self.unpushed()
+            + sum(
+                p.stat().st_size
+                for p in ([dest] if dest.is_file() else dest.rglob("*"))
+                if p.is_file()
+            )
+        )
         return True
 
     def put_file(self, rel: str, body: bytes, message: str) -> None:
@@ -513,7 +609,10 @@ def write_row(root: pathlib.Path, url: str, row: dict) -> None:
     path = row_path(root, url)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
-    tmp.write_text(json.dumps(row, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.write_text(
+        json.dumps(row, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     os.replace(tmp, path)
 
 
@@ -547,7 +646,11 @@ def place_gm(store: Archive, name: str, entry: dict) -> str:
     source = GM_DIR / name
     if not (store.dir / dest).exists() and source.exists():
         store.copy_in(dest, source)
-        if source.is_file() and source.suffix.lower() == ".pdf" and (text := pdf_text(source.read_bytes())):
+        if (
+            source.is_file()
+            and source.suffix.lower() == ".pdf"
+            and (text := pdf_text(source.read_bytes()))
+        ):
             store.put_file(f"{dest}.txt", text.encode("utf-8"), f"the text of {dest}")
     return dest if (store.dir / dest).exists() else ""
 
@@ -561,7 +664,14 @@ def home_of(root: pathlib.Path) -> pathlib.Path:
     return src.home(root)
 
 
-def archive_url(root: pathlib.Path, url: str, who: rec.Cited, browser, store: Archive, push: bool = True) -> dict:  # noqa: ANN001
+def archive_url(
+    root: pathlib.Path,
+    url: str,
+    who: rec.Cited,
+    browser,
+    store: Archive,
+    push: bool = True,
+) -> dict:  # noqa: ANN001
     """Archive one cited URL, copy its keys' GM files, write its manifest row, and push when asked. Returns the row."""
     url = rec.clean(url)
     copies, table = gm_copies(root), gm_table(root)
@@ -571,12 +681,28 @@ def archive_url(root: pathlib.Path, url: str, who: rec.Cited, browser, store: Ar
     files, parts = split_large(got.files)
     when = stamp()
     rel = f"{capture_base(url)}/{when}"
-    record = {**got.record, "captured": when, "keys": who.keys, "notes": who.notes, "outcome": got.outcome, "parts": parts}
+    record = {
+        **got.record,
+        "captured": when,
+        "keys": who.keys,
+        "notes": who.notes,
+        "outcome": got.outcome,
+        "parts": parts,
+    }
     gm_paths = []
     with store.locked():
         store.ensure()
         if files:
-            rel = store.put(rel, {**files, "capture.json": (json.dumps(record, ensure_ascii=False, indent=1) + "\n").encode()}, f"{got.outcome}: {url}")
+            rel = store.put(
+                rel,
+                {
+                    **files,
+                    "capture.json": (
+                        json.dumps(record, ensure_ascii=False, indent=1) + "\n"
+                    ).encode(),
+                },
+                f"{got.outcome}: {url}",
+            )
         gm_paths = [p for name in mine if (p := place_gm(store, name, table[name]))]
         failure = store.push() if push else ""
     old = read_row(root, url) or {}
@@ -587,7 +713,9 @@ def archive_url(root: pathlib.Path, url: str, who: rec.Cited, browser, store: Ar
         "outcome": got.outcome,
         "path": rel if files else old.get("path", ""),
         "first": old.get("first") or (rel if files else ""),
-        "captured": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "captured": datetime.datetime.now(datetime.timezone.utc).isoformat(
+            timespec="seconds"
+        ),
         "sha256": got.record.get("sha256", ""),
         "revision": got.record.get("revision", ""),
         "final_url": got.record.get("final_url", ""),
@@ -595,7 +723,11 @@ def archive_url(root: pathlib.Path, url: str, who: rec.Cited, browser, store: Ar
         "gm_copies": sorted(set(gm_paths) | set(old.get("gm_copies", []))),
     }
     if failure:
-        row["held"], row["outcome"], row["reason"] = row["outcome"], "pending-upload", f"push failed: {failure}"
+        row["held"], row["outcome"], row["reason"] = (
+            row["outcome"],
+            "pending-upload",
+            f"push failed: {failure}",
+        )
     write_row(root, url, row)
     return row
 
@@ -623,14 +755,20 @@ def sync_gm_copies(root: pathlib.Path, store: Archive) -> int:
                     changed += 1
         failure = store.push()
     if failure:
-        raise RuntimeError(f"the GM's copies are committed but the push failed: {failure}")
+        raise RuntimeError(
+            f"the GM's copies are committed but the push failed: {failure}"
+        )
     return changed
 
 
 def owed(root: pathlib.Path) -> dict[str, rec.Cited]:
     """Every cited URL with no row, or a row still waiting on its upload."""
     rows = rec.load(str(root / ".claude/skills/diagram/research"))
-    return {u: w for u, w in rec.cited(str(root / ".claude/skills/diagram/research")).items() if rows.get(rec.url_id(u), {}).get("outcome") in (None, "pending-upload")}
+    return {
+        u: w
+        for u, w in rec.cited(str(root / ".claude/skills/diagram/research")).items()
+        if rows.get(rec.url_id(u), {}).get("outcome") in (None, "pending-upload")
+    }
 
 
 # ---- the backfill ------------------------------------------------------------------------------------------------
@@ -647,7 +785,11 @@ def lanes(urls: list[str], n: int) -> list[list[str]]:
     return [lane for lane in out if lane]
 
 
-def _lane(args: tuple[str, list[str], str]) -> list[dict]:  # pragma: no cover - one worker process with a live browser; its parts are tested
+def _lane(
+    args: tuple[str, list[str], str],
+) -> list[
+    dict
+]:  # pragma: no cover - one worker process with a live browser; its parts are tested
     root_s, urls, home_s = args
     root = pathlib.Path(root_s)
     store = Archive(pathlib.Path(home_s), env=git_env(token(root)))
@@ -656,10 +798,14 @@ def _lane(args: tuple[str, list[str], str]) -> list[dict]:  # pragma: no cover -
     out = []
     try:
         for n, url in enumerate(urls, 1):
-            if n % RECYCLE_EVERY == 0:  # a long-lived browser grows: two lanes held 1.8 GB after ~600 pages (2026-10-02)
+            if (
+                n % RECYCLE_EVERY == 0
+            ):  # a long-lived browser grows: two lanes held 1.8 GB after ~600 pages (2026-10-02)
                 browser.close()
                 browser = Browser()
-            row = archive_url(root, url, who.get(url, rec.Cited()), browser, store, push=False)
+            row = archive_url(
+                root, url, who.get(url, rec.Cited()), browser, store, push=False
+            )
             out.append(row)
             print(f"{row['outcome']:26} {url}", flush=True)
             if store.unpushed() >= PUSH_EVERY:
@@ -671,9 +817,16 @@ def _lane(args: tuple[str, list[str], str]) -> list[dict]:  # pragma: no cover -
     return out
 
 
-def backfill(root: pathlib.Path, workers: int) -> int:  # pragma: no cover - the live run; `lanes`, `archive_url` and `report` are tested
+def backfill(
+    root: pathlib.Path, workers: int
+) -> (
+    int
+):  # pragma: no cover - the live run; `lanes`, `archive_url` and `report` are tested
     todo = owed(root)
-    print(f"archive: {len(todo)} cited URL(s) owed a copy, in up to {workers} lane(s)", flush=True)
+    print(
+        f"archive: {len(todo)} cited URL(s) owed a copy, in up to {workers} lane(s)",
+        flush=True,
+    )
     home = home_of(root)
     store = Archive(home, env=git_env(token(root)))
     with store.locked():
@@ -685,7 +838,10 @@ def backfill(root: pathlib.Path, workers: int) -> int:  # pragma: no cover - the
     with store.locked():
         failure = store.push()
     if failure:
-        print(f"archive: the final push failed - {failure}; the captures wait in {store.dir}", file=sys.stderr)
+        print(
+            f"archive: the final push failed - {failure}; the captures wait in {store.dir}",
+            file=sys.stderr,
+        )
         return 1
     settle(root)
     return report(root)
@@ -729,8 +885,12 @@ def report(root: pathlib.Path, out=sys.stdout) -> int:  # noqa: ANN001
     return 1 if missing else 0
 
 
-def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument plumbing over the tested functions
-    ap = argparse.ArgumentParser(description="archive the record's cited sources (feature 309)")
+def main(
+    argv: list[str] | None = None,
+) -> int:  # pragma: no cover - argument plumbing over the tested functions
+    ap = argparse.ArgumentParser(
+        description="archive the record's cited sources (feature 309)"
+    )
     sub = ap.add_subparsers(dest="cmd", required=True)
     one = sub.add_parser("url")
     one.add_argument("url")
@@ -744,24 +904,36 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     if args.cmd == "report":
         return report(root)
     if args.cmd == "gm-copies":
-        print(f"archive: {sync_gm_copies(root, Archive(home_of(root), env=git_env(token(root))))} row(s) given the GM's copies")
+        print(
+            f"archive: {sync_gm_copies(root, Archive(home_of(root), env=git_env(token(root))))} row(s) given the GM's copies"
+        )
         return 0
     if args.cmd == "backfill":
         return backfill(root, args.workers)
     return archive_one(root, args.url, args.key)
 
 
-def archive_one(root: pathlib.Path, url: str, key: str = "") -> int:  # pragma: no cover - the live path `make archive` and `make reserve` take
+def archive_one(
+    root: pathlib.Path, url: str, key: str = ""
+) -> int:  # pragma: no cover - the live path `make archive` and `make reserve` take
     """Archive one URL now, as the census sees it (a KEY names a registry entry not yet written)."""
-    who = rec.cited(str(root / ".claude/skills/diagram/research")).get(rec.clean(url), rec.Cited())
+    who = rec.cited(str(root / ".claude/skills/diagram/research")).get(
+        rec.clean(url), rec.Cited()
+    )
     if key and key not in who.keys:
         who.keys.insert(0, key)
     browser = Browser()
     try:
-        row = archive_url(root, url, who, browser, Archive(home_of(root), env=git_env(token(root))))
+        row = archive_url(
+            root, url, who, browser, Archive(home_of(root), env=git_env(token(root)))
+        )
     finally:
         browser.close()
-    print(f"archive: {row['outcome']} - {url}" + (f" ({row['reason']})" if row["reason"] else "") + (f"\n  {rec.copy_link(row)}" if row["path"] else ""))
+    print(
+        f"archive: {row['outcome']} - {url}"
+        + (f" ({row['reason']})" if row["reason"] else "")
+        + (f"\n  {rec.copy_link(row)}" if row["path"] else "")
+    )
     return 0
 
 

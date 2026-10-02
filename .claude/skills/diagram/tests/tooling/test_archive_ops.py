@@ -107,7 +107,7 @@ def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(t
     (inbox / "a.pdf").write_bytes(b"%PDF x")
     assert ops.process_inbox(root, store, inbox)[0] == {"a.pdf": "gm-copies/a.pdf"}
     with store.locked():
-        rel = store.put(f"{ar.capture_base('https://a')}/20261002T000000Z", {"text.txt": "Forty to sixty MATS of straw.".encode()}, "a capture")
+        rel = store.put(f"{ar.capture_base('https://a')}/20261002T000000Z", {"text.txt": b"Forty to sixty MATS of straw."}, "a capture")
     ar.write_row(root, "https://a", {"url": "https://a", "outcome": "archived", "path": rel, "keys": ["alpha"], "gm_copies": ["gm-copies/a.pdf"]})
     out = io.StringIO()
     assert ops.find(root, store, url="https://www.a/", out=out) == 0 and f"local: {store.dir / rel}" in out.getvalue()

@@ -52,10 +52,16 @@ GM_LISTS = ("TO-DOWNLOAD.md", "for-the-gm-fetch-list.md")
 
 def write_table(root: pathlib.Path, table: dict[str, dict]) -> None:
     path = root / ar.MANIFEST / rec.GM_COPIES
-    doc = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {"_about": "Feature 309: the GM's downloaded files."}
+    doc = (
+        json.loads(path.read_text(encoding="utf-8"))
+        if path.is_file()
+        else {"_about": "Feature 309: the GM's downloaded files."}
+    )
     doc["files"] = {k: table[k] for k in sorted(table)}
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
+    )
 
 
 def on_github(store: ar.Archive, rel: str) -> bool:
@@ -64,7 +70,12 @@ def on_github(store: ar.Archive, rel: str) -> bool:
     return done.returncode == 0 and bool(done.stdout.strip())
 
 
-def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | None = None, match: dict[str, list[str]] | None = None) -> tuple[dict[str, str], list[str]]:
+def process_inbox(
+    root: pathlib.Path,
+    store: ar.Archive,
+    inbox: pathlib.Path | None = None,
+    match: dict[str, list[str]] | None = None,
+) -> tuple[dict[str, str], list[str]]:
     """Archive every inbox entry the table places, confirm the push, then delete it (FR-013). Returns (name -> its archive
     path, the names left waiting). An entry is deleted only where its path is confirmed in `origin/main`, so a failed push
     deletes nothing. A NEW entry - not in `gm-copies.json` - is processed only once `match` gives its keys (`[]` for one
@@ -73,8 +84,19 @@ def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | N
     inbox = inbox or ar.GM_DIR
     table = ar.gm_table(root)
     for name, keys in (match or {}).items():
-        table.setdefault(name, {"evidence": "matched by the session at the inbox (feature 309 FR-012)"})["keys"] = keys
-    names = [n for n in sorted(os.listdir(inbox)) if n not in GM_LISTS and not n.startswith(".")] if inbox.is_dir() else []
+        table.setdefault(
+            name,
+            {"evidence": "matched by the session at the inbox (feature 309 FR-012)"},
+        )["keys"] = keys
+    names = (
+        [
+            n
+            for n in sorted(os.listdir(inbox))
+            if n not in GM_LISTS and not n.startswith(".")
+        ]
+        if inbox.is_dir()
+        else []
+    )
     placed: dict[str, str] = {}
     waiting = [n for n in names if n not in table]
     names = [n for n in names if n in table]
@@ -91,7 +113,9 @@ def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | N
         failure = store.push()
     write_table(root, table)
     if failure:
-        raise RuntimeError(f"the inbox is archived locally but the push failed, so nothing was deleted: {failure}")
+        raise RuntimeError(
+            f"the inbox is archived locally but the push failed, so nothing was deleted: {failure}"
+        )
     for name, dest in placed.items():
         if on_github(store, dest):
             target = inbox / name
@@ -102,7 +126,9 @@ def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | N
 def consulted_urls(root: pathlib.Path) -> list[str]:
     """Every URL a session has read (the sources-consulted ledger, the page cache's own URLs first) with no row yet."""
     home = src.home(root)
-    have = {json.loads(p.read_text(encoding="utf-8"))["url"] for p in ar.row_files(root)}
+    have = {
+        json.loads(p.read_text(encoding="utf-8"))["url"] for p in ar.row_files(root)
+    }
     seen_norm = {src.norm(u) for u in have}
     urls: dict[str, str] = {}
     for meta in sorted((home / src.CACHE).glob("*/*/meta.json")):
@@ -117,7 +143,11 @@ def consulted_urls(root: pathlib.Path) -> list[str]:
     return sorted(u for n, u in urls.items() if n not in seen_norm)
 
 
-def consulted(root: pathlib.Path, limit: int = 0) -> int:  # pragma: no cover - the live run; `consulted_urls` and `archive_url` are tested
+def consulted(
+    root: pathlib.Path, limit: int = 0
+) -> (
+    int
+):  # pragma: no cover - the live run; `consulted_urls` and `archive_url` are tested
     todo = consulted_urls(root)
     todo = todo[:limit] if limit else todo
     print(f"archive: {len(todo)} consulted URL(s) with no copy yet", flush=True)
@@ -143,7 +173,10 @@ def consulted(root: pathlib.Path, limit: int = 0) -> int:  # pragma: no cover - 
 
 def unarchived(root: pathlib.Path, urls: list[str]) -> list[str]:
     """The URLs, cleaned, that have no archive row yet - a page read again is not captured again (FR-014)."""
-    have = {src.norm(json.loads(p.read_text(encoding="utf-8"))["url"]) for p in ar.row_files(root)}
+    have = {
+        src.norm(json.loads(p.read_text(encoding="utf-8"))["url"])
+        for p in ar.row_files(root)
+    }
     out = []
     for url in (rec.clean(u) for u in urls):
         if url.startswith("http") and src.norm(url) not in have and url not in out:
@@ -151,7 +184,9 @@ def unarchived(root: pathlib.Path, urls: list[str]) -> list[str]:
     return out
 
 
-def archive_urls(root: pathlib.Path, urls: list[str]) -> int:  # pragma: no cover - the live path the ledger's writers take; `unarchived` and `archive_url` are tested
+def archive_urls(
+    root: pathlib.Path, urls: list[str]
+) -> int:  # pragma: no cover - the live path the ledger's writers take; `unarchived` and `archive_url` are tested
     """Archive the pages just read that have no row (FR-014): one browser, one push."""
     todo = unarchived(root, urls)
     if not todo:
@@ -168,38 +203,73 @@ def archive_urls(root: pathlib.Path, urls: list[str]) -> int:  # pragma: no cove
     return 0
 
 
-def find(root: pathlib.Path, store: ar.Archive, url: str = "", key: str = "", terms: str = "", out=sys.stdout) -> int:  # noqa: ANN001
+def find(
+    root: pathlib.Path,
+    store: ar.Archive,
+    url: str = "",
+    key: str = "",
+    terms: str = "",
+    out=sys.stdout,
+) -> int:  # noqa: ANN001
     """What the archive already holds (FR-015): rows by URL or key, and archived texts holding every term; each with its
     local path. Exit 0 with hits, 1 with none - so a session knows to go to the web."""
     hits = 0
     rows = [json.loads(p.read_text(encoding="utf-8")) for p in ar.row_files(root)]
     want = src.norm(url) if url else ""
     for row in rows:
-        if (want and src.norm(row["url"]) == want) or (key and key in row.get("keys", [])):
+        if (want and src.norm(row["url"]) == want) or (
+            key and key in row.get("keys", [])
+        ):
             hits += 1
             local = store.dir / row["path"] if row.get("path") else None
-            print(f"{row['outcome']:26} {row['url']}\n  local: {local or '(no copy)'}\n  keys: {', '.join(row.get('keys', [])) or '-'}", file=out)
+            print(
+                f"{row['outcome']:26} {row['url']}\n  local: {local or '(no copy)'}\n  keys: {', '.join(row.get('keys', [])) or '-'}",
+                file=out,
+            )
             for gm in row.get("gm_copies", []):
                 print(f"  the GM's copy: {store.dir / gm}", file=out)
     if key:
         for name, entry in sorted(ar.gm_table(root).items()):
             if key in entry.get("keys", []) and entry.get("archived"):
                 hits += 1
-                print(f"the GM's copy of {key}: {store.dir / entry['archived']}", file=out)
+                print(
+                    f"the GM's copy of {key}: {store.dir / entry['archived']}", file=out
+                )
     words = [t.strip() for t in terms.split("|") if t.strip()]
     if words and store.dir.is_dir():
         found = None
         for word in words:
-            done = subprocess.run(["grep", "-rlIiF", "--include=text.txt", "--include=*.pdf.txt", "--include=*.txt", "--", word, str(store.dir)], capture_output=True, text=True, check=False)
+            done = subprocess.run(
+                [
+                    "grep",
+                    "-rlIiF",
+                    "--include=text.txt",
+                    "--include=*.pdf.txt",
+                    "--include=*.txt",
+                    "--",
+                    word,
+                    str(store.dir),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
             files = {f for f in done.stdout.splitlines() if "/.git/" not in f}
             found = files if found is None else found & files
         by_dir = {str(pathlib.Path(f).parent): f for f in sorted(found or ())}
         url_of = {str(store.dir / r["path"]): r["url"] for r in rows if r.get("path")}
         for d, f in sorted(by_dir.items()):
             hits += 1
-            print(f"text holds {' + '.join(words)}: {f}" + (f"\n  url: {url_of[d]}" if d in url_of else ""), file=out)
+            print(
+                f"text holds {' + '.join(words)}: {f}"
+                + (f"\n  url: {url_of[d]}" if d in url_of else ""),
+                file=out,
+            )
     if not hits:
-        print("archive: nothing held - search the web (and archive what you read: `make source-pages` does)", file=out)
+        print(
+            "archive: nothing held - search the web (and archive what you read: `make source-pages` does)",
+            file=out,
+        )
     return 0 if hits else 1
 
 
@@ -225,21 +295,37 @@ def relayout(root: pathlib.Path, store: ar.Archive) -> int:
                 if old and not old.startswith(base + "/"):
                     renames.setdefault(os.path.dirname(old), base)
                     row[field] = f"{base}/{os.path.basename(old)}"
-            row["gm_copies"] = sorted({renames.get(g, g) for g in row.get("gm_copies", [])})
+            row["gm_copies"] = sorted(
+                {renames.get(g, g) for g in row.get("gm_copies", [])}
+            )
             ar.write_row(root, row["url"], row)
             path.unlink()
             moved += 1
         for old, new in sorted(renames.items()):
             if (store.dir / old).exists() and old != new:
-                if new.endswith("/" + os.path.basename(old)) or new.startswith(ar.GM_DEST + "/"):
+                if new.endswith("/" + os.path.basename(old)) or new.startswith(
+                    ar.GM_DEST + "/"
+                ):
                     (store.dir / new).parent.mkdir(parents=True, exist_ok=True)
                     store.git("mv", "-k", old, new)
                 else:
                     (store.dir / new).mkdir(parents=True, exist_ok=True)
                     for child in sorted((store.dir / old).iterdir()):
-                        store.git("mv", "-k", str(child.relative_to(store.dir)), f"{new}/{child.name}")
+                        store.git(
+                            "mv",
+                            "-k",
+                            str(child.relative_to(store.dir)),
+                            f"{new}/{child.name}",
+                        )
         for old in sorted({o.split("/")[0] for o in renames}):
-            for d in sorted((p for p in (store.dir / old).rglob("*") if p.is_dir()), key=lambda p: -len(p.parts)) if (store.dir / old).is_dir() else []:
+            for d in (
+                sorted(
+                    (p for p in (store.dir / old).rglob("*") if p.is_dir()),
+                    key=lambda p: -len(p.parts),
+                )
+                if (store.dir / old).is_dir()
+                else []
+            ):
                 if not any(d.iterdir()):
                     d.rmdir()
             if (store.dir / old).is_dir() and not any((store.dir / old).iterdir()):
@@ -247,7 +333,13 @@ def relayout(root: pathlib.Path, store: ar.Archive) -> int:
         for name, entry in table.items():
             if (store.dir / ar.GM_DEST / name).exists():
                 entry["archived"] = f"{ar.GM_DEST}/{name}"
-        store.git("commit", "-q", "-m", "relayout: captures sharded by the URL id's first two hex digits, the GM's copies under gm-copies/", check=False)
+        store.git(
+            "commit",
+            "-q",
+            "-m",
+            "relayout: captures sharded by the URL id's first two hex digits, the GM's copies under gm-copies/",
+            check=False,
+        )
         failure = store.push()
     write_table(root, table)
     if failure:
@@ -255,12 +347,26 @@ def relayout(root: pathlib.Path, store: ar.Archive) -> int:
     return moved
 
 
-def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument plumbing over the tested functions
-    ap = argparse.ArgumentParser(description="the source archive's housekeeping and lookups (feature 309)")
+def main(
+    argv: list[str] | None = None,
+) -> int:  # pragma: no cover - argument plumbing over the tested functions
+    ap = argparse.ArgumentParser(
+        description="the source archive's housekeeping and lookups (feature 309)"
+    )
     sub = ap.add_subparsers(dest="cmd", required=True)
     i = sub.add_parser("inbox")
-    i.add_argument("--match", action="append", default=[], help="<file>=<key>[,<key>] - a new download's keys")
-    i.add_argument("--none", action="append", default=[], help="<file> - a new download that copies no cited source")
+    i.add_argument(
+        "--match",
+        action="append",
+        default=[],
+        help="<file>=<key>[,<key>] - a new download's keys",
+    )
+    i.add_argument(
+        "--none",
+        action="append",
+        default=[],
+        help="<file> - a new download that copies no cited source",
+    )
     c = sub.add_parser("consulted")
     c.add_argument("--limit", type=int, default=0)
     f = sub.add_parser("find")
@@ -282,14 +388,22 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     if args.cmd == "relayout":
         print(f"archive: {relayout(root, store)} row(s) moved to the sharded layout")
         return 0
-    match = {m.split("=", 1)[0]: [k for k in m.split("=", 1)[1].split(",") if k] for m in args.match if "=" in m}
+    match = {
+        m.split("=", 1)[0]: [k for k in m.split("=", 1)[1].split(",") if k]
+        for m in args.match
+        if "=" in m
+    }
     match.update({n: [] for n in args.none})
     placed, waiting = process_inbox(root, store, match=match)
-    print(f"archive: {len(placed)} inbox file(s) archived, pushed and removed from {ar.GM_DIR}")
+    print(
+        f"archive: {len(placed)} inbox file(s) archived, pushed and removed from {ar.GM_DIR}"
+    )
     for name, dest in placed.items():
         print(f"  {name} -> {dest}")
     for name in waiting:
-        print(f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` (or NONE='{name}' if it copies no cited source)")
+        print(
+            f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` (or NONE='{name}' if it copies no cited source)"
+        )
     ar.sync_gm_copies(root, store)
     return 0
 
