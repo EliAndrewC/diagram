@@ -652,6 +652,14 @@ class GrovesMixin:
                 for c in (getattr(self, "_conifer_crowns", None) or [])
                 if cx - w / 2 - _cpad - c[2] <= c[0] <= cx + w / 2 + _cpad + c[2] and cy - h / 2 - _cpad - c[2] <= c[1] <= cy + h / 2 + _cpad + c[2]
             ]  # a conifer whose DISC reaches the box
+            # ...AND NO CONIFER WHERE A YARD PERSIMMON WILL BE PAINTED OVER IT (GM 2026-10-02): the persimmon is seated with its
+            # household, behind the house where a front yard keeps its sun, which is where the farm's grove stands; it is inked
+            # on top after every grove, so a cedar under its crown would read as the broadleaf-over-conifer case (B5b)
+            _trees = [
+                (t[0], t[1], t[2] / 2)
+                for t in ((rec.get("geom") or {}).get("fixtures", {}).get("persimmon") for rec in self.M.get("houses") or ())
+                if t is not None and cx - w / 2 - _cpad - t[2] <= t[0] <= cx + w / 2 + _cpad + t[2] and cy - h / 2 - _cpad - t[2] <= t[1] <= cy + h / 2 + _cpad + t[2]
+            ]
             high: list[str] = []
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
@@ -687,6 +695,8 @@ class GrovesMixin:
                 if not self._crown_seat_clear(cx + px, cy + py - lift, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - lift, rr, drawn):
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 if kind != "conifer" and over_a_conifer(cx + px, cy + py - lift, rr, _cones):
+                    continue
+                if kind == "conifer" and any(over_a_conifer(tx, ty, tr, [(cx + px, cy + py - lift, rr)]) for tx, ty, tr in _trees):
                     continue
                 drawn.append((cx + px, cy + py - lift, rr))
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
