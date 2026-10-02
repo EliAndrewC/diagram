@@ -82,3 +82,61 @@ By round 4 the seats refused for no garden side fitting were 34-52 a seed at 40 
 reach the placer are mostly good ones, so there was little left to catch. And the larger box refused positions the settle
 would have moved past onto clear ground: seed 4 popped 1,721 seats against 290, seed 9 753 against 300. Withdrawn; the house
 box alone stays (plan D1).
+
+## R6 - The field's corridor: its ground read once for every candidate (observed 2026-10-02, method: `prof.py 15 13`, then `abab.sh` against the base, `r6-15-*.log`, `r6-40-*.log`)
+
+On seed 13 at 15 households the field's corridor (`reserve_field_corridor`, reserved once a margin before any house) took 3.4 of
+the stage's 5.8 s, profiled: it tried 145 candidate runs, and `corridor_on_lawful_ground` built a new `Lawful` - indexing every
+water course, outline and farmstead part of the map (`GroundIndex`) - for each. The candidates are tried on one standing
+manifest, so the caller now builds one `Lawful` and hands it in; and a run is squared through `Lawful.squared`, which skips the
+squaring where no water comes within its reach (where it changes nothing). Profiled, 5.8 -> 3.7 s on that seed.
+
+Rounds 1-6 alternated against the base: 15 households 26.2 -> 22.8 s (-13%), 40 households 49.8 -> 29.1 s (-42%), every seed on
+one margin. The 15-household legs ran under heavier load than R4's (the base leg 26.2 s against 21.3 s), and single runs vary
+there; three runs of three seeds each (the fastest kept): seed 1 1.64 -> 1.24 s, seed 11 1.09 -> 1.05 s, seed 4 1.11 -> 1.38 s.
+
+## R7 - Seed 4 at 15 households, slower (observed 2026-10-02, method: `prof.py 15 4` on both engines; `routecount.py`; `searchsize.py`)
+
+The base's 42 route searches on seed 4 found a path of cells every time and 37 of them were refused when pulled taut (its
+search ran through the household's own beds, R2) - cheap searches that bought 5 routes. The clone's 34 searches buy 11 routes,
+and its placer is asked 54 times against 105; but each search that must detour round what stands pops up to 1,168 cells (the
+nearest aim 12-17 cells away, the goal 24-27), and 7 that find nothing explore the whole reach (2,501 cells). A heavier weight
+on the aim did not help (1.5: 1.35-1.46 s; 2.5: 1.48 s; 4.0: 1.77-1.82 s on seed 4). The detour is the search doing what it
+must; the route grid stays as it is.
+
+## R8 - The courses out of a run's reach (observed 2026-10-02, method: `prof.py 15 13`)
+
+`square_run` squared a run at every water course of the map and `law.oblique_at` compared every lane segment with every course
+segment (the overlap census's 356,470 comparisons in the homesteads stage). Each now skips a course whose box, grown by its
+reach, misses the run's: no crossing there and no vertex within reach, so nothing changes. On seed 13 the 145 field candidates
+all stand by the brook and a drawn channel, so little was skipped there (`square_run` 0.47 -> 0.38 s profiled); kept as exact.
+All 144 refused candidates on that seed cross the brook and a channel more than the tolerance off square after the squaring
+(`fieldwhy.py`).
+
+## R9 - Where the 15-household stage goes now, and what an efficient process would do (observed 2026-10-02, method: `split.py 15 1,...,16`, wrapping the stage's parts, one process)
+
+16.7 s over seeds 1-16, 1.04 s a map:
+
+| part | share | what it is | what an efficient process would do | where the stage stands |
+|---|---|---|---|---|
+| the growth (`grow_the_margin`) | 59% | 41 ms a house seated: the corridor search (straight runs, the gable, the routed path) and the lane law over the whole tree are about 70% of it (profile, seed 13); the household's layout at each seat offered, the rest | find a house's path once, where its seat is chosen, rather than search for it after: lay the hamlet's lanes first and seat the houses along them, so each corridor is a short spur the lane law has already judged | the cheap form - the same seats, the reachable first - measured no gain (R10). The full form plans the lanes before the houses, which changes the GM's growth (feature 308: the houses grown first, each path laid back as it is placed); put to the GM, not taken here |
+| the field's corridor | 15% | one corridor per margin, 0.07-0.19 s a map, 0.50 on seed 13 where 144 candidates cross the brook and a channel obliquely | generate the runs that cross square at a ford, instead of generating any run and refusing the oblique ones | NOT DONE: the candidates are the ways package's (`field_runs`, `routed_field_runs`); recorded |
+| the site boundary | 11% | the ground asked once, 0.08-0.17 s a map (feature 226) | already the efficient form: built once, looked up per seat | DONE |
+| the rest of the stage | 15% | the margin's choice, the exit strip, the seat region, the records | each once a margin | DONE |
+
+## R10 - Seats with a straight run to the tree offered first, tried and withdrawn (observed 2026-10-02, method: the growth's heap ordered three ways - by distance from the seat as shipped, by a straight shot to the tree's nearest point within 40 ft bands of distance, by a straight shot first - `refusals.py` on six seeds at 15 households and four at 40, one run each, `r10.log`)
+
+R9's efficient process offers the seats a path already reaches. The cheapest form of it - the same seats, offered in an order
+that puts first those whose line to the access tree's nearest point clears every placed homestead - bought nothing: summed, 15
+households 7.05 s as shipped, 7.30 s banded, 7.14 s shot-first; 40 households 10.81, 10.63, 10.58 s - within a single run's
+spread, every seed on one margin. The corridor search is not where order can help: the seats the growth offers are mostly
+reachable already (R4: the placer is asked 54 times for 15 houses on seed 4), and what costs is the search and the lane law on
+the seats it seats. Withdrawn.
+
+## R11 - The cohort against the base (observed 2026-10-02, method: `make cohort N=24 JOBS=4` in the base worktree and in the clone, seeds 1-24 and the six pinned)
+
+Both 28/30, the same two failures on both: seed 5 (dispersed, `fixtures_on_groves`, a woodpile on a grove) and seed 903
+(linear, `WebRefused`). Neither form grows, so neither is this feature's; both stand on the base as on the clone (feature 308
+recorded them with the persimmon change, owned by the session working the grove and canopy rules, feature 310). No household
+lost, no seed refused that the base seated. `JOBS` was added to `make cohort` for this run: its workers were cpus - 2 with no way
+to ask fewer, 20 on this host and ~10 GB, past the containers' shared cap while other sessions ran.
