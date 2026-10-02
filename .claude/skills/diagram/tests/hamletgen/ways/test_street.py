@@ -197,3 +197,21 @@ def test_the_drawn_span_is_the_streets_own_farms_at_their_reach() -> None:
     s._row_street_farms = [[(700.0, 440.0)]]
     assert 600.0 <= drawn_span(s, 0, farms)[0][0] < 608.0, "its own farms, as seated"
     assert drawn_span(s, 1, farms) == []
+
+
+def test_the_run_past_an_end_farm_stops_short_of_the_brook() -> None:
+    """A planned street's run past its end farm stops a ford's landing (22 ft) short of where it would cross the brook, never
+    short of the end farm itself; a crossing between its farms is left to it (`brook_bounds`). Cohort seed 11: the half frame
+    past the last farm took a row's street over the brook 11 degrees off its course, 46 ft from the nearest ford, and the
+    squared crossing kinked - a tree lane the web was refused for."""
+    farms = [(300.0, 560.0), (700.0, 440.0)]
+    shallow = [(600.0, 530.0), (880.0, 470.0)]  # crosses the street at x = 740, 40 ft past the last farm, 12 degrees off it
+    span = street_span(LINE, farms, reach=150.0, pad=50.0, brook=shallow)
+    assert 710.0 <= span[-1][0] <= 718.0 and 250.0 <= span[0][0] < 258.0, "stopped 22 ft short of the crossing; the far end as it was"
+    assert 288.0 <= street_span(LINE, farms, reach=150.0, pad=50.0, brook=[(220.0, 400.0), (300.0, 600.0)])[0][0] < 296.0, "the first end too"
+    assert street_span(LINE, farms, reach=150.0, pad=50.0, brook=[(710.0, 400.0), (710.0, 600.0)])[-1][0] >= 692.0, "never short of the end farm (to its sample)"
+    between = street_span(LINE, farms, reach=150.0, pad=50.0, brook=[(500.0, 400.0), (500.0, 600.0)])
+    assert between == street_span(LINE, farms, reach=150.0, pad=50.0), "a crossing between its farms is the street's own"
+    s = Settlement(1400, 1400, seed=3)
+    s._row_streets = [LINE]
+    assert 710.0 <= drawn_span(s, 0, [{"x": x, "y": y} for x, y in farms], shallow)[-1][0] <= 718.0, "the road and the web read the same span"

@@ -14,6 +14,8 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 from ..consts import BUNDLE_PITCH, FOOTPATH_FABRIC_GAP, Poly, Pt
+from . import law
+from .corridors import FORD_LANDING_FT
 from .fabric import _crosses_fabric, _draw_web
 from .route import _route
 from .serve import door_path
@@ -34,21 +36,23 @@ def row_reach(houses: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
     return 1.5 * fw, fw / 2
 
 
-def drawn_span(s: Settlement, k: int, houses: Sequence[Mapping[str, Any]]) -> list[Pt]:
+def drawn_span(s: Settlement, k: int, houses: Sequence[Mapping[str, Any]], brook: Sequence[Pt] = ()) -> list[Pt]:
     """The stretch of planned street `k` the web will lay (`lay_row_streets`): its own farms' span (`street_span`) at the
-    farms' own reach (`row_reach`). The road reads it too (`track.stage_track`), so it runs out from the street as drawn."""
+    farms' own reach (`row_reach`), short of the `brook` past its end farms. The road reads it too (`track.stage_track`),
+    with the same brook, so it runs out from the street as drawn."""
     lines = getattr(s, "_row_streets", None) or []
     if k >= len(lines):
         return []
     own = getattr(s, "_row_street_farms", None) or []
     centers = [(float(h["x"]), float(h["y"])) for h in houses]
     reach, pad = row_reach(houses)
-    return street_span(lines[k], own[k] if k < len(own) else centers, reach, pad)
+    return street_span(lines[k], own[k] if k < len(own) else centers, reach, pad, brook)
 
 
-def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: float) -> list[Pt]:
+def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: float, brook: Sequence[Pt] = ()) -> list[Pt]:
     """The stretch of a planned street its farms stand along: from the first farm's projection less `pad` to the last's
-    plus `pad`, over the farms within `reach` of the line; [] when no farm is. The line's own vertices are kept, thinned to
+    plus `pad`, over the farms within `reach` of the line, its run past an end farm stopped a ford's landing short of where
+    the line crosses the `brook` (`brook_bounds`); [] when no farm is. The line's own vertices are kept, thinned to
     `_VERTEX_FT`."""
     if len(line) < 2:
         return []
@@ -65,7 +69,7 @@ def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: flo
         along.append(arc[i] + math.dist(line[i], q))
     if not along:
         return []
-    lo, hi = max(0.0, min(along) - pad), min(arc[-1], max(along) + pad)
+    lo, hi = brook_bounds(line, arc, min(along), max(along), max(0.0, min(along) - pad), min(arc[-1], max(along) + pad), brook)
     idx = [i for i, u in enumerate(arc) if lo <= u <= hi]
     kept: list[int] = []
     for i in idx:
@@ -74,6 +78,31 @@ def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: flo
     if idx and kept[-1] != idx[-1]:
         kept.append(idx[-1])  # the stretch ends where its last farm does, not at the last whole vertex step
     return [line[i] for i in kept]
+
+
+def brook_bounds(line: Sequence[Pt], arc: Sequence[float], first: float, last: float, lo: float, hi: float, brook: Sequence[Pt]) -> tuple[float, float]:
+    """`lo` and `hi` (arc lengths along `line`, its cumulative lengths `arc`) drawn in to `FORD_LANDING_FT` short of the
+    nearest crossing of `brook` beyond the end farms' projections `first` and `last` - never past those projections
+    themselves, so the street still spans its farms.
+
+    WHY. A planned street is a straight line fitted to the hard ground's edge, and its run past the end farm (`pad`, half a
+    frame) is drawn wherever that line goes. Along a brook it went OVER the brook: on cohort seed 11 the line ran 11 degrees
+    off the brook's course, the last farm's projection stood 12 ft short of the crossing, and the half frame past it took the
+    street across 46 ft from the nearest ford. A street is a tree lane no settle may cut, so the crossing was squared in
+    place (`checks.square_crossings`) into two 80 degree turns 21 ft apart - a kink - still off the ford, and the web was
+    refused (`WebRefused`: bends, off_ford). A run past the last farm serves nothing over the water, so it stops a ford's
+    landing short of the crossing along the line (a map drawing convention: the one figure the ways already keep between a
+    way's turn and the brook), or at the end farm where the crossing is nearer than that (seed 11: 12 ft past it) - and the
+    road runs out from there (`track.stage_track` reads the same span), over the brook at a ford as every way crosses it.
+    A crossing BETWEEN farms is left to the street: its farms stand on both banks."""
+    if len(brook) < 2 or len(line) < 2:
+        return lo, hi
+    at = [arc[k] + math.dist(line[k], x) for k, x in law.crossing_points([(float(p[0]), float(p[1])) for p in line], [(float(p[0]), float(p[1])) for p in brook])]
+    if beyond := [u for u in at if u >= last]:
+        hi = max(last, min(hi, min(beyond) - FORD_LANDING_FT))
+    if before := [u for u in at if u <= first]:
+        lo = min(first, max(lo, max(before) + FORD_LANDING_FT))
+    return lo, hi
 
 
 def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: list[tuple[Pt, Pt]], half: float = STREET_WIDTH / 2 + 1.0) -> list[Pt]:
@@ -116,9 +145,9 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
     return (path + leg[1:]) if len(leg) >= 2 else path
 
 
-def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
-    """Lay each planned street of `s._row_streets` as one way: its farms' stretch (`street_span`), threaded round any
-    steading in its way (`thread`), joined to the connector or a street already laid (`join_to`), drawn at the street's
+def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], brook: Sequence[Pt] = ()) -> int:
+    """Lay each planned street of `s._row_streets` as one way: its farms' stretch (`street_span`, short of the `brook` past
+    its end farms), threaded round any steading in its way (`thread`), joined to the connector or a street already laid (`join_to`), drawn at the street's
     tread and recorded `street` with its index. Returns the streets drawn."""
     centers = [(float(h["x"]), float(h["y"])) for h in houses]
     # EACH STREET SPANS ITS OWN FARMS, as `seat_rows` seated them: spanned over every farm within reach, Mizuguchi's second
@@ -126,7 +155,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     # (settlement-review, 2026-09-30)
     n = 0
     for k, _line in enumerate(getattr(s, "_row_streets", None) or []):
-        path = thread(drawn_span(s, k, houses), walls, hard, water)
+        path = thread(drawn_span(s, k, houses, brook), walls, hard, water)
         # A FURTHER STREET JOINS THE ROW'S STREETS, NOT THE ROAD: joined to the nearest of either, Mizuguchi's second street
         # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
         # (settlement-review, 2026-09-30); only the first street takes the road

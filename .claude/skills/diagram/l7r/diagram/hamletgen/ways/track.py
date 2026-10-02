@@ -667,7 +667,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     if _row and len(_row) >= 2:
         from .street import drawn_span  # the street module reads the web's settle, laid after this stage
 
-        _span = drawn_span(s, 0, s.M.get("houses") or [])
+        _span = drawn_span(s, 0, s.M.get("houses") or [], plan.brook or [])
         _out = street_run_out(_span if len(_span) >= 2 else _row, s.W, s.H)
         # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the street's
         # line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
