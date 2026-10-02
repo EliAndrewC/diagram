@@ -82,6 +82,16 @@ def test_a_refused_roll_is_recorded_as_refused_never_swapped_out(monkeypatch: py
     assert row["refused"].startswith("WebRefused: lanes 1") and "seconds" not in row and row["seed"] == 6
 
 
+def test_the_reference_refusing_still_stops_the_bookend(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Only a scaling row records a refusal: the 15-household reference refusing is a defect the bookend stops on, as it always
+    did (specs/297 research R8: `make perf` failing on main is how a refused seed 4 was found)."""
+    from l7r.diagram.hamletgen.ways.last_resort import WebRefused
+
+    _stand_in_stages(monkeypatch, raise_at=ps.REFERENCE["households"])
+    with pytest.raises(WebRefused):
+        ps.measure((6,))
+
+
 def test_the_scaling_sizes_are_the_specs() -> None:
     """FR-001: 10, 20 and 40 beside the 15-household reference; 80 refuses in the field (research R5)."""
     assert ps.SCALING_SIZES == (10, 20, 40)

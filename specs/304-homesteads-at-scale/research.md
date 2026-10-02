@@ -163,3 +163,15 @@ seat (`seat_reaches_tree` -> `_house_candidates`) 33-38%, the four layouts with 
 of every candidate corridor (`prime_site`) 15%. Those are the seat search's own questions asked of ~1,500 seats, 23 of which the
 exhaustive pass seats - not a scan an index replaces. Per the spec this is recorded and raised with the GM, not pursued with
 levers beyond the three accepted.
+
+## R11. The T03 fix's regression on Kashikawa, and its fix (observed 2026-10-02, method: the full gate's pool tests, then a background agent in its own worktree; `make map GEN="--no-cache pool/hamlets/kashikawa/kashikawa.gen.py"`, `make test-file FILE=tests/hamletgen`, `make cohort N=24`)
+
+(Observed 2026-10-02, method: as the heading.) The gate failed Kashikawa on `test_no_two_ways_run_side_by_side_past_a_pitch` (a link
+running 204 ft within 30 ft of a farm's door path) and `test_no_zigzag_straddles_a_joint`. The cohort had passed 30/30: it does not
+run those pool tests. Cause: with the spur's tip set on the bund again (R8), Kashikawa's field path SURVIVED where a later pass had
+dropped it, as an island the first join pass linked to the street by a 350 ft ordinary lane; the door path laid after it doubled
+that link, and the settle's `settle_shadows` keeps a shadowing lane whose drop would break the network - the link was the path's
+only join. Fix (`corridors.strands_only_ordinary`, `settle.drop_stranding`): the shadowing lane goes with the ordinary lanes it
+alone joined when no farmhouse is stranded, and a field left without its way gets the field path drawn again as `stage_web` draws
+it. Kashikawa rolls its pre-T03 lanes; the pool tests 31/31, `tests/hamletgen` 1,187 passed, the cohort 30/30. Neither rule was
+loosened; refusing the link where it would shadow was tried first and cannot fire (the door path is laid after it).
