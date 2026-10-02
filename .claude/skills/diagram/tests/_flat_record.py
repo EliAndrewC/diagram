@@ -116,7 +116,7 @@ def write(tmp: pathlib.Path) -> pathlib.Path:
             encoding="utf-8",
         )
     (tmp / "assets").mkdir()
-    for name in ("record.css", "record.js", "site.css", "site.js"):
+    for name in ("record.css", "record.js", "site.css", "site.js", "theme.js"):
         (tmp / "assets" / name).write_text(f"/* {name} */", encoding="utf-8")
     return tmp
 

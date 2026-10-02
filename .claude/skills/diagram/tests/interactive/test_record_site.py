@@ -255,6 +255,50 @@ def test_a_notes_file_with_a_bad_original_is_refused_by_name(tmp_path: pathlib.P
         site.build(str(rec))
 
 
+def test_a_used_for_line_links_its_section_on_both_forms_and_an_unknown_one_is_refused(tmp_path: pathlib.Path) -> None:
+    """GM 2026-10-02: a "Used for:" line names a section, linked to its page on the small pages and to its place on the
+    single page; a link to no section refuses the build, naming the entry."""
+    rec = fr.write(tmp_path)
+    used = '<p><em>Used for:</em> shops (<a href="contents.json#fabric">Urban fabric</a>, <a href="contents.json#ways">Ways</a>)</p>\n'
+    fr.edit_entry(rec, "0010-alpha.html", "<!-- tags:", used + "<!-- tags:")
+    files = site.build(str(rec))
+    assert '(<a href="../findings/fabric.html">Urban fabric</a>, <a href="../findings/ways.html">Ways</a>)' in files["sources/alpha.html"]
+    assert '(<a href="#research-fabric">Urban fabric</a>, <a href="#research-ways">Ways</a>)' in files["all.html"]
+    assert 'id="research-fabric"' in files["all.html"] and "findings/fabric.html" in files
+    fr.edit_entry(rec, "0010-alpha.html", "contents.json#fabric", "contents.json#nowhere")
+    with pytest.raises(RecordError, match=r"alpha.*no section `nowhere`"):
+        site.build(str(rec))
+
+
+def test_the_record_links_its_used_for_sections_lists_its_campaign_notes_and_carries_the_theme(built: dict[str, str]) -> None:
+    """GM 2026-10-02, on the real record: no "Used for:" line names a page file any more, the budgets entry lists its
+    sections, and every page loads the theme before it is painted."""
+    assert '(<a href="../findings/religion-and-the-dead.html">Religion and the dead</a>)' in built["sources/ranzan-senjuin.html"]
+    assert not [n for n, p in built.items() if n.startswith("sources/") and re.search(r"Used for:</em>[^\n]*\((<code>)?[a-z/-]+\.html", p)]
+    assert built["sources/l7r-budgets.html"].count("<li>&quot;") + built["sources/l7r-budgets.html"].count('<li>"') >= 12
+    head = built["index.html"].split("</head>", 1)[0]
+    assert '<script src="assets/theme.js"></script>' in head and "record-theme" in built["assets/theme.js"], "not deferred: the choice is on before paint"
+
+
+def test_a_campaign_notes_line_naming_several_sections_is_a_list() -> None:
+    """GM 2026-10-02: the GM's campaign notes cited by several sections read as a bulleted list; one section, or any other
+    citation line, stays as it is written."""
+    two = '<p>The GM\'s campaign notes, <code>l7r.md</code>, "A" (https://g/l7r.md#a), "B" (https://g/l7r.md#b) and "C" (https://g/l7r.md#c) (https://g/l7r.md)<!-- READ x --></p>'
+    assert site.canon_list(two) == (
+        "<p>The GM's campaign notes, <code>l7r.md</code> (https://g/l7r.md):<!-- READ x --></p>\n"
+        '<ul class="canon-sections">\n<li>"A" (https://g/l7r.md#a)</li>\n<li>"B" (https://g/l7r.md#b)</li>\n<li>"C" (https://g/l7r.md#c)</li>\n</ul>'
+    )
+    last = '<p>The GM\'s campaign notes, <code>b.md</code>, "A" (https://g/b.md#a) and the office budget (https://g/b.md)</p>'
+    assert site.canon_list(last).endswith('<li>"A" (https://g/b.md#a)</li>\n<li>the office budget (https://g/b.md)</li>\n</ul>')
+    assert site.canon_list(last).startswith("<p>The GM's campaign notes, <code>b.md</code>:</p>"), "no whole-file URL, none shown"
+    for same in (
+        '<p>The GM\'s campaign notes, <code>l7r.md</code>, "A" (https://g/l7r.md#a) (https://g/l7r.md)</p>',
+        '<p>The GM\'s campaign notes, <code>l7r.md</code>, "A" (https://g/l7r.md#a), "B" (https://g/l7r.md#b) and more besides</p>',
+        "<p>Alpha, a work (https://a)</p>",
+    ):
+        assert site.canon_list(same) == same
+
+
 def test_a_registry_without_its_title_is_refused(tmp_path: pathlib.Path) -> None:
     rec = fr.write(tmp_path)
     (rec / "sources" / "_front.html").write_text("<!DOCTYPE html>\n<p>no main, no title</p>\n", encoding="utf-8")
@@ -377,7 +421,14 @@ def test_the_link_resolver_on_plain_strings() -> None:
     assert index.resolve("../SOURCES.html", "0001-a.html") == links.Loc("source", None)
     assert index.resolve("#k", None) == links.Loc("source", "k") and index.resolve("assets/x.css", None) == "assets/x.css"
     assert index.resolve("../assets/x.css", "0001-a.html") == "assets/x.css"
-    for bad, words in (("#zzz", "no id `zzz` on the registry"), ("towns.html", "no such page")):
+    index.add_section("towns", "research")
+    index.add_section("towns", "drawing")
+    index.add_section("legend", "drawing")
+    assert index.resolve("contents.json#towns", None) == links.Loc("section", "research-towns"), "the research half's page first"
+    assert index.resolve("../contents.json#legend", "0001-a.html") == links.Loc("section", "drawing-legend")
+    assert links.site_href(links.Loc("section", "drawing-legend"), "sources/k.html") == "../drawing/legend.html"
+    assert links.single_href(links.Loc("section", "research-towns"), "s") == "#research-towns"
+    for bad, words in (("#zzz", "no id `zzz` on the registry"), ("towns.html", "no such page"), ("contents.json#nowhere", "no section `nowhere`")):
         with pytest.raises(links.LinkError, match=words):
             index.resolve(bad, None)
     assert links.site_href(links.Loc("q", "a", "inner"), "findings/ways.html") == "../q/a.html#inner"

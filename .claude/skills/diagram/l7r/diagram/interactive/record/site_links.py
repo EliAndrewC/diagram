@@ -2,7 +2,10 @@
 
 A question's fragment, notes and originals are written in `questions/` and link from there (spec 303, plan D4):
 another question's page as its file name (`0412-village-shrines.html#the-hall`, `0412-village-shrines.drawing.html`), an
-id on the same page as `#id`, the registry as `../SOURCES.html#<key>`, an asset as `../assets/...`. The registry's own
+id on the same page as `#id`, the registry as `../SOURCES.html#<key>`, an asset as `../assets/...`, and a section of the
+record as `../contents.json#<section id>` - the pointer form for a section, so a "Used for:" line names the section its
+work serves and the build links it (GM 2026-10-02: *"where if we're on the 'everything in one page' version it links back
+to that section but if we're on individual pages then it links to the individual page"*). The registry's own
 fragments were written for `SOURCES.html` at the record's root. The site writes every page twice - its own small page,
 and its anchor on the single page - so each `href` is resolved once, against the page it was written in, and written
 for both. Nothing is guessed: every `id` is indexed, and a link that lands nowhere is a refusal naming the fragment
@@ -18,9 +21,13 @@ from dataclasses import dataclass
 #: The registry's page, as a link names it, and its site directory.
 REGISTRY = "SOURCES.html"
 REGISTRY_DIR = "sources"
+#: The record's table of contents: a link to `contents.json#<id>` is a link to that section.
+CONTENTS = "contents.json"
 QUESTIONS = "questions"
 #: Where a question's small page is, in the site - flat, so a regrouping moves no URL (spec 303 FR-004).
 QUESTION_DIR = "q"
+#: Where each half's section pages are in the site (`site_pages.HALF_DIR`, which reads it from here).
+SECTION_DIR = {"research": "findings", "drawing": "drawing"}
 #: An id anywhere in a fragment, and a link or an image source in its markup.
 _ID = re.compile(r'\bid="([^"]+)"')
 _ATTR = re.compile(r'(<(?:a|img)\b[^>]*?\s(?:href|src)=")([^"]*)(")', re.S)
@@ -34,8 +41,9 @@ class LinkError(Exception):
 
 @dataclass(frozen=True)
 class Loc:
-    """Where an anchor lives in the site: a question page (`kind` "q", `page` its heading id) or the registry (`kind`
-    "source", `page` an entry's key, or None for the registry's own page), and the anchor (None for the top)."""
+    """Where an anchor lives in the site: a question page (`kind` "q", `page` its heading id), the registry (`kind`
+    "source", `page` an entry's key, or None for the registry's own page) or a section (`kind` "section", `page` the
+    section's anchor on the single page, `half-id`), and the anchor (None for the top)."""
 
     kind: str
     page: str | None
@@ -54,6 +62,11 @@ class Index:
         self.files: dict[str, str] = {}  # question file name -> its page's heading id
         self.ids: dict[str, set[str]] = {}  # question file name -> the ids on its page
         self.registry: dict[str, str | None] = {}  # id on the registry -> the entry holding it (None: its own page)
+        self.sections: dict[str, str] = {}  # section id -> the half whose page a link to it opens
+
+    def add_section(self, section_id: str, half: str) -> None:
+        """A section with a page in `half`; the first half given is the one a link opens (the research, then the drawing)."""
+        self.sections.setdefault(section_id, half)
 
     def add_page(self, file: str, heading_id: str, html: str) -> None:
         self.files[file] = heading_id
@@ -77,6 +90,10 @@ class Index:
         target = posixpath.normpath(posixpath.join(QUESTIONS if own is not None else "", path))
         if target == REGISTRY:
             return self._registry(anchor, href)
+        if target == CONTENTS:
+            if anchor not in self.sections:
+                raise LinkError(f"`{href}` - no section `{anchor}` in the record's contents")
+            return Loc("section", f"{self.sections[anchor]}-{anchor}")
         if target.startswith(QUESTIONS + "/"):
             return self._question(target[len(QUESTIONS) + 1 :], anchor, href)
         if target.endswith(".html"):
@@ -104,6 +121,9 @@ def site_file(loc: Loc) -> str:
     """The site file a place in the record is on."""
     if loc.kind == "q":
         return f"{QUESTION_DIR}/{loc.page}.html"
+    if loc.kind == "section":
+        half, _, sid = (loc.page or "").partition("-")
+        return f"{SECTION_DIR[half]}/{sid}.html"
     return f"{REGISTRY_DIR}/{loc.page}.html" if loc.page is not None else f"{REGISTRY_DIR}/index.html"
 
 
@@ -116,7 +136,7 @@ def site_href(loc: Loc, here: str) -> str:
 
 
 def single_href(loc: Loc, registry_title: str) -> str:
-    """The same link on the single page, where every page is an anchor."""
+    """The same link on the single page, where every page is an anchor (a section's is its `page`, `half-id`)."""
     return f"#{loc.anchor or loc.page or registry_title}"
 
 

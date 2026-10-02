@@ -221,6 +221,10 @@ changed entry - two agents, dispatched in the same turn (spec 209 D5). The regis
 - **A registry entry explains its work once**: after the citation line, `<p><em>What it is:</em> ...</p>` and
   `<p><em>Why it applies, and its limits:</em> ...</p>`, each one to three sentences, honest about date, place
   and method. A cited key without both fails the build; every list of works cited is derived from them.
+- **A `Used for:` line names each section it serves as a LINK**, never a page file name: `(<a
+  href="contents.json#religion-and-the-dead">Religion and the dead</a>)`, the section's id from `research/contents.json`
+  and its title as the text. The build links it to the section's page, or to its place on the single page, and refuses
+  an id that is not a section (GM 2026-10-02).
 - **Every entry is TAGGED, and its limits are its own** (feature 305, GM 2026-10-02: labels whose tooltips carry *"the
   standardized explanation of the strengths and limitations inherent to the category of source, in addition to the
   specific explanation"*). The entry's last line is `<!-- tags: period=a[,b]; region=x[,y]; kind=k -->`, values from

@@ -36,7 +36,7 @@ from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, clear_cach
 
 SITE = "site"
 #: The assets the site carries, copied from `research/assets/` - the hand-written ones. The glossary is derived.
-ASSETS = ("record.css", "record.js", "site.css", "site.js")
+ASSETS = ("record.css", "record.js", "site.css", "site.js", "theme.js")
 TITLE = sp.TITLE
 _H1 = re.compile(r'<h1 id="([^"]+)">(.*?)</h1>', re.S)
 _HEAD = re.compile(r"<h([23]) id=\"([^\"]+)\">(.*?)</h\1>", re.S)
@@ -51,6 +51,11 @@ _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _SENTENCE = re.compile(r"(.+?[.!?])(?:\s|$)", re.S)
 #: What the assembly writes under a heading before the question's own opening: the "Not to be confused with:" list.
 _CONFUSABLES = re.compile(r'<div class="confusables">.*?</div>', re.S)
+#: A citation line of the GM's campaign notes - its lead, then the sections and URLs, then its session note - and in it
+#: each parenthesized URL, and the comma or `and` that joins one section to the next (`canon_list`).
+_CANON_LINE = re.compile(r"<p>(The GM's campaign notes, <code>[^<]+</code>), (.*?)(<!--.*?-->)?</p>", re.S)
+_PAREN_URL = re.compile(r"\((https?://[^\s()]+)\)")
+_JOIN = re.compile(r"^\s*(?:,\s*)?(?:and\s+)?")
 #: Ids the site's own pages use, which no fragment may.
 RESERVED = ("contents", "citations", "record", "page-notes", "page-works", "tags", *(h for h, _ in sp.HALVES))
 
@@ -67,6 +72,33 @@ def lead_of(section: str) -> str:
     text = _text(m.group(1))
     s = _SENTENCE.match(text)
     return s.group(1) if s else text
+
+
+def canon_list(line: str) -> str:
+    """A citation line naming two or more sections of the GM's campaign notes, as a bulleted list (GM 2026-10-02: *"when
+    my campaign notes include a list of different sections ... then it should be listed as a bulleted list, for
+    legibility"*): the line's lead and the whole file's URL, then a bullet per section with its URL. The registry keeps the
+    one line - `The GM's campaign notes, <code>file</code>, "Heading" (url), ... and "Heading" (url) (file url)` - and the
+    build lists it, so every entry written in that form is listed. Any other line, or one naming a single section, is
+    returned as it is."""
+    m = _CANON_LINE.fullmatch(line.strip())
+    if m is None:
+        return line
+    lead, rest, comment = m.group(1), m.group(2), m.group(3) or ""
+    items: list[str] = []
+    whole = ""
+    at = 0
+    for u in _PAREN_URL.finditer(rest):
+        name = _JOIN.sub("", rest[at : u.start()]).strip()
+        if name:
+            items.append(f"{name} ({u.group(1)})")
+        else:
+            whole = u.group(1)
+        at = u.end()
+    if rest[at:].strip() or len(items) < 2:
+        return line
+    head = f"<p>{lead}" + (f" ({whole})" if whole else "") + f":{comment}</p>"
+    return head + '\n<ul class="canon-sections">\n' + "".join(f"<li>{i}</li>\n" for i in items) + "</ul>"
 
 
 def _item(text: str, heading_id: str, page: qs.Page | None = None) -> sp.Item:
@@ -149,6 +181,10 @@ class Build:
         except st.SourceTagError as e:
             raise RecordError(str(e)) from None
         self.index = build_index(self.items, self.registry, tuple(self.catalog.anchors()))
+        for half, _ in sp.HALVES:
+            for section in ct.walk(self.record.sections):
+                if self.record.holds(section, half):
+                    self.index.add_section(section.id, half)
         self.entries = registry_entries(record_dir)
         self.notes: dict[str, dict[str, str]] = {}
         self.files: dict[str, str] = {}
@@ -304,7 +340,7 @@ class Build:
         citation line - the paragraph after the heading - made links (feature 307 FR-006)."""
         text = st.strip_marker(item.html)
         m = _HEADING_END.search(text)
-        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + _FIRST_P.sub(lambda p: linkify(p.group(0)), text[m.end() :], count=1)
+        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + _FIRST_P.sub(lambda p: linkify(canon_list(p.group(0))), text[m.end() :], count=1)
 
     def _registry(self) -> None:
         reg = self.registry

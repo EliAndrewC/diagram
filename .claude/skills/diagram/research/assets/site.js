@@ -43,6 +43,19 @@
   top.appendChild(link(nav.title, nav.home, page === nav.home));
   top.appendChild(link('The whole record on one page', nav.all, page === nav.all));
   side.appendChild(top);
+  // The light / dark toggle (theme.js keeps the choice); it names the mode a click switches to.
+  var theme = window.RECORD_THEME;
+  if (theme) {
+    var toggle = el('button', 'theme-toggle'); toggle.type = 'button';
+    var label = function () {
+      var next = theme.current() === 'dark' ? 'light' : 'dark';
+      toggle.textContent = next === 'dark' ? '☾ Dark mode' : '☀ Light mode';
+      toggle.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+    };
+    toggle.addEventListener('click', function () { theme.set(theme.current() === 'dark' ? 'light' : 'dark'); label(); });
+    label();
+    side.appendChild(toggle);
+  }
   nav.groups.forEach(function (g) {
     side.appendChild(el('h2', null, g.label));
     var list = el('ul', 'parts');

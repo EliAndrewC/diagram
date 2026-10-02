@@ -1,7 +1,10 @@
 /* The research record's pages (feature 194, GM 2026-09-06). One stylesheet for every page under research/;
    the footnote hover is record.js. Edit here, never in a page. */
 :root { color-scheme: light dark; --ink: #222; --paper: #fbfaf7; --rule: #c9c4b8; --link: #3b5c9a; --note: #f2efe6; }
-@media (prefers-color-scheme: dark) { :root { --ink: #e6e2d8; --paper: #1d1c1a; --rule: #4a463f; --link: #9db4e0; --note: #2a2825; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #e6e2d8; --paper: #1d1c1a; --rule: #4a463f; --link: #9db4e0; --note: #2a2825; } }
+/* the sidebar's light / dark toggle (GM 2026-10-02): `assets/theme.js` sets data-theme from the reader's last choice */
+:root[data-theme="dark"] { color-scheme: dark; --ink: #e6e2d8; --paper: #1d1c1a; --rule: #4a463f; --link: #9db4e0; --note: #2a2825; }
+:root[data-theme="light"] { color-scheme: light; }
 html { background: var(--paper); color: var(--ink); }
 body { margin: 0; font: 16px/1.55 Georgia, "Times New Roman", serif; }
 main { max-width: 54rem; margin: 0 auto; padding: 1rem 1.25rem 4rem; }

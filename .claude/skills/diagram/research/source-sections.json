@@ -2,13 +2,13 @@
  "sections": [
   {
    "id": "works-canon",
-   "title": "Setting canon",
+   "title": "L7R setting notes",
    "description": "The GM's own campaign notes: the setting's facts, which govern wherever they speak.",
    "canon": true
   },
   {
    "id": "works-published-setting",
-   "title": "The published game setting",
+   "title": "L5R setting wiki",
    "description": "The Legend of the Five Rings setting as the game publishes it, which the campaign adapts: fiction, not evidence, and the GM's notes govern.",
    "takes": [
     {

@@ -174,7 +174,7 @@ carry none. Every value and the explanation its label shows, derived from `resea
 - `kind=reference` - **Reference**: An encyclopedia or dictionary, including Wikipedia. It is broad, summarized and usually right about what a thing is. But it is secondhand: Wikipedia is edited by its community and can change, and a figure it gives is only as good as the reference behind it. The record relies on it for what a thing is, and for a number only where its own source carries the number.
 - `kind=institutional` - **Institutional**: A museum, a government office, a preservation society or a university's public page. It is generally careful and often first-hand about its own site or collection. But it is written for visitors, so it can simplify, rarely cites its evidence, and may describe a restoration rather than the original.
 - `kind=popular` - **Popular**: A blog, a tourism board, a travel account or a news story. It is readable, often first-hand, and often has photographs of what it describes. But it rarely cites a study, a promotional page shows its subject at its best, and its numbers are usually round.
-- (no marker) - **Setting canon**: The GM's own campaign notes. They are facts of the setting, not evidence about the real world, so they govern wherever they speak, and no applicability judgment applies to them.
+- (no marker) - **L7R setting notes**: The GM's own campaign notes. They are facts of the setting, not evidence about the real world, so they govern wherever they speak, and no applicability judgment applies to them.
 <!-- /source-tags -->
 
 ## Output

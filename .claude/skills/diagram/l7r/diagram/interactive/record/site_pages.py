@@ -20,6 +20,7 @@ from dataclasses import dataclass
 
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
+from l7r.diagram.interactive.record import site_links as links
 from l7r.diagram.interactive.sources import linkify
 
 TITLE = "The research record"
@@ -29,7 +30,7 @@ HALVES = (("research", "The research"), ("drawing", "How our maps draw it"))
 #: Where each half's section pages are in the site. Not `research/`: a path `research/<x>.html` is what the pointer check
 #: refuses as a retired built page of the record (`scripts/check-research-pointers.py`), and a site path must not read
 #: as one.
-HALF_DIR = {"research": "findings", "drawing": "drawing"}
+HALF_DIR = links.SECTION_DIR
 REGISTRY_GROUP = "Sources"
 TAGS_GROUP = "Tags"
 FACET_NAMES = {"subject": "Subject", "setting": "Setting", "level": "Level"}
@@ -61,6 +62,7 @@ def shell(title: str, here: str, open_keys: str, body: str, *, lazy_glossary: bo
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         f"<title>{html.escape(title)}</title>\n"
         f'<link rel="stylesheet" href="{root}assets/record.css">\n<link rel="stylesheet" href="{root}assets/site.css">\n'
+        f'<script src="{root}assets/theme.js"></script>\n'
         f'<script src="{root}assets/glossary.js" defer></script>\n'
         f'<script src="{root}nav.js" defer></script>\n<script src="{root}assets/site.js" defer></script>\n'
         f'<script src="{root}assets/record.js" defer></script>\n'
