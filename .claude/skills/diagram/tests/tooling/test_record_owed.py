@@ -59,6 +59,7 @@ def test_words_drop_comments_markup_and_whitespace_and_keep_the_note_marks() -> 
     a = '<p>The  <strong>post</strong>\n stood.<!-- a note --><sup class="fn" data-note="k"></sup></p>'
     assert ru.words(a) == "The post stood. [^k]"
     assert ru.words("<p>A &amp; B</p>") == "A & B"
+    assert ru.words("<li><strong>A lead.</strong><br>Its body.</li>") == "A lead. Its body."
 
 
 def test_a_page_is_read_as_heading_intro_and_blocks() -> None:

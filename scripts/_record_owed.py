@@ -42,7 +42,6 @@ sys.path.insert(0, str(HERE))
 import _record_units as ru  # noqa: E402
 
 _SOURCE_FILE = re.compile(r"^\d{4}-([a-z0-9-]+)\.html$")
-_CODE_KEY = re.compile(r"<code>([a-z0-9-]+)</code>")
 
 
 def _git(root: pathlib.Path, *args: str, stdin: str | None = None) -> str:
@@ -182,7 +181,7 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         return f"make check-bundle KEY={u.subject}"
     if check == "source-reader":
         stem, _, note = u.subject.partition("#")
-        keys = _CODE_KEY.findall((now.notes.get(stem, {}).get(note, "") if now else "")) if now else []
+        keys = list(now.cites.get(stem, {}).get(note, ())) if now else []
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
     if check == "entry-drift":

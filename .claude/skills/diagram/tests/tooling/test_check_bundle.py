@@ -30,6 +30,14 @@ def _load():  # noqa: ANN202
 cb = _load()
 
 
+@pytest.fixture(autouse=True)
+def _owed_everywhere(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest) -> None:
+    """These tests prove a bundle's SHAPE on the real record, where this clone's delta owes nothing; the owed refusal
+    (feature 311) is `test_bundle_owed.py`'s, so here every bundle is owed."""
+    monkeypatch.setattr(cb.bo, "owed_for_question", lambda root, q, for_, ok: ([], for_, ""))
+    monkeypatch.setattr(cb.bo, "owed_for_key", lambda root, key, whole, ok, new: ([], "source-reader" if whole else "source-applicability", ""))
+
+
 def test_the_keys_a_question_cites_are_read_off_its_links() -> None:
     notes = (
         '<li data-note="edo-enwiki"><a href="https://en.wikipedia.org/wiki/Edo"><code>edo-enwiki</code></a> - x</li>\n'

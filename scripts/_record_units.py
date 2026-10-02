@@ -46,6 +46,7 @@ SOURCES = f"{RECORD}/sources/010-works-cited"
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _MARK = re.compile(r'<sup class="fn" data-note="([^"]+)"></sup>')
 _TAG = re.compile(r"<[^>]+>")
+_BREAK = re.compile(r"<br\s*/?>", re.I)
 _SPACE = re.compile(r"\s+")
 _HEADING = re.compile(r"<h[23][^>]*>(.*?)</h[23]>", re.S)
 # the blocks a reader meets, as `_check_bundle.py` reads them: an unclosed block ends where the next one opens
@@ -55,6 +56,7 @@ _ORIG_TOKEN = re.compile(r'<span class="orig" data-orig="([^"]+)"></span>')
 _ORIG_STORED = re.compile(r'<li data-orig="([^"]+)">(.*?)</li>', re.S)
 _STEM = re.compile(r"^(\d{4})-([^.]+)(\.drawing)?\.html$")
 _INTRO = re.compile(r'\bclass="intro"')
+_CODE = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
 
 #: the checks this module decides, in the order a report lists them
 CHECKS = ("intro-check", "record-format", "source-reader", "quote-check", "source-applicability")
@@ -64,6 +66,7 @@ def words(text: str) -> str:
     """A fragment's WORDS: comments and markup gone, entities decoded, whitespace collapsed, each note mark a `[^key]`."""
     text = _COMMENT.sub("", text)
     text = _MARK.sub(lambda m: f" [^{m.group(1)}]", text)
+    text = _BREAK.sub(" ", text)  # a lead line and its body are two runs of words, not one
     return _SPACE.sub(" ", html.unescape(_TAG.sub("", text))).strip()
 
 
@@ -115,6 +118,8 @@ class Record:
     notes: dict[str, dict[str, str]]
     slugs: dict[str, str]
     sources: dict[str, str]
+    #: stem -> note -> the registry keys the note links (`<code>key</code>`): which notes a source-reader read is for
+    cites: dict[str, dict[str, tuple[str, ...]]] = field(default_factory=dict)
 
     @classmethod
     def of(cls, files: Mapping[str, str], sources: Mapping[str, str]) -> Record:
@@ -122,18 +127,20 @@ class Record:
         pages: dict[str, Page] = {}
         notes: dict[str, dict[str, str]] = {}
         slugs: dict[str, str] = {}
+        cites: dict[str, dict[str, tuple[str, ...]]] = {}
         for name, text in files.items():
             if name.endswith(".notes.html"):
                 page = name[: -len(".notes.html")] + ".html"
                 m = _STEM.match(page)
                 if m:
                     notes[_subject(m)] = read_notes(text, files.get(name[: -len(".notes.html")] + ".originals.html", ""))
+                    cites[_subject(m)] = {k: tuple(dict.fromkeys(_CODE.findall(body))) for k, body in _NOTE.findall(text)}
                 continue
             m = _STEM.match(name)
             if m:
                 pages[_subject(m)] = read_page(text)
                 slugs[_subject(m)] = m.group(2)
-        return cls(pages, notes, slugs, {k: words(v) for k, v in sources.items()})
+        return cls(pages, notes, slugs, {k: words(v) for k, v in sources.items()}, cites)
 
     def index(self) -> Index:
         ix = Index()

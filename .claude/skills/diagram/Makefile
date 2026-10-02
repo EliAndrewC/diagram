@@ -1223,11 +1223,17 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  Q=<NNNN>         one question (both pages; a page's file name for one): pages, notes, prepass, quote-verbatim, cited registry entries, the variant index
 ##  KEY=<key>        one source: its registry entry and its saved page
 ##  OUT=<dir>        default /tmp/l7r-check/q-<question> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches   KIND=<modal class> adds its docstring, for entry-drift   NOTES=<key,key> a RE-check of those notes only   FOR=quote-check|record-format|entry-drift only that check's parts   WHOLE=1 with KEY= the whole page in parts, for source-reader (D19)
-	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>) is required - e.g. make check-bundle Q=0087\n' >&2; exit 2; fi
+# GUARD_EDIT_OK: feature 311 - the argument check moved below, widened only to admit QS= for an intro-check batch.
 ##  QUESTION=<q>     with KEY= WHOLE=1: the research question the page is read for, on the sources-consulted ledger (feature 288)
 # GUARD_EDIT_OK: feature 288 D3 - an optional QUESTION=, nothing loosened: a WHOLE=1 read is a research read and is ledgered with it.
 # GUARD_EDIT_OK: feature 303 - the question is passed as Q, not PAGE --section; nothing loosened.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(Q)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",)
+##  FEATURE 311 - a bundle for a check nothing owes is REFUSED (`make record-owed` lists what is owed); FOR=quote-check with no NOTES= holds only the owed notes
+##  NOT_OWED_OK="<why>"  build it anyway (a backfill, an audit the GM asked for), recorded in the MANIFEST
+##  NEW="<the claim>"    with KEY= WHOLE=1: a source-reader read for a claim not yet in the record
+##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
+# GUARD_EDIT_OK: feature 311 - the bundle refuses a check nothing owes (QS=, NOT_OWED_OK=, NEW= passed through); this tightens, it loosens nothing.
+	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
