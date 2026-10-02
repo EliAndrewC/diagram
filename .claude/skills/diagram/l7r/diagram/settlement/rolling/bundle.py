@@ -322,10 +322,10 @@ class BundleGeomMixin:
         # on the north and west, the yard on the south front, the garden on the east - then carried to the map's wind
         # by `dispersed_layout`'s turn. The multi-bed garden split is a NUCLEATED feature; a dispersed farm keeps one bed. Its
         # own well pocket is laid in the canonical frame (`canonical_farmstead`), turned with the rest - never `_lay_well_pocket`.
-        # THE THIN BANDS STAND CLEAR OF THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): on a map
-        # that keeps the sun, the east band beyond the garden and a ring's south band beyond the yard stand the canopy reach
-        # out, and a crown's radius more, so the whole band stands - not thinned to a stub at the sun ground's edge (the
-        # homestead grove's glyph-check, Kashikawa: east bands 103 crowns to 23). Otherwise the old strips.
+        # THE THIN BANDS KEEP OUT OF THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): on a map that
+        # keeps the sun, the garden stands beside the yard and the east band closes the house's east side only (`sun_band`,
+        # `dispersed.canonical_farmstead`: the frontage stays inside the record's 240 ft), and a ring's south band stands the
+        # canopy reach and a crown's radius beyond the yard, so it stands whole
         _sun = self.px(CANOPY_SHADE_FT) + self.px(self.CANOPY_R_FT) * 1.7 * 1.15 if getattr(self, "_sun_corridor_ft", 0.0) else 0.0
         dispersed = dispersed_layout(
             hx,
@@ -338,8 +338,9 @@ class BundleGeomMixin:
             sides=self._grove_sides(),
             turn=bundle_turn(self._windward(), self._grove_flank()),
             thin=self.px(THIN_BAND_FT),
-            sun_east=_sun if _sun else EAST_SHADE_REACH * self.bscale,
+            sun_east=EAST_SHADE_REACH * self.bscale,
             yard_sun=_sun if _sun else YARD_SUN_STRIP,
+            sun_band=bool(_sun),
             way_in=self.px(WAY_IN_FT),
             pad=self.px(LANE_ROOM_FT) / 2.0,
             back=self.px(SERVICE_STRIP_FT),

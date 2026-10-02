@@ -72,6 +72,7 @@ def canonical_farmstead(
     sun_east: float,
     way_in: float,
     yard_sun: float = YARD_SUN_STRIP,
+    sun_band: bool = False,
     back: float = 0.0,
     well: float = 0.0,
 ) -> dict[str, Any]:
@@ -79,14 +80,16 @@ def canonical_farmstead(
     `groves` as (rect, face, "deep" | "thin") - the deep north and west bands; with three sides a thin east band; with four
     a thin south band too, broken at the yard's middle for the way in. The corners close: the north and south bands run
     the whole width, the west and east bands between them. Each thin band stands clear of what the ground it closes needs
-    - the east band beyond the garden's morning-sun reach, the south band beyond the yard's drying strip. With `well` (the
+    - the east band beyond the garden's morning-sun reach, the south band beyond the yard's drying strip; with `sun_band` (a map
+    keeping every canopy tree out of the plots' sun, feature 310) the garden stands beside the yard and the east band closes
+    the house's east side only, ending at its front wall, north of every plot's sun ground. With `well` (the
     pocket's side), `well`: the farm's OWN WELL POCKET beside the yard, on its west, away from the garden and off the way in."""
     gw, gh = garden
     yw, yh = yard
     yard_r = (0.0, ch / 2 + gap + yh / 2, yw, yh)
     # beside the yard, at its far end (the yard keeps the garden's sky open to the south), or against the house's east
     # wall, at its mid-height
-    garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
+    garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard or sun_band else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
     works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)]
     # A GROVE FARM CARRIES ITS OWN WATER FROM ITS SEATING (feature 291 FR-018 and FR-019 on feature 287's seating, homes H09):
     # the pocket a wellhead needs, laid in the dooryard beside the yard - where on the plot the well stood no page read says
@@ -117,7 +120,12 @@ def canonical_farmstead(
         (_box(west_in - b, north_in, west_in, south_out), W, "deep"),
     ]
     if sides >= 3:
-        groves.append((_box(east_out - thin, north_in, east_out, south_out if sides == 4 else south_w), E, "thin"))
+        # ...ALONG THE HOUSE ONLY, ON A MAP THAT KEEPS EVERY TREE OUT OF THE PLOTS' SUN (feature 310, GM 2026-10-02): the garden then
+        # stands beside the yard (`sun_band`), every plot's sun ground begins at the house's front line, and a band run on past it
+        # was stripped to a stub (the glyph-check, Kashikawa); standing it the reach out instead widened the frame past the
+        # record's widest row frontage, 240 ft (research/questions/0033-row-villages-resson.html). So it closes the house's east side
+        east_end = ch / 2 if sun_band else (south_out if sides == 4 else south_w)
+        groves.append((_box(east_out - thin, north_in, east_out, east_end), E, "thin"))
     if sides == 4:
         mid = yard_r[0]
         groves.append((_box(west_in - b, south_in, mid - way_in / 2, south_out), S, "thin"))
@@ -148,6 +156,7 @@ def dispersed_layout(
     sun_east: float,
     way_in: float,
     yard_sun: float = YARD_SUN_STRIP,
+    sun_band: bool = False,
     pad: float = 0.0,
     back: float = 0.0,
     well: float = 0.0,
@@ -160,7 +169,9 @@ def dispersed_layout(
     the house's north wall or its west, where the house takes its sun."""
     moved = turn != (1, 0, 0, 1)
     cw, ch = (hh, hw) if turns_axes(turn) else (hw, hh)
-    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, yard_sun=yard_sun, way_in=way_in, back=back, well=well)
+    can = canonical_farmstead(
+        cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, yard_sun=yard_sun, sun_band=sun_band, way_in=way_in, back=back, well=well
+    )
     yard_r = _carried(can["yard"], turn, hx, hy)
     garden_r = _carried(can["garden"], turn, hx, hy)
     well_r = _carried(can["well"], turn, hx, hy) if can["well"] is not None else None
