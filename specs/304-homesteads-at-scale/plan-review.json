@@ -1,6 +1,6 @@
 {
  "feature": "304-homesteads-at-scale",
- "plan_sha256": "2b1535df8f4ea1f86800567fe5551a6541177ecc93ac80e2a749ec63f0ff26a1",
+ "plan_sha256": "6162727f3022b5acda0280de9ba93fd3948f4c469d0b6badfc7e287d46ec0ff9",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
