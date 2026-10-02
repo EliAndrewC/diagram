@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-02T01:13:03Z",
+  "target": "plan-gate push",
+  "commit": "db3e7c570",
+  "why": "feature 303's mechanical pointer sweep rewrote research pointers in landed plans; it changed none of their decisions, as feature 301's sweep did (its FR-027)"
+}
