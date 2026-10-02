@@ -1,0 +1,231 @@
+{
+ "_about": "Feature 309 FR-012: each file in /host-l7r-repo/academic-sources/ matched to the registry key(s) of the cited source it is a copy of (keys [] = it copies no cited source; listed, not archived). Matched 2026-10-02 by title, DOI or URL (method: specs/309-source-archive/plan.md, "The GM's downloaded copies").",
+ "files": {
+  "1-s2.0-S1389934121000836-main.pdf": {
+   "keys": [
+    "kweon-youn-2021"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "13467581.2021.1972810.pdf": {
+   "keys": [
+    "wang-ochiai-2022"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "17041744.pdf": {
+   "keys": [
+    "lai-2003-daoism-today"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "1971.867 - Model of a Pigsty and Latrines.jpg": {
+   "keys": [
+    "artic-pigsty-latrine"
+   ],
+   "evidence": "AIC object 1971.867 Model of a Pigsty and Latrines; entry cites artic.edu/artworks/37716"
+  },
+  "A Study on the analysis of location on the traditional rural village forest in South Korea.pdf": {
+   "keys": [
+    "park-2013-maeulsup"
+   ],
+   "evidence": "Park Mee Jeong et al, Journal of Korean Society of Rural Planning 19(1) 2013, doi 10.7851/ksrp.2013.19.1.149"
+  },
+  "ABELE-DISSERTATION-2018.pdf": {
+   "keys": [
+    "abele-2018-kawata"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "Ecological Research - 2010 - Takeuchi - Rebuilding the relationship between people and nature  the Satoyama Initiative.pdf": {
+   "keys": [
+    "takeuchi-2010-satoyama"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "FULLTEXT01.pdf": {
+   "keys": [
+    "ma-2024-desire-paths"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "FactorsOfSpatialDistribution.txt": {
+   "keys": [],
+   "evidence": "Kim, Kang, Park, Lee doi 10.1016/j.landurbplan.2018.03.015; grepped DOI, title, 'Korean village groves' across sources/ and questions notes: no hit"
+  },
+  "FenshuiForestManagement.txt": {
+   "keys": [
+    "yuan-liu-2009"
+   ],
+   "evidence": "Yuan & Liu, doi 10.1016/j.foreco.2009.01.040 (abstract page)"
+  },
+  "FenshuiForests.txt": {
+   "keys": [],
+   "evidence": "Chen, Coggins, Minor, Zhang doi 10.1016/j.ufug.2017.12.011 (paywalled capture); grepped DOI/authors: no hit (7200-coggins-minor-2018 is a different paper)"
+  },
+  "ForestChiefSystem.txt": {
+   "keys": [
+    "huangshan-daily-jiekou"
+   ],
+   "evidence": "Huangshan Daily 'Huangshan's exploration of the forest chief system' 2022"
+  },
+  "ForestSurroundingTheHouse-315.jpg": {
+   "keys": [],
+   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry"
+  },
+  "ForestSurroundingTheHouse-316.jpg": {
+   "keys": [],
+   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry"
+  },
+  "ForestSurroundingTheHouse-317.jpg": {
+   "keys": [],
+   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry"
+  },
+  "ForestSurroundingTheHouse.txt": {
+   "keys": [],
+   "evidence": "'House forest' book pp.315-318, kimori along Ome Kaido; grepped kimori/Ome Kaido/zelkova/house forest: no entry matches this book (related yashikirin entries are other works)"
+  },
+  "Iron production in three Ming texts.html": {
+   "keys": [
+    "wagner-ming-iron"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "Iron production in three Ming texts_files": {
+   "keys": [
+    "wagner-ming-iron"
+   ],
+   "evidence": "folder belongs with its .html"
+  },
+  "Japan Architectural Review - 2020 - Ushijima - Spatial composition and premise arrangement of traditional Manchu village in.pdf": {
+   "keys": [
+    "ushijima-2020-manchu"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "Journal of Ecology - 2017 - Packer - Biological Flora of the British Isles  Phragmites australis.pdf": {
+   "keys": [
+    "packer-2017-phragmites"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "MoreFenshuiForests.txt": {
+   "keys": [
+    "yuan-liu-2009"
+   ],
+   "evidence": "same Yuan & Liu 2009 doi 10.1016/j.foreco.2009.01.040 (second capture)"
+  },
+  "PatternsOfEcoDensity.txt": {
+   "keys": [
+    "ma-2017-fengshui-carbon"
+   ],
+   "evidence": "Ma et al, Patterns of ecosystem carbon density in edge-affected fengshui forests, doi 10.1016/j.ecoleng.2017.07.037"
+  },
+  "S0006320711000450": {
+   "keys": [
+    "hu-2011-fengshui-patches"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "Seeing from Above Observation of Contemporary Dike-Pond Landsca pe.pdf": {
+   "keys": [
+    "tian-dike-pond"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "Traditional Chinese fining and puddling.html": {
+   "keys": [
+    "wagner-fining-puddling"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "Traditional Chinese fining and puddling_files": {
+   "keys": [
+    "wagner-fining-puddling"
+   ],
+   "evidence": "folder belongs with its .html"
+  },
+  "Unit-10.pdf": {
+   "keys": [
+    "ignou-silt-control"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "asie_0766-1177_1988_num_4_1_915.pdf": {
+   "keys": [
+    "lagerwey-1988-taoist-lineages"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "asie_0766-1177_2011_num_20_1_1377.pdf": {
+   "keys": [],
+   "evidence": "Goossaert 2011 'The Heavenly Master, Canonization...' doi 10.3406/asie.2011.1377; grepped DOI/author/title: only a mention in questions/0228-town-monasteries notes, no registry entry"
+  },
+  "eue-1039.pdf": {
+   "keys": [
+    "tajima-2007-night-soil"
+   ],
+   "evidence": "Tajima, Marketing of Urban Human Waste, eue/1039 matches entry URL"
+  },
+  "forests-11-01286.pdf": {
+   "keys": [
+    "forests-2020"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "geosciences-11-00352-v2.pdf": {
+   "keys": [
+    "mdpi-sho-fan-groundwater"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "hj_june_2025_p10-11.pdf": {
+   "keys": [
+    "senmaida"
+   ],
+   "evidence": "Highlighting Japan June 2025 Shiroyone Senmaida feature; registry entry 0390-senmaida cites gov-online june_2025 (best match, page-level not exact)"
+  },
+  "mukoyama-2022-the-eastern-cousins-of-european-sovereign-states-the-development-of-linear-borders-in-early-modern-japan.pdf": {
+   "keys": [
+    "mukoyama-linear-borders"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "s12685-022-00302-1.pdf": {
+   "keys": [
+    "kabu-ido-commons"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "suitou-2.pdf": {
+   "keys": [
+    "maff-suitou-mizu"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "sustainability-10-03860.pdf": {
+   "keys": [
+    "mdpi-3860"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  },
+  "sustainability-11-00454.pdf": {
+   "keys": [
+    "jiao-2019-satoyama"
+   ],
+   "evidence": "Jiao et al Sustainability 11(2):454 matches entry URL"
+  },
+  "sustainability-12-01180-v2.pdf": {
+   "keys": [
+    "mdpi-kunisaki"
+   ],
+   "evidence": "Sustainability 12(3):1180 Kunisaki matches entry URL"
+  },
+  "中山市风水林的药用植物资源.pdf": {
+   "keys": [
+    "zhongshan-fsw-2016"
+   ],
+   "evidence": "title/DOI/URL matched registry entry"
+  }
+ }
+}

@@ -200,3 +200,7 @@ This feature draws and states nothing on a map; it changes the research tooling 
   marker, which misses most (42 files, 5 entries name one): it now matches every file in `academic-sources/` to its key,
   measured in the plan, archived beside the live capture and in addition to it, the GM-copy outcome used only where the live
   fetch fails.
+- Round 3 (spec-fidelity, verify, 2026-10-02): the spec FAITHFUL; 1 item on the plan - D2 still chose the GM's copies by the
+  entry marker, put them ahead of the live fetch, and lacked FR-012's match measurement. Addressed in `plan.md`: the live
+  fetch first, every matched file copied in addition, and the measured match (42 entries, 33 matched over 31 keys, 7 copy no
+  cited source).
