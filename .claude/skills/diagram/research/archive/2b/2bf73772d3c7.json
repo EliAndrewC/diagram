@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T12:33:24+00:00",
+ "captured": "2026-10-02T15:13:22+00:00",
  "final_url": "https://online.bunka.go.jp/heritages/detail/181523",
  "first": "2b/2bf73772d3c7/20261002T123323Z",
  "gm_copies": [],
@@ -10,10 +10,10 @@
   "0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.notes.html",
   "0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.notes.html"
  ],
- "outcome": "partial",
- "path": "2b/2bf73772d3c7/20261002T123323Z",
- "reason": "the page showed no text",
+ "outcome": "archived",
+ "path": "2b/2bf73772d3c7/20261002T151317Z",
+ "reason": "",
  "revision": "",
- "sha256": "6cc352e4ea52de43f9f9ba3f3aac854a5ec28de432a274d5c537d3724c97bc08",
+ "sha256": "94a3d888fd20711be3bb0f0660887001d236807524a828e0c51d2c0543f76aab",
  "url": "https://online.bunka.go.jp/heritages/detail/181523"
 }

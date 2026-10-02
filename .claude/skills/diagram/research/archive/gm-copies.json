@@ -59,7 +59,8 @@
   },
   "FactorsOfSpatialDistribution.txt": {
    "keys": [],
-   "evidence": "Kim, Kang, Park, Lee doi 10.1016/j.landurbplan.2018.03.015; grepped DOI, title, 'Korean village groves' across sources/ and questions notes: no hit"
+   "evidence": "Kim, Kang, Park, Lee doi 10.1016/j.landurbplan.2018.03.015; grepped DOI, title, 'Korean village groves' across sources/ and questions notes: no hit",
+   "archived": "gm-copies/FactorsOfSpatialDistribution.txt"
   },
   "FenshuiForestManagement.txt": {
    "keys": [
@@ -70,7 +71,8 @@
   },
   "FenshuiForests.txt": {
    "keys": [],
-   "evidence": "Chen, Coggins, Minor, Zhang doi 10.1016/j.ufug.2017.12.011 (paywalled capture); grepped DOI/authors: no hit (7200-coggins-minor-2018 is a different paper)"
+   "evidence": "Chen, Coggins, Minor, Zhang doi 10.1016/j.ufug.2017.12.011 (paywalled capture); grepped DOI/authors: no hit (7200-coggins-minor-2018 is a different paper)",
+   "archived": "gm-copies/FenshuiForests.txt"
   },
   "ForestChiefSystem.txt": {
    "keys": [
@@ -81,19 +83,23 @@
   },
   "ForestSurroundingTheHouse-315.jpg": {
    "keys": [],
-   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry"
+   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry",
+   "archived": "gm-copies/ForestSurroundingTheHouse-315.jpg"
   },
   "ForestSurroundingTheHouse-316.jpg": {
    "keys": [],
-   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry"
+   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry",
+   "archived": "gm-copies/ForestSurroundingTheHouse-316.jpg"
   },
   "ForestSurroundingTheHouse-317.jpg": {
    "keys": [],
-   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry"
+   "evidence": "page image of ForestSurroundingTheHouse.txt; no registry entry",
+   "archived": "gm-copies/ForestSurroundingTheHouse-317.jpg"
   },
   "ForestSurroundingTheHouse.txt": {
    "keys": [],
-   "evidence": "'House forest' book pp.315-318, kimori along Ome Kaido; grepped kimori/Ome Kaido/zelkova/house forest: no entry matches this book (related yashikirin entries are other works)"
+   "evidence": "'House forest' book pp.315-318, kimori along Ome Kaido; grepped kimori/Ome Kaido/zelkova/house forest: no entry matches this book (related yashikirin entries are other works)",
+   "archived": "gm-copies/ForestSurroundingTheHouse.txt"
   },
   "Iron production in three Ming texts.html": {
    "keys": [
@@ -181,7 +187,8 @@
   },
   "asie_0766-1177_2011_num_20_1_1377.pdf": {
    "keys": [],
-   "evidence": "Goossaert 2011 'The Heavenly Master, Canonization...' doi 10.3406/asie.2011.1377; grepped DOI/author/title: only a mention in questions/0228-town-monasteries notes, no registry entry"
+   "evidence": "Goossaert 2011 'The Heavenly Master, Canonization...' doi 10.3406/asie.2011.1377; grepped DOI/author/title: only a mention in questions/0228-town-monasteries notes, no registry entry",
+   "archived": "gm-copies/asie_0766-1177_2011_num_20_1_1377.pdf"
   },
   "eue-1039.pdf": {
    "keys": [

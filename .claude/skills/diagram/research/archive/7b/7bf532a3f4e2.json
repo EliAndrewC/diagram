@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T15:13:25+00:00",
+ "final_url": "https://web.archive.org/web/20240906195200id_/https://tobunken.repo.nii.ac.jp/record/3166/files/06_55_Imaishi.pdf",
+ "first": "7b/7bf532a3f4e2/20261002T151325Z",
+ "gm_copies": [],
+ "keys": [
+  "tobunken-mushiro"
+ ],
+ "notes": [
+  "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.notes.html",
+  "0037-threshing-and-drying-yards-at-farmhouses-niwa.notes.html"
+ ],
+ "outcome": "archived-earlier-snapshot",
+ "path": "7b/7bf532a3f4e2/20261002T151325Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://tobunken.repo.nii.ac.jp/record/3166/files/06_55_Imaishi.pdf"
+}

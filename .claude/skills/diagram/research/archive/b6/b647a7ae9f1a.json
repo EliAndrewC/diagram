@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-02T12:28:07+00:00",
+ "captured": "2026-10-02T15:14:01+00:00",
  "final_url": "https://archive.org/stream/chinesefarmecono0000john/chinesefarmecono0000john_djvu.txt",
  "first": "b6/b647a7ae9f1a/20261002T122807Z",
  "gm_copies": [],
@@ -15,10 +15,10 @@
   "0049-pigs-and-ducks-in-south-china-rice-villages.notes.html",
   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.notes.html"
  ],
- "outcome": "partial",
- "path": "b6/b647a7ae9f1a/20261002T122807Z",
- "reason": "the page showed no text",
+ "outcome": "archived",
+ "path": "b6/b647a7ae9f1a/20261002T151359Z",
+ "reason": "",
  "revision": "",
- "sha256": "3a626bdbd14ac0975b95712aed03d8d0a917208bfd25eedfee33cefba238b488",
+ "sha256": "77444800d9e6bb4882797f294bf75b3ca4b191cfdeee402e1b67cd63612a3b9f",
  "url": "https://archive.org/stream/chinesefarmecono0000john/chinesefarmecono0000john_djvu.txt"
 }
