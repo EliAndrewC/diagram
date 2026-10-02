@@ -175,3 +175,12 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
 - The line-of-sight reach region and the live seat region are both candidates for FR-006; feature 297's research (R9-R17)
   lists the levers already withdrawn and is read before either is built.
 - The field's refusal at 80 households is left to the village tier.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED, 4 items - the Edge Cases let the seed list be chosen on the base
+  against FR-001's fixed seeds; FR-006 reached past the two accepted forms; SC-002/SC-003 were targets the GM did not ask for;
+  the bookend's "about 70 s" was unlabeled and disagreed with the table. Addressed: the four reference seeds kept at every size,
+  a refusal recorded; FR-006 names the two forms and sends any other pruning to the GM; the goals labeled the session's, a miss
+  recorded and raised; the cost an observed-label estimate of 76-100 s.
+- Round 2 (spec-fidelity, verify, 2026-10-01): FAITHFUL; all four items resolved, no new contradiction.
