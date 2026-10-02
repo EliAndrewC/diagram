@@ -4,10 +4,11 @@
 THE INBOX (FR-013; the GM, 2026-10-02: use the download directory *"as a queue of sorts ... once something has been
 added to the diagram research repository and then pushed, then we can delete it from the academic sources directory"*).
 Every file or saved-page folder in `/host-l7r-repo/academic-sources/` but the GM's two lists is copied to
-`gm-copies/<name>` of the archive, the push is CONFIRMED on GitHub (the path is in `origin/main`'s tree), and only then
+`gm-copies/<name>` of the archive once its keys are known (a new download waits until the session matches it: MATCH= or
+NONE=), the push is CONFIRMED on GitHub (the path is in `origin/main`'s tree), and only then
 is it deleted from the inbox. `research/archive/gm-copies.json` keeps each processed file's name, keys and archive path,
 so a copy is still found after its file is gone; a file that copies no cited source is archived all the same (*"store
-sources which we ourselves do not end up citing"*), its keys `[]` until a session matches it.
+sources which we ourselves do not end up citing"*), its keys `[]`.
 
 EVERY PAGE READ (FR-014). `make source-pages` archives what it reads (`_source_pages.py`); `consulted` archives every
 URL on the sources-consulted ledger with no row yet - a whole live capture where the page answers, else the page cache's
@@ -63,19 +64,26 @@ def on_github(store: ar.Archive, rel: str) -> bool:
     return done.returncode == 0 and bool(done.stdout.strip())
 
 
-def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | None = None) -> dict[str, str]:
-    """Archive every inbox entry, confirm the push, then delete it (FR-013). Returns name -> its archive path; an entry is
-    deleted only where its path is confirmed in `origin/main`, so a failed push deletes nothing."""
+def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | None = None, match: dict[str, list[str]] | None = None) -> tuple[dict[str, str], list[str]]:
+    """Archive every inbox entry the table places, confirm the push, then delete it (FR-013). Returns (name -> its archive
+    path, the names left waiting). An entry is deleted only where its path is confirmed in `origin/main`, so a failed push
+    deletes nothing. A NEW entry - not in `gm-copies.json` - is processed only once `match` gives its keys (`[]` for one
+    judged to copy no cited source, `make archive-inbox NONE=<file>`): FR-012 matches every GM file to its key, and a file
+    archived keyless and deleted would never be matched (plan review, Amendment 1). Until then it waits in the inbox."""
     inbox = inbox or ar.GM_DIR
     table = ar.gm_table(root)
+    for name, keys in (match or {}).items():
+        table.setdefault(name, {"evidence": "matched by the session at the inbox (feature 309 FR-012)"})["keys"] = keys
     names = [n for n in sorted(os.listdir(inbox)) if n not in GM_LISTS and not n.startswith(".")] if inbox.is_dir() else []
     placed: dict[str, str] = {}
+    waiting = [n for n in names if n not in table]
+    names = [n for n in names if n in table]
     if not names:
-        return placed
+        return placed, waiting
     with store.locked():
         store.ensure()
         for name in names:
-            entry = table.setdefault(name, {"keys": [], "evidence": "not matched yet - archived from the inbox (feature 309 FR-013)"})
+            entry = table[name]
             dest = ar.place_gm(store, name, entry)
             if dest:
                 entry["archived"] = dest
@@ -88,7 +96,7 @@ def process_inbox(root: pathlib.Path, store: ar.Archive, inbox: pathlib.Path | N
         if on_github(store, dest):
             target = inbox / name
             shutil.rmtree(target) if target.is_dir() else target.unlink()
-    return placed
+    return placed, waiting
 
 
 def consulted_urls(root: pathlib.Path) -> list[str]:
@@ -250,7 +258,9 @@ def relayout(root: pathlib.Path, store: ar.Archive) -> int:
 def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument plumbing over the tested functions
     ap = argparse.ArgumentParser(description="the source archive's housekeeping and lookups (feature 309)")
     sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("inbox")
+    i = sub.add_parser("inbox")
+    i.add_argument("--match", action="append", default=[], help="<file>=<key>[,<key>] - a new download's keys")
+    i.add_argument("--none", action="append", default=[], help="<file> - a new download that copies no cited source")
     c = sub.add_parser("consulted")
     c.add_argument("--limit", type=int, default=0)
     f = sub.add_parser("find")
@@ -272,10 +282,14 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     if args.cmd == "relayout":
         print(f"archive: {relayout(root, store)} row(s) moved to the sharded layout")
         return 0
-    placed = process_inbox(root, store)
+    match = {m.split("=", 1)[0]: [k for k in m.split("=", 1)[1].split(",") if k] for m in args.match if "=" in m}
+    match.update({n: [] for n in args.none})
+    placed, waiting = process_inbox(root, store, match=match)
     print(f"archive: {len(placed)} inbox file(s) archived, pushed and removed from {ar.GM_DIR}")
     for name, dest in placed.items():
         print(f"  {name} -> {dest}")
+    for name in waiting:
+        print(f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` (or NONE='{name}' if it copies no cited source)")
     ar.sync_gm_copies(root, store)
     return 0
 

@@ -31,8 +31,9 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 - A citation is a footnote at the assertion quoting the passage verbatim from a public page a reader can open, in
   English translation marked as one (the original after). A source that cannot be read is not cited. A source only
   the GM can fetch goes at the END of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in its format.
-- Look in the archive before the web (feature 309): start the pass with `make archive-inbox` (the GM's new downloads
-  archived and moved out of `academic-sources/`), then `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` for every
+- Look in the archive before the web (feature 309): start the pass with `make archive-inbox` (the GM's downloads
+  archived and moved out of `academic-sources/`; a NEW download is listed WAITING until you read its first page and give
+  its keys - `MATCH='<file>=<key>'`, or `NONE='<file>'` if it copies no cited source), then `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` for every
   source before searching or fetching - it names the local copy to read. Every page you read through `make
   source-pages` or record with `make source-outcome` is archived for the next session.
 - The record is written for a casual reader: glossary tooltips for terms, session notes in HTML comments, nothing

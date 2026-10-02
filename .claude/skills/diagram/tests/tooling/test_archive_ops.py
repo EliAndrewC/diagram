@@ -60,13 +60,17 @@ def test_the_inbox_is_archived_confirmed_and_emptied_but_the_gms_lists_stay(tmp_
     (inbox / "page_files" / "i.png").write_bytes(b"png")
     for name in ops.GM_LISTS:
         (inbox / name).write_text("the GM's list", encoding="utf-8")
-    placed = ops.process_inbox(root, store, inbox)
-    assert placed == {"a.pdf": "gm-copies/a.pdf", "new.txt": "gm-copies/new.txt", "page_files": "gm-copies/page_files"}
+    placed, waiting = ops.process_inbox(root, store, inbox)
+    assert placed == {"a.pdf": "gm-copies/a.pdf"} and waiting == ["new.txt", "page_files"], "a new download waits for its keys"
+    assert sorted(p.name for p in inbox.iterdir()) == sorted([*ops.GM_LISTS, "new.txt", "page_files"])
+    placed, waiting = ops.process_inbox(root, store, inbox, match={"new.txt": [], "page_files": ["beta"]})
+    assert placed == {"new.txt": "gm-copies/new.txt", "page_files": "gm-copies/page_files"} and waiting == []
     assert sorted(p.name for p in inbox.iterdir()) == sorted(ops.GM_LISTS)
     table = ar.gm_table(root)
     assert table["a.pdf"] == {"keys": ["alpha"], "archived": "gm-copies/a.pdf"}
     assert table["new.txt"]["keys"] == [] and table["new.txt"]["archived"] == "gm-copies/new.txt"
-    assert all(ops.on_github(store, p) for p in placed.values())
+    assert table["page_files"]["keys"] == ["beta"]
+    assert all(ops.on_github(store, p) for p in ("gm-copies/a.pdf", "gm-copies/new.txt", "gm-copies/page_files"))
     assert ar.place_gm(store, "a.pdf", table["a.pdf"]) == "gm-copies/a.pdf", "found in the archive after its file is gone"
 
 
@@ -79,7 +83,7 @@ def test_a_failed_push_deletes_nothing_from_the_inbox(tmp_path: pathlib.Path, mo
     with pytest.raises(RuntimeError, match="nothing was deleted"):
         ops.process_inbox(root, store, inbox)
     assert (inbox / "a.pdf").is_file()
-    assert ops.process_inbox(root, store, tmp_path / "no-inbox") == {}
+    assert ops.process_inbox(root, store, tmp_path / "no-inbox") == ({}, [])
 
 
 def test_a_page_read_again_is_not_captured_again(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -101,7 +105,7 @@ def test_the_consulted_backfill_takes_the_caches_urls_and_the_ledgers(tmp_path: 
 def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root, store, inbox = _world(tmp_path, monkeypatch)
     (inbox / "a.pdf").write_bytes(b"%PDF x")
-    ops.process_inbox(root, store, inbox)
+    assert ops.process_inbox(root, store, inbox)[0] == {"a.pdf": "gm-copies/a.pdf"}
     with store.locked():
         rel = store.put(f"{ar.capture_base('https://a')}/20261002T000000Z", {"text.txt": "Forty to sixty MATS of straw.".encode()}, "a capture")
     ar.write_row(root, "https://a", {"url": "https://a", "outcome": "archived", "path": rel, "keys": ["alpha"], "gm_copies": ["gm-copies/a.pdf"]})

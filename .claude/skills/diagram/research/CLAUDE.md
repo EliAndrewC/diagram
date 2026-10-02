@@ -68,7 +68,9 @@ looks a page up without fetching it.
 **Look in the archive before the web** (feature 309, the GM 2026-10-02: *"first check to see if we already have
 something, rather than going out and trying to find it on the internet"*). A research pass starts with `make
 archive-inbox` - the GM's downloads in `/host-l7r-repo/academic-sources/` are archived, the push confirmed, and the files
-removed, so whatever is still there is unprocessed - and asks `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` of
+removed, so whatever is still there is unprocessed; a NEW download is listed WAITING until the session reads its first
+page, finds the source it copies (`TO-DOWNLOAD.md` names what each download was asked for) and gives its keys, `make
+archive-inbox MATCH='<file>=<key>'` (`NONE='<file>'` for one that copies no cited source) - and asks `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` of
 every source before searching or fetching; it names the local copy to read (exit 1: nothing held, go to the web).
 
 **Every cited and every read page is archived** (a hedge against *"websites going offline"*): every URL in a registry

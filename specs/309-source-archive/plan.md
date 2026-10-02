@@ -5,8 +5,7 @@
 ## Summary
 
 Archive every URL the record cites (registry entries and direct footnote links, FR-001) into the private repository
-`EliAndrewC/diagram-research`: the served bytes, the whole page as one offline file, the text and a capture record. Every
-file of the GM's `academic-sources/` that copies a cited source is archived beside that source's captures. One host-wide
+`EliAndrewC/diagram-research`: the served bytes, the whole page as one offline file, the text and a capture record. Every file of the GM's `academic-sources/` is archived (Amendment 1: the inbox), each matched to the key it copies. One host-wide
 working copy of the archive repository, pushed straight to GitHub under a host-wide lock. A per-URL manifest committed here
 records every outcome; the record build refuses a cited URL with none, and each source page shows its archived-copy link. A
 one-time backfill archives what is already cited; `make reserve ... URL=` archives what is cited from now on.
@@ -54,7 +53,7 @@ committed as `research/archive/gm-copies.json`).
   folders (each belongs with its saved `.html` page) are the 40 matched.
 - **33 match a cited source** (31 files and the 2 folders), over 30 keys (counted 2026-10-02 from the committed table: three keys hold two entries each - `yuan-liu-2009` two text files, each `wagner-*` key a saved page and its folder). Only 8 registry entries mention `academic-sources`
   at all, so a marker-based rule would have missed most (spec-fidelity round 2).
-- **7 copy no cited source** and are listed, not archived: `FactorsOfSpatialDistribution.txt` (Kim et al. 2018),
+- **7 copy no cited source** (keys `[]`), archived all the same under Amendment 1 (FR-013 - before it they were listed and not archived): `FactorsOfSpatialDistribution.txt` (Kim et al. 2018),
   `FenshuiForests.txt` (Chen, Coggins, Minor and Zhang), `asie_0766-1177_2011_num_20_1_1377.pdf` (Goossaert 2011 - named in
   question 0228's notes, no registry entry), `ForestSurroundingTheHouse.txt` and its three page images `-315/-316/-317.jpg`.
 
@@ -134,8 +133,11 @@ CLAUDE.md, docs/research-record-rules.md, container-scripts/page-session-rules.m
   (observed 2026-10-02: 1,803 rows moved; the top level went from 1,775 entries to 257).
 - **D12 - The inbox** (FR-013): every entry of `academic-sources/` but `TO-DOWNLOAD.md` and `for-the-gm-fetch-list.md` is
   copied to `gm-copies/<name>`, pushed, and deleted only where `git ls-tree origin/main -- <path>` lists it after the
-  push; a failed push deletes nothing. A file not yet in `gm-copies.json` is added with `keys: []` and archived all the same;
-  a session that matches it later edits its keys. The table records `archived` for every processed file, which is how a copy
+  push; a failed push deletes nothing. A NEW file - not yet in `gm-copies.json` - is not processed until the session matches
+  it: `make archive-inbox` lists it WAITING with the instruction, the session reads its first page (as T12 did for all 40),
+  finds the source it copies (`TO-DOWNLOAD.md` names the key each download was asked for), and runs `make archive-inbox
+  MATCH='<file>=<key>'`, or `NONE='<file>'` for one judged to copy no cited source (`keys: []`, archived all the same). A
+  waiting file stays in the inbox, so the directory still shows it as unprocessed (plan review, Amendment 1). The table records `archived` for every processed file, which is how a copy
   is found once its file is gone (`place_gm`).
 - **D13 - Every page read** (FR-014): `_sources.archive_reads` runs `_archive_ops.py urls` from `make source-pages` (its
   ledgered reads) and `make source-outcome`; `make reserve ... URL=` already archives. A URL with a row is not captured
