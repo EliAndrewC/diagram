@@ -1,6 +1,6 @@
 ---
 name: source-reader
-description: Reads the sources a research entry cites and reports per claim READ, NOT-FOUND or CONTRADICTED with the verbatim passage - run in every research pass.
+description: Reads the sources a research entry cites and reports per claim READ, NOT-FOUND or CONTRADICTED with the verbatim passage - run in every research pass, on the notes it supports.
 model: opus
 effort: high
 omitClaudeMd: true
@@ -9,7 +9,7 @@ tools: WebFetch, WebSearch, Read, Grep
 
 ## When to dispatch this agent
 
-Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/sources/. Verification, not judgment - Opus at high effort (tier table, GM 2026-09-19: Sonnet was tried on recorded runs and under-called what Opus found); it never decides a rule, it reports what a page says.
+Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass, on the claims a new or changed note will carry - before the note is written its bundle is declared `NEW="<the claim>"`, after it `make record-owed` names the note (feature 311) - (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/sources/. Verification, not judgment - Opus at high effort (tier table, GM 2026-09-19: Sonnet was tried on recorded runs and under-called what Opus found); it never decides a rule, it reports what a page says.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 

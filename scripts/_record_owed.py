@@ -41,7 +41,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import _record_units as ru  # noqa: E402
 
-_SOURCE_FILE = re.compile(r"^\d{4}-([a-z0-9-]+)\.html$")
+_SOURCE_FILE = re.compile(r"^\d+-([a-z0-9-]+)\.html$")  # a write-up number runs past four digits (20500-...)
 
 
 def _git(root: pathlib.Path, *args: str, stdin: str | None = None) -> str:

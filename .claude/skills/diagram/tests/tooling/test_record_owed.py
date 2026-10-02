@@ -224,3 +224,13 @@ def test_the_cli_prints_the_units_and_the_unanswered_ones(tmp_path: pathlib.Path
     assert capsys.readouterr().out.split() == ["intro-check:0094", "record-format:0094"]
     assert ro.main(["--root", str(d), "--q", "0095", "--slugs"]) == 0
     assert capsys.readouterr().out == ""
+
+
+def test_a_write_up_numbered_past_four_digits_owes_its_check(tmp_path: pathlib.Path) -> None:
+    """Half the registry is numbered 1xxxx/2xxxx (`20500-visitbeijing-zhili-yamen.html`); a four-digit pattern read none of
+    them, so a new write-up there owed nothing - found by the SC-002 replay."""
+    d = _repo(tmp_path)
+    f = d / ru.SOURCES / "20500-some-key.html"
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text('<h3 id="some-key">some-key</h3>\n<p><em>What it is:</em> a page.</p>\n', encoding="utf-8")
+    assert [u.slug for u in ro.units(d)] == ["source-applicability:some-key"]

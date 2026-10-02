@@ -491,8 +491,9 @@ def intro_bundle(root: pathlib.Path, questions: list[str], out_arg: str, not_owe
     """An intro-check bundle over one question or a batch (plan D4, D10): each question's research page whole, its drawing
     page and the map elements written from it - and refused for a question nothing owes it on, unless a reason is given."""
     units: list = []
+    every = bo.ro.units(root)
     for q in questions:
-        got, _checks, refusal = bo.owed_for_question(root, q, "intro-check", not_owed_ok)
+        got, _checks, refusal = bo.owed_for_question(root, q, "intro-check", not_owed_ok, every)
         if refusal:
             print(f"check-bundle: REFUSED - {refusal}", file=sys.stderr)
             return 3

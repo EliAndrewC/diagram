@@ -16,6 +16,7 @@ one `unit: <slug> <fingerprint>` line per unit it carries, at the content copied
 from __future__ import annotations
 
 import ast
+import functools
 import pathlib
 import re
 import sys
@@ -41,12 +42,14 @@ def question_of(q: str) -> str:
     return m.group(1).zfill(4) if m else q
 
 
-def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str) -> tuple[list[ru.Unit], str, str]:
-    """(the units the bundle carries, the `owed-checks:` value, a refusal or ""), for `make check-bundle Q= FOR=`."""
+def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str, every: list[ru.Unit] | None = None) -> tuple[list[ru.Unit], str, str]:
+    """(the units the bundle carries, the `owed-checks:` value, a refusal or ""), for `make check-bundle Q= FOR=`; `every`
+    is the delta's units when the caller already has them (a batch asks once, not once per question)."""
     if for_ == "record-style":
         return [], "record-style", ""
     qn = question_of(q)
-    units = [u for u in ro.units(root) if ru.question(u.subject) == qn or (u.check == "entry-drift" and for_ in ("entry-drift", "all"))]
+    every = ro.units(root) if every is None else every
+    units = [u for u in every if ru.question(u.subject) == qn or (u.check == "entry-drift" and for_ in ("entry-drift", "all"))]
     if for_ != "all":
         units = [u for u in units if u.check == for_]
     if units:
@@ -56,7 +59,6 @@ def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str) -
             return [], "", "NOT_OWED_OK needs a REASON - two words and eight characters - so the audit says why"
         checks = GATED[:-1] if for_ == "all" else (for_,)
         return tree_units(root, qn, checks), " ".join(checks), ""
-    every = ro.units(root)
     listing = "\n".join(f"    {u.slug}" for u in every) or "    (nothing: no record check is owed by this delta)"
     return [], "", (
         f"no {for_ if for_ != 'all' else 'record'} check is owed on question {qn} by this delta - a bundle for it would "
@@ -120,17 +122,27 @@ def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
 # --- the intro-check bundle (plan D4) --------------------------------------------------------------------------------------
 
 
-def modals_for(root: pathlib.Path, page: str) -> list[str]:
-    """The `Name:` and `Label:` of every modal whose `Entry:` names this question page - what the map draws from it."""
+@functools.cache
+def _modal_docs(root: pathlib.Path) -> tuple[tuple[str, str], ...]:
+    """(class name, docstring) of every modal, parsed once a run - a batch of 24 questions parsed them 24 times."""
     out = []
     for d in MODAL_DIRS:
         for path in sorted((root / d).glob("*.py")):
             for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
                 doc = ast.get_docstring(node) if isinstance(node, ast.ClassDef) else None
-                if doc and re.search(rf"^\s*Entry:.*\b{re.escape(page)}", doc, re.M):
-                    name = re.search(r"^\s*Name:\s*(.+)$", doc, re.M)
-                    label = re.search(r"^\s*Label:\s*(.+)$", doc, re.M)
-                    out.append(f"- {name.group(1).strip() if name else node.name}" + (f" (label: {label.group(1).strip()})" if label else ""))
+                if doc:
+                    out.append((node.name, doc))
+    return tuple(out)
+
+
+def modals_for(root: pathlib.Path, page: str) -> list[str]:
+    """The `Name:` and `Label:` of every modal whose `Entry:` names this question page - what the map draws from it."""
+    out = []
+    for cls, doc in _modal_docs(root):
+        if re.search(rf"^\s*Entry:.*\b{re.escape(page)}", doc, re.M):
+            name = re.search(r"^\s*Name:\s*(.+)$", doc, re.M)
+            label = re.search(r"^\s*Label:\s*(.+)$", doc, re.M)
+            out.append(f"- {name.group(1).strip() if name else cls}" + (f" (label: {label.group(1).strip()})" if label else ""))
     return out
 
 
