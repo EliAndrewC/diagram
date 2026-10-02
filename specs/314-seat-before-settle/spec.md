@@ -126,3 +126,6 @@ recorded.
 - Amendment (the plan review's round 1, item 2, 2026-10-02): the Decisions row said the seat was dropped "at its first settled
   position"; the settle drops it at any position it would lay the household out at (each move is a layout, the GM's "before
   the household layout"). The row and the Edge Cases entry now say so; the review count restarts.
+- Amendment round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 1 item - the Edge Cases entry still said "first settled
+  position". Addressed in 91ced5d4c.
+- Amendment round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - the item confirmed against the diff.
