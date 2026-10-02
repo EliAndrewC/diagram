@@ -78,5 +78,5 @@ Crowns in sun are `tree_shade.trees_shading_plots` at `CANOPY_SHADE_FT` - (plot,
 | Mizuguchi | - (grove farms) | - | - | 2,069 -> 1,807 | 10 -> 0 |
 | Sawada | 9,414 / 9,418 -> 8,791 / 8,791 | 460 -> 421 | 140 -> 140 | 1,354 -> 1,202 | 183 -> 0 |
 
-The rolled wood falls 4.5 to 6.6% because the sun ground takes part of the ground the copse could hold (`wood_goal.attainable_band`);
+The rolled wood falls 4.5 to 6.6% (one-shot, observed 2026-10-02; method: the table above, read from the five manifests) because the sun ground takes part of the ground the copse could hold (`wood_goal.attainable_band`);
 drawn stays within 8 sq ft of rolled. Kashikawa draws more crowns because its east bands now run end to end.
