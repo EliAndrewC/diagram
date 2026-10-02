@@ -184,3 +184,4 @@ the implementation finds it needs is recorded here with its class before it land
   the band's figure. Rounds 1-4 measured FR-003's capacity prediction and FR-004's packed proposals NO-GO.
 - Amendment 1, round 1 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 1 item - the band figure's class was not one of the
   four; it is a labeled guess with its reasoning.
+- Amendment 1, round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL.
