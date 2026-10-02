@@ -124,3 +124,16 @@ was refused by the web - and Sawada was refused (`WebRefused`, its field way's d
 before (`plan.SEAT_ROOM_GROUND_FT = 104`) and the band at 162: the cohort 29/30 (seed 903 still refused - lane 2, the skeleton,
 `bends`), the pool clean, and at 40 households fifteen of sixteen seeds seat on the FIRST margin (seed 47 3.6 s, from 50.0 on
 the base engine; seed 12 the outlier, eleven margins, 31.9 s), 94.9 s summed over the sixteen.
+
+## R12. The seating's band apart from the margin's (observed 2026-10-02, method: the clone's engine; `make cohort N=24`, `make map` per pool gen, `make test-file FILE=tests/hamletgen`, the 40-household probe over sixteen seeds)
+
+(Observed 2026-10-02, method: as the heading.) R11's variant - the band at 162 for everything but the canvas's room - leaves a
+band longer than the canvas holds with its windward belt: `test_the_canvas_holds_the_seat_and_its_belt_on_the_windward_side`
+failed for every wind (the belt's room is a band-depth and more upwind of the band's fringe, so a 162 band needs a 162 room),
+and growing the room (R11's first form) re-fitted every field. Isolated: the canvas grown with the band left at 104 made 40
+households WORSE (seed 39: 42 margins, 216 s) - the win is the seating's spread, not the room. So the seating's band is its own
+figure (`consts.SEATING_GROUND_FT = 162`, `_seat_households`' lattice and seat bound), and the margin, the canvas and the belt keep
+`HOMESTEAD_GROUND_FT`'s 104 - every canvas, field and margin as the base drew it. At 40 households: 11 of 16 seeds on the first
+margin, the worst 14.1 s, 84.2 s summed (the base engine about 449 s over the same seeds, R7's sweep and the spec's Context);
+the cohort 30/30; the pool: Inashiro refused by the web (an access lane, `needle_joins`) and Sawada failing the pool test of two
+ways side by side past a pitch - each sent to its root cause (R13).

@@ -98,6 +98,10 @@ def test_a_corridor_through_another_homestead_or_its_own_house_is_refused(monkey
 
 def test_a_corridor_over_ground_the_boundary_refuses_is_refused() -> None:
     plan = a_plan(households=10)
+    # the square moved 300 px down the canvas: its only wind-facing margin (the north edge) seats a band whose center stands
+    # dep + 12 off it, and the band holding a homestead's whole ground (feature 306, 162 ft a household) is long enough that
+    # at the square's own y the center sat nearer the canvas's top than half the band's length (`seat_cluster`'s HARD 3)
+    plan.envelope = [(x, y + 300.0) for x, y in plan.envelope]
     plan.seat = hg.seat_cluster(plan)
     s = _open()
     s.field_polys.append(list(plan.envelope))

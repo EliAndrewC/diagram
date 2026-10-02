@@ -20,8 +20,8 @@ from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
-from ..plan import SitePlan, _roll
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SEATING_GROUND_FT, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
+from ..plan import SitePlan, _roll, band_extent
 from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
@@ -513,7 +513,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # the first roll's draw is this one, so no map moves).
     rng = random.Random((plan.spec.seed * 2654435761) & 0xFFFFFFFF)
     placed = 0
-    lat, dep = seat["lat"], seat["dep"]
+    # THE SEATING'S BAND (feature 306): the margin was chosen, and the canvas and belt sized, with `HOMESTEAD_GROUND_FT`'s band;
+    # the households are spread over one holding their whole ground, wood floor and all (`SEATING_GROUND_FT`, research R12)
+    dep, lat = band_extent(plan.spec.households, plan.cluster_shape, SEATING_GROUND_FT)
 
     # THE FRONT ROW GOES DOWN FIRST, along the band's field-facing face. A cluster seeded only by
     # its SHAPE fills its whole depth evenly, and on a small hamlet that can leave the field ringed
