@@ -43,7 +43,7 @@ lanes) did not move that edge; giving the band the ground a homestead actually t
   104 - growing those too re-fitted every field and refused sites the base seated (R11), and the canvas grown alone made 40
   households worse (R12). Its own verdict (FR-011): GO - at 40 households 11 of 16 seeds on the first margin, 84.2 s summed
   against the base's ~449, every household seated (R12); the cohort 30/30. The pool's two regressions under it (Inashiro's
-  access lane, Sawada's doubled way) go to their root causes (R13) before it lands.
+  access lane, Sawada's doubled way) go to their root causes (R14) before it lands.
 - **D2 The rescue and the dry-spell cap are built only if they pay on top of D1** (FR-011): measured on the sixteen-seed set
   at 40 households, D1 alone against D1 with both (research R9); built where faster beyond the spread with every household
   seated, else recorded and withdrawn.

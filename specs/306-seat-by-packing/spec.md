@@ -131,9 +131,11 @@ flagged. It stays a standing check, run beside `make perf`, so a future scan of 
   with what it bought, including any withdrawn.
 - **FR-010**: The band the seating spreads its households over MUST hold the ground a homestead actually takes - the GM's
   *"start off larger"* (request.md) and the GM's *"a bounding box that will contain a homestead and the things in the
-  homestead"*: its envelope and its wood floor - derived from measured homesteads, not tuned to just fit. Where growing the
-  margin's band, the canvas or the belt with it re-fits fields and refuses sites the base seated (research R11, R12), those keep
-  their figure and the seating's band is its own.
+  homestead"*: its envelope and its wood floor - derived from measured homesteads, not tuned to just fit. The GM's larger-maps
+  direction was conditional on the map's edge being what stops the seating (*"If the thing that is stopping us from fitting 40
+  households is the margin in the sense of being the edge of the map"*): the canvas grown alone, the band at 104, made 40
+  households WORSE (research R12), so the edge is not the limit, and the canvas, the margin's band and the belt keep their figure;
+  growing them also refused sites the base seated (R11: the cohort 30/30 -> 27/30, Sawada refused), which FR-008 forbids.
 - **FR-011**: Each lever (FR-003, FR-004, FR-010 and any later round's) is built in the engine only on its OWN prototype verdict
   (faster beyond the spread, every household seated); a lever measured NO-GO is recorded with its numbers (FR-009) and not
   built, and the goals SC-002/SC-003 are judged on the levers that are.
@@ -187,7 +189,11 @@ the implementation finds it needs is recorded here with its class before it land
 - Amendment 1, round 1 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 1 item - the band figure's class was not one of the
   four; it is a labeled guess with its reasoning.
 - Amendment 1, round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL.
-- Amendment 2 (2026-10-02, research R11-R12): FR-010 scoped to the seating's band - the band, canvas and belt grown together
-  re-fitted fields and refused sites (the cohort 30/30 -> 27/30, Sawada refused); the seating's band alone keeps the 40-household
+- Amendment 2 (2026-10-02, research R11-R12): FR-010 scoped to the seating's band - the GM's larger-maps condition measured and
+  answered no (the canvas grown alone made 40 households worse, R12); the band, canvas and belt grown together re-fitted every
+  field and refused sites the base seated (the cohort 30/30 -> 27/30, Sawada refused); the seating's band alone keeps the 40-household
   win (observed 2026-10-02, method: research R12's probe - 84.2 s summed over sixteen seeds against the base's ~449) with every
   canvas, field and margin as before.
+- Amendment 2, round 1 (spec-fidelity, verify, 2026-10-02): CHANGES REQUIRED, 2 items - FR-010 kept the canvas for a cost reason
+  rather than the GM's condition measured; tasks.md described the old design. Addressed: FR-010 gives the condition's measurement
+  and FR-008; T11/T22/T23 brought in line.

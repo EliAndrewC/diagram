@@ -23,7 +23,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [ ] T10 [US2] `306-start` bookend on the unmodified engine; the cohort baseline
       research: rendering
       verify: the snapshot file; the cohort's pass count
-- [ ] T11 [US2] D1: `HOMESTEAD_GROUND_FT` 104 -> 162 with its derivation; the tests pinning the band updated in the same edit
+- [ ] T11 [US2] D1: `SEATING_GROUND_FT = 162` added for the seating's band, with its derivation; `HOMESTEAD_GROUND_FT` stays
+      104 for the margin, canvas and belt; the tests pinning the band updated in the same edit
       research: rendering
       verify: `make quick` green
 - [ ] T12 [US2] Inashiro regenerated, then the pool (`make maps SCOPE=all`) and the cohort (`make cohort N=24`): every rule passes,
@@ -43,12 +44,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [ ] T21 [US3] Green: `tools/overlap_census.py`, `make census`, `make perf` running it (D4)
       research: rendering
       verify: `make quick`; 100% coverage of the tool; `make census` lists R10's nine
-- [ ] T22 [US3] The nine flagged checks (D5): each indexed with identical answers and an equivalence test, or recorded why not
+- [ ] T22 [US3] Every flagged check (D5), starting with R10's nine: indexed, boxed or lined - identical answers preferred (an
+      equivalence test), a moved answer held to FR-008 - or, where the fix is slower, recorded why not
       research: rendering
-      verify: research R11 per check; the pool manifests identical before D1 is applied over them
+      verify: research R13 per check; the pool manifests identical where the answers are
 - [ ] T23 [US3] The census re-run after T22: what still flags, each resolved or recorded
       research: rendering
-      verify: research R11's closing list
+      verify: research R13's closing list
 
 ## Closing
 

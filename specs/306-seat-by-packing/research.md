@@ -157,3 +157,16 @@ scan as its oracle, red when the index drops a candidate:
 
 The census on the clone's engine afterwards (the pool and the reference at 40, shapely's predicates counted): **no check over
 5,000**; the largest 2,624 (`ways/street.joints_along`), 2,137 (`_blocked_cells`), 1,989 (`web.tidy_lane_ends`).
+
+## R14. The pool's two regressions under the seating's band, at their causes (observed 2026-10-02, method: a background agent in its own worktree; `make map` per gen, `make test-file FILE=tests/hamletgen/test_pool_261.py`, `make maps SCOPE=all`, `make cohort N=24`)
+
+(Observed 2026-10-02, method: as the heading.) **Inashiro** (`WebRefused`, an access lane's `needle_joins`): the seating judged the
+tree with corridors hung from the exit strip at one point; the web's touch pass later moved the connector's start 2.6 ft along the
+strip, and `tree.lanes_of` moved each corridor end onto that start - turning a 355 ft leg a third of a degree, so a second corridor
+hung from it met it at 19.95 degrees where the seating had judged 20.26: a needle no settle may cut (both tree lanes). Fixed:
+`lanes_of` leaves a corridor end already on the connector's tread where the seating judged it. **Sawada** (two ways side by side
+past a pitch): an ordinary join lane ran 105 ft within 30 ft of the exit strip and was the only way to one farmhouse, whose own
+reserved corridor was never drawn because the stray lane reached the house first; `settle_shadows` keeps a shadowing lane the
+network needs. Fixed: `tree.left_to_the_tree` lets it drop such a lane where the houses it leaves unreached have reserved
+corridors, which the settle then draws. Two tests in `tests/hamletgen/ways/test_tree.py`. With both, and the row street's inside
+corner rounded (the earlier seed-903 fix, `homesteads/rows.py`): the pool clean, `test_pool_261.py` 31/31, the cohort 30/30.
