@@ -14,6 +14,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import pathlib
+import subprocess
 
 REPO = pathlib.Path(__file__).resolve().parents[5]
 SKILL = REPO / ".claude/skills/diagram"
@@ -183,7 +184,10 @@ def test_a_sheet_with_no_tags_and_no_gaps_still_renders(tmp_path, capsys):
 
 
 def test_the_table_reads_a_real_pool_plan():
-    plans = sorted((SKILL / "pool" / "magistracies").glob("*/*.svg"))
+    # A TRACKED (hand-drawn) plan only: the tier's generated exceptions (`county-magistracy-example`, sorted first) are
+    # rewritten by other tests mid-run, and a read that landed mid-write failed on an empty file (2026-10-02).
+    tracked = subprocess.run(["git", "-C", str(SKILL), "ls-files", "pool/magistracies"], capture_output=True, text=True, check=True).stdout.split()
+    plans = sorted(SKILL / f for f in tracked if f.endswith(".svg"))
     assert plans, "non-vacuity: the pool holds Mode A plans"
     data = st.table(plans[0].read_text(encoding="utf-8"))
     assert len(data["rects"]) > 20 and data["gaps"] and any(w >= 2.0 for w in data["strokes_ft"])

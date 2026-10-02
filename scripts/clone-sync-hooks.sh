@@ -476,16 +476,21 @@ case $MODE in
     # skipped as before; but GitHub main is the integration point now and /diagram is a mirror
     # nobody works in, so refreshing it (and its renders) loses nothing and keeps what the GM
     # browses from lagging GitHub by more than one turn.
+    # GUARD_EDIT_OK: 2026-10-02 - `--background-render`: this hook has 60 s, and a synchronous render-sync under the
+    # shared lock queued past it; the render goes to a detached runner and the lock wait is bounded (sync-with-main.sh,
+    # SYNC_LOCK_WAIT). Its NOTE / WARNING lines - a busy lock, a failed earlier render - are passed on.
     if [ -n "$(git -C "$clone" status --porcelain 2>/dev/null)" ]; then
-      if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --mirror-only 2>&1); then
+      if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --mirror-only --background-render 2>&1); then
         echo "clone-sync: $clone has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done"
+        printf '%s\n' "$out" | grep -E '^sync-with-main: (NOTE|WARNING)' || true
       else
         echo "clone-sync: $clone has uncommitted work (mid-task) - clone merge skipped; mirror refresh FAILED: $(printf '%s' "$out" | tail -1)"
       fi
       exit 0
     fi
-    if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in 2>&1); then
+    if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --background-render 2>&1); then  # GUARD_EDIT_OK: 2026-10-02 bounded wait and detached render, as above
       echo "clone-sync: auto-synced $clone with main (git)"
+      printf '%s\n' "$out" | grep -E '^sync-with-main: (NOTE|WARNING)' || true
     else
       echo "clone-sync: auto sync-in FAILED in $clone - resolve before modifying the repo: $(printf '%s' "$out" | tail -2)"
     fi

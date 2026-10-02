@@ -207,7 +207,7 @@ def test_is_fresh_all_paths(repo):
 
 def test_regen_pool_runs_stale_skips_fresh_and_exempts_mode_a(repo):
     repo_dir, skill, _pool = repo
-    fp = rc.engine_fingerprint(skill)
+    fp = rc.render_fingerprint(skill)
     stale = _make_gen(skill, "villages", "stale")
     fresh = _make_gen(skill, "villages", "fresh")
     mode_a = _make_gen(skill, "magistracies", "ochiba")
@@ -242,6 +242,129 @@ def test_regen_pool_no_allow_main(repo):
     skipped, ran, frozen = rc.regen_pool(skill, repo_dir, jobs=None, allow_main=False)
     assert skipped == [] and ran == [gen] and frozen == []
     assert Path(rc._predicted_svg(gen)[:-4] + ".ran").read_text() == "unset"
+
+
+def test_engine_fingerprint_moves_on_an_engine_data_file(repo):
+    """2026-10-02: `buildings/types.json` decides the kinds a sheet's page writes up, and the walk hashed `.py` only."""
+    _, skill, _ = repo
+    data = os.path.join(skill, "l7r", "diagram", "buildings")
+    os.makedirs(data)
+    with open(os.path.join(data, "types.json"), "w") as fh:
+        fh.write("{}\n")
+    fp1 = rc.engine_fingerprint(skill)
+    with open(os.path.join(data, "types.json"), "w") as fh:
+        fh.write('{"shrine": {}}\n')
+    assert rc.engine_fingerprint(skill) != fp1
+    # a data file outside the engine package is not engine content
+    fp2 = rc.engine_fingerprint(skill)
+    with open(os.path.join(skill, "elsewhere.json"), "w") as fh:
+        fh.write("{}\n")
+    assert rc.engine_fingerprint(skill) == fp2
+
+
+def _question(skill: str, name: str, text: str) -> None:
+    qdir = os.path.join(skill, "research", "questions")
+    os.makedirs(qdir, exist_ok=True)
+    with open(os.path.join(qdir, name), "w") as fh:
+        fh.write(text)
+
+
+def test_record_headings_fingerprint_moves_on_a_heading_and_not_on_a_body(repo):
+    """A map's page shows each named question's heading, so a renamed heading must re-render the pool; a body edit
+    must not, or every research push would re-render every map."""
+    _, skill, _ = repo
+    empty = rc.record_headings_fingerprint(skill)  # no record at all: the fixture case
+    _question(skill, "0001-a.html", '<!-- <h2 id="old">a note</h2> -->\n<h2 id="a">How wide?</h2>\n<p>Body.</p>\n')
+    _question(skill, "0002-b.html", "<p>no heading at all</p>\n")
+    _question(skill, "notes.txt", "not a question\n")
+    fp1 = rc.record_headings_fingerprint(skill)
+    assert fp1 != empty
+    _question(skill, "0001-a.html", '<!-- <h2 id="old">a note</h2> -->\n<h2 id="a">How wide?</h2>\n<p>New body.</p>\n')
+    _question(skill, "notes.txt", "changed\n")
+    assert rc.record_headings_fingerprint(skill) == fp1  # body and non-question edits re-render nothing
+    _question(skill, "0001-a.html", '<!-- <h2 id="old">changed note</h2> -->\n<h2 id="a">How wide?</h2>\n<p>New body.</p>\n')
+    assert rc.record_headings_fingerprint(skill) == fp1  # a commented-out heading is not the heading
+    _question(skill, "0001-a.html", '<h2 id="a">How wide was it?</h2>\n<p>New body.</p>\n')
+    fp2 = rc.record_headings_fingerprint(skill)
+    assert fp2 != fp1
+    assert rc.render_fingerprint(skill) != rc.engine_fingerprint(skill)
+    before = rc.render_fingerprint(skill)
+    _question(skill, "0001-a.html", '<h2 id="a">How wide, really?</h2>\n')
+    assert rc.render_fingerprint(skill) != before
+
+
+# A stand-in Mode A sheet gen: READS its tracked svg and writes the png and page beside it, as the real sheets do.
+FAKE_SHEET_GEN = (
+    "import os\n"
+    "base = os.path.abspath(__file__)[:-len('.gen.py')]\n"
+    "svg = open(base + '.svg').read()\n"
+    "open(base + '.png', 'w').write('PNG of ' + svg)\n"
+    "open(base + '.html', 'w').write('<!DOCTYPE html>')\n"
+    "open(base + '.ran', 'a').write('x')\n"
+)
+
+
+def _make_sheet(skill: str, stem: str = "ubame") -> str:
+    gen = _make_gen(skill, "magistracies", stem)
+    with open(gen, "w") as fh:
+        fh.write(FAKE_SHEET_GEN)
+    with open(rc._predicted_svg(gen), "w") as fh:
+        fh.write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect/></svg>')
+    return gen
+
+
+def test_sheet_hash_and_freshness_all_paths(repo):
+    _, skill, _ = repo
+    gen = _make_sheet(skill)
+    fp = rc.render_fingerprint(skill)
+    base = gen[: -len(".gen.py")]
+    assert rc._sidecar(gen) == os.path.join(os.path.dirname(gen), ".ubame.render-cache")
+    h = rc.sheet_hash(gen, fp)
+    assert h is not None and h != rc.input_hash(gen, fp)
+    assert rc.sheet_hash(gen, "other") != h  # the fingerprint matters
+    assert rc._is_fresh_sheet(gen, fp) is False  # no png or page
+    Path(base + ".png").write_text("x")
+    Path(base + ".html").write_text("x")
+    assert rc._is_fresh_sheet(gen, fp) is False  # no sidecar
+    Path(rc._sidecar(gen)).write_text("0" * 64 + "\n")
+    assert rc._is_fresh_sheet(gen, fp) is False  # wrong value
+    Path(rc._sidecar(gen)).write_text(h + "\n")
+    assert rc._is_fresh_sheet(gen, fp) is True
+    Path(base + ".svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle/></svg>')
+    assert rc._is_fresh_sheet(gen, fp) is False  # the sheet itself was redrawn
+    os.remove(base + ".svg")
+    assert rc.sheet_hash(gen, fp) is None
+    assert rc._is_fresh_sheet(gen, fp) is False
+
+
+def test_regen_pool_reruns_a_sheet_only_when_its_inputs_move(repo):
+    """The 2026-10-02 timeout: four sheets re-ran on every render-sync (17-28 s), inside every session's prompt hook.
+    A sheet now runs once, is stamped beside its tracked svg, and runs again only when the sheet or the engine moves."""
+    repo_dir, skill, _pool = repo
+    gen = _make_sheet(skill)
+    ran_marker = Path(gen[: -len(".gen.py")] + ".ran")
+    tracked_svg = Path(rc._predicted_svg(gen)).read_text()
+    assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]
+    assert Path(rc._sidecar(gen)).read_text().strip() == rc.sheet_hash(gen, rc.render_fingerprint(skill))
+    assert Path(rc._predicted_svg(gen)).read_text() == tracked_svg  # the tracked svg is never stamped
+    skipped, ran, _ = rc.regen_pool(skill, repo_dir, jobs=1)
+    assert (skipped, ran) == ([gen], [])
+    assert ran_marker.read_text() == "x"
+    Path(rc._predicted_svg(gen)).write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle/></svg>')
+    assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]  # the sheet redrawn
+    with open(os.path.join(skill, "settlement.py"), "w") as fh:
+        fh.write("# engine v9\n")
+    assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]  # the engine moved
+    assert ran_marker.read_text() == "xxx"
+
+
+def test_regen_pool_writes_no_sidecar_for_a_sheet_whose_svg_vanished(repo):
+    repo_dir, skill, _pool = repo
+    gen = _make_gen(skill, "magistracies", "gone")
+    with open(gen, "w") as fh:
+        fh.write("import os\nopen(os.path.abspath(__file__)[:-len('.gen.py')] + '.png', 'w').write('x')\n")
+    assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]
+    assert not os.path.exists(rc._sidecar(gen))
 
 
 def test_main_reports_and_returns_zero(repo, capsys):
