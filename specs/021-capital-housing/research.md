@@ -5,12 +5,12 @@ The Principle XII **opening bookend**. For each element: what the historical rea
 element in reality. Items marked **[standing]** cite research already recorded for features
 016-020 (pointer given; not re-derived). Items marked **[new]** were researched for this
 feature and the finding is recorded here in full; the durable copy lands in
-`research/cities/capitals.md` / `settlements/ways.md` as part of implementation
+`research/contents.json#capitals` / `settlements/ways.md` as part of implementation
 (record-the-why).
 
 ## 1. Rank-graded samurai districts [standing]
 
-`research/cities/capitals.md`, "The capital's samurai are senior-heavy". Both traditions
+`research/contents.json#capitals`, "The capital's samurai are senior-heavy". Both traditions
 grade proximity by rank: Edo's daimyo and upper hatamoto ringed the castle with lower
 samurai further out; Chinese administrative cities seated officials nearest the yamen.
 The capital INVERTS the provincial senior/junior mix (70% senior R5+ vs 27% provincial), so
@@ -54,7 +54,7 @@ within ~600 real ft of street-path from the settling basin's gate, biased toward
 commoner machi (which lack private wells); wells inside the band record `kind: "cistern"`,
 all others stay dug draw-wells. The 600 ft figure is a chosen point inside a plausible range
 (Edo mains ran much further; a domain capital's young system plausibly serves its gate
-quarter first) - recorded beside the rule in code and in research/cities/capitals.md.
+quarter first) - recorded beside the rule in code and in research/contents.json#capitals.
 
 ## 5. Fire towers and the watch [new]
 

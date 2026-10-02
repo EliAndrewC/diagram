@@ -55,7 +55,7 @@ tanning yards, several theater stages
   gen.py + JSON manifest + gitignored render, established since the pool began; the
   markdown-with-YAML convention governs prose pools, not maps.
 - **IV. One Canonical Home for GM Source**: N/A - no SOURCE blocks move; doctrine additions
-  go to their existing homes (`settlements/capitals.md`, `research/cities/capitals.md`).
+  go to their existing homes (`settlements/capitals.md`, `research/contents.json#capitals`).
 - **V. Protecting the GM's Writing (NON-NEGOTIABLE)**: PASS - no task touches SOURCE-marked
   content.
 - **VI. Verify Before Reporting Done**: PASS - per-task verification listed in tasks.md:
@@ -110,7 +110,7 @@ specs/021-capital-housing/
 ├── pool/capitals/shiro-daika.gen.py  (+ .json manifest; ship step)
 ├── pool/regressions/    # new fixtures frozen per defect
 ├── settlements/capitals.md    # doctrine updates (record-the-why)
-└── research/cities/capitals.md  # research additions (durable home of the new findings)
+└── research/contents.json#capitals  # research additions (durable home of the new findings)
 ```
 
 **Structure Decision**: existing single-package layout; no new modules. The gen file moves
