@@ -312,6 +312,12 @@ for d in glob.glob("/proc/[0-9]*"):
     for f in dict.fromkeys(paths):
         if not os.path.exists(f):
             continue
+        # GUARD_EDIT_OK: 2026-10-02, fixing a guard that fires on correct work - NOT THE HARNESS'S SNAPSHOT, NOT A
+        # SCRIPT. Every Bash command runs as `source <shell snapshot> && eval '...'`, and the snapshot came first: old
+        # and held open by nobody, it made 727 of September's 728 reports, each about a live loop. An executable (the
+        # `_writer-alive.sh` that no-poll writes into a loop) is run, never watched - the rule `files_named` keeps.
+        if "/shell-snapshots/" in f or (os.path.isfile(f) and os.access(f, os.X_OK)):
+            continue
         if subprocess.run([alive, f], capture_output=True).returncode != 0:
             print(f"{p} {f}")
             break
