@@ -634,6 +634,17 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # field; otherwise the map says why it has no path to its rice.
         _threaded = _thread_the_fabric(s, plan, _spur_pts)
         _drawn_spur, _swept = spur_cut_at_the_fold(_threaded, plan.envelope) if len(_threaded) >= 2 else (_threaded, "no way to the field clear of the steadings - the field path is the web's")
+        # ...AND THE DRAWN TIP IS SET ON THE BUND AGAIN (269 B04): the tip was set above, but the threading moves the spur's
+        # free bow vertex round the steadings and the fold cut then keeps the arm out to it, so the path drawn can end at a
+        # vertex neither step held to the field's edge. Cohort seed 905 (feature 304 T03, dispersed): a 6 ft spur bowed 14 ft
+        # sideways was threaded out to a bow 20 ft inside a paddy plot, and the arm kept ran across the comb's main ditch at the
+        # field's head onto a 2 ft bund strip - no deck lands dry there (`crossing_deck`), and a dispersed hamlet runs no web
+        # settle to cut it, so `bridges()` raised `UndeckableCrossing`. Pulled back out of the worked ground, the tip stops on
+        # this side of the bund, as the tip set above does.
+        if _swept is None:
+            _drawn_spur = tip_onto_the_bund(_drawn_spur, memo_ground(s, "worked", worked_ground), SPUR_WIDTH / 2.0, RunOnBlocks(s))
+            if len(_drawn_spur) < 2:
+                _swept = "the threaded spur runs in the worked ground end to end - the field path is the web's"
         if _swept is None and not s.admits_lane(_drawn_spur, SPUR_WIDTH):
             _swept = "the overlap matrix refuses the spur (a dry plot or a steading's part on it) - the field path is the web's"
         if _swept is None:

@@ -56,6 +56,44 @@ def test_a_spur_cut_short_of_the_field_is_recorded_instead_of_drawn(monkeypatch)
     assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")], "and nothing is drawn for it"
 
 
+_RICE = [(600.0, 1250.0), (800.0, 1250.0), (800.0, 1350.0), (600.0, 1350.0)]  # a field south of the wall of houses
+
+
+def _spur_drawn_from(monkeypatch, arm):  # type: ignore[no-untyped-def]
+    """`stage_track` on the walled settlement with a field (`_RICE`), the fold cut handing back `arm`: (settlement, spur)."""
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    s.M.setdefault("fields", []).append({"outline": [list(q) for q in _RICE]})
+    plan.seat = hg.seat_cluster(plan)
+    monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: (list(arm), None))
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
+    track.stage_track(s, plan)
+    return s, next((ln for ln in s.M.get("lanes") or [] if ln.get("spur")), None)
+
+
+def test_a_spur_whose_kept_arm_ends_in_the_rice_is_drawn_to_the_bund(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 304 T03 (cohort seed 905): the threading moved the spur's bow 20 ft into a paddy plot and the fold cut kept the
+    arm out to it, across the main ditch at the field's head where no deck lands dry - `bridges()` raised. The DRAWN tip is
+    set on the bund (269 B04): pulled back out of the worked ground, the tread's half-width and a foot clear of its edge."""
+    from l7r.diagram.hamletgen.ways.geom import worked_ground
+
+    s, spur = _spur_drawn_from(monkeypatch, [(700.0, 1150.0), (700.0, 1300.0)])
+    assert spur is not None, "the spur is drawn"
+    tip = (float(spur["pts"][-1][0]), float(spur["pts"][-1][1]))
+    ground = worked_ground(s.M)
+    assert not ground.inside(tip), "its tip is not in the rice"
+    assert 3.4 <= ground.dist(tip) <= 5.0, f"it stops on the bund, not short of it: {ground.dist(tip):.1f} ft off the edge"
+
+
+def test_a_spur_whose_kept_arm_is_all_rice_is_recorded_dropped(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """...and an arm in the worked ground end to end leaves nothing to draw: the spur is recorded dropped, the field path the
+    web's."""
+    s, spur = _spur_drawn_from(monkeypatch, [(700.0, 1270.0), (700.0, 1320.0)])
+    assert spur is None
+    assert "in the worked ground end to end" in s.M["meta"].get("field_spur_swept", "")
+
+
 def test_an_end_in_a_grove_band_leaves_it_toward_the_run_s_other_end() -> None:
     """`_out_of_bands` (feature 291). A spur that began at a deep band's middle (cohort seed 11) is set out of the band by
     the side it was heading for - walked toward the far end, with containment asked as well as the gap - and not into the
