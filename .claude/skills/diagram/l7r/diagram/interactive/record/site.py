@@ -304,10 +304,7 @@ class Build:
         citation line - the paragraph after the heading - made links (feature 307 FR-006)."""
         text = st.strip_marker(item.html)
         m = _HEADING_END.search(text)
-        if m is None:
-            return text
-        rest = _FIRST_P.sub(lambda p: linkify(p.group(0)), text[m.end() :], count=1)
-        return text[: m.end()] + "\n" + self.catalog.labels(item.id) + rest
+        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + _FIRST_P.sub(lambda p: linkify(p.group(0)), text[m.end() :], count=1)
 
     def _registry(self) -> None:
         reg = self.registry
