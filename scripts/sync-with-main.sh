@@ -290,6 +290,10 @@ push_cmd() {
   # built page; here as well as at the gate because a docs-only or spec-only delta takes the DIRECT route. Selftest first.
   python3 "$ROOT/scripts/check-research-pointers.py" --selftest >/dev/null || die "check-research-pointers selftest failed - the guard itself is broken; fix scripts/check-research-pointers.py before pushing"
   python3 "$ROOT/scripts/check-research-pointers.py" "$ROOT" || die "a pointer to the research does not resolve, or names a built page (above) - feature 301; \`make fragment-move\` moves a fragment with its pointers"
+  # GUARD_EDIT_OK: feature 313 FR-010 - a NEW check: the canonical download list stays append-only against main (no entry
+  # lost, moved or inserted, no id reused, every entry with its mark lines). Selftest first, as the pointer check's.
+  python3 "$ROOT/scripts/_downloads.py" selftest || die "the download-list check's selftest failed - the guard itself is broken; fix scripts/_downloads.py before pushing"
+  ( cd "$ROOT" && python3 "$ROOT/scripts/_downloads.py" check ) || die "the canonical download list is not append-only against main (above) - feature 313; \`make download-add FILE=<draft.md>\` appends an entry"
   "$ROOT/scripts/entry-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 258 - the record's assembly check runs HERE as well as at the gate, and for
   # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where

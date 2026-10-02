@@ -1,0 +1,111 @@
+{
+ "feature": "313-download-list",
+ "plan_sha256": "2f2bd26dd0549c6c137dc724da21a40afcd8e0a75d5a58a779ebe826c1436ef7",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Files: canonical list, sync-state JSON and hand-state JSON under research/; the GM's copy written by sync only; a session may hand-edit an entry's text",
+   "class": "within",
+   "why": "FR-001 beside the record, FR-007 sync record, FR-011 hand states in one file, US2 scenario 4 session edits"
+  },
+  {
+   "id": "D2",
+   "summary": "Entry format and the three mark lines, with a dated recorded line",
+   "class": "within",
+   "why": "FR-002, FR-003"
+  },
+  {
+   "id": "D3",
+   "summary": "One-time import: header, high-risk section first, the GM's file unchanged; 1-6, 8, 12-16 downloaded and 7, 9, 10, 11 not found from the 2026-09-13 table; byte-for-byte re-derivation test",
+   "class": "within",
+   "why": "FR-001, FR-004, SC-001"
+  },
+  {
+   "id": "D4-compare",
+   "summary": "Ingest as a three-way comparison against synced.commit; marks recorded while text edits wait for KEEP=/DROP=; conflicts shown three ways; unknown ids named and pending; refused before the first sync; then the inbox",
+   "class": "within",
+   "why": "FR-005, US2 scenarios 3-4, edge cases"
+  },
+  {
+   "id": "D4-contradiction",
+   "summary": "Ingest refuses found-elsewhere without downloaded or partial, and not-found with downloaded, partial or paywalled",
+   "class": "within",
+   "why": "Amended to FR-005 and US2 scenario 2 word for word; round 1's NOT LEGITIMATE narrowing is gone"
+  },
+  {
+   "id": "D5",
+   "summary": "Sync refuses unless the copy's sha matches imported/synced/ingested or the copy is absent, naming entries; refuses on an uncommitted canonical list; records sha, date, commit",
+   "class": "within",
+   "why": "FR-007, US3; the uncommitted-list refusal binds only the session and keeps the base a commit"
+  },
+  {
+   "id": "D6-add",
+   "summary": "make download-add from a draft; checks link, fallback, an existing record pointer, blocked-by; next number under the host-wide lock over mirror, clones and a ledger; appended at the end. HIGH_RISK=1 removed",
+   "class": "within",
+   "why": "FR-008, US4 scenario 1; round 1's high-risk-section insertion is dropped"
+  },
+  {
+   "id": "D7",
+   "summary": "Inbox MATCH takes an entry id; resolves to its keys or []; saved-as files matched without asking; unmatched files wait",
+   "class": "within",
+   "why": "FR-006, edge case keyless file"
+  },
+  {
+   "id": "D8",
+   "summary": "An entry's keys: backticked registry keys, manifest keys of linked URLs, optional '- Key:' line",
+   "class": "within",
+   "why": "definition the spec leaves open; serves FR-011 and the several-keys edge case"
+  },
+  {
+   "id": "D9-rules",
+   "summary": "Rule 1 mark mapping and several-entries rule; manifest rows: archived/earlier-snapshot open, gm-copy gm-full, a partial row whose page would not render whole but whose served text is kept open, other partial/unreachable to gone (404/410), down (timeout, network, 5xx), else bot-refused; most open row wins; no row with READ open, else never-read; hand state wins over 2-3 on same date or later, never over a mark that gives a state",
+   "class": "within",
+   "why": "FR-011 rules 1-4 and the hand-state rule as accepted; round 1's never-read override (old rule 3) is removed. The new partial mapping applies the request's own definition of open, 'read by us': measured 2026-10-02 (archive/*/*.json outcome and reason), 22 of 37 partial rows carry reason 'the page would not render whole: its served HTML and text are kept', i.e. the text was served to us and kept, not refused; the 15 others are HTTP 403 (13), 406, 429 and stay bot-refused, so US5 scenario 2 holds. This is the mapping the spec leaves to the states file, not a carve-out"
+  },
+  {
+   "id": "D9-keyless",
+   "summary": "A keyless list entry (download:<id>) takes rule 1, then a hand-recorded state, else never-read",
+   "class": "within",
+   "why": "Amended to FR-011's rules for keyless entries, so D9a's list-entry seeds take effect; round 1's narrowing is gone"
+  },
+  {
+   "id": "D9a",
+   "summary": "Seeds: paywall prose in registry and list entries recorded by SET one by one, dated 2026-10-02, quoting the line; open, other-work and GM-full mentions passed over; the list goes in research.md",
+   "class": "within",
+   "why": "FR-011 seeding; skipping GM-full mentions stops a dated seed outranking the GM's copy"
+  },
+  {
+   "id": "D9-report",
+   "summary": "make access-tags with KEY=, JSON=1, SET=",
+   "class": "within",
+   "why": "FR-012"
+  },
+  {
+   "id": "D10",
+   "summary": "Guard download-copy-hooks.sh refusing Edit/Write/shell writes to the GM's copy with the add/sync commands; escape DOWNLOAD_COPY_OK, logged; companion test proven red",
+   "class": "within",
+   "why": "FR-009, SC-004; a logged escape with a reason is the project's standing guard form"
+  },
+  {
+   "id": "D11",
+   "summary": "Push check against origin/main: lost id, reorder, a new id not after every main id, not numeric or not above main's highest, reused id, malformed marks; selftest first; passes while absent on main",
+   "class": "within",
+   "why": "FR-010; the H-section insertion allowance is removed, so every new entry is at the end"
+  },
+  {
+   "id": "D12",
+   "summary": "Rule rewritten in CLAUDE.md, research/CLAUDE.md, the doctrine, record rules, page-session rules; ingest/sync documented; guard-table row",
+   "class": "within",
+   "why": "FR-013, SC-006"
+  },
+  {
+   "id": "TC-route",
+   "summary": "Tooling only, DIRECT route, no perf bookends or map reviews; reuse of Lock, inbox and guard-log helpers; make targets forwarded from the root Makefile",
+   "class": "within",
+   "why": "nothing on a map changes (spec Decisions)"
+  }
+ ],
+ "verdict": "CLEAR"
+}

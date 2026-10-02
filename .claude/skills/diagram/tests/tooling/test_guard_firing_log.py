@@ -299,6 +299,7 @@ _ESCAPES = {
     "POLL_OK": ("command", "routes through _hookmatch.py escape"),
     "DISCARD_OK": ("command", "routes through _hookmatch.py escape"),
     "README_OK": ("command", "routes through _hookmatch.py escape via escape_or_refuse; the GM's delegated README edit (2026-09-06)"),
+    "DOWNLOAD_COPY_OK": ("command", "routes through _hookmatch.py escape via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
     "NO_BRANCH_OK": ("command", "routes through _hookmatch.py escape"),
     "MAIN_TREE_OK": ("command", "routes through _hookmatch.py escape"),
     "HOST_GIT_OK": ("command", "routes through _hookmatch.py escape, via RS_ESCAPED"),

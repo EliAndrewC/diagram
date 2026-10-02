@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted - `spec-fidelity` FAITHFUL, round 4 (2026-10-02)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): the download list *"deserves to be in source control somewhere"*,
 the GM's working file *"should be an actual copy and not the canonical source"*; per entry *"a space that is already set
@@ -61,7 +61,7 @@ the date; each source an entry names has its access tag updated; the files dropp
 1. **Given** the GM ticked "downloaded" on entry 17 and "partial" and "paywalled" on H7, **When** the session ingests,
    **Then** the canonical list records both, dated, and the access report shows H7's source `northampton-tannery-1996` as
    the GM's partial copy.
-2. **Given** "found elsewhere" ticked with neither "downloaded" nor "partial", or "not found" ticked with either, **When** the
+2. **Given** "found elsewhere" ticked with neither "downloaded" nor "partial", or "not found" ticked with any of the other three, **When** the
    session ingests, **Then** that entry is not recorded and is named with the reason; the rest are recorded.
 3. **Given** the GM also edited an entry's text, **When** the session ingests, **Then** the text edit is shown, and the
    command records the edit or discards it only on an explicit instruction. It never drops the edit silently.
@@ -78,6 +78,8 @@ copy holds anything not yet ingested, and names what.
 1. **Given** the copy unchanged since the last sync or ingest, **When** the session syncs, **Then** the copy is replaced.
 2. **Given** a mark ticked since the last ingest, **When** the session syncs, **Then** it refuses, naming the entries, and
    tells the session to ingest first.
+3. **Given** the GM's file changed since the import and no sync yet, **When** the session syncs, **Then** it refuses,
+   naming the entries changed or added since the import.
 
 ### User Story 4 - Sessions add to the canonical list, at its end (Priority: P1)
 
@@ -115,6 +117,11 @@ every list entry with no registry key: one of eight states with the date last ch
 - A file in `academic-sources/` matched to an entry with no registry key: archived under feature 309's inbox with keys `[]`
   and the entry's id recorded beside it, so the copy is found again when the entry's work enters the registry.
 - A key with several manifest rows: the most open state wins (below); the date is that row's.
+- A key named by several entries (H7 and entry 9 both name `northampton-tannery-1996`; H2 and entry 10 both name
+  `irri-drying-floor`): the most recently recorded mark that gives a state decides; on the same date, the most open state.
+- The GM's file changed between the import and the first sync (a GM edit, or an entry a session appended by hand before the
+  new rule reached it): the first sync refuses and names the changed or added entries, and says how to bring them into the
+  canonical list (an added entry through the add command, a changed one by hand) before syncing again.
 
 ## Requirements *(mandatory)*
 
@@ -131,14 +138,15 @@ every list entry with no registry key: one of eight states with the date last ch
   "You already saved a PDF". Every other box starts unticked.
 - **FR-005**: Ingest reads the GM's copy and matches its entries to the canonical list's by id. Against the version last
   synced, it records every changed mark, dated. It refuses an entry whose marks contradict (found elsewhere without
-  downloaded or partial; not found with downloaded or partial). It shows every text edit the GM made outside the mark lines,
+  downloaded or partial; not found with downloaded, partial or paywalled). It shows every text edit the GM made outside the mark lines,
   and keeps or discards one only when told. It keeps a session's change to the same entry, and names a conflict where both
   changed the same text. It names any id the canonical list lacks. It then runs the archive inbox.
 - **FR-006**: The archive inbox (feature 309) accepts a list entry's id where it accepts registry keys. The file is archived
   under that entry's keys, or keyless with the id recorded. A file named on an entry's saved-as line is matched without being
   asked.
 - **FR-007**: Sync writes the canonical list over the GM's copy. It refuses while the copy differs from what was last synced or
-  ingested, naming the entries. It records what it wrote, so the next ingest can tell the GM's changes from a session's.
+  ingested, naming the entries. Before the first sync, the baseline is the GM's file as the import read it, its fingerprint
+  recorded by the import. It records what it wrote, so the next ingest can tell the GM's changes from a session's.
 - **FR-008**: Adding an entry is one command. It allocates the next number under a host-wide lock that sees every clone. It
   checks that the entry carries a link, a search fallback, what rests on it (as pointers to the record's files) and why it is
   blocked, writes the mark lines, and appends the entry at the end.
@@ -150,10 +158,21 @@ every list entry with no registry key: one of eight states with the date last ch
   us), bot-refused (opens in a browser but refuses us), down (timed out or a server error), gone (404, no copy), gm-full (the
   GM's full copy), gm-partial (the GM's partial copy: an abstract or excerpt), paywalled (a paid or institutional login) or
   never-read (referenced only). Each comes with the date last checked and what it rests on. It is derived from what the
-  repository records: a GM mark recorded on an entry naming the key decides; otherwise the most open of the key's manifest
-  rows; otherwise a dated `READ` comment in its registry entry (open); otherwise never-read. A state recorded by hand, with
-  its date and a reason, is kept as evidence and wins when it is newer. The states, their order and their meanings are
-  stated in one file.
+  repository records, in this order:
+  1. A GM mark recorded on an entry naming the key decides. Downloaded gives gm-full, whatever else is ticked; partial
+     without downloaded (with or without paywalled) gives gm-partial; paywalled alone gives paywalled. Not found alone gives
+     no state: the next rules decide, and the basis says the GM did not find it. Found elsewhere changes no state. Where
+     several entries name the key, the most recently recorded mark that gives a state decides, and on the same date the
+     most open state; a not-found mark only adds to the basis and never overrides another entry's state.
+  2. Otherwise the most open of the key's manifest rows.
+  3. Otherwise a dated `READ` comment in its registry entry gives open.
+  4. Otherwise never-read.
+  A state recorded by hand, with its date and a reason, is kept as evidence. It wins over rules 2 to 4 when its date is
+  the same as or later than theirs, and never over a GM mark (rule 1): the GM's own tick is the latest word on what can be
+  got. The paywall
+  knowledge the repository already holds in prose - a list entry's "Blocked by" saying paywalled or subscription, a
+  registry entry's comment or write-up saying so - is seeded as hand-recorded states by this feature, each read and
+  confirmed, each citing the line it rests on. The states, their order and their meanings are stated in one file.
 - **FR-012**: One command reports the access tags: for one key or entry, for all (counts per state), or as JSON for another
   tool (feature 312) to read.
 - **FR-013**: The rule "a source only the GM can fetch goes at the END of TO-DOWNLOAD.md" is rewritten wherever it is stated
@@ -175,15 +194,18 @@ every list entry with no registry key: one of eight states with the date last ch
 - **SC-001** (FR-001, FR-002, FR-003, FR-004): The canonical list holds the 22 high-risk entries first, then all 306 imported
   entries in their order. Each has its mark lines. Its text outside the mark lines matches the import's sources, which a
   test checks.
-- **SC-002** (FR-005, FR-007): A gate test drives a temporary copy through sync, a GM tick, a GM text edit, a session edit
+- **SC-002** (FR-005, FR-006, FR-007): A gate test drives a temporary copy through sync, a GM tick, a GM text edit, a session edit
   and ingest. It asserts the marks recorded, the text edit held for an instruction, the session's edit kept, and sync refused
-  before the ingest and allowed after.
+  before the ingest and allowed after. A gate test resolves an entry id given at the inbox to that entry's keys, and a
+  saved-as name to its file in the inbox.
 - **SC-003** (FR-008, FR-010): Gate tests show two adds taking distinct numbers, and the push check refusing each of the five
   violations.
 - **SC-004** (FR-009): The guard's test companion shows an Edit, a Write and a shell redirect to the GM's copy refused, and
   sync allowed.
-- **SC-005** (FR-011, FR-012): The report gives every one of the 2,126 registry keys a state with a date. Its per-state
-  counts are recorded in this feature, and a gate test pins one key per derivation rule.
+- **SC-005** (FR-011, FR-012): The report gives every one of the 2,126 registry keys, and every keyless list entry, a state
+  with a date (never-read excepted, which may have none). Its per-state counts are recorded in this feature. A gate test pins
+  one key per derivation rule, the mark mapping for each allowed combination, the several-entries rule, one seeded
+  paywalled key, and a seeded paywalled key whose entry the GM then marks downloaded showing gm-full.
 - **SC-006** (FR-013): No rule file still tells a session to append to `TO-DOWNLOAD.md` by hand.
 
 ## Decisions Recorded
@@ -211,3 +233,20 @@ Classes are those of `docs/research-doctrine.md`. Nothing on a map changes, so n
 - The first sync, which replaces the GM's current file, happens on the GM's word.
 
 ## Review history
+
+- **Round 1** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - four items: a key named by several entries had no rule; the
+  states that mark combinations give were unstated; paywall knowledge already in the record's prose was ignored; the first
+  sync had no baseline. All four applied: FR-011's ordered rules with the mark mapping and the several-entries rule, the
+  seeding of the existing paywall knowledge, FR-005's not-found refusal widened to paywalled, FR-007's import baseline, two
+  edge cases, US3 scenario 3, and SC-005 widened to keyless entries (the review's aside).
+- **Round 2** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - items 3 and 4 resolved; two gaps in rule 1: a newer
+  not-found mark on one entry could hide another entry's state, and downloaded with partial had two answers. Applied: the
+  newest mark that gives a state decides, not-found never overrides; downloaded gives gm-full whatever else is ticked; the
+  first-sync refusal says how to bring the named entries in (the review's wording point). Also changed by the session: a
+  hand-recorded state wins on the same date as the derived one, not only a later date, so a state seeded on the day of an
+  archive capture is not silently outranked by it.
+- **Round 3** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - both round-2 items resolved; one new item from the session's
+  change: a hand state could outrank the GM's ingested mark. Applied, more simply than the review's wording: a hand state
+  never wins over a GM mark, and wins over rules 2 to 4 on the same date or later; SC-005 pins the seeded-then-downloaded case.
+- **Lint-only edit after acceptance** (2026-10-02): `spec-lint` required FR-006 to be named by a success criterion; SC-002
+  now names it, with the two inbox cases its tests already pin. No requirement changed.
