@@ -172,13 +172,61 @@ for. The spaced-for reach is `household_reach`, asked at the seat offered, befor
 |---|---|---|
 | the largest house, no household parts (the plan review's round-3 harness) | 240 of 302 | 8.3, 7.3, 35.9, 26.3 px |
 | the largest house, with the household's parts | 33 of 272 | -0.4, -0.4, 21.1, 14.9 px |
-| the household's OWN lot: its house, kura and parts | **12 of 234** | 5.0, 0.0, 3.6, 5.5 px |
+| the household's OWN lot: its house, kura and parts | 12 of 234 | 5.0, 0.0, 3.6, 5.5 px |
+| ...settled when OFFERED, for the household seated next (R10) | 5 of 271, all moved | 0.7, 0.0, 2.5, 2.3 px |
+| ...and the grown seat EXACT, no computed move (R10, the final engine) | **0 of 301** (none moved) | 0, 0, 0, 0 |
 
 - **Why the largest house bounds nothing.** A homestead's fixtures (the manure heap, the privy, the woodpile, the persimmon)
   are sought round its own walls. A larger house moves them, so the largest house's layout does not bound a smaller
   household's layout.
-- **The 12 that still exceed.** All are among the 30 placements the placer MOVED: its one computed move off a single
+- **On the final engine** (R10: settled when offered, the gap on the parting axis, the grown seat exact), no placement
+  exceeds the reach its seat was spaced for. Measured by `separation_check.py` (the plan review's harness): no house's drawn
+  envelope comes closer to its source's footprint than the gap. The closest is 19.4 px against the 16 px gap, over 301
+  grown placements.
+- **The 12 that exceeded under the earlier form.** All are among the 30 placements the placer MOVED: its one computed move off a single
   overlapping neighbor (feature 227), after which the homestead is turned at its new spot. None of the 204 unmoved placements
   exceeds its seat's reach. So every seat the growth offers clears the standing footprints by the household's own envelope
   there (FR-004). The placer's existing move then carries a few households up to 5.5 px, away from the neighbor they would
   overlap.
+
+## R10 - The engine build, back to back (observed 2026-10-02, method: prototype.py's `base` mode, run with ROOT set to the base worktree (`/tmp/base308`, HEAD before the engine change) and then to the clone, alternated per seed, one run each, under load 4-8)
+
+**The final engine's changes.** Each was measured on the way to the final engine. Earlier runs on half-changed engines are
+discarded.
+- **A seat is settled when it is offered** (`growth.py`), not when it is queued. On seed 8 at 15 households, 448 seats were
+  queued and 194 offered; settling each as queued cost 1.27 s of a 2.6 s seating.
+- **Each settle starts from where the last ended**: the union of the first guess and the reach the last settle found. It
+  took 2.8 envelope rolls a seat before. Seeds 5, 7, 9 and 47 at 15 households went 1.06-1.32 s -> 0.63-0.64 s.
+- **The route is asked last** (`access.ROUTE_LATER`). The seat's own question takes a route as possible, and the search runs
+  only after the parts' cheap refusals.
+- **The gap is on the axis that parts the two homesteads** (`seat_toward`). A unit test found that a gap added along a
+  slanted bearing parted them by 15.45 of 16 px at 15 degrees.
+- **The placer's one computed move may not carry a grown seat nearer its source than the gap** (`keeps_its_distance`, read
+  by `_place_bundle_nucleated` as `_grown_keep`).
+  - On the engine before it, the move carried one house 2.6 px from its source (`separation_check.py`, seed 8).
+  - Making a grown seat exact instead, with no move at all, was measured and withdrawn: 101.4 / 79.0 s base against 80.4 s
+    clone at 40 households, with seed 4 on its third margin. The move is needed for capacity, and only the moves toward the
+    source are refused.
+
+**The final engine** (`separation_check.py` and `reach_check.py`, seeds 1, 3, 4, 8, 13 and 25 at 40 households):
+- 271 grown placements, 19 of them moved.
+- None comes closer to its source's footprint than the gap: the closest unmoved one is 17.7 px, the closest moved one 23.6 px.
+
+**Timing, homesteads stage seconds:**
+
+| households | base sum | clone sum | first margin (base / clone) | every household seated |
+|---|---|---|---|---|
+| 15 | 17.5 | 15.6 | 16 / 16 | yes |
+| 40 | 101.4 | 84.8 | 11 / 12 | yes |
+
+**At 40 households, by seed (base -> clone, margins):** 1: 3.39 -> 2.65; 2: 12.90 (3) -> 2.21; 3: 4.68 -> 4.43; 4: 3.19 ->
+3.48; 5: 2.49 -> 3.38; 6: 14.55 (4) -> 10.62 (2); 7: 6.60 (2) -> 4.38; 8: 4.53 -> 10.83 (2); 9: 5.07 -> 8.41 (2); 10: 3.34 ->
+5.66; 11: 2.84 -> 3.47; 12: 16.42 (6) -> 8.34 (2); 13: 2.55 -> 6.09; 25: 4.23 -> 2.78; 39: 10.75 (3) -> 3.07; 47: 3.87 -> 4.97.
+
+**Offers at 40 households:** 230-2,483 a seed under the clone, 5.8-62 per house kept, against 383-5,927 under the base.
+
+**The session's goals.**
+- SC-002 (under 4 s on every seed at 40 households) is missed on eight seeds: 3, 6, 7, 8, 9, 10, 13 and 47, at 4.38-10.83 s.
+- SC-003 (at most 5 offers a house kept, at most two margins) is missed on offers (5.8-62). It is met on margins: no seed
+  needs a third.
+- Both misses are raised with the GM, with every round's numbers here (FR-002).

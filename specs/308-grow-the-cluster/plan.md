@@ -73,8 +73,17 @@ numbers and raised with the GM.
     - The seat is first placed with a first guess (the reach at the first house). Where the reach rolled at that seat
       exceeds the guess on any side, the seat is moved out to the union of the two and asked again. After `SETTLE_TRIES` (4)
       moves without settling, it is not offered. A unit test holds the move, the drop and the household's own lot.
-    - MEASURED (research R9): no unmoved placement exceeds the reach its seat was spaced for. All 12 of 234 that do were
-      moved by the placer's existing one computed move off an overlapping neighbor, by at most 5.5 px.
+    - MEASURED (research R9, R10), on the final engine: 0 of 301 grown placements exceed the reach their seat was spaced
+      for. None comes closer to its source's footprint than the gap: the closest is 19.4 px against 16.
+    - THE GROWN SEAT IS EXACT (`_grown_seat`, read by `_place_bundle_nucleated`). The placer's one computed move off a single
+      overlapping homestead is not made for a grown seat; that overlap refuses it, and the growth offers the next. The
+      growth computed the seat's distance from its source, and the move had carried one house 2.6 px from its source
+      (research R10).
+    - THE GAP IS ON THE AXIS THAT PARTS THE TWO (`seat_toward`). Added along a slanted bearing, it parted them by only
+      gap x cos (a unit test found 15.45 of 16 px at 15 degrees).
+    - A SEAT IS SETTLED WHEN IT IS OFFERED, not when it is queued. The household it is settled for is then the one seated
+      there, and most queued seats are never offered. Each settle starts from the union of the first guess and the reach
+      the last settle ended on.
     - Two bounds were priced and refused.
       - The largest house with the household's parts left 33 of 272 placements over, by up to 21 px: the fixtures are
         sought round the household's own walls, so a larger house does not bound them.
@@ -102,6 +111,9 @@ numbers and raised with the GM.
     `parts_clear`, `standing_ground` and `lawful_leg`. A route has at most 5 legs, none doubling back (`doubles_back`).
     The whole route must then leave its own yard (`leaves_its_yard`, feature 287 M8). These are every test `_house_candidates`
     asks of a straight or round-the-gable corridor, so no corridor rule is skipped (FR-005, FR-006).
+  - *Asked last.* The seat's own question (`seat_reaches_tree`) takes a route as possible without searching for one
+    (`ROUTE_LATER`). The route's search, the dearest of the seat's questions, is asked by `access_corridor` after the parts'
+    cheap refusals: the wood's seats and the sun. The verdict is the same, asked later (research R10).
   - *Admitted.* It is admitted by `tree_admits` as any corridor is, and recorded leg by leg (`reserve`), which the web already
     draws as a chain.
   - *Class.* A map drawing convention: the routing is how a seat's path is found, and the web draws it under the unchanged
