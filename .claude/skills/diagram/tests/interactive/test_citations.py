@@ -9,11 +9,10 @@ a write-up is honest about the work's era, place and kind - is its job, before a
 
 from __future__ import annotations
 
+import json
 import pathlib
 
 import pytest
-
-import json
 
 from l7r.diagram.interactive.citations import WORKS_CLOSE, WORKS_OPEN, cited_keys, works_html
 from l7r.diagram.interactive.record import site, store

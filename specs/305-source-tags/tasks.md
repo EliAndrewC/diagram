@@ -43,13 +43,15 @@ reaches a map.
 - [x] T07 [US4] The migration under `specs/305-source-tags/migrate/`: `extract.py` batches, the 22 Sonnet classifications (rules: research R5 and plan D3), `apply.py` with R4's trim checks and R3's consistency lists, the lists worked by hand, every unsettled source settled by the vocabulary first; the build check passing with no exemption (FR-014, FR-015; SC-001; plan D10)
       research: rendering
       verify: DONE. extract.py 2,110 non-canon entries in 22 batches; 22 Sonnet classifications; apply.py: 0 bad tags, 0 unclassified, 910 trims passed R4, 1 refused (suido-ishizue-minuma, done by hand: deleted only 'without footnotes'); 35 unsettled + 98 late-date flags adjudicated by two Opus agents (41 changed); vocabulary gained fiction/rokugan and the undated/straddling rules (FR-002, FR-003); make record builds with no exemption (SC-001); report.md and results/ committed
-- [ ] T08 [US4] The check: a stratified sample of at least 60 entries bundled (`make check-bundle KEY=`) and judged by `source-applicability`; every wrong tag and every repeated or lost limit fixed; any pattern swept across the registry (SC-004, SC-005; plan D11)
+- [x] T08 [US4] The check: a stratified sample of at least 60 entries bundled (`make check-bundle KEY=`) and judged by `source-applicability`; every wrong tag and every repeated or lost limit fixed; any pattern swept across the registry (SC-004, SC-005; plan D11)
       research: rendering
+      verify: DONE. 60-entry stratified sample (every period/region value, kinds >=3) judged by source-applicability in 6 agents: 174/180 facet tags RIGHT (96.7%, SC-004 needs 19 in 20); 51 EDIT blocks applied (49 as written, 2 hand-reduced to drop facts from uncited sources), 5 tags corrected; sweeps: 41 premodern-only entries naming modern dates re-adjudicated (9 changed), 281 paragraphs with generic phrases re-trimmed (163), 15 possibly-lost limits checked (0 to restore); sweep-report.md
 
 ## Phase 6 - Polish and landing
 
-- [ ] T09 The site looked at in a browser - a question page's grouped works and a label's hover, the registry index, the single page - and SC-003 checked by a script over the built site; SC-006's figure (the total limits-paragraph length before and after)
+- [x] T09 The site looked at in a browser - a question page's grouped works and a label's hover, the registry index, the single page - and SC-003 checked by a script over the built site; SC-006's figure (the total limits-paragraph length before and after)
       research: rendering
+      verify: DONE. Chromium (Playwright): yashikirin drawing page's works grouped with chips and the period tooltip in the note box; visit-toyama-sankyoson entry with Present day/Japan/Popular and the kind tooltip; registry index grouped. check_site.py over the built site: 471 question pages, 4,308 works, all.html 9 sections/2,126 works, index 9 sections, every check passed (SC-003). SC-006: limits paragraphs 1,244,183 -> 1,197,456 characters
 - [ ] T10 Verify and land: SC-002 as tests; `make record CHECK=1`; `make record` timed against T01; `make done` compared with T01's baseline; closing notes in `plan.md`; pushed
       research: rendering
 

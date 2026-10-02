@@ -360,7 +360,6 @@ causeway	causeway
 causeways	causeway
 celestial order	Celestial Order
 censorate	Censorate
-center-pivot	center-pivot
 centipede lane	centipede lane
 centipede lanes	centipede lane
 centroid	centroid
