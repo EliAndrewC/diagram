@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-organization`)
 **Created**: 2026-10-01
-**Status**: Accepted - FAITHFUL at round 3 (2026-10-01); amendment 1 (FR-017's exceptions) FAITHFUL at its round 3
+**Status**: Implemented (2026-10-02) - spec FAITHFUL at round 3, amendment 1 FAITHFUL at its round 3; plan CLEAR at round 5
 **Request**: [`request.md`](request.md) - the GM's words verbatim. The organization of the record today is *"haphazard"*:
 a top-level "Research" beside a "Cities" that is also research, "How our maps draw it" beside "How our maps draw cities",
 drawing conventions (Presentation) filed as research, and an order that opens on field archetypes for no reason. The GM
