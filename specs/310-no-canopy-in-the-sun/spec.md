@@ -147,3 +147,4 @@ no placer keeps a different reach for a canopy crown.
 | spec 3 | spec-fidelity-verify | FAITHFUL | - |
 | spec 4 (spec-lint wording) | spec-fidelity-verify | FAITHFUL | no meaning changed |
 | amendment 1 (the not-canopy row) | spec-fidelity | CHANGES REQUIRED | the tea hedge's ruling overstated; three passages contradicting the row |
+| amendment 2 | spec-fidelity-verify | CHANGES REQUIRED | tasks T22 named the hill margin's tea rows, which no ruling covers (dropped: never a tree site) |
