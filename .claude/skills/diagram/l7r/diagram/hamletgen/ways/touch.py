@@ -107,7 +107,8 @@ def _touch_junctions(
     final: bool = False,
     movable: Sequence[Poly] | None = None,
 ) -> int:
-    """The LAST pass over the web: every lane end that stands NEAR another way is extended to TOUCH it.
+    """A late pass over the web (it runs four times; `settle_the_web` is the last): every lane end that stands NEAR
+    another way is extended to TOUCH it.
 
     THE NETWORK WAS CONNECTED BY TOLERANCE AND DISCONNECTED IN INK (GM 2026-08-27, feature 133 T31:
     *"a bunch of random scattered lanes strewn about without much rhyme or reason ... a short section

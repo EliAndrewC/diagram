@@ -542,11 +542,8 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     over a connector already routed through it; `driver.py` records the move). The hinterland's own toe
     marsh and scrub come later and keep out of it. Each strip hugs the dike's outer face (reeds auto-skip the band and the ponds via the
     keep-outs) and runs off the frame - it is wild ground continuing, not a feature with an edge,
-    so `crop_to_content` ignores it. `meta.waterward` declares the flanks for
-    `polder_waterward_flanks_wet`, which samples 28 px outside the dike's extreme on each and wants
-    14 of 20 points wet - so a strip ENDING at that extreme still satisfies it. A polder that declares
-    nothing skips the check silently - the 'check that never runs' shape - which is why the scripted
-    tier declares.
+    so `crop_to_content` ignores it. `meta.waterward` declares the water-facing flanks, and the frame holds each
+    strip to the view's edge (`to_the_strips`, `waterward_to_the_frame`).
 
     THE STRIP STOPS AT THE MOUND (feature 150 T54, GM 2026-08-28: "the marshland overlaps with the
     earthen mounds ... In some cases, it seems to even extend past them"). Each strip used to lap 60 px
@@ -556,7 +553,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     dike's outer face (`dike_face`), so record and ink both stop where the embankment starts and neither
     leaves a dry apron in front of it - clipping the rectangle to the dike's extreme instead was tried
     and showed one up to 40 px wide wherever the ring wanders inward from its outermost point. `marsh()`
-    keeps the scatter off the band itself and off every pond bank in the same change: the strip is the
+    keeps its reed tile off the band itself and off every pond bank in the same change: the strip is the
     REGION, the keep-out is the guarantee - the two halves of one rule.
 
     Steps:
@@ -606,10 +603,11 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     """Where plank crossings go on a polder's ring canal (research 2026-07-22, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html): people cross to the fields where they LIVE and then walk the bund network,
-    so crossings CLUSTER on the settlement-side toe collector, are sparse on the interior laterals,
-    and there are NONE on the unsettled feeder, the far toe or the drain. `build_polder` names the
-    +cross collector `e_toe` and the other `w_toe`; which is the settlement side is read off the
-    seat, not assumed."""
+    so crossings CLUSTER on the collector the village abuts. On a FLANK: three on the settlement-side toe, one on each
+    interior lateral, NONE on the feeder, the far toe or the drain. At the HEAD: three on the feeder, one on each toe.
+    At the FOOT: two on each toe and none on the drain. `build_polder` names the +cross collector `e_toe` and the other
+    `w_toe`; which is the settlement side is read off the seat, not assumed. (A valley hamlet such as the reference has
+    no polder: this and the dike gates draw nothing there.)"""
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:
         return {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}

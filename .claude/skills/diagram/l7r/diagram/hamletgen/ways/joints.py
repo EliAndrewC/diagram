@@ -19,8 +19,9 @@ to keep walking."*
 - A HOOK AT A LANE'S END - a last leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more - is taken off: the lane
   ends at the vertex before it, or where the leg before first reaches the way the hook was bending back onto.
 
-It runs LAST in the web stage, after every pass that can lay a joint, so no rewrite may break what those passes
-settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
+It runs after the web's sweeps, and once more after `settle_the_web` (feature 308): the settle squares a crossing after
+the first run and can lay a Z across a joint, which the second mends - a Z becomes a T like a fold, or, where no T fits,
+the joint moves back one vertex (`_joint_moved_back`). No rewrite may break what the passes before it settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
 and every farmhouse a way served still has one within `_SERVE_FT` (`keeps_the_web`) - and `commit_lane` still
 refuses anything that splits the web.
 """
@@ -316,7 +317,8 @@ def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, f
 
 def center_lane_ends(s: Settlement) -> int:
     """Every lane end that stops on another lane's tread is set where `centered_end` says, record and ink together.
-    Runs after `straighten_joints`, the last pass that moves a lane end. Returns the number of ends moved."""
+    Runs after the first `straighten_joints`; the trims, the bund run-on, the settle and the second joint pass can still
+    move an end, and are not re-centered. Returns the number of ends moved."""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     moved = 0
     for i, ln in enumerate(lanes):

@@ -180,9 +180,10 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     it starves an elongated cluster of wells entirely, because the inset box no longer holds a grid
     cell (`settlement_has_wells`, seed 3).
 
-    So the seats are derived from the HOUSES: a candidate must have several homesteads around it and
-    none too far, which is what "among the dwellings" means, and the innermost candidates are tried
-    first. `well_at` gives the engine's own verdict on each - it refuses a seat on a lane, a crop, a
+    The well pockets the seating laid in the households' bundles are drawn first (feature 287, homes H10), and a grove
+    farm takes its own water; the communal wells beyond them are seated here. Their seats are derived from the HOUSES: a
+    candidate must have several homesteads around it and none too far, which is what "among the dwellings" means, and
+    the innermost candidates are tried first. `well_at` gives the engine's own verdict on each - it refuses a seat on a lane, a crop, a
     footprint or too near another well - so nothing here restates a placement rule."""
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:

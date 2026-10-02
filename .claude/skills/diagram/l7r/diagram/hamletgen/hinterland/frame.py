@@ -190,8 +190,9 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     """The frame the scatter predicts and throws within (feature 224, GM 2026-09-11: "the scatter still throws its
     off-map blades"): the crop's own frame-setting boxes at this moment (`_crop_boxes`, the source `crop_to_content`
     reads), the belt, the woodland patches and the bamboo seats already scanned, and the title pocket when one is
-    reserved - grown by the crop's margin and `SCATTER_PAD`. The same prediction `stage_windbreak` makes for the
-    belt's clumps, with the reserved polygons added because this runs earlier. Recorded on the settlement so
+    reserved - grown by the crop's margin and `SCATTER_PAD`: a prediction, asked before the view is decided (the marsh's
+    throw). Once the view is decided (`plan.view`, before the scrub is scattered) it is the decided view itself, with
+    `SCATTER_PAD` past it and the title band's allowance (`TITLE_BAND_ALLOWANCE`). Recorded on the settlement so
     `finish()` can say whether the view stayed inside it (`meta.scatter_frame_breach`). A convention this sets: the file's
     scatter is a function of this frame, not of the parcel - a map re-cropped wider than its recorded view finds bare
     ground from `SCATTER_PAD` out (settlement-review, 2026-09-11)."""
@@ -298,10 +299,11 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     flank. That leaves the lateral corners, which is exactly where the coppice scan wants to go
     (`open_ground_patches` prefers the nearest qualifying ground). Both cannot have them.
 
-    So one corner of the map's content is reserved before the coppice is sited. The corner chosen is
-    the one furthest from the field's middle AND from the houses - the emptiest quarter of the sheet,
-    which is where a reader would expect the cartouche anyway. It is a reservation, not a placement:
-    `title()` still does its own search and may well sit somewhere else."""
+    So one pocket of the map's content is reserved before the coppice is sited: the first blank box the scan
+    `title()` runs (top to bottom, left to right) finds clear of every title obstacle and `TITLE_POCKET_CLEAR_FT`
+    (40 ft) from every feature glyph - 300 x 190 first, then 210 x 120 - and where neither fits inside the content, a
+    placard-sized box just outside it: above-left, above-right, below-left, then below-right. It is a reservation, not
+    a placement: `title()` still does its own search and may well sit somewhere else."""
     # RESERVED ONCE (feature 150, Kuwabata seed 21): four callers ask for the pocket at four stages, and each
     # ask re-ran the blank-box search against the obstacles of ITS moment - the belt was dented around one
     # answer, the coppice kept out of another, and the frame's answer (after the crop, with the belt and the

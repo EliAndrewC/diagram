@@ -22,18 +22,20 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     """Lay the irrigation skeleton and carve the paddies between its threads.
 
     Second, because the water is first and the field is grown AROUND the water (the water-first
-    inversion `waterfields.py` exists for). The head sluice comes from `head_sluice`, which puts the
-    intake at the field's high head - gravity, not a knob.
+    inversion the `waterfields/` package exists for). The head sluice comes from `head_sluice`, which puts the
+    intake at the field's high head - gravity, not a knob. A POLDER hands the whole stage to `stage_polder`. The
+    stretches of a ditch that run outside the crop are reserved as 30 px no-build corridors once the field is drawn.
 
     Steps:
+        l7r.diagram.hamletgen.water.comb.head_sluice
+        l7r.diagram.settlement.Settlement.plot_texture
         l7r.diagram.hamletgen.water.comb.fit_field
         l7r.diagram.sitegen.geom.net_acres
-        l7r.diagram.hamletgen.water.comb.head_sluice
         l7r.diagram.hamletgen.water.brook.feed_brook
+        l7r.diagram.settlement.Settlement.draw_comb_field
         l7r.diagram.hamletgen.water.brook.open_race_mouth
         l7r.diagram.hamletgen.water.brook.draw_intake
-        l7r.diagram.settlement.Settlement.draw_comb_field
-        l7r.diagram.settlement.Settlement.plot_texture
+        l7r.diagram.hamletgen.water.polder.stage_polder
     """
     if plan.field_archetype in POLDER_ARCHETYPES:
         stage_polder(s, plan)

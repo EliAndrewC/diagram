@@ -139,8 +139,8 @@ along the back row. Where none fits within it, the whole page behind the back ro
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
-    A candidate is a rect on a `BAMBOO_SEAT_STEP_FT` lattice around its target, refused when any of its perimeter
-    samples stands on a house, yard, garden, shed, byre, well, board, lane, paddy, marsh, pond, the belt,
+    A candidate is a rect on a `BAMBOO_SEAT_STEP_FT` lattice around its target, refused when any sample of a grid over
+    the whole stand (`BAMBOO_SAMPLE_FT` apart) stands on a house, yard, garden, shed, byre, well, lane, paddy, marsh, pond, the belt,
     a coppice patch or the other stand (each with its own pad), and the surviving candidate nearest the
     target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it at full size, then at 70%, and only
     then anywhere on the page behind the back row, full size then 70%; a stand that fits nowhere is dropped - a hamlet

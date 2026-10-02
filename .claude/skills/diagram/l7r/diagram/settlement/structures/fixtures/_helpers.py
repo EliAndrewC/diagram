@@ -185,8 +185,9 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
     same point. So `center` keeps today's behavior byte for byte, and only the two placements that
     need a landmark get one.
 
-    `entrance` is the MOUTH, not the nearest point: the approach is walked from its far end inward and
-    the anchor is where it first reaches the cluster. Taking the nearest point instead would put the
+    `entrance` is where the connector hands over to the lanes (`kosatsuba_handover`, feature 261) - every departure
+    passes that junction. Where the connector meets no other way, it is the MOUTH, not the nearest point: the approach
+    is walked from its far end inward and the anchor is where it first reaches the cluster. Taking the nearest point instead would put the
     anchor at the deepest point of the track's run past the houses, i.e. inside the settlement, which
     is the opposite of an entrance.
     """

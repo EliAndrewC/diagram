@@ -215,10 +215,10 @@ class LanesMixin:
         A lane exists to be fronted. The engine already ends an arm where it meets crop or water
         ("shortening the arm is the honest fix: the lane simply ends where the crop starts"), but an
         arm that meets neither runs the full cluster band into open ground - and the thing that says
-        where it should stop, namely where the houses actually landed, does not exist when the lanes
-        are laid. Lanes must be laid FIRST: a lane is a no-build corridor the homesteads front. So
-        the trim happens here instead, after the flush, by rewriting the ink in the stream slots the
-        lane already owns - the lane keeps its exact draw position and nothing re-layers.
+        where it should stop, namely where the houses actually landed, may not exist when a lane is laid. So the trim
+        is asked after the lanes are drawn - in the scripted hamlet, right after the web's runs, against the placed
+        houses - by rewriting the ink in the stream slots the lane already owns: the lane keeps its exact draw position and
+        nothing re-layers. It also drops an internal lane shorter than `_LANE_MIN_FT` (71 ft).
 
         A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/questions/0081-village-lanes.drawing.html: "a lane that serves a farmhouse ends at
         that house's dooryard ... a lane end that reaches nothing is pulled back to the last house it serves"). An end serves
