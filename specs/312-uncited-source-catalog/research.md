@@ -77,3 +77,17 @@ but a check bundle's saved page, a source-reader's or a source-applicability's, 
 rule, and so was the filter. The fix (constitution XIV, the defect is the cache's): every imported entry is read live and
 replaced (`verify --all-imported`), each recorded `same`, `misfiled` or `unread` in `import-check.jsonl`; a page found
 misfiled loses its verdict and its write-up and is judged again from the live text.
+
+## R6: a long work is read whole by several readers (2026-10-02)
+
+**Found:** the Read tool returns about 60,000 characters of a file, and the drafting parts were cut at 20,000 estimated
+tokens - up to 80,000 characters of English. The drafters of two book-length works (Staunton 1797, 11 parts; Esherick and
+Rankin 1990, 17 parts) said so: each read only the head of each part, one skipped whole parts. A whole book is also more
+than one agent can hold (1.4 MB).
+
+**Decided (deliberate, the contract's "read whole" kept):** parts are capped at 50,000 characters as well
+(`PART_CHARS`, tested); a work too long for one agent is read by several readers, each taking three or four parts whole
+and writing notes (span, every passage on settlements and buildings with a quotation, limits, and the first and last
+line of each part as proof of the whole read), and the drafter writes the entry from all the notes. The partial-read
+entries were set aside unwritten (`entries.partial-read.jsonl`). Priced: one drafter told to page through every part
+(over its context for a 1.4 MB work); write-ups that state what was read (breaks "read whole").
