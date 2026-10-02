@@ -86,22 +86,24 @@ line to stay on the right side of was not drawn for it.
 
 **Why this priority**: the GM's general rule; it is how the next inefficiency of this shape is found rather than stumbled on.
 
-**Independent Test**: the census runs on the reference at 40 households and lists every check with its calls, its mean and
-largest comparison count; a deliberately unindexed scan added to a test roll is flagged.
+**Independent Test**: the census runs over the pool's generated rolls (every form) and the reference at 40 households, and
+lists every check with its calls, its mean and largest comparison count; a deliberately unindexed scan added to a test roll is
+flagged. It stays a standing check, run beside `make perf`, so a future scan of this shape is caught when it lands.
 
 **Acceptance Scenarios**:
 
 1. **Given** a roll, **When** the census runs, **Then** every flagged check is listed with its stage, calls and comparison
    counts.
-2. **Given** a flagged check in the homesteads stage, **When** this feature lands, **Then** it is given its box, index or line,
-   or recorded with the measurement of why not; a flagged check in another stage is recorded and raised with the GM.
+2. **Given** a flagged check in any stage, **When** this feature lands, **Then** it is given its box, index or line, or
+   recorded with the measurement of why not.
 
 ### Edge Cases
 
 - A margin the packing predicts too small that the engine's greedy seating would have filled: the prediction is a lower bound
   where it can be; a wrong prediction is measured by the harness (US1) and costs at most one extra seated margin (US2.1).
-- The polder archetypes and the dispersed and linear forms do not seat by the nucleated placer; they are left as they are, and
-  the harness says so per seed.
+- Every form is seated through `seat_every_household` and its margin ladder, so FR-003 and FR-004 apply to every form; the
+  harness (US1) and SC-002/SC-003 report each form the pool rolls. A form the packing physically cannot serve is put to an
+  independent `spec-fidelity` check with its measurement, never excluded here.
 - 80 households and up refuse in the field stage (feature 304 research R5); out of scope.
 
 ## Requirements *(mandatory)*
@@ -110,18 +112,18 @@ largest comparison count; a deliberately unindexed scan added to a test roll is 
 
 - **FR-001**: A prototype MUST measure the packing against the engine's seating on captured states, back to back, before any
   engine change, and report a GO/NO-GO verdict by the rule in US1.
-- **FR-002**: On NO-GO the session MUST iterate the design at least once more, measured the same way, before stopping; every
-  round's numbers are recorded.
-- **FR-003**: On GO the engine MUST choose the margin by the packing's predicted capacity rather than by seating each margin
-  in turn.
+- **FR-002**: Wherever SC-002 or SC-003 is missed - whatever an earlier round's verdict - the session MUST prototype and measure
+  at least one further design round the same way before stopping; every round's numbers are recorded.
+- **FR-003**: On GO the engine MUST know a margin's capacity before seating it - predicted from its free ground under the rules
+  that limit how many homesteads it holds - and choose the margin by it rather than by seating each margin in turn.
 - **FR-004**: On GO the engine MUST propose seats by packing homestead bounding boxes adjacent to the ones already standing, and
   ask the full rules only of the proposed seats.
 - **FR-005**: The packing MUST read the free ground from rasters and boxes built once per margin and kept current as homesteads
   land (constitution X clause 15), never by a scan over the map's items per candidate.
-- **FR-006**: A census MUST count the items each overlap or proximity check compares against, per call, over a roll, and flag
-  the checks past a threshold set in the plan from the measured distribution.
-- **FR-007**: Every flagged check in the homesteads stage MUST be indexed, boxed or lined, or recorded with why not; flagged
-  checks in other stages MUST be recorded and raised with the GM.
+- **FR-006**: A census MUST count the items each overlap or proximity check compares against, per call, over the pool's
+  generated rolls of every form, and flag the checks past a threshold set in the plan from the measured distribution; it stays
+  a standing check run beside `make perf`.
+- **FR-007**: Every flagged check, in any stage, MUST be indexed, boxed or lined, or recorded with the measurement of why not.
 - **FR-008**: No pool map or cohort seed may fail a rule it passed before or seat fewer households; maps may move within the
   rules (GM 2026-09-30, feature 297: "They do NOT need to remain identical in output").
 - **FR-009**: Every lever MUST be timed by the wall clock, base and clone back to back, and recorded in `dev/performance.md`
@@ -138,10 +140,10 @@ largest comparison count; a deliberately unindexed scan added to a test roll is 
 - **SC-003** (FR-003, FR-004): At most two margins are seated per roll, and the placer is offered at most five seats per house
   kept, on every reference seed at 10/20/40 households.
 - **SC-004** (FR-008): The cohort passes as many seeds as the base (30/30) and every pool map passes its rules.
-- **SC-005** (FR-006, FR-007): The census lists every check of a roll; every flagged homesteads check is resolved or recorded.
+- **SC-005** (FR-006, FR-007): The census lists every check of the pool's rolls; every flagged check is resolved or recorded.
 - **SC-006** (FR-003, FR-004, FR-009): The 15-household reference is not slower (perf band 0 or better).
-- SC-002 and SC-003 are the session's goals, set from the GM's *"not a full second per box"*: a miss after the iterations FR-002
-  asks for is recorded with every round's numbers and raised with the GM.
+- SC-002 and SC-003 are the session's goals, set from the GM's *"not a full second per box"*: a miss is met with FR-002's further
+  round; one that survives it is recorded with every round's numbers and raised with the GM.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -157,4 +159,12 @@ the implementation finds it needs is recorded here with its class before it land
 
 - The reference spec at 10/15/20/40 households (feature 304's scaling leg) is the measure; `make perf` carries it.
 - Feature 302's harness pattern (capture the inputs, run both methods back to back, compute the verdict) is reused.
-- The nucleated form is the subject; the other forms keep their seating unless the census flags a check in them.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 4 items - the other forms carved out on a premise the code contradicts;
+  iteration tied to NO-GO rather than to the goals; flagged checks outside the homesteads stage only raised; the census on one
+  roll only. Addressed: every form in scope, a further round wherever SC-002/SC-003 is missed, every flagged check fixed or
+  measured, the census over the pool's rolls and standing beside `make perf`. FR-003 also reworded after the round-1 prototype
+  (research R1): the capacity is predicted under the rules that limit it, since the free ground alone holds 213-305 boxes where
+  15-40 homesteads seat.
