@@ -46,8 +46,9 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   `quote-verbatim`) - an invocation, never a mention (a grep for the word passes; the guard doctrine).
 - **D3 - The build's refusals** gathered with the rest (feature 305 FR-010): a registry entry or footnote linking a blocked
   or banned URL; an uncited entry linking the GM's notes (the canon section's URLs); a footnote citing a key whose entry
-  is in `040-uncited-works/` (naming `make cite-uncited KEY=<k>`); a footnote citing a key whose access state in 313's
-  `source-access.json` is `paywalled` or `never-read` (FR-020; skipped with one printed line while that file is absent).
+  is in `040-uncited-works/` (naming `make cite-uncited KEY=<k>`). FR-020 is a push and gate check, not the build's: a
+  footnote citing a source FR-019 names (313's report JSON: `paywalled`, `gm-partial`, `never-read`, or a GM mark of
+  paywalled or not found) with no confirmation line in `research/partial-confirmations.jsonl` is refused.
 - **D4 - The uncited set and the rule verdicts.** `_uncited.py set` = `consulted_urls` minus URLs with a verdict line,
   minus URLs any registry entry carries (respellings resolved by `norm` and by the cleaned URL), plus manifest rows with no
   key, no note and no footnote (the pre-hold captures). Re-runnable: a page read and never cited after this feature is in
@@ -85,13 +86,17 @@ the high-risk sources confirmed once the GM has downloaded them (FR-021).
   it cannot map is kept as written, prefixed `old:`) to a line `{url, key, question, sought, outcome, date, feature}`, with
   `sought` = `unknown - recorded before feature 312`. `make source-pages` requires `Q=` and `SOUGHT=`, prints the URL's
   attempts and verdict before fetching, and appends `pending` attempts; `make source-outcome` appends the outcome line.
-  The WebFetch hook adds the same print as context. `make attempts URL=|KEY=|Q=` prints them.
+  The WebFetch hook adds the same print as context and appends an attempt (its `prompt` as what was sought); the Bash
+  side of the hook appends one for a `curl`/`wget`-style fetch (the command as what was sought). `make archive` and `make
+  archive-find` append one. `make attempts URL=|KEY=|Q=` prints them.
 - **D13 - FR-005 inventory** is a table in `docs/research-doctrine.md` - rule, where it is stated, what enforces it - with a
   test that every script, hook or agent file the table names exists; a mechanical rule found with no tool gets one here.
-- **D14 - FR-019 removal** runs after feature 313 lands: the keys whose access state is `paywalled` or `never-read`; for
-  each footnote citing one, `make quote-verbatim` against any readable copy (an open abstract included); a footnote whose
-  passage is not found becomes an absence note, or is dropped where another note carries the claim; the entry moves out of
-  the works cited and a `not-kept.jsonl` line records it. Every changed question owes its record checks.
+- **D14 - FR-019 removal** runs after feature 313 lands: the keys FR-019 names, from 313's report JSON; for each footnote
+  citing one, `make quote-verbatim` and `quote-check` against the readable part (the open page, an open abstract, the
+  GM's partial copy); a confirmed footnote gets a line in `research/partial-confirmations.jsonl` (key, note id, where the
+  passage was read, the date); an unconfirmed one becomes an absence note, or is dropped where another note carries the
+  claim. A key left with no footnote leaves the works cited, gets 313's hand-recorded state and a `not-kept.jsonl` line.
+  Every changed question owes its record checks.
 - **D15 - FR-021** runs when the GM reports downloads ingested (313's `make downloads-ingest`): per key, `make
   check-bundle KEY=` and `source-reader`; then `quote-check` on its notes; corrections applied with `make apply-edits`.
 

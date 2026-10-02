@@ -94,10 +94,12 @@ the source's earlier attempts and its filter verdict; every new consult records 
 **Independent Test**: `make source-pages` on a URL with earlier attempts prints them before fetching; run without saying
 what is sought, it is refused with the compliant command; `make attempts URL=<u>` lists the attempts.
 
-### User Story 6 - A cited source no one can read is not cited (Priority: P1)
+### User Story 6 - A cited source no one can fully read is cited only where its passage is confirmed (Priority: P1)
 
-A cited source that is paywalled (by its access tag) or was never read stops being cited: its footnotes become absence
-notes where it was the only support, and the build refuses a footnote citing such a source.
+A cited source where less than the work can be read - the GM marked it paywalled or not found, or its access state is
+`paywalled`, `gm-partial` or `never-read` - loses each footnote whose passage `quote-check` has not confirmed in the
+readable part (an absence note where it was the only support); the push and the gate refuse any such footnote with no
+recorded confirmation.
 
 ### User Story 7 - The high-risk sources are confirmed or removed (Priority: P1, needs the GM)
 
@@ -155,8 +157,9 @@ in User Story 6.
   (building, farming, settlement, landscape, daily life, religion, administration - the subjects of `research/tags.json`),
   of a kind of source the record would cite (scholarship, a primary text, a museum, archive, government or reference
   work, an established encyclopedia), of evidence the setting could use: premodern or traditional practice, another
-  period's or region's as an analog, or facts not bound to a period (the `works-timeless` section); never the canon
-  section. Its verdict is KEEP or NOT-KEPT; a NOT-KEPT carries one or more reasons from the fixed set -
+  period's or region's as an analog, or facts not bound to a period (the `works-timeless` section) - or the published L5R
+  setting the campaign adapts (the `works-published-setting` section: the GM, *"if we ever have any original L5R setting
+  notes from like the L5R wiki ... then that could go there"*); never the canon section. Its verdict is KEEP or NOT-KEPT; a NOT-KEPT carries one or more reasons from the fixed set -
   `off-topic` (the title misled), `modern-only` (industrial or mechanized practice whose numbers would mislead),
   `unreliable-kind` (AI-generated, content farm, unsourced aggregator), `no-substance` (search, listing, index or stub
   page), `duplicate` (a copy of a kept or cited page), `unreadable` - and an optional one-line note. It may propose a domain
@@ -196,8 +199,9 @@ in User Story 6.
   originally"*).
 - **FR-017**: Every new consult records what was sought, by every route that reads a page: `make source-pages` requires
   the question and `SOUGHT=` and refuses without them, printing the compliant command; `make archive-find` and `make
-  archive` write an attempt with what they were asked for; a WebFetch writes one through the hook FR-002 and FR-018 add,
-  its `prompt` serving as what was sought where no question is named. `make source-outcome` writes the attempt's outcome.
+  archive` write an attempt with what they were asked for; a WebFetch and a Bash fetch (`curl`, `wget` and the other
+  fetch commands FR-002 names) write one through the hook FR-002 and FR-018 add - a WebFetch's `prompt` serving as what was
+  sought where no question is named, a Bash fetch's command where none is. `make source-outcome` writes the attempt's outcome.
 - **FR-018**: Before a page is fetched, its earlier attempts and its filter verdict are printed: by `make source-pages`, by
   `make archive-find`, and by the WebFetch hook as added context. `make attempts URL=<u> | KEY=<k> | Q=<NNNN>` prints them on
   demand. A verdict never refuses a read.
@@ -268,6 +272,8 @@ in User Story 6.
 
 ## Review
 
+- Round 2 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 3. Applied: User Story 6 says what FR-019/FR-020 say; FR-017
+  covers the Bash fetch routes; FR-008 admits the published L5R setting (`works-published-setting`).
 - Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 6. Applied: FR-008 takes period-free evidence; FR-019/FR-020 made
   consistent (removal footnote by footnote unless the passage is confirmed in the readable part; `gm-partial` and "not
   found" included; the refusal at the push and the gate); FR-005's inventory covers every rules file and gives a

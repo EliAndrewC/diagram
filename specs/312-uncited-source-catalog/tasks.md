@@ -27,7 +27,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [ ] T10 [US5] `scripts/_attempts.py` (seed, append, show), `make attempts`; `.gitattributes` union lines; tests (plan D12)
       research: rendering
 - [ ] T11 [US5] `make source-pages` requires `Q=` and `SOUGHT=` and prints attempts and verdict first; `make
-      source-outcome` appends the outcome; the WebFetch hook prints them as context; tests
+      source-outcome` appends the outcome; the hook prints them as context for a WebFetch and appends an attempt for a
+      WebFetch or a Bash fetch; `make archive` and `archive-find` append one; tests
       research: rendering
 - [ ] T12 [US5] seed `source-attempts.jsonl` from the ledger; SC-007 count recorded in `research.md`
       research: rendering
@@ -66,9 +67,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 
 - [ ] T40 [US6] FR-005: the inventory table in the doctrine and its test; a tool for each mechanical rule without one
       research: rendering
-- [ ] T41 [US6] the build refuses a footnote citing a `paywalled` or `never-read` source (needs 313's tags)
+- [ ] T41 [US6] the push and the gate refuse a footnote citing a source FR-019 names with no recorded confirmation
+      (needs 313's report)
       research: rendering
-- [ ] T42 [US6] the paywalled and never-read citations removed (plan D14); record checks on every changed question
+- [ ] T42 [US6] the footnotes of FR-019's sources confirmed or removed (plan D14); record checks on every changed question
       research: rendering
 
 ## Phase 6 - the high-risk sources (US7; FR-021) - waits on the GM's downloads
