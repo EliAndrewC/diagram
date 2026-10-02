@@ -140,8 +140,8 @@ root guard table gains its row. `_archive_ops.GM_LISTS` already leaves the GM's 
 - VI: PASS - each task names its verification; `make done` and `make hooks-test` at the end; `make record CHECK=1` and
   the pointer check over the new file.
 - X: PASS - ruff, ruff format and pyrefly over the new scripts. Tests are written red first in
-  `tests/tooling/test_downloads.py` and `test_access_tags.py`. No file nears 1,000 lines: `_downloads.py` is estimated at
-  ~450 and `_access_tags.py` at ~200. The coverage floor is over `l7r` and does not change.
+  `tests/tooling/test_downloads.py` and `test_access_tags.py`. No file nears the 1,000-line bar (`check-file-scale.py` holds it at the gate).
+  The coverage floor is over `l7r` and does not change.
 - XII: N/A for rendering - nothing a map draws or states changes. The access tags restate what the archive and the registry
   record; no new finding is made.
 - XIII: PASS - the baseline is `make done` in a detached worktree before the push. Shared code touched:
