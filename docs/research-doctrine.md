@@ -74,11 +74,12 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   check we create in order to justify whether a source is applicable to be used in the creation of
   our diagrams, that subagent check should also be run when we first begin to make use of the source
   prior to integrating its numbers or claims or details into our maps."*).
-- **A source only the GM can fetch goes on THEIR download list, in THEIR format, appended at the
+- **A source only the GM can fetch goes on the download list, in THEIR format, appended at the
   end** (GM 2026-09-14: *"each source has a link to what you think the URL is and a link to the
   Google search as a backup where the Google search should uniquely identify the resource ... saved
   in markdown in this format since that is much easier for me to find things"*):
-  `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, one markdown entry per work with the guessed
+  the canonical list `research/to-download.md` through `make download-add` (feature 313; the GM's
+  `academic-sources/TO-DOWNLOAD.md` is their marked copy, synced from it), one markdown entry per work with the guessed
   direct link AND the uniquely identifying Google-search link, what rests on it and what blocked it,
   never handed over only in a chat message; the full shape is in the research directory's
   `CLAUDE.md`, "A source the GM is to fetch by hand".

@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 112 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 116 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -109,6 +109,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Project state</h2>
 <p class=sec>Switches, audits and the records that make the tooling&#x27;s own behavior reviewable.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
+<tr><td class=n>make access-tags</td><td class=a>DATE JSON KEY REASON SET</td><td>what can be got of each source - open, gm-full, gm-partial, paywalled, bot-refused, down, gone, never-read - derived from the archive, the registry and the GM&#x27;s marks (feature 313)   [KEY=&lt;key|download:ID&gt;] [JSON=1] | SET=&lt;state&gt; KEY= DATE=&lt;YYYY-MM-DD&gt; REASON=&quot;&lt;what it rests on&gt;&quot;</td></tr>
 <tr><td class=n>make agent-census</td><td class=a><div class=ad><span class=an>SINCE=&lt;date&gt;</span><span class=aw>only the runs that started on or after it</span></div><div class=ad><span class=an>OUT=&lt;json&gt;</span><span class=aw>also write the rows to this file</span></div></td><td>what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=&lt;json&gt;]</td></tr>
 <tr><td class=n>make append</td><td class=a>FILE LINE</td><td>append ONE line to a coordination file without reading or printing it (feature 274)</td></tr>
 <tr><td class=n>make apply-edits</td><td class=a>DRY FROM SKIP</td><td>apply a quote-check or record-format report&#x27;s EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)</td></tr>
@@ -123,6 +124,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make claim</td><td class=a><div class=ad><span class=an>SLUG=&lt;slug&gt;</span><span class=aw>lower-case kebab; the directory becomes specs/NNN-&lt;slug&gt;/ in THIS clone</span></div><div class=ad><span class=an>PEEK</span></div><div class=ad><span class=an>RENUMBER</span></div></td><td>claim the next spec-kit feature number under the host-wide lock</td></tr>
 <tr><td class=n>make commit-permitted</td><td class=a>&ndash;</td><td>commit the most recent bypass-log entry, which is how a paid FULL run is authorized</td></tr>
 <tr><td class=n>make docs</td><td class=a>&ndash;</td><td>regenerate docs/make-targets.html from this Makefile&#x27;s own `##` lines</td></tr>
+<tr><td class=n>make download-add</td><td class=a>FILE</td><td>append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)</td></tr>
+<tr><td class=n>make downloads-ingest</td><td class=a>DROP KEEP</td><td>on the GM&#x27;s word &quot;ingest&quot;: the marks in the GM&#x27;s copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP=&quot;&lt;ids&gt;&quot;] [DROP=&quot;&lt;ids&gt;&quot;]</td></tr>
+<tr><td class=n>make downloads-sync</td><td class=a>&ndash;</td><td>on the GM&#x27;s word &quot;sync&quot;: the GM&#x27;s copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)</td></tr>
 <tr><td class=n>make effort-blind</td><td class=a>SEED TASK</td><td>feature 293: export one task&#x27;s two outputs, stripped and labeled A/B, to a bundle outside the repository</td></tr>
 <tr><td class=n>make effort-init</td><td class=a>OFFSET SEED SNAPSHOT SOURCES_HOME START</td><td>feature 293: record what every run of the effort experiment shares, once</td></tr>
 <tr><td class=n>make effort-measure</td><td class=a>RUN VOID</td><td>feature 293: measure a finished run from its transcripts, the guard log and its clone</td></tr>

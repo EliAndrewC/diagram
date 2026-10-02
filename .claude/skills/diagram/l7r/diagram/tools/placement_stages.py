@@ -267,14 +267,34 @@ def features_between(s: Settlement, lo: dict[tuple[str, str], int], hi: dict[tup
         for key, c in counts.items():
             if key and key != "-":  # `"-"` is ink ruled NOT highlighted, so a reader cannot click it
                 found[key] = found.get(key, 0) + c
-    for layer in ("water", "late_water"):  # the deferred water carries its class on each entry (`Settlement._tag`)
+    # The DEFERRED stores are drawn at finish, so their ink sits in slots reserved long before the stage that filled them:
+    # the ways (`ground`) and the water carry their class on each entry (`Settlement._tag`), and a tiled cover - the marsh,
+    # the scrub - on its `Cover` (feature 298's slots are reserved by `_header`, so the marsh and the scrub were credited
+    # to no stage and the closing list named them as features Inashiro does not have)
+    for layer in ("ground", "water", "late_water", "_covers"):
         entries = getattr(s, layer, None)
         if isinstance(entries, list):
             for e in entries[lo.get(("attr", layer), 0) : hi.get(("attr", layer), len(entries))]:
-                key = e.get("cls") if isinstance(e, dict) else None
-                if isinstance(key, str) and key and key != "-":  # a water entry's class is a plain key
+                tag = e.get("cls") if isinstance(e, dict) else getattr(e, "cls", None)
+                for key in tag_keys(tag):
                     found[key] = found.get(key, 0) + 1
     return sorted(found)
+
+
+def tag_keys(tag: object) -> list[str]:
+    """The classes a reader can click that one deferred entry's tag names: a plain key, both sides of a `Split`, every
+    piece of a `Parts` - never `"-"`, the ink ruled NOT highlighted."""
+    from l7r.diagram.interactive.tags import Split
+
+    if isinstance(tag, str):
+        keys = [tag]
+    elif isinstance(tag, Split):
+        keys = [tag.fill, tag.stroke]
+    elif isinstance(tag, tuple):
+        keys = [piece[0] for piece in tag if isinstance(piece, tuple) and piece and isinstance(piece[0], str)]
+    else:
+        keys = []
+    return [k for k in dict.fromkeys(keys) if k and k != "-"]
 
 
 def elsewhere_in_the_pool(named: set[str], skill: str) -> list[tuple[str, str]]:
@@ -457,12 +477,14 @@ def draw_boundary(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: fl
 
     lines = Image.new("RGBA", im.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(lines)
+    refused = Image.new("L", im.size, 0)  # the refused cells as a mask, so the rule can go round the ground a house may take
     fg = refused_ground(overlay)
     if fg is not None:
         c = fg.cell * sc
         for i, j in fg.taken:
             x, y = (fg.x0 + i * fg.cell - x0) * sc, (fg.y0 + j * fg.cell - y0) * sc
             draw.rectangle((x, y, x + c, y + c), fill=BOUNDARY_COLORS["taken"])
+            ImageDraw.Draw(refused).rectangle((x, y, x + c, y + c), fill=255)
     for ring in (overlay.get("rings") or []) + (overlay.get("holes") or []):
         pts = [((x - x0) * sc, (y - y0) * sc) for x, y in ring]
         draw.line([*pts, pts[0]], fill=BOUNDARY_COLORS["rings"], width=max(2, round(sc * 3)))
@@ -478,14 +500,18 @@ def draw_boundary(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: fl
     base = Image.composite(base, Image.alpha_composite(base, veil), mask)
     lines.putalpha(ImageChops.multiply(lines.getchannel("A"), mask))  # the lines and the tint clipped to the window
     base = Image.alpha_composite(base, lines)
-    edge = mask.filter(ImageFilter.FIND_EDGES).point(lambda v: 255 if v > 0 else 0)
+    # THE RULE GOES ROUND THE GROUND A HOUSE MAY TAKE, not round the window's two limits (the GM, 2026-10-02: the shape "extends
+    # into the rice paddy fields where certainly none of that could go"): the window less its refused cells, so the paddy
+    # inside the limits lies outside the rule, tinted, and only seatable ground is enclosed
+    open_ground = ImageChops.subtract(mask, refused)
+    edge = open_ground.filter(ImageFilter.FIND_EDGES).point(lambda v: 255 if v > 0 else 0)
     base.paste(Image.new("RGBA", im.size, BOUNDARY_COLORS["edge"]), (0, 0), edge)
     return base.convert("RGB")
 
 
-RESERVATION_COLORS = {"access": (235, 135, 20, 110), "exit": (190, 40, 190, 150), "wood": (25, 110, 35, 255)}
+RESERVATION_COLORS = {"access": (235, 135, 20, 110), "exit": (45, 45, 55, 170), "wood": (25, 110, 35, 255)}
 """The reservations' inks on the homesteads plate: the access corridors a translucent orange band, the exit strip a
-translucent magenta band, the wood-share seats a dark green ring - none of them a color the map itself uses for ground."""
+dark gray band (it was magenta, and the GM read it as the boundary's red, 2026-10-02), the wood-share seats a dark green ring - none of them a color the map itself uses for ground."""
 
 
 def draw_reservations(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
@@ -657,7 +683,8 @@ def homestead_legend(window_ft: tuple[float, float] | None) -> str:
     recorded its window - the window's two limits in feet."""
     reserved = (
         "Over that, the ground the seating reserved as it seated them: each house's access corridor in orange (bending where it was "
-        "routed round what stands), the exit strip the corridors start from in magenta, and each household's wood-share seats as "
+        "routed round what stands), the exit strip in dark gray - the start of the hamlet's way out, reserved before any house so "
+        "every house's path can join it - and each household's wood-share seats as "
         "dark green rings."
     )
     if window_ft is None:
@@ -667,11 +694,12 @@ def homestead_legend(window_ft: tuple[float, float] | None) -> str:
         )
     bound, reach = window_ft
     return (
-        f"Drawn over this plate: what the seating asked of the ground. It offers a house only inside the dark rule - within "
-        f"{bound:,.0f} ft of the margin's seat and {reach:,.0f} ft of the paddy - and everything outside it is veiled, because no seat "
-        "there is ever asked. Inside, the red tint is the ground it refuses a homestead outright, rasterized once and looked up per "
-        "seat: the paddy's side of its facing chords (blue), the no-build ground's outline (red: the hem, the marshes, the ponds, the "
-        "dry plots, the reed toe) and the water's clearance (teal). " + reserved
+        f"Drawn over this plate: what the seating asked of the ground. The dark rule encloses the ground a house may be offered: "
+        f"within {bound:,.0f} ft of the margin's seat (the cluster's limit, which keeps a nucleated hamlet together) and "
+        f"{reach:,.0f} ft of the paddy, less the ground refused outright. Beyond those two limits the plate is veiled, because no "
+        "seat there is ever asked. Within them, the red tint is the refused ground, rasterized once and looked up per seat: the "
+        "paddy's side of its facing chords (blue), the no-build ground's outline (red: the hem, the marshes, the ponds, the dry "
+        "plots, the reed toe) and the water's clearance (teal). " + reserved
     )
 
 

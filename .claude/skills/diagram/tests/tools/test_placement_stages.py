@@ -293,12 +293,15 @@ def test_the_boundary_is_drawn_only_where_the_seating_asks_it(monkeypatch: pytes
     assert im.getpixel((20, 20)) != (255, 255, 255) and im.getpixel((20, 20))[0] > 240, "outside the window, veiled in paper"
     assert im.getpixel((75, 90)) == im.getpixel((20, 20)), "the ring outside the window is not drawn"
     assert im.getpixel((150, 30)) == im.getpixel((20, 20)), "nor the water's line"
+    rule = ps.BOUNDARY_COLORS["edge"][:3]
+    assert rule in [im.getpixel((120, y)) for y in range(194, 206)], "the rule runs along the paddy's edge, round the open ground"
+    assert rule not in [im.getpixel((120, y)) for y in range(232, 300)], "and not round the window's arc out in the paddy"
     whole = ps.draw_boundary(Image.new("RGB", (300, 300), (255, 255, 255)), {k: v for k, v in _window_overlay().items() if k != "window"}, 0.0, 0.0, 1.0)
     assert whole.getpixel((75, 90))[0] > 150 and whole.getpixel((75, 90))[1] < 90, "no window: every line drawn, as recorded"
 
 
 def test_the_homesteads_legend_states_the_window_it_drew() -> None:
-    assert "within 743 ft of the margin's seat and 700 ft of the paddy" in ps.homestead_legend((743.2, 700.0))
+    assert "within 743 ft of the margin's seat (the cluster's limit, which keeps a nucleated hamlet together) and 700 ft of the paddy" in ps.homestead_legend((743.2, 700.0))
     assert "the site boundary the homesteads were seated against" in ps.homestead_legend(None)
 
 
@@ -337,7 +340,7 @@ def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path, monkey
     assert any(b > 150 and r < 90 for r, g, b in px), "a blue chord"
     assert any(g > 110 and b > 110 and r < 80 for r, g, b in px), "a teal corridor"
     assert corridor[0] > corridor[1] > corridor[2] + 30, f"an orange access corridor, the map showing through: {corridor}"
-    assert strip[0] > strip[1] + 40 and strip[2] > strip[1] + 40, f"a magenta exit strip: {strip}"
+    assert max(strip) < 150 and abs(strip[0] - strip[1]) < 30, f"a dark gray exit strip, nothing a reader takes for red: {strip}"
     assert seat[1] > seat[0] + 40 and seat[1] > seat[2] + 40, f"a dark green wood-share ring: {seat}"
 
 
@@ -635,6 +638,24 @@ def test_the_deferred_water_is_ink_and_names_its_features() -> None:
     hi = ps._watermark(s)
     assert ps._ink_total(hi) - ps._ink_total(lo) == 5 and ps._ink(s) >= 5, "every queued water record is ink"
     assert ps.features_between(s, lo, hi) == ["irrigation ditch", "stream"]
+
+
+def test_the_ways_and_the_tiled_covers_name_their_features() -> None:
+    """The page audit (2026-10-02): the lanes queue in `ground` and the marsh and scrub tiles in `_covers`, all inked
+    into slots reserved before the stage that filled them - so no stage named the village lane, the marsh or the scrub,
+    and the closing list called them features Inashiro does not have. Each entry's class is named, a `Split` by both
+    sides and a `Parts` by every classed piece."""
+    from l7r.diagram.interactive.tags import Split
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.land.tiles import Cover
+
+    s = Settlement(W=400, H=400, seed=1)
+    lo = ps._watermark(s)
+    s.ground += [{"cls": "village lane"}, {"cls": Split("bund", "bund beans")}, {"cls": (("privy", "<a/>"), (None, "<b/>"))}]
+    s._covers += [Cover("reed", "marsh", [(0, 0), (1, 0), (1, 1)]), Cover("grass", None, [])]
+    hi = ps._watermark(s)
+    assert ps.features_between(s, lo, hi) == ["bund", "bund beans", "marsh", "privy", "village lane"]
+    assert ps.tag_keys("-") == [] and ps.tag_keys(None) == [] and ps.tag_keys(("not a piece",)) == []
 
 
 def _classed_stage() -> Any:

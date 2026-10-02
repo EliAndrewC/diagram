@@ -302,9 +302,9 @@ about half of what the record had attributed to them, and the rest is labeled GU
 **A source the GM is to fetch by hand goes on the download list, in the GM's format, appended at the END** (feature 242,
 GM 2026-09-14). Whenever a session has a source, page or document for the GM to look at or download - a `source-reader`
 that could not fetch a page a person can open, a `quote-check` NOT-READABLE, a dead link with a likely copy elsewhere, a
-paper only a library holds - it is saved in MARKDOWN in `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` (the GM's
-`l7r/academic-sources/`, mounted here), one entry per work, appended after the last entry of the current part and never
-inserted into the middle, so the GM can work down the list and know that everything above where they stopped is done.
+paper only a library holds - it is saved in MARKDOWN in the canonical list `research/to-download.md` with `make
+download-add FILE=<draft>` (feature 313; the GM's `academic-sources/TO-DOWNLOAD.md` is their marked copy, written only by
+`make downloads-sync`), one entry per work, appended at the end and never inserted into the middle, so the GM can work down the list and know that everything above where they stopped is done.
 Each entry carries: a heading naming the work (author or publisher, title, and what it is about where the title does not
 say); a clickable link to **the URL the session believes the document lives at** - its best guess, kept even when the
 fetch failed there or the address could not be verified, because the GM's browser may succeed where the container did
@@ -317,8 +317,8 @@ format in TO-DOWNLOAD.md where each source has a link to what you think the URL 
 backup where the Google search should uniquely identify the resource ... anytime you do have a source for me to look at,
 then it should be saved in markdown in this format since that is much easier for me to find things."* A wrong or dead
 direct link then costs them one extra click rather than a hunt. A list handed over only in a chat message is not saved.
-Nothing enforces this mechanically: the list lives in the GM's own checkout, outside this repository, so no gate here
-reads it - the rule stands here with its reason.
+Since feature 313 it is enforced: the list is in this repository, `make download-add` checks an entry's parts and appends
+it, the push refuses an entry lost, moved or inserted, and `download-copy-hooks.sh` refuses a write to the GM's copy.
 
 Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
 resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
