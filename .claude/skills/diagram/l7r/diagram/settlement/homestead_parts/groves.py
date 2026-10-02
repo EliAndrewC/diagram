@@ -291,6 +291,7 @@ class GrovesMixin:
         ground.extend([(x - clump / 2 + 2, y - clump / 2 + 2, x + clump / 2 - 2, y + clump / 2 - 2) for x, y in seated])
         bb = (min(p[0] for p in seated) - clump, min(p[1] for p in seated) - clump, max(p[0] for p in seated) + clump, max(p[1] for p in seated) + clump)
         krect, kcirc = self._canopy_keepouts(bb)
+        krect += self._sun_keepouts(bb)  # ...and every yard's and bed's sun ground (feature 310: no canopy tree exempt)
         rects, circs = PointGrid(64.0), PointGrid(64.0)
         rects.extend([(cx, cy, hw, hh, cx - hw, cy - hh, cx + hw, cy + hh) for cx, cy, hw, hh in krect])
         circs.extend([(wx, wy, wr, wx - wr, wy - wr, wx + wr, wy + wr) for wx, wy, wr in kcirc])
@@ -616,9 +617,24 @@ class GrovesMixin:
                 # ...and the bamboo stays GROVE_BAMBOO_SHARE of ALL the clump's items (269 B29), rows included, not of the fewer rolls
                 b_th = c_th = min(1.0, GROVE_BAMBOO_SHARE * (rows + n) / n)
             items: list[Any] = []
-            for _ in range(n):
+            # A THIN BAND'S FEW TREES RUN ITS WHOLE LENGTH (feature 310, the homestead grove's glyph-check on Kashikawa): a farm
+            # grove's thin side (the dooryard mix, a band at least twice as long as it is wide) carries four or five items, and
+            # thrown anywhere in the box they left the band's end bare on 2 farms in 20 - a tree standing 20-30 ft clear of the
+            # north band it joins. So the items are spread END TO END along the long axis, the first and last at the band's
+            # two ends and the rest jittered round their even steps: an item in each of n equal stretches still left the
+            # first crown up to a stretch from the joint (12.7 and 17.1 ft clear of the north band on Kashikawa, the
+            # homestead grove's third glyph-check round), where the band must run on from the north band's corner.
+            strata = mix == "dooryard" and max(w, h) >= 2.0 * min(w, h)
+            for k in range(n):
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
                 py = random.uniform(-h / 2 + 2, h / 2 - 2)
+                if strata:
+                    jig = random.random() - 0.5
+                    t = 0.5 if n == 1 else (k if k in (0, n - 1) else k + 0.6 * jig) / (n - 1)  # ends pinned, the rest near their steps
+                    if h >= w:
+                        py = -h / 2 + 2 + t * (h - 4)
+                    else:
+                        px = -w / 2 + 2 + t * (w - 4)
                 roll = random.random()
                 kind = "bamboo" if roll < b_th or in_box(cx + px, cy + py, bamboo_box) else ("conifer" if roll < c_th else "broadleaf")
                 band = LESSER_BROADLEAF_S if mix == "conifer_led" else ((1.25, 1.7) if random.random() < 0.25 else (0.72, 1.05))  # a few emergent crowns over many small
@@ -642,6 +658,9 @@ class GrovesMixin:
             # rule this engine states for every other index ("the index prunes; it never decides").
             _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * 1.7 * 1.15 + 1.0)
             krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
+            # ...AND EVERY YARD'S AND BED'S SUN GROUND for the crowns (feature 310, GM 2026-10-02: "no canopy trees should be exempt"),
+            # never for the bamboo culm marks below (the GM's "maybe bamboo")
+            ksun = krect + self._sun_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
             _near = self._crowns_near(cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
             # THE CONIFERS ARE PAINTED LAST (feature 294 B5b): the clump's lesser crowns first, its conifers over them, and a
@@ -687,7 +706,7 @@ class GrovesMixin:
                 # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
                 # real foliage is a plain dark green; the tint is chosen so the wet stand reads apart)
                 col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))
-                if self._crown_covers(cx + px, cy + py - lift, rr, krect, kcirc, self.CANOPY_PAD):
+                if self._crown_covers(cx + px, cy + py - lift, rr, ksun, kcirc, self.CANOPY_PAD):
                     continue
                 # TWO SCANS, NOT A GRID (feature 284, A6 withdrawn, specs/284 research R7): a crown grid per clump was exact but
                 # slower - a clump's nearby crowns are few, and filing them cost more than walking them (the windbreak 8-12%

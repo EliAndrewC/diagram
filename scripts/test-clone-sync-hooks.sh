@@ -229,6 +229,25 @@ case $OUT in *"feature.json is TRACKED"*) printf 'ok    tracked feature.json is 
 case $OUT in *"git rm --cached"*) printf 'ok    warning carries the fix command\n' ;;
              *) printf 'FAIL  warning omits the fix command\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
 
+# a CLEAN clone with a make run going in it is mid-task too: the merge waits for the run (feature 310, 2026-10-02 - a gate
+# was merged under and failed on a test file the merge rewrote). The fake run is a process named make, working in the clone.
+git clone -q "$FMAIN4" "$FMAIN4/.clones/runclone"
+RUNC=$FMAIN4/.clones/runclone
+echo '*' >> "$RUNC/.git/info/exclude"   # the hook writes the clone's local settings, gitignored in a real clone
+printf '%s' "$RUNC" > "$FMAIN4/.clones/.session-clones/sid-run"
+(cd "$RUNC" && exec -a make sleep 120) & RUNPID=$!
+sleep 0.3
+OUT=$(printf '{"session_id":"sid-run"}' \
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1); RC=$?
+kill "$RUNPID" 2>/dev/null; wait "$RUNPID" 2>/dev/null
+check "a clean clone with a live make -> prompt exits 0" 0 "$RC"
+case $OUT in *"has a make run going"*"clone merge skipped"*) printf 'ok    a live make in the clone skips the merge\n' ;;
+             *) printf 'FAIL  a clean clone with a live make was not held from the merge\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
+OUT=$(printf '{"session_id":"sid-run"}' \
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+case $OUT in *"make run going"*) printf 'FAIL  a clone with no run was held as if one ran\n      out: %s\n' "$OUT"; FAILED=1 ;;
+             *) printf 'ok    with the run gone, the clean clone is not held\n' ;; esac
+
 # once per session - a warning that repeats every prompt is noise the GM learns to skip
 OUT=$(printf '{"session_id":"sid-fj"}' \
       | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)

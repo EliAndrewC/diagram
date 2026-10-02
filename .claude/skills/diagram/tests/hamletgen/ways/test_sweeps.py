@@ -695,3 +695,22 @@ def test_a_join_lane_the_split_made_redundant_is_swept_after_the_split() -> None
     assert split_at_crossings(s) == 1
     assert hg.ways._sweep_doubled_remnants(s) == 1, "after it, the crossing is a junction and the join lane is doubled ink"
     assert [(150.0, 6.0), (200.0, 0.0)] not in [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"]]
+
+
+def test_two_wide_ends_already_on_one_wide_way_are_not_joined_again() -> None:
+    """Cohort seed 903 (2026-10-02): an end standing on a wide lane that runs on through the other end is already joined at
+    width - `_keep_the_route_wide` must not carry it up that lane; ends joined only through a footpath still are."""
+    from l7r.diagram.hamletgen.ways.sweeps import joined_at_width
+
+    skeleton = [(219.5, 5548.8), (247.3, 5520.0), (275.1, 5491.3)]
+    assert joined_at_width((219.5, 5548.8), (235.4, 5532.3), [skeleton]), "the skeleton runs through both ends"
+    assert not joined_at_width((0.0, 0.0), (11.0, 0.0), [[(0.0, 5.0), (11.0, 5.0)]]), "a way 5 ft off both ends joins neither"
+    assert not joined_at_width((0.0, 0.0), (11.0, 0.0), [[(0.0, 0.0)]]), "a one-point way is no way"
+
+
+def test_keep_the_route_wide_leaves_ends_already_on_one_wide_way() -> None:
+    """Cohort seed 903 (2026-10-02): the connector's end stands on a skeleton lane that runs on through another wide lane's
+    end 20 ft away - the route is already wide, so the pass joins nothing (it once carried the connector up the skeleton)."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (-100.0, 0.0)], [(0.0, 0.0), (50.0, 0.0)], [(20.0, 0.0), (20.0, 100.0)]])
+    assert _keep_the_route_wide(s, [], [], []) == 0
+    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (-100.0, 0.0)], "the connector is not carried up the skeleton"

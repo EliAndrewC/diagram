@@ -1,7 +1,7 @@
-"""The single tree's shade on a yard or a bed (GM 2026-10-02, `settlement/homestead_parts/tree_shade.py`): the plot's sun
+"""A tree's shade on a yard or a bed (GM 2026-10-02, `settlement/homestead_parts/tree_shade.py`; feature 310): the plot's sun
 ground runs from its north edge, `reach` east, west and south of it; a crown north of that line throws its shadow away."""
 
-from l7r.diagram.settlement.homestead_parts.tree_shade import _plot_box, crown_shades, persimmons_shading_plots
+from l7r.diagram.settlement.homestead_parts.tree_shade import crown_shades, map_trees, plot_box, sun_box, trees_shading_plots
 
 PLOT = (0.0, 0.0, 40.0, 20.0)  # x -20..20, y -10..10 (+y south)
 
@@ -16,18 +16,30 @@ def test_a_crown_shades_a_plot_from_east_west_and_south_never_from_the_north() -
     assert not crown_shades(75.0, 75.0, 10.0, PLOT, 50.0), "off the corner of the sun ground"
 
 
+def test_the_sun_box_is_the_same_ground_as_the_predicate() -> None:
+    """`sun_box` is the keep-out form `_crown_covers` reads: x -70..70, y -10..60 for the plot above at 50."""
+    assert sun_box(PLOT, 50.0) == (0.0, 25.0, 70.0, 35.0)
+
+
 def test_a_plot_is_read_by_its_quad_else_its_box() -> None:
-    assert _plot_box({"poly": [[0, 0], [10, 0], [10, 4], [0, 4]], "x": 99, "y": 99, "w": 1, "h": 1}) == (5.0, 2.0, 10.0, 4.0)
-    assert _plot_box({"x": 1, "y": 2, "w": 3, "h": 4}) == (1.0, 2.0, 3.0, 4.0)
-    assert _plot_box({"x": 1}) is None
+    assert plot_box({"poly": [[0, 0], [10, 0], [10, 4], [0, 4]], "x": 99, "y": 99, "w": 1, "h": 1}) == (5.0, 2.0, 10.0, 4.0)
+    assert plot_box({"x": 1, "y": 2, "w": 3, "h": 4}) == (1.0, 2.0, 3.0, 4.0)
+    assert plot_box({"x": 1}) is None
 
 
-def test_the_map_check_names_each_crown_in_a_plots_sun_at_the_maps_scale() -> None:
+def test_the_map_check_reads_every_recorded_tree_at_the_maps_scale() -> None:
     M = {
         "meta": {"ftpx": 2.0},  # two feet a pixel: 50 ft is 25 px
         "threshing_yards": [{"x": 0, "y": 0, "w": 40, "h": 20}, {"x": 500}],
         "gardens": [{"poly": [[200, 0], [220, 0], [220, 10], [200, 10]]}],
-        "persimmons": [{"x": 50, "y": 0, "r": 6}, {"x": 0, "y": -40, "r": 6}],
+        "tree_crowns": [50.0, 0.0, 6.0, 0.0, -40.0, 6.0],
+        "scrub_pines": [[210.0, 30.0, 3.0]],
+        "planted_trees": [{"kind": "willow", "trees": [[-40.0, 0.0, 4.0]]}],
     }
-    assert persimmons_shading_plots(M, 50.0) == [("threshing_yards", (50.0, 0.0), (0.0, 0.0))]
-    assert persimmons_shading_plots({"persimmons": M["persimmons"], "threshing_yards": M["threshing_yards"][:1]}, 50.0) != [], "no meta: a foot a pixel"
+    assert [t[0] for t in map_trees(M)] == ["crown", "crown", "pine", "willow"]
+    assert trees_shading_plots(M, 50.0) == [
+        ("threshing_yards", "crown", (50.0, 0.0), (0.0, 0.0)),
+        ("gardens", "pine", (210.0, 30.0), (210.0, 5.0)),
+        ("threshing_yards", "willow", (-40.0, 0.0), (0.0, 0.0)),
+    ]
+    assert trees_shading_plots({"tree_crowns": [50.0, 0.0, 6.0], "threshing_yards": M["threshing_yards"][:1]}, 50.0) != [], "no meta: a foot a pixel"

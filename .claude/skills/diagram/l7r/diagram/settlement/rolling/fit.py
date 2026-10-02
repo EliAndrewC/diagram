@@ -10,8 +10,8 @@ from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edg
 from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
-from ..farm_fixtures import PERSIMMON_CROWN_FT, PERSIMMON_SHADE_FT
-from ..homestead_parts.tree_shade import crown_shades
+from ..farm_fixtures import PERSIMMON_CROWN_FT
+from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
 from .access import access_corridor, legs
 from .lot import bundle_admitted, watered
 
@@ -48,6 +48,14 @@ def house_extent(rec: Any) -> tuple[float, float, float, float]:
     if tree is not None:
         x0, y0, x1, y1 = min(x0, tree[0] - tree[2] / 2), min(y0, tree[1] - tree[2] / 2), max(x1, tree[0] + tree[2] / 2), max(y1, tree[1] + tree[2] / 2)
     return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
+
+
+def recorded_box(r: Any, turn: float) -> tuple[float, float, float, float]:
+    """A laid fixture (x, y, w, h) as `grove_rules.fixtures_on_groves` reads its record: center and size rounded to 0.1 (the
+    drawn record's own rounding, `farm_fixtures`), turned by `turn` degrees (already rounded) - its axis-aligned box."""
+    x, y, w, h = round(float(r[0]), 1), round(float(r[1]), 1), round(float(r[2]), 1), round(float(r[3]), 1)
+    th = math.radians(turn)
+    return (x, y, abs(w * math.cos(th)) + abs(h * math.sin(th)), abs(w * math.sin(th)) + abs(h * math.cos(th)))
 
 
 def part_box(geom: Any, key: str) -> Any:
@@ -640,15 +648,22 @@ class BundleFitMixin:
         neighbor's (`grove_rules.fixtures_on_groves`, the same boxes)? The fixtures are laid clear of the bands in the house's
         unturned frame (`_lay_fixtures`), and the house's turn carried a privy or a manure heap into its own deep band on
         three cohort seeds (feature 291 on 287)."""
-        fixtures = list(((geom.get("boxes") or {}).get("fixtures") or {}).values())
-        if not fixtures:
+        boxes = (geom.get("boxes") or {}).get("fixtures") or {}
+        if not boxes:
             return False
+        # ...AS THE RECORD WILL HOLD THEM (cohort seed 5, 2026-10-02): the check reads each fixture's turned box from its record,
+        # whose center, size and turn are rounded to 0.1, and each band's center rounded the same; a wood shed turned 13.8 degrees
+        # cleared its farm's north band here at full precision and overlapped it in the record by 0.03 px. A margin instead
+        # refused every near touch and moved the pinned seeds (four of seven failed); the record's own boxes refuse only this
+        turn = round(float(geom.get("turn") or 0.0), 1)
+        fixtures = [b if k == "persimmon" else recorded_box(r, turn) for k, r in (geom.get("fixtures") or {}).items() for b in (boxes[k],)]
         bands = list(geom.get("groves") or ())
         cx, cy, bw, bh = geom["bbox"]
         for rec in houses_meeting(self.M["houses"], (cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2)):
             g = rec.get("geom")
             if g and g is not geom:
                 bands += list(g.get("groves") or ())
+        bands = [(round(float(b[0]), 1), round(float(b[1]), 1), float(b[2]), float(b[3])) for b in bands]
         return any(abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2 for f in fixtures for b in bands)
 
     def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
@@ -819,8 +834,9 @@ class BundleFitMixin:
         `_relax_gardens_south` nudges a shaded garden south after the fact - best-effort, "a garden boxed in to the south
         stays put". With the dispersed and linear forms back in the roll, the cohort measured 8 of its 13 grove-carrying
         seeds (1-24) with a neighbor's windward stand across a garden's morning sun, 1 to 12 gardens a map. A farm's OWN
-        bands never do: its deep bands stand on the wind's side and its thin east band beyond the reach, by construction
-        (`dispersed.canonical_farmstead`)."""
+        bands keep the same preference by construction - its deep bands on the wind's side, its thin east band beyond the reach
+        (`dispersed.canonical_farmstead`). A preference for whole bands, not the sun rule, which holds every crown where it is
+        drawn (`KeepoutsMixin._sun_keepouts`, feature 310)."""
         new_groves = tuple(geom.get("groves") or ())
         if not new_groves:  # a nucleated bundle, on a map whose farms carry no grove
             return False
@@ -865,12 +881,12 @@ class BundleFitMixin:
 
     def _persimmon_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this household's persimmon stand in a yard's or bed's sun, or a standing neighbor's persimmon in this
-        household's (GM 2026-10-02, `PERSIMMON_SHADE_FT`, `tree_shade.crown_shades`)? Its own plots are kept by its seat
+        household's (GM 2026-10-02, `CANOPY_SHADE_FT`, `tree_shade.crown_shades`)? Its own plots are kept by its seat
         (`fixture_seats._persimmon`, at every rake the map allows), asked again here as drawn; a neighbor's are this test
         alone, in both directions, as the sun corridor is (`_sun_corridor_ok`). On the map that keeps the sun corridor."""
         if not getattr(self, "_sun_corridor_ft", 0.0):
             return False
-        reach, r = self.px(PERSIMMON_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)  # a foot past the crown: the map's check reads the drawn quads
+        reach, r = self.px(CANOPY_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)  # a foot past the crown: the map's check reads the drawn quads
         tree = (geom.get("fixtures") or {}).get("persimmon")
         plots = [p for p in (part_box(geom, "yard"), *(part_box(geom, "gardens") or ())) if p is not None]
         if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in plots):
@@ -895,10 +911,12 @@ class BundleFitMixin:
         return False
 
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
-        """A threshing yard dries rice in the southern sun, so no grove may sit in the ~22px strip directly
+        """A SEATING PREFERENCE (feature 310): a threshing yard dries rice in the southern sun, so a farm is not seated with a grove
+        BAND in the ~22px strip directly
         SOUTH of any yard. Tests the candidate's grove against every placed yard's sun-corridor and the
         candidate's yard against every placed grove, so packing never stacks a windbreak over a neighbor's
-        drying ground."""
+        drying ground and the bands stay whole. It is not the sun rule: every canopy crown is held out of every plot's sun ground
+        where it is drawn (`KeepoutsMixin._sun_keepouts`, `CANOPY_SHADE_FT`), whatever seat a farm takes."""
 
         def shades(grove: Any, yard: Any) -> bool:
             cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11

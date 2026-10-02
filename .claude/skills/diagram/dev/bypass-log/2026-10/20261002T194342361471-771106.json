@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T19:43:42Z",
+  "target": "review-accept",
+  "commit": "be1cdcda6",
+  "outcome": "permitted",
+  "why": "review-accept fix-check--inashiro 4: Inashiro draws no dike, so no planted trees; the leg is exercised on the maps that do and by its unit tests"
+}

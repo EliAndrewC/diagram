@@ -93,7 +93,7 @@ class Windbreak(Kind):
     one hectare - half under a hectare, four in ten between one and two. A village's belt is drawn at one to two
     hectares, in the upper half of that band; a hamlet's follows the cluster it stands behind, the five hamlet maps
     drawing theirs at 0.6 to 1.8 hectares, from well under that band up into it.
-    It is kept off the west side of the gardens so the beds keep their afternoon sun.
+    Like every canopy tree on the map, no tree of it stands within 50 ft east, west or south of a yard or kitchen bed, so the plots keep their morning and afternoon sun - the 50 ft being the shadow of a belt at a working 10 m, a guessed height.
     What it was made of was done two ways. The Japanese farmstead grove was led by one tall tree - in three of the four
     regions of a 2004 survey cedar grew at every homestead and was the dominant tree, in two of them planted in rows -
     with about nine to eighteen kinds of tree beside it; the Chinese village grove of the Pearl River Delta is a mixed
@@ -153,12 +153,12 @@ class HomesteadGrove(Kind):
     44 ft); how often each shape was taken is on no page, so the roll -
     two sides half the time, three sides three times in ten, four sides twice in ten, and four sides four times in ten
     where the farms stand on flood-prone ground - is a GUESS, this project's choice, and so are the thin band's
-    depth (one tree, 17 ft), the kind of trees in it, and the width of the way in through a ring.
+    depth (one tree, 17 ft), the kind of trees in it, the width of the way in through a ring, and, on a map keeping the yards and beds in the sun, a third or fourth side's band closing only the house's own side.
 
     Caveat: how often each shape was taken is on no page, so the roll - two sides half the time, three sides three times
     in ten, four sides twice in ten, and four sides four times in ten where the farms stand on flood-prone ground - is a
     GUESS, this project's choice, and so are the thin band's depth (one tree, 17 ft), the kind of trees in it,
-    and the width of the way in through a ring.
+    the width of the way in through a ring, and, on a map keeping the yards and beds in the sun, a third or fourth side's band closing only the house's own side.
 
     Name: homestead grove
     Covers: `groves`

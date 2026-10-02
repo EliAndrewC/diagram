@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-02T19:57:57Z",
+  "target": "review-accept",
+  "commit": "3845e432e",
+  "outcome": "permitted",
+  "why": "review-accept fix-check--inashiro c2: a confirmation, not a defect: the fix fired and its record reads the drawn crowns"
+}

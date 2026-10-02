@@ -6,13 +6,13 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from ..farm_fixtures import PERSIMMON_SHADE_FT
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures, sun_turns
 from ..homestead_parts.grove_sides import bundle_turn
+from ..homestead_parts.tree_shade import CANOPY_SHADE_FT
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
 from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 from .bearing import BEARING_SPREAD_DEG
-from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, dispersed_layout
+from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, dispersed_layout
 from .lot import kura_rect
 
 if TYPE_CHECKING:
@@ -322,6 +322,11 @@ class BundleGeomMixin:
         # on the north and west, the yard on the south front, the garden on the east - then carried to the map's wind
         # by `dispersed_layout`'s turn. The multi-bed garden split is a NUCLEATED feature; a dispersed farm keeps one bed. Its
         # own well pocket is laid in the canonical frame (`canonical_farmstead`), turned with the rest - never `_lay_well_pocket`.
+        # THE THIN BANDS KEEP OUT OF THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): on a map that
+        # keeps the sun, the garden stands beside the yard and the east band closes the house's east side only (`sun_band`,
+        # `dispersed.canonical_farmstead`: the frontage stays inside the record's 240 ft), and a ring's south band stands the
+        # canopy reach and a crown's radius beyond the yard, so it stands whole
+        _sun = self.px(CANOPY_SHADE_FT) + self.px(self.CANOPY_R_FT) * 1.7 * 1.15 if getattr(self, "_sun_corridor_ft", 0.0) else 0.0
         dispersed = dispersed_layout(
             hx,
             hy,
@@ -334,6 +339,8 @@ class BundleGeomMixin:
             turn=bundle_turn(self._windward(), self._grove_flank()),
             thin=self.px(THIN_BAND_FT),
             sun_east=EAST_SHADE_REACH * self.bscale,
+            yard_sun=_sun if _sun else YARD_SUN_STRIP,
+            sun_band=bool(_sun),
             way_in=self.px(WAY_IN_FT),
             pad=self.px(LANE_ROOM_FT) / 2.0,
             back=self.px(SERVICE_STRIP_FT),
@@ -383,12 +390,12 @@ class BundleGeomMixin:
         forms = getattr(self, "_fixture_forms", None) or FixtureForms()
         annex = rel(base["byre"]) if base.get("byre") is not None else None
         notes: dict[str, Any] = {}
-        # THE PERSIMMON KEEPS OUT OF ITS OWN YARD'S AND BEDS' SUN (GM 2026-10-02, `PERSIMMON_SHADE_FT`), on the map that keeps
+        # THE PERSIMMON KEEPS OUT OF ITS OWN YARD'S AND BEDS' SUN (GM 2026-10-02, `CANOPY_SHADE_FT`), on the map that keeps
         # the sun corridor (the scripted path's opt-in, `sun_corridor`), at every rake the house may yet be drawn at: this
         # template serves every position, and the turn is the position's (`_house_rot`: the common bearing +-30, else +-5)
         bearing = getattr(self, "_house_bearing", None)
         lo, hi = (-5.0, 5.0) if bearing is None else (bearing - BEARING_SPREAD_DEG, bearing + BEARING_SPREAD_DEG)
-        shade = self.px(PERSIMMON_SHADE_FT) if getattr(self, "_sun_corridor_ft", 0.0) else 0.0
+        shade = self.px(CANOPY_SHADE_FT) if getattr(self, "_sun_corridor_ft", 0.0) else 0.0
         try:
             laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex, notes, shade, sun_turns(lo, hi))
         except FixtureUnlaid as refused:  # a bath room or a wood shed with no seat in this layout: the fit refuses it (feature 280)

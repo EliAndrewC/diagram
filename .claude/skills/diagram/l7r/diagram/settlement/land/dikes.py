@@ -257,14 +257,19 @@ class DikeMixin:
         # gold under a modal that says the bank is "planted with willow and mulberry to bind it" - the
         # GM's own complaint about the crop dike, standing on the class the new sibling link points at.
         g = [f'<g clip-path="url(#{cid})">']
+        trees: list[tuple[float, float, float] | None] = [None]  # which pieces are canopy trees (feature 310: thinned once the plots stand)
         for wx, wy in _row_walk(0.74, 8.5):  # the WILLOW row rides the outer (water) face - pollarded, larger crowns
             wcol = random.choice(("#7C9856", "#87A45C", "#6E8B4A"))
-            g.append(f'<circle cx="{wx + random.uniform(-1.4, 1.4):.1f}" cy="{wy + random.uniform(-1.4, 1.4):.1f}" r="{random.uniform(3.5, 5.5):.1f}" fill="{wcol}" opacity="0.75"/>')
+            tx, ty, tr = wx + random.uniform(-1.4, 1.4), wy + random.uniform(-1.4, 1.4), random.uniform(3.5, 5.5)
+            g.append(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{tr:.1f}" fill="{wcol}" opacity="0.75"/>')
+            trees.append((tx, ty, tr))
         for mx2, my2 in _row_walk(0.26, 4.4):  # the MULBERRY row on the inner face - coppiced, same form as the pond banks
             mcol2 = random.choice(("#6E8B4A", "#7C9A54", "#5E7C40"))
             g.append(f'<circle cx="{mx2 + random.uniform(-1.2, 1.2):.1f}" cy="{my2 + random.uniform(-1.2, 1.2):.1f}" r="{random.uniform(2.2, 3.6):.1f}" fill="{mcol2}" opacity="0.85"/>')
+            trees.append(None)  # a coppiced bush, not canopy (spec 310's Decisions)
         g.append("</g>")
-        self.add("".join(g), cls=Planted("perimeter dike"))
+        trees.append(None)
+        self._plant_run("willow", g, trees, Planted("perimeter dike"))
         random.setstate(st)
         self.M.setdefault("dikes", []).append(
             {

@@ -178,7 +178,7 @@ class ThreshingYard(Kind):
     Why: Threshing and drying were done per household, in the yard (though some south-China villages shared one drying floor), and the yard needs sun: a thatched roof
     pitched at 45 degrees would put a minka's ridge at about 20-22 feet (a reconstruction: no page gives the pitch or
     the height), so no yard is placed in the 39 ft band of shadow south of a neighbor's wall over a drying day taken,
-    as a guess, to run from nine to three, and no windbreak tree stands within 50 ft to its west and southwest, and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
+    as a guess, to run from nine to three, and no canopy tree - of the windbreak, a grove, the copse, a wood or an orchard, the farm's own or a neighbor's - stands within 50 ft to its east, west or south (holding a farm's own trees to that is this project's choice, and bamboo is left out), and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
     each is rolled from a right-skewed spread about 25 tsubo, correlated with the household - the barley country's
     count and, in a rice district, a museum's count of about fifty mats a farm for drying the grain. Whether racks stand
     by the houses follows the weather of the region, not a village's taste: racks gathered by the house are recorded for
@@ -211,14 +211,14 @@ class Garden(Kind):
     What: The household's kitchen garden: a tilled bed in planted rows of daikon and greens, beside the house.
 
     Why: A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's
-    shadow to the south, clear of the windbreak's afternoon shade to the west, and, where open ground allows, nudged south out of a neighbor's grove that would take their morning sun from the east.
+    shadow to the south, clear of every canopy tree's shade - the windbreak's, a grove's, a persimmon's, its own farm's or a neighbor's - for 50 ft (about 15 m) to the east, west and south, and, where open ground allows, nudged south out of a neighbor's grove that would take their morning sun from the east.
 
     Note: The bed's size and its crops are guesses: no page read gives a kitchen bed's area or lists what it grew, so
     its area is held to a guessed range of 10 to 140 sq m (about 108 to 1,507 sq ft) and its crops - daikon, onions,
     beans and herbs - are this project's reading. That a farm household kept a bed of its own for its table is read.
     The sun rule is worked out from the autumn sun's geometry: its season rests on daikon standing in the bed through
-    autumn, its west lane is sized to a windbreak drawn at a working height of 10 m (about 33 ft), a guess at the
-    height of a stand kept in use, and moving a bed out of a neighbor's grove's morning shade is this project's choice.
+    autumn, its 50 ft lane to the east, west and south reckons every canopy tree at a working windbreak's 10 m (about 33 ft), a guess at the
+    height of a stand kept in use; holding a farm's own grove to that lane, leaving bamboo out of it, and moving a bed out of a neighbor's grove's morning shade are this project's choices.
     The record gives the bed no proportion or row count, so those are drawn to read as a worked kitchen bed at this
     scale.
 
@@ -425,18 +425,17 @@ class Persimmon(Kind):
     them around the homestead, and the tree shades the house in summer. The farm villages of the past had an old
     giant persimmon in the dooryard of every house, and one is remembered in the bamboo grove behind a house, so the
     tree stands in front of the house, most often, or behind it, each hamlet rolling how often each. But like every
-    tree on the map it keeps out of a threshing yard's and a garden bed's sun - nothing within 50 ft east, west or south
+    canopy tree on the map it keeps out of a threshing yard's and a garden bed's sun - nothing within 50 ft east, west or south
     of one - so a farm that dries its grain in a front yard keeps its persimmon behind the house; the one survey that
     puts fruit trees in a front yard describes one hardly used for drying. Its crown is drawn about 23 ft across.
 
     Note: Presence and the two sides are read, though the one account from before 1868 is at second hand and the rest are undated or later (toyoko, a newspaper history of the Fuyu persimmon, Sato on fruit trees
     in the front yard). The crown is a modern horticultural reference's full-grown size, a guess: no record from before
     1868 gives an ordinary dooryard persimmon's crown. How much likelier the front is, the height its shade is reckoned
-    at, and the share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses.
+    at - a working windbreak's 10 m, below the 12 m a full-grown persimmon reaches - and the share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses; no record says how near a drying yard the tree stood, so keeping it out of a yard's sun is this project's own rule.
 
     Caveat: The crown is a modern horticultural reference's full-grown size, a guess: no record from before 1868 gives an
-    ordinary dooryard persimmon's crown. How much likelier the front is, the height its shade is reckoned at, and the
-    share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses.
+    ordinary dooryard persimmon's crown. How much likelier the front is, the height its shade is reckoned at - a working windbreak's 10 m, below the 12 m a full-grown persimmon reaches - and the share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses; no record says how near a drying yard the tree stood, so keeping it out of a yard's sun is this project's own rule.
 
     Name: persimmon
     Covers: `persimmons` - the dooryard persimmon tree

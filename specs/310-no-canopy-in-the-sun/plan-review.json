@@ -1,0 +1,73 @@
+{
+ "feature": "310-no-canopy-in-the-sun",
+ "plan_sha256": "a4767a974d23b8ed5eb046711c9788d70eab8860736fc98a3bdde298ace09ec4",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One reach constant for every canopy tree (PERSIMMON_SHADE_FT -> tree_shade.CANOPY_SHADE_FT); the persimmon's seat keeps its own form",
+   "class": "within",
+   "why": "FR-002 verbatim. Unchanged since round 1."
+  },
+  {
+   "id": "D2",
+   "summary": "_sun_keepouts on the keep-outs mixin, on for a map keeping the sun corridor, covering drawn plots and every placed bundle's yard and gardens",
+   "class": "within",
+   "why": "FR-001 binds a scripted map; the legacy exemption is the spec's own Edge Case. Unchanged since round 1."
+  },
+  {
+   "id": "D3",
+   "summary": "Every tree site takes the keep-out: the _crown_covers sites, the woodland commons' throws and room grid, the scrub pines (scrub_pines), and the perimeter dike's willows AND the fruit dike's trees (planted_trees, thinned at stage_hinterland's start); the persimmon already keeps it",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 2's three items are carried. (1) The fruit dike's standard trees (landuse.py fruit branch, r 4-5 px on the centerline) are now in D3 with the willows, recorded as planted_trees and dropped once the plots stand. (2) R1's method is now the interactive class registry read class by class; checked independently: every Kind in interactive/classes/*.py (greenery, fields, dikepond, homestead, water_and_ways) is either named as a tree class in R1 or draws no tree (marsh draws only the cut reed form, its carr not yet drawn), so no canopy placer is left out. (3) The Summary no longer claims every crown passes _crown_covers; it names the sites seated by their own tests or drawn before any plot. The only narrowing left inside D3 is the not-canopy exclusion, ruled separately below; the willow/fruit thinning is the full rule applied after the plots exist, not an exception."
+  },
+  {
+   "id": "D3-mulberry",
+   "summary": "The perimeter dike's inner mulberry row and the mulberry dikes' rows are coppiced mulberry, not canopy, and do not take the keep-out",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 2's ruling stands and its conditions are now met: it covers coppiced mulberry only (the fruit dike's trees are held, D3), it is recorded in the spec's Decisions table with its class (accurate, the record's 'trained as low bushes ... pruned once a year to 1.5 to 1.8 m') and why, D7 puts each class on the sun page, and the row says it is raised with the GM once the implementation works."
+  },
+  {
+   "id": "D3-tea",
+   "summary": "The tea dike's clipped hedge (two rows of hedge runs, landuse.py tea branch) is not canopy and does not take the keep-out (MODE 1 exception check)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Adjudicated on its own, not under the mulberry's argument. Words: the GM narrowed 'ANY trees' to 'no canopy trees should be exempt', with bamboo as the plant that 'doesn't create much shade'; what the engine draws for a tea dike is a clipped hedge (stroked runs ~3 ft wide), not a crowned tree, so leaving it out reads the GM's own qualifier rather than completing the GM's thought. Purpose: the rule exists so a plot keeps its sun; a plucked hedge stands at working height and throws a shadow a small fraction of the canopy reach, so the exclusion does not gut the rule. Class check: the hedge is the same class as the mulberry stool (a bush of the bank cut back as a crop), not stretched over any standing tree - the fruit dike's trees, the one canopy crop of a dike, are held. Weakness, recorded rather than fatal: the record says Qu Dajun names tea among the dikes' trees and 'says nothing of how it stood', so the hedge form and its low height are a guess, not a finding; the spec row labels it 'guess for the tea hedge's height'. Conditions: keep that guess label on the sun page as well as the spec, and raise it with the GM beside the mulberry once the implementation works. Whether a premodern dike's tea should be drawn as a hedge at all is a historical-accuracy question outside this review."
+  },
+  {
+   "id": "D3-willows",
+   "summary": "Trees drawn before any plot exists (the perimeter dike's willows, the fruit dike's trees) are thinned of each tree in a plot's sun once the homesteads stand",
+   "class": "within",
+   "why": "FR-004's 'no stage after may draw one there'; dropping each offending tree once the plots exist leaves the map the clause asks for. The trees are held to the full rule, not excepted."
+  },
+  {
+   "id": "D4",
+   "summary": "The copse's west-lane exemption and its unsupported comment are removed; the lane stays as a seat prefilter",
+   "class": "within",
+   "why": "FR-006 first clause verbatim."
+  },
+  {
+   "id": "D5",
+   "summary": "The farm grove's seat-time strips stay as seating preferences; every text presenting a strip as the sun rule is rewritten",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's ruling stands; its condition (the texts listed for rewriting, no record page describing a strip as the sun rule) is carried unchanged. The strips exempt nothing once D3 holds every crown at draw time."
+  },
+  {
+   "id": "D6",
+   "summary": "One map check, trees_shading_plots, over tree_crowns, scrub_pines and planted_trees; persimmons_shading_plots retired into it; gate test over the five hamlets and the cohort audit",
+   "class": "within",
+   "why": "Round 2's finding is fixed: the check now reads planted_trees, which records the fruit dike's trees with the willows, so every canopy placer R1 lists reaches the check (tree_crowns for the _crown_covers sites, commons and persimmon; scrub_pines; planted_trees). That is FR-005's 'counts every canopy crown in a plot's sun' with nothing narrowed. Enforcement of the request, not unrequested scope."
+  },
+  {
+   "id": "D7",
+   "summary": "The sun page states the one rule, the bamboo exemption as the GM's choice and the class of each decision; the persimmon bullet folds in; modals checked by entry-drift",
+   "class": "within",
+   "why": "FR-007 and SC-003."
+  }
+ ],
+ "verdict": "CLEAR"
+}
