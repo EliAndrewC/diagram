@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -143,6 +144,9 @@ def units(root: pathlib.Path, base: str | None = None, head: str | None = None) 
 
 
 def store(root: pathlib.Path) -> pathlib.Path:
+    """Where the answer records live: the clone's git dir, or `RECORD_CHECKS_DIR` (a test's throwaway store)."""
+    if os.environ.get("RECORD_CHECKS_DIR"):
+        return pathlib.Path(os.environ["RECORD_CHECKS_DIR"])
     common = _git(root, "rev-parse", "--git-common-dir").strip() or ".git"
     path = pathlib.Path(common)
     return (path if path.is_absolute() else root / path) / "record-checks"
@@ -249,6 +253,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--q", default="", help="only this question's units (its number)")
     ap.add_argument("--unanswered", action="store_true", help="only the units with no current answer record")
     ap.add_argument("--slugs", action="store_true", help="print the unit slugs alone, one a line")
+    ap.add_argument("--skip-check", default="", help="leave out this check's units (the gate, when ENTRY_DRIFT_OK discharged them)")
     ap.add_argument("--between", nargs=2, metavar=("A", "B"), help="the units B owes against A (no entry-drift, no answers)")
     ap.add_argument("--answer", default="", metavar="CHECK", help="record that CHECK returned on the named units")
     ap.add_argument("--result", default="", help="with --answer: the check's verdict counts")
@@ -282,6 +287,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     rows = units(root, *args.between) if args.between else (unanswered(root) if args.unanswered else units(root))
     if args.q:
         rows = [u for u in rows if ru.question(u.subject) == args.q.zfill(4)]
+    if args.skip_check:
+        rows = [u for u in rows if u.check != args.skip_check]
     if args.slugs:
         print("".join(u.slug + "\n" for u in rows), end="")
     else:

@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
-# test-entry-gate.sh - the companion suite for entry-gate.sh (constitution XVIII: a guard without one
-# turns the gate red). It drives the guard with real payloads rather than grepping it: a grep proves a
-# branch EXISTS, not that it fires.
+# test-entry-gate.sh - the companion suite for entry-gate.sh, the record gate (constitution XVIII: a guard without one
+# turns the gate red). It drives the guard with real edits to a real question page rather than grepping it: a grep proves
+# a branch EXISTS, not that it fires. Feature 311 rewrote it: the page it edited had become a pointer
+# (`contents.json#field-archetypes`) and nothing ran it, because `make hooks-test` listed only `*-hooks.sh` - it is on the
+# roster now.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(git -C "$HERE" rev-parse --show-toplevel)"
 GATE="$HERE/entry-gate.sh"
-PAGE="$ROOT/.claude/skills/diagram/research/contents.json#field-archetypes"
+PAGE="$ROOT/.claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.html"
 BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
-# ISOLATE THE CENSUS (feature 169). A suite that drives a recording guard must write into a throwaway
-# log, or its fixtures land in the live guard census - the very numbers this project uses to decide
-# which guards are worth their cost. Feature 168 missed `test-review-gate.sh` exactly here, and 24 of
-# 113 live entries turned out to be that suite's fixtures within a day.
+# ISOLATE THE CENSUS (feature 169) AND THE ANSWERS (feature 311): a suite that drives a recording guard writes into
+# throwaway stores, or its fixtures land in the live guard census and the clone's own answer records.
 GUARD_LOG_DIR="$(mktemp -d)"; export GUARD_LOG_DIR
+RECORD_CHECKS_DIR="$(mktemp -d)"; export RECORD_CHECKS_DIR
 
 pass=0; fail=0
 ok() { if [ "$1" = "$2" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL %s: got %s want %s\n' "$3" "$1" "$2"; fi; }
@@ -21,7 +22,7 @@ BAK="$(mktemp)"; cp "$PAGE" "$BAK"
 BL_BEFORE="$(find "$BL" -name '*.json' | wc -l)"
 restore() {
   cp "$BAK" "$PAGE"; rm -f "$BAK"
-  rm -rf "$GUARD_LOG_DIR"
+  rm -rf "$GUARD_LOG_DIR" "$RECORD_CHECKS_DIR"
   # any bypass-log entry this suite created goes too, however it exited - the log is a record of real
   # bypasses and a test's fixtures have no business in it
   while [ "$(find "$BL" -name '*.json' | wc -l)" -gt "$BL_BEFORE" ]; do
@@ -29,33 +30,60 @@ restore() {
   done
 }
 trap restore EXIT
-
-# 1. a clean tree is quiet - the guard must not fire on correct work
-( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "clean tree is quiet"
-
-# 2. a section moved under an unchanged modal REFUSES
-python3 - "$PAGE" <<'PY'
+edit() { python3 - "$PAGE" "$1" "$2" <<'PY'
 import pathlib, sys
 p = pathlib.Path(sys.argv[1]); s = p.read_text()
-p.write_text(s.replace("Both are drawn.", "Both are drawn, and a probe sentence stands here.", 1))
+assert sys.argv[2] in s
+p.write_text(s.replace(sys.argv[2], sys.argv[3], 1))
 PY
-( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 1 "an unresolved pair refuses"
+}
+answer_all() { python3 - "$ROOT" <<'PY'
+import pathlib, sys
+sys.path.insert(0, sys.argv[1] + "/scripts")
+import _record_owed as ro
+root = pathlib.Path(sys.argv[1])
+for u in ro.unanswered(root):
+    ro.write_answer(ro.store(root), u.slug, u.fingerprint, "0/0/0")
+PY
+}
 
-# 3. the escape must SAY WHY - a bare token is refused, not honored (feature 170's rule)
-( cd "$ROOT" && ENTRY_DRIFT_OK=x "$GATE" >/dev/null 2>&1 ); ok $? 1 "a bare token is refused"
+# 1. a tree with no record change is quiet - the guard must not fire on correct work
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "no record change is quiet"
 
-# 4. a real reason discharges it AND lands in dev/bypass-log/, which is what `make audit` reads
+# 2. a comment and a re-wrap change no words, so they owe nothing
+edit "<p>Where two powers" "<p><!-- probe -->Where  two powers"
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "a comment and a re-wrap owe nothing"
+cp "$BAK" "$PAGE"
+
+# 3. reworded findings owe checks, and the refusal names them with the command that answers each
+edit "a short way apart." "a short distance apart."
+out="$( cd "$ROOT" && "$GATE" 2>&1 )"; ok $? 1 "an owed unit with no answer refuses"
+case "$out" in *"quote-check:0094#kyakhta-trade-enwiki"*"make check-bundle Q=0094 FOR=quote-check"*) r=0 ;; *) r=1 ;; esac
+ok "$r" 0 "the refusal names the unit and its bundle command"
+
+# 4. answered at this content: quiet; the words move again: the answer is stale and it refuses again
+answer_all
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "answered units ship"
+edit "a short distance apart." "a short walk apart."
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 1 "a stale answer refuses"
+
+# 5. the escapes must SAY WHY - a bare token is refused, not honored (feature 170's rule)
+( cd "$ROOT" && RECORD_CHECKS_OK=x "$GATE" >/dev/null 2>&1 ); ok $? 1 "a bare RECORD_CHECKS_OK is refused"
+( cd "$ROOT" && ENTRY_DRIFT_OK=x "$GATE" >/dev/null 2>&1 ); ok $? 1 "a bare ENTRY_DRIFT_OK is refused"
+
+# 6. ENTRY_DRIFT_OK discharges the entry-drift units only: the quote-check units still refuse
+( cd "$ROOT" && ENTRY_DRIFT_OK="a probe moved no finding" "$GATE" >/dev/null 2>&1 ); ok $? 1 "ENTRY_DRIFT_OK leaves the other units owed"
+
+# 7. a real RECORD_CHECKS_OK reason discharges every unit AND lands in dev/bypass-log/
 before=$(find "$BL" -name '*.json' | wc -l)
-( cd "$ROOT" && ENTRY_DRIFT_OK="a probe sentence moved no finding" "$GATE" >/dev/null 2>&1 ); ok $? 0 "a reason discharges it"
+( cd "$ROOT" && RECORD_CHECKS_OK="a probe sentence, no check owed" "$GATE" >/dev/null 2>&1 ); ok $? 0 "a reason discharges it"
 after=$(find "$BL" -name '*.json' | wc -l)
 ok "$after" "$((before+1))" "the reason is recorded in dev/bypass-log/"
-newest="$(find "$BL" -name '*.json' -newer "$BAK" | head -1)"
-[ -n "$newest" ] && grep -q "a probe sentence moved no finding" "$newest"; ok $? 0 "the recorded entry carries the reason"
-[ -n "$newest" ] && rm -f "$newest"
+grep -lq "a probe sentence, no check owed" "$BL"/*.json; ok $? 0 "the recorded entry carries the reason"
 
-# 5. restoring the page goes quiet again - the guard tracks the tree, not a latch
-restore; trap - EXIT; BAK="$(mktemp)"; cp "$PAGE" "$BAK"; trap restore EXIT
-( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "quiet again once the section is restored"
+# 8. restoring the page goes quiet again - the guard tracks the tree, not a latch
+cp "$BAK" "$PAGE"
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "quiet again once the page is restored"
 
 printf 'test-entry-gate: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
