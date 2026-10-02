@@ -36,7 +36,7 @@ from l7r.diagram.settlement import Settlement  # noqa: E402
 
 REF = {"name": "Inashiro", "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated", "fixtures_min": {"shrine": 1}}
 BASE_REST = C.seat_the_rest
-GAP = float(os.environ.get("GAP", "6"))  # px between two footprints
+GAP = float(os.environ.get("GAP", "-1"))  # px between two footprints; -1: the path out, a corridor's strip (2 x ACCESS_HALF_FT) + 2 px
 JITTER_DEG = float(os.environ.get("JITTER_DEG", "12"))  # +- the direction
 JITTER_FRAC = float(os.environ.get("JITTER_FRAC", "0.12"))  # + up to this share of the spacing
 RINGS = tuple(float(r) for r in os.environ.get("RINGS", "1").split(","))  # each direction offered at these multiples of its least distance
@@ -56,9 +56,12 @@ def footprint(h: dict[str, Any], s: Any) -> tuple[float, float, float, float]:
     for p in (h.get("wood_share") or {}).get("seats") or ():
         w, e = max(w, hx - p[0] + CLUMP), max(e, p[0] - hx + CLUMP)
         n, so = max(n, hy - p[1] + CLUMP), max(so, p[1] - hy + CLUMP)
-    yard = (g.get("boxes") or {}).get("yard") or g.get("yard")
-    if yard is not None:
-        so = max(so, (yard[1] + yard[3] / 2) - hy + s.px(SUN_CORRIDOR_FT))
+    # ...SOUTH, the sun the yard and the beds are owed: no house's north wall within `SUN_CORRIDOR_FT` + 2 ft of a yard's or a
+    # bed's south edge (`_sun_corridor_ok`, `_gardens_sun_ok`)
+    boxes = g.get("boxes") or {}
+    for r in [boxes.get("yard") or g.get("yard"), *(boxes.get("gardens") or g.get("gardens") or ())]:
+        if r is not None:
+            so = max(so, (r[1] + r[3] / 2) - hy + s.px(SUN_CORRIDOR_FT + 2.0))
     return w, e, n, so
 
 
@@ -67,6 +70,9 @@ def grow(s: Any, plan: Any, placed: int) -> int:
     if placed >= want:
         return placed
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
+    global GAP
+    if GAP < 0:
+        GAP = 2 * s.px(7.0) + 2.0
     dep, lat = ST.band_extent(plan.spec.households, plan.cluster_shape, ST.SEATING_GROUND_FT)
     bound = 1.15 * math.hypot(lat, dep)
     heap: list[tuple[float, int, float, float]] = []
@@ -90,7 +96,7 @@ def grow(s: Any, plan: Any, placed: int) -> int:
         houses = s.M.get("houses") or []
         for h in houses[done:]:
             w, e, nn, so = footprint(h, s)
-            pw, pe, pn, ps = proto[0] if proto else (w, e, nn, so)
+            pw, pe, pn, ps = proto_box[0] if proto_box else (w, e, nn, so)
             hx, hy = float(h["x"]), float(h["y"])
             ndir, rings = LEVELS[level[0]]
             for k in range(ndir):
@@ -160,8 +166,10 @@ def grow(s: Any, plan: Any, placed: int) -> int:
             return placed
     while placed < want:
         if not proto_box and s.M.get("houses"):
+            # THE NEW HOUSEHOLD'S REACH: the envelope of the LARGEST homestead the roll can take (the front row's `_house_max`),
+            # never smaller than the household's own (plan review round 1)
             h0 = s.M["houses"][0]
-            bx, by, bw, bh = h0["geom"]["bbox"]
+            bx, by, bw, bh = s._bundle_envelope(float(h0["x"]), float(h0["y"]), s.px(46) * 1.35, s.px(28) * 1.10, shed=True)
             proto_box.append((float(h0["x"]) - (bx - bw / 2), (bx + bw / 2) - float(h0["x"]), float(h0["y"]) - (by - bh / 2), (by + bh / 2) - float(h0["y"])))
         if MODE in ("house", "both"):
             offer_around()
@@ -398,7 +406,8 @@ def routed(s: Any, tree: Any, geom: Any) -> Any:
                 break
             out.append(pts[far])
             k = far
-        if k == len(pts) - 1 and len(out) <= maxlegs + 1:
+        yard = (geom.get("boxes") or {}).get("yard")
+        if k == len(pts) - 1 and len(out) <= maxlegs + 1 and A.leaves_its_yard(tuple(out), yard, s.px(A.TREAD_HALF_FT + A.PART_MARGIN_FT)):
             got = tuple(out)
             memo[(door, "routed")] = got
             STATS["routed_ok"] = STATS.get("routed_ok", 0) + 1

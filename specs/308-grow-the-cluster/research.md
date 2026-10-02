@@ -122,3 +122,39 @@ At 40 households, homesteads stage seconds (margins):
 - At 20 households the sums are 17.8 s for the base and 16.6 s for the grower.
 - The legs at 10 and 15 households ran under uneven load: seed 13 at 10 households measured 1.91 s in the leg and 0.58 s alone.
   Those two sizes are re-measured alternating (R7).
+
+## R7 - 10 and 15 households, alternating (observed 2026-10-02, method: prototype.py, base and grow alternated per seed, two runs each, the faster kept)
+
+| households | base sum | grow sum | seeds faster under grow | margins |
+|---|---|---|---|---|
+| 10 | 9.08 s | 7.54 s | 11 of 16 (seed 5: 1.08 -> 0.52 s) | the first on every seed, under both |
+| 15 | 16.56 s | 13.73 s | 13 of 16 (seed 4: 2.35 -> 1.56 s) | the first on every seed, under both |
+
+**The verdict, by US1's GO rule: GO at every size.** The grower is faster in sum at 10, 15, 20 and 40 households (R6, R7), and
+it seats every household on every seed the engine seats.
+
+**What it misses.**
+- SC-003, at most 5 offers per house kept. Most seeds offer 5-35 per house at 40 households, and seed 8 takes two margins.
+- SC-002, under 4 s on every seed at 40 households. Seeds 3, 4, 7 and 8 take 4.1-10.0 s.
+
+Both misses are carried to the engine build, where the levels and the router's breadth can be tuned.
+
+## R8 - The plan review's footprint (observed 2026-10-02, method: prototype.py, base and grow alternated per seed, one run each, under load 5-8)
+
+The footprint the plan review asked for (plan D1):
+- the PATH OUT: the gap between two footprints is a corridor's whole strip plus 2 px, where it was 6 px;
+- the beds' sun as well as the yard's, the south reach being the farther of the yard's and the beds' south edges plus
+  `SUN_CORRIDOR_FT` + 2 ft;
+- the new household's reach taken from the LARGEST homestead the roll can take (`_bundle_envelope` at `_house_max`), where it
+  was the first house's;
+- every routed path held to `leaves_its_yard`.
+
+| households | base sum | grow sum | margins under grow |
+|---|---|---|---|
+| 40 | 138.9 s | 93.9 s | the first on 15 of 16 seeds; seed 8 on the second |
+| 15 | 25.2 s | 18.9 s | the first on every seed |
+
+- Every seed seats every household under both methods. The load made both methods' times higher than in R6 and R7, but each
+  pair ran back to back.
+- **Still GO.** The wider spacing costs offers: seed 1 offers 1,394 for 40 houses, where it offered 757 in R6. So SC-003 is
+  missed by more than before.

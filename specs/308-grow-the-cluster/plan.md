@@ -7,8 +7,8 @@
 ## Summary
 
 The GM's growth works once a house's path can bend.
-- **Rounds 1 to 3 (R1-R3).** Each grew houses at the footprint's minimum distance, sun corridor included. They stalled at 3 to
-  21 houses a margin. A house grown behind another has no STRAIGHT run from its door to the access tree: the standing house and
+- **Rounds 1 to 3 (R1-R3).** Each grew houses at the footprint's minimum distance, sun corridor included. None filled a margin
+  reliably: R1 seated 3-15 a margin (8-28 on seed 25), R2 3-7, and R3's variants filled one margin in ten at best. A house grown behind another has no STRAIGHT run from its door to the access tree: the standing house and
   its woodlot stand across every run.
 - **The current engine (R4).** It finds the rare seats a straight run reaches by offering every free grid point, which costs
   hundreds to thousands of offers and margins thrown away.
@@ -17,7 +17,16 @@ The GM's growth works once a house's path can bend.
   dry it widens (more directions, farther rings), and the eight seeds tried all seat 40 households on the first margin in 1.6 to
   4.2 s.
 
-The engine change is that grower (FR-003, FR-004, FR-007) and that router (FR-005).
+The engine change is that grower (FR-003, FR-004, FR-007) and that router (FR-005). It is built ONLY ON GO (US2, FR-001), and
+the verdict is recorded: R7, GO at 10, 15, 20 and 40 households.
+
+**The goals it misses (FR-002).** R6 misses both of the session's goals:
+- SC-002 (under 4 s on every seed at 40 households): seeds 3, 4, 7 and 8 take 5.32, 4.14, 4.10 and 10.01 s.
+- SC-003 (at most 5 offers per house kept): every seed offers 6.4-35.6 per house.
+
+The plan review's footprint terms (D1) are a further round, measured before the engine build as R8. A further tuning round of
+the levels and the router's breadth is measured on the engine (T06). A miss that survives both is recorded with every round's
+numbers and raised with the GM.
 
 ## Technical Context
 
@@ -47,9 +56,16 @@ The engine change is that grower (FR-003, FR-004, FR-007) and that router (FR-00
     the map's seed (`_hjit`). The direction is jittered by ±12 degrees (`GROW_JITTER_DEG`) and the distance by up to +12%
     (`GROW_JITTER_FRAC`). Each seat stands at the distance in that direction where the two homesteads' FOOTPRINTS part, plus
     `GROW_GAP` (6 px).
-  - *A homestead's footprint* is its envelope (`geom["bbox"]`) plus its reserved woodlot seats (a clump's half-width round
-    each), and to the SOUTH its threshing yard's far edge plus `SUN_CORRIDOR_FT`. The new house's own reach is the first
-    house's footprint.
+  - *A standing homestead's footprint* (FR-003) is made of:
+    - its envelope (`geom["bbox"]`: the house, the yard and the beds);
+    - its reserved woodlot seats (a clump's half-width round each);
+    - to the SOUTH, the sun its yard AND its beds are owed. That is the farthest south edge of the yard or a bed, plus
+      `SUN_CORRIDOR_FT` and the placer's 2 ft (`_sun_corridor_ok` and `_gardens_sun_ok`, computed, not assumed);
+    - its PATH OUT. `GROW_GAP` is a corridor's whole strip (2 x `ACCESS_HALF_FT`) plus 2 px, so a path fits between two
+      footprints, and a standing house's own reserved path is refused to every envelope by the placer.
+  - *The new household's reach* is the envelope of the LARGEST homestead the roll can take (`_bundle_envelope` at the front
+    row's `_house_max`, kura reserved). So no seat is offered closer than the household's own footprint allows (FR-004's
+    "never closer").
   - *The order.* Seats are offered nearest the seat center first, within the form's bound (`FORM_BOUND` times the 162 ft
     seating band's diagonal). Each is judged by `try_place`, which relaxes and skips no rule (FR-006).
   - *When the seats run dry.* With households left, every standing house offers again at the next level of `GROW_LEVELS`:
@@ -69,8 +85,9 @@ The engine change is that grower (FR-003, FR-004, FR-007) and that router (FR-00
     open off the site's taken ground, off every placed box by the corridor's half-width, off the reserved wood seats and off
     the house's own box.
   - *Pulled taut.* Each leg reaches the farthest node the engine's own leg tests admit: `house_clear`, `fixtures_clear`,
-    `parts_clear`, `standing_ground` and `lawful_leg`, the same tests a straight corridor passes. A route has at most 5 legs,
-    none doubling back (`doubles_back`).
+    `parts_clear`, `standing_ground` and `lawful_leg`. A route has at most 5 legs, none doubling back (`doubles_back`).
+    The whole route must then leave its own yard (`leaves_its_yard`, feature 287 M8). These are every test `_house_candidates`
+    asks of a straight or round-the-gable corridor, so no corridor rule is skipped (FR-005, FR-006).
   - *Admitted.* It is admitted by `tree_admits` as any corridor is, and recorded leg by leg (`reserve`), which the web already
     draws as a chain.
   - *Class.* A map drawing convention: the routing is how a seat's path is found, and the web draws it under the unchanged
@@ -95,8 +112,10 @@ The prototype's legs are back to back over the sixteen seeds at 10/15/20/40 hous
 - **I, II, III, IV, V, VII, VIII, IX**: N/A. There is no UI, pool content kind, SOURCE block, prose or setting detail.
 - **VI**: per task below.
   - The occasions: the seating moves every nucleated hamlet's cluster, and the corridors may now bend.
-  - The paths' glyph is unchanged, and no element is new to a map. But the placement rule that lays a house's path changes
-    substantially (D3), so a glyph-check of the access lanes on Inashiro is declared in `tasks.md`'s `## Occasions`.
+  - The paths' glyph is unchanged, and no element is new to a map. But two placement rules change substantially, so
+    `tasks.md`'s `## Occasions` declares a glyph-check on Inashiro for each:
+    - the village lane (D3), whose path may now be routed;
+    - the farmhouse (D1, D2), whose cluster is now grown.
 - **X**: red-green tests for the router and the grower (unit tests on plain inputs), and 100% coverage.
 - **XII**: D1's figures are guesses with reasons at the constants; D3's class is recorded at the module.
 - **XIII**: the cohort and pool baseline is taken on the base in a detached worktree before the engine edit.
