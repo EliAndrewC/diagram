@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-02T23:48:28Z",
+  "target": "record-checked",
+  "commit": "a0b4c9c1b",
+  "why": "entry-drift on entry-drift:marsh: second round: the checks' own fixes applied, wording only"
+}
