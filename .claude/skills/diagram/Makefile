@@ -1508,8 +1508,13 @@ maps:            ## [maps] regenerate and check the pool, picking its own scope 
 perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds   LABEL=<NNN>-start|-end
 ##  LABEL=<NNN>-start|<NNN>-end  which bookend this snapshot is (default: `adhoc`, which counts as neither)
 	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)"
+	@$(MAKE) --no-print-directory census
+# GUARD_EDIT_OK: feature 306 FR-006 - the overlap census runs after every perf snapshot (the standing check) and on its own.
 
-perf-report:     ## [performance] the trend, and which BAND the newest bookend pair reaches   AGAINST=<NNN>-start ENV=local|codebuild
+census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
+	@python3 -m l7r.diagram.tools.overlap_census
+
+perf-report:    ## [performance] the trend, and which BAND the newest bookend pair reaches   AGAINST=<NNN>-start ENV=local|codebuild
 ##  AGAINST=<NNN>-start  compare the newest snapshot against this bookend
 ##  ENV=local|codebuild  which environment's band-1 line to judge against (default: local)
 	@python3 -m l7r.diagram.tools.perf_snapshot --report $(if $(AGAINST),--against $(AGAINST),)

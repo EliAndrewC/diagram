@@ -154,6 +154,8 @@ IN_PROCESS: tuple[InProcess, ...] = (
     InProcess("tests/tools/test_perf_snapshot.py", "stand-in stages under a deterministic clock: the tool's behavior, not a map's time (feature 214)", stub=True),
     # GUARD_EDIT_OK: feature 304 - the scaling leg's tests run the same stand-in stages as test_perf_snapshot.py's (a size asked, a refusal recorded, the reference's refusal raised); they roll no map
     InProcess("tests/tools/test_perf_scaling.py", "stand-in stages under a deterministic clock: the scaling leg's rows and refusals, not a map's time (feature 304)", stub=True),
+    # GUARD_EDIT_OK: feature 306 - the overlap census's roll test runs stand-in stages to see each stage labeled; it rolls no map
+    InProcess("tests/tools/test_overlap_census.py", "stand-in stages: the census's stage labels, not a map's comparisons (feature 306)", stub=True),
     InProcess("tests/tools/test_perf_profile.py", "stand-in stages under a deterministic clock: the tool's behavior, not a map's time (feature 214)", stub=True),
     InProcess("tests/tools/test_placement_stages.py", "stand-in stages; rolls no map (milliseconds)", stub=True),
     InProcess("tests/hamletgen/test_driver.py", "stand-in stages: the stage-profile and roll-scope tests roll no map (milliseconds)", stub=True),
