@@ -1,6 +1,6 @@
 {
  "feature": "314-seat-before-settle",
- "plan_sha256": "fe40b7ae722799c9fee7b46b06c75fbbdc3f687a93990a3b8ef2484257c8bee8",
+ "plan_sha256": "964e5ad4098ab8a7698d5efd159a08304ec516ddb9d494ea677ad235d5a24017",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,31 +8,37 @@
    "id": "D1",
    "summary": "settled_seat asks seat_refused (field reach, house box vs canvas/corridors/two placed homesteads, refused-ground grid) of every position it would lay the household out at; water not asked; a refused position drops the seat",
    "class": "within",
-   "why": "FR-001 and the GM's 'before the household layout' taken literally (each settle move is a layout). Round-1 item 2 resolved: the spec's Decisions row now says 'any position the settle would lay its household out at', matching D1 (the spec's Edge Cases line still says 'first settled position' - raised on the spec amendment, not a plan finding). Water omitted because a household sought at a seat carries a pocket where none is in reach; r4-40-new shows reach/water 0 on every seed."
+   "why": "Unchanged since round 2. FR-001 and the GM's 'before the household layout' taken literally; the spec's Decisions row and Edge Cases both say 'any position the settle would lay its household out at'."
   },
   {
    "id": "D2",
-   "summary": "the placed homesteads asked of the house box (in D1); the house-and-yard core box check PRICED in research R5 (+4% at 15, +11% at 40, alternated against round 4) and withdrawn on those numbers",
+   "summary": "placed homesteads asked of the house box (in D1); the house-and-yard core box check priced in R5 and withdrawn",
    "class": "within",
-   "why": "Round-1 item 1 resolved: FR-002 says 'the measurement decides which', and it now does. Re-summed from the logs: r5-15 19.40 -> 20.25 s, r5-40 34.52 -> 38.23 s, every seed one margin, all households seated; seed 4 popped 1,721 seats against 290 and seed 9 753 against 300, the measured mechanism (a larger box drops positions the settle would have moved onto clear ground) that applies to any box larger than the house's. The GM asked for the placed houses 'where it's cheap'; measured, it is not. One recorded count is wrong: R5 says round 4's no-garden-side refusals were '26-51 a seed at 40 households', the logs (r4-40-new, r5-40-base) give 34-52; 26 is the with-check leg's minimum. Correct the figure; the decision stands on it either way."
+   "why": "Unchanged since round 2. FR-002 'the measurement decides which'; R5 measured it slower. Round 2's count correction (34-52 at 40 households) is now in research.md line 90."
   },
   {
    "id": "D3",
-   "summary": "route search keeps off own parts, first step judged by house_clear/fixtures_clear/parts_clear, last leg by standing_ground, heuristic once a cell; door's grid kept, map grid withdrawn (R4)",
+   "summary": "route search keeps off its own house only (as main); first step from the door may span two cells and is judged by house_clear/fixtures_clear/parts_clear; last leg refused by standing_ground; heuristic once a cell; door's grid kept, map grid withdrawn (R4); own-parts blocking withdrawn on R12",
    "class": "within",
-   "why": "Round-1 item 3 resolved for D3: kept on R4's alternated numbers, re-summed from the logs (15 households 21.33 -> 17.47 s, 40 households 49.10 -> 30.06 s, every seed one margin, 240/400 seated); the map grid's withdrawal is measured (R3: 48.40 -> 50.98 s with seed 6 at three margins; R4 four-seed door vs map). FR-004 recorded both."
+   "why": "The change WITHDRAWS a lever, and the withdrawal is required, not chosen: FR-005 forbids a seed failing that the base passed, and R12 records seed 13 at 20 households refused (WebRefused) with own parts on and rolled with them off. FR-004's 'a round that does not pay is withdrawn' independently holds: at 20 households the end bookend read +7.7% with seeds 4 and 39 +34.9%/+22.0%. Nothing the GM asked for is narrowed: every path offered still passes the placer's full rules (FR-003) and no rule changed. Code matches the plan (route.py: mine = [(own, hgap)] only; first_ok and goal_of keep their tests). R13's figures re-summed from the logs: 15 hh 20.31 -> 19.18 s, 40 hh 46.47 -> 36.10 s, 240/240 and 400/400 seated, every seed on margin 1; 20 hh homesteads 12.25 -> 11.01 s, web 9.04 -> 8.32 s; seeds 4/8/12 at 40 as stated. SC-001 (>=10% at 40) holds at -22%. Observation, not a narrowing: 'kept on R13's numbers' is a cumulative timing of all rounds against main, not of D3's changed form alone, the same cumulative reading round 2 accepted for D4."
+  },
+  {
+   "id": "R12-defect",
+   "summary": "(research R12, relied on by D3) the seating's tree_admits admits corridors that break the lane law once the web squares/joins them; not fixed in this feature, raised with the GM",
+   "class": "within",
+   "why": "Not a narrowing of the GM's request: the request is the homesteads stage's speed; the defect is a pre-existing correctness gap in feature 287's seating/web contract, and with D3 as changed it does not reach a map (seed 13 rolls on both, R13). Fixing it would not by itself restore the withdrawn lever, since R12 attributes seeds 4 and 39's web slowdown to a separate mechanism (island lanes that _join_orphan_ways cannot join), and R13 records that the web paid back the 15-household gain. Whether deferring it satisfies constitution XIV is a matter for the GM (raised), not request fidelity. US2's stopping rule still binds: before the iteration stops, the record must name the route search's remaining cost and either the stage doing what an efficient process would, or a measured reason it cannot."
   },
   {
    "id": "D4",
-   "summary": "sun ground once per rake; surface water indexed with PointGrid; kept within R4's rounds",
+   "summary": "sun ground once per rake; surface water indexed with PointGrid",
    "class": "within",
-   "why": "Round-1 item 3: now timed, cumulatively - R3 (rounds 1-3) and R4 (rounds 1-4) each alternated base against clone, which is FR-004's literal 'timed ... base and clone back to back, before being kept'. Exact, answer-preserving, tested against the predicates they replace. Its own increment is not isolated (no leg with and without D4 alone), so the Constitution Check's 'every lever timed' holds only cumulatively - an observation, not a narrowing of the request."
+   "why": "Unchanged since round 2; exact, answer-preserving, timed cumulatively."
   },
   {
    "id": "D5",
    "summary": "iterate on profile until the record names each remaining cost, the efficient process, and that the stage does it or a measured reason it cannot",
    "class": "within",
-   "why": "US2 acceptance scenario 2 verbatim; the GM's 'keep iterating until we get there'. T06 carries it."
+   "why": "Unchanged; US2 acceptance scenario 2 verbatim and the GM's 'keep iterating until we get there'. R13 names the next candidate (pre-check at the settle's first position only), so the iteration is not declared stopped."
   }
  ],
  "verdict": "CLEAR"

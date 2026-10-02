@@ -157,3 +157,46 @@ recorded them with the persimmon change, owned by the session working the grove 
 lost, no seed refused that the base seated. `JOBS` was added to `make cohort` for this run: its workers were cpus - 2 with no way
 to ask fewer, 20 on this host and ~10 GB, past the containers' shared cap while other sessions ran.
 (observed 2026-10-02, method: as the heading.)
+## R12 - The 20-household leg: the route's own parts withdrawn (observed 2026-10-02, method: the bookends `314-start` (re-taken at main with feature 310, the worktree `/tmp/start314b`) and `314-end`; `stagetime.py` per stage, both engines; the route's parts switched by environment to bisect)
+
+The end bookend read band 3: the 20-household leg +7.7%, seed 4 +34.9% and seed 39 +22.0%, the web stage +1.9 and +1.7 s; the
+10, 15 and 40 legs were faster (-4.0%, -3.5%, -17.7%). Rolled stage by stage on eight seeds at 20 households, the web was 0.95 ->
+2.97 s on seed 4 and 1.04 -> 2.83 s on seed 39 - the cluster's skeleton lanes laid as an island across the brook, 650-720 ft from
+the network, which `_join_orphan_ways` searched to join and refused every time - and seed 13 was REFUSED (`WebRefused`: three
+access lanes the web's last resort could not mend, needle loops) where main rolled it. Bisected on seed 13: the two-cell first step
+and the last leg's test were not the cause; the search kept off the household's own parts was - with it off, the seed rolled (35
+corridors, as main's) and seeds 4 and 39 drew their web in 0.96 and 1.34 s. Withdrawn (plan D3): the search keeps off its own house
+only, as before; its first step and its last leg keep their tests.
+
+A DEFECT THIS FOUND, NOT FIXED HERE: the seating admits a corridor by the lane law over the whole tree (`tree_admits`, feature 287
+wave 6, whose promise is that the web can always draw what was reserved), and three corridors it admitted on seed 13 broke the
+lane law once the web drew them. Mechanism (sketch): the seating judges the corridors as lanes before the web's own passes (the
+joint pass, the squaring at crossings, the settle's cuts) reshape them, so a corridor that winds round its own beds is lawful as
+reserved and loops once squared or joined. The fix is the seating judging the corridor as the web will draw it (the squared, joined
+form), which is a change to `ways/tree.py:admits` and the web's passes - beyond this feature; raised with the GM.
+(observed 2026-10-02, method: as the heading.)
+
+## R13 - The rounds as shipped, against main (observed 2026-10-02, method: `abab.sh` with `/tmp/start314b` (main with feature 310) as the base, `r12-15-*.log`, `r12-40-*.log`; `stagetime.py` at 20 households, `r12-summary.txt`)
+
+| households | seeds | main | clone | change | margins |
+|---|---|---|---|---|---|
+| 15 | 1-16 | 20.3 s | 19.2 s | -5% | one on every seed, both legs |
+| 40 | 1, 2, 4, 6, 8, 9, 10, 12, 13, 39 | 46.5 s | 36.1 s | -22% | one on every seed, both legs |
+| 20 | 1, 2, 4, 5, 13, 25, 39, 47 | homesteads 12.25 s, web 9.04 s | homesteads 11.01 s, web 8.32 s | -10%, -8% | seed 13 rolled on both |
+
+With the own parts withdrawn (R12) the 15-household gain falls from R4's -18% to -5%: the own parts were most of what the search
+saved there, and the web paid it back. At 40 households seeds 4, 8 and 12 are slower on this run (4.57 -> 5.11, 2.57 -> 5.85,
+3.39 -> 4.02 s), the other seven faster. Seed 8 popped 1,805 seats against main's 297, 1,220 of them dropped by the pre-check (plan
+D1): there a position refused mid-settle is dropped where the settle would have moved on, and the growth widens instead - the
+cost the spec's Decisions row accepted as search breadth, measured. Asking the pre-check only at the settle's first position is
+the next round's candidate, not taken here.
+(observed 2026-10-02, method: as the heading.)
+
+## R14 - The pre-check at the settle's first position only, tried and withdrawn (observed 2026-10-02, method: `refusals.py`, the pre-check asked at every position the settle lays out at (as shipped) against at its first only, switched by environment, nine seed runs)
+
+R13's candidate: a position refused mid-settle drops the seat, and on seed 8 at 40 households the growth widened for it (1,805
+seats popped against main's 297). Asked at the first position only, seed 8 needed TWO margins (11.62 s against 5.63 s, 4,114
+seats popped); seeds 4, 12 and 10 at 40 were a little faster (5.06 -> 3.89, 3.83 -> 3.49, 3.71 -> 3.65 s), seed 2 a little
+slower; at 15 households seed 13 1.58 against 2.03 s, the other three level. A lost margin outweighs the rest; withdrawn. The
+pre-check stays at every position (plan D1).
+(observed 2026-10-02, method: as the heading.)

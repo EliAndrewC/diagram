@@ -39,13 +39,13 @@ house and its threshing yard, which every garden side's box holds, computed with
 settle would have moved onto clear ground. Withdrawn on those numbers; no cheaper test of the placed homesteads than D1's was
 found.
 
-**D3 - The routed path refused where it is searched (US2, round 2).** Research R2 and R4; kept on R4's numbers (rounds 1-4
-alternated against the base: -18% at 15 households, -39% at 40, every seed on one margin) - a round that does not pay is
-withdrawn and recorded, as the map's grid and R5's check were. The search keeps off the household's
-own parts by the gaps their leg tests keep (`parts_clear`, `fixtures_clear`, the house by `house_gap`); its first step from the
-door may span two cells and is judged by those three tests; a goal whose last leg onto the tree the standing ground refuses
-(`standing_ground`) is no goal; a cell's heuristic is computed once. The grid stays the door's: the map's grid, tried to share
-the standing answers between searches, lost seed 6 two margins (R4) and is withdrawn.
+**D3 - The routed path refused where it is searched (US2, round 2).** Research R2, R4 and R12. Its first step from the door may
+span two cells and is judged by the household's own leg tests (`house_clear`, `fixtures_clear`, `parts_clear`); a goal whose last
+leg onto the tree the standing ground refuses (`standing_ground`) is no goal; a cell's heuristic is computed once. The search
+keeps off its own house only, as before: kept off the household's beds and fixtures too, it found paths the web could not draw
+(seed 13 at 20 households refused, seeds 4 and 39 a web stage 2-3x slower) and was withdrawn (R12). The grid stays the door's:
+the map's grid lost seed 6 two margins (R4) and is withdrawn. Kept on R13's numbers - a round that does not pay is withdrawn
+and recorded, as the map's grid, R5's check and R12's own parts were.
 
 **D4 - Exact speedups of the household layout and the well pocket (US2, round 3).** Each plot's sun ground is taken once per
 rake (`tree_shade.sun_ground`, asked by `crown_in_ground`; `crown_shades` reads the same two), not once per crown asked; the
