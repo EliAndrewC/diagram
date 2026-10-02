@@ -120,6 +120,7 @@ def cited_marks(root: pathlib.Path) -> set[str]:
     return {r["url"] for r in src.read(src.home(root)) if r.get("outcome", "").startswith("cited:") and r["outcome"][6:].strip() in keys}
 
 
+_KOTOBANK = re.compile(r"^kotobank\.jp/word/[^/]*-(\d+)$")
 _GITHUB_RAW = re.compile(r"^raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/")
 HOST_ALIASES = (("mdpi-res.com/", "res.mdpi.com/"), ("online.bunka.go.jp/", "bunka.nii.ac.jp/"))
 _ZH_VARIANT = re.compile(r"^zh\.wikipedia\.org/(?:zh-(?:hans|hant|cn|tw|hk|sg|mo)|wiki)/")
@@ -130,6 +131,7 @@ def work(n: str) -> str:
     article served as `/zh-hans/X`, `/zh-tw/X` and `/wiki/X` was judged and written up twice (Pingyao's wall, 2026-10-02)."""
     n = _ZH_VARIANT.sub("zh.wikipedia.org/wiki/", n)
     n = _GITHUB_RAW.sub(r"github.com/\1/\2/blob/\3/", n)  # a file by its raw URL and its page URL (daizhige, 2026-10-02)
+    n = _KOTOBANK.sub(r"kotobank.jp/word/\1", n)  # Kotobank serves an entry by its number, whatever word is in front (2026-10-02)
     for alias, host in HOST_ALIASES:  # one file server under two names (Yannopoulos 2015 on both, 2026-10-02)
         if n.startswith(alias):
             return host + n[len(alias):]
@@ -843,8 +845,14 @@ def report(root: pathlib.Path) -> str:
     left = uncited_set(root)
     where = src.home(root)
     readable = sum(1 for u in left if text_of(where, u) is not None)
+    kept = {work(x["url"]) for x in at.read(root, KEPT)}
+    d = at.base(root) / at.UNCITED
+    entries = {f.name: {work(src.norm(u.rstrip(").,;:"))) for u in src._URL.findall(f.read_text(encoding="utf-8"))} for f in (sorted(d.glob("[0-9]*-*.html")) if d.is_dir() else [])}
+    orphans = sum(1 for us in entries.values() if not us & kept)
+    unwritten = len(kept - set().union(*entries.values())) if entries else len(kept)
     return (f"uncited: {len(left)} page(s) not yet judged ({readable} with saved text); {len(at.read(root, KEPT))} kept, "
-            f"{len(nk)} not kept ({', '.join(f'{k} {v}' for k, v in sorted(reasons.items()))})")
+            f"{len(nk)} not kept ({', '.join(f'{k} {v}' for k, v in sorted(reasons.items()))}); {len(entries)} written up, "
+            f"{unwritten} kept with no entry, {orphans} entr(ies) whose URL is no kept page's (a citation a check corrected)")
 
 
 def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument plumbing over the tested functions
