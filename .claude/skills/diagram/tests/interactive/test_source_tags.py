@@ -38,7 +38,8 @@ def test_the_real_vocabulary_and_sections_load_and_every_period_states_every_reg
     """FR-003 (GM message 2): each period explanation states its cut-off and why, by region."""
     vocab = st.load_vocabulary(RESEARCH_DIR)
     sections = st.load_sections(RESEARCH_DIR, vocab)
-    assert [s.id for s in sections][0] == "works-canon" and sections[0].canon
+    assert [s.id for s in sections][:2] == ["works-canon", "works-published-setting"] and sections[0].canon
+    assert st.home(sections, st.SourceTags(("fiction",), ("rokugan",), ("popular",))).id == "works-published-setting"  # type: ignore[union-attr]
     premodern = vocab.known("period")["premodern"].description
     for words in ("1868", "1895", "1876", "Ryukyu", "Vietnam", "Taiwan", "1800", "elsewhere", "General"):
         assert words in premodern, words
@@ -95,7 +96,8 @@ _JAPAN = {"id": "works-japan", "title": "Japan", "takes": [{"region": "japan"}]}
         ({"sections": [{"id": "japan", "title": "J", "takes": [{"region": "japan"}]}]}, "starting `works-`"),
         ({"sections": [_CANON, _JAPAN, _JAPAN]}, "the id is used twice"),
         ({"sections": [_CANON, {"id": "works-x", "takes": [{"region": "japan"}]}]}, "no `title`"),
-        ({"sections": [_CANON, {"id": "works-x", "title": "X"}]}, "takes nothing - a section other than the canon one"),
+        ({"sections": [{**_CANON, "takes": [{"region": "japan"}]}]}, "not both, not neither"),
+        ({"sections": [_CANON, {"id": "works-x", "title": "X"}]}, "not both, not neither"),
         ({"sections": [_JAPAN]}, "exactly one section is the canon section"),
         ({"sections": [_CANON, {**_CANON, "id": "works-canon-2"}]}, "exactly one section is the canon section"),
         ({"sections": [_CANON, {"id": "works-x", "title": "X", "takes": ["japan"]}]}, "a clause is an object"),
@@ -146,8 +148,6 @@ def test_a_work_lives_in_the_first_section_its_primary_tags_match(rec: pathlib.P
     assert st.home(sections, st.SourceTags(("premodern",), ("japan", "general"), ("primary",))).id == "works-premodern-japan"  # type: ignore[union-attr]
     assert st.home(sections, st.SourceTags(("timeless",), ("general",), ("reference",))).id == "works-general"  # type: ignore[union-attr]
     assert st.home(sections, st.SourceTags(("premodern",), ("china", "japan"), ("primary",))) is None, "the primary region decides, not the second"
-    with_clauses = [st.Section("works-canon", "Canon", "", True, ({"period": ("timeless",)},)), *sections[1:]]
-    assert st.home(with_clauses, st.SourceTags(("timeless",), ("general",), ("reference",))).id == "works-canon", "the canon section's clauses take works too"  # type: ignore[union-attr]
 
 
 def test_labels_carry_their_explanations_escaped_and_the_marker_is_stripped(rec: pathlib.Path) -> None:

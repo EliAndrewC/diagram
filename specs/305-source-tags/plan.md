@@ -84,7 +84,7 @@ sees the cut-off for every region and the reason for it. No cut-off reasoning li
 classifier that finds a source the table does not settle stops and lists it for the session, and the session extends
 the explanation before tagging it.
 
-**D4 - The sections** are FR-007's eight, in that order, in `source-sections.json`. "Beyond East Asia, and general
+**D4 - The sections** are FR-007's nine (eight until amendment 2 added the published game setting, second), in that order, in `source-sections.json`. "Beyond East Asia, and general
 works" takes the primary regions Europe, elsewhere and general. "Not period-bound" comes before it and takes the
 primary period timeless first, so a timeless botanical work tagged `general` lands under Not period-bound.
 

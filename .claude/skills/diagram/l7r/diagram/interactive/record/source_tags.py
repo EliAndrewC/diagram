@@ -74,8 +74,7 @@ class Vocabulary:
 
 @dataclass(frozen=True)
 class Section:
-    """A works section: its heading, its description, and the clauses it takes works by. The canon section takes the GM's
-    notes by `canon`, and may take tagged works by clauses too (feature 305: the published game setting, `period=fiction`)."""
+    """A works section: its heading, its description, and the clauses it takes works by (none for the canon one)."""
 
     id: str
     title: str
@@ -149,8 +148,8 @@ def load_sections(record_dir: str, vocab: Vocabulary) -> list[Section]:
             raise SourceTagError(f"{where}: no `title`")
         canon = raw.get("canon") is True
         takes = tuple(_clause(where, c, vocab) for c in raw.get("takes", []))
-        if not canon and not takes:
-            raise SourceTagError(f"{where}: takes nothing - a section other than the canon one takes works by clauses")
+        if canon == bool(takes):
+            raise SourceTagError(f"{where}: a section takes works by clauses, or is the canon section with none - not both, not neither")
         out.append(Section(sid, raw["title"], str(raw.get("description", "")), canon, takes))
     if sum(s.canon for s in out) != 1:
         raise SourceTagError(f"{SECTIONS}: exactly one section is the canon section")
@@ -189,11 +188,10 @@ def takes(section: Section, tags: SourceTags) -> bool:
 
 
 def home(sections: list[Section], tags: SourceTags | None) -> Section | None:
-    """The section a work lives in: the canon section for a canon work (`tags` None), else the first whose clauses take
-    it - the canon section included, when it has clauses."""
+    """The section a work lives in: the canon section for a canon work (`tags` None), else the first that takes it."""
     if tags is None:
         return next(s for s in sections if s.canon)
-    return next((s for s in sections if takes(s, tags)), None)
+    return next((s for s in sections if not s.canon and takes(s, tags)), None)
 
 
 def strip_marker(entry_html: str) -> str:

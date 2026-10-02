@@ -158,7 +158,9 @@ to it.
   - **Kind**: primary; scholarship; reference; institutional; popular.
 
   The classification pass may add a value where a real group of entries fits none of these. A value is never removed
-  while an entry carries it.
+  while an entry carries it. Amendment 2: the pass found one such group, the published Legend of the Five Rings setting
+  (two fan-wiki entries), neither real evidence nor the GM's notes, and added period *fiction* and region *Rokugan
+  (published)*.
 - **FR-003**: Each period explanation states its cut-off and the logic behind it (GM, message 2). Every cut-off is set
   by region, because the regions industrialized at different times. The explanation names the change that ends the
   period and says why that change matters to the evidence: cheap iron and new crops, land reform, railways and
@@ -176,20 +178,22 @@ to it.
   section has an id, a title, a one-line description and a rule over the primary tags. A work belongs to the first
   section whose rule takes it, and Setting canon is a section of its own, first. Regrouping is an edit to this file
   alone.
-- **FR-007**: The works sections are, in order:
+- **FR-007**: The works sections are, in order (nine since amendment 2):
   1. Setting canon
-  2. Premodern Japan
-  3. Premodern China
-  4. Premodern Korea and East Asia
-  5. Not period-bound
-  6. Modern preindustrial East Asia
-  7. Present-day East Asia
-  8. Beyond East Asia, and general works
+  2. The published game setting (amendment 2: period *fiction* or region *Rokugan*)
+  3. Premodern Japan
+  4. Premodern China
+  5. Premodern Korea and East Asia
+  6. Not period-bound
+  7. Modern preindustrial East Asia
+  8. Present-day East Asia
+  9. Beyond East Asia, and general works
 
   The last section takes every work whose primary region is Europe, elsewhere or general, whatever its period, so
   every combination of tags has a section.
 
-  The order is the weight the record gives each group. Canon governs. Premodern East Asian evidence is the setting's
+  The order is the weight the record gives each group. Canon governs, and the published setting it adapts comes next,
+  apart from it because it is not the GM's. Premodern East Asian evidence is the setting's
   model, Japan and China first since Rokugan draws on both. Physical facts transfer whole. Modern preindustrial
   evidence comes before present-day evidence because it shows hand farming. Korea is East Asian but stands apart from
   the two models; Europe and the rest share least.
@@ -266,6 +270,7 @@ This feature draws nothing on a map and states nothing new about one. It labels 
 | Period follows the evidence, not the publication | session judgment | a modern study of Edo registers is premodern evidence; tagging by publication date would bury the best scholarship among tourism pages | the vocabulary's period explanations; `research/CLAUDE.md` |
 | The period cut-offs, by region | session judgment, delegated by the GM (message 2) | each region's own industrial transition; the logic is stated in each tooltip | the vocabulary file (FR-003) |
 | The section order (FR-007) | session judgment | the record's weight: canon, then the setting's models, then physical facts, then the modern groups, then the regions furthest from the setting | the section rule file; FR-007 |
+| The published game setting gets its own section, second, and the values *fiction* / *Rokugan* | session judgment, amendment 2 (FR-002 allows a value for a real group none fits) | two fan-wiki entries are the game's fiction: not evidence, and not the GM's canon, so neither heading fits them | the vocabulary file; the rule file |
 | Canon gets one fixed label and the first section | session judgment, from the record's rule that the GM's notes are canon, not evidence | they need no applicability judgment | the vocabulary file; the rule file |
 | Within a section, first-citation order on a question page | carried from feature 211 D7 | the reader arrives from a footnote | `citations.py` |
 
@@ -288,3 +293,6 @@ This feature draws nothing on a map and states nothing new about one. It labels 
 - Round 1 (spec-fidelity, 2026-10-02): FAITHFUL. Two asides, not findings, both taken: the 2,126 count now says how it
   was counted, and FR-010's message names the combination for an untaken combination rather than "the allowed values".
   FR-007's last section now takes general-region works of any period, so a premodern general work has a home.
+- Amendment 1, round 1 (spec-fidelity-verify, 2026-10-02): CHANGES REQUIRED, 1 item - the two fan-wiki entries were
+  listed under *Setting canon*, which the spec defines as the GM's notes. Addressed by amendment 2: they have their own
+  section, *The published game setting*, second; FR-002 lists the two values and FR-007 the ninth section.

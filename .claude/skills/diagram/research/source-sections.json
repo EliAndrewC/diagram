@@ -3,8 +3,13 @@
   {
    "id": "works-canon",
    "title": "Setting canon",
-   "description": "The GM's own campaign notes, which govern wherever they speak, and the published game setting they adapt.",
-   "canon": true,
+   "description": "The GM's own campaign notes: the setting's facts, which govern wherever they speak.",
+   "canon": true
+  },
+  {
+   "id": "works-published-setting",
+   "title": "The published game setting",
+   "description": "The Legend of the Five Rings setting as the game publishes it, which the campaign adapts: fiction, not evidence, and the GM's notes govern.",
    "takes": [
     {
      "period": "fiction"
