@@ -160,3 +160,23 @@ def test_a_question_moves_when_its_page_changes_and_not_when_only_its_notes_or_n
     (rec / "0040-new.html").write_text('<h2 id="new">New</h2>', encoding="utf-8")
     _git(tmp_path, "add", "-A")
     assert eo.moved_anchors(tmp_path, base, None) == {"0010-ponds.html", "0010-ponds.drawing.html"}
+
+
+def test_an_intro_a_comment_or_a_re_wrap_moves_no_section(tmp_path):  # noqa: ANN001
+    """Feature 311 (spec FR-004, last row): a modal is written from a section's FINDINGS. An intro paragraph cites nothing
+    and says only why the question is asked; a comment, a tag marker or a re-wrap changes no words. None owes entry-drift."""
+    rec = tmp_path / eo.RESEARCH / "questions"
+    rec.mkdir(parents=True)
+    (rec / "0010-ponds.html").write_text('<h2 id="ponds">Ponds</h2>\n<!-- tags: subject=water -->\n<p>Dug <strong>deep</strong>.</p>', encoding="utf-8")
+    _git(tmp_path, "init", "-q")
+    _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A")
+    _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base")
+    base = subprocess.run(["git", "-C", str(tmp_path), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    (rec / "0010-ponds.html").write_text(
+        '<h2 id="ponds">Ponds</h2>\n<!-- tags: subject=water,farm -->\n<p class="intro">In Rokugan every village digs one.</p>\n'
+        "<p>Dug\n  deep.<!-- seen 2026-10-02 --></p>",
+        encoding="utf-8",
+    )
+    assert eo.moved_anchors(tmp_path, base, None) == set()
+    (rec / "0010-ponds.html").write_text('<h2 id="ponds">Ponds</h2>\n<p>Dug shallow.</p>', encoding="utf-8")
+    assert eo.moved_anchors(tmp_path, base, None) == {"0010-ponds.html"}
