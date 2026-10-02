@@ -38,3 +38,7 @@ Every task is tooling over the record: nothing a map draws or asserts changes, s
 - [x] T12 Verify and land: SC-002 and SC-006 as tests; `make record CHECK=1`; `make done` compared with T01's baseline; peers' unpushed research work checked (plan D12); the migration script deleted; pushed (SC-011)
       research: rendering
       verify: DONE. make done green on the merged tree (with feature 302): 130 s; make record CHECK=1 clean; pointer and entry checks clean; no peer clone holds unpushed research work; one-time scripts deleted
+
+## Occasions
+
+- none: the engine edits are pointer comments, the record's build and its readers; no glyph is drawn differently and nothing is placed differently on any map (`make maps SCOPE=all` clean, the gate green)
