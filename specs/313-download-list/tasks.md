@@ -23,7 +23,7 @@ read line by line; no new finding is made and nothing a map draws changes, so ea
       `test_archive_ops.py` (FR-006; plan D7)
       research: rendering
       verify:
-- [ ] T04 [US4] Add under the host-wide lock and `make download-add FILE= [HIGH_RISK=1]`; the push check `_downloads.py
+- [ ] T04 [US4] Add under the host-wide lock and `make download-add FILE=`; the push check `_downloads.py
       check` with its selftest in `sync-with-main.sh`; tests for two adds taking distinct numbers and each of the five
       refusals (FR-008, FR-010, SC-003; plan D6, D11)
       research: rendering

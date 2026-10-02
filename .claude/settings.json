@@ -171,6 +171,15 @@
         ]
       },
       {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/download-copy-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/download-copy-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 313 - a NEW guard: a session's write to the GM's copy of the download list is refused with make download-add / make downloads-sync"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {

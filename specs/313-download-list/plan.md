@@ -56,7 +56,7 @@ copy:
 
 | | outcome |
 |---|---|
-| marks differ from the canonical marks | validated, then recorded with today's date; refused and named on found-elsewhere without downloaded or partial, or not-found with either |
+| marks differ from the canonical marks | validated, then recorded with today's date; refused and named on found-elsewhere without downloaded or partial, or not-found with downloaded, partial or paywalled |
 | body = base body | nothing, whether or not a session changed it |
 | body differs from base, canonical body = base | the GM's edit: shown as a diff, kept with `KEEP=<ids>`, discarded with `DROP=<ids>`, else pending |
 | body differs from base and the canonical body differs from both | a conflict: shown three ways, settled only by `KEEP=` or `DROP=` |
@@ -76,8 +76,7 @@ carrying a link line (`- **[...](http...)**`), `- Fallback:` with a link, `- **R
 `research/questions/<file>` or `research/contents.json#<section>` that exists, and `- Blocked by:`. Under `Lock`
 (`<mirror>/.specify/download-ids.lock`), the next number is one past the highest held by the mirror's list, every clone's
 list and the ledger `<mirror>/.specify/download-ids.jsonl`. Each number is written to the ledger, and the entry, with its
-mark lines, is appended at the end. `HIGH_RISK=1` takes the next `H<n>` instead and appends at the end of the high-risk
-section; feature 312 owns that list's growth.
+mark lines, is appended at the end.
 
 **D7 - The inbox takes an entry's id.** `MATCH="<file>=#17"` or `"<file>=H3"` resolves to the keys that entry names (D8),
 or to `[]`, and the table row records `"download": "<id>"`. Ingest passes a match for every entry whose saved-as line names
@@ -93,14 +92,12 @@ manifest gives for the URLs it links. A drafted entry may state `- Key: <k>[, <k
    did not find it. Several entries naming the key: the newest mark that gives a state, and on the same date the most open;
    a not-found mark never overrides another entry's state. Dated by the recorded line.
 2. Else the manifest rows naming the key, each mapped: `archived` and `archived-earlier-snapshot` to open, `archived-gm-copy`
-   to gm-full, `partial` and `unreachable` to gone on HTTP 404 or 410, down on a timeout, a network error or HTTP 5xx, and
-   bot-refused otherwise (403, 405, 406, 429, a page that would not render). The most open row wins, in the order open,
+   to gm-full, a `partial` row whose page would not render whole but whose served text is kept to open (we read it), and
+   other `partial` and `unreachable` rows to gone on HTTP 404 or 410, down on a timeout, a network error or HTTP 5xx, and
+   bot-refused otherwise (403, 405, 406, 429). The most open row wins, in the order open,
    gm-full, gm-partial, paywalled, bot-refused, down, gone, never-read, dated by its capture.
-3. If that gives bot-refused, down or gone, or there is no row, and the registry entry has no `READ` comment, the state is
-   never-read. This keeps apart the three states 312's request names: read, never read but referenced, and once read but
-   unreachable now.
-4. No row, with a `READ` comment: open, dated by the latest `READ`.
-5. A state recorded by hand in `source-access.json` wins over 2-4 when its date is the same or later, and never over a mark
+3. No row, with a `READ` comment: open, dated by the latest `READ`; no row and no `READ`: never-read.
+4. A state recorded by hand in `source-access.json` wins over 2-3 when its date is the same or later, and never over a mark
    that gives a state (rule 1). A not-found tick alone leaves a hand state in force (round 4's aside).
 
 **D9a - The seeds** (spec FR-011). The paywall knowledge already in prose is recorded with `SET`, one by one, each read in
@@ -111,7 +108,7 @@ Mentions that say a page is open ("no paywall", "the full text to a reader with 
 work, or where the GM already holds a full copy are not seeded. The list of what was seeded and what was passed over goes
 in `research.md`.
 
-Each keyless list entry is `download:<id>`: rule 1 gives its state, else never-read.
+Each keyless list entry is `download:<id>`: rule 1, then a state recorded by hand, else never-read.
 `make access-tags [KEY=<key or download:<id>>] [JSON=1] [SET=<state> KEY= DATE=<d> REASON="..."]` prints counts per state, one tag, or
 everything as JSON; `SET` appends a hand record. Not stored otherwise (spec Decisions).
 
@@ -122,9 +119,7 @@ pass because they run the script, which the guard does not see. The escape is `D
 companion is `scripts/test-download-copy-hooks.sh`, proven red by deleting the match.
 
 **D11 - The push check.** `_downloads.py check` runs in `sync-with-main.sh` beside the pointer check, comparing with
-`origin/main`'s list. It refuses: an id that main has but this list lacks; main's ids out of their order; a new numeric id
-not at the end, or not above main's highest; a new H id not at the end of the high-risk section; an id used twice; an entry
-without well-formed mark lines. Each refusal names the id and the command that fixes it. `--selftest` runs first, as the
+`origin/main`'s list. It refuses: an id that main has but this list lacks; main's ids out of their order; a new id that is not after every id main has, not numeric, or not above main's highest number; an id used twice; an entry without well-formed mark lines. Each refusal names the id and the command that fixes it. `--selftest` runs first, as the
 pointer check's does. While the list is absent on main, the check passes.
 
 **D12 - The doctrine.** The rule at `CLAUDE.md` (Research), `research/CLAUDE.md` (two places),
@@ -155,7 +150,7 @@ scripts/_access_tags.py               the derivation and the report
 scripts/download-copy-hooks.sh        the guard; scripts/test-download-copy-hooks.sh its companion
 scripts/_archive_ops.py               MATCH= takes an entry id
 scripts/sync-with-main.sh             the push check
-.claude/skills/diagram/Makefile       downloads-ingest, downloads-sync, download-add, access-tags
+.claude/skills/diagram/Makefile       downloads-ingest, downloads-sync, download-add, access-tags (forwarded from the root Makefile)
 .claude/skills/diagram/research/      to-download.md, to-download.state.json, source-access.json
 .claude/skills/diagram/tests/tooling/ test_downloads.py, test_access_tags.py, test_archive_ops.py (one case)
 .claude/settings.json                 the guard registered
