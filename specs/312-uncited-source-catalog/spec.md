@@ -16,7 +16,7 @@ sources shown in their own "Uncited sources" part of Sources; a BLOCKED-DOMAIN c
 first member) *"tool enforced"* at every route; every citation rule enforced by tooling; paywalled citations removed; and
 the high-risk sources (`high-risk-sources.md`) downloaded by the GM and confirmed before the feature closes.
 
-Builds on feature 313 (the access tags in `research/source-access.json` and the canonical download list
+Builds on feature 313 (the access tags, read through its report command, and the canonical download list
 `research/to-download.md`, built by a peer session in parallel and landing first), feature 309 (the archive), feature 305
 (source tags and sections) and feature 288 (the sources-consulted ledger and the page cache).
 
@@ -136,10 +136,11 @@ in User Story 6.
 - **FR-004**: Sources forbidden for other reasons are banned at the CITATION, by URL pattern, in
   `research/banned-citations.json` (pattern, reason, the GM's approval); the build refuses a citation matching one. Fetching
   them is not blocked (they may share a domain with allowed sources).
-- **FR-005**: Every citation rule is enforced by tooling. The rules in `research/CLAUDE.md` and
-  `docs/research-doctrine.md` are inventoried, each with the tool that enforces it (a script, a build refusal, a hook, or
-  the check agent the record gate owes); a rule with none that can be checked mechanically gets one, tested, and the
-  inventory lives in the doctrine.
+- **FR-005**: Every citation rule is enforced by tooling. Every citation rule stated in `CLAUDE.md`, `research/CLAUDE.md`,
+  `docs/research-record-rules.md`, `docs/research-doctrine.md` and `container-scripts/page-session-rules.md` is
+  inventoried, each with the tool that enforces it (a script, a build refusal, a hook, or the check agent the record gate
+  owes); a rule with no tool gets one - a mechanical check, tested, where it can be checked mechanically, otherwise a check
+  the record gate owes on the words it governs. The inventory lives in the doctrine.
 
 **The filter**
 
@@ -153,8 +154,9 @@ in User Story 6.
   text, with no question in hand, against the THRESHOLD: the page holds checkable evidence on a subject the record covers
   (building, farming, settlement, landscape, daily life, religion, administration - the subjects of `research/tags.json`),
   of a kind of source the record would cite (scholarship, a primary text, a museum, archive, government or reference
-  work, an established encyclopedia), in a form the setting could use (premodern or traditional practice; another region
-  as an analog). Its verdict is KEEP or NOT-KEPT; a NOT-KEPT carries one or more reasons from the fixed set -
+  work, an established encyclopedia), of evidence the setting could use: premodern or traditional practice, another
+  period's or region's as an analog, or facts not bound to a period (the `works-timeless` section); never the canon
+  section. Its verdict is KEEP or NOT-KEPT; a NOT-KEPT carries one or more reasons from the fixed set -
   `off-topic` (the title misled), `modern-only` (industrial or mechanized practice whose numbers would mislead),
   `unreliable-kind` (AI-generated, content farm, unsourced aggregator), `no-substance` (search, listing, index or stub
   page), `duplicate` (a copy of a kept or cited page), `unreadable` - and an optional one-line note. It may propose a domain
@@ -187,25 +189,29 @@ in User Story 6.
   where it has one, the question (its current stem), what was sought, the outcome (`found`, `partial`, `not-found`,
   `not-applicable`, `unreadable`, `unknown`), the date and the feature. It covers cited and uncited sources alike; what a
   cited source WAS used for stays derived from its footnotes and is not copied here.
-- **FR-016**: The log is seeded from the ledger: every row naming a question becomes an attempt, its question id mapped to
-  the current stem (`moved-303.json`), its outcome mapped (`nothing-found` -> `not-found`, `rejected:` -> `not-applicable`
+- **FR-016**: The log is seeded from the ledger: every row becomes an attempt, its question id mapped to the current stem
+  (`moved-303.json`), or `unknown` where it names none, its outcome mapped (`nothing-found` -> `not-found`, `rejected:` -> `not-applicable`
   with the reason, `unreadable`, `cited:` -> `found`, the rest `unknown`), and what was sought written as unknown - recorded
   before feature 312 (the GM: *"it is of course okay in any case to mark that we don't know why something was consulted
   originally"*).
-- **FR-017**: Every new consult records what was sought: `make source-pages` requires the question and `SOUGHT=` and
-  refuses without them, printing the compliant command; `make source-outcome` writes the attempt's outcome.
+- **FR-017**: Every new consult records what was sought, by every route that reads a page: `make source-pages` requires
+  the question and `SOUGHT=` and refuses without them, printing the compliant command; `make archive-find` and `make
+  archive` write an attempt with what they were asked for; a WebFetch writes one through the hook FR-002 and FR-018 add,
+  its `prompt` serving as what was sought where no question is named. `make source-outcome` writes the attempt's outcome.
 - **FR-018**: Before a page is fetched, its earlier attempts and its filter verdict are printed: by `make source-pages`, by
   `make archive-find`, and by the WebFetch hook as added context. `make attempts URL=<u> | KEY=<k> | Q=<NNNN>` prints them on
   demand. A verdict never refuses a read.
 
 **Sources no one can read**
 
-- **FR-019**: A cited source whose access state (feature 313) is `paywalled` or `never-read`, whose quoted passage cannot be
-  confirmed from a page that IS readable, is removed as a source: each footnote citing it becomes an absence note where it
-  was the claim's only support (or is dropped where another source carries the claim), its entry leaves the works cited,
-  and it is recorded known-unavailable by its access tag and a not-kept line (`unreadable`, its access state). A footnote
-  quoting a passage readable on a public page (an open abstract) stands.
-- **FR-020**: The build refuses a footnote citing a source whose access state is `paywalled` or `never-read`.
+- **FR-019**: A cited source where what can be read is less than the work - the GM marked it paywalled or not found, or its
+  access state (feature 313's report) is `paywalled`, `gm-partial` or `never-read` - is removed as a source footnote by
+  footnote: each footnote citing it is removed (an absence note where it was the claim's only support, dropped where
+  another note carries the claim) unless `quote-check` has confirmed its quoted passage in the readable part (the open page,
+  an open abstract, or the GM's partial copy), a confirmation recorded per footnote. A source left with no footnote leaves
+  the works cited and is recorded known-unavailable through 313's hand-recorded state (a date and a reason) and a not-kept
+  line (`unreadable`, its access state).
+- **FR-020**: The push and the gate refuse a footnote citing a source FR-019 names unless its confirmation is on record.
 - **FR-021**: Each of the 22 sources on `high-risk-sources.md` (tiers 1 and 2 and the unreachable 7) is downloaded by the GM
   and ingested (feature 313), or reported not found; each one got is read by `source-reader` and its footnotes checked by
   `quote-check`, and the record is corrected where they disagree; one not found or paywalled is removed by FR-019.
@@ -232,29 +238,38 @@ in User Story 6.
 - **SC-005** (FR-008, FR-009): the calibration record shows three runs a leg at agreement on 19 verdicts in 20 or more on each (`research.md` R1).
 - **SC-006** (FR-012, FR-013, FR-014): every kept URL has an uncited entry that `source-applicability` has answered;
   `make record` builds the "Uncited sources" part; the fixtures for a canon link and a cited uncited entry fail the build.
-- **SC-007** (FR-015, FR-016, FR-017, FR-018): every ledger row naming a question has an attempt line; `make source-pages`
-  without `SOUGHT=` is refused; with earlier attempts it prints them before the fetch.
-- **SC-008** (FR-019, FR-020): no footnote cites a source whose access state is `paywalled` or `never-read`, held by the
-  build.
+- **SC-007** (FR-015, FR-016, FR-017, FR-018): every ledger row has an attempt line; `make source-pages` without `SOUGHT=`
+  is refused; with earlier attempts it prints them before the fetch; one consult by each route of FR-017 writes an
+  attempt, each pinned by a test.
+- **SC-008** (FR-019, FR-020): no footnote cites a source FR-019 names without its recorded confirmation, held at the push
+  and the gate.
 - **SC-009** (FR-021, FR-022): each of the 22 high-risk sources is confirmed by `source-reader` and `quote-check`, corrected,
   or removed; each of the 8 respellings is covered.
 
 ## Decisions Recorded
 
 - The threshold (FR-008) is the session's, from its proposal the GM accepted (`request.md`, point 1), widened from
-  "premodern East Asian" to the record's subjects and its analogs, since the record cites European and modern-preindustrial
-  analogs with their limits (`research/source-sections.json`).
+  "premodern East Asian" to the record's subjects, its analogs and facts not bound to a period, since the record cites
+  European, modern-preindustrial and period-free evidence with its limits (`research/source-sections.json`; ruled faithful by
+  `spec-fidelity`, round 1).
 - The negative control is labeled by this session from the uncited set itself, since the ledger's 60 rejections are
   "not useful for that question", which is not "not worth keeping" (`request.md`, point 1).
 - The attempts log and the not-kept list are committed, union-merged files beside the record rather than host-local, since
   the GM asked for a record kept with the sources and the ledger is host-local.
 - An open abstract that carries a footnote's passage keeps the footnote (FR-019): the passage is readable, so the citation
-  meets the rule; the session's refinement, offered to the GM in `request.md`.
+  meets the rule; the session's refinement, offered to the GM in `request.md`, ruled within the GM's ruling by
+  `spec-fidelity` (round 1), and raised with the GM once the removal has run.
 
 ## Assumptions
 
-- Feature 313 lands first, with the access tags and the ingest; this feature reads the tags through 313's make targets and
-  never edits `source-access.json` by hand.
+- Feature 313 lands first, with the access tags and the ingest; this feature reads the tags through 313's report command
+  (its JSON output) and records a state only through 313's hand-recorded state, never by editing 313's files.
 - The GM's downloads (FR-021) are the GM's time; the feature stays open until they are done.
 
 ## Review
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 6. Applied: FR-008 takes period-free evidence; FR-019/FR-020 made
+  consistent (removal footnote by footnote unless the passage is confirmed in the readable part; `gm-partial` and "not
+  found" included; the refusal at the push and the gate); FR-005's inventory covers every rules file and gives a
+  non-mechanical rule a gate-owed check; FR-017 reaches every reading route; FR-016 seeds every ledger row; the 313 boundary
+  reads 313's report command, not a file.
