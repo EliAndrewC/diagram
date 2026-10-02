@@ -31,7 +31,7 @@ Two recon findings shape the whole plan:
 - **X. Python Discipline (NON-NEGOTIABLE)**: **PASS** - ruff, `mypy --strict`, red-green TDD, 100% coverage, behavior-named tests, parametrized variants.
 - **XI. Japanese Authenticity**: **PASS** - *masugata*, *ote-mon*, *honmaru/ninomaru/sannomaru*, *ishigaki* all used in their attested senses (see 018's research.md).
 - **XII. Historical Grounding Bookends (NON-NEGOTIABLE)**: **BOTH GATES DISCHARGED HERE.**
-  - *Opening*: already done and recorded in [`../018-capital-space-budget/research.md`](../018-capital-space-budget/research.md) and `research/contents.json#capitals`. This feature adds no new world-assertion beyond drawing what that research settled, so it inherits rather than repeats the gate.
+  - *Opening*: already done and recorded in [`../018-capital-space-budget/research.md`](../018-capital-space-budget/research.md) and `research/cities/capitals.md`. This feature adds no new world-assertion beyond drawing what that research settled, so it inherits rather than repeats the gate.
   - *Closing*: **transferred INTO this feature from 018**, and this is the feature that finally produces an artifact. Before done, the rendered Shiro Daika PNG is examined - the picture, not the code - against those Phase 0 findings. This is a task, not a sentiment (see tasks.md).
 
 ## The three design decisions
