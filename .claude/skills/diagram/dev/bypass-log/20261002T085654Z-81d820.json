@@ -1,0 +1,6 @@
+{
+  "utc": "20261002T085654Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "glyph-check--alder passed twice in this feature at keys 320a4102c6f3 and 0fcb5de7af59, the cap is two, and Sawada at this key differs from the second pass only in its seat-search counters"
+}

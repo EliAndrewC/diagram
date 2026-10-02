@@ -224,3 +224,13 @@ houses on the sixteen seeds took them by offer 512. Fixed: no rescue on a full m
 base's ~10.1), still on margin 3 with all 40; the sixteen-seed total 89.4 -> 82.8 s. The audit also attributed the two
 10-household increases of the bookend pair to the seating's band (the band at 104 restores them: seed 4's full run 2.8 -> 2.4 s;
 seed 39's notice stage 0.52 -> 0.06 s).
+
+## R18. The bookends (observed 2026-10-02, method: `make perf LABEL=306-end` on the final engine, `make perf-report AGAINST=306-start`)
+
+(Observed 2026-10-02, method: as the heading.) The final pair is band 0 - every seed faster at every size (the reference -29.3%,
+10 households -32.0%, 20 -53.9%, 40 -75.4%). It is NOT back to back: 306-start was taken in `/tmp/base306` while the census
+agents ran, and an end taken while two stray scratch processes held two cores read band 3 (+23.2%, the field and hinterland
+stages - which this feature does not touch - grown with the rest). The pair's magnitudes are therefore indicative only; the
+measure of record is R15's back-to-back run with R17's correction (40 households: 427.7 s over the fifteen seeds the base could
+roll -> 82.8 s over all sixteen). The earlier end's band-2 explanation and the perf-audit's records (dev/perf-log/) stand for
+that pair; the audit's two findings were fixed (R17).
