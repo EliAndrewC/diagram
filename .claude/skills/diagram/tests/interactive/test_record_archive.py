@@ -32,7 +32,9 @@ def _manifest(rec: pathlib.Path, *rows: dict) -> None:
     d = rec / archive.ARCHIVE_DIR
     d.mkdir(exist_ok=True)
     for row in rows:
-        (d / f"{archive.url_id(row['url'])}.json").write_text(json.dumps(row), encoding="utf-8")
+        uid = archive.url_id(row["url"])
+        (d / uid[:2]).mkdir(exist_ok=True)
+        (d / uid[:2] / f"{uid}.json").write_text(json.dumps(row), encoding="utf-8")
 
 
 @pytest.mark.parametrize(

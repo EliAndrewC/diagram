@@ -183,6 +183,8 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
     rows = save(args.urls, out, pages or src.CachedPages(qv.Pages(), where, refresh=src.refresh_wanted()), quotes, ledger)
     print((out / "MANIFEST.txt").read_text(encoding="utf-8"), end="")
     print(f"  saved {sum(r['state'] == 'FETCHED' for r in rows)} of {len(rows)} to {out} - hand source-reader the manifest")
+    if ledger is not None:
+        src.archive_reads(src.repo_root(), list(args.urls))
     return 0
 
 

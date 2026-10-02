@@ -1,0 +1,18 @@
+{
+ "captured": "2026-10-02T14:23:40+00:00",
+ "final_url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797",
+ "first": "7a/7a02d76dd25c/20261002T142340Z",
+ "gm_copies": [
+  "gm-copies/Journal of Ecology - 2017 - Packer - Biological Flora of the British Isles  Phragmites australis.pdf"
+ ],
+ "keys": [
+  "packer-2017-phragmites"
+ ],
+ "notes": [],
+ "outcome": "archived-gm-copy",
+ "path": "7a/7a02d76dd25c/20261002T142340Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "16d5e965d77512eebab9b48b329c1c3200ed99580337d10a25f2ba2d91ff76b0",
+ "url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797"
+}

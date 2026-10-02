@@ -13,7 +13,7 @@ article page, the PMC copy behind a DOI: 23 entries, plan review 2026-10-02) - a
 registry is not the whole list: spec-fidelity round 1 found about a dozen footnote URLs no entry carries. `scripts/_archive.py`, which takes the copies, asks THIS module
 what is cited and what a URL's id is, so the build and the archiver agree by construction.
 
-THE MANIFEST is one JSON file per cited URL, `research/archive/<id>.json` (one file each, so two sessions archiving
+THE MANIFEST is one JSON file per URL, `research/archive/<id[:2]>/<id>.json` (one file each, so two sessions archiving
 different URLs never touch the same file - plan D3), holding the outcome and where the copy lies in the archive
 repository. A source's page in the built site shows its archived-copy link from it (spec FR-010).
 """
@@ -36,6 +36,10 @@ from l7r.diagram.interactive.sources import QUESTIONS
 ARCHIVE_DIR = "archive"
 #: The FR-012 match of the GM's downloaded files to the keys they copy, beside the manifest.
 GM_COPIES = "gm-copies.json"
+#: A row's file, `<id[:2]>/<id>.json`: sharded by the id's first two hex digits so no directory holds more than a few
+#: hundred rows as the manifest grows past 5,000 (GitHub lists only the first 1,000 entries of a directory - the GM asked
+#: for a layout that stays browsable, 2026-10-02). The archive repository is sharded the same way.
+ROW_GLOB = "[0-9a-f][0-9a-f]/[0-9a-f]*.json"
 #: The archive repository. PRIVATE (the GM, 2026-10-02: *"for now I just want an archive"* - much of it is
 #: copyrighted), so its links open for the GM and no one else.
 REPO = "https://github.com/EliAndrewC/diagram-research"
@@ -103,7 +107,7 @@ def cited(research_dir: str) -> dict[str, Cited]:
 def load(research_dir: str) -> dict[str, dict]:
     """The manifest: id -> row. Empty when the record has no `archive/` (a test's small record)."""
     rows = {}
-    for path in sorted(glob.glob(os.path.join(research_dir, ARCHIVE_DIR, "[0-9a-f]*.json"))):
+    for path in sorted(glob.glob(os.path.join(research_dir, ARCHIVE_DIR, ROW_GLOB))):
         with open(path, encoding="utf-8") as fh:
             rows[os.path.basename(path)[:-5]] = json.load(fh)
     return rows

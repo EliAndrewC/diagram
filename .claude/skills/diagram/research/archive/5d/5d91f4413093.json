@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T14:57:12+00:00",
+ "final_url": "",
+ "first": "",
+ "gm_copies": [
+  "gm-copies/中山市风水林的药用植物资源.pdf"
+ ],
+ "keys": [
+  "zhongshan-fsw-2016"
+ ],
+ "notes": [
+  "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.notes.html"
+ ],
+ "outcome": "archived-gm-copy",
+ "path": "",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://rdswxb.hainanu.edu.cn/cn/article/doi/10.15886/j.cnki.rdswxb.2016.03.016"
+}

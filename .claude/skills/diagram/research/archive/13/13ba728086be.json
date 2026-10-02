@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T12:42:04+00:00",
+ "final_url": "https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706",
+ "first": "13/13ba728086be/20261002T124204Z",
+ "gm_copies": [],
+ "keys": [
+  "kushiro-mire-2014"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "13/13ba728086be/20261002T124204Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "b4d0e0e7734cd7ac1a9cf2f9492644a4211109dd9d68a1e2765bba627035521d",
+ "url": "https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706"
+}

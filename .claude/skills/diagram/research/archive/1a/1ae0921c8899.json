@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T14:42:16+00:00",
+ "final_url": "https://kazusa.jpn.org/b/archives/2883",
+ "first": "1a/1ae0921c8899/20261002T144216Z",
+ "gm_copies": [],
+ "keys": [
+  "kazusa-bugyosho"
+ ],
+ "notes": [
+  "0114-the-imperial-magistrates-compound-in-a-capital.drawing.notes.html",
+  "0114-the-imperial-magistrates-compound-in-a-capital.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "1a/1ae0921c8899/20261002T144216Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "986e3d80f76a23b1891cfae5de39957bcd4949dd857014e7fa3d6d38e8afb9e2",
+ "url": "https://kazusa.jpn.org/b/archives/2883"
+}

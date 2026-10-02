@@ -7,7 +7,9 @@ web page and every PDF, *"even things which seem at low risk of going away, like
 *"the whole webpage with images and css and such and not just the html content"*. The repository is PRIVATE on purpose:
 much of it is copyrighted, and *"for now I just want an archive"*.
 
-WHAT A CAPTURE HOLDS (spec FR-002), in `<key>/<id>/<UTC time>/` of the archive (a URL only a footnote cites: `notes/<id>/`):
+WHAT A CAPTURE HOLDS (spec FR-002), in `<id[:2]>/<id>/<UTC time>/` of the archive - sharded by the URL id's first two hex
+digits, so no directory holds more than a few hundred entries (GitHub lists only the first 1,000 of a directory; the GM
+asked for the layout to stay browsable as the archive grows past 5,000 URLs, 2026-10-02) - with who cites it in `capture.json`:
   served.<ext>  the bytes the site served, unaltered (an HTML document, a PDF, an image)
   page.mhtml    a web page whole, as Chromium rendered it - its text, images, stylesheets and fonts - in one file that any
                 Chromium browser opens offline (plan D1: SingleFile fails on this host's Node, monolith runs no scripts)
@@ -21,7 +23,7 @@ Wayback snapshot, then the GM's downloaded copy, else it is `unreachable` with t
 (a bot wall, or a page that rendered no text) takes the GM's copy first, then a snapshot, else it is `partial` - what the
 site served, the page cache's text beside it (`capture`). And
 IN ADDITION, every file of `/host-l7r-repo/academic-sources/` that `research/archive/gm-copies.json` matches to a key is
-copied to `<key>/gm-copy/` (FR-012), whatever the live fetch did.
+copied to `gm-copies/<file>` (FR-012), whatever the live fetch did.
 
 ONE WORKING COPY on the host (the GM: *"you can just push directly to it without each of our diagram .clones/ having its
 own copy"*): `<mirror>/.specify/source-archive/`, written under `<mirror>/.specify/source-archive.lock`, pushed straight to
@@ -460,6 +462,16 @@ class Archive:
         self._count(self.unpushed() + sum(p.stat().st_size for p in ([dest] if dest.is_file() else dest.rglob("*")) if p.is_file()))
         return True
 
+    def put_file(self, rel: str, body: bytes, message: str) -> None:
+        """Write and commit one file at `rel` (call under the lock), where nothing is yet."""
+        if (self.dir / rel).exists():
+            return
+        (self.dir / rel).parent.mkdir(parents=True, exist_ok=True)
+        (self.dir / rel).write_bytes(body)
+        self.git("add", "--", rel)
+        self.git("commit", "-q", "-m", message)
+        self._count(self.unpushed() + len(body))
+
     def push(self) -> str:
         """Push `main` (call under the lock); '' on success or with nothing committed yet, else git's complaint."""
         if self.git("rev-parse", "--verify", "-q", "HEAD", check=False).returncode != 0:
@@ -475,7 +487,19 @@ class Archive:
 
 
 def row_path(root: pathlib.Path, url: str) -> pathlib.Path:
-    return root / MANIFEST / f"{rec.url_id(url)}.json"
+    """A URL's manifest row, sharded as the archive is: `research/archive/<id[:2]>/<id>.json`."""
+    uid = rec.url_id(url)
+    return root / MANIFEST / uid[:2] / f"{uid}.json"
+
+
+def row_files(root: pathlib.Path) -> list[pathlib.Path]:
+    return sorted((root / MANIFEST).glob(rec.ROW_GLOB))
+
+
+def capture_base(url: str) -> str:
+    """Where a URL's captures go in the archive: `<id[:2]>/<id>`."""
+    uid = rec.url_id(url)
+    return f"{uid[:2]}/{uid}"
 
 
 def read_row(root: pathlib.Path, url: str) -> dict | None:
@@ -493,19 +517,39 @@ def write_row(root: pathlib.Path, url: str, row: dict) -> None:
     os.replace(tmp, path)
 
 
-def gm_copies(root: pathlib.Path) -> dict[str, list[str]]:
-    """key -> the GM's files that copy it (FR-012), from `research/archive/gm-copies.json`. No table, no copies; a
-    table that will not parse is an error, never an empty table - the first backfill ran on a malformed one and copied
-    none of the GM's files while every row looked normal (2026-10-02)."""
+def gm_table(root: pathlib.Path) -> dict[str, dict]:
+    """The GM's files, by name: each one's keys and, once copied, where it is in the archive (`archived`). No table, no
+    files; a table that will not parse is an error, never an empty table - the first backfill ran on a malformed one and
+    copied none of the GM's files while every row looked normal (2026-10-02)."""
     path = root / MANIFEST / rec.GM_COPIES
     if not path.is_file():
         return {}
-    files = json.loads(path.read_text(encoding="utf-8"))["files"]
+    return json.loads(path.read_text(encoding="utf-8"))["files"]
+
+
+def gm_copies(root: pathlib.Path) -> dict[str, list[str]]:
+    """key -> the GM's files that copy it (FR-012), from `research/archive/gm-copies.json`."""
     out: dict[str, list[str]] = {}
-    for name, entry in sorted(files.items()):
+    for name, entry in sorted(gm_table(root).items()):
         for key in entry.get("keys", []):
             out.setdefault(key, []).append(name)
     return out
+
+
+GM_DEST = "gm-copies"
+
+
+def place_gm(store: Archive, name: str, entry: dict) -> str:
+    """The GM's file `name` in the archive (call under the lock): copied from the inbox to `gm-copies/<name>` once, its
+    text beside a PDF as `<name>.txt` so `make archive-find` reads it; returns its archive path, or '' where it is
+    neither in the archive nor in the inbox. A file the table already places (`archived`) is looked for there."""
+    dest = entry.get("archived") or f"{GM_DEST}/{name}"
+    source = GM_DIR / name
+    if not (store.dir / dest).exists() and source.exists():
+        store.copy_in(dest, source)
+        if source.is_file() and source.suffix.lower() == ".pdf" and (text := pdf_text(source.read_bytes())):
+            store.put_file(f"{dest}.txt", text.encode("utf-8"), f"the text of {dest}")
+    return dest if (store.dir / dest).exists() else ""
 
 
 def stamp() -> str:
@@ -520,24 +564,20 @@ def home_of(root: pathlib.Path) -> pathlib.Path:
 def archive_url(root: pathlib.Path, url: str, who: rec.Cited, browser, store: Archive, push: bool = True) -> dict:  # noqa: ANN001
     """Archive one cited URL, copy its keys' GM files, write its manifest row, and push when asked. Returns the row."""
     url = rec.clean(url)
-    copies = gm_copies(root)
-    mine = [(k, n) for k in who.keys for n in copies.get(k, [])]
+    copies, table = gm_copies(root), gm_table(root)
+    mine = sorted({n for k in who.keys for n in copies.get(k, [])})
     cache = src.cached(src.home(root), url, max_age_days=CACHE_ANY_AGE_DAYS)
     got = capture(browser, url, bool(mine), cache["text"] if cache else "")
     files, parts = split_large(got.files)
     when = stamp()
-    base = f"{who.keys[0]}/{rec.url_id(url)}" if who.keys else f"notes/{rec.url_id(url)}"
-    rel = f"{base}/{when}"
+    rel = f"{capture_base(url)}/{when}"
     record = {**got.record, "captured": when, "keys": who.keys, "notes": who.notes, "outcome": got.outcome, "parts": parts}
     gm_paths = []
     with store.locked():
         store.ensure()
         if files:
             rel = store.put(rel, {**files, "capture.json": (json.dumps(record, ensure_ascii=False, indent=1) + "\n").encode()}, f"{got.outcome}: {url}")
-        for key, name in mine:
-            if (GM_DIR / name).exists():
-                store.copy_in(f"{key}/gm-copy/{name}", GM_DIR / name)
-                gm_paths.append(f"{key}/gm-copy/{name}")
+        gm_paths = [p for name in mine if (p := place_gm(store, name, table[name]))]
         failure = store.push() if push else ""
     old = read_row(root, url) or {}
     row = {
@@ -564,17 +604,13 @@ def sync_gm_copies(root: pathlib.Path, store: Archive) -> int:
     """Every GM file `gm-copies.json` matches copied into the archive, and every row of its key told so - without fetching
     anything (FR-012). A row the live fetch left `partial` or `unreachable` becomes `archived-gm-copy` (plan D2: the GM's
     copy stands in where the live page failed). Returns the rows changed."""
-    copies = gm_copies(root)
-    rows = {p: json.loads(p.read_text(encoding="utf-8")) for p in sorted((root / MANIFEST).glob("[0-9a-f]*.json"))}
+    copies, table = gm_copies(root), gm_table(root)
+    rows = {p: json.loads(p.read_text(encoding="utf-8")) for p in row_files(root)}
     changed = 0
     with store.locked():
         store.ensure()
         for key, names in copies.items():
-            paths = []
-            for name in names:
-                if (GM_DIR / name).exists():
-                    store.copy_in(f"{key}/gm-copy/{name}", GM_DIR / name)
-                    paths.append(f"{key}/gm-copy/{name}")
+            paths = [p for name in names if (p := place_gm(store, name, table[name]))]
             for row in rows.values():
                 if key not in row.get("keys", []) or not paths:
                     continue
@@ -658,7 +694,7 @@ def backfill(root: pathlib.Path, workers: int) -> int:  # pragma: no cover - the
 def settle(root: pathlib.Path) -> int:
     """Rows waiting on an upload, once a push has gone through, get their real outcome back."""
     n = 0
-    for path in sorted((root / MANIFEST).glob("[0-9a-f]*.json")):
+    for path in row_files(root):
         row = json.loads(path.read_text(encoding="utf-8"))
         if row.get("outcome") == "pending-upload" and row.get("held"):
             row["outcome"], row["reason"] = row.pop("held"), ""

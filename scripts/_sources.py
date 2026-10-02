@@ -150,6 +150,21 @@ def line(ctx: dict, url: str, outcome: str, questions: list[str] | None = None) 
     return {"url": norm(url), "raw": url, "utc": now(), **ctx, "questions": questions or [], "outcome": outcome}
 
 
+def archive_reads(root: pathlib.Path, urls: list[str], runner=None) -> int:  # noqa: ANN001 - the seam a test replaces
+    """Every page read is archived as its read is recorded (feature 309 FR-014; the GM chose every page read, cited or
+    not): `_archive_ops.py urls` captures each URL with no archive row yet, its report on stderr so this command's own
+    output is unchanged. A failure never blocks the read. `L7R_ARCHIVE_READS=0` switches it off - the test suite's seam
+    (`tests/tooling/conftest.py`), as `L7R_SOURCES_HOME` moves the ledger; no session sets it."""
+    import subprocess  # noqa: PLC0415
+
+    if not urls or os.environ.get("L7R_ARCHIVE_READS") == "0":
+        return 0
+    done = (runner or subprocess.run)([sys.executable, str(HERE / "_archive_ops.py"), "urls", *urls], cwd=root, stdout=sys.stderr, stderr=sys.stderr, check=False)
+    if done.returncode != 0:
+        print(f"archive: archiving the pages read failed (exit {done.returncode}) - `make archive URL=<u>` retries one", file=sys.stderr)
+    return done.returncode
+
+
 def valid_outcome(outcome: str) -> bool:
     return bool(_OUTCOME.fullmatch(outcome.strip()))
 
@@ -421,6 +436,7 @@ def main(argv: list[str] | None = None) -> int:
         row = line(context(root), args.url, args.outcome.strip(), [args.question] if args.question else [])
         append(where, [row])
         print(f"source-outcome: recorded{show(row)}")
+        archive_reads(root, [args.url])
         return 0
     if args.cmd == "lookup":
         if not (args.url or args.key):

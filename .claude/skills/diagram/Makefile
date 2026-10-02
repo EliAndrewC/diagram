@@ -1238,9 +1238,17 @@ archive: ## [project] archive ONE cited URL now into the private source archive 
 	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
-# GUARD_EDIT_OK: feature 309 - a new operation, GM=1 (the GM's matched files copied into the archive); no guard changes.
-archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched academic-sources files copied in (feature 309)   [WORKERS=4] [REPORT=1] [GM=1]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4)))
+# GUARD_EDIT_OK: feature 309 - new operations, GM=1 (the GM's matched files copied into the archive) and CONSULTED=1 (every page read, archived); no guard changes.
+archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, every page on the sources-consulted ledger with no copy (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
+	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),); else python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
+
+# GUARD_EDIT_OK: feature 309 Amendment 1 - two new operations (the GM's download directory processed as an inbox; the archive looked in before the web); no guard changes.
+archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass (feature 309)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" inbox
+
+archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b"
+	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi

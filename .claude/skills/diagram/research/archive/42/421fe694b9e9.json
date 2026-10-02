@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T12:35:51+00:00",
+ "final_url": "https://www.nature.com/articles/s41598-020-60169-1",
+ "first": "42/421fe694b9e9/20261002T123551Z",
+ "gm_copies": [],
+ "keys": [
+  "kaifeng-pmc7048742"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "42/421fe694b9e9/20261002T123551Z",
+ "reason": "the page showed no text",
+ "revision": "",
+ "sha256": "d0aba6008cba0031c4d42f1a0e54f73e991bc5157953ac2341c042f3523f30d5",
+ "url": "https://doi.org/10.1038/s41598-020-60169-1"
+}

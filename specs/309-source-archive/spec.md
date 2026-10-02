@@ -303,3 +303,5 @@ This feature draws and states nothing on a map; it changes the research tooling 
   GM's file in place until FR-013 removes it, the Edge Case points at the archived copy, the manifest entity covers every
   archived URL and the GM-copy table; (3) FR-016 names `make archive-inbox` as a step of every research pass and adds the
   root `CLAUDE.md` and `docs/research-doctrine.md`. Also folded in: the GM's sharding question (FR-003, a Decisions row).
+- Amendment 1, round 2 (spec-fidelity, verify, 2026-10-02; a NOT-REVIEWABLE return before it, for unlabeled figures, now
+  labeled): FAITHFUL. Noted for the plan: its layout lines predate the sharding and are rewritten with the plan's amendment.

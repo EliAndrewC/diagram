@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T14:55:44+00:00",
+ "final_url": "https://pfaf.org/user/plant.aspx?latinname=Diospyros+kaki",
+ "first": "82/822bbf3599e4/20261002T145544Z",
+ "gm_copies": [],
+ "keys": [
+  "pfaf-kaki"
+ ],
+ "notes": [
+  "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.notes.html",
+  "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "82/822bbf3599e4/20261002T145544Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "ad77b8667a532aad9181e515b39c43e506b601f9365125ee8e620d60d0015ff1",
+ "url": "https://pfaf.org/user/plant.aspx?latinname=Diospyros+kaki"
+}

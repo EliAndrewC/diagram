@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-02T12:35:57+00:00",
+ "final_url": "https://www.tandfonline.com/doi/full/10.1179/014703703788762953",
+ "first": "a8/a8ad67e9262b/20261002T123557Z",
+ "gm_copies": [],
+ "keys": [
+  "miles-2003"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "a8/a8ad67e9262b/20261002T123557Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "6248aba8af69d23e42ff6543b96e1ed41e55bab7e16c383c5a247195b315933a",
+ "url": "https://doi.org/10.1179/014703703788762953"
+}

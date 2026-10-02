@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T13:39:50+00:00",
+ "final_url": "https://lyzz.visitbeijing.com.cn/news/detail?id=17810",
+ "first": "df/dfaf628ce958/20261002T133950Z",
+ "gm_copies": [],
+ "keys": [
+  "visitbeijing-zhili-yamen"
+ ],
+ "notes": [
+  "0167-offices-of-the-six-ministries-liubu.drawing.notes.html",
+  "0167-offices-of-the-six-ministries-liubu.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "df/dfaf628ce958/20261002T133950Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "71a93b3ecfce4de070836a4b6d08bcb1aed0bc6d6d6842cd9f504e3a35dfdb47",
+ "url": "https://lyzz.visitbeijing.com.cn/news/detail?id=17810"
+}

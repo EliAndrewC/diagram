@@ -1,0 +1,19 @@
+{
+ "captured": "2026-10-02T12:50:25+00:00",
+ "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6459177/",
+ "first": "03/030e16755e73/20261002T125025Z",
+ "gm_copies": [],
+ "keys": [
+  "cao-2019-abandoned-paddy"
+ ],
+ "notes": [
+  "0057-marshes-and-wetlands-shitchi.drawing.notes.html",
+  "0057-marshes-and-wetlands-shitchi.notes.html"
+ ],
+ "outcome": "partial",
+ "path": "03/030e16755e73/20261002T125025Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "415ff807abb2fd49ce840d67bf14cb4d647e78afa9ab115c2b2dd8c8614928dd",
+ "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6459177/"
+}

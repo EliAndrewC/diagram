@@ -1,0 +1,20 @@
+{
+ "captured": "2026-10-02T14:29:08+00:00",
+ "final_url": "",
+ "first": "66/66c57174bcd0/20261002T142908Z",
+ "gm_copies": [],
+ "keys": [
+  "gd-gazetteer-sangji"
+ ],
+ "notes": [
+  "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.notes.html",
+  "0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.notes.html",
+  "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.notes.html"
+ ],
+ "outcome": "unreachable",
+ "path": "66/66c57174bcd0/20261002T142908Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://dfz.gd.gov.cn/index/dqyj/content/post_4237091.html"
+}

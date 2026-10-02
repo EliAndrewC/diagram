@@ -1,0 +1,30 @@
+{
+ "captured": "2026-10-02T13:32:32+00:00",
+ "final_url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md",
+ "first": "",
+ "gm_copies": [],
+ "keys": [
+  "l7r-median-domain",
+  "l7r-castes",
+  "l7r-wagons",
+  "l7r-tariffs",
+  "l7r-stable-horse-culture",
+  "l7r-rites-and-temples",
+  "l7r-merchant-families",
+  "l7r-market-day",
+  "l7r-toshi-ranbo-barracks",
+  "l7r-imperials",
+  "l7r-ashigaru",
+  "l7r-choyo-festival",
+  "l7r-justice",
+  "l7r-geisha-houses",
+  "l7r-estates-toward-capital"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "",
+ "reason": "HTTP 503",
+ "revision": "",
+ "sha256": "5ea81d0616df061a931781c3bd05697a347da318f9871b9ca82e04a6b2467e0f",
+ "url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md"
+}

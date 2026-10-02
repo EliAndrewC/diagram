@@ -223,16 +223,16 @@ def test_one_url_is_archived_with_its_gm_copy_pushed_and_its_row_written(tmp_pat
     stand = Stand({"https://a": _page("https://a")}, {"https://a": ("MHTML", "A's text")})
     who = rec.cited(str(root / ".claude/skills/diagram/research"))["https://a"]
     row = ar.archive_url(root, "https://a", who, stand, store)
-    assert row["outcome"] == "archived" and row["path"].startswith(f"alpha/{rec.url_id('https://a')}/") and row["first"] == row["path"]
-    assert row["gm_copies"] == ["alpha/gm-copy/alpha.pdf", "alpha/gm-copy/pages_files"]
+    assert row["outcome"] == "archived" and row["path"].startswith(ar.capture_base("https://a") + "/") and row["first"] == row["path"]
+    assert row["gm_copies"] == ["gm-copies/alpha.pdf", "gm-copies/pages_files"]
     assert ar.read_row(root, "https://a") == row and store.unpushed() == 0
     listed = subprocess.run(["git", "-C", remote, "ls-tree", "-r", "--name-only", "main"], capture_output=True, text=True, check=True).stdout.split()
     assert f"{row['path']}/page.mhtml" in listed and f"{row['path']}/capture.json" in listed
-    assert "alpha/gm-copy/alpha.pdf" in listed and "alpha/gm-copy/pages_files/img.png" in listed
+    assert "gm-copies/alpha.pdf" in listed and "gm-copies/pages_files/img.png" in listed
     again = ar.archive_url(root, "https://a", who, stand, store)
     assert again["first"] == row["path"] and again["gm_copies"] == row["gm_copies"], "a later capture never replaces the first"
     assert again["path"] != row["path"] and (store.dir / row["path"] / "page.mhtml").is_file()
-    assert not store.copy_in("alpha/gm-copy/alpha.pdf", gm / "alpha.pdf"), "a GM file is copied once"
+    assert not store.copy_in("gm-copies/alpha.pdf", gm / "alpha.pdf"), "a GM file is copied once"
 
 
 def test_a_failed_push_leaves_the_row_pending_until_a_push_settles_it(tmp_path: pathlib.Path) -> None:
@@ -244,7 +244,7 @@ def test_a_failed_push_leaves_the_row_pending_until_a_push_settles_it(tmp_path: 
     who = rec.Cited(notes=["0001-lanes.notes.html"])
     row = ar.archive_url(root, "https://direct.org/p", who, Stand({"https://direct.org/p": _page("https://direct.org/p")}, {"https://direct.org/p": ("M", "t")}), store)
     assert row["outcome"] == "pending-upload" and row["held"] == "archived" and row["reason"].startswith("push failed:")
-    assert row["path"].startswith("notes/") and store.unpushed() > 0
+    assert row["path"].startswith(ar.capture_base("https://direct.org/p") + "/") and store.unpushed() > 0
     store.git("remote", "set-url", "origin", remote)
     with store.locked():
         assert store.push() == ""
@@ -284,7 +284,7 @@ def test_the_gm_copies_are_synced_into_rows_already_written(tmp_path: pathlib.Pa
     store = ar.Archive(tmp_path / "home", remote=remote)
     assert ar.sync_gm_copies(root, store) == 1
     row = ar.read_row(root, "https://a")
-    assert row["outcome"] == "archived-gm-copy" and row["gm_copies"] == ["alpha/gm-copy/alpha.pdf"]
+    assert row["outcome"] == "archived-gm-copy" and row["gm_copies"] == ["gm-copies/alpha.pdf"]
     assert ar.read_row(root, "https://b")["gm_copies"] == []
     assert ar.sync_gm_copies(root, store) == 0, "a second sync changes nothing"
     store.git("remote", "set-url", "origin", str(tmp_path / "nowhere.git"))
@@ -312,7 +312,7 @@ def test_the_report_counts_every_cited_url(tmp_path: pathlib.Path) -> None:
     assert ar.report(root, out) == 0
     text = out.getvalue()
     assert "archive coverage: 2 cited URL(s)" in text and "  unreachable https://b - HTTP 404" in text
-    (root / ar.MANIFEST / f"{rec.url_id('https://b')}.json").unlink()
+    ar.row_path(root, "https://b").unlink()
     out = io.StringIO()
     assert ar.report(root, out) == 1 and "no row: https://b" in out.getvalue()
     assert set(ar.owed(root)) == {"https://b"}
