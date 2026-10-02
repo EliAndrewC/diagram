@@ -63,7 +63,7 @@ def test_every_question_section_tag_and_entry_has_its_page_and_the_navigation_na
             assert sp.tag_file(facet, tag.id) in built, tag.id
     assert len(record.pages()) > 400, "non-vacuity"
     nav = _nav(built)
-    named = {h for g in nav["groups"] for s in g["sections"] for h in _named(s)} - {"index.html#tags"}
+    named = {h.split("#")[0] for g in nav["groups"] for s in g["sections"] for h in _named(s)} - {"index.html"}
     pages = {f for f in built if f.endswith(".html") and f not in ("index.html", "all.html")}
     assert named == pages, sorted(pages ^ named)[:10]
     for f in ("q/rice-paddies-and-their-plots-suiden.html", "sources/index.html", "index.html", "all.html", "findings/fields.html"):
@@ -277,9 +277,50 @@ def test_works_stand_under_their_sections_with_their_labels_everywhere(tmp_path:
     assert '<p class="srctags">' in alpha and "<!-- tags: period=" not in alpha and 'rel="prev" href="../sources/gamma.html"' in alpha, "the pager walks the grouped order"
     assert "Setting canon</span>" in files["sources/gamma.html"]
     single = files["all.html"]
-    assert '<h3 class="works-section" id="works-canon">' in single and '<h4 id="alpha">' in single and "<!-- tags: period=" not in single
-    assert single.index('<h4 id="gamma">') < single.index('<h4 id="alpha">') < single.index('<h4 id="beta">')
+    assert '<h3 class="works-section" id="works-canon">' in single and '<h5 id="alpha">' in single and "<!-- tags: period=" not in single
+    assert single.index('<h5 id="gamma">') < single.index('<h5 id="alpha">') < single.index('<h5 id="beta">')
     assert 'href="#works-premodern-japan">Premodern Japan</a>' in single, "the contents name the sections"
+
+
+def test_the_sources_nest_by_section_then_kind_in_the_sidebar_the_contents_and_the_index(tmp_path: pathlib.Path) -> None:
+    """307 US1, SC-001..SC-003: "Sources" once, its works sections directly beneath it, each section's kinds beneath it in
+    the vocabulary's order (the canon's works directly), every work once; a source's page opens its section and kind;
+    the home page, the index and the one-page record nest the same way, every link landing on an id."""
+    files = site.build(str(fr.write(tmp_path)))
+    sources = next(g for g in _nav(files)["groups"] if g["label"] == "Sources")["sections"]
+    assert [s["title"] for s in sources] == ["Setting canon", "Premodern Japan", "Present day"]
+    assert sources[0]["sections"] == [] and [i[0] for i in sources[0]["items"]] == ["gamma"], "the canon lists its works directly"
+    assert [k["title"] for k in sources[1]["sections"]] == ["Primary"] and sources[1]["sections"][0]["items"] == [["alpha", "sources/alpha.html"]]
+    assert [k["key"] for k in sources[2]["sections"]] == ["sources/works-present-day/reference"]
+    every = [i[1] for s in sources for i in s["items"]] + [i[1] for s in sources for k in s["sections"] for i in k["items"]]
+    assert sorted(every) == ["sources/alpha.html", "sources/beta.html", "sources/gamma.html"]
+    index = files["sources/index.html"]
+    for s in sources:
+        for n in [s, *s["sections"]]:
+            assert f'id="{n["href"].split("#")[1]}"' in index, n["href"]
+    assert 'data-part="sources/works-premodern-japan sources/works-premodern-japan/primary"' in files["sources/alpha.html"]
+    assert 'data-part="sources/works-canon"' in files["sources/gamma.html"]
+    assert index.index('id="works-premodern-japan"') < index.index('id="works-premodern-japan-primary"') < index.index('href="alpha.html"')
+    home = files["index.html"]
+    single = files["all.html"]
+    assert home.count(">Sources<") == 1 and 'href="sources/index.html#works-premodern-japan-primary">Primary</a>' in home
+    assert home.index(">Primary</a>") < home.index('href="sources/alpha.html">alpha</a>'), "the home page lists the works under their kind"
+    assert single.index('href="#works-premodern-japan-primary"') < single.index('<li><a href="#alpha">alpha</a></li>'), "the contents list the works"
+    single = files["all.html"]
+    assert '<h4 class="works-kind" id="works-present-day-reference"' in single and 'href="#works-present-day-reference">Reference</a>' in single
+    assert 'Alpha, a work (<a href="https://a" target="_blank" rel="noopener">https://a</a>)' in files["sources/alpha.html"], "307 FR-006 on a source's page"
+
+
+def test_no_page_of_the_built_site_shows_a_bare_url(built: dict[str, str]) -> None:
+    """307 SC-004: no `http(s)://` URL appears as text outside a link on any page of the site - linking a page's content
+    again would change nothing - and a citation line's URL is among those linked."""
+    from l7r.diagram.interactive.sources import linkify  # noqa: PLC0415
+
+    mains = {name: page.split("<main>", 1)[1].split("</main>", 1)[0] for name, page in built.items() if name.endswith(".html") and "<main>" in page}
+    assert len(mains) > 2000, "non-vacuity"
+    bare = [name for name, main in mains.items() if linkify(main) != main]
+    assert not bare, bare[:5]
+    assert 'target="_blank" rel="noopener">https://' in built["sources/visit-toyama-sankyoson.html"]
 
 
 def test_the_build_refuses_a_work_with_no_tags_an_unknown_one_or_no_section_and_a_missing_rule_file(tmp_path: pathlib.Path) -> None:

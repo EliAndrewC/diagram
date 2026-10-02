@@ -72,7 +72,8 @@ def test_the_works_block_reports_a_key_with_no_write_up_and_links_a_key_as_featu
     block, missing = works_html(["k-2", "k-1", "k-3", "k-4"], entries, "../", st.Catalog(str(tmp_path), tagged, set(), "sources"))
     assert missing == ["k-3", "k-4"]
     assert block.startswith(WORKS_OPEN) and block.endswith(WORKS_CLOSE)
-    assert '<h4 id="work-k-1"><a href="https://x.y/z"><code>k-1</code></a></h4>\n<p class="srctags">' in block and "</p>\n<p>Paper X (https://x.y/z)</p>" in block
+    assert '<h4 id="work-k-1"><a href="https://x.y/z"><code>k-1</code></a></h4>\n<p class="srctags">' in block
+    assert '</p>\n<p>Paper X (<a href="https://x.y/z" target="_blank" rel="noopener">https://x.y/z</a>)</p>' in block, "307 FR-006: the URL is a link"
     assert '<h4 id="work-k-2"><a href="../SOURCES.html#k-2"><code>k-2</code></a></h4>' in block, "a not-read document links its registry entry"
     assert block.index("Premodern Japan") < block.index("work-k-1") < block.index('id="page-works-present-day"') < block.index("work-k-2"), "grouped by section, not by citation order"
     assert f"<p><em>{WHY_LABEL}</em> It applies.</p>" in block and "k-3" not in block
@@ -90,3 +91,31 @@ def test_registry_entries_read_the_citation_line_and_the_write_ups(tmp_path: pat
     assert entries["k-1"]["what"] == "A paper about <em>things</em>." and entries["k-1"]["why"] == "Because." and entries["k-1"]["used"] == "the number"
     assert entries["k-2"] == {"cite": "Bare (URL: none - unpublished)", "line": "Bare (URL: none - unpublished)", "what": "", "why": "", "used": ""}
     assert registry_entries(str(tmp_path / "nowhere")) == {}
+
+
+# ------------------------------------------------------------------------------------------------- feature 307
+
+
+def test_a_bare_url_becomes_a_link_opening_a_new_tab_and_nothing_else_is_touched() -> None:
+    """307 FR-006: every bare URL in a citation line is a link to itself in a new tab; a URL in a link, a tag or a comment
+    is left alone; the trailing punctuation of a sentence and an unopened parenthesis stay outside the link."""
+    from l7r.diagram.interactive.sources import linkify  # noqa: PLC0415
+
+    new = '<a href="{0}" target="_blank" rel="noopener">{0}</a>'
+    assert linkify("JStage (https://doi.org/10.2355/x.91.1_2)") == "JStage (" + new.format("https://doi.org/10.2355/x.91.1_2") + ")"
+    assert linkify("see https://a.b/c_(d), then.") == "see " + new.format("https://a.b/c_(d)") + ", then."
+    kept = '<a href="https://k.l">https://k.l</a> <img src="https://m.n/i.png"><!-- READ https://o.p -->'
+    assert linkify(kept) == kept
+    assert linkify("two: http://x.y and https://z.w.") == "two: " + new.format("http://x.y") + " and " + new.format("https://z.w") + "."
+    assert linkify(linkify("once https://q.r")) == linkify("once https://q.r"), "linking twice changes nothing"
+
+
+def test_every_canon_entry_links_its_notes_on_github_and_none_says_url_none() -> None:
+    """307 FR-007, SC-005: the GM's campaign-note entries cite the notes' public home, each quoted section at an anchor."""
+    import re  # noqa: PLC0415
+
+    lines = {k: e["line"] for k, e in registry_entries().items() if k in canon_keys()}
+    assert len(lines) >= 16, "non-vacuity"
+    for key, line in lines.items():
+        assert "URL: none" not in line, key
+        assert re.search(r"https://github\.com/EliAndrewC/l7r/blob/master/setting/(l7r|budgets)\.md#[a-z0-9-]+", line), key

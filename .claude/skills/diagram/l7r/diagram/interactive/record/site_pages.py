@@ -20,6 +20,7 @@ from dataclasses import dataclass
 
 from l7r.diagram.interactive.record import contents as ct
 from l7r.diagram.interactive.record import questions as qs
+from l7r.diagram.interactive.sources import linkify
 
 TITLE = "The research record"
 #: The two halves of the record, in the order they are read. A section is shown in a half only when it, or one of its
@@ -67,7 +68,7 @@ def shell(title: str, here: str, open_keys: str, body: str, *, lazy_glossary: bo
         f'<body class="site" data-root="{root}" data-part="{html.escape(open_keys)}" data-page="{html.escape(here)}"{" data-lazy-glossary" if lazy_glossary else ""}>\n'
         '<div class="layout">\n<nav id="sidebar" aria-label="Contents">'
         f'<noscript><p><a href="{root}index.html">Contents</a> - <a href="{root}all.html">the whole record on one page</a></p></noscript></nav>\n'
-        f"<main>\n{body}\n</main>\n</div>\n</body>\n</html>\n"
+        f"<main>\n{linkify(body)}\n</main>\n</div>\n</body>\n</html>\n"
     )
 
 
@@ -134,8 +135,9 @@ def tags_line(tags: ct.Tags, vocab: ct.Vocabulary, here: str) -> str:
     return '<p class="tags"><em>Tags:</em> ' + ", ".join(links) + "</p>\n"
 
 
-def nav_tree(record: qs.Record, items: dict[str, Item], registry_title: str, registry_items: list[Item]) -> dict:
-    """The navigation as data: each half's sections nested with their questions, the tags, the sources."""
+def nav_tree(record: qs.Record, items: dict[str, Item], sources: list[dict]) -> dict:
+    """The navigation as data: each half's sections nested with their questions, the tags, and the sources - their works
+    sections straight under the Sources heading, each with its kinds and works beneath (feature 307)."""
 
     def node(half: str, section: ct.Section) -> dict:
         return {
@@ -152,12 +154,7 @@ def nav_tree(record: qs.Record, items: dict[str, Item], registry_title: str, reg
         for facet in ct.FACETS
     ]
     groups.append({"label": TAGS_GROUP, "sections": tag_nodes})
-    groups.append(
-        {
-            "label": REGISTRY_GROUP,
-            "sections": [{"key": "sources", "title": registry_title, "href": "sources/index.html", "sections": [], "items": [[i.title, f"sources/{i.id}.html"] for i in registry_items]}],
-        }
-    )
+    groups.append({"label": REGISTRY_GROUP, "sections": sources})
     return {"title": TITLE, "home": "index.html", "all": "all.html", "groups": groups}
 
 

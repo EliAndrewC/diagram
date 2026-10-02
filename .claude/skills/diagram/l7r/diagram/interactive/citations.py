@@ -20,7 +20,7 @@ import re
 
 from l7r.diagram.interactive.record import absence
 from l7r.diagram.interactive.record.source_tags import Catalog, section_heading
-from l7r.diagram.interactive.sources import WHAT_LABEL, WHY_LABEL, link_target
+from l7r.diagram.interactive.sources import WHAT_LABEL, WHY_LABEL, link_target, linkify
 
 _KEY_LINK = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 _BACK = re.compile(r'\s*<a class="fnback" href="[^"]*">back</a>')
@@ -55,7 +55,7 @@ def works_html(keys: list[str], entries: dict[str, dict[str, str]], rel: str, ca
             e = entries[key]
             parts.append(f'<h4 id="work-{key}"><a href="{link_target(key, e["line"], rel)}"><code>{key}</code></a></h4>')
             parts.append(catalog.labels(key))
-            parts.append(f"<p>{e['cite']}</p>")
+            parts.append(f"<p>{linkify(e['cite'])}</p>")
             parts.append(f"<p><em>{WHAT_LABEL}</em> {e['what']}</p>")
             parts.append(f"<p><em>{WHY_LABEL}</em> {e['why']}</p>")
     parts.append(WORKS_CLOSE)

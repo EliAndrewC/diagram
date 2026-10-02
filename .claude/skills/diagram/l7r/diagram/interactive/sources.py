@@ -308,12 +308,44 @@ def link_target(key: str, cite: str, rel: str) -> str:
     carries parentheses keeps them - the defect of 2026-09-06) when it was read, else the registry entry that
     says it was not (`rel` is '' from research/, '../' from cities/ and citations/, '../../' from citations/cities/)."""
     m = _CITE_URL.search(cite)
-    if not_read(cite) or m is None:
+    if not_read(cite) or m is None or _CANON_FILE.search(cite):
+        # the GM's own campaign notes keep their registry link (the GM's ruling, 2026-09-07); since feature 307 the
+        # registry entry they open is what links the notes on GitHub, section by section
         return f"{rel}SOURCES.html#{key}"
     u = m.group(0).rstrip(".,;:")
     while u.endswith(")") and u.count(")") > u.count("("):
         u = u[:-1]
     return u
+
+
+#: Where a bare URL may stand in a fragment of markup: outside every tag and comment, and outside a link's text.
+_MARKUP_PART = re.compile(r"(<!--.*?-->|<a\b[^>]*>.*?</a>|<script\b.*?</script>|<style\b.*?</style>|<[^>]+>)", re.S)
+
+
+def _url_end(u: str) -> str:
+    """A URL as a sentence leaves it, trimmed of the punctuation after it and of a closing parenthesis it did not open
+    (the rule `link_target` follows)."""
+    u = u.rstrip(".,;:")
+    while u.endswith(")") and u.count(")") > u.count("("):
+        u = u[:-1].rstrip(".,;:")
+    return u
+
+
+def linkify(fragment: str) -> str:
+    """Every bare URL in `fragment` made a link to itself that opens in a new tab (feature 307, GM 2026-10-02: *"when we
+    display a URL, it should become a link ... that would open the source in a new tab"*), done by the build so nothing
+    is typed into the registry. A URL already inside a link, a tag, a comment, a script or a style is left as it is. The
+    site calls it on every page's content (`site_pages.shell`), so a URL shown anywhere on a page is a link."""
+
+    def text(part: str) -> str:
+        out, at = [], 0
+        for m in _CITE_URL.finditer(part):
+            u = _url_end(m.group(0))
+            out.append(part[at : m.start()] + f'<a href="{u}" target="_blank" rel="noopener">{u}</a>')
+            at = m.start() + len(u)
+        return "".join(out) + part[at:]
+
+    return "".join(p if i % 2 else text(p) for i, p in enumerate(_MARKUP_PART.split(fragment)))
 
 
 def _labeled(body: str, label: str) -> str:

@@ -32,7 +32,7 @@ from l7r.diagram.interactive.record import store
 from l7r.diagram.interactive.record.notes import NoteError, Placed, render_note
 from l7r.diagram.interactive.record.split import split
 from l7r.diagram.interactive.record.store import RecordError
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, clear_caches, page_text, registry_entries
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, clear_caches, linkify, page_text, registry_entries
 
 SITE = "site"
 #: The assets the site carries, copied from `research/assets/` - the hand-written ones. The glossary is derived.
@@ -43,6 +43,7 @@ _HEAD = re.compile(r"<h([23]) id=\"([^\"]+)\">(.*?)</h\1>", re.S)
 #: A registry entry's heading, which the one-page record sets a level below its works section's.
 _ENTRY_H3 = re.compile(r"<h3( id=\"[^\"]+\">.*?)</h3>", re.S)
 _HEADING_END = re.compile(r"</h[1-4]>")
+_FIRST_P = re.compile(r"<p>.*?</p>", re.S)
 _MAIN = re.compile(r"<main>\s*", re.S)
 _TRAILING_RULE = re.compile(r"\s*<hr>\s*$")
 _P = re.compile(r"<p>(.*?)</p>", re.S)
@@ -147,7 +148,7 @@ class Build:
             self.catalog = st.Catalog(record_dir, {i.id: i.html for i in self.registry.items()}, canon_keys(record_dir), store.REGISTRY_DIR)
         except st.SourceTagError as e:
             raise RecordError(str(e)) from None
-        self.index = build_index(self.items, self.registry, tuple(s.id for s in self.catalog.sections))
+        self.index = build_index(self.items, self.registry, tuple(self.catalog.anchors()))
         self.entries = registry_entries(record_dir)
         self.notes: dict[str, dict[str, str]] = {}
         self.files: dict[str, str] = {}
@@ -176,7 +177,7 @@ class Build:
         self._registry()
         self._home()
         self._single()
-        self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.registry.title, self.registry_run()))
+        self.files["nav.js"] = sp.nav_js(sp.nav_tree(self.record, self.items, self.source_nodes()))
         if self.errors:
             raise RecordError("\n  ".join([f"the site does not build ({len(self.errors)} refusal(s)):", *self.errors]))
         return self.files
@@ -256,15 +257,54 @@ class Build:
         refused = [i for i in items if i.id not in self.catalog.section]
         return out + ([(None, refused)] if refused else [])
 
+    def shelves(self, items: list[sp.Item]) -> list[tuple[st.Section | None, list[tuple[st.Label | None, list[sp.Item]]]]]:
+        """A registry group's entries by works section, then by primary kind (feature 307, GM 2026-10-02: *"'Sources' as a
+        top-level section, and then 'Setting canon' as a subsection of that ... and then in cases where we have other tags
+        ... such as 'Reference' vs 'Scholarship' then we could have sub subsections for those"*). The canon, untagged,
+        stands under no kind; an entry the catalog refused stands under no section."""
+        out: list[tuple[st.Section | None, list[tuple[st.Label | None, list[sp.Item]]]]] = []
+        for section, entries in self.grouped(items):
+            by_key = {i.id: i for i in entries}
+            kinds = [(None, entries)] if section is None else [(lab, [by_key[k] for k in keys]) for lab, keys in self.catalog.by_kind(list(by_key))]
+            out.append((section, kinds))
+        return out
+
     def registry_run(self) -> list[sp.Item]:
-        """Every registry entry in the order its pages are chained and listed: group by group, section by section."""
-        return [i for _g, _h, items in self.registry.groups for _s, run in self.grouped(items) for i in run]
+        """Every registry entry in the order its pages are chained and listed: group by group, section by section, kind
+        by kind."""
+        return [i for _g, _h, items in self.registry.groups for _s, kinds in self.shelves(items) for _k, run in kinds for i in run]
+
+    def open_keys_of(self, key: str) -> str:
+        """The sidebar nodes a source's own page opens: its section's and its kind's."""
+        section, tags = self.catalog.section.get(key), self.catalog.tags.get(key)
+        if section is None:
+            return "sources"
+        return f"sources/{section.id}" + (f" sources/{section.id}/{tags.primary('kind')}" if tags is not None else "")
+
+    def source_nodes(self) -> list[dict]:
+        """The Sources group of the sidebar: each works section, its kinds beneath it, the works beneath those - each node
+        linking its place on the sources index (feature 307 FR-001..FR-003)."""
+        index = f"{links.REGISTRY_DIR}/index.html"
+        nodes = []
+        for _g, _h, items in self.registry.groups:
+            for section, kinds in self.shelves(items):
+                if section is None:
+                    continue
+                subs = [
+                    {"key": f"sources/{section.id}/{lab.id}", "title": lab.name, "href": f"{index}#{st.kind_anchor(section, lab)}", "sections": [], "items": [_nav_row(i) for i in run]}
+                    for lab, run in kinds
+                    if lab is not None
+                ]
+                direct = [_nav_row(i) for lab, run in kinds if lab is None for i in run]
+                nodes.append({"key": f"sources/{section.id}", "title": section.title, "href": f"{index}#{section.id}", "sections": subs, "items": direct})
+        return nodes
 
     def entry_html(self, item: sp.Item) -> str:
-        """A registry entry as the reader sees it: its marker gone, its labels under its heading."""
+        """A registry entry as the reader sees it: its marker gone, its labels under its heading, and the URLs of its
+        citation line - the paragraph after the heading - made links (feature 307 FR-006)."""
         text = st.strip_marker(item.html)
         m = _HEADING_END.search(text)
-        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + text[m.end() :]
+        return text if m is None else text[: m.end()] + "\n" + self.catalog.labels(item.id) + _FIRST_P.sub(lambda p: linkify(p.group(0)), text[m.end() :], count=1)
 
     def _registry(self) -> None:
         reg = self.registry
@@ -273,15 +313,18 @@ class Build:
             here = f"{links.REGISTRY_DIR}/{item.id}.html"
             body = self.rewrite(self.entry_html(item), None, here, f"{store.REGISTRY_DIR}/ {item.id}")
             content = sp.crumbs(here, [(reg.title, f"{links.REGISTRY_DIR}/index.html")]) + _as_title(body) + sp.pager(run, at, here, links.REGISTRY_DIR)
-            self.files[here] = sp.shell(f"{item.title} - {reg.title}", here, "sources", content)
+            self.files[here] = sp.shell(f"{item.title} - {reg.title}", here, self.open_keys_of(item.id), content)
         here = f"{links.REGISTRY_DIR}/index.html"
         body = sp.crumbs(here, []) + f'<h1 id="{reg.title_id}">{html.escape(reg.title)}</h1>\n' + self.rewrite(reg.intro, None, here, f"{store.REGISTRY_DIR}/_front.html") + "\n"
         for gid, ghtml, items in reg.groups:
             body += self.rewrite(ghtml, None, here, f"{store.REGISTRY_DIR}/ group {gid}")
-            for section, entries in self.grouped(items):
+            for section, kinds in self.shelves(items):
                 if section is not None:
                     body += st.section_heading(section, 3, section.id) + "\n"
-                body += '<ul class="questions">\n' + "\n".join(f'<li><a href="{i.id}.html">{html.escape(i.title)}</a></li>' for i in entries) + "\n</ul>\n"
+                for lab, entries in kinds:
+                    if section is not None and lab is not None:
+                        body += st.kind_heading(section, lab, 4) + "\n"
+                    body += '<ul class="questions">\n' + "\n".join(f'<li><a href="{i.id}.html">{html.escape(i.title)}</a></li>' for i in entries) + "\n</ul>\n"
         self.files[here] = sp.shell(reg.title, here, "sources", body)
 
     def _home(self) -> None:
@@ -301,7 +344,8 @@ class Build:
         for facet in ct.FACETS:
             tags = ", ".join(f'<a href="{sp.tag_file(facet, t.id)}">{html.escape(t.name)}</a>' for t in sp.facet_tags(self.record.vocab, facet))
             body.append(f"<p><em>{sp.FACET_NAMES[facet]}:</em> {tags}</p>")
-        body.append(f'<h2>{sp.REGISTRY_GROUP}</h2>\n<ul><li><a href="{links.REGISTRY_DIR}/index.html">{html.escape(self.registry.title)}</a></li></ul>')
+        sources = "".join(_home_source(n) for n in self.source_nodes())
+        body.append(f'<h2><a href="{links.REGISTRY_DIR}/index.html">{sp.REGISTRY_GROUP}</a></h2>\n<ul>{sources}</ul>')
         self.files["index.html"] = sp.shell(TITLE, "index.html", "", "\n".join(body))
 
     def _single(self) -> None:
@@ -346,7 +390,7 @@ class Build:
             f'<li><a href="#{reg.title_id}">{html.escape(reg.title)}</a><ul>'
             + "".join(
                 f'<li><a href="#{gid}">{html.escape(_text(_HEAD.search(gh).group(3)) if _HEAD.search(gh) else gid)}</a>'
-                + ("<ul>" + "".join(f'<li><a href="#{s.id}">{html.escape(s.title)}</a></li>' for s, _r in self.grouped(gi) if s is not None) + "</ul>" if gi else "")
+                + ("<ul>" + "".join(_toc_section(s, kinds) for s, kinds in self.shelves(gi) if s is not None) + "</ul>" if gi else "")
                 + "</li>"
                 for gid, gh, gi in reg.groups
             )
@@ -356,14 +400,46 @@ class Build:
         out.append(self.rewrite(reg.intro, None, "all.html", f"{store.REGISTRY_DIR}/_front.html", single=True))
         for gid, ghtml, items in reg.groups:
             out.append(self.rewrite(ghtml, None, "all.html", f"{store.REGISTRY_DIR}/ group {gid}", single=True))
-            for section, entries in self.grouped(items):
+            for section, kinds in self.shelves(items):
                 if section is not None:
                     out.append(st.section_heading(section, 3, section.id) + "\n")
-                out += [_ENTRY_H3.sub(r"<h4\1</h4>", self.rewrite(self.entry_html(i), None, "all.html", f"{store.REGISTRY_DIR}/ {i.id}", single=True), count=1) for i in entries]
+                for lab, entries in kinds:
+                    if section is not None and lab is not None:
+                        out.append(st.kind_heading(section, lab, 4) + "\n")
+                    out += [_ENTRY_H3.sub(r"<h5\1</h5>", self.rewrite(self.entry_html(i), None, "all.html", f"{store.REGISTRY_DIR}/ {i.id}", single=True), count=1) for i in entries]
         out.append("</section>\n")
         toc.append("</ul></nav>\n")
         head = f'<h1 id="record">{TITLE}</h1>\n<p><em>Every question the maps were researched from, every note behind them and every source they cite, on one page. The same record, a page per question: <a href="index.html">the contents</a>.</em></p>\n'
         self.files["all.html"] = sp.shell(TITLE + " - the whole record", "all.html", "", head + "".join(toc) + "".join(out), lazy_glossary=True)
+
+
+def _nav_row(item: sp.Item) -> list[str]:
+    """A source as the sidebar lists it: its key and its page."""
+    return [item.title, f"{links.REGISTRY_DIR}/{item.id}.html"]
+
+
+def _works_list(items: list[sp.Item], href: str) -> str:
+    """Works as a contents list: each its key, linking `href` with the key in place of `{}`."""
+    return "<ul>" + "".join(f'<li><a href="{href.format(i.id)}">{html.escape(i.title)}</a></li>' for i in items) + "</ul>" if items else ""
+
+
+def _toc_section(section: st.Section, kinds: list[tuple[st.Label | None, list[sp.Item]]]) -> str:
+    """A works section's line in the one-page record's contents: its kinds nested beneath it, and the works beneath each
+    kind - or beneath the section, for the canon (feature 307 FR-004)."""
+    subs = "".join(f'<li><a href="#{st.kind_anchor(section, lab)}">{html.escape(lab.name)}</a>{_works_list(run, "#{}")}</li>' for lab, run in kinds if lab is not None)
+    direct = [i for lab, run in kinds if lab is None for i in run]
+    return f'<li><a href="#{section.id}">{html.escape(section.title)}</a>' + _works_list(direct, "#{}") + (f"<ul>{subs}</ul>" if subs else "") + "</li>"
+
+
+def _home_source(node: dict) -> str:
+    """A works section on the home page: its kinds and their works beneath it, each in a block that opens on a click, so
+    the contents stay readable with two thousand works under them (feature 307 FR-004)."""
+
+    def works(rows: list[list[str]]) -> str:
+        return "<ul>" + "".join(f'<li><a href="{href}">{html.escape(title)}</a></li>' for title, href in rows) + "</ul>" if rows else ""
+
+    kinds = "".join(f'<li><details><summary><a href="{k["href"]}">{html.escape(k["title"])}</a></summary>{works(k["items"])}</details></li>' for k in node["sections"])
+    return f'<li><details><summary><a href="{node["href"]}">{html.escape(node["title"])}</a></summary>{works(node["items"])}' + (f"<ul>{kinds}</ul>" if kinds else "") + "</details></li>"
 
 
 def build(record_dir: str = RESEARCH_DIR) -> dict[str, str]:

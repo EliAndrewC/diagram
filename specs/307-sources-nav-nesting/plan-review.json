@@ -1,0 +1,69 @@
+{
+ "feature": "307-sources-nav-nesting",
+ "plan_sha256": "2689f585fbb795e18857e2e40b0cbb3f2e38b16e7d0fbbf32871e694afbdf1ca",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Summary",
+   "summary": "Bare URLs anywhere on a page are made links by sources.linkify, called on every page's content (site_pages.shell).",
+   "class": "within",
+   "why": "Now matches message 2 and FR-006/SC-004 (every displayed URL on every built page) and D4; the round-1 citation-lines-only wording is gone."
+  },
+  {
+   "id": "D1",
+   "summary": "Second level is the primary kind in source-tags.json order; untagged canon lists its works directly.",
+   "class": "within",
+   "why": "Unchanged; settled by FR-002 and the GM's Reference vs Scholarship example."
+  },
+  {
+   "id": "D2",
+   "summary": "Sidebar: works sections directly under the Sources group, keys sources/<section>[/<kind>], links into the sources index, a source page opens its section and kind.",
+   "class": "within",
+   "why": "Unchanged; implements FR-001 and FR-003."
+  },
+  {
+   "id": "D3-index",
+   "summary": "Sources index: section h3, kind h4 with its explanation as tooltip, then works; one-page Sources part the same at h5.",
+   "class": "within",
+   "why": "Unchanged; FR-004."
+  },
+  {
+   "id": "D3-home-contents",
+   "summary": "Home page: the Sources heading links the index, with sections, their kinds and the works nested beneath, each section and kind a block that opens on a click.",
+   "class": "within",
+   "why": "Now lists the works under each kind as the spec's Independent Test and FR-004 require and the GM asked ('and then list things underneath that'). The click-to-open blocks are presentation of the same nested contents, every work still present once; the GM's stated aim was browsability, which this serves rather than narrows."
+  },
+  {
+   "id": "D3-onepage-contents",
+   "summary": "The one-page record's contents list the works under each kind (the canon's under its section), as they list each research section's questions.",
+   "class": "within",
+   "why": "Now Sources -> section -> kind -> works, matching the Independent Test and FR-004."
+  },
+  {
+   "id": "D3-pager",
+   "summary": "The registry pager walks section -> kind -> registry order.",
+   "class": "within",
+   "why": "Unchanged; follows the requested nesting."
+  },
+  {
+   "id": "D4",
+   "summary": "linkify on every page's content in site_pages.shell, target=_blank rel=noopener, skipping tags, comments, links, scripts and styles.",
+   "class": "within",
+   "why": "Unchanged; FR-006 and message 2."
+  },
+  {
+   "id": "D5",
+   "summary": "One-time migrate script rewrites canon citation lines to GitHub file and heading URLs; unmatched refused.",
+   "class": "within",
+   "why": "Unchanged; FR-007 and the GM's GitHub example."
+  },
+  {
+   "id": "D6",
+   "summary": "research/CLAUDE.md documents the GitHub canon citation and that the build links plain-text URLs.",
+   "class": "within",
+   "why": "Unchanged; keeps the requested state true for future entries."
+  }
+ ],
+ "verdict": "CLEAR"
+}
