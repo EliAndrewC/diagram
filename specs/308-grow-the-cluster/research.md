@@ -119,6 +119,8 @@ At 40 households, homesteads stage seconds (margins):
 
 - At 40 households every seed seats every household under both methods. The grower uses the first margin on 15 of 16 seeds;
   the base uses it on 11.
+- Offers under grow at 40 households, by seed: 1: 757; 2: 254; 3: 1,568; 4: 1,425; 5: 702; 6: 479; 7: 773; 8: 3,427; 9: 474;
+  10: 764; 11: 1,223; 12: 826; 13: 224; 25: 567; 39: 762; 47: 506. That is 224-3,427 a seed, or 5.6-85.7 offers per house kept.
 - At 20 households the sums are 17.8 s for the base and 16.6 s for the grower.
 - The legs at 10 and 15 households ran under uneven load: seed 13 at 10 households measured 1.91 s in the leg and 0.58 s alone.
   Those two sizes are re-measured alternating (R7).

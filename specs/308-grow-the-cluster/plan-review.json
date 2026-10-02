@@ -1,88 +1,94 @@
 {
  "feature": "308-grow-the-cluster",
- "plan_sha256": "1ef4257bc65987f92ebefbe11a14ca6f67b6e676fcdeece6ba29ea35c3bcac4d",
+ "plan_sha256": "170d2065958089251294a04f6fe8d676a8ce87aa1607d4f19580370a51ac0256",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1-first",
-   "summary": "The first house is offered the free ground nearest the seat point (capacity.free_seats through the seat region, at most DRY_SPELL offers) until one stands",
+   "summary": "The first house is offered the free ground nearest the seat (capacity.free_seats through the seat region, at most DRY_SPELL offers)",
    "class": "within",
-   "why": "US1 puts the first house at the cluster's seed point and FR-006 lets the placer decide; offering the nearest lawful ground to that point is that, for one house only. It is not FR-007's exhaustive pass, which seats the quota."
+   "why": "Unchanged from round 1: US1 puts the first house at the seed point and the placer decides; one house, not FR-007's exhaustive pass."
   },
   {
    "id": "D1-next",
-   "summary": "Every standing house offers seats in a ring of directions jittered positionally (+/-12 deg, up to +12% distance) at the distance where the two footprints part plus GROW_GAP",
-   "class": "within",
-   "why": "FR-004 as written: from a standing house, direction and spacing jittered from the seed by _hjit, never closer than the computed distance (the distance is recomputed for the jittered bearing and the jitter only lengthens it)."
+   "summary": "Every standing house offers seats in a jittered ring (+/-12 deg, up to +12%) at the distance where the footprints part plus GROW_GAP - stated at plan line 58 as 'GROW_GAP (6 px)'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Line 58 still states the gap as 6 px, the value round 1 ruled NOT LEGITIMATE because it leaves no room for the path out; line 64 states the fixed value (a corridor's whole strip plus 2 px, 16 px at the reference scale; growth.py grow_gap computes 2 x px(ACCESS_HALF_FT) + 2 = 16.0, measured here). The plan states both, and the stale one is the rejected narrowing. Fix: line 58 says 'plus GROW_GAP (a corridor's whole strip plus 2 px, below)' and drops '6 px'."
   },
   {
    "id": "D1-footprint",
-   "summary": "A homestead's footprint for the minimum distance is its envelope plus its reserved woodlot seats plus, to the south, its yard's far edge plus SUN_CORRIDOR_FT; the new house's own reach is the FIRST house's footprint",
+   "summary": "A standing homestead's footprint: envelope, reserved woodlot seats, the south reach of the yard's AND beds' south edges plus SUN_CORRIDOR_FT + 2 ft; the path out as GROW_GAP; the new household's reach the envelope of the LARGEST homestead the roll can take (_bundle_envelope at _house_max)",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-003 lists five inputs and three sun rules; the plan's footprint carries the house, yard, gardens, woodlot share and the yard's sun corridor (and so the grove-south strip, 39 ft > 22 px at 1 ft/px) but drops 'its path out' entirely - GROW_GAP is 6 px, under a corridor's 14 ft strip - and never computes the garden-shade rule. The path out is the term the GM approved by name ('a footprint that includes house, yard, garden, woodlot and the path out') and it is purpose-bearing: feature 306 R3's unfair test offered seats exactly where a neighbor's door path lay. A standing house's reserved path is known when its neighbors are offered, so including it is possible; none of the three grounds for an exception holds. Also: the next household's size is its lot's rung (known at seat order), so proxying its reach by house 0's can offer closer than FR-003's distance where house 0 is smaller - FR-004's 'never closer' needs the household's own reach or a proxy shown to be the largest."
+   "why": "Two of round 1's three items are fixed and confirmed: the path out (GROW_GAP = the corridor's strip + 2 px) and the garden shade (the beds' south edges + SUN_CORRIDOR_FT + 2 ft, the reach _gardens_sun_ok measures, fit.py:722). The third is not. The plan says the new household's reach is 'the envelope of the LARGEST homestead the roll can take' and that so 'no seat is offered closer than the household's own footprint allows'. That premise was not measured, and it is false. _bundle_envelope at _house_max is the largest HOUSE, but the yard and bed rolls key on the position, and the prototype and growth.py take them at house 0's position only. Measured here (300 positions, _house_max, shed=True): the envelope's west reach runs 140.0-172.1 px and its south reach 60.2-100.5 px, while east (79.9) and north (106.8) are constant. So house 0's envelope is one draw, and a later household can reach up to 40 px further south and 32 px further west than the distance offered for it. That is FR-004's 'never closer than FR-003's distance' unmet, and exactly the 'proxy shown to be the largest' round 1 asked for. Fix: the new household's reach on each side is the MAXIMUM the roll can produce (computed from the yard and bed distributions' bounds, or the per-side maximum over the roll's extremes), or the envelope rolled for that household at the candidate seat. Then state the measurement that shows it is never smaller than any household's envelope. (Checked and NOT a finding: the new household's own sun is not in its reach, but a seat grown north is held off by the standing envelope's north reach, which is 91 px past the house wall against a 41 ft corridor. On seeds 1, 25 and 4 the north sector drew 0 sun_corridor and 0 yard_grove refusals, measured here on the clone's growth.py.)"
   },
   {
    "id": "D1-order",
-   "summary": "Seats offered nearest the seat center first, within FORM_BOUND times the 162 ft band's diagonal; each judged by try_place",
+   "summary": "Seats nearest the seat center first, within FORM_BOUND x the 162 ft band's diagonal; each judged by try_place",
    "class": "within",
-   "why": "The spec's edge case holds growth inside the band; FR-006's full rules decide each seat."
+   "why": "Unchanged: the spec's band edge case and FR-006."
   },
   {
    "id": "D1-levels",
-   "summary": "When the heap runs dry, every standing house offers again at wider GROW_LEVELS (8 dirs ring 1; 12 dirs rings 1, 1.5; 16 dirs rings 1.25, 1.75, 2); past the last level the margin is reported short",
+   "summary": "GROW_LEVELS widening (8 dirs ring 1; 12 dirs rings 1, 1.5; 16 dirs rings 1.25, 1.75, 2); past the last level the margin is reported short",
    "class": "within",
-   "why": "Every seat is still anchored on a standing house at a multiple >= 1 of the footprint distance, so it is FR-004 growth, not the free grid; the offer count is bounded by houses x directions x rings, and running past the last level reports the margin short as FR-007 says. Not the exhaustive pass smuggled back."
+   "why": "Unchanged: every seat is anchored on a standing house at a multiple of at least 1 of the footprint distance. That is FR-004 growth, and the short report is FR-007."
   },
   {
    "id": "D1-class",
-   "summary": "Jitter, gap and rings labeled guesses with reasons at the constants; placement order a map drawing convention",
+   "summary": "Jitter, gap and rings labeled guesses at the constants; the order a map drawing convention",
    "class": "within",
    "why": "Matches the spec's Decisions Recorded."
   },
   {
    "id": "D2",
-   "summary": "Front row, lattice ranks and exhaustive pass with rescue removed for settlement_form == nucleated, grow_the_margin in their place; dispersed keeps them, linear's seat_rows untouched; seat_search records grow keys",
+   "summary": "Front row, lattice ranks and exhaustive pass with rescue removed for nucleated; grow_the_margin in their place; dispersed keeps them, linear's seat_rows untouched",
    "class": "within",
-   "why": "FR-007 literally for the nucleated form; the dispersed and linear scope is the spec's round-1 rulings (LEGITIMATE), restated, not widened. The counters only follow the removal."
+   "why": "Unchanged: FR-007 literally for the nucleated form, with the spec's round-1 scope rulings."
   },
   {
    "id": "D3-route",
-   "summary": "Where no straight or round-the-gable corridor clears, _house_candidates yields an A*-routed corridor from a dooryard door to the tree's nearest points, pulled taut, reserved leg by leg, admitted by tree_admits; on only for the nucleated seating",
+   "summary": "A* routed corridor where no straight or gable one clears, nucleated seating only, admitted by tree_admits, reserved leg by leg",
    "class": "within",
-   "why": "FR-005: the path is laid as the house is placed, ending on the access tree, which holds every standing house's path; the request asked for each house's path 'laid back to its neighbor's as it goes' and says nothing of straightness. Straight candidates are still tried first."
+   "why": "Unchanged: FR-005, with straight candidates tried first."
   },
   {
    "id": "D3-tests",
-   "summary": "The routed corridor's legs are judged by house_clear, fixtures_clear, parts_clear, standing_ground, lawful_leg, doubles_back and tree_admits - stated as 'the same tests a straight corridor passes'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "A straight or gable candidate is also asked leaves_its_yard (access.py _house_candidates, feature 287 M8); the list omits it and the A* grid keeps off the house's own box but not its yard. FR-005 ('the placer's own corridor rules still judge it') and FR-006 ('no rule is relaxed or skipped') leave no room for a corridor rule the routed path skips. One clause fixes it: the routed candidate passes leaves_its_yard as the others do."
+   "summary": "Each leg is held to house_clear, fixtures_clear, parts_clear, standing_ground, lawful_leg and doubles_back, and the whole route to leaves_its_yard (feature 287 M8), stated as every test _house_candidates asks",
+   "class": "within",
+   "why": "Round 1's item is fixed. The plan (lines 89-90) now asks leaves_its_yard of every routed path, and the prototype (prototype.py:410) and the clone's route.py:170 both ask it. That is every corridor test _house_candidates asks (access.py:553, 561), so no corridor rule is skipped (FR-005, FR-006)."
   },
   {
    "id": "D3-breadth",
-   "summary": "At most 5 legs, a 12 px grid within 320 px of each door, A* weight 1.5",
+   "summary": "At most 5 legs, a 12 px grid within 320 px, A* weight 1.5",
    "class": "within",
-   "why": "Search breadth; a seat with no route found is refused as a seat with no straight corridor is today. No rule changes."
+   "why": "Search breadth, not a rule."
   },
   {
    "id": "D3-class",
-   "summary": "Routing classed a map drawing convention, recorded at the module docstring, indexed via _reach_index, FreeGround and the wood grid",
+   "summary": "Routing a map drawing convention recorded at the module docstring; indexed via _reach_index, FreeGround, the wood grid",
    "class": "within",
-   "why": "Recording and indexing, as the project rules require."
+   "why": "Recording and indexing as the project rules require."
   },
   {
    "id": "D4",
-   "summary": "Dispersed and linear unchanged; only the nucleated form grows",
+   "summary": "Dispersed and linear unchanged",
    "class": "within",
-   "why": "The spec's round-1 rulings, unchanged in scope."
+   "why": "The spec's round-1 rulings."
+  },
+  {
+   "id": "GO-and-misses",
+   "summary": "The engine is built only on GO, with the verdict recorded (R7, GO at every size). SC-002 and SC-003 are missed (R6), and R8 is a further prototyped round. A tuning round on the engine (T06) follows, and a surviving miss is recorded and raised with the GM",
+   "class": "within",
+   "why": "This is US1/FR-001's GO gate and FR-002 as written: R8 is a further round, prototyped and measured, and every round's numbers are recorded. A note, not a ruling: the plan's 'every seed offers 6.4-35.6 per house' (line 25) has no row in research.md, whose R7 says 'Most seeds offer 5-35 per house'. One of the two is wrong, so correct it to the measured figure."
   },
   {
    "id": "V-sequence",
-   "summary": "Verification: prototype legs (R6), then Inashiro, pool and cohort against a detached-worktree baseline, then make done and the bookends",
+   "summary": "Prototype legs, then Inashiro, pool and cohort against a detached-worktree baseline, then make done and the bookends",
    "class": "within",
-   "why": "Follows FR-001 and FR-008, provided the GO verdict (R7 pending) is recorded before the first engine edit."
+   "why": "FR-001 and FR-008, with the GO verdict recorded before the engine build."
   }
  ],
  "verdict": "BLOCKED"

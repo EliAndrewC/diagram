@@ -22,7 +22,8 @@ the verdict is recorded: R7, GO at 10, 15, 20 and 40 households.
 
 **The goals it misses (FR-002).** R6 misses both of the session's goals:
 - SC-002 (under 4 s on every seed at 40 households): seeds 3, 4, 7 and 8 take 5.32, 4.14, 4.10 and 10.01 s.
-- SC-003 (at most 5 offers per house kept): every seed offers 6.4-35.6 per house.
+- SC-003 (at most 5 offers per house kept): R6's offers are 224-3,427 per seed at 40 households, 5.6-85.7 per house kept
+  (research R6's table).
 
 The plan review's footprint terms (D1) are a further round, measured before the engine build as R8. A further tuning round of
 the levels and the router's breadth is measured on the engine (T06). A miss that survives both is recorded with every round's
@@ -55,17 +56,27 @@ numbers and raised with the GM.
   - *Each next house.* Every standing house offers seats in a ring of directions round itself, jittered positionally from
     the map's seed (`_hjit`). The direction is jittered by ±12 degrees (`GROW_JITTER_DEG`) and the distance by up to +12%
     (`GROW_JITTER_FRAC`). Each seat stands at the distance in that direction where the two homesteads' FOOTPRINTS part, plus
-    `GROW_GAP` (6 px).
+    the path's room (`grow_gap`, below).
   - *A standing homestead's footprint* (FR-003) is made of:
     - its envelope (`geom["bbox"]`: the house, the yard and the beds);
     - its reserved woodlot seats (a clump's half-width round each);
     - to the SOUTH, the sun its yard AND its beds are owed. That is the farthest south edge of the yard or a bed, plus
       `SUN_CORRIDOR_FT` and the placer's 2 ft (`_sun_corridor_ok` and `_gardens_sun_ok`, computed, not assumed);
-    - its PATH OUT. `GROW_GAP` is a corridor's whole strip (2 x `ACCESS_HALF_FT`) plus 2 px, so a path fits between two
+    - its PATH OUT. The gap (`grow_gap`) is a corridor's whole strip (2 x `ACCESS_HALF_FT`) plus 2 px, so a path fits between two
       footprints, and a standing house's own reserved path is refused to every envelope by the placer.
-  - *The new household's reach* is the envelope of the LARGEST homestead the roll can take (`_bundle_envelope` at the front
-    row's `_house_max`, kura reserved). So no seat is offered closer than the household's own footprint allows (FR-004's
-    "never closer").
+  - *The new household's reach* is its envelope ROLLED AT THE SEAT OFFERED (`settled_seat`).
+    - It is `_bundle_envelope` at that very seat with the largest house the roll can take (the front row's `_house_max`,
+      kura reserved). A homestead's yard and beds are rolled from where it stands: a seat search keys the rolls on the seat
+      offered (`_household_seat`), and outside one they key on the position. The house's size raises the yard (the tilt) and
+      the beds (0.48 and 0.85 of the house), so the largest house's envelope at a seat holds every household's envelope there.
+    - The seat is first placed with a first guess (the reach at the first house). Where the reach rolled at that seat
+      exceeds the guess on any side, it is moved out to the union of the two, and asked again. After `SETTLE_TRIES` (4) moves
+      without settling, it is not offered.
+    - So every seat offered clears the standing footprint by its OWN envelope there (FR-004's "never closer"). A unit test
+      holds both the move and the drop.
+    - A bound from the roll's own limits was priced and refused. The yard's lognormal has a bounded tail (z at most 4.24,
+      Irwin-Hall), and with the largest house's tilt it reaches about 13 times the median area: a footprint every seat would
+      carry for a yard almost no household rolls.
   - *The order.* Seats are offered nearest the seat center first, within the form's bound (`FORM_BOUND` times the 162 ft
     seating band's diagonal). Each is judged by `try_place`, which relaxes and skips no rule (FR-006).
   - *When the seats run dry.* With households left, every standing house offers again at the next level of `GROW_LEVELS`:
