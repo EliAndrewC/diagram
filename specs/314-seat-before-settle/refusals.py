@@ -26,7 +26,7 @@ from collections import defaultdict
 from contextlib import redirect_stdout
 from typing import Any
 
-sys.path.insert(0, "/diagram/.clones/diagram-performance/.claude/skills/diagram")
+sys.path.insert(0, os.environ.get("ROOT", "/diagram/.clones/diagram-performance") + "/.claude/skills/diagram")
 from l7r.diagram.hamletgen import HamletSpec, plan_site  # noqa: E402
 from l7r.diagram.hamletgen.driver import STAGES, roll_scope  # noqa: E402
 from l7r.diagram.hamletgen.homesteads import growth as G  # noqa: E402

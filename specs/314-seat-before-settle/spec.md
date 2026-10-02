@@ -10,7 +10,7 @@
 it is cheap, before a grown seat's household is laid out - *"whatever it is that we are missing that an efficient process would
 have, we need to keep iterating until we get there."*
 
-## Context: where the seating's time goes (observed 2026-10-02, method: `request.md`'s measurement - the homesteads stage at 40 households, seeds 1, 2, 4, 6, 8, 9, 10, 12, 13 and 39, every grown seat followed to its outcome, one process, sequential)
+## Context: where the seating's time goes at 40 households (observed 2026-10-02, method: `request.md`'s measurement - the homesteads stage at 40 households, seeds 1, 2, 4, 6, 8, 9, 10, 12, 13 and 39, every grown seat followed to its outcome, one process, sequential)
 
 The homesteads stage took 53.8 s over the ten seeds, every seed seating 40 on its first margin. Each seat the growth pops is first
 SETTLED - the next household's whole homestead laid out at the seat to find how far it must move to keep its distance - and then
@@ -22,6 +22,9 @@ offered to the placer:
 | refused: no garden side's box fit among the standing homesteads | 3,556 | 6.7 s | 1.4 s | 15% |
 | fit, refused by the parts - no lawful corridor, or the lane law | 2,021 | 3.8 s | 12.8 s | 31% |
 | seated | 400 | 0.8 s | 12.9 s | 25% |
+
+The same breakdown at the GM's case, 15 households on seeds 1-16, is measured with the base leg of US1 and recorded in
+`research.md` R1 (SC-003).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -48,9 +51,10 @@ refused seats, the stage's time, and the households seated.
 ### User Story 2 - Keep iterating on the rest (Priority: P2)
 
 After US1, the stage's remaining costs - the corridor search and the lane law on seats that fit (31%), the settle itself, the
-seated commit - are each measured and attacked in further rounds, each prototyped and timed back to back before it is kept, until
-a round's measured gain on the 15-household reference falls under 5% of the stage, or every remaining cost is one no round could
-move; every round's numbers, kept or withdrawn, are recorded.
+seated commit - are each measured and attacked in further rounds, each prototyped and timed back to back before it is kept. The
+iteration stops only when the record names each remaining cost of the stage, states what an efficient process would do about it,
+and shows either that the stage now does that or a measured reason it cannot; every round's numbers, kept or withdrawn, are
+recorded.
 
 **Why this priority**: the GM's *"keep iterating until we get there"*.
 
@@ -60,8 +64,9 @@ move; every round's numbers, kept or withdrawn, are recorded.
 **Acceptance Scenarios**:
 
 1. **Given** a round kept, **When** the pool and cohort are rolled, **Then** every rule passes and no household is lost.
-2. **Given** the iteration stops, **When** the GM reads the record, **Then** it names what each remaining cost is and why the
-   last round could not move it.
+2. **Given** the iteration stops, **When** the GM reads the record, **Then** it names each remaining cost of the stage, what an
+   efficient process would do about it, and either that the stage now does it or the measured reason it cannot - the only
+   stopping rule.
 
 ### Edge Cases
 
@@ -93,15 +98,17 @@ move; every round's numbers, kept or withdrawn, are recorded.
   base, back to back (the base observed 2026-10-02, method: `Context`'s measurement - 53.8 s summed).
 - **SC-002** (FR-003, FR-005): The cohort passes as many seeds as the base, every pool map passes its rules, every household is
   seated.
-- **SC-003** (FR-004): The 15-household reference's homesteads stage, summed over sixteen seeds, is recorded for the base and
-  after every kept round; the iteration stops only as US2 says.
-- **SC-004**: The perf bookend's 15-household reference is not slower (perf band 0 or better).
+- **SC-003** (FR-001, FR-002): The GM's case - the 15-household reference, seeds 1-16 - has its refusal breakdown recorded for the
+  base, and US1's gain there is recorded, base against clone, back to back.
+- **SC-004** (FR-004): The 15-household reference's homesteads stage, summed over seeds 1-16, is recorded after every kept round;
+  the iteration stops only by US2's acceptance scenario 2.
+- **SC-005**: The perf bookend's 15-household reference is not slower (perf band 0 or better).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| A grown seat refused on the ground at its first settled position is dropped, not moved out | map drawing convention (search breadth; every seat offered passes the same rules) | the GM: check the grid "before the household layout"; a seat's outward move only follows the same direction into the same ground | this spec; the growth's docstring |
+| A grown seat refused on the ground at its first settled position is dropped, not moved out | map drawing convention (the placement ORDER and search breadth, as feature 308 classed its growth; every seat offered passes the same rules) | the GM: check the grid "before the household layout"; whether dropping rather than moving out costs a household is measured (FR-005), not assumed | this spec; the growth's docstring |
 
 ## Assumptions
 
