@@ -109,7 +109,7 @@
    "summary": "the sense-check of sweep-made section pointers covered code and docs only; landed specs were not checked, and the restore of glued text was keyed on .md",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-017 lists landed specs and requires each reference rewritten to the new form. Measured: 85 lines in landed specs carry a section id with the rest of an old path glued on, invisible to the check (the section id is valid): 60 in specs/292 briefs (research/buildings/<NNN>-<id>.html -> research/contents.json#compounds<NNN>-<id>.html), 16 in specs/250 briefs (#compounds*.html etc.), specs/180/spec.md:121 (#cities<x>.md, was research/cities/<x>.md), specs/209, 211, 229, 266, 285. A garbled pointer is not the new form and was not the old text; nothing makes a check impossible (one grep finds them)"
+   "why": "FR-017 lists landed specs and requires each reference rewritten to the new form. Measured: 85 lines in landed specs carry a section id with the rest of an old path glued on, invisible to the check (the section id is valid): 60 in specs/292 briefs (research/buildings/<NNN>-<id>.html -> research/questions/<NNNN>-<id>.html), 16 in specs/250 briefs (#compounds*.html etc.), specs/180/spec.md:121 (#cities<x>.md, was research/cities/<x>.md), specs/209, 211, 229, 266, 285. A garbled pointer is not the new form and was not the old text; nothing makes a check impossible (one grep finds them)"
   },
   {
    "id": "D8a-4",

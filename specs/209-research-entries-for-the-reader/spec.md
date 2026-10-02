@@ -22,7 +22,7 @@ every future entry, (5) applies them to every existing entry, and (6) extends th
 the record so they look for all three.
 
 The pages in scope are all sixteen pages under `research/`: the fifteen research PAGES - `research/*.html`
-less `SOURCES.html`, and `research/contents.json#cities*.html` - whose `<h2>` sections are the entries the GM's paste is one
+less `SOURCES.html`, and `research/contents.json#cities` - whose `<h2>` sections are the entries the GM's paste is one
 of, and the registry `SOURCES.html`, which the map's unread-source links open and a reader reaches from every
 citation. The registry has no `Grounds:`/`Evidence:` fields; every other rule holds over it (D6).
 

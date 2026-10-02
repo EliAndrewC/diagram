@@ -25,7 +25,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **Does a city farm inside its walls?** - *"Does a city farm inside its walls?"* — **"on the two common reckonings it comes out at roughly 5 by 10 ft"**. The body says the metrology has not been read, but the two reckonings themselves are an unfootnoted claim about premodern measures.  _(from `qc-fabric-government-hinterland-ways.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/contents.json#outside-the-walls*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#outside-the-walls` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 

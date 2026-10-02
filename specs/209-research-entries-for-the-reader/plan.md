@@ -20,7 +20,7 @@
 ## Files
 
 - `l7r/diagram/interactive/glossary.py`, `l7r/diagram/tools/glossary_asset.py`, `Makefile` (`glossary`)
-- `research/assets/record.js`, `research/assets/record.css`, `research/assets/glossary.js` (derived), every `research/*.html` and `research/contents.json#cities*.html`
+- `research/assets/record.js`, `research/assets/record.css`, `research/assets/glossary.js` (derived), every `research/*.html` and `research/contents.json#cities`
 - `.claude/agents/record-format.md`
 - `tests/interactive/test_record_format.py`, `tests/tools/test_glossary_asset.py`, `tests/interactive/test_page.py`, `tests/full/interactive/page_browser/{conftest,test_synthetic}.py`
 - `research/CLAUDE.md`, `research/README.md`, `l7r/diagram/interactive/CLAUDE.md`, `tests/CLAUDE.md`, `CLAUDE.md`

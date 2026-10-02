@@ -123,7 +123,8 @@ question - one merged away before this feature - names nothing and passes in a l
 else the retired argument is refused, whatever its number, because a live file using it is stale). (2) The check reads every tracked file except what FR-017 does not edit: the GM's own words (`request.md`, a SOURCE block,
 a quotation of the GM in the docs' form `*"..."*`); a README, whose stale references are listed in
 `readme-correction-offered.md` until the GM rules on them (constitution XVII); the mapping (`moved-303.json`,
-`migration.md`); and the guard-replay corpora under `scripts/fixtures/` - verbatim records of commands sessions ran,
+`migration.md`); a recorded review verdict (`plan-review.json`, the reviewer's words); and the guard-replay corpora
+under `scripts/fixtures/` - verbatim records of commands sessions ran,
 restored to their words after the sweep touched them. Within the rest, six files are REFUSAL DATA (the check and its
 test, the hook helper `_hm_record.py`, the record-edit and check-bundle hook suites, and the record test proving a
 Markdown-era token is reported), whose retired forms are what they
@@ -136,7 +137,11 @@ turned into a section pointer was checked for sense in code and docs; where the 
 Markdown-era path onto a section id, the original text was restored from the commit before the sweep (101 places); then
 every Markdown-era page path whose page is in the mapping - the record's file names before feature 194 - was rewritten
 to its section like any whole-page pointer (277 places, three of them live links in pool notes), and the check refuses
-the form; a `.md` name that is no page of the record is not touched. (4) The sweep's edits to landed features' specs and plans make those features' recorded
+the form; a `.md` name that is no page of the record is not touched. The sense-check covered the landed specs too: where
+the sweep had kept the rest of an old path after a section id there (`#compounds<NNN>-<id>.html` in the 292 briefs, a
+glob `#cities*.html`, `#cities<x>.md`), a fragment placeholder became `research/questions/<NNNN>-<id>.html` and a glob or
+page path the bare section, and the check refuses a section id with path text glued after it, so the class cannot come
+back. Three pool-note links that were a directory short of the record before this feature now reach it (XIV). (4) The sweep's edits to landed features' specs and plans make those features' recorded
 reviews stale; as feature 301's sweep did (its FR-027), the push passes the review and plan gates with their escapes and
 the reason logged - a mechanical rewrite of pointers, reviewed here, not a change to what those features decided.
 

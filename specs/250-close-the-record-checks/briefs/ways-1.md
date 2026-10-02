@@ -24,7 +24,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **What vehicle used a village lane** - *"What vehicle used a village lane"* — **"It may touch a plot's boundary, since paths hug field margins by design"**. A claim about how paths were actually made, with no note. (The rest of the paragraph is fn-23 / fn-24.)  _(from `qc-fabric-government-hinterland-ways.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/contents.json#ways*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#ways` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 

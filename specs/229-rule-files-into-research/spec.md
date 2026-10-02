@@ -165,7 +165,7 @@ offered correction); then FR-007's one addition, the pre-189 fixture. Any other 
 `settlements.md`, `settlements/<name>.md` or `settlements/cities/<name>.md` fails the gate; the rule matches the path forms and the bare basenames alike, resolving a bare basename from
 the containing file's directory so that `future-work/towns.md` and `future-work/cities.md` stay legitimate
 targets. The new pages are covered by every existing record test (they glob `research/*.html` and
-`research/contents.json#cities*.html`). `tests/tooling/test_docs_match_the_mechanism.py`'s operative list drops
+`research/contents.json#cities`). `tests/tooling/test_docs_match_the_mechanism.py`'s operative list drops
 `settlements/fields.md` and `settlements.md`.
 
 **FR-009 - `buildings.md` stays operative and out of the retirement.** Mode A plans are hand-authored by

@@ -27,7 +27,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **How large are the gates, walls and funerary features drawn?** - *How large are the gates, walls and funerary features drawn?*: "Cremated bone takes almost no volume" — no footnote (a candidate for a grounds note on physical necessity rather than a citation).  _(from `qc-fields-religion-archetypes.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/contents.json#religion-and-the-dead*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#religion-and-the-dead` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 

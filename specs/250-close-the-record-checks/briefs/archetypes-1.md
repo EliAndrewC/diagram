@@ -25,7 +25,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **The 6:4 water-to-dike ratio, and coppiced mulberry** - *The 6:4 water-to-dike ratio, and coppiced mulberry*: "A crown is two to four feet across and adjacent crowns nearly touch" — no marker of its own (`fn-38` covers the coppicing, `fn-125` the density guess).  _(from `qc-fields-religion-archetypes.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/contents.json#field-archetypes*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#field-archetypes` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 

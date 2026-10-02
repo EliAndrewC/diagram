@@ -40,14 +40,14 @@ and the style guide before you write.
    (`git -C /diagram/.clones/diagram-reorg rev-parse --short HEAD`) - the handoff names it as BASE.
 3. **Write each topic** as a research fragment and, where the folded sections say anything about how our maps draw
    the thing, a rendering fragment:
-   - **The research fragment** is `research/contents.json#compounds<NNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
+   - **The research fragment** is `research/questions/<NNNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
      `<id>` the title's anchor (lowercase; letters, digits and spaces kept; spaces to hyphens: "Threshing and drying
      yards at farmhouses (niwa)" is `threshing-and-drying-yards-at-farmhouses-niwa`). It opens with
      `<h2 id="<id>"><title></h2>`, then the comments: `<!-- feature 292 sweep, 2026-09-30: folded from <the old ids> -->`,
      the folded sections' `Grounds:` and `Evidence:` fields merged into one of each, and a `REMOVED` comment for any
      claim you cut under STYLE.md section 4 (what it said and why it went). Then the opening paragraphs, then the
      bullets, as the model does.
-   - **The rendering fragment** is `research/contents.json#compounds<NNN>-<rid>.html`, titled to mirror the research title
+   - **The rendering fragment** is `research/questions/<NNNN>-<id>.drawing.html`, titled to mirror the research title
      ("How our maps draw ..."), its second line `<!-- about: buildings.html#<id> -->` - `make record` then links the two
      both ways; never type a link between them. It follows the style guide too, and cites the research it rests on.
      The map's rules, the sizes chosen, conventions, knobs, what the generator places where, and why, go here, and

@@ -1,4 +1,4 @@
-# Audit: the city tier - `settlements/cities.md`, `settlements/cities/*.md`, `settlements/capitals.md` against `research/contents.json#cities*.html`
+# Audit: the city tier - `settlements/cities.md`, `settlements/cities/*.md`, `settlements/capitals.md` against `research/contents.json#cities`
 
 Independent Opus reader, 2026-09-12. Section granularity. Class E here means SETTING-CANON.
 

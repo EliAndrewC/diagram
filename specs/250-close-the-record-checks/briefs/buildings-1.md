@@ -30,7 +30,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **eaves nearly touching** - *"eaves nearly touching"* ("A compound wall is a building") — inside fn-81's span, but fn-81's recorded search covers the offset, the two roofs and patching access, not the eaves.  _(from `qc-buildings-vegetation.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/contents.json#compounds*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#compounds` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 

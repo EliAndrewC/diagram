@@ -28,7 +28,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **Wall towers - the mamian system and bowshot ranges** - spec 2: "within 186 ft of a ward gate where a neighborhood fence meets the rampart, which is a manned chokepoint" - "manned" is unfootnoted.  _(from `qc-river-cities-defenses-towns.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words over `research/contents.json#city-defenses*.html` - the label beside it is the REPORT's heading, only a hint.
+distinctive words over `research/contents.json#city-defenses` - the label beside it is the REPORT's heading, only a hint.
 Then confirm the sentence carries its note (say which) or work it as an FR-002 item. Never confirm against a
 fragment the grep did not name.
 

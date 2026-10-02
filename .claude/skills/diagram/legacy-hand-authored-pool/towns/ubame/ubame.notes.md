@@ -96,8 +96,7 @@ invisible. On Ubame the wind is the default NW monsoon (downwind = SE) while the
   quench trough, slag heap, stacked bar iron. Ubame follows the **Japanese two-site** tatara/okaji
   split rather than the Chinese adjacent-hearth arrangement, and that divergence is disclosed with
   its reason: dispersed fuel forces two sites. Full grounding in
-  [`../../research/contents.json#trades-and-services`](../../research/contents.json#trades-and-services) and
-  [`../../research/contents.json#trades-and-services`](../../research/contents.json#trades-and-services).
+  [`research/contents.json#trades-and-services`](../../../research/contents.json#trades-and-services).
 
 ## The potters' kiln works and the two carts (GM, 2026-08-17)
 

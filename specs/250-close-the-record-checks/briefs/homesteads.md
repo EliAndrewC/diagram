@@ -25,7 +25,7 @@ CITATION (a quotation from a public page that says it), an ABSENCE note (`no pub
 - **The farmstead's fixtures** - *"Stable litter and grass composted into stable manure (kyuhi, 厩肥)"* — carries an inline "(no readable page supports it)" but **no footnote**.  _(from `hw-quotecheck.md`)_
 
 **FR-006 - items 242's work list can no longer find.** Each was rewritten during 242. Find it by grepping its
-distinctive words (a figure, a name, a term) over `research/contents.json#homesteads*.html` - the section label beside it is
+distinctive words (a figure, a name, a term) over `research/contents.json#homesteads` - the section label beside it is
 the REPORT's heading, not the record's, and is only a hint. Then either confirm the sentence carries its note
 (say which note) or work it as an FR-002 item. Never confirm against a fragment the grep did not name.
 

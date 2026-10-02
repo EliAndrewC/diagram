@@ -5,7 +5,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
 ## Decisions
 
 - **D1 - read the fragments, and only the fragments** (FR-001, FR-002). The record is written per entry (feature 258): a
-  question is `research/<page>/NNN-<id>.html` (or `research/contents.json#cities<page>/...`), its notes the `.notes.html` beside it.
+  question is `research/<page>/NNN-<id>.html` (or `research/contents.json#cities`), its notes the `.notes.html` beside it.
   The assembled pages and the citations pages repeat those fragments, so reading them would count each item twice.
   The page's name is the fragment's directory, the question's heading and anchor are the fragment's `<h2 id="...">`.
 - **D2 - what an item is** (FR-002, FR-005). HTML comments are stripped first (a session note is not a claim).

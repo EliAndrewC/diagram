@@ -34,6 +34,9 @@ MAPPING = "moved-303.json"
 QUESTION = re.compile(r"(?<![\w.-])research/questions/(\d{4}-[^\s\"'`)\]<>,;|#*]+?\.html)(?![\w.-])")
 #: A section of the record.
 SECTION = re.compile(r"(?<![\w.-])research/contents\.json#([a-z0-9-]+)")
+#: A section pointer with the rest of an old path glued after its id - what a pointer sweep leaves when it rewrites a page
+#: directory and keeps what followed it (`#compounds<NNN>-<id>.html`, `#cities*.html`, `#water/x`).
+GLUED = re.compile(r"(?<![\w.-])research/contents\.json#[a-z0-9-]+(?:[A-Z0-9_*{]|<(?!/)|/[^\s)`]|\.md\b|\.html\b)")
 #: A retired fragment path: any `research/<dir>/.../NNN-<x>.html` outside `questions/` and the registry's `sources/`.
 OLD_FRAGMENT = re.compile(r"(?<![\w.-])research/((?:[a-z][a-z-]*/)+)(\d{3}-[^\s\"'`)\]<>,;|#*]+?\.html)(?![\w.-])")
 #: A retired page directory, and a retired built page.
@@ -100,6 +103,8 @@ def problems(text: str, mapping: Mapping, *, fixture: bool = False, refusal_data
             out.append(f"`research/contents.json#{m.group(1)}` - no such section")
     if refusal_data:
         return out
+    for m in GLUED.finditer(text):
+        out.append(f"`{m.group(0)}` - path text glued after a section id; name the section alone or the question's file")
     for m in mapping.old_md.finditer(text):
         out.append(f"`{m.group(0)}` - a retired page (feature 303); name {mapping.section_of(m.group(1))}")
     for m in mapping.old_dir.finditer(text):
@@ -163,7 +168,7 @@ TEST_DATA = VERBATIM
 
 
 def exempt(path: str) -> bool:
-    if path.startswith(TEST_DATA):
+    if path.startswith(TEST_DATA) or path.endswith("/plan-review.json"):  # a recorded review verdict: its words are a record
         return True
     return path in EXEMPT or path.rsplit("/", 1)[-1] in ("request.md", "README.md") or path.endswith((".png", ".webp", ".jpg", ".pdf", ".gz"))
 
@@ -218,6 +223,10 @@ def selftest() -> int:
         assert problems("PAGE=water SECTION=121", mapping, landed_spec=True) == [], "in a landed spec a retired number names no question"
         assert "name `Q=<NNNN>`" in problems("PAGE=water SECTION=121", mapping)[0], "anywhere else the retired argument is refused"
         assert "name research/contents.json#water" in problems("see research/water" + ".md for it", mapping)[0]
+        assert "glued after a section id" in problems("research/contents.json#water*.html", mapping)[0]
+        assert problems("<code>research/contents.json#water</code>", mapping) == [], "a closing tag is not glued text"
+        assert "glued after a section id" in problems("research/contents.json#water<NNN>-<id>.html", mapping)[0]
+        assert problems("research/contents.json#water.", mapping) == [] and problems("(research/contents.json#water)", mapping) == []
         assert problems('glob(REPO / "research/water")', mapping), "a retired directory named without its slash"
         assert problems("research/questions/0499-made-up.html", mapping, fixture=True) == [], "a fixture names its own record"
         assert problems("research/water/120-reservoir-ponds-tameike.html", mapping, fixture=True), "but not a retired form"

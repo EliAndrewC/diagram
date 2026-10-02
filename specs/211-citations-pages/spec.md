@@ -22,7 +22,7 @@ judges whether a source is applicable to a premodern East Asian setting, runs it
 as their write-ups are added, and makes it a step of the procedure BEFORE a new source's numbers, claims or details
 are integrated into the maps.
 
-The pages in scope are the fifteen research pages (`research/*.html` less `SOURCES.html`, and `research/contents.json#cities*.html`;
+The pages in scope are the fifteen research pages (`research/*.html` less `SOURCES.html`, and `research/contents.json#cities`;
 795 footnotes citing 319 distinct registry keys as of 2026-09-07), the registry `SOURCES.html`, the record's assets,
 the tooling and tests that read the record, and the procedure documents.
 
