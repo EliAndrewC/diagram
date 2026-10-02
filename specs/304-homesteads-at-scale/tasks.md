@@ -62,30 +62,30 @@ houses, that map is re-examined here before landing and an occasion is added if 
       cohort's per-seed houses and results equal to T01's
       research: rendering
       verify: DONE. make maps SCOPE=all: 5 hamlets REGENERATED, every manifest byte-identical; cohort N=24 28/30, the same two refusals as the base (Audit-11, Audit-905)
-- [ ] T25 [US2] What P2 bought: the scaling legs on the clone against `304-scale-base`, back to back (base worktree, then clone)
+- [x] T25 [US2] What P2 bought: the scaling legs on the clone against `304-scale-base`, back to back (base worktree, then clone)
       research: rendering
-      verify: per-size homesteads seconds before/after in research.md
+      verify: DONE. research R10: D5 (ring) 1-4% slower than the scan on all four seeds - withdrawn; D6 (pocket index) seed 47 55.6 -> 48.8-49.9 s, nothing on the other three
 
 ## P3 - no dead seats (US3; FR-006; SC-006)
 
-- [ ] T30 [US3] Scratch toggles for forms A, A' and B (plan D9) on top of P2; each timed at 15/20/40 households on the four seeds
+- [x] T30 [US3] Scratch toggles for forms A, A' and B (plan D9) on top of P2; each timed at 15/20/40 households on the four seeds
       (best of three) and counted (placer calls, houses seated), and on the pool and cohort seeds 1-24 (houses seated, rules)
       research: rendering
-      verify: the table of D9's measurements in research.md, base and each form back to back
-- [ ] T31 [US3] The choice by D10's rule, recorded with every form's numbers; on "none faster", P3 is withdrawn here (T32-T34
+      verify: DONE. research R10 table: 40 hh sums P2 77.0 s, A 113.7, A' 198.6, B 82.7; all seated 40/40; 15/20 hh in the same section
+- [x] T31 [US3] The choice by D10's rule, recorded with every form's numbers; on "none faster", P3 is withdrawn here (T32-T34
       dropped, the record says why)
       research: rendering
-      verify: the decision and the withdrawn forms in research.md and `dev/performance.md`
-- [ ] T32 [US3] Red: D11's tests for the chosen form (no seat offered that the current state refuses / that has no clear strip)
+      verify: DONE. D10: none faster at 40 - all three withdrawn (research R10); T32-T34 dropped
+- [x] T32 [US3] Red: D11's tests for the chosen form (no seat offered that the current state refuses / that has no clear strip)
       research: rendering
-      verify: the tests fail on P2's engine
-- [ ] T33 [US3] Green: the chosen form in `hamletgen/homesteads/capacity.py` / `region.py`
+      verify: DONE. DROPPED by T31: no form passed plan D10's rule (research R10)
+- [x] T33 [US3] Green: the chosen form in `hamletgen/homesteads/capacity.py` / `region.py`
       research: rendering
-      verify: `make quick` green; T32 passes
-- [ ] T34 [US3] Inashiro regenerated and gated, then the pool and the cohort: every map's rules pass; households seated per
+      verify: DONE. DROPPED by T31: no form passed plan D10's rule (research R10)
+- [x] T34 [US3] Inashiro regenerated and gated, then the pool and the cohort: every map's rules pass; households seated per
       cohort seed and pool map at least T01's (SC-006)
       research: rendering
-      verify: `make maps SCOPE=all` green; the cohort compared seed by seed in research.md
+      verify: DONE. DROPPED by T31: no form passed plan D10's rule (research R10)
 
 ## Closing
 
