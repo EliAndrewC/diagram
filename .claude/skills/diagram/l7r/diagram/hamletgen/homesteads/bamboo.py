@@ -130,10 +130,10 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 # drawn axis-aligned in (cw, ch) at (cx, cy), the rect the predicate reads
                 if not stand_spares_seats(cx, cy, cw, ch, seats, s.bscale):
                     continue
-                if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])):
-                    continue  # the household's strip stands on its house's bank (feature 287, homes H01)
-                if across_a_lane((hx, hy), (cx, cy), lanes):
-                    continue  # ...and on its house's side of every lane (glyph check, feature 302: Sawada's strip across a lane)
+                # the household's strip stands on its house's bank (feature 287, homes H01) ...and on its house's side of every lane
+                # (glyph check, feature 302: Sawada's strip across a lane)
+                if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])) or across_a_lane((hx, hy), (cx, cy), lanes):
+                    continue
                 ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
                 plan.bamboo_of[len(plan.bamboo_polys) + len(out)] = (hx, hy)  # its owner, for the stand's record (`of`)
                 out.append(ring)

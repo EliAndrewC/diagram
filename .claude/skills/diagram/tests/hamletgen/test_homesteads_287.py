@@ -109,6 +109,26 @@ def test_a_household_bamboo_strip_stands_on_its_house_bank_and_names_its_house()
     assert got, "some strips seated over the seeds"
 
 
+def test_a_household_bamboo_strip_with_every_seat_across_the_brook_is_not_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """...and where EVERY seat the strip could take lies across the brook, none is seated: the refusal itself, asked
+    directly (the pool's rolls reached it only by the accident of a layout, and feature 306's regenerated maps moved off it)."""
+    from l7r.diagram.hamletgen.homesteads import bamboo
+
+    asked: list[object] = []
+
+    def across(house: object, strip: object, streams: object) -> bool:
+        asked.append(strip)
+        return True
+
+    monkeypatch.setattr(bamboo, "crosses_a_stream", across)
+    for seed in range(10):
+        s, plan = _toy_hamlet(10, seed=seed)
+        plan.bamboo = "homestead"
+        houses = [{"x": 200.0 + 120.0 * k, "y": 200.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for k in range(8)]
+        assert bamboo.household_bamboo(s, plan, houses) == []
+    assert asked, "non-vacuity: seats reached the brook's question"
+
+
 def test_a_household_bamboo_strip_gives_way_to_every_reserved_copse_seat() -> None:
     """Feature 280 keeps the copse two crowns off the bamboo, feature 287 woods W25 plants every reserved seat: a strip is
     refused where a household's reserved seat falls in its keep-out (`stand_spares_seats`), and the next side tried."""
