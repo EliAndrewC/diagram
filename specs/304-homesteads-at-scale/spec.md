@@ -189,4 +189,4 @@ entries stay correct. Any lever that would change a rule (not only a seat) is ou
   recorded and raised; the cost a labeled estimate from the two probed seeds.
 - Round 2 (spec-fidelity, verify, 2026-10-01): FAITHFUL; all four items resolved, no new contradiction.
 - After acceptance (2026-10-01, a measurement, no requirement changed): seeds 39 and 47 rolled at 10/20/40 households; the
-  Context gains their figures (seed 47's 55.6 s homesteads tail at 40) and the bookend's cost is restated from all four seeds.
+  Context gains their figures (seed 47's homesteads tail at 40) and the bookend's cost is restated from all four seeds.
