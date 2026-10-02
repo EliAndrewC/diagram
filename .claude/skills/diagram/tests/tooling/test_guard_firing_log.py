@@ -84,9 +84,8 @@ CASES = [
     # times" cannot say which of them is carrying the cost, which is the whole point of the fourth field
     ("shell-check", _payload(command="if true; then"), "blocked", "parse"),
     ("shell-check", _payload(command='echo "use `make quick` first"'), "blocked", "executing-backtick"),
-    # an ambiguous -m (an escaped inner quote) still refuses; an unambiguous one is rewritten into a -F - heredoc (bc3de51cf,
-    # GM 2026-10-02: "I do indeed want that git commit rewrite") - this row expected the old refusal until feature 311
-    ("shell-check", _payload(command='git commit -m "say \\"hi\\" now"'), "blocked", "commit-dash-m"),
+    ("shell-check", _payload(command='git commit -m "the pond\'s own "center" thing"'), "blocked", "commit-dash-m"),
+    # an unambiguous message is rewritten into a quoted -F - heredoc rather than refused (2026-10-02, the GM approved it)
     ("shell-check", _payload(command='git commit -m "one" -m "two"'), "rewrote", "commit-dash-m-heredoc"),
     ("shell-check", _payload(command="git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'"), "blocked", "coauthor-address"),
     ("shell-check", _payload(command='echo "a `span`"  # SHELL_CHECK_OK: quoting a transcript verbatim'), "escaped", "shell-check-ok"),
