@@ -7,9 +7,10 @@
 Three pieces of tooling and two passes of judgment. The tooling: the blocked-domain and banned-citation lists with one
 decision function used by every fetch route, every store and the record build (FR-001..FR-004); the attempts log and the
 not-kept list, committed and union-merged, read before every fetch (FR-010, FR-015..FR-018); the "Uncited sources" part
-of the built record and its refusals (FR-012..FR-014, FR-020). The judgment: the `source-filter` agent, calibrated, over
+of the built record and its refusals (FR-012..FR-014), and FR-020's push-and-gate check. The judgment: the `source-filter` agent, calibrated, over
 the uncited set (FR-006..FR-011); and the write-ups of the kept pages, each checked by `source-applicability` (FR-012).
-Then the work that waits on others: the paywalled citations removed once feature 313's access tags exist (FR-019), and
+Then the work that waits on others: the footnotes of every source less than wholly readable confirmed in its readable part
+or removed, once feature 313's access tags exist (FR-019), and
 the high-risk sources confirmed once the GM has downloaded them (FR-021).
 
 ## Technical Context

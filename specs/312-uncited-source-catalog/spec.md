@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted - spec-fidelity verdict FAITHFUL (round 3, 2026-10-02)
 
 **Input**: the GM's request, verbatim in `request.md`, with the rulings settled there. In short: a usefulness FILTER (its
 own subagent check) over the ~2,846 pages read and never cited, so that only pages *"above a certain threshold of usefulness
@@ -270,7 +270,10 @@ in User Story 6.
   (its JSON output) and records a state only through 313's hand-recorded state, never by editing 313's files.
 - The GM's downloads (FR-021) are the GM's time; the feature stays open until they are done.
 
-## Review
+## Review history
+
+- Round 3 (spec-fidelity, 2026-10-02): verdict FAITHFUL - round 2's three items resolved, no new findings; two plan
+  wording asides fixed in `plan.md`.
 
 - Round 2 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 3. Applied: User Story 6 says what FR-019/FR-020 say; FR-017
   covers the Bash fetch routes; FR-008 admits the published L5R setting (`works-published-setting`).
