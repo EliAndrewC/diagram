@@ -340,3 +340,32 @@ def test_a_tree_whose_new_way_out_would_cross_a_brook_twice_is_refused(monkeypat
     monkeypatch.setattr(tree, "way_out_once", twice)
     assert not tree.admits(_law(M), M, run, ACCESS_ROLE, house), "its way out over the brook and back: refused"
     assert asked and asked[0][0][0] == (100.0, 80.0), "the chain judged is the new house's, from its own door"
+
+
+def test_an_end_on_the_connectors_tread_is_drawn_where_the_seating_judged_it() -> None:
+    """`lanes_of` (feature 306, Inashiro): the web carried the connector's start a few feet inward along the strip, past
+    the strip point a corridor hangs from; the strip is cut back to that start, and the corridor's end - already on the
+    connector's tread - stays where the seating judged it rather than turning its long leg onto the start (which made a
+    corridor hung from it a 19.9 degree needle). Off the tread it is set on the foot as before."""
+    base = _tree(access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}, {"pts": [[40.0, 300.0], [1.0, 0.0]], "of": [40.0, 320.0]}])
+    cases = (((3.0, 0.0), [[3.0, 0.0], [0.0, 0.0], [-1000.0, 0.0]], (1.0, 0.0)), ((10.0, 0.0), [[10.0, 0.0], [10.0, -1000.0]], (10.0, 0.0)))
+    for start, tread, end in cases:
+        M = {**base, "lanes": [{"pts": tread, "w": 6, "connector": True}]}
+        recs = tree.tree_records(M)
+        host = tree.hosts(recs, ((400.0, 0.0), (0.0, 0.0)))
+        lanes = tree.lanes_of(M, recs, host, [0, 1])
+        assert lanes[0]["pts"][-1] == start and lanes[2]["pts"][-1] == end, (start, lanes)
+
+
+def test_an_ordinary_lane_whose_drop_leaves_only_reserved_houses_unreached_is_left_to_the_tree() -> None:
+    """`left_to_the_tree` (feature 306, Sawada): the one way reaching houses A and B, both with reserved corridors, may go
+    (the settle then draws their corridors); not one reaching house C, which has none, nor one another lane hangs from, nor
+    one whose drop leaves nothing to the tree."""
+    con = {"pts": [[0.0, 0.0], [-1000.0, 0.0]], "w": 6, "connector": True}
+    x, y = {"pts": [[0.0, 0.0], [300.0, 80.0]], "w": 3}, {"pts": [[0.0, 0.0], [600.0, 580.0]], "w": 3}
+    assert tree.left_to_the_tree(_tree(lanes=[con, x]), 1), "A and B are the tree's"
+    assert not tree.left_to_the_tree(_tree(lanes=[con, y]), 1), "C has no reserved corridor"
+    assert not tree.left_to_the_tree(_tree(lanes=[con, x, {"pts": [[300.0, 80.0], [310.0, 400.0]], "w": 3}]), 1), "it strands a lane"
+    assert not tree.left_to_the_tree(_tree(lanes=[con, x, {"pts": [[0.0, -5.0], [-400.0, -5.0]], "w": 3}]), 2), "nothing left to the tree"
+    apart = [con, {"pts": [[500.0, 900.0], [600.0, 900.0]], "w": 3}, {"pts": [[600.0, 900.0], [700.0, 900.0]], "w": 3}, {"pts": [[700.0, 900.0], [800.0, 900.0]], "w": 3}]
+    assert not tree.left_to_the_tree(_tree(lanes=apart), 2), "it splits a piece off the connector's network in two"

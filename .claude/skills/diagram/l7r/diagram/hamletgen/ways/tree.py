@@ -209,7 +209,12 @@ def lanes_of(
         # stretch the squaring moved (cohort seed 8: the exit strip over a channel) is carried on to the foot on it
         h = host[i]
         on = drawn_of.get(h) if h is not None else None
-        if on is not None and len(on) >= 2 and not _on(pts[-1], on):
+        # ...UNLESS IT STANDS ON THE CONNECTOR'S TREAD ALREADY, where the strip is cut back to the connector's start: the web's
+        # touch pass can carry the connector's start a few feet inward along the strip, past the point the seating hung
+        # corridors from (Inashiro, feature 306: 2.6 ft), and a corridor's end carried back onto that start turned its 355 ft
+        # leg a third of a degree - enough to make the corridor hung from it a 19.9 degree needle, a tree lane no settle may
+        # cut. On the connector's tread the end meets the network as the seating judged it, so it is drawn where it was.
+        if on is not None and len(on) >= 2 and not _on(pts[-1], on) and not (h == -1 and drawn and connector_foot(M, pts[-1]) is not None):
             q = pts[-1]
             k = min(range(len(on) - 1), key=lambda m: seg_dist(q[0], q[1], on[m], on[m + 1]))
             foot = seg_closest(q[0], q[1], on[k], on[k + 1])
@@ -354,6 +359,30 @@ def _key(ln: Mapping[str, Any]) -> tuple[Any, ...] | None:
     if role == ACCESS_ROLE and ln.get("of"):
         return (role, round(float(ln["of"][0]), 1), round(float(ln["of"][1]), 1))
     return (role,) if role in (FIELD_ROLE, STRIP_ROLE) else None
+
+
+def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
+    """Would taking ordinary lane `i` away keep every other lane on the connector's network and the web in no more networks,
+    leaving unreached only farmhouses the seating reserved a corridor for - which the settle then draws as judged (`owed`,
+    `settle_tree`)? `settle.keeps_the_network` asks that no house be newly unreached at all.
+
+    WHY (feature 306, Sawada): a join-orphans lane ran 105 ft within 30 ft of the exit strip - the doubled band
+    `settle_shadows` takes away - but it was the one way reaching a farmhouse, so the web was not kept without it and the
+    band stayed; that house had no corridor drawn only because the stray lane reached it first. Its corridor was reserved
+    and judged lawful at seating, so the band goes and the house is reached by its own way."""
+    from .corridors import _on_the_connector
+
+    lanes = M.get("lanes") or []
+    others = [k for k in range(len(lanes)) if k != i]
+    if (_on_the_connector(lanes, range(len(lanes))) - {i}) - _on_the_connector(lanes, others):
+        return False
+    trial = {**M, "lanes": [lanes[k] for k in others]}
+    if law.lane_networks(trial) > law.lane_networks(M):
+        return False
+    before = {(x, y) for x, y, _d in unreached_houses(M)}
+    lost = [(x, y) for x, y, _d in unreached_houses(trial) if (x, y) not in before]
+    reserved = [r["of"] for r in tree_records(M) if r["role"] == ACCESS_ROLE and r["of"] is not None]
+    return bool(lost) and all(any(math.dist(h, c) <= 1.5 for c in reserved) for h in lost)
 
 
 def owed(M: Mapping[str, Any]) -> list[int]:

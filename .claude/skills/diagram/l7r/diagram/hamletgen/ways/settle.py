@@ -67,7 +67,7 @@ from .joints import joints
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
-from .tree import prune_the_tree, settle_defer, settle_tree, tree_faults
+from .tree import left_to_the_tree, prune_the_tree, settle_defer, settle_tree, tree_faults
 
 SETTLE_ROUNDS = 8
 """Repair rounds before the lanes still breaking a rule are dropped whole. Each round runs every rule once; a measured
@@ -542,7 +542,7 @@ def settle_shadows(s: Any) -> int:
     for i in range(len(ways)):  # ...a tree lane too, beside an ordinary one: a door path is tree, the lane it doubles not
         if (j := shadowed_by(ways, i)) is not None:
             for k in sorted({i, j} & ordinary, key=lambda n: polyline_len(ways[n])):
-                if keeps_the_network(s.M, k, []):
+                if keeps_the_network(s.M, k, []) or left_to_the_tree(s.M, k):  # ...a house it reached gets its reserved way
                     return apply_pieces(s, {k: []})
                 if strands_only_ordinary(s.M, k):  # ...or with the ordinary lanes it alone joined (`strands_only_ordinary`)
                     return drop_stranding(s, k)
