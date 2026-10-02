@@ -101,8 +101,12 @@ A list of items, each: **the claim as written in the entry** (verbatim), **the s
    notification; the parent session waited ten hours. Hosts that have behaved: zh/ja/en Wikipedia,
    JStage, kotobank, PMC, FAO, the prefectural and municipal `.lg.jp` pages.
    A host that refused says nothing about a human reader (GM 2026-09-07): name the work and your best URL in NOTE so
-   it can go on the GM's download list, and check `/host-l7r-repo/academic-sources/` first - the GM may already have
-   saved a copy for you to read.
+   it can go on the GM's download list, and look in the source archive first - the GM may already have saved a copy,
+   or a session may have archived the page (feature 309: every cited and every read page is archived). The archive is
+   `/diagram/.specify/source-archive/`: the GM's downloads under `gm-copies/<file>` (a PDF's text beside it as
+   `<file>.txt`), every captured page under `<2 hex>/<id>/<time>/` with its `text.txt` and `capture.json` (whose `url`
+   names the page). Grep it for the work's title, its URL or the passage before you fetch anything. A file still in
+   `/host-l7r-repo/academic-sources/` has not been archived yet - read it there.
 2. **Ask the page for the passage, not for agreement.** Prompt the fetch for the verbatim sentences
    about the subject - never "does this page support X?" A page asked whether it agrees will agree.
 3. **Judge the claim against the quoted text, in context.** Numbers must match; scope must match

@@ -49,6 +49,10 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
   the search pass before deciding, before asking the GM, and before writing "guess". The GM is asked
   only when the record is silent or contradictory, and the ask says what was searched and found.
+- The search pass looks in the ARCHIVE before the web (feature 309): `make archive-inbox` first (the GM's downloads in
+  `academic-sources/` archived, then removed - what is left there is unprocessed), then `make archive-find` for each
+  source. Every cited and every read page is archived in the PRIVATE repository `EliAndrewC/diagram-research`; never
+  link or copy it anywhere public.
 - Where the research supports more than one form, it becomes a knob with per-settlement variance
   rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
   choice between distinct forms is a knob.

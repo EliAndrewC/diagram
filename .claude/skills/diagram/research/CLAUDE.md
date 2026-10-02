@@ -65,13 +65,20 @@ OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable [QUESTION=<NNNN>]`; 
 KEY=<k> URL=<u>` marks a new entry's source `cited:<k>` itself. `make sources-consulted URL=<u>` (or `KEY=<regex>`)
 looks a page up without fetching it.
 
-**Every cited page is archived** (feature 309, the GM 2026-10-02: a hedge against *"websites going offline"*): every URL
-in a registry entry (its comments' too) and every URL a footnote links has a copy - served bytes, the whole page as MHTML,
-its text - in the PRIVATE repository `EliAndrewC/diagram-research`, and a row in `research/archive/<id>.json`. `make
-reserve KIND=registry ... URL=<u>` archives the new entry's URL itself; a URL cited any other way (a footnote's direct
-link, a URL added to an entry) is archived with `make archive URL=<u>`, and `make record` refuses a cited URL with no
-row, naming that command. `make archive-sources REPORT=1` prints the coverage. Never link or copy the archive anywhere
-public: much of it is copyrighted.
+**Look in the archive before the web** (feature 309, the GM 2026-10-02: *"first check to see if we already have
+something, rather than going out and trying to find it on the internet"*). A research pass starts with `make
+archive-inbox` - the GM's downloads in `/host-l7r-repo/academic-sources/` are archived, the push confirmed, and the files
+removed, so whatever is still there is unprocessed - and asks `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` of
+every source before searching or fetching; it names the local copy to read (exit 1: nothing held, go to the web).
+
+**Every cited and every read page is archived** (a hedge against *"websites going offline"*): every URL in a registry
+entry (its comments' too), every URL a footnote links, and every page a session reads, cited or not, has a copy - served
+bytes, the whole page as MHTML, its text - in the PRIVATE repository `EliAndrewC/diagram-research` (the host's one
+working copy: `<mirror>/.specify/source-archive/`), and a row in `research/archive/<id[:2]>/<id>.json`. `make reserve
+KIND=registry ... URL=<u>`, `make source-pages` and `make source-outcome` archive their URLs themselves; a URL cited any
+other way (a footnote's direct link, a URL added to an entry) is archived with `make archive URL=<u>`, and `make record`
+refuses a cited URL with no row, naming that command. `make archive-sources REPORT=1` prints the coverage. Never link or
+copy the archive anywhere public: much of it is copyrighted.
 
 **A write session takes at most four questions and ten new registry keys** (feature 274). Measured over 282
 sessions (its research R1): a write session's cost follows its turn count (r = 0.92) and grows roughly with the square
@@ -192,7 +199,8 @@ entry they open cites the notes on GitHub (feature 307, GM 2026-10-02): the file
 its anchor by GitHub's rule (`sources.github_anchor`). The build makes every bare URL on a citation line a link that
 opens in a new tab, so a citation line is written with its URL in plain text. A page
 the container cannot fetch is not thereby unreadable - if the GM can open it, anyone can; a source only the GM
-can fetch is downloaded by them to `/host-l7r-repo/academic-sources/` - the session reads the copy, the footnote
+can fetch is downloaded by them to `/host-l7r-repo/academic-sources/` and moved into the archive by `make archive-inbox`
+(`gm-copies/<file>`, found with `make archive-find`) - the session reads the archived copy, the footnote
 links the PUBLIC page and says the copy was read, and the quote-check runs against the copy; a paywalled text with a
 public abstract is cited for the abstract's words only; what a read copy does NOT say is written down where the
 claim stands, and the rest labeled GUESS. A source for the GM to fetch goes at the END of

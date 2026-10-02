@@ -287,7 +287,8 @@ footnotes, every one without a recorded SEEN verdict re-fetched - is `specs/195-
 **A page the container cannot fetch is not thereby unreadable.** mdpi.com, Wiley, Springer, ScienceDirect and others
 refuse automated fetches while serving a person; when a source matters, the GM downloads it (2026-09-07: *"I can try to
 download them myself as a human and then save them somewhere that you can see them"*) into `l7r/academic-sources/`,
-mounted here at `/host-l7r-repo/academic-sources/`. The session reads the copy (an Opus reader per paper, passages
+mounted here at `/host-l7r-repo/academic-sources/`, and `make archive-inbox` moves it into the source archive once it is
+pushed (feature 309; `make archive-find` names the copy). The session reads the copy (an Opus reader per paper, passages
 verbatim with page or section), the footnote links the PUBLIC page and says the copy was read, and the quote-check runs
 against the copy. A paywalled full text whose abstract is public is cited for the abstract's words only. **Whether a page is public is the GM's
 test, not the container's**: the GM has no academic subscription, so a page they can open is open to anyone (GM 2026-09-07: *"if it is

@@ -202,3 +202,12 @@ host keeps one working copy of it, pushed straight to GitHub - no clone of it pe
 downloaded files in `academic-sources/` that copy a cited source are archived beside its captures. The mechanism, the
 fallback order for a dead or a refused page and the measurements: `specs/309-source-archive/`; the operative rule:
 `.claude/skills/diagram/research/CLAUDE.md`.
+
+**Amendment (the GM, 2026-10-02).** The download directory is a queue: *"once something has been added to the diagram
+research repository and then pushed, then we can delete it from the academic sources directory. And in that way, looking
+at that directory is just a good way to know whether there is something that we have not processed yet."* Sources read
+and not cited are archived too - *"When we check a paper for one fact, it may not have what we need for the question that
+we are asking, but then we may end up wanting to check the paper later for a different fact"* - every page a session
+reads, the earlier reads included (the GM's choice). And the research pass looks in the archive first: *"our research
+procedure should include a step where we first check to see if we already have something, rather than going out and
+trying to find it on the internet"* - `make archive-inbox`, then `make archive-find`, before any search.
