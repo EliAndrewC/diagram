@@ -39,5 +39,6 @@ research already reaches: nothing a map draws changes and no new finding is made
 - [x] T10 [US2] SC-002: `--between` over the last 30 record-only commits on main, tabulated in `research.md` beside what the doctrine's wording owed
       research: rendering
       verify: DONE. DONE. --between over the 5 record-only commits since the 303 layout (research R2): tag-only 0, sweeps 163 and 911 matching their messages; found and fixed the five-digit write-up miss
-- [ ] T11 `make done` green, `make hooks-test`, `make record CHECK=1`; zero new failures against the baseline; pushed
+- [x] T11 `make done` green, `make hooks-test`, `make record CHECK=1`; zero new failures against the baseline; pushed
       research: rendering
+      verify: DONE. DONE. make done green (10,565 passed, 3 skipped; XDIST_WORKERS=4 under the host's memory cap after two OOM-killed runs); hooks-test green against these guard scripts (entry-gate 13/13, check-bundle 31/31, sync-with-main 62/62); zero new failures vs the baseline; make record CHECK=1 runs at the push
