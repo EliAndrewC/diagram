@@ -1,0 +1,53 @@
+{
+ "feature": "310-no-canopy-in-the-sun",
+ "plan_sha256": "c57e202a48b3f086289de0e61d3965f6d023b90fafa581245b1483daebf97a0f",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One reach constant for every canopy tree (PERSIMMON_SHADE_FT -> tree_shade.CANOPY_SHADE_FT, the sun page's west-lane reach); the persimmon's seat keeps its own form",
+   "class": "within",
+   "why": "FR-002 asks exactly this: one reach, the working windbreak tree's, one predicate. The persimmon already applies that predicate and reach (spec Edge Cases: 'already keeps the rule; it is not changed')."
+  },
+  {
+   "id": "D2",
+   "summary": "_sun_keepouts on the keep-outs mixin, on only for a map that keeps the sun corridor (_sun_corridor_ft), covering drawn plots and every placed bundle's yard and gardens",
+   "class": "within",
+   "why": "FR-001 binds 'a scripted map' and the spec's Edge Cases exempt the legacy hand-drawn maps (the record's standing ruling, sun page: 'the rule binds a map when a generator draws it'). Measured 2026-10-02: the opt-in is set unconditionally by the one scripted settlement generator (hamletgen/homesteads/stages.py:181, s.sun_corridor(SUN_CORRIDOR_FT)); no other caller sets it; the other pool .gen.py files (magistracies, Hoshigaoka shrine) are hand sheets and compounds, not Settlement maps. So the gate excludes exactly the hand-drawn maps the spec already exempts and no scripted map. Including the placed bundles' plots is what lets farm-grove bands drawn in the flush be held (spec Edge Case 'A farm's own grove')."
+  },
+  {
+   "id": "D3",
+   "summary": "Every crown site takes the new keep-out: _belt_ranks, the _draw_grove crown test, the woods stand and fringe; the bamboo culm marks keep the old list",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The decision says 'every crown site' but its list, and research.md R1's premise 'Every drawn canopy crown passes _crown_covers', omit a canopy placer the scripted path runs: the woodland commons in settlement/land/cover.py. hamletgen/hinterland/stages.py:237 calls s.commons(patch, role='woodland'), which seats coppice crowns by random throws tested with _sparse/_commons_keep (cover.py:483) and, when under-stocked, by woodland_room's grid (cover.py:297-331, 508-510), and records them in tree_crowns (cover.py:494, 510) - never through _crown_covers. As written, those crowns are not held at placement, which narrows FR-001 ('a wood') and FR-004 ('Each placer refuses or drops a crown') from an unmeasured premise; D6's check would catch one only where a commons happens to reach a plot, and the five pool maps carry none in a plot's sun today, so the gap can ship green. No argument is offered for the omission - it is an oversight, and nothing in the request or spec implies it. Fix: add the commons coppice's throws AND its woodland_room fallback to D3 (the box test is the same disc-against-rectangle; feed _sun_keepouts into _commons_keep or test it beside _sparse), correct R1's claim, and - as the spec's Assumption requires ('the plan confirms no crown escapes the record') - state how every canopy site was enumerated (grep of tree_crowns writers: keepouts._record_crowns via groves.py, woods.py, farm_fixtures.persimmon; and cover.py's direct appends). The scrub commons' 'scraggly hill pines' (cover.py ~535-560, drawn as trunk-and-branch lines, not recorded in tree_crowns) are trees drawn outside the record; the plan must say whether they are held, or put their exclusion to a MODE 1 exception check - it may not pass them silently."
+  },
+  {
+   "id": "D4",
+   "summary": "The copse's west-lane exemption and its unsupported comment are removed; the lane stays as a seat prefilter that D3 also enforces at the crown",
+   "class": "within",
+   "why": "FR-006 first clause, verbatim. Keeping the lane as a prefilter only refuses more."
+  },
+  {
+   "id": "D5",
+   "summary": "The farm grove's seat-time strips (fit._yard_sun_conflict 22 px south, _garden_sun_conflict 22 px east) stay as seating preferences; the full rule is enforced at the crown by D3",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrowing against FR-006's literal 'the farm grove's narrower strips are replaced by the one rule': the strip code survives. Ruled legitimate on purpose, not words. The request's purpose is that no canopy tree is exempt from the sun calculation; the strips, after D3, admit no crown - they can only refuse a seat, and every farm-grove crown (own or neighbor's, D2 includes placed bundles' plots) is then held to the full reach at draw time whatever seat was taken. FR-006's object is what the farm grove KEEPS (spec Context table, 'what they keep today'); after D2+D3 it keeps the one rule, so the strips are no longer the rule. Replacing them with the full reach at seat time would refuse bundles and move houses, which the accepted spec's Assumption sets aside ('house seats and plots stay where the seating puts them; only trees give way. Re-seating is not required') - so keeping seating as it is is implied by the spec itself. Condition for the ruling to hold: the docstrings and comments that now state the strips AS the sun rule (fit._yard_sun_conflict 'no grove may sit in the ~22px strip', rolling/dispersed.py:20, hamletgen/consts.py:474, _garden_sun_conflict's 'A farm's OWN bands never do... by construction') are rewritten as seating preferences under the one crown rule, and no record page or modal (D7, entry-drift) presents a 22 px strip or 'by construction' as how a grove keeps a plot's sun."
+  },
+  {
+   "id": "D6",
+   "summary": "One map check over every recorded crown (crowns_shading_plots), persimmons_shading_plots retired into it; gate test over the five hamlets and the cohort audit",
+   "class": "within",
+   "why": "FR-005 verbatim; it is enforcement of the request, red before the fix per Constitution X."
+  },
+  {
+   "id": "D7",
+   "summary": "The sun page states the one rule and the bamboo exemption as the GM's choice; the persimmon bullet folds in; modals checked by entry-drift",
+   "class": "within",
+   "why": "FR-007 and SC-003; the bamboo label follows the spec's Decisions row."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

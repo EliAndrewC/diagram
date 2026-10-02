@@ -16,7 +16,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 
 ## Phase 1 - the check, red (US1; FR-005)
 
-- [ ] T10 [US1] D6: `tree_shade.crowns_shading_plots` over every recorded crown (the persimmon function retired into it), unit
+- [ ] T10 [US1] D6: `tree_shade.trees_shading_plots` over every recorded tree (crowns, pines, willows) (the persimmon function retired into it), unit
       tests; `tests/gate/test_canopy_sun.py` over the five hamlets replaces `test_persimmon_sun.py` and is RED on today's pool
       (95, 78, 98, 10, 143); the cohort audit reads it
       research: rendering
@@ -31,7 +31,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
       tests (on, off, a bundle's plot before its record)
       research: rendering
       verify: `make test-file` on the keep-outs tests
-- [ ] T22 [US1] D3: the belt's ranks, the clump crowns and the woods' stand and fringe take it; the culm marks do not; a unit test
+- [ ] T22 [US1] D3: the belt's ranks, the clump crowns, the woods' stand and fringe, the woodland commons (throws and room grid),
+      the scrub pines (recorded as `scrub_pines`) and the dike willows (thinned once the plots stand, `dike_willows`) take it;
+      the culm marks and the coppiced mulberry do not; a unit test
       per site and one that a culm mark may stand in a plot's sun
       research: rendering
       verify: `make test-file` on the groves and woods tests

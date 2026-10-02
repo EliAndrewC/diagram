@@ -24,24 +24,29 @@ the bamboo page's tall madake, labeled the same way and raised with the GM.
 **What determines it in reality.** The sun's path in the drying season (season and latitude), and the household's choice of
 where its plots and trees stood (tenure: its own lot). Neither is drawn from a source here beyond the shadow geometry.
 
-## R1 The crown placers (scouted 2026-10-02)
+## R1 The tree placers (scouted 2026-10-02; the plan review's D3 finding folded in)
 
-Every drawn canopy crown passes `Settlement._crown_covers(x, y, r, rects, circles, pad)` against keep-out boxes as
-(center, half-width, half-height) before it is drawn:
+**How the list was found.** Every writer of `tree_crowns` (a grep of the engine for the key: `_record_crowns` and its four
+callers, and `land/cover.py`'s two direct writes), then every class a scripted hamlet inks (the union of the five pool
+manifests' `ink_classes`) read for the trees it draws: alder, copse, homestead grove, windbreak, woodland commons, persimmon,
+scrub and rough grazing, perimeter dike, mulberry dike. Nothing else on a hamlet draws a tree.
 
-| placer | site | trees |
-|---|---|---|
-| `_belt_ranks` | `homestead_parts/groves.py` | the conifer-led belt's rank conifers |
-| `_draw_grove` clumps | `homestead_parts/groves.py` | the farm grove's bands, the windbreak's and the copse's clumps |
-| woods stand + fringe | `shrines_wells/woods.py` | woods, the woodland commons, shrine groves |
-| the persimmon | `homestead_parts/fixture_seats.py` | seats itself out of the sun ground (pushed 2026-10-02) |
+| placer | site | trees | today's test before inking | recorded |
+|---|---|---|---|---|
+| `_belt_ranks` | `homestead_parts/groves.py` | the conifer-led belt's rank conifers | `_crown_covers` | `tree_crowns` |
+| `_draw_grove` clumps | `homestead_parts/groves.py` | the farm grove's bands, the windbreak's, the copse's and the alder clumps | `_crown_covers` | `tree_crowns` |
+| woods stand + fringe | `shrines_wells/woods.py` | woods and shrine groves (no scripted hamlet draws one today) | `_crown_covers` | `tree_crowns` |
+| the woodland commons' throws and its `woodland_room` grid | `land/cover.py` | the coppice crowns | `_sparse` / the room grid - NOT `_crown_covers` | `tree_crowns` |
+| the scrub's hill pines | `land/cover.py` | a few scraggly pines, trunk and branch lines | `_sparse`, `_in_soft` | NOT recorded |
+| the perimeter dike's willow row | `land/dikes.py` | pollarded willows on the water face | none - drawn in the field stage, before any plot exists | NOT recorded |
+| the persimmon | `homestead_parts/fixture_seats.py` | one tree a household | seats itself out of the sun ground | `tree_crowns` |
 
-The bamboo culm marks in a clump use the same keep-out list (`groves.py`, the marks pass) - the one site the new boxes must not
-reach (FR-003).
+Not canopy: the bamboo culm marks and stands (FR-003), and the perimeter dike's and the mulberry dikes' coppiced mulberry -
+the code and the record call them coppiced bushes, a crop of the bank cut back each year, "not canopy"
+(`land/dikes.py`, `fields/landuse.py`).
 
 A plot's sun ground is the box from `x0 - reach` to `x1 + reach` and `y0` to `y1 + reach` - a (center, half sizes) box - and
-`_crown_covers`' disc-against-box test is exactly `tree_shade.crown_shades`. So one keep-out source serves every crown site.
-
+`_crown_covers`' disc-against-box test is exactly `tree_shade.crown_shades`. So one keep-out source serves every crown test.
 ## R2 Before figures (SC-004; one-shot, read from the shipped manifests 2026-10-02)
 
 | map | household wood rolled / drawn (sq ft) | copse clumps | windbreak clumps | recorded crowns |

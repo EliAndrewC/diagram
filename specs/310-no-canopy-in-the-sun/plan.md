@@ -38,19 +38,31 @@ then the pool (`make maps`) and the cohort.
   `threshing_yards` and `gardens` and every placed bundle's `yard` and `gardens` (a farm grove's arms are drawn in the flush,
   whose plots may not yet be records). Off on every other map. Indexed as the caller indexes its other boxes: the belt's
   `PointGrid`, the clump's prefiltered list (both built once per stand; clause 15).
-- **D3 Every crown site takes it; no bamboo site does**: `_belt_ranks`, the `_draw_grove` crown test, the woods stand and
-  fringe. The culm marks' test keeps the old list (FR-003). A crown refused is simply not drawn, as a crown over a roof is
-  today (the wood is the remainder - spec Decisions row 5).
+- **D3 Every tree site takes it; no bamboo or coppiced-mulberry site does** (research R1, the whole inventory):
+  - the `_crown_covers` sites - `_belt_ranks`, the `_draw_grove` crown test, the woods stand and fringe - take the sun boxes
+    in their keep-out list; the culm marks' test keeps the old list (FR-003);
+  - the woodland commons' throws and its `woodland_room` fallback grid refuse a crown that `crown_shades` finds in a plot's
+    sun (the commons are drawn in the hinterland stage, after every plot);
+  - the scrub's hill pines refuse a pine whose branch spread (its crown, the widest branch's reach) stands in a plot's sun, and
+    are recorded as `scrub_pines` [x, y, r] so the check sees them (not in `tree_crowns`, which other rules read as canopy
+    discs - recording the pines there would move those rules);
+  - the perimeter dike's willow row is drawn in the field stage, before any plot exists: its willows are recorded with the
+    planted string's place in the stream (`dike_willows`), and once the homesteads are placed (`stage_hinterland`'s start) the
+    string is rewritten without each willow that stands in a plot's sun - the mulberry row unchanged;
+  - the persimmon already keeps the rule.
+  A tree refused is simply not drawn, as a crown over a roof is today (the wood is the remainder - spec Decisions row 5).
 - **D4 The copse's west-lane exemption goes** (`homestead_parts/stands.py`: the lane applies to every mix; the comment's
   unsupported justification is removed - FR-006). The lane is now a seat prefilter that D3 also enforces at the crown.
 - **D5 The farm grove's seat-time strips stay as seating PREFERENCES** (`fit._yard_sun_conflict`, `_garden_sun_conflict`):
   they refuse a bundle whose grove BAND would stand in a neighbor's sun, which keeps bands whole; they exempt nothing, because
   D3 holds every crown to the full rule whatever seat a bundle takes. Replacing them with the full reach at seat time would
-  refuse bundles for crowns D3 thins anyway. Recorded at the functions. (FR-006's "replaced by the one rule": the one rule is
-  the crown's; the strips are no longer the rule.)
-- **D6 The map check reads every crown**: `tree_shade.crowns_shading_plots(M, reach)` over `tree_crowns` (the persimmon's
-  crown is recorded there too, so `persimmons_shading_plots` is retired into it). The gate test becomes
-  `tests/gate/test_canopy_sun.py` over the five hamlets; the cohort audit reads the same function.
+  refuse bundles for crowns D3 thins anyway, and move houses (the spec's Assumption: only trees give way). Every text that
+  presents a strip as the sun rule is rewritten as a seating preference under the one crown rule: the `_yard_sun_conflict`
+  docstring, `_garden_sun_conflict`'s "by construction", `rolling/dispersed.py`'s and `hamletgen/consts.py`'s comments; no record
+  page or modal describes a strip as how a grove keeps a plot's sun.
+- **D6 The map check reads every tree**: `tree_shade.trees_shading_plots(M, reach)` over `tree_crowns`, `scrub_pines` and
+  `dike_willows` (the persimmon's crown is in `tree_crowns`, so `persimmons_shading_plots` is retired into it). The gate test
+  becomes `tests/gate/test_canopy_sun.py` over the five hamlets; the cohort audit reads the same function.
 - **D7 The record**: the sun page states the one rule, the bamboo exemption as the GM's choice, and the class of each
   (spec Decisions); the persimmon bullet folds into it. The modals written from it are checked by `entry-drift`.
 
@@ -77,6 +89,8 @@ specs/310-no-canopy-in-the-sun/       request, spec, research, plan, tasks
 ├── homestead_parts/groves.py         D3 (belt ranks, clump crowns; not the culm marks)
 ├── homestead_parts/stands.py         D4
 ├── shrines_wells/woods.py            D3
+├── land/cover.py, land/dikes.py      D3 (the commons, the scrub pines, the dike willows)
+├── rolling/dispersed.py              D5 (comments)
 ├── rolling/fit.py                    D5 (comments)
 └── tools/cohort_audit.py             D6
 .claude/skills/diagram/tests/gate/test_canopy_sun.py   D6 (replaces test_persimmon_sun.py)
