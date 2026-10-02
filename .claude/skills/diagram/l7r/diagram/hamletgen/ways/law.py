@@ -731,13 +731,33 @@ def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, in
     """(lane index, segment index, point, degrees off square) for every lane crossing of the brook or a drawn channel
     (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square."""
     out = []
+    ways = list(_ways(M))
+    boxes = [_bbox(p) for p in ways]
     for course in water_courses(M, water):
-        for i, p in enumerate(_ways(M)):
+        cb = _bbox(course)
+        for i, p in enumerate(ways):
+            # ...a lane whose box misses the course's crosses none of it (feature 314: the census's 1,000 comparisons a call)
+            if boxes[i] is None or cb is None or boxes[i][2] < cb[0] or cb[2] < boxes[i][0] or boxes[i][3] < cb[1] or cb[3] < boxes[i][1]:
+                continue
             for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
                 for u, v in zip(course, course[1:], strict=False):
                     if segments_cross(a, b, u, v) and (off := off_square(a, b, u, v)) > FORD_SQUARE_TOL_DEG:
                         out.append((i, k, seg_intersect(a, b, u, v) or a, off))
     return out
+
+
+def _bbox(p: Sequence[Sequence[float]]) -> tuple[float, float, float, float] | None:
+    """The box `(x0, y0, x1, y1)` of a polyline, or None for an empty one."""
+    if not p:
+        return None
+    xs, ys = [float(q[0]) for q in p], [float(q[1]) for q in p]
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def boxes_meet(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], pad: float) -> bool:
+    """Do the boxes of two polylines come within `pad` of each other (`_bbox`)? Two empty ones never do."""
+    ba, bb = _bbox(a), _bbox(b)
+    return ba is not None and bb is not None and not (ba[2] + pad < bb[0] or bb[2] + pad < ba[0] or ba[3] + pad < bb[1] or bb[3] + pad < ba[1])
 
 
 def oblique_crossings(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, int, float]]:

@@ -35,5 +35,8 @@ st.sort_stats("tottime").print_stats(30)
 for name in os.environ.get("CALLERS", "").split(","):
     if name:
         st.sort_stats("cumulative").print_callers(name)
+for name in os.environ.get("CALLEES", "").split(","):
+    if name:
+        st.sort_stats("cumulative").print_callees(name)
 print(f"stage {took:.2f} s, {houses} houses")
 print(out.getvalue())

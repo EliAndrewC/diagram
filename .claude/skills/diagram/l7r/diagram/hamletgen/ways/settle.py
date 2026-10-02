@@ -879,6 +879,8 @@ def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
     brook at its ford 38 degrees off square, and the corridor was refused for it)."""
     q = list(run)
     for course, half in square_waters(M):
+        if not law.boxes_meet(q, course, half):  # out of its reach the squaring changes nothing (feature 314)
+            continue
         for _ in range(SQUARE_PASSES):
             nq = square_crossings(q, course, half)
             if nq == q:
@@ -890,9 +892,8 @@ def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
 def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = ACCESS_WIDTH, lawful: Lawful | None = None) -> bool:
     """THE SEATING'S QUESTION (feature 287, plan M3): would a corridor along `run`, squared at its water crossings
     (`square_run`), stand on lawful ground (`Lawful.on_lawful_ground`) on the manifest as it stands? One predicate, asked by
-    the seating before it admits a house and by the web before it draws the corridor. A caller asking many runs of one standing
-    manifest hands in its `Lawful(SimpleNamespace(M=M))`, whose ground is indexed once (feature 314: the field's corridor asked
-    145 runs on one map, each indexing it again - 3.0 of the homesteads stage's 5.8 s at 15 households)."""
+    the seating before it admits a house and by the web before it draws the corridor. A caller asking many runs of one manifest
+    hands in its `Lawful(SimpleNamespace(M=M))`, indexed once (feature 314: 145 runs, each indexing it again, 3.0 of 5.8 s)."""
     import types
 
     ix = lawful or Lawful(types.SimpleNamespace(M=M))
