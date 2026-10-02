@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted - `spec-fidelity` FAITHFUL, round 4 (2026-10-02)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): the download list *"deserves to be in source control somewhere"*,
 the GM's working file *"should be an actual copy and not the canonical source"*; per entry *"a space that is already set

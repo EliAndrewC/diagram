@@ -88,8 +88,10 @@ manifest gives for the URLs it links. A drafted entry may state `- Key: <k>[, <k
 
 **D9 - The access tag** (`scripts/_access_tags.py`). For each registry key (from the entries' `<h3 id=...>`):
 
-1. A GM mark recorded on an entry naming the key: downloaded gives gm-full; partial gives gm-partial; paywalled alone gives
-   paywalled. It is dated by the recorded line. Not-found alone decides nothing; the basis says the GM did not find it.
+1. A GM mark recorded on an entry naming the key: downloaded gives gm-full whatever else is ticked; partial without
+   downloaded gives gm-partial; paywalled alone gives paywalled; not found alone gives no state, and the basis says the GM
+   did not find it. Several entries naming the key: the newest mark that gives a state, and on the same date the most open;
+   a not-found mark never overrides another entry's state. Dated by the recorded line.
 2. Else the manifest rows naming the key, each mapped: `archived` and `archived-earlier-snapshot` to open, `archived-gm-copy`
    to gm-full, `partial` and `unreachable` to gone on HTTP 404 or 410, down on a timeout, a network error or HTTP 5xx, and
    bot-refused otherwise (403, 405, 406, 429, a page that would not render). The most open row wins, in the order open,
@@ -98,10 +100,19 @@ manifest gives for the URLs it links. A drafted entry may state `- Key: <k>[, <k
    never-read. This keeps apart the three states 312's request names: read, never read but referenced, and once read but
    unreachable now.
 4. No row, with a `READ` comment: open, dated by the latest `READ`.
-5. A state recorded by hand in `source-access.json` wins over 1-4 when its date is later.
+5. A state recorded by hand in `source-access.json` wins over 2-4 when its date is the same or later, and never over a mark
+   that gives a state (rule 1). A not-found tick alone leaves a hand state in force (round 4's aside).
+
+**D9a - The seeds** (spec FR-011). The paywall knowledge already in prose is recorded with `SET`, one by one, each read in
+its line first. It covers registry entries whose comment or write-up says the full text is paywalled, behind a
+subscription or a login wall, and list entries whose `Blocked by` says paywalled, a subscription database or an
+institutional login. Each seed is dated 2026-10-02, the day it was read and confirmed, and its reason quotes the line.
+Mentions that say a page is open ("no paywall", "the full text to a reader with no subscription"), that concern another
+work, or where the GM already holds a full copy are not seeded. The list of what was seeded and what was passed over goes
+in `research.md`.
 
 Each keyless list entry is `download:<id>`: rule 1 gives its state, else never-read.
-`make access-tags [KEY=<k>|ID=<id>] [JSON=1] [SET=<state> DATE=<d> REASON="..."]` prints counts per state, one tag, or
+`make access-tags [KEY=<key or download:<id>>] [JSON=1] [SET=<state> KEY= DATE=<d> REASON="..."]` prints counts per state, one tag, or
 everything as JSON; `SET` appends a hand record. Not stored otherwise (spec Decisions).
 
 **D10 - The guard** `scripts/download-copy-hooks.sh` (PreToolUse, Bash|Edit|Write|NotebookEdit): an Edit or Write whose path
