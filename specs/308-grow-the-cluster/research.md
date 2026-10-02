@@ -211,8 +211,8 @@ discarded.
 - **The placer's one computed move may not carry a grown seat nearer its source than the gap** (`keeps_its_distance`, read
   by `_place_bundle_nucleated` as `_grown_keep`).
   - On the engine before it, the move carried one house 2.6 px from its source (`separation_check.py`, seed 8).
-  - Making a grown seat exact instead, with no move at all, was measured and withdrawn: 101.4 / 79.0 s base against 80.4 s
-    clone at 40 households, with seed 4 on its third margin. The move is needed for capacity, and only the moves toward the
+  - Making a grown seat exact instead, with no move at all, was measured and withdrawn: on its own run, the base took 79.0 s and the clone
+    80.4 s at 40 households (the 101.4 s base sum is R10's final run, below), with seed 4 on its third margin. The move is needed for capacity, and only the moves toward the
     source are refused. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 **The final engine** (`separation_check.py` and `reach_check.py`, seeds 1, 3, 4, 8, 13 and 25 at 40 households):

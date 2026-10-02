@@ -1011,3 +1011,42 @@ capacity was found by seating it, and seed 47 seated sixteen margins (25,279 pla
 houses, along planned frontage lanes (each seated FEWER a margin - every lane the law admits is reserved ground); a wider
 corridor search alone (moves which margin succeeds, not whether); the shared sheds at the band's rim. **Lesson worth carrying:**
 when a search's success is near chance, the lever is the capacity it is searching in, not the order it searches.
+
+## Grow the cluster, and route its paths (feature 308)
+
+The GM, after feature 306: *"once you've placed the first house, you should notionally be able to compute the minimum distance
+needed to seat a second house, then place it in a direction, then repeat, with a little randomized jitter"* - with the sun and
+shade a homestead is owed counted in that distance. The record is `specs/308-grow-the-cluster/research.md` R1-R10.
+
+**What worked.** A NUCLEATED cluster is now grown (`hamletgen/homesteads/growth.py`), and a grown house's path is routed where no
+straight one clears (`settlement/rolling/route.py`).
+- *The first house* stands on the free ground nearest the seat.
+- *Each next house* is offered from a standing one, in a ring of directions, at the distance where the two footprints part. A
+  footprint is the envelope, the woodlot seats, the path's strip, and to the south the sun its yard and beds are owed. The seat
+  is settled on the next household's OWN envelope, rolled where it stands.
+- *When the seats run dry*, the growth widens (more directions, farther rings).
+- *The front row, the ranks and the exhaustive pass* are now the dispersed form's only.
+- *The measure*, back to back over the sixteen reference seeds (R10): at 40 households 101.4 -> 84.8 s; at 15 households
+  17.5 -> 15.6 s. The bookend reference total went 20.6 -> 13.4 s (-35%).
+
+**What did not, measured.**
+- *Straight paths only* (R1-R3): growth stalled at 3-21 houses a margin. A house grown behind another has no straight run to the
+  access tree past it and its woodlot.
+- *An exact grown seat*, with no computed move (R10): it cost capacity, 79.0 base against 80.4 s at 40 households, with seed 4
+  on its third margin. The move is kept and refused only where it would carry a seat nearer its source than the gap
+  (`keeps_its_distance`).
+
+**The cost lessons.**
+- *Settle a seat when it is OFFERED, not when it is queued.* Seed 8 at 15 households queued 448 seats and offered 194, and
+  settling each as queued was half its seating.
+- *Ask the route last* (`access.ROUTE_LATER`). The A* search is the dearest question a seat is asked, so it runs after the
+  parts' cheap refusals.
+- *The gap goes on the axis that parts two boxes, never along a slanted bearing.* A unit test found gap x cos.
+
+**What it cost.** The web stage on one seed (seed 47 at 20 households: 0.39 -> 1.2 s). The routed paths carry more legs (31
+against 21), and `_join_orphan_ways` re-joins the pieces the lane law cut from them: 17 router calls, ~1.0 s. Explained with a
+control (`specs/308-grow-the-cluster/measurements.json`) and audited.
+
+**Missed goals.** Eight seeds still take over 4 s at 40 households, and 5.8-62 offers are made per house kept. The placer's other
+rules (the woodlots, the corridors) still refuse most offered seats. A village tier that plans its paths, rather than finding
+them, would be the next lever.

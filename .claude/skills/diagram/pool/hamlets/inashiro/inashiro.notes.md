@@ -1872,3 +1872,14 @@ streets and door paths held to the lane law as tree lanes. Measured on this roll
 The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research 0040; the lots' quota, `settlement/rolling/lot.py`), and its length is held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the roll the feature 291-on-287 entry above measured; the 2026-09-29 line under feature 280 is an earlier roll): the two storehouses stood on the 8th and 12th largest of 15 farmhouses and now stand on the 1st and 2nd, drawn 23.0 x 12.8 and 24.7 x 13.8 ft. The re-pack kept 10 of the 15 house centers. No thicket (the bamboo knob is homestead).
 
 What else the re-pack moved: the connector leaves to the north-west, 327 ft to a bend at (2012, 1477) just off the sheet's west edge, where main's ran straight south-west from the entrance, so the road now enters through the windbreak's north-west corner (the lane's crossing of the belt is a GUESS in research/contents.json#vegetation); a north-row house went from (2338, 1581) to the far west at (2194, 1848), and the view widened 117 ft west to take it in; the notice board stands 36 ft east of main's seat, at (2294.5, 1640.9), still at the entrance every household passes; the second public well moved about 270 ft, from (2472, 1943) to (2316, 2166), with the houses it serves; 15 lanes where main drew 13, the web settled in 4 rounds; the woodland commons 3 stands where main drew 2, 75,828 sq ft against 52,556 (counted by `role` woodland; the other five commons are grazing). The homestead wood is drawn at 14,367 sq ft a homestead against the 12,136 rolled, 18% over, where main drew 15,009 against 14,992 - inside `HOMESTEAD_WOOD_FT2`'s band either way. The fixture counts are main's: bath rooms 4, wood sheds 6, privies 13, coops 13, manure heaps 8, shrine 1.
+
+## 2026-10-02 (feature 308): the cluster grown from its first house - the layout moved
+
+The nucleated cluster is now GROWN (`hamletgen/homesteads/growth.py`): its first house on the free ground nearest the seat,
+each next one from a standing house at the distance their footprints part - the envelope, the woodlot seats, a path's strip,
+and to the south the sun the yard and beds are owed - jittered from the map's seed. A house no straight path reaches has its
+path routed round what stands (`settlement/rolling/route.py`). Measured against main's manifest (2026-10-02): 15 houses on the
+first margin as before; 272 seats offered where main's front row, ranks and exhaustive pass offered 599; `cluster_seeding`
+`grown` (main: `frontage`); the drawn aspect 1.81 against 1.29, still round's band; 15 lanes against 14; 27 access-corridor
+legs against 20, five of the house paths routed (the lane glyph check, 2026-10-02: PASS, one path - lane 13 - ringing a
+neighbor's grove for 420 ft where the straight way crosses that neighbor's dooryard).
