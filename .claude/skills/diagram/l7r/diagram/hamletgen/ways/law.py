@@ -737,7 +737,8 @@ def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, in
         cb = _bbox(course)
         for i, p in enumerate(ways):
             # ...a lane whose box misses the course's crosses none of it (feature 314: the census's 1,000 comparisons a call)
-            if boxes[i] is None or cb is None or boxes[i][2] < cb[0] or cb[2] < boxes[i][0] or boxes[i][3] < cb[1] or cb[3] < boxes[i][1]:
+            lb = boxes[i]
+            if lb is None or cb is None or lb[2] < cb[0] or cb[2] < lb[0] or lb[3] < cb[1] or cb[3] < lb[1]:
                 continue
             for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
                 for u, v in zip(course, course[1:], strict=False):

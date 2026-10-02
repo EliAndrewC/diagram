@@ -1057,3 +1057,40 @@ retaken on the final engine is band 0 on every leg: the reference total 20.6 -> 
 **Missed goals.** Eight seeds still take over 4 s at 40 households, and 5.8-62 offers are made per house kept. The placer's other
 rules (the woodlots, the corridors) still refuse most offered seats. A village tier that plans its paths, rather than finding
 them, would be the next lever.
+
+## Seat before settle: a seat's ground asked before its layout, a path refused where it is searched (feature 314, 2026-10-02)
+
+The GM, after the homesteads stage was measured seat by seat: *"the amount of time that it is taking to put 15 homesteads on a
+map just cannot possibly be as optimized as we can make it ... we need to keep iterating until we get there."* The record is
+`specs/314-seat-before-settle/research.md` R1-R11; every lever was timed against the base alternated per seed (`abab.sh`), under
+the load of other sessions, so only alternated legs are compared.
+
+**What shipped.**
+- *The seat's own questions before its layout* (R1, plan D1): the field's reach and the house's own box (the canvas, a reserved
+  corridor, two placed homesteads, the refused-ground grid) are asked at every position the settle would lay the household out
+  at. Laying the household out was 11% of the stage at 40 households on seats the placer then refused in a lookup.
+- *The routed path refused where it is searched* (R2, R4): the search keeps off the household's own beds, sheds and fixtures by
+  their leg tests' gaps, judges its first step by those tests and its last leg onto the tree by the standing ground, and computes
+  a cell's heuristic once. Searched over its own beds, a path was found and then refused when pulled taut - 1,016 of 1,189 on one
+  map.
+- *Exact speedups* (R4, R6, R8): the persimmon's sun ground taken once per rake; the surface water indexed for the well pocket;
+  the field's corridor reading its ground once for all its candidates (3.0 of 5.8 s on seed 13 at 15 households, each candidate
+  had indexed the whole map again); the squaring and the oblique test skipping courses out of a run's reach.
+
+Rounds 1-6 against the base: 15 households 21.3 -> 17.5 s (R4) and 26.2 -> 22.8 s (R6, heavier load) over seeds 1-16; 40
+households 49.1 -> 30.1 s and 49.8 -> 29.1 s over ten seeds; every seed on one margin on both legs. The cohort 28/30 on both
+legs, the same two failures.
+
+**What did not, measured.**
+- *The map's grid for the route* (R3, R4): laid on the map's multiples of the step so the standing answers could be shared
+  between searches, the narrow ways between homesteads held no grid point and seed 6 at 40 households threw two margins away
+  (16.4 s against 5.9). The sharing was not what paid; the tests asked where the path is searched were.
+- *The house and its yard asked before the layout* (R5): every garden side's box holds it, but it made the stage 4% slower at 15
+  households and 11% at 40 - few seats were left for it to catch, and its larger box dropped positions the settle would have
+  moved onto clear ground.
+- *A heavier weight on the search's aim* (R7): 2.5 and 4.0 were no faster than 1.5 on the seed whose searches detour.
+- *The seats with a straight run to the tree offered first* (R10): no gain at either size.
+
+**What remains** (R9, at 15 households): the growth 59% (the corridor search and the lane law about 70% of it), the field's
+corridor 15%, the site boundary 11%, the stage's once-a-margin work 15%. The lever left for the growth is to lay the lanes before
+the houses and seat the houses along them - a change to the GM's growth, put to the GM.

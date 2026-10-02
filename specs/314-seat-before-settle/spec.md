@@ -95,14 +95,14 @@ recorded.
 ### Measurable Outcomes
 
 - **SC-001** (FR-001, FR-002): The homesteads stage at 40 households on `Context`'s ten seeds is at least 10% faster than the
-  base, back to back (the base observed 2026-10-02, method: `Context`'s measurement - 53.8 s summed).
+  base, back to back (the base observed 2026-10-02, method: `Context`'s measurement - 53.8 s summed; the result in research.md R4).
 - **SC-002** (FR-003, FR-005): The cohort passes as many seeds as the base, every pool map passes its rules, every household is
   seated.
 - **SC-003** (FR-001, FR-002): The GM's case - the 15-household reference, seeds 1-16 - has its refusal breakdown recorded for the
   base, and US1's gain there is recorded, base against clone, back to back.
 - **SC-004** (FR-004): The 15-household reference's homesteads stage, summed over seeds 1-16, is recorded after every kept round;
   the iteration stops only by US2's acceptance scenario 2.
-- **SC-005**: The perf bookend's 15-household reference is not slower (perf band 0 or better).
+- **SC-005** (FR-004): The perf bookend's 15-household reference is not slower (perf band 0 or better).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
