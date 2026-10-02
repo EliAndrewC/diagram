@@ -1033,3 +1033,13 @@ streets and door paths held to the lane law as tree lanes. Measured on this roll
 The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research 0040) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 5th and 14th of 19 farmhouses and now stand on the 1st and 2nd, drawn 24.8 x 13.8 and 24.6 x 13.7 ft. The re-pack kept 4 of the 19 house centers.
 
 What else the re-pack moved: the notice board stands 57 ft from main's seat, at (4069.1, 1942.6); two of the three shared wells moved with their houses, to (4133, 2243) and (4573, 2485); 15 lanes where main drew 17, the web settled in 5 rounds, the 135 ft field way to the bund kept; the cluster now draws round, 1.98 to one, where main's drew a crescent at 2.47 (`declare_cluster_shape`). The fixture counts are main's: bath rooms 5, wood sheds 8, privies 17, coops 14, manure heaps 13, shrine 1.
+
+## 2026-10-02 (feature 306): the seating's band holds a homestead's whole ground - the layout moved
+
+The seating now spreads its households over a band sized for each homestead's envelope AND its wood floor
+(`SEATING_GROUND_FT`, 162 ft a household; the margin, canvas and belt keep 104 - specs/306-seat-by-packing/research.md R12),
+so every farmstead moved. Two web repairs found on the way were made at their causes (research R14): a stray join lane that
+ran beside the exit strip is dropped where the farmhouse it alone reached has its own reserved corridor, which the settle now
+draws. The belt's record (`village_groves[windbreak]`) now counts 218 clumps, 514 broadleaf crowns, 49 bamboo marks and 14
+clumps in the marsh drawn as alder (glyph-check 2026-10-02: PASS, all 14 inside the toe marsh or on its brook bank) - the
+counts in the entries above are their own rolls'.
