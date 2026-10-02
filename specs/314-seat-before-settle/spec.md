@@ -108,7 +108,7 @@ recorded.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| A grown seat refused on the ground at its first settled position is dropped, not moved out | map drawing convention (the placement ORDER and search breadth, as feature 308 classed its growth; every seat offered passes the same rules) | the GM: check the grid "before the household layout"; whether dropping rather than moving out costs a household is measured (FR-005), not assumed | this spec; the growth's docstring |
+| A grown seat refused on its own ground at any position the settle would lay its household out at is dropped, not moved on | map drawing convention (the placement ORDER and search breadth, as feature 308 classed its growth; every seat offered passes the same rules) | the GM: check the grid "before the household layout"; whether dropping rather than moving out costs a household is measured (FR-005), not assumed | this spec; the growth's docstring |
 
 ## Assumptions
 
@@ -123,3 +123,6 @@ recorded.
   measured reason it cannot; SC-003 records the breakdown and US1's gain at 15 households, seeds 1-16. The aside (the Decisions
   row's unmeasured claim) answered: the cost is measured (FR-005), not assumed.
 - Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - both items and the aside confirmed against the diff.
+- Amendment (the plan review's round 1, item 2, 2026-10-02): the Decisions row said the seat was dropped "at its first settled
+  position"; the settle drops it at any position it would lay the household out at (each move is a layout, the GM's "before
+  the household layout"). The row now says so; the review count restarts.

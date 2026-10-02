@@ -1,0 +1,40 @@
+{
+ "feature": "314-seat-before-settle",
+ "plan_sha256": "dfa6df7befc2cf19b7ece9d82c974a943c199fe7be4f88d43c7a4fe778164496",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "settled_seat asks seat_refused (field reach, house box vs canvas/corridors/two placed homesteads, refused-ground grid) of every position before laying the household out; water not asked; a refused position drops the seat",
+   "class": "within",
+   "why": "FR-001 and the GM's 'before the household layout' taken literally (each settle move is a layout). Water omitted because watered(q) holds at the seat where the household is sought (well = needs_pocket at that point); r1-new-40 shows reach/water refusals 0 of 0 on every seed after the pre-check. Dropping at any settle position, not only the first, is the same search-breadth class as the spec's Decisions row, but the row says 'first settled position' and should be aligned."
+  },
+  {
+   "id": "D2",
+   "summary": "no placed-homesteads pre-check beyond the two-boxes test inside _house_box_refused; declared no cheaper test exists; measurement only 'if a later round prices one'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-002 says 'the measurement decides which'; the GM's request names 'the placed houses where it's cheap'. D2 decides by argument and makes the measurement conditional on a later round that may never happen. The refused-by-standing-homesteads bucket is the largest pre-layout bucket (3,556 seats, 15% at 40). Candidates exist that are not obviously dearer than the layout (a lower-bound envelope from the house box and the least garden reach, or the cached unraked layout's extents, against two placed boxes) and must be priced and recorded before being declined. Not physically impossible, not implied by the GM's words, and the literal reading defeats nothing."
+  },
+  {
+   "id": "D3",
+   "summary": "route search keeps off own parts, judges first step and last leg by the taut pull's tests, heuristic once a cell; map grid tried and withdrawn",
+   "class": "within",
+   "why": "A US2 round on the corridor cost; same lane law; withdrawn lever recorded per FR-004. Kept status must still follow its alternated timing (R3 pending)."
+  },
+  {
+   "id": "D4",
+   "summary": "sun ground once per rake; surface water indexed with PointGrid",
+   "class": "within",
+   "why": "Exact speedups in US2; tests against the replaced predicates; keep status follows FR-004 timing."
+  },
+  {
+   "id": "D5",
+   "summary": "iterate on profile until record names each remaining cost, the efficient process, and that the stage does it or a measured reason it cannot",
+   "class": "within",
+   "why": "US2 acceptance scenario 2 verbatim; the GM's 'keep iterating until we get there'."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
