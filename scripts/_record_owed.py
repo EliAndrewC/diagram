@@ -39,6 +39,8 @@ from collections.abc import Sequence
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+# no __pycache__ beside the scripts: the push runs this in fixture trees whose `git status` must stay clean
+sys.dont_write_bytecode = True
 import _record_units as ru  # noqa: E402
 
 _SOURCE_FILE = re.compile(r"^\d+-([a-z0-9-]+)\.html$")  # a write-up number runs past four digits (20500-...)
@@ -155,18 +157,25 @@ def _file(store_dir: pathlib.Path, slug: str) -> pathlib.Path:
     return store_dir / (urllib.parse.quote(slug, safe="") + ".json")
 
 
+def _read(store_dir: pathlib.Path, slug: str) -> dict:
+    try:
+        return json.loads(_file(store_dir, slug).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
 def write_answer(store_dir: pathlib.Path, slug: str, fp: str, result: str) -> None:
+    """Record an answer. Every fingerprint ever answered is kept: an answer is about WORDS, so content reverted to words a
+    check already passed stays answered (an edit answered and then undone owed its unit again when only the last was kept)."""
     store_dir.mkdir(parents=True, exist_ok=True)
-    rec = {"unit": slug, "fingerprint": fp, "result": result, "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    seen = [f for f in _read(store_dir, slug).get("answered", []) if f != fp] + [fp]
+    rec = {"unit": slug, "fingerprint": fp, "answered": seen, "result": result, "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
 
 
 def answered(store_dir: pathlib.Path, slug: str, fp: str) -> bool:
-    f = _file(store_dir, slug)
-    try:
-        return json.loads(f.read_text(encoding="utf-8")).get("fingerprint") == fp
-    except (OSError, ValueError):
-        return False
+    rec = _read(store_dir, slug)
+    return fp == rec.get("fingerprint") or fp in rec.get("answered", [])
 
 
 def unanswered(root: pathlib.Path) -> list[ru.Unit]:

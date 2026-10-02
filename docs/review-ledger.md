@@ -348,10 +348,29 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-02 | intro-check | seeded batch of 24, run 1 (SC-005) | 3/3 seeds | 0094 NEEDS-INTRO, 0036 none, planted 0083 INTRO-FIX | judgment | - | - | 48 s | 377k in (299k cached) / 2.9k out |
 | 2026-10-02 | intro-check | seeded batch of 24, run 2 (SC-005) | 3/3 seeds | as run 1, and 0003 flagged | judgment | - | - | 60 s | 657k in (576k cached) / 3.7k out |
 | 2026-10-02 | intro-check | seeded batch of 24, run 3 (SC-005) | 3/3 seeds | as run 1, and 0003, 0110 flagged | judgment | - | - | 96 s | 876k in (790k cached) / 5.8k out |
-| 2026-10-02 | intro-check | backfill batches 00-09 (236 questions) | 9 NEEDS-INTRO | 0003 0015 0056 0110 0157 0173 0212 0216 0240 | judgment | - | intros written | 391 s (ten runs) | 3,990k in (3,364k cached) / 23.7k out (ten runs) |
+| 2026-10-02 | intro-check | backfill batch 00 | NO-INTRO-NEEDED/NEEDS-INTRO 22/2 | flagged 0003 0015 | judgment | - | intro written | 58 s | 518k in (459k cached) / 4.0k out |
+| 2026-10-02 | intro-check | backfill batch 01 | NO-INTRO-NEEDED/NEEDS-INTRO 24/0 | none | nothing | - | - | 35 s | 442k in (378k cached) / 1.9k out |
+| 2026-10-02 | intro-check | backfill batch 02 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0056 | judgment | - | intro written | 40 s | 444k in (387k cached) / 2.1k out |
+| 2026-10-02 | intro-check | backfill batch 03 | NO-INTRO-NEEDED/NEEDS-INTRO 24/0 | none | nothing | - | - | 31 s | 308k in (258k cached) / 1.8k out |
+| 2026-10-02 | intro-check | backfill batch 04 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0110 | judgment | - | intro written | 37 s | 472k in (364k cached) / 2.1k out |
+| 2026-10-02 | intro-check | backfill batch 05 | NO-INTRO-NEEDED/NEEDS-INTRO 24/0 | none | nothing | - | - | 32 s | 391k in (326k cached) / 1.8k out |
+| 2026-10-02 | intro-check | backfill batch 06 | NO-INTRO-NEEDED/NEEDS-INTRO 23/1 | flagged 0157 | judgment | - | intro written | 47 s | 424k in (374k cached) / 2.8k out |
+| 2026-10-02 | intro-check | backfill batch 07 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0173 | judgment | - | intro written | 41 s | 368k in (314k cached) / 2.7k out |
+| 2026-10-02 | intro-check | backfill batch 08 | NO-INTRO-NEEDED/NEEDS-INTRO 22/2 | flagged 0212 0216 | judgment | - | intro written | 31 s | 312k in (250k cached) / 2.0k out |
+| 2026-10-02 | intro-check | backfill batch 09 | NO-INTRO-NEEDED/NEEDS-INTRO 22/1 | flagged 0240 | judgment | - | intro written | 38 s | 311k in (254k cached) / 2.5k out |
 | 2026-10-02 | intro-check | 0094 written intro | INTRO-OK | the GM's table and tea against the drawing page's mats (put to the GM) | judgment | no | put to the GM | 18 s | 88k in (57k cached) / 1.3k out |
 | 2026-10-02 | record-format | 0094 written intro | 0/0/0 | the same table and doors note | nothing | - | - | 23 s | 44k in (27k cached) / 1.7k out |
 | 2026-10-02 | intro-check | nine written intros (round 1) | INTRO-FIX 3 | 0157 a gap between houses; 0212 the serving women's reason; 0216 the drawn temple-quarter shrines | judgment | yes | rewritten | 36 s | 156k in (102k cached) / 2.8k out |
-| 2026-10-02 | record-format | nine written intros (round 1) | 0/0/0 x9 | 0157's wording note matched intro-check's | nothing | - | - | 175 s (nine runs) | 534k in (400k cached) / 13.2k out (nine runs) |
+| 2026-10-02 | record-format | 0003 written intro (round 1) | 0/0/0 | none | nothing | - | - | 20 s | 63k in (45k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0015 written intro (round 1) | 0/0/0 | none | nothing | - | - | 25 s | 54k in (31k cached) / 2.0k out |
+| 2026-10-02 | record-format | 0056 written intro (round 1) | 0/0/0 | none | nothing | - | - | 18 s | 50k in (38k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0110 written intro (round 1) | 0/0/0 | none | nothing | - | - | 13 s | 43k in (35k cached) / 0.9k out |
+| 2026-10-02 | record-format | 0157 written intro (round 1) | 0/0/0 | a wording note matching intro-check | nothing | - | - | 22 s | 41k in (33k cached) / 1.6k out |
+| 2026-10-02 | record-format | 0173 written intro (round 1) | 0/0/0 | none | nothing | - | - | 15 s | 93k in (73k cached) / 1.1k out |
+| 2026-10-02 | record-format | 0212 written intro (round 1) | 0/0/0 | none | nothing | - | - | 26 s | 83k in (66k cached) / 1.9k out |
+| 2026-10-02 | record-format | 0216 written intro (round 1) | 0/0/0 | a wording note matching intro-check | nothing | - | - | 24 s | 65k in (45k cached) / 2.0k out |
+| 2026-10-02 | record-format | 0240 written intro (round 1) | 0/0/0 | none | nothing | - | - | 12 s | 42k in (34k cached) / 0.9k out |
 | 2026-10-02 | intro-check | three rewritten intros (round 2) | INTRO-OK 3 | none | nothing | - | - | 17 s | 95k in (57k cached) / 1.4k out |
-| 2026-10-02 | record-format | three rewritten intros (round 2) | 0/0/0 x3 | none | nothing | - | - | 48 s (three runs) | 200k in (157k cached) / 3.2k out (three runs) |
+| 2026-10-02 | record-format | 0157 rewritten intro (round 2) | 0/0/0 | none | nothing | - | - | 9 s | 25k in (18k cached) / 0.6k out |
+| 2026-10-02 | record-format | 0212 rewritten intro (round 2) | 0/0/0 | none | nothing | - | - | 22 s | 83k in (66k cached) / 1.4k out |
+| 2026-10-02 | record-format | 0216 rewritten intro (round 2) | 0/0/0 | none | nothing | - | - | 17 s | 92k in (73k cached) / 1.2k out |

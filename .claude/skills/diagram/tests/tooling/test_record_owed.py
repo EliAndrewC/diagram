@@ -167,6 +167,9 @@ def test_an_answer_record_is_current_until_its_content_moves(tmp_path: pathlib.P
     assert ro.answered(store, "record-format:0094", "fp1")
     assert not ro.answered(store, "record-format:0094", "fp2")
     assert not ro.answered(store, "quote-check:0094#k", "fp1")
+    ro.write_answer(store, "record-format:0094", "fp2", "0/0/0")
+    assert ro.answered(store, "record-format:0094", "fp1") and ro.answered(store, "record-format:0094", "fp2"), "reverted words stay answered"
+    assert not ro.answered(store, "record-format:0094", "fp3")
     saved = json.loads(next(store.iterdir()).read_text(encoding="utf-8"))
     assert saved["unit"] == "record-format:0094" and saved["result"] == "0/0/0"
 

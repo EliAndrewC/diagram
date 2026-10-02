@@ -47,6 +47,10 @@ for u in ro.unanswered(root):
 PY
 }
 
+# the delta this clone carries may owe units of its own, answered in the clone's real store; the throwaway store starts
+# with them answered, so every case below measures only what the suite itself changes
+answer_all
+
 # 1. a tree with no record change is quiet - the guard must not fire on correct work
 ( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "no record change is quiet"
 

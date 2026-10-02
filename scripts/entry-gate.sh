@@ -80,7 +80,8 @@ if [ -n "${ENTRY_DRIFT_OK:-}" ]; then
 fi
 
 # shellcheck disable=SC2086
-OWED="$(python3 "$EG_HERE/_record_owed.py" --root "$ROOT" --unanswered $SKIP 2>/dev/null || true)"
+# GUARD_EDIT_OK: feature 311 - no bytecode: the push's own suite runs this in fixture trees whose `git status` must stay clean
+OWED="$(PYTHONDONTWRITEBYTECODE=1 python3 "$EG_HERE/_record_owed.py" --root "$ROOT" --unanswered $SKIP 2>/dev/null || true)"
 case "$OWED" in ""|"record-owed: no record check is owed"*) exit 0 ;; esac
 
 guard_log entry-gate blocked "$(printf '%s' "$OWED" | head -c 400)" record-owed
