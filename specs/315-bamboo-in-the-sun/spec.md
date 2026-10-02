@@ -128,7 +128,7 @@ modal still calls bamboo exempt from the sun rule.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Bamboo is held to the sun rule, not exempt | historically accurate for the heights; the rule itself a guess, as feature 310's is | the GM asked to look it up and keep the exemption only if bamboo deserves it; the timber bamboos a farm kept stand 10 m and more, as tall as the tree the canopy reach is reckoned from, in thickets that shade out almost everything else | the sun page; `tree_shade.py` |
+| Bamboo is held to the sun rule, not exempt | historically accurate for the heights; the rule itself a guess, as feature 310's is | the GM asked to look it up and keep the exemption only if bamboo deserves it; the timber bamboos a farm kept stand at least as tall as the tree the canopy reach is reckoned from, in thickets that shade out almost everything else | the sun page; `tree_shade.py` |
 | Bamboo's reach is worked out from its least cited height, by the canopy reach's own derivation | guess (the least height, as for trees; taller stands would reach further) | the GM expected a different distance for different things; the derivation gives each thing its own, and bamboo's least height is the tree's | the sun page; the plan |
 | The coppiced mulberry and the tea hedge stay outside the rule | as feature 310 recorded | not tall; unchanged here | feature 310's spec |
 
