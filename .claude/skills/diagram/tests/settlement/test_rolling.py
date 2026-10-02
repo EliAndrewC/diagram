@@ -131,6 +131,22 @@ def test_sun_corridor_covers_a_neighbors_garden_and_this_bundles_gardens():
     assert s._gardens_sun_ok({"gardens": [(300, 430, 22, 24)]}) is True  # off by default, like the yard rule
 
 
+def test_a_persimmon_keeps_out_of_its_own_and_its_neighbors_yards_and_beds_sun():
+    """GM 2026-10-02: the placer refuses a bundle whose persimmon stands in a yard's or bed's sun - its own as drawn, a
+    standing neighbor's - and one whose plots a standing neighbor's persimmon shades; off where the sun corridor is."""
+    s = _nuc_village()
+    tree = (500, 300, 23, 23)
+    assert s._persimmon_sun_conflict({"yard": (500, 330, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is False, "off by default"
+    s.sun_corridor(39)
+    assert s._persimmon_sun_conflict({"yard": (440, 300, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is True, "its own yard"
+    assert s._persimmon_sun_conflict({"yard": (500, 400, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is False, "behind its house"
+    assert s._persimmon_sun_conflict({"yard": (500, 400, 36, 26), "gardens": []}) is False, "a household with no tree"
+    s.M["houses"].append({"x": 420, "y": 260, "w": 46, "h": 28, "geom": {"yard": (420, 300, 36, 26), "gardens": [(470, 260, 22, 24)], "fixtures": {"persimmon": (380, 330, 23, 23)}}})
+    assert s._persimmon_sun_conflict({"yard": (500, 400, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is True, "a neighbor's yard to its east"
+    assert s._persimmon_sun_conflict({"yard": (360, 380, 36, 26), "gardens": [], "fixtures": {"persimmon": (360, 340, 23, 23)}}) is True, "a neighbor's tree over this yard"
+    assert s._persimmon_sun_conflict({"yard": (700, 600, 36, 26), "gardens": [], "fixtures": {"persimmon": (700, 560, 23, 23)}}) is False, "far from both"
+
+
 def test_headman_refuses_a_non_toscale_map():
     # the legacy (pre-to-scale) headman rec branch was dead code after the Hikari fix and is gone
     s = Settlement(800, 800, seed=5)

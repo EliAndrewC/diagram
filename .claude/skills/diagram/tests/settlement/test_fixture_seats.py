@@ -7,6 +7,7 @@ import pytest
 
 from l7r.diagram.settlement.farm_fixtures import kura_rect
 from l7r.diagram.settlement.homestead_parts import fixture_seats as fs
+from l7r.diagram.settlement.homestead_parts.tree_shade import crown_shades
 
 HW, HH = 46.0, 28.0
 HOUSE = (0.0, 0.0, HW, HH)
@@ -114,6 +115,27 @@ def test_a_crowded_steading_steps_its_fixtures_outward_and_the_persimmon_further
     front = _lay(("persimmon",), roll=0.9, forms=fs.FixtureForms(persimmon_front=0.95))["persimmon"]
     back = _lay(("persimmon",), roll=0.99, forms=fs.FixtureForms(persimmon_front=0.2))["persimmon"]
     assert front[1] > 0.0 and back[1] < 0.0, "the dooryard, else behind the house - never the flank"
+
+
+def test_the_persimmon_keeps_out_of_its_yards_and_beds_sun_at_every_rake() -> None:
+    """GM 2026-10-02: a front drying yard's sun ground covers the whole dooryard, so the tree goes behind the house; with
+    only a bed far off, the front seat stands. Held at every rake the house may be drawn at."""
+    turns = fs.sun_turns(-41.25, 18.75)
+    front = fs.FixtureForms(persimmon_front=0.95)
+    crown = fs.lay_fixtures(("persimmon",), HW, HH, [HOUSE], [YARD, GARDEN], YARD, False, lambda salt: 0.1, front, _px, shade=50.0, turns=turns)["persimmon"]
+    assert crown[1] < 0.0, "behind the house"
+    for t in turns:
+        th = fs.math.radians(t)
+        c, s = fs.math.cos(th), fs.math.sin(th)
+        x, y = crown[0] * c - crown[1] * s, crown[0] * s + crown[1] * c
+        for q in (YARD, GARDEN):
+            qx, qy = q[0] * c - q[1] * s, q[0] * s + q[1] * c
+            qw, qh = q[2] * abs(c) + q[3] * abs(s), q[2] * abs(s) + q[3] * abs(c)
+            assert not crown_shades(x, y, crown[2] / 2, (qx, qy, qw, qh), 50.0), (t, q)
+    far_bed = (HW / 2 + 200.0, 0.0, 14.0, 24.0)
+    alone = fs.lay_fixtures(("persimmon",), HW, HH, [HOUSE], [far_bed], YARD, False, lambda salt: 0.1, front, _px, shade=50.0, turns=turns)["persimmon"]
+    assert alone[1] > 0.0, "no yard's sun to keep: the dooryard in front"
+    assert fs.sun_turns(0.0, 0.0) == (0.0, 0.0) and fs.sun_turns(-5.0, 5.0) == (-5.0, 0.0, 5.0)
 
 
 def test_the_helpers_read_as_they_say() -> None:

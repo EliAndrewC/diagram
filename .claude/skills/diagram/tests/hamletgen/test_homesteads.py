@@ -89,6 +89,23 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
     assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)], "...but a pocket is always drawn"  # type: ignore[arg-type]
 
 
+def test_a_lattice_well_keeps_170_px_off_a_pocket_well() -> None:
+    """`wells_not_clustered`: with a household's pocket well standing, the lattice's seat 117 px from it - one the engine
+    would allow - is passed over, and no second well is dug near the first. Asserted directly since the pool's maps
+    stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
+    from types import SimpleNamespace
+
+    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0)  # two wells wanted
+    east = (1110.0, 1000.0)
+    pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
+    wells: list[tuple[float, float]] = []
+    fake = _only_seat(*east)
+    fake.well = lambda x, y: wells.append((x, y))  # type: ignore[attr-defined]
+    fake._crop_boxes = lambda city=False: []  # type: ignore[attr-defined]
+    assert math.hypot(east[0] - 1000.0, east[1] - 1040.0) < 170.0
+    assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)]  # type: ignore[arg-type]
+
+
 def test_the_well_gap_reads_the_turned_wall_and_passes_over_a_derelict() -> None:
     """The predicate measures each dwelling on its drawn quad (a house turned a quarter lies along the other axis) and
     reads no abandoned house as a dwelling; with no dwelling at all, no well stands among any."""
@@ -120,6 +137,20 @@ def test_strip_blocked_refuses_the_canvas_edge_a_crossing_lane_and_a_drawn_crown
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, lane) is True
     s.M["tree_crowns"] = [500.0, 500.0, 12.0]
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a crown drawn two stages earlier"
+
+
+def test_strip_blocked_refuses_a_well_or_a_shed_seated_before_it() -> None:
+    """The T49 arm: a wellhead (by its radius) or a shed (by its box) within 6 ft of the strip blocks it - asserted directly
+    since the pool's maps stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    s.M["wells"] = [{"x": 520.0, "y": 500.0, "r": 4.0}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a wellhead at the strip's end"
+    s.M["wells"] = []
+    s.M["farm_sheds"] = [{"x": 500.0, "y": 515.0, "w": 20.0, "h": 12.0}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a shed overlapping its long side"
+    s.M["farm_sheds"] = [{"x": 500.0, "y": 560.0, "w": 20.0, "h": 12.0}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False, "a shed well clear"
 
 
 def test_farmstead_fixtures_on_a_houseless_map_place_nothing() -> None:
