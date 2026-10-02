@@ -1308,6 +1308,23 @@ archive-find: ## [project] does the archive already hold it? by URL, registry ke
 	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
+# GUARD_EDIT_OK: feature 313 - four new operations over the canonical download list and the access tags; no guard changes.
+downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_downloads.py" ingest --keep "$(KEEP)" --drop "$(DROP)"
+
+downloads-sync: ## [project] on the GM's word "sync": the GM's copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_downloads.py" sync
+
+# GUARD_EDIT_OK: feature 313 plan review - no HIGH_RISK=: every new entry is appended at the end of the list (spec FR-008).
+download-add: ## [project] append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)   FILE=<draft.md, entries headed "### NEW. <the work>">
+	@if [ -z "$(FILE)" ]; then printf 'make download-add: FILE=<draft.md> is required - entries headed "### NEW. <the work>", each with a link line, "- Fallback:", "- **Rests on it:**" naming research/questions/<file>, and "- Blocked by:"\n' >&2; exit 2; fi
+	@: "GUARD_EDIT_OK: feature 313 - FILE= passed as given; the script resolves a relative path from here or the repository root, since the root Makefile forwards with -C"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_downloads.py" add "$(FILE)"
+
+access-tags: ## [project] what can be got of each source - open, gm-full, gm-partial, paywalled, bot-refused, down, gone, never-read - derived from the archive, the registry and the GM's marks (feature 313)   [KEY=<key|download:ID>] [JSON=1] | SET=<state> KEY= DATE=<YYYY-MM-DD> REASON="<what it rests on>"
+	@if [ -n "$(SET)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_access_tags.py" set "$(KEY)" "$(SET)" "$(DATE)" "$(REASON)"; \
+	else python3 "$$(git rev-parse --show-toplevel)/scripts/_access_tags.py" report $(if $(KEY),--key "$(KEY)",) $(if $(JSON),--json,); fi
+
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)

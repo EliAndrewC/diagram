@@ -36,6 +36,7 @@ import argparse
 import json
 import os
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -76,12 +77,15 @@ def process_inbox(
     store: ar.Archive,
     inbox: pathlib.Path | None = None,
     match: dict[str, list[str]] | None = None,
+    downloads: dict[str, str] | None = None,
 ) -> tuple[dict[str, str], list[str]]:
     """Archive every inbox entry the table places, confirm the push, then delete it (FR-013). Returns (name -> its archive
     path, the names left waiting). An entry is deleted only where its path is confirmed in `origin/main`, so a failed push
     deletes nothing. A NEW entry - not in `gm-copies.json` - is processed only once `match` gives its keys (`[]` for one
     judged to copy no cited source, `make archive-inbox NONE=<file>`): FR-012 matches every GM file to its key, and a file
-    archived keyless and deleted would never be matched (plan review, Amendment 1). Until then it waits in the inbox."""
+    archived keyless and deleted would never be matched (plan review, Amendment 1). Until then it waits in the inbox.
+    `downloads` names the download-list entry each file answers (feature 313 FR-006), recorded beside its keys so a
+    keyless entry's copy is found again once its work enters the registry."""
     inbox = inbox or ar.GM_DIR
     table = ar.gm_table(root)
     for name, keys in (match or {}).items():
@@ -89,6 +93,8 @@ def process_inbox(
             name,
             {"evidence": "matched by the session at the inbox (feature 309 FR-012)"},
         )["keys"] = keys
+    for name, entry_id in (downloads or {}).items():
+        table.setdefault(name, {"keys": []})["download"] = entry_id
     names = (
         [
             n
@@ -122,6 +128,37 @@ def process_inbox(
             target = inbox / name
             shutil.rmtree(target) if target.is_dir() else target.unlink()
     return placed, waiting
+
+
+ENTRY_ID = re.compile(r"^#?(H?\d+)$")
+
+
+def resolve_matches(
+    root: pathlib.Path, raw: list[str]
+) -> tuple[dict[str, list[str]], dict[str, str]]:
+    """`<file>=<key>[,<key>]` or `<file>=#17` / `<file>=H3` (feature 313 FR-006): an entry id resolves to the registry keys
+    that download-list entry names, `[]` where it names none, and is returned beside them. An id the list lacks is a
+    refusal naming it."""
+    import _access_tags as at
+
+    match: dict[str, list[str]] = {}
+    downloads: dict[str, str] = {}
+    world = None
+    for m in raw:
+        if "=" not in m:
+            continue
+        name, value = m.split("=", 1)
+        found = ENTRY_ID.match(value.strip())
+        if not found:
+            match[name] = [k for k in value.split(",") if k]
+            continue
+        world = world or at.load(root)
+        eid = found.group(1)
+        if f"download:{eid}" not in world.entry_keys:
+            raise SystemExit(f"archive: no download-list entry {eid} in {at.dl.CANON}")
+        match[name] = sorted(world.entry_keys[f"download:{eid}"])
+        downloads[name] = eid
+    return match, downloads
 
 
 def consulted_urls(root: pathlib.Path) -> list[str]:
@@ -368,7 +405,7 @@ def main(
         "--match",
         action="append",
         default=[],
-        help="<file>=<key>[,<key>] - a new download's keys",
+        help="<file>=<key>[,<key>] - a new download's keys; or <file>=#<id> / <file>=H<n>, the download-list entry it answers",
     )
     i.add_argument(
         "--none",
@@ -397,13 +434,9 @@ def main(
     if args.cmd == "relayout":
         print(f"archive: {relayout(root, store)} row(s) moved to the sharded layout")
         return 0
-    match = {
-        m.split("=", 1)[0]: [k for k in m.split("=", 1)[1].split(",") if k]
-        for m in args.match
-        if "=" in m
-    }
+    match, downloads = resolve_matches(root, args.match)
     match.update({n: [] for n in args.none})
-    placed, waiting = process_inbox(root, store, match=match)
+    placed, waiting = process_inbox(root, store, match=match, downloads=downloads)
     print(
         f"archive: {len(placed)} inbox file(s) archived, pushed and removed from {ar.GM_DIR}"
     )
@@ -411,7 +444,7 @@ def main(
         print(f"  {name} -> {dest}")
     for name in waiting:
         print(
-            f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` (or NONE='{name}' if it copies no cited source)"
+            f"  WAITING {name}: a new download - read its first page, find the source it copies, then `make archive-inbox MATCH='{name}=<key>'` - or MATCH='{name}=#<id>' for the download-list entry it answers (feature 313), or NONE='{name}' if it copies no cited source"
         )
     ar.sync_gm_copies(root, store)
     return 0

@@ -661,7 +661,12 @@ def _coverage_is_current(cov_src: str) -> bool:
 
         data = CoverageData(basename=cov_src)
         data.read()
-        return all(os.path.isfile(f) for f in data.measured_files())
+        # AND that measure THIS tree (found 2026-10-02, feature 313's gate): a clone seeds its cache from a sibling
+        # (`seed_roll_cache`, feature 167), and the sibling's coverage names the SIBLING's absolute paths - files that
+        # exist, so the test above passed them, and the replay put a second root's modules into the floor's table at
+        # ~70%. Coverage from another tree is doubt like any other: the entry regenerates once and records its own.
+        mine = HERE + os.sep
+        return all(os.path.isfile(f) and (not os.path.isabs(f) or f.startswith(mine)) for f in data.measured_files())
     except Exception:  # noqa: BLE001 - unreadable stored coverage IS doubt, and doubt regenerates
         return False
 

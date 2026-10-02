@@ -196,6 +196,26 @@ def test_unreadable_stored_coverage_is_DOUBT_and_doubt_regenerates(tmp_path: pat
     assert gencache._coverage_is_current(str(bad)) is False
 
 
+def test_stored_coverage_measuring_ANOTHER_CLONES_files_is_stale(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A clone seeds its cache from a sibling (feature 167, `seed_roll_cache`), and the sibling's stored coverage names
+    the SIBLING's absolute paths - files that exist, so the existence test passed them and a hit replayed them into
+    this gate's combine: the floor then reported every engine module under a second root at ~70% (found 2026-10-02,
+    feature 313's gate). Coverage naming files outside this skill root regenerates once, recording its own."""
+    from coverage import CoverageData
+
+    here, other = tmp_path / "mine", tmp_path / "theirs"
+    for root in (here, other):
+        (root / "l7r").mkdir(parents=True)
+        (root / "l7r" / "m.py").write_text("x = 1\n", encoding="utf-8")
+    monkeypatch.setattr(gencache, "HERE", str(here))
+    for name, root in (("mine.dat", here), ("theirs.dat", other)):
+        data = CoverageData(basename=str(tmp_path / name))
+        data.add_lines({str(root / "l7r" / "m.py"): [1]})
+        data.write()
+    assert gencache._coverage_is_current(str(tmp_path / "mine.dat")) is True
+    assert gencache._coverage_is_current(str(tmp_path / "theirs.dat")) is False
+
+
 def test_the_open_SPY_ignores_a_file_object_it_cannot_take_a_path_of(monkeypatch: pytest.MonkeyPatch) -> None:
     """The dependency recorder wraps `open` to note what a generator READ. `open` also accepts a file
     descriptor, and `os.path.abspath` on an int raises - so the spy must fall through to the real
