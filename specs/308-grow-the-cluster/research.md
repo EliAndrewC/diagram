@@ -10,7 +10,7 @@ Every figure here was observed 2026-10-02, method: `specs/308-grow-the-cluster/p
 standing house offers eight seats around it, jittered by ±12 degrees in direction and up to +12% in distance, positional from
 the map's seed. Each seat sits at the distance where the two homesteads' footprints part. A footprint is the envelope plus the
 reserved woodlot seats, and to the south the yard's far edge plus `SUN_CORRIDOR_FT` (FR-003). Seats are offered nearest the
-cluster's center first, and the placer's `try_place` judges each one.
+cluster's center first, and the placer's `try_place` judges each one. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 **Result (seeds 4, 25 at 40 households).** No margin seats 40. Each margin seats 3-15 households (seed 25: 8-28) for 5-8 offers
 per house kept.
@@ -38,7 +38,7 @@ reaches one row along the exit strip and stops.
 plus `GAP` off the path, one envelope width apart.
 
 **Result.** The row along the exit strip seats cleanly: short corridors, a refusal mix of reach and envelope. Then the margin
-stops at 3-7. The ground beyond the field's reach (700 ft) ends the row inland, and a second row has no way through the first.
+stops at 3-7. The ground beyond the field's reach (700 ft) ends the row inland, and a second row has no way through the first. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 ## R3 - Round 2b/3: both proposers, more directions and rings, gaps in the row
 
@@ -47,6 +47,7 @@ stops at 3-7. The ground beyond the field's reach (700 ft) ends the row inland, 
 | both proposers | 7-14 | 11-17 | 8-16 |
 | 12 directions, rings 1/1.4/1.8 | 11-40 (14.5 s, 10 margins) | 13-36 | 11-19 |
 | a footpath gap every seat along the row (`ROWGAP` 1 or 2) | no gain | no gain | no gain |
+(observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 None fills a margin reliably. The limit is still a straight run from the door.
 
@@ -54,7 +55,7 @@ None fills a margin reliably. The limit is still a straight run from the door.
 
 The base seats 40 on margin 1 with 1,682 offers in 3.4 s. Its plate shows a BRANCHING path tree. Trunks run parallel to the
 field, from far houses back to the exit strip, and later houses hang off them with short diagonal legs. The exhaustive pass finds
-these by offering every grid point: a far house's long corridor becomes the trunk the next houses reach.
+these by offering every grid point: a far house's long corridor becomes the trunk the next houses reach. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 ## R5 - Round 5: the path laid round what stands (routed corridors)
 
@@ -65,13 +66,13 @@ these by offering every grid point: a far house's long corridor becomes the trun
 - It ends at the nearest point of the tree.
 - It is then pulled taut. Each leg reaches the farthest node the engine's own leg tests admit: `house_clear`, `fixtures_clear`,
   `parts_clear`, `standing_ground` and `lawful_leg`. A route has at most 5 legs and no hairpin (`doubles_back`).
-- The corridor so found still passes `tree_admits` (the lane law over the whole tree) before it is reserved, like any other.
+- The corridor so found still passes `tree_admits` (the lane law over the whole tree) before it is reserved, like any other. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 This is FR-005 literally: each house's path is laid back to a neighbor's path or the tree as the house is placed.
 
 **Capacity.** Seed 25, 8 directions, 10 px grid: 26 margins, but each seats 29-36 at about 6 offers a house kept. Growth now
 fills nearly a whole margin, and the plate draws a branching tree like the base's. The margin still falls 4-11 short and is
-thrown away.
+thrown away. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 **Widening the growth when it runs dry.** When the heap is empty with households unseated, every standing house offers again at
 the next level: 8 directions at ring 1, then 12 directions at rings 1 and 1.5, then 16 directions at rings 1.25, 1.75 and 2.0.
@@ -89,7 +90,7 @@ It is still growth from the standing houses, never the free grid.
 | 39 | 1 | 2.9 | 762 |
 
 Seeds 2, 6, 7, 12 and 39 took 5-13 s on the base, because 3-6 margins were seated and thrown away. Every stage after the
-homesteads also ran on all eight seeds (`FULL=1`) without a refusal.
+homesteads also ran on all eight seeds (`FULL=1`) without a refusal. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 The back-to-back legs over the sixteen seeds at 10, 15, 20 and 40 households are R6.
 
@@ -123,7 +124,7 @@ At 40 households, homesteads stage seconds (margins):
   10: 764; 11: 1,223; 12: 826; 13: 224; 25: 567; 39: 762; 47: 506. That is 224-3,427 a seed, or 5.6-85.7 offers per house kept.
 - At 20 households the sums are 17.8 s for the base and 16.6 s for the grower.
 - The legs at 10 and 15 households ran under uneven load: seed 13 at 10 households measured 1.91 s in the leg and 0.58 s alone.
-  Those two sizes are re-measured alternating (R7).
+  Those two sizes are re-measured alternating (R7). (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 ## R7 - 10 and 15 households, alternating (observed 2026-10-02, method: prototype.py, base and grow alternated per seed, two runs each, the faster kept)
 
@@ -131,13 +132,14 @@ At 40 households, homesteads stage seconds (margins):
 |---|---|---|---|---|
 | 10 | 9.08 s | 7.54 s | 11 of 16 (seed 5: 1.08 -> 0.52 s) | the first on every seed, under both |
 | 15 | 16.56 s | 13.73 s | 13 of 16 (seed 4: 2.35 -> 1.56 s) | the first on every seed, under both |
+(observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 **The verdict, by US1's GO rule: GO at every size.** The grower is faster in sum at 10, 15, 20 and 40 households (R6, R7), and
 it seats every household on every seed the engine seats.
 
 **What it misses.**
 - SC-003, at most 5 offers per house kept. Most seeds offer 5-35 per house at 40 households, and seed 8 takes two margins.
-- SC-002, under 4 s on every seed at 40 households. Seeds 3, 4, 7 and 8 take 4.1-10.0 s.
+- SC-002, under 4 s on every seed at 40 households. Seeds 3, 4, 7 and 8 take 4.1-10.0 s. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 Both misses are carried to the engine build, where the levels and the router's breadth can be tuned.
 
@@ -149,12 +151,13 @@ The footprint the plan review asked for (plan D1):
   `SUN_CORRIDOR_FT` + 2 ft;
 - the new household's reach taken from the LARGEST homestead the roll can take (`_bundle_envelope` at `_house_max`), where it
   was the first house's;
-- every routed path held to `leaves_its_yard`.
+- every routed path held to `leaves_its_yard`. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 | households | base sum | grow sum | margins under grow |
 |---|---|---|---|
 | 40 | 138.9 s | 93.9 s | the first on 15 of 16 seeds; seed 8 on the second |
 | 15 | 25.2 s | 18.9 s | the first on every seed |
+(observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 - Every seed seats every household under both methods. The load made both methods' times higher than in R6 and R7, but each
   pair ran back to back.
@@ -174,20 +177,24 @@ for. The spaced-for reach is `household_reach`, asked at the seat offered, befor
 | the largest house, with the household's parts | 33 of 272 | -0.4, -0.4, 21.1, 14.9 px |
 | the household's OWN lot: its house, kura and parts | 12 of 234 | 5.0, 0.0, 3.6, 5.5 px |
 | ...settled when OFFERED, for the household seated next (R10) | 5 of 271, all moved | 0.7, 0.0, 2.5, 2.3 px |
-| ...and the grown seat EXACT, no computed move (R10, the final engine) | **0 of 301** (none moved) | 0, 0, 0, 0 |
+| ...and the grown seat EXACT, no computed move (WITHDRAWN, R10: it cost capacity) | 0 of 301 (none moved) | 0, 0, 0, 0 |
+| ...the move kept, refused only nearer the source than the gap (R10, THE FINAL ENGINE) | **5 of 271, all moved** | 0.7, 0.0, 2.5, 2.3 px |
+(observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 - **Why the largest house bounds nothing.** A homestead's fixtures (the manure heap, the privy, the woodpile, the persimmon)
   are sought round its own walls. A larger house moves them, so the largest house's layout does not bound a smaller
   household's layout.
-- **On the final engine** (R10: settled when offered, the gap on the parting axis, the grown seat exact), no placement
-  exceeds the reach its seat was spaced for. Measured by `separation_check.py` (the plan review's harness): no house's drawn
-  envelope comes closer to its source's footprint than the gap. The closest is 19.4 px against the 16 px gap, over 301
-  grown placements.
+- **On the final engine** (R10: settled when offered, the gap on the parting axis, the placer's move refused where it would
+  carry a grown seat nearer its source than the gap), no UNMOVED placement exceeds the reach its seat was spaced for. The 5
+  that do are among the 19 the placer moved, by at most 2.5 px. Measured by `separation_check.py` (the plan review's harness): no house's drawn
+  envelope comes closer to its source's footprint than the gap. Over 271 grown placements, the closest unmoved one is
+  17.7 px from its source against the 16 px gap, and the closest moved one 23.6 px. The withdrawn exact-seat variant
+  measured 19.4 px over 301.
 - **The 12 that exceeded under the earlier form.** All are among the 30 placements the placer MOVED: its one computed move off a single
   overlapping neighbor (feature 227), after which the homestead is turned at its new spot. None of the 204 unmoved placements
   exceeds its seat's reach. So every seat the growth offers clears the standing footprints by the household's own envelope
-  there (FR-004). The placer's existing move then carries a few households up to 5.5 px, away from the neighbor they would
-  overlap.
+  there (FR-004). Under that earlier form, the placer's move carried a few households up to 5.5 px past their reach, away from the neighbor they would
+  overlap. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 ## R10 - The engine build, back to back (observed 2026-10-02, method: prototype.py's `base` mode, run with ROOT set to the base worktree (`/tmp/base308`, HEAD before the engine change) and then to the clone, alternated per seed, one run each, under load 4-8)
 
@@ -206,11 +213,11 @@ discarded.
   - On the engine before it, the move carried one house 2.6 px from its source (`separation_check.py`, seed 8).
   - Making a grown seat exact instead, with no move at all, was measured and withdrawn: 101.4 / 79.0 s base against 80.4 s
     clone at 40 households, with seed 4 on its third margin. The move is needed for capacity, and only the moves toward the
-    source are refused.
+    source are refused. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 **The final engine** (`separation_check.py` and `reach_check.py`, seeds 1, 3, 4, 8, 13 and 25 at 40 households):
 - 271 grown placements, 19 of them moved.
-- None comes closer to its source's footprint than the gap: the closest unmoved one is 17.7 px, the closest moved one 23.6 px.
+- None comes closer to its source's footprint than the gap: the closest unmoved one is 17.7 px, the closest moved one 23.6 px. (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)
 
 **Timing, homesteads stage seconds:**
 
@@ -229,4 +236,4 @@ discarded.
 - SC-002 (under 4 s on every seed at 40 households) is missed on eight seeds: 3, 6, 7, 8, 9, 10, 13 and 47, at 4.38-10.83 s.
 - SC-003 (at most 5 offers a house kept, at most two margins) is missed on offers (5.8-62). It is met on margins: no seed
   needs a third.
-- Both misses are raised with the GM, with every round's numbers here (FR-002).
+- Both misses are raised with the GM, with every round's numbers here (FR-002). (observed 2026-10-02, method: this section's run of `prototype.py` or the check named here.)

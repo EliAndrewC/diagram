@@ -73,12 +73,17 @@ numbers and raised with the GM.
     - The seat is first placed with a first guess (the reach at the first house). Where the reach rolled at that seat
       exceeds the guess on any side, the seat is moved out to the union of the two and asked again. After `SETTLE_TRIES` (4)
       moves without settling, it is not offered. A unit test holds the move, the drop and the household's own lot.
-    - MEASURED (research R9, R10), on the final engine: 0 of 301 grown placements exceed the reach their seat was spaced
-      for. None comes closer to its source's footprint than the gap: the closest is 19.4 px against 16.
-    - THE GROWN SEAT IS EXACT (`_grown_seat`, read by `_place_bundle_nucleated`). The placer's one computed move off a single
-      overlapping homestead is not made for a grown seat; that overlap refuses it, and the growth offers the next. The
-      growth computed the seat's distance from its source, and the move had carried one house 2.6 px from its source
-      (research R10).
+    - MEASURED (research R9, R10), on the final engine, over 271 grown placements (19 moved by the placer):
+      - none comes closer to its source's footprint than the gap: the closest unmoved one is 17.7 px and the closest
+        moved one 23.6 px, against 16;
+      - no unmoved placement exceeds the reach its seat was spaced for, and the 5 that do were moved by the placer, by at
+        most 2.5 px.
+    - THE PLACER'S MOVE MAY NOT CARRY A GROWN SEAT NEARER ITS SOURCE THAN THE GAP (`keeps_its_distance`, set by the growth as
+      `_grown_keep` and read by `_place_bundle_nucleated`). The placer's one computed move off a single overlapping homestead
+      is kept, and refused only where the moved box would stand nearer the source's footprint than the gap. Before this,
+      it carried one house 2.6 px from its source (research R10).
+      - An EXACT grown seat (no move at all) was measured and withdrawn: 80.4 s against the base's 79.0 at 40 households,
+        with seed 4 on its third margin (research R10). The move is needed for capacity.
     - THE GAP IS ON THE AXIS THAT PARTS THE TWO (`seat_toward`). Added along a slanted bearing, it parted them by only
       gap x cos (a unit test found 15.45 of 16 px at 15 degrees).
     - A SEAT IS SETTLED WHEN IT IS OFFERED, not when it is queued. The household it is settled for is then the one seated
