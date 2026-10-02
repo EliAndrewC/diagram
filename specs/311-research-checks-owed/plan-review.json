@@ -1,6 +1,6 @@
 {
  "feature": "311-research-checks-owed",
- "plan_sha256": "d7d225f98e47d078400eb8d4c4869c79d988263b5dbf5629b68746c39cc46496",
+ "plan_sha256": "84542969a87575fe532402a593711e2dad7cc49706159552f6134c1eeb81cfd7",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,9 +18,9 @@
   },
   {
    "id": "D2",
-   "summary": "CHANGED = normalized text present nowhere in the record at the base; FR-004 table applied mechanically; intro-check on research pages only; base read in one ls-tree + cat-file batch",
+   "summary": "CHANGED = normalized text present nowhere in the record at the base; FR-004 table applied mechanically; intro-check on research pages only; base read in one ls-tree + cat-file batch over research/questions/ (1,404 files) and only the write-ups the delta touched",
    "class": "within",
-   "why": "Restates FR-004 and the move/merge and drawing-page Edge Cases; the read method is implementation (its 'about 1,700 files' is unmeasured - see aside)."
+   "why": "Restates FR-004 and the move/merge and drawing-page Edge Cases. Reading only touched write-ups narrows nothing: a write-up the delta did not touch cannot have changed visible text. Counts re-run 2026-10-02 (ls): 1,404 question files, 2,126 write-ups - both reproduce."
   },
   {
    "id": "D3",
@@ -105,7 +105,7 @@
    "id": "D9-new",
    "summary": "A WHOLE=1 read declared NEW=\"<the claim>\" for a claim not yet in the record is built, recorded in the guard log and MANIFEST",
    "class": "within",
-   "why": "A named, recorded stated reason under FR-005's override; it should hold FR-005's two-words floor like every other reason."
+   "why": "A named, recorded stated reason under FR-005's override, now held to the two-words floor FR-005 sets (review-2 aside applied)."
   },
   {
    "id": "D10-backfill",
@@ -127,9 +127,9 @@
   },
   {
    "id": "ConstitutionCheck",
-   "summary": "Constitution check rows; XII still reads 'each intro states the class the drawing page already records (accurate, deviation, convention)'",
+   "summary": "Constitution check rows; XII now says each intro may name the class its cited body or drawing page reaches (four classes) and adds no historical claim",
    "class": "within",
-   "why": "Not a decision of its own: D3/D4 govern and match FR-001. The XII line is a stale restatement of the round-1 wording (drawing page only, three classes, 'states' for 'may name') and should be aligned to D3/D4."
+   "why": "Not a decision of its own; XII now matches D3/D4 and FR-001 (review-2 aside applied)."
   }
  ],
  "verdict": "CLEAR"
