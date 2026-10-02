@@ -27,9 +27,12 @@ where its plots and trees stood (tenure: its own lot). Neither is drawn from a s
 ## R1 The tree placers (scouted 2026-10-02; the plan review's D3 finding folded in)
 
 **How the list was found.** Every writer of `tree_crowns` (a grep of the engine for the key: `_record_crowns` and its four
-callers, and `land/cover.py`'s two direct writes), then every class a scripted hamlet inks (the union of the five pool
-manifests' `ink_classes`) read for the trees it draws: alder, copse, homestead grove, windbreak, woodland commons, persimmon,
-scrub and rough grazing, perimeter dike, mulberry dike. Nothing else on a hamlet draws a tree.
+callers, and `land/cover.py`'s two direct writes), then every class the generator can draw - the interactive class registry,
+`l7r/diagram/interactive/classes/*.py`, read class by class for the trees each draws (not only the five pool maps' classes,
+which missed the fruit dike a mulberry-dike hamlet may roll). Trees: alder, copse, homestead grove, windbreak, woodland
+commons, persimmon, scrub and rough grazing (its pines), perimeter dike (its willows), fruit dike. No trees: homestead bamboo
+and the shared bamboo grove (bamboo, FR-003), mulberry dike and tea dike (coppiced and clipped bushes, below), burial ground,
+field rock, grave island, and every field, water, way and building class.
 
 | placer | site | trees | today's test before inking | recorded |
 |---|---|---|---|---|
@@ -39,10 +42,13 @@ scrub and rough grazing, perimeter dike, mulberry dike. Nothing else on a hamlet
 | the woodland commons' throws and its `woodland_room` grid | `land/cover.py` | the coppice crowns | `_sparse` / the room grid - NOT `_crown_covers` | `tree_crowns` |
 | the scrub's hill pines | `land/cover.py` | a few scraggly pines, trunk and branch lines | `_sparse`, `_in_soft` | NOT recorded |
 | the perimeter dike's willow row | `land/dikes.py` | pollarded willows on the water face | none - drawn in the field stage, before any plot exists | NOT recorded |
+| the fruit dike's trees | `fields/landuse.py` | standard fruit trees along a dike-pond's bank (lychee, longan, citrus) | none - drawn in the field stage, before any plot exists | NOT recorded |
 | the persimmon | `homestead_parts/fixture_seats.py` | one tree a household | seats itself out of the sun ground | `tree_crowns` |
 
-Not canopy: the bamboo culm marks and stands (FR-003), and the perimeter dike's and the mulberry dikes' coppiced mulberry -
-the code and the record call them coppiced bushes, a crop of the bank cut back each year, "not canopy"
+Not canopy: the bamboo culm marks and stands (FR-003); the perimeter dike's and the mulberry dikes' coppiced mulberry, "for the
+most part trained as low bushes ... pruned once a year to 1.5 to 1.8 m" (`research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html`);
+and the tea dike's hedge, clipped to about 3 ft wide (`fields/landuse.py`) -
+each a bush of the bank cut back as a crop, which the code calls "not canopy"
 (`land/dikes.py`, `fields/landuse.py`).
 
 A plot's sun ground is the box from `x0 - reach` to `x1 + reach` and `y0` to `y1 + reach` - a (center, half sizes) box - and

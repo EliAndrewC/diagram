@@ -1,6 +1,6 @@
 {
  "feature": "310-no-canopy-in-the-sun",
- "plan_sha256": "c57e202a48b3f086289de0e61d3965f6d023b90fafa581245b1483daebf97a0f",
+ "plan_sha256": "aaa411ef0cd9f9ea52e058804799b3c0a8c3f692d8b67e9aed1d0c88ed4ae468",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,45 +8,59 @@
    "id": "D1",
    "summary": "One reach constant for every canopy tree (PERSIMMON_SHADE_FT -> tree_shade.CANOPY_SHADE_FT, the sun page's west-lane reach); the persimmon's seat keeps its own form",
    "class": "within",
-   "why": "FR-002 asks exactly this: one reach, the working windbreak tree's, one predicate. The persimmon already applies that predicate and reach (spec Edge Cases: 'already keeps the rule; it is not changed')."
+   "why": "FR-002 verbatim: one reach, the working windbreak tree's, one predicate. Unchanged since round 1."
   },
   {
    "id": "D2",
-   "summary": "_sun_keepouts on the keep-outs mixin, on only for a map that keeps the sun corridor (_sun_corridor_ft), covering drawn plots and every placed bundle's yard and gardens",
+   "summary": "_sun_keepouts on the keep-outs mixin, on for a map keeping the sun corridor, covering drawn plots and every placed bundle's yard and gardens",
    "class": "within",
-   "why": "FR-001 binds 'a scripted map' and the spec's Edge Cases exempt the legacy hand-drawn maps (the record's standing ruling, sun page: 'the rule binds a map when a generator draws it'). Measured 2026-10-02: the opt-in is set unconditionally by the one scripted settlement generator (hamletgen/homesteads/stages.py:181, s.sun_corridor(SUN_CORRIDOR_FT)); no other caller sets it; the other pool .gen.py files (magistracies, Hoshigaoka shrine) are hand sheets and compounds, not Settlement maps. So the gate excludes exactly the hand-drawn maps the spec already exempts and no scripted map. Including the placed bundles' plots is what lets farm-grove bands drawn in the flush be held (spec Edge Case 'A farm's own grove')."
+   "why": "FR-001 binds a scripted map; the legacy hand-drawn exemption is the spec's own Edge Case. Unchanged since round 1, where the opt-in was measured as set by the one scripted settlement generator."
   },
   {
    "id": "D3",
-   "summary": "Every crown site takes the new keep-out: _belt_ranks, the _draw_grove crown test, the woods stand and fringe; the bamboo culm marks keep the old list",
+   "summary": "Every tree site takes the keep-out: the _crown_covers sites, the woodland commons' throws and woodland_room grid, the scrub hill pines (recorded as scrub_pines), the perimeter dike's willow row (dike_willows, thinned once plots stand); the persimmon already keeps it",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "The decision says 'every crown site' but its list, and research.md R1's premise 'Every drawn canopy crown passes _crown_covers', omit a canopy placer the scripted path runs: the woodland commons in settlement/land/cover.py. hamletgen/hinterland/stages.py:237 calls s.commons(patch, role='woodland'), which seats coppice crowns by random throws tested with _sparse/_commons_keep (cover.py:483) and, when under-stocked, by woodland_room's grid (cover.py:297-331, 508-510), and records them in tree_crowns (cover.py:494, 510) - never through _crown_covers. As written, those crowns are not held at placement, which narrows FR-001 ('a wood') and FR-004 ('Each placer refuses or drops a crown') from an unmeasured premise; D6's check would catch one only where a commons happens to reach a plot, and the five pool maps carry none in a plot's sun today, so the gap can ship green. No argument is offered for the omission - it is an oversight, and nothing in the request or spec implies it. Fix: add the commons coppice's throws AND its woodland_room fallback to D3 (the box test is the same disc-against-rectangle; feed _sun_keepouts into _commons_keep or test it beside _sparse), correct R1's claim, and - as the spec's Assumption requires ('the plan confirms no crown escapes the record') - state how every canopy site was enumerated (grep of tree_crowns writers: keepouts._record_crowns via groves.py, woods.py, farm_fixtures.persimmon; and cover.py's direct appends). The scrub commons' 'scraggly hill pines' (cover.py ~535-560, drawn as trunk-and-branch lines, not recorded in tree_crowns) are trees drawn outside the record; the plan must say whether they are held, or put their exclusion to a MODE 1 exception check - it may not pass them silently."
+   "why": "Round 1's items are all carried: the commons' throws and room grid are held, R1's false premise is rewritten, the inventory's method is stated, the scrub pines are held and recorded. But the stated method - the union of the five pool manifests' ink_classes - samples what five maps happened to draw, not what the scripted generator can draw, and it misses a canopy placer: the FRUIT DIKE. hamletgen/plan.py:479 rolls dike_crop from DIKE_CROPS = (mulberry x3, fruit x2, tea) (hamletgen/consts.py:408) on any mulberry_dike_fishpond hamlet that does not pin it (pool/hamlets/kuwabata/kuwabata.gen.py:37 says so: 'the knob also rolls fruit'); hamletgen/water/polder.py:242-248 passes it to apply_land_use, and settlement/fields/landuse.py:511-516 draws, for crop 'fruit', 'standard trees at ~18 ft' (lychee, longan, citrus; r 4-5 px) on the band's centerline, inked straight into the SVG and recorded in neither tree_crowns nor any list D6 reads. FR-001 names 'a fruit tree' and 'any later kind' and binds every scripted map, so R1's 'Nothing else on a hamlet draws a tree' is false and the fruit dike is passed silently - the same oversight as round 1's commons, with no argument offered. Fix: add the fruit dike's trees to D3 (drawn in the field/polder stage before the plots, so held like the dike willows: recorded and dropped once the plots stand, or drawn after them) and record them so D6 counts them; restate R1's method as the generator's vocabulary (the interactive class registry, l7r/diagram/interactive/classes/*.py: it carries fruit dike, tea dike, burial ground, field rock and homestead bamboo, which the five manifests do not) read class by class; and correct the plan's Summary, which still says 'Every drawn canopy crown already passes one test before it is inked - _crown_covers' and 'handed to every crown test' - the premise R1 now disowns."
+  },
+  {
+   "id": "D3-mulberry",
+   "summary": "The perimeter dike's inner mulberry row and the mulberry dikes' rows are coppiced mulberry, not canopy, and do not take the keep-out (MODE 1 exception check)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Adjudicated against 'no canopy trees should be exempt' and on each case. The exclusion is implied by the GM's own word: the GM first said 'ANY trees' and then narrowed it to 'canopy trees', with bamboo as the example of a plant that 'doesn't create much shade'. The record says cultivated mulberry was 'for the most part trained as low bushes ... pruned once a year to 1.5 to 1.8 m (~5-6 ft)' (research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html), and the engine draws it as such (landuse.py:492-499 and dikes.py:263, coppiced bushes r 2.2-3.6 px, half the willow's): a crop stool cut back every year forms no canopy, so excluding it reads the GM's qualifier rather than completing the GM's thought. Purpose test: the rule exists so a plot keeps its sun; at the record's own ratio (a ~33 ft tree throws ~50 ft) a 5-6 ft bush throws under 10 ft, so the exclusion does not gut it. Class check: both rows are the same thing (dikes.py:263 'coppiced, same form as the pond banks'); the plan did NOT stretch the argument over the perimeter dike's POLLARDED willows, which it holds. Conditions: the exclusion covers coppiced mulberry only (the fruit dike's standard trees are canopy - see D3); it is recorded in the spec's Decisions table and on the sun page with its class and why; and, as an exception that passed this check, it is raised with the GM once the implementation works."
+  },
+  {
+   "id": "D3-willows",
+   "summary": "The perimeter dike's willow row, drawn before any plot exists, is thinned of each willow in a plot's sun once the homesteads stand",
+   "class": "within",
+   "why": "FR-004's operative clause is 'no stage after may draw one there'; a placer that runs before the plots exist cannot test against them, and dropping each offending willow once they do leaves the same map the clause asks for. The willows are held to the full rule, not excepted."
   },
   {
    "id": "D4",
-   "summary": "The copse's west-lane exemption and its unsupported comment are removed; the lane stays as a seat prefilter that D3 also enforces at the crown",
+   "summary": "The copse's west-lane exemption and its unsupported comment are removed; the lane stays as a seat prefilter",
    "class": "within",
-   "why": "FR-006 first clause, verbatim. Keeping the lane as a prefilter only refuses more."
+   "why": "FR-006 first clause verbatim."
   },
   {
    "id": "D5",
-   "summary": "The farm grove's seat-time strips (fit._yard_sun_conflict 22 px south, _garden_sun_conflict 22 px east) stay as seating preferences; the full rule is enforced at the crown by D3",
+   "summary": "The farm grove's seat-time strips stay as seating preferences; every text presenting a strip as the sun rule is rewritten",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrowing against FR-006's literal 'the farm grove's narrower strips are replaced by the one rule': the strip code survives. Ruled legitimate on purpose, not words. The request's purpose is that no canopy tree is exempt from the sun calculation; the strips, after D3, admit no crown - they can only refuse a seat, and every farm-grove crown (own or neighbor's, D2 includes placed bundles' plots) is then held to the full reach at draw time whatever seat was taken. FR-006's object is what the farm grove KEEPS (spec Context table, 'what they keep today'); after D2+D3 it keeps the one rule, so the strips are no longer the rule. Replacing them with the full reach at seat time would refuse bundles and move houses, which the accepted spec's Assumption sets aside ('house seats and plots stay where the seating puts them; only trees give way. Re-seating is not required') - so keeping seating as it is is implied by the spec itself. Condition for the ruling to hold: the docstrings and comments that now state the strips AS the sun rule (fit._yard_sun_conflict 'no grove may sit in the ~22px strip', rolling/dispersed.py:20, hamletgen/consts.py:474, _garden_sun_conflict's 'A farm's OWN bands never do... by construction') are rewritten as seating preferences under the one crown rule, and no record page or modal (D7, entry-drift) presents a 22 px strip or 'by construction' as how a grove keeps a plot's sun."
+   "why": "Round 1's ruling stands and its condition is now carried in the plan: the _yard_sun_conflict docstring, _garden_sun_conflict's 'by construction', rolling/dispersed.py's and hamletgen/consts.py's comments are listed for rewriting as seating preferences, and no record page or modal may describe a strip as how a grove keeps a plot's sun. The strips exempt nothing once D3 holds every crown at draw time, and re-seating to the full reach would move houses, which the spec's Assumption sets aside."
   },
   {
    "id": "D6",
-   "summary": "One map check over every recorded crown (crowns_shading_plots), persimmons_shading_plots retired into it; gate test over the five hamlets and the cohort audit",
-   "class": "within",
-   "why": "FR-005 verbatim; it is enforcement of the request, red before the fix per Constitution X."
+   "summary": "One map check, trees_shading_plots, over tree_crowns, scrub_pines and dike_willows; persimmons_shading_plots retired into it; gate test over the five hamlets and the cohort audit",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 asks for a check that 'counts every canopy crown in a plot's sun'. The lists it reads omit the fruit dike's trees (landuse.py:511-516 records none), so on a fruit-dike hamlet the check is blind to a whole class of canopy tree. Same root cause as D3, adjudicated separately because the check is the backstop: fix with D3 by recording the fruit dike's trees and reading that record here. Enforcement of the request otherwise - not unrequested scope."
   },
   {
    "id": "D7",
    "summary": "The sun page states the one rule and the bamboo exemption as the GM's choice; the persimmon bullet folds in; modals checked by entry-drift",
    "class": "within",
-   "why": "FR-007 and SC-003; the bamboo label follows the spec's Decisions row."
+   "why": "FR-007 and SC-003."
   }
  ],
  "verdict": "BLOCKED"

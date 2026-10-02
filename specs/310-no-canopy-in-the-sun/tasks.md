@@ -32,7 +32,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
       research: rendering
       verify: `make test-file` on the keep-outs tests
 - [ ] T22 [US1] D3: the belt's ranks, the clump crowns, the woods' stand and fringe, the woodland commons (throws and room grid),
-      the scrub pines (recorded as `scrub_pines`) and the dike willows (thinned once the plots stand, `dike_willows`) take it;
+      the scrub pines (recorded as `scrub_pines`) and the dike willows and the fruit dike's trees (thinned once the plots stand, `planted_trees`) take it;
       the culm marks and the coppiced mulberry do not; a unit test
       per site and one that a culm mark may stand in a plot's sun
       research: rendering
