@@ -75,7 +75,7 @@ committed as `research/archive/gm-copies.json`).
   INDEPENDENTLY of that order, every file `gm-copies.json` matches to a key is copied to `gm-copies/` whatever the live
   fetch's outcome (FR-012: in addition, never in place). A source page's archived line lists every copy of every URL the
   entry cites (FR-010; 21 entries cite several).
-- **D3 - One manifest file per URL**, so concurrent sessions never conflict; about 2,100 small files for the cited URLs, at most ~4,900 if feature 312 keeps every page read (the ledger's 4,903 distinct URLs, observed 2026-10-02), sharded by D11.
+- **D3 - One manifest file per URL**, so concurrent sessions never conflict; about 2,100 small files for the cited URLs (2,108, `measurement/coverage.txt`), at most ~4,900 if feature 312 keeps every page read (the ledger's 4,903 distinct URLs, observed 2026-10-02), sharded by D11.
 - **D4 - Capture time is the version key**: a later capture is a new directory (FR-009); the row points at the latest and
   keeps the first in `first`.
 - **D5 - At reserve time a failure never blocks** (FR-006): the outcome is written as it is; a push that fails writes
@@ -144,7 +144,8 @@ CLAUDE.md, docs/research-record-rules.md, container-scripts/page-session-rules.m
   records its reads and archives nothing. A URL with a row is not captured again (`unarchived`, by `_sources.norm`).
   `L7R_ARCHIVE_READS=0` is the test suite's seam (`tests/tooling/conftest.py`), as `L7R_SOURCES_HOME` is. The `consulted`
   operation (`make archive-sources CONSULTED=1`) stays, unrun: feature 312 archives the uncited pages its filter keeps, and
-  the three it captured before the GM held it (2026-10-02) wait for that filter.
+  the three it captured before the GM held it (observed 2026-10-02: the manifest rows with no key and no note, 3 of 2,111)
+  wait for that filter.
 - **D14 - The lookup** (FR-015): `make archive-find` reads the rows (by `_sources.norm` of the URL, or a key) and greps the
   archived texts (`text.txt`, a GM PDF's `.txt`) for every term; exit 1 with nothing held, saying to go to the web.
 - **D15 - Found while running the backfill, fixed in the work** (constitution XIV): a render that failed under load is tried

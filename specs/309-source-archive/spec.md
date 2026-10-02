@@ -128,7 +128,8 @@ than `cited:` record the read and archive nothing.
    the command finishes, **Then** the page has an archived copy and a manifest row.
 2. **Given** a page read with `make source-pages`, or recorded `rejected:`, `nothing-found`, `unreadable` or `pending`,
    **When** the command finishes, **Then** its ledger line is written and nothing is archived.
-3. The three uncited pages the consulted backfill archived before the GM held it (2026-10-02) stay in the archive for
+3. The three uncited pages the consulted backfill archived before the GM held it (observed 2026-10-02: the manifest rows
+   with no key and no note - 3 of 2,111, all `agri-history.ihns.ac.cn`) stay in the archive for
    feature 312's filter to judge.
 
 ---
@@ -219,7 +220,8 @@ path; the research rules, the page-session rules and the reading agents' contrac
 - **FR-014** (Amendments 1 and 2): a page is archived when it is cited - by any route that cites it (`make reserve ...
   URL=`, `make source-outcome OUTCOME=cited:<key>`); a row records it, and a URL that already has a row is not captured
   again. A read that cites nothing (`make source-pages`, any other outcome) is recorded on the sources-consulted ledger and
-  not archived; the uncited pages, the ~4,900 earlier reads among them, are feature 312's (Amendment 2).
+  not archived; the uncited pages - 2,846 with no archive row (observed 2026-10-02: `_archive_ops.consulted_urls`, the
+  ledger's and the page cache's URLs with no manifest row, after the cited backfill) - are feature 312's (Amendment 2).
 - **FR-015** (Amendment 1): `make archive-find URL=<u> | KEY=<k> | TERMS="a|b"` answers from the manifest and the archived
   text, without a fetch, naming each copy's local path.
 - **FR-016** (Amendment 1): the research procedure names the archive lookup (`make archive-find`) as the first step for
