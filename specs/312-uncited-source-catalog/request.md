@@ -84,3 +84,20 @@ The GM (verbatim):
 Yes, I agree that they should go through the filter like any other unsighted page, and then their disposition should just be whatever the filter ends up saying.
 
 Settled: the three pages go through the filter like every other uncited page, and the filter's verdict is their disposition.
+
+## Banned sources (GM, 2026-10-02, verbatim; still not to start)
+
+The session reported that the Grokipedia ban is a written rule only (`docs/research-doctrine.md`; three citations were
+dropped by hand in feature 143) with no tooling behind it, and that no Grokipedia page is on the sources-consulted ledger.
+
+The GM:
+
+Oh yeah, we should definitely make sure that our citation rules are enforced by tooling and not just remembering to do the correct thing. Like if we can literally block ourselves from even checking Grokopedia, that's good. In my view, though, that kind of block might not be appropriate for other things that we end up forbidding from being cited. things that we forbid might be hosted on the same domains or whatever as things that we do not forbid. And I mean, I guess I'm not opposed to Grokopedia being checked if it was in order to find other sources that we could cite, but we should never ever even so much as list it as a potential source of information. Like it doesn't even get a write-up as something that we considered and rejected. It is just blacklisted across the board. And to be honest, I don't know that it is worth checking because it has so many hallucinations that maybe it is better to just blacklist the domain. I don't know. Either way, it should be tool enforced. And if that's not already part of that, then we should make sure that feature 312 adds the tooling support for whatever we deem is appropriate. Thanks.
+
+Settled for the spec: every citation rule is enforced by tooling. Grokipedia is banned across the board: never cited,
+never written up, never on the ledger or in the archive, never listed as a source considered and rejected. Whether it
+may still be opened to find other sources is the spec's to decide; the session's recommendation is to block the domain
+at every fetch route too, given its hallucinations - a page found through it can be found another way. Other forbidden
+sources are banned at the CITATION, by URL or pattern, not by domain, since they may share a domain with sources that
+are allowed.
+
