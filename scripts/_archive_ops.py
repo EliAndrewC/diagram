@@ -26,8 +26,8 @@ the GM asked for a layout that stays browsable past 5,000 (2026-10-02), so they 
     _archive_ops.py consulted [--limit N] `make archive-sources CONSULTED=1`
     _archive_ops.py find [--url U] [--key K] [--terms "a|b"]   `make archive-find`
     _archive_ops.py relayout              one time
-    _archive_ops.py urls <u> ...          the pages just read, archived where they have no row (`make source-pages`,
-                                          `make source-outcome` call it)
+    _archive_ops.py urls <u> ...          the cited pages, archived where they have no row (`make source-outcome
+                                          OUTCOME=cited:<key>` calls it)
 """
 
 from __future__ import annotations
