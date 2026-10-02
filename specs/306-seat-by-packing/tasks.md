@@ -63,6 +63,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [x] T32 `dev/performance.md` "Seat by packing (feature 306)"; the memory note
       research: rendering
       verify: DONE. dev/performance.md 'Seat by packing (feature 306)'; memory project_seat_by_packing_306
-- [ ] T33 `make done` green; push
+- [x] T33 `make done` green; push
       research: rendering
-      verify: the gate; `sync-with-main.sh done` lands
+      verify: DONE. make done green on the final engine (already-verified after the rescue fix's run, 182 s); pushed by sync-with-main.sh done
