@@ -99,3 +99,12 @@ the round-3 seats grown from the houses at 162: worse on three of four seeds - w
 planted region; the difference that makes it (`planted_region`) left a sliver LineString where the water's edge ran along the
 envelope's, and the fit raised `AttributeError`. A line plants nothing: only the region's polygons are rings now
 (`tests/waterfields/test_partition.py::test_a_sliver_line_in_the_region_is_not_a_ring`). Constitution XIV.
+
+## R10. The overlap census, calibrated (observed 2026-10-02, method: a scratch census - `sys.monitoring` on the geometry primitives, each comparison charged to the nearest named function outside `settlement/_geom/`, its calls counted from its first comparison - over the five pool hamlets' specs and the reference at 40 households, seed 4)
+
+(Observed 2026-10-02, method: as the heading.) Comparisons per call of the checks a roll runs: nine over 5,000 -
+`ways/touch._clear_of_fabric` 111,700 (one call, the web), `ways/dry_exit._blocked_cells` 101,229 (the track),
+`cluster.seat_cluster` 30,604 (the seat), `city/bridges.bridges` 16,190, `homestead_parts/groves._belt_ranks` 15,005,
+`fields/comb._comb_record_field` 12,263, `ways/street.street_span` 6,394, `city/bridges.channel_footbridges` 5,485,
+`water/polder.dike_gaps_at_channels` 5,048; the next below at 3,859 (`ways/serve._lay_web_lane`), the bulk under 1,500. The flag
+is set at the knee, 5,000.
