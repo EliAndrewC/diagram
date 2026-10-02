@@ -1,0 +1,112 @@
+{
+ "feature": "305-source-tags",
+ "plan_sha256": "daa8c568c437be534e35d2816cc4dabfd61e8f23b7b9b4dffba94e8c8547abfe",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Two data files: source-tags.json (ordered value lists + canon label) and source-sections.json (ordered sections, clauses over PRIMARY tags, works- id prefix)",
+   "class": "within",
+   "why": "Carries FR-001, FR-006 (rule over primary tags, first match, regrouping by editing one file)."
+  },
+  {
+   "id": "D2",
+   "summary": "Tags as a last-line HTML comment marker; canon carries none; every malformed case gathered into the build's error list",
+   "class": "within",
+   "why": "FR-005 (grep-findable, never shown raw) and FR-010; the extra refusals (repeated facet, marker on canon) only enforce FR-004."
+  },
+  {
+   "id": "D3",
+   "summary": "Period cut-offs by region: Japan, China, Korea stated in full; Europe premodern before ~1800 with modern-preindustrial and present-day left '-'; east-asia-other given no cut-off; elsewhere left to the classifier's judgment 'and say so in the batch notes' (R5)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "GM message 2 delegates the cut-offs on one condition: 'as long as you explain the logic in the tooltips'; FR-003 makes every cut-off set by region and stated in the period explanation. The plan states cut-offs for three of the seven region values, leaves Europe after ~1800 unstated, gives east-asia-other (Ryukyu, Taiwan, Vietnam) nothing at all, and moves the elsewhere logic into batch notes no reader sees. Nothing makes stating them impossible; it is an omission that narrows the GM's one stated condition."
+  },
+  {
+   "id": "D4",
+   "summary": "FR-007's eight sections in order; Not period-bound (before the last) takes primary timeless works of any region",
+   "class": "within",
+   "why": "FR-007 order plus FR-006 first-match; the last section's 'whatever its period' clause still guarantees every combination a home."
+  },
+  {
+   "id": "D5",
+   "summary": "Labels as spans with data-def + title under each work heading, period/region/kind order; grouped h3 sections with descriptions on question foot, all.html registry part and sources/index.html; registry pager walks grouped order; marker stripped",
+   "class": "within",
+   "why": "FR-008, FR-009 (existing #fntip tooltip, native title without scripts), US2 scenarios 1-3."
+  },
+  {
+   "id": "D6",
+   "summary": "New engine module record/source_tags.py (loaders, parse, home, labels_html, strip_marker, Catalog); registry_entries gains raw tags",
+   "class": "within",
+   "why": "Implementation structure for FR-006..FR-010; no scope change."
+  },
+  {
+   "id": "D7",
+   "summary": "make reserve KIND=registry TAGS=...; checked against vocabulary; placeholder marker without TAGS that the build refuses",
+   "class": "within",
+   "why": "FR-011 and US3 scenario 3."
+  },
+  {
+   "id": "D8",
+   "summary": "source-applicability contract gains a Tags rule, a derived vocabulary block kept in sync by make source-tags-contract and a failing test, and a tags verdict line",
+   "class": "within",
+   "why": "FR-012 (contract judges tags and repeated limits, carries the explanations); the sync test only enforces FR-012."
+  },
+  {
+   "id": "D9",
+   "summary": "Docs: research CLAUDE.md, research doctrine, page-session rules, plus one clause in the root CLAUDE.md",
+   "class": "within",
+   "why": "FR-013; the root clause is a pointer serving the same rule, not new behavior."
+  },
+  {
+   "id": "D10",
+   "summary": "Spec-local migration tooling: Sonnet batches classify and propose trims; apply.py checks vocabulary, R4 and R3 consistency lists; refusals and flags worked by hand; build check and data land in one push",
+   "class": "within",
+   "why": "FR-014, FR-015; refused trims go to the session, so the scope of the trim is not reduced."
+  },
+  {
+   "id": "D11",
+   "summary": "Stratified sample of at least 60 entries (>=5 per period and region value where they exist) via check bundles to source-applicability; every wrong tag and repeated or lost limit fixed; patterns swept by grep",
+   "class": "within",
+   "why": "SC-004 and SC-005 as written."
+  },
+  {
+   "id": "R2",
+   "summary": "URL host used only as a hint and a consistency check for kind; every entry classified by reading",
+   "class": "within",
+   "why": "Serves FR-004/FR-014 accuracy; narrows nothing."
+  },
+  {
+   "id": "R3-limitation",
+   "summary": "source-applicability sampled at 60 entries instead of run on every trimmed write-up; mechanical R4 checks stand in for the rest",
+   "class": "within",
+   "why": "The GM's request is silent on how the migration is verified, and the accepted spec settles it explicitly (SC-004, SC-005: a stratified sample of at least 60, plus a registry-wide sweep of any pattern). It narrows a standing project rule, not the GM's request or the spec; the plan records it as an accepted limitation with costs, priced alternatives and who chose, as CLAUDE.md requires. R4 rule 2 guarantees the trim adds no claim or number that would need an applicability judgment."
+  },
+  {
+   "id": "R4",
+   "summary": "Mechanical trim acceptance: not longer, no new words beyond connectives, inline markup and HTML comments kept, reason-for-applying kept; else listed for hand work; null = no trim",
+   "class": "within",
+   "why": "Stricter than FR-015's 'gains nothing new' and refusals are done by hand, so every paragraph is still owed its trim; lost source-specific limits are SC-005's sample and sweep."
+  },
+  {
+   "id": "R5",
+   "summary": "Classification rules: period by evidence, present-day sites describing premodern forms, not period-bound for physical facts, region placement, kind definitions, canon untagged",
+   "class": "within",
+   "why": "Restates the spec's edge cases and FR-004; the cut-off clause is ruled under D3."
+  },
+  {
+   "id": "R6",
+   "summary": "Marker placed on the last line rather than under the heading or as an h3 attribute",
+   "class": "within",
+   "why": "FR-005; placement is design, not scope."
+  },
+  {
+   "id": "perf",
+   "summary": "make record timed before and after; >10% slowdown diagnosed before landing",
+   "class": "within",
+   "why": "Project process; no scope change."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

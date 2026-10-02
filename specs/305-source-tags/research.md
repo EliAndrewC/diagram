@@ -80,9 +80,9 @@ applies a trim only when all of these hold, and lists every refusal for the sess
 
 - **Period follows the evidence the record takes from the work**, as its "Used for" line shows, not the publication
   date. If the evidence is from several periods, list each, the one most of the uses rest on first.
-- **Cut-offs by region** (FR-003): Japan premodern before 1868, modern preindustrial 1868 to about 1955, present day
-  after. China before about 1895 / about 1895-1950 / after. Korea before 1876 / 1876-1950 / after. Europe premodern
-  before about 1800. Elsewhere, judge by the region's own industrial transition and say so in the batch notes.
+- **Cut-offs by region** (FR-003): the table in plan D3, for every region value, verbatim in the batch prompt and in
+  the period explanations. A source the table does not settle is not tagged by the classifier's own judgment: it is
+  listed (`"unsettled": "<why>"`), and the session extends the explanation before tagging it.
 - A present-day source DESCRIBING a premodern thing (a museum page about an Edo farmhouse, a preserved Edo terrace):
   premodern when the record takes the premodern form from it, present day when it takes present-day counts or the
   present working landscape.

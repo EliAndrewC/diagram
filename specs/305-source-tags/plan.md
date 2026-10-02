@@ -72,9 +72,17 @@ are in each period's explanation:
 | Region | Premodern | Modern preindustrial | Present day |
 |---|---|---|---|
 | Japan | before 1868 (Meiji Restoration: foreign trade, factory goods, the 1873 land tax) | 1868 to about 1955 | after about 1955, when farm machinery and the consolidation of fields spread |
-| China | before about 1895 (treaty-port factories, railways) | about 1895 to about 1950 | after land reform and collectivization |
+| China | before about 1895 (treaty-port factories, railways) | about 1895 to about 1950 | after land reform (1950) and collectivization |
 | Korea | before 1876 (the ports opened) | 1876 to about 1950 | after land reform and the war |
-| Europe | before about 1800 | - | - |
+| Other East Asia | before colonial rule or annexation brought factory goods and reforms: Vietnam before the French conquest (about 1860-1885), Ryukyu before annexation (1879), Taiwan before Japanese rule (1895) | from then to about 1950 | after about 1950 (land reforms, war, mechanization) |
+| Europe | before about 1800 (enclosure, new crops, the first factories and canals) | about 1800 to about 1950, while the countryside was still worked by hand and horse but bought factory goods and shipped by rail | after about 1950, when the tractor and chemical fertilizer replaced the horse and manure |
+| Elsewhere | before the region's countryside was reached by railways, factory goods or colonial cash cropping | from then until farm machinery spread, about 1950 in most places | after that |
+| General | the period of its evidence, by the rule of the region it comes from; a work about facts that do not change with the era is not period-bound | | |
+
+Every cell of this table is written into the period explanations in `source-tags.json`, so a reader hovering a label
+sees the cut-off for every region and the reason for it. No cut-off reasoning lives only in a batch note: a
+classifier that finds a source the table does not settle stops and lists it for the session, and the session extends
+the explanation before tagging it.
 
 **D4 - The sections** are FR-007's eight, in that order, in `source-sections.json`. "Beyond East Asia, and general
 works" takes the primary regions Europe, elsewhere and general. "Not period-bound" comes before it and takes the
