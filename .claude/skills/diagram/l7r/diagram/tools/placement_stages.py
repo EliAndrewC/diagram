@@ -267,14 +267,34 @@ def features_between(s: Settlement, lo: dict[tuple[str, str], int], hi: dict[tup
         for key, c in counts.items():
             if key and key != "-":  # `"-"` is ink ruled NOT highlighted, so a reader cannot click it
                 found[key] = found.get(key, 0) + c
-    for layer in ("water", "late_water"):  # the deferred water carries its class on each entry (`Settlement._tag`)
+    # The DEFERRED stores are drawn at finish, so their ink sits in slots reserved long before the stage that filled them:
+    # the ways (`ground`) and the water carry their class on each entry (`Settlement._tag`), and a tiled cover - the marsh,
+    # the scrub - on its `Cover` (feature 298's slots are reserved by `_header`, so the marsh and the scrub were credited
+    # to no stage and the closing list named them as features Inashiro does not have)
+    for layer in ("ground", "water", "late_water", "_covers"):
         entries = getattr(s, layer, None)
         if isinstance(entries, list):
             for e in entries[lo.get(("attr", layer), 0) : hi.get(("attr", layer), len(entries))]:
-                key = e.get("cls") if isinstance(e, dict) else None
-                if isinstance(key, str) and key and key != "-":  # a water entry's class is a plain key
+                tag = e.get("cls") if isinstance(e, dict) else getattr(e, "cls", None)
+                for key in tag_keys(tag):
                     found[key] = found.get(key, 0) + 1
     return sorted(found)
+
+
+def tag_keys(tag: object) -> list[str]:
+    """The classes a reader can click that one deferred entry's tag names: a plain key, both sides of a `Split`, every
+    piece of a `Parts` - never `"-"`, the ink ruled NOT highlighted."""
+    from l7r.diagram.interactive.tags import Split
+
+    if isinstance(tag, str):
+        keys = [tag]
+    elif isinstance(tag, Split):
+        keys = [tag.fill, tag.stroke]
+    elif isinstance(tag, tuple):
+        keys = [piece[0] for piece in tag if isinstance(piece, tuple) and piece and isinstance(piece[0], str)]
+    else:
+        keys = []
+    return [k for k in dict.fromkeys(keys) if k and k != "-"]
 
 
 def elsewhere_in_the_pool(named: set[str], skill: str) -> list[tuple[str, str]]:
