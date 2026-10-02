@@ -202,6 +202,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.cohort_audit": ("cohort", "expensive"),
     "l7r.diagram.tools.mapcheck": ("maps", "expensive"),  # feature: `tripwire` retired 2026-09-05 - it was `maps` with a false help line
     "l7r.diagram.tools.perf_snapshot": ("perf", "expensive"),
+    "l7r.diagram.tools.overlap_census": ("census", "expensive"),  # feature 306: comparisons per call of every check the pool's rolls run
     "l7r.diagram.tools.roll_audit": ("roll-audit", "cheap"),  # feature 216: the engine lines each roll alone reaches, off the gate baseline
     "l7r.diagram.labels.hand_sheet": ("sheet-render", "cheap"),  # feature 286: a hand-drawn sheet rendered with its captions placed
     "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
