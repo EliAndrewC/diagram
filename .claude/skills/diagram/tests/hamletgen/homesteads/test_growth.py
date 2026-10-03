@@ -326,3 +326,14 @@ def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.Mo
     s.try_place = lambda x, y, k: (seats.append((x, y)) if getattr(s, "_tight_of", None) is not None else None) or real(x, y, k)  # type: ignore[method-assign]
     grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
     assert seats and all(y > -1e-6 for _x, y in seats), "the first house's yard lies south: no tight seat north of it"
+
+
+def test_a_tight_seat_by_a_way_is_no_tight_seat() -> None:
+    """Feature 317 (`TIGHT_TREE_FT`): a household that near the access tree has a way of its own - the custom's condition fails."""
+    tree = SimpleNamespace(targets=lambda p: [(p[0] + 79.0, p[1])])
+    s = SimpleNamespace(px=lambda ft: ft, _access=tree)
+    assert growth.near_the_tree(s, (0.0, 0.0))
+    s._access = SimpleNamespace(targets=lambda p: [(p[0] + 81.0, p[1])])
+    assert not growth.near_the_tree(s, (0.0, 0.0))
+    assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft, _access=SimpleNamespace(targets=lambda p: [])), (0.0, 0.0)), "no tree point"
+    assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft), (0.0, 0.0)), "no tree"

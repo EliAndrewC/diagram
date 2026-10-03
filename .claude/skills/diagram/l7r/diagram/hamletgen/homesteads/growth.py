@@ -208,6 +208,20 @@ TIGHT_GAP_PX = 2.0
 TIGHT_BEARING_DEG = 112.5
 
 
+#: How near the access tree a TIGHT seat may stand and still be offered, in feet (feature 317): a household that close to a way has
+#: a way of its own, the custom's condition failing. MEASURED (research R8): at 15 households on 13 settlements, no passage came
+#: from a tight seat nearer the tree than 87 ft, and of the 135 of 343 tight tries nearer than 80 every one whose walk was found had
+#: a corridor of its own; the tries the cut spares are a search breadth, never a rule - each is refused unasked as it would have been.
+TIGHT_TREE_FT = 80.0
+
+
+def near_the_tree(s: Settlement, seat: Pt) -> bool:
+    """Does a tight seat stand within `TIGHT_TREE_FT` of the access tree's nearest point (`AccessTree.targets`)?"""
+    tree = getattr(s, "_access", None)
+    near = tree.targets(seat)[:1] if tree is not None else []
+    return bool(near) and math.dist(seat, near[0]) < s.px(TIGHT_TREE_FT)
+
+
 def yard_side(center: Pt, yard: Pt, angle: float) -> bool:
     """Does the bearing `angle` (radians) from a standing house at `center` stand within `TIGHT_BEARING_DEG` of the bearing to
     its threshing yard at `yard`?"""
@@ -297,9 +311,9 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                     break
                 level, done = level + 1, 0  # DRY: every standing house offers again, wider
                 continue
-            center, reach, ang, scale, nb = heapq.heappop(heap)[3]
-            if nb is not None and getattr(s, "_passage_left", 0) <= 0:
-                continue  # the share is spent: a tight seat is no seat
+            seat, (center, reach, ang, scale, nb) = heapq.heappop(heap)[2:]
+            if nb is not None and (getattr(s, "_passage_left", 0) <= 0 or near_the_tree(s, seat)):
+                continue  # the share is spent, or the seat stands by a way (`TIGHT_TREE_FT`): a tight seat is no seat
             parting = TIGHT_GAP_PX if nb is not None else gap
             house = next_house(s, largest)
             lot: list[Reach] = []
