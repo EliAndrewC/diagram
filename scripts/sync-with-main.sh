@@ -115,15 +115,20 @@ ensure_git_config() {
 }
 ensure_git_config
 
-# GITHUB MAIN IS MAIN (feature 130, FR-001, research R7). The clone's `origin` and the mirror's are
+# GITHUB MAIN IS MAIN (feature 130, FR-001, research R7). The clone's `origin` is
 # GitHub over HTTPS - the container has no SSH key, and the public repository needs no credential
 # to READ; a push presents the PAT through GIT_ASKPASS (scripts/git-askpass-token.sh) from
 # development-secrets.ini, never on a command line. A remote still pointing at the local mirror or
 # at the SSH URL is re-pointed here, once, and said so. CLONE_GITHUB stays as the test seam.
+# THE MIRROR'S `origin` IS THE GM'S, NOT OURS (GUARD_EDIT_OK: the GM asked for this, 2026-10-03). It used to be re-pointed to HTTPS too, which
+# undid the GM's SSH remote on every sync, so a plain `git push`/`git pull` on the laptop asked for a
+# username. The mirror is now refreshed from $GITHUB_URL by URL (mirror_refresh), straight into
+# refs/remotes/origin/main, which the guards here and in clone-sync-hooks.sh read - its remote's URL
+# is never touched.
 GITHUB_URL=${CLONE_GITHUB:-https://github.com/EliAndrewC/diagram}
 ensure_github_origin() {
   local tree url
-  for tree in "$ROOT" "$MAIN"; do
+  for tree in "$ROOT"; do
     url=$(git -C "$tree" remote get-url origin 2>/dev/null || true)
     if [ "$url" != "$GITHUB_URL" ]; then
       git -C "$tree" remote set-url origin "$GITHUB_URL" 2>/dev/null || git -C "$tree" remote add origin "$GITHUB_URL"
@@ -143,8 +148,10 @@ ensure_github_origin
 # and says so rather than merging in the mirror. Render-sync follows, cache-short-circuited.
 mirror_refresh() { # [wait-seconds]: with one, returns 75 when the lock stays busy that long (the prompt hook's path)
   local rc=0
-  if [ -n "${1:-}" ]; then flock -E 75 -w "$1" "$LOCK" git -C "$MAIN" pull -q --ff-only origin main || rc=$?
-  else flock "$LOCK" git -C "$MAIN" pull -q --ff-only origin main || rc=$?; fi
+  # By URL, not by remote name: the mirror's `origin` is the GM's (see ensure_github_origin).
+  local refresh='git -C "$M" fetch -q "$U" +refs/heads/main:refs/remotes/origin/main && git -C "$M" merge -q --ff-only refs/remotes/origin/main'
+  if [ -n "${1:-}" ]; then flock -E 75 -w "$1" "$LOCK" env M="$MAIN" U="$GITHUB_URL" sh -c "$refresh" || rc=$?
+  else flock "$LOCK" env M="$MAIN" U="$GITHUB_URL" sh -c "$refresh" || rc=$?; fi
   [ "$rc" = 75 ] && [ -n "${1:-}" ] && return 75
   [ "$rc" = 0 ] \
     || die "mirror $MAIN cannot fast-forward to GitHub main - someone committed there by hand (main is a MIRROR, nobody's workspace). Inspect 'git -C $MAIN log origin/main..HEAD' and move that work into a clone."
