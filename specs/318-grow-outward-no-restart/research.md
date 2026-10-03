@@ -55,3 +55,24 @@ The seats nearest the field are more often hemmed in by the paddy and the standi
 the cost is the corridor searches that find no way (2.5 s of `access_corridor` across 238 calls). The cost is the order the GM
 asked for (the nearest-the-field option tried first); it is measured at the bookends and carried through the perf records. Observed 2026-10-03, method: `refusals318.py` and
 `prof318.py` (cProfile of the homestead stage).
+
+## R4 - Option A, the ways laid in the gaps (Amendments 2 and 3), the scratch prototype
+
+Observed 2026-10-03, method: the scratch prototype (in-memory patches of the clone at a241afe7f: no per-seat search, the 20 ft
+gap, the ring tie-break, a gap pass at the seating's end), each stage's process time on the reference at 15 households (seeds 4,
+25, 39, 47) and cohort seeds 2, 7, 8, 9 and 10.
+
+- Laid after the seating by the corridor router as it is (one search per house against the growing tree): 2-9 houses a map
+  unreached. The grid found a route from both doors every time; the taut pull refused it - its own beds and fixtures, which the
+  router's grid does not keep off, and at most 5 legs. Laying in the seating's order, or 9 legs, mended one map of nine.
+- A gap pass (one flood over lane ground from the way out, a local way out of each homestead, traced along the flood): the
+  failures were then the whole tree's lane law - the doubled band (`tree_shadows`) in 10 of 14, a new way running beside an
+  older one in the same gap. Joining an older way at a T within 25 ft mended them.
+- The raster's open test must be the corridor's own (the site's uncertain cells asked exactly): with the free-ground raster's
+  surely-taken cells alone, the taut pull refused a leg in 8 of 18 failures.
+- Padding the homestead boxes by most of a cell closed the gaps (20 ft gap less two 7 ft half-widths leaves 6 ft): every house
+  but a few found no way out. Unpadded, with no diagonal cutting a blocked corner: 5 of 9 maps reached every house.
+- Up to six distinct exits a house: 6 of 9. Cell 5 px: 8 of 9 (cell 6 px: 7 of 9; 4 px: 6 of 9 and 0.3 s more).
+- Cost, homesteads stage summed over the nine: main 9.85 s; the tie-break alone 9.96 s; option A 14.38 s (the pass 0.5-0.9 s a
+  map: the flood about 0.4, the site's uncertain cells 0.15, the local searches and the lane law 0.2). The per-seat search it
+  replaces was about 0.25 s a map on main; the +11.9% of the first amendment was the field-first order, not the search.

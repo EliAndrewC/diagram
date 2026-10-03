@@ -1,11 +1,11 @@
 # Tasks: grow outward, never restart (feature 318)
 
-**Input**: plan.md (D1-D8)
+**Input**: plan.md (D1-D14)
 
 ## Occasions
 
 - placement-changed: farmhouse - a nucleated cluster grows at its edge with no radius or field-reach wall, the seat nearest the field first, and no seating is thrown away (plan D1-D4)
-- placement-changed: village lane - the lanes follow the houses the new growth seats (plan D2, D4)
+- placement-changed: village lane - the ways are laid in the gaps between homesteads once every house stands (plan D9-D13)
 
 ## Tasks
 
@@ -30,3 +30,16 @@
 - [x] T07 `make done`, the cohort and the pool against main, the bookends with the spread, the occasions' reviews and the claims (FR-009, FR-010, SC-005, SC-006)
       research: rendering
       verify: DONE. make done green (cc146e2cd, 55 s incremental after full runs); cohort 30/30 against main's 30/30 (make cohort N=24); pool hamlets byte-identical through the perf fixes; 318-end bookend +11.9% band 3, perf-audit consistent and justified (20261003T203450Z / T203500Z); glyph-check farmhouse and village lane PASS round 5 on a3ada499; claims-owed none
+- [ ] T08 the tie-break: main's levels, rings of `TIE_RING_FT`, the field nearer within a ring; the order tests (D4, FR-003a, SC-002a)
+      research: rendering
+- [ ] T09 the threading gap, pairwise for a tight seat; the gap test (D9, FR-011, SC-007)
+      research: rendering
+- [ ] T10 lane ground and its one predicate; no per-seat search; the no-search test (D10, D11, FR-012, FR-013, SC-008)
+      research: rendering
+- [ ] T11 the gap pass and the pinch; their unit tests on constructed sites (D12, D13, FR-014, SC-009)
+      research: rendering
+- [ ] T12 the record: 0081 and 0029's drawing pages, the claims, their checks (D14, FR-008, SC-004)
+      research: rendering
+- [ ] T13 `make done`, the cohort and the pool against main, the bookends (FR-010, FR-015, SC-005, SC-009, SC-010), the occasions' reviews
+      research: rendering
+
