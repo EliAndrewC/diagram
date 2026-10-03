@@ -7,12 +7,13 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures, sun_turns
+from ..homestead_parts.grove_rules import EAST_REACH_PX
 from ..homestead_parts.grove_sides import bundle_turn
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
 from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 from .bearing import BEARING_SPREAD_DEG
-from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, dispersed_layout
+from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, clear_east_of_beds, dispersed_layout
 from .lot import kura_rect
 
 if TYPE_CHECKING:
@@ -158,6 +159,8 @@ class BundleGeomMixin:
         frame = base.pop("_frame", None)
         turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
+        if frame is not None:  # dispersed: no unraked band left standing in a turned bed's morning sun (feature 315, seed 906)
+            base["groves"] = clear_east_of_beds(list(base.get("groves") or ()), list(base["gardens"]), EAST_REACH_PX * self.bscale)
         base["turn"] = turn  # the parts' turn, so a reader of their true sizes (`access.doors_of`) measures them as drawn
         # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
         _th = math.radians(turn)
@@ -176,6 +179,10 @@ class BundleGeomMixin:
             base["bbox"] = self._bbox_of(rects)
         else:  # dispersed: the grove's unraked frame with the turned yard and garden
             base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else []), *boxes["fixtures"].values()])
+        # ...AND ITS PERSIMMON KEPT ONLY WHERE, AT THIS RAKE, IT SHADES NO PLOT - its own or a placed neighbor's (feature 315): decided
+        # here, because the placer lays a seat's homestead afresh once it is chosen (`_place_bundle`), so a tree dropped by the
+        # fit alone came back on the record (cohort seed 1: its own yard's sun)
+        self._settle_persimmon(base)
         return base
 
     def _core_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, shed: bool = False) -> dict[str, Any]:  # type: ignore[misc]
@@ -385,7 +392,11 @@ class BundleGeomMixin:
         def rel(r: Any) -> Any:
             return (r[0] - hx, r[1] - hy, r[2], r[3])
 
-        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well"), *bands) if r is not None]
+        # A GROVE FARM'S BANDS TAKE ITS PERSIMMON (feature 315): the traditional igune held "a few fruit trees" among its cedar and
+        # pine (Sendai's replanting plan, research/questions/0075-bamboo-groves-chikurin.html), so the persimmon's trunk and crown may
+        # stand in its own grove's bands - behind the house, within the dooryard - where no other fixture stands
+        fruit = [rel(b) for b in bands]
+        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well")) if r is not None]
         ground = [rel(base["yard"]), *(rel(g) for g in base["gardens"])]
         forms = getattr(self, "_fixture_forms", None) or FixtureForms()
         annex = rel(base["byre"]) if base.get("byre") is not None else None
@@ -393,11 +404,30 @@ class BundleGeomMixin:
         # THE PERSIMMON KEEPS OUT OF ITS OWN YARD'S AND BEDS' SUN (GM 2026-10-02, `CANOPY_SHADE_FT`), on the map that keeps
         # the sun corridor (the scripted path's opt-in, `sun_corridor`), at every rake the house may yet be drawn at: this
         # template serves every position, and the turn is the position's (`_house_rot`: the common bearing +-30, else +-5)
+        # ...judged at the rake of the household's own seat (feature 315): the template no longer has to hold at every rake the house
+        # might take, because the fit asks the tree again as drawn, at the house's own rake, and drops it there if it shades a
+        # plot (`fit._persimmon_sun_conflict`); held at the whole 60-degree range, a grove farm found no dooryard seat at all
         bearing = getattr(self, "_house_bearing", None)
         lo, hi = (-5.0, 5.0) if bearing is None else (bearing - BEARING_SPREAD_DEG, bearing + BEARING_SPREAD_DEG)
         shade = self.px(CANOPY_SHADE_FT) if getattr(self, "_sun_corridor_ft", 0.0) else 0.0
         try:
-            laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex, notes, shade, sun_turns(lo, hi))
+            laid = lay_fixtures(
+                kinds,
+                hw,
+                hh,
+                roofs,
+                ground,
+                rel(base["yard"]),
+                shed,
+                lambda salt: self._hjit(sx, sy, salt),
+                forms,
+                self.px,
+                annex,
+                notes,
+                shade,
+                (self._turn_at(sx, sy),) if getattr(self, "_sun_corridor_ft", 0.0) else sun_turns(lo, hi),
+                fruit,
+            )
         except FixtureUnlaid as refused:  # a bath room or a wood shed with no seat in this layout: the fit refuses it (feature 280)
             base["unlaid"] = str(refused)
             return

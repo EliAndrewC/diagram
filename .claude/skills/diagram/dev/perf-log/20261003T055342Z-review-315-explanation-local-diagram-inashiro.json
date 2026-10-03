@@ -1,0 +1,378 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "8f13ae931",
+    "label": "315-start",
+    "utc": "20261002T220503Z"
+  },
+  "binding": "7ff4c62d5a9673532a6d3e112dceb1d01e2dd2f3c3686723c852388d4d38e277",
+  "end": {
+    "commit": "3a72b7e88",
+    "label": "315-end",
+    "utc": "20261003T055219Z"
+  },
+  "environment": "local",
+  "explanation": "Seed 47 at 15 households is +5.0% (4.2 s; web +0.3 s, windbreak +0.1 s) while the total is -16.7% and seed 47 at 10, 20 and 40 households is -36.7%, -39.3% and -45.0%. 315 adds work in exactly those two stages: every farm grove's culm marks are tested against the bamboo sun keep-outs (groves.py kbam, drawn in the windbreak stage), and the web's settle asks the corner weld of every needle no cut opens (settle_needles). The rest of the speed-up is 314's, merged in.",
+  "feature": "315-bamboo-in-the-sun",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "ba150eae-6164-4e48-ab0e-3ebcacdf35b5",
+    "utc": "20261003T055342Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -32.3,
+          "39": -27.6,
+          "4": -40.0,
+          "47": -36.7
+        },
+        "total_pct": -34.6
+      },
+      "20": {
+        "seeds": {
+          "25": -39.1,
+          "39": -30.5,
+          "4": -19.0,
+          "47": -39.3
+        },
+        "total_pct": -32.0
+      },
+      "40": {
+        "seeds": {
+          "25": -35.3,
+          "39": -42.8,
+          "4": -30.3,
+          "47": -45.0
+        },
+        "total_pct": -37.9
+      }
+    },
+    "seeds": {
+      "25": -26.3,
+      "39": -22.0,
+      "4": -21.8,
+      "47": 5.0
+    },
+    "total_pct": -16.7
+  },
+  "render": "perf bands [local]: 315-end vs 315-start -> band 1\n  seed   4   -21.8%\n  seed  25   -26.3%\n  seed  39   -22.0%\n  seed  47    +5.0%; grew: web +0.3s, windbreak +0.1s\n  TOTAL      -16.7%\n  10 households: TOTAL  -34.6% -> band 0\n    seed   4   -40.0%\n    seed  25   -32.3%\n    seed  39   -27.6%\n    seed  47   -36.7%\n  20 households: TOTAL  -32.0% -> band 0\n    seed   4   -19.0%\n    seed  25   -39.1%\n    seed  39   -30.5%\n    seed  47   -39.3%\n  40 households: TOTAL  -37.9% -> band 0\n    seed   4   -30.3%\n    seed  25   -35.3%\n    seed  39   -42.8%\n    seed  47   -45.0%\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.07,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.0
+      ],
+      "field": [
+        0.67,
+        0.6
+      ],
+      "frame": [
+        0.01,
+        0.0
+      ],
+      "hinterland": [
+        0.72,
+        0.51
+      ],
+      "homesteads": [
+        0.81,
+        0.61
+      ],
+      "labels": [
+        0.04,
+        0.01
+      ],
+      "notice": [
+        0.13,
+        0.06
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.05
+      ],
+      "track": [
+        0.06,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.75,
+        0.5
+      ],
+      "windbreak": [
+        0.43,
+        0.32
+      ],
+      "woodland": [
+        0.05,
+        0.04
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.1,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.59,
+        0.42
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        1.03,
+        0.6
+      ],
+      "homesteads": [
+        1.05,
+        0.63
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.11,
+        0.17
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.01
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.07,
+        0.04
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.58,
+        0.72
+      ],
+      "windbreak": [
+        0.46,
+        0.45
+      ],
+      "woodland": [
+        0.09,
+        0.07
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.08,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        1.0,
+        0.72
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        1.33,
+        0.96
+      ],
+      "homesteads": [
+        1.12,
+        0.83
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.15,
+        0.1
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.17,
+        0.18
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.86,
+        0.7
+      ],
+      "windbreak": [
+        0.5,
+        0.48
+      ],
+      "woodland": [
+        0.17,
+        0.14
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.09,
+        0.06
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.0
+      ],
+      "field": [
+        0.64,
+        0.66
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.75,
+        0.63
+      ],
+      "homesteads": [
+        1.09,
+        1.06
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.13
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.07,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.69,
+        0.96
+      ],
+      "windbreak": [
+        0.41,
+        0.46
+      ],
+      "woodland": [
+        0.05,
+        0.1
+      ]
+    }
+  },
+  "unverified": "a control (the same seed rolled with the bamboo keep-outs and the weld removed) was not taken: four sessions held the shared 10 GB cap during this run and memguard was killing processes; the increase is about 0.2 s on one seed of sixteen",
+  "verdict": "pending"
+}

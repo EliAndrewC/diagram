@@ -547,6 +547,17 @@ def test_a_needle_of_grass_is_opened_on_its_shorter_lane() -> None:
     assert settle.settle_needles(tree) == 0, "a needle bounded by the tree alone is the tree's"
 
 
+def test_a_sliver_where_two_tree_ways_meet_is_welded() -> None:
+    """Cohort seed 22 (feature 315): two access corridors meeting with one corner 0.4 px past the other's tread - no cut may
+    open it (both are the tree), so the corner is welded onto the tread and the web closes no face there."""
+    s = _S([CONN, ([(-541.0, 41.0), (-461.0, 51.0), (-366.0, 116.0)], {}), ([(-536.0, -118.0), (-536.0, 42.0), (-326.0, 32.0)], {})])
+    for ln in s.M["lanes"][1:]:
+        ln["role"] = "access"
+    assert law.needle_loops(s.M), "found: the sliver"
+    assert settle.settle_needles(s) == 2
+    assert law.needle_loops(s.M) == [] and _pts(s, 2)[1] in _pts(s, 1), "one shared vertex"
+
+
 def polyline(p):
     return sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False))
 

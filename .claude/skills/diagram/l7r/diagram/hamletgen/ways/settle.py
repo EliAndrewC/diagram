@@ -47,6 +47,7 @@ from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_doorya
 
 from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, Poly, Pt
 from . import law
+from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
 from .checks import served_network, square_crossings, unreached_houses
 from .clearance import kink_spans
 from .corridors import (
@@ -68,6 +69,7 @@ from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `set
 from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import left_to_the_tree, prune_the_tree, settle_defer, settle_tree, tree_faults
+from .weld import weld_corner
 
 SETTLE_ROUNDS = 8
 """Repair rounds before the lanes still breaking a rule are dropped whole. Each round runs every rule once; a measured
@@ -89,40 +91,6 @@ SQUARE_MARGIN_FT = 6.0
 
 def _pts(ln: Mapping[str, Any]) -> Poly:
     return [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
-
-
-def sub_run(p: Poly, s0: float, s1: float) -> Poly:
-    """The part of the run `p` between arc lengths `s0` and `s1` (clamped to the run) - [] when that is nothing."""
-    total = polyline_len(p)
-    s0, s1 = max(0.0, s0), min(total, s1)
-    if s1 - s0 < 1e-6 or len(p) < 2:
-        return []
-    out: Poly = []
-    acc = 0.0
-    for a, b in zip(p, p[1:], strict=False):
-        d = math.dist(a, b)
-        lo, hi = acc, acc + d
-        if hi >= s0 and lo <= s1 and d > 0:
-            t0 = max(0.0, (s0 - lo) / d)
-            t1 = min(1.0, (s1 - lo) / d)
-            q0 = (a[0] + (b[0] - a[0]) * t0, a[1] + (b[1] - a[1]) * t0)
-            q1 = (a[0] + (b[0] - a[0]) * t1, a[1] + (b[1] - a[1]) * t1)
-            if not out:
-                out.append(q0)
-            if math.dist(out[-1], q1) > 1e-9:
-                out.append(q1)
-        acc = hi
-    return out if len(out) >= 2 else []
-
-
-def arc_at(p: Poly, k: int, x: Pt) -> float:
-    """The arc length along `p` of the point `x` on its segment `k`."""
-    return polyline_len(p[: k + 1]) + math.dist(p[k], x)
-
-
-def cut_around(p: Poly, at: float, gap: float) -> list[Poly]:
-    """`p` with the stretch within `gap` of arc length `at` taken out: the pieces either side."""
-    return [q for q in (sub_run(p, 0.0, at - gap), sub_run(p, at + gap, polyline_len(p))) if q]
 
 
 def _rounded(p: Poly) -> list[list[float]]:
@@ -644,6 +612,8 @@ def settle_needles(s: Any) -> int:
             pieces = [[(float(x), float(y)) for x, y in g.coords] for g in parts if g.geom_type == "LineString" and not g.is_empty]
             if keeps_the_network(M, i, pieces):
                 return apply_pieces(s, {i: pieces})
+        if (welded := weld_corner(lanes, face, bounding)) is not None:  # a sliver where two ways meet: one vertex, no face (`weld.py`)
+            return apply_pieces(s, {k: [p] for k, p in welded.items()})
     return 0
 
 

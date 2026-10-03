@@ -246,3 +246,11 @@ def test_a_write_up_numbered_past_four_digits_owes_its_check(tmp_path: pathlib.P
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text('<h3 id="some-key">some-key</h3>\n<p><em>What it is:</em> a page.</p>\n', encoding="utf-8")
     assert [u.slug for u in ro.units(d)] == ["source-applicability:some-key"]
+
+
+def test_an_entry_drift_unit_names_its_sections_number_and_its_answer() -> None:
+    """Its subject is a modal's key, never a question: the hint once read `make check-bundle Q=vegetable garden`, refused."""
+    u = ru.Unit("entry-drift:vegetable garden", "its section's findings moved (0038-sunlight-and-shade-on-the-farm.drawing.html)")
+    cmd = ro.command(u)
+    assert "Q=0038 FOR=entry-drift" in cmd and 'CHECK=entry-drift KIND="vegetable garden"' in cmd
+    assert "Q=<its section>" in ro.command(ru.Unit("entry-drift:well", "its section's findings moved ()"))

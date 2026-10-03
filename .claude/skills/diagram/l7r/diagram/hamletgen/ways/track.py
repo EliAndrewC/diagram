@@ -68,7 +68,7 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
     return cut, "folded back short of the field - the ground between is marsh a path may not cross"
 
 
-def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) -> Pt:
+def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt, turn_deg: float = 0.0) -> Pt:
     """Where a track leaves the settlement - measured from the PLACED houses, not the predicted band.
 
     FR-002, and feature 126's unfinished task T009. Until now the gateway came from
@@ -94,6 +94,9 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
         return fallback
     ax, ay = cast(Pt, seat["along"])
     ox, oy = cast(Pt, seat["out"])
+    if turn_deg:  # a bearing turned off the downslope (`stage_track`, where the downslope gateway has no dry way out)
+        c, sn = math.cos(math.radians(turn_deg)), math.sin(math.radians(turn_deg))
+        ox, oy, ax, ay = ox * c - oy * sn, ox * sn + oy * c, ax * c - ay * sn, ax * sn + ay * c
     xs = [float(h["x"]) for h in hs]
     ys = [float(h["y"]) for h in hs]
     cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
@@ -689,7 +692,9 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # back in `stage_sink`, before this, and a cohort sweep found ways ending in it on two maps.
     toe = s.toe_band()
     drawn_wet = marsh_ground(s.M, but=("defense",))
-    track = connector_track(plan, gate, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
+    from .gateway import gateway_track  # the layer above this one: its fallbacks sweep with `connector_track` (feature 315)
+
+    track = gateway_track(s, plan, seat, _band_gate, gate, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, drawn_water_segs(s), fabric)
     s.lane(
         connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
         width=CONNECTOR_WIDTH,

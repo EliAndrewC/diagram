@@ -267,3 +267,26 @@ def test_every_crown_site_keeps_out_of_a_plots_sun() -> None:
     w.M["threshing_yards"] = [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 20.0}]
     w._draw_stand([(420, 420), (600, 420), (600, 600), (420, 600)], 3, True)  # drawn as at crop time
     assert len(w.M["tree_crowns"]) > 0 and trees_shading_plots(w.M, CANOPY_SHADE_FT) == []
+
+
+def test_the_sun_keepouts_take_a_reach_of_their_own() -> None:
+    """Feature 315: `_sun_keepouts(bbox, reach_ft)` - bamboo's reach, or any other, in place of the canopy reach."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT, sun_box
+
+    s = _sunny()
+    s.M["threshing_yards"] = [{"x": 500.0, "y": 500.0, "w": 40.0, "h": 20.0}]
+    assert s._sun_keepouts((0.0, 0.0, 1000.0, 1000.0), BAMBOO_SHADE_FT) == [sun_box((500.0, 500.0, 40.0, 20.0), BAMBOO_SHADE_FT)]
+    assert s._sun_keepouts((0.0, 0.0, 1000.0, 1000.0), 10.0) == [sun_box((500.0, 500.0, 40.0, 20.0), 10.0)]
+
+
+def test_a_nudged_beds_sun_ground_is_clear_of_every_standing_tree_promised_seat_and_bamboo_mark() -> None:
+    """Feature 315 (cohort seed 14): a bed slid south after the groves stand may not take a drawn crown, a persimmon promised a
+    seat or a bamboo mark into its sun ground."""
+    from l7r.diagram.settlement.rolling.farmsteads import beds_sun_clear
+
+    bed = [(0.0, 0.0, 20.0, 20.0)]  # sun ground x -60..60, y -10..60 at a reach of 50
+    assert beds_sun_clear(bed, [], [], [], 50.0, 50.0)
+    assert not beds_sun_clear(bed, [0.0, 65.0, 6.0], [], [], 50.0, 50.0), "a drawn crown south"
+    assert not beds_sun_clear(bed, [], [(65.0, 0.0, 6.0)], [], 50.0, 50.0), "a promised persimmon east"
+    assert not beds_sun_clear(bed, [], [], [[-62.0, 10.0, 3.0]], 50.0, 50.0), "a bamboo mark west"
+    assert beds_sun_clear(bed, [0.0, -30.0, 6.0], [(80.0, 0.0, 6.0)], [[0.0, 75.0, 3.0]], 50.0, 50.0), "each clear of it"

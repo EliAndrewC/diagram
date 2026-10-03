@@ -346,3 +346,30 @@ def test_on_a_map_keeping_the_sun_the_east_band_closes_the_house_side_only() -> 
     assert sunny["garden"][1] == sunny["yard"][1], "the garden stands beside the yard"
     width = lambda c: max(r[0] + r[2] / 2 for r, _f, _d in c["groves"]) - min(r[0] - r[2] / 2 for r, _f, _d in c["groves"])  # noqa: E731
     assert width(sunny) == width(plain)
+
+
+def test_on_a_map_keeping_the_sun_a_bed_taller_than_its_yard_stands_wholly_south_of_the_east_band() -> None:
+    """Feature 315 (cohort seeds 14, 15, 906): with `sun_band` a bed taller than the yard it stands beside, centered on the yard,
+    rose past the front wall, where the east band ends, into the band's morning shade; it now stands a gap south of the wall."""
+    for garden, yard in (((22.0, 30.0), (40.0, 20.0)), ((22.0, 24.0), (40.0, 30.0))):
+        c = canonical_farmstead(50.0, 28.0, 3.0, garden, yard, sides=3, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, sun_band=True)
+        east = next(r for r, face, _d in c["groves"] if face == (1, 0))
+        top = c["garden"][1] - c["garden"][3] / 2
+        assert top >= east[1] + east[3] / 2 + 3.0, (garden, yard, top)
+        assert c["garden"][1] >= c["yard"][1], "never north of the yard's line"
+
+
+def test_a_band_in_a_turned_beds_east_reach_is_cut_back_to_the_beds_edge() -> None:
+    """Feature 315 (cohort seed 906): a bed turned with its house rises past the unraked east band's end; the band is cut back at
+    its near end to the bed's top, a band below the bed to its bottom, one out of reach left whole, a stub never made."""
+    from l7r.diagram.settlement.rolling.dispersed import clear_east_of_beds
+
+    bed = (0.0, 0.0, 20.0, 20.0)  # east edge 10, y -10..10
+    above = (24.0, -30.0, 17.0, 42.0)  # west edge 15.5, y -51..-9: 1 px into the bed's height
+    assert clear_east_of_beds([above], [bed], 22.0) == [(24.0, -31.0, 17.0, 40.0)], "cut to a pixel clear of the bed's top"
+    below = (24.0, 30.0, 17.0, 42.0)  # y 9..51
+    assert clear_east_of_beds([below], [bed], 22.0) == [(24.0, 31.0, 17.0, 40.0)], "cut to a pixel clear of the bed's bottom"
+    far = (60.0, -30.0, 17.0, 42.0)
+    assert clear_east_of_beds([far], [bed], 22.0) == [far], "out of reach"
+    stubby = (24.0, -5.0, 17.0, 20.0)  # cutting it to the bed's top would leave 5 px
+    assert clear_east_of_beds([stubby], [bed], 22.0) == [stubby], "never cut to a stub"

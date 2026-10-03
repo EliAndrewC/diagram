@@ -90,6 +90,6 @@ CROWN_FILLS = (
     '#7C9856',  # land/cover.py woodland commons
     '#87A45C',  # land/cover.py woodland commons
     '#BBD06A',  # homestead_parts.py bamboo top
-    '#7C9A3E',  # farm_fixtures.py the yard persimmon (feature 133 T57)
+    '#94A23A',  # farm_fixtures.py the yard persimmon (feature 133 T57; yellowed in 315: #7C9A3E stood 7.8 in CIELAB from the grove's #7C9A4E, and the record draws it 'a yellower green than the groves')
 )
 RICE_GREENS = ['#A6C398', '#A2C094', '#A9C69C']  # rice at ONE stage - near-identical greens (reads uniform)
