@@ -27,6 +27,6 @@
 - [x] T06 the record: 0029, 0032 and 0081's drawing pages, and their record checks (D7, FR-008, SC-004)
       research: rendering
       verify: DONE. 0029, 0032, 0081 drawing pages edited; record checks answered clean (make record-owed: none owed)
-- [ ] T07 `make done`, the cohort and the pool against main, the bookends with the spread, the occasions' reviews and the claims (FR-009, FR-010, SC-005, SC-006)
+- [x] T07 `make done`, the cohort and the pool against main, the bookends with the spread, the occasions' reviews and the claims (FR-009, FR-010, SC-005, SC-006)
       research: rendering
-      verify:
+      verify: DONE. make done green (cc146e2cd, 55 s incremental after full runs); cohort 30/30 against main's 30/30 (make cohort N=24); pool hamlets byte-identical through the perf fixes; 318-end bookend +11.9% band 3, perf-audit consistent and justified (20261003T203450Z / T203500Z); glyph-check farmhouse and village lane PASS round 5 on a3ada499; claims-owed none

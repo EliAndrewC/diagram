@@ -35487,13 +35487,21 @@
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
-  "code": "e5779a460d2997b2",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#a persimmon by its trunk alone": {
+  "code": "ffaa90e87c8d5d4a",
   "core": "a29987cf79a0020b",
   "date": "2026-10-03",
-  "note": "0081 drawing answers this: \"Where a straight path to it would cross its own garden beds or fixtures, the path is routed around them - a map drawing convention\"; cite research/questions/0081-village-lanes.drawing.html for the strip off privy, stack and shed; only the persimmon held off by its 4 ft trunk with the crown overhanging is unanswered (GUESS)",
+  "note": "the 4 ft trunk box with the crown allowed to overhang is a guess; 0081's drawing page says nothing about clearance under a tree's crown",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
+  "code": "30a952b55ae1ce77",
+  "core": "a29987cf79a0020b",
+  "date": "2026-10-03",
+  "note": "0081 drawing: \"Where a straight path to it would cross its own garden beds or fixtures, the path is routed around them - a map drawing convention\"; the code refuses any segment that passes within the path's half-width of a fixture's box",
+  "research": "9525e03c22df776b",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own well": {
   "code": "fbb5527e2ae6e127",

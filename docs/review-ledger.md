@@ -560,3 +560,5 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-03 | glyph-check | village lane on inashiro, feature 318 round 3 (manifest byte-identical) | PASS | F6-F8 restated | nothing | - | - | 65 s | 232k in (196k cached) / 6.7k out |
 | 2026-10-03 | glyph-check | farmhouse on inashiro, feature 318 round 4 (cell cache batched; manifest byte-identical) | PASS | F7 nitpick restated | nothing | - | - | 143 s | 315k in (278k cached) / 7.2k out |
 | 2026-10-03 | glyph-check | village lane on inashiro, feature 318 round 4 (manifest byte-identical) | PASS | F6-F8 restated | nothing | - | - | 62 s | 182k in (150k cached) / 6.1k out |
+| 2026-10-03 | glyph-check | farmhouse on inashiro, feature 318 round 5 (corridor off its own well; manifest byte-identical) | PASS | F7 nitpick restated | nothing | - | - | 86 s | 239k in (203k cached) / 8.3k out |
+| 2026-10-03 | glyph-check | village lane on inashiro, feature 318 round 5 (manifest byte-identical) | PASS | F6-F8 restated | nothing | - | - | 79 s | 298k in (271k cached) / 8.0k out |
