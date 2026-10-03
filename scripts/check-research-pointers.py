@@ -155,8 +155,12 @@ def tracked(root: Path) -> list[str]:
 #: script's selftest - builds a record of its own in a temporary directory, so a question file it names in the new form
 #: need not exist in this one; a retired form in it is still refused, because a test using an old path for any other
 #: reason is stale. Everything else - the engine, the tooling's own code, the docs, the agents, the specs - is held whole.
-VERBATIM = ("scripts/fixtures/",)
+# GUARD_EDIT_OK: feature 312 - fixing a guard that fires on correct work: the attempts log quotes what each read sought,
+# word for word from the ledger (old question numbers among them), and test_attempts.py names the old form to prove the
+# seed maps it to the new one; neither is a pointer.
+VERBATIM = ("scripts/fixtures/", f"{RECORD}/source-attempts.jsonl")
 REFUSAL_DATA = (
+    f"{SKILL}/tests/tooling/test_attempts.py",
     "scripts/check-research-pointers.py",
     f"{SKILL}/tests/tooling/test_research_pointers.py",
     "scripts/_hm_record.py",

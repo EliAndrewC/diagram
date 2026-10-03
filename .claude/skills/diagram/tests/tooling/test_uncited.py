@@ -32,6 +32,7 @@ def _load(name: str):  # noqa: ANN202
 
 
 un = _load("_uncited")
+ui = _load("_uncited_imports")
 ar, src, at = un.ar, un.src, un.at
 
 
@@ -311,21 +312,21 @@ def test_an_imported_copy_is_checked_against_the_live_page(tmp_path: pathlib.Pat
     src.put(_home(), "https://w.org/dead", village, origin="import:/tmp/x")
     src.put(_home(), "https://w.org/fetched", village)
     pages = {"https://w.org/mura": _page("https://w.org/mura", body=village), "https://w.org/same": _page("https://w.org/same", body=village + " Edited.")}
-    got = un.verify(root, ["https://w.org/mura", "https://w.org/same", "https://w.org/dead", "https://w.org/fetched"], Stand(pages))
+    got = ui.verify(root, ["https://w.org/mura", "https://w.org/same", "https://w.org/dead", "https://w.org/fetched"], Stand(pages))
     assert got == {"same": 1, "misfiled": 1, "unread": 1}, "a fetched copy is never checked"
-    assert {x["raw"]: x["result"] for x in at.read(root, un.MISFILED)} == {"https://w.org/mura": "misfiled", "https://w.org/same": "same", "https://w.org/dead": "unread"}
-    assert un.text_of(_home(), "https://w.org/mura") == village.strip() and un.imported(_home(), "https://w.org/mura") is None, "the live text replaces the copy"
+    assert {x["raw"]: x["result"] for x in at.read(root, ui.MISFILED)} == {"https://w.org/mura": "misfiled", "https://w.org/same": "same", "https://w.org/dead": "unread"}
+    assert un.text_of(_home(), "https://w.org/mura") == village.strip() and ui.imported(_home(), "https://w.org/mura") is None, "the live text replaces the copy"
     assert (src.entry_dir(_home(), "https://w.org/mura") / "imported.txt").read_text(encoding="utf-8").startswith("Gravel road"), "a misfiled copy is kept to be read"
     assert not (src.entry_dir(_home(), "https://w.org/same") / "imported.txt").exists()
-    assert un.imported(_home(), "https://w.org/dead") is not None, "an unread page keeps its copy"
-    assert un.imported_urls(_home()) == ["https://w.org/dead"]
-    assert not un.same_page("", "x")
+    assert ui.imported(_home(), "https://w.org/dead") is not None, "an unread page keeps its copy"
+    assert ui.imported_urls(_home()) == ["https://w.org/dead"]
+    assert not ui.same_page("", "x")
     src.put(_home(), "https://w.org/gbk", village, origin="import:/tmp/x")
-    got = un.verify(root, ["https://w.org/gbk"], Stand({"https://w.org/gbk": _page("https://w.org/gbk", body="\ufffd\ufffd mis-decoded " * 40)}))
-    assert got["unread"] == 1 and un.imported(_home(), "https://w.org/gbk") is not None, "a garbled read never replaces the copy"
-    assert un.worse_read("x" * 1000, "y" * 400) and not un.worse_read("x" * 1000, "y" * 600)
-    assert un.worse_read("大阪の日本橋" * 50, "Nippombashi bridge in Osaka " * 50) and not un.worse_read("大阪の日本橋" * 50, "大阪の日本橋 Osaka" * 50)
-    assert un.garbled("\ufffd" * 2 + "x" * 98) and not un.garbled("\ufffd" + "x" * 99) and not un.garbled("\ufffd")
+    got = ui.verify(root, ["https://w.org/gbk"], Stand({"https://w.org/gbk": _page("https://w.org/gbk", body="\ufffd\ufffd mis-decoded " * 40)}))
+    assert got["unread"] == 1 and ui.imported(_home(), "https://w.org/gbk") is not None, "a garbled read never replaces the copy"
+    assert ui.worse_read("x" * 1000, "y" * 400) and not ui.worse_read("x" * 1000, "y" * 600)
+    assert ui.worse_read("大阪の日本橋" * 50, "Nippombashi bridge in Osaka " * 50) and not ui.worse_read("大阪の日本橋" * 50, "大阪の日本橋 Osaka" * 50)
+    assert ui.garbled("\ufffd" * 2 + "x" * 98) and not ui.garbled("\ufffd" + "x" * 99) and not ui.garbled("\ufffd")
 
 
 def test_cite_moves_an_uncited_entry_to_the_works_cited_with_a_used_for_line(tmp_path: pathlib.Path) -> None:
@@ -516,8 +517,8 @@ def test_copy_verdicts_lists_a_verdict_that_blames_its_saved_copy_once_the_page_
                     un.line("https://w.org/gbk", ["unreadable"], "source-filter", "saved text is mojibake"),
                     un.line("https://w.org/short", ["no-substance"], "source-filter", "title only")], un.NOT_KEPT)
     at.write(root, [{"url": src.norm(u), "raw": u, "result": "same", "date": "2026-10-02"} for u in
-                    ("https://w.org/blog", "https://w.org/stub", "https://w.org/gbk", "https://w.org/short")], un.MISFILED)
-    got = un.copy_verdicts(root)
+                    ("https://w.org/blog", "https://w.org/stub", "https://w.org/gbk", "https://w.org/short")], ui.MISFILED)
+    got = ui.copy_verdicts(root)
     assert len(got) == 1 and got[0].startswith("https://w.org/blog") and "unreadable" in got[0]
-    un.stands(root, "https://w.org/blog", "read: the live page is still mojibake past its frame")
-    assert un.copy_verdicts(root) == [], "a page read and found sound leaves the list"
+    ui.stands(root, "https://w.org/blog", "read: the live page is still mojibake past its frame")
+    assert ui.copy_verdicts(root) == [], "a page read and found sound leaves the list"
