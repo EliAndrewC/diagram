@@ -66,6 +66,9 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   asked again - its own homestead set aside, as when it was first asked - whether it has a corridor of its own now; one that has
   is seated by it as any other household and loses its passage (`meta.passage_revoked`). A later household's corridor reserved
   past its beds had given Inashiro's one such household a drawn lane a few feet off (the farmhouse glyph check, research R9).
+  Asked of the layout it is drawn with, where the seat asked every layout: another layout at the seat would have a way for 2 of
+  15 such households at 15 households and 3 of 12 at 40 (research R9) - an accepted limitation put to the GM, since honoring it
+  re-lays a seated homestead.
 
 Every other rule of the placer is asked as before; only the corridor's question is answered by the passage.
 

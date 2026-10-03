@@ -291,3 +291,15 @@ allow 30 together; at 40 households on seeds 2, 25, 39 and 47, 12 where the thre
 measured before the per-layout route was withdrawn, when more tight seats found a way of their own; with the band at 112.5 and
 no recheck the count at 15 households was 23.
 (observed 2026-10-03, method: as the heading.)
+
+**An accepted limitation, for the GM: the recheck asks the drawn layout only** (impl-drift round 4, DRIFTED on
+`recheck_passages`): the drawing page judges a way of its own "by its whole holding ... if any layout of the homestead would leave
+it a way of its own, it has one". At the seat every layout is asked (`landlocked`); once all are seated, only the layout drawn.
+Of the households still reached across a yard on the finished seating, another layout at their seat would have a corridor of
+its own for 2 of 15 at 15 households (seeds 1-16) and 3 of 12 at 40 (seeds 2, 25, 47). The alternatives priced: re-lay such a
+household with that layout after seating - an in-place move of a homestead and everything recorded at its seat, which the
+engine does in one guarded place (`_solve_homestead`); or record the drawn-layout recheck on the drawing page, which re-owes the
+~300 claims that cite it. Accepted by the session for this landing, with the claim's DRIFTED verdict carried by `CLAIMS_OK`;
+put to the GM.
+(observed 2026-10-03, method: `layout_probe.py` in the session's scratchpad - after `recheck_passages`, each remaining passage
+household's other garden layouts at its seat asked `access_corridor` with its own homestead set aside.)
