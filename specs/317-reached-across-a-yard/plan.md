@@ -57,6 +57,10 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   searched on the two households' land and the corridor over the whole tree (research R6). And once a seat: a household that has
   a way of its own from one garden layout at the seat is not on land the custom covers, so its other layouts there are refused
   unasked (research R7: the corridor found at 93 of 106 searches after a walk; the tight seats' work 4.0 -> 2.15 s).
+- THE LAND, NOT ONE LAYOUT (`passage.landlocked`): the seat is taken only where some garden layout at it has a walk to the
+  neighbor's yard and none has a corridor of its own, asked once a seat before any layout is judged - a household lays its beds
+  where its way can run. Judged a layout at a time, 10 of 13 passages at 15 households and 6 of 20 at 40 were households another
+  layout would have given a way of its own (research R8).
 
 Every other rule of the placer is asked as before; only the corridor's question is answered by the passage.
 
@@ -87,7 +91,11 @@ searched per garden layout round the household's own parts (feature 314's search
 the route laid round the first one's beds), and it pays - the seats lost to the path alone 77 -> 21 and 90 -> 22, the stage -6%
 and -10% in CPU seconds. Its one regression on the cohort (seed 18: squaring a water crossing straightened a routed path across
 the household's own privy) is closed the same way as R12: the seating judge asks the household's own house, beds and fixtures of
-the path as the web will lay it (`tree.laid_run`, `own_clear`).
+the path as the web will lay it (`tree.laid_run`, `own_clear`). Found and closed against main (research R8): a joint's pull is
+never taken into a kink the two lanes did not have (`joints._one_joint`, seed 47 at 20 households); a door the search round its
+house alone cannot take to the tree is searched once for a seat's four layouts (`route.house_reaches`, exact); and the route's
+search leaves the persimmon - held by the door since feature 315 - to the taut pull's leg tests (seed 39 at 40 households,
+1,084 -> 295 seats tried).
 
 **D7 - The known bugs (FR-007).** research.md lists each: the D6 defect (this feature); cohort seeds 14, 15, 906 and 22, 23 (the
 Diagram (Inashiro) session, feature 315). At close, each is fixed with its run or in progress with its owner's last word.

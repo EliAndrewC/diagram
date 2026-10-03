@@ -169,3 +169,44 @@ With `own_way`, of 208 tight seats tried: 108 walks asked, 55 found; 55 corridor
 12 households admitted. The stage's remaining tight cost is the settles of the popped tight seats (402 popped, 0.53 s) and the
 placer's calls (1.62 s).
 (observed 2026-10-03, method: as the heading.)
+
+## R8 - Against main: what the whole feature costs, the regressions it found, and how each was closed (method: `t07.sh` against origin/main 2ba3c353c, `t07-*`; `prof.py` call counts (a profile's function calls, which the host's load does not move) against the worktree at origin/main f9e8770a5 (feature 315); `passage_faithful.py`, `tight_features.py`, `refusals.py`, `corridor_only.py`; the bookends `317-start` (/tmp/main317b, f9e8770a5) and `317-end`, taken back to back three times)
+
+**Seed 47 at 20 households refused** (T07, engine a301f4e2a): `WebRefused`, an access lane's bends. `straighten_joints` joined two
+access lanes meeting end to end at a door - a corridor hung from another's start - and pulled the pair taut round the walls,
+dropping a bend's vertex and kinking at the next. Fixed (bebed7632): a joint's pull is refused where it makes a kink the two did
+not have. The cohort (`make cohort N=24 JOBS=2`, the six pinned seeds included): 25/30 on both main and the clone - seeds 14, 15,
+906, 22, 23 on both, the Diagram (Inashiro) session's, landed in feature 315.
+
+**The 80 ft cut** (`TIGHT_TREE_FT`): at 15 households on 13 settlements no passage came from a tight seat nearer the access tree
+than 87 ft; of the 135 of 343 tight tries nearer than 80, every one whose walk was found had a corridor of its own (9 of 9). A
+straight-line test from the seat to the tree (does it cross a homestead?) predicted nothing (5 passages from 195 "clear" tries, 5
+from 148 "blocked").
+
+**The household's land, not one layout** (`passage.landlocked`, 0ff3c6ef5): checking every garden layout at each passage seat,
+10 of 13 passages at 15 households and 6 of 20 at 40 were households another layout would have given a corridor of its own - the
+first layout with a walk and no corridor had been admitted. Judged by the land (some layout walks, none has a way): 7 passages at
+15 households on 13 settlements, 8 at 40 on four. Every one of the 13 earlier passage households could reach the tree round its
+house alone (`house_reaches`), so none was shut in by its neighbors: what refused its own way was its beds, the taut pull or the
+lane law at one layout.
+
+**Where the work went** (calls, seed 2 at 40 households): main 13.4M, the clone with the passage off 12.9M, with it on 24.7M; the
+route search 154 calls and 0.52 s on main against 281 and 4.70 s. The search round the house alone reaching no goal now rules out
+a door once for a seat's four layouts, asked only after a layout's own search found nothing (`house_reaches`, b1b208f03, exact).
+
+**Seed 39 at 40 households, the bookend's band 3** (+48% to +58%, homesteads +4.8 to +5.3 s, passage budget 0): bisected to the
+merge with feature 315 - the clone before it tried 287 seats, main 294, the merge 1,084. Feature 315 holds the persimmon in the
+dooryard by the door, and the per-layout route's keep round its trunk left the 12 px grid no cell between it and the house (112
+of 456 searches found nothing). Left out of the search's obstacles (the taut pull still keeps the legs off its trunk): 295 seats,
+1.94 s (ec50fc817).
+
+**The bookends**, three takes back to back on the engine as it stood (single wall-clock rolls a seed, the reference spec at 10, 15,
+20 and 40 households on seeds 4, 25, 39, 47):
+
+| engine | total | 10 hh | 20 hh | 40 hh | band |
+|---|---|---|---|---|---|
+| b1b208f03 (before the land-not-layout and persimmon fixes) | -0.8% | +8.8% | -32.1% | -16.4% (seed 39 +58.4%) | 3 |
+| 0ff3c6ef5 | -4.9% | 0.0% | -37.0% | -21.6% (seed 39 +48.3%) | 3 |
+| the persimmon fix | -6.5% | 0.0% (seed 47 +16.7%) | -35.8% | -30.1% (seed 47 +12.9%) | 2 |
+
+(observed 2026-10-03, method: as the heading.)
