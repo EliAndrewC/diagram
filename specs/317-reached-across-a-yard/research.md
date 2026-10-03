@@ -222,8 +222,6 @@ of 456 searches found nothing). Left out of the search's obstacles (the taut pul
 | the persimmon fix | -6.5% | 0.0% (seed 47 +16.7%) | -35.8% | -30.1% (seed 47 +12.9%) | 2 |
 (observed 2026-10-03, method: as the heading.)
 
-(observed 2026-10-03, method: as the heading.)
-
 **The per-layout route withdrawn, and the passage's cost alone** (homesteads stage, profile calls against main f9e8770a5 on the
 bookend's flagged seeds; `houseonly.py` and `NOPASS=1` in the session's scratchpad switch each off): with the passage off, the
 route searched per garden layout round its own parts did 4.72M / 3.26M / 15.52M / 3.48M calls (15 households seeds 4 and 25, 40
@@ -239,3 +237,12 @@ and layouts (about 1.7 s), the walks (0.8 s): the stage 4.3 -> 9.1 s.
 across a neighbor whose center stood 90 ft from a lane, inside `WEB_REACH_FT`, so the web owed its corridor nothing and two
 farmsteads showed no way. Fixed (5307dd602): the corridor of every house another is reached across is owed and never pruned.
 (observed 2026-10-03, method: the glyph-check's measurement on the review snapshot.)
+
+**The persimmon short on Inashiro** (the gate at engine 2d7e7cf060a1, B10: 11 drawn of 12 rolled): feature 315's reseat gives a
+tree the count is short of to a household that rolled none, searching its dooryard on its rolled side, and asked a neighbor's sun
+only of the seat the search returned - so a household whose first seat shaded a neighbor gave the tree up, though a later seat, or
+the other side of its house, shaded no one. The tight seats moved Inashiro's homesteads, and all four households without a tree
+were refused that way. Fixed (6adad5792): the neighbor's sun is part of the search's own test, asked of every seat it tries, on the
+rolled side and then the other - 12 of 12. A tried alternative, refusing a tight seat whose layout dropped its persimmon, was
+reverted: the tree is the hamlet's count's, not the household's.
+(observed 2026-10-03, method: `persim_probe.py` in the session's scratchpad, the reference spec rolled and its persimmons counted.)

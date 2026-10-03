@@ -99,7 +99,11 @@ house, beds and fixtures of the path as the web will lay it (`tree.laid_run`, `o
 households).
 
 **D7 - The known bugs (FR-007).** research.md lists each: the D6 defect (this feature); cohort seeds 14, 15, 906 and 22, 23 (the
-Diagram (Inashiro) session, feature 315). At close, each is fixed with its run or in progress with its owner's last word.
+Diagram (Inashiro) session, feature 315). At close, each is fixed with its run or in progress with its owner's last word. Found
+at the gate and closed (research R8): feature 315's persimmon reseat asked a neighbor's sun only of the first seat its search chose,
+on the household's rolled side alone, and gave the tree up where a later seat or the other side shaded no one - Inashiro, moved by
+the tight seats, drew 11 persimmons of 12 rolled (B10). It now asks the neighbor's sun of every seat it tries, on the rolled side
+and then the other (`persimmon_reseat.persimmon_for`).
 
 ## Verification
 

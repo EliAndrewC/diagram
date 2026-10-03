@@ -5,7 +5,7 @@
 ## Occasions
 
 - placement-changed: farmhouse - within the rolled share, a nucleated household with no corridor of its own may be seated against a neighbor's land, reached by passage across its yard (plan D2-D4)
-- placement-changed: village lane - such a household draws no lane of its own; the seating judges each corridor as the web will draw it, and each garden layout's path is routed round its own beds and fixtures (plan D5, D6)
+- placement-changed: village lane - such a household draws no lane of its own, and the household it is reached across always keeps its way; the seating judges each corridor as the web will draw it (plan D5, D6)
 
 ## Tasks
 
