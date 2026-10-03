@@ -81,3 +81,32 @@ def test_a_household_whose_dooryard_has_no_seat_takes_none_and_the_next_is_offer
     monkeypatch.setattr(persimmon_reseat, "_persimmon", lambda *args: None)
     assert persimmon_for(s, a, FixtureForms()) is None, "no seat in its dooryard"
     assert reseat_persimmons(s, s.M["houses"], 1, FixtureForms()) == 0 and not a["fixtures"] and not b["fixtures"]
+
+
+def test_the_seat_search_looks_past_a_seat_in_a_neighbor_s_sun(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 317: a neighbor's sun is asked of each seat the search tries, so a seat that shades one is passed over for the
+    next - asked only of the chosen seat, the household gave the tree up (Inashiro: 11 drawn of 12 rolled)."""
+    s = _hamlet()
+    h = _house(1000.0, 1000.0)
+    s.M["houses"] = [h]
+    asked: list[int] = []
+
+    def shades(self, g, tree, r, reach):  # type: ignore[no-untyped-def]
+        asked.append(1)
+        return len(asked) == 1  # the first seat tried is in a neighbor's sun, the rest are not
+
+    monkeypatch.setattr(Settlement, "_persimmon_shades_a_neighbor", shades)
+    rec = persimmon_for(s, h, FixtureForms(persimmon_front=0.05))
+    assert rec is not None and len(asked) >= 2, "the next seat taken"
+
+
+def test_a_household_without_a_seat_on_its_rolled_side_tries_the_other(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    from l7r.diagram.hamletgen.homesteads import persimmon_reseat
+
+    s = _hamlet()
+    h = _house(1000.0, 1000.0)
+    s.M["houses"] = [h]
+    sides: list[bool] = []
+    monkeypatch.setattr(persimmon_reseat, "_persimmon", lambda hw, hh, taken, roofs, front, px, clear: sides.append(front) or (None if front else (0.0, -40.0, 23.0, 23.0)))
+    rec = persimmon_for(s, h, FixtureForms(persimmon_front=0.95))
+    assert sides == [True, False] and rec is not None, "front rolled, no seat there: behind the house"

@@ -47,23 +47,35 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
     sunlit = _sunlit(ground, s.px(CANOPY_SHADE_FT), (turn,))
     cones = getattr(s, "_conifer_crowns", None) or []
 
+    crown, shade = s.px(PERSIMMON_CROWN_FT + 1.0), s.px(CANOPY_SHADE_FT)
+
     def clear(lx: float, ly: float, r: float) -> bool:
         wx, wy, _w, _d = _turned((hx + lx, hy + ly, 0.0, 0.0), hx, hy, turn)
-        return sunlit(lx, ly, r) and not any(over_a_conifer(cx, cy, cr, [(wx, wy, r)]) for cx, cy, cr in cones)
+        # ...and out of every neighbor's plots' sun, asked of each seat the search tries (feature 317): asked only of the seat it
+        # chose, the search stopped at the first and the household gave the tree up, where a later seat shaded no one (Inashiro,
+        # moved by the feature, kept 11 of 12 rolled)
+        return (
+            sunlit(lx, ly, r)
+            and not any(over_a_conifer(cx, cy, cr, [(wx, wy, r)]) for cx, cy, cr in cones)
+            and not s._persimmon_shades_a_neighbor(g, (wx, wy, 0.0, 0.0), crown, shade)
+        )
 
     front = s._hjit(hx, hy, SALT["persimmon"] + 0.5) < forms.persimmon_front
-    seat = _persimmon(hw, hh, taken, roofs, front, s.px, clear)
-    if seat is None:
-        return None
-    x, y, w, d = _turned((hx + seat[0], hy + seat[1], seat[2], seat[3]), hx, hy, turn)
-    r, reach = s.px(PERSIMMON_CROWN_FT + 1.0), s.px(CANOPY_SHADE_FT)
-    if s._persimmon_shades_a_neighbor(g, (x, y, w, d), r, reach):
-        return None
-    for rec in s.M.get("houses") or ():  # nor in a neighbor's grove
-        if rec is not h and any(abs(x - b[0]) < (w + b[2]) / 2 and abs(y - b[1]) < (d + b[3]) / 2 for b in (rec.get("geom") or {}).get("groves") or ()):
-            return None
-    c, sn = abs(math.cos(math.radians(turn))), abs(math.sin(math.radians(turn)))
-    return {"kind": "persimmon", "x": x, "y": y, "w": w, "h": d, "box": [x, y, w * c + d * sn, w * sn + d * c], "ft": [PERSIMMON_CROWN_FT * 2.0, PERSIMMON_CROWN_FT * 2.0]}
+    # ...ITS ROLLED SIDE OF THE HOUSE FIRST, THEN THE OTHER (feature 317): the tree is the hamlet's rolled count's, given here to
+    # a household that rolled none, so the side is this household's preference and not a rule; with feature 317's tight seats
+    # and moved maps, Inashiro's four households without a tree each had no seat on their rolled side and the count fell short
+    # (11 drawn of 12 rolled, B10)
+    for side in (front, not front):
+        seat = _persimmon(hw, hh, taken, roofs, side, s.px, clear)
+        if seat is None:
+            continue
+        x, y, w, d = _turned((hx + seat[0], hy + seat[1], seat[2], seat[3]), hx, hy, turn)
+        # ...nor in a neighbor's grove (a neighbor's sun is the search's own test, `clear`)
+        if any(rec is not h and any(abs(x - b[0]) < (w + b[2]) / 2 and abs(y - b[1]) < (d + b[3]) / 2 for b in (rec.get("geom") or {}).get("groves") or ()) for rec in s.M.get("houses") or ()):
+            continue
+        c, sn = abs(math.cos(math.radians(turn))), abs(math.sin(math.radians(turn)))
+        return {"kind": "persimmon", "x": x, "y": y, "w": w, "h": d, "box": [x, y, w * c + d * sn, w * sn + d * c], "ft": [PERSIMMON_CROWN_FT * 2.0, PERSIMMON_CROWN_FT * 2.0]}
+    return None
 
 
 def reseat_persimmons(s: Settlement, houses: Sequence[dict[str, Any]], target: int, forms: FixtureForms) -> int:
