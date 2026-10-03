@@ -208,7 +208,8 @@ class ToriiAvenueMixin:
         Research:
             arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: one at each interior vertex the caller gives
             arch spacing on the path - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft apart, the innermost 12 ft off the hall; set by the caller's vertices instead
-            ascent path - CONVENTION: an 8 px path with a dashed centerline
+            ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+            ascent path centerline - CONVENTION: a dashed centerline and its color
         """
         dstr = 'M' + ' L'.join(f'{x},{y}' for x, y in ascent)
         self.add(f'<path d="{dstr}" fill="none" stroke="#B89A6A" stroke-width="8" opacity="0.7"/>')
@@ -222,7 +223,8 @@ class ToriiAvenueMixin:
         Research:
             arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the caller's count
             arches spread over the ascent - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: from 6% to 86% of its length, not 12 ft apart nor 12 ft off the hall
-            ascent path - CONVENTION: an 8 px path with a dashed centerline
+            ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+            ascent path centerline - CONVENTION: a dashed centerline and its color
         """
         seg = [math.hypot(ascent[i + 1][0] - ascent[i][0], ascent[i + 1][1] - ascent[i][1]) for i in range(len(ascent) - 1)]
         tot = sum(seg)

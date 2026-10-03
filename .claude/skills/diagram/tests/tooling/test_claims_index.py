@@ -180,27 +180,40 @@ def _row(cur: dict, key: str, verdict: str, **kw: str) -> dict[str, str]:
 def test_classify_introduced_and_pre_existing(tmp_path: pathlib.Path) -> None:
     base_skill = _tree(tmp_path / "base")
     base = cx.current(base_skill)
+    cores, bq = cx.base_cores(base_skill), base_skill / "research" / "questions"
     k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
     # IN-STEP at the base, a finding now: introduced
-    assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, base)[0]
+    assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, cores, bq)[0]
     # a finding at both ends, whatever changed: pre-existing
     head = cx.current(_tree(tmp_path / "head", MOD.replace("x * SHARE", "x * SHARE + 1")))
-    assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {k: _row(base, k, "DRIFTED")}, base) == ([], [f"DRIFTED        {k} - n"])
+    assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {k: _row(base, k, "DRIFTED")}, cores, bq) == ([], [f"DRIFTED        {k} - n"])
     # no base row: untouched code and research is pre-existing; changed code is introduced
-    assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {}, base)[0] == []
-    assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, base)[0]
+    assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {}, cores, bq)[0] == []
+    assert cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, cores, bq)[0]
     # a rename with the code intact is pre-existing; a copy beside a live original is introduced
     renamed = cx.current(_tree(tmp_path / "ren", MOD.replace("def far_row", "def far_rows")))
     kr = k.replace("far_row#", "far_rows#")
-    assert cx.classify(renamed, {kr: _row(renamed, kr, "MISLABELED")}, {}, base)[0] == []
+    assert cx.classify(renamed, {kr: _row(renamed, kr, "MISLABELED")}, {}, cores, bq)[0] == []
     copied = cx.current(_tree(tmp_path / "copy", MOD + MOD[MOD.index("def far_row") :].split("def helper")[0].replace("def far_row", "def far_row2")))
     kc = k.replace("far_row#", "far_row2#")
-    assert cx.classify(copied, {kc: _row(copied, kc, "MISLABELED")}, {}, base)[0]
+    assert cx.classify(copied, {kc: _row(copied, kc, "MISLABELED")}, {}, cores, bq)[0]
     # the cited question's findings changed under a first finding: introduced
     moved = cx.current(_tree(tmp_path / "moved", page=PAGE.replace("face the street", "face south")))
-    assert cx.classify(moved, {k: _row(moved, k, "DRIFTED")}, {}, base)[0]
+    assert cx.classify(moved, {k: _row(moved, k, "DRIFTED")}, {}, cores, bq)[0]
     # an IN-STEP row is no finding
-    assert cx.classify(base, {k: _row(base, k, "IN-STEP")}, {}, base) == ([], [])
+    assert cx.classify(base, {k: _row(base, k, "IN-STEP")}, {}, cores, bq) == ([], [])
+
+
+def test_a_base_with_no_claims_at_all_makes_every_first_finding_on_untouched_code_pre_existing(tmp_path: pathlib.Path) -> None:
+    # this feature's own landing: main holds the code but no claims - its units still have cores (the push once read
+    # "no claim at the base" as "no unit at the base" and called every audit finding introduced)
+    bare = MOD.replace("Research: plumbing - NONE\n", "").replace(f'"""Research: dry share - {Q}"""\n', "").replace(f"\n    Research: dry share - {Q}\n    ", "")
+    base_skill = _tree(tmp_path / "base", bare)
+    assert cx.current(base_skill) == {} or all("rows.py" not in k for k in cx.current(base_skill))
+    head = cx.current(_tree(tmp_path / "head"))
+    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    intro, pre = cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, cx.base_cores(base_skill), base_skill / "research" / "questions")
+    assert intro == [] and pre
 
 
 def test_the_gate_refuses_owed_and_introduced_and_warns_pre_existing(tmp_path: pathlib.Path) -> None:

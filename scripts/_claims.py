@@ -201,8 +201,10 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> P
         if unit.names:
             parts.append("- constants it reads: " + "; ".join(f"`{n}`" for n in unit.names))
         parts.append(f"\n```{lang}\n{_source(root, unit)}\n```\n")
-        for r in rows:
-            for ptr in r.claim.pointers:
+        # every page ANY claim of the unit cites, owed or not: an UNRESEARCHED or GUESS claim cites nothing, and its check
+        # can only see a page that answers it if the unit's other claims bring it (the torii re-check, 2026-10-03)
+        for c in unit.claims:
+            for ptr in c.pointers:
                 name = ptr.rsplit("/", 1)[1]
                 if name not in cited and (qdir / name).is_file():
                     cited.append(name)
@@ -297,12 +299,20 @@ def base_tree(root: Path, base: str, into: Path) -> Path:
     return into / SKILL
 
 
-def classify(cur: dict[str, Row], index: dict[str, dict[str, str]], base_index: dict[str, dict[str, str]], base: dict[str, Row]) -> tuple[list[str], list[str]]:
-    """(introduced, pre-existing) finding lines (spec FR-010): over plain dicts, so it is tested without git."""
+def base_cores(skill: Path) -> dict[str, str]:
+    """uid -> core for EVERY unit at a tree, claimed or not: the base the push compares with may hold no claims at all (this
+    feature's own landing, where main has none), and a unit's code is the same whatever its claims say."""
+    cl = engine(Path(__file__).resolve().parents[1] / SKILL)
+    return {f"{u.path}::{u.qualname}": u.core for u, _errors in cl.all_units(skill, every_module_unit=True)}
+
+
+def classify(cur: dict[str, Row], index: dict[str, dict[str, str]], base_index: dict[str, dict[str, str]], cores: dict[str, str], base_qdir: Path) -> tuple[list[str], list[str]]:
+    """(introduced, pre-existing) finding lines (spec FR-010). `cores` is every unit's core at the merge base (`base_cores`),
+    `base_qdir` the base's questions: a first finding is introduced only when its unit's code matches no base unit's (its own
+    key's, or one gone at the head - a rename or a move) or its claim's cited findings differ from the base's."""
     head_uids = {r.uid for r in cur.values()}
-    base_by_uid = {r.uid: r.unit.core for r in base.values()}
-    gone_cores = {core for uid, core in base_by_uid.items() if uid not in head_uids}
-    base_research = {k: r.research for k, r in base.items()}
+    gone_cores = {core for uid, core in cores.items() if uid not in head_uids}
+    memo: dict[str, str] = {}
     intro: list[str] = []
     pre: list[str] = []
     for key, v in sorted(live_rows(cur, index).items()):
@@ -314,8 +324,8 @@ def classify(cur: dict[str, Row], index: dict[str, dict[str, str]], base_index: 
             (pre if was.get("verdict") in FINDINGS else intro).append(line)
             continue
         uid, core = key.rsplit("#", 1)[0], v.get("core", "")
-        code_changed = not (base_by_uid.get(uid) == core or core in gone_cores)
-        research_changed = key in cur and key in base_research and base_research[key] != cur[key].research
+        code_changed = not (cores.get(uid) == core or core in gone_cores)
+        research_changed = key in cur and research_fp(cur[key].claim.pointers, base_qdir, memo) != cur[key].research
         (intro if code_changed or research_changed else pre).append(line)
     return intro, pre
 
@@ -331,8 +341,8 @@ def gate(root: Path) -> tuple[list[str], list[str]]:
     base_index = json.loads(_git(root, "show", f"{mb}:{INDEX}") or "{}") if mb else {}
     with tempfile.TemporaryDirectory() as tmp:
         bskill = base_tree(root, mb, Path(tmp)) if mb else Path(tmp)
-        base = current(bskill, bskill / "research" / "questions") if mb else {}
-    intro, pre = classify(cur, index, base_index, base)
+        cores = base_cores(bskill) if mb else {}
+        intro, pre = classify(cur, index, base_index, cores, bskill / "research" / "questions")
     return refuse + [f"introduced: {x}" for x in intro], [f"pre-existing: {x}" for x in pre]
 
 

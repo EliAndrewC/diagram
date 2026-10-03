@@ -315,7 +315,7 @@ def module_aliases(tree: ast.Module, table: dict[str, tuple[str, str]], modules:
     return out
 
 
-def module_units(source: str | ast.Module, path: str, module: str = "", is_package: bool = False, constants: dict[str, dict[str, str]] | None = None) -> tuple[list[Claim], list[str], list[Unit]]:
+def module_units(source: str | ast.Module, path: str, module: str = "", is_package: bool = False, constants: dict[str, dict[str, str]] | None = None, every_module_unit: bool = False) -> tuple[list[Claim], list[str], list[Unit]]:
     """(the module's claims, its errors, its units) for one Python source text (or its freshly parsed tree, which is
     consumed: its docstrings are stripped in place).
 
@@ -349,7 +349,7 @@ def module_units(source: str | ast.Module, path: str, module: str = "", is_packa
     # writer G11 on `settlement/_knobs.py`, feature 316): those statements belong to no function, class or constant, and a
     # module docstring's claims about them would otherwise fingerprint nothing. Its claims are the module's own.
     calls = [st for st in tree.body if isinstance(st, ast.Expr) and isinstance(st.value, ast.Call)]
-    if calls and mod_claims:
+    if calls and (mod_claims or every_module_unit):  # the push's base needs the core even where no claim stood yet
         shell = ast.Module(body=calls, type_ignores=[])
         found.append(("<module>", "module", shell, None))
         shell.lineno, shell.end_lineno = calls[0].lineno, calls[-1].end_lineno  # type: ignore[attr-defined]
@@ -493,14 +493,14 @@ def _scope_trees(skill: Path, root: str = ROOT_PACKAGE) -> dict[str, tuple[Path,
     return dict(sorted(seen.items()))
 
 
-def all_units(skill: Path, repo_prefix: str = ".claude/skills/diagram/") -> Iterator[tuple[Unit, list[str]]]:
+def all_units(skill: Path, repo_prefix: str = ".claude/skills/diagram/", every_module_unit: bool = False) -> Iterator[tuple[Unit, list[str]]]:
     """Every unit in scope with its module's errors: the code (FR-002), then the procedure sections (FR-003). Paths are
     repository-relative, as the index keys them."""
     mods = _scope_trees(skill)
     constants = reexported({m: module_constants(t) for m, (_p, t) in mods.items()}, {m: import_table(t, m, p.name == "__init__.py") for m, (p, t) in mods.items()})
     for mod, (p, tree) in mods.items():
         rel = repo_prefix + p.relative_to(skill).as_posix()
-        _claims, errors, units = module_units(tree, rel, mod, p.name == "__init__.py", constants)
+        _claims, errors, units = module_units(tree, rel, mod, p.name == "__init__.py", constants, every_module_unit)
         for unit in units:
             yield unit, errors
     for doc, tops in PROCEDURES.items():

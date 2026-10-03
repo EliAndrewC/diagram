@@ -37415,13 +37415,21 @@
   "research": "fec85c262db7577d",
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_even#ascent path": {
-  "code": "1970f53b572195a9",
+ ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_even#ascent path centerline": {
+  "code": "c21baa07751f1cbe",
   "core": "6bdc671bc5caa2d7",
   "date": "2026-10-03",
-  "note": "stroke-width=\"8\" fixes the approach's drawn width (about 24 ft at 3 ft/px), a physical width a reader reads off the map, so CONVENTION is wrong for it; split it: the approach width as UNRESEARCHED (or GUESS), the dashed centerline and its color as CONVENTION",
+  "note": "1 px dashed #6B4F2A line is display only",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_even#ascent path width": {
+  "code": "1ce1900e1433ce30",
+  "core": "6bdc671bc5caa2d7",
+  "date": "2026-10-03",
+  "note": "fixed 8 px band; no cited material in the bundle answers it",
+  "research": "",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_path#arch count": {
   "code": "669df86627c2d703",
@@ -37439,11 +37447,19 @@
   "research": "fec85c262db7577d",
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_path#ascent path": {
-  "code": "751f42308ba6191a",
+ ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_path#ascent path centerline": {
+  "code": "db1e4e0b9e63d392",
   "core": "93c9ff4d7cb83d08",
   "date": "2026-10-03",
-  "note": "how the path is shown",
+  "note": "1 px dashed #6B4F2A line is display only",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_path#ascent path width": {
+  "code": "f57edf7941c6c6d8",
+  "core": "93c9ff4d7cb83d08",
+  "date": "2026-10-03",
+  "note": "fixed 8 px band; no cited material in the bundle answers it",
   "research": "",
   "verdict": "IN-STEP"
  },

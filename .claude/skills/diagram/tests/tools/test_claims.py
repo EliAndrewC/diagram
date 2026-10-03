@@ -195,6 +195,7 @@ def test_a_module_that_calls_at_import_is_a_unit_of_its_own_claims() -> None:
     assert (mod.qualname, [c.label for c in mod.claims], mod.inherited) == ("<module>", ["lane form"], False)
     assert next(u for u in cl.module_units(src.replace("register(1)", "register(2)"), "k.py")[2] if u.kind == "module").core != mod.core
     assert all(u.kind != "module" for u in cl.module_units("register(1)\n", "k.py")[2]), "no module claims, no module unit"
+    assert [u.kind for u in cl.module_units("register(1)\n", "k.py", every_module_unit=True)[2]] == ["module"], "...unless asked (the push's base)"
 
 
 def test_a_parsed_tree_is_accepted_and_an_annotated_constant_counts() -> None:
