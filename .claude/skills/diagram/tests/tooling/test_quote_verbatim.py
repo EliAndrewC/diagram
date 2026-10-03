@@ -13,8 +13,6 @@ path hands `Pages` a fake opener.
 
 from __future__ import annotations
 
-import pytest
-
 import importlib.util
 import io
 import json
@@ -22,6 +20,8 @@ import os
 import pathlib
 import re
 import urllib.error
+
+import pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[5]
 
