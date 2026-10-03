@@ -100,7 +100,7 @@ engine no longer keeps.
 **Acceptance Scenarios**:
 
 1. **Given** the 0032 drawing page, **When** read, **Then** its quarter-built figure is a measurement the maps report, not a
-   rule they keep, and the 700 ft is no limit.
+   rule they keep, and the field reach is no limit.
 2. **Given** the 0081 drawing page, **When** read, **Then** it says a passage the finished map makes unnecessary (its drawn
    layout given a way of its own) is ended in place, and nothing in it says a household is re-laid with another layout.
 
@@ -124,7 +124,7 @@ engine no longer keeps.
   condition, "seated only where it has no way of its own".
 - **FR-002**: A nucleated cluster MUST keep growing outward from its standing houses, nearest first, while households are left
   and free ground remains; the old seat radius MUST NOT refuse a seat (it may order the offers).
-- **FR-003**: No distance from the field MUST refuse a seat, on any form: the 700 ft field reach (`FIELD_REACH_FT`) goes as a
+- **FR-003**: No distance from the field MUST refuse a seat, on any form: the field reach (`FIELD_REACH_FT`) goes as a
   limit. Among seats otherwise equal, the one nearer the field MUST be taken (the GM: people did not want to walk far to their
   fields). The hard limits are the existing per-house rules: dry ground, nothing on crop or water, every rule a seat already asks.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
@@ -138,7 +138,7 @@ engine no longer keeps.
 - **FR-007**: Page 0032's quarter-built figure MUST be reported for each nucleated map (built share inside the houses' outline)
   and MUST NOT refuse or alter a seating.
 - **FR-008**: The drawing pages MUST state what the maps now do (0004 already does; 0029, 0032 and 0081 as above), each value in
-  its class, and every code claim citing the 700 ft as a researched maximum MUST be corrected or removed with it.
+  its class, and every code claim citing the field reach as a researched maximum MUST be corrected or removed with it.
 - **FR-009**: No pool map or cohort seed may fail a rule it passed before or seat fewer households; maps may move within the rules
   (GM 2026-09-30, feature 297).
 - **FR-010**: The homesteads stage MUST be timed against main at 15 and 40 households, alternated per seed, and recorded; the
@@ -164,7 +164,7 @@ engine no longer keeps.
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | A cluster grows at its edge; no house is moved for a late one | canon: the GM's ruling of 2026-10-03 ("when someone else moved in, everyone did not move their houses"), as 0004's drawing page already states the maps' rule | the GM's request | 0004's drawing page; this spec; the seating's comment |
-| No distance from the field refuses a seat; nearer the field preferred | the record holds no maximum (0029: "No farmhouse is held to a maximum distance from its fields"); the preference is canon, the GM's ruling of 2026-10-03 | the 700 ft was the drawn villages' back row, not a source's figure | 0029's and 0032's drawing pages |
+| No distance from the field refuses a seat; nearer the field preferred | the record holds no maximum (0029: "No farmhouse is held to a maximum distance from its fields"); the preference is canon, the GM's ruling of 2026-10-03 | the field reach was the drawn villages' back row, not a source's figure | 0029's and 0032's drawing pages |
 | The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM chose it as soft | 0032's drawing page |
 | A passage no longer re-laid after the seating; one the finished map makes unnecessary ended in place | historically accurate for the condition (0081: "seated only where it has no way of its own"); the re-lay removed as a take-back (the GM's request) | the re-lay moved a seated house | 0081's drawing page |
 
@@ -180,5 +180,5 @@ engine no longer keeps.
   measured premise, refused the same way); the growth model labeled historically accurate where it is the GM's ruling (canon).
 - Round 2 (spec-fidelity-verify, 2026-10-03): FAITHFUL - the three items confirmed against the diff; aside: the 0081 sentence
   for US3 scenario 2 says the finished map's check asks the drawn layout only.
-- Amendment (2026-10-03, the GM's rulings in `request.md`): the 700 ft field reach removed as a limit on every form, nearness
+- Amendment (2026-10-03, the GM's rulings in `request.md`): the field reach removed as a limit on every form, nearness
   to the field a preference; cohort seed 18 grows on its first margin. The review counter restarts with this amendment.
