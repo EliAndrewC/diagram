@@ -180,7 +180,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
 
     Research:
         lane pulled taut - research/questions/0081-village-lanes.drawing.html: string-pulled to the furthest vertex a clear chord reaches
-        hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses its shorter arm, unless the arm is a farmhouse's only way (a household reached across a neighbor's land owed none, `geom.lane_houses`)
+        hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses a returning arm under 40 ft
+        a longer hairpin arm - UNRESEARCHED: an arm of 40 to 90 ft (`_LONG_ARM_FT`) cut only where no farmhouse loses its only way by it (a household reached across a neighbor's land owed none, `geom.lane_houses`); a longer one kept as a lane
         bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice

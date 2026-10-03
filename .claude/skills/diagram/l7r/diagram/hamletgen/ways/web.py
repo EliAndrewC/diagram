@@ -445,7 +445,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
-        web cut spacing - UNRESEARCHED: alley and back-lane cuts WEB_REACH_FT 100 ft apart, MIN_WEB_GAP 18 ft at least
+        web cut spacing - UNRESEARCHED: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
+        a cut's room - research/questions/0081-village-lanes.drawing.html: MIN_WEB_GAP, a lane 7 ft clear of a garden fence on each side of its tread
+        a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0081-village-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain

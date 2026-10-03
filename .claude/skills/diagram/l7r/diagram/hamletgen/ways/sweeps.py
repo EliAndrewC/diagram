@@ -106,6 +106,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     Research:
         one way drawn as two is joined - UNRESEARCHED: a walkable gap in one way is closed, up to `_BREAK_SPAN_FT` within `_BREAK_BEARING_DEG`
         no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists
+        a short gap closed at any bearing - UNRESEARCHED: a break of `_LANE_JOIN_FT` (30 ft) or less, whatever the two ways' bearings
         bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
         bridge clearance fallback - DEVIATION research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
     made = 0

@@ -176,7 +176,7 @@ def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> l
     half-width (`fixtures_clear`'s). The corridor's own route keeps off the house alone (`routed_corridors`: searched per
     layout round these parts, it was withdrawn - research R8).
 
-    Research: a walk crosses nothing of either household - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture, each kept at its leg test's gap
+    Research: a walk crosses nothing of either household - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture, each kept at its leg test's gap; the persimmon left out of the grid's walls, its trunk held off by every leg's own test (`passage.walk_clear`, `fixtures_clear`)
     """
     from .access import PART_MARGIN_FT, TREAD_HALF_FT
 

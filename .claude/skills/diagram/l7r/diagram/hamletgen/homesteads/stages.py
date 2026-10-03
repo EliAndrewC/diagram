@@ -410,7 +410,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the seating's reach - UNRESEARCHED: a homestead within `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, 1.3 times that for the front row
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
-        the step between ranks - UNRESEARCHED: an envelope's depth and `MIN_WEB_GAP`, and `SUN_CORRIDOR_FT` more where the ranks climb north
+        the step between ranks - UNRESEARCHED: an envelope's depth
+        a lane's room between ranks - research/questions/0081-village-lanes.drawing.html: `MIN_WEB_GAP`, a lane 7 ft clear of a garden fence on each side
+        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more where the ranks climb north
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,

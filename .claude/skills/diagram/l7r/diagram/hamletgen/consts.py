@@ -243,7 +243,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
-"""Research: every farmhouse reached by a way - research/questions/0081-village-lanes.drawing.html: within 100 ft, but the few reached across a neighbor's land"""
+"""Research: every farmhouse reached by a way - GUESS research/questions/0081-village-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0
 """How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.

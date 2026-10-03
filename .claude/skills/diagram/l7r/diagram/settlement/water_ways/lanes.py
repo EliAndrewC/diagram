@@ -265,7 +265,7 @@ class LanesMixin:
             one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
             short lanes dropped - UNRESEARCHED: an internal lane under 71 ft
             the track out and the field spur stay whole - research/questions/0081-village-lanes.drawing.html
-            a row street stays whole - UNRESEARCHED: its ends are not pulled back as a lane's are
+            a row street stays whole - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it, its ends not pulled back as a lane's are
         """
         lanes = self.M.get("lanes") or []
         houses = self.M.get("houses") or []
