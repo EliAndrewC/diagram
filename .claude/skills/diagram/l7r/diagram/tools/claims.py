@@ -160,7 +160,7 @@ def claims_of(doc: str | None) -> tuple[list[Claim], list[str]]:
         except ClaimError as exc:
             errors.append(str(exc))
     if section_lines(doc) == []:
-        errors.append(f"an empty `Research:` section")
+        errors.append("an empty `Research:` section")
     return claims, errors
 
 

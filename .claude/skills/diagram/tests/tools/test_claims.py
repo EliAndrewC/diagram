@@ -261,4 +261,3 @@ def test_coverage_names_every_unit_without_a_claim_and_every_missing_question(tm
     assert "buildings/programs.md:1 Magistrate's manor (county magistracy): no claim - add a `<!-- Research:" in text
     assert "shared.py" not in text and "buildings.md:" not in text
     assert cl.coverage(cl.all_units(skill, ""), questions={"0033-row-villages-resson.html"}) == [p for p in problems if "names no question" not in p]
-

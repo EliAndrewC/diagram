@@ -45,8 +45,10 @@ if SKILL not in sys.path:
 
 from l7r.diagram.hamletgen import HamletSpec, SitePlan, plan_site  # noqa: E402
 from l7r.diagram.hamletgen.driver import STAGES, roll_scope  # noqa: E402
+from l7r.diagram.interactive import sources as _sources  # noqa: E402
 from l7r.diagram.settlement import Settlement  # noqa: E402
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT  # noqa: E402
+from l7r.diagram.tools import claims as _claims  # noqa: E402
 
 # THE PAGE IS WRITTEN FROM THE CODE'S OWN DOCUMENTATION (feature 227, GM 2026-09-12: *"I would like it if this HTML
 # page basically was generated based on the documentation, the docstrings, the stages, and such so that I could just
@@ -65,7 +67,7 @@ def stage_doc(stage: Any) -> tuple[str, list[str], list[str]]:
     The title is the docstring's first paragraph; the paragraphs are the rest up to the `Steps:` line; the steps
     are the dotted names listed under it, one per line, in order. A stage with no docstring gets a title that says
     so and no steps - visibly, never silently (the roster test fails the gate on it)."""
-    doc = inspect.getdoc(stage) or ""
+    doc = _claims.strip_section(inspect.getdoc(stage) or "")
     if not doc.strip():
         return ("(no docstring - this stage explains nothing)", ["This stage has no docstring. Write one, with a `Steps:` section naming the functions that are its algorithm."], [])
     head, _sep, tail = doc.partition("\nSteps:")
@@ -92,9 +94,65 @@ def resolve_step(path: str) -> Any:
 def step_doc(path: str) -> tuple[str, list[str]]:
     """A step as the page shows it: its short name and its docstring's paragraphs."""
     obj = resolve_step(path)
-    doc = inspect.getdoc(obj) or ""
+    doc = _claims.strip_section(inspect.getdoc(obj) or "")
     paras = [" ".join(line.strip() for line in para.split("\n")) for para in doc.strip().split("\n\n")] if doc.strip() else ["(no docstring)"]
     return (path.rsplit(".", 1)[-1], paras)
+
+
+# THE RESEARCH UNDER EVERY STAGE AND STEP (feature 316, GM 2026-10-02: *"if we are able to link to individual research
+# pages in every step where we talk about what the step is doing and then we say oh yeah and here is the research that
+# demonstrates that this is the correct thing then that is a great proof of implementation"*). A stage's or a step's CLAIMS
+# are the `Research:` lines of its docstring (`tools/claims.py`), or its module's where it has none; each pointer links the
+# question's page in the record's site, and each claim shows the verdict the claims index (`dev/claims-index.json`) holds -
+# so a drifted claim reads as drifted here too.
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(SKILL)))
+CLAIMS_INDEX = os.path.join(SKILL, "dev", "claims-index.json")
+
+
+@functools.cache
+def _verdicts() -> dict[str, str]:
+    import json
+    from pathlib import Path
+
+    rows = json.loads(Path(CLAIMS_INDEX).read_text(encoding="utf-8")) if os.path.isfile(CLAIMS_INDEX) else {}
+    return {k: v.get("verdict", "") for k, v in rows.items()}
+
+
+def research_of(obj: Any) -> list[dict[str, Any]]:
+    """What the page shows of a stage's or a step's claims: per claim its label, account, backing, the questions it cites
+    (`{"text", "site"}`, `site` relative to the record's site) and its verdict (`unchecked` where the index holds none)."""
+    obj = inspect.unwrap(obj)
+    found, _errors = _claims.claims_of(inspect.getdoc(obj))
+    if not found:
+        found, _errors = _claims.claims_of(inspect.getdoc(sys.modules[obj.__module__]))
+    rel = os.path.relpath(inspect.getsourcefile(obj) or "", REPO).replace(os.sep, "/")
+    out: list[dict[str, Any]] = []
+    for c in found:
+        qs = [{"text": q["text"], "site": q["url"].removeprefix(_sources.SITE_PAGES)} for p in c.pointers for q in _sources.research_questions(p)]
+        out.append({"label": c.label, "account": c.account, "backing": c.backing, "questions": qs, "verdict": _verdicts().get(f"{rel}::{obj.__qualname__}#{c.label}", "unchecked")})
+    return out
+
+
+#: What a backing that names no question says on the page.
+_CLASS_WORDS = {
+    "GUESS": "a guess - searched for, and the record is silent",
+    "UNRESEARCHED": "not yet researched",
+    "CONVENTION": "a map drawing convention",
+    "NONE": "no physical decision",
+}
+
+
+def research_html(items: list[dict[str, Any]], site: str) -> str:
+    """The "Research" list under a stage or a step; `site` is the record's site relative to the page."""
+    if not items:
+        return ""
+    lis = []
+    for c in items:
+        links = ", ".join(f'<a href="{escape(site + q["site"])}">{escape(q["text"])}</a>' for q in c["questions"])
+        what = (("deviates from " if c["backing"] == "DEVIATION" else "") + links) if c["questions"] else escape(_CLASS_WORDS.get(c["backing"], c["backing"]))
+        acc = f' <span class="acc">({escape(c["account"])})</span>' if c["account"] else ""
+        lis.append(f'<li><b>{escape(c["label"])}</b> - {what}{acc} <span class="vd vd-{escape(c["verdict"].lower())}">{escape(c["verdict"])}</span></li>')
+    return '<div class="research"><span class="fl">Research</span><ul>' + "".join(lis) + "</ul></div>"
 
 
 # THE PLATE AFTER EVERY STEP, not only after every stage (feature 227, GM 2026-09-12: *"how much work would it
@@ -582,6 +640,7 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
                 "ih": 0,
                 "decided": [],
                 "features": features_between(s, start, _watermark(s)),
+                "research": research_of(stage),
             }
             rows.append(row)
             # A COPY IS FINISHED, NOT THE LIVE SETTLEMENT: `finish` flushes deferred canopies, seats captions and
@@ -619,7 +678,7 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
                     _prev = mark
             for k, path in enumerate(step_names, 1):
                 name, sparas = step_doc(path)
-                entry: dict[str, Any] = {"name": name, "path": path, "paras": sparas, "img": None, "iw": 0, "ih": 0, "unrenderable": False, "features": []}
+                entry: dict[str, Any] = {"name": name, "path": path, "paras": sparas, "img": None, "iw": 0, "ih": 0, "unrenderable": False, "features": [], "research": research_of(resolve_step(path))}
                 row["steps"].append(entry)
                 if path in plate_at:
                     entry["features"] = features_between(s, _from[path], plate_at[path])
@@ -719,6 +778,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         if name not in keep and name.endswith((".png", ".svg", ".json", ".html")):  # ...and what a plate left half-made
             os.remove(os.path.join(out_dir, name))
             print(f"  pruned stale plate {name}")
+    site = os.path.relpath(os.path.join(SKILL, "research", "site"), out_dir).replace(os.sep, "/") + "/"
     parts = [
         "<title>Hamlet placement order</title>",
         "<style>",
@@ -763,6 +823,9 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         ".toc li{break-inside:avoid;margin:.15rem 0}",
         ".toc a{color:var(--ink);text-decoration:none}.toc a:hover{text-decoration:underline}",
         ".toc .n{margin-right:.55rem}",
+        ".research{margin:.5rem 0 .4rem;font-size:.9rem}.research ul{margin:.2rem 0 0;padding-left:1.1rem}.research li{margin:.15rem 0}",
+        ".research .acc{color:var(--dim)}.vd{font:700 .68rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.05em;padding:.12rem .35rem;border-radius:3px;border:1px solid var(--rule);color:var(--dim)}",
+        ".vd-in-step{color:#2f6b3a;border-color:#2f6b3a}.vd-drifted,.vd-mislabeled,.vd-needs-research,.vd-unclaimed{color:#9b2c1f;border-color:#9b2c1f}",
         "</style>",
         '<div class="wrap">',
         "<h1>Hamlet placement order</h1>",
@@ -790,13 +853,14 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
             f'<section class="stage" id="s{r["i"]:02d}">',
             f'<div class="hd"><span class="n">{r["i"]:02d}</span><span class="t">{escape(r["title"])}</span><span class="fn">{escape(r["fn"])}</span></div>',
             *(f'<p class="why">{escape(p)}</p>' for p in r["paras"]),
+            research_html(r.get("research", []), site),
         ]
         if r["features"]:
             parts.append('<p class="feats"><span class="fl">Features this stage puts on the map</span> ' + escape(", ".join(r["features"])) + "</p>")
         if r["steps"]:
             parts.append(f'<details class="steps" open><summary>The algorithm, step by step ({len(r["steps"])})</summary>')
             for e in r["steps"]:
-                parts.append(f'<div class="step"><span class="sn">{escape(e["name"])}</span>' + "".join(f"<p>{escape(p)}</p>" for p in e["paras"]))
+                parts.append(f'<div class="step"><span class="sn">{escape(e["name"])}</span>' + "".join(f"<p>{escape(p)}</p>" for p in e["paras"]) + research_html(e.get("research", []), site))
                 if e["features"]:
                     parts.append('<p class="feats"><span class="fl">Draws</span> ' + escape(", ".join(e["features"])) + "</p>")
                 if e["img"]:

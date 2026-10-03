@@ -146,7 +146,12 @@ def test_record_writes_verdicts_refuses_strangers_and_keeps_unclaimed_rows_until
     out, msgs = cx.record({"old": {"verdict": "IN-STEP"}}, units, reply, "2026-10-02")
     assert out["p::f#a"] == {"verdict": "DRIFTED", "code": "c1", "core": "k1", "research": "r1", "date": "2026-10-02", "note": "the share is fixed"}
     assert "p::f#b" not in out and out["p::f#the row count"]["verdict"] == "UNCLAIMED" and "old" in out
-    assert msgs == ["refused: `p::f#zz` is not a unit of this bundle", "no verdict for `p::f#b` - it stays owed", "UNCLAIMED p::f - the row count: write a claim for it, then check it", "refused: UNCLAIMED `p::g` is not a unit of this bundle"]
+    assert msgs == [
+        "refused: `p::f#zz` is not a unit of this bundle",
+        "no verdict for `p::f#b` - it stays owed",
+        "UNCLAIMED p::f - the row count: write a claim for it, then check it",
+        "refused: UNCLAIMED `p::g` is not a unit of this bundle",
+    ]
     again, _ = cx.record(out, units, "VERDICT p::f#a IN-STEP - fixed\nVERDICT p::f#b IN-STEP - ok\n", "d")
     assert "p::f#the row count" not in again and again["p::f#a"]["verdict"] == "IN-STEP"
 
