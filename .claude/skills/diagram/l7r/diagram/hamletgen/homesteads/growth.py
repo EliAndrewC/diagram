@@ -17,13 +17,15 @@ threshing yard also contributes."*
   (`household_reach`, `settled_seat`): its yard and beds are rolled from where it stands, so
   the seat is moved out until its own envelope there clears - no seat is offered closer than its own footprint allows.
 - A SEAT THE GROUND REFUSES IS NEVER LAID OUT (feature 314): before the household's envelope is rolled at a seat, the questions
-  that need no layout are asked of the house there (`seat_refused`) - the field's reach, and its own box against the canvas, the
+  that need no layout are asked of the house there (`seat_refused`) - its own box against the canvas, the
   reserved corridors, the placed homesteads and the refused-ground grid, exactly as the placer asks them - and a seat they refuse
   is dropped. Laying out the household was 11% of the stage on seats the placer then refused for one of these in a lookup.
-- Seats are offered nearest the seat first, within the form's bound, and each is judged by the placer's full rules
-  (`try_place`). Its path is laid as it is placed - straight, or routed round what stands (`settlement/rolling/route.py`).
-- WHEN THE SEATS RUN DRY with households left, every standing house offers again at the next of `GROW_LEVELS`: more directions,
-  farther rings. Past the last the margin is short, and `seat_every_household` offers the next margin.
+- Of the seats a level offers, the nearest the field is tried first (`field_distance`, feature 318, the GM's ruling), and each
+  is judged by the placer's full rules (`try_place`). No radius and no distance from the field refuses one. Its path is laid as
+  it is placed - straight, or routed round what stands (`settlement/rolling/route.py`).
+- WHEN THE SEATS RUN DRY with households left, every standing house offers again one ring further (`grow_level`, past
+  `GROW_LEVELS`), until a level queues no new seat on the canvas.
+  No seated house is ever taken back (feature 318): a margin that cannot seat everyone is refused.
 
 What it replaced on the nucleated form (FR-007): the front row along the field, the lattice ranks behind it and the exhaustive pass
 over every free grid point with its rescue - 383 to 5,927 offers for 40 houses, a margin seated whole and thrown away where it fell
@@ -40,10 +42,11 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.settlement._geom.primitives import chain_distance, convex_hull
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT
-from l7r.diagram.settlement.rolling.fit import within_field_reach
 from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done
-from l7r.diagram.settlement.rolling.passage import crossable, passages_spent
+from l7r.diagram.settlement.rolling.passage import crossable
+from l7r.diagram.sitegen.geom import poly_area
 
 from ..consts import SUN_CORRIDOR_FT, Pt
 from .capacity import DRY_SPELL, _near_a_house, free_seats, offer_seats
@@ -53,19 +56,24 @@ if TYPE_CHECKING:
 
     from ..plan import SitePlan
 
-#: The jitter on a seat's direction, in degrees either way: a GUESS for the GM's "a little randomized jitter ... so that it's not
-#: just an unrealistic grid" - a twelfth of the eight-direction ring's 45-degree step either way, so neighboring directions never
-#: cross. The record gives no spacing variance for a nucleated hamlet.
+#: The jitter on a seat's direction, in degrees either way AT EIGHT DIRECTIONS: a GUESS for the GM's "a little randomized jitter
+#: ... so that it's not just an unrealistic grid" - 12 of the eight-direction ring's 45-degree step either way, and scaled with the
+#: step at any other count (`grow_jitter`: 6 at sixteen), so neighboring directions never cross (at sixteen, 12 either way of a
+#: 22.5-degree step did). The record gives no spacing variance for a nucleated hamlet.
 GROW_JITTER_DEG = 12.0
-"""Research: direction jitter - GUESS: 12 degrees either way"""
+"""Research: direction jitter - GUESS: 12 degrees either way at eight directions, scaled with the step"""
 #: ...and on its distance, as a share added to the least distance (never subtracted - the least is the rule): a GUESS, as above.
 GROW_JITTER_FRAC = 0.12
 """Research: distance jitter - GUESS: up to 0.12 of the least distance added"""
-#: The growth's widening, (directions, rings) - each ring a multiple of the least distance - offered in turn while households are
-#: left and the seats run dry: MEASURED on the reference at 40 households (research R5): at eight directions and one ring a margin
-#: seated 29-36 of 40 and was thrown away; with the three levels all sixteen seeds seat on the first or second margin. A search
-#: breadth, never a rule - every seat is still asked every rule.
-GROW_LEVELS: tuple[tuple[int, tuple[float, ...]], ...] = ((8, (1.0,)), (12, (1.0, 1.5)), (16, (1.25, 1.75, 2.0)))
+#: The growth's offers, (directions, rings) - each ring a multiple of the least distance - and past the table one ring further each
+#: level while households are left and the seats run dry (`grow_level`). ONE LEVEL OF SIXTEEN DIRECTIONS AND THREE RINGS, ALL OFFERED
+#: AT ONCE, nearest the field first (feature 318, plan D4 amended, MEASURED on the reference at 40 households, seeds 4/25/39/47): with
+#: no radius a level never runs dry, so the three-level table (8, then 12, then 16 directions) kept its eight sparse directions for the
+#: whole seating and crept AWAY from the field - mean house-to-field 637, 400, 585, 442 ft against main's 443, 421, 429, 416. Sixteen
+#: directions and rings 1.0/1.5/2.0 at once: 370, 389, 425, 339 ft, every farthest house under 640 ft, homestead stage 31.2 s for the
+#: four against main's 21.5 (every ring 1.0-2.0 in quarters: 405, 361, 386, 352 ft at 44.6 s; twelve directions: 429, 362, 421, 374
+#: at 29.6 s). A search breadth, never a rule - every seat is still asked every rule.
+GROW_LEVELS: tuple[tuple[int, tuple[float, ...]], ...] = ((16, (1.0, 1.5, 2.0)),)
 #: Half a woodlot clump's width about a reserved wood seat, in px: the copse's clump (`COPSE_CLUMP_BS` at hamlet scale is 24)
 WOOD_CLUMP_PX = 12.0
 #: How many times a seat is moved out to clear its own envelope rolled where it stands (`settled_seat`) before it is dropped:
@@ -175,12 +183,10 @@ def household_reach(s: Settlement, q: Pt, largest: tuple[float, float]) -> Reach
 
 def seat_refused(s: Settlement, q: Pt, house: tuple[float, float]) -> bool:
     """Would the placer refuse a house of `house` (w, h) seated at `q` before laying out any part of its homestead (feature 314)?
-    Its own questions, asked as it asks them (`_place_bundle_nucleated`): the field's reach, then the house's own box as drawn
+    Its own questions, asked as it asks them (`_place_bundle_nucleated`): the house's own box as drawn
     there against the canvas, the reserved corridors and the placed homesteads (`_house_box_refused`) and the refused-ground grid
     (`FreeGround.rect_refused`: every garden side's box holds the house's, so a refused cell under it refuses them all). The
     water is not asked: a household seated where it is sought carries a pocket wherever none is in reach (`watered`)."""
-    if not within_field_reach(s, q[0], q[1]):
-        return True
     box = s._house_box(q[0], q[1], house[0], house[1])
     if s._house_box_refused(box):
         return True
@@ -265,18 +271,76 @@ def land_box(center: Pt, reach: Reach) -> tuple[float, float, float, float]:
     return (center[0] + (e - w) / 2.0, center[1] + (so - n) / 2.0, w + e, n + so)
 
 
-def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, largest: tuple[float, float]) -> int:
-    """Seat `plan.spec.households` on this margin by growth (the module's account); returns the count seated. `bound` is the
-    form's reach from the seat, `largest` the largest house `(w, h)` the roll can take. Records `seat_search.grow_offered`,
+def built_share(houses: Sequence[dict[str, Any]]) -> float:
+    """The share of a nucleated cluster's outline its homesteads cover (feature 318, FR-007): the homesteads' boxes (house,
+    yard, gardens and the homestead grove, `geom.bbox`) over the convex hull of their corners. REPORTED, never enforced - page
+    0032's quarter-built floor binds a village, and "a hamlet is rightly loose and is not held to it". 0.0 under three
+    homesteads (no outline).
+
+    Research: the built share reported - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: the quarter-built figure measured on every nucleated map, refusing nothing
+    """
+    boxes = [(rec.get("geom") or {}).get("bbox") for rec in houses]
+    boxes = [b for b in boxes if b]
+    if len(boxes) < 3:
+        return 0.0
+    corners = [(float(x) + sx * float(w) / 2.0, float(y) + sy * float(h) / 2.0) for x, y, w, h in boxes for sx in (-1, 1) for sy in (-1, 1)]
+    hull = convex_hull(corners)
+    area = poly_area(hull) if len(hull) >= 3 else 0.0
+    return round(min(1.0, sum(float(b[2]) * float(b[3]) for b in boxes) / area), 3) if area > 0.0 else 0.0
+
+
+def grow_jitter(ndir: int) -> float:
+    """The direction jitter, degrees either way, at `ndir` directions: `GROW_JITTER_DEG` at eight, scaled with the step.
+
+    Research: direction jitter - GUESS: scaled with the step, so neighboring directions never cross
+    """
+    return GROW_JITTER_DEG * 8.0 / ndir
+
+
+def grow_level(level: int) -> tuple[int, tuple[float, ...]]:
+    """The growth's `level`-th widening: `GROW_LEVELS`' (directions, rings), and past the table 16 directions on one ring half
+    the least distance further out each level (feature 318: the cluster grows at its edge until every household stands; no
+    radius stops it).
+
+    Research: the growth's widening past the table - UNRESEARCHED: a ring half the least distance further each level, a search breadth
+    """
+    if level < len(GROW_LEVELS):
+        return GROW_LEVELS[level]
+    return 16, (GROW_LEVELS[-1][1][-1] + 0.5 * (level - len(GROW_LEVELS) + 1),)
+
+
+def on_the_canvas(s: Settlement, q: Pt) -> bool:
+    """Does the seat `q` stand on the map's canvas - the growth's only bound on where it queues a seat (feature 318)?
+
+    Research: plumbing - NONE: the canvas's extent
+    """
+    x0, y0, x1, y1 = getattr(s, "_canvas_box", None) or (0.0, 0.0, float(s.W), float(s.H))
+    return x0 <= q[0] <= x1 and y0 <= q[1] <= y1
+
+
+def field_distance(s: Settlement, q: Pt) -> float:
+    """How far the seat `q` stands from the field's facing chains (`s._site_chains`) - the growth's order: of the seats a level
+    offers, the nearest the field is tried first (feature 318, the GM 2026-10-03: "if we have multiple options in our placement,
+    and one option is closer to the fields, then we should take the one that is closer to the fields"). 0 where no chains are
+    installed.
+
+    Research: nearest the field first - CANON: the GM's ruling of 2026-10-03, people did not want to walk far to their fields; no distance is a limit
+    """
+    chains = getattr(s, "_site_chains", None)
+    return float(chain_distance(q[0], q[1], chains)) if chains else 0.0
+
+
+def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[float, float]) -> int:
+    """Seat `plan.spec.households` on this margin by growth (the module's account); returns the count seated. `largest` is the
+    largest house `(w, h)` the roll can take. Records `seat_search.grow_offered`,
     `grow_took` and `grow_level` (the widening levels it needed).
 
     Research:
-        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part, jittered, nearest the seat first
+        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part, jittered, the seat nearest the field first
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
-        tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, nearest the seat first beside the ordinary seats
-        a seating with passages stopped early - research/questions/0081-village-lanes.drawing.html: the share is how many may be reached that way, never how many must, so a seating that has spent passages stops before the widest level and is seated again without them (`stages.seat_the_margin`)
+        tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
         a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
-        the growth's widening - UNRESEARCHED: rings at 1.25 to 2.0 times the parting distance, in 12 and 16 directions, while households are left (`GROW_LEVELS`)
+        the growth's widening - UNRESEARCHED: 16 directions at 1.0, 1.5 and 2.0 times the parting distance at once, then one ring further each level, while households are left and the canvas offers seats (`GROW_LEVELS`, `grow_level`)
     """
     want = plan.spec.households
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
@@ -302,17 +366,18 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
         guess = reach_at((float(h0["x"]), float(h0["y"])))
         gap = grow_gap(s)
         start = guess
-        heap: list[tuple[float, int, Pt, Any]] = []
+        heap: list[tuple[float, float, int, Pt, Any]] = []  # nearest the field, then nearest the seat
         tight: set[tuple[int, int]] = set()  # the standing houses whose tight seats are queued (feature 317)
         seen: set[tuple[Any, ...]] = set()
         done = 0
         while placed < want:
-            ndir, rings = GROW_LEVELS[level]
+            ndir, rings = grow_level(level)
+            queued = 0
             for rec in houses[done:]:
                 hx, hy = float(rec["x"]), float(rec["y"])
                 reach = footprint(s, rec)
                 for k in range(ndir):
-                    ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * GROW_JITTER_DEG)
+                    ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * grow_jitter(ndir))
                     far = 1.0 + s._hjit(hx, hy, _SALT_DISTANCE + k) * GROW_JITTER_FRAC
                     base = seat_toward((hx, hy), reach, guess, ang, gap)
                     for ring in rings:
@@ -321,10 +386,10 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                         # households: 448 queued, 194 offered - settling each as queued was 1.27 s of a 2.6 s seating)
                         q = (hx + (base[0] - hx) * far * ring, hy + (base[1] - hy) * far * ring)
                         key = (round(q[0] / 10.0), round(q[1] / 10.0))
-                        d = math.hypot(q[0] - cx, q[1] - cy)
-                        if key not in seen and d <= bound:
+                        if key not in seen and on_the_canvas(s, q):
                             seen.add(key)
-                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, far * ring, None)))
+                            queued += 1
+                            heapq.heappush(heap, (field_distance(s, q), math.hypot(q[0] - cx, q[1] - cy), len(seen), q, ((hx, hy), reach, ang, far * ring, None)))
                 # ...AND, WHILE THE SHARE HAS ROOM, ITS TIGHT SEATS (feature 317, plan D2): at the parting with no path's strip,
                 # in the same directions, unjittered in distance - a household there stands against this one's land, and is
                 # taken only by passage across its yard (`fit._parts_fit`, `passage.passage_of`); queued once a house, only round
@@ -334,21 +399,21 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                     tight.add(hkey)
                     yard = rec["geom"]["boxes"]["yard"]
                     for k in range(ndir):
-                        ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * GROW_JITTER_DEG)
+                        ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * grow_jitter(ndir))
                         if not yard_side((hx, hy), (float(yard[0]), float(yard[1])), ang):
                             continue
                         q = seat_toward((hx, hy), reach, guess, ang, TIGHT_GAP_PX)
-                        d = math.hypot(q[0] - cx, q[1] - cy)
-                        if d <= bound:
+                        if on_the_canvas(s, q):
                             seen.add(("tight", round(q[0] / 10.0), round(q[1] / 10.0)))
-                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, 1.0, rec)))
+                            queued += 1
+                            heapq.heappush(heap, (field_distance(s, q), math.hypot(q[0] - cx, q[1] - cy), len(seen), q, ((hx, hy), reach, ang, 1.0, rec)))
             done = len(houses)
             if not heap:
-                if level + 1 >= len(GROW_LEVELS) or (level + 2 == len(GROW_LEVELS) and passages_spent(s, plan.spec.households)):
-                    break  # ...and a seating that spent passages stops before the widest level: it is seated again without them
+                if level >= len(GROW_LEVELS) and not queued:
+                    break  # ...widened past the table until a level queues no new seat on the canvas: the ground is full
                 level, done = level + 1, 0  # DRY: every standing house offers again, wider
                 continue
-            seat, (center, reach, ang, scale, nb) = heapq.heappop(heap)[2:]
+            seat, (center, reach, ang, scale, nb) = heapq.heappop(heap)[3:]
             if nb is not None and (getattr(s, "_passage_left", 0) <= 0 or near_the_tree(s, seat)):
                 continue  # the share is spent, or the seat stands by a way (`TIGHT_TREE_FT`): a tight seat is no seat
             parting = TIGHT_GAP_PX if nb is not None else gap
@@ -357,7 +422,7 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
             got = settled_seat(center, reach, start, ang, parting, scale, reach_at, lambda q, h=house: seat_refused(s, q, h), lot)
             if got is not None:  # the next settle starts from the reach this one settled on (fewer rolls a seat)
                 start = union(guess, last[0])
-            if got is None or _near_a_house(s, got) or math.hypot(got[0] - cx, got[1] - cy) > bound:
+            if got is None or _near_a_house(s, got):
                 continue
             q = got
             offered += 1

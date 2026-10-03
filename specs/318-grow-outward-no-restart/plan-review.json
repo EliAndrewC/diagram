@@ -1,62 +1,62 @@
 {
  "feature": "318-grow-outward-no-restart",
- "plan_sha256": "18987ba4788298a859a5678d8998da85164a4a17a4843fc36b340c405929628c",
+ "plan_sha256": "c7106f722657273fc37925457299a74c7f51cfa9a95f85c0a53eecb13b96102a",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "One margin seated once; the ladder only for a margin that seats no house (no lawful exit bearing or field corridor); a margin seating some but not all refused with SiteRefused; rescue, withheld re-seat, early stop and the 12:1 refusal removed, the declared shape still recorded",
+   "summary": "One margin seated once; the ladder only for a margin that seats no house; a partial seating refused with SiteRefused; rescue, withheld re-seat, early stop and the 12:1 refusal removed, declared shape still recorded",
    "class": "within",
-   "why": "FR-001, FR-004, FR-005 and FR-006 as written: a pre-start skip seats no house so nothing is taken back, and a partial seating is refused rather than reseated elsewhere. The GM: get rid of this pattern completely."
+   "why": "FR-001, FR-004, FR-005, FR-006 as written; unchanged since the CLEAR review. The GM: get rid of this pattern completely."
   },
   {
    "id": "D2",
-   "summary": "Growth queues and settles seats with no radius test and keeps widening past GROW_LEVELS (16 directions, rings stepping out) until a level queues no new seat on the canvas; the old radius stays only where it sizes other things",
+   "summary": "Growth queues and settles seats with no radius test, widening past GROW_LEVELS until a level queues no new seat on the canvas; AMENDED: the table is one level, every direction and ring of the old three offered at once",
    "class": "within",
-   "why": "FR-002: the radius refuses no seat; the GM: keep placing houses outside the boundary. The termination answers FR-005's 'no free ground on the map' with a lattice of ring points, an approximation that SC-003 and the cohort (FR-009) measure; that is a design matter, not a narrowing."
+   "why": "FR-002 (the radius refuses no seat) and the GM's 'keep placing houses outside of the boundary'. The one-level table follows D4 and keeps every offer adjacent to a standing house, so the cluster still grows at its edge; the further levels beyond the table remain the widening when nearby ground runs out."
   },
   {
    "id": "D3",
-   "summary": "FIELD_REACH_FT and within_field_reach deleted with their four calls; seat window, free-ground grid box and free_seats' box become the canvas; site_boundary.window records the seat center only; legend and tests updated; ways/law.py's own constant untouched",
+   "summary": "FIELD_REACH_FT and within_field_reach deleted with their four calls; seat window, free-ground grid box and free_seats' box are the canvas; AMENDED: site_boundary.window records the canvas box and the plate draws it as a box; ways/law.py's constant untouched",
    "class": "within",
-   "why": "FR-003 and SC-002; the GM: get rid of these 700 feet measurement completely. Measured: the grep shows exactly the four predicate calls plus the stages/boundary/capacity uses the plan names. The window recording the center rather than a box 'sized from the map's own extent' (FR-003's words) removes the figure either way; the spec's sentence should be reconciled with it, but it narrows nothing."
+   "why": "FR-003 verbatim: the window 'sized from the map's own extent'. The amendment closes the gap the first review noted between the plan (seat center) and the spec's sentence. The GM: get rid of these 700 feet measurement completely."
   },
   {
    "id": "D4",
-   "summary": "Growth heap keyed by distance to the field's facing chains instead of distance from the margin center, level structure unchanged; unit test pins the order",
+   "summary": "AMENDED: growth heap keyed by distance to the field's facing chains, ties by distance from the margin center; GROW_LEVELS one level of sixteen directions at rings 1.0/1.5/2.0 offered at once, jitter scaled with the step; homestead-stage cost carried to the bookends",
    "class": "within",
-   "why": "FR-003a and SC-002a verbatim: nearest the field first among a level's offers, the level-by-level widening kept so the cluster stays tight. The GM: take the one that is closer to the fields."
+   "why": "The GM: 'if we have multiple options in our placement, and one option is closer to the fields, then we should take the one that is closer'. Offering every adjacent option at once and taking the nearest the field is that sentence more literally than the sparse first level was; FR-003a's purpose clause ('the cluster stays as tight as its ground allows') is what the first plan measured failing (research R1) and the amendment restores. Each offer is still adjacent to a standing house (US1: grows at the edge). Nothing the GM asked for is dropped; the time cost is not a fidelity matter and FR-010 measures it."
   },
   {
    "id": "D5",
-   "summary": "recheck_passages keeps only its in-place arm (a passage the finished map makes unnecessary ended, no house moved); relay, stored layouts and passage_unfit removed",
+   "summary": "recheck_passages keeps only its in-place arm; relay, stored layouts and passage_unfit removed",
    "class": "within",
-   "why": "FR-001 and US2 scenario 2 as accepted: the re-lay is a take-back and goes; the in-place ending moves no house and holds page 0081's condition."
+   "why": "FR-001 and US2 scenario 2; unchanged."
   },
   {
    "id": "D6",
-   "summary": "Quarter-built figure recorded per nucleated map as meta.built_share (houses, yards, gardens, groves inside the convex hull of homestead boxes), refusing nothing",
+   "summary": "Quarter-built figure recorded per nucleated map as meta.built_share, refusing nothing",
    "class": "within",
-   "why": "FR-007; the GM chose 'floor soft'. Premise measured: no engine file names a built share or quarter-built rule, and page 0032's drawing page says hamlets are exempt and no village is laid out by chance today, so reporting is all there is to do."
+   "why": "FR-007; the GM chose 'floor soft'; unchanged."
   },
   {
    "id": "D7",
-   "summary": "Drawing pages 0029, 0032 and 0081 rewritten as US3 states; claims citing the reach removed with their code; impl-drift on changed units",
+   "summary": "Drawing pages 0029, 0032, 0081 rewritten as US3 states; claims citing the reach removed; impl-drift on changed units",
    "class": "within",
-   "why": "FR-008 and US3 scenarios 1-3; the GM's preference recorded as canon."
+   "why": "FR-008 and US3; unchanged."
   },
   {
    "id": "D8",
-   "summary": "Declared occasions: placement-changed farmhouse on the nucleated pool maps (Inashiro, Kuwabata, Sawada) and village lane where houses move",
+   "summary": "Declared occasions: placement-changed farmhouse on Inashiro, Kuwabata, Sawada; village lane where houses move",
    "class": "within",
-   "why": "Review process, not the GM's request; automatic occasions (a glyph re-placed) still fire on any other map the removal of the reach moves."
+   "why": "Review process, not the GM's request; unchanged."
   },
   {
-   "id": "V1 (reviewer's label, Verification)",
-   "summary": "The regression check runs make cohort N=24 with the pool against main",
+   "id": "V1 (Verification)",
+   "summary": "Regression check runs make cohort N=24 and the pool against main; seed 18 and the 40-household seeds on their first margin; bookends with spread and built share",
    "class": "within",
-   "why": "SC-005/FR-009 name 'the cohort'; N=24 is the project's standing cohort run (every recent feature's spec uses it) and includes seed 18. The 30-seed census is FR-005's premise, a separate measurement already taken."
+   "why": "SC-002, SC-005, FR-009, FR-010 as named."
   }
  ],
  "verdict": "CLEAR"

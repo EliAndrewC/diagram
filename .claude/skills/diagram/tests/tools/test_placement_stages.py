@@ -257,26 +257,23 @@ def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path:
 
 
 def _window_overlay() -> dict[str, Any]:
-    """A seating window at (150, 150), 100 px across and within 60 px of a chord along y = 200, the field below it."""
+    """A seating window from (50, 50) to (250, 250), with a chord along y = 200, the field below it."""
     return {
         "chords": [[[50.0, 200.0], [250.0, 200.0], [0.0, -1.0]]],
-        "rings": [[[60.0, 90.0], [90.0, 90.0], [90.0, 120.0], [60.0, 120.0]]],
+        "rings": [[[10.0, 60.0], [40.0, 60.0], [40.0, 90.0], [10.0, 90.0]]],
         "holes": [],
         "water": [[[150.0, 0.0], [150.0, 300.0], 4.0]],
         "corridors": [],
-        "window": [150.0, 150.0, 100.0, 60.0],
+        "window": [50.0, 50.0, 250.0, 250.0],
     }
 
 
-def test_the_seating_window_is_the_seats_bound_where_it_meets_the_fields_reach() -> None:
-    """Feature 308 (the GM: "fix that page to show what we are actually doing"): the window a grown seat may stand in is
-    within `bound` of the seat AND within `reach` of the paddy's chords; a manifest with no window has none."""
+def test_the_seating_window_is_the_recorded_box() -> None:
+    """Feature 308 (the GM: "fix that page to show what we are actually doing"), amended by feature 318: the window a grown
+    seat may stand in is the recorded box - the canvas, no radius and no reach from the paddy; a manifest with no window has none."""
     m = ps.window_mask((300, 300), _window_overlay(), 0.0, 0.0, 1.0)
-    assert m.getpixel((150, 160)) == 255, "near the seat and the field"
-    assert m.getpixel((150, 100)) == 0, "within the bound but 100 px from the field"
-    assert m.getpixel((150, 240)) == 255 and m.getpixel((150, 290)) == 0, "past the field the bound ends it"
-    bare = {**_window_overlay(), "chords": []}
-    assert ps.window_mask((300, 300), bare, 0.0, 0.0, 1.0).getpixel((150, 100)) == 255, "no chords: the bound alone"
+    assert m.getpixel((150, 160)) == 255 and m.getpixel((150, 60)) == 255 and m.getpixel((240, 240)) == 255, "anywhere in the box"
+    assert m.getpixel((20, 20)) == 0 and m.getpixel((290, 150)) == 0, "outside the box"
     assert ps.window_mask((300, 300), {"chords": []}, 0.0, 0.0, 1.0) is None
     assert ps.refused_ground({"chords": []}) is None
 
@@ -291,17 +288,18 @@ def test_the_boundary_is_drawn_only_where_the_seating_asks_it(monkeypatch: pytes
     assert inside_field[0] > inside_field[1] + 20, f"the field's side of the chord, in the window, refused: {inside_field}"
     assert inside_free == (255, 255, 255), "free ground in the window, untouched"
     assert im.getpixel((20, 20)) != (255, 255, 255) and im.getpixel((20, 20))[0] > 240, "outside the window, veiled in paper"
-    assert im.getpixel((75, 90)) == im.getpixel((20, 20)), "the ring outside the window is not drawn"
+    assert im.getpixel((25, 60)) == im.getpixel((20, 20)), "the ring outside the window is not drawn"
     assert im.getpixel((150, 30)) == im.getpixel((20, 20)), "nor the water's line"
     rule = ps.BOUNDARY_COLORS["edge"][:3]
     assert rule in [im.getpixel((120, y)) for y in range(194, 206)], "the rule runs along the paddy's edge, round the open ground"
-    assert rule not in [im.getpixel((120, y)) for y in range(232, 300)], "and not round the window's arc out in the paddy"
+    assert rule not in [im.getpixel((120, y)) for y in range(232, 300)], "and not round the window's edge out in the paddy"
     whole = ps.draw_boundary(Image.new("RGB", (300, 300), (255, 255, 255)), {k: v for k, v in _window_overlay().items() if k != "window"}, 0.0, 0.0, 1.0)
-    assert whole.getpixel((75, 90))[0] > 150 and whole.getpixel((75, 90))[1] < 90, "no window: every line drawn, as recorded"
+    assert whole.getpixel((25, 60))[0] > 150 and whole.getpixel((25, 60))[1] < 90, "no window: every line drawn, as recorded"
 
 
 def test_the_homesteads_legend_states_the_window_it_drew() -> None:
-    assert "within 743 ft of the margin's seat (the cluster's limit, which keeps a nucleated hamlet together) and 700 ft of the paddy" in ps.homestead_legend((743.2, 700.0))
+    got = ps.homestead_legend((2400.0, 1800.0))
+    assert "anywhere on the 2,400 by 1,800 ft map - no distance from the margin's seat or from the paddy limits a seat" in got
     assert "the site boundary the homesteads were seated against" in ps.homestead_legend(None)
 
 

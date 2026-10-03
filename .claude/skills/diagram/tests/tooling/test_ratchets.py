@@ -251,3 +251,12 @@ def test_a_class_median_EXCLUDES_entries_that_carry_no_class(tmp_path) -> None: 
     assert gc.median_seconds("done", "reference", cwd, "cold") == 700
     assert gc.class_count("done", "reference", cwd, "warm") == 1
     assert gc.median_seconds("done", "reference", cwd) == 700, "classless still sees all three"
+
+
+def test_the_quick_budget_judges_only_a_warm_selective_run() -> None:
+    """Feature 318 found it: `make quick ALL=1` ran 9,247 tests in 78 s, all passing, and failed on the 60 s budget as
+    'something slow is running' - the ratchet beside it already exempted ALL=1 and a cold run (feature 171). The budget
+    is held to the same runs: its test names the warm and ALL conditions."""
+    recipe = (SCRIPTS.parent / ".claude" / "skills" / "diagram" / "Makefile").read_text(encoding="utf-8")
+    line = next(ln for ln in recipe.splitlines() if "-gt $(QUICK_BUDGET)" in ln)
+    assert '"$$warm" = yes' in line and '[ -z "$(ALL)" ]' in line, line

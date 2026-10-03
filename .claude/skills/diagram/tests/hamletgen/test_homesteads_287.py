@@ -210,16 +210,6 @@ def test_the_commons_pockets_widen_past_a_full_core_and_keep_off_the_paddy() -> 
     assert full.reserve_commons_byres(seat, 20) == []
 
 
-def test_the_free_ground_grid_covers_the_fields_reach_not_the_canvas() -> None:
-    """Feature 287, homes H31: the canvas grew for the seat's room; the FreeGround grid covers only the chords' reach."""
-    from l7r.diagram.hamletgen.homesteads.boundary import free_ground_bounds
-
-    chains = [[((1000.0, 1000.0), (1200.0, 1000.0), (0.0, 1.0))]]
-    assert free_ground_bounds(chains, 300.0, 5000.0, 5000.0) == (700.0, 700.0, 1500.0, 1300.0)
-    assert free_ground_bounds(chains, 2000.0, 2500.0, 2500.0) == (0.0, 0.0, 2500.0, 2500.0)
-    assert free_ground_bounds([], 300.0, 5000.0, 4000.0) == (0.0, 0.0, 5000.0, 4000.0)
-
-
 def _brook_site() -> Settlement:
     """A brook between the cluster (west) and its field (east), a ford on it, and the tree's exit strip running west."""
     from l7r.diagram.settlement.rolling.access import start_tree

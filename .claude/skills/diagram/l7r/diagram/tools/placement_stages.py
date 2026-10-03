@@ -488,27 +488,18 @@ page's own paper color, and the edge of the seating window a dark rule."""
 
 
 def window_mask(size: tuple[int, int], overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
-    """Where the seating may offer a house, as an 8-bit mask over a plate: within the window's `bound` of the seat AND within
-    its `reach` of the paddy's facing chords (`within_field_reach`), the two limits every grown seat is held to
-    (`growth.grow_the_margin`). None where the manifest records no window (a form that is not grown)."""
-    from PIL import Image, ImageChops, ImageDraw
+    """Where the seating may offer a house, as an 8-bit mask over a plate: the window's box `(x0, y0, x1, y1)` - the whole
+    canvas, since no radius from the seat and no distance from the field limits a grown seat (feature 318,
+    `growth.grow_the_margin`). None where the manifest records no window (a form that is not grown)."""
+    from PIL import Image, ImageDraw
 
     win = overlay.get("window")
     if not win:
         return None
-    cx, cy, bound, reach = (float(v) for v in win)
-    circle = Image.new("L", size, 0)
-    px, py, pr = (cx - x0) * sc, (cy - y0) * sc, bound * sc
-    ImageDraw.Draw(circle).ellipse((px - pr, py - pr, px + pr, py + pr), fill=255)
-    near = Image.new("L", size, 0)
-    draw = ImageDraw.Draw(near)
-    rr = reach * sc
-    for a, b, *_n in overlay.get("chords") or []:
-        pa, pb = ((a[0] - x0) * sc, (a[1] - y0) * sc), ((b[0] - x0) * sc, (b[1] - y0) * sc)
-        draw.line([pa, pb], fill=255, width=max(1, round(2 * rr)))
-        for q in (pa, pb):
-            draw.ellipse((q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr), fill=255)
-    return ImageChops.multiply(circle, near) if overlay.get("chords") else circle
+    wx0, wy0, wx1, wy1 = (float(v) for v in win)
+    box = Image.new("L", size, 0)
+    ImageDraw.Draw(box).rectangle(((wx0 - x0) * sc, (wy0 - y0) * sc, (wx1 - x0) * sc, (wy1 - y0) * sc), fill=255)
+    return box
 
 
 def refused_ground(overlay: dict[str, Any]) -> Any:
@@ -519,11 +510,11 @@ def refused_ground(overlay: dict[str, Any]) -> Any:
     win = overlay.get("window")
     if not win:
         return None
-    cx, cy, bound, _reach = (float(v) for v in win)
+    wx0, wy0, wx1, wy1 = (float(v) for v in win)
     chains = [[((a[0], a[1]), (b[0], b[1]), (n[0], n[1])) for a, b, n in overlay.get("chords") or []]]
     corridors = ([((a[0], a[1]), (b[0], b[1]), c) for a, b, c in overlay.get("water") or []], [((a[0], a[1]), (b[0], b[1]), c) for a, b, c in overlay.get("corridors") or []])
     outline = ([[(x, y) for x, y in r] for r in overlay.get("rings") or []], [[(x, y) for x, y in h] for h in overlay.get("holes") or []])
-    return FreeGround(chains, corridors, outline, (cx - bound, cy - bound, cx + bound, cy + bound))
+    return FreeGround(chains, corridors, outline, (wx0, wy0, wx1, wy1))
 
 
 def draw_boundary(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
@@ -651,8 +642,9 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
             jobs: list[tuple[Any, dict[tuple[str, str], int] | None, str, dict[str, Any] | None, int]] = []
             if drew:
                 overlay = homestead_overlay(s) if not had_boundary and "site_boundary" in s.M else None
-                if overlay and overlay.get("window"):  # the window's two limits, in feet, for the plate's legend
-                    row["window_ft"] = (float(overlay["window"][2]) / s.px(1.0), float(overlay["window"][3]) / s.px(1.0))
+                if overlay and overlay.get("window"):  # the window's width and height, in feet, for the plate's legend
+                    w = overlay["window"]
+                    row["window_ft"] = ((float(w[2]) - float(w[0])) / s.px(1.0), (float(w[3]) - float(w[1])) / s.px(1.0))
                 jobs.append((row, None, stem, overlay, 2600))
             else:
                 row["decided"] = [(k, str(v)) for k, v in now.items() if known.get(k) != v]
@@ -739,7 +731,7 @@ def _make_plates(s: Settlement, jobs: list[Any], out_dir: str, width: int) -> No
 
 def homestead_legend(window_ft: tuple[float, float] | None) -> str:
     """The homesteads plate's legend: what `draw_boundary` and `draw_reservations` drew over it, and - where the seating
-    recorded its window - the window's two limits in feet."""
+    recorded its window - the window's size in feet."""
     reserved = (
         "Over that, the ground the seating reserved as it seated them: each house's access corridor in orange (bending where it was "
         "routed round what stands), the exit strip in dark gray - the start of the hamlet's way out, reserved before any house so "
@@ -751,12 +743,12 @@ def homestead_legend(window_ft: tuple[float, float] | None) -> str:
             "Drawn over this plate: the site boundary the homesteads were seated against - the paddy's facing chords in blue, the "
             "outline of the no-build ground in red, the water and corridor segments in teal. " + reserved
         )
-    bound, reach = window_ft
+    wide, high = window_ft
     return (
         f"Drawn over this plate: what the seating asked of the ground. The dark rule encloses the ground a house may be offered: "
-        f"within {bound:,.0f} ft of the margin's seat (the cluster's limit, which keeps a nucleated hamlet together) and "
-        f"{reach:,.0f} ft of the paddy, less the ground refused outright. Beyond those two limits the plate is veiled, because no "
-        "seat there is ever asked. Within them, the red tint is the refused ground, rasterized once and looked up per seat: the "
+        f"anywhere on the {wide:,.0f} by {high:,.0f} ft map - no distance from the margin's seat or from the paddy limits a seat; "
+        "the cluster grows at its edge, the seat nearest the paddy first - less the ground refused outright. "
+        "The red tint is the refused ground, rasterized once and looked up per seat: the "
         "paddy's side of its facing chords (blue), the no-build ground's outline (red: the hem, the marshes, the ponds, the dry "
         "plots, the reed toe) and the water's clearance (teal). " + reserved
     )

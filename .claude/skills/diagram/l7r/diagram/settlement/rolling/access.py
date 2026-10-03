@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING, Any
 
 from .._geom import PointGrid, Pt, seg_closest, seg_dist, segments_cross
@@ -83,7 +83,7 @@ class AccessTree:
     Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a corridor reserved from each door to the tree, no later homestead covering it - but for the few households reached across a neighbor's yard, whose walk is held clear the same way (`bar`)
     """
 
-    __slots__ = ("_along", "_targets", "bar_items", "bars", "grid", "half", "routed", "segs", "tried")
+    __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
 
     def __init__(self, half: float) -> None:
         self.half = half
@@ -100,7 +100,6 @@ class AccessTree:
         # THE WALKS ACROSS A NEIGHBOR'S YARD (feature 317, `passage.py`): kept clear of every later homestead as a corridor is
         # (`covers_box`), but no corridor is aimed at one, no route ends on one and no lane is drawn along one - a grid apart
         self.bars = PointGrid(128.0)
-        self.bar_items: list[Any] = []  # ...and the entries filed there, for a walk taken back (`unbar`)
 
     def add(self, a: Pt, b: Pt) -> None:
         self.segs.append((a, b))
@@ -120,28 +119,6 @@ class AccessTree:
         h = self.half
         item = (a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)
         self.bars.extend([item])
-        self.bar_items.append(item)
-
-    def unbar(self, walk: Sequence[Pt]) -> list[Any]:
-        """Take the walk `walk` (its points, as `bar` was given them leg by leg) back off the tree - a household re-laid with
-        a way of its own once the seating is done (`passage.recheck_passages`) - and return the entries taken, for `rebar`.
-
-        Research: corridor geometry, memo and search plumbing - NONE: the bars filed again without the walk's legs
-        """
-        legs_of = set(zip(walk, walk[1:], strict=False))
-        gone = [it for it in self.bar_items if (it[0], it[1]) in legs_of]
-        self.bar_items = [it for it in self.bar_items if (it[0], it[1]) not in legs_of]
-        self.bars = PointGrid(128.0)
-        self.bars.extend(self.bar_items)
-        return gone
-
-    def rebar(self, items: Sequence[Any]) -> None:
-        """File again the walk entries `unbar` took back (the re-lay refused).
-
-        Research: corridor geometry, memo and search plumbing - NONE
-        """
-        self.bars.extend(list(items))
-        self.bar_items.extend(items)
 
     def covers_box(self, box: Any) -> bool:
         """Does any corridor's strip - or a passage's walk (`bar`) - meet the box `(cx, cy, w, h)`? The ONE test an envelope

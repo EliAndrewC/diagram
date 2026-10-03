@@ -66,28 +66,6 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
     return list(out.values())
 
 
-#: How far a farmhouse may stand from the field it works, in feet (feature 287, homes H03). The record gives a 6 ft MINIMUM
-#: and no maximum; it gives as a TOLERANCE a back-row house about 700 ft from the crops as "the honest back of a compact
-#: village" (research/questions/0029-farmhouses-minka.drawing.html). 700 is therefore the reach every
-#: seat is held to while a hamlet's site boundary is installed, and the exhaustive seat pass scans: a map drawing
-#: convention whose figure is the record's own tolerance, not a pick.
-FIELD_REACH_FT = 700.0
-"""Research: farthest a house stands from its field - research/questions/0029-farmhouses-minka.drawing.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: 700 ft, the back-row tolerance held as a maximum"""
-
-
-def within_field_reach(s: Any, x: float, y: float) -> bool:
-    """Is a house at (x, y) within `FIELD_REACH_FT` of its field (homes H03)? The ONE predicate the seat test
-    (`_parts_fit`), the exhaustive seat pass and the finished-map test read. The field is its facing chains - the paddy's
-    outline as the seat sees it; where none is installed (the legacy village roll, every placer after the homestead
-    stage), nothing is held.
-
-    Research: house within reach of its field - research/questions/0029-farmhouses-minka.drawing.html: `FIELD_REACH_FT` to the field's facing chains"""
-    chains = getattr(s, "_site_chains", None)
-    if not chains:
-        return True
-    return bool(chain_distance(x, y, chains) <= s.px(FIELD_REACH_FT))
-
-
 class BundleFitMixin:
     # WHAT A HAMLET'S SEATING INSTALLS for the fit test (feature 287, plan M3 and M5), None outside it: the access tree
     # (`rolling/access.py`), the well pockets laid so far, the households' lots and the byre form their bundles reserve a
@@ -114,8 +92,8 @@ class BundleFitMixin:
         plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
         MAXIMUM at all (`research/questions/0029-farmhouses-minka.drawing.html`; the
         retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
-        TOLERANCE in the other direction: a back-row house about 700 ft from the crops "reads as the honest
-        back of a compact village", and a hamlet "is legitimately loose and is not held to" the village
+        DESCRIPTION in the other direction: a back-row house about 700 ft from the crops "reads as the honest
+        back of a compact village" (no limit: feature 318 removed the reach once held at it), and a hamlet "is legitimately loose and is not held to" the village
         coverage floor at all. So 165 catches a house that has left the farmland; it does not describe how
         far a farmer lives from the paddy, and a cluster standing further out than this is not thereby
         wrong. It formerly cited "the gate's ADJ=165" - `all_houses_field_adjacent`, which died with the
@@ -349,7 +327,7 @@ class BundleFitMixin:
 
     def _parts_fit(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
-        (feature 227): the field's reach and the household's water; no part over another household's reserved wood seat;
+        (feature 227): the household's water; no part over another household's reserved wood seat;
         the yard's and the gardens' sun; the corridor from its door to the access tree (`access_corridor` - routed round
         what stands where the tree routes); the house's wall rule against the paddy; no part across a stream; the exact
         tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
@@ -365,12 +343,6 @@ class BundleFitMixin:
         if geom.get("unlaid"):
             return False
         house = geom["house"]
-        # the four garden sides of a seat stand one house: its reach to the field is asked once (`_reach_memo`)
-        _rm = self.__dict__.get("_reach_memo")
-        if _rm is None or _rm[0] != house[0] or _rm[1] != house[1] or _rm[2] is not self._site_chains:
-            _rm = self.__dict__["_reach_memo"] = (house[0], house[1], self._site_chains, within_field_reach(self, house[0], house[1]))
-        if not _rm[3]:
-            return False
         if not self._candidate_watered(geom):
             return False
         # THE FEW LOOKUPS THAT REFUSE MOST OF WHAT THE CORRIDOR WOULD BE ASKED, FIRST (the perf-audit's owed lever, 287

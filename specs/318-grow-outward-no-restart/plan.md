@@ -26,22 +26,34 @@ level, the 12:1 refusal (`drawn_in_band` asked as a refusal; the declared shape 
 **D2 - The growth keeps widening (FR-002).** `growth.grow_the_margin` queues and offers seats with no radius test: the
 `d <= bound` filter on queued seats and the `> bound` refusal of a settled seat go. Where `GROW_LEVELS` runs dry the growth keeps
 widening: further levels at 16 directions with rings stepping out by half the least distance each, until a level queues no new
-seat on the canvas (every ring point off it or already seen) - the termination. The old radius stays only where it sizes
+seat on the canvas (every ring point off it or already seen) - the termination. AMENDED with D4 (research R1): the table is one
+level, every direction and ring of the old three offered at once. The old radius stays only where it sizes
 something else (the exit strip's length, the front row's reach on the other forms, the seat lattice's band).
 
 **D3 - The field reach removed (FR-003, SC-002).** `fit.FIELD_REACH_FT` and `within_field_reach` deleted, with their four
 calls (`growth.seat_refused`, `place._place_bundle_nucleated`, `capacity.free_seats`, `fit._parts_fit`'s reach memo). The
 growth's seat region window (`region.seat_window`), the free-ground grid's box (`boundary.free_ground_bounds`) and
 `capacity.free_seats`' search box are the canvas; their docstrings already say the box bounds the cost, never the answer -
-the grid's cost on the whole canvas measured at the bookends. `site_boundary.window` records the seat center only (no reach);
+the grid's cost on the whole canvas measured at the bookends. `site_boundary.window` records the canvas box `(x0, y0, x1, y1)` - sized from the map's own extent, FR-003's words - and the
+placement-stages plate draws it as a box (no radius, no reach);
 the placement-stages legend and the tests pinning 700 updated. `ways/law.py`'s own `FIELD_REACH_FT` (a way reaching the field)
 untouched.
 
-**D4 - Nearest the field first (FR-003a, SC-002a).** The growth's heap is keyed by the seat's distance to the field's facing
-chains (`chain_distance` against `s._site_chains`, the same chains the reach read), not by its distance from the margin's
-center; the level structure is unchanged, so every seat offered is one adjacent to a standing house at the current level, and
-of those the nearest the field is tried first. A unit test pins the order (SC-002a). Measured after: the drawn aspect and the
-spread on the bookend seeds.
+**D4 - Nearest the field first (FR-003a, SC-002a), AMENDED 2026-10-03 on measurement (research R1).** The growth's heap is keyed
+by the seat's distance to the field's facing chains (`chain_distance` against `s._site_chains`, the same chains the reach read),
+ties broken by the distance from the margin's center; every seat offered is one adjacent to a standing house, and of those the
+nearest the field is tried first. A unit test pins the order (SC-002a).
+
+The level structure as first planned ("unchanged": 8 directions, then 12, then 16) was measured and FAILED FR-003a's own clause,
+"the cluster stays as tight as its ground allows": with no radius a level never runs dry, so the eight sparse directions of the
+first level served the whole seating, the near-field seats they missed were never offered, and the cluster crept away from the
+field - mean house-to-field distance on the reference at 40 households (seeds 4, 25, 39, 47) 637, 400, 585, 442 ft against main's
+443, 421, 429, 416. So `GROW_LEVELS` is ONE level, sixteen directions at rings 1.0, 1.5 and 2.0 of the least distance offered at
+once - every adjacent option, the nearest the field taken: 384, 367, 394, 355 ft, every farthest house under 610 ft. Priced: every
+ring in quarters 1.0-2.0 (405, 361, 386, 352 ft, homestead stage 44.6 s for the four), twelve directions (429, 362, 421, 374 ft,
+29.6 s); chosen sixteen at three rings (31.2 s against main's 21.5; 32.7 s once the direction jitter is scaled with the step,
+`grow_jitter`, so sixteen directions' neighbors never cross). The cost - near-field seats are more often hemmed in and refused
+after the envelope and the corridor search - is a perf band the bookends measure (FR-010).
 
 **D5 - The passage recheck without the re-lay (FR-001).** `passage.recheck_passages` keeps only its first arm: a household
 reached across a yard whose drawn layout finds a straight or round-the-gable corridor on the finished seating is given it and

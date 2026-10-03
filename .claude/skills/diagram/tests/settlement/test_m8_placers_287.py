@@ -15,7 +15,7 @@ from l7r.diagram.settlement.civic_grounds.edge_seat import EdgeGround, edge_seat
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import BAR_MARGIN_PX, ground_blocks, open_water_discs
-from l7r.diagram.settlement.rolling import access, fit
+from l7r.diagram.settlement.rolling import access
 from l7r.diagram.settlement.rolling.bundle import BundleGeomMixin, PocketUnlaid, box_gap, boxes_meet, pocket_clear_of_beds, pocket_keeps_its_dwelling
 from l7r.diagram.settlement.rolling.lot import bundle_admitted, bundle_records, held_part_records
 from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
@@ -213,7 +213,6 @@ def test_the_bundle_fit_refuses_a_layout_the_registry_refuses(monkeypatch: pytes
     _ditch_at(s, privy[0], privy[1])
     assert not s._bundle_fits(geom), "the privy on a ditch"
     t = _hamlet()
-    monkeypatch.setattr(fit, "within_field_reach", lambda *a: True)
     for rule in ("_candidate_watered", "_gardens_sun_ok", "_sun_corridor_ok"):
         monkeypatch.setattr(type(t), rule, lambda self, *a: True)
     assert t._parts_fit(geom)

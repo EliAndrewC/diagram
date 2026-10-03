@@ -1501,7 +1501,9 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	  root=$$(git rev-parse --show-toplevel); \
 	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/_ratchet.py" quick "$$el" || exit 1; \
 	  elif [ $$el -ge 15 ]; then printf '\nquick took %ss, but this run was %s - not judged against the 15s bar (feature 171).\n' "$$el" "$$([ "$$warm" = yes ] && echo "ALL=1, so unselective" || echo "COLD: it built .testmondata")"; fi; \
-	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
+	  : "(GUARD_EDIT_OK: feature 318 found it - the BUDGET judges the same runs the ratchet does, a warm selective one;"; \
+	  : " ALL=1 ran 9,247 tests in 78 s, every one passing, and failed here as 'something slow is running')"; \
+	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ $$el -gt $(QUICK_BUDGET) ]; then \
 	    printf '\n\033[1mquick took %ss, over its %ss budget.\033[0m\n' "$$el" "$(QUICK_BUDGET)"; \
 	    printf 'Something slow is running that should not be. Find it:  \033[1mmake durations\033[0m\n'; \
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \

@@ -17,9 +17,8 @@ from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, in
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
-from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
-from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share, passages_spent, recheck_passages
+from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share, recheck_passages
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
@@ -28,9 +27,9 @@ from ..plan import SitePlan, band_extent
 from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
-from .growth import grow_the_margin, grows
+from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
-from .region import SeatRegion, seat_window
+from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
 from .seat_geometry import bank_of, declare_cluster_shape, drawn_in_band, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
 from .seats import front_row
@@ -87,13 +86,13 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     The ground is asked ONCE. Before the first seat, the site boundary is computed from everything the map holds:
     the paddy's outline as a few facing chords, everything else - the hem, the marshes, the ponds, the dry plots, the reed
     toe that will be drawn later, the no-build ground - as one outline with holes, and the water courses and registered
-    corridors as segments. It is rasterized once over the ground within the field's reach (`FreeGround`), so a seat on
+    corridors as segments. It is rasterized once over the canvas (`FreeGround`), so a seat on
     ground a cell surely refuses is refused by one lookup; a candidate rectangle is judged at nine points against the
     boundary only where its cells are not already decided. The plate shows the window the growth offers seats in and the
     ground it refuses there.
 
     A NUCLEATED CLUSTER IS GROWN (feature 308, `growth.py`): its first house on the free ground nearest the seat's center,
-    within the field's reach (`FIELD_REACH_FT`); each next house offered from a house already standing, in a ring of
+    on the canvas; each next house offered from a house already standing, in a ring of
     directions round it, at the distance where the two homesteads' footprints part - the envelope, the woodlot, the path
     out, and to the south the sun its yard and beds are owed - jittered by a hash of the standing house's position; wider
     rings while households are left. A grown house's path to the access tree is laid as it is placed, straight where one
@@ -251,77 +250,49 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # trims actually exist.
 
 
-def seat_the_margin(s: Settlement, plan: SitePlan, mark: Any, want: int) -> tuple[int, int]:
-    """One margin seated (`_seat_households`) - and, where it leaves a household without a house after seating some across a
-    neighbor's yard, seated again with the passage withheld before the ladder takes the next margin (`meta.passage_withheld`).
-
-    THE SHARE IS A CEILING, NOT A QUOTA (feature 317, research R10): households reached across a yard stand against their
-    neighbors' land, and on seed 47 at 40 households they left the chosen margin seven houses short and the next one too, so
-    the map was seated on the third margin, after two seatings thrown away (the perf-audit, 2026-10-03); with the passage
-    withheld the chosen margin seats all 40. A seating that has spent passages stops before the growth's widest level
-    (`growth.grow_the_margin`): no seating that seats everyone reaches it with passages (the bookend's seeds at 15, 20 and 40
-    households, research R10), and seed 47's spent 5.7 s there for a seating thrown away.
-
-    Research: a share that may be reached by passage - research/questions/0081-village-lanes.drawing.html: the share is how many may be reached that way, never how many must; a margin that seats everyone without it keeps its site
-    """
-    placed, cloud = _seat_households(s, plan)
-    if placed >= want or not passages_spent(s, plan.spec.households):
-        return placed, cloud
-    unseat_to(s, mark)
-    s._passage_withheld = True  # type: ignore[attr-defined]
-    try:
-        placed, cloud = _seat_households(s, plan)
-    finally:
-        s._passage_withheld = False  # type: ignore[attr-defined]
-    s.M["meta"]["passage_withheld"] = True
-    return placed, cloud
-
-
 def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
-    """Every declared household seated, or the site refused (feature 287, homes H14 and plan D2).
+    """Every declared household seated on the chosen margin, or the site refused (feature 287, homes H14 and plan D2; feature
+    318).
 
-    The chosen margin is seated first (`_seat_households`: a nucleated cluster grown, `growth.grow_the_margin`; a
-    dispersed hamlet's last round the exhaustive pass; a row village's rows). Where that leaves a household without a
-    house - the growth's widest rings offer no more seats, or the exhaustive pass finds the ground full - the houses it
-    seated are taken back and the next margin of `seat_cluster`'s ranking is seated instead (`margin_ladder`; on a polder
-    only the margins on the chosen flank, the waterward fringe being drawn already), and so is a seating whose houses draw
-    no cluster shape's band (`drawn_in_band`). The seating kept is the one pass that seated everyone - no second roll of
-    anything. Past the last margin the site is refused, naming it: `SiteRefused`, raised HERE rather than at `stage_seat`
-    where plan D2 places it, because a margin's capacity is known only by seating it. A margin with no dry way out is
-    skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin).
+    The chosen margin is seated once (`_seat_households`: a nucleated cluster grown outward until every household stands,
+    `growth.grow_the_margin`; a dispersed hamlet's last round the exhaustive pass; a row village's rows). NO SEATED HOUSE IS
+    EVER TAKEN BACK (feature 318, the GM 2026-10-03: "when someone else moved in, everyone did not move their houses"): the
+    margin ladder of `seat_cluster`'s ranking is asked only past a margin that seated no house at all - no lawful way out, no
+    lawful corridor to its field - where nothing stands to be taken back; a margin that seats some households but not all is
+    refused (`SiteRefused`, naming the households seated). The ladder used to take back a margin's houses and seat the next
+    from scratch (cohort seed 18 seated eleven margins before its twelfth held everyone), and a seating past a cluster shape's
+    band (12:1) was refused the same way; both went with feature 318. `meta.seat_margin` counts the margins asked.
+
     Research:
         every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused
-        a seating inside a shape's band - UNRESEARCHED: refused where its houses draw no cluster shape's band (a string past 12:1)
+        no house taken back - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: the placer searches wider ground rather than starting over, so the houses already placed stay where they are
     """
     want = plan.spec.households
     mark = seating_mark(s)
-    placed, cloud = seat_the_margin(s, plan, mark, want)
-    tried = [placed]
+    s.M.setdefault("meta", {})["houses_taken_back"] = 0  # ...and any house a later cut takes, counted (SC-001: held at 0)
+    placed, cloud = _seat_households(s, plan)
+    asked = 1
     ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
     toe: Any = None
-    banded = drawn_in_band(s, plan)
-    # ...AND A SEATING WHOSE HOUSES DRAW NO SHAPE'S BAND IS NOT KEPT (feature 287, homes wave 5): past the longest band's
-    # ceiling (`in_a_shapes_band`, a string past 12:1) the margin is taken back as one that seated too few is
-    for margin in ladder if placed < want or not banded else ():
-        # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is
-        # asked the same, lazily, before the houses on it are taken back
+    for margin in ladder if placed == 0 else ():
+        # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is asked the
+        # same, lazily
         toe = (s.toe_band() or None,) if toe is None else toe
         if not seat_has_dry_exit(plan, (float(margin["cx"]), float(margin["cy"])), toe[0], marsh_ground(s.M, only=("pond_fringe",))):
             continue
-        unseat_to(s, mark)
+        unseat_to(s, mark)  # ...no house stands: only the unseated margin's own reservations go
         plan.seat = {**margin, "ladder": ladder}
         s.field_face = (float(margin["cx"]), float(margin["cy"]))
         s.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
-        placed, cloud = seat_the_margin(s, plan, mark, want)
-        tried.append(placed)
-        banded = drawn_in_band(s, plan)
-        if placed >= want and banded:
+        placed, cloud = _seat_households(s, plan)
+        asked += 1
+        if placed:
             break
     if placed < want:
-        raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats all {want} households - seated {tried} on the {len(tried)} margin(s) tried")
-    if not banded:
-        raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats its households inside a cluster shape's band")
-    s.M["meta"]["seat_margin"] = len(tried)
+        raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): seated {placed} of {want} households on margin {asked}; no house is taken back")
+    s.M["meta"]["seat_margin"] = asked
+    if grows(plan):  # the quarter-built figure, reported for every nucleated map and enforced on none (FR-007)
+        s.M["meta"]["built_share"] = built_share(s.M.get("houses") or [])
     return placed, cloud
 
 
@@ -572,9 +543,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
             return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
     # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
-    s._seat_region = SeatRegion(s, seat_window(s, s.px(FIELD_REACH_FT))) if getattr(s, "_nucleated", False) else None
+    s._seat_region = SeatRegion(s, (0.0, 0.0, float(s.W), float(s.H))) if getattr(s, "_nucleated", False) else None
     # THE PASSAGE SHARE (feature 317, plan D4; `rolling/passage.py`), rolled from the seed, counted afresh on each margin
-    share = passage_share(plan.spec.seed) if grows(plan) and not getattr(s, "_passage_withheld", False) else 0.0
+    share = passage_share(plan.spec.seed) if grows(plan) else 0.0
     s._passage_left = passage_budget(share, plan.spec.households)  # type: ignore[attr-defined]
     s.M["meta"]["passage_share"] = share
     # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no
@@ -930,14 +901,14 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
             if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
                 break
             _offered, _along_the_field = _ends, True
-    # THE EXHAUSTIVE PASS (feature 287, homes H14): while the quota is short, every free point of the legal ground within
-    # the field's reach, a third of a pitch apart, is offered to the same placer - cohort seed 32 seated 13 of 14 when the
+    # THE EXHAUSTIVE PASS (feature 287, homes H14): while the quota is short, every free point of the legal ground on the
+    # canvas, a third of a pitch apart, is offered to the same placer - cohort seed 32 seated 13 of 14 when the
     # rounds above alone decided.
     if _grown:
-        # ...and where it may offer a seat, recorded with the boundary for the walk-through's plate: within `bound` of the seat and
-        # `FIELD_REACH_FT` of the field's chords (`within_field_reach`), as (cx, cy, bound, reach)
-        s.M["site_boundary"]["window"] = [round(float(seat["cx"]), 1), round(float(seat["cy"]), 1), round(bound, 1), round(s.px(FIELD_REACH_FT), 1)]
-        placed = grow_the_margin(s, plan, placed, bound, _house_max)
+        # ...and where it may offer a seat, recorded with the boundary for the walk-through's plate: the whole canvas, as (x0, y0, x1,
+        # y1) - no radius and no distance from the field bounds the growth (feature 318)
+        s.M["site_boundary"]["window"] = [0.0, 0.0, round(float(s.W), 1), round(float(s.H), 1)]
+        placed = grow_the_margin(s, plan, placed, _house_max)
     elif not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
         placed = seat_the_rest(s, plan, placed)
     return placed, _cloud_placed

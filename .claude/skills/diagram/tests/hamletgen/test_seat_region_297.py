@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from l7r.diagram.hamletgen.homesteads.region import SeatRegion, flood_from, free_components, seat_window, touches_many
+from l7r.diagram.hamletgen.homesteads.region import SeatRegion, flood_from, free_components, touches_many
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom.region import Region
 from l7r.diagram.settlement.rolling.access import AccessTree
@@ -72,11 +72,3 @@ def test_a_seat_is_offered_where_a_side_fits_and_its_yard_reaches_the_tree() -> 
     region._reach = None
     assert region.offer([(750.0, 180.0)]) == [False], "free ground, but walled off from the tree"
     _ = fence
-
-
-def test_the_seat_window_is_the_chains_grown_by_reach_and_a_pitch() -> None:
-    s = _open()
-    assert seat_window(s, 100.0) == (0.0, 0.0, 1400.0, 1400.0), "no chains: the canvas"
-    s._site_chains = [[((600.0, 600.0), (700.0, 650.0), (0.0, 1.0))]]
-    x0, y0, x1, y1 = seat_window(s, 100.0)
-    assert 0.0 < x0 < 600.0 and x1 > 700.0 and y1 > 650.0

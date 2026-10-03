@@ -45,7 +45,7 @@ def test_a_seat_reaches_the_tree_only_where_a_door_has_a_corridor_and_the_search
 
 
 def test_a_seat_failing_its_own_questions_builds_no_layout_and_its_corridor_is_asked_once(monkeypatch) -> None:
-    """The field's reach and the water refuse before any layout; the corridor - the costliest question - is asked once per seat,
+    """The water refuses before any layout; the corridor - the costliest question - is asked once per seat,
     after the envelope, for all its unmoved sides (research R10)."""
     from l7r.diagram.settlement.rolling import place
 
@@ -54,9 +54,6 @@ def test_a_seat_failing_its_own_questions_builds_no_layout_and_its_corridor_is_a
     built: list[str] = []
     real_geom = type(s)._bundle_geom
     monkeypatch.setattr(type(s), "_bundle_geom", lambda self, *a, **k: built.append("x") or real_geom(self, *a, **k))
-    monkeypatch.setattr(place, "within_field_reach", lambda s_, x, y: False)
-    assert s._place_bundle_nucleated(500.0, 500.0, 46.0, 28.0) is None and not built, "beyond the field's reach: no layout"
-    monkeypatch.setattr(place, "within_field_reach", lambda s_, x, y: True)
     s._household_watered, s._household_well = True, False
     monkeypatch.setattr(place, "watered", lambda s_, x, y, well: False)
     assert s._place_bundle_nucleated(500.0, 500.0, 46.0, 28.0) is None and not built, "no water: no layout"

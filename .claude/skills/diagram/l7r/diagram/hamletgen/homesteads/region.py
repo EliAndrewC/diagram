@@ -32,7 +32,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.settlement._geom.region import Region
 from l7r.diagram.settlement.rolling.lot import DEPTH_FACTORS, LENGTH_FACTORS
 
-from ..consts import BUNDLE_PITCH, Pt
+from ..consts import Pt
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -213,14 +213,3 @@ def touches_many(sat: Any, region: Region, x0s: Any, y0s: Any, x1s: Any, y1s: An
     i1 = np.clip(np.floor((np.asarray(x1s) - region.x0) / region.cell).astype(np.int64) + 1, 0, region.nx)
     j1 = np.clip(np.floor((np.asarray(y1s) - region.y0) / region.cell).astype(np.int64) + 1, 0, region.ny)
     return (sat[j1, i1] - sat[j0, i1] - sat[j1, i0] + sat[j0, i0]) > 0
-
-
-def seat_window(s: Settlement, reach: float) -> tuple[float, float, float, float]:
-    """The seat band's window: the free-seat bounds (`capacity.free_seats`'s - the site chains grown by the field's reach), grown
-    by a bundle pitch, clamped to the canvas."""
-    pts = [p for ch in (getattr(s, "_site_chains", None) or []) for a, b, _n in ch for p in (a, b)]
-    x0, y0, x1, y1 = 0.0, 0.0, float(s.W), float(s.H)
-    if pts:
-        x0, x1 = max(x0, min(p[0] for p in pts) - reach - BUNDLE_PITCH), min(x1, max(p[0] for p in pts) + reach + BUNDLE_PITCH)
-        y0, y1 = max(y0, min(p[1] for p in pts) - reach - BUNDLE_PITCH), min(y1, max(p[1] for p in pts) + reach + BUNDLE_PITCH)
-    return (x0, y0, x1, y1)

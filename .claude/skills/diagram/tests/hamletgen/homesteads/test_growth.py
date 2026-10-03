@@ -59,6 +59,7 @@ class _Ground:
         self._seat_region = None
         self.first = first
         self.asked: list[tuple[float, float]] = []
+        self._canvas_box = (-1000.0, -1000.0, 1000.0, 1000.0)  # the canvas the growth widens to (`growth.on_the_canvas`)
 
     def px(self, ft: float) -> float:
         return ft
@@ -90,7 +91,7 @@ def _plan(n: int) -> Any:
 def test_the_cluster_grows_from_its_first_house_nearest_the_seat_first(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0), (500.0, 0.0)])
     s = _Ground(room=40.0)
-    assert grow_the_margin(s, _plan(6), 0, 1e9, (46.0, 28.0)) == 6  # type: ignore[arg-type]
+    assert grow_the_margin(s, _plan(6), 0, (46.0, 28.0)) == 6  # type: ignore[arg-type]
     assert s.asked[0] == (0.0, 0.0), "the first house on the free ground nearest the seat"
     near = [math.hypot(h["x"], h["y"]) for h in s.M["houses"][1:]]
     assert max(near) < 100.0, "every next house a footprint away from one standing, not across the margin"
@@ -100,25 +101,47 @@ def test_the_cluster_grows_from_its_first_house_nearest_the_seat_first(monkeypat
 def test_a_margin_whose_seats_run_dry_widens_then_is_reported_short(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
     s = _Ground(room=40.0, ring=120.0)  # the ground ends 120 from the seat
-    got = grow_the_margin(s, _plan(200), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    got = grow_the_margin(s, _plan(200), 0, (46.0, 28.0))  # type: ignore[arg-type]
     assert 1 < got < 200, "seated what the ground holds, then short"
-    assert s._seat_search["grow_level"] == len(GROW_LEVELS) - 1, "every widening tried before giving up"
+    assert s._seat_search["grow_level"] > len(GROW_LEVELS) - 1, "widened past the table until the canvas offered no new seat"
+    assert all(math.hypot(x, y) <= 1000.0 * math.sqrt(2.0) for x, y in s.asked), "never offered a seat off the canvas"
+
+
+def test_past_the_table_the_growth_widens_one_ring_at_a_time() -> None:
+    """`growth.grow_level` (feature 318): the table's levels as they stand, then 16 directions on one ring half the least
+    distance further each level - no radius stops the growth."""
+    assert [growth.grow_level(k) for k in range(len(GROW_LEVELS))] == list(GROW_LEVELS)
+    last = GROW_LEVELS[-1][1][-1]
+    assert growth.grow_level(len(GROW_LEVELS)) == (16, (last + 0.5,)) and growth.grow_level(len(GROW_LEVELS) + 2) == (16, (last + 1.5,))
+
+
+def test_of_a_levels_seats_the_nearest_the_field_is_tried_first(monkeypatch: pytest.MonkeyPatch) -> None:
+    """SC-002a (feature 318, the GM's ruling): with the field along the line y = 300, the seats one level offers round the first
+    house are tried nearest the field first - never a farther one before a nearer."""
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Ground(room=40.0)
+    s._site_chains = [[((-1000.0, 300.0), (1000.0, 300.0), (0.0, -1.0))]]
+    seat = s.try_place
+    monkeypatch.setattr(s, "try_place", lambda x, y, k: seat(x, y, k) if not s.M["houses"] else s.asked.append((x, y)) or False)
+    grow_the_margin(s, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
+    first_level = s.asked[1:9]  # after the first house, the first eight seats its level offers, in the order tried
+    assert first_level and [300.0 - y for _x, y in first_level] == sorted(300.0 - y for _x, y in first_level), first_level
     s2 = _Ground(room=40.0)
-    assert grow_the_margin(s2, _plan(5), 0, 30.0, (46.0, 28.0)) == 1, "nothing offered beyond the form's bound"  # type: ignore[arg-type]
+    assert growth.field_distance(s2, (0.0, 0.0)) == 0.0, "no field installed: no order of its own"
 
 
 def test_a_margin_with_no_free_ground_or_nothing_owed_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [])
     s = _Ground(room=40.0)
-    assert grow_the_margin(s, _plan(5), 0, 1e9, (46.0, 28.0)) == 0 and s._seat_search["grow_took"] == 0  # type: ignore[arg-type]
-    assert grow_the_margin(_Ground(room=40.0), _plan(0), 0, 1e9, (46.0, 28.0)) == 0  # type: ignore[arg-type]
+    assert grow_the_margin(s, _plan(5), 0, (46.0, 28.0)) == 0 and s._seat_search["grow_took"] == 0  # type: ignore[arg-type]
+    assert grow_the_margin(_Ground(room=40.0), _plan(0), 0, (46.0, 28.0)) == 0  # type: ignore[arg-type]
 
 
 def test_the_first_seat_asks_the_seat_region(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(900.0, 0.0), (0.0, 0.0)])
     s = _Ground(room=40.0)
     s._seat_region = SimpleNamespace(offer=lambda seats: [q[0] < 500.0 for q in seats])  # type: ignore[assignment]
-    grow_the_margin(s, _plan(1), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    grow_the_margin(s, _plan(1), 0, (46.0, 28.0))  # type: ignore[arg-type]
     assert s.asked == [(0.0, 0.0)], "the seat the region refuses is never offered"
 
 
@@ -151,7 +174,7 @@ def test_a_seat_the_ground_refuses_is_dropped_before_its_household_is_laid_out()
 
 
 def test_the_seats_own_questions_are_the_placers_asked_of_the_house_alone() -> None:
-    """Feature 314: the field's reach, the house's own box against the canvas, the corridors and the placed homesteads, and the
+    """Feature 314: the house's own box against the canvas, the corridors and the placed homesteads, and the
     refused-ground grid under it - each refuses the seat; a seat none refuses is laid out."""
     from l7r.diagram.hamletgen.homesteads.growth import seat_refused
 
@@ -164,7 +187,7 @@ def test_the_seats_own_questions_are_the_placers_asked_of_the_house_alone() -> N
     assert seat_refused(s, (0.0, 0.0), (46.0, 28.0)) is True, "the canvas, a corridor or two homesteads under the house"  # type: ignore[arg-type]
     far = _Ground(room=40.0)
     far._site_chains = [[((0.0, 0.0), (10.0, 0.0), (0.0, 1.0))]]  # type: ignore[attr-defined]
-    assert seat_refused(far, (0.0, 5000.0), (46.0, 28.0)) is True, "past the field's reach"  # type: ignore[arg-type]
+    assert seat_refused(far, (0.0, 5000.0), (46.0, 28.0)) is False, "no distance from the field refuses a seat (feature 318)"  # type: ignore[arg-type]
 
 
 def test_the_next_house_is_its_lots_rung_or_the_largest() -> None:
@@ -273,7 +296,7 @@ def test_while_the_share_has_room_each_reached_house_offers_tight_seats_against_
     monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
     s = _Tight(room=30.0)
     s._passage_left = 1  # type: ignore[attr-defined]
-    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    grow_the_margin(s, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
     told = [t for t in s.told if t is not None]
     assert told, "tight seats offered"
     t = told[0]
@@ -285,7 +308,7 @@ def test_while_the_share_has_room_each_reached_house_offers_tight_seats_against_
     assert sum(t is not None for t in s.told) == 1, "the share of one spent, the tight seats still queued are passed over"
     spent = _Tight(room=30.0)
     spent._passage_left = 0  # type: ignore[attr-defined]
-    grow_the_margin(spent, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    grow_the_margin(spent, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
     assert all(t is None for t in spent.told), "the share spent: no tight seat"
 
 
@@ -296,7 +319,7 @@ def test_a_house_no_passage_may_cross_to_offers_no_tight_seat(monkeypatch: pytes
     asked: list[Any] = []
     real = s.try_place
     s.try_place = lambda x, y, k: asked.append(getattr(s, "_tight_of", None)) or real(x, y, k)  # type: ignore[method-assign]
-    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    grow_the_margin(s, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
     assert asked and all(t is None for t in asked)
 
 
@@ -330,7 +353,7 @@ def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.Mo
     seats: list[tuple[float, float]] = []
     real = s.try_place
     s.try_place = lambda x, y, k: (seats.append((x, y)) if getattr(s, "_tight_of", None) is not None else None) or real(x, y, k)  # type: ignore[method-assign]
-    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    grow_the_margin(s, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
     assert seats and all(y > -1e-6 for _x, y in seats), "the first house's yard lies south: no tight seat north of it"
 
 
@@ -343,3 +366,37 @@ def test_a_tight_seat_by_a_way_is_no_tight_seat() -> None:
     assert not growth.near_the_tree(s, (0.0, 0.0))
     assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft, _access=SimpleNamespace(targets=lambda p: [])), (0.0, 0.0)), "no tree point"
     assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft), (0.0, 0.0)), "no tree"
+
+
+def test_the_built_share_is_the_homesteads_over_their_outline() -> None:
+    """FR-007 (feature 318): four 100 x 100 homesteads at the corners of a 300 x 300 square cover 40,000 of the 90,000 their
+    corners' hull holds; under three homesteads there is no outline."""
+    homes = [{"geom": {"bbox": (x, y, 100.0, 100.0)}} for x, y in ((50.0, 50.0), (250.0, 50.0), (50.0, 250.0), (250.0, 250.0))]
+    assert growth.built_share(homes) == round(40000.0 / 90000.0, 3)
+    assert growth.built_share(homes[:2]) == 0.0 and growth.built_share([{"geom": {}}] * 3) == 0.0
+    flat = [{"geom": {"bbox": (x, 0.0, 0.0, 0.0)}} for x in (0.0, 1.0, 2.0)]
+    assert growth.built_share(flat) == 0.0, "a degenerate outline reports nothing"
+
+
+def test_a_constructed_site_too_small_for_everyone_is_refused_naming_the_shortfall(monkeypatch: pytest.MonkeyPatch) -> None:
+    """SC-003 (feature 318, FR-005): ground that holds only what fits within 120 px of the seat, asked for 200 households -
+    the growth seats what the ground holds, widening until the canvas offers nothing new, and the seating is refused naming
+    how many stood; every house it seated still stands."""
+    from l7r.diagram.hamletgen.homesteads import stages
+    from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
+
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Ground(room=40.0, ring=120.0)
+    plan = SimpleNamespace(spec=SimpleNamespace(households=200, name="Tiny", seed=5), seat={"cx": 0.0, "cy": 0.0, "ladder": []}, field_archetype="hill")
+    monkeypatch.setattr(stages, "seating_mark", lambda s_: ())
+    monkeypatch.setattr(stages, "_seat_households", lambda s_, p_: (grow_the_margin(s_, p_, 0, (46.0, 28.0)), 0))
+    with pytest.raises(SiteRefused, match=r"Tiny \(seed 5\): seated \d+ of 200 households on margin 1; no house is taken back") as got:
+        stages.seat_every_household(s, plan)  # type: ignore[arg-type]
+    stood = int(str(got.value).split("seated ")[1].split(" of")[0])
+    assert 1 < stood == len(s.M["houses"]), "the shortfall named, and every house seated still standing"
+
+
+def test_the_direction_jitter_scales_with_the_step_so_neighbors_never_cross() -> None:
+    """`grow_jitter` (feature 318): 12 degrees either way at eight directions, 6 at sixteen - always under half the step."""
+    assert growth.grow_jitter(8) == growth.GROW_JITTER_DEG and growth.grow_jitter(16) == growth.GROW_JITTER_DEG / 2.0
+    assert all(2.0 * growth.grow_jitter(n) < 360.0 / n for n in (8, 12, 16))

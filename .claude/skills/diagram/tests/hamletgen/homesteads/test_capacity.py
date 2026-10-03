@@ -11,7 +11,7 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads import capacity, stages
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused, compass, free_seats, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT, within_field_reach
+from l7r.diagram.settlement.rolling import fit
 from tests.hamletgen._builders import CROWN, a_plan
 
 
@@ -35,20 +35,10 @@ def _toy(households: int) -> tuple[Settlement, hg.SitePlan]:
     return s, plan
 
 
-def test_the_field_reach_is_the_records_tolerance_and_holds_only_where_a_boundary_stands() -> None:
-    """H03: a house further than 700 ft from its field's chords is refused; nothing is held with no chains installed."""
-    s, plan = _toy(10)
-    assert within_field_reach(s, 5000.0, 5000.0), "no boundary installed: nothing is held"
-    hg.homesteads.boundary.install_site_boundary(s, plan)
-    ax, ay = plan.seat["anchor"]
-    ox, oy = plan.seat["out"]
-    assert FIELD_REACH_FT == 700.0
-    assert within_field_reach(s, ax + ox * 650.0, ay + oy * 650.0)
-    assert not within_field_reach(s, ax + ox * 760.0, ay + oy * 760.0)
-
-
-def test_the_placer_refuses_a_seat_beyond_the_fields_reach() -> None:
-    """H03 at the placer: `_parts_fit` refuses a homestead 760 px out and admits the same one 150 px out."""
+def test_no_distance_from_the_field_refuses_a_seat() -> None:
+    """Feature 318 (FR-003, SC-002): the field reach is gone - no name of it in the fit rules, and `_parts_fit` refuses a
+    homestead 760 px out for no reason the one 150 px out does not share."""
+    assert not hasattr(fit, "FIELD_REACH_FT") and not hasattr(fit, "within_field_reach")
     s, plan = _toy(10)
     hg.homesteads.boundary.install_site_boundary(s, plan)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
@@ -56,20 +46,21 @@ def test_the_placer_refuses_a_seat_beyond_the_fields_reach() -> None:
     ox, oy = plan.seat["out"]
     far = s._bundle_geom(ax + ox * 760.0, ay + oy * 760.0, 46.0, 28.0, "SE")
     near = s._bundle_geom(ax + ox * 150.0, ay + oy * 150.0, 46.0, 28.0, "SE")
-    assert not s._parts_fit(far)
     assert s._parts_fit(near)
+    assert s._parts_fit(far), "760 px from the field, seated as the near one is"
 
 
-def test_free_seats_are_the_free_ground_within_reach_nearest_the_seat_first() -> None:
-    """H14's grid: no seat in a cell the static ground surely refuses, none beyond the reach, none on a standing house;
-    ordered center-out."""
+def test_free_seats_are_the_free_ground_nearest_the_seat_first() -> None:
+    """H14's grid: no seat in a cell the static ground surely refuses, none on a standing house; ordered center-out; and the
+    whole canvas searched (feature 318: no reach from the field bounds it)."""
     s, plan = _toy(10)
     hg.homesteads.boundary.install_site_boundary(s, plan)
     center = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     s.M["houses"].append({"x": center[0], "y": center[1], "w": 46.0, "h": 28.0, "kind": "plain"})
     seats = free_seats(s, center)
     assert seats, "the toy's margin has free ground"
-    assert all(within_field_reach(s, x, y) and not s._free_ground.point_taken(x, y) for x, y in seats)
+    assert all(not s._free_ground.point_taken(x, y) for x, y in seats)
+    assert max(q[0] for q in seats) > 1300.0 or min(q[0] for q in seats) < 100.0 or max(q[1] for q in seats) > 1300.0, "seats to the canvas's edge"
     assert all(math.dist(q, center) >= 50.0 for q in seats), "no seat on the standing house"
     d = [math.dist(q, center) for q in seats]
     assert d == sorted(d)
@@ -129,7 +120,9 @@ def test_the_ladder_on_a_polder_keeps_to_the_flank_its_fringe_was_drawn_for() ->
     assert [compass(v) for v in ((1, 0), (-1, 0), (0, 1), (0, -1))] == ["E", "W", "S", "N"]
 
 
-def test_a_margin_left_takes_back_every_house_it_seated() -> None:
+def test_a_margin_left_is_cut_back_to_its_mark_and_any_house_cut_is_counted() -> None:
+    """`unseat_to`: every registry cut to the mark; a house cut is counted in `meta.houses_taken_back` - the count SC-001
+    holds at 0 on every rolled hamlet (feature 318)."""
     s, _plan = _toy(10)
     s.M["houses"].append({"x": 1.0, "y": 1.0})
     s.placed.append((1.0, 1.0, 2.0, 2.0))
@@ -143,30 +136,33 @@ def test_a_margin_left_takes_back_every_house_it_seated() -> None:
     unseat_to(s, mark)
     assert (len(s.M["houses"]), len(s.placed), len(s._pending_farmsteads)) == (1, 1, 0)
     assert (len(s.M["row_holdings"]), len(s.block_polys), len(s.hard_polys)) == (0, mark[4], mark[5]), "the holdings go with their farms"
+    assert s.M["meta"]["houses_taken_back"] == 1, "the house cut, counted"
 
 
-def test_a_margin_that_cannot_seat_everyone_hands_the_hamlet_to_the_next(monkeypatch: pytest.MonkeyPatch) -> None:
-    """D2's ladder: the chosen margin seats 7 of 10, the next seats all 10 - that seating is kept, one pass each, and the
-    rung that seated the hamlet is recorded."""
+def test_a_short_margin_is_refused_and_no_house_it_seated_is_taken_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    """SC-001 (feature 318): the chosen margin seats 7 of 10 - the seating is refused, naming the count, and the 7 houses still
+    stand; no other margin is seated over them. The ladder is asked only past a margin that seated NO house."""
     s, plan = _toy(10)
-    rung = dict(plan.seat["ladder"][0])
     calls: list[tuple[float, float]] = []
+    taken: list[int] = []
 
     def seat_on(s_: Settlement, plan_: hg.SitePlan) -> tuple[int, int]:
         calls.append((plan_.seat["cx"], plan_.seat["cy"]))
-        n = 7 if len(calls) == 1 else 10
-        for k in range(n):
+        for k in range(7):
             s_.M["houses"].append({"x": float(k), "y": 0.0, "kind": "plain"})
-        return n, 0
+        return 7, 0
 
     monkeypatch.setattr(stages, "_seat_households", seat_on)
-    assert stages.seat_every_household(s, plan) == (10, 0)
-    assert calls[1] == (rung["cx"], rung["cy"]) and len(s.M["houses"]) == 10
-    assert s.M["meta"]["seat_margin"] == 2 and s.field_face == (float(rung["cx"]), float(rung["cy"]))
+    monkeypatch.setattr(stages, "unseat_to", lambda s_, mark: taken.append(len(s_.M["houses"])))
+    with pytest.raises(SiteRefused, match=r"Test \(seed 3\): seated 7 of 10 households on margin 1; no house is taken back"):
+        stages.seat_every_household(s, plan)
+    assert len(calls) == 1 and len(s.M["houses"]) == 7 and taken == [], "one seating, its houses standing, nothing unseated"
 
 
-def test_a_rung_with_no_dry_exit_is_passed_over(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287, ways W23: a ladder rung whose seat has no dry way out of the frame is not seated - the next one is."""
+def test_a_margin_that_seats_no_house_passes_to_the_next_and_a_rung_with_no_dry_exit_is_passed_over(monkeypatch: pytest.MonkeyPatch) -> None:
+    """D1 (feature 318) and feature 287, ways W23: a margin that cannot start - no house seated - is left for the next rung,
+    nothing being taken back; a rung whose seat has no dry way out of the frame is not seated; the rung that seated the hamlet
+    is recorded."""
     s, plan = _toy(10)
     assert len(plan.seat["ladder"]) >= 2
     walled, rung = dict(plan.seat["ladder"][0]), dict(plan.seat["ladder"][1])
@@ -174,34 +170,33 @@ def test_a_rung_with_no_dry_exit_is_passed_over(monkeypatch: pytest.MonkeyPatch)
 
     def seat_on(s_: Settlement, plan_: hg.SitePlan) -> tuple[int, int]:
         calls.append((plan_.seat["cx"], plan_.seat["cy"]))
-        return (7, 0) if len(calls) == 1 else (10, 0)
+        return (0, 0) if len(calls) == 1 else (10, 0)
 
     monkeypatch.setattr(stages, "_seat_households", seat_on)
     monkeypatch.setattr(stages, "seat_has_dry_exit", lambda plan_, q, toe, wet: q != (walled["cx"], walled["cy"]))
     assert stages.seat_every_household(s, plan) == (10, 0)
     assert calls[1] == (rung["cx"], rung["cy"]) and (walled["cx"], walled["cy"]) not in calls
+    assert s.M["meta"]["seat_margin"] == 2 and s.field_face == (float(rung["cx"]), float(rung["cy"]))
 
 
-def test_a_site_no_margin_can_seat_is_refused_naming_it(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_site_where_no_margin_starts_is_refused_naming_it(monkeypatch: pytest.MonkeyPatch) -> None:
     s, plan = _toy(10)
     plan.seat["ladder"] = plan.seat["ladder"][:1]
-    monkeypatch.setattr(stages, "_seat_households", lambda s_, p_: (6, 0))
-    with pytest.raises(SiteRefused, match=r"Test \(seed 3\): no margin seats all 10 households - seated \[6, 6\]"):
+    monkeypatch.setattr(stages, "_seat_households", lambda s_, p_: (0, 0))
+    with pytest.raises(SiteRefused, match=r"Test \(seed 3\): seated 0 of 10 households on margin 2; no house is taken back"):
         stages.seat_every_household(s, plan)
 
 
-def test_a_seating_drawn_past_every_shapes_band_is_taken_back_and_the_next_margin_seated(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287, homes wave 5: a margin that seats every household in a string past 12:1 (`in_a_shapes_band`: no band
-    holds it; `declare_cluster_shape` could only name the nearest) is taken back as a short one is; the next margin's
-    round cluster is kept - and a site whose every margin draws a string is refused, naming it."""
+def test_a_cluster_drawn_past_every_shapes_band_is_kept(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 318 (FR-006): the 12:1 refusal is gone - a margin that seats every household in a string past every cluster
+    shape's band (`in_a_shapes_band`) is kept as drawn, on the first margin; the band itself still reads as it did."""
     s, plan = _toy(10)
     calls: list[int] = []
 
     def seat_on(s_: Settlement, plan_: hg.SitePlan) -> tuple[int, int]:
         calls.append(1)
-        string = len(calls) == 1 or len(plan_.seat["ladder"]) == 1
         for k in range(10):
-            s_.M["houses"].append({"x": 200.0 * k, "y": 1.0 * (k % 2), "kind": "plain"} if string else {"x": 40.0 * (k % 4), "y": 40.0 * (k // 4), "kind": "plain"})
+            s_.M["houses"].append({"x": 200.0 * k, "y": 1.0 * (k % 2), "kind": "plain"})
         return 10, 0
 
     monkeypatch.setattr(stages, "_seat_households", seat_on)
@@ -210,12 +205,7 @@ def test_a_seating_drawn_past_every_shapes_band_is_taken_back_and_the_next_margi
     assert stages.in_a_shapes_band([{"x": 40.0 * k, "y": 1.0 * (k % 2)} for k in range(10)]), "360 ft of row, one homestead deep: 3.6:1"
     assert stages.in_a_shapes_band([{"x": 1.0 * k, "y": 0.0} for k in range(10)]), "smaller than one homestead each way: 1:1, round"
     assert stages.in_a_shapes_band([{"x": 40.0 * k, "y": 40.0 * (k % 2)} for k in range(10)]), "a string inside 12:1"
-    assert stages.seat_every_household(s, plan) == (10, 0) and len(calls) == 2 and s.M["meta"]["seat_margin"] == 2
-    assert stages.in_a_shapes_band(s.M["houses"]) and len(s.M["houses"]) == 10
-    t, plan_t = _toy(10)
-    plan_t.seat["ladder"] = plan_t.seat["ladder"][:1]
-    with pytest.raises(SiteRefused, match="inside a cluster shape's band"):
-        stages.seat_every_household(t, plan_t)
+    assert stages.seat_every_household(s, plan) == (10, 0) and len(calls) == 1 and s.M["meta"]["seat_margin"] == 1
 
 
 def test_a_row_village_is_a_row_not_a_cluster_and_takes_no_cluster_band(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -306,7 +296,7 @@ def test_a_rank_round_stops_offering_seats_once_the_quota_is_seated(monkeypatch:
     assert placed == 10 and len(offered) == 10, "ten offered, ten seated, the rest of the round never asked"
 
 
-# ---- feature 306: the dry-spell cap and the near-miss rescue (plan D2) -------------------------------------------------------
+# ---- feature 306: the dry-spell cap (plan D2; the near-miss rescue went with feature 318) ----------------------------------
 
 
 class _Seater:
@@ -331,62 +321,3 @@ def test_the_pass_gives_a_margin_up_after_a_dry_spell_and_a_take_restarts_it() -
     s = _Seater(set())
     assert capacity.offer_seats(s, seats, 0, 5, None) == (0, 10, 0), "no cap: every seat offered"  # type: ignore[arg-type]
     assert capacity.offer_seats(_Seater({seats[0]}), seats, 0, 1, 3)[:2] == (1, 1), "the want met: no more offered"  # type: ignore[arg-type]
-
-
-def test_a_near_miss_is_rescued_on_a_finer_grid_with_a_wider_corridor_search(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`seat_the_rest` hands a margin left at most `RESCUE_SHORT` households to `rescue_the_margin`, which offers the finer
-    grid with the tree's breadth widened for the rescue and set back after it (the corridor memo dropped both ways)."""
-    from l7r.diagram.settlement.rolling.access import TARGETS_TRIED, AccessTree
-
-    tree = AccessTree(7.0)
-    tree.add((0.0, 0.0), (100.0, 0.0))
-    steps: list[float | None] = []
-    breadth: list[int] = []
-    fill = [0]
-
-    def seats(s: object, center: object, step: float | None = None) -> list[tuple[float, float]]:
-        steps.append(step)
-        return [(1.0, 1.0)] if step is None else [(2.0, 2.0), (3.0, 3.0)]
-
-    def offer(s: object, seats: list, placed: int, want: int, dry: int | None) -> tuple[int, int, int]:
-        breadth.append(tree.tried)
-        took = (want - placed) if dry == capacity.RESCUE_DRY_SPELL else fill[0] * (want - placed)  # the pass seats `fill`; the rescue the rest
-        return placed + took, len(seats), took
-
-    monkeypatch.setattr(capacity, "free_seats", seats)
-    monkeypatch.setattr(capacity, "offer_seats", offer)
-    s = Settlement(1000, 1000, seed=1)
-    s._seat_search = {}
-    s._access = tree
-    s.__dict__["_corridor_memo"] = ("state", {})
-
-    class Region:
-        def offer(self, pts: list) -> list[bool]:
-            return [True] * len(pts)
-
-    s._seat_region = Region()
-    plan = a_plan(households=10)
-    plan.seat = {"cx": 500.0, "cy": 500.0}
-    assert seat_the_rest(s, plan, 10 - capacity.RESCUE_SHORT) == 10
-    assert steps == [None, capacity.RESCUE_STEP] and breadth == [TARGETS_TRIED, capacity.RESCUE_TARGETS]
-    assert tree.tried == TARGETS_TRIED and "_corridor_memo" not in s.__dict__, "the breadth set back, the memo dropped"
-    assert s._seat_search["rescue_took"] == capacity.RESCUE_SHORT
-    steps.clear()
-    assert seat_the_rest(s, plan, 10 - capacity.RESCUE_SHORT - 1) == 10 - capacity.RESCUE_SHORT - 1, "too far short: no rescue"
-    assert steps == [None]
-    steps.clear()
-    fill[0] = 1
-    assert seat_the_rest(s, plan, 8) == 10 and steps == [None], "a pass that fills the margin calls no rescue (the perf-audit's defect)"
-
-
-def test_a_rescue_with_no_tree_and_no_region_still_offers_the_finer_grid(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(capacity, "free_seats", lambda s, center, step=None: [(5.0, 5.0)])
-    s = Settlement(1000, 1000, seed=1)
-    s._seat_search = {"candidates": 0}
-    s._access = None
-    s._seat_region = None
-    taken = _Seater({(5.0, 5.0)})
-    s.try_place = taken.try_place  # type: ignore[method-assign]
-    plan = a_plan(households=10)
-    plan.seat = {"cx": 500.0, "cy": 500.0}
-    assert capacity.rescue_the_margin(s, plan, 9) == 10

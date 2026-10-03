@@ -245,7 +245,7 @@ def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -
             try:
                 stage_homesteads(s, plan)
             except capacity.SiteRefused as refused:
-                assert "no margin seats all 10" in str(refused), "refused by name, never shipped short"
+                assert "of 10 households on margin" in str(refused), "refused by name, never shipped short"
             else:
                 assert len(s.M["houses"]) == 10, "nucleated: every household seated"
             assert not s.M.get("row_street_plans"), "nucleated: no row planned"
@@ -269,7 +269,7 @@ def test_a_row_village_whose_streets_cannot_hold_every_farm_is_refused(monkeypat
     s._nucleated = False
     s.field_polys.append(list(plan.envelope))
     monkeypatch.setattr(rows, "seat_rows", lambda s_, plan_, frame, allowed=None: 0)  # the streets hold nobody
-    with pytest.raises(capacity.SiteRefused, match="no margin seats all 10"):
+    with pytest.raises(capacity.SiteRefused, match=r"seated 0 of 10 households on margin 1; no house is taken back"):
         st.stage_homesteads(s, plan)
 
 
@@ -366,7 +366,7 @@ def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds(monkeypatch: py
     plan.seat["ladder"] = []  # this margin alone: the refusal below is the chosen margin's
     # ...AND A QUOTA THE GROUND CANNOT HOLD IS REFUSED, NEVER SHIPPED SHORT (feature 287, homes H14 and plan D2): the
     # rescue and then the exhaustive pass over every free point within reach ran, and still the ground was full
-    with pytest.raises(SiteRefused, match="no margin seats all 20 households"):
+    with pytest.raises(SiteRefused, match=r"seated \d+ of 20 households on margin 1; no house is taken back"):
         stage_homesteads(s, plan)
     assert s._seat_search["rounds"] >= 5, "the rescue ran"
     assert s._seat_search["exhaustive_offered"] > 0, "...and the exhaustive pass after it"
@@ -432,7 +432,7 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
         return real(x, y, *a, **kw)
 
     s.try_place = spy  # type: ignore[method-assign]
-    with pytest.raises(SiteRefused, match="no margin seats all 13 households"):
+    with pytest.raises(SiteRefused, match=r"seated \d+ of 13 households on margin 1; no house is taken back"):
         stage_homesteads(s, plan)
     ss = s._seat_search
     assert ss["rounds"] >= 1, "the ranks ran"

@@ -30,3 +30,14 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     assert len(reports) == len(specs)
     failing = {r.plan.spec.name: list(r.failures) for r in reports if r.failures}
     assert not failing, f"a coverage roll reports failures: {failing}"
+
+
+@pytest.mark.rolls_map
+def test_no_rolled_hamlet_took_a_seated_house_back() -> None:
+    """SC-001 (feature 318, the GM 2026-10-03: "get rid of this pattern completely"): no seating takes a seated house back -
+    every coverage roll and every pool hamlet the seating ran on records `meta.houses_taken_back` at 0 (counted by
+    `capacity.unseat_to`, the one place a seated house could be cut)."""
+    counted = {spec.name: (_pool.rolled_report(spec).manifest or {}).get("meta", {}).get("houses_taken_back") for spec in rolls.COVERAGE}
+    counted = {k: v for k, v in counted.items() if v is not None}
+    assert counted, "no roll recorded the count: the test would pass on nothing"
+    assert not {k: v for k, v in counted.items() if v}, f"houses taken back: {counted}"
