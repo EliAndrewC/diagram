@@ -6957,7 +6957,8 @@
  "dozo-zukuri": {
   "def": "Plastered-storehouse construction: thick earth-and-plaster walls and plaster-faced doors, used for storehouses and, in Edo after the Kyoho era, spread by order to townhouses for fire prevention.",
   "variants": [
-   "dozo-zukuri"
+   "dozo-zukuri",
+   "storehouse style"
   ]
  },
  "yamen-god": {
@@ -15394,6 +15395,24 @@
   "variants": [
    "okabe",
    "ōkabe"
+  ]
+ },
+ "konnyaku": {
+  "def": "A starchy flour ground from the root of the konjac (devil's-tongue) plant; mixed with sand and water, it made the coat laid on an earth wall before a lime-plaster finish.",
+  "variants": [
+   "konnyaku"
+  ]
+ },
+ "Meiji teens": {
+  "def": "The years Meiji 10 to 19, 1877 to 1886, the second decade of the Meiji era.",
+  "variants": [
+   "Meiji teens"
+  ]
+ },
+ "rizi-pisciculture": {
+  "def": "The raising of fish in flooded rice fields alongside the rice crop.",
+  "variants": [
+   "rizi-pisciculture"
   ]
  }
 }

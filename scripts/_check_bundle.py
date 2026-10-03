@@ -396,7 +396,33 @@ def ledger_part(saved: str) -> str:
     return saved.split("pointer | file | state", 1)[0].strip("\n")
 
 
-def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", owed: str = "") -> int:
+def claims_read(root: pathlib.Path, units: list) -> str:
+    """The claims a WHOLE read is owed for: each owed note and the blocks carrying its mark, per question. Feature 319: a
+    WHOLE bundle held only the write-up and the page, so source-reader judged the write-up and the owed notes' sentences
+    went unread while their units were answered."""
+    wanted: dict[str, set[str]] = {}
+    for u in units:
+        if u.check == "source-reader":
+            stem, _, note = u.subject.partition("#")
+            wanted.setdefault(stem, set()).add(note)
+    if not wanted:
+        return ""
+    from _hm_record import fragments_for  # noqa: PLC0415
+
+    parts = ["", "## The claims to read (the owed notes, and the sentences carrying them)", ""]
+    for stem, keys in sorted(wanted.items()):
+        q, _, page = stem.partition(".")  # `0094` is the research page, `0094.drawing` the drawing page
+        for rel in fragments_for(q, str(root)):
+            if (".drawing." in rel) != (page == "drawing"):
+                continue
+            text = (root / rel).read_text(encoding="utf-8")
+            body = notes_subset(text, keys) if rel.endswith(".notes.html") else excerpt(text, keys)
+            if 'data-note="' in body:
+                parts += [f"### `{rel}`", "", "```", body.rstrip("\n"), "```", ""]
+    return "\n".join(parts) + "\n"
+
+
+def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "", owed: str = "", units: list | None = None) -> int:
     entry = registry_entry(root, key)
     if entry is None:
         print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
@@ -424,7 +450,7 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
             rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
         if code:
             print(text, file=sys.stderr)
-    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows) + owed, encoding="utf-8")
+    (out / MANIFEST).write_text(manifest(out, f"source {key}", rows) + owed + claims_read(root, units), encoding="utf-8")
     print(f"check-bundle: {len(rows)} item(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -455,7 +481,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"check-bundle: REFUSED - {refusal}", file=sys.stderr)
             return 3
         return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole, args.question,
-                          bo.manifest_lines(units, checks, escape))
+                          bo.manifest_lines(units, checks, escape), units)
     if args.for_ == "intro-check":
         return intro_bundle(root, (args.qs or args.q).split(), args.out, args.not_owed_ok)
     if not args.q:

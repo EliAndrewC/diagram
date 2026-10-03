@@ -204,7 +204,8 @@ already where it belongs, and you do not report it.
      accepted" - propose `comment` for the ruling, and a rewrite of the sentence that states the DECISION as the
      project's choice and why, in terms of the history. NOT a session note: a source key that links to its work; the
      decision itself and the alternatives it declined, told as the project's choice; the honest label on a claim
-     (GUESS, a search that found nothing).
+     (GUESS, a search that found nothing); a GROUNDS note's fixed opening `no source is owed: <reason>` - the
+     footnote test requires those words, and a rewrite of them breaks the build (feature 319: one was proposed).
    - **HISTORY** - each visible reference to a past state of the record or of the maps: what a sentence used
      to say, a correction and its date, a re-read and what it changed, when and how a source was first pointed
      to or that it was once summary-only, which feature or pass did the work, what "the doc had carried". For

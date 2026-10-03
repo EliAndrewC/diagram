@@ -2011,6 +2011,7 @@ kon-ya	kon-ya
 kon-yamachi	Kon'yamachi
 konara	konara
 kondo	kondo
+konnyaku	konnyaku
 konya	kon-ya
 konyamachi	Kon'yamachi
 koraimon	koraimon
@@ -2262,6 +2263,7 @@ medake	medake
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration
+meiji teens	Meiji teens
 meireki	Meireki
 meisho zue	meisho zue
 meisho-zue	meisho zue
@@ -2996,6 +2998,7 @@ river offices	river office
 river stage	river stage
 river terrace	river terrace
 river terraces	river terrace
+rizi-pisciculture	rizi-pisciculture
 road magistrate	road magistrate
 road magistrates	road magistrate
 road village	roson
@@ -3453,6 +3456,7 @@ stoplog	stoplog gate
 stoplog gate	stoplog gate
 stoplog gates	stoplog gate
 stoplogs	stoplog gate
+storehouse style	dozo-zukuri
 storehouse-built	storehouse-built
 storehouse-built machiya	storehouse-built
 straw rick	rick

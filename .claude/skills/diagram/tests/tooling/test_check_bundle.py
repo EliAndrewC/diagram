@@ -125,6 +125,26 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
 
 
+def test_a_whole_bundle_carries_the_owed_notes_and_their_sentences(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 319: a WHOLE bundle held only the write-up and the page, so source-reader checked the write-up and the
+    owed notes' sentences went unread. The bundle now carries each owed note and the blocks marking it, on its own page."""
+    import sys  # noqa: PLC0415
+
+    sys.path.insert(0, str(REPO / "scripts"))
+    import _record_units as ru  # noqa: PLC0415
+
+    units = [ru.Unit("source-reader:0165#edo-enwiki", "the note is new or changed")]
+    monkeypatch.setattr(cb.bo, "owed_for_key", lambda root, key, whole, ok, new: (units, "source-reader", ""))
+    monkeypatch.setattr(cb, "run_script", lambda name, args, root: (0, ""))
+    out = tmp_path / "whole"
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(out), "--root", str(REPO)]) == 0
+    text = (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "## The claims to read" in text
+    assert '<li data-note="edo-enwiki">' in text, "the owed note itself"
+    assert 'class="fn" data-note="edo-enwiki"' in text, "the sentence carrying its mark"
+    assert ".drawing." not in text.split("## The claims to read", 1)[1], "a research-page note never pulls the drawing page"
+
+
 def test_the_manifest_holds_every_copy_so_a_check_reads_one_file(tmp_path: pathlib.Path) -> None:
     out = tmp_path / "bundle"
     assert cb.main(["0087", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0

@@ -1,0 +1,12 @@
+- intro-check 0244: NO-INTRO-NEEDED 1 - recorded
+- entry-drift Door (0117): IN-STEP 1 - recorded; no modal edit owed (the farm back-entrance attestation leaves the compound kitchen's second door a guess)
+- translation-check 0244: FAITHFUL 9 - recorded (the two source typos 本舞 and 牡嘱 are the page's own, kept)
+- translation-check 0117: FAITHFUL 9, LOOSE 1 - 'locked' became 'secured'; recorded
+- record-format 0029: VOCABULARY 4, SESSION NOTE 1 - Meiji teens and rizi-pisciculture glossed, net-owner's fishing house; the grounds-note rewrite rejected (it broke the required 'no source is owed:' form; record-format.md now says so)
+- record-format 0117: SESSION NOTE 1 - the door check moved to a comment; the drawn-door widths softened to 'mostly'
+- record-format 0244: VOCABULARY 2 - konnyaku glossed, 'storehouse style' a variant of dozo-zukuri
+- quote-check 0029 (4 batches, unfootnoted owed): PARTIAL 11, DOES-NOT-SUPPORT 1 - magariya to Iwate, Huizhou roofs, the quarter-turn cut, the 67-degree footnote moved, Mumun-period, fengshui reading labeled, the Hirayama house's place and date quoted, the rice-and-bund line and 'no two farmsteads' cut, the bunto line widened
+- quote-check 0117: PARTIAL 4 - the Ikegami house a folk house of a farming district (quoted), Morse's chair quoted from the title page, the big door 'such as a board door', pivot-hung leaves
+- quote-check 0244: PARTIAL 1, unfootnoted 2 - the same Ikegami and Morse fixes; fn-4's DIFFERS is a line-break artifact
+- source-applicability morse-1886-homes, miyoshi-kurashi-mingu-1998, miyoshi-ikegami-house: APPLICABLE-WITH-LIMITS 3 - limits rewritten (bark wall southern and poor, plaster not durable, wealth inferred, the house unusual, the resident's memory scoped)
+- source-reader round 1 (ikegami, mingu, morse, kotobank whole reads): READ 23, NOT-FOUND 9 - write-up fixes applied (kotobank 'count' -> most/many/few, mingu's date and 'rich' moved to the ikegami page, Morse's Restoration inference cut and Satow's 'plastered wattles' named); NOT recorded - the WHOLE bundles held no owed note text (fixed in _check_bundle.py), so round 2 re-reads them
