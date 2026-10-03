@@ -273,3 +273,21 @@ decision between the code and the page - change the map or record the deviation 
 drawing page, which re-owes all of its ~300 claims a check. A feature of its own, put to the GM; the push carries them by
 `CLAIMS_OK` with this record named.
 (observed 2026-10-03, method: as the heading.)
+
+**Rounds 2 to 4.** Round 2 (83 claims, two batches): 73 IN-STEP; it found the dangling-end sweep's end rule still counting a
+household reached across a yard, and `TIGHT_BEARING_DEG` (112.5) past the page's "the side ... where the neighbor's threshing yard
+lies" - held to 90 (e26349c0a). Round 3 (23 claims): 21 IN-STEP; the rest claim wording, answered in 4e375737a.
+(observed 2026-10-03, method: as the heading.)
+
+**The condition on the finished seating** (the farmhouse glyph check, NEEDS-WORK F5): Inashiro's one household reached across
+a yard had a drawn lane 10 ft from its homestead - `landlocked` judged it at its seat, and a later household's corridor was
+reserved past its beds. `passage.recheck_passages` asks every such household again once all are seated (e26349c0a); on the
+re-rolled Inashiro its center stands 116 ft from the nearest drawn lane.
+(observed 2026-10-03, method: the reviewer's measurement on its snapshot; the re-rolled manifest's lanes against the house.)
+
+**How many are reached across a yard, as the feature lands** (`bearing_probe.py` in the session's scratchpad, the reference
+spec; `meta.passage_reached`): at 15 households on seeds 1-16, 15 households, where the 13 settlements whose share allows one
+allow 30 together; at 40 households on seeds 2, 25, 39 and 47, 12 where the three that allow one allow 23. R8's 7 and 8 were
+measured before the per-layout route was withdrawn, when more tight seats found a way of their own; with the band at 112.5 and
+no recheck the count at 15 households was 23.
+(observed 2026-10-03, method: as the heading.)

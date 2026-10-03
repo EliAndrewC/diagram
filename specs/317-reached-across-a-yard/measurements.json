@@ -9,6 +9,26 @@
   "verifies": "F1",
   "answers": "86f173b401a2"
  },
+ "gc-fh-r2-f5-recheck": {
+  "value": 94.8,
+  "unit": "ft",
+  "quantity": "from the household reached across a yard (2567.7, 2117.7) - its center and its garden's corners - to the nearest drawn lane on the re-rolled Inashiro, where round 2 measured 10.1 ft from its homestead; `passage.recheck_passages` asks the condition again once every household is seated (meta.passage_revoked 0 here: no later corridor gave it a way)",
+  "source": "pool/hamlets/inashiro/inashiro.json at 4e375737a - houses[] with reached_across, gardens[] by `of`, lanes[].pts, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--farmhouse",
+  "verifies": "F5",
+  "answers": "380fe74de6da"
+ },
+ "gc-vl-r2-f3-recheck": {
+  "value": 94.8,
+  "unit": "ft",
+  "quantity": "from the household reached across a yard (2567.7, 2117.7) - its center and its garden's corners - to the nearest drawn lane on the re-rolled Inashiro (its center 115.8 ft off), no longer as near a way as the lane-less households the ways count as served; the condition is asked again once every household is seated (`passage.recheck_passages`)",
+  "source": "pool/hamlets/inashiro/inashiro.json at 4e375737a - houses[] with reached_across, gardens[] by `of`, lanes[].pts, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F3",
+  "answers": "380fe74de6da"
+ },
  "gc-hb-f6-page": {
   "value": 1,
   "unit": "paragraph",
