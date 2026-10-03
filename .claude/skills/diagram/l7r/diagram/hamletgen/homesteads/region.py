@@ -89,7 +89,12 @@ class SeatRegion:
             import numpy as np
 
             tree = getattr(self.s, "_access", None)
-            reach = flood_from(self.buildable, list(tree.segs) if tree is not None else [], float(tree.half) if tree is not None else 0.0)
+            segs = list(tree.segs) if tree is not None else []
+            # ...AND FROM THE WINDOW'S EDGE WHERE THE CANVAS GOES ON (feature 318): the window bounds the rasters' cost, never an
+            # answer, so ground that may reach the tree round the outside of it is counted reached - an over-count the placer's
+            # own corridor search settles, where an under-count refused a seat (Kuwabata and Sawada seated other houses)
+            segs += [] if tree is None else window_edges(self.window, (0.0, 0.0, float(self.s.W), float(self.s.H)), self.cell)
+            reach = flood_from(self.buildable, segs, float(tree.half) if tree is not None else 0.0)
             sat = np.zeros((reach.shape[0] + 1, reach.shape[1] + 1), dtype=np.int32)
             sat[1:, 1:] = reach.astype(np.int32).cumsum(0).cumsum(1)
             self._reach = (reach, sat)
@@ -97,7 +102,8 @@ class SeatRegion:
 
     def offer(self, pts: Sequence[Pt]) -> list[bool]:
         """For each candidate seat (a house center), whether it is offered: a side's envelope clear, and - where an access tree is
-        installed - its yard's box touching the reachable ground."""
+        installed - its yard's box touching the reachable ground. A seat outside the region's window is offered unjudged (feature
+        318: the window bounds the rasters' cost, never where a house may stand; the placer's own tests decide)."""
         import numpy as np
 
         self.sync()
@@ -112,6 +118,12 @@ class SeatRegion:
         if self.yard is not None and getattr(self.s, "_access", None) is not None:
             y0_, y1_ = self.yard[1], self.yard[3]
             ok &= touches_many(self._reached()[1], self.buildable, xs + self.yard[0], ys + y0_, xs + self.yard[2], ys + y1_)
+        # ...where every box it asks lies inside the window; one that crosses its edge is judged by no raster cell of its own
+        x0w, y0w, x1w, y1w = self.window[0], self.window[1], self.window[2], self.window[3]
+        boxes = [*self.sides, *([self.yard] if self.yard is not None else [])]
+        bx0, by0 = min(b[0] for b in boxes), min(b[1] for b in boxes)
+        bx1, by1 = max(b[2] for b in boxes), max(b[3] for b in boxes)
+        ok |= (xs + bx0 < x0w) | (xs + bx1 > x1w) | (ys + by0 < y0w) | (ys + by1 > y1w)
         return [bool(v) for v in ok]
 
 
@@ -134,6 +146,27 @@ def smallest_sides(s: Settlement) -> tuple[list[tuple[float, float, float, float
         return sides, yard
     finally:
         s.__dict__.update(saved)
+
+
+def window_edges(window: Sequence[float], canvas: Sequence[float], cell: float) -> list[tuple[Pt, Pt]]:
+    """The edges of `window` that lie inside `canvas` (an edge on the canvas's own edge has nothing beyond it), each drawn a
+    cell inside the window so the flood seeds its border cells (`SeatRegion._reached`).
+
+    Research: plumbing - NONE: a raster's border, which the ground beyond it may reach through
+    """
+    x0, y0, x1, y1 = (float(v) for v in window)
+    cx0, cy0, cx1, cy1 = (float(v) for v in canvas)
+    i0, j0, i1, j1 = x0 + cell / 2.0, y0 + cell / 2.0, x1 - cell / 2.0, y1 - cell / 2.0
+    out: list[tuple[Pt, Pt]] = []
+    if x0 > cx0:
+        out.append(((i0, j0), (i0, j1)))
+    if x1 < cx1:
+        out.append(((i1, j0), (i1, j1)))
+    if y0 > cy0:
+        out.append(((i0, j0), (i1, j0)))
+    if y1 < cy1:
+        out.append(((i0, j1), (i1, j1)))
+    return out
 
 
 def flood_from(region: Region, segs: Sequence[tuple[Pt, Pt]], half: float) -> Any:

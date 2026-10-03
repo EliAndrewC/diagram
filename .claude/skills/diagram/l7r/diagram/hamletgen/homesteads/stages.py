@@ -24,7 +24,7 @@ from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, CO
 from ..cluster import seat_has_dry_exit
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SEATING_GROUND_FT, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan, band_extent
-from .boundary import install_site_boundary
+from .boundary import install_site_boundary, seating_window
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .growth import built_share, grow_the_margin, grows
@@ -550,7 +550,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
             return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
     # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
-    s._seat_region = SeatRegion(s, (0.0, 0.0, float(s.W), float(s.H))) if getattr(s, "_nucleated", False) else None
+    s._seat_region = SeatRegion(s, seating_window(s, (float(seat["cx"]), float(seat["cy"])), plan.spec.households)) if getattr(s, "_nucleated", False) else None
     # THE PASSAGE SHARE (feature 317, plan D4; `rolling/passage.py`), rolled from the seed, counted afresh on each margin
     share = passage_share(plan.spec.seed) if grows(plan) else 0.0
     s._passage_left = passage_budget(share, plan.spec.households)  # type: ignore[attr-defined]

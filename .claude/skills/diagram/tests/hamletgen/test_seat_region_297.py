@@ -72,3 +72,59 @@ def test_a_seat_is_offered_where_a_side_fits_and_its_yard_reaches_the_tree() -> 
     region._reach = None
     assert region.offer([(750.0, 180.0)]) == [False], "free ground, but walled off from the tree"
     _ = fence
+
+
+def test_a_seat_outside_the_regions_window_is_offered_unjudged() -> None:
+    """Feature 318 (the perf-audit's correction): the window bounds the rasters' cost, never where a house may stand - a seat
+    outside it is offered for the placer's own tests to decide, though the ground there is taken."""
+    s = _open()
+    s._free_ground = SimpleNamespace(taken={(i, j) for i in range(0, 175) for j in range(0, 175)}, cell=8.0, x0=0.0, y0=0.0)
+    s.placed = []
+    region = SeatRegion(s, (400.0, 400.0, 800.0, 800.0))
+    assert region.offer([(600.0, 600.0), (1100.0, 600.0), (600.0, 100.0)]) == [False, True, True], "inside: judged; outside: offered"
+
+
+def test_the_seating_window_grows_with_the_households_and_stays_on_the_canvas() -> None:
+    """`boundary.seating_window` (feature 318): the seat out twice the radius the households' seating ground would fill
+    (`SEATING_GROUND_FT` each), clipped to the canvas."""
+    import math
+
+    from l7r.diagram.hamletgen.consts import SEATING_GROUND_FT
+    from l7r.diagram.hamletgen.homesteads.boundary import seating_window
+
+    s = _open(4000.0)
+    r = 2.0 * SEATING_GROUND_FT * math.sqrt(15 / math.pi)
+    assert seating_window(s, (2000.0, 2000.0), 15) == (2000.0 - r, 2000.0 - r, 2000.0 + r, 2000.0 + r)
+    big = seating_window(s, (2000.0, 2000.0), 40)
+    assert big[2] - big[0] > 2 * r, "more households, a wider window"
+    assert seating_window(s, (100.0, 3950.0), 15) == (0.0, 3950.0 - r, 100.0 + r, 4000.0), "clipped to the canvas"
+    assert seating_window(s, (2000.0, 2000.0), 0) == seating_window(s, (2000.0, 2000.0), 1)
+
+
+def test_the_flood_is_seeded_at_a_window_edge_the_canvas_goes_on_past() -> None:
+    """`region.window_edges` (feature 318): an edge on the canvas's own edge seeds nothing; an inner edge is drawn half a cell
+    inside the window, so ground reaching the tree round the outside is counted reached."""
+    from l7r.diagram.hamletgen.homesteads.region import window_edges
+
+    assert window_edges((0.0, 0.0, 100.0, 100.0), (0.0, 0.0, 100.0, 100.0), 8.0) == []
+    got = window_edges((10.0, 0.0, 100.0, 90.0), (0.0, 0.0, 100.0, 100.0), 8.0)
+    assert got == [((14.0, 4.0), (14.0, 86.0)), ((14.0, 86.0), (96.0, 86.0))], "the west and south edges, a half cell in"
+    assert len(window_edges((10.0, 10.0, 90.0, 90.0), (0.0, 0.0, 100.0, 100.0), 8.0)) == 4
+
+
+def test_a_seat_whose_box_crosses_the_windows_edge_is_offered_and_reach_runs_round_the_outside() -> None:
+    """Feature 318: a seat inside the window whose envelope crosses its edge is judged by no raster cell of its own - offered;
+    and with an access tree, ground cut off from it inside the window but open to the window's inner edge is reached."""
+    s = _open()
+    s._free_ground = SimpleNamespace(taken=set(), cell=8.0, x0=0.0, y0=0.0)
+    s.placed = []
+    region = SeatRegion(s, (400.0, 400.0, 800.0, 800.0))
+    near_edge = 800.0 - min(b[2] for b in region.sides) + 4.0  # its east box reaches 4 px past the window's east edge
+    assert region.offer([(near_edge, 600.0)]) == [True]
+    tree = AccessTree(half=7.0)
+    tree.add((420.0, 420.0), (460.0, 420.0))
+    s._access = tree
+    walled = SeatRegion(s, (400.0, 400.0, 800.0, 800.0))
+    walled.buildable.line([(500.0, 400.0), (500.0, 800.0)], 4.0)  # a wall between the tree and the east of the window
+    walled._reach = None
+    assert walled.offer([(650.0, 600.0)]) == [True], "reached round the outside, through the window's open east edge"

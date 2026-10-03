@@ -33,7 +33,7 @@ from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_ch
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import WEB_HARD_GAP, WEB_REACH_FT
+from ..consts import SEATING_GROUND_FT, WEB_HARD_GAP, WEB_REACH_FT
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -442,6 +442,22 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
     return [*([env] if len(env) >= 3 else []), *crop_polys(s), *([toe] if len(toe) >= 3 else []), *wet]
 
 
+def seating_window(s: Settlement, seat: tuple[float, float], households: int) -> tuple[float, float, float, float]:
+    """The box the free-ground grid and the seat region are rasterized over: the margin's seat, out twice the radius the
+    households' own seating ground would fill (`SEATING_GROUND_FT` each), clipped to the canvas. A COST WINDOW, NEVER AN
+    ANSWER (feature 318, the perf-audit's correction): outside it the grid asserts nothing (`FreeGround.point_taken` is False
+    there, so the placer asks its full test) and the region offers every seat (`SeatRegion.offer`), so no seat is refused
+    for where it stands. Over the whole canvas the two rasters were 2.4 s of the 15-household bookend's 4.6 s growth (four
+    seeds, five reps, medians). No rule's verdict moves; the order of the offers can - past the window the grid strikes
+    nothing unasked, so the exhaustive pass's dry spell (`capacity.offer_seats`) is spent on other seats, and Kuwabata and
+    Sawada seated other houses (maps may change for speed, held to the rules: the GM, 2026-09-30).
+
+    Research: plumbing - NONE: a raster's extent, which bounds its cost and no seat
+    """
+    r = s.px(2.0 * SEATING_GROUND_FT * math.sqrt(max(households, 1) / math.pi))
+    return (max(0.0, seat[0] - r), max(0.0, seat[1] - r), min(float(s.W), seat[0] + r), min(float(s.H), seat[1] + r))
+
+
 def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
     `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001).
@@ -462,7 +478,7 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     chains, corridors, outline = site_boundary(s, seat)
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)
-    s._free_ground = FreeGround(chains, corridors, outline, (0.0, 0.0, float(s.W), float(s.H)))
+    s._free_ground = FreeGround(chains, corridors, outline, seating_window(s, seat, plan.spec.households))
     s._unreachable = UnreachableGround(web_hard_ground(s, plan))
     s.M["site_boundary"] = {
         "chords": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], [round(n[0], 4), round(n[1], 4)]] for ch in chains for a, b, n in ch],
