@@ -132,9 +132,12 @@ out of the afternoon lane west of every yard and bed, and the seating's reservat
 on main's Inashiro, Kuwabata and Sawada - and a neighbor's path was routed round two of them. The reservation now keeps the lane
 by the copse's own figure, and a gate test holds every reserved seat planted (`tests/gate/test_wood_shares_planted.py`).
 
-**D8 - The route search shared (the GM, 2026-10-03: *"Yes, definitely do this"*).** The perf audit's lever - one map of what is
-reachable shared across the route searches, instead of each searching from scratch - is a feature of its own, the next one: with
-the passage unrouted (D2) it no longer carries the passage's cost, and it speeds every household's routed path, main's included.
+**D8 - The route search shared (the GM, 2026-10-03: *"Yes, definitely do this"*), AMENDED ON THE MEASUREMENT (research R10).**
+The perf audit's lever was one map of what is reachable, shared across the route searches. Measured before building, it would
+have answered none of seed 47's 509 failed searches at 40 households: none began inside a region an earlier failure had found
+closed. 348 of them had no branch of the tree within reach and explored their whole box first; an exact check before each
+search (`route.tree_in_reach`) takes those out with the same verdict, maps byte-identical. Built in its place, inside this
+feature; the shared map is not built.
 
 ## Verification
 

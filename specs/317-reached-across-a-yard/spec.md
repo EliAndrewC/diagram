@@ -108,8 +108,12 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
   `gardens_east_shaded`) and seeds 22 and 23 (linear: `WebRefused`) - the Diagram (Inashiro) session, feature 315, agreed by
   message 2026-10-02. A bug found later joins the list with its owner; found 2026-10-03 (this feature): the seating reserving
   wood seats in the afternoon sun lane feature 310 holds the copse out of, so the copse never plants them.
-- **FR-008**: The route search shared across searches (the GM, 2026-10-03: "Yes, definitely do this") is the next feature, not
-  this one; this feature's spec and plan name it as the follow-up.
+- **FR-008**: The route search's cost the GM ruled on ("Yes, definitely do this", 2026-10-03) MUST be cut inside this feature by
+  the lever the measurement supports, its maps unchanged where the lever is exact (research R10, at 40 households: of seed 47's
+  509 failed corridor searches the shared reachability map would have answered none, 348 had no branch of the tree in reach;
+  seed 25, the cell the GM ruled on, keeps 19 failed searches on the amended engine, none of them answerable by the map). The
+  substitution - an exact no-branch-in-reach check built, the map not - MUST be put to the GM in the feature's report as an
+  amendment of the 2026-10-03 ruling, with R10's measurement.
 
 ## Success Criteria *(mandatory)*
 
@@ -124,6 +128,8 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
 - **SC-005** (FR-006): the homesteads stage at 15 and 40 households, base against clone, recorded in research.md.
 - **SC-006** (FR-007): when this feature closes, research.md lists each known bug as fixed, with the run that shows it, or as owned
   and in progress by the agreed session, with that session's last word on it; none without an owner.
+- **SC-007** (FR-008): the homesteads stage at 40 households, seeds 25 and 47, before and after `route.tree_in_reach`, recorded in
+  research.md; the pool byte-identical with the check on and off.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -147,5 +153,5 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
   FR-007 lists each known bug with its owner and SC-006 records each at close.
 - Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - the three items confirmed against the diff.
 - Amendment (2026-10-03, the GM's ruling in `request.md`): FR-002 asks a way of its own of straight and round-the-house paths
-  only, no routed search; FR-007 adds the wood seats reserved in the afternoon sun lane; FR-008 names the shared route search as
-  the next feature. The review counter restarts with this amendment.
+  only, no routed search; FR-007 adds the wood seats reserved in the afternoon sun lane; FR-008 cuts the route search's cost inside
+  this feature (amended on the measurement, research R10). The review counter restarts with this amendment.

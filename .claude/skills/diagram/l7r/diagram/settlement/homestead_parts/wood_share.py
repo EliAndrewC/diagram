@@ -80,9 +80,7 @@ EAST_LANE_PX = 24.0
 """Research: bed's morning lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 24 px east of a bed"""
 
 
-def copse_keepouts(
-    parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float, west_ft: float = 0.0
-) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
+def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float, west_ft: float = 0.0) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
     """The copse keep-outs of one homestead's parts, as `(circles, rects)`: the discs a clump's center may not enter and
     the open rectangles it may not stand in, each `village_grove`'s own figure (see the module's note) grown by
     `BAR_MARGIN_PX`. `parts` holds `(cx, cy, w, h)` rects - the unturned size at the drawn center, as a record is: `house`,

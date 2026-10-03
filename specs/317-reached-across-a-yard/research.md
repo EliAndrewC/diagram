@@ -115,6 +115,7 @@ slow webs, drew theirs in 0.57 and 0.76 s. The 20-household leg is the bookend's
 | Cohort seeds 14, 15, 906 (dispersed: `trees_shading_plots`, `gardens_east_shaded`) | Diagram (Inashiro), feature 315 | fixed in 315, landed and merged here: 30 of 30 on main and on this clone (2026-10-03) |
 | A headless page session resumed after a stall dispatched its returned checks again: their reports sat queued in its transcript, never taken up, and Claude Code told the resumed session they "didn't finish" | this feature (found running R1's checks) | fixed: the resume names a file of the queued reports and resumes early once they are back (`_page_session_runner.undelivered`, `returned_file`, `turn_ended`; fa30940d5, tests in `tests/tooling/test_page_session.py`) |
 | A `resume:` page session that stalled would fail to be resumed (`--session-id` no longer in its command) | this feature | fixed in the same commit, tested |
+| The seating reserved wood seats in the afternoon sun lane west of every yard and bed (feature 310's), which the copse never plants - main's Inashiro 18, Kuwabata 16, Sawada 34 unplanted - and routed paths round them (the 27 ft lane bulge, the village lane glyph check round 3 F5) | this feature, T10 | fixed: the reservation keeps the lane (R10); `tests/gate/test_wood_shares_planted.py` red before, Inashiro 320 of 320 planted after |
 | `pair-hooks.sh stop` read a green `make test-file` as a green gate and told sessions (a headless page session sharing the clone among them) to dispatch reviews no gate had earned | this feature | fixed: the stop branch asks the gate stamp as the pretool branch does (b54a76717); the new case fails with the old line (102 passed, 2 failed) and passes with the fix (104) |
 | Cohort seed 18 (nucleated, 15 households) refused (`OverlapRefused`: lanes over farm_fixtures) - found by T07's cohort, made by the per-layout route: squaring a water crossing straightened a routed path's bend across the household's own privy | this feature | fixed: the seating judge asks the household's own house, beds and fixtures of the path as the web lays it (`tree.laid_run`, `own_clear`; 6a38205a0); `make cohort N=1 SEED=18` rolls |
 | Seed 47 at 20 households refused (`WebRefused`: an access lane's bends) - found by T07's 20-household leg: `straighten_joints` joined two access lanes meeting end to end at a door and pulled the pair into a kink, a tree lane no settle may cut | this feature | fixed: a joint's pull is refused where it makes a kink the two did not have (bebed7632); the seed rolls, and the new test fails without the fix |
@@ -315,4 +316,45 @@ by the recheck (the 13 settlements whose share allows one allow 30); at 40 house
 ended (the three that allow one allow 23) - seed 25 seats 5 by passage and keeps 1. With the routes shared more tight seats pass
 the seat's test and are seated by passage, and a later corridor ends most of them at 40 households; the tight seats tried for
 them are the bookends' band 3 (`perf-317-control-40`). R8's 7 and 8 were measured before the per-layout route was withdrawn.
+(observed 2026-10-03, method: as the heading.)
+
+## R10 - The GM's ruling of 2026-10-03, the wood seats, and the route search (method: `control_probe.py`, `count_probe.py`, `seq_probe.py`, `fail_probe.py`, `seats_planted.py` and `seat_why.py` in the session's scratchpad; homesteads-stage CPU seconds alternated with main at /tmp/main317c, 38901e2df, on a machine another session was loading - ratios within a take, not absolute seconds)
+
+**The wood seats** (the village lane's glyph check, round 3, F5: lane 14 on Inashiro bulged 27 ft round bare scrub). The tree
+draws each access lane as the seating routed it; house 14's path was routed round two seats of house 13's wood share, and the
+copse never planted them: refused as "local" ground, inside the afternoon lane feature 310 holds every canopy tree out of, west
+and southwest of a yard or bed. The reservation (`wood_share.copse_keepouts`) kept the south strip and the beds' morning lane,
+not that lane. Unplanted reserved seats on main's pool: Inashiro 18 of 326, Kuwabata 16 of 347, Sawada 34 of 413; every one
+refused by the local family. Fixed as feature 287's plan D9 holds the floor - by construction, a household seated only with
+room for its floor - the reservation now keeps the lane by the copse's own figure; a gate test holds every recorded seat
+planted (`tests/gate/test_wood_shares_planted.py`, red on all three before the fix). Inashiro after: 320 of 320 planted.
+(observed 2026-10-03, method: as the heading.)
+
+**What the seat fix costs.** Honest reservations leave less ground: at 40 households seed 39 offered 483 candidate seats against
+155 with the lane left out of the reservation, and its growth widened a level; seed 47, with the passage too, seated 38 of 40
+on its first margin, searched some 700 more seats, threw it away and seated all 40 on the second. At 15 households the stage
+stands near main (per seed, two takes: seed 4 +19-36%, 25 +21-27%, 39 +2-4%, 47 4-9% faster).
+(observed 2026-10-03, method: as the heading.)
+
+**The cheaper test** (the GM's ruling, `request.md`: a way of its own asked of straight and round-the-gable corridors, no
+routed search; `access.access_corridor(routed=False)`, `passage.landlocked`). Built as ruled. It seats more households across
+a yard (seed 47 at 40 households: 6 against 5, the seat fix off in both), so the stage did not fall: a household reached across
+a yard adds no branch to the tree, and the households seated behind it later find no path - their failed searches were the cost.
+
+**The shared route search** (the GM: "Yes, definitely do this"). MEASURED BEFORE BUILDING: of seed 47's 509 failed corridor
+searches at 40 households, none started inside a region an earlier failure, closed by standing ground alone at the same
+standing state, had explored - a shared map of what is reachable would have answered none of them. 412 of the 509 ran to the
+edge of their box, and 348 had no branch of the tree within reach at all: 760,468 of the 953,362 cells the failures opened. An
+exact check before each search - no segment of the tree within the search's reach, no search (`route.tree_in_reach`) - takes
+those out with the same verdict (Inashiro byte-identical); seed 47 at 40 households 35 s -> 19.9 s. On the amended engine seed 25 at 40 households - the cell the GM ruled on - keeps 19
+failed corridor searches, each closed by the household's own parts (456 cells opened in all), none answerable by a shared map.
+That check is built in
+place of the shared map (plan D8, amended); the map is not built.
+(observed 2026-10-03, method: as the heading.)
+
+**SC-007, the check on and off** (`control_probe.py` with `NOPRE=1` patching `route.tree_in_reach` to always True; two
+alternated takes, homesteads-stage CPU seconds, 40 households): seed 25 3.95 / 3.96 with it, 3.94 / 3.96 without - its failed
+searches all had a branch in reach; seed 47 19.94 / 19.95 with it, 33.37 / 33.58 without. The seated manifest hashes the same
+with it on and off on seeds 25, 47 and 39 (sha256 of the whole manifest after the homesteads stage), and Inashiro regenerates
+byte-identical.
 (observed 2026-10-03, method: as the heading.)
