@@ -1163,6 +1163,9 @@ claims-checked: ## [project] record an impl-drift reply into the claims index, a
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
+claims-coverage: ## [project] every unit with no research claim, a malformed claim or a pointer to no question - the gate's coverage test, narrowed   [IN=<part of a file path>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" coverage $(if $(IN),--path "$(IN)",)
+
 claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" report
 

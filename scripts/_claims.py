@@ -186,6 +186,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> P
     cited: list[str] = []
     parts = [
         "# Bundle for impl-drift (feature 316)\n",
+        "owed-checks: impl-drift\n",
         "Each UNIT below is a function, method, class, constant or procedure section with its CLAIMS. Judge each claim against "
         "the questions it cites (inline at the end) and report one `VERDICT <key> <IN-STEP|DRIFTED|NEEDS-RESEARCH|MISLABELED|"
         "CANNOT-TELL> - <note>` line per KEY, plus `UNCLAIMED <path>::<qualname> - <decision>` for a physical decision in a "
@@ -345,6 +346,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     r.add_argument("--reply", required=True)
     sub.add_parser("report")
     sub.add_parser("gate")
+    cv = sub.add_parser("coverage")
+    cv.add_argument("--path", default="", help="only units whose file path contains this")
     ap.add_argument("--root", default=".")
     args = ap.parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
@@ -355,6 +358,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         for x in refuse:
             print(f"claims-gate: REFUSED {x}")
         return 1 if refuse else 0
+    if args.cmd == "coverage":
+        cl = engine(root / SKILL)
+        qs = {p.name for p in (root / QUESTIONS).glob("*.html")}
+        probs = [x for x in cl.coverage(cl.all_units(root / SKILL), qs) if args.path in x.split(" ", 1)[0]]
+        print("\n".join(probs) if probs else f"claims-coverage: every unit{' under ' + args.path if args.path else ''} carries a claim")
+        if probs:
+            print(f"claims-coverage: {len(probs)} problem(s). The form: {cl.GRAMMAR}")
+        return 1 if probs else 0
     cur = current(root / SKILL)
     index = load_index(root / INDEX)
     if args.cmd == "owed":
