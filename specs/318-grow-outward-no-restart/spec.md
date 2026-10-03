@@ -209,3 +209,6 @@ engine no longer keeps.
   law's unrelated reach of a way to the field (scoped to the seating's constant); FR-003's closed list of remaining limits left out the
   household's water and its way to the tree (every rule a seat asks today but the reach).
 - Amendment round 3 (spec-fidelity-verify, 2026-10-03): FAITHFUL - both items confirmed; the amended spec accepted.
+- Amendment round 4 (spec-fidelity, 2026-10-03): FAITHFUL - SC-003a and SC-003b name FR-004 and FR-006, and the decision row
+  (every adjacent seat at once, nearest the field first) is plan D4 as ruled CLEAR; aside: SC-003b could also fail when the
+  drawn shape goes unrecorded.
