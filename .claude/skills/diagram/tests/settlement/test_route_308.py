@@ -200,3 +200,24 @@ def test_a_routed_path_the_tree_will_not_take_is_refused(monkeypatch: pytest.Mon
     s._access.routed = True
     assert next(route.routed_corridors(s, s._access, geom), None) is not None, "a route is found"
     assert access_corridor(s, geom) is None, "...and refused by the tree"
+
+
+def test_a_door_shut_in_round_its_house_alone_is_not_searched_again_for_another_layout(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 317 (`house_reaches`): once a layout's search finds nothing and the search round the house alone reaches no goal,
+    the seat's other layouts - which search a part of that ground - skip the door; where the house alone reaches, they search."""
+    monkeypatch.setattr(access, "parts_clear", lambda *a: True)
+    s = _open()
+    geom = _hemmed(s)
+    s.placed.extend([(400.0, 700.0, 60.0, 500.0), (1000.0, 700.0, 60.0, 500.0), (700.0, 950.0, 700.0, 60.0)])  # walled in all round
+    s._access.routed = True
+    other = {**geom, "boxes": {**geom["boxes"], "gardens": [(760.0, 760.0, 20.0, 20.0)]}}
+    calls: list[int] = []
+    real = route._route_from
+    monkeypatch.setattr(route, "_route_from", lambda *a: calls.append(1) or real(*a))
+    assert list(route.routed_corridors(s, s._access, geom)) == [] and len(calls) == 2
+    assert list(route.routed_corridors(s, s._access, other)) == [] and len(calls) == 2, "the other layout: no search"
+    assert route.house_reaches(s, s._access, access.doors_of(geom, s._access.half)[0], geom["boxes"]["house"], s._access.half, access.house_gap(s), None, None, s._reach_index(s.placed, "placed_reach"), route.ROUTE_STEP_PX) is False
+    open_ = _open()
+    g2 = _hemmed(open_)
+    open_._access.routed = True
+    assert route.house_reaches(open_, open_._access, access.doors_of(g2, open_._access.half)[0], g2["boxes"]["house"], open_._access.half, access.house_gap(open_), None, None, open_._reach_index(open_.placed, "placed_reach"), route.ROUTE_STEP_PX)

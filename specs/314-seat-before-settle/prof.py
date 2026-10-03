@@ -11,6 +11,9 @@ import refusals  # noqa: E402
 h, seed = int(sys.argv[1]), int(sys.argv[2])
 from l7r.diagram.hamletgen.homesteads import stages as ST  # noqa: E402
 
+if os.environ.get("NOPASS") and hasattr(ST, "passage_share"):  # feature 317: the passage's share rolled at none
+    ST.passage_share = lambda seed: 0.0
+
 import l7r.diagram.hamletgen.driver as D0
 
 _want = "stage_" + os.environ.get("STAGE", "homesteads")

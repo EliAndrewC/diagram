@@ -147,9 +147,19 @@ def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tup
 
     mine = own_parts(s, geom, own, hgap, half)
     for door in A.doors_of(geom, half)[:2]:
+        # ...FIRST, ONCE FOR THE SEAT'S HOUSE: whether the search reaches the tree at all round the house alone (`house_reaches`)
+        # - a layout's search, kept off its parts too, reaches no goal where this reaches none, so a door shut in is searched
+        # once for the four layouts of a seat, not once a layout (feature 317, research R8: failing searches exhaust the reach,
+        # and with each layout searching its own route a shut-in door was searched up to four times)
+        # Asked only after a layout's own search found nothing, so a door that reaches pays no second search
+        hkey = ("reaches", door, tuple(own))
+        if memo.get(hkey) is False:
+            continue
         key = ("routed", door, tuple(tuple(b) for b, _g in mine), tuple((geom.get("boxes") or {}).get("yard") or ()))
         if key not in memo:
             memo[key] = _route_from(s, tree, door, mine, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok, geom)
+            if memo[key] is None and hkey not in memo:
+                memo[hkey] = house_reaches(s, tree, door, own, half, hgap, fg, wood, placed, step)
         if memo[key] is not None:
             yield memo[key]
 
@@ -192,8 +202,31 @@ def _route_from(
     geom: Any,
 ) -> tuple[Pt, ...] | None:
     """One door's routed path (`routed_corridors`), or None."""
+    from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard
+
+    found = _cells_to_tree(s, tree, door, mine, half, hgap, fg, wood, placed, step, geom)
+    if found is None:
+        return None
+    cells, q = found
+    pts = [door, *((door[0] + c[0] * step, door[1] + c[1] * step) for c in cells[1:]), q]
+    run = taut(pts, leg_ok, doubles_back, ROUTE_LEGS)
+    # ...AND IT LEAVES ITS OWN YARD, as every straight and round-the-gable corridor must (`_house_candidates`, feature 287 M8)
+    return run if run is not None and leaves_its_yard(run, yard, s.px(TREAD_HALF_FT + PART_MARGIN_FT)) else None
+
+
+def house_reaches(s: Settlement, tree: AccessTree, door: Pt, own: Any, half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float) -> bool:
+    """Does the search from `door` reach the tree at all with only the house kept off of the household's own (`_cells_to_tree`)?
+    A layout's search keeps off its own parts too and judges its first step by them, so it searches a part of this one's
+    ground: where this reaches no goal, no layout's search does (feature 317)."""
+    return _cells_to_tree(s, tree, door, [(own, hgap)], half, hgap, fg, wood, placed, step, {"house": own, "boxes": {"house": own}}) is not None
+
+
+def _cells_to_tree(
+    s: Settlement, tree: AccessTree, door: Pt, mine: Sequence[tuple[Any, float]], half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, geom: Any
+) -> tuple[list[Cell], Pt] | None:
+    """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None."""
     from . import access as A
-    from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard, seg_box_within
+    from .access import seg_box_within
 
     memo = A._standing_memo(s)[1]
 
@@ -239,11 +272,4 @@ def _route_from(
         p = at(c)
         return A.house_clear(door, p, geom, hgap) and A.fixtures_clear(s, door, p, geom) and A.parts_clear(s, door, p, geom)
 
-    found = search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, (0, 0), first_ok)
-    if found is None:
-        return None
-    cells, q = found
-    pts = [door, *(at(c) for c in cells[1:]), q]
-    run = taut(pts, leg_ok, doubles_back, ROUTE_LEGS)
-    # ...AND IT LEAVES ITS OWN YARD, as every straight and round-the-gable corridor must (`_house_candidates`, feature 287 M8)
-    return run if run is not None and leaves_its_yard(run, yard, s.px(TREAD_HALF_FT + PART_MARGIN_FT)) else None
+    return search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, (0, 0), first_ok)
