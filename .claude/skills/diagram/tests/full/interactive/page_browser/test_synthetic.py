@@ -267,53 +267,35 @@ def test_the_clicked_class_stays_highlighted_while_its_modal_is_open(synthetic: 
     synthetic.js("() => window.l7rMap.fitWidth()")
 
 
-def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(synthetic: Page) -> None:
-    """GM 2026-08-28: hover a term for its definition; "See references" opens a second modal above the first."""
+def test_glossary_terms_carry_their_definition_and_the_references_are_a_tab(synthetic: Page) -> None:
+    """GM 2026-08-28: hover a term for its definition. Feature 319 (GM 2026-10-03): the modal is tabs - About, Guesses,
+    References - in one dialog; the references are a tab, no longer a second dialog over the first."""
     synthetic.js("() => window.l7rMap.fit()")
     synthetic.open("bund")
     spans = synthetic.js("() => Array.from(document.querySelectorAll('#explain .gl')).map(s => [s.textContent, s.getAttribute('data-def').slice(0, 30)])")
     assert any(t.lower() in ("bund", "bunds", "aze", "azenuri") and d for t, d in spans), spans
-    assert synthetic.js("() => !document.getElementById('x-refs').hidden")
-    synthetic.js("() => document.getElementById('x-refs').click()")
+    shown = "() => ({ about: !document.getElementById('p-about').hidden, guesses: !document.getElementById('p-guesses').hidden, refs: !document.getElementById('p-refs').hidden, explain: document.getElementById('explain').open, shade: !document.getElementById('shade').hidden, tabs: Array.from(document.querySelectorAll('#x-tabs button')).filter(b => !b.hidden).map(b => b.textContent) })"
+    state = synthetic.js(shown)
+    assert state["about"] and not state["refs"] and state["explain"] and state["shade"], "the dialog opens on About"
+    assert state["tabs"][0] == "About" and state["tabs"][-1] == "References" and "Guesses" not in state["tabs"], "an old-form class has no guesses tab"
+    synthetic.js("() => document.getElementById('t-refs').click()")
     synthetic.page.wait_for_timeout(30)
-    # THE REFERENCES REPLACE THE EXPLANATION (feature 181, GM 2026-09-05): the explanation stays OPEN (its
-    # close event would release the pin and the shade) but is not DISPLAYED while the references are up
-    shown = "() => ({ refs: document.getElementById('references').open, explain: document.getElementById('explain').open, visible: getComputedStyle(document.getElementById('explain')).display !== 'none', shade: !document.getElementById('shade').hidden })"
-    assert synthetic.js(shown) == {"refs": True, "explain": True, "visible": False, "shade": True}, "the explanation disappears behind the references; the shade and the pin stay"
+    state = synthetic.js(shown)
+    assert state["refs"] and not state["about"] and state["explain"] and state["shade"], "the references tab replaces the About panel; the shade and the pin stay"
     assert synthetic.js("() => window.l7rMap.pinned()") == "bund"
-    assert synthetic.js("() => document.getElementById('r-list').children.length") >= 1
-    # the title is "<Name> references", the name a link that does what the button does
-    name = CLASSES["bund"].name
-    title = f"{name[0].upper()}{name[1:]}"
-    assert synthetic.js("() => document.getElementById('r-name').textContent") == f"{title} references"
-    assert synthetic.js("() => { const a = document.querySelector('#r-name a#r-back'); return a && a.textContent; }") == title
-    # NO DOTTED UNDERLINE ON A LINK (feature 186, GM 2026-09-05): the title link, a question link and (below,
-    # on the windbreak) a sibling link render with no underline at all; color and hover color are the style
-    assert synthetic.js("() => ['#r-name a#r-back', '#r-list a.q'].map(s => getComputedStyle(document.querySelector(s)).textDecorationLine)") == ["none", "none"]
-    synthetic.js("() => document.getElementById('r-back').click()")
-    synthetic.page.wait_for_timeout(30)
-    assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "the title link brings the writeup back"
-    synthetic.js("() => document.getElementById('x-refs').click()")
-    synthetic.page.wait_for_timeout(30)
-    assert synthetic.js(shown)["visible"] is False
-    synthetic.js("() => document.getElementById('r-close').click()")
-    synthetic.page.wait_for_timeout(30)
-    assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "so does the button"
-    synthetic.js("() => document.getElementById('x-refs').click()")
-    synthetic.page.wait_for_timeout(30)
-    assert synthetic.js(shown)["visible"] is False
-    # THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): every line is a link into the research
-    # record's local page (feature 194), the button says where it returns to, and the explanation carries no "Record:" line
+    # THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): every line is a link into the research record's own
+    # small page (feature 301), opening in a new tab; no "Record:" line anywhere
     links = synthetic.js("() => Array.from(document.querySelectorAll('#r-list a.q')).map(a => [a.textContent, a.getAttribute('href'), a.getAttribute('target')])")
-    # feature 301: each question links its own small page in the record's site
     assert links and all(t and h.startswith(SITE_PAGES) and h.endswith(".html") and tg == "_blank" for t, h, tg in links), links
-    assert synthetic.js("() => document.getElementById('x-refs').textContent") == f"See references ({len(links)})"
-    name = CLASSES["bund"].name
-    assert synthetic.js("() => document.getElementById('r-close').textContent") == f"Return to {name[0].upper()}{name[1:]} writeup"
+    # NO DOTTED UNDERLINE ON A LINK (feature 186, GM 2026-09-05)
+    assert synthetic.js("() => getComputedStyle(document.querySelector('#r-list a.q')).textDecorationLine") == "none"
     assert synthetic.js("() => document.getElementById('x-entry')") is None and "Record:" not in synthetic.js("() => document.getElementById('explain').textContent")
-    synthetic.page.keyboard.press("Escape")
+    synthetic.js("() => document.getElementById('t-about').click()")
     synthetic.page.wait_for_timeout(30)
-    assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "Escape closes only the references, and the writeup comes back"
+    assert synthetic.js(shown)["about"], "the About tab brings the write-up back"
+    synthetic.js("() => document.getElementById('t-refs').click()")
+    synthetic.open("bund")
+    assert synthetic.js(shown)["about"], "a fresh open starts on About"
     synthetic.page.keyboard.press("Escape")
     assert not synthetic.dialog()["open"]
 

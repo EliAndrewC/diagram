@@ -512,6 +512,10 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             "name": fc.name,
             "what": fc.what,
             "why": fc.why,
+            # THE ABOUT FORM (feature 319): the About tab's paragraphs and the Guesses tab's bullets; empty on an old-form
+            # class, which page.js shows in its About tab as before (lead, what, why, caveat)
+            "about": list(fc.about),
+            "guesses": list(fc.guesses),
             # `lead` is empty for an `accurate` class (feature 156) - see `classes.lead_sentence`.
             # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
             # classification is still readable on the page (`data-label`), per constitution XII.
@@ -547,6 +551,8 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             "name": key,
             "what": "This kind of feature has no entry in the class registry yet (interactive/classes/).",
             "why": "",
+            "about": [],
+            "guesses": [],
             "label": "guess",
             # the stub follows the same contract as a real entry, so its announcement survives
             # (settlement-review nitpick, 2026-08-29: it still carried the pre-154 keys, which
@@ -823,20 +829,22 @@ def render_page(
         '<button type="button" data-z="fit" title="fit the whole map (0)">fit</button></nav>\n'
         '<div id="shade" hidden></div>\n'
         '<dialog id="explain" aria-labelledby="x-name"><article>'
-        '<header><h2 id="x-name"></h2><p id="x-label" class="label"></p></header>'
-        '<section id="x-what"></section><section id="x-why"></section>'
+        # THE TABS (feature 319, GM 2026-10-03: *"we could have an overview tab and a guesses tab and a references tab"*,
+        # the first named "About"): one dialog, a tab with nothing to show is not drawn (page.js `open`), and the
+        # references are a tab - the separate references dialog and its "Return to <X> writeup" button went with it.
+        '<header><h2 id="x-name"></h2><nav id="x-tabs" role="tablist">'
+        '<button type="button" role="tab" id="t-about" data-tab="about" aria-controls="p-about">About</button>'
+        '<button type="button" role="tab" id="t-guesses" data-tab="guesses" aria-controls="p-guesses">Guesses</button>'
+        '<button type="button" role="tab" id="t-refs" data-tab="refs" aria-controls="p-refs">References</button></nav></header>'
+        '<div id="p-about" role="tabpanel" aria-labelledby="t-about"><p id="x-label" class="label"></p>'
+        '<section id="x-about"></section><section id="x-what"></section><section id="x-why"></section>'
         '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
-        '<section id="x-siblings"></section>'
-        # NO "Record:" LINE (feature 180, GM 2026-09-05: "I don't think we need lines like [Record: ...]
-        # on our main modal") - the entry pointer is bookkeeping a reader of the map does not need; the
-        # references modal below carries what it pointed at, as questions.
-        '<footer><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
+        '<section id="x-siblings"></section></div>'
+        '<div id="p-guesses" role="tabpanel" aria-labelledby="t-guesses" hidden><ul id="x-guesses"></ul></div>'
+        # NO "Record:" LINE (feature 180, GM 2026-09-05) - the references tab lists the QUESTIONS the entry names.
+        f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><p id="r-intro" class="intro">{REFERENCES_LEAD}</p><section id="r-list"></section></div>'
+        '<footer><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
-        # THE REFERENCES MODAL lists the QUESTIONS the research asked, linked to their answers (feature
-        # 180); its button says where it goes ("Return to <Name> writeup", set by page.js), because a bare
-        # "Close" could be read as closing every modal at once.
-        f'<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2><p id="r-intro" class="intro">{REFERENCES_LEAD}</p></header><section id="r-list"></section>'
-        '<footer><button id="r-close" type="button">Return to writeup</button></footer></article></dialog>\n'
         # THE GLOSSARY TOOLTIP, a sibling of the dialogs rather than a child of a word (feature 182): a box
         # inside a dialog is clipped by the dialog's own scrolling edge; page.js places this one.
         '<div id="tip" role="tooltip" hidden></div>\n'

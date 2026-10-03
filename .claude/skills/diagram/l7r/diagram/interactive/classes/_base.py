@@ -95,7 +95,7 @@ class FeatureClass:
     covers: str  # which manifest features it draws - documentation for the next reader
     what: str  # what the thing IS
     why: str  # why it stands where it does on the map
-    label: Label  # constitution XII: accurate | deviation | convention | guess
+    label: Label | None  # constitution XII: accurate | deviation | convention | guess - None in the About form (feature 319), whose classification is per statement
     label_note: str  # the one line that justifies the label (a deviation says what deviates; a convention says what is drawn otherwise and what the real thing is; a guess says what is silent)
     sources: tuple[str, ...]  # `research/sources/` keys, or ("not recorded",)
     entry: str  # the research/ entry (file + heading) the text was written FROM
@@ -109,6 +109,13 @@ class FeatureClass:
     # `guess`, whose lead sentence already carries theirs.
     caveat: str = ""
     siblings: dict[str, str] = field(default_factory=dict)  # sibling key -> how THIS class differs from it
+    # THE ABOUT FORM (feature 319, GM 2026-10-03: *"we could have an overview tab and a guesses tab and a references tab"*,
+    # the first named "About"). `about` is the About tab's paragraphs, `guesses` the Guesses tab's bullets (empty: no tab),
+    # `form` which guidelines hold it - `dev/modals.md` (standard) or `dev/modals-particular.md` (particular). An old-form
+    # class has `about == ()` and keeps `what`/`why`/`label_note`/`caveat`; the rollout's last task retires that form.
+    about: tuple[str, ...] = ()
+    guesses: tuple[str, ...] = ()
+    form: str = "standard"
 
 
 _LABEL_WORDS: dict[Label, str] = {cast(Label, label): words for label, words in _TEXT["label_words"].items()}
@@ -125,13 +132,13 @@ def label_phrase(label: Label) -> str:
     return _LABEL_WORDS[label]
 
 
-def lead_sentence(label: Label, note: str) -> str:
+def lead_sentence(label: Label | None, note: str) -> str:
     """The sentence a modal OPENS with, or "" when there is nothing to announce.
 
     Only a liberty is announced (`ANNOUNCED`). An `accurate` class returns "" and its modal leads
     with what the feature IS - the presumption of accuracy the GM asked for, which is enforced HERE,
     at the one place the sentence is built, rather than by asking every caller to remember it."""
-    if label not in ANNOUNCED:
+    if label is None or label not in ANNOUNCED:  # None: the About form, which announces nothing (feature 319)
         return ""
     if label == "convention":
         return CONVENTION_LEAD + note
@@ -155,9 +162,16 @@ def slug(key: str) -> str:
 #: from class attributes into the docstring, so a relabeling or a repointed research entry is a page-content
 #: edit like any rewording - `make page-check`, not the gate; only `key` stays code, being what the engine
 #: writes on the ink and what the stylesheet matches).
-_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "Name", "Covers", "Label", "Sources", "Entry")
-_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat|Name|Covers|Label|Sources|Entry):\s?(.*)$")
-_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Label", "Sources", "Entry")
+_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "About", "Guesses", "Name", "Covers", "Label", "Sources", "Entry", "Form")
+_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Name|Covers|Label|Sources|Entry|Form):\s?(.*)$")
+_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Label", "Sources", "Entry", "Form")
+#: The About form's data tags: `Label:` goes (a guess is a bullet, not the feature's label - `dev/modals.md` M11) and `Form:`
+#: is optional (default `standard`).
+_ABOUT_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Sources", "Entry")
+_OLD_PROSE: tuple[str, ...] = ("What", "Why", "Note", "Caveat")
+FORMS: frozenset[str] = frozenset({"standard", "particular"})
+#: A paragraph break inside `About:` - a blank line, kept (only there) so the About tab has paragraphs (`dev/modals.md` M2).
+_PARA = "\n\n"
 
 
 def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
@@ -177,15 +191,53 @@ def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
             out[cur] = [m.group(2)] if m.group(2) else []
             continue
         if not line:
+            if cur == "About" and out[cur]:
+                out[cur].append("")  # a paragraph break, kept for the About tab
             continue
         if cur is None:
-            raise ValueError(f"{name}: text before the first tag ({line[:40]!r}) - every line belongs to What/Why/Note/Caveat")
+            raise ValueError(f"{name}: text before the first tag ({line[:40]!r}) - every line belongs to What/Why/Note/Caveat or About/Guesses")
         out[cur].append(line)
-    got = {k: " ".join(v).strip() for k, v in out.items()}
-    for required in ("What", "Why", "Note"):
-        if not got.get(required):
-            raise ValueError(f"{name}: the docstring has no {required}: section")
+    got = {k: _join(k, v) for k, v in out.items()}
+    required = ("About",) if "About" in got else ("What", "Why", "Note")
+    for tag in required:
+        if not got.get(tag):
+            raise ValueError(f"{name}: the docstring has no {tag}: section")
     return got
+
+
+def _join(tag: str, lines: list[str]) -> str:
+    """One tag's value: wrapped lines joined with one space; `About:` keeps its paragraph breaks and `Guesses:` its
+    bullets, one to a line.
+    Research: modal vocabulary plumbing - NONE"""
+    if tag == "About":
+        paras: list[list[str]] = [[]]
+        for line in lines:
+            if line:
+                paras[-1].append(line)
+            elif paras[-1]:
+                paras.append([])
+        return _PARA.join(" ".join(p) for p in paras if p).strip()
+    if tag == "Guesses":
+        bullets: list[list[str]] = []
+        for line in lines:
+            if line.startswith("- ") or not bullets:
+                bullets.append([line])
+            else:
+                bullets[-1].append(line)
+        return "\n".join(" ".join(b) for b in bullets).strip()
+    return " ".join(lines).strip()
+
+
+def about_paragraphs(text: str) -> tuple[str, ...]:
+    """The About tab's paragraphs from a parsed `About:` value.
+    Research: modal vocabulary plumbing - NONE"""
+    return tuple(" ".join(p.split()) for p in text.split(_PARA) if p.strip())
+
+
+def guess_bullets(text: str) -> tuple[str, ...]:
+    """The Guesses tab's bullets from a parsed `Guesses:` value, each without its `- `.
+    Research: modal vocabulary plumbing - NONE"""
+    return tuple(line[2:].strip() for line in text.splitlines() if line.strip())
 
 
 class Kind:
@@ -205,7 +257,11 @@ class Kind:
     def feature(cls) -> FeatureClass:
         """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring."""
         parts = parse_explanation(cls.__doc__, cls.__name__)
+        if "About" in parts:
+            return _about_feature(cls.__name__, cls.key, parts)
         for tag in _DATA_TAGS:
+            if tag == "Form":
+                continue
             if not parts.get(tag):
                 raise ValueError(f"{cls.__name__}: the docstring has no {tag}: section")
         if parts["Label"] not in _LABEL_WORDS:
@@ -222,6 +278,40 @@ class Kind:
             entry=parts["Entry"],
             caveat=parts.get("Caveat", ""),
         )
+
+
+def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
+    """A class in the About form (feature 319): its paragraphs, its guesses, no feature-level label (`dev/modals.md` M11).
+    The old prose tags and `Label:` are refused rather than ignored, so a half-converted class fails at import.
+    Research: modal vocabulary plumbing - NONE"""
+    for tag in _ABOUT_DATA_TAGS:
+        if not parts.get(tag):
+            raise ValueError(f"{name}: the docstring has no {tag}: section")
+    if "Label" in parts:
+        raise ValueError(f"{name}: the About form takes no Label: - a guess is a bullet under Guesses: (dev/modals.md M11)")
+    old = [t for t in _OLD_PROSE if t in parts]
+    if old:
+        raise ValueError(f"{name}: the About form replaces What/Why/Note/Caveat - remove {', '.join(t + ':' for t in old)}")
+    form = parts.get("Form", "standard")
+    if form not in FORMS:
+        raise ValueError(f"{name}: Form: {form!r} is not one of {sorted(FORMS)}")
+    raw_guesses = parts.get("Guesses", "")
+    if raw_guesses and not all(line.startswith("- ") for line in raw_guesses.splitlines()):
+        raise ValueError(f"{name}: each guess is a bullet - start every line under Guesses: with '- '")
+    return FeatureClass(
+        key=key,
+        name=parts["Name"],
+        covers=parts["Covers"],
+        what="",
+        why="",
+        label=None,
+        label_note="",
+        sources=tuple(s.strip() for s in parts["Sources"].split(",") if s.strip()),
+        entry=parts["Entry"],
+        about=about_paragraphs(parts["About"]),
+        guesses=guess_bullets(raw_guesses),
+        form=form,
+    )
 
 
 def install_siblings(defs: list[FeatureClass], pairs: dict[tuple[str, str], str]) -> dict[str, FeatureClass]:

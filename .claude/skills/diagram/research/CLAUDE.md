@@ -131,7 +131,8 @@ references" (the QUESTIONS we asked) -> the answer on the research page -> the s
   (`scripts/check-entry-headings.py` fails the gate on one that resolves to nothing). A section deliberately not
   written is `research/contents.json#<section> (no dedicated entry - recorded as silent)`.
 - A class's explanation names the entries it was written from; that pointer is all that puts a question on a
-  modal. New questions reach a modal only when the GM asks for them.
+  modal. Since feature 319 the pointer is exactly the questions the modal's statements rest on (`dev/modals.md` M14), and
+  `modal-research` checks it both ways and searches the record for a question that answers what the modal leaves open.
 
 ## Four labels (GM 2026-09-05, feature 183)
 

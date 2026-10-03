@@ -219,20 +219,20 @@ def test_the_page_carries_the_questions_and_no_record_line() -> None:
     assert "x-entry" not in markup and "Record:" not in markup
     assert "x-entry" not in html_text.split("<script>")[1], "and the script touches no such element"
     assert f'<p id="r-intro" class="intro">{REFERENCES_LEAD}</p>' in html_text and REFERENCES_LEAD == "Topics we researched for this map feature:"
-    assert '<button id="r-close" type="button">Return to writeup</button>' in html_text
     blob = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', html_text, re.S).group(1).replace("<\\/", "</"))
     farmhouse = blob["classes"]["farmhouse"]
     assert farmhouse["questions"] and set(farmhouse["questions"][0]) == {"text", "url"}
     assert not {"sources", "refs", "entry"} & set(farmhouse)
-    assert 'd.questions.length ? "See references (" + d.questions.length + ")"' in html_text, "the count is the number of questions (spec D3)"
-    assert '"Return to " + cap(d.name) + " writeup"' in html_text
-    # feature 181: the references REPLACE the explanation (hidden by a class the stylesheet knows, cleared
-    # when the references close), and the title's name is a link sharing the button's handler
-    assert "dialog#explain.behind { display: none; }" in html_text
-    assert 'dialog.classList.add("behind")' in html_text and 'dialog.classList.remove("behind")' in html_text
-    assert 'back.id = "r-back"' in html_text and 'document.createTextNode(" references")' in html_text
-    # feature 182: the glossary tooltip is ONE element outside both dialogs, placed by the script
-    assert '<div id="tip" role="tooltip" hidden></div>' in markup and markup.index('id="tip"') > markup.index('id="references"')
+    # feature 319: the modal is TABS - About, Guesses, References - in one dialog; the references dialog, its return button
+    # and the "See references (N)" link are gone (they were features 180 and 181's), and a tab with nothing to show is hidden
+    assert '<nav id="x-tabs" role="tablist">' in markup and all(f'id="t-{t}"' in markup for t in ("about", "guesses", "refs"))
+    assert [m for m in re.findall(r'role="tab" id="t-\w+" data-tab="\w+" aria-controls="p-\w+">(\w+)<', markup)] == ["About", "Guesses", "References"]
+    assert 'id="references"' not in markup and "r-close" not in html_text and "See references" not in html_text
+    assert "behind" not in html_text.split("<style>")[1].split("</style>")[0], "no stylesheet rule hides the explanation any more"
+    assert 'document.getElementById("t-guesses").hidden = !(d.guesses && d.guesses.length)' in html_text
+    assert 'document.getElementById("t-refs").hidden = !d.questions.length' in html_text
+    # feature 182: the glossary tooltip is ONE element outside the dialog, placed by the script
+    assert '<div id="tip" role="tooltip" hidden></div>' in markup and markup.index('id="tip"') > markup.index('id="explain"')
     assert ".gl:hover::after" not in html_text and "#tip { position: fixed;" in html_text
 
 

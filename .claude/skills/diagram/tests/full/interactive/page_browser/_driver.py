@@ -74,7 +74,7 @@ class Page:
 
     def dialog(self) -> dict[str, Any]:
         return self.js(
-            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, caveat: document.getElementById('x-caveat').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('x-refs').textContent }; }"
+            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, caveat: document.getElementById('x-caveat').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('t-refs').hidden ? '' : document.getElementById('r-list').children.length + ' references', about: document.getElementById('x-about').textContent, guesses: Array.from(document.querySelectorAll('#x-guesses li')).map(li => li.textContent) }; }"
         )
 
     def close(self) -> None:

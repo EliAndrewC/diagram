@@ -1,0 +1,126 @@
+# Tasks - feature 319, modal write-ups a reader can take in
+
+Phases follow the GM's order (spec FR-010): guidelines and checks, the farmhouse pilot, the garden pilot, a further pilot if
+the garden's first rewrite needs changes, then - on the GM's go-ahead - the title card's choices and the rollout. The GM's
+verdict on each pilot round is recorded under its task (SC-005). Nothing but the spec claim lands on main until the rollout is
+done (FR-012).
+
+## Occasions
+
+- none: no map, sheet, glyph or placement changes - the page is a second serialization of the same drawing (feature 134
+  FR-010); the modal checks are this feature's subject, owed by its own command (plan D6)
+
+## Phase 1 - guidelines, the form, the tabs, the checks
+
+- [ ] T01 [US1] [US5] The two guideline documents, `dev/modals.md` (standardized) and `dev/modals-particular.md` (particular),
+  numbered rules with their provenance; indexed from `interactive/classes/CLAUDE.md`; `research/CLAUDE.md`'s "New questions
+  reach a modal only when the GM asks for them" brought in line with M14 (FR-001, FR-002, FR-003; plan D3)
+      research: rendering
+      verify:
+- [ ] T02 [US2] The About form in `classes/_base.py` (`About:` paragraphs, `Guesses:` bullets, `Form:`, no `Label:`; the old
+  form still parses) and the page data (`about`, `guesses`); `tests/interactive/test_about_form.py` red then green; the
+  registry snapshot test exempts an About-form class's label (FR-005; plan D1)
+      research: rendering
+      verify:
+- [ ] T03 [US2] [US3] The tabbed modal - About / Guesses / References in one dialog, hidden when empty, opening on About; the
+  references dialog retired; `page.js`, `page.css`, `page.py`; the browser test and `test_page.py` rewritten for tabs;
+  `interactive/CLAUDE.md`'s presumption-of-accuracy and references sections rewritten; `make page-check` green (FR-005,
+  FR-006, FR-007; plan D2)
+      research: rendering
+      verify:
+- [ ] T04 [US3] `scripts/_modal_bundle.py` and `make modal-bundle KIND= FOR=` / `make modal-prepass KIND=`: the rendered tabs,
+  the guidelines copy, the prepass (word counts, barred phrases, bullets, Entry resolution) and the candidates - the UNION of
+  any shared subject tag with the Entry pages and the kind's name or glossary variants, ranked, never cut, the whole question
+  record copied for grep; a fixture test that 0004 is a farmhouse candidate (FR-008; plan D5)
+      research: rendering
+      verify:
+- [ ] T05 [US3] `.claude/agents/modal-form.md` and `.claude/agents/modal-research.md` (Opus, medium, `omitClaudeMd`), their
+  rows in `tests/test_agent_models.py`; `modal-research` reports accuracy, references and gaps as three verdicts (FR-008; plan
+  D4)
+      research: rendering
+      verify:
+- [ ] T06 [US3] Owed and enforced: `scripts/_modal_owed.py` owes `modal-form:<key>`, `modal-accuracy:<key>`,
+  `modal-references:<key>`, `modal-gaps:<key>` for an About-form class whose About, Guesses or Entry changed, and the three
+  research units (not a `modal-research:<key>` - the plan review's note) when a page its Entry names changed, replacing
+  entry-drift for About-form classes only; folded into `_record_owed.py`, `make record-checked`, `entry-gate.sh`; tests on
+  fixture trees; the refusal message names the command (FR-008; plan D6)
+      research: rendering
+      verify:
+- [ ] T07 [US3] The checks proved on the OLD text (plan D7): the current farmhouse and garden converted mechanically into
+  bundles; `modal-form` reports the farmhouse's missing materials and occupancy and the garden's guess-led opening;
+  `modal-research` reports 0004 as a farmhouse gap. A check that passes the old text is fixed first. Ledger rows with cost
+      research: rendering
+      verify:
+
+## Phase 2 - the farmhouse pilot
+
+- [ ] T08 [US1] The research pass for the farmhouse's unanswered standard questions - its walls; whether it closed up (storm
+  shutters, board doors) - archive first, then the web; recorded and cited on the question pages they belong to (0029 for the
+  walls, 0102 or 0117 for the openings) through a write and a check page session (plan D8)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+      verify:
+- [ ] T09 [US1] The farmhouse rewritten in the About form from the guidelines: purpose (one household; work on the earth floor;
+  the inner stable), look (thatch on a hipped or gabled roof, the earth floor and the raised rooms, the walls, the big sliding
+  door and its wicket), how many (household of about five, low and high), size; guesses as bullets; `Entry:` exactly what it
+  rests on; both checks green in at most two rounds; Inashiro's page regenerated in the clone (plan D9)
+      research: rendering
+      verify:
+- [ ] T10 [US6] THE GM'S VERDICT on the farmhouse - each change made in the guidelines first, then the modal, re-checked;
+  repeated until the GM is satisfied (FR-010)
+      research: rendering
+      verify:
+
+## Phase 3 - the garden pilot (and a further pilot only if needed)
+
+- [ ] T11 [US2] The garden rewritten from the (amended) guidelines - M6 settled on it - with its research pass where a
+  standard question is open; both checks; the page regenerated
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+      verify:
+- [ ] T12 [US6] THE GM'S VERDICT on the garden's FIRST rewrite. Accepted with no changes and the GM's go-ahead: the rollout
+  starts. Otherwise: changes to the guidelines, then the garden; a further feature is piloted as T11/T12 (FR-010, SC-005)
+      research: rendering
+      verify:
+
+## Phase 4 - the title card's choices (after the go-ahead)
+
+- [ ] T13 [US4] D10 settled into `plan.md` and re-reviewed: `interactive/assets/choices.json` over EVERY per-settlement
+  choice - a test reads the POPULATED `KNOBS` registry (23 knobs, seven registered from other modules - the plan review's
+  note), not `_knobs.py`'s lines, and every `### Features` source key; the choice-value modals in a new registry in the About
+  form; the title card lists the choices, each value opening its modal; the hamlets' `### Features` facts moved; a test that
+  no hamlet feature modal differs between two pool maps (FR-004, FR-009, SC-004)
+      research: rendering
+      verify:
+
+## Phase 5 - the rollout (after the go-ahead)
+
+- [ ] T14 [US6] Every hamlet class rewritten in the About form, by writer agents on disjoint modules, each class checked from
+  its own bundles; research passes where a standard question is open (FR-011)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+      verify:
+- [ ] T15 [US4] Every choice value's modal written and checked (FR-011)
+      research: rendering
+      verify:
+- [ ] T16 [US5] The sheets: every compound kind classed standard or `Form: particular` (plan D11); the general kinds rewritten
+  under `modals.md`, the particulars and every sheet's `### Features` entries under `modals-particular.md`, the canon answer in
+  the `modal-research` bundle; checked (FR-003, FR-011)
+      research: rendering
+      verify:
+- [ ] T17 The old form retired: the What/Why/Note/Caveat parser, the label lead, the caveat machinery and their tests; the
+  docs; `make page-check` and `make done` green; the pool pages regenerated; the push (FR-012, SC-006)
+      research: rendering
+      verify:

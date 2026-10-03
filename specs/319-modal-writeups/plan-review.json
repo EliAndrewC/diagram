@@ -1,6 +1,6 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "9e0ed6aa96d7bdc58c8ef1206963bb092097e4b28d5b499f8ef3a99047e16ece",
+ "plan_sha256": "973046d0a5931ebd6d483d53985b802d91fa3bcfdda8fbee4e6d937ccca69383",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,76 +8,81 @@
    "id": "D1",
    "summary": "New docstring form: About: paragraphs and a Guesses: bullet list; no feature-level Label: (None in the new form); Form: particular optional; old form parses until the last rollout task removes it",
    "class": "within",
-   "why": "FR-005 makes a guess a property of a statement, and the spec's Decisions table keeps the four classes per statement: a guess is a bullet, a deviation and a convention are said in the About text where FR-005 puts them, and nothing is announced as accurate (FR-002). Dropping the one-per-feature label is what the GM's garden complaint asks for. Removing the old form at the end serves FR-011."
+   "why": "FR-005 makes a guess a property of a statement and the spec's Decisions table keeps the four classes per statement; FR-002 (nothing announced as accurate) holds. Removing the old form at the end serves FR-011. Unchanged from round 1."
   },
   {
    "id": "D2",
-   "summary": "One tabbed dialog About / Guesses / References; empty tabs not drawn; References tab replaces the separate references dialog; place card gets the same tabs; old-form classes shown on About until rewritten",
+   "summary": "One tabbed dialog About / Guesses / References; empty tabs not drawn; the References tab replaces the separate references dialog; the place card gets the same tabs; old-form classes shown on About until rewritten",
    "class": "within",
-   "why": "FR-005, FR-006, FR-007 and the GM's 'about guesses and references'. The old-form display is transitional and never lands (FR-012), and FR-011 rewrites every class."
+   "why": "FR-005, FR-006, FR-007 and the GM's 'about guesses and references'. The old-form display is transitional and never lands (FR-012); FR-011 rewrites every class. Unchanged from round 1."
   },
   {
    "id": "D3",
    "summary": "The two guideline documents are the checks' single contract, copied into each bundle, rules numbered and findings naming their rule; GM-asked changes go there first",
    "class": "within",
-   "why": "FR-001, FR-003, FR-010 and SC-001 (each rule held by a named check)."
+   "why": "FR-001, FR-003, FR-010 and SC-001. Unchanged from round 1."
   },
   {
    "id": "D4",
-   "summary": "Two agents, not three: modal-form (form) and modal-research (accuracy + references + gaps); the particular form uses the same two with particular rules and the canon answer",
+   "summary": "Two agents: modal-form (form) and modal-research, which reports THREE verdicts (accuracy, references, gaps), each its own owed unit (modal-accuracy, modal-references, modal-gaps) and its own ledger row; particulars use the same two agents with the particular rules and the canon answer",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The accepted spec says 'Each check is a defined agent' and SC-003 'the three checks', so one agent for accuracy and references departs from its letter. But every criterion FR-008 (b) and (c) names is still checked, by an agent independent of the author, owed and enforced at the push; and the GM's own words leave a separate references agent open: 'And maybe there's a subagent check specifically for deciding which research things should be linked. I'm not sure.' The purpose (accuracy and the linked set reviewed as the research is) is untouched. Condition: reconcile the spec's wording (FR-008 / SC-003) with the two-agent packaging, or have modal-research report accuracy, references and gaps as separate verdicts in the ledger, so SC-003's 'three checks' is still measurable."
+   "why": "FR-008 says 'Each check is a defined agent' and SC-003 'the three checks', so one agent carrying accuracy and references departs from the letter. Round 1 ruled it legitimate on condition that the three remain separately measurable; the amended D4 meets that condition exactly: three verdicts, three owed units, three ledger rows, so SC-003's 'passed the three checks, recorded in the review ledger with cost' is measured per check. Every criterion FR-008 (b) and (c) names is still checked by an agent independent of the author, owed and enforced at the push, and the GM's own words leave the packaging open ('maybe there's a subagent check specifically for deciding which research things should be linked. I'm not sure'). The purpose is untouched."
   },
   {
    "id": "D5",
-   "summary": "Prepass and bundle; the gap candidates are only questions whose subject tags meet the kind's PRIMARY subject AND whose words carry the kind's name or a glossary variant",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Spec US3 scenario 2 and FR-008(c): the check searches the record 'by tag and by term' for a question answering what the modal leaves unanswered, 'so research the record holds is not missed'; D4 confines GAPS (and the 'each guess absent from the record' test) to these candidates. Measured 2026-10-03 on the tags lines: the farmhouse's Entry questions 0029 and 0028 have primary subject homesteads; 0004 (how many lived in a house - the GM's motivating 'surprised to see as few references' case and the spec's own Context example) is tagged subject=tiers,households, so the AND on the primary subject drops it, and D7's own required finding (0004 reported as a gap) cannot be reached by design. Not physically impossible, not implied by the GM's words, and it defeats the stated purpose on the motivating case. Fix: take the UNION - a question whose subjects meet ANY subject of the kind's Entry pages, OR whose words carry the kind's name or a glossary variant (or let modal-research search beyond the list) - and keep D7's 0004 test as the proof."
+   "summary": "Prepass and bundle; the gap candidates are the UNION of every question sharing ANY subject tag with the Entry pages and every question whose words carry the kind's name or a glossary variant; ranking orders and never cuts; modal-research may grep the whole record copy; 0004 named as the test",
+   "class": "within",
+   "why": "Round 1 ruled the AND-on-primary-subject filter NOT LEGITIMATE because it excluded 0004, the spec's own Context example. The amendment takes the union, forbids cutting, and lets the agent search the whole record beyond the list - which is US3 scenario 2's 'searched the record ... (by tag and by term)' and FR-008(c) without narrowing. Measured this round on the tags comment lines: 0004 carries 'subject=tiers,households', 0029 and 0028 carry 'subject=homesteads,buildings,households', so 0004 meets the union through 'households' and D7's required finding is reachable. research/assets/glossary-variants.txt exists. No longer a narrowing."
   },
   {
    "id": "D6",
-   "summary": "modal-form and modal-research owed per new-form class when About/Guesses/Entry change, modal-research also when an Entry page changes; replaces entry-drift for new-form classes; enforced by entry-gate at the push",
+   "summary": "modal-form and the three modal-research units owed per new-form class when About/Guesses/Entry text changes; modal-research also owed when an Entry page changes; replaces entry-drift for new-form classes; enforced by entry-gate at the push",
    "class": "within",
-   "why": "FR-008: owed by a changed modal and enforced at the push 'as entry-drift is'. modal-research's accuracy test against the Entry pages is entry-drift's question and keeps its trigger (an Entry page changed), so nothing entry-drift checked goes unchecked; old-form classes keep entry-drift until retired."
+   "why": "FR-008: owed by a changed modal and enforced at the push 'as entry-drift is'. Precision note, not a fidelity finding: the Entry-page trigger still names a unit 'modal-research:<key>', which is no longer one of the three units D4 and D6 define; when built it should owe the three units (at least modal-accuracy), so that entry-drift's question - does the modal still agree with its pages - stays owed for new-form classes. Read either way nothing the spec asks goes unchecked."
   },
   {
    "id": "D7",
-   "summary": "Both checks are first run on the current farmhouse and garden text and must report the farmhouse's missing materials and occupancy, the garden's guess-led opening, and 0004 as a gap",
+   "summary": "Both checks first run on the current farmhouse and garden text and must report the farmhouse's missing materials and occupancy, the garden's guess-led opening, and 0004 as a gap",
    "class": "within",
-   "why": "Enforcement of FR-008 (a check proved to fire); it serves the request rather than adding scope."
+   "why": "Enforcement of FR-008 (a check proved to fire on the motivating defects); serves the request rather than adding scope. With D5's union it is now reachable."
   },
   {
    "id": "D8",
    "summary": "The farmhouse's standard questions answered from the record first (0029, 0028, 0004, 0048, 0030); unanswered ones get the full research pass before becoming a guess; research: physical tasks",
    "class": "within",
-   "why": "Spec Assumptions (research pass before a guess), US1 scenario 1 and the project's research doctrine."
+   "why": "Spec Assumptions (research pass before a guess), US1 scenario 1 and the research doctrine. Unchanged from round 1."
   },
   {
    "id": "D9",
    "summary": "Pilot hand-off: rewrite, both checks green (two rounds), regenerate Inashiro in the clone, give the GM the path; verdict in tasks.md; farmhouse then garden, a further feature only if the garden's first rewrite needs changes; rollout waits for the go-ahead",
    "class": "within",
-   "why": "FR-010, FR-012, US6 and the GM's 'I can look at the results in the clone ... then we'll move on to another one'."
+   "why": "FR-010, FR-012, US6 and the GM's sequence. Unchanged from round 1."
   },
   {
    "id": "D10",
-   "summary": "Title card choices (sketch, settled after the pilots): a declared choices.json naming the meta keys shown, each value a standardized modal in a new registry; ### Features facts become choices or counts; a test holds no hamlet feature modal differs between maps",
+   "summary": "Title card choices (sketch, settled after the pilots): a declared choices.json listing EVERY per-settlement choice, rolled, declared or pinned, with a test holding every declared knob and every meta key a ### Features fact came from; each value a standardized modal in a new registry; ### Features facts become choices or counts; a test holds no hamlet feature modal differs between maps",
    "class": "within",
-   "why": "FR-004, FR-009, US4. Within only on the reading that choices.json lists EVERY per-settlement choice (FR-009 'every', the spec's edge case: pinned knobs listed too) and uses the table only to separate knobs from other meta; a knob left off the title card would be a narrowing owed its own ruling. Settling the sketch edits plan.md, which changes this digest and brings it back through this review."
+   "why": "FR-004, FR-009 ('every per-settlement choice ... each knob's value, and the per-map facts now in ### Features'), US4 and the pinned-knob edge case. Round 1's condition (every choice listed, the table only separating knobs from other meta) is now stated and enforced. Precision note, measured this round: the KNOBS registry lives in settlement/_knobs.py, but only 16 knobs are registered in that file; seven more (family_form, weir_form, fan_middle, footbridge_form, winter_crop, paddy_rest, windbreak_belt) register into it from other modules. The test must read the populated KNOBS registry, not the 16 register_knob lines of the file (the spec's Context count), or 'leaves no knob off' is not what it enforces. Non-knob per-settlement values such as harvest_weather (declared on the plan, never rolled) and hamlet_burial reach the table through the ### Features half of the test. Settling the sketch edits plan.md, which changes this digest and returns it here."
   },
   {
    "id": "D11",
    "summary": "Sheets after the hamlet rollout: each compound kind tagged particular (particulars.py membership, or setting-particular content even when on several sheets) or standard; each sheet's ### Features entries reviewed under the particular guidelines; canon answer in the particular bundle",
    "class": "within",
-   "why": "FR-003, FR-011, US5 and the spec's edge case that reuse across sheets does not make a kind general; FR-011 still rewrites every general and particular kind."
+   "why": "FR-003, FR-011, US5 and the spec's edge case that reuse across sheets does not make a kind general. Unchanged from round 1."
   },
   {
    "id": "TC-tiers",
    "summary": "Both new agents pinned on Opus at medium effort, omitClaudeMd true",
    "class": "within",
-   "why": "FR-008 asks for defined agents on pinned tiers; the tier chosen is a cost/design matter, not fidelity."
+   "why": "FR-008 asks for defined agents on pinned tiers; the tier is a cost/design matter, not fidelity."
+  },
+  {
+   "id": "Risks-count",
+   "summary": "The rollout is 56 hamlet classes, the choice values and 99 sheet kinds, each with the checks; parallel writer agents on disjoint modules after the go-ahead",
+   "class": "within",
+   "why": "Not a narrowing: every class, value and kind is in scope (FR-011). The figure now carries its method and date; re-run this round, '^class .*(Kind)' across compound_kinds/*.py counts 99 (particulars 18, shrine 16, grounds 22, household 27, office 16)."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

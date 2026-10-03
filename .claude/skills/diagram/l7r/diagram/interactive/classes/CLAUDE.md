@@ -21,6 +21,15 @@ fingerprint hashes bytes), so the page regenerates.
 
 ## Writing an entry
 
+**What a modal SAYS is governed by `dev/modals.md`** (feature 319): the reader, the tabs (About / Guesses / References), the
+questions each kind's About answers, where a guess, a deviation and a convention go, and which questions the References tab
+lists. A kind particular to one sheet or to the setting follows `dev/modals-particular.md`. The two checks that hold them are
+`modal-form` and `modal-research`, owed by an About-form class whose prose or `Entry:` changed. A class is in the ABOUT FORM
+when it carries `About:` (paragraphs, a blank line between them) and optionally `Guesses:` (`- ` bullets) and `Form:
+particular`, with `Name:` / `Covers:` / `Sources:` / `Entry:` and no `Label:`; the old form below is retired class by class
+during feature 319's rollout.
+
+
 ```python
 class HenCoop(Kind):
     """

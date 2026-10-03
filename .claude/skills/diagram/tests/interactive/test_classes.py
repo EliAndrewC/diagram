@@ -100,9 +100,12 @@ def test_an_entry_is_complete(key: str) -> None:
     # reads it. So the rule is that a heading exists and still names the thing the ink is tagged with,
     # not that the two strings are identical.
     assert fc.name and key in fc.name, "the modal's heading names the class its ink carries"
-    assert len(fc.what) > 40 and len(fc.why) > 40, "an explanation is a paragraph, not a label"
-    assert fc.label in ("accurate", "deviation", "convention", "guess")
-    assert fc.label_note, "the label is justified in one line"
+    if fc.about:  # feature 319's About form: paragraphs and guesses, no feature-level label (dev/modals.md M11)
+        assert fc.label is None and all(len(p) > 40 for p in fc.about), "an About paragraph is a paragraph, not a label"
+    else:
+        assert len(fc.what) > 40 and len(fc.why) > 40, "an explanation is a paragraph, not a label"
+        assert fc.label in ("accurate", "deviation", "convention", "guess")
+        assert fc.label_note, "the label is justified in one line"
     assert fc.sources and all(fc.sources), "a sources line, or 'not recorded'"
     assert "research/" in fc.entry, "written FROM a research entry"
 

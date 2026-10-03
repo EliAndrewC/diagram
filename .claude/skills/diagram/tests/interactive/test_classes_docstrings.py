@@ -186,6 +186,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
         if key in SINCE_189:
             continue  # retired; its successors are new entries with their own data, judged by test_classes.py
         fc = CLASSES[key]
+        if fc.about:
+            # FEATURE 319 RETIRES THE LABEL CLASS BY CLASS: an About-form class carries no feature-level `label` (a guess is a
+            # bullet - dev/modals.md M11), and its `entry` and `sources` are rewritten with its prose (M14: exactly what the
+            # statements rest on). `name` and `covers` still never move, and the sibling pairs are checked as below.
+            assert fc.label is None and fc.name == was["name"] and fc.covers == was["covers"], key
+            kept = {k: t for k, t in was["siblings"].items() if k not in SINCE_189}
+            assert {k: t for k, t in fc.siblings.items() if k in kept} == kept, key
+            continue
         for field in ("label", "name", "covers", "entry"):
             assert getattr(fc, field) == was[field], (key, field)
         assert tuple(fc.sources) == tuple(was["sources"]), key
