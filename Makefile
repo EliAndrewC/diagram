@@ -27,9 +27,11 @@ help:
 # GUARD_EDIT_OK: feature 295 - `plan-verdict` forwards too: spec-fidelity's MODE 4 contract runs it from the clone root, and
 # on 2026-09-30 it found no such target there and recorded through `scripts/_plan_gate.py` by hand.
 # GUARD_EDIT_OK: feature 313 - the GM's "ingest" and "sync", the add and the access report forward too: a session answers them from wherever it stands.
+# GUARD_EDIT_OK: feature 316 - the claims targets forward too: the GM ran `make claims-report` from the repository root and got "No rule to make target".
 FORWARD := done quick maps reference hooks-test tooling durations page-check tick claim \
            switches ci-status ci-off ci-on perf-report perf-review audit lines append open-questions plan-verdict \
-           downloads-ingest downloads-sync download-add access-tags
+           downloads-ingest downloads-sync download-add access-tags \
+           claims-report claims-coverage claims-owed claims-bundle claims-checked
 # GUARD_EDIT_OK: feature 197 - FIXING A FORWARD THAT BROKE ON CORRECT WORK (Principle XIV, found while ticking
 # this feature's own tasks). `$(MAKEOVERRIDES)` expanded to the raw `NOTE=<text>` and was pasted UNQUOTED into
 # the recipe, so `make tick NOTE="green; every case"` from the repository root ran `tick NOTE=green` and then
