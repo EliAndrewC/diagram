@@ -195,6 +195,12 @@ def test_a_parsed_tree_is_accepted_and_an_annotated_constant_counts() -> None:
     assert [(u.qualname, [c.label for c in u.claims]) for u in units] == [("X", ["x"])]
 
 
+def test_an_overload_stub_is_not_a_unit_its_implementation_is() -> None:
+    src = "import typing\nfrom typing import overload\n\n\n@overload\ndef f(x: int) -> int: ...\n@typing.overload\ndef f(x: str) -> str: ...\ndef f(x):\n    return x\n"
+    _m, _e, units = cl.module_units(src, "o.py")
+    assert [(u.qualname, u.lineno) for u in units] == [("f", 9)]
+
+
 def test_resolve_from_handles_absolute_and_relative_imports() -> None:
     import ast
 

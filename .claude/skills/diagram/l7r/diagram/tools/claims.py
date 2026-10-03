@@ -293,6 +293,12 @@ def nameless_dump(node: ast.AST) -> str:
         shell.name = name  # type: ignore[attr-defined]
 
 
+def _is_overload(fn: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
+    """An `@overload` (or `@typing.overload`) stub: found by the audit's batch 19, where `labels/placer.py`'s stubs of `place`
+    took the implementation's key and its bundle showed a stub."""
+    return any((isinstance(d, ast.Name) and d.id == "overload") or (isinstance(d, ast.Attribute) and d.attr == "overload") for d in fn.decorator_list)
+
+
 def module_aliases(tree: ast.Module, table: dict[str, tuple[str, str]], modules: set[str]) -> dict[str, str]:
     """local name -> in-scope module, for `from pkg import mod [as m]` and `import pkg.mod as m` - so `m.NAME` is a read
     of that module's constant (36 such reads in `hamletgen/ways` alone, counted 2026-10-02)."""
@@ -320,6 +326,8 @@ def module_units(source: str | ast.Module, path: str, module: str = "", is_packa
     def walk(body: list[ast.stmt], prefix: str, in_class: bool) -> None:
         for stmt in body:
             if isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if _is_overload(stmt):  # a typing stub shares its implementation's name; the implementation is the unit
+                    continue
                 found.append((prefix + stmt.name, "method" if in_class else "function", stmt, ast.get_docstring(stmt)))
             elif isinstance(stmt, ast.ClassDef):
                 found.append((prefix + stmt.name, "class", stmt, ast.get_docstring(stmt)))
