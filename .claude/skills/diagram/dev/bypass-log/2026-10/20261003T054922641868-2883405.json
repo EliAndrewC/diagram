@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T05:49:22Z",
+  "target": "review-accept",
+  "commit": "d6a928f97",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--persimmon F1: fixed in this delta: the persimmon fill is #94A23A, 15.4 to 34.3 apart in CIELAB from every grove and wood green (was 7.8 from #7C9A4E); this round re-judges it"
+}
