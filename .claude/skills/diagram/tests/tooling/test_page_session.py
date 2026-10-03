@@ -469,3 +469,92 @@ def test_a_stalled_session_is_resumed_at_once_and_capped(tmp_path: pathlib.Path,
     assert f"stalled {first} - idle 20 min, resumed {ps.STALL_RESUMES} times already; moving on" in lines
     assert all("--resume" in c for c in calls[1 : ps.STALL_RESUMES + 1]), "each stall resumes the SAME session"
     assert "--session-id" in calls[-1] and lines[-1] == "ALL DONE", "then the next brief runs"
+
+
+# Feature 317: a resumed session is handed what its agents returned (R1's check session dispatched its eight checks twice).
+
+
+def _transcript(path: pathlib.Path, rows: list[dict]) -> None:
+    import json
+
+    path.write_text("".join(json.dumps(r) + "\n" for r in rows) + "not json\n", encoding="utf-8")
+
+
+def _note(name: str) -> dict:
+    return {
+        "type": "queue-operation",
+        "operation": "enqueue",
+        "content": f"<task-notification>\n<summary>Agent \"{name}\" finished</summary>\n<result>{name}: 1 IN-STEP</result>\n</task-notification>",
+    }
+
+
+def _turn(stop: str) -> dict:
+    return {"type": "assistant", "message": {"stop_reason": stop, "content": [{"type": "text", "text": "..."}]}}
+
+
+DEQ = {"type": "queue-operation", "operation": "dequeue"}
+
+
+def test_the_reports_a_headless_session_never_took_up_are_those_queued_since_its_last_dequeue(tmp_path: pathlib.Path) -> None:
+    """The R1 check session's transcript, in small: a prompt taken up, then eight reports queued and never taken up; after
+    the resume the notice of unfinished agents and the prompt are taken up, and only what is queued after counts."""
+    _transcript(tmp_path / "sid.jsonl", [{"type": "queue-operation", "operation": "enqueue", "content": "the brief"}, DEQ, _turn("end_turn"), _note("quote-check"), _note("record-format")])
+    got = ps.undelivered(str(tmp_path), "sid")
+    assert len(got) == 2 and "quote-check: 1 IN-STEP" in got[0] and "record-format" in got[1]
+    _transcript(tmp_path / "sid.jsonl", [_note("quote-check"), DEQ, _turn("tool_use")])
+    assert ps.undelivered(str(tmp_path), "sid") == [] and ps.undelivered(str(tmp_path), "none") == []
+
+
+def test_a_turn_has_ended_only_when_the_last_assistant_entry_stopped_at_end_turn(tmp_path: pathlib.Path) -> None:
+    _transcript(tmp_path / "a.jsonl", [_turn("tool_use"), _turn("end_turn"), _note("x")])
+    _transcript(tmp_path / "b.jsonl", [_turn("end_turn"), _turn("tool_use")])
+    assert ps.turn_ended(str(tmp_path), "a") and not ps.turn_ended(str(tmp_path), "b") and not ps.turn_ended(str(tmp_path), "none")
+
+
+def test_a_resume_names_the_file_of_reports_and_a_resume_item_carries_them(tmp_path: pathlib.Path) -> None:
+    """The reports are written beside the session's log and the resume's prompt names the file; with none, no file and the
+    plain continue. A `resume:` item is planned with them, and a stall of it resumes it again rather than failing (its
+    command has no `--session-id` left to replace)."""
+    assert ps.returned_file(str(tmp_path), []) is None and not (tmp_path / "returned.md").exists()
+    path = ps.returned_file(str(tmp_path), ["<task-notification>a</task-notification>", "<task-notification>b</task-notification>"])
+    assert path == str(tmp_path / "returned.md") and (tmp_path / "returned.md").read_text(encoding="utf-8").count("<task-notification>") == 2
+    base = ["claude", "-p", "brief", "--session-id", "s1"]
+    assert ps.resume_command(base, "s1")[2] == ps.RESUME
+    told = ps.resume_command(base, "s1", path)
+    assert told[2].startswith(ps.RESUME) and path in told[2] and "do not dispatch them again" in told[2] and told[3:] == ["--resume", "s1"]
+    assert ps.resume_command(told, "s1") == [*told[:2], ps.RESUME, "--resume", "s1"], "a resumed command resumed again"
+    brief = tmp_path / "r1-check.md"
+    brief.write_text(BRIEF, encoding="utf-8")
+    sid = "46661922-2c8c-4c0d-9ba3-d357b196b81b"
+    projects = tmp_path / "projects"
+    projects.mkdir()
+    _transcript(projects / f"{sid}.jsonl", [DEQ, _turn("end_turn"), _note("entry-drift CartYard")])
+    (item,) = ps.plan(str(tmp_path), "n", str(projects), [], [f"resume:{sid}:{brief}"])
+    returned = pathlib.Path(item["log"], "returned.md")
+    assert returned.exists() and "entry-drift CartYard" in returned.read_text(encoding="utf-8")
+    assert str(returned) in item["cmd"][item["cmd"].index("-p") + 1]
+
+
+def test_a_session_whose_turn_ended_with_reports_waiting_is_resumed_before_the_long_stall(tmp_path: pathlib.Path) -> None:
+    """Quiet past RETURNED_AFTER, its turn ended and reports queued: ended well short of STALL_AFTER. Quiet as long but still
+    in a tool call (its turn not ended), or with nothing queued, it is left to the long stall."""
+    import os
+    import time
+
+    def watch(rows: list[dict], sid: str) -> bool:
+        proc = _fake_claude(tmp_path, sid)
+        try:
+            _transcript(tmp_path / f"{sid}.jsonl", rows)
+            os.utime(tmp_path / f"{sid}.jsonl", (time.time() - 3600, time.time() - 3600))
+            w = ps.StallWatch(str(tmp_path), sid, check=0.05, after=600, returned=0.2)
+            w.start()
+            time.sleep(0.6)
+            w.stop()
+            return w.stalled
+        finally:
+            proc.kill()
+            proc.wait()
+
+    assert watch([DEQ, _turn("end_turn"), _note("quote-check")], "sid-back"), "the reports are back: resumed now"
+    assert not watch([DEQ, _turn("tool_use"), _note("quote-check")], "sid-busy"), "still in a tool call: left alone"
+    assert not watch([DEQ, _turn("end_turn")], "sid-idle"), "nothing queued: left to the long stall"

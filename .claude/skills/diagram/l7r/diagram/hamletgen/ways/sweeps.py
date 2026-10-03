@@ -27,6 +27,7 @@ from .geom import (
     _net_reach,
     _reach,
     end_serves,
+    lane_houses,
     memo_ground,
     polyline_len,
     shadow_share,
@@ -42,13 +43,13 @@ from .route import _route
 # to join two points 77 ft apart, folded back through the windbreak. 2.0 admits a path that goes
 # properly round one steading, which is what the router draws, and still refuses a fold.
 _PATH_DIRECTNESS = 2.0
-"""Research: path directness - research/questions/0081-village-lanes.html: a path up to 2.0 times its chord"""
+"""Research: path directness - UNRESEARCHED: a path up to 2.0 times its chord"""
 
 # A LINK that joins two halves of one settlement may wander further than a door path. Going round a
 # paddy is legitimately indirect, and the thing being bought is the difference between a dozen houses
 # reachable and a dozen houses not.
 _LINK_DIRECTNESS = 4.0
-"""Research: network link directness - research/questions/0081-village-lanes.html: a link up to 4.0 times its chord"""
+"""Research: network link directness - UNRESEARCHED: a link up to 4.0 times its chord"""
 
 _TREAD_TOUCH_FT = 6.0
 """The gap below which two treads are already ONE piece of ink and there is nothing to bridge.
@@ -103,8 +104,10 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     middle; the same shape survives on other maps and is a plain gap in the network.
 
     Research:
-        one way drawn as two is joined - research/questions/0081-village-lanes.drawing.html: a walkable gap in one way is closed
+        one way drawn as two is joined - UNRESEARCHED: a walkable gap in one way is closed, up to `_BREAK_SPAN_FT` within `_BREAK_BEARING_DEG`
         no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists
+        a short gap closed at any bearing - research/questions/0081-village-lanes.drawing.html: ends that nearly meet are joined - a break of `_LANE_JOIN_FT` (30 ft) or less, whatever the two ways' bearings
+        a bridge as direct as a path - UNRESEARCHED: refused where its route runs over `_PATH_DIRECTNESS` (2) times the gap
         bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
         bridge clearance fallback - DEVIATION research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
     made = 0
@@ -451,12 +454,12 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
 
     Research:
         doubled lane dropped - CONVENTION: a lane within 8 ft of another for half its length reads as one band
-        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served
+        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
         web kept one network - research/questions/0081-village-lanes.drawing.html
     """
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
-    centers = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    centers = lane_houses(s.M)  # the houses a remnant may be kept for: a household reached across a yard is owed none (feature 317)
     dropped = 0
     gone: list[int] = []
     for i, ln in enumerate(lanes):
@@ -661,11 +664,12 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
 
     Research:
-        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves
-        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard
-        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)"""
+        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves a way, the field or a house - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
+        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
+        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
+        a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish"""
     lanes = s.M.get("lanes") or []
-    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    owed = lane_houses(s.M)  # the houses an end serves, is kept for or carried to: a household reached across a yard is owed none (feature 317)
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
@@ -690,8 +694,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
         ]
 
-        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:
-            return end_serves(q, _o, houses, ground, steadings)
+        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:  # ...a house it SERVES: never one reached across a yard
+            return end_serves(q, _o, owed, ground, steadings)
 
         _mine = [(float(x), float(y)) for x, y in pts]
         # ...BUT NEVER PAST ANOTHER LANE'S END THAT RESTS ON THIS ONE (269 E4). Pulling an unserving end back takes the
@@ -720,7 +724,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
         # ...AND NEVER AT THE COST OF A HOUSE, the clause every other sweep here carries. Without it this pass drops a lane
         # some farmhouse needs, `generate` re-rolls the whole map to serve it, and the roll costs what the re-roll costs:
         # measured on the reference hamlet, attempt 1 became attempt 3 and its seed went +20.5% (feature 230 pass 11).
-        _served = [h for h in houses if min((seg_dist(h[0], h[1], a, b) for a, b in zip(_mine, _mine[1:], strict=False)), default=float("inf")) <= _SERVE_FT]
+        _served = [h for h in owed if min((seg_dist(h[0], h[1], a, b) for a, b in zip(_mine, _mine[1:], strict=False)), default=float("inf")) <= _SERVE_FT]
         _rest = [
             sg
             for j, o in enumerate(lanes)
@@ -738,7 +742,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             for _e in (-1, 0):
                 if _reaches(pts[_e]):
                     continue
-                _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT, groves=_bands)
+                _q = carry_to_dooryard(pts[_e], owed, steadings, 2.0 * _REACH_FT, groves=_bands)
                 if _q is not None:
                     pts = [*pts, _q] if _e == -1 else [_q, *pts]
             if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"] or not s.reshape_lane(ln, pts):  # ...admitted by the matrix (M8)
@@ -810,7 +814,7 @@ def _sweep_debris(s: Settlement) -> int:
 
     Research:
         isolated fragment dropped - research/questions/0081-village-lanes.drawing.html: one network
-        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served"""
+        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)"""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     live = [i for i in range(len(lanes)) if len(ways[i]) >= 2]
@@ -818,7 +822,7 @@ def _sweep_debris(s: Settlement) -> int:
         return 0
     comp = _components(ways, 4.0)  # the INK standard, as `_smooth_web._pieces` uses - not the gate's 30 ft reach
     alone = {c for c in {comp[i] for i in live} if sum(1 for i in live if comp[i] == c) == 1}
-    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    houses = lane_houses(s.M)  # a household reached across a yard is owed no way of its own (feature 317)
 
     def _near(pt: Pt, segs: Sequence[tuple[Pt, Pt]]) -> float:
         return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))

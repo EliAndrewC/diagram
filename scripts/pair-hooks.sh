@@ -644,7 +644,10 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
 ' 2>/dev/null)"
   [ -n "$key" ] || exit 0
   # a gate ran green against this content, and nothing reviewed it
-  [ "$(read_field "${CLONE_ROOT}/.git/verification-state.json" engine_key)" = "$key" ] || exit 0
+  # GUARD_EDIT_OK: feature 317 - asked of the gate stamp (`gate_green`), as the pretool branch has asked since feature 294:
+  # the verification record is last-event-wins, and a green `make test-file` wrote this content's key, so the stop branch
+  # told a session "the gate went green" when one test file had - and told it a headless page session sharing the clone.
+  gate_green "$key" || exit 0
   review_recorded "$key" && exit 0
   # GUARD_EDIT_OK: feature 248 FR-003 - "a review is pending" no longer keeps the turn open by itself: a running
   # review of map A does not cover map B. The per-map question is asked below, after the waivers.

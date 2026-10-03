@@ -274,3 +274,21 @@ def test_a_z_no_t_mends_is_mended_by_moving_the_joint_back(monkeypatch: pytest.M
     monkeypatch.setattr(J, "_joint_moved_back", lambda s_, lanes, joint, *a: moved.append(joint) or True)
     assert J._one_joint(s, s.M["lanes"], [], [], [], [])  # type: ignore[arg-type]
     assert moved == [(0, -1, 1, 0)], "the Z's joint moved back"
+
+
+def test_two_lanes_meeting_end_to_end_are_never_pulled_into_a_kink(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 317 (seed 47 at 20 households): a corridor hung from another's start at a door, the pair met end to end; pulled
+    taut as one round the map's walls, the run lost the vertex of its bend and kinked at the next - a tree lane no settle may
+    cut. A pull that makes a kink the two did not have is not taken (the walls' pull stood in for by the seed's own result)."""
+    from l7r.diagram.hamletgen.ways import joints as J
+    from l7r.diagram.hamletgen.ways import law
+
+    x = [[657.0, 328.0], [648.0, 420.0]]
+    y = [[648.0, 420.0], [669.0, 446.0], [669.0, 458.0], [657.0, 482.0], [490.0, 473.0]]
+    assert not law.kinks([tuple(p) for p in [*x, *y[1:]]]), "the two as one: no kink"
+    seeds_pull = [(657.0, 328.0), (648.0, 420.0), (669.0, 458.0), (657.0, 482.0), (490.0, 473.0)]
+    assert law.kinks(seeds_pull), "...the seed's pull: a kink"
+    monkeypatch.setattr(J, "pulled", lambda pts, ok: list(seeds_pull))
+    s = _webbed([{"pts": x, "w": 3}, {"pts": y, "w": 3}])
+    straighten_joints(s, [], [], [])
+    assert len(_lanes(s)) == 2 and all(not law.kinks([tuple(p) for p in pts]) for pts in _lanes(s)), "not taken: no kink made"

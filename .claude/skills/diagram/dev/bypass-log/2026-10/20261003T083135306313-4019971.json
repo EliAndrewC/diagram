@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T08:31:35Z",
+  "target": "review-accept",
+  "commit": "4e375737a",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F2: questionable, no gate rule: a lane passing another's end vertex and joining just beyond is main's joint code on the layout the passage moves (sliver_probe.py: unchanged with the feature's joint guard off, main's one with the passage share at 0); put to the GM with the lever the round named"
+}

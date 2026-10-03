@@ -259,7 +259,8 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     it before it admits a corridor.
 
     Research:
-        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: no hook, needle, fold, hairpin, doubled tail or dangling end among its lanes
+        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: no hook, fold, hairpin or dangling end among its lanes
+        no sliver between the tree's lanes - UNRESEARCHED: no needle (`needle_loops`), asked of the tree with its ends joined as the settle joins them (`as_joined`), and no doubled tail
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
         free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house"""
@@ -280,30 +281,9 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     law_.tree = False
     chain = chain_of(recs, host, k)
     whole = [*range(k), k]
-    memo = base.__dict__.setdefault("_tree_squares", {})  # the water does not change while the seating asks
-
-    def square(run: Poly) -> Poly:
-        key = tuple(run)
-        if key not in memo:
-            memo[key] = base.squared(list(run))
-        return list(memo[key])
-
-    # EACH RUN REJOINED AND SQUARED ONCE WHILE THE WATER STANDS (dev/performance.md, shape two): every seat asked re-laid
-    # every reserved run of the tree - `rejoined` tests each leg against every leg of the brook and the channels (312,044
-    # `segments_cross` on seed 44, most of the tree's question) - though a reserved run and the water are the same from one
-    # seat to the next. Remembered by the run's points, and forgotten whenever the water the squaring reads differs.
-    waters = square_waters_of(M)
-    laid = base.__dict__.get("_tree_laid")
-    if laid is None or laid[0] != waters:
-        laid = base.__dict__["_tree_laid"] = (waters, {})
-    done: dict[tuple[Pt, ...], Poly] = laid[1]
 
     def lay(run: Poly) -> Poly:
-        key = tuple(run)
-        hit = done.get(key)
-        if hit is None:
-            hit = done[key] = square(rejoined(run, waters))
-        return list(hit)
+        return laid_run(base, M, run)
 
     for ctx in (whole, [*reversed(chain[1:]), k]):
         lanes = lanes_of(M, recs, host, ctx, drawn=False, laid=lay)
@@ -318,6 +298,12 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             # fault, and a face in a part of the tree is never thinner than the faces the whole tree made of it
             if law.needle_loops({"lanes": lanes}):
                 return False
+            # ...NOR CLOSES ONE ONCE THE WEB JOINS ITS ENDS (feature 317, plan D6): the settle carries a free end that stops
+            # short of a way onto it (`settle.settle_joins`, `law.near_misses`), and on seed 13 at 20 households a corridor's
+            # start 15 ft from another's end was carried onto it and closed a sliver with a third - lawful as judged, refused
+            # as drawn (feature 314 research R12). So the tree is asked again with its ends joined as the web will join them.
+            if law.needle_loops({"lanes": as_joined(_trial(view, lanes=[*lanes, *stub]), lanes)}):
+                return False
             if any(len(ends) > law.DOORSTEP_MAX for ends in law.fronting_ends(_trial(view, lanes=[*lanes, *stub])).values()):
                 return False
             if not way_out_once(M, [lanes_chain(recs, host, lanes, k)]):
@@ -328,6 +314,42 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             if tree_shadows([ln["pts"] for ln in lanes]):
                 return False
     return True
+
+
+def laid_run(base: Any, M: Mapping[str, Any], run: Poly) -> Poly:
+    """`run` as the web lays it - rejoined (`rejoined`) and squared at its water crossings (`base.squared`) - each run once while
+    the water stands.
+
+    EACH RUN REJOINED AND SQUARED ONCE WHILE THE WATER STANDS (dev/performance.md, shape two): every seat asked re-laid every
+    reserved run of the tree - `rejoined` tests each leg against every leg of the brook and the channels (312,044
+    `segments_cross` on seed 44, most of the tree's question) - though a reserved run and the water are the same from one seat
+    to the next. Remembered on `base` by the run's points, and forgotten whenever the water the squaring reads differs."""
+    memo = base.__dict__.setdefault("_tree_squares", {})  # the water does not change while the seating asks
+    waters = square_waters_of(M)
+    laid = base.__dict__.get("_tree_laid")
+    if laid is None or laid[0] != waters:
+        laid = base.__dict__["_tree_laid"] = (waters, {})
+    done: dict[tuple[Pt, ...], Poly] = laid[1]
+    key = tuple(run)
+    hit = done.get(key)
+    if hit is None:
+        joined = rejoined(run, waters)
+        sk = tuple(joined)
+        if sk not in memo:
+            memo[sk] = base.squared(list(joined))
+        hit = done[key] = list(memo[sk])
+    return list(hit)
+
+
+def as_joined(trial: Mapping[str, Any], lanes: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """`lanes` (the first lanes of `trial`) with every end that stops short of a way carried onto it, as the settle carries it
+    (`settle.settle_joins`, which reads `law.near_misses` the same way)."""
+    out = [dict(ln) for ln in lanes]
+    for i, end, f in law.near_misses(trial):
+        if i < len(out):
+            p = [_pt(q) for q in out[i]["pts"]]
+            out[i]["pts"] = [*p, f] if end == -1 else [f, *p]
+    return out
 
 
 def tree_shadows(ways: Sequence[Sequence[Pt]]) -> bool:
@@ -410,15 +432,24 @@ def owed(M: Mapping[str, Any]) -> list[int]:
     the field's where no way reaches the field (`law.field_unreached`) - with every run each hangs from.
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: the corridor of each unreached house
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: the corridor of each unreached house, a household reached across a neighbor's yard counted reached through its neighbor (`unreached_houses`)
+        the way of a household another is reached across - research/questions/0081-village-lanes.drawing.html: its corridor always owed, its own way always drawn (`passage_anchors`)
         field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field's corridor where no way reaches its bund"""
     recs = tree_records(M)
     host = hosts(recs, _strip(M))
-    far = [(float(x), float(y)) for x, y, _d in unreached_houses(M)]
+    # ...AND THE CORRIDOR OF EVERY HOUSE ANOTHER IS REACHED ACROSS (feature 317, `rolling/passage.py`): the walk arrives at that
+    # house's yard and goes on along its way, so its way is drawn however near the lanes its center stands - a glyph-check of
+    # Inashiro found the anchor 90 ft from a lane, its corridor not owed, and the two farmsteads left with no way touching either
+    far = [(float(x), float(y)) for x, y, _d in unreached_houses(M)] + passage_anchors(M)
     want = [i for i, r in enumerate(recs) if r["of"] is not None and any(math.dist(r["of"], c) <= 1.5 for c in far)]
     if law.field_unreached(M):
         want += [i for i, r in enumerate(recs) if r["role"] == FIELD_ROLE]
     return sorted({j for i in want for j in chain_of(recs, host, i)})
+
+
+def passage_anchors(M: Mapping[str, Any]) -> list[Pt]:
+    """Where each household reached across a neighbor's yard is reached from - the neighbors' positions (`reached_across`)."""
+    return [(float(h["reached_across"][0]), float(h["reached_across"][1])) for h in M.get("houses") or [] if h.get("reached_across")]
 
 
 def settle_tree(s: Any) -> int:
@@ -522,9 +553,11 @@ def prune_the_tree(s: Any) -> int:
 
     Research:
         redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs
+        the way of a household another is reached across - research/questions/0081-village-lanes.drawing.html: its corridor never pruned (`passage_anchors`)
         street and door path never pruned - research/questions/0033-row-villages-resson.drawing.html: the way a row's farms are reached by"""
     M = s.M
     lanes = M.get("lanes") or []
+    anchors = passage_anchors(M)  # ...nor the way a household reached across a yard goes on along (feature 317, `owed`)
     order = sorted(
         # ...never a row village's street or a grove farm's own door path (feature 291 FR-017 and FR-019): each is the way its
         # farms are reached by, not a corridor another way stands in for - pruned as one, Mizuguchi's door paths went as
@@ -532,7 +565,13 @@ def prune_the_tree(s: Any) -> int:
         (
             i
             for i, ln in enumerate(lanes)
-            if is_tree(ln) and not ln.get("connector") and not ln.get("street") and not ln.get("serves") and ln.get("role") != STRIP_ROLE and len(ln.get("pts") or []) >= 2
+            if is_tree(ln)
+            and not ln.get("connector")
+            and not ln.get("street")
+            and not ln.get("serves")
+            and ln.get("role") != STRIP_ROLE
+            and len(ln.get("pts") or []) >= 2
+            and not (ln.get("of") and any(math.dist(_pt(ln["of"]), a) <= 1.5 for a in anchors))
         ),
         key=lambda i: -polyline_len(law.lane_pts(lanes[i])),
     )
@@ -700,10 +739,36 @@ def records_of(geom: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any] 
 
 def seating_judge(s: Any) -> Any:
     """The tree's question (`admits`) as the seating asks it of a house's corridor (`access.tree_admits`), installed on the
-    settlement as `_corridor_tree` - the settlement package cannot import the hamlet generator."""
+    settlement as `_corridor_tree` - the settlement package cannot import the hamlet generator.
+
+    Research: a corridor judged as the web will lay it - research/questions/0081-village-lanes.drawing.html: refused where its squared run crosses its own household's house, beds, sheds or fixtures (`own_clear`), nothing built on a lane
+    """
 
     def judge(corridor: Sequence[Pt], geom: Mapping[str, Any]) -> bool:
         house, yard = records_of(geom)
-        return admits(seating_law(s), s.M, [_pt(q) for q in corridor], ACCESS_ROLE, house, yard)
+        base, run = seating_law(s), [_pt(q) for q in corridor]
+        # ...AND THE HOUSEHOLD'S OWN HOUSE, BEDS AND FIXTURES CLEAR OF IT AS THE WEB WILL LAY IT (feature 317): squaring a water
+        # crossing re-lays the approach (`laid_run`), and on cohort seed 18 at 15 households it took a routed path's bend out
+        # and ran the lane across the household's own privy - asked of the path as found, never of the path as drawn, since
+        # the household's parts are not yet on the manifest the tree reads (`OverlapRefused`, lanes over farm_fixtures).
+        drawn = laid_run(base, s.M, run)
+        if drawn != run and not own_clear(s, drawn, geom):
+            return False
+        return admits(base, s.M, run, ACCESS_ROLE, house, yard)
 
     return judge
+
+
+def own_clear(s: Any, run: Poly, geom: Mapping[str, Any]) -> bool:
+    """Does every leg of `run` clear the household's own house, beds, sheds and fixtures, by the corridor's own leg tests
+    (`access.house_clear`, `fixtures_clear`, `parts_clear`) - the leg onto the tree passing unasked where it has no length?
+
+    Research: a lane clear of its own household - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; a path routed round its own beds and fixtures, at the corridor's own leg gaps
+    """
+    from l7r.diagram.settlement.rolling import access as A
+
+    hgap, last = A.house_gap(s), len(run) - 2
+    return all(
+        (n == last and math.dist(a, b) < 1e-6) or (A.house_clear(a, b, geom, hgap) and A.fixtures_clear(s, a, b, geom) and A.parts_clear(s, a, b, geom))
+        for n, (a, b) in enumerate(zip(run, run[1:], strict=False))
+    )

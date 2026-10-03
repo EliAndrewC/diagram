@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T145740Z"
+  },
+  "binding": "f607c6ea71637357a98d2ae1afbe3d9f216e5c533e7e80dfd8740534a8e87e26",
+  "end": {
+    "commit": "e9cd4717a",
+    "label": "317-end",
+    "utc": "20261003T150117Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "GM",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T153448Z"
+  },
+  "kind": "signoff",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -5.9,
+          "4": 0.0,
+          "47": 17.9
+        },
+        "total_pct": 2.3
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": -13.6,
+          "4": -7.8,
+          "47": 11.1
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 16.0,
+          "39": 11.6,
+          "4": -4.6,
+          "47": 34.1
+        },
+        "total_pct": 12.3
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -17.0,
+      "4": 2.0,
+      "47": -10.9
+    },
+    "total_pct": -6.7
+  },
+  "note": "the GM, 2026-10-03, in this session: 'Okay, let's sign off on that in order to allow it to land on main. So you can go ahead and mark that' and 'you can definitely do this for me' (recorded by the session with the terminal test overridden, as the GM authorized and as feature 287's sign-off was) - band 3 at 40 households (total +12.3%, seed 47 +34.1%), explained (perf-317-control-40d), confirmed consistent and audited justified; the throw-out-and-relay of a margin that runs out of room is to be a separate feature",
+  "verdict": "signed"
+}

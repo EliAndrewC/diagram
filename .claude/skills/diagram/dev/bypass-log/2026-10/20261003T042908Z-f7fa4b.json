@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T04:29:08Z",
+  "target": "record-checked",
+  "commit": "d522bc76d",
+  "why": "source-reader on source-reader:0081#village-lanes-7: village-lanes-7 is an absence note whose only change is the word general; it cites no page, so a source-reader has nothing to read"
+}

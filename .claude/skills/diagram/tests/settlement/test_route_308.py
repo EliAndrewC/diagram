@@ -109,12 +109,12 @@ def test_a_grid_point_on_taken_ground_or_by_a_reserved_seat_is_shut() -> None:
     s._access.routed = True
     s._free_ground = Ground()  # type: ignore[assignment]
     s._wood = Wood()  # type: ignore[assignment]
-    own = geom["boxes"]["house"]
+    mine = route.own_parts(s, geom, geom["boxes"]["house"], access.house_gap(s), s._access.half)
     run = route._route_from(
         s,
         s._access,
         access.doors_of(geom, s._access.half)[0],
-        own,
+        mine,
         None,
         s._access.half,
         access.house_gap(s),
@@ -155,3 +155,66 @@ def test_a_routes_last_leg_onto_the_tree_is_judged_where_it_is_searched(monkeypa
     real = access.standing_ground
     monkeypatch.setattr(access, "standing_ground", lambda s_, a, b, memo: abs(b[1] - 450.0) > 1e-6 and real(s_, a, b, memo))
     assert access_corridor(s, geom) is None, "every last leg onto the tree refused: no goal"
+
+
+def test_the_route_keeps_off_the_household_s_own_parts_each_by_its_leg_test_s_gap() -> None:
+    """Feature 317 T06: the house by the house gap, the shed, byre, well and beds by the parts' gap, the fixtures by a corridor's
+    half-width - but not the persimmon, held by the door since feature 315: the taut pull keeps the legs off its trunk."""
+    s = _open()
+    geom = {
+        "house": (0.0, 0.0, 40.0, 20.0),
+        "boxes": {"shed": (50.0, 0.0, 10.0, 10.0), "gardens": [(0.0, 60.0, 30.0, 20.0)], "fixtures": {"privy": (80.0, 0.0, 6.0, 6.0), "persimmon": (90.0, 40.0, 30.0, 30.0)}},
+    }
+    got = route.own_parts(s, geom, geom["house"], 12.0, 7.0)
+    pgap = s.px(access.TREAD_HALF_FT + access.PART_MARGIN_FT)
+    assert got[0] == ((0.0, 0.0, 40.0, 20.0), 12.0), "the house first, by the house gap"
+    assert ((50.0, 0.0, 10.0, 10.0), pgap) in got and ((0.0, 60.0, 30.0, 20.0), pgap) in got, "the shed and the bed by the parts' gap"
+    assert ((80.0, 0.0, 6.0, 6.0), 7.0) in got, "fixtures by the half-width"
+    assert all(b[:2] != (90.0, 40.0) for b, _g in got), "...the persimmon left to the taut pull"
+    assert len(got) == 4, "no byre or well, and the persimmon: none listed"
+
+
+def test_a_seat_s_layouts_share_its_route_round_the_house(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 317 (T06 withdrawn, research R8): the route keeps off the house alone and is searched once for a seat's house and
+    yard - two garden layouts of it share the search, each taking the route only where its own beds leave it clear."""
+    monkeypatch.setattr(access, "parts_clear", lambda *a: True)
+    s = _open()
+    geom = _hemmed(s)
+    s._access.routed = True
+    other = {**geom, "boxes": {**geom["boxes"], "gardens": [(760.0, 760.0, 20.0, 20.0)]}}
+    calls: list[int] = []
+    real = route._route_from
+    monkeypatch.setattr(route, "_route_from", lambda *a: calls.append(1) or real(*a))
+    list(route.routed_corridors(s, s._access, geom))
+    assert len(calls) == 2, "the two dooryard doors"
+    list(route.routed_corridors(s, s._access, other))
+    assert len(calls) == 2, "...and the other layout shares them"
+
+
+def test_a_routed_path_the_tree_will_not_take_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 317 T06: a routed path is admitted as every candidate is (`admitted`) - here the lane law over the tree refuses it."""
+    monkeypatch.setattr(access, "parts_clear", lambda *a: True)
+    monkeypatch.setattr(access, "tree_admits", lambda *a: False)
+    s = _open()
+    geom = _hemmed(s)
+    s._access.routed = True
+    assert next(route.routed_corridors(s, s._access, geom), None) is not None, "a route is found"
+    assert access_corridor(s, geom) is None, "...and refused by the tree"
+
+
+def test_a_door_with_no_branch_of_the_tree_in_reach_is_not_searched(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`route.tree_in_reach` (feature 317, research R10): a segment whose box overlaps the door's square of reach counts, one
+    wholly outside it does not; and `_route_from` returns None without searching where none does."""
+    segs = [((500.0, 100.0), (500.0, 200.0))]
+    assert route.tree_in_reach(segs, (400.0, 150.0), 120.0), "the segment's box within reach"
+    assert route.tree_in_reach(segs, (650.0, 150.0), 150.0), "on the square's edge counts"
+    assert not route.tree_in_reach(segs, (700.0, 150.0), 150.0) and not route.tree_in_reach([], (0.0, 0.0), 1e9)
+    s = Settlement(1400.0, 1400.0, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    tree = start_tree(s, (600.0, 450.0), (1.0, 0.0), 100.0)
+    asked: list[int] = []
+    monkeypatch.setattr(route, "_cells_to_tree", lambda *a: asked.append(1) or None)
+    far = (600.0 + route.ROUTE_REACH_PX + 200.0, 1300.0)
+    assert route._route_from(s, tree, far, [], None, 7.0, 4.0, None, None, None, route.ROUTE_STEP_PX, lambda a, b: True, {}) is None and not asked
+    near = (650.0, 520.0)
+    assert route._route_from(s, tree, near, [], None, 7.0, 4.0, None, None, None, route.ROUTE_STEP_PX, lambda a, b: True, {}) is None and asked == [1]

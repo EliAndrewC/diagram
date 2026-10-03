@@ -244,3 +244,102 @@ def test_a_moved_box_keeps_the_growths_distance_from_its_source_or_is_refused() 
     assert not keeps_its_distance((35.0, 0.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0), "15: moved too near"
     assert keeps_its_distance((0.0, 56.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0), "south, past the sun's reach"
     assert keeps_its_distance((-36.0, 0.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0) and keeps_its_distance((0.0, -36.0, 20.0, 20.0), (0.0, 0.0), standing, 16.0)
+
+
+class _Tight(_Ground):
+    """The stand-in placer, each seated household reached by a corridor and given a yard, recording the tight seat's word."""
+
+    def __init__(self, room: float) -> None:
+        super().__init__(room)
+        self.told: list[Any] = []
+
+    def _bundle_envelope(self, x: float, y: float, w: float, h: float, shed: bool = False) -> tuple[float, float, float, float]:
+        return (x, y, 120.0, 120.0)  # a homestead's envelope at the engine's scale: a tight seat stands past half a pitch
+
+    def try_place(self, x: float, y: float, _kind: str) -> bool:
+        told = getattr(self, "_tight_of", None)
+        self.told.append(told)
+        ok = super().try_place(x, y, _kind)
+        if ok:
+            self.M["houses"][-1]["geom"].update(access=((x, y), (x, y - 50.0)), boxes={"yard": (x, y + 10.0, 20.0, 10.0)})
+            if told is not None:
+                self._passage_left -= 1  # type: ignore[attr-defined]  # a passage spends the share, as the placer's record does
+        return ok
+
+
+def test_while_the_share_has_room_each_reached_house_offers_tight_seats_against_its_land(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 317, plan D2: a tight seat parts the two footprints by `TIGHT_GAP_PX` alone, and the household offered it is told
+    its neighbor, the neighbor's land, its own allotted reach and the parting; none is offered with the share spent."""
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Tight(room=30.0)
+    s._passage_left = 1  # type: ignore[attr-defined]
+    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    told = [t for t in s.told if t is not None]
+    assert told, "tight seats offered"
+    t = told[0]
+    nb = t["rec"]  # the standing house whose yard-side seat was offered first
+    assert any(nb is h for h in s.M["houses"])
+    assert t["gap"] == growth.TIGHT_GAP_PX and t["land"] == growth.land_box((nb["x"], nb["y"]), footprint(s, nb))
+    assert t["own"] == (60.0, 60.0, 60.0, 60.0), "its own land: the reach the seat was parted by"
+    assert getattr(s, "_tight_of", None) is None, "...and forgotten after"
+    assert sum(t is not None for t in s.told) == 1, "the share of one spent, the tight seats still queued are passed over"
+    spent = _Tight(room=30.0)
+    spent._passage_left = 0  # type: ignore[attr-defined]
+    grow_the_margin(spent, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    assert all(t is None for t in spent.told), "the share spent: no tight seat"
+
+
+def test_a_house_no_passage_may_cross_to_offers_no_tight_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Ground(room=30.0)  # seats households with no corridor and no yard
+    s._passage_left = 1  # type: ignore[attr-defined]
+    asked: list[Any] = []
+    real = s.try_place
+    s.try_place = lambda x, y, k: asked.append(getattr(s, "_tight_of", None)) or real(x, y, k)  # type: ignore[method-assign]
+    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    assert asked and all(t is None for t in asked)
+
+
+def test_the_seat_s_allotted_reach_is_the_one_it_was_parted_by() -> None:
+    from l7r.diagram.hamletgen.homesteads.growth import settled_seat
+
+    standing, guess, big = (10.0, 10.0, 10.0, 10.0), (5.0, 5.0, 5.0, 5.0), (9.0, 9.0, 9.0, 9.0)
+    rolls = iter([big, (8.0, 8.0, 8.0, 8.0)])
+    lot: list[Any] = []
+    assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, lambda q: next(rolls), None, lot) is not None
+    assert lot == [big], "moved out to the union, and parted by it - not by the smaller reach rolled at the last seat"
+    assert growth.land_box((0.0, 0.0), (10.0, 20.0, 5.0, 15.0)) == (5.0, 5.0, 30.0, 20.0)
+
+
+def test_a_tight_seat_stands_on_its_neighbor_s_yard_side() -> None:
+    """Feature 317 (`TIGHT_BEARING_DEG`): on the side of the house its yard lies on, as the drawing page places such a
+    household - within 90 degrees of the bearing to the yard, never past the perpendicular or behind the house."""
+    center, yard = (0.0, 0.0), (0.0, 10.0)  # the yard to the south (screen axes)
+    assert growth.yard_side(center, yard, math.pi / 2), "toward the yard"
+    off = math.radians(80.0)
+    assert growth.yard_side(center, yard, math.pi / 2 - off) and growth.yard_side(center, yard, math.pi / 2 + off), "80 degrees off: the yard's side"
+    off = math.radians(100.0)
+    assert not growth.yard_side(center, yard, math.pi / 2 - off) and not growth.yard_side(center, yard, math.pi / 2 + off), "100 degrees off: past it"
+    assert not growth.yard_side(center, yard, -math.pi / 2), "behind the house"
+
+
+def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Tight(room=30.0)
+    s._passage_left = 1  # type: ignore[attr-defined]
+    seats: list[tuple[float, float]] = []
+    real = s.try_place
+    s.try_place = lambda x, y, k: (seats.append((x, y)) if getattr(s, "_tight_of", None) is not None else None) or real(x, y, k)  # type: ignore[method-assign]
+    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    assert seats and all(y > -1e-6 for _x, y in seats), "the first house's yard lies south: no tight seat north of it"
+
+
+def test_a_tight_seat_by_a_way_is_no_tight_seat() -> None:
+    """Feature 317 (`TIGHT_TREE_FT`): a household that near the access tree has a way of its own - the custom's condition fails."""
+    tree = SimpleNamespace(targets=lambda p: [(p[0] + 79.0, p[1])])
+    s = SimpleNamespace(px=lambda ft: ft, _access=tree)
+    assert growth.near_the_tree(s, (0.0, 0.0))
+    s._access = SimpleNamespace(targets=lambda p: [(p[0] + 81.0, p[1])])
+    assert not growth.near_the_tree(s, (0.0, 0.0))
+    assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft, _access=SimpleNamespace(targets=lambda p: [])), (0.0, 0.0)), "no tree point"
+    assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft), (0.0, 0.0)), "no tree"

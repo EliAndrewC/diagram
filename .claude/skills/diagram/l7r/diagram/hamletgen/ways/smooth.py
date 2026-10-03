@@ -15,7 +15,7 @@ from ..consts import (
     Pt,
 )
 from .clearance import _ARM_FT, _HAIRPIN_DEG, _clear_link, _clear_touch, bowtie_cut
-from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, polyline_len
+from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, lane_houses, polyline_len
 from .sweeps import _SERVE_FT
 
 _STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little past _LANE_JOIN_FT from the run it left (T99 unlock, seed 37)
@@ -180,7 +180,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
 
     Research:
         lane pulled taut - research/questions/0081-village-lanes.drawing.html: string-pulled to the furthest vertex a clear chord reaches
-        hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses its shorter arm
+        hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses a returning arm under 40 ft
+        a longer hairpin arm - UNRESEARCHED: an arm of 40 to 90 ft (`_LONG_ARM_FT`) cut only where no farmhouse loses its only way by it (a household reached across a neighbor's land owed none, `geom.lane_houses`); a longer one kept as a lane
         bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
@@ -215,6 +216,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         return any(seg_dist(q[0], q[1], a, b) <= 4.0 for a, b in segs)
 
     _houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    _owed = lane_houses(s.M)  # ...and the ones an arm may be kept for: a household reached across a yard is owed none (feature 317)
 
     def _near_segs(pt: Pt, segs: Sequence[tuple[Pt, Pt]]) -> float:
         return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
@@ -232,7 +234,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
             return False
         arm_segs = list(zip(arm, arm[1:], strict=False))
         kept_segs = list(zip(kept, kept[1:], strict=False)) + list(others)
-        if any(_near_segs(h, arm_segs) <= _SERVE_FT < _near_segs(h, kept_segs) for h in _houses):
+        if any(_near_segs(h, arm_segs) <= _SERVE_FT < _near_segs(h, kept_segs) for h in _owed):
             return False
         return _near_segs(tip, others) <= _END_WAY_FT or min((math.dist(tip, h) for h in _houses), default=float("inf")) <= _END_HOUSE_FT
 

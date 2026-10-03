@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T134454Z"
+  },
+  "binding": "7608a0239c5c73dd82717962687e62d2d16eae43d497b86425add06f2b299283",
+  "criteria": {
+    "commensurate": "Not shown. Most of the cost is what the two causes do together, not the work either one does. At 40 hh seed 47 (outside the band) homesteads goes from 3.9 s to 21.1-21.7 s, and the seating chosen gets worse: margin 1 seats 33 and margin 2 seats 38, both thrown away (11.9 s), and the map kept sits on the third-ranked margin rather than main's first; that third seating alone takes 8.3 s. Inside the band the cost is small in seconds but large in percent: 20:25 homesteads 1.10-1.17 -> 1.79-1.85 s and notice 0.11 -> 0.77 s; 20:47 homesteads 1.24-1.27 -> 1.70-1.79 s. Whether five passages on a map moved two margins down are worth 17 s is a design question for the GM, and the data cannot answer it.",
+    "necessary": "Yes for both causes, separately. The wood-seat fix (wood_share.copse_keepouts gains the afternoon lane, west_ft) corrects a defect: reserved seats the copse never planted, 16-34 a shipped hamlet, red gate test_wood_shares_planted.py before (research R10). The passage (rolling/passage.py, feature 317) is the GM's request. Either one alone costs little at 40 hh seed 47: homesteads 4.98-5.32 s with the passage only and 4.18-4.23 s with the fix only, against main's 3.85-4.04 s.",
+    "no_way_around": "Open. The route prefilter (35 -> 20 s, SC-007 byte-identical) and the shared map that was measured and not built answer the cost of a single search. They do not answer the thrown-away margins. The profile (seed 47, 40 hh, clone): grow_the_margin 46.4 of 52.7 s profiled, of which access_corridor 24.9 s and route.routed_corridors 16.0 s across 509 failed searches. An untested cheaper form: when a margin falls short with passages spent, seat the SAME margin again with a smaller passage budget before moving down the ladder. Both single-cause arms seat 40 on margin 1 in 4.2-5.3 s, so this would likely keep margin 1 and cost about 5 s, but it changes the map (fewer passages, margin 1 instead of 3). To settle it: build that arm and measure seed 47 and 25 at 40 hh and the 20-hh cells, and get the GM's ruling on whether margin 1 with fewer passages is the wanted behavior. Separately, the notice stage's passage-driven growth (place_kosatsuba _route_seats, 0.11 -> 0.77 s at 20:25) has not been examined."
+  },
+  "end": {
+    "commit": "ac8af8f80",
+    "label": "317-end",
+    "utc": "20261003T134829Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T140356Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -3.3,
+          "4": 0.0,
+          "47": 11.5
+        },
+        "total_pct": 1.7
+      },
+      "20": {
+        "seeds": {
+          "25": 23.3,
+          "39": -10.2,
+          "4": -11.3,
+          "47": 16.7
+        },
+        "total_pct": 3.4
+      },
+      "40": {
+        "seeds": {
+          "25": 16.7,
+          "39": 11.0,
+          "4": -5.0,
+          "47": 134.7
+        },
+        "total_pct": 35.4
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -14.3,
+      "4": 8.7,
+      "47": -8.0
+    },
+    "total_pct": -3.4
+  },
+  "note": "Explanation recorded INCONSISTENT in the same review (20261003T140343Z confirmation): three margins rather than one, the margin move, and the notice stage left out. Band 3 also needs the GM's make perf-signoff, which this agent cannot grant.",
+  "verdict": "cannot-determine"
+}

@@ -18,7 +18,7 @@ share: planted, they draw `households x floor` of copse whatever the belt draws.
 WHAT THE KEEP-OUTS ARE. A seat is refused where the copse's own planting (`village_grove`, `dense=False`) would refuse
 its clump: the occupancy disc of a house, yard, garden bed, byre, kura or retirement house (half its diagonal, plus the
 clump's radius and 2 px), a wellhead's (its drawn half-size, plus 1.05 clumps and 1 px), the sunny strip south of every
-yard and bed and the morning lane east of every bed, and the crop (12 px plus the clump's radius), the dry plots (12),
+yard and bed, the morning lane east of every bed and the afternoon lane west of every yard and bed, and the crop (12 px plus the clump's radius), the dry plots (12),
 the dike and the marsh, open water (its half-width plus the clump's radius). The figures are `village_grove`'s; the
 placer holds them `BAR_MARGIN_PX` stricter, the placer-stricter-by-a-hair rule the sun corridor keeps (`_sun_corridor_ok`),
 because the planting reads the drawn records and the seat reads the parts they are drawn from.
@@ -80,18 +80,21 @@ EAST_LANE_PX = 24.0
 """Research: bed's morning lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 24 px east of a bed"""
 
 
-def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
+def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float, west_ft: float = 0.0) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
     """The copse keep-outs of one homestead's parts, as `(circles, rects)`: the discs a clump's center may not enter and
     the open rectangles it may not stand in, each `village_grove`'s own figure (see the module's note) grown by
     `BAR_MARGIN_PX`. `parts` holds `(cx, cy, w, h)` rects - the unturned size at the drawn center, as a record is: `house`,
     `yard`, `gardens` (a list), `shed`, `byre`, `retirement` and `well` (the pocket; `well_vr` its drawn half-size).
+    `west_ft` is the afternoon lane west of every yard and bed where the map declares one (`west_sun_lane`), 0 where none.
 
     Research:
         clump beside, never on, a building - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             half the diagonal plus the clump's radius and 2 px
         copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
-        plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: south of each yard and bed,
-            east of each bed
+        plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse's own SEAT keep-outs
+            (`village_grove`): south of each yard and bed at the map's sun depth, 24 px east of each bed, and west and southwest
+            of each yard and bed at the map's afternoon lane; the page's 50 ft round every crown is held at the planting
+            (`_sun_keepouts`)
     """
     cr, m = clump / 2.0, BAR_MARGIN_PX
     circles: list[tuple[float, float, float]] = []
@@ -110,6 +113,13 @@ def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, wel
     for g in parts.get("gardens") or ():  # ...and the morning lane east of a bed
         east, half = g[0] + g[2] / 2.0, g[3] / 2.0 + cr + 2.0
         rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_PX + cr + m, g[1] + half + m))
+    # ...AND THE AFTERNOON LANE WEST AND SOUTHWEST OF A YARD OR A BED, where the map declares one (feature 310 put it on the copse,
+    # `village_grove`'s `west`, and not here: a seat reserved in it was never planted - the shipped hamlets lost 16-34 seats
+    # each, and on Inashiro a neighbor's path routed round two of them bulged 27 ft round bare scrub; feature 317)
+    for r in [parts.get("yard"), *(parts.get("gardens") or ())] if west_ft > 0.0 else ():
+        if r is not None:
+            wx0, wy0, wy1 = r[0] - r[2] / 2.0, r[1] - r[3] / 2.0, r[1] + r[3] / 2.0
+            rects.append((wx0 - west_ft - cr - 3.0 - m, wy0 - cr - 1.0 - m, wx0 + cr + 1.0 + m, wy1 + west_ft + cr + 1.0 + m))
     return circles, rects
 
 
@@ -231,10 +241,13 @@ class WoodShares:
         """The reservations' state for one seating.
 
         Research:
-            sun strip default - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 22 ft where the map
-                declares none
+            sun strip default - NONE: copies `village_grove`'s own `_sun_depth` (22 px where the map declares no sun corridor), so
+                the reservation keeps what the planting keeps; the strip itself is judged at `copse_keepouts`
+            afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
+                `west_sun_lane`, none where it declares none
             seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
         """
+        self.params = (floor_ft2, reach_ft, corridor_half)  # ...kept for a state rebuilt without one household (`without`)
         self.clump = COPSE_CLUMP_BS * s.bscale
         self.cr = round(self.clump / 2.0, 1)  # the radius the planted copse records and `wood_canopy` counts at
         self.pitch = SEAT_PITCH_BS * s.bscale
@@ -242,6 +255,7 @@ class WoodShares:
         self.reach = s.px(reach_ft)
         self.cell = 2.0 * s.bscale  # `wood_canopy`'s raster
         self.sun_depth = float(getattr(s, "_sun_corridor_ft", 22.0))
+        self.west_ft = float(getattr(s, "_west_sun_ft", 0.0))  # the afternoon lane, where the map declares one (`west_sun_lane`)
         self.well_vr = float(s._well_vr())
         # a clump keeps its crown off a lane's tread (`village_grove`'s corridor buffer); a corridor's way runs anywhere in
         # its strip, so a seat keeps the strip's half plus that buffer off the corridor's line - the buffer the copse plants
@@ -270,7 +284,7 @@ class WoodShares:
             self.file([(float(x), float(y), 0.5 * math.hypot(bw, bh) + self.clump / 2.0 + 2.0 + BAR_MARGIN_PX)], [])
 
     def keepouts(self, geom: Mapping[str, Any]) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
-        return copse_keepouts(bundle_parts(geom), self.clump, self.sun_depth, self.well_vr)
+        return copse_keepouts(bundle_parts(geom), self.clump, self.sun_depth, self.well_vr, self.west_ft)
 
     def seat_barred(self, x: float, y: float, house: Pt, own: tuple[Any, Any], corridors: Sequence[tuple[Pt, Pt]], banks: Sequence[tuple[Pt, Pt]] | None = None) -> bool:
         """THE ONE PREDICATE of a reserved seat: may the copse stand a clump at (x, y) for the house at `house`, among its own
@@ -385,6 +399,21 @@ class WoodShares:
         """File keep-outs every later seat is read against."""
         self.bars.extend([("c", cx, cy, r, cx - r, cy - r, cx + r, cy + r) for cx, cy, r in circles])
         self.bars.extend([("r", x0, y0, x1, y1, x0, y0, x1, y1) for x0, y0, x1, y1 in rects])
+
+    def without(self, s: Settlement, rec: Mapping[str, Any]) -> WoodShares:
+        """The reservations as they would stand had `rec` never been admitted: a fresh state, every other household with a
+        share filed again from its record (`wood_share`) - for a household re-laid once the seating is done
+        (`passage.recheck_passages`), whose old keep-outs and seats must not refuse its new layout.
+
+        Research: reservations plumbing - NONE: the same filing, `rec` left out
+        """
+        fresh = WoodShares(s, *self.params)
+        for h in s.M.get("houses") or []:
+            share = h.get("wood_share")
+            if h is rec or not share or not h.get("geom"):
+                continue
+            fresh.commit(h["geom"], [(float(p[0]), float(p[1])) for p in share.get("seats") or ()])
+        return fresh
 
     def commit(self, geom: Mapping[str, Any], seats: Sequence[tuple[float, float]]) -> float:
         """File an admitted homestead: its keep-outs, its seats and their crowns. Returns the ground the seats cover (px^2)."""

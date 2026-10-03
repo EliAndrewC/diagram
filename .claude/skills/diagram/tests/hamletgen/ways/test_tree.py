@@ -374,3 +374,56 @@ def test_an_ordinary_lane_whose_drop_leaves_only_reserved_houses_unreached_is_le
     assert not tree.left_to_the_tree(_tree(lanes=[con, x, {"pts": [[0.0, -5.0], [-400.0, -5.0]], "w": 3}]), 2), "nothing left to the tree"
     apart = [con, {"pts": [[500.0, 900.0], [600.0, 900.0]], "w": 3}, {"pts": [[600.0, 900.0], [700.0, 900.0]], "w": 3}, {"pts": [[700.0, 900.0], [800.0, 900.0]], "w": 3}]
     assert not tree.left_to_the_tree(_tree(lanes=apart), 2), "it splits a piece off the connector's network in two"
+
+
+def test_the_tree_is_asked_again_with_its_ends_joined_as_the_web_joins_them() -> None:
+    """Feature 317, plan D6: a free end that stops short of a way it makes for is carried onto it (`law.near_misses`, as the
+    settle's `settle_joins` carries it) - feature 314 R12's corridor start, 15 ft from another's end, closed a sliver once
+    joined - so `admits` asks the needle of the joined tree too."""
+    lanes = [{"pts": [[0.0, 0.0], [300.0, 0.0]], "w": 3.0}, {"pts": [[150.0, 60.0], [110.0, 12.0]], "w": 3.0}]
+    trial = {"meta": dict(_GEN), "lanes": lanes, "houses": []}
+    joined = tree.as_joined(trial, lanes)
+    assert [list(q) for q in joined[0]["pts"]] == lanes[0]["pts"], "a lane whose ends make for no way is left as it was"
+    assert len(joined[1]["pts"]) == 3 and abs(joined[1]["pts"][-1][1]) < 1e-6, "the end carried onto the way it made for"
+    assert lanes[1]["pts"] == [[150.0, 60.0], [110.0, 12.0]], "the trial's own lanes untouched"
+
+
+def test_a_corridor_whose_joined_tree_closes_a_sliver_is_refused(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 317, plan D6: lawful as laid, but a sliver once the web joins the ends - refused at seating."""
+    M = _tree()
+    ok = _law(M)
+    house = _house(100.0, 100.0)
+    assert tree.admits(ok, M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "lawful as laid and as joined"
+    real = law.needle_loops
+    monkeypatch.setattr(tree, "as_joined", lambda trial, lanes: [{**ln, "joined": True} for ln in lanes])
+    monkeypatch.setattr(law, "needle_loops", lambda M_: ["sliver"] if any(ln.get("joined") for ln in M_["lanes"]) else real(M_))
+    assert not tree.admits(_law(M), M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "a sliver only once joined: refused"
+
+
+def test_a_corridor_whose_drawn_form_crosses_its_own_fixture_is_refused(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 317 (cohort seed 18 at 15 households): squaring a water crossing re-lays a run's approach (`laid_run`), and a
+    routed path's bend taken out ran the lane across the household's own privy. The seating judge asks the household's own
+    house, beds and fixtures of the run as it will be drawn, where that differs from the run found (`own_clear`)."""
+    s = types.SimpleNamespace(M=_tree(), px=lambda ft: ft, _access=types.SimpleNamespace(half=7.0))
+    geom = {"house": (100.0, 100.0, 40.0, 28.0), "yard": (100.0, 60.0, 30.0, 20.0), "turn": 180.0, "boxes": {"fixtures": {"privy": (130.0, 30.0, 10.0, 10.0)}}}
+    found = [(100.0, 48.0), (100.0, 20.0), (100.0, 0.0)]
+    assert tree.own_clear(s, found, geom), "the path as found keeps off the privy"
+    across = [(100.0, 48.0), (140.0, 20.0), (140.0, 0.0)]
+    assert not tree.own_clear(s, across, geom), "...a leg through it does not"
+    assert tree.own_clear(s, [(100.0, 48.0), (100.0, 0.0), (100.0, 0.0)], geom), "a last leg of no length passes unasked"
+    judge = tree.seating_judge(s)
+    assert judge(found, geom), "drawn as found: judged by the tree alone"
+    monkeypatch.setattr(tree, "laid_run", lambda base, M, run: across)
+    assert not judge(found, geom), "drawn across its own privy: refused"
+
+
+def test_a_house_another_is_reached_across_is_owed_its_way_and_never_pruned_of_it() -> None:
+    """Feature 317 (Inashiro's glyph-check F1): the walk of a household reached across a neighbor's yard goes on along the
+    neighbor's way, so the neighbor's corridor is owed however near the lanes its center stands, and never pruned."""
+    M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
+    M["lanes"] += [{"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "role": STRIP_ROLE}, {"pts": [[0.0, 0.0], [260.0, 60.0]], "w": 3}]
+    assert tree.owed(M) == [], "the house is reached by an ordinary lane: its corridor is not owed"
+    M["houses"].append({**_house(300.0, 400.0), "reached_across": [300.0, 100.0], "passage_depth": 1})
+    assert tree.passage_anchors(M) == [(300.0, 100.0)] and tree.owed(M) == [0], "...until another household is reached across it"
+    M["lanes"].append({"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [300.0, 100.0]})
+    assert tree.prune_the_tree(_S(M)) == 0 and any(ln.get("role") == ACCESS_ROLE for ln in M["lanes"]), "its way is not pruned"

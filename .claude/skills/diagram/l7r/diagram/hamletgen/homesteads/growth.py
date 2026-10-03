@@ -43,6 +43,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT
 from l7r.diagram.settlement.rolling.fit import within_field_reach
 from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done
+from l7r.diagram.settlement.rolling.passage import crossable, passages_spent
 
 from ..consts import SUN_CORRIDOR_FT, Pt
 from .capacity import DRY_SPELL, _near_a_house, free_seats, offer_seats
@@ -127,11 +128,12 @@ def union(a: Reach, b: Reach) -> Reach:
     return max(a[0], b[0]), max(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])
 
 
-def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: float, scale: float, reach_at: Any, refused: Any = None) -> Pt | None:
+def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: float, scale: float, reach_at: Any, refused: Any = None, allotted: list[Reach] | None = None) -> Pt | None:
     """The seat along `angle` from `center`, `scale` times its least distance, where the new homestead - its reach rolled AT
     THE SEAT (`reach_at`) - clears the standing one (FR-004's "never closer"): from `guess`, moved out while the reach rolled
     there exceeds the reach it was placed for, each move to the union of the two; None after `SETTLE_TRIES` moves, or as soon
-    as a seat it would roll at is one `refused` refuses (feature 314: the ground is asked before the layout)."""
+    as a seat it would roll at is one `refused` refuses (feature 314: the ground is asked before the layout). `allotted`, where
+    given, is set to the reach the seat was parted by - the household's land as the growth allots it (feature 317)."""
     new = guess
     for _ in range(SETTLE_TRIES):
         base = seat_toward(center, standing, new, angle, gap)
@@ -140,6 +142,8 @@ def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: f
             return None
         got = reach_at(q)
         if all(g <= n + 1e-9 for g, n in zip(got, new, strict=True)):
+            if allotted is not None:
+                allotted[:] = [new]
             return q
         new = union(got, new)
     return None
@@ -194,12 +198,71 @@ def next_house(s: Settlement, largest: tuple[float, float]) -> tuple[float, floa
 
 
 def grow_gap(s: Settlement) -> float:
-    """The room left between two footprints: a path's whole reserved strip (2 x `ACCESS_HALF_FT`) and 2 px - the PATH OUT the
-    GM's footprint includes (plan review round 1).
+    """The room left between two footprints: a path's whole reserved strip (2 x `ACCESS_HALF_FT`) and the parting
+    (`TIGHT_GAP_PX`) - the PATH OUT the GM's footprint includes (plan review round 1).
 
-    Research: a path's room between homesteads - UNRESEARCHED: the access corridor's whole width and 2 px
+    Research: a path's room between homesteads - research/questions/0081-village-lanes.drawing.html: a lane 7 ft clear of a garden fence on each side (the access corridor's whole width) and the 2 ft the growth leaves between neighbors
     """
-    return 2.0 * s.px(ACCESS_HALF_FT) + 2.0
+    return 2.0 * s.px(ACCESS_HALF_FT) + TIGHT_GAP_PX
+
+
+#: The parting a TIGHT seat leaves between two footprints, in px: the 2 px the growth parts every two homesteads by, with no path's
+#: strip - a household seated there stands against its neighbor's land, and is taken only by passage across the neighbor's yard
+#: (feature 317, plan D2; `settlement/rolling/passage.py`).
+TIGHT_GAP_PX = 2.0
+"""Research:
+    household against its neighbor's land - research/questions/0081-village-lanes.html: land with no way of its own to the road, reached by passage over a neighbor's
+    the parting - GUESS research/questions/0081-village-lanes.drawing.html: the 2 ft the growth leaves between neighbors, with no path's strip
+"""
+
+
+#: How far off the bearing from a standing house to its threshing yard a TIGHT seat may stand, in degrees (feature 317): the side of
+#: the house its yard lies on, as the drawing page places such a household. MEASURED (research R7): behind the house - 135 and 180
+#: degrees off - a walk had to go round it and seated 1 household in 194 tight tries on 13 settlements at 15 households, the yard's
+#: side 15 in 304. It was 112.5, past the perpendicular, until the impl-drift check held it to the page (research R9): at 15
+#: households on seeds 1-16, 23 households were reached by passage at either value. A search breadth, not a rule of the custom: a
+#: household behind its neighbor is still seated, by the growth's ordinary seats and a way of its own.
+TIGHT_BEARING_DEG = 90.0
+"""Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: offered within 90 degrees of the bearing to the neighbor's threshing yard, the side its yard lies on"""
+
+
+#: How near the access tree a TIGHT seat may stand and still be offered, in feet (feature 317): a household that close to a way has
+#: a way of its own, the custom's condition failing. MEASURED (research R8): at 15 households on 13 settlements, no passage came
+#: from a tight seat nearer the tree than 87 ft, and of the 135 of 343 tight tries nearer than 80 every one whose walk was found had
+#: a corridor of its own; the tries the cut spares are a search breadth, never a rule - each is refused unasked as it would have been.
+TIGHT_TREE_FT = 80.0
+"""Research: a passage household away from a way - research/questions/0081-village-lanes.drawing.html: no tight seat offered within 80 ft of the access tree, a household near a way having one"""
+
+
+def near_the_tree(s: Settlement, seat: Pt) -> bool:
+    """Does a tight seat stand within `TIGHT_TREE_FT` of the access tree's nearest point (`AccessTree.targets`)?
+
+    Research: a passage household away from a way - research/questions/0081-village-lanes.drawing.html: the distance to the access tree's nearest point
+    """
+    tree = getattr(s, "_access", None)
+    near = tree.targets(seat)[:1] if tree is not None else []
+    return bool(near) and math.dist(seat, near[0]) < s.px(TIGHT_TREE_FT)
+
+
+def yard_side(center: Pt, yard: Pt, angle: float) -> bool:
+    """Does the bearing `angle` (radians) from a standing house at `center` stand within `TIGHT_BEARING_DEG` of the bearing to
+    its threshing yard at `yard`?
+
+    Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: the bearing off the bearing to the yard
+    """
+    to_yard = math.atan2(yard[1] - center[1], yard[0] - center[0])
+    off = abs((math.degrees(angle - to_yard) + 180.0) % 360.0 - 180.0)
+    return off < TIGHT_BEARING_DEG
+
+
+def land_box(center: Pt, reach: Reach) -> tuple[float, float, float, float]:
+    """The box `(cx, cy, w, h)` a footprint reaching `reach` (west, east, north, south) from `center` covers - a standing
+    household's land as the growth parts it, which a passage's walk may cross (feature 317).
+
+    Research: a household's land - NONE: the box its footprint covers
+    """
+    w, e, n, so = reach
+    return (center[0] + (e - w) / 2.0, center[1] + (so - n) / 2.0, w + e, n + so)
 
 
 def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, largest: tuple[float, float]) -> int:
@@ -210,6 +273,10 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
     Research:
         cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part, jittered, nearest the seat first
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
+        tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, nearest the seat first beside the ordinary seats
+        a seating with passages stopped early - research/questions/0081-village-lanes.drawing.html: the share is how many may be reached that way, never how many must, so a seating that has spent passages stops before the widest level and is seated again without them (`stages.seat_the_margin`)
+        a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
+        the growth's widening - UNRESEARCHED: rings at 1.25 to 2.0 times the parting distance, in 12 and 16 directions, while households are left (`GROW_LEVELS`)
     """
     want = plan.spec.households
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
@@ -236,7 +303,8 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
         gap = grow_gap(s)
         start = guess
         heap: list[tuple[float, int, Pt, Any]] = []
-        seen: set[tuple[int, int]] = set()
+        tight: set[tuple[int, int]] = set()  # the standing houses whose tight seats are queued (feature 317)
+        seen: set[tuple[Any, ...]] = set()
         done = 0
         while placed < want:
             ndir, rings = GROW_LEVELS[level]
@@ -256,16 +324,37 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                         d = math.hypot(q[0] - cx, q[1] - cy)
                         if key not in seen and d <= bound:
                             seen.add(key)
-                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, far * ring)))
+                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, far * ring, None)))
+                # ...AND, WHILE THE SHARE HAS ROOM, ITS TIGHT SEATS (feature 317, plan D2): at the parting with no path's strip,
+                # in the same directions, unjittered in distance - a household there stands against this one's land, and is
+                # taken only by passage across its yard (`fit._parts_fit`, `passage.passage_of`); queued once a house, only round
+                # one a passage may cross to (`passage.crossable`), and only on its yard's side (`yard_side`)
+                hkey = (round(hx), round(hy))
+                if getattr(s, "_passage_left", 0) > 0 and hkey not in tight and crossable(rec):
+                    tight.add(hkey)
+                    yard = rec["geom"]["boxes"]["yard"]
+                    for k in range(ndir):
+                        ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * GROW_JITTER_DEG)
+                        if not yard_side((hx, hy), (float(yard[0]), float(yard[1])), ang):
+                            continue
+                        q = seat_toward((hx, hy), reach, guess, ang, TIGHT_GAP_PX)
+                        d = math.hypot(q[0] - cx, q[1] - cy)
+                        if d <= bound:
+                            seen.add(("tight", round(q[0] / 10.0), round(q[1] / 10.0)))
+                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, 1.0, rec)))
             done = len(houses)
             if not heap:
-                if level + 1 >= len(GROW_LEVELS):
-                    break
+                if level + 1 >= len(GROW_LEVELS) or (level + 2 == len(GROW_LEVELS) and passages_spent(s, plan.spec.households)):
+                    break  # ...and a seating that spent passages stops before the widest level: it is seated again without them
                 level, done = level + 1, 0  # DRY: every standing house offers again, wider
                 continue
-            center, reach, ang, scale = heapq.heappop(heap)[3]
+            seat, (center, reach, ang, scale, nb) = heapq.heappop(heap)[2:]
+            if nb is not None and (getattr(s, "_passage_left", 0) <= 0 or near_the_tree(s, seat)):
+                continue  # the share is spent, or the seat stands by a way (`TIGHT_TREE_FT`): a tight seat is no seat
+            parting = TIGHT_GAP_PX if nb is not None else gap
             house = next_house(s, largest)
-            got = settled_seat(center, reach, start, ang, gap, scale, reach_at, lambda q, h=house: seat_refused(s, q, h))
+            lot: list[Reach] = []
+            got = settled_seat(center, reach, start, ang, parting, scale, reach_at, lambda q, h=house: seat_refused(s, q, h), lot)
             if got is not None:  # the next settle starts from the reach this one settled on (fewer rolls a seat)
                 start = union(guess, last[0])
             if got is None or _near_a_house(s, got) or math.hypot(got[0] - cx, got[1] - cy) > bound:
@@ -274,11 +363,15 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
             offered += 1
             s._seat_search["candidates"] += 1
             # the placer's one computed move off a third homestead may not carry it nearer its source than the growth's distance
-            s._grown_keep = lambda box, c=center, r=reach: keeps_its_distance(box, c, r, gap)  # type: ignore[attr-defined]
+            s._grown_keep = lambda box, c=center, r=reach, g=parting: keeps_its_distance(box, c, r, g)  # type: ignore[attr-defined]
+            # ...a tight seat's household told its neighbor, the two lands as the growth parted them (its own: the reach the seat
+            # was parted by, `lot`, carried with its house), and the parting
+            s._tight_of = {"rec": nb, "land": land_box(center, reach), "own": lot[0], "gap": TIGHT_GAP_PX} if nb is not None else None  # type: ignore[attr-defined]
             try:
                 seated = s.try_place(q[0], q[1], "plain")
             finally:
                 s._grown_keep = None  # type: ignore[attr-defined]
+                s._tight_of = None  # type: ignore[attr-defined]
             if seated:
                 placed += 1
                 took += 1

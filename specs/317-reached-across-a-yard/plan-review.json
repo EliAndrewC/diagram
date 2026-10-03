@@ -1,0 +1,211 @@
+{
+ "feature": "317-reached-across-a-yard",
+ "plan_sha256": "2989f23c5da71191d41789a442ff9b660dfd2dd21900639e6762d85cad37e584",
+ "reviewed": "2026-10-03",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "The record first: the village-lanes entry rewritten from what was read (brief R1); the drawing page (brief R2) once D2-D4 land",
+   "class": "within",
+   "why": "FR-001 and US1 as written."
+  },
+  {
+   "id": "D2-order",
+   "summary": "A household asks for a corridor first; only where access_corridor finds none may it be reached by passage",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged ruling: implied by the GM's 'if that is what the research bears out, then we should go with it' - every Wigmore entry conditions passage on land that 'cannot reach the highway without passing over' another's; no unresearched requirement is added."
+  },
+  {
+   "id": "D2-tight",
+   "summary": "While the share has room, standing houses offer tight seats at the footprints' parting plus 2 px, without the path's strip",
+   "class": "within",
+   "why": "The mechanism the MODE 1 ruling of 2026-10-03 required so that FR-002's 'MUST be able to seat' can happen; bounded by D4's share."
+  },
+  {
+   "id": "D2-tight-refusal",
+   "summary": "A tight seat is taken only by passage; a household finding its own corridor there is refused it; ordinary seats keep a path's room",
+   "class": "within",
+   "why": "Excludes no household that could be reached across a yard; lane households keep the spacing the spec does not ask to change. D2-order applied at the tight seat."
+  },
+  {
+   "id": "D2-tight-crossable",
+   "summary": "Tight seats offered only round a house a passage may cross to: reached within D3's chain and with a yard (passage.crossable)",
+   "class": "within",
+   "why": "A tight seat is taken only by passage (D2-tight-refusal), and a passage must end at a neighbor's yard whose house reaches the tree within PASSAGE_CHAIN (D2-walk, D3). A tight seat round any other house could seat no one, so the filter removes only seats that could never be taken; no household FR-002 allows is excluded."
+  },
+  {
+   "id": "D2-tight-yard-side",
+   "summary": "Tight seats offered only within TIGHT_BEARING_DEG 90 (was 112.5) of the bearing from the house to its yard, the side its yard lies on, as the drawing page places it",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing, ruled as before: the research's condition says nothing of which side of the neighbor's house the land lies. Legitimate on the spec's OWN rules, not on cost: FR-002 forbids the walk crossing a house, bed, shed or fixture and D2-walk keeps it on the two households' land, so the excluded sector is all but emptied by FR-002 itself (R7, every bearing offered: 15 of 16 passages within 90 degrees, 1 walk in 194 tries behind). The move from 112.5 to 90 is held to the record's own drawing page, labeled a map drawing convention, and growth.py's comment records 23 passage households at 15 households, seeds 1-16, at either value - no passage lost on the measured run. A household outside the band is still seated with its own way; US2's purpose is not gutted."
+  },
+  {
+   "id": "D2-tree-cut",
+   "summary": "No tight seat offered within TIGHT_TREE_FT (80 ft) of the access tree",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: a distance proxy for the custom's condition, not the condition. Legitimate on the same ground as before, and RE-MEASURED under the amended predicate (the reviewer, 2026-10-03, scratchpad fid_treecut.py, growth.near_the_tree patched off, 15 households, seeds 1-16, the clone at cb9bdd17a): of 93 tight tries nearer than 80 ft, none was taken by passage with the straight-or-round-the-gable test; the nearest passage stood 95 ft from the tree. So the GM's 2026-10-03 relaxation does not reopen the zone the cut closes on the measured run. Still a search breadth, never to be recorded as a historical claim; measured at 15 households only."
+  },
+  {
+   "id": "D2-own-way",
+   "summary": "Once one garden layout at a tight seat finds a corridor, the seat's other layouts are refused unasked",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Legitimate on the same ground as D2-order: Wigmore's condition is the LAND's - land that cannot reach the highway without passing over another's - and a seat from which some garden layout has a way of its own is land with road access. The previous round's item (93 of 106 not in R7) is closed: R7 now records 106 found, 93 corridors after a walk. Now subsumed by D2-land."
+  },
+  {
+   "id": "D2-adjoin",
+   "summary": "The reach is the custom's condition: the household's land (the reach its seat was parted by, over every layout) within the parting and PASSAGE_ADJOIN_FT of the neighbor's footprint, a GUESS",
+   "class": "within",
+   "why": "Unchanged: land against land, the spec's 'across a neighbor's dooryard' read literally; makes FR-002 reachable rather than restricting it (R6)."
+  },
+  {
+   "id": "D2-walk",
+   "summary": "The walk from a dooryard door to the neighbor's threshing yard, on the two households' land, clear of houses, beds, sheds, byres, well pockets, fixtures, other homesteads, refused ground and wood seats, routed; not drawn as a lane (GUESS)",
+   "class": "within",
+   "why": "Unchanged: FR-002's clearances and US2's 'no lane of its own'; routing removes a restriction the request never asked for (R6)."
+  },
+  {
+   "id": "D2-no-routed",
+   "summary": "A WAY OF ITS OWN, WITHOUT THE ROUTED SEARCH: the corridor a tight seat asks for (landlocked, the recheck) is straight or round the gable only (access_corridor routed=False); recorded as CANON on the drawing page",
+   "class": "within",
+   "why": "The GM's amendment verbatim: to 'A cheaper test for \"no way of its own\": straight and round-the-house paths only, no routing search', 'Yes do this too'. round_the_gable is the round-the-house corridor the lever named. It applies only to the passage's test, not to ordinary seats, which is what the lever described. Labeled canon (the GM's ruling), not historical. It does not reach further than the GM's words: D2-order still asks 'no way of its own', which the GM's approval of a cheaper TEST for it presupposes; the GM's 'even if there IS a lane you might do it anyway' explains the tolerance of false positives rather than ordering the condition dropped."
+  },
+  {
+   "id": "D2-walk-order",
+   "summary": "Amended: at a tight seat the straight/round-the-gable corridors are asked first (landlocked, now the cheaper), then the walks; at each layout walk and corridor again as one predicate",
+   "class": "within",
+   "why": "Evaluation order with an identical verdict (both must hold); the swap follows from the GM's cheaper test making the corridor the cheaper question."
+  },
+  {
+   "id": "D2-land",
+   "summary": "THE LAND, NOT ONE LAYOUT (passage.landlocked): a tight seat is taken only where some layout has a walk and none has a straight or round-the-gable corridor of its own, asked once a seat",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged ruling: Wigmore's condition is the LAND's ('cannot reach the highway without passing over' another's), and the request says go with what the research bears out. The amendment only narrows what counts as 'a corridor of its own' to the GM's cheaper test, which admits more passages, not fewer; the land-not-layout rule itself is unchanged."
+  },
+  {
+   "id": "D2-recheck",
+   "summary": "ON THE FINISHED SEATING (passage.recheck_passages): each passage household asked again, its homestead set aside, whether it has a straight or round-the-gable corridor of its own now; one that has is seated by it and loses its passage",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged ruling (same ground as D2-order and D2-land), now asked with the GM's cheaper test. That is the consistent reading of the amendment: a household a routed lane alone would reach keeps its passage at the recheck as at the seat, which the GM's 'even if there IS a lane you might do it anyway' squarely allows. FR-002's 'MUST be able to seat' holds (the reviewer's run above: 24 households reached across a yard at 15 households, seeds 1-16)."
+  },
+  {
+   "id": "D2-recheck-whole-holding",
+   "summary": "On the finished seating the recheck asks the drawn layout, then every other layout built at the seat (_tight_of['layouts'], the lot installed; unlaid layouts skipped as landlocked skips them); one whose corridor fits the finished seating, judged as the placer judges a layout with the household's own record, homestead, walk and wood reservations set aside, re-seats the household (passage.relay) and ends its passage",
+   "class": "within",
+   "why": "Implements the previous round's ruling exactly: the research condition is the LAND's and the drawing page's 'if any layout of the homestead would leave it a way of its own, it has one'; the recheck now asks the same layouts landlocked asked at the seat (passage.py recheck_passages / relay, place.py:282). It narrows nothing the GM asked: it removes passages only where the household has a way of its own, i.e. it keeps the passage within 'what the research bears out'. FR-002's 'MUST be able to seat' still holds (R9: 14 reached at 15 households, seeds 1-16; 11 at 40, seeds 2/25/39/47)."
+  },
+  {
+   "id": "D2-recheck-unfit",
+   "summary": "A layout that has a corridor but does not fit the finished seating (its box refused, its envelope blocked, or its parts not fitting) is not a way the holding has; the passage stands, counted as meta.passage_unfit (measured 0 at 15 and 40 households, R9)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing of the drawing page's 'any layout' read literally, but implied by the request's own research condition: Wigmore's custom is for land that 'cannot reach the highway without passing over' another's, and a layout that can only stand by occupying ground the finished seating gives to other homesteads (or refused ground) is not a way over the household's own land - its way would pass over another's. Not cost-motivated, not completing the GM's thought: it is the same rule the placer applies to every layout everywhere. It is made visible, not hidden (meta.passage_unfit), and measured 0 on the reference at 15 and 40 households (R9, one-shot labeled 2026-10-03, relay_probe.py), so it carves out no household on the measured run. Uprooting such a household to an unrelated seat elsewhere is not something the request or the research asks for."
+  },
+  {
+   "id": "D3",
+   "summary": "A chain of passages ends at a corridor within PASSAGE_CHAIN = 2, a GUESS citing Echigo",
+   "class": "within",
+   "why": "Unchanged: the spec delegates any chain limit to the plan as a labeled GUESS citing Echigo."
+  },
+  {
+   "id": "D4",
+   "summary": "PASSAGE_SHARE_BAND = (0.0, 0.25) rolled per nucleated settlement, a GUESS; beyond the share only with a corridor; the share a ceiling, never a quota",
+   "class": "within",
+   "why": "Unchanged: FR-002's rolled share within a band labeled as a guess. That the share bounds passages rather than requiring them is already the spec's own reading (US1: 'never more than the share allows'; SC-002: within each settlement's rolled share)."
+  },
+  {
+   "id": "D4-withheld",
+   "summary": "A margin that leaves a household unseated after seating some across a yard is seated again on the same margin with the passage withheld, before the ladder takes the next margin (stages.seat_the_margin, meta.passage_withheld)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: a settlement whose rolled share is above zero can now end with no passage where it formerly took a wider margin with some (seed 47 at 40 households, 5-6 -> 0). Legitimate on the request's own purpose: the GM asked that no non-requirement cost the seating 'optimizations that we know work', and the amendment is a performance ruling that neither way of reaching a house is rigorous ('not some kind of huge deal'; 'even if there IS a lane you might do it anyway'). Passages are still offered first on every margin; they are withheld only where the passage seating has already failed to seat everyone, so no lane-to-every-house requirement is re-imposed. Literally keeping passages through the ladder would throw away two seatings and place the map on a wider margin (seed 47: 20 s vs main's 3.9 s, R10), defeating that purpose; the research does not prefer margin N+1 with passages over margin N without. Scope measured: seeds 25 and 39 seat identical manifests (R10)."
+  },
+  {
+   "id": "D4-widest",
+   "summary": "A seating that has spent passages stops before the growth's widest level and is seated again without them (growth.grow_the_margin, passage.passages_spent)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: a passage seating that would have needed the widest growth level and succeeded there is replaced by one without passages. Legitimate on the same purpose as D4-withheld, and its premise is MEASURED, not assumed: no seating that seats everyone reached the widest level with passages on seeds 4, 25, 39, 47 at 15, 20 and 40 households (count_probe, R10), so it cuts a branch observed only to fail (seed 47 spent 5.7 s there on a seating thrown away); seeds 25 and 39 hash the same. The household it touches is seated by a way of its own, which the GM ruled is not to be avoided either. The cut is the same kind of accepted guess-for-speed the GM approved for 'no way of its own'."
+  },
+  {
+   "id": "D5",
+   "summary": "reached_across on the record; checks.unreached_houses counts a chain ending at a reached household",
+   "class": "within",
+   "why": "FR-003 as written."
+  },
+  {
+   "id": "D5-lane-houses",
+   "summary": "The ways owe a household reached across a yard no lane of its own: arm/fragment keeping, carried ends and the web's cut spacing ask geom.lane_houses (every farmhouse but those reached across a neighbor's yard); an end that merely reaches a house still counts every house",
+   "class": "within",
+   "why": "US2 as written: 'A household so reached has no lane of its own'; FR-003 is carried by the passage chain (D5). Without it the ways would build the very lane the spec says such a household lacks."
+  },
+  {
+   "id": "D5-anchor",
+   "summary": "The household a passage is reached across keeps its corridor: owed and never pruned however near the lanes its center stands (tree.passage_anchors; Inashiro glyph-check F1)",
+   "class": "within",
+   "why": "Serves FR-002 ('to a way') and FR-003: a passage that ends at a yard whose own house has no drawn way leaves the chain ending at nothing (R8, the anchor 90 ft from a lane, two farmsteads with no way). It adds a corridor only for a household another is reached across; no household that may be reached by passage is excluded and no lane is imposed on any other house, so the GM's purpose (no unresearched lane-to-every-house requirement) is untouched."
+  },
+  {
+   "id": "D6",
+   "summary": "The corridor judged as drawn (tree.as_joined, the exact box prefilter in law.near_misses / law.free_end); the judge's own_clear / tree.laid_run defect (seed 18) kept closed; a joint's pull never taken into a kink (seed 47 at 20 hh)",
+   "class": "within",
+   "why": "FR-004 and SC-003 as written; seed 18's judge defect and seed 47's WebRefused are bugs found against main, closed under FR-005 and FR-007 ('a bug found later joins the list'). None changes who may be reached or how."
+  },
+  {
+   "id": "D6-withdrawn",
+   "summary": "The route searched per garden layout round the household's own parts retried and WITHDRAWN: after feature 315 merged it cost the homesteads stage 3-43% more in calls than main's search round the house alone (R8); the corridor's route keeps off the house alone, as on main",
+   "class": "within",
+   "why": "The plan's own condition ('kept only if it pays', FR-006) applied as written. No FR requires the per-layout route; withdrawing it returns to main's behavior, so no household is lost against main (FR-005). It does not cut against the request's purpose: the GM asked that we not disregard 'optimizations that we know work' for an unresearched requirement, and R8 measures this one as no longer working (4.72M/3.26M/15.52M/3.48M calls against main's 4.59M/2.99M/11.64M/2.43M, re-derived: +2.8%, +9.0%, +33.3%, +43.2%); it is withdrawn on its cost, not to protect a requirement. The house_reaches shortcut and the persimmon-out-of-obstacles change that served it leave the plan with it."
+  },
+  {
+   "id": "D7",
+   "summary": "Known bugs listed with owners: D6 here; cohort seeds 14, 15, 906, 22, 23 with the Diagram (Inashiro) session",
+   "class": "within",
+   "why": "FR-007, SC-006."
+  },
+  {
+   "id": "D7-persimmon",
+   "summary": "Feature 315's persimmon reseat asks a neighbor's sun of every seat it tries, on the rolled side and then the other (persimmon_reseat.persimmon_for); Inashiro 11 -> 12 of 12 rolled (B10)",
+   "class": "within",
+   "why": "A regression this feature's tight seats exposed on a pool map (FR-005: no pool map may fail a rule it passed before) and a bug found at the gate (FR-007 joins the list). The reseat serves a tree the hamlet's count rolled to a household that rolled none; trying the other side of the house keeps the tree in its dooryard (feature 315's rule) and the count whole, and relaxes nothing the GM's request or this spec set. Not a narrowing: it admits more, not less. The tried alternative (refusing a tight seat that dropped its persimmon) would have narrowed passages and was reverted."
+  },
+  {
+   "id": "D7-kura-byre",
+   "summary": "A grove farm's test that no part stands on a corridor (fit._on_the_access) now includes its kura and byre",
+   "class": "within",
+   "why": "FR-007: a known bug found by the impl-drift check, fixed in the work at hand."
+  },
+  {
+   "id": "D7-wood-seats",
+   "summary": "The seating's wood-floor reservation (wood_share.copse_keepouts) keeps feature 310's afternoon sun lane, so no seat is reserved where the copse never plants; gate test tests/gate/test_wood_shares_planted.py",
+   "class": "within",
+   "why": "FR-007 and the request's 'I do want all known bugs to be fixed': a defect a glyph check found (Inashiro lane 14 bulging round bare scrub), fixed in the work at hand with a test that fails while it is absent (enforcement of the request, not scope). It admits no new rule the GM did not ask for: it makes the reservation agree with what feature 310 already plants. R10 records its cost (wider growth at 40 households) and that every household is still seated, so FR-005 is the check, not this ruling."
+  },
+  {
+   "id": "D8",
+   "summary": "The GM's 'Yes, definitely do this' to a shared map of what is reachable across route searches: AMENDED on the measurement (R10) - the map is not built; an exact no-branch-in-reach check before each search (route.tree_in_reach) is built in its place, maps byte-identical; the substitution put to the GM in the report (FR-008)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Presumed not legitimate: the GM approved a specific lever and it is not built. Legitimate on two grounds together, and only with FR-008's report. (1) Implied by the GM's own standing words: 'Goal over directions. Eli's suggested implementation is a sketch; if measuring shows a better way to reach the goal, present it with an amended plan instead of executing the sketch literally.' The lever was the session's own proposal, approved on its estimate ('might save about half of the extra time'), and the GM's purpose was that time. (2) Building it literally would not serve that purpose, measured (R10, observed 2026-10-03): on seed 25 at 40 households, the cell the GM ruled on, the amended engine keeps 19 failed searches opening 456 cells in all, each closed by the household's OWN parts, which no map shared across searches at a standing state can answer; on seed 47, none of 509 failures began in a region an earlier failure had closed, and the 348 with no branch in reach are answered exactly by the cheaper check (seed 47 35 -> 19.9 s; seed 25 unchanged, 3.95 vs 3.94 s). Not cost-motivated in the forbidden sense (the substitute is cheaper to build, but the ruling rests on the lever's measured inability to serve the GM's purpose), and not quiet: FR-008 makes the report to the GM mandatory. CAVEATS for that report: (a) it must say plainly that the approved map was NOT built and that the cell the GM ruled on was not sped up by either lever; (b) R10's seed-47 test modeled the map as reuse of regions earlier failures closed - a map flooded from the tree at each standing state is another design that test does not directly rule out for failures closed by standing ground alone; the seed-25 own-parts finding rules out any standing-state map on the GM's cell, so this does not change the ruling, but the report should not claim more than was measured."
+  },
+  {
+   "id": "verification",
+   "summary": "Unit tests of tight seats, passage, chain, share, reach; SC-002 at 15 households; refusals/abab, cohort, make done, bookends",
+   "class": "within",
+   "why": "Enforces FR-002, FR-003, FR-005, FR-006, SC-002."
+  },
+  {
+   "id": "bookends",
+   "summary": "Performance bookends 317-start / 317-end back to back at origin/main",
+   "class": "within",
+   "why": "Constitution VI; serves FR-006."
+  }
+ ],
+ "verdict": "CLEAR"
+}

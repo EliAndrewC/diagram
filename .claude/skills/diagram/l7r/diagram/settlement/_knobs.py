@@ -420,8 +420,8 @@ def web_cuts(coords: Sequence[float], reach: float, gap: float) -> list[float]:
     house unreachable because its neighbors are packed tight.
 
     Research:
-        every house within reach of a way - research/questions/0081-village-lanes.drawing.html: the fewest cuts that cover every house
-        a cut in the widest gap - research/questions/0081-village-lanes.html: never through a house; reach * 0.5 ahead when no gap fits
+        every house within reach of a way - research/questions/0081-village-lanes.drawing.html: the fewest cuts that cover every house the caller gives (the web gives every one but those reached across a neighbor's land, `hamletgen/ways/web.py`)
+        a cut in the widest gap - GUESS research/questions/0081-village-lanes.drawing.html: lanes as the gaps between plots, never through a house; reach * 0.5 ahead when no gap fits
     """
     xs = sorted(float(c) for c in coords)
     if not xs:

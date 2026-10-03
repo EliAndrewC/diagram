@@ -1,0 +1,16 @@
+base 4 field=0.97 homesteads=1.68 track=0.16 appurtenances=0.12 web=0.90 hinterland=1.41 woodland=0.15 windbreak=0.84 notice=0.16 | lanes=20 corridors=36 legs=36
+new  4 field=1.48 homesteads=1.68 track=0.13 appurtenances=0.22 web=0.57 hinterland=0.97 woodland=0.10 windbreak=0.45 notice=0.17 | lanes=18 corridors=43 legs=43
+base 13 field=1.04 homesteads=1.34 track=0.12 appurtenances=0.14 web=0.78 hinterland=0.96 woodland=0.13 windbreak=0.59 notice=0.24 labels=0.05 | lanes=17 corridors=35 legs=35
+new  13 field=1.05 homesteads=1.09 track=0.10 appurtenances=0.12 web=0.88 hinterland=0.93 woodland=0.12 windbreak=0.56 notice=0.29 | lanes=17 corridors=48 legs=48
+base 39 field=0.84 homesteads=0.88 track=0.08 appurtenances=0.12 web=0.77 hinterland=0.74 woodland=0.21 windbreak=0.94 notice=0.11 | lanes=18 corridors=31 legs=31
+new  39 field=0.79 homesteads=1.00 track=0.08 appurtenances=0.16 web=0.76 hinterland=0.94 woodland=0.15 windbreak=0.68 notice=0.21 | lanes=19 corridors=44 legs=44
+base 2 field=0.76 homesteads=0.88 track=0.08 appurtenances=0.14 web=1.00 hinterland=0.77 woodland=0.12 windbreak=0.61 notice=0.14 | lanes=14 corridors=30 legs=30
+new  2 field=0.72 homesteads=0.82 appurtenances=0.13 web=0.64 hinterland=0.73 woodland=0.08 windbreak=0.72 notice=0.42 | lanes=16 corridors=41 legs=41
+base 6 field=1.30 sink=0.05 homesteads=1.05 track=0.07 appurtenances=0.12 web=0.67 hinterland=0.96 woodland=0.14 windbreak=0.67 notice=0.97 | lanes=16 corridors=27 legs=27
+new  6 field=1.48 homesteads=1.06 track=0.05 appurtenances=0.11 web=0.69 hinterland=0.72 woodland=0.15 windbreak=0.59 notice=0.55 | lanes=19 corridors=41 legs=41
+base 8 field=0.92 homesteads=1.22 track=0.08 appurtenances=0.12 web=0.59 hinterland=0.84 woodland=0.10 windbreak=0.50 notice=0.08 | lanes=19 corridors=34 legs=34
+new  8 field=1.02 homesteads=1.56 track=0.09 appurtenances=0.17 web=1.31 hinterland=1.02 woodland=0.09 windbreak=0.53 notice=0.16 | lanes=16 corridors=44 legs=44
+base 25 field=1.64 sink=0.07 homesteads=1.15 track=0.07 appurtenances=0.11 web=0.78 hinterland=1.00 woodland=0.11 windbreak=0.68 notice=0.13 | lanes=22 corridors=26 legs=26
+new  25 field=1.88 homesteads=1.52 track=0.09 appurtenances=0.17 web=1.02 hinterland=0.89 woodland=0.09 windbreak=0.49 notice=0.18 | lanes=25 corridors=48 legs=48
+base 47 field=0.69 homesteads=0.98 track=0.07 appurtenances=0.10 web=0.59 hinterland=0.82 windbreak=1.04 notice=0.85 | lanes=17 corridors=32 legs=32
+new  47 field=1.12 sink=0.06 homesteads=1.58 track=0.11 appurtenances=0.18 web=1.02 hinterland=0.92 woodland=0.07 windbreak=0.73 notice=0.17 | lanes=18 corridors=37 legs=37

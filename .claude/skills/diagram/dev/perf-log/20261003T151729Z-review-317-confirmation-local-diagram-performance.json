@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T145740Z"
+  },
+  "binding": "f607c6ea71637357a98d2ae1afbe3d9f216e5c533e7e80dfd8740534a8e87e26",
+  "end": {
+    "commit": "e9cd4717a",
+    "label": "317-end",
+    "utc": "20261003T150117Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T151729Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -5.9,
+          "4": 0.0,
+          "47": 17.9
+        },
+        "total_pct": 2.3
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": -13.6,
+          "4": -7.8,
+          "47": 11.1
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 16.0,
+          "39": 11.6,
+          "4": -4.6,
+          "47": 34.1
+        },
+        "total_pct": 12.3
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -17.0,
+      "4": 2.0,
+      "47": -10.9
+    },
+    "total_pct": -6.7
+  },
+  "note": "The control stands and seed 47 is now right: the early stop reproduces (homesteads CPU at 40 hh, seeds 25/39/47, alternated: main 2.93/2.60/3.73 and 2.83/2.60/4.15; clone 4.15/4.13/8.19 and 4.38/4.51/8.68; the engine before the stop, 529daac23, 4.20/4.38/9.99 and 4.10/4.25/9.47; sha256 identical before and after the stop on all three). The passage seating places 33 at grow_level 1 (450 placer calls, 3.9 s, 0.1 s after its last house) and the withheld one 40 (368 calls, 3.7 s); the kept map has no passage. One attribution is wrong and it is a crossing cell: seed 25 at 40 hh (+16.0%) is put on the passage (homesteads +1.1 s with 4 passages, web +0.4 s on its layout). The passage-off arm does not remove it. Whole run to the end of the stages, CPU s, 40:25: main 13.11/13.12, clone 14.90/14.88, NOPASS 15.00, WEST0 16.34, both off 13.24. Homesteads: main 2.85, clone 3.93, NOPASS 3.63, both off 3.01, so the passage's own share is about 0.3 s. Web: main 1.60, clone 2.02, NOPASS 1.96, WEST0 3.04, both off 1.53, so the passage's share is none. perf-317-control-40c already shows this: NOPASS seed 25 3.80/3.88 against the clone at 4.18/4.24. The 40:25 growth is the two causes together, mostly the seat fix's layout, and it goes only with both off. (This agent's own 143831Z note called seed 25 the passage. That was wrong.) The passage is the cause at 20:25: total main 6.02, clone 7.22, NOPASS 5.97; notice 0.12 / 0.78 / 0.23. 10:47 is also joint: total main 2.69, clone 2.93, NOPASS 3.09, both off 2.65. Rewrite cause (2) so that seed 25 at 40 and its web growth are joint, with the seat fix's layout the larger part, and keep the passage at 20:25.",
+  "verdict": "inconsistent"
+}

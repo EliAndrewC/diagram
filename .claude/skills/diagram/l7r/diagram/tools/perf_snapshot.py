@@ -244,7 +244,10 @@ def report(against: str | None) -> int:
 
     base = None
     if against:
-        base = next((s for s in snaps if str(s["label"]) == against), None)
+        # ...THE NEWEST WITH THAT LABEL (feature 317): taken first-found, a feature that took its bookends again - a second
+        # `-start` on main once main moved - was compared against its OLDEST start, on another main, and the report printed
+        # -34% where the push's `perf_review`, which pairs the newest, measured +17% on the same seed
+        base = next((s for s in reversed(snaps) if str(s["label"]) == against), None)
         if base is None:
             print(f"\nno snapshot labelled {against!r}")
             return 1

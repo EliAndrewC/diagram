@@ -57,6 +57,19 @@ def test_the_keepouts_are_the_copses_own_figures_a_hair_stricter() -> None:
     assert not in_keepouts(100.0, 100.0 - 38.5, [(100.0, 100.0, 38.5)], []), "a disc's edge is not inside it (the planting's strict test)"
 
 
+def test_the_afternoon_lane_west_of_a_yard_and_a_bed_is_kept_where_the_map_declares_one() -> None:
+    """Feature 310 holds the copse out of the lane west and southwest of every yard and bed (`village_grove`'s `west`); the
+    reservation keeps the same figure a hair stricter, so no seat is reserved where the copse will not plant it. None
+    where the map declares no lane."""
+    parts = {"house": (100.0, 100.0, 40.0, 30.0), "yard": (100.0, 140.0, 40.0, 20.0), "gardens": [(140.0, 100.0, 20.0, 20.0)]}
+    _c, plain = copse_keepouts(parts, 22.0, 39.0, 12.0)
+    _c, rects = copse_keepouts(parts, 22.0, 39.0, 12.0, 50.0)
+    assert rects[: len(plain)] == plain and len(rects) == len(plain) + 2, "one lane for the yard and one for the bed"
+    m = BAR_MARGIN_PX
+    assert rects[len(plain)] == (80.0 - 50.0 - 11.0 - 3.0 - m, 130.0 - 11.0 - 1.0 - m, 80.0 + 11.0 + 1.0 + m, 150.0 + 50.0 + 11.0 + 1.0 + m), "the yard's"
+    assert in_keepouts(40.0, 160.0, [], rects) and not in_keepouts(40.0, 160.0, [], plain), "30 ft southwest of the yard: barred by the lane alone"
+
+
 def test_a_household_on_open_ground_reserves_its_floor_behind_its_house() -> None:
     s = _open()
     wood = install_wood_shares(s, FLOOR, REACH, 7.0)

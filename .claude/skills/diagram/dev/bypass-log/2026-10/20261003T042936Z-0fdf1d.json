@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T04:29:36Z",
+  "target": "record-checked",
+  "commit": "d522bc76d",
+  "why": "source-reader on source-reader:0081.drawing#aze-jawiki: drawing aze-jawiki changed only its gloss (the map's rule taken out of quote brackets); the quoted passage is unchanged and VERBATIM by make quote-verbatim"
+}

@@ -306,6 +306,17 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt, ab_eps: float = 0.02) -> Pt | None:
     return None
 
 
+def lane_houses(M: Mapping[str, Any]) -> list[Pt]:
+    """The farmhouses a lane is owed to SERVE: every one but a household reached across a neighbor's yard (feature 317,
+    `settlement/rolling/passage.py`), which has no way of its own - its neighbor's way is its way in. Asked where a pass
+    keeps an arm or a fragment as the only way to a house, or carries a lane's end to a dooryard; where an end merely
+    REACHES something (`end_serves`), every house counts.
+
+    Research: who a lane serves - research/questions/0081-village-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land
+    """
+    return [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if not h.get("reached_across")]
+
+
 def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     """Every piece of a steading's own BUILT ground, as the shapes a lane end can arrive at.
 

@@ -1,0 +1,145 @@
+{
+ "gc-vl-f1-anchor-way": {
+  "value": 1,
+  "unit": "lane",
+  "quantity": "the household another is reached across, at (2600.5, 1960.7), has its own access lane (lane 3, its `of` within 1.5 px of the house) on the re-rolled map; the household reached across it, at (2567.0, 2120.9), has none, by design",
+  "source": "pool/hamlets/inashiro/inashiro.json at 91805d323 - lanes[].of against houses[] carrying reached_across, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F1",
+  "answers": "86f173b401a2"
+ },
+ "perf-317-control-40": {
+  "verifies": "the band-3 reading of the final bookends: seed 25 at 40 households +21.6% (homesteads +1.4 s), on the engine as it lands (014cb1a20)",
+  "subject": "perf bookend, reference spec, seeds 25 and 47, 40 households, the homesteads stage",
+  "value": 1.89,
+  "unit": "s, the homesteads stage's CPU at seed 25, 40 households, the passage share at 0 (median of three)",
+  "quantity": "three alternated takes, 2026-10-03, homesteads CPU seconds at 40 households: main (38901e2df) seed 25 1.69/1.79/1.87, seed 47 2.25/2.44/2.44; the clone 2.87/3.14/3.10 (5 seated by passage, 4 of them revoked on the finished seating, 1 kept) and 2.41/2.51/2.51; the clone with the passage share at 0 1.87/1.89/2.00 and 2.53/2.57/2.40 - the passage carries the whole of seed 25's growth (the share allows 9 at 40 households, so tight seats are tried all through the growth: 444 seatings tried against main's 284, 472 A* searches against 113, profiled); seed 47's crossing is in the web, on the layout the passage makes",
+  "source": "control_probe.py in the session's scratchpad (NOPASS=1 sets stages.passage_share to 0), run against both trees; the counts by cProfile on the same probe",
+  "observed": "2026-10-03"
+ },
+ "perf-317-route-shared": {
+  "verifies": "the 0.3 s of the homesteads stage at seed 39, 40 households, the perf-audit's second confirmation found unexplained with the passage share at 0",
+  "subject": "perf, reference spec, seed 39 at 40 households, the homesteads stage (no passage on either engine)",
+  "value": 1.64,
+  "unit": "s, the homesteads stage's CPU at seed 39, 40 households, the routes back in the seat's shared stream (median of three)",
+  "quantity": "three alternated takes, 2026-10-03, homesteads CPU seconds: main (38901e2df) 1.58/1.57/1.55; the clone with the routes back in `_house_candidates`' shared stream (014cb1a20) 1.64/1.64/1.78, and with the passage share at 0 1.61/1.76/1.78 - where before it, with `access_corridor` routing again per layout, the perf-audit measured 1.91-2.02 with the share at 0",
+  "source": "control_probe.py in the session's scratchpad, run against both trees",
+  "observed": "2026-10-03"
+ },
+ "perf-317-control-judge": {
+  "verifies": "the cost the perf-audit's confirmation found apart from the passage: the homesteads stage over main with the passage share at 0 (seed 39 at 40 households, +5.1% on the bookend)",
+  "subject": "perf bookend, reference spec, seed 39 at 40 households and seed 25 at 15, the homesteads stage",
+  "value": 0.05,
+  "unit": "s, what the seating judge's feature-317 additions alone cost the homesteads stage at seed 39, 40 households, the passage share at 0",
+  "quantity": "CORRECTED on the perf-audit's second confirmation: the session's first arm (JUDGE_OFF: `tree.as_joined` returning no lanes AND `tree.laid_run` the run as found, homesteads 1.76/1.84/1.77 s against 1.80/2.00/2.07 with the share at 0) switched off main's own rejoin-and-square in `admits` too, which feature 317 only moved into `laid_run`, so its 0.23 s was not the new judge's. The perf-audit's arm with only the new judge off (`as_joined` returning no lanes, `laid_run` the run as found only where `seating_judge` asks it) ran 1.91/1.95/1.97 s against 1.94/1.91/1.94 with the judge on: about 0.05 s. The rest of the gap to main (1.55-1.70 s) was the per-layout routing left over from T06 (`perf-317-route-shared`)",
+  "source": "the perf-audit's `audit_judge317.py` (JUDGE=session|judgeonly|new arms, detached worktrees) and the session's control_probe.py, in the session's scratchpad",
+  "observed": "2026-10-03"
+ },
+ "perf-317-control-nopass": {
+  "verifies": "the band-2 readings of 317-end against 317-start at 20 households, seeds 25 (+17.1%) and 47 (+12.5%), homesteads +0.4 and +0.5 s",
+  "subject": "perf bookend, reference spec, seeds 25 and 47, 20 households, the homesteads stage",
+  "value": 0.75,
+  "unit": "s, the homesteads stage's CPU with the passage share at 0, seed 25 (median of three)",
+  "quantity": "three alternated takes each, 2026-10-03, homesteads stage CPU seconds: main (/tmp/main317c, 38901e2df) seed 25 0.68/0.71/0.67, seed 47 0.75/0.76/0.80; the clone (2ba1f3cf) 1.08/1.10/1.21 and 1.24/1.23/1.32 (1 and 3 passages); the clone with the passage share at 0 0.73/0.75/0.75 and 0.79/0.82/0.83 - with the cause removed the stage stands within 8-10% of main, so the passage accounts for 0.35-0.42 s of the 0.42-0.48 s it grew",
+  "source": "control_probe.py in the session's scratchpad (NOPASS=1 sets stages.passage_share to 0), run against both trees",
+  "observed": "2026-10-03"
+ },
+ "gc-fh-r2-f5-recheck": {
+  "value": 94.8,
+  "unit": "ft",
+  "quantity": "from the household reached across a yard (2567.7, 2117.7) - its center and its garden's corners - to the nearest drawn lane on the re-rolled Inashiro, where round 2 measured 10.1 ft from its homestead; `passage.recheck_passages` asks the condition again once every household is seated (meta.passage_revoked 0 here: no later corridor gave it a way)",
+  "source": "pool/hamlets/inashiro/inashiro.json at 4e375737a - houses[] with reached_across, gardens[] by `of`, lanes[].pts, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--farmhouse",
+  "verifies": "F5",
+  "answers": "380fe74de6da"
+ },
+ "gc-vl-r2-f3-recheck": {
+  "value": 94.8,
+  "unit": "ft",
+  "quantity": "from the household reached across a yard (2567.7, 2117.7) - its center and its garden's corners - to the nearest drawn lane on the re-rolled Inashiro (its center 115.8 ft off), no longer as near a way as the lane-less households the ways count as served; the condition is asked again once every household is seated (`passage.recheck_passages`)",
+  "source": "pool/hamlets/inashiro/inashiro.json at 4e375737a - houses[] with reached_across, gardens[] by `of`, lanes[].pts, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F3",
+  "answers": "380fe74de6da"
+ },
+ "gc-hb-f6-page": {
+  "value": 1,
+  "unit": "paragraph",
+  "quantity": "the drawing page's first paragraph now describes the mark the SVG draws: 'paired culm strokes and a leafy fork in jade green, jittered on a 7 ft grid over a light jade wash' (the SVG's #2F8F4E / #4BA35F strokes over an 18% #2F8F4E wash); the 'pale yellow-green ... no fill' text the finding quoted is gone",
+  "source": "research/questions/0075-bamboo-groves-chikurin.drawing.html at d7c5fb007, line 6, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--homestead-bamboo",
+  "verifies": "F6",
+  "answers": "bf15b1649ecb"
+ },
+ "gc-fh-f7-notes": {
+  "value": 1,
+  "unit": "entry",
+  "quantity": "inashiro.notes.md carries a feature 317 entry, dated 2026-10-03: the household reached across its neighbor's yard, the share 0.099, the drawn aspect 1.98 against main's 1.54, the persimmons 12 of 12",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md at 91805d323, the last section",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--farmhouse",
+  "verifies": "F7",
+  "answers": "86f173b401a2"
+ },
+ "gc-fh-r3-f5-notes": {
+  "value": 1,
+  "unit": "entry",
+  "quantity": "inashiro.notes.md's feature 317 entry restated from the shipped manifest: the household reached across at (2567.7, 2117.7), 80 seats offered, a drawn aspect of 2.60, 15 lanes, 13 of them access, passage_unfit 1, the wood seats 320 of 320 planted - each matching the manifest's houses[], lanes[] and meta",
+  "source": "pool/hamlets/inashiro/inashiro.json and inashiro.notes.md at f98af88a3, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--farmhouse",
+  "verifies": "F5",
+  "answers": "5058ad6878e2"
+ },
+ "gc-vl-r3-f8-notes": {
+  "value": 1,
+  "unit": "entry",
+  "quantity": "inashiro.notes.md's feature 317 entry restated from the shipped manifest: the household reached across at (2567.7, 2117.7), 80 seats offered, a drawn aspect of 2.60, 15 lanes, 13 of them access, passage_unfit 1, the wood seats 320 of 320 planted - each matching the manifest's houses[], lanes[] and meta",
+  "source": "pool/hamlets/inashiro/inashiro.json and inashiro.notes.md at f98af88a3, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F8",
+  "answers": "5058ad6878e2"
+ },
+ "gc-vl-r3-f5-seats": {
+  "value": 0,
+  "unit": "reserved wood seats unplanted",
+  "quantity": "the cause of the bulge removed: on the re-rolled Inashiro every household's reserved wood seat has a copse clump on it (320 of 320; 2 of house 13's, in its own yard's afternoon sun lane, had routed house 14's path round them), so no path is routed round ground the copse never plants; held for the pool by tests/gate/test_wood_shares_planted.py",
+  "source": "seats_planted.py in the session's scratchpad on pool/hamlets/inashiro/inashiro.json at f98af88a3; research R10",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F5",
+  "answers": "5058ad6878e2"
+ },
+ "perf-317-control-40b": {
+  "verifies": "the band-3 reading of the amended engine's bookends (20261003T134829Z 317-end against the newest 317-start): 40 households total +35.4%, seed 47 +134.7% (homesteads +16.3 s), seed 25 +16.7%, seed 39 +11.0%",
+  "subject": "perf bookend, reference spec, 40 households, seeds 25, 39 and 47, the homesteads stage",
+  "value": 3.99,
+  "unit": "s, the homesteads stage's CPU at seed 47, 40 households, with the seat fix and the passage both switched off (mean of two takes)",
+  "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47): main (38901e2df) 2.85/2.56/3.70 and 2.83/2.58/3.77; the clone as built 3.91/4.01/20.01 and 3.97/3.97/20.14; the wood reservation without the afternoon lane (WEST0) 4.08/2.77/4.89 and 4.30/2.83/5.30; the passage share at 0 (NOPASS) 3.61/3.97/4.06 and 3.74/4.02/4.20; both off 2.97/2.70/3.96 and 3.10/2.82/4.02 - with both causes removed the stage stands within 4-9% of main. Seed 39's +1.2 s is the seat fix alone (no passage); seed 25's is both, overlapping; seed 47's +16 s is their interaction: its first seating stops two households short of 40 and is thrown away (research R10)",
+  "source": "control_probe.py in the session's scratchpad (WEST0=1 drops the afternoon lane from WoodShares.keepouts; NOPASS=1 sets stages.passage_share to 0), run against /tmp/main317c and the clone at ac8af8f80",
+  "observed": "2026-10-03"
+ },
+ "perf-317-control-40c": {
+  "verifies": "the band-3 reading of the bookends on the engine with the passage share a ceiling (stages.seat_the_margin): 40 households total +14.6%, seed 47 +42.3%, seed 25 +13.4%; 20 households seed 25 +13.0%, seed 47 +13.2%",
+  "subject": "perf bookend, reference spec, 40 households, seeds 25, 39 and 47, the homesteads stage",
+  "value": 4.14,
+  "unit": "s, the homesteads stage's CPU at seed 47, 40 households, with the seat fix and the passage both switched off (mean of two takes)",
+  "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47), every seating on its first margin: main (38901e2df) 3.01/2.74/4.00 and 2.98/2.79/3.90; the clone as built 4.18/4.34/10.13 and 4.24/4.33/9.68 (seed 47: its passage seating falls short and is seated again with the passage withheld, meta.passage_withheld); the wood reservation without the afternoon lane (WEST0) 4.33/2.82/5.02 and 4.64/3.02/5.15; the passage share at 0 (NOPASS) 3.80/4.14/4.44 and 3.88/4.21/4.47; both off 3.16/2.90/4.13 and 3.32/2.84/4.14 - within 3-11% of main",
+  "source": "control_probe.py in the session's scratchpad (WEST0=1, NOPASS=1), against /tmp/main317c and the clone at 529daac23",
+  "observed": "2026-10-03"
+ },
+ "perf-317-control-40d": {
+  "verifies": "the band-3 reading of the bookends on the engine with the early stop (growth.grow_the_margin, passage.passages_spent): 40 households total +12.3%, seed 47 +34.1%, seed 25 +16.0%, seed 39 +11.6%; 20 households seeds 25 +14.7%, 47 +11.1%; 10 households seed 47 +17.9%",
+  "subject": "perf bookend, reference spec, 40 households, seeds 25, 39 and 47, the homesteads stage",
+  "value": 8.23,
+  "unit": "s, the homesteads stage's CPU at seed 47, 40 households, as built with the early stop (mean of two takes)",
+  "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47): main (38901e2df) 3.02/2.70/3.96 and 3.26/2.78/3.96; the clone with the early stop 4.17/4.30/8.20 and 4.06/4.20/8.26, seeds 25 and 39 seating the same manifests as without it (sha256 after the homesteads stage). With the causes switched off on the engine before the early stop, which changes nothing where no passage is spent (perf-317-control-40c): both off 3.16/2.90/4.13 and 3.32/2.84/4.14, within 3-11% of main",
+  "source": "control_probe.py in the session's scratchpad (HASH=1), against /tmp/main317c and the clone at 226d6517e; perf-317-control-40c for the switched-off arms",
+  "observed": "2026-10-03"
+ }
+}

@@ -1,0 +1,16 @@
+base 4 field=1.05 homesteads=1.43 track=0.19 appurtenances=0.15 web=0.92 hinterland=1.12 woodland=0.10 windbreak=0.58 notice=0.11 | lanes=20 corridors=36 legs=36
+new  4 field=1.12 homesteads=1.59 track=0.12 appurtenances=0.15 web=0.84 hinterland=1.17 woodland=0.13 windbreak=0.60 notice=0.21 | lanes=16 corridors=41 legs=41
+base 13 field=1.19 homesteads=1.78 track=0.16 appurtenances=0.13 web=0.89 hinterland=1.07 woodland=0.13 windbreak=0.60 notice=0.19 | lanes=17 corridors=35 legs=35
+new  13 field=1.16 homesteads=3.49 track=0.09 appurtenances=0.14 web=1.27 hinterland=0.93 woodland=0.11 windbreak=0.51 notice=0.10 | lanes=16 corridors=43 legs=43
+base 39 field=0.71 homesteads=0.97 track=0.10 appurtenances=0.13 web=0.81 hinterland=0.87 woodland=0.12 windbreak=0.57 notice=0.15 | lanes=18 corridors=31 legs=31
+new  39 field=0.88 homesteads=1.09 track=0.08 appurtenances=0.14 web=0.74 hinterland=0.82 woodland=0.16 windbreak=0.62 notice=0.25 | lanes=19 corridors=44 legs=44
+base 2 field=1.02 homesteads=1.02 track=0.07 appurtenances=0.12 web=0.99 hinterland=0.71 woodland=0.12 windbreak=0.66 notice=0.14 | lanes=14 corridors=30 legs=30
+new  2 field=0.99 homesteads=1.90 track=0.06 appurtenances=0.15 web=0.86 hinterland=0.91 woodland=0.11 windbreak=0.51 notice=0.10 | lanes=14 corridors=36 legs=36
+base 6 field=1.12 homesteads=1.08 track=0.08 appurtenances=0.12 web=0.63 hinterland=0.76 woodland=0.12 windbreak=0.64 notice=0.66 | lanes=16 corridors=27 legs=27
+new  6 field=1.18 sink=0.06 homesteads=1.34 track=0.06 appurtenances=0.17 web=0.94 hinterland=0.81 woodland=0.11 windbreak=0.69 notice=0.10 | lanes=17 corridors=38 legs=38
+base 8 field=1.12 homesteads=1.12 track=0.13 appurtenances=0.19 web=0.85 hinterland=0.88 woodland=0.11 windbreak=0.67 notice=0.12 | lanes=19 corridors=34 legs=34
+new  8 field=0.94 homesteads=1.38 track=0.11 appurtenances=0.19 web=0.70 hinterland=0.95 windbreak=0.41 notice=0.13 | lanes=14 corridors=35 legs=35
+base 25 field=1.48 homesteads=1.03 track=0.08 appurtenances=0.13 web=0.75 hinterland=0.85 woodland=0.10 windbreak=0.52 notice=0.10 | lanes=22 corridors=26 legs=26
+new  25 field=2.09 homesteads=1.76 track=0.08 appurtenances=0.13 web=0.88 hinterland=1.25 woodland=0.15 windbreak=0.75 notice=0.25 | lanes=15 corridors=34 legs=34
+base 47 field=1.04 homesteads=1.17 track=0.09 appurtenances=0.14 web=0.90 hinterland=0.81 windbreak=0.60 notice=0.51 | lanes=17 corridors=32 legs=32
+new  47 l7r.diagram.hamletgen.ways.last_resort.WebRefused: the web's last resort cannot mend it without dropping a tree lane: lanes 3 (access) still break a rule of the lane law; the web still breaks bends

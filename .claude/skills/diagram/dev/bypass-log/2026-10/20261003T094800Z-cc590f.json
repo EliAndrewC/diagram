@@ -1,0 +1,6 @@
+{
+  "utc": "20261003T094800Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "glyph-check rounds capped at two per unit (feature 294 FR-009): the farmhouse and village lane on Inashiro verified by measurement (gc-fh-r2-f5-recheck, gc-vl-r2-f3-recheck); the homestead bamboo on Kuwabata passed its last round; all to the GM through escalation-check"
+}

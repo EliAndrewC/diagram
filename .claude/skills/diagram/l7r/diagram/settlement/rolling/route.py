@@ -8,8 +8,9 @@ round what stands:
 
 - SEARCHED on a grid of the open ground (`ROUTE_STEP_PX`) within `ROUTE_REACH_PX` of the door: weighted A* (`ROUTE_WEIGHT`)
   aimed at the tree's nearest points. A grid point is open off the site's taken ground (`FreeGround`), off every placed
-  homestead box by the corridor's half-width, off the reserved wood seats and off the house's own box (the placed index, the
-  site raster and the wood grid, each asked per point - never a registry walk).
+  homestead box by the corridor's half-width, off the reserved wood seats and off the household's own house, beds, sheds and
+  fixtures (`own_parts`; the placed index, the site raster and the wood grid, each asked per point - never a registry walk).
+  So it is searched for each LAYOUT of a seat (its garden side, its fixtures), not once for the seat's house and yard.
 - PULLED TAUT through the engine's OWN leg tests (`leg_ok`): each leg runs to the farthest grid point the house, its fixtures,
   its beds, the standing ground and the ways' ground test admit - the tests a straight corridor passes - and none turns back on
   itself (`doubles_back`). At most `ROUTE_LEGS` legs.
@@ -134,6 +135,17 @@ def taut(pts: Sequence[Pt], leg_ok: Callable[[Pt, Pt], bool], turns_back: Callab
     return tuple(out) if len(out) - 1 <= most else None
 
 
+def tree_in_reach(segs: Sequence[tuple[Pt, Pt]], door: Pt, reach: float) -> bool:
+    """Does any of the tree's segments come within the square `reach` about `door` (bounding boxes overlapping)? A route search's
+    every grid point lies within `ROUTE_REACH_PX` of its door on each axis and its goal within a step of a segment
+    (`_cells_to_tree`'s `goal_of`), so where none does, no route can be found.
+
+    Research: search breadth - NONE: an exact prefilter of the route search, the same verdict
+    """
+    x0, y0, x1, y1 = door[0] - reach, door[1] - reach, door[0] + reach, door[1] + reach
+    return any(max(a[0], b[0]) >= x0 and min(a[0], b[0]) <= x1 and max(a[1], b[1]) >= y0 and min(a[1], b[1]) <= y1 for a, b in segs)
+
+
 def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:
     """The routed paths from the homestead's two dooryard doors (`doors_of`: the forecourt, the yard's far edge), each searched
     once while nothing standing changes (`_standing_memo`).
@@ -154,23 +166,88 @@ def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tup
     def leg_ok(a: Pt, b: Pt) -> bool:
         return A.house_clear(a, b, geom, hgap) and A.fixtures_clear(s, a, b, geom) and A.parts_clear(s, a, b, geom) and A.standing_ground(s, a, b, memo) and A.lawful_leg(s, a, b, memo)
 
+    # ...OFF THE HOUSE'S OWN BOX ONLY, and once for the seat's house and yard - its layouts share it, each taking it only where
+    # its own beds and fixtures leave it clear (the taut pull's and `access_corridor`'s leg tests). A FIX THAT FAILED (feature
+    # 317, task T06, research R8): searched for each garden layout round its own beds and fixtures (`own_parts`), it seated more
+    # households with a path before feature 315 merged (seats lost to the path alone 77 -> 21 at 15 households), and after it cost
+    # the homesteads stage 3-43% more than this search on the bookend's seeds (calls, passage off), the layouts no longer seated
+    # better and each searched again. Withdrawn: do not retry it without measuring it against main's layouts first.
+    mine = [(own, hgap)]
     for door in A.doors_of(geom, half)[:2]:
         key = ("routed", door, tuple(own), tuple((geom.get("boxes") or {}).get("yard") or ()))
         if key not in memo:
-            memo[key] = _route_from(s, tree, door, own, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok, geom)
+            memo[key] = _route_from(s, tree, door, mine, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok, geom)
         if memo[key] is not None:
             yield memo[key]
 
 
+def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> list[tuple[Any, float]]:
+    """What a household's own parts keep a WALK off of (`passage.walk_of`, feature 317), each with the gap its leg test keeps:
+    the house (`house_clear`'s gap), the shed, byre, well and garden beds (`parts_clear`'s), the fixtures by a corridor's
+    half-width (`fixtures_clear`'s). The corridor's own route keeps off the house alone (`routed_corridors`: searched per
+    layout round these parts, it was withdrawn - research R8).
+
+    Research: a walk crosses nothing of either household - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture, each kept at its leg test's gap; the persimmon left out of the grid's walls, its trunk held off by every leg's own test (`passage.walk_clear`, `fixtures_clear`)
+    """
+    from .access import PART_MARGIN_FT, TREAD_HALF_FT
+
+    boxes = geom.get("boxes") or {}
+    pgap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
+    mine: list[tuple[Any, float]] = [(own, hgap)]
+    mine += [(b, pgap) for b in [*(boxes.get(k) for k in ("shed", "byre", "well")), *(boxes.get("gardens") or ())] if b is not None]
+    # ...BUT NOT THE PERSIMMON (feature 317, research R8): feature 315 holds it in the dooryard, by the door, and its trunk's keep
+    # (a corridor's half-width) left the grid no cell between it and the house - seed 39 at 40 households searched 456 routes,
+    # 112 of them finding nothing, and tried 1,084 seats where the search without it tried 295. The taut pull still keeps every
+    # leg off its trunk (`fixtures_clear`), as it did before the route kept off its own parts.
+    mine += [(b, half) for kind, b in sorted((boxes.get("fixtures") or {}).items()) if kind != "persimmon"]
+    return mine
+
+
 def _route_from(
-    s: Settlement, tree: AccessTree, door: Pt, own: Any, yard: Any, half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, leg_ok: Callable[[Pt, Pt], bool], geom: Any
+    s: Settlement,
+    tree: AccessTree,
+    door: Pt,
+    mine: Sequence[tuple[Any, float]],
+    yard: Any,
+    half: float,
+    hgap: float,
+    fg: Any,
+    wood: Any,
+    placed: Any,
+    step: float,
+    leg_ok: Callable[[Pt, Pt], bool],
+    geom: Any,
 ) -> tuple[Pt, ...] | None:
     """One door's routed path (`routed_corridors`), or None.
 
     Research: path leaves its own yard once - UNRESEARCHED: kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again
     """
+    from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard
+
+    # ...NOT SEARCHED WHERE NO BRANCH OF THE TREE COMES WITHIN ITS REACH (feature 317, research R10): such a search can find no
+    # goal, and it explored its whole box before failing - 348 of seed 47's 509 failed searches at 40 households, 80% of the cells
+    # they opened. The same verdict, decided before the search
+    if not tree_in_reach(tree.segs, door, int(ROUTE_REACH_PX / step) * step + step):
+        return None
+    found = _cells_to_tree(s, tree, door, mine, half, hgap, fg, wood, placed, step, geom)
+    if found is None:
+        return None
+    cells, q = found
+    pts = [door, *((door[0] + c[0] * step, door[1] + c[1] * step) for c in cells[1:]), q]
+    run = taut(pts, leg_ok, doubles_back, ROUTE_LEGS)
+    # ...AND IT LEAVES ITS OWN YARD, as every straight and round-the-gable corridor must (`_house_candidates`, feature 287 M8)
+    return run if run is not None and leaves_its_yard(run, yard, s.px(TREAD_HALF_FT + PART_MARGIN_FT)) else None
+
+
+def _cells_to_tree(
+    s: Settlement, tree: AccessTree, door: Pt, mine: Sequence[tuple[Any, float]], half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, geom: Any
+) -> tuple[list[Cell], Pt] | None:
+    """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None.
+
+    Research: path kept off what stands - research/questions/0081-village-lanes.drawing.html: nothing built on a lane - off the household's own house and the parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
+    """
     from . import access as A
-    from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard, seg_box_within
+    from .access import seg_box_within
 
     memo = A._standing_memo(s)[1]
 
@@ -184,12 +261,7 @@ def _route_from(
     def at(c: Cell) -> Pt:
         return (x0 + c[0] * step, y0 + c[1] * step)
 
-    # ...OFF THE HOUSE'S OWN BOX ONLY. Kept off the household's beds, sheds and fixtures too (feature 314 research R2: a path
-    # searched over its own beds was found and then refused when pulled taut), the paths it found wound round those parts and
-    # the web could not draw three of them on one map - seed 13 at 20 households refused (`WebRefused`, needle loops) where
-    # the base rolled it; withdrawn (research R12). The first step and the last leg keep their tests (below).
-    mine = [(own, hgap)]
-
+    # ...OFF THE HOUSEHOLD'S OWN HOUSE AND PARTS (`own_parts`): the first step and the last leg keep their tests (below)
     def is_open(c: Cell) -> bool:
         p = at(c)
         if fg is not None and fg.point_taken(p[0], p[1]):
@@ -221,11 +293,4 @@ def _route_from(
         p = at(c)
         return A.house_clear(door, p, geom, hgap) and A.fixtures_clear(s, door, p, geom) and A.parts_clear(s, door, p, geom)
 
-    found = search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, (0, 0), first_ok)
-    if found is None:
-        return None
-    cells, q = found
-    pts = [door, *(at(c) for c in cells[1:]), q]
-    run = taut(pts, leg_ok, doubles_back, ROUTE_LEGS)
-    # ...AND IT LEAVES ITS OWN YARD, as every straight and round-the-gable corridor must (`_house_candidates`, feature 287 M8)
-    return run if run is not None and leaves_its_yard(run, yard, s.px(TREAD_HALF_FT + PART_MARGIN_FT)) else None
+    return search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, (0, 0), first_ok)

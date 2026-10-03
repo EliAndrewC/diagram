@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T08:31:34Z",
+  "target": "review-accept",
+  "commit": "4e375737a",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--farmhouse F6: a confirmation of the round, no fix asked; the map has since re-rolled and this round judges it afresh"
+}

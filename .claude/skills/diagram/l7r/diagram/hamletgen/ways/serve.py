@@ -355,7 +355,9 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             a 3 ft footpath where the door stands past the reach
         round the grove to the street - research/questions/0033-row-villages-resson.drawing.html: a path round the grove,
             a GUESS there
-        off the fixtures and grove bands - research/questions/0081-village-lanes.drawing.html: walls to the path"""
+        off the fixtures and grove bands - research/questions/0081-village-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
+        no path to a household reached across a yard - research/questions/0081-village-lanes.drawing.html: it shows no lane of its own
+        a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
     from .settle import Lawful  # local: the settle sits above serve too
@@ -380,6 +382,8 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     steadings = steading_footprints(s.M)
     n = 0
     for h in list(s.M.get("houses", [])):
+        if h.get("reached_across"):
+            continue  # reached across its neighbor's yard: a household with no way of its own (feature 317, `rolling/passage.py`)
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
         if door is not None:
             # ...clear of everything the router keeps off, not the fixtures alone: stepped toward its own well, a door stood in
@@ -422,7 +426,7 @@ def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]]
     counts, the settle cut it back a frame, and the farm stood off every way (2026-10-01).
 
     Research:
-        the street serves the farm - research/questions/0081-village-lanes.drawing.html: within 60 ft of the house or
+        the street serves the farm - GUESS research/questions/0081-village-lanes.drawing.html: within 60 ft of the house or
             12 ft of its built ground"""
     if street is None:
         return True

@@ -129,7 +129,8 @@ def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]
             log = os.path.join(root, ".git", "page-sessions", sid)
             os.makedirs(log, exist_ok=True)
             write = not _brief_load.declared(_read(brief))
-            queue.append({"sid": sid, "log": log, "brief": brief, "cmd": resume_command(command(root, name, extra, brief, sid), sid), "write": write})
+            returned = returned_file(log, undelivered(projects, sid))
+            queue.append({"sid": sid, "log": log, "brief": brief, "cmd": resume_command(command(root, name, extra, brief, sid), sid, returned), "write": write})
             print(f"page-session: resume {sid} ({os.path.basename(brief)})")
             continue
         if item.startswith("then:"):
@@ -209,7 +210,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
                     break
                 stalls += 1
                 runlog.write(f"stalled {item['sid']} - idle {watch.idle // 60} min, resuming it ({stalls} of {STALL_RESUMES})\n")
-                cmd = resume_command(item["cmd"], item["sid"])
+                cmd = resume_command(item["cmd"], item["sid"], returned_file(item["log"], undelivered(projects_dir(root), item["sid"])))
                 continue
             if not failed(rc, text) or attempt == RETRIES:
                 break
@@ -217,7 +218,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
             runlog.write(f"failed {item['sid']} rc={rc} - waiting {min(wait, RETRY_EVERY) // 60} min (reset in {wait // 60}), then resuming it ({first_line(text)})\n")
             time.sleep(min(wait, RETRY_EVERY))
             attempt += 1
-            cmd = resume_command(item["cmd"], item["sid"])
+            cmd = resume_command(item["cmd"], item["sid"], returned_file(item["log"], undelivered(projects_dir(root), item["sid"])))
         runlog.write(f"ended {item['sid']} rc={rc}\n")
         cont = os.path.join(item["log"], "continue.md")
         if os.path.isfile(cont):
@@ -267,6 +268,55 @@ STALL_AFTER = 15 * 60
 STALL_CHECK = 60
 STALL_RESUMES = 8
 
+# ...AND HANDED WHAT ITS AGENTS RETURNED (feature 317, 2026-10-03). The agents' reports reach a headless session's
+# transcript only as QUEUED notifications (`queue-operation` / `enqueue`) that its process never takes up, and a resumed
+# session is told by Claude Code that its "background agents didn't finish before the previous session ended" - so feature
+# 317's R1 check session, whose eight checks had all returned within two minutes of its turn's end, was resumed fifteen
+# minutes later, dispatched all eight again, ended its turn and sat again. So the resume names a file holding every report
+# queued since the session last took one up (`undelivered`), and a session whose turn has ended with reports waiting is
+# resumed after RETURNED_AFTER of quiet rather than STALL_AFTER: its agents' writes count as activity, so five quiet
+# minutes is every agent finished or stuck, and a session still in a tool call (its last turn not ended) is left alone.
+RETURNED_AFTER = 5 * 60
+RETURNED = (
+    " Your background agents returned while you waited - a headless session is not woken by them, and the notice that they"
+    " did not finish is wrong. Every report is in {path}: read it, record each check from it, and do not dispatch them again."
+)
+
+
+def _entries(path: str) -> list[dict]:
+    out = []
+    for line in _read(path).splitlines():
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict):
+            out.append(row)
+    return out
+
+
+def undelivered(projects: str, sid: str) -> list[str]:
+    """The task notifications queued in the session's transcript since it last took one up (each `enqueue` after the last
+    `dequeue`) - the agents' reports a headless process never read."""
+    rows = [r for r in _entries(os.path.join(projects, f"{sid}.jsonl")) if r.get("type") == "queue-operation"]
+    last = max((i for i, r in enumerate(rows) if r.get("operation") == "dequeue"), default=-1)
+    return [str(r.get("content")) for r in rows[last + 1 :] if r.get("operation") == "enqueue" and "<task-notification>" in str(r.get("content") or "")]
+
+
+def turn_ended(projects: str, sid: str) -> bool:
+    """Has the session's last turn ended (its last assistant entry stopped at `end_turn`, not at a tool call it is running)?"""
+    last = [r for r in _entries(os.path.join(projects, f"{sid}.jsonl")) if r.get("type") == "assistant"]
+    return bool(last) and (last[-1].get("message") or {}).get("stop_reason") == "end_turn"
+
+
+def returned_file(log: str, reports: list[str]) -> str | None:
+    """Write the reports a resume hands its session to `<log>/returned.md`; None, and nothing written, when there are none."""
+    if not reports:
+        return None
+    path = os.path.join(log, "returned.md")
+    pathlib.Path(path).write_text("\n\n".join(reports) + "\n", encoding="utf-8")
+    return path
+
 
 def projects_dir(root: str) -> str:
     """Where Claude Code writes the transcripts of a session started in `root` - as `page-session.sh` computes it."""
@@ -298,9 +348,9 @@ class StallWatch(threading.Thread):
     """Beside one session: every STALL_CHECK seconds, the silence since its last transcript write or since the watch
     began, whichever is later; past STALL_AFTER it ends the session's process and records `stalled` and `idle`."""
 
-    def __init__(self, projects: str, sid: str, check: float = STALL_CHECK, after: float = STALL_AFTER) -> None:
+    def __init__(self, projects: str, sid: str, check: float = STALL_CHECK, after: float = STALL_AFTER, returned: float = RETURNED_AFTER) -> None:
         super().__init__(daemon=True)
-        self.projects, self.sid, self.check, self.after = projects, sid, check, after
+        self.projects, self.sid, self.check, self.after, self.returned = projects, sid, check, after, returned
         self.began = time.time()
         self.halt = threading.Event()
         self.stalled = False
@@ -310,7 +360,7 @@ class StallWatch(threading.Thread):
         while not self.halt.wait(self.check):
             # never before the watch began: a RESUMED session's transcript is as old as the wait that preceded it
             quiet = time.time() - max(last_activity(self.projects, self.sid) or 0.0, self.began)
-            if quiet < self.after:
+            if quiet < self.after and not (quiet >= self.returned and turn_ended(self.projects, self.sid) and undelivered(self.projects, self.sid)):
                 continue
             pids = session_pids(self.sid)
             if not pids:
@@ -363,12 +413,14 @@ def wait_for(text: str, attempt: int, now: float) -> int:
     return BACKOFF[min(attempt, len(BACKOFF) - 1)]
 
 
-def resume_command(cmd: list[str], sid: str) -> list[str]:
-    """The same session's command, resumed: `--session-id <sid>` becomes `--resume <sid>`, the prompt a continue."""
+def resume_command(cmd: list[str], sid: str, returned: str | None = None) -> list[str]:
+    """The same session's command, resumed: `--session-id <sid>` becomes `--resume <sid>`, the prompt a continue - naming
+    the file of its agents' reports where the runner wrote one (`returned_file`)."""
     out = list(cmd)
-    i = out.index("--session-id")
-    out[i : i + 2] = ["--resume", sid]
-    out[out.index("-p") + 1] = RESUME
+    if "--session-id" in out:
+        i = out.index("--session-id")
+        out[i : i + 2] = ["--resume", sid]
+    out[out.index("-p") + 1] = RESUME + (RETURNED.format(path=returned) if returned else "")
     return out
 
 

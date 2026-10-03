@@ -130,9 +130,14 @@ check "the override runs the gate alone" '[ "$(rc_pretool "$OVER")" -eq 0 ]'
 check "...and logs its reason for the audit" 'grep -rql "docs only, no map ink" "$SKILL/dev/bypass-log"'
 
 # --- 6. stop: a half-open pairing is refused ONCE --------------------------------------------------
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+# GUARD_EDIT_OK: feature 317 - a green `make test-file` writes the content's key to the verification record and is no gate:
+# the stop branch asks the gate stamp, so it is quiet until a gate went green on this content
+printf '{"engine_key":"%s","target":"test-file"}' "$KEY" > "$CLONE/.git/verification-state.json"
 rm -f "$CLONE/.git/pairing-state.json"
 STOP=$(printf '{"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$CLONE")
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); TESTFILE=$?
+check "stop is quiet when only a test file went green on this content" '[ "$TESTFILE" -eq 0 ]'
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; touch "$CLONE/.git/stub-gate-green"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); FIRST=$?
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); SECOND=$?
 check "stop refuses a half-open pairing" '[ "$FIRST" -eq 2 ]'

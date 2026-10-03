@@ -37,7 +37,7 @@ from typing import Any
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
-from .clearance import _HAIRPIN_DEG, _bends_badly, _clear_link, _clear_touch
+from .clearance import _HAIRPIN_DEG, _bends_badly, _clear_link, _clear_touch, kink_spans
 from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, _seg_cross, _turn_deg
 from .smooth import _JOG_FT, admits_lane, commit_lane, web_pieces
 from .sweeps import _SERVE_FT
@@ -248,7 +248,11 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             return _clear_touch(p[a], p[b], hard, walls, water, g) and all(seg_dist(v[0], v[1], p[a], p[b]) <= _JOG_FT for v in p[a + 1 : b])
 
         new = pulled(old, ok)
-        if len(new) == len(old) or not keeps_the_web(lanes, {i, j}, old, new, houses):
+        # ...NEVER INTO A KINK THE TWO DID NOT HAVE (feature 317): two access lanes met end to end at a door (one corridor hung
+        # from another's start, the route round its own beds), the pull took out a vertex of a bend and left a kink at the next,
+        # and a tree lane no settle may cut was refused with it (seed 47 at 20 households, `WebRefused`: bends) - the test a
+        # join that stops short is held to (`law.near_misses`)
+        if len(new) == len(old) or len(kink_spans(new)) > len(kink_spans(old)) or not keeps_the_web(lanes, {i, j}, old, new, houses):
             continue
         if commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)
@@ -452,7 +456,7 @@ def split_at_crossings(s: Settlement) -> int:
 
 
 _SHORT_LEG_FT = 25.0  # a last leg this short, with the joint beyond it, is read as one turn (a map drawing convention)
-"""Research: two turns read as one - research/questions/0081-village-lanes.drawing.html: across a leg under 25 ft"""
+"""Research: two turns read as one - UNRESEARCHED: across a leg under 25 ft"""
 
 
 def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
@@ -461,7 +465,7 @@ def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
     the limit, which is how the joint pass missed one (the 269 landing's round-2 review of Kuwabata: 79 + 90 degrees
     across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart).
 
-    Research: no hairpin - research/questions/0081-village-lanes.drawing.html: 140 degrees summed over a short leg"""
+    Research: no hairpin - UNRESEARCHED: 140 degrees summed over a leg under 25 ft"""
     if math.dist(b, j) > _SHORT_LEG_FT:
         return False
 

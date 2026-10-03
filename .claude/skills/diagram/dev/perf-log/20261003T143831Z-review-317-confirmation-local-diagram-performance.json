@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T142008Z"
+  },
+  "binding": "41a4bb892ed90f02074b52782ffe0affc52d3cc6f8ff32de4bb696ed5987edf7",
+  "end": {
+    "commit": "529daac23",
+    "label": "317-end",
+    "utc": "20261003T142347Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T143831Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.2,
+          "39": -13.9,
+          "4": 2.7,
+          "47": 6.7
+        },
+        "total_pct": -2.2
+      },
+      "20": {
+        "seeds": {
+          "25": 13.0,
+          "39": -4.8,
+          "4": -12.0,
+          "47": 13.2
+        },
+        "total_pct": 1.5
+      },
+      "40": {
+        "seeds": {
+          "25": 13.4,
+          "39": 10.0,
+          "4": -1.0,
+          "47": 42.3
+        },
+        "total_pct": 14.6
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -18.8,
+      "4": -1.9,
+      "47": -13.8
+    },
+    "total_pct": -9.0
+  },
+  "note": "The control stands and the attribution is right: perf-317-control-40c reproduced (two alternated takes, homesteads CPU at 40 hh, seeds 25/39/47: main 3.03/2.87/4.32 and 3.02/3.15/4.04; clone 4.18/4.45/10.11 and 4.43/4.31/9.62; WEST0 4.46/2.97/5.78 and 4.32/2.95/5.27; NOPASS 3.82/4.40/4.47 and 3.96/4.58/4.45; both off 3.15/3.19/4.33 and 3.22/3.31/4.37). Seed 39 is the wood-seat fix; seed 25 is the passage; seed 47 is now one margin seated twice and margin 1 kept; notice at 20:25 0.12-0.14 on main, 0.79 on the clone, 0.21-0.23 with NOPASS. Two statements are wrong. (1) Seed 47 does not fall two households short: the discarded passage seating places 33 of 40 (7 short; 896 placer calls and grow_level 2, against 368 calls and level 1 for the withheld seating that places 40; 5.69 s of CPU against 3.64 s). The stages.seat_the_margin docstring repeats the same wrong figure. The explanation also does not say that the kept seed-47 map has no passages and is byte-identical (s.M without meta) to the share-0 map. (2) It is silent on the web stage at 40:25, which the report says grew +0.5 s: main web 1.69/1.64 and both-off 1.67/1.63, against 2.17/2.84 on the clone (NOPASS 2.13/2.06, WEST0 3.44/3.35), so the growth is the layout from both causes. It is load-bearing: without it seed 25 at 40 reads about +9.9% and does not cross. Minor: 10 households is not at or under main on every seed (seed 47 +6.7%, seed 4 +2.7%). Rewrite with 33 of 40, the zero-passage identical map on seed 47, and the web growth at 40:25.",
+  "verdict": "inconsistent"
+}

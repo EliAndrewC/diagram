@@ -37,7 +37,7 @@ TIP_MARGIN_FT = 1.0
 # How far an end that reaches nothing may be carried on to the bund: the gate's own reach to another way, the distance at
 # which the old rule counted the field as reached - so an end the old rule passed as "near the field" is carried onto it.
 RUN_ON_REACH_FT = WAY_END_REACH_FT
-"""Research: run-on reach - research/questions/0081-village-lanes.drawing.html: an end within 60 ft of the field is carried on"""
+"""Research: run-on reach - GUESS research/questions/0081-village-lanes.drawing.html: an end within 60 ft of the field is carried on"""
 # A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
 # behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
 RUN_ON_TURN_DEG = 60.0

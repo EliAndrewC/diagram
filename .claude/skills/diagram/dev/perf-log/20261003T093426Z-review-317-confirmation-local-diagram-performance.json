@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T090835Z"
+  },
+  "binding": "6b95a3fb7747235423cf3a3018fabe1250c9189825cc8bffe01ce4936f1c1ffd",
+  "end": {
+    "commit": "8ae1ef704",
+    "label": "317-end",
+    "utc": "20261003T091041Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T093426Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -5.3,
+          "39": -10.0,
+          "4": 0.0,
+          "47": -5.6
+        },
+        "total_pct": -5.1
+      },
+      "20": {
+        "seeds": {
+          "25": 17.1,
+          "39": 0.0,
+          "4": -14.9,
+          "47": 12.5
+        },
+        "total_pct": 2.5
+      },
+      "40": {
+        "seeds": {
+          "25": 2.7,
+          "39": 5.1,
+          "4": -10.1,
+          "47": 12.2
+        },
+        "total_pct": 1.1
+      }
+    },
+    "seeds": {
+      "25": 3.8,
+      "39": -6.7,
+      "4": 6.7,
+      "47": -20.6
+    },
+    "total_pct": -5.0
+  },
+  "note": "Cause (1) holds: the passage carries the three crossings, and s25 notice and 40hh s47 web are on its layout (the reviewer's earlier share-0 counterfactual). Causes (2) and (3) do not hold for 40hh s39 (+5.1%, homesteads +0.3 s). perf-317-control-judge's JUDGE_OFF makes tree.laid_run the identity, which also strips the rejoin and square that admits' lay already did on main; the diff moves that code into laid_run, it does not add it. So the 0.23 s counts main's own work. The reviewer turned off exactly what is new (as_joined [], laid_run the identity only in seating_judge's own call, so own_clear is never asked), 3 alternated CPU takes in detached worktrees: 1.91/1.95/1.97 s against share 0 at 2.02/2.02/1.98, about 0.05 s. The session's stub reproduced 1.68-1.85. All end arms seat the identical layout, so at s39 the judge refuses nothing more and routes no more doors. The rest is not run-to-run spread: share 0 ran 1.91-2.02 over 6 takes, main 1.55-1.70, disjoint, about 0.3 s (18%) unattributed. A candidate to control, not an attribution: access_corridor now runs route.routed_corridors per layout after every candidate (a return None became a break; earlier profile 239 vs 74 calls, access.admitted 1,607 calls). Name that cost with a control that removes only it, and correct perf-317-control-judge.",
+  "verdict": "inconsistent"
+}

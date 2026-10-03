@@ -257,6 +257,18 @@ def test_a_RETROACTIVE_baseline_is_compared_against_the_newest_that_is_NOT_itsel
     assert "SLOWER" in out, "12.0 against 10.0 is +20%"
 
 
+def test_a_baseline_taken_again_is_the_NEWEST_with_its_label(tmp_path, monkeypatch, capsys) -> None:
+    """Feature 317 took its bookends again once main moved: the report compared the newest end against the OLDEST start, on
+    another main, where the push's `perf_review` pairs the newest - two answers for one pair."""
+    old = _snap174("317-start", "20260101T000000Z", [{"seed": 1, "seconds": 20.0}])
+    new = _snap174("317-start", "20260103T000000Z", [{"seed": 1, "seconds": 10.0}])
+    end = _snap174("317-end", "20260104T000000Z", [{"seed": 1, "seconds": 12.0}])
+    _log(tmp_path, monkeypatch, old, new, end)
+    ps.report("317-start")
+    out = capsys.readouterr().out
+    assert "10.0s ->   12.0s" in out and "SLOWER" in out, "against the newer start: +20%, not -40%"
+
+
 def test_only_ONE_snapshot_with_that_label_says_there_is_nothing_to_compare(tmp_path, monkeypatch, capsys) -> None:
     _log(tmp_path, monkeypatch, _snap174("174-start", "20260101T000000Z", [{"seed": 1, "seconds": 10.0}]))
     assert ps.report("174-start") == 0

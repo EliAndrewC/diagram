@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T134454Z"
+  },
+  "binding": "7608a0239c5c73dd82717962687e62d2d16eae43d497b86425add06f2b299283",
+  "end": {
+    "commit": "ac8af8f80",
+    "label": "317-end",
+    "utc": "20261003T134829Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T140343Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -3.3,
+          "4": 0.0,
+          "47": 11.5
+        },
+        "total_pct": 1.7
+      },
+      "20": {
+        "seeds": {
+          "25": 23.3,
+          "39": -10.2,
+          "4": -11.3,
+          "47": 16.7
+        },
+        "total_pct": 3.4
+      },
+      "40": {
+        "seeds": {
+          "25": 16.7,
+          "39": 11.0,
+          "4": -5.0,
+          "47": 134.7
+        },
+        "total_pct": 35.4
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -14.3,
+      "4": 8.7,
+      "47": -8.0
+    },
+    "total_pct": -3.4
+  },
+  "note": "The two causes stand (control perf-317-control-40b reproduced, two alternated takes, homesteads CPU at 40 hh, seeds 25/39/47: main 3.03/2.83/4.04 and 2.90/2.70/3.85; clone 4.09/4.26/21.11 and 4.17/4.14/21.72; both off 3.21/3.01/4.08 and 3.11/2.73/4.18; seed 47 WEST0 alone 5.32/4.98, NOPASS alone 4.23/4.18). The explanation misstates the rest. (1) Seed 47's mechanism is wrong: the clone seats THREE margins, 33 then 38 then 40 households (5.4 s + 6.5 s thrown away, and the kept third-margin seating takes 8.3 s against main's single 3.6 s seating on margin 1), not 'the first seating stops two short of 40 and is thrown away'; the kept map also moves from margin 1 to margin 3, which the explanation does not say. (2) 'Band 3 is the 40-household leg' is false: the report puts the 20-household leg at band 3 (seed 25 +23.3%) and the 10-household leg at band 2 (seed 47 +11.5%), and the explanation is silent on the notice stage that grew there. That growth is real, not noise: notice CPU at 20:25 0.11/0.12 s on main against 0.77/0.76 s on the clone, at 20:47 and 10:47 0.10 -> 0.25 s; at 20:25 NOPASS takes it to 0.23 s (WEST0 0.60 s), so it follows from the passage's layout (place_kosatsuba -> _route_seats, three boards tried). Rewrite with the three margins, the margin move and the notice stage's growth.",
+  "verdict": "inconsistent"
+}

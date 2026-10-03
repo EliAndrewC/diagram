@@ -12,6 +12,7 @@ from .._geom import Indexed, Pt, point_in_poly
 from .access import seat_reaches_tree
 from .fit import part_box, within_field_reach
 from .lot import watered
+from .passage import landlocked
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -239,6 +240,7 @@ class PlacerMixin:
             garden side chosen by the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: fewest shaded beds, then the south corners before the walls
             left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
             one computed move off a neighbor - NONE: the measured overlap plus 2 px, once
+            a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
         """
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
@@ -271,6 +273,13 @@ class PlacerMixin:
         _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}
         _env = self._bbox_of([g["bbox"] for g in _at.values()])
         _union_clear = not (_fg is not None and _fg.rect_refused(_env)) and self._envelope_blocked(_env) is None
+        # A TIGHT SEAT IS JUDGED BY ITS LAND, NOT ONE LAYOUT (feature 317, `passage.landlocked`): the custom is for land with no
+        # way of its own, and a household lays its beds where its way can run - so the seat is taken only where some layout here
+        # has a walk to the neighbor's yard and none has a corridor of its own
+        if getattr(self, "_tight_of", None) is not None:
+            if not landlocked(self, list(_at.values())):
+                return None
+            self._tight_of["layouts"] = list(_at.values())  # ...kept for the recheck on the finished seating (`recheck_passages`)
         best: Any = None
         _reaches: bool | None = None
         for rank, side in enumerate(self._NUC_SIDES):

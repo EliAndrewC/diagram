@@ -8,9 +8,10 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
-from .rolling.access import TREAD_WALL_FT, reserve
+from .rolling.access import TREAD_WALL_FT
 from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
+from .rolling.passage import reserve_way
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/questions/0029-farmhouses-minka.drawing.html). The paddy's margin is
@@ -728,8 +729,6 @@ class HousesMixin:
             return False
         cx, cy, geom = spot
         self.placed.append(geom["bbox"])  # reserve the whole homestead footprint as one rect
-        if geom.get("access") is not None:  # the corridor the seat was admitted with, reserved (feature 287, plan M3)
-            reserve(self, geom["access"], (cx, cy))
         rec = {
             "x": cx,
             "y": cy,
@@ -743,6 +742,7 @@ class HousesMixin:
             "wealth": wf,
             "geom": geom,
         }  # rot position-seeded, like _shed above
+        reserve_way(self, rec, geom, (cx, cy))  # its corridor reserved (feature 287, plan M3), or its walk across a yard (feature 317)
         record_parts(self, rec, geom, _byre_form)  # the reserved stall and well pocket, on the record
         self.M["houses"].append(rec)
         self._pending_farmsteads.append(rec)

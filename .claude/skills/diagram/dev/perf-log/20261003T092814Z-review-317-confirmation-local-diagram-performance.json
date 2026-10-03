@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T090835Z"
+  },
+  "binding": "6b95a3fb7747235423cf3a3018fabe1250c9189825cc8bffe01ce4936f1c1ffd",
+  "end": {
+    "commit": "8ae1ef704",
+    "label": "317-end",
+    "utc": "20261003T091041Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T092814Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -5.3,
+          "39": -10.0,
+          "4": 0.0,
+          "47": -5.6
+        },
+        "total_pct": -5.1
+      },
+      "20": {
+        "seeds": {
+          "25": 17.1,
+          "39": 0.0,
+          "4": -14.9,
+          "47": 12.5
+        },
+        "total_pct": 2.5
+      },
+      "40": {
+        "seeds": {
+          "25": 2.7,
+          "39": 5.1,
+          "4": -10.1,
+          "47": 12.2
+        },
+        "total_pct": 1.1
+      }
+    },
+    "seeds": {
+      "25": 3.8,
+      "39": -6.7,
+      "4": 6.7,
+      "47": -20.6
+    },
+    "total_pct": -5.0
+  },
+  "note": "The passage holds for the three crossings (reviewer's 3 alternated CPU takes, worktrees: share 0 puts 20hh s25 at 6.30 s vs main 6.25 vs end 7.25, 20hh s47 3.56/3.52/3.94, 40hh s47 9.10/8.95/10.39), and 40hh s47's web +1.2 s is the passage layout, not tree.passage_anchors (stubbed: web 2.50 vs 2.46). But the written cause is silent on two things the delta shows. (1) 20hh s25 notice +0.4 s (0.08 -> 0.49 in the bookends), about 45% of that seed's +0.9 s; the explanation names only the homesteads route searches. (2) A cost that is not the passage: 40hh s39 (+5.1%, homesteads +0.3 s) seats no passage on either engine, and share 0 leaves homesteads at 1.97-1.99 s vs main 1.65. A profile puts it in the corridor-as-drawn code (route.routed_corridors 239 vs 74 calls, access.admitted 1,607 calls / 1.34 s, tree.admits 0.70 -> 1.09 s). That cost is also the unexplained 8-10% residual in the session's own control, and 15hh s25 is likewise +6% over main with share 0. Rewrite to name the notice growth and the non-passage corridor cost with its own control.",
+  "verdict": "inconsistent"
+}

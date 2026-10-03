@@ -254,6 +254,15 @@ def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[
     assert cx.main(["--root", str(root), "gate"]) == 1 and "REFUSED owed (new)" in capsys.readouterr().out
 
 
+def test_a_key_whose_label_holds_a_comma_is_named_whole() -> None:
+    known = {"p::f#the track out, the field spur and a row street stay whole": 1, "p::f#a": 2, "p::f#a, b": 3, "p::g#c": 4}
+    whole = "p::f#the track out, the field spur and a row street stay whole"
+    assert cx.split_keys(f"{whole},p::g#c", known) == [whole, "p::g#c"]
+    assert cx.split_keys("p::f#a, b,p::g#c", known) == ["p::f#a, b", "p::g#c"], "the longest known run"
+    assert cx.split_keys("p::f#a,p::g#c", known) == ["p::f#a", "p::g#c"]
+    assert cx.split_keys("nope, p::g#c,", known) == ["nope", "p::g#c"], "an unknown piece alone, an empty one dropped"
+
+
 def test_a_class_is_shown_as_its_own_statements_and_each_method_under_its_own_heading(tmp_path: pathlib.Path) -> None:
     skill = _tree(tmp_path, MOD + '\n\nclass Farm:\n    """Research: farm - NONE"""\n\n    SIZE = 3\n\n    def lay(self):\n        return self.SIZE * 2\n')
     cur = cx.current(skill)

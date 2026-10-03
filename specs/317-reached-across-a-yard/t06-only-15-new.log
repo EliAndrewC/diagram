@@ -1,0 +1,14 @@
+seed stage_s houses | seats seated seats_lost_to_corridor sides sides_passed sides_refused_else corridor_none corridor_only | s: corridor_none corridor_found
+   1   0.87    15 | 57 15 0 131 45 82 4 4 | 0.00 0.19
+   2   0.72    15 | 49 15 2 104 43 51 10 10 | 0.08 0.24
+   3   0.92    15 | 55 15 2 106 49 49 8 8 | 0.07 0.21
+   4   0.98    15 | 50 15 3 99 32 48 19 17 | 0.16 0.24
+   5   1.36    15 | 64 15 8 140 49 51 40 28 | 0.28 0.36
+   6   0.76    15 | 52 15 1 135 41 85 9 7 | 0.07 0.20
+   7   0.85    15 | 46 15 2 94 49 36 9 9 | 0.06 0.24
+   8   0.79    15 | 53 15 3 99 44 42 13 13 | 0.06 0.21
+ALL | seats=426 seated=120 seats_lost_to_corridor=21 sides=908 sides_passed=352 sides_refused_else=444 corridor_none=112 corridor_only=96
+WHY | route_none=16 route_searched=387 why_lane-law=25 why_leg-own-parts=39 why_no-candidate=32
+door to nearest house ft (n=91): min/p10/p25/median/p75/p90/max 84 111 123 139 186 192 229
+door to nearest tree  ft (n=96): min/p10/p25/median/p75/p90/max 51 125 136 165 176 185 252
+door to nearest yard  ft (n=91): min/p10/p25/median/p75/p90/max 83 111 128 143 160 182 209

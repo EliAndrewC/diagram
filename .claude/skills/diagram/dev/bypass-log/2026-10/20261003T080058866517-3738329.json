@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T08:00:58Z",
+  "target": "review-accept",
+  "commit": "d7c5fb007",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F2: questionable, no gate rule: the joints that pass a corner and join just beyond are main's joint code on the layout the passage moves (sliver_probe.py: unchanged with the feature's kink guard off, main's one with the passage share at 0); the map has re-rolled and this round re-judges them"
+}

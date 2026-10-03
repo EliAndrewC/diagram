@@ -1,0 +1,6 @@
+{
+  "utc": "20261003T090728Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "glyph-check rounds capped at two per unit (feature 294 FR-009): the farmhouse fix verified by measurement gc-fh-r2-f5-recheck and gc-vl-r2-f3-recheck; both units to the GM through escalation-check"
+}

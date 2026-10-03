@@ -36,6 +36,7 @@ from l7r.diagram.settlement.rolling import access as A  # noqa: E402
 from l7r.diagram.settlement.rolling import place as P  # noqa: E402
 from l7r.diagram.settlement.rolling import fit as F  # noqa: E402
 
+CLOCK = time.process_time if os.environ.get("CLOCK") == "cpu" else time.perf_counter  # CLOCK=cpu: the process's own CPU seconds, which the host's load barely moves (feature 317)
 REF = {"name": "Inashiro", "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated", "fixtures_min": {"shrine": 1}}
 
 T: dict[str, float] = defaultdict(float)  # seconds by outcome
@@ -48,11 +49,11 @@ ST_BY: dict[str, float] = defaultdict(float)  # settle seconds by the outcome th
 
 def timed(name: str, fn: Any) -> Any:
     def w(*a: Any, **k: Any) -> Any:
-        t0 = time.perf_counter()
+        t0 = CLOCK()
         try:
             return fn(*a, **k)
         finally:
-            SUB[name] += time.perf_counter() - t0
+            SUB[name] += CLOCK() - t0
 
     return w
 
@@ -61,9 +62,9 @@ def install() -> None:
     settle = G.settled_seat
 
     def settled(*a: Any, **k: Any) -> Any:
-        t0 = time.perf_counter()
+        t0 = CLOCK()
         got = settle(*a, **k)
-        dt = time.perf_counter() - t0
+        dt = CLOCK() - t0
         T["settle"] += dt
         N["popped"] += 1
         PEND["settle"] = PEND.get("settle", 0.0) + dt  # charged to the outcome of the next placer call, else dropped
@@ -78,9 +79,9 @@ def install() -> None:
     rr = P.seat_reaches_tree
 
     def reaches(s: Any, geom: Any) -> bool:
-        t0 = time.perf_counter()
+        t0 = CLOCK()
         ok = rr(s, geom)
-        SUB["seat_reaches_tree"] += time.perf_counter() - t0
+        SUB["seat_reaches_tree"] += CLOCK() - t0
         CUR["reached"] = ok
         return ok
 
@@ -105,9 +106,9 @@ def install() -> None:
             return tp(self, x, y, kind, *a, **k)
         CUR.clear()
         before = dict(SUB)
-        t0 = time.perf_counter()
+        t0 = CLOCK()
         ok = tp(self, x, y, kind, *a, **k)
-        dt = time.perf_counter() - t0
+        dt = CLOCK() - t0
         if ok:
             out = "seated"
         elif CUR.get("house_box"):
@@ -149,11 +150,11 @@ def run(households: int, seed: int) -> tuple[float, int]:
     took = 0.0
     with roll_scope(plan.spec):
         for st in STAGES:
-            t0 = time.perf_counter()
+            t0 = CLOCK()
             with redirect_stdout(io.StringIO()):
                 st(s, plan)
             if st.__name__ == "stage_homesteads":
-                took = time.perf_counter() - t0
+                took = CLOCK() - t0
                 break
     return took, len(s.M.get("houses") or [])
 

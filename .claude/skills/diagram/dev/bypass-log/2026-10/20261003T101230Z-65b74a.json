@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T10:12:30Z",
+  "target": "claims-gate",
+  "commit": "c68576042",
+  "why": "CLAIMS_OK: the 17 findings the claims gate counts as introduced are the lane code's pre-existing figures against the 0081 drawing page (research R5 and R9 list each), counted new only because feature 317 rewrote the page they cite; recording them re-owes the page's 300 claims, so they go to a follow-up feature put to the GM"
+}

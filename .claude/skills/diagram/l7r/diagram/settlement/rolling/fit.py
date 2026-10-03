@@ -15,6 +15,7 @@ from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
 from .access import access_corridor, legs
 from .lot import bundle_admitted, watered
+from .passage import passage_of
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -352,11 +353,11 @@ class BundleFitMixin:
         the yard's and the gardens' sun; the corridor from its door to the access tree (`access_corridor` - routed round
         what stands where the tree routes); the house's wall rule against the paddy; no part across a stream; the exact
         tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
-        ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its
-        share of the wood floor (`WoodShares.share`).
+        ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its share of the wood floor (`WoodShares.share`).
 
         Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
-            persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang"""
+            persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
+            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where it finds a straight or round-the-gable corridor of its own (no routed one sought: the GM's ruling of 2026-10-03)"""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -396,7 +397,27 @@ class BundleFitMixin:
         # share its search (`access_corridor`).
         tree = getattr(self, "_access", None)
         corridor = None
-        if tree is not None:
+        if tree is not None and getattr(self, "_tight_of", None) is not None:
+            # ...OR, AT A TIGHT SEAT AGAINST A NEIGHBOR'S LAND, A PASSAGE ACROSS ITS YARD (feature 317, `passage.py`): the custom
+            # is for land with no way of its own, so the household is reached across the neighbor's yard where a walk there is
+            # and no corridor of its own is (one that finds a corridor is refused the seat: the growth's ordinary seats keep a
+            # path's room). The seat was taken only where `landlocked` found no layout here with a straight or round-the-gable
+            # corridor (no routed one is sought, the GM's ruling of 2026-10-03), so the walk is asked first and the corridor is
+            # asked again only as the one predicate: the same verdict, both must hold. And ONCE A SEAT:
+            # a household with a way of its own from one garden layout at the seat is not on land the custom covers, so its
+            # other layouts there are refused unasked (`own_way`; research R7: 93 of 106 corridor searches after a walk found
+            # one, 1.75 s of the tight seats' 4.0)
+            tight = self._tight_of
+            if tight.get("own_way"):
+                return False
+            passage = passage_of(self, geom)
+            if passage is None:
+                return False
+            if access_corridor(self, geom, routed=False) is not None:  # ...a straight one or one round the gable (`landlocked`)
+                tight["own_way"] = True
+                return False
+            geom["passage"] = passage
+        elif tree is not None:
             corridor = access_corridor(self, geom)
             if corridor is None:
                 return False
@@ -623,7 +644,7 @@ class BundleFitMixin:
         return any(meet(f, b) for f in fixtures for b in bands) or (tree is not None and any(meet(tree, b) for b in bands if (b[0], b[1]) not in own))
 
     def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
-        """Does any part of this bundle - its house, yard, beds, well pocket, fixtures or grove bands - stand on a corridor of
+        """Does any part of this bundle - its house, yard, beds, kura, byre, well pocket, fixtures or grove bands - stand on a corridor of
         the access tree (`rolling.access.AccessTree.covers_box`)? The nucleated placer asks it of the whole envelope
         (`_envelope_blocked`, plan M3: no later placement covers a corridor); a grove farm, seated by this path, never
         asked, and Mizuguchi's first roll on feature 287 laid a farm's fixture across the exit strip, which the registry
@@ -634,7 +655,7 @@ class BundleFitMixin:
         if tree is None:
             return False
         boxes = geom.get("boxes") or {}
-        parts = [boxes.get(k) for k in ("house", "yard", "well")] + list(boxes.get("gardens") or ()) + list((boxes.get("fixtures") or {}).values()) + list(geom.get("groves") or ())
+        parts = [boxes.get(k) for k in ("house", "yard", "shed", "byre", "well")] + list(boxes.get("gardens") or ()) + list((boxes.get("fixtures") or {}).values()) + list(geom.get("groves") or ())
         return any(tree.covers_box(b) for b in parts if b is not None)
 
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]

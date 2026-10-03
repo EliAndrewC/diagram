@@ -480,7 +480,8 @@ def main(argv: list[str] | None = None) -> int:
     bare = args.for_ == "quote-check" and bo.unfootnoted_owed(units)
     if len(batches) > 1:
         print(f"check-bundle: the notes are over {NOTES_BUDGET:,} bytes - {len(batches)} quote-check bundles, one agent each:")
-        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_, owed, bare)
+        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_,
+                              bo.manifest_lines(bo.batch_units(units, frozenset(b)), checks, args.not_owed_ok), bare)
                  for i, b in enumerate(batches, start=1)]
         return max(codes)
     return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed)

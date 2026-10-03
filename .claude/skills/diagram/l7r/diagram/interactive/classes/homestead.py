@@ -18,7 +18,7 @@ class Farmhouse(Kind):
     slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands
     alone, its own yashikirin sheltering it.
 
-    Why: A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but
+    Why: On this map every house in a nucleated hamlet is reached by a lane, and each stands close to the paddy - up against it, but
     never on the bund. HOW that access is delivered is not settled: alleys cut off the spine, each household
     having made its own way to the road as this map reads it, and a laid-out back lane serving a regular row are
     both seen in villages read, so
@@ -31,7 +31,7 @@ class Farmhouse(Kind):
     with it: this project draws them always lined up with their house. About one farm in eight carries a storehouse
     against its back wall, a village headman's always.
 
-    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane holds in the villages read, though no page states it as a rule; the alleys-off-the-spine form is read only in one surveyed twentieth-century Manchu village on the dry northern plain, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
+    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane is this map's rule, not the record's: no page states it, and in Japan a household with no way of its own to the road could cross a neighbor's land by custom (an 1892 edition of local customs, mostly of plots or land and partly of towns); the alleys-off-the-spine form is read in one surveyed twentieth-century Manchu village on the dry northern plain and in Enoshima, whose houses behind its street were reached by the narrowest of alleys, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
     are both unsourced GUESSES, and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
