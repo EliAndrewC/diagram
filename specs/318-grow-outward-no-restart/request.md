@@ -59,3 +59,13 @@ The session answered: yes among homesteads alone; the exceptions are pockets aga
 the gap plus a cheap raster check would let the seating drop the path search. The GM:
 
 I would like this folded into 318, both the field preference being made a true tie-breaker and the lane spacing.  This is not going to spread things out by enough to make the map appear too dispersed and I'm not concerned about the other lane-blocking map features because we already know it's okay for people to cut through neighbors' yards in a pinch.  So with this in mind, I think we can do the gap rule plus some kind of cheap check; the lane layout is expensive and could be made relatively cheap if we guaranteed space for lanes during homestead placement.  This does let us drop the search entirely, as you say, which will also be helpful.
+
+## Amendment 3 (GM, 2026-10-03, verbatim)
+
+The session reported that option A (lanes laid in the gaps after the seating) is in line with page 0081's reading and
+consistent with the record (Smith 1899 supports houses first, paths worn after; no source states lanes as the gaps between
+plots, so that stays a GUESS), and measured it on nine nucleated seeds: homesteads stage main 9.85 s, the field preference
+as a tie-break alone 9.96 s, option A 14.38 s (+45%), eight of nine maps reaching every house. It recommended the tie-break
+alone and dropping A. The GM:
+
+Yes, I still want A for how it shapes the map, based on that research finding.  But yes please also implement the tie-break thing for the real speedup.
