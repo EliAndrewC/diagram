@@ -73,7 +73,8 @@ seating, on every form, across the cohort.
 1. **Given** any form (nucleated, dispersed, linear), **When** a hamlet is seated, **Then** the count of seated houses never
    falls during the seating.
 2. **Given** a household reached across a neighbor's yard at its seat, **When** the seating finishes, **Then** it keeps its
-   seat and its passage (no recheck re-lays it).
+   seat - no recheck re-lays it; a passage the finished map makes unnecessary (the household now has a straight or
+   round-the-gable way of its own) is ended in place, the household keeping its house where it stands.
 
 ---
 
@@ -91,7 +92,8 @@ engine no longer keeps.
 
 1. **Given** the 0032 drawing page, **When** read, **Then** its quarter-built figure is a measurement the maps report, not a
    rule they keep.
-2. **Given** the 0081 drawing page, **When** read, **Then** nothing in it says a passage is asked again once all are seated.
+2. **Given** the 0081 drawing page, **When** read, **Then** it says a passage the finished map makes unnecessary is ended in
+   place, and nothing in it says a household is re-laid with another layout.
 
 ### Edge Cases
 
@@ -107,7 +109,9 @@ engine no longer keeps.
 ### Functional Requirements
 
 - **FR-001**: The seating MUST NOT take back any farmhouse it has seated - no margin ladder take-back, no rescue re-search of a
-  seated margin, no re-seat with the passage withheld, no recheck re-laying a household after the seating.
+  seated margin, no re-seat with the passage withheld, no recheck re-laying a household after the seating. The check that ends
+  a passage once the finished seating gives the household a way of its own (moving no house) MUST stay: it holds page 0081's
+  condition, "seated only where it has no way of its own".
 - **FR-002**: A nucleated cluster MUST keep growing outward from its standing houses, nearest first, while households are left
   and seats remain within the field reach; the old seat radius MUST NOT refuse a seat (it may order the offers).
 - **FR-003**: The hard limits on where a house may stand MUST be the research-backed ones and the existing per-house rules: within
@@ -115,7 +119,11 @@ engine no longer keeps.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
   house is seated on it.
 - **FR-005**: Where the field reach cannot hold every household, the map MUST be refused, naming the households seated and the
-  margin, never seated on another margin after houses were placed.
+  margin, never seated on another margin after houses were placed. The other forms already seat out to the field reach in their
+  own passes (a dispersed hamlet's exhaustive pass, a row village's rows) and are refused the same way where those run short;
+  the premise, measured 2026-10-03 (`margin_census.py` in the session's scratchpad, the cohort's specs, seeds 1-30): none of the
+  15 non-nucleated cohort seeds (8 dispersed, 7 linear) nor the pool's two row villages seated past its first margin - only
+  nucleated seed 18, on its twelfth.
 - **FR-006**: The cluster-shape refusal (a seating past 12:1) MUST go; the drawn shape MUST still be recorded.
 - **FR-007**: Page 0032's quarter-built figure MUST be reported for each nucleated map (built share inside the houses' outline)
   and MUST NOT refuse or alter a seating.
@@ -143,10 +151,10 @@ engine no longer keeps.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| A cluster grows at its edge; no house is moved for a late one | historically accurate in the record's reading (0004's rule); the GM's understanding of how farming communities grew | the GM's request; 0004 | 0004's drawing page; this spec; the seating's comment |
+| A cluster grows at its edge; no house is moved for a late one | canon: the GM's ruling of 2026-10-03 ("when someone else moved in, everyone did not move their houses"), as 0004's drawing page already states the maps' rule | the GM's request | 0004's drawing page; this spec; the seating's comment |
 | The field reach (`FIELD_REACH_FT`) the one hard extent | historically accurate (0029, 0032: the back-row tolerance held as a maximum) | the GM chose it as the one hard limit | 0032's drawing page |
 | The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM chose it as soft | 0032's drawing page |
-| A passage judged at its seat only | canon: the GM's ruling of 2026-10-03 (feature 317), cutting through a yard is no great matter | the recheck was a take-back | 0081's drawing page |
+| A passage no longer re-laid after the seating; one the finished map makes unnecessary ended in place | historically accurate for the condition (0081: "seated only where it has no way of its own"); the re-lay removed as a take-back (the GM's request) | the re-lay moved a seated house | 0081's drawing page |
 
 ## Assumptions
 
@@ -155,3 +163,6 @@ engine no longer keeps.
   the settle rounds are a separate redesign the GM was told of).
 
 ## Review history
+- Round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - the passage recheck's in-place ending is not a take-back and
+  holds 0081's condition (kept; only the re-lay goes); the other forms' behavior without the ladder unstated (FR-005: the
+  measured premise, refused the same way); the growth model labeled historically accurate where it is the GM's ruling (canon).
