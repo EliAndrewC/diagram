@@ -17,10 +17,12 @@ Reference spec (Inashiro's: nucleated, pond sink) at 40 households, the bookend 
 | no reach, 12 directions x 1.0 / 1.5 / 2.0 | 429 / 689 | 362 / 611 | 421 / 647 | 374 / 657 | 29.6 |
 | no reach, 16 directions x 1.0 / 1.5 / 2.0, jitter unscaled | 370 / 604 | 389 / 630 | 425 / 634 | 339 / 539 | 31.2 |
 | **chosen: 16 directions x 1.0 / 1.5 / 2.0, jitter scaled** | **384 / 607** | **367 / 580** | **394 / 605** | **355 / 539** | **32.7** |
+Observed 2026-10-03, method: `spread318.py` over the four cells, one process at a time on each tree.
 
 Why the three levels failed: the heap pops the nearest-the-field seat first (popped keys 92, 108, 108, 119 ft on seed 4), but those
 seats are refused, and with no radius the eight-direction level never runs dry - houses seated 231, 364, 511, ... 957 ft from
 the field in turn. Main reached its near-field gaps only after its radius emptied level 0 and the 12- and 16-direction levels ran.
+Observed 2026-10-03, method: `order318.py` (the heap's popped keys and each seated house's field distance, in order).
 
 Every chosen cell seats on margin 1 at growth level 0; no house taken back; aspects 2.84-4.06, each inside its declared shape's band
 (crescent or elongated); built share 0.238-0.313 (main 0.224-0.318).
@@ -37,7 +39,8 @@ Every chosen cell seats on margin 1 at growth level 0; no house taken back; aspe
 | cohort 7 | chosen | 1 | 747 | 282 / 434 | 0.229 | 2.10 |
 
 Seed 18 is the spec's narrow strip: on its first margin it grows along and away from the field (farthest 817 ft), where main threw
-eleven margins away and seated the twelfth. The row villages (cohort 3, 11) are unchanged (the growth does not seat them).
+eleven margins away and seated the twelfth. The row villages (cohort 3, 11) are unchanged (the growth does not seat them). Observed 2026-10-03, method:
+`spread318.py`.
 
 ## R3 - Where the small seeds' extra time goes
 
@@ -50,4 +53,5 @@ Reference 15 households seed 8, the offers the growth made and why each was refu
 
 The seats nearest the field are more often hemmed in by the paddy and the standing houses; the envelope refusals are cheap, and
 the cost is the corridor searches that find no way (2.5 s of `access_corridor` across 238 calls). The cost is the order the GM
-asked for (the nearest-the-field option tried first); it is measured at the bookends and carried through the perf records.
+asked for (the nearest-the-field option tried first); it is measured at the bookends and carried through the perf records. Observed 2026-10-03, method: `refusals318.py` and
+`prof318.py` (cProfile of the homestead stage).

@@ -168,6 +168,9 @@ engine no longer keeps.
 - **SC-002a** (FR-003a): a test fails if, of the seats one growth level offers, a seat farther from the field is tried before a
   nearer one.
 - **SC-003** (FR-005): a constructed site with too little free ground is refused with the shortfall named.
+- **SC-003a** (FR-004): a test fails if a margin that seated no house is not followed by the next, or a margin with no dry way out
+  is seated.
+- **SC-003b** (FR-006): a test fails if a seating drawn past every cluster shape's band is refused or seated again.
 - **SC-004** (FR-007, FR-008): the record checks owed by the page edits answer clean; each nucleated pool map's manifest carries
   its quarter-built figure.
 - **SC-005** (FR-009): the cohort passes every seed main passes; the pool passes its rules.
@@ -180,6 +183,7 @@ engine no longer keeps.
 |---|---|---|---|
 | A cluster grows at its edge; no house is moved for a late one | canon: the GM's ruling of 2026-10-03 ("when someone else moved in, everyone did not move their houses"), as 0004's drawing page already states the maps' rule | the GM's request | 0004's drawing page; this spec; the seating's comment |
 | No distance from the field refuses a seat; nearer the field preferred | the record holds no maximum (0029: "No farmhouse is held to a maximum distance from its fields"); the preference is canon, the GM's ruling of 2026-10-03 | the field reach was the drawn villages' back row, not a source's figure | 0029's and 0032's drawing pages |
+| Every adjacent seat offered at once - sixteen directions, rings 1.0, 1.5 and 2.0 of the least distance - the nearest the field first | a search breadth chosen on measurement (research.md R1: the three-level table crept away from the field once no radius emptied its first level); the direction jitter scaled with the step, a GUESS | FR-003a's "as tight as its ground allows" | `growth.GROW_LEVELS`, plan D4 |
 | The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM chose it as soft | 0032's drawing page |
 | A passage no longer re-laid after the seating; one the finished map makes unnecessary ended in place | historically accurate for the condition (0081: "seated only where it has no way of its own"); the re-lay removed as a take-back (the GM's request) | the re-lay moved a seated house | 0081's drawing page |
 
