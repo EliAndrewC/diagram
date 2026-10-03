@@ -54,6 +54,16 @@ def test_all_is_owed_when_anything_is_and_the_manifest_lists_what(owing) -> None
     assert "0110" not in text
 
 
+def test_a_one_page_bundle_carries_only_that_pages_units(owing) -> None:  # noqa: ANN001
+    """Feature 319: a research page's bundle listed the drawing page's owed units, which it never copied, so recording
+    it would have answered checks no agent ran."""
+    owing("quote-check:0094#a", "quote-check:0094.drawing#b", "quote-check:0094.drawing#unfootnoted", "record-format:0094")
+    units, _, _ = bo.owed_for_question(REPO, "0094-rooms-for-a-parley-across-a-border.html", "all", "")
+    assert [u.slug for u in units] == ["quote-check:0094#a", "record-format:0094"]
+    units, _, _ = bo.owed_for_question(REPO, "0094-rooms-for-a-parley-across-a-border.drawing.html", "quote-check", "")
+    assert [u.slug for u in units] == ["quote-check:0094.drawing#b", "quote-check:0094.drawing#unfootnoted"]
+
+
 def test_a_reason_builds_it_anyway_and_a_bare_token_does_not(owing) -> None:  # noqa: ANN001
     owing()
     assert "needs a REASON" in bo.owed_for_question(REPO, "0094", "intro-check", "x")[2]

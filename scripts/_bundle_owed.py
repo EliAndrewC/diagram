@@ -50,6 +50,9 @@ def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str, e
     qn = question_of(q)
     every = ro.units(root) if every is None else every
     units = [u for u in every if ru.question(u.subject) == qn or (u.check == "entry-drift" and for_ in ("entry-drift", "all"))]
+    if q.endswith(".html"):  # ONE page (feature 303): its units only - feature 319 recorded a research page's bundle as
+        drawing = ".drawing." in q  # answering the drawing page's units, which that bundle never carried
+        units = [u for u in units if "#" not in u.subject or (".drawing" in u.subject.partition("#")[0]) == drawing]
     if for_ != "all":
         units = [u for u in units if u.check == for_]
     if units:

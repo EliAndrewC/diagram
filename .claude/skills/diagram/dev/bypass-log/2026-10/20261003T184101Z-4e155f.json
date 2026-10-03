@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T18:41:01Z",
+  "target": "record-checked",
+  "commit": "b637c2da2",
+  "why": "source-reader on source-reader:0244#farmhouse-walls-absence: an absence note cites no key, so no source bundle carries it; source-reader judged its claim against each page it names in rounds 1-3 and it held"
+}

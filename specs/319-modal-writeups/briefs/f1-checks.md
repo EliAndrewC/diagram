@@ -19,3 +19,10 @@
 - round 2, source-reader (the claims now in the bundle): ikegami READ 9, mingu READ 4 (the veranda item scoped to 'such a veranda'), morse READ 4 + absence held, nihon-no-minka READ 4 ('frontage' -> 'along its ridge'); the 0244 absence held against all three pages
 - round 2, translation-check: 0029 FAITHFUL 2; 0244 FAITHFUL 8, LOOSE 1 ('ample economic means'); 本舞 and 牡嘱 are the page's own misprints, kept verbatim
 - page-check: the Door modal edit's interactive tests pass; test_synthetic_page_mechanics fails on the hamlet registry's label assertion (_driver.py:110) - T09's About-form Farmhouse has no label lead, not this session's to change
+- round 3, quote-check 0029 (5 page batches): PARTIAL 1, unfootnoted 3 - the Ota house glossed, '27 Okinawan villages' footnoted to -2, minka defined from the Heibonsha entry (new note kotobank-minka-29), the south-facing sentence made a pointer to 0037/0038, the bund line pointed at 0014
+- round 3, quote-check 0117 (2 pages): SUPPORTS 14, PARTIAL 1 - 'usually' restored to the one-ken door; 0244: PARTIAL 1 - the note's translation now says lime plaster (漆喰)
+- round 3, record-format 0029/0117/0244: clean
+- round 3, source-applicability: kotobank MISSING 1 (its regional forms are well-off houses, few older than the late 1600s) applied; mingu and morse HONEST
+- round 3, source-reader: nihon-no-minka READ 4; minami-alps READ 5, NOT-FOUND 1 (the kannon-biraki gloss, reworded as the name's meaning); ikegami READ 5 (the well-off house hedged 'by its museum's reckoning'); the 0244 absence note recorded with REASON (no key, held against every page it names)
+- round 3, translation-check: 0029 FAITHFUL 3, 0244 FAITHFUL 9, 0117 LOOSE 2 ('Against this background ... around', 'wheat or barley straw') applied in 0117 and 0244
+- tooling: a one-page bundle (Q=<page>.html) listed the other page's owed units and so would have answered checks it never carried; _bundle_owed.py now cuts a page bundle to its page (test_a_one_page_bundle_carries_only_that_pages_units)
