@@ -164,7 +164,7 @@ engine no longer keeps.
 - **SC-001** (FR-001): a test fails if the seated-house count falls during any seating; it passes on the cohort and the pool.
 - **SC-002** (FR-002, FR-003): on the reference spec at 40 households, seeds 4, 25, 39 and 47, and on cohort seed 18, every
   household is seated on the chosen margin; no seat is refused for its distance from the field; no `FIELD_REACH_FT` remains in
-  `settlement/rolling/fit.py` and nothing imports it; the ways law's own 60 ft reach of a way to the field is unchanged.
+  `settlement/rolling/fit.py` and nothing imports it; the ways law's own reach of a way to the field (`ways/law.py`'s `FIELD_REACH_FT`) is unchanged.
 - **SC-002a** (FR-003a): a test fails if, of the seats one growth level offers, a seat farther from the field is tried before a
   nearer one.
 - **SC-003** (FR-005): a constructed site with too little free ground is refused with the shortfall named.
@@ -202,5 +202,5 @@ engine no longer keeps.
   observed 2026-10-03, method: `bound_probe.py` in the session's scratchpad with the constant enlarged); "otherwise equal" a tie that never occurs (FR-003a: the nearest the
   field first among a growth level's seats, with SC-002a); 0029's statement unspecified (US3 scenario 3).
 - Amendment round 2 (spec-fidelity-verify, 2026-10-03): CHANGES REQUIRED, 2 small items - SC-002's name check caught the ways
-  law's unrelated 60 ft reach (scoped to the seating's constant); FR-003's closed list of remaining limits left out the
+  law's unrelated reach of a way to the field (scoped to the seating's constant); FR-003's closed list of remaining limits left out the
   household's water and its way to the tree (every rule a seat asks today but the reach).
