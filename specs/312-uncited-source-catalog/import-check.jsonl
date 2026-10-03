@@ -1018,3 +1018,112 @@
 {"url": "city.adachi.tokyo.jp/bunka/chiikibunka/bunkazai_yougo_mon.html", "raw": "https://www.city.adachi.tokyo.jp/bunka/chiikibunka/bunkazai_yougo_mon.html", "result": "restored", "note": "the live read was a machine-translation notice", "date": "2026-10-02"}
 {"url": "osaka-info.jp/spot/nippombashi-bridge", "raw": "https://osaka-info.jp/spot/nippombashi-bridge/", "result": "restored", "note": "the live read was the English edition; the write-up is of the Japanese page", "date": "2026-10-02"}
 {"url": "zj.cnr.cn/tdzj/20250711/t20250711_527257197.shtml", "raw": "https://zj.cnr.cn/tdzj/20250711/t20250711_527257197.shtml", "result": "restored", "note": "the live read was mis-decoded GBK", "date": "2026-10-02"}
+{"url": "komonjokan.net/cgi-bin/komon/kirokukan/kirokukan_view.cgi?mode=details&code_no=80017&class_id=17", "raw": "https://komonjokan.net/cgi-bin/komon/kirokukan/kirokukan_view.cgi?mode=details&code_no=80017&class_id=17", "result": "misfiled", "date": "2026-10-02"}
+{"url": "yakumarujigenryu.com/薬丸自顕流の歴史", "raw": "https://www.yakumarujigenryu.com/%E8%96%AC%E4%B8%B8%E8%87%AA%E9%A1%95%E6%B5%81%E3%81%AE%E6%AD%B4%E5%8F%B2/", "result": "same", "date": "2026-10-02"}
+{"url": "kobun.weblio.jp/content/しがらみ", "raw": "https://kobun.weblio.jp/content/%E3%81%97%E3%81%8C%E3%82%89%E3%81%BF", "result": "same", "date": "2026-10-02"}
+{"url": "chiculture.org.hk/sc/china-five-thousand-years/693", "raw": "https://chiculture.org.hk/sc/china-five-thousand-years/693", "result": "unread", "date": "2026-10-02"}
+{"url": "raw.githubusercontent.com/garychowcmu/daizhigev20/master/子藏/农家/补农书.txt", "raw": "https://raw.githubusercontent.com/garychowcmu/daizhigev20/master/%E5%AD%90%E8%97%8F/%E5%86%9C%E5%AE%B6/%E8%A1%A5%E5%86%9C%E4%B9%A6.txt", "result": "same", "date": "2026-10-02"}
+{"url": "dyyjy.zjgsu.edu.cn/show.asp?cid=404", "raw": "http://dyyjy.zjgsu.edu.cn/show.asp?cid=404", "result": "unread", "date": "2026-10-02"}
+{"url": "mokuiku.metro.tokyo.lg.jp/forest/3-5.html", "raw": "https://mokuiku.metro.tokyo.lg.jp/forest/3-5.html", "result": "unread", "date": "2026-10-02"}
+{"url": "rekishijin.com/30433", "raw": "https://www.rekishijin.com/30433", "result": "unread", "date": "2026-10-02"}
+{"url": "wafujyutaku.jp/outside-and-inside/327", "raw": "https://wafujyutaku.jp/outside-and-inside/327", "result": "same", "date": "2026-10-02"}
+{"url": "town.takatori.nara.jp/contents_detail.php?co=kak&frmid=1278", "raw": "https://www.town.takatori.nara.jp/contents_detail.php?co=kak&frmId=1278", "result": "same", "date": "2026-10-02"}
+{"url": "tiangong.5000yan.com/naili/34916.html", "raw": "https://tiangong.5000yan.com/naili/34916.html", "result": "same", "date": "2026-10-02"}
+{"url": "tsuijimatsu.com/55", "raw": "https://www.tsuijimatsu.com/55", "result": "same", "date": "2026-10-02"}
+{"url": "city.ome.tokyo.jp/soshiki/76/71363.html", "raw": "https://www.city.ome.tokyo.jp/soshiki/76/71363.html", "result": "same", "date": "2026-10-02"}
+{"url": "peking.bjd.com.cn/content/s6122ff5ae4b0637be8aa2fc0.html", "raw": "https://peking.bjd.com.cn/content/s6122ff5ae4b0637be8aa2fc0.html", "result": "same", "date": "2026-10-02"}
+{"url": "ktr.mlit.go.jp/yokohama/tokaido/02_tokaido/04_qa/index3/answer10.htm", "raw": "https://www.ktr.mlit.go.jp/yokohama/tokaido/02_tokaido/04_qa/index3/answer10.htm", "result": "same", "date": "2026-10-02"}
+{"url": "edo-tokyo-museum.or.jp/library/reference/5768.html", "raw": "https://www.edo-tokyo-museum.or.jp/library/reference/5768.html", "result": "same", "date": "2026-10-02"}
+{"url": "tama-100.or.jp/cmsfiles/contents/0000000/676/18.pdf", "raw": "https://www.tama-100.or.jp/cmsfiles/contents/0000000/676/18.pdf", "result": "same", "date": "2026-10-02"}
+{"url": "kabuki-bito.jp/special/knowledge/tepco-life/post-life-22/2", "raw": "https://www.kabuki-bito.jp/special/knowledge/tepco-life/post-life-22/2/", "result": "same", "date": "2026-10-02"}
+{"url": "pref.fukushima.lg.jp/sec/36240a/aidusumi01.html", "raw": "https://www.pref.fukushima.lg.jp/sec/36240a/aidusumi01.html", "result": "same", "date": "2026-10-02"}
+{"url": "qulishi.com/article/202005/407640.html", "raw": "https://www.qulishi.com/article/202005/407640.html", "result": "same", "date": "2026-10-02"}
+{"url": "suido-ishizue.jp/daichi/part3/01/04.html", "raw": "https://www.suido-ishizue.jp/daichi/part3/01/04.html", "result": "same", "date": "2026-10-02"}
+{"url": "city.kodaira.tokyo.jp/kurashi/086/086882.html", "raw": "https://www.city.kodaira.tokyo.jp/kurashi/086/086882.html", "result": "same", "date": "2026-10-02"}
+{"url": "sakai-machiyamuseums.com/teppoukaji", "raw": "https://www.sakai-machiyamuseums.com/teppoukaji/", "result": "same", "date": "2026-10-02"}
+{"url": "blltokyo.net/tkburaku/history/index.html", "raw": "https://blltokyo.net/tkburaku/history/index.html", "result": "same", "date": "2026-10-02"}
+{"url": "ifs.or.jp/teinai/tei02", "raw": "https://www.ifs.or.jp/teinai/tei02/", "result": "same", "date": "2026-10-02"}
+{"url": "city.otsuki.yamanashi.jp/15/05", "raw": "https://www.city.otsuki.yamanashi.jp/15/05/", "result": "same", "date": "2026-10-02"}
+{"url": "jcastle.info/view/samurai_residences", "raw": "https://jcastle.info/view/Samurai_Residences", "result": "unread", "date": "2026-10-02"}
+{"url": "kunishitei.bunka.go.jp/bsys/maindetails/102/00003889", "raw": "https://kunishitei.bunka.go.jp/bsys/maindetails/102/00003889", "result": "same", "date": "2026-10-02"}
+{"url": "ajnews.zjol.com.cn/ajnews/system/2018/08/21/031089164.shtml", "raw": "https://ajnews.zjol.com.cn/ajnews/system/2018/08/21/031089164.shtml", "result": "same", "date": "2026-10-02"}
+{"url": "eonet.ne.jp/~shoyu/mametisiki/reference-8b.html", "raw": "http://www.eonet.ne.jp/~shoyu/mametisiki/reference-8b.html", "result": "same", "date": "2026-10-02"}
+{"url": "city.kadoma.osaka.jp/soshiki/shiminbunkabu/6/3/6/32867.html", "raw": "https://www.city.kadoma.osaka.jp/soshiki/shiminbunkabu/6/3/6/32867.html", "result": "same", "date": "2026-10-02"}
+{"url": "hb.pei.jp/shiro/bingo/jyoge-daikansho", "raw": "https://www.hb.pei.jp/shiro/bingo/jyoge-daikansho/", "result": "same", "date": "2026-10-02"}
+{"url": "city.shinshiro.lg.jp/kanko/meisyo/senmaida.html", "raw": "https://www.city.shinshiro.lg.jp/kanko/meisyo/senmaida.html", "result": "same", "date": "2026-10-02"}
+{"url": "kanko-shinjuku.jp/spot/-/article_367.html", "raw": "https://www.kanko-shinjuku.jp/spot/-/article_367.html", "result": "same", "date": "2026-10-02"}
+{"url": "matsue-bukeyashiki.jp/about/index.html", "raw": "https://www.matsue-bukeyashiki.jp/about/index.html", "result": "same", "date": "2026-10-02"}
+{"url": "kiso-nagano.ne.jp/naraijuku", "raw": "https://kiso-nagano.ne.jp/naraijuku/", "result": "same", "date": "2026-10-02"}
+{"url": "takaoyoshiki.cocolog-nifty.com/edojidai/2005/08/post_cd16.html", "raw": "http://takaoyoshiki.cocolog-nifty.com/edojidai/2005/08/post_cd16.html", "result": "same", "date": "2026-10-02"}
+{"url": "museum.or.jp/museum/12310", "raw": "https://www.museum.or.jp/museum/12310", "result": "same", "date": "2026-10-02"}
+{"url": "blog.sina.com.cn/s/blog_485a82450101gu6o.html", "raw": "https://blog.sina.com.cn/s/blog_485a82450101gu6o.html", "result": "same", "date": "2026-10-02"}
+{"url": "kodokiko.com/harima-vr-7", "raw": "https://kodokiko.com/harima-vr-7/", "result": "same", "date": "2026-10-02"}
+{"url": "city.iwakura.aichi.jp/bunkazai_db/0000000484.html", "raw": "https://www.city.iwakura.aichi.jp/bunkazai_db/0000000484.html", "result": "same", "date": "2026-10-02"}
+{"url": "sanadahoumotsukan.com/facility_detail.php?n=6", "raw": "https://www.sanadahoumotsukan.com/facility_detail.php?n=6", "result": "same", "date": "2026-10-02"}
+{"url": "reinet.or.jp/?page_id=13724", "raw": "https://www.reinet.or.jp/?page_id=13724", "result": "same", "date": "2026-10-02"}
+{"url": "column.enakawakamiya.co.jp/gifu/takayama-jinya-highlights.html", "raw": "https://column.enakawakamiya.co.jp/gifu/takayama-jinya-highlights.html", "result": "same", "date": "2026-10-02"}
+{"url": "pref.ishikawa.lg.jp/kyoiku/bunkazai/siseki/2-4.html", "raw": "https://www.pref.ishikawa.lg.jp/kyoiku/bunkazai/siseki/2-4.html", "result": "same", "date": "2026-10-02"}
+{"url": "gushiwen.cn/shiwens/default.aspx?astr=蒋士铨", "raw": "https://m.gushiwen.cn/shiwens/default.aspx?astr=%E8%92%8B%E5%A3%AB%E9%93%A8", "result": "same", "date": "2026-10-02"}
+{"url": "vegetable.alic.go.jp/yasaijoho/yasai/0702_yasai1.html", "raw": "https://vegetable.alic.go.jp/yasaijoho/yasai/0702_yasai1.html", "result": "same", "date": "2026-10-02"}
+{"url": "nyxdhyj.isa.ac.cn/cn/article/pdf/preview/10.13872/j.1000-0275.2019.0084.pdf", "raw": "https://nyxdhyj.isa.ac.cn/cn/article/pdf/preview/10.13872/j.1000-0275.2019.0084.pdf", "result": "same", "date": "2026-10-02"}
+{"url": "kagoshima-kankou.com/guide/11053", "raw": "https://www.kagoshima-kankou.com/guide/11053", "result": "same", "date": "2026-10-02"}
+{"url": "saga-otakara.jp/search/detail.html?cultureid=5151", "raw": "https://www.saga-otakara.jp/search/detail.html?cultureId=5151", "result": "same", "date": "2026-10-02"}
+{"url": "city.muko.kyoto.jp/site/rekishi/1021.html", "raw": "https://www.city.muko.kyoto.jp/site/rekishi/1021.html", "result": "same", "date": "2026-10-02"}
+{"url": "ciae.com.cn/detail/zh/36272.html", "raw": "https://www.ciae.com.cn/detail/zh/36272.html", "result": "same", "date": "2026-10-02"}
+{"url": "city.yokohama.lg.jp/kanagawa/shokai/rekishi/spot/kosatuba.html", "raw": "https://www.city.yokohama.lg.jp/kanagawa/shokai/rekishi/spot/kosatuba.html", "result": "same", "date": "2026-10-02"}
+{"url": "ro-yu.com/column/edo/10938.html", "raw": "https://www.ro-yu.com/column/edo/10938.html", "result": "same", "date": "2026-10-02"}
+{"url": "hono.jp/edo/yakumaru", "raw": "https://hono.jp/edo/yakumaru/", "result": "same", "date": "2026-10-02"}
+{"url": "rekishikan.museum.ibk.ed.jp/06_jiten/rekisi/jyoukamati.htm", "raw": "https://www.rekishikan.museum.ibk.ed.jp/06_jiten/rekisi/jyoukamati.htm", "result": "same", "date": "2026-10-02"}
+{"url": "u-tokyo.ac.jp/focus/ja/features/z1304_00228.html", "raw": "https://www.u-tokyo.ac.jp/focus/ja/features/z1304_00228.html", "result": "same", "date": "2026-10-02"}
+{"url": "city.toki.lg.jp/kanko/bunkazai/1004852/1004853/1006503/1003297.html", "raw": "https://www.city.toki.lg.jp/kanko/bunkazai/1004852/1004853/1006503/1003297.html", "result": "same", "date": "2026-10-02"}
+{"url": "tosyokan.pref.shizuoka.jp/data/open/cnt/3/50/1/ssr1-4.pdf", "raw": "https://www.tosyokan.pref.shizuoka.jp/data/open/cnt/3/50/1/ssr1-4.pdf", "result": "unread", "date": "2026-10-02"}
+{"url": "www2.ntj.jac.go.jp/dglib/contents/learn/edc20/geino/rakugo/kurashi2.html", "raw": "https://www2.ntj.jac.go.jp/dglib/contents/learn/edc20/geino/rakugo/kurashi2.html", "result": "same", "date": "2026-10-02"}
+{"url": "hiroshima-bunka.jp/modules/newdb/detail.php?id=701", "raw": "https://www.hiroshima-bunka.jp/modules/newdb/detail.php?id=701", "result": "unread", "date": "2026-10-02"}
+{"url": "1010.or.jp/guide/history", "raw": "https://www.1010.or.jp/guide/history/", "result": "same", "date": "2026-10-02"}
+{"url": "komonjokan.net/cgi-bin/komon/kirokukan/kirokukan_view.cgi?mode=details&code_no=80017&class_id=17", "raw": "https://komonjokan.net/cgi-bin/komon/kirokukan/kirokukan_view.cgi?mode=details&code_no=80017&class_id=17", "result": "restored", "note": "the live read was mis-decoded Shift-JIS", "date": "2026-10-02"}
+{"url": "jogetenryo.com/meguru/sight/436", "raw": "https://jogetenryo.com/meguru/sight/436/", "result": "same", "date": "2026-10-02"}
+{"url": "kusanomido.com/study/history/japan/17104", "raw": "https://kusanomido.com/study/history/japan/17104/", "result": "same", "date": "2026-10-02"}
+{"url": "touroji.com/elementary_knowledge/noborigama.html", "raw": "https://touroji.com/elementary_knowledge/noborigama.html", "result": "unread", "date": "2026-10-02"}
+{"url": "bousaihaku.com/ffhistory/11279", "raw": "https://www.bousaihaku.com/ffhistory/11279/", "result": "same", "date": "2026-10-02"}
+{"url": "city.shimada.shizuoka.jp/shimahaku/docs/kawagoshi-seido.html", "raw": "https://www.city.shimada.shizuoka.jp/shimahaku/docs/kawagoshi-seido.html", "result": "same", "date": "2026-10-02"}
+{"url": "town.seika.kyoto.jp/kakuka/sangyo/4/1_1/3576.html", "raw": "https://www.town.seika.kyoto.jp/kakuka/sangyo/4/1_1/3576.html", "result": "same", "date": "2026-10-02"}
+{"url": "dha.ac.cn/info/1425/3681.htm", "raw": "https://www.dha.ac.cn/info/1425/3681.htm", "result": "same", "date": "2026-10-02"}
+{"url": "kanjipedia.jp/kotoba/0002568200", "raw": "https://www.kanjipedia.jp/kotoba/0002568200", "result": "same", "date": "2026-10-02"}
+{"url": "thepaper.cn/newsdetail_forward_1473300", "raw": "https://www.thepaper.cn/newsDetail_forward_1473300", "result": "same", "date": "2026-10-02"}
+{"url": "sacred-texts.com/cfu/bop/index.htm", "raw": "https://sacred-texts.com/cfu/bop/index.htm", "result": "unread", "date": "2026-10-02"}
+{"url": "pref.osaka.lg.jp/senshunm/gyoumu/tameike.html", "raw": "https://www.pref.osaka.lg.jp/senshunm/gyoumu/tameike.html", "result": "same", "date": "2026-10-02"}
+{"url": "hetima.net/firetower/reference/history", "raw": "http://www.hetima.net/firetower/reference/history/", "result": "unread", "date": "2026-10-02"}
+{"url": "city.takashima.lg.jp/soshiki/shokokankobu/kankoshinkoka/7/3/740.html", "raw": "https://www.city.takashima.lg.jp/soshiki/shokokankobu/kankoshinkoka/7/3/740.html", "result": "same", "date": "2026-10-02"}
+{"url": "misatosekizai.co.jp/word_grave/ya/yasikibochi.shtml", "raw": "https://www.misatosekizai.co.jp/word_grave/ya/yasikibochi.shtml", "result": "unread", "date": "2026-10-02"}
+{"url": "agri.mynavi.jp/2019_08_21_84311", "raw": "https://agri.mynavi.jp/2019_08_21_84311/", "result": "same", "date": "2026-10-02"}
+{"url": "s-kent.jp/2019/06/08/左官一服噺-　建物○土蔵の戸前の名称（the-name-of-the-tomae-of-the-dozo", "raw": "https://s-kent.jp/2019/06/08/%E5%B7%A6%E5%AE%98%E4%B8%80%E6%9C%8D%E5%99%BA-%E3%80%80%E5%BB%BA%E7%89%A9%E2%97%8B%E5%9C%9F%E8%94%B5%E3%81%AE%E6%88%B8%E5%89%8D%E3%81%AE%E5%90%8D%E7%A7%B0%EF%BC%88the-name-of-the-tomae-of-the-dozo/", "result": "same", "date": "2026-10-02"}
+{"url": "vill.tarama.okinawa.jp/kankou/taramano_miryoku/syuraku", "raw": "https://www.vill.tarama.okinawa.jp/kankou/taramano_miryoku/syuraku/", "result": "same", "date": "2026-10-02"}
+{"url": "city.kasuga.fukuoka.jp/miryoku/history/1010879/1010921/1010926.html", "raw": "https://www.city.kasuga.fukuoka.jp/miryoku/history/1010879/1010921/1010926.html", "result": "same", "date": "2026-10-02"}
+{"url": "hidatakayama.or.jp/spot/detail_1106.html", "raw": "https://www.hidatakayama.or.jp/spot/detail_1106.html", "result": "same", "date": "2026-10-02"}
+{"url": "chisan.or.jp/shinpukuji/center/workshop/forum/愛宕　真福寺―江戸の寺院を知る", "raw": "https://chisan.or.jp/shinpukuji/center/workshop/forum/%E6%84%9B%E5%AE%95%E3%80%80%E7%9C%9F%E7%A6%8F%E5%AF%BA%E2%80%95%E6%B1%9F%E6%88%B8%E3%81%AE%E5%AF%BA%E9%99%A2%E3%82%92%E7%9F%A5%E3%82%8B/", "result": "same", "date": "2026-10-02"}
+{"url": "chibanian.info/nochiyoso2024", "raw": "https://chibanian.info/nochiyoso2024/", "result": "same", "date": "2026-10-02"}
+{"url": "souda-kyoto.jp/guide/spot/sugimotoke.html", "raw": "https://souda-kyoto.jp/guide/spot/sugimotoke.html", "result": "same", "date": "2026-10-02"}
+{"url": "kdas.jp/detail_display.php?t_cd=1&acc_cd=3&aclc_cd=0&chap=3&hp_page=18&bc_cd=1", "raw": "https://kdas.jp/detail_display.php?t_cd=1&acc_cd=3&aclc_cd=0&chap=3&hp_page=18&bc_cd=1", "result": "same", "date": "2026-10-02"}
+{"url": "town.mizumaki.lg.jp/museum/040/020/050/280/823.html", "raw": "https://www.town.mizumaki.lg.jp/museum/040/020/050/280/823.html", "result": "same", "date": "2026-10-02"}
+{"url": "city.ono.fukui.jp/kosodate/bunka-rekishi/shokai/hashimotoke.html", "raw": "https://www.city.ono.fukui.jp/kosodate/bunka-rekishi/shokai/hashimotoke.html", "result": "same", "date": "2026-10-02"}
+{"url": "milei.jp/takayama-jinya", "raw": "https://milei.jp/takayama-jinya/", "result": "same", "date": "2026-10-02"}
+{"url": "city.itabashi.tokyo.jp/bunka/kanko/jyukei/1006821.html", "raw": "https://www.city.itabashi.tokyo.jp/bunka/kanko/jyukei/1006821.html", "result": "same", "date": "2026-10-02"}
+{"url": "greenshinto.com/2012/02/15/more-on-sacred-groves", "raw": "https://www.greenshinto.com/2012/02/15/more-on-sacred-groves/", "result": "same", "date": "2026-10-02"}
+{"url": "city.mitaka.lg.jp/suisya/shiryo/nihon.html", "raw": "https://www.city.mitaka.lg.jp/suisya/shiryo/nihon.html", "result": "same", "date": "2026-10-02"}
+{"url": "ochiaijuku.com/5647", "raw": "https://ochiaijuku.com/5647", "result": "same", "date": "2026-10-02"}
+{"url": "wajikan.com/note/biwa", "raw": "https://wajikan.com/note/biwa/", "result": "same", "date": "2026-10-02"}
+{"url": "aboutcivil.org/canal-head-regulator.html", "raw": "https://www.aboutcivil.org/canal-head-regulator.html", "result": "same", "date": "2026-10-02"}
+{"url": "kanazawa.hakuichi.co.jp/blog/detail.php?blog_id=140", "raw": "https://kanazawa.hakuichi.co.jp/blog/detail.php?blog_id=140", "result": "same", "date": "2026-10-02"}
+{"url": "cnkgraph.com/writing/1060228", "raw": "https://cnkgraph.com/Writing/1060228", "result": "unread", "date": "2026-10-02"}
+{"url": "gimin.travelogues.jp/magistrates_office", "raw": "https://gimin.travelogues.jp/magistrates_office/", "result": "same", "date": "2026-10-02"}
+{"url": "iplant-j.jp/journal/vol-2_no-1/plot-to-plot-irrigation_weeding-method", "raw": "https://www.iplant-j.jp/journal/vol-2_no-1/plot-to-plot-irrigation_weeding-method/", "result": "unread", "date": "2026-10-02"}
+{"url": "city.yamaguchi.lg.jp/rs/rekibunshigen/r109.html", "raw": "https://www.city.yamaguchi.lg.jp/rs/rekibunshigen/r109.html", "result": "same", "date": "2026-10-02"}
+{"url": "iwami-gg.jugem.jp/?eid=4728", "raw": "https://iwami-gg.jugem.jp/?eid=4728", "result": "unread", "date": "2026-10-02"}
+{"url": "moch.daishodai.ac.jp/tanbou/kurayashiki01_01.html", "raw": "http://moch.daishodai.ac.jp/tanbou/kurayashiki01_01.html", "result": "unread", "date": "2026-10-02"}
+{"url": "yuncunzhai.com/book/183385.jhtml", "raw": "https://www.yuncunzhai.com/book/183385.jhtml", "result": "same", "date": "2026-10-02"}
+{"url": "city.setagaya.lg.jp/02059/3398.html", "raw": "https://www.city.setagaya.lg.jp/02059/3398.html", "result": "misfiled", "date": "2026-10-02"}
+{"url": "city.kakegawa.shizuoka.jp/kanko/kana/spot-list/otemon.html", "raw": "https://www.city.kakegawa.shizuoka.jp/kanko/kana/spot-list/otemon.html", "result": "restored", "note": "the live read was under half the copy the verdict was judged from", "date": "2026-10-02"}
+{"url": "scf.org.cn/csjjh/n3421/n5604/u1ai301306.html", "raw": "https://www.scf.org.cn/csjjh/n3421/n5604/u1ai301306.html", "result": "restored", "note": "the live read was under half the copy the verdict was judged from", "date": "2026-10-02"}
+{"url": "city.koto.lg.jp/103020/bunkasports/bunka/bunkazaisiseki/bunkazai/15716.html", "raw": "https://www.city.koto.lg.jp/103020/bunkasports/bunka/bunkazaisiseki/bunkazai/15716.html", "result": "restored", "note": "the live read was under half the copy the verdict was judged from", "date": "2026-10-02"}
+{"url": "kansai-u.ac.jp/reed_rfl/archive/08_1.php", "raw": "https://www.kansai-u.ac.jp/reed_rfl/archive/08_1.php", "result": "restored", "note": "the live read was under half the copy the verdict was judged from", "date": "2026-10-02"}
+{"url": "city.setagaya.lg.jp/02059/3398.html", "raw": "https://www.city.setagaya.lg.jp/02059/3398.html", "result": "restored", "note": "the live read was under half the copy the verdict was judged from", "date": "2026-10-02"}
