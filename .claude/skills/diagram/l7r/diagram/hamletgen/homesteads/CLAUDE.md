@@ -16,4 +16,5 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 | `growth.py` | how a NUCLEATED cluster is seated (feature 308): grown from its first house, each next house offered from a standing one at the distance their footprints part - the envelope, the woodlot, the path out and the sun its yard and beds are owed - jittered, widening while households are left (`grow_the_margin`, `footprint`, `seat_toward`, `GROW_LEVELS`) |
 | `capacity.py` | the DISPERSED form's last pass - the exhaustive offer of the free ground, its dry-spell cap and the near-miss rescue - and the margin ladder every form shares (`margin_ladder`, `seating_mark`, `unseat_to`, `SiteRefused`) |
 | `stages.py` (334) | STAGES 5 and 6 - the homesteads themselves and what stands among them. Read this first |
+| `seat_geometry.py` | the seating's leaf geometry (feature 316 split it from `stages.py`, which re-exports it): the brook push, the seat's turn, the drawn cluster band and the declared cluster shape |
 | `__init__.py` | the composed surface only - the re-exports that keep every existing importer working. Never add logic here |

@@ -75,14 +75,14 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
 
 
 WOODLAND_MIN_CROWNS = 5
-"""Research: stocked wood floor - CONVENTION: at least five crowns, so a wood reads as one"""
-#: a scrub pine's crown for the sun rule (feature 310): its lowest, widest branch, drawn 3.6 bs out, and the stroke's slack
-PINE_SPREAD_BS = 4.6
 """The fewest crowns a woodland commons may record (`test_a_woodland_commons_is_visibly_stocked`, feature 287 woods W13):
 a parcel claiming a wood draws one - under five crowns it reads as a few trees on grass, not a worked wood. A map drawing
 convention on legibility, the rule's own figure; the parcel's real stocking is `COMMONS_SPACING_FT`.
 
-Research: pine crown reach - CONVENTION: 4.6 bs, the drawn pine's widest branch and its stroke"""
+Research: stocked wood floor - CONVENTION: at least five crowns, so a wood reads as one"""
+#: a scrub pine's crown for the sun rule (feature 310): its lowest, widest branch, drawn 3.6 bs out, and the stroke's slack
+PINE_SPREAD_BS = 4.6
+"""Research: pine crown reach - CONVENTION: 4.6 bs, the drawn pine's widest branch and its stroke"""
 
 BARE_STEP = 25.0  # px between the samples `bare_cells` takes - the gate's own grid (`margins_form_continuous_ring`)
 BARE_SHARE_CAP = 0.35
