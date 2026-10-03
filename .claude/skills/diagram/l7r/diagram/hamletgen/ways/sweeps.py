@@ -106,7 +106,8 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     Research:
         one way drawn as two is joined - UNRESEARCHED: a walkable gap in one way is closed, up to `_BREAK_SPAN_FT` within `_BREAK_BEARING_DEG`
         no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists
-        a short gap closed at any bearing - UNRESEARCHED: a break of `_LANE_JOIN_FT` (30 ft) or less, whatever the two ways' bearings
+        a short gap closed at any bearing - research/questions/0081-village-lanes.drawing.html: ends that nearly meet are joined - a break of `_LANE_JOIN_FT` (30 ft) or less, whatever the two ways' bearings
+        a bridge as direct as a path - UNRESEARCHED: refused where its route runs over `_PATH_DIRECTNESS` (2) times the gap
         bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
         bridge clearance fallback - DEVIATION research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
     made = 0
@@ -665,7 +666,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     Research:
         lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves a way, the field or a house - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
         end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
-        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)"""
+        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
+        a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish"""
     lanes = s.M.get("lanes") or []
     owed = lane_houses(s.M)  # the houses an end serves, is kept for or carried to: a household reached across a yard is owed none (feature 317)
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and

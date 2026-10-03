@@ -289,7 +289,7 @@ def recheck_passages(s: Settlement) -> int:
     317): `landlocked` judged the household when it was seated, and a later household's corridor, reserved past its beds,
     drew a lane within a few feet of it - a household with a way of its own, reached across its neighbor's yard.
 
-    Research: no way of its own on the finished map - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household with a way of its own is reached by it, never across a neighbor's land
+    Research: no way of its own on the finished map - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household with a way of its own is reached by it, never across a neighbor's land - asked of the layout it is drawn with, its whole holding having been judged at its seat (`landlocked`, every layout there)
     """
     if getattr(s, "_access", None) is None:
         return 0

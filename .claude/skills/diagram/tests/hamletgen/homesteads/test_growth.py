@@ -277,7 +277,9 @@ def test_while_the_share_has_room_each_reached_house_offers_tight_seats_against_
     told = [t for t in s.told if t is not None]
     assert told, "tight seats offered"
     t = told[0]
-    assert t["gap"] == growth.TIGHT_GAP_PX and t["rec"] is s.M["houses"][0] and t["land"] == growth.land_box((0.0, 0.0), footprint(s, s.M["houses"][0]))
+    nb = t["rec"]  # the standing house whose yard-side seat was offered first
+    assert any(nb is h for h in s.M["houses"])
+    assert t["gap"] == growth.TIGHT_GAP_PX and t["land"] == growth.land_box((nb["x"], nb["y"]), footprint(s, nb))
     assert t["own"] == (60.0, 60.0, 60.0, 60.0), "its own land: the reach the seat was parted by"
     assert getattr(s, "_tight_of", None) is None, "...and forgotten after"
     assert sum(t is not None for t in s.told) == 1, "the share of one spent, the tight seats still queued are passed over"

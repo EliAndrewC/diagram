@@ -35,9 +35,10 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   stands against its neighbor's land. A tight seat is taken only by passage: a household that finds a corridor of its own there
   is not land the custom covers and is refused the seat (the growth's ordinary seats keep a path's room). They are offered only
   round a house a passage may cross to (reached within the chain, D3, with a yard: `passage.crossable`) and only on its yard's
-  side - within `TIGHT_BEARING_DEG` (112.5) of the bearing to its yard, its front and flanks - a search breadth MEASURED (research
-  R7): with every bearing offered, behind its house a walk to the yard was found once in 194 tries on 13 settlements, and 15 of
-  the 16 passages came within 90 degrees of the yard. A household behind its neighbor is still seated, by the ordinary seats and
+  side - within `TIGHT_BEARING_DEG` (90) of the bearing to its yard, the side its yard lies on, as the drawing page places it - a
+  search breadth MEASURED (research R7): with every bearing offered, behind its house a walk to the yard was found once in 194
+  tries on 13 settlements, and 15 of the 16 passages came within 90 degrees of the yard. (It was 112.5, past the perpendicular,
+  until the impl-drift check held it to the page - research R9.) A household behind its neighbor is still seated, by the ordinary seats and
   a way of its own. Nor is a tight seat offered within `TIGHT_TREE_FT` (80 ft) of the access tree, where a household has a way of
   its own and the custom's condition fails - measured (research R8): no passage came from nearer than 87 ft, and of the 135 of 343
   tight tries nearer than 80 every one whose walk was found had a corridor of its own.
@@ -61,6 +62,10 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   neighbor's yard and none has a corridor of its own, asked once a seat before any layout is judged - a household lays its beds
   where its way can run. Judged a layout at a time, 10 of 13 passages at 15 households and 6 of 20 at 40 were households another
   layout would have given a way of its own (research R8).
+- ON THE FINISHED SEATING (`passage.recheck_passages`): once every household is seated, each household reached across a yard is
+  asked again - its own homestead set aside, as when it was first asked - whether it has a corridor of its own now; one that has
+  is seated by it as any other household and loses its passage (`meta.passage_revoked`). A later household's corridor reserved
+  past its beds had given Inashiro's one such household a drawn lane a few feet off (the farmhouse glyph check, research R9).
 
 Every other rule of the placer is asked as before; only the corridor's question is answered by the passage.
 
