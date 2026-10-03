@@ -107,7 +107,9 @@ STATE = python3 -m l7r.diagram.ci state
 # built as the reference BYPASS. The GM's understanding ("there is no way to short circuit that")
 # was true only of reference scope. Now: the prompt authorizes the EXPENSE, then the reference map
 # still gates; REF_OK is the one, separate, logged way to skip that step, as for every other target.
-done:
+# GUARD_EDIT_OK: feature 316 follow-up - `done` gets its `##` line: the repository root forwards exactly the documented targets
+# (scripts/make-docs.py --forwardable), and `done` was the one public target with none.
+done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
 # (GUARD_EDIT_OK: feature 132 - a FULL run is a pool sweep, so the scope lock refuses it BEFORE the prompt.
 #  THE LOCAL SHORT-CIRCUIT (same feature, the GM's amendment): reference scope reuses the verdict in hand when
 #  the last record is a green `make done` against exactly this engine

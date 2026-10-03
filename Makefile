@@ -12,24 +12,21 @@ DIAGRAM := .claude/skills/diagram
 .PHONY: help
 help:
 	@printf 'This is the repository root; the engine and its targets live in %s.\n' "$(DIAGRAM)"
-	@printf 'The diagram targets are forwarded from here: make done | quick | maps | reference | hooks-test | ...\n'
+	@printf 'Every documented diagram target is forwarded from here: make done | quick | maps | hooks-test | claims-report | ...\n'
 	@printf 'Anything else: (cd %s && make <target>)\n' "$(DIAGRAM)"
 
-# Forwarded verbatim. Kept as an explicit list, not a %-rule, so a typo names the route rather
-# than being forwarded into a second "No rule to make target".
-# GUARD_EDIT_OK: feature 185 - `scope-lock`/`scope-unlock` retired with the lock. `gate-manifest`
-# and `new-check` went with the check battery in feature 166 and were never removed here (FR-004a):
-# a stale forward resolves, forwards into the skill, and dies naming the WRONG file - the exact
-# second-order failure the comment above says this explicit list exists to prevent.
-# GUARD_EDIT_OK: feature 197 - `claim` forwards too; it is the specify step's first command and runs from the clone root.
-# GUARD_EDIT_OK: feature 274 D5 - `lines` and `append` forward too: a page session reads and writes its coordination files from wherever it stands.
-# GUARD_EDIT_OK: feature 285 - `open-questions` forwards too: the GM ran it from the repository root and got "No rule to make target".
-# GUARD_EDIT_OK: feature 295 - `plan-verdict` forwards too: spec-fidelity's MODE 4 contract runs it from the clone root, and
-# on 2026-09-30 it found no such target there and recorded through `scripts/_plan_gate.py` by hand.
-# GUARD_EDIT_OK: feature 313 - the GM's "ingest" and "sync", the add and the access report forward too: a session answers them from wherever it stands.
-FORWARD := done quick maps reference hooks-test tooling durations page-check tick claim \
-           switches ci-status ci-off ci-on perf-report perf-review audit lines append open-questions plan-verdict \
-           downloads-ingest downloads-sync download-add access-tags
+# Forwarded verbatim: EVERY documented target of the skill Makefile, DERIVED, never listed (feature 316 follow-up, GM
+# 2026-10-03: *"That bug keeps recurring where something gets defined but then not passed through"*). The list was kept by
+# hand so a typo would name the route rather than be forwarded into a second "No rule to make target" - and six features
+# (197, 274, 285, 295, 313, 316) each added a skill target and forgot it here, while `reference`, renamed `_reference`,
+# stayed listed and forwarded into exactly that second failure. `scripts/make-docs.py --forwardable` prints every target
+# with a `##` line that is not flagged `{internal}`, the same parse that builds docs/make-targets.html and that the gate's
+# `make-docs --check` holds: a target forwards the moment it is documented and stops the moment its line goes, and a typo
+# or an undocumented name still fails HERE, naming the route. tests/tooling/test_make_docs.py pins the derivation.
+# GUARD_EDIT_OK: feature 316 follow-up - the hand list replaced by the derivation above; nothing the list forwarded is
+# lost except the retired `reference`, which forwarded into a second "No rule to make target".
+# `help` is the root's own (it names the route); the skill's `help` is reached with `cd .claude/skills/diagram && make help`.
+FORWARD := $(filter-out help,$(shell python3 "$(CURDIR)/scripts/make-docs.py" "$(CURDIR)" --forwardable))
 # GUARD_EDIT_OK: feature 197 - FIXING A FORWARD THAT BROKE ON CORRECT WORK (Principle XIV, found while ticking
 # this feature's own tasks). `$(MAKEOVERRIDES)` expanded to the raw `NOTE=<text>` and was pasted UNQUOTED into
 # the recipe, so `make tick NOTE="green; every case"` from the repository root ran `tick NOTE=green` and then

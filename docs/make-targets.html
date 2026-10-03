@@ -28,11 +28,12 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 121 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 122 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cov-file</td><td class=a><div class=ad><span class=an>FILE=&lt;test path&gt;</span><span class=aw>the test file to run</span></div><div class=ad><span class=an>MOD=&lt;module path&gt;</span><span class=aw>the module to report coverage for - e.g. `l7r/diagram/settlement/houses.py`</span></div></td><td>which lines of MOD does ONE test file reach?</td></tr>
+<tr><td class=n>make done</td><td class=a>FULL INCREMENTAL</td><td>tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded</td></tr>
 <tr><td class=n>make durations</td><td class=a><div class=ad><span class=an>FULL=1</span><span class=aw>also profile `tests/full/` (default: it is ignored, so this is the quick tree only)</span></div><div class=ad><span class=an>MARK=&lt;expr&gt;</span><span class=aw>a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)</span></div><div class=ad><span class=an>N=&lt;rows&gt;</span><span class=aw>how many of the slowest rows to print (default: 12)</span></div></td><td>where the suite&#x27;s time goes - run when a target feels slow</td></tr>
 <tr><td class=n>make hooks-test</td><td class=a>&ndash;</td><td>run every scripts/test-*-hooks.sh, and prove each guard still has a companion</td></tr>
 <tr><td class=n>make idle-tests<span class='b off' title="arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand">inactive</span></td><td class=a>&ndash;</td><td>what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done` <span class=w>arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand</span></td></tr>

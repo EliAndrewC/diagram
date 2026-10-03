@@ -97,3 +97,42 @@ def test_the_page_groups_and_names_its_source() -> None:
     # `make reference` was here until the GM retired the public rung on 2026-09-06; `static` replaces
     # it as the third probe - a target from a DIFFERENT section, which is what this line is checking.
     assert "make done" in page and "make quick" in page and "make static" in page
+
+
+# ---- THE ROOT FORWARDS WHAT THIS DOCUMENTS (feature 316 follow-up) ----------------------------------------------------
+# GM 2026-10-03: "That bug keeps recurring where something gets defined but then not passed through." The root Makefile's
+# hand list missed a new skill target six times and kept forwarding a retired one; it now reads `--forwardable`.
+
+
+def test_forwardable_is_every_documented_target_a_person_types(tmp_path: Path) -> None:
+    mk = tmp_path / "Makefile"
+    mk.write_text(
+        "alpha:          ## [tests] typed\n\t@true\n_beta:          ## [tests] {internal} called by a recipe\n\t@true\ngamma:\n\t@true\n",
+        encoding="utf-8",
+    )
+    assert _mod().forwardable(mk) == ["alpha"], "documented and typed only: no internal, no undocumented target"
+
+
+def test_the_root_forwards_exactly_the_documented_skill_targets() -> None:
+    root_forward = subprocess.run(
+        ["make", "-s", "--no-print-directory", "-C", str(ROOT), "--eval", "print-forward: ; @echo $(FORWARD)", "print-forward"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert root_forward.returncode == 0, root_forward.stderr
+    forwarded = set(root_forward.stdout.split())
+    expected = set(_mod().forwardable(MAKEFILE)) - {"help"}
+    assert forwarded == expected, f"root forwards {sorted(forwarded ^ expected)} differently from the documented targets"
+    assert {"done", "quick", "claims-report", "claims-coverage", "open-questions"} <= forwarded
+    assert "reference" not in forwarded, "a retired target is not forwarded into a second 'No rule to make target'"
+
+
+def test_a_forwarded_target_reaches_the_skill_and_a_typo_fails_at_the_root() -> None:
+    ok = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(ROOT), "claims-report"], capture_output=True, text=True, timeout=60)
+    assert ok.returncode == 0 and "_claims.py" in ok.stdout, ok.stdout + ok.stderr
+    typo = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(ROOT), "claims-reprot"], capture_output=True, text=True, timeout=60)
+    # A forwarded miss leaves a second line, the root's `[Makefile:NN: claims-reprot] Error 2`; a miss AT the root has none.
+    # (Not `make[1]` - under `make test-file` MAKELEVEL is already set, so the root's own error is labeled make[1].)
+    assert typo.returncode != 0 and "No rule to make target 'claims-reprot'" in typo.stderr, typo.stderr
+    assert "] Error" not in typo.stderr, f"the typo was forwarded into the skill: {typo.stderr}"
