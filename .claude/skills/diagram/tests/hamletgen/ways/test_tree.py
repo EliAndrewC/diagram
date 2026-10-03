@@ -396,3 +396,20 @@ def test_a_corridor_whose_joined_tree_closes_a_sliver_is_refused(monkeypatch) ->
     monkeypatch.setattr(tree, "as_joined", lambda trial, lanes: [{**ln, "joined": True} for ln in lanes])
     monkeypatch.setattr(law, "needle_loops", lambda M_: ["sliver"] if any(ln.get("joined") for ln in M_["lanes"]) else real(M_))
     assert not tree.admits(_law(M), M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "a sliver only once joined: refused"
+
+
+def test_a_corridor_whose_drawn_form_crosses_its_own_fixture_is_refused(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 317 (cohort seed 18 at 15 households): squaring a water crossing re-lays a run's approach (`laid_run`), and a
+    routed path's bend taken out ran the lane across the household's own privy. The seating judge asks the household's own
+    house, beds and fixtures of the run as it will be drawn, where that differs from the run found (`own_clear`)."""
+    s = types.SimpleNamespace(M=_tree(), px=lambda ft: ft, _access=types.SimpleNamespace(half=7.0))
+    geom = {"house": (100.0, 100.0, 40.0, 28.0), "yard": (100.0, 60.0, 30.0, 20.0), "turn": 180.0, "boxes": {"fixtures": {"privy": (130.0, 30.0, 10.0, 10.0)}}}
+    found = [(100.0, 48.0), (100.0, 20.0), (100.0, 0.0)]
+    assert tree.own_clear(s, found, geom), "the path as found keeps off the privy"
+    across = [(100.0, 48.0), (140.0, 20.0), (140.0, 0.0)]
+    assert not tree.own_clear(s, across, geom), "...a leg through it does not"
+    assert tree.own_clear(s, [(100.0, 48.0), (100.0, 0.0), (100.0, 0.0)], geom), "a last leg of no length passes unasked"
+    judge = tree.seating_judge(s)
+    assert judge(found, geom), "drawn as found: judged by the tree alone"
+    monkeypatch.setattr(tree, "laid_run", lambda base, M, run: across)
+    assert not judge(found, geom), "drawn across its own privy: refused"

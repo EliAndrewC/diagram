@@ -1,0 +1,36 @@
+[1mreference settlement (Inashiro, seed 4): CLEAN[0m [MISS]
+checking the reference settlement first (60 s) - the cohort is 20-25 min
+
+[1mreference settlement clean[0m - running the cohort
+
+
+--- Audit-14  seed=14 households=20 form=dispersed sides=3 fall=45 sink=pond shape=round lanes=Y water=well
+    FAIL trees_shading_plots -> 1, e.g. [('gardens', 'crown', (1307.9, 3319.8), (1300.15, 3248.35))]
+
+--- Audit-15  seed=15 households=16 form=dispersed sides=3 fall=0 sink=pond shape=round lanes=spine water=channel
+    FAIL gardens_east_shaded -> 1, e.g. [((1972.4, 2550.6), {'x': 2010.8, 'y': 2514.8, 'w': 17.0, 'h': 54.474999999999994, 'rot': 0, 'of': [1941.806588480639, 2528.3282094824885], 'face': [1, 0], 'depth': 'thin', 'bamboo': False})]
+    FAIL trees_shading_plots -> 1, e.g. [('gardens', 'crown', (1636.5, 1673.1), (1639.4, 1625.75))]
+
+Audit-18 households=15 form=nucleated REFUSED
+    FAIL refused:OverlapRefused -> lanes would be recorded on a farm_fixtures at (2264, 1997), which the overlap matrix forbids
+
+Audit-22 households=10 form=linear REFUSED
+    FAIL refused:WebRefused -> the web's last resort cannot mend it without dropping a tree lane: the web still breaks off_ford
+
+Audit-23 households=17 form=linear REFUSED
+    FAIL refused:WebRefused -> the web's last resort cannot mend it without dropping a tree lane: lanes 1 (skeleton) still break a rule of the lane law; the web still breaks over_fixtures
+
+--- Audit-906  seed=906 households=16 form=dispersed sides=3 fall=45 sink=pond shape=round lanes=spine water=well
+    FAIL trees_shading_plots -> 2, e.g. [('gardens', 'crown', (1588.8, 1721.1), (1614.3, 1651.25)), ('gardens', 'crown', (1903.0, 2185.8), (1890.0, 2111.05))]
+
+forms rolled: dispersed 9, linear 10, nucleated 11
+grove sides among the farms that carry a grove: 2 sides 8, 3 sides 6, 4 sides 3
+row villages: 8; knob values never rolled: none
+
+24/30 passed the whole gate
+residue by check:
+    3  trees_shading_plots
+    2  refused:WebRefused
+    1  gardens_east_shaded
+    1  refused:OverlapRefused
+make: *** [Makefile:425: cohort] Error 1

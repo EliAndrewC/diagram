@@ -266,30 +266,8 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     law_.tree = False
     chain = chain_of(recs, host, k)
     whole = [*range(k), k]
-    memo = base.__dict__.setdefault("_tree_squares", {})  # the water does not change while the seating asks
-
-    def square(run: Poly) -> Poly:
-        key = tuple(run)
-        if key not in memo:
-            memo[key] = base.squared(list(run))
-        return list(memo[key])
-
-    # EACH RUN REJOINED AND SQUARED ONCE WHILE THE WATER STANDS (dev/performance.md, shape two): every seat asked re-laid
-    # every reserved run of the tree - `rejoined` tests each leg against every leg of the brook and the channels (312,044
-    # `segments_cross` on seed 44, most of the tree's question) - though a reserved run and the water are the same from one
-    # seat to the next. Remembered by the run's points, and forgotten whenever the water the squaring reads differs.
-    waters = square_waters_of(M)
-    laid = base.__dict__.get("_tree_laid")
-    if laid is None or laid[0] != waters:
-        laid = base.__dict__["_tree_laid"] = (waters, {})
-    done: dict[tuple[Pt, ...], Poly] = laid[1]
-
     def lay(run: Poly) -> Poly:
-        key = tuple(run)
-        hit = done.get(key)
-        if hit is None:
-            hit = done[key] = square(rejoined(run, waters))
-        return list(hit)
+        return laid_run(base, M, run)
 
     for ctx in (whole, [*reversed(chain[1:]), k]):
         lanes = lanes_of(M, recs, host, ctx, drawn=False, laid=lay)
@@ -320,6 +298,31 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             if tree_shadows([ln["pts"] for ln in lanes]):
                 return False
     return True
+
+
+def laid_run(base: Any, M: Mapping[str, Any], run: Poly) -> Poly:
+    """`run` as the web lays it - rejoined (`rejoined`) and squared at its water crossings (`base.squared`) - each run once while
+    the water stands.
+
+    EACH RUN REJOINED AND SQUARED ONCE WHILE THE WATER STANDS (dev/performance.md, shape two): every seat asked re-laid every
+    reserved run of the tree - `rejoined` tests each leg against every leg of the brook and the channels (312,044
+    `segments_cross` on seed 44, most of the tree's question) - though a reserved run and the water are the same from one seat
+    to the next. Remembered on `base` by the run's points, and forgotten whenever the water the squaring reads differs."""
+    memo = base.__dict__.setdefault("_tree_squares", {})  # the water does not change while the seating asks
+    waters = square_waters_of(M)
+    laid = base.__dict__.get("_tree_laid")
+    if laid is None or laid[0] != waters:
+        laid = base.__dict__["_tree_laid"] = (waters, {})
+    done: dict[tuple[Pt, ...], Poly] = laid[1]
+    key = tuple(run)
+    hit = done.get(key)
+    if hit is None:
+        joined = rejoined(run, waters)
+        sk = tuple(joined)
+        if sk not in memo:
+            memo[sk] = base.squared(list(joined))
+        hit = done[key] = list(memo[sk])
+    return list(hit)
 
 
 def as_joined(trial: Mapping[str, Any], lanes: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
@@ -687,6 +690,26 @@ def seating_judge(s: Any) -> Any:
 
     def judge(corridor: Sequence[Pt], geom: Mapping[str, Any]) -> bool:
         house, yard = records_of(geom)
-        return admits(seating_law(s), s.M, [_pt(q) for q in corridor], ACCESS_ROLE, house, yard)
+        base, run = seating_law(s), [_pt(q) for q in corridor]
+        # ...AND THE HOUSEHOLD'S OWN HOUSE, BEDS AND FIXTURES CLEAR OF IT AS THE WEB WILL LAY IT (feature 317): squaring a water
+        # crossing re-lays the approach (`laid_run`), and on cohort seed 18 at 15 households it took a routed path's bend out
+        # and ran the lane across the household's own privy - asked of the path as found, never of the path as drawn, since
+        # the household's parts are not yet on the manifest the tree reads (`OverlapRefused`, lanes over farm_fixtures).
+        drawn = laid_run(base, s.M, run)
+        if drawn != run and not own_clear(s, drawn, geom):
+            return False
+        return admits(base, s.M, run, ACCESS_ROLE, house, yard)
 
     return judge
+
+
+def own_clear(s: Any, run: Poly, geom: Mapping[str, Any]) -> bool:
+    """Does every leg of `run` clear the household's own house, beds, sheds and fixtures, by the corridor's own leg tests
+    (`access.house_clear`, `fixtures_clear`, `parts_clear`) - the leg onto the tree passing unasked where it has no length?"""
+    from l7r.diagram.settlement.rolling import access as A
+
+    hgap, last = A.house_gap(s), len(run) - 2
+    return all(
+        (n == last and math.dist(a, b) < 1e-6) or (A.house_clear(a, b, geom, hgap) and A.fixtures_clear(s, a, b, geom) and A.parts_clear(s, a, b, geom))
+        for n, (a, b) in enumerate(zip(run, run[1:], strict=False))
+    )

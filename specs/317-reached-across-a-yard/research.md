@@ -73,3 +73,40 @@ is the route finding paths through the household's own beds: it kept off the hou
 (R4).
 (observed 2026-10-03, method: as the heading; the classification asks each layout's candidates `fixtures_clear` /
 `parts_clear` and `lawful_leg` separately.)
+
+## R4 - The route searched per layout, round its own parts (task T06; method: `t06.sh` - the base a worktree at b54a76717, the fixed judge without it; `t06-*`)
+
+Each garden layout searches its own route after the seat's shared straight and round-the-gable candidates, kept off the
+household's house, shed, byre, well, beds and fixtures by the gaps their leg tests keep (`route.own_parts`; the memo keyed per
+layout). Feature 314 had tried the search off its own parts and withdrawn it (its R12) for two reasons this feature removes: the
+judge's defect (R2), and a route searched once for the seat's house and yard, so every layout took the route laid round the
+first layout's beds.
+
+| | 15 households, seeds 1-8 | 40 households, seeds 2, 6, 10, 13 |
+|---|---|---|
+| seats popped, base -> new | 631 -> 426 | 1,152 -> 682 |
+| seats lost to the path alone | 77 -> 21 | 90 -> 22 |
+| corridor-only layouts: own parts / no path / lane law | 191 / 109 / 13 -> 39 / 32 / 25 | 260 / 67 / 13 -> 55 / 32 / 14 |
+| route searches | 277 -> 387 | 361 -> 499 |
+| homesteads stage, CPU seconds, alternated | 27.1 -> 25.6 s | 34.5 -> 30.9 s |
+| households seated | 120 -> 120 | 160 -> 160 |
+
+The layouts still refused stand at least 83-85 ft from the nearest neighbor's yard (median 143-145 ft).
+
+At 20 households (feature 314 R12's leg), one wall-clock run a seed, eight seeds (4, 13, 39, 2, 6, 8, 25, 47): every seed rolled
+on both engines, seed 13 included - the seed feature 314 refused with the search off its own parts. The access corridors' legs
+rose (seed 13: 35 -> 48; summed 251 -> 346: paths bend round the beds); the homesteads stage summed 9.18 -> 10.31 s and the web
+6.08 -> 6.89 s, single runs under load (seed 8's web 0.59 -> 1.31 s, seed 4's 0.90 -> 0.57 s). Seeds 4 and 39, feature 314's
+slow webs, drew theirs in 0.57 and 0.76 s. The 20-household leg is the bookend's to settle (T09).
+(observed 2026-10-03, method: as the heading.)
+
+## R5 - The known bugs, their owners and states (FR-007, SC-006)
+
+| bug | owner | state |
+|---|---|---|
+| The seating admitted a corridor the web then reshaped into a needle (feature 314 R12) | this feature | fixed: `tree.as_joined` (R2); the reproduction rolls, and seed 13 at 20 households rolls with the route off its own parts (R4) |
+| Cohort seeds 22, 23 (linear, `WebRefused`) | Diagram (Inashiro), feature 315 | its last word, 2026-10-03: seed 22 fixed in 315 (commit 82ce6927b, a corner welded onto a tread in `settle_needles`), seed 23 passes on its engine, a full cohort running before its push. On this clone both still refuse (22: off_ford, 23: over_fixtures; `make cohort N=2 SEED=22`) - not this feature's |
+| Cohort seeds 14, 15, 906 (dispersed: `trees_shading_plots`, `gardens_east_shaded`) | Diagram (Inashiro), feature 315 | owned and in progress (agreed 2026-10-02); 906 still fails on this clone |
+| A headless page session resumed after a stall dispatched its returned checks again: their reports sat queued in its transcript, never taken up, and Claude Code told the resumed session they "didn't finish" | this feature (found running R1's checks) | fixed: the resume names a file of the queued reports and resumes early once they are back (`_page_session_runner.undelivered`, `returned_file`, `turn_ended`; fa30940d5, tests in `tests/tooling/test_page_session.py`) |
+| A `resume:` page session that stalled would fail to be resumed (`--session-id` no longer in its command) | this feature | fixed in the same commit, tested |
+| `pair-hooks.sh stop` read a green `make test-file` as a green gate and told sessions (a headless page session sharing the clone among them) to dispatch reviews no gate had earned | this feature | fixed: the stop branch asks the gate stamp as the pretool branch does (b54a76717); the new case fails with the old line (102 passed, 2 failed) and passes with the fix (104) |
