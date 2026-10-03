@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "8e24ebb146e65bd3d986ffbff9c9a4b0a9bebb3af24562ab8a47df484fd232a5",
+  "criteria": {
+    "commensurate": "Yes. +11.9% on the bookend (17.7 -> 19.8 s), nearly all of it D4, buys the ruled behavior: a mean house-to-field distance of 355-394 ft against 416-443 ft on main (research R1). The no-restart engine also seats cohort seed 18 on its first margin in 2.4 s against 18.7 s on main. The change is behavioral, not cosmetic, and the cost per seed is about 0.5-0.9 s at 15 hh.",
+    "necessary": "Yes. Plan D4 offers the open seat nearest the field first, with all 16 directions and 3 rings offered at once. It is the GM's canon ruling of 2026-10-03 (growth.field_distance) and it causes the growth: in the reviewer's medians at 096490ead (homesteads CPU, 15 hh, 4 seeds, 3 reps) main is 4.32 s, landed 6.73 s and D4 reverted 4.75 s, so D4 is 1.98 s. At 40 hh (seeds 4/25/39) main is 13.8 s, landed about 20.7 s and D4 reverted about 11.9 s. The remaining 0.43 s at 15 hh is the FR-003 unbounded search and the corridor judging, and at 40 hh those changes run faster than main.",
+    "no_way_around": "None found. Round 2's correction landed in b9db98ae6 (FreeGround.decide_beyond, one vectorized call): homesteads CPU went from 7.66 to 6.73 s with house hashes unchanged on all four seeds (8212a77c 1710d203 937a8877 d6db8c21). D4's candidates are already lazy (a heap ordered by field distance, settled only when popped), so the extra cost is the near-field seats the placer refuses (seed 4: 281 offers against 80 on main). That is inherent to trying the nearest seat first. Among the tables measured (R1), none is cheaper with equal distances. Still band 3: the GM's perf-signoff is required."
+  },
+  "end": {
+    "commit": "e58ead892",
+    "label": "318-end",
+    "utc": "20261003T202347Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T203500Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 6.7,
+          "39": 9.7,
+          "4": 28.6,
+          "47": 23.3
+        },
+        "total_pct": 17.5
+      },
+      "20": {
+        "seeds": {
+          "25": -10.7,
+          "39": 23.6,
+          "4": 10.4,
+          "47": 10.3
+        },
+        "total_pct": 7.1
+      },
+      "40": {
+        "seeds": {
+          "25": 19.0,
+          "39": 21.5,
+          "4": 20.6,
+          "47": -17.1
+        },
+        "total_pct": 9.9
+      }
+    },
+    "seeds": {
+      "25": 15.4,
+      "39": 18.4,
+      "4": 23.5,
+      "47": -8.2
+    },
+    "total_pct": 11.9
+  },
+  "note": "",
+  "verdict": "justified"
+}

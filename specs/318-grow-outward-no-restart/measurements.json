@@ -1,11 +1,11 @@
 {
  "perf-318-control-d4": {
-  "verifies": "the band-3 reading of the 318 bookends on the landing engine: total +15.8% (17.7 s -> 20.5 s), the homesteads stage on every seed",
+  "verifies": "the band-3 reading of the final 318 bookends: total +11.9% (17.7 s -> 19.8 s), the homesteads stage on seeds 4, 25 and 39",
   "subject": "perf bookend, reference spec (Inashiro), seeds 4/25/39/47 at 15 households and the 10/20/40 scaling legs",
-  "value": 18.6,
+  "value": 18.9,
   "unit": "s, the bookend total with plan D4 removed (the three-level 8/12/16-direction table, the seat-distance order, the unscaled jitter), everything else as it lands",
-  "quantity": "one-shot bookends, 2026-10-03, this host, one process each: 318-start (main ddb924e01) 17.7 s; 318-end (fdd811294 + ledger, dev/perf-log/20261003T195442Z-318-end-diagram-performance.json) 20.5 s; the control (the landing engine with D4 reverted in a detached worktree, dev/perf-log/20261003T195830Z-318-control-d4b-ctl318.json) 18.6 s. D4 is 1.9 s of the 2.8; the remaining 0.9 s (+5%) is the growth with no radius and the seating's other changes (perf-318-control-windows, perf-318-control-web)",
-  "source": "make perf LABEL=318-end in the clone and LABEL=318-control-d4b in a detached worktree of the landing commit with growth.py's GROW_LEVELS, field_distance and grow_jitter reverted",
+  "quantity": "one-shot bookends, 2026-10-03, this host, one process each: 318-start (main ddb924e01) 17.7 s; 318-end (096490ead, dev/perf-log/20261003T202347Z-318-end-diagram-performance.json) 19.8 s; the control (096490ead with D4 reverted, dev/perf-log/20261003T202754Z-318-control-d4c-ctl318.json) 18.9 s. The previous engine's pair read 20.5 / 18.6 s (1.9 s for D4); single bookends on this host move by about a second, so D4 is read as 0.9-1.9 s of the 2.1 s, and the perf-audit's five-rep medians (2.06 s of homesteads CPU for D4 at 15 households, round 2) are the firmer figure",
+  "source": "make perf LABEL=318-end in the clone and LABEL=318-control-d4c in a detached worktree of 096490ead with growth.py's GROW_LEVELS, field_distance and grow_jitter reverted",
   "observed": "2026-10-03"
  },
  "perf-318-control-windows": {
@@ -24,6 +24,15 @@
   "unit": "s, the web stage's CPU at seed 4, 40 households, with feature 318's three web changes stubbed out (`tree_shadow_cuts`, `walked_shadows`, `_join_admitted`)",
   "quantity": "one-shot, 2026-10-03, one process: seed 4 web 3.52 s as it lands, 3.54 with the three web changes stubbed, 3.53 with the shadow cut alone stubbed, 1.70 on main; seed 25 1.85 / 1.91 / 1.90 against 2.15 on main (faster). The web code 318 changed is not the cause; the layout is: on seed 4 the settle runs twice (153 step calls against main's 51, a straightening after the first settle owing a second) and prunes the tree 9 times against 3",
   "source": "scratchpad webctl318.py (NOSHADOW, WEBOFF) and webprof318.py (cProfile of the web stage) on the clone at ffb6cbb45..52667ef72 and on main ddb924e01",
+  "observed": "2026-10-03"
+ },
+ "perf-318-control-cells": {
+  "verifies": "the perf-audit's round-2 correction: the first house's candidates decided 110,873 cells past the grid's window one shapely call each",
+  "subject": "perf, reference spec, seeds 4/25/39/47 at 15 households, the homesteads stage",
+  "value": 6.8,
+  "unit": "s, the homesteads stage's CPU summed over the four seeds, the cells past the window decided in one call (`FreeGround.decide_beyond`, b9db98ae6)",
+  "quantity": "one-shot, 2026-10-03, one process: 2.17 / 1.60 / 1.34 / 1.69 s against 7.56 s summed one call a cell; the five pool hamlets byte-identical",
+  "source": "scratchpad spread318.py on the clone at b9db98ae6 against fdd811294",
   "observed": "2026-10-03"
  }
 }
