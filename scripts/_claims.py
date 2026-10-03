@@ -270,6 +270,12 @@ def record(index: dict[str, dict[str, str]], units: dict[str, dict[str, str]], r
 # ---- the report and the gate ---------------------------------------------------------------------------------------
 
 
+def split_units(text: str) -> list[str]:
+    """UNITS="<key>,<key>" as keys. A claim's name may hold a comma ("walls, gate and empty court"), so a comma
+    splits only where the next piece starts a new key (it holds the `::` of a path)."""
+    return [k.strip() for k in re.split(r",(?=[^,]*::)", text.strip().rstrip(",")) if k.strip()]
+
+
 def report(cur: dict[str, Row], index: dict[str, dict[str, str]]) -> str:
     """Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011)."""
     rows = live_rows(cur, index)
@@ -403,7 +409,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         elif args.module:
             keys = sorted(k for k, row in cur.items() if row.unit.path == args.module or row.unit.path.endswith("/" + args.module))
         else:
-            keys = [k.strip() for k in args.units.split(",") if k.strip()]
+            keys = split_units(args.units)
         unknown = [k for k in keys if k not in cur]
         if unknown or not keys:
             print(f"claims-bundle: no such claim(s): {', '.join(unknown) or '(none selected)'}", file=sys.stderr)

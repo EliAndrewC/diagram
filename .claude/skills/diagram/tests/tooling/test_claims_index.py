@@ -159,6 +159,12 @@ def test_record_writes_verdicts_refuses_strangers_and_keeps_unclaimed_rows_until
     assert "p::f#the row count" not in again and again["p::f#a"]["verdict"] == "IN-STEP"
 
 
+def test_units_split_only_where_a_new_key_starts_so_a_claim_name_may_hold_a_comma() -> None:
+    a = "x/civic.py::Civic.mansion#walls, gate and empty court"
+    b = "x/wells.py::place#wells shared"
+    assert cx.split_units(f"{a},{b}, ") == [a, b]
+
+
 def test_the_report_counts_lists_findings_and_the_open_research(tmp_path: pathlib.Path) -> None:
     skill = _tree(tmp_path)
     index = _all_in_step(tmp_path)
