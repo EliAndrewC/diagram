@@ -246,3 +246,30 @@ were refused that way. Fixed (6adad5792): the neighbor's sun is part of the sear
 rolled side and then the other - 12 of 12. A tried alternative, refusing a tight seat whose layout dropped its persimmon, was
 reverted: the tree is the hamlet's count's, not the household's.
 (observed 2026-10-03, method: `persim_probe.py` in the session's scratchpad, the reference spec rolled and its persimmons counted.)
+
+## R9 - The research claims (feature 316, merged 2026-10-03): what the impl-drift check found, and what was done (method: `make claims-owed`, `make claims-bundle UNITS=`, the `impl-drift` contract given to eight ad-hoc Opus agents - the agent file landed after this session started - `make claims-checked`, `scripts/_claims.py gate`)
+
+**Owed.** Merged with feature 316, the feature owed 387 claims in 41 files: 34 new (the passage's units), 54 whose code changed,
+299 whose cited research changed - every claim citing 0081-village-lanes, whose findings this feature rewrote. Round 1, eight
+batches by file: 298 IN-STEP, 51 DRIFTED, 19 MISLABELED, 11 NEEDS-RESEARCH, 8 CANNOT-TELL, and 37 UNCLAIMED decisions. The push's
+verdict counted 72 of them introduced (a finding on a claim whose code or cited research moved since main's index) and 527
+pre-existing across the engine, which only warn.
+(observed 2026-10-03, method: as the heading.)
+
+**What the feature owed, and fixed** (d7c5fb007): the lanes still treated a household reached across a yard as owed a way of its
+own - an arm or fragment kept as its "only way" (`smooth._smooth_web`, `touch._touch_junctions`, `sweeps._sweep_debris`), a
+dangling end carried to its dooryard (`sweeps._sweep_dangling_ends`), the web's cuts spaced to cover it (`web.py`). One rule now
+says who a lane serves (`geom.lane_houses`); the pool's five hamlets rolled byte-identical on it. `fit._on_the_access` left a grove
+farm's kura and byre out of the parts it keeps off a corridor. The passage's units cite the drawing page that records them;
+"every farmhouse served" names the exception wherever it is claimed; `stage_web`'s and `WEB_REACH_FT`'s "the record is decisive"
+reads "not always". Claims the page does not answer are UNRESEARCHED, or the page's GUESS where it records one, as the check said.
+(observed 2026-10-03, method: as the heading; the pool by `make map` on each of the five and `git status`.)
+
+**What it did not fix, and why**: the pre-existing figures the lane code and the 0081 drawing page disagree on - ends joined at
+11.5 ft (`joints._MEET_FT`) and at 30 ft to a way's side (`law.JOIN_REACH_FT`) where the page says 25; a 4-6 ft gap off a fence or
+the fabric in five passes, and 5.5 ft for the field way, where the page says 7; the exit strip drawn 3 ft where the page's spine
+is 5; the track's and the spur's bows where the page pulls every lane taut; and the farmhouse sizes against 0029. Each is a
+decision between the code and the page - change the map or record the deviation - and recording them is an edit to the 0081
+drawing page, which re-owes all of its ~300 claims a check. A feature of its own, put to the GM; the push carries them by
+`CLAIMS_OK` with this record named.
+(observed 2026-10-03, method: as the heading.)

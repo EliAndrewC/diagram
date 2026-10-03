@@ -78,7 +78,11 @@ ways' one predicate of reach (`checks.unreached_houses`, which the web's settle,
 read) counts it reached when its chain ends at a reached household. The pool and gate tests that ask reach read the same
 predicate. And the household it is reached across keeps its way drawn: its corridor is owed and never pruned, however near the
 lanes its center stands (`tree.passage_anchors`; the village lane's glyph-check on Inashiro, F1 - the anchor 90 ft from a lane,
-its corridor not owed, the two farmsteads left with no way). Nothing else of the ways changes.
+its corridor not owed, the two farmsteads left with no way). And the ways owe the reached household no lane of its own (research
+R9, the impl-drift check): where a pass keeps an arm or a fragment as a house's only way, carries a lane's end to a dooryard, or
+spaces the web's cuts to cover the houses, it asks one rule of who a lane serves - every farmhouse but those reached across a
+neighbor's yard (`geom.lane_houses`) - while an end that merely reaches a house still counts every house. Nothing else of the
+ways changes.
 
 **D6 - The corridor judged as drawn (FR-004).** Feature 314 R12's refused web, reproduced (the route's own parts switched on, seed
 13 at 20 households): three access lanes close a sliver because the web begins one at the house's door - (2939, 2606) - where the
@@ -103,7 +107,8 @@ Diagram (Inashiro) session, feature 315). At close, each is fixed with its run o
 at the gate and closed (research R8): feature 315's persimmon reseat asked a neighbor's sun only of the first seat its search chose,
 on the household's rolled side alone, and gave the tree up where a later seat or the other side shaded no one - Inashiro, moved by
 the tight seats, drew 11 persimmons of 12 rolled (B10). It now asks the neighbor's sun of every seat it tries, on the rolled side
-and then the other (`persimmon_reseat.persimmon_for`).
+and then the other (`persimmon_reseat.persimmon_for`). Found by the impl-drift check and closed (research R9): a grove farm's
+test that no part of it stands on a corridor (`fit._on_the_access`) left out its kura and its byre.
 
 ## Verification
 
