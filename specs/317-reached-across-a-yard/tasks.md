@@ -38,5 +38,6 @@
 - [x] T08 the known bugs listed with their owners and states (D7, FR-007, SC-006)
       research: rendering
       verify: DONE. research R5 lists every bug found with its owner and state: the feature's own fixed (the judge as drawn, seeds 18 and 47, the persimmon reseat, the kura and byre, the passage on the finished seating, four tooling bugs); 315's cohort seeds with the Diagram (Inashiro) session (landed in 315); the lane code's pre-existing figures against its page and the sliver joint, to a follow-up put to the GM
-- [ ] T09 `make done`, the bookends, the occasions' reviews
+- [x] T09 `make done`, the bookends, the occasions' reviews
       research: rendering
+      verify: DONE. make done green on the engine as it lands (5058ad68); the final bookends, three alternated takes against main 38901e2df: band 3 (seed 25 at 40 households +21.6%), explained with its control (perf-317-control-40), confirmed consistent and audited justified by the perf-audit subagent - the GM's sign-off (make perf-signoff) is owed at the push; the occasions' reviews: farmhouse and village lane on Inashiro to their two-round cap (the farmhouse's round-2 fix verified by measurement), homestead bamboo on Kuwabata PASS; the claims checked in eight impl-drift rounds
