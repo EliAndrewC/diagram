@@ -4551,19 +4551,43 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround#site boundary": {
-  "code": "e34864f0a4873697",
-  "core": "420f8b9011439f2a",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FREE_GROUND_CELL#plumbing": {
+  "code": "498b97b5d66be882",
+  "core": "232d3ac8ac8b4b8c",
   "date": "2026-10-03",
-  "note": "exact pruning raster",
+  "note": "the raster's cell size; it changes how fine the grid is, not what the map shows",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround#site boundary": {
+  "code": "defba2c33fd377e5",
+  "core": "975b783ee6a712bc",
+  "date": "2026-10-03",
+  "note": "an index of the ground tests; the clearance is an input, and the half-pixel shrink and grow are tolerances",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.__init__#site boundary": {
-  "code": "f0ddc1df607d0e82",
-  "core": "0e15744ecae0480a",
+  "code": "f8bf2df6890c1ccd",
+  "core": "9fc2b28eb7c31e34",
   "date": "2026-10-03",
-  "note": "exact pruning raster",
+  "note": "turns the union into a raster; the block size, half-pixel buffers and depth are cost or tolerance only",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround._cell_beyond#site boundary": {
+  "code": "bf57d9c5f81b532c",
+  "core": "5323c742e0cea0bc",
+  "date": "2026-10-03",
+  "note": "decides a cell past the window lazily, with the same two tests as a cell inside it",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround._inside#site boundary": {
+  "code": "8b50dddd41cbf86c",
+  "core": "caee39a8274c0d7c",
+  "date": "2026-10-03",
+  "note": "a bounds check on the index",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -4584,18 +4608,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.point_clear#site boundary": {
-  "code": "0b9c0bf2af8994a2",
-  "core": "9725b3981919c4e8",
+  "code": "94bd891350d4aed4",
+  "core": "ededadcba0c24b0d",
   "date": "2026-10-03",
-  "note": "lookup",
+  "note": "looks up a cell, falling back to the cell past the window",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.point_taken#site boundary": {
-  "code": "c661aed85e877e8e",
-  "core": "302ef5d8cda65b88",
+  "code": "f073cc3a63f45345",
+  "core": "377cd24f6f2e3816",
   "date": "2026-10-03",
-  "note": "lookup",
+  "note": "looks up a cell, falling back to the cell past the window",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -4744,10 +4768,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::seating_window#plumbing": {
-  "code": "393cc0e8828fe858",
-  "core": "fa51c0e9ae59cf6d",
+  "code": "a5e96d90b60ace84",
+  "core": "302f9356f22caaf2",
   "date": "2026-10-03",
-  "note": "only sets the rasters' extent; outside it nothing is refused, so it is a cost window and not a seat rule",
+  "note": "the window only limits cost, and cells past it are decided the same way, so no seat depends on its 2x reach",
   "research": "",
   "verdict": "IN-STEP"
  },
