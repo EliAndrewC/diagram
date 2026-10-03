@@ -47,6 +47,6 @@
 - [x] T11 a way of its own asked of straight and round-the-house paths only, the drawing page saying so (D2 amended, FR-002)
       research: rendering
       verify: DONE. access_corridor(routed=False) asked by landlocked, the fit's own-way test and the recheck (the GM's ruling of 2026-10-03); the drawing page says so (record-format and quote-check rounds 1-2 answered); FR-008's substitution built and measured - route.tree_in_reach, the pool identical on and off (SC-007, R10); impl-drift over the 355 re-owed claims and two follow-up rounds, 0 owed; gate green at 8a929fdc; glyph-checks farmhouse, village lane (round 4, the GM's waiver) and Sawada's woodland commons PASS; cohort 30 of 30
-- [ ] T12 `make done`, the bookends, the occasions' reviews and the claims on the amended engine (FR-005, FR-006)
+- [x] T12 `make done`, the bookends, the occasions' reviews and the claims on the amended engine (FR-005, FR-006)
       research: rendering
-      verify:
+      verify: DONE. gate green at bac847b3; glyph-checks farmhouse and village lane on Inashiro (round 6, the GM's waiver) and the woodland commons new to Sawada PASS; claims 0 owed; cohort 30 of 30; plan MODE 4 CLEAR (32 decisions); bookends 317-end 20261003T150117Z against 317-start 20261003T145740Z: band 3 at 40 households (total +12.3%, seed 47 +34.1%), the 15-household legs -6.7%; explained (perf-317-control-40d), confirmed consistent and audited justified by the perf-audit subagent - the GM's sign-off is owed at the push

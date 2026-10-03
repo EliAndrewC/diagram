@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "531a5cf45a9842184f4863f38a2886733e9b43413723b273653f97cf4882a143",
+ "plan_sha256": "2989f23c5da71191d41789a442ff9b660dfd2dd21900639e6762d85cad37e584",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -115,9 +115,23 @@
   },
   {
    "id": "D4",
-   "summary": "PASSAGE_SHARE_BAND = (0.0, 0.25) rolled per nucleated settlement, a GUESS; beyond the share only with a corridor",
+   "summary": "PASSAGE_SHARE_BAND = (0.0, 0.25) rolled per nucleated settlement, a GUESS; beyond the share only with a corridor; the share a ceiling, never a quota",
    "class": "within",
-   "why": "Unchanged: FR-002's rolled share within a band labeled as a guess."
+   "why": "Unchanged: FR-002's rolled share within a band labeled as a guess. That the share bounds passages rather than requiring them is already the spec's own reading (US1: 'never more than the share allows'; SC-002: within each settlement's rolled share)."
+  },
+  {
+   "id": "D4-withheld",
+   "summary": "A margin that leaves a household unseated after seating some across a yard is seated again on the same margin with the passage withheld, before the ladder takes the next margin (stages.seat_the_margin, meta.passage_withheld)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: a settlement whose rolled share is above zero can now end with no passage where it formerly took a wider margin with some (seed 47 at 40 households, 5-6 -> 0). Legitimate on the request's own purpose: the GM asked that no non-requirement cost the seating 'optimizations that we know work', and the amendment is a performance ruling that neither way of reaching a house is rigorous ('not some kind of huge deal'; 'even if there IS a lane you might do it anyway'). Passages are still offered first on every margin; they are withheld only where the passage seating has already failed to seat everyone, so no lane-to-every-house requirement is re-imposed. Literally keeping passages through the ladder would throw away two seatings and place the map on a wider margin (seed 47: 20 s vs main's 3.9 s, R10), defeating that purpose; the research does not prefer margin N+1 with passages over margin N without. Scope measured: seeds 25 and 39 seat identical manifests (R10)."
+  },
+  {
+   "id": "D4-widest",
+   "summary": "A seating that has spent passages stops before the growth's widest level and is seated again without them (growth.grow_the_margin, passage.passages_spent)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: a passage seating that would have needed the widest growth level and succeeded there is replaced by one without passages. Legitimate on the same purpose as D4-withheld, and its premise is MEASURED, not assumed: no seating that seats everyone reached the widest level with passages on seeds 4, 25, 39, 47 at 15, 20 and 40 households (count_probe, R10), so it cuts a branch observed only to fail (seed 47 spent 5.7 s there on a seating thrown away); seeds 25 and 39 hash the same. The household it touches is seated by a way of its own, which the GM ruled is not to be avoided either. The cut is the same kind of accepted guess-for-speed the GM approved for 'no way of its own'."
   },
   {
    "id": "D5",
