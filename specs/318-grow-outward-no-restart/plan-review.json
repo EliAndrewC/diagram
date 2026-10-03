@@ -1,63 +1,96 @@
 {
  "feature": "318-grow-outward-no-restart",
- "plan_sha256": "c7106f722657273fc37925457299a74c7f51cfa9a95f85c0a53eecb13b96102a",
+ "plan_sha256": "a574d329663243fe00efa4355b98c103fcaef762b5779edec6523bd8d3288e28",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "One margin seated once; the ladder only for a margin that seats no house; a partial seating refused with SiteRefused; rescue, withheld re-seat, early stop and the 12:1 refusal removed, declared shape still recorded",
+   "summary": "One margin seated once; the ladder only past a margin seating no house; partial seating refused; rescue, withheld re-seat, early stop, 12:1 refusal removed",
    "class": "within",
-   "why": "FR-001, FR-004, FR-005, FR-006 as written; unchanged since the CLEAR review. The GM: get rid of this pattern completely."
+   "why": "FR-001, FR-004-FR-006; unchanged since the CLEAR review."
   },
   {
    "id": "D2",
-   "summary": "Growth queues and settles seats with no radius test, widening past GROW_LEVELS until a level queues no new seat on the canvas; AMENDED: the table is one level, every direction and ring of the old three offered at once",
-   "class": "within",
-   "why": "FR-002 (the radius refuses no seat) and the GM's 'keep placing houses outside of the boundary'. The one-level table follows D4 and keeps every offer adjacent to a standing house, so the cluster still grows at its edge; the further levels beyond the table remain the widening when nearby ground runs out."
+   "summary": "Growth widens past GROW_LEVELS with no radius test; still says 'AMENDED with D4 (research R1): the table is one level, every direction and ring of the old three offered at once'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The one-level table is the decision D4 WITHDRAWS. FR-003a: the growth's breadth MUST be main's; the GM (Amendment 3): 'the tie-break thing for the real speedup' - the one-level table was the +11.9% slowdown. The widening past the table (FR-002) is within; the stale sentence contradicts the request and D4."
   },
   {
    "id": "D3",
-   "summary": "FIELD_REACH_FT and within_field_reach deleted with their four calls; seat window, free-ground grid box and free_seats' box are the canvas; AMENDED: site_boundary.window records the canvas box and the plate draws it as a box; ways/law.py's constant untouched",
+   "summary": "FIELD_REACH_FT and within_field_reach deleted; seat window, free-ground box and free_seats box the canvas; ways/law.py constant untouched",
    "class": "within",
-   "why": "FR-003 verbatim: the window 'sized from the map's own extent'. The amendment closes the gap the first review noted between the plan (seat center) and the spec's sentence. The GM: get rid of these 700 feet measurement completely."
+   "why": "FR-003 as written. Note: the engine as landed builds the seat region and free-ground grid over boundary.seating_window (twice the households' seating radius, clipped to the canvas), not the canvas - D3's text is no longer what is built (see D10)."
   },
   {
    "id": "D4",
-   "summary": "AMENDED: growth heap keyed by distance to the field's facing chains, ties by distance from the margin center; GROW_LEVELS one level of sixteen directions at rings 1.0/1.5/2.0 offered at once, jitter scaled with the step; homestead-stage cost carried to the bookends",
+   "summary": "Main's GROW_LEVELS (8/12/16); heap keyed by 20 ft TIE_RING_FT ring of distance from the margin's seat center, field distance breaking ties within a ring, then exact distance, then insertion order; the 16x3 level withdrawn",
    "class": "within",
-   "why": "The GM: 'if we have multiple options in our placement, and one option is closer to the fields, then we should take the one that is closer'. Offering every adjacent option at once and taking the nearest the field is that sentence more literally than the sparse first level was; FR-003a's purpose clause ('the cluster stays as tight as its ground allows') is what the first plan measured failing (research R1) and the amendment restores. Each offer is still adjacent to a standing house (US1: grows at the edge). Nothing the GM asked for is dropped; the time cost is not a fidelity matter and FR-010 measures it."
+   "why": "FR-003a and SC-002a verbatim; the GM: 'all else being equal, try this first' and 'the tie-break thing for the real speedup'. Verified main's key is distance from the margin's seat center (origin/main growth.py) and the ring cannot outrank it."
   },
   {
    "id": "D5",
-   "summary": "recheck_passages keeps only its in-place arm; relay, stored layouts and passage_unfit removed",
+   "summary": "recheck_passages keeps only its in-place ending; relay removed; now runs after the gap pass",
    "class": "within",
-   "why": "FR-001 and US2 scenario 2; unchanged."
+   "why": "FR-001 and FR-013's last sentence (the end-in-place check against the tree the ways make)."
   },
   {
    "id": "D6",
-   "summary": "Quarter-built figure recorded per nucleated map as meta.built_share, refusing nothing",
+   "summary": "Built share recorded, refusing nothing",
    "class": "within",
-   "why": "FR-007; the GM chose 'floor soft'; unchanged."
+   "why": "FR-007; the GM's 'floor soft'."
   },
   {
    "id": "D7",
-   "summary": "Drawing pages 0029, 0032, 0081 rewritten as US3 states; claims citing the reach removed; impl-drift on changed units",
+   "summary": "0029/0032/0081 drawing pages; claims citing the reach removed",
    "class": "within",
-   "why": "FR-008 and US3; unchanged."
+   "why": "FR-008, US3."
   },
   {
    "id": "D8",
-   "summary": "Declared occasions: placement-changed farmhouse on Inashiro, Kuwabata, Sawada; village lane where houses move",
+   "summary": "Occasions: placement-changed farmhouse on the nucleated pool maps; village lane for the ways laid in the gaps",
    "class": "within",
-   "why": "Review process, not the GM's request; unchanged."
+   "why": "Review process; matches tasks.md Occasions."
   },
   {
-   "id": "V1 (Verification)",
-   "summary": "Regression check runs make cohort N=24 and the pool against main; seed 18 and the 40-household seeds on their first margin; bookends with spread and built share",
+   "id": "D9",
+   "summary": "grow_gap = MIN_WEB_GAP (18 ft) + the 2 ft parting = 20 ft; a tight seat parted at TIGHT_GAP_PX from its one neighbor only",
    "class": "within",
-   "why": "SC-002, SC-005, FR-009, FR-010 as named."
+   "why": "FR-011: 'at least' the threading gap, the exemption pairwise. Constants verified (consts.MIN_WEB_GAP = 2 x 7 + 4 = 18; main's gap 16). The GM: 'a slightly higher minimum distance from your neighbors'."
+  },
+  {
+   "id": "D10",
+   "summary": "Lane-ground raster in SeatRegion; one predicate opens() admits an ordinary seat and refuses a tight one; flooded also from the window's edge 'as today'",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The window-edge seeding (and region.offer passing a seat past the window unjudged) admits a seat whose lane ground is not shown connected to the way out (FR-012). Today that over-count is 'settled by the placer's own corridor search' (region.py) - which D11 removes. It is legitimate only because, with every two homesteads a threading gap apart, the pockets it can miss are those against the paddy, water or map edge, which the GM accepted outright: 'I'm not concerned about the other lane-blocking map features because ... it's okay for people to cut through neighbors' yards in a pinch'. The plan must say so rather than 'as today'."
+  },
+  {
+   "id": "D11",
+   "summary": "No per-seat corridor search, judgment or reservation for an ordinary household; exit strip and field corridor kept; a passage household's walk still barred",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The walk bar is a path reserved per household before the last stands (SC-008's literal 'reserved'). Legitimate: it is not a search (the GM: 'drop the search entirely'), and without it a later house may stand on the walk of the tight seat that FR-011 and FR-013 keep. The access tree exists only on the nucleated form (stages.py), so no other form keeps a per-seat search."
+  },
+  {
+   "id": "D12",
+   "summary": "gap_ways.py at the seating's end: raster, flood from the way out costed to the gap's middle, per-house local way out (6 exits), traced with a T-join within 25 ft, taut, admitted by the corridor's own predicate, reserved and recorded",
+   "class": "within",
+   "why": "FR-014 clause by clause: dooryard, gaps' middle, way out or an earlier way at a T, today's lane law, laid before the other parts and kept clear. The GM: 'I still want A for how it shapes the map'."
+  },
+  {
+   "id": "D13",
+   "summary": "A household the gap pass does not reach recorded reached across the nearest household with a laid way (kind pinch), the 3 ft adjoining condition not binding, counted in meta.pinch_passages",
+   "class": "within",
+   "why": "FR-014's fallback; the GM: 'it's okay for people to cut through neighbors' yards in a pinch' states no adjoining condition. 'No lawful way reaches' is decided by the pass's bounded search, the same standard every corridor in the engine has; counted, so a miss is visible."
+  },
+  {
+   "id": "D14",
+   "summary": "0081 and 0029 drawing pages (gap, no search while seated, ways in the gaps as a GUESS, the pinch; nearer the field all else equal); claims re-checked by impl-drift",
+   "class": "within",
+   "why": "FR-008, US3 scenarios 3-4. 0029 currently states the withdrawn 'every direction at once' rule in its comment and is the page D14 rewrites."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

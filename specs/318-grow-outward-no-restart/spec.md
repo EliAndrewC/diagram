@@ -144,7 +144,9 @@ engine no longer keeps.
   pinning the figure updated. The hard limits that remain are every rule a seat asks today, with the field reach and the per-seat
   path search the exceptions (FR-013): dry ground, nothing on crop or water, the canvas, the exit strip and the field's corridor
   (the only corridors reserved while houses are seated), the standing homesteads and the threading gap (FR-011), the household's
-  water, and FR-012's check that its yard opens onto lane ground connected to the way out.
+  water, and FR-012's check that its yard opens onto lane ground connected to the way out. The rasters that answer these are
+  built over a cost window about the seat (twice the households' seating radius, clipped to the canvas); every answer past it
+  is decided exactly or counted open, so the window bounds the cost, never where a house may stand.
 - **FR-003a** (Amendments 2 and 3): Nearness to the field MUST be a tie-break only - "all else being equal, try this first" (the
   GM, Amendment 2). The growth's order is main's (level by level, nearest the margin's seat center first), with "equal" taken as
   the same ring of distance from the seat center, rings `TIE_RING_FT` wide (a GUESS: about the parting between two
@@ -157,9 +159,11 @@ engine no longer keeps.
   so a way can always be laid between neighbors. The exemption is PAIRWISE: a household reached across a neighbor's yard (feature
   317's tight seat) stands against that one neighbor by design, and keeps the gap from every other homestead.
 - **FR-012** (Amendment 2): A seat MUST be admitted by a cheap check in place of a path search: its yard opens onto LANE GROUND
-  connected to the way out - ground a lane can pass at its width (the standing homesteads held off by a corridor's half-width,
-  the site's taken ground, the households' wood seats), flooded from the exit strip and the field's corridor, a raster asked by
-  lookup and kept current as houses stand.
+  connected to the way out - ground a lane can pass at its width: the site's taken ground grown by about a corridor's
+  half-width and the households' wood seats, flooded from the exit strip and the field's corridor, a raster asked by lookup
+  and kept current as houses stand. Between homesteads the width is FR-011's to guarantee (the raster's cell cannot resolve a
+  20 ft gap), so the raster answers where the paddy, the water and the map's edge close ground off; a household it admits that
+  no way then reaches is FR-014's pinch, counted.
 - **FR-013** (Amendment 2): WHILE HOUSES ARE SEATED the seating MUST search no path for a household - no access corridor is
   searched for, judged against the lane law, or reserved per house ("This does let us drop the search entirely"); FR-014's single
   pass, after the last household stands, is the one place a household's way is laid, judged and kept clear. Once per map, the exit strip and the
@@ -209,8 +213,9 @@ engine no longer keeps.
   width back to the GM.
 - **SC-007** (FR-011): a test fails if two homesteads the growth seats (neither reached across the other) stand closer than the
   threading gap; measured on the cohort and the pool.
-- **SC-008** (FR-012, FR-013): a test fails if a path is searched, judged or reserved for a household before the last household
-  stands (no corridor search is called while houses are seated); FR-014's pass after it is the only caller.
+- **SC-008** (FR-012, FR-013): a test fails if an access corridor is searched, judged or reserved for a household before the last
+  household stands (no corridor search is called while houses are seated); FR-014's pass after it is the only caller. A tight
+  seat's walk across its neighbor's yard is still barred as it is seated (feature 317) - not a corridor.
 - **SC-009** (FR-014): the cohort and the pool reach every household by a way or across a neighbor's yard, and no map is
   refused for want of a way.
 - **SC-010** (FR-010, FR-015): the bookends against main recorded with the spread and the house-to-field distances, the perf records owed
@@ -268,3 +273,10 @@ engine no longer keeps.
 - Amendment 3 (the GM, 2026-10-03, `request.md`): option A kept for the map's shape, the tie-break for the speed; FR-015 records
   the accepted cost. Spec-fidelity round 1 of Amendment 2 applied: the tie-break's equal class (FR-003a), FR-003's remaining
   limits, US1/US3 restated, FR-008/US3 carry 0081 and the claims, FR-011 pairwise, FR-012 lane ground, FR-013 the own-way target.
+- Amendment 2, spec-fidelity round 2 (2026-10-03): CHANGES REQUIRED - SC-002a's measured count of reordered seats, US1's ring
+  from the seat center, FR-013/SC-008 against FR-014; applied (deb46e536).
+- Amendment 2, spec-fidelity round 3 (2026-10-03): FAITHFUL.
+- After the plan review (MODE 4, BLOCKED on D2): FR-003 states the cost window as built (the perf audit's correction); FR-012
+  states what the lane raster holds (homesteads guaranteed by FR-011, not painted); SC-008 scoped to access corridors. A verify
+  round is owed on these three.
+

@@ -27,15 +27,17 @@ level, the 12:1 refusal (`drawn_in_band` asked as a refusal; the declared shape 
 **D2 - The growth keeps widening (FR-002).** `growth.grow_the_margin` queues and offers seats with no radius test: the
 `d <= bound` filter on queued seats and the `> bound` refusal of a settled seat go. Where `GROW_LEVELS` runs dry the growth keeps
 widening: further levels at 16 directions with rings stepping out by half the least distance each, until a level queues no new
-seat on the canvas (every ring point off it or already seen) - the termination. AMENDED with D4 (research R1): the table is one
-level, every direction and ring of the old three offered at once. The old radius stays only where it sizes
+seat on the canvas (every ring point off it or already seen) - the termination. The levels themselves are main's `GROW_LEVELS`
+(8, then 12, then 16 directions; D4 as amended by Amendments 2 and 3); the single level of every direction at once is withdrawn.
+The old radius stays only where it sizes
 something else (the exit strip's length, the front row's reach on the other forms, the seat lattice's band).
 
 **D3 - The field reach removed (FR-003, SC-002).** `fit.FIELD_REACH_FT` and `within_field_reach` deleted, with their four
 calls (`growth.seat_refused`, `place._place_bundle_nucleated`, `capacity.free_seats`, `fit._parts_fit`'s reach memo). The
-growth's seat region window (`region.seat_window`), the free-ground grid's box (`boundary.free_ground_bounds`) and
-`capacity.free_seats`' search box are the canvas; their docstrings already say the box bounds the cost, never the answer -
-the grid's cost on the whole canvas measured at the bookends. `site_boundary.window` records the canvas box `(x0, y0, x1, y1)` - sized from the map's own extent, FR-003's words - and the
+growth's seat region and the free-ground grid are built over a COST WINDOW (`boundary.seating_window`: twice the households'
+seating radius about the seat, snapped to the grid, clipped to the canvas - the perf audit's correction, `perf-318-control-windows`),
+and every answer past it is decided exactly (`FreeGround._cell_beyond`, `decide_beyond`) or counted open (`SeatRegion.offer`,
+`opens`): the window bounds the cost, never where a house may stand; `capacity.free_seats`' search box is the canvas. `site_boundary.window` records the canvas box `(x0, y0, x1, y1)` - sized from the map's own extent, FR-003's words - and the
 placement-stages plate draws it as a box (no radius, no reach);
 the placement-stages legend and the tests pinning 700 updated. `ways/law.py`'s own `FIELD_REACH_FT` (a way reaching the field)
 untouched.
@@ -79,9 +81,16 @@ against 16 before. A corridor's line keeps `ACCESS_HALF_FT` (7 ft) off each home
 run in. Pairwise exemption: a tight seat (feature 317) is placed at `TIGHT_GAP_PX` from the one neighbor it is reached across and
 keeps `grow_gap` from every other footprint (`keeps_its_distance` asked against the others).
 
-**D10 - Lane ground, the cheap check (FR-012, FR-013).** `SeatRegion` gains a second raster, LANE GROUND: the buildable raster
-with every seated homestead's box painted grown by `ACCESS_HALF_FT`, flooded from the exit strip and the field's corridor (and
-from the window's edge where the canvas goes on, as today). `SeatRegion.opens(geom)`: does the homestead's yard, grown by the
+**D10 - Lane ground, the cheap check (FR-012, FR-013).** `SeatRegion` gains a second raster, LANE GROUND: FreeGround's surely-taken
+cells grown by one cell (8 px, about the corridor's half-width) and the reserved wood seats - the exit strip NOT painted - flooded
+from the exit strip and the field's corridor (and from the window's edge where the canvas goes on, as today). The seated
+homesteads are NOT painted: at the grid's 8 px cell, painted (`Region.rect` over-paints by two cells) they close every 20 ft gap;
+the threading gap (D9) is what guarantees a lane's room between them, so this raster answers only where the paddy, the water and
+the map's edge close ground off. What it can miss, and is accepted: a seat whose yard lies past the window is counted open
+without being shown connected, and a pocket narrower than a lane that the one-cell growth does not close - with every two
+homesteads a threading gap apart, only against the paddy, the water or the map's edge. Such a household gets no admitted way in
+the gap pass and ends as a pinch (D13), counted in `meta.pinch_passages`; the GM: "I'm not concerned about the other
+lane-blocking map features because ... it's okay for people to cut through neighbors' yards in a pinch". `SeatRegion.opens(geom)`: does the homestead's yard, grown by the
 half-width and a cell, touch a reached cell - a summed-area lookup. One predicate, two askers: an ordinary seat is admitted only
 where it holds (`place._place_bundle_nucleated`, in place of `seat_reaches_tree`; `fit._parts_fit`, in place of
 `access_corridor`), and a tight seat is refused where it holds (`passage.landlocked`, in place of the straight or round-the-gable
