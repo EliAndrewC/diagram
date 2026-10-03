@@ -294,7 +294,7 @@ def own_corridor(s: Settlement, rec: Mapping[str, Any], geom: Any) -> tuple[Pt, 
     """The straight or round-the-gable corridor of its own the household `rec` would have laid as `geom`, its own homestead
     set aside (as it stood unseated when its seat was judged), or None - `landlocked`'s question, asked of a seated household.
 
-    Research: a way of its own on the finished seating - CANON: the GM's ruling of 2026-10-03, a straight or round-the-gable corridor (`access.access_corridor`, `routed` False), as `landlocked` asks it
+    Research: a way of its own on the finished seating - research/questions/0081-village-lanes.drawing.html: a straight path or one round the house's gable, no bending path looked for (`access.access_corridor`, `routed` False), as `landlocked` asks it
     """
     own = (rec.get("geom") or {}).get("bbox")
     k = next((i for i, b in enumerate(s.placed) if b is own), None)

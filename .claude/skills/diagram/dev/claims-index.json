@@ -13951,27 +13951,35 @@
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#doubled lane dropped": {
-  "code": "d4fdb22919fed4f3",
-  "core": "7fa8010ec15c53d0",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#a lane that leaves a way and returns to it (both ends within _LANE_JOIN_FT 30 ft of one way) is dropped; the \"doubled lane dropped\" claim covers only the 8 ft / half-length clause": {
+  "code": "a741400c4d413865",
+  "core": "a741400c4d413865",
   "date": "2026-10-03",
-  "note": "matches",
+  "note": "a lane that leaves a way and returns to it (both ends within _LANE_JOIN_FT 30 ft of one way) is dropped; the \"doubled lane dropped\" claim covers only the 8 ft / half-length clause",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#doubled lane dropped": {
+  "code": "7a9eaaaaa3519524",
+  "core": "a741400c4d413865",
+  "date": "2026-10-03",
+  "note": "a doubled band read as one is how the lane is shown",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#no house stranded": {
-  "code": "1e0032d2cb7df95e",
-  "core": "7fa8010ec15c53d0",
+  "code": "56bccef2868e2526",
+  "core": "a741400c4d413865",
   "date": "2026-10-03",
-  "note": "the stranding test reads every house in `M[\"houses\"]`, not `lane_houses`, so a remnant is kept for a household the page says is \"reached across a neighbor's land\" and owed no lane",
+  "note": "lane_houses plus the 100 ft reach match \"reaching every farmhouse but the few reached across a neighbor's land\"; how close counts as serving is the page's GUESS",
   "research": "8d9a0f7e01993e43",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#web kept one network": {
-  "code": "edddeeffee9a8395",
-  "core": "7fa8010ec15c53d0",
+  "code": "75b01c86f78039d4",
+  "core": "a741400c4d413865",
   "date": "2026-10-03",
-  "note": "a drop that would split the network is refused",
+  "note": "refusing a drop that raises the component count matches \"the lanes form one network\"",
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
@@ -15375,29 +15383,37 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#end carried on to the bund": {
-  "code": "4163f940b5a0728d",
-  "core": "b7114611fd865b47",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#a tail kept as a house's only way": {
+  "code": "e214d17c7b3aafd8",
+  "core": "0e39e889e62f6fa7",
   "date": "2026-10-03",
-  "note": "0014: a lane runs on to the bund",
+  "note": "_keep is drawn from lane_houses, so no lane is kept for a household reached across a neighbor's land",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#end carried on to the bund": {
+  "code": "a02a62831c0ed8bc",
+  "core": "0e39e889e62f6fa7",
+  "date": "2026-10-03",
+  "note": "run_lanes_on_to_the_bund matches \"the hamlet's nearest lane runs on to the bund\"",
   "research": "b23b14a8548c443f",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#lane end reaches something": {
-  "code": "ee4f779b94da47f6",
-  "core": "b7114611fd865b47",
+  "code": "ab38c1936bafb595",
+  "core": "0e39e889e62f6fa7",
   "date": "2026-10-03",
-  "note": "`_keep` is built from `_final_houses` (every house, `reached_across` included), so a tail is kept as the \"only way\" to a household the page says \"shows no lane of its own\". It should build `_keep` from `lane_houses(s.M)",
+  "note": "matches \"a lane end that reaches nothing is pulled back to the last house it serves\"; the exit-strip connector is the track out",
   "research": "8d9a0f7e01993e43",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#lane serving nothing dropped": {
-  "code": "8b5552f4297f9d8c",
-  "core": "b7114611fd865b47",
+  "code": "1189302d452a3fe9",
+  "core": "0e39e889e62f6fa7",
   "date": "2026-10-03",
-  "note": "the nub-drop exemption reads the same `_keep`, so a nub within `WEB_REACH_FT` of a `reached_across` house is spared, against the page's \"no lane of its own\". It should use `lane_houses",
+  "note": "drops the empty lane and the nub that serves no owed house; unsplitting_drops keeps the web one network",
   "research": "8d9a0f7e01993e43",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::unsplitting_drops#web kept one network": {
   "code": "607bb95953f5b09d",
@@ -32728,12 +32744,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "8e8e1d245d9bb3e1",
+  "code": "03974109eae17ce1",
   "core": "cbdbf49efda26158",
   "date": "2026-10-03",
-  "note": "`getattr(s, \"_sun_corridor_ft\", 22.0)`: the page gives 39 ft (house), 50 ft (tree), or no rule at all for a map that declares none; 22 ft matches none of them, so default to 0 as the west lane does",
-  "research": "4c4e1b01edd744e8",
-  "verdict": "DRIFTED"
+  "note": "`getattr(s, \"_sun_corridor_ft\", 22.0)` is a tree clearance south of yards and beds, a physical figure, not how something is shown; cite questions/0038-sunlight-and-shade-on-the-farm.drawing.html as `plots' sun strips` does (or NONE, if it only copies village_grove's `_sun_depth`), not CONVENTION",
+  "research": "",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.commit#plumbing": {
   "code": "35922c8d9fdc90bb",
@@ -32856,12 +32872,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "4d1f27df835125c1",
+  "code": "64616298ebbe289b",
   "core": "7aa0b687a92d28d8",
   "date": "2026-10-03",
-  "note": "the page says no crown of \"the copse\" stands \"within 50 ft east, west or south of a yard or bed\"; the code keeps the west at 50 ft but the south at sun_depth (the house's 39 ft) and the east at EAST_LANE_PX=24, and only for beds (yards get no east strip)",
+  "note": "the sides match the page (south; east; west and southwest from the north edge down); the page itself keeps the 50 ft \"as the windbreak is planted\", refusing a clump at planting",
   "research": "4c4e1b01edd744e8",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::crown_cells#plumbing": {
   "code": "761ccaa8f2401896",
@@ -37215,11 +37231,11 @@
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::own_corridor#passage machinery": {
-  "code": "ffff5a53f5ecd72b",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::own_corridor#a way of its own on the finished seating": {
+  "code": "e2392dbd45193dcc",
   "core": "31a978d71dc66981",
   "date": "2026-10-03",
-  "note": "choosing `routed=False` decides what counts as a way of its own on the finished map (a straight or round-the-gable path, not a routed one); should be CANON: the GM's ruling of 2026-10-03, as landlocked's claim is",
+  "note": "0081's drawing page answers this (\"A way of its own here means a straight path from its dooryard, or one carried round its house's gable; a path that would have to bend round other homesteads is not looked for\"); cite research/questions/0081-village-lanes.drawing.html, not CANON",
   "research": "",
   "verdict": "MISLABELED"
  },
