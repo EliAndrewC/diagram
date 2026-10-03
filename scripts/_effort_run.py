@@ -58,7 +58,7 @@ MAKE_VARS = ("MAKEFLAGS", "MAKELEVEL", "MFLAGS", "MAKEOVERRIDES", "TASK", "RUN",
              "SOURCES_HOME", "SNAPSHOT")
 # R5 D7 (revised at T09): the 9.0 GB cap is ONE host cgroup over every Claude container, read through the host-diag tool
 # (read-only, no sudo for cgroup files). memwatch's figure is that cgroup's raw memory.current, page cache included.
-HOST_DIAG = "/host-l7r-repo/gm-assistant/scripts/claude-diagnostics/client/host-diag"
+HOST_DIAG = "/host-scripts/claude-diagnostics/client/host-diag"  # this-laptop repo, mounted read-only (2026-10-03)
 SHARED_SLICE = "/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/claude.slice/claude-containers.slice"
 
 
