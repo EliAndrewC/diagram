@@ -5,7 +5,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 ## Occasions
 
 - placement-changed: persimmon - on a grove farm the persimmon may stand in its own grove behind the house (Kashikawa)
-Bamboo: no pool bamboo is re-placed - every culm mark stands where it stood (Inashiro 20, Kashikawa 47, Kuwabata 63, Sawada 31 recorded; Mizuguchi draws none outside its stand), and Kuwabata's one household strip, which stood 0.3 ft from a garden's sun ground (one-shot, observed 2026-10-02; method: the HEAD manifest's stand against every drawn plot's sun box), found every one of its six seats in the sun and is no longer drawn - an element removed, with nothing left on the map to judge; the gate test (D5) holds the rule.
+Bamboo: no occasion - its rule refuses a mark or stand only in a plot's sun, and the regenerated pool draws none there (the gate test); its marks moved only with the farms re-seated round them (one-shot, observed 2026-10-02; method: `bamboo_marks` and `bamboo_stands` counted on the pool - Inashiro 25 marks, Kashikawa 64 and a stand, Kuwabata 50, Mizuguchi a stand, Sawada 52; Kuwabata's one household strip found every seat in a garden's sun and is no longer drawn).
 
 ## Phase 0 - baselines (constitution VI, XIII)
 
