@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "2f258bdce6a45e9875e124b7308785d75e68d3d5fd3ab3f1a5d2550df472d941",
+ "plan_sha256": "4dc016dadaa2edc2301516dbbee6fe4812b5f25a7941abee90febf08b0204566",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -100,16 +100,34 @@
    "why": "FR-003 as written."
   },
   {
-   "id": "D6",
-   "summary": "The corridor judged as drawn (tree.as_joined, the box prefilter); the route per layout round its own parts, kept because it pays; seed 18 closed by tree.laid_run / own_clear; and, against main (R8): the joint's pull refused into a kink (seed 47 at 20 hh), route.house_reaches once a seat (exact), the persimmon left out of the route search's obstacles with the taut pull's leg tests keeping its trunk clear (seed 39 at 40 hh)",
+   "id": "D5-anchor",
+   "summary": "The household a passage is reached across keeps its corridor: owed and never pruned however near the lanes its center stands (tree.passage_anchors; Inashiro glyph-check F1)",
    "class": "within",
-   "why": "FR-004, SC-003, FR-005, FR-006, FR-007. The three additions are regressions found against main and closed (FR-005, FR-007: a bug found later joins the list) and an exact shortcut; none changes what a household may be or how it is reached. The persimmon change keeps the trunk clear through the leg tests, so no rule the request or spec set is relaxed."
+   "why": "Serves FR-002 ('to a way') and FR-003: a passage that ends at a yard whose own house has no drawn way leaves the chain ending at nothing (R8, the anchor 90 ft from a lane, two farmsteads with no way). It adds a corridor only for a household another is reached across; no household that may be reached by passage is excluded and no lane is imposed on any other house, so the GM's purpose (no unresearched lane-to-every-house requirement) is untouched."
+  },
+  {
+   "id": "D6",
+   "summary": "The corridor judged as drawn (tree.as_joined, the exact box prefilter in law.near_misses / law.free_end); the judge's own_clear / tree.laid_run defect (seed 18) kept closed; a joint's pull never taken into a kink (seed 47 at 20 hh)",
+   "class": "within",
+   "why": "FR-004 and SC-003 as written; seed 18's judge defect and seed 47's WebRefused are bugs found against main, closed under FR-005 and FR-007 ('a bug found later joins the list'). None changes who may be reached or how."
+  },
+  {
+   "id": "D6-withdrawn",
+   "summary": "The route searched per garden layout round the household's own parts retried and WITHDRAWN: after feature 315 merged it cost the homesteads stage 3-43% more in calls than main's search round the house alone (R8); the corridor's route keeps off the house alone, as on main",
+   "class": "within",
+   "why": "The plan's own condition ('kept only if it pays', FR-006) applied as written. No FR requires the per-layout route; withdrawing it returns to main's behavior, so no household is lost against main (FR-005). It does not cut against the request's purpose: the GM asked that we not disregard 'optimizations that we know work' for an unresearched requirement, and R8 measures this one as no longer working (4.72M/3.26M/15.52M/3.48M calls against main's 4.59M/2.99M/11.64M/2.43M, re-derived: +2.8%, +9.0%, +33.3%, +43.2%); it is withdrawn on its cost, not to protect a requirement. The house_reaches shortcut and the persimmon-out-of-obstacles change that served it leave the plan with it."
   },
   {
    "id": "D7",
    "summary": "Known bugs listed with owners: D6 here; cohort seeds 14, 15, 906, 22, 23 with the Diagram (Inashiro) session",
    "class": "within",
    "why": "FR-007, SC-006."
+  },
+  {
+   "id": "D7-persimmon",
+   "summary": "Feature 315's persimmon reseat asks a neighbor's sun of every seat it tries, on the rolled side and then the other (persimmon_reseat.persimmon_for); Inashiro 11 -> 12 of 12 rolled (B10)",
+   "class": "within",
+   "why": "A regression this feature's tight seats exposed on a pool map (FR-005: no pool map may fail a rule it passed before) and a bug found at the gate (FR-007 joins the list). The reseat serves a tree the hamlet's count rolled to a household that rolled none; trying the other side of the house keeps the tree in its dooryard (feature 315's rule) and the count whole, and relaxes nothing the GM's request or this spec set. Not a narrowing: it admits more, not less. The tried alternative (refusing a tight seat that dropped its persimmon) would have narrowed passages and was reverted."
   },
   {
    "id": "verification",
