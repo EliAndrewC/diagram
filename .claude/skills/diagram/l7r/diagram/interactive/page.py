@@ -566,16 +566,38 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
     return out
 
 
+#: The keys of an entry that are NOT reader-facing words: the label (an attribute), the cursor flag, the sibling KEYS (the
+#: page renders their NAMES, which are other entries' `name`, scanned there), and the questions (link text the page does
+#: not wrap). Everything else an entry carries is text the modal shows, so it is scanned - a DENY list, never an allow
+#: list: an allow list of five keys missed the About form's `about` and `guesses` when feature 319 added them (the GM,
+#: 2026-10-03: "any tooltip'ed thing in the research should be automatically tooltipped in the interactive HTML map
+#: modals").
+NOT_RENDERED: frozenset[str] = frozenset({"label", "plain", "siblings", "questions"})
+
+
+def rendered_text(entry: dict[str, Any]) -> str:
+    """Every word an entry shows its reader, whatever key it rides on: strings, and the strings inside lists (the About
+    tab's paragraphs, the Guesses tab's bullets).
+    Research: plumbing - NONE"""
+    parts: list[str] = []
+    for key, value in entry.items():
+        if key in NOT_RENDERED:
+            continue
+        if isinstance(value, str):
+            parts.append(value)
+        elif isinstance(value, list):
+            parts.extend(v for v in value if isinstance(v, str))
+    return " ".join(parts)
+
+
 def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     """The glossary entries whose terms occur in the present explanations - variants and definition,
     longest variants first so "head race" wins over "head". The page wraps each occurrence.
 
-    IT READS WHAT THE PAGE RENDERS, and nothing else. That used to include `label_note`; since
-    feature 156 the note itself is not rendered - only the `lead` built from it for a liberty, and
-    the `caveat` split out of it for an accurate class - so those two are what is scanned. Scanning
-    a string the reader never sees would define terms that never appear, which the companion test
-    in `test_page.py` catches from the other direction."""
-    raw = " ".join(" ".join(str(d.get(k, "")) for k in ("what", "why", "lead", "caveat", "on_this_map")) for d in data.values())
+    IT READS WHAT THE PAGE RENDERS, and nothing else - `rendered_text`, every key but `NOT_RENDERED` (feature 319: the
+    allow list it replaced missed the About and Guesses tabs). Scanning a string the reader never sees would define
+    terms that never appear, which the companion test in `test_page.py` catches from the other direction."""
+    raw = " ".join(rendered_text(d) for d in data.values())
     text = raw.lower()
     out: list[dict[str, Any]] = []
     # A SUBSTRING TEST FIRST (feature 224): 729 word-boundary searches over the whole text cost 0.28 s per page and

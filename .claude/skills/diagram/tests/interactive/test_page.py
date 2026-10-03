@@ -434,6 +434,29 @@ def test_glossary_for_defines_tsubo_where_an_explanation_counts_in_it() -> None:
     assert not [g for g in glossary_for(uncounted) if g["term"] == "tsubo"]
 
 
+def test_a_term_only_in_the_about_or_guesses_tab_is_still_a_tooltip() -> None:
+    """Feature 319 (GM 2026-10-03: "any tooltip'ed thing in the research should be automatically tooltipped in the
+    interactive HTML map modals"): the terms a page ships are read from EVERY word a modal shows. The five-key allow
+    list this replaced never read the About form's `about` paragraphs or `guesses` bullets, so a term used only there
+    shipped no definition and was never wrapped."""
+    about = {"yard": {"about": ["Before 1868 a yard was swept daily."], "guesses": ["its size, 20 to 30 tsubo"], "label": None, "questions": [], "siblings": []}}
+    terms = {g["term"] for g in glossary_for(about)}
+    assert {"1868", "tsubo"} <= terms, terms
+
+
+def test_every_key_a_modal_carries_is_scanned_for_terms_or_ruled_not_rendered() -> None:
+    """The deny list is the rule: a key added to a modal's data is scanned unless it is named in `NOT_RENDERED`, and the
+    named ones exist (so a renamed key cannot leave a dead exemption behind)."""
+    from l7r.diagram.interactive.page import NOT_RENDERED, rendered_text
+
+    data = explanations(set(CLASSES))
+    keys = {k for d in data.values() for k in d}
+    assert NOT_RENDERED <= keys, NOT_RENDERED - keys
+    assert {"about", "guesses", "what", "why", "lead", "caveat", "on_this_map"} <= keys - NOT_RENDERED
+    farmhouse = rendered_text(data["farmhouse"])
+    assert CLASSES["farmhouse"].about[0] in farmhouse and "farmhouses-minka" not in farmhouse, "the paragraphs, not the links"
+
+
 def test_every_registered_source_carries_a_link_or_says_why_not() -> None:
     """Constitution v2.13.0 (GM 2026-08-28): a SOURCES.md key records the URL where the source can be
     read, or an explicit `URL: none - <why>`; the references modal links to it."""
