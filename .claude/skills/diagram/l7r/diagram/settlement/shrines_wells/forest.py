@@ -1,4 +1,7 @@
-"""The canvas-filling forest of a town or city (feature 145: moved out of woods.py, whose tree stands the hamlet path executes)."""
+"""The canvas-filling forest of a town or city (feature 145: moved out of woods.py, whose tree stands the hamlet path executes).
+
+Research: plumbing - NONE
+"""
 
 from typing import TYPE_CHECKING
 
@@ -14,7 +17,13 @@ class ForestMixin:
         INDIVIDUAL TREES (see _tree_stand for the density research). Blocks houses. Deterministic
         (RNG saved/restored) so it never perturbs house placement. The TREE LINE is recorded
         separately from the filled polygon because the frame reveals only a shallow band of wood
-        past it (crop_to_content) - deeper in it is undifferentiated canopy, i.e. wasted image."""
+        past it (crop_to_content) - deeper in it is undifferentiated canopy, i.e. wasted image.
+
+        Research:
+            wood drawn as a stand of trees - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: _tree_stand to the canvas edge
+            floor inset a crown's width - CONVENTION
+            caption - CONVENTION: 14 pt bold italic
+        """
         pts = list(west_edge) + [(self.W + 12, west_edge[-1][1]), (self.W + 12, west_edge[0][1])]
         xs = [p[0] for p in pts]
         ys = [p[1] for p in pts]

@@ -2,6 +2,8 @@
 the yards on the map last.
 
 Split from settlement/civic_grounds.py by feature 115 - see settlement/civic_grounds/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -53,7 +55,16 @@ class LodgingMixin:
         BIGGER and PLAINER than a shophouse (no awning, a long dormitory of plain doorways), set
         where travelers arrive: the gate market of a walled town, the road of an unwalled one.
         Default-on for a town (town_has_flophouse); meta(flophouses=N) requires more. Records to
-        M['flophouses'] and blocks houses - place it BEFORE any nearby pack/ring."""
+        M['flophouses'] and blocks houses - place it BEFORE any nearby pack/ring.
+
+        Research:
+            flophouse size - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: 104 x 46 ft
+            a long dormitory with a row of doorways - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html
+            turned to the nearest way - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: a roadside work faces its way
+            way-turning threshold - UNRESEARCHED: within 500 ft, else square
+            keep-clear margin - UNRESEARCHED: 30 px
+            caption - CONVENTION
+        """
         if w is None:
             w, h = self.px(104), self.px(46)
         if rot is None:
@@ -108,7 +119,15 @@ class LodgingMixin:
         The form is declared to meta and to the record, so a check can hold the drawing to it.
 
         Real size ~66x48 ft, converted at the map's ftpx - as a fixed-px glyph it read 2.5x too big on
-        a city map. Neither analogue counts anything, so the footprint is ours and unattested."""
+        a city map. Neither analogue counts anything, so the footprint is ours and unattested.
+
+        Research:
+            inn form knob - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html, research/questions/0184-inns-hatago-and-carters-inns.html: wagon (one story) or hatago (two)
+            inn footprint - research/questions/0184-inns-hatago-and-carters-inns.drawing.html: 66 x 48 ft
+            fronts the road - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: the caller's rot, noren to the roadbed
+            glyph - CONVENTION: roof band, window rows, noren
+            keep-clear margin - UNRESEARCHED: 24 px
+        """
         if form is None:
             form = self.resolve("caravan_inn_form")
         elif form not in KNOBS["caravan_inn_form"].value_space:
@@ -157,7 +176,14 @@ class LodgingMixin:
         Recorded in M['buildings'] (kind 'stables', non-residential). Wants OPEN GROUND around it. `rot`
         tilts it to sit parallel to its inn / the road. Place BEFORE any nearby pack, but AFTER its
         cluster's inn + flophouse (so the yard, `yard=True`, skips them). Real size ~92x44 ft (stall rows
-        for a full wagon-train), converted at the map's ftpx."""
+        for a full wagon-train), converted at the map's ftpx.
+
+        Research:
+            stables size - UNRESEARCHED: 92 x 44 ft
+            stall divisions - research/questions/0108-stables-umaya.drawing.html: every 16 px at the 44 ft depth, at least 6 px
+            keep-clear margin - UNRESEARCHED: 24 px
+            working yard at a city's gate stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: queued, radius 72 px
+        """
         if w is None:
             w, h = self.px(92), self.px(44)
         hw, hh = w / 2, h / 2
@@ -199,7 +225,10 @@ class LodgingMixin:
         auto-avoids roads, streets, fields, water, the rampart, and every drawn footprint, so it
         fills only the genuinely open ground - and records M['stable_yards'], which the empty-space
         detector counts as claimed. The label (e.g. "caravan ground") is optional; the rails
-        usually read on their own."""
+        usually read on their own.
+
+        Research: caravan ground - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a queued yard, radius 68 px by default
+        """
         self._pending_yards.append((cx, cy, 0.0, 0.0, r, label))  # queued like the stables yards - drawn at crop time when every way exists (GM 2026-07-24)
 
     def flush_stable_yards(self: Settlement) -> None:  # type: ignore[misc]

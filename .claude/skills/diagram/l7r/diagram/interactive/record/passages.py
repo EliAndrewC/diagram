@@ -13,6 +13,8 @@ of the notes matches `<li ...>(.*?)</li>` lazily.
 
 A split is made only at depth zero - outside brackets 「」, parentheses, double quotes, and HTML tags and comments - and
 only where the next thing is a passage: a quotation mark, or the key link of another source.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

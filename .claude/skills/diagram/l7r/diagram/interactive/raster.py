@@ -22,6 +22,10 @@ clips. Invisible by construction, and it is what keeps the first load near today
 is added: 0.36 s today, 0.83 with the ink kept, 0.58 dropped.
 
 Every number here is a rendering decision (constitution XII), recorded in specs/200 with its measurement.
+
+Research:
+    raster plumbing - NONE: tiling, the off-map drop, the id map and encoding
+    low-zoom picture - CONVENTION: one image of the whole picture below a screen scale, at RASTER_R px per map px
 """
 
 from __future__ import annotations

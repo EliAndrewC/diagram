@@ -8,7 +8,9 @@ the brook and back, and a house or the field left unreached by that was recorded
 fallback that emitted the violation (research R12's caveat on ways W01 / W03, homes H16). Now a rule the tree still breaks
 once every ordinary lane that could mend it is gone is an engine defect, refused by name (`WebRefused`): the map is not
 produced. And a farmhouse, or the field its corridor was reserved to, left unreached when the settle ends - whichever way
-it ended - is refused the same way (`refuse_unreached`), so nothing downstream records one."""
+it ended - is refused the same way (`refuse_unreached`), so nothing downstream records one.
+
+Research: repair policy - NONE: each rule is claimed at its predicate in law.py"""
 
 from __future__ import annotations
 
@@ -133,7 +135,11 @@ def _named(lanes: Sequence[Mapping[str, Any]], idxs: Iterable[int]) -> str:
 def refuse_unmended(s: Any) -> None:
     """Raise `WebRefused` if, after the last resort, a lane still breaks a rule of the law (a tree lane, which no drop may
     take; or an ordinary one the passes ran out on) or a household's way out still crosses the brook and back (on tree lanes
-    alone, since every ordinary carrier was dropped)."""
+    alone, since every ordinary carrier was dropped).
+
+    Research:
+        lane law - NONE: each rule is claimed at its predicate in law.py
+        no way out over the brook and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     M = s.M
     lanes = M.get("lanes") or []
     why = []
@@ -152,7 +158,11 @@ def refuse_unmended(s: Any) -> None:
 def refuse_unreached(M: Mapping[str, Any]) -> None:
     """Raise `WebRefused` if the settled web leaves a farmhouse unreached (`unreached_houses`), or the field unreached where
     the seating reserved it a corridor (`law.field_unreached`, a `field` record in `access_corridors`): the seating reserved a
-    lawful corridor for each, and the web draws it as the tree, so neither is ever shipped unreached (ways W01, W03)."""
+    lawful corridor for each, and the web draws it as the tree, so neither is ever shipped unreached (ways W01, W03).
+
+    Research:
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html
+        the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: some way joins the bund"""
     why = []
     if far := unreached_houses(M):
         why.append(f"{len(far)} farmhouse(s) stand off the connected way network, at {[(x, y) for x, y, _d in far[:4]]}")

@@ -4,6 +4,8 @@ Everything above this layer is built from these: a distance, a containment, a cr
 intersection. Nothing here reads a manifest or knows what a paddy is.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: coordinate math - NONE
 """
 
 import math

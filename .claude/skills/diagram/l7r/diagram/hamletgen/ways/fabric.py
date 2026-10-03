@@ -1,4 +1,7 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing and geometry - NONE
+"""
 
 from __future__ import annotations
 
@@ -146,7 +149,13 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     the manifest and does not have to be re-derived geometrically.
 
     Houses are rotated rects and are read as their real corners (x, y ARE the center here, the same
-    convention `rect_corners` uses in the gate); the area features already record an outline."""
+    convention `rect_corners` uses in the gate); the area features already record an outline.
+
+    Research:
+        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: houses, yards, beds, sheds, wells and
+            fixtures are fabric a lane keeps off
+        no lane through a farm's grove - UNRESEARCHED: the grove band is fabric, but for its own farm's path
+        a path leaves its own yard - UNRESEARCHED: the owner's yard, bed and shed are not walls to its own path"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses", []):
         c = (float(h["x"]), float(h["y"]))
@@ -211,6 +220,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
 # `lanes_reach_something`'s own way-reach, deliberately: a path that gets this close IS connected as
 # far as the gate is concerned, and demanding better only threw away paths that served their house.
 _LANE_JOIN_FT = 30.0  # inside lanes_reach_something's own 40 ft, with room to spare for a rounded end
+"""Research: join tolerance - NONE: how near an end is found as joining, before it is snapped on"""
 
 # A GAP THIS SHORT BETWEEN TWO NEAR-COLLINEAR ENDS IS ONE WAY DRAWN AS TWO. 150 ft is about a
 # household and a half of frontage - far enough that a real interruption (a wellhead, a bed, a
@@ -223,6 +233,7 @@ _LANE_JOIN_FT = 30.0  # inside lanes_reach_something's own 40 ft, with room to s
 # 20 ft fragments, left behind when the end-trim pulled a path back to its last serving point. A
 # 4 ft mark fronts nobody and reads as a speck of clipping debris. 30 ft is under half a door path.
 _WEB_MIN_FT = 30.0
+"""Research: shortest way - UNRESEARCHED: a run under 30 ft is debris unless it earns a house"""
 
 
 def _net_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
@@ -253,6 +264,8 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
     The measure `houses_clear_of_lanes` uses: the house's DRAWN rectangle (rotation included) against the
     tread, which is the polyline widened by half its stroke. No tolerance either way - the check allows the
     overlap none, so neither does this.
+
+    Research: no house on a tread - research/questions/0081-village-lanes.drawing.html: half the width plus 2 ft
     """
     # MIRROR THE CHECK'S WINDOW, NOT JUST ITS FORMULA (this skill's CLAUDE.md). `houses_clear_of_lanes`
     # tests the house's four ROTATED CORNERS PLUS ITS CENTER against each lane segment at
@@ -265,7 +278,9 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
 
 def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> bool:
     """`_hits_a_steading`'s body on plain records (feature 287, M1): the lane law (`law.fouls_fabric`) asks it of a
-    manifest's houses, the web pass of the settlement's - one predicate, read by both."""
+    manifest's houses, the web pass of the settlement's - one predicate, read by both.
+
+    Research: no house on a tread - research/questions/0081-village-lanes.drawing.html: corners and center at half plus 2 ft"""
     half = width / 2.0 + 2.0
     for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
@@ -283,7 +298,14 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     length floor refuses the door path of a steading that sits close to the network - which is
     exactly the house that most needs one - and the 48-seed sweep went from 6 unreached-house seeds
     to 17 the moment the floor went in. So a short run is refused only when it EARNS nothing: if it
-    brings a house inside the reach that is outside it now, it is a way, whatever its length."""
+    brings a house inside the reach that is outside it now, it is a way, whatever its length.
+
+    Research:
+        shortest way - UNRESEARCHED: under 30 ft drawn only where it brings a house within 100 ft
+        no join link through a house - research/questions/0081-village-lanes.drawing.html: nothing built on a lane
+        web lanes seat no house - research/questions/0081-village-lanes.drawing.html: the farmhouses placed first, the lanes
+            among them after
+        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane"""
     if len(pts) < 2:
         return False
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a
@@ -342,7 +364,12 @@ def _pull_back_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequ
     the network. The off-canvas end is never touched, because reaching the frame is the connector's
     other job (`connector_lane_runs_off_edge`). An end that finds nothing to reach is LEFT ALONE
     rather than deleted - a hamlet whose track genuinely joins nothing is a real map to look at, not
-    a map to silently shorten, and Kashikawa is currently that map."""
+    a map to silently shorten, and Kashikawa is currently that map.
+
+    Research:
+        the track meets the lanes - research/questions/0081-village-lanes.drawing.html: never stops in open country, its
+            inner end pulled back to touch the way it joins
+        the track out runs off the map - research/questions/0081-village-lanes.drawing.html: the off-canvas end untouched"""
 
     # A CONNECTOR ARRIVES AT THE WAYS, NOT MERELY NEAR A HOUSE, which is the one place its rule is
     # stricter than `lanes_reach_something`'s. That check accepts a farmhouse within 90 ft, and it is

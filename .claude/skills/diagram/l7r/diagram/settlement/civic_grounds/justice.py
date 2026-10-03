@@ -1,6 +1,8 @@
 """Ground given over to punishment, and to the boundaries punishment is measured against.
 
 Split from settlement/civic_grounds.py by feature 115 - see settlement/civic_grounds/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 from typing import TYPE_CHECKING
@@ -41,7 +43,15 @@ class JusticeGroundsMixin:
 
         Records M['punishment_spots']; reserves ground. Call BEFORE the urban packs - it sits where
         packing pressure is highest, and reserving after the pack means fighting for a seat that no
-        longer exists (see the DRAW ORDER map in this skill's CLAUDE.md)."""
+        longer exists (see the DRAW ORDER map in this skill's CLAUDE.md).
+
+        Research:
+            ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: PUNISHMENT_SPOT_FT, 30 x 12 ft
+            cangue, flogging post and kneeling stone - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
+            no notice board of its own - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
+            keep-clear margin - UNRESEARCHED: 6 px
+            caption - CONVENTION
+        """
         w, h = self.px(PUNISHMENT_SPOT_FT[0]), self.px(PUNISHMENT_SPOT_FT[1])
         hw, hh = w / 2, h / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -107,7 +117,16 @@ class JusticeGroundsMixin:
             ground as a busy scaffold would assert something false about how often Rokugan kills.
 
         Records M['execution_grounds']; reserves ground. Call beside the funerary cluster (phase 4),
-        before the hinterland scrub and village_grove, so no crown is drawn onto it."""
+        before the hinterland scrub and village_grove, so no crown is drawn onto it.
+
+        Research:
+            ground size by tier - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: execution_ground_ft
+            county ground weedy and open, city ground screened on three sides - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
+            empty post sockets - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
+            stake, sand bed, head-display stand, well and pit - UNRESEARCHED
+            keep-clear margin - UNRESEARCHED: 8 px
+            caption - CONVENTION
+        """
         city = self.M["meta"].get("scale") in CITY_TIER_SCALES
         _gwft, _ghft = execution_ground_ft("city" if city else "town")
         gw, gh = self.px(_gwft), self.px(_ghft)
@@ -173,7 +192,14 @@ class JusticeGroundsMixin:
 
         A LOCATION MARKER: a real stone is ~3 ft, sub-glyph at every tier, so the true footprint is
         recorded in w/h and the drawn box in vw/vh - the wells' and kosatsuba's doctrine exactly
-        (SKILL.md "to scale"). Records M['boundary_markers']."""
+        (SKILL.md "to scale"). Records M['boundary_markers'].
+
+        Research:
+            dosojin at the boundary - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html, research/questions/0085-village-boundaries-and-their-markers-murazakai.drawing.html: the caller's seat on the road out
+            stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: BOUNDARY_MARKER_FT recorded, drawn at the marker floor
+            paired figures - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: a seam down the stone
+            caption - CONVENTION
+        """
         w = h = self.px(BOUNDARY_MARKER_FT)
         k = max(1.0, BOUNDARY_MARKER_MIN_PX / w)  # marker floor, aspect preserved
         vw, vh = w * k, h * k

@@ -13,6 +13,8 @@ dike's geometry and the village on it moves; that coupling is the reason to keep
 the reason a session loading one wants the other in front of it.
 
 Split from settlement/land.py by feature 120 - see settlement/land/CLAUDE.md for the index.
+
+Research: plumbing - NONE: geometry, reaches and manifest records
 """
 
 import math
@@ -25,15 +27,21 @@ from l7r.diagram.settlement._geom.primitives import keepout_ring
 from .._geom import Poly, Pt, point_in_poly, seg_dist, smooth_closed, smooth_points
 
 DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water/polder.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
+"""Research:
+    dike cut at a crossing - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band and its rows cut where a channel crosses
+    cut width - UNRESEARCHED: 15 px either side of a sluice or crossing, a 30 px gap"""
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 DIKE_IRREGULARITY = 1.4  # a hand-piled dike's widest stretch is at least this many times its narrowest (feature 287, water W40): research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html - built by basket and repaired where the water took most, never a ruled uniform band
+"""Research: hand-piled width - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the widest stretch at least 1.4 times the narrowest"""
 _IRREGULARITY_AIM = 1.42  # what the stretch aims at: the record rounds each width to 0.1 px, and the placer stays stricter than the rule it is held to
 
 
 def dike_irregular(w_min: float, w_max: float) -> bool:
     """THE RULE (feature 287, water W40): the band's widest stretch is at least `DIKE_IRREGULARITY` times its narrowest.
-    The placer's stretch and the test of the recorded `w_min` / `w_max` read this one predicate."""
+    The placer's stretch and the test of the recorded `w_min` / `w_max` read this one predicate.
+
+    Research: hand-piled width - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: widest at least DIKE_IRREGULARITY times the narrowest"""
     return w_min > 0 and w_max >= DIKE_IRREGULARITY * w_min
 
 
@@ -44,7 +52,9 @@ def hand_piled_widths(ws: list[float], width: tuple[float, float]) -> list[float
     A flatter one is mapped AFFINELY onto an interval `_IRREGULARITY_AIM` wide in ratio, centered on its own mean and
     shifted inside `width` - the shape of the profile (where it bulges, where it pinches) is kept, only its amplitude
     grows; no new random draw is taken. A profile with no shape at all (every width equal) takes one broad swell round
-    the loop. A `width` range narrower than the rule itself is a caller's error, refused rather than drawn."""
+    the loop. A `width` range narrower than the rule itself is a caller's error, refused rather than drawn.
+
+    Research: hand-piled width - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a flat profile stretched to read as heaped and repaired"""
     wlo, whi = width
     if whi < _IRREGULARITY_AIM * wlo:
         raise ValueError(f"a dike width range {wlo}-{whi} cannot be {DIKE_IRREGULARITY}x irregular")
@@ -64,7 +74,11 @@ def dike_band(inner_env: Any, seed: int, width: tuple[float, float] = (14.0, 40.
     """The perimeter dike's GEOMETRY, drawing nothing: the densified inner face with the edge each point lies on, the
     inner and outer faces, the width profile and the ring's centroid. A pure function of (ring, seed, width), so a stage
     can know where the crest will run before the band is drawn and notched (feature 287, water W42) - `perimeter_dike`
-    draws exactly this band."""
+    draws exactly this band.
+
+    Research:
+        dike width - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 14-40 ft, swelling and pinching along the ring
+        faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the outer face follows the water in curves, the inner hugs the fields"""
     R = random.Random(seed)
     pts = list(inner_env)
     if pts and pts[0] == pts[-1]:
@@ -122,7 +136,9 @@ def course_breaches(course: Poly, crest: Poly, gaps: Poly, reach: float = CREST_
     """THE RULE (feature 287, water W42): the midpoints of `course`'s segments that lie on the dike crest (within `reach`
     of the closed crest line) farther than `gap_reach` from every recorded gap - a channel cut through the dike where
     the settlement decided no water should cross. The stage that gaps the dike and the test of it read this one
-    predicate."""
+    predicate.
+
+    Research: water crosses only at sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a course on the crest away from every recorded gap breaches the dike"""
     loop = [*crest, crest[0]] if crest else []
     out: list[Pt] = []
     for a, b in zip(course, course[1:], strict=False):
@@ -140,7 +156,9 @@ def breaches_any_dike(course: Poly, dikes: Any, step: float = 1.0) -> bool:
     gaps? `course_breaches` - the one predicate - asked over the course walked at `step`, so a long leg that crosses the
     crest far from its own midpoint is seen, and half a foot stricter on both reaches than the rule, since the record
     rounds to 0.1 px (feature 287, water W42's second half: a channel router drawing after the dike asks this and refuses
-    the course)."""
+    the course).
+
+    Research: water crosses only at sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a course breaching any dike's crest away from its gaps is refused"""
     pts = [(float(p[0]), float(p[1])) for p in course]
     dense: Poly = pts[:1]
     for a, b in zip(pts, pts[1:], strict=False):
@@ -175,7 +193,17 @@ class DikeMixin:
         below. The (14, 40) ft band runs past it by a map drawing CONVENTION, so the ring reads as the greater
         bank beside the 23 ft crop dikes round the fish ponds (the old "~6-10 m+" figure was the pond dikes'
         modern width, not a polder ring's): research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html. Records M['dikes']; labeled (a polder
-        dike is NOT an "obvious" feature - the GM asked for it named)."""
+        dike is NOT an "obvious" feature - the GM asked for it named).
+
+        Research:
+            dike width - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the 14-40 ft band
+            notched at sluices - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band and its rows cut where a channel crosses
+            earth mottle - CONVENTION: patch-repair ellipses over the band
+            willow row - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: three quarters out toward the water, 8.5 px apart, crowns r 3.5-5.5
+            mulberry row - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a quarter out from the fields, 4.4 px apart, crowns r 2.2-3.6
+            rows on the faces - DEVIATION research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html
+            no building on the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: houses and groves kept off the band
+            dike label - CONVENTION: named on a clear stretch away from the village"""
         from l7r.diagram.waterfields import BUND
 
         dense, inner_s, outer_s, w_seen, (cx, cy) = dike_band(inner_env, seed, width)
@@ -318,7 +346,11 @@ class DikeMixin:
         gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft
         of the cut - which is why this is a separate step, called from the crossings stage after every
         watercourse is recorded, and not part of `perimeter_dike` (drawn before the inlet stream exists;
-        measured: the inlet gate landed 8.9 px off its stream). Returns the number of gates drawn."""
+        measured: the inlet gate landed 8.9 px off its stream). Returns the number of gates drawn.
+
+        Research:
+            sluice at every cut - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a gate at each gap, along the crest across the water
+            gate span - UNRESEARCHED: 6 ft"""
         n_gates = 0
         for dk in self.M.get("dikes", []):
             crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]
@@ -368,7 +400,15 @@ class DikeMixin:
         M['houses'], which exempts them from structures_clear_of_dike while dike_top_houses_on_the_dike
         verifies each actually sits on the band. `span` = (start, end) fractions of the crest loop's arc
         length, so a gen can line one flank rather than the full ring; sites within `gap_clear` px of a
-        sluice gap are skipped (nobody builds over the sluice notch). Returns the number placed."""
+        sluice gap are skipped (nobody builds over the sluice notch). Returns the number placed.
+
+        Research:
+            dike-top village - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: houses in single file on the crest
+            dike-top house size - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft
+            spacing along the crest - UNRESEARCHED: neighbors at least 1.15 house widths apart
+            house platform - UNRESEARCHED: the house plus 14 by 10 ft of widened crest
+            off the sluice notch - UNRESEARCHED: no house within 34 px of a gap
+            no homestead bundle - UNRESEARCHED: bare houses, the gardens down on the parcels"""
         from l7r.diagram.waterfields import BUND
 
         dk = self.M["dikes"][dike]

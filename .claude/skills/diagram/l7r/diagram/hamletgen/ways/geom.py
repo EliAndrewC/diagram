@@ -1,4 +1,7 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: geometry - NONE
+"""
 
 from __future__ import annotations
 
@@ -96,6 +99,8 @@ def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | Non
     structural predicate has no dial to leave set too low, which is the whole reason to prefer it.
 
     `reach` is the gate's own "is this end ON that way" tolerance, not a tuning knob.
+
+    Research: a lane that goes nowhere - UNRESEARCHED: both ends on one other way
     """
     if len(pts) < 2:
         return None
@@ -136,7 +141,9 @@ def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
     does, the rest is a stub. Cut at a vertex within `_TOUCH_GAP` of one of `others`, or at a
     crossing. `others` is the TARGET set only - the main component in the orphan ladder, the unmet
     ways in the touch pass - never the piece's own component: a piece is often several lanes, and
-    cutting at one of them left the reference hamlet's web in pieces on the first try."""
+    cutting at one of them left the reference hamlet's web in pieces on the first try.
+
+    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a link ends where it meets"""
     if not others or len(link) < 2:
         return list(link)
     out = [link[0]]
@@ -168,7 +175,9 @@ def _unretrace(pts: Poly) -> Poly:
     router's first hop is free to land on the piece's own next vertex - so prepending the whole link
     drew `A -> B -> A' -> B -> ...`, a 180-degree hairpin the eye reads as a loop (cohort seed 07,
     feature 137 T03: lane 1 went 20 ft out to its old end and 20 ft back). Splicing is the one place
-    this shape is made, so it is undone here rather than by a general smoothing pass."""
+    this shape is made, so it is undone here rather than by a general smoothing pass.
+
+    Research: no doubling back - research/questions/0081-village-lanes.drawing.html: an out-and-back collapsed"""
     out = [p for k, p in enumerate(pts) if k == 0 or math.dist(p, pts[k - 1]) > 0.5]
     k = 1
     while k < len(out) - 1:
@@ -195,6 +204,7 @@ def _unretrace(pts: Poly) -> Poly:
 # corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
 # gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
 _TOUCH_GAP = 4.0
+"""Research: a junction link may brush a fence - research/questions/0081-village-lanes.drawing.html: 4 ft off footprints"""
 
 
 def _components(ways: Sequence[Poly], touch: float) -> list[int]:
@@ -220,16 +230,21 @@ def _components(ways: Sequence[Poly], touch: float) -> list[int]:
 
 
 _HOOK_FT = 12.0
+"""Research: hook leg - research/questions/0081-village-lanes.drawing.html: 12 ft or less"""
 _HOOK_DEG = 90.0
 """A HOOK: a lane's end leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more - drawing thresholds, reasoned in
-`joints` (four paces is too short a leg to be a route of its own; 90 degrees is where a turn stops reading as a bend)."""
+`joints` (four paces is too short a leg to be a route of its own; 90 degrees is where a turn stops reading as a bend).
+
+Research: hook turn - research/questions/0081-village-lanes.drawing.html: 90 degrees or more"""
 
 
 def door_unhooked(path: Poly, clear: Callable[[Pt, Pt], bool]) -> Poly:
     """A door path (`path[0]` the door) without a hook at the door: a first leg of `_HOOK_FT` or less that the path turns
     back from by `_HOOK_DEG` or more goes - the door joined straight to the vertex after it where `clear` allows, else the
     path begins at that vertex (feature 291: Kashikawa's door path at (2300, 2777) stepped 6 ft south and turned back 124
-    degrees, the router's first cell)."""
+    degrees, the router's first cell).
+
+    Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: at the door"""
     if len(path) < 3 or math.dist(path[0], path[1]) > _HOOK_FT or _turn_deg(path[0], path[1], path[2]) < _HOOK_DEG:
         return path
     return [path[0], *path[2:]] if clear(path[0], path[2]) else path[1:]
@@ -258,6 +273,10 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     is cheap, and a bounded walk cannot fail to terminate the way a solve can. The bound is what makes the
     LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
     caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
+
+    Research:
+        track gateway off the fabric - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, walked out until clear
+        gateway clearance - UNRESEARCHED: 16 ft (`TRACK_FABRIC_GAP`) by default
     """
     # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
     # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.
@@ -300,7 +319,11 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
 
     TURNED AS DRAWN (269 B18). The rectangles were read axis-aligned while a farmhouse's rake was 5 degrees, which moved
     these distances by less than the clip's 4 ft step; a house turned 30 degrees, or a quarter turn, is not that, so each
-    building is its `rot_rect` at its own `rot`."""
+    building is its `rot_rect` at its own `rot`.
+
+    Research:
+        a lane ends at the dooryard - research/questions/0081-village-lanes.drawing.html: the buildings, yard and garden
+        ground cover is no destination - UNRESEARCHED: the commons and groves are left out"""
     out: list[Poly] = []
     for key in ("houses", "byres", "farm_sheds", "retirement_houses"):
         for r in M.get(key) or []:  # type: ignore[union-attr]
@@ -326,7 +349,9 @@ def worked_ground_rings(M: Mapping[str, Any]) -> list[list[Pt]]:
     """The field a way may END at: the paddy's outlines AND its dry hem, which is worked ground of the same field (feature
     261: Mizuguchi's spur crossed the brook and stopped at the hem plots between the water and the paddy, 108 ft from the
     paddy's own outline, and was dropped as an end in open ground - the hamlet's only way to its rice). One definition,
-    read by the sweep that trims ends and by the gate that checks them."""
+    read by the sweep that trims ends and by the gate that checks them.
+
+    Research: the field a way ends at - research/questions/0081-village-lanes.drawing.html: the paddy and its dry hem"""
     rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
     return rings + [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (M.get("dry_plots") or []) if d.get("poly")]
 
@@ -337,7 +362,11 @@ class WorkedGround:
     The paddy's outline, its dry plots, and its drawn rice: the outline runs 3-9 ft off the rice on a valley fan and a
     plot can stand up to 12 ft past it (measured on the five pool hamlets), so a tip measured to the outline alone could
     stop on the rice or short of it. The union is taken once (shapely), and a query is one distance to its boundary - no
-    walk over the rings per end (dev/performance.md)."""
+    walk over the rings per end (dev/performance.md).
+
+    Research:
+        the bund a way arrives on - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the edge of the
+            outline, dry plots and rice together"""
 
     def __init__(self, rings: Sequence[Sequence[Pt]]) -> None:
         from shapely.geometry import Polygon
@@ -435,7 +464,12 @@ def end_serves(
 
     THE FIELD IS REACHED ON ITS BUND (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path "never ends in open ground short of the
     bund"): within `BUND_REACH_FT` of the worked ground's edge, where it used to be anywhere within 60 ft of the field. An
-    end short of the bund is carried on to it (`ways/bund.py`) before the trims that read this."""
+    end short of the bund is carried on to it (`ways/bund.py`) before the trims that read this.
+
+    Research:
+        an end reaches something seen - research/questions/0081-village-lanes.drawing.html: a way or farmhouse within 60 ft
+        reached on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
+        arrived at a steading - research/questions/0081-village-lanes.drawing.html: within 12 ft of its built ground"""
     if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
         return True
     if any(math.dist(q, h) <= WAY_END_REACH_FT for h in houses):
@@ -467,7 +501,12 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     A web lane's ends come out of the clipper, which stops where the ground stops being walkable and has
     no opinion about whether anything is there. Trimming BEFORE the ink goes down is better than trimming
     after: `trim_lane_stubs` drops anything under its 71 ft floor, which is the right rule for a skeleton
-    arm and would delete the door paths this feature exists to draw."""
+    arm and would delete the door paths this feature exists to draw.
+
+    Research:
+        pulled back to the last house served - research/questions/0081-village-lanes.drawing.html: ends trimmed to what
+            serves, 4 ft at a time
+        an outlying house keeps its way - research/questions/0081-village-lanes.drawing.html: every farmhouse served, 100 ft"""
 
     # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
     # the map whose whole purpose is served by something that is neither a house nor another lane. Without
@@ -544,7 +583,9 @@ def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
     it could be serving, the rest is a way into the woods. So the last segment is cut at the foot of the
     perpendicular from the house it last approaches, and a segment that moves away from all of them is dropped.
     An end that meets a way, the field or a steading's built ground is the caller's to leave alone - it has
-    arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`."""
+    arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`.
+
+    Research: no road to nowhere - research/questions/0081-village-lanes.drawing.html: cut at the house's closest approach"""
     out = list(run)
     while near and len(out) >= 2:
         a, b = out[-2], out[-1]

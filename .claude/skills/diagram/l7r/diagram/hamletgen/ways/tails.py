@@ -1,6 +1,8 @@
 """The DOUBLED TAIL (feature 261; split from `sweeps.py` by feature 280 at the 1,000-line bar): a lane whose end runs on
 beside the way it met is cut back to where it came alongside, unless the cut would strand a lane that met the tail, and a
-lane stranded only by the touch gap is carried onto the way first. `sweeps.py` re-exports every name here."""
+lane stranded only by the touch gap is carried onto the way first. `sweeps.py` re-exports every name here.
+
+Research: doubled tail plumbing - NONE"""
 
 from __future__ import annotations
 
@@ -15,12 +17,17 @@ from .geom import _TOUCH_GAP, _components, polyline_len
 from .keeper import kept
 
 _ALONG_FT = 14.0  # ft: two centerlines this close read as one tread doubled - a 6 ft way's width plus its soft shoulders
+"""Research: doubled tread distance - CONVENTION: centerlines within 14 ft read as one tread"""
 _ALONG_MIN_FT = 30.0  # ft: shorter than this, running beside a way is just the approach to the junction
+"""Research: tail run length - UNRESEARCHED: 30 ft beside a way before it is a doubled tail"""
 _ALONG_DEG = 25.0  # deg: nearer to parallel than this, the lane is running WITH the way, not meeting it
+"""Research: running with the way - UNRESEARCHED: within 25 degrees of parallel"""
 _DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doubled (Kuwabata's ran at ~3, Sawada's at 9.5); between
+"""Research: doubled tail angle - UNRESEARCHED: within 15 degrees of parallel"""
 # this and `_ALONG_DEG` the sweep still cuts it, to the crossing it overran, which then stands as a shallow Y - a junction, not a
 # doubling (Inashiro's straggler meets its join lane at 21.6 degrees)
 _CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
+"""Research: tail ends at the crossing it overran - research/questions/0081-village-lanes.drawing.html: within 40 ft"""
 
 
 def _parallel(u: Pt, v: Pt, deg: float) -> bool:
@@ -63,7 +70,9 @@ def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: f
 
 def cut_at_tail(pts: Sequence[Pt], k: int, other: Sequence[Pt], step: float = 4.0) -> list[Pt]:
     """`pts` cut at its `k`th sample (the `along_tail` index) and ended on its snap onto `other`: the vertices before the
-    cut, the cut point, and the nearest point of `other` to it."""
+    cut, the cut point, and the nearest point of `other` to it.
+
+    Research: tail ends at the crossing it overran - research/questions/0081-village-lanes.drawing.html: within 40 ft"""
     samples: list[Pt] = []
     for a, b in zip(pts, pts[1:], strict=False):
         n = max(1, int(math.dist(a, b) // step))
@@ -100,7 +109,9 @@ def cut_keeps_network(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequen
     (`_TOUCH_GAP`) than they were. FOUND BY FEATURE 280 (Sawada, once the larger yards moved its rows): a straggler's tail
     running beside the way it met was cut back to where it came alongside, and a third straggler that had joined that
     tail was left 13.7 ft from anything - two lane networks, which `test_every_shipped_hamlets_lanes_are_one_network`
-    caught. A tail that carries another lane's junction is not a doubled tail; it is part of the network."""
+    caught. A tail that carries another lane's junction is not a doubled tail; it is part of the network.
+
+    Research: web kept one network - research/questions/0081-village-lanes.drawing.html"""
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
 
     def pieces(pts: Sequence[Pt]) -> int:
@@ -112,7 +123,9 @@ def cut_keeps_network(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequen
 
 
 _RESEAT_FT = 2.0 * _TOUCH_GAP
-"""How far a lane end left on a cut tail may be carried onto the way the tail ran beside (Sawada, feature 280: 4.4 ft)."""
+"""How far a lane end left on a cut tail may be carried onto the way the tail ran beside (Sawada, feature 280: 4.4 ft).
+
+Research: end carried onto the way - NONE: a tolerance, twice the touch gap"""
 
 
 def reseat_on_way(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequence[Pt], after: Sequence[Pt], way: Sequence[Pt]) -> dict[int, list[Pt]]:
@@ -143,7 +156,11 @@ def _sweep_doubled_tails(s: Settlement) -> int:
     """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
     (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and
     merging to one stroke, past the corner where it met it - a doubled road and a dead end). The tail is cut at its first
-    sample alongside and the end snapped onto the way, so the two meet in one junction. Each end is asked in turn."""
+    sample alongside and the end snapped onto the way, so the two meet in one junction. Each end is asked in turn.
+
+    Research:
+        doubled tail cut - UNRESEARCHED: a lane running on beside the way it met ends where it came alongside
+        narrower tail cut - research/questions/0081-village-lanes.drawing.html: the through-route keeps its width"""
     lanes = s.M.get("lanes") or []
     fixed = 0
     # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft

@@ -1,6 +1,8 @@
 """FIND a spot and commit to it: the spiral searches, the two compaction slides, the nucleated garden-side choice, the legacy per-house solver.
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
+
+Research: search and prefilter plumbing - NONE
 """
 
 import math
@@ -18,6 +20,13 @@ if TYPE_CHECKING:
 
 class PlacerMixin:
     def headman(self: Settlement, x: float, y: float, w: float = 92, h: float = 56) -> Any:  # type: ignore[misc]
+        """Seat the village headman's house: a larger plain farmhouse.
+
+        Research:
+            headman's house size - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: 92 x 56 ft by default, four times a plain farmhouse
+            headman a plain farmstead enlarged - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: seated through the bundle with its own yard and garden, no large-house wing
+            no headman in a hamlet - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: refused on a hamlet-scale map
+        """
         # `w`, `h` are in FEET (drawn at the map's ftpx, px(92) = 46px at 2 ft/px). A nanushi/shoya house is
         # the grandest in the village but still a house - ~92x56 ft, clearly larger than a plain 46x28 ft
         # farmhouse without the old fortress-sized 216x136 ft. headman_is_largest holds.
@@ -119,7 +128,12 @@ class PlacerMixin:
 
     def _slide(self: Settlement, cx: float, cy: float, hw: float, hh: float, target_fn: Any, grove_off_field: bool) -> Pt:  # type: ignore[misc]
         """Greedily shove the bundle toward target_fn (a field bund, then a neighbor) in small steps, as
-        far as it still fits - the 'pack as close as the rules allow' step."""
+        far as it still fits - the 'pack as close as the rules allow' step.
+
+        Research:
+            dispersed farm packed toward field and neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the first slide, 2 px steps up to 48 toward the bund, while it fits
+            dispersed farm packed against its nearest neighbor - UNRESEARCHED: the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing
+        """
         for _ in range(48):
             tgt = target_fn(cx, cy)
             if tgt is None:
@@ -160,7 +174,12 @@ class PlacerMixin:
             self._household_seat = prior
 
     def _place_bundle_dispersed(self: Settlement, x: float, y: float, hw: float, hh: float) -> Any:  # type: ignore[misc]
-        """The dispersed spiral: the nearest seat that fits, then the two slides (see `_place_bundle`)."""
+        """The dispersed spiral: the nearest seat that fits, then the two slides (see `_place_bundle`).
+
+        Research:
+            row farm kept on its lot - research/questions/0033-row-villages-resson.drawing.html: within a row the seat is nudged at most one step and never slid
+            nearest seat that fits - NONE: a spiral of offsets to 91 px from the seed
+        """
         offsets = [(0, 0)]
         # A ROW'S SEAT IS EXACT (feature 291 plan D15, `hamletgen/homesteads/rows.py`): the row planned each frame one lot
         # along its street, and the two slides below - toward the field, then against the neighbor - carried the far row
@@ -187,6 +206,7 @@ class PlacerMixin:
         return None
 
     _NUC_SIDES = ("SE", "SW", "E", "W")  # garden-side preference: sunny south strip first, walls as fallback
+    """Research: garden side preference - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the sunny south corners first, the east and west walls after"""
 
     def _place_bundle_nucleated(self: Settlement, x: float, y: float, hw: float, hh: float, shed: bool = False) -> Any:  # type: ignore[misc]
         """Nucleated placement, THE ENVELOPE FIRST (feature 227, GM 2026-09-12: *"I thought that what we were doing
@@ -214,7 +234,13 @@ class PlacerMixin:
         one placed box is shifted once by the measured overlap, away from that neighbor, and tested once more (the GM:
         *"measuring the distance to the neighbor and then moving however much the correct amount is"*) - never nearer a
         grown seat's source than the growth's distance (`growth.keeps_its_distance`). Anything else is refused and the
-        proposer offers the next seat."""
+        proposer offers the next seat.
+
+        Research:
+            garden side chosen by the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: fewest shaded beds, then the south corners before the walls
+            left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
+            one computed move off a neighbor - NONE: the measured overlap plus 2 px, once
+        """
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
         # open ground of most seats - every configuration's box fits inside it and no other rectangle is tested; the
@@ -336,7 +362,12 @@ class PlacerMixin:
         displacement among the spots that hold the whole homestead. A farm that has a grove (`_wants_grove`) takes
         ONLY a spot with room for all of it (feature 291, FR-010: no farm quietly loses sides - the old fallback to a
         yard-and-garden-only spot is gone), so with none within its nudges it is not seated, as a to-scale farm whose
-        bundle does not fit is not. Updates rec's position + reservation. Returns (yard_spot, garden_spot), or None."""
+        bundle does not fit is not. Updates rec's position + reservation. Returns (yard_spot, garden_spot), or None.
+
+        Research:
+            whole homestead or none - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove farm takes only a spot with room for every rolled side, its yard and garden
+            least displacement - NONE: the nearest nudge that holds the whole homestead
+        """
         x0, y0, w, h = rec["x"], rec["y"], rec["w"], rec["h"]
         self.placed: list[Any] = Indexed(
             p for p in self.placed if p != (x0, y0, w, h)

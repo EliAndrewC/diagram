@@ -1,4 +1,7 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: routing machinery - NONE
+"""
 
 from __future__ import annotations
 
@@ -25,7 +28,11 @@ _CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0, "cell": 
 
 def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
     """Record the brook course whose band a route pays `cost` to enter, `radius` either side of it; an empty course
-    clears it."""
+    clears it.
+
+    Research:
+        crossing the brook is charged - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
+            `cost` to enter the band, so a way keeps to its own bank unless crossing saves more"""
     # CELLS A HAIR WIDER THAN THE BAND (feature 281, FR-003). The samples were filed in 20 px cells and an ask read every
     # cell within the radius - 25 dict lookups at the ford's 30 px, 1,638,800 of them on Kashikawa's routes, nearly all
     # empty. A sample within `radius` of a point lies at most one cell away when the cell is WIDER than the radius (strictly,
@@ -168,7 +175,13 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
 
     Returns [] when there is genuinely no way through - which is a real answer, and better than the
     caret a review found on Mizuguchi: a 38 ft mark drawn 71 ft from the house it served, touching
-    nothing, to cure a one-foot violation."""
+    nothing, to cure a one-foot violation.
+
+    Research:
+        a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: least cost through the
+            steadings, then pulled taut like a string
+        clear of the fabric - research/questions/0081-village-lanes.drawing.html: 7 ft by default, 8 ft off the crop
+        lattice off the water - UNRESEARCHED: 14 ft off the water lines"""
     cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:
@@ -273,7 +286,11 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
     40 ft as a zigzag (cohort seed 14, feature 137 T03), and a turn past 140 as a hairpin. Both are
     the lattice showing through, not the ground; a path that may brush a fence at a junction may
     brush it at a corner, so each such jog is replaced by its chord when `_clear_touch` allows it.
-    The thresholds are the check's own, so this undoes exactly what the check would refuse."""
+    The thresholds are the check's own, so this undoes exactly what the check would refuse.
+
+    Research:
+        no hairpin - research/questions/0081-village-lanes.drawing.html: a turn of 140 degrees chorded or eased
+        no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft chorded"""
     gap = _TOUCH_GAP if gap is None else gap  # the module constant is defined below this function
     out = list(path)
     k = 1
@@ -318,6 +335,7 @@ def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tupl
 # cut. 24 ft is three paces past the widest homestead gap the fabric leaves; beyond that the detour
 # stops being the same way and the router should have found another line.
 _EASE_FT = 24.0
+"""Research: how far a corner is eased - UNRESEARCHED: up to 24 ft off its apex"""
 _EASE_STEPS = 6
 
 
@@ -335,7 +353,9 @@ def _ease_corner(a: Pt, apex: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly]
     thresholds. That keeps the way going round what is actually there - which is what a trodden path
     does - instead of doubling back on itself. Returns the replacement point as a one-item path, or
     None when no offset within `_EASE_FT` works, in which case the jog stays and the caller's other
-    passes (or the router) must deal with it."""
+    passes (or the router) must deal with it.
+
+    Research: a path goes round what stands - research/questions/0081-village-lanes.drawing.html: no hairpin, the apex's side"""
     mx, my = (a[0] + b[0]) / 2.0, (a[1] + b[1]) / 2.0
     dx, dy = b[0] - a[0], b[1] - a[1]
     span = math.hypot(dx, dy)

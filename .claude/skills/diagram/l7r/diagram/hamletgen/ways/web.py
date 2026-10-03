@@ -1,4 +1,6 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: web plumbing - NONE"""
 
 from __future__ import annotations
 
@@ -71,7 +73,14 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
 
     The frame, arcs and stands are the caller's, already measured off the placed houses, so the
     skeleton and the web share one coordinate domain and cannot disagree about where the cluster is.
-    Returns the kept arms, for the web to treat as existing network."""
+    Returns the kept arms, for the web to treat as existing network.
+
+    Research:
+        skeleton laid after the houses - research/questions/0081-village-lanes.drawing.html: the farmhouses are placed first
+        skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
+        clear of crop, wet and water - UNRESEARCHED: 20 ft off the crop, the marsh and the ditches
+        routed round the steadings - research/questions/0081-village-lanes.drawing.html: nothing is built on a lane
+        skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
     if len(arcs) < 2:
         return []
     arc0 = (min(arcs) + max(arcs)) / 2.0
@@ -236,7 +245,9 @@ def cut_the_overruns(s: Settlement) -> None:
     ran on past the connector to a loose end is cut where it met it (`cut_past_connector`); the connector itself is left.
 
     LIFTED TO MODULE LEVEL (feature 261, the GM's 2026-08-28 ruling on inner functions): it was the tail of `stage_web`,
-    and once main's placer re-laid the pool no shipped roll rewrote a lane here, so the rewrite went uncovered."""
+    and once main's placer re-laid the pool no shipped roll rewrote a lane here, so the rewrite went uncovered.
+
+    Research: overrun cut - research/questions/0081-village-lanes.drawing.html: a free stub past a kink, a loose tail past the connector"""
     for _i, _ln in enumerate(s.M.get("lanes") or []):
         _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
         _others = [
@@ -267,6 +278,11 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
     uncovered. That is the right outcome for the maps and the wrong way to test a safety net: it still has to work
     for the seed that needs it. Everything it needs comes from the settlement and the crop's envelope, so it takes
     those two and nothing else.
+
+    Research:
+        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back to a way, a house or the bund
+        end carried on to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
+        lane serving nothing dropped - research/questions/0081-village-lanes.drawing.html: unless it is the only link in the web
     """
     _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     _final_steadings = steading_footprints(s.M)  # a tread that stops at a dooryard has arrived there (feature 227 D11)
@@ -349,7 +365,9 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
 
 def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) -> list[int]:
     """The lanes of `drops` that can go without parting the web: each is dropped only if the lanes left after it fall into
-    no more networks (at the 4 ft ink tolerance) than before - tried back to front, each against the drops already taken."""
+    no more networks (at the 4 ft ink tolerance) than before - tried back to front, each against the drops already taken.
+
+    Research: web kept one network - research/questions/0081-village-lanes.drawing.html"""
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     gone: set[int] = set()
 
@@ -367,7 +385,9 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
     """A skeleton arm with its ends trimmed to service, or none where too little is left. The skeleton is drawn before anything
     serves the houses, so its ends are trimmed to the bar the gate asks of a lane end (feature 227: two of Inashiro's arms
     ended 81-97 ft from the nearest house), against the houses alone; an arm left under `_WEB_MIN_FT` is no arm. Lifted from
-    `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs."""
+    `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs.
+
+    Research: skeleton arm trimmed to service - research/questions/0081-village-lanes.drawing.html: its ends pulled back to the houses it serves"""
     if len(arm) >= 2:
         arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
     return [] if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT else arm
@@ -414,6 +434,21 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.joints.meet_end_to_end
         l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund
         l7r.diagram.hamletgen.ways.settle.settle_the_web
+
+    Research:
+        dispersed hamlet draws no web - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
+        lane form knob - research/questions/0081-village-lanes.drawing.html: side lanes or a back lane, rolled per map
+        lanes after the houses - research/questions/0081-village-lanes.drawing.html
+        lane runs past its last steading - GUESS: 30 ft
+        back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
+        back lane tie spacing - UNRESEARCHED: the ties about three pitches (3 x BUNDLE_PITCH) apart
+        belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
+            may cross a shelter belt, the planting resuming on both sides, but not run its length
+        door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
+        web cut spacing - UNRESEARCHED: alley and back-lane cuts WEB_REACH_FT 100 ft apart, MIN_WEB_GAP 18 ft at least
+        web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
+        row streets laid - research/questions/0033-row-villages-resson.drawing.html
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -792,7 +827,9 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
     against every remaining run on every pass - a candidate is ~175 points at the 4 ft clip step and
     the admitted network grows without bound, so it went quadratic in samples on top of quadratic in
     passes and killed a cohort worker outright. The prefilter is the index and the stride is the
-    resolution; neither decides anything, which is the project's standing rule for both."""
+    resolution; neither decides anything, which is the project's standing rule for both.
+
+    Research: islands never drawn - research/questions/0081-village-lanes.drawing.html: one network grown from the skeleton"""
     runs = [r for r in cands if len(r) >= 2]
     if not runs:
         return []
@@ -839,6 +876,8 @@ def resettle_straightened(s: Settlement, hard: list[Any], walls: Sequence[Any], 
     """THE JOINTS READ AS ONE WAY ONCE MORE, where the settle laid a Z at one (feature 308, Inashiro on the merged engine: a
     crossing squared near the field spur's end turned it back against the link joined there - `square_every_crossing` runs
     after the web's joint pass); a joint it rewrites is settled again, and the settle's record replaced. Its wall-clock seconds
-    stay out of the manifest (287, 2026-09-29)."""
+    stay out of the manifest (287, 2026-09-29).
+
+    Research: joints read as one way - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one"""
     if straighten_joints(s, hard, walls, water):
         s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}

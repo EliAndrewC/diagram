@@ -1,4 +1,7 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research: drawing engine plumbing - NONE
+"""
 
 import contextlib
 import random
@@ -52,7 +55,28 @@ class Settlement(
     FarmFixturesMixin,
     PondStockMixin,
 ):
+    """The settlement map: the composed mixins, the record streams and the framing constants.
+
+    Research:
+        hill-wood stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT 13 ft centers
+        hill-wood crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT 8.5 ft mean radius
+        coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: COMMONS_SPACING_FT 8 ft centers
+        coppice crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: COMMONS_CROWN_R_FT 4 to 4.5 ft
+        forest floor tint - CONVENTION: FOREST_FLOOR
+        wood revealed by the crop - CONVENTION: FOREST_REVEAL_FT, about 110 ft past the tree line
+        what sets the frame - CONVENTION: _CROP_HARD and _CROP_CITY, the features the crop contains
+        layer offsets and the crown pad - NONE
+    """
+
     def __init__(self: Settlement, W: int = 1820, H: int = 1180, seed: int = 23) -> None:
+        """The empty map: its registries, record streams and defaults.
+
+        Research:
+            a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no rice
+            swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: the clearings registry
+            no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
+            registries and record streams - NONE
+        """
         random.seed(seed)
         self.W, self.H = W, H
         self.seed = seed  # drives every unpinned knob's independent deterministic roll (feature 005)
@@ -381,7 +405,9 @@ class Settlement(
         another lane's bed at a junction - the beds merge into a continuous crossroads. Within each
         sub-layer the wider lane (higher zpri = WIDTH) is on top, so the wider road still wins where two
         beds overlap (road 26 > avenue 22 > street 18 > alley 10). Each feature records its BED's final
-        draw position (rec[zkey]) for the width-layering check."""
+        draw position (rec[zkey]) for the width-layering check.
+
+        Research: ways layered as crossroads - CONVENTION: every edge under every bed, the wider bed on top"""
         if self._ground_idx is None:
             self._ground_idx = len(self.out)
             self.out.append("")  # placeholder, replaced by the sorted block at finish()
@@ -402,7 +428,9 @@ class Settlement(
         still paint over a channel's end. `clip` (optional {'pts','bed_t','sheen_t'}) marks a pond-anchored
         feeder whose bed/sheen are RE-EMITTED at flush, snapped to the rim - deferred so it works even when the
         feeder is drawn BEFORE the pond (M['pond'] is not known at call time). `pond_fill` marks the pond's
-        water body, drawn LAST among the beds so it paints over any feeder's inside-the-rim overshoot."""
+        water body, drawn LAST among the beds so it paints over any feeder's inside-the-rim overshoot.
+
+        Research: water layered as one body - CONVENTION: rims under beds under sheens, beds in one shared-opacity group"""
         if late:
             # (RE-)ANCHOR the late block at EVERY late call, not just the first: a multi-comb map
             # emits plots-then-channels per field, so a block pinned at the FIRST field's position
@@ -452,6 +480,12 @@ class Settlement(
             self._cover_slots[key] = self.add("", cls=cls)
 
     def meta(self: Settlement, **kw: Any) -> None:
+        """Record map meta; a declared scale sets the building grain.
+
+        Research:
+            feet per pixel by size - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 1 for a hamlet or town, 2 for a village, 3 for a city
+            village glyphs pre-scaled - NONE: a village keeps bscale 1
+        """
         if "ftpx" in kw:
             # The map's declared real scale in FEET PER PIXEL - the GM's ladder (research/contents.json#tiers
             # "How our maps draw and state each size of settlement"): hamlet/town 1,
@@ -531,7 +565,9 @@ class Settlement(
         practice: thin linear features (a 5 ft roji, a hairline gutter) are drawn at a minimum
         visible width rather than to scale, because at 3 ft/px they would be under 2px and vanish.
         True-width-or-floored, never inflated past the floor - so wide features stay honest and
-        the floor only rescues features that would otherwise be invisible."""
+        the floor only rescues features that would otherwise be invisible.
+
+        Research: linework floor - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 4 px, true width above it"""
         return max(ft / self.ftpx, 4.0)
 
     def set_view(self: Settlement, ox: float, oy: float, w: float, h: float) -> None:
@@ -539,7 +575,9 @@ class Settlement(
         the full coordinate space, so off-view features (estates, farmland) simply run off the
         edge. The checks read meta['view'] and treat this crop - not the canvas - as the map edge.
         Used for city maps, which 'just barely encompass' the walled city and let the countryside
-        run off the edge (a city map is about the city; a town map is about its surroundings)."""
+        run off the edge (a city map is about the city; a town map is about its surroundings).
+
+        Research: the page crop - CONVENTION: the checks treat the view as the map edge"""
         self.view = (ox, oy, w, h)
         self.M["meta"]["view"] = [ox, oy, w, h]
         self._partition_grove_clumps(ox, oy, w, h)
@@ -569,7 +607,9 @@ class Settlement(
         ...AND THE EXTENT IS RECORDED AGAIN (feature 287, woods W15): the grove's `w` x `h` is what its `clumps` stock, and
         moving the off-page clumps out of `clumps` can leave a box they no longer stock - so the box is re-decided over the
         clumps on the page by the placer's own rule (`stocked_box`): kept where they stock it, else the extent they are
-        drawn at on the page, else their main stand's."""
+        drawn at on the page, else their main stand's.
+
+        Research: a clump wholly off the view is off the page - CONVENTION: the belt clips at the frame as the wood continuing"""
         from .homestead_parts.stands import record_box, stocked_box  # noqa: PLC0415 - kept beside its one use
 
         for g in self.M.get("village_groves") or []:
@@ -698,13 +738,17 @@ class Settlement(
         frame: it is drawn and simply CLIPS at the edge, trailing off as 'more wild ground / more map this way'.
         (We used to extend the frame to preserve 2/3 of a trailing commons, but the GM wants the frame tight to
         the real content - a graveyard, the pond - never held open by empty back-slope grazing, so the commons
-        now clips like the marsh instead of dragging the frame out.)"""
+        now clips like the marsh instead of dragging the frame out.)
+
+        Research: framed to the hard content - CONVENTION: the frame-setting boxes plus a 30 px margin"""
         self.crop_to_view(content_view(self._crop_boxes(city=False), extra, margin, self.W, self.H))
 
     def crop_to_view(self: Settlement, view: tuple[float, float, float, float]) -> None:
         """Frame the map to a view DECIDED EARLIER (feature 287, M6): the woods' canopy is flushed, seeing the complete
         map, and the view is set exactly. `crop_to_content` is this with the view computed on the spot; a scripted hamlet
-        decides its view once, at the end of `stage_hinterland`, and hands that view here."""
+        decides its view once, at the end of `stage_hinterland`, and hands that view here.
+
+        Research: framed to a decided view - CONVENTION"""
         self.flush_tree_stands()  # the woods' canopy draws HERE, seeing the complete map (see flush_tree_stands)
         self.set_view(*view)
 

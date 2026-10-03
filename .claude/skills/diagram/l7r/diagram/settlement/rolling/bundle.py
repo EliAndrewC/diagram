@@ -1,6 +1,8 @@
 """What a homestead BUNDLE is: house, threshing yard, dooryard garden beds, kura, grove arms. Pure geometry - it places nothing and draws nothing.
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
+
+Research: box and template plumbing - NONE
 """
 
 import math
@@ -43,7 +45,10 @@ def pocket_keeps_its_dwelling(box: tuple[float, float, float, float], house: tup
     """Does the pocket `box` keep the wall gap the wells rule reads to its own `house` (both (cx, cy, w, h), unturned in the
     house's frame, which the rake turns as one piece)? At most `WELL_AMONG_DWELLINGS_PX` from the wall, on the rule's own
     predicate (`well_gap_to_dwellings`, its center to the house's drawn quad), and its footprint - the wellhead and its
-    margin - clear of the house's (`box_gap` at least 0: a shared edge, no overlap)."""
+    margin - clear of the house's (`box_gap` at least 0: a shared edge, no overlap).
+
+    Research: well among the doors it serves - research/questions/0196-communal-wells-ido.drawing.html: within `WELL_AMONG_DWELLINGS_PX` of its own house's wall, its footprint clear of the house
+    """
     hx, hy, hw, hh = house
     near = well_gap_to_dwellings([{"x": hx, "y": hy, "w": hw, "h": hh}], box[0], box[1]) <= WELL_AMONG_DWELLINGS_PX
     return near and box_gap(box, house) >= 0.0
@@ -62,7 +67,10 @@ def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float, hou
 
     ...AND ITS WALL GAP TO ITS OWN DWELLING (homes H09's other half, research R12): wherever it stands, the pocket keeps
     what the wells rule reads (`pocket_keeps_its_dwelling`) - a push past the beds walks it outward, so the push stops,
-    refusing the layout (`PocketUnlaid`), the moment it is carried past the rule's reach; that also bounds the push."""
+    refusing the layout (`PocketUnlaid`), the moment it is carried past the rule's reach; that also bounds the push.
+
+    Research: well pocket off the garden beds - research/questions/0196-communal-wells-ido.drawing.html: never on a crop plot; pushed past every bed by a gap, on the flank away from the primary bed
+    """
     for x in xs:
         box = (x, y, p, p)
         if not any(boxes_meet(box, b) for b in beds):
@@ -102,7 +110,14 @@ class BundleGeomMixin:
         returned to `_bundle_geom` they are RESERVED and collision-checked as part of the whole bundle - so an
         opposite-side bed can never overlap a neighbor or a paddy. Splits only fire when each bed stays wide
         enough (~12 ft) to read as a real garden, so it is the larger (well-off / headman) plots that
-        fragment. Total bed area stays in the saien band (`garden_area_within_norms`). Returns (cx,cy,w,h) rects."""
+        fragment. Total bed area stays in the saien band (`garden_area_within_norms`). Returns (cx,cy,w,h) rects.
+
+        Research:
+            bed split share - UNRESEARCHED: about one household in four splits its plot into two beds
+            bed split forms - UNRESEARCHED: half flank the house on opposite walls, the rest stacked (south gardens) or side by side; each bed at least 6 ft (`bscale`) wide
+            beds one household's garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: the beds together held to the garden's size range
+            beds on sunny sides - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: never the north back
+        """
         bs = self.bscale
         jx, jy = seat if seat is not None else (hx, hy)  # the household's seat when one is being sought (feature 276, D10)
         if self._hjit(jx, jy, 8.0) >= 0.26:  # the common case: one undivided plot
@@ -146,7 +161,10 @@ class BundleGeomMixin:
         THE GROUND CLEARED IS THE GROUND DRAWN, AT ANY TURN (269 B18). The parts keep their true sizes - the drawing and
         the fixtures read a part in its house's frame - and `boxes` holds each part's axis-aligned box AS DRAWN, turned
         (`turned_box`); every fit rule reads the boxes, and the bundle's `bbox` is theirs. Under the old +/-5 degree
-        rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not."""
+        rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not.
+
+        Research: homestead turns as one piece - research/questions/0029-farmhouses-minka.drawing.html: the yard and beds turn with the house about its center, the ground cleared as drawn
+        """
         tpl = self._bundle_template(hw, hh, garden_side, shed, getattr(self, "_household_seat", None) or (hx, hy))
 
         def moved(r: Any) -> Any:
@@ -242,7 +260,21 @@ class BundleGeomMixin:
         pack tight (no per-house grove - a nucleus shelters itself); DISPERSED (default) also carries the
         farm's own GROVE on the sides its settlement rolled, turned to the map's wind (`dispersed.dispersed_layout`,
         feature 291). Returns a dict of (cx, cy, w, h) rects keyed house/garden/yard (+ `groves`, a list, with
-        `grove_faces` beside it, when dispersed)."""
+        `grove_faces` beside it, when dispersed).
+
+        Research:
+            house-to-part gap - UNRESEARCHED: 3 ft between the house and its yard and garden
+            garden size - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.48 x 0.85 of the house, jittered up to 1.25x, capped at 48 x 34 ft (dispersed 42 x 30)
+            yard before the south wall - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0029-farmhouses-minka.drawing.html: the rolled yard, centered on the front
+            headman keeps an ordinary yard and garden - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: the caps hold a big house's parts to an ordinary farm's
+            no grove of its own in a cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a nucleus shelters behind one village belt
+            garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
+            forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
+            storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall
+            byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
+            dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
+            south band kept off the yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: on a sun-keeping map the south band stands `CANOPY_SHADE_FT` plus 1.7 x 1.15 crown radii beyond the yard
+        """
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
         sx, sy = seat  # the rolls key on the household's seat (see `_bundle_geom`)
@@ -365,7 +397,12 @@ class BundleGeomMixin:
         the envelope admits the household only with room for its well and the well stands among the doors it serves
         (within `WELL_AMONG_DWELLINGS_PX` of the wall: `pocket_clear_of_beds` refuses a pocket that would not be, and the
         layout is then marked `unlaid`, which the fit refuses). Beside the yard rather than before it, so the homestead
-        reaches no deeper toward a paddy the yard faces than the yard does."""
+        reaches no deeper toward a paddy the yard faces than the yard does.
+
+        Research:
+            household well where none is near - research/questions/0196-communal-wells-ido.drawing.html: a pocket among the doors it serves
+            pocket beside the yard - UNRESEARCHED: on the dooryard side, on the flank away from the garden
+        """
         if not getattr(self, "_household_well", False):
             return
         p = 2.0 * self._well_vr() + self.px(6.0)
@@ -383,7 +420,12 @@ class BundleGeomMixin:
         not cover, the yard and the beds it may - in the house's frame (`homestead_parts/fixture_seats.py`), with the
         hamlet's rolled forms (`_fixture_forms`) and the household's own position roll. So the envelope admits a household
         only with room for its privy, its stack, its tree, and no later stage can take that room. A grove farm's `bands`
-        (feature 291) are built ground too: no fixture stands in its own grove."""
+        (feature 291) are built ground too: no fixture stands in its own grove.
+
+        Research:
+            farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the kinds the household's lot keeps, laid in its own frame
+            persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: at every rake the house may be drawn at
+        """
         kinds = getattr(self, "_household_fixtures", None) or ()
         if not kinds:
             return
@@ -444,7 +486,10 @@ class BundleGeomMixin:
         to 3 ft sideways along the front wall, the direction following the rake's sign, which the GM saw as more
         room at one end of the yard than the other. The rake is position-seeded, so it is known here, at seat
         time, and every fit test the placer runs reads the moved centers - the ground cleared is the ground drawn.
-        The grove arms are not moved: they are drawn unraked."""
+        The grove arms are not moved: they are drawn unraked.
+
+        Research: homestead turns as one piece - research/questions/0029-farmhouses-minka.drawing.html: parts carried round the house center by its rake; the grove arms left unraked
+        """
 
         # `turn_about` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
         th = math.radians(rot or 0.0)

@@ -1,4 +1,7 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research: trade-works plumbing - NONE
+"""
 
 import math
 import random
@@ -81,7 +84,13 @@ class TradesMixin:
         1-2 per seat of ~3,000; brewers were town elite, sited IN town on good well water). Drawn
         as the long gabled VAT HALL (ridge + fermentation-vat circles + a masonry chimney), the
         street SHOPFRONT attached at one end, a rice KURA at the other, and the brewery's OWN WELL
-        (mandatory water) in the working corner. Records M['breweries'] (city_has_brewery)."""
+        (mandatory water) in the working corner. Records M['breweries'] (city_has_brewery).
+
+        Research:
+            brewery premises - research/questions/0207-sake-breweries-sakagura.html, research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: vat hall, shopfront, rice kura and its own well
+            vat hall size - research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: 96 x 36 ft, a 40 x 26 ft shopfront, a 22 x 15 ft kura
+            brewery glyph - CONVENTION: ridge, vat circles, chimney
+        """
         hw_, hh_ = self.px(96) / 2, self.px(36) / 2  # the vat hall
         sw_, sh_ = self.px(40) / 2, self.px(26) / 2  # the shopfront
         kw_, kh_ = self.px(22) / 2, self.px(15) / 2  # the rice kura
@@ -114,7 +123,14 @@ class TradesMixin:
         in open water, so the yard sits ON water: a stream, channel, canal, the pond, or the moat
         (city_has_dye_works enforces the adjacency; ~2,000-5,000 sq ft of racks at town scale,
         bolts run 35-40 ft). Drawn as the small vat WORKSHOP + rack lines hung with indigo cloth.
-        Records M['dye_yards']."""
+        Records M['dye_yards'].
+
+        Research:
+            dye works on water - research/questions/0209-dyers-weavers-and-papermakers-konya.html: drying racks dominate, rinsing in open water
+            dye yard size - research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: an 80 x 52 ft yard, a 36 x 24 ft workshop
+            indigo vats - research/questions/0209-dyers-weavers-and-papermakers-konya.html: two sunken vats by the workshop door (the page: buried four in a row)
+            dye glyph - CONVENTION: rack lines hung with indigo cloth
+        """
         yw_, yh_ = self.px(80), self.px(52)
         ww_, wh_ = self.px(36) / 2, self.px(24) / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -139,7 +155,14 @@ class TradesMixin:
         """A riverside LUMBER YARD (zaimokuya) - stacked timber + a river landing; stock moves by
         water at scale, so this is a RIVER-PORT feature only (city_river_port_has_lumber_yard;
         a landlocked city has none - the GM's Tango/Nagahara split). Small office + stack rows.
-        Records M['lumber_yards']."""
+        Records M['lumber_yards'].
+
+        Research:
+            lumber yard at a river port - research/questions/0210-timber-yards-and-log-booms-kiba.html
+            lumber yard size - research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: the page's GUESS of 3,000 to 8,000 sq ft; a 90 x 60 ft yard
+            lumber office size - UNRESEARCHED: 24 x 16 ft
+            stack glyph - CONVENTION
+        """
         yw_, yh_ = self.px(90), self.px(60)
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-yw_ / 2:.1f}" y="{-yh_ / 2:.1f}" width="{self.px(24):.1f}" height="{self.px(16):.1f}" rx="2" fill="#D8C49A" stroke="#6B4F2A" stroke-width="1.5"/>')  # the office/house
@@ -155,7 +178,12 @@ class TradesMixin:
         """An OIL PRESSER's barn (aburaya / youfang): the wedge-and-beam press is a massive timber
         machine plus an ox-driven edge-runner mill on a ~20-25 ft circular track - a barn-scale
         works (~40-60 x 25-30 ft), fire-conscious, toward the town edge. Barn + the mill ring.
-        Records M['oil_presses'] (city_has_oil_press)."""
+        Records M['oil_presses'] (city_has_oil_press).
+
+        Research:
+            oil press barn and mill ring - research/questions/0200-oil-pressers-aburaya.html: a 54 x 30 ft barn, a 22 ft edge-runner track
+            press glyph - CONVENTION
+        """
         bw_, bh_ = self.px(54) / 2, self.px(30) / 2
         ring_r = self.px(22) / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -171,7 +199,12 @@ class TradesMixin:
     def pawnshop(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "pawnshop") -> None:  # type: ignore[misc]
         """A PAWNSHOP (shichiya): an ordinary shopfront whose tell is STORAGE - pledges are bulky,
         so the broker keeps 2-3 fireproof kura in a walled rear court (the existing kura glyph
-        multiplied, per research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html). Records M['pawnshops'] (city_has_pawnshop)."""
+        multiplied, per research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html). Records M['pawnshops'] (city_has_pawnshop).
+
+        Research:
+            pawnshop kura - research/questions/0201-pawnshops-shichiya.html, research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: a 48 x 32 ft shopfront with fireproof kura in a walled rear court
+            kura size - UNRESEARCHED: 20 x 14 ft each
+        """
         sw_, sh_ = self.px(48) / 2, self.px(32) / 2
         kw_, kh_ = self.px(20) / 2, self.px(14) / 2
         ch_ = kh_ * 2 + 4.5  # the rear court's depth
@@ -191,7 +224,13 @@ class TradesMixin:
     def bathhouse(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "bathhouse") -> None:  # type: ignore[misc]
         """A BATHHOUSE (sento; China-first correct - commercial baths are attested from the Song):
         a shophouse-scale bath building with a rear furnace + chimney, and the visible extra - the
-        firewood stack yard behind. Records M['bathhouses'] (city_has_bathhouse)."""
+        firewood stack yard behind. Records M['bathhouses'] (city_has_bathhouse).
+
+        Research:
+            bathhouse premises - research/questions/0202-public-bathhouses-sento.drawing.html: the page's GUESS layout, a bath with a rear furnace and a fuel yard behind
+            bathhouse size - research/questions/0202-public-bathhouses-sento.drawing.html: the page's GUESS of about 40 x 30 ft and a 1,000 to 2,000 sq ft yard; the code draws 48 x 32 ft with a 48 x 22 ft yard
+            fuel-yard glyph - CONVENTION
+        """
         bw_, bh_ = self.px(48) / 2, self.px(32) / 2
         wd_ = self.px(22)  # the FUEL YARD band behind - the furnace's firewood store, the sento's visible extra (GM 2026-07-24: the first 3-line woodpile read too subtle to register as a yard)
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -217,7 +256,9 @@ class TradesMixin:
         roll (the merchant_estates analog). Recorded as meta['bathhouse_roll'] and gated by
         city_has_bathhouse, so a stale hand count can never ship. The roll consumes NO
         main-stream RNG (dedicated Random on the map seed): a map rolling its old count stays
-        byte-identical."""
+        byte-identical.
+
+        Research: bathhouse count - research/questions/0202-public-bathhouses-sento.drawing.html: one per full 2,000 inhabitants plus a remainder roll, at least one"""
         pop = int(self.M.get("meta", {}).get("population") or 3000)
         # GM formula (2026-07-24, second refinement): 1 bathhouse per full 2,000 population, plus
         # a chance of ONE extra equal to the remainder fraction - a 2,500 seat has 1 guaranteed +
@@ -258,7 +299,15 @@ class TradesMixin:
         the apron is a horse's length (~8 ft) plus room to lead one in and turn it. The shed is
         deliberately NOT attached to the stables - an open forge against a hay-and-timber stall
         range is a fire the yard does not survive, so real yards kept the smithy across the ground
-        (farrier_keeps_fire_gap). Records M['farriers']."""
+        (farrier_keeps_fire_gap). Records M['farriers'].
+
+        Research:
+            a farrier where horses concentrate - research/questions/0205-smiths-and-farriers-kajiya.html, research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: beside a stables only
+            forge and apron size - research/questions/0205-smiths-and-farriers-kajiya.html: a 20 x 18 ft shed (the page's one plan, modern and undated, ~21 x 18 ft with its work floor inside)
+            working apron - UNRESEARCHED: an open-fronted shed with a 28 x 20 ft apron in front
+            ox-shoeing frame - research/questions/0205-smiths-and-farriers-kajiya.html: about 7 x 4 ft
+            forge furniture glyphs - CONVENTION: hearth, hood, anvil, quench tub, post
+        """
         sw_, sh_ = self.px(20), self.px(18)  # the forge shed
         aw_, ah_ = self.px(28), self.px(20)  # the working apron in front of it
         top_ = -(sh_ + ah_) / 2
@@ -358,7 +407,17 @@ class TradesMixin:
         this record and deliberately NOT in M['houses']: every dwelling rule in the gate - well
         reach, ward classification, the burakumin standoff - is written about the settlement's own
         housing stock, and a satellite works' two cottages would be adjudicated by rules that were
-        never about them."""
+        never about them.
+
+        Research:
+            a kiln works with its households - research/questions/0192-pottery-kilns-noborigama.html: kiln, shed, clay pit, fuel, well and two or three cottages
+            a chambered climbing kiln - research/questions/0192-pottery-kilns-noborigama.drawing.html: laid up its slope
+            works sizes - research/questions/0192-pottery-kilns-noborigama.drawing.html: the page's GUESS; a 140 x 120 ft ground, a 32 x 18 ft shed, a 30 x 24 ft pit, 28 x 18 ft cottages
+            kiln length - DEVIATION research/questions/0192-pottery-kilns-noborigama.drawing.html: a 46 x 16 ft kiln against the measured 55-80 x ~7 ft; the 16 ft width is not recorded as a departure
+            fuel stack at the stoke end - UNRESEARCHED
+            kiln along its haul road - UNRESEARCHED: turned along the nearest way within 400 ft when no rot is given
+            kiln glyph - CONVENTION
+        """
         if rot is None:
             # a kiln hauls fuel and clay by CART, so it stands on its haul road and lies along it -
             # derived from the way at draw time, so a re-routed road turns the works with it
@@ -487,7 +546,14 @@ class TradesMixin:
         Sizes are TRUE feet at the map's grain (no legibility inflation), pitched against the pool's
         other bulk-goods yards - the lumber yard's 90x60 and the dye yard's 80x52.
 
-        Records M['charcoal_yards'] with `sheds` (settlement_has_charcoal_yard)."""
+        Records M['charcoal_yards'] with `sheds` (settlement_has_charcoal_yard).
+
+        Research:
+            roofed sheds and a weighing floor - research/questions/0197-charcoal-yards-and-charcoal-stores.html, research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: the findings support the weighing floor; the roofed stacking sheds stand on the drawing page only
+            no cooling apron - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
+            yard sizes - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: the page's GUESS; an 88 x 58 ft yard, 34 x 18 ft sheds, a 16 x 14 ft weighing floor
+            bale glyph - CONVENTION
+        """
         yw_, yh_ = self.px(88), self.px(58)
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(
@@ -546,7 +612,13 @@ class TradesMixin:
         waste and the product together are what tell a reader this is a refinery and not a smithy.
 
         Records M['refining_forges'] with `hearths` (refining_forge_stands_off_dwellings,
-        refining_forge_downwind, settlement_has_refining_forge)."""
+        refining_forge_downwind, settlement_has_refining_forge).
+
+        Research:
+            two-stage refining at its own site - research/questions/0198-iron-refining-forges-chao.html, research/questions/0198-iron-refining-forges-chao.drawing.html: two hearths, charcoal store, quench, bar iron, slag
+            forge sizes - UNRESEARCHED: a 74 x 48 ft yard, a 44 x 26 ft shed, a 24 x 16 ft charcoal store
+            forge glyph - CONVENTION
+        """
         yw_, yh_ = self.px(74), self.px(48)
         shw_, shh_ = self.px(44), self.px(26)
         scx_, scy_ = -self.px(6), -self.px(10)
@@ -633,7 +705,12 @@ class TradesMixin:
         running across a parley room's floor). So the line is drawn as a LINE and classified in
         _OVERLAP_EXEMPT: it reserves nothing, blocks nothing, and is overlapped by design.
 
-        Records M['borders'] with `poly` + `label` and deliberately NO w/h."""
+        Records M['borders'] with `poly` + `label` and deliberately NO w/h.
+
+        Research:
+            a drawn clan border - research/questions/0083-clan-borders-and-their-markers.html: a line of law that reserves nothing
+            border line glyph - CONVENTION
+        """
         poly = [[round(px_, 1), round(py_, 1)] for px_, py_ in pts]
         d = "M " + " L ".join(f"{px_:.1f} {py_:.1f}" for px_, py_ in pts)
         self.add(f'<path d="{d}" fill="none" stroke="#6B2A18" stroke-width="{max(self.lw(3), 2.6):.1f}" stroke-dasharray="14,7,4,7" opacity="0.85"/>')
@@ -714,7 +791,17 @@ class TradesMixin:
 
         `water="stream"` draws staking frames out in the shallows (live water, the shironameshi
         picture); `water="ditch"` draws a gated intake cut instead, for a yard that sits on an
-        irrigation drain and must pond its own water. Records M['tanning_yards']."""
+        irrigation drain and must pond its own water. Records M['tanning_yards'].
+
+        Research:
+            a tanning yard on water at the edge - research/questions/0193-tanning-yards.html, research/questions/0193-tanning-yards.drawing.html: pits, racks and a shed, the water side on the bank
+            pit count by territory - research/questions/0193-tanning-yards.drawing.html: 4 pits by default
+            pit size - UNRESEARCHED: pits drawn 9 x 5 ft (0193 gives no pit size; the docstring's 4.6 ft is not the code's)
+            yard size from pit count - UNRESEARCHED: 14 + 11 ft per pit column by 9 ft per row + 32 ft, one row up to 5 pits
+            work shed - UNRESEARCHED: 14 x 10 ft
+            staking frames or an intake cut - research/questions/0193-tanning-yards.drawing.html: by the water kind
+            yard glyph - CONVENTION
+        """
         rows = 1 if pits <= 5 else 2
         per_row = math.ceil(pits / rows)
         yw_, yh_ = self.px(14 + 11 * per_row), self.px(rows * 9 + 32)

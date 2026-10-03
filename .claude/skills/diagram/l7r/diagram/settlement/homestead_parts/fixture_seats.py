@@ -22,6 +22,8 @@ door, the stable wing's end wall or the floored rooms' end wall (`bath_room_seat
 place along those walls; and the WOOD SHED stands a ken off a wall of its steading, never walked out across the dooryard
 (`shed_off_a_wall`; M21), offered every place a ken off the walls. The privy and the bath room take a size rolled per
 household (`fixture_ft`: the Kakimochi table's sixteen privies, a room 6 ft out by 6-12 ft along).
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -43,17 +45,26 @@ Rect = tuple[float, float, float, float]  # (center x, center y, width, height),
 #: the wood shed a ken off a wall of the steading - so the walls are theirs before the free-standing kinds take the ground
 #: by them; then the late placer's order; the persimmon last - its crown over no roof and out of the yard's and beds' sun.
 FIXTURE_ORDER = ("retirement", "bath", "woodpile", "privy", "manure", "coop", "shrine", "persimmon")
+"""Research: laying order - UNRESEARCHED: the retirement house, the bath room and the wood shed take the walls first"""
 
 WALL_GAP_FT = 3.5  # a fixture's edge off the wall or part it stands by: the review measured -0.3 ft at 3.0 against the drawn wall
+"""Research: fixture wall gap - UNRESEARCHED: 3.5 ft off the wall or part it stands by"""
 STEP_FT = 8.0  # the outward pace a fixture takes when every recorded seat is taken (the late placer's own rung)
+"""Research: outward pace - UNRESEARCHED: 8 ft further out when every recorded seat is taken"""
 OUT_STEPS = 24  # paces offered: 192 ft, past any bundle's parts
 WALL_SLIDE_FT = 4.0  # the spacing of the places offered along a wall to a bath room or a wood shed
 PRIVY_YARD_STEP_FT = 6.0  # the yard outhouse a ken off the back wall (GUESS)
+"""Research: yard outhouse off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: a ken"""
 PRIVY_FRONT_STEP_FT = 8.0  # the front-yard privy a step out from the front wall (GUESS)
+"""Research: front privy off the front wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft"""
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search's radii, 18 to 48 ft (`PRIVY_SUN_MAX_FT`'s reasons, fixtures.py)
+"""Research: sun-side search start - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: from 18 ft"""
 PRIVY_SUN_MAX_FT = 48.0
+"""Research: sun-side search reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: to 48 ft"""
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
+"""Research: privies on the sunny side - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 72.7%"""
 WOODSHED_STEP_FT = 6.0  # the wood shed a ken off the wall it serves, a building of its own (GUESS: where on the plot no page says)
+"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: a ken, 6 ft"""
 # THE PRIVY'S SIZE (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
 # the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
@@ -75,25 +86,34 @@ PRIVY_SIZES_FT: tuple[tuple[float, float], ...] = (
     (24.0, 12.0),
     (6.0, 6.0),
 )
+"""Research: privy sizes - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the Kakimochi table's sixteen, equally likely"""
 # THE BATH ROOM (feature 280 M22, research/homesteads/740): joined to the main house - beside its main door, at the far end
 # of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the +x end) -
 # a room of 1-2 tsubo: one ken out from the wall, one to two ken along it, rolled per household (a calibration on the
 # registers' 1-2 tsubo). The free-standing bath shed is found only in the twentieth century, and is not drawn.
 BATH_DEPTH_FT = 6.0
+"""Research: bath room depth - research/questions/0044-baths-on-the-farm-furo.drawing.html: one ken out from the wall"""
 BATH_LENGTH_FT = (6.0, 12.0)
+"""Research: bath room length - research/questions/0044-baths-on-the-farm-furo.drawing.html: one to two ken along the wall"""
 BATH_WALLS = ("main_door", "stable_end", "floored_rooms")
+"""Research: bath room walls - research/questions/0044-baths-on-the-farm-furo.drawing.html: the main door, the stable end, the floored rooms"""
 SHRINE_CORNER_FT = 14.0  # the household shrine a plot corner off the house's corner
+"""Research: shrine off the house corner - UNRESEARCHED: 14 ft out each way"""
 TRUNK_FT = 4.0  # the persimmon's trunk box
+"""Research: persimmon trunk box - UNRESEARCHED: 4 ft"""
 CANOPY_PAD = 0.6  # the crown's placement clearance off a roof (`Settlement.CANOPY_PAD`)
 PERSIMMON_STEPS_FT = (10.0, 20.0)  # the persimmon's ring a step out, and two
+"""Research: persimmon stepped out - UNRESEARCHED: 10 and 20 ft past its first ring"""
 #: THE DOORYARD'S REACH (feature 315; research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
 #: the fruit trees stand "within about 30 ft of the house"): the persimmon's paces stop where its crown's edge would stand farther
 #: than this from the house's walls. Paced on without it, a crowded farm's persimmon walked 80 ft out onto the row's street
 #: (cohort seed 23), no dooryard tree at all; a farm with no seat within it keeps no persimmon, as a farm with no room keeps no bamboo.
 PERSIMMON_DOORYARD_FT = 30.0
+"""Research: persimmon near the house - GUESS research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the crown's edge within 30 ft of the walls"""
 SHADE_MARGIN_FT = 2.0  # the seat stricter than the map's check by a hair, as the sun corridor's placer is (`fit._sun_corridor_ok`)
 
 SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
+"""Research: shrine corner weights - research/questions/0219-household-shrines-yashikigami.drawing.html: NW 45, NE 35, SW 20"""
 CORNER_SIGNS = {"NW": (-1.0, -1.0), "NE": (1.0, -1.0), "SW": (-1.0, 1.0)}
 SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0, "retirement": 131.7}
 
@@ -110,7 +130,16 @@ class FixtureUnlaid(ValueError):
 class FixtureForms:
     """The hamlet's fixture forms, rolled once per map (`hamletgen/homesteads/fixtures.py`, `fixture_forms`): the privy
     seats' weights, the bath room's wall, the persimmon's front share and the manure's form. The woodpile has one form
-    left, the wood shed (feature 280 M21: the eaves stack and the kizuma are modern-only), so it rolls none."""
+    left, the wood shed (feature 280 M21: the eaves stack and the kizuma are modern-only), so it rolls none.
+
+    Research:
+        privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: yard 35, front 30,
+            stable 20, barn 15
+        bath room's default wall - research/questions/0044-baths-on-the-farm-furo.drawing.html: beside the main door
+        persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
+            0.7 by default
+        manure form - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: heap by default, or pit
+        retirement house size and gaps - UNRESEARCHED: 18 x 15 ft, 6 or 12 ft off the house"""
 
     privy_weights: tuple[tuple[str, float], ...] = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
     bath_seat: str = "main_door"
@@ -133,7 +162,11 @@ def weighted(weights: Sequence[tuple[str, float]], u: float) -> str:
 def privy_sun_reach_ft(w_ft: float, d_ft: float) -> float:
     """How far from its house's center the sun-side search may seat a privy of `w_ft` x `d_ft`: `PRIVY_SUN_MAX_FT`, plus the
     half-length it has past the one-ken default, so its near edge stands no farther out than a one-ken privy's (feature
-    280, settlement-review of Sawada: every privy of 18 x 12 ft or more fell through to the north-east seat, 7 of 17)."""
+    280, settlement-review of Sawada: every privy of 18 x 12 ft or more fell through to the north-east seat, 7 of 17).
+
+    Research:
+        sun-side reach by size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 48 ft plus the
+            half-length past a one-ken privy"""
     return PRIVY_SUN_MAX_FT + max(0.0, (max(w_ft, d_ft) - 6.0) / 2.0)
 
 
@@ -141,7 +174,19 @@ def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | 
     """A fixture's size in real feet, `(along its wall, out from it)`, in the form the hamlet rolled: the privy one of the
     Kakimochi table's sixteen and the bath room 6 ft out by 6-12 ft along, each rolled off the household's own position roll
     `roll` (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html and 740; the kinds' one-ken default without one); every other kind its one
-    size (`FIXTURE_FT`), the pit's, the crown's or the retirement house's."""
+    size (`FIXTURE_FT`), the pit's, the crown's or the retirement house's.
+
+    Research:
+        privy size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: rolled from the sixteen
+        bath room size - research/questions/0044-baths-on-the-farm-furo.drawing.html: 6 ft out by 6 to 12 ft along
+        persimmon crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
+            twice the crown radius each way
+        other fixtures' sizes - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the wood shed 24 x 12 ft
+        manure heap size - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: 8 x 6 ft
+        coop size - research/questions/0045-chickens-and-chicken-coops.drawing.html: 5 x 5 ft
+        shrine size - research/questions/0219-household-shrines-yashikigami.drawing.html: 6 x 6 ft, larger than life
+        manure pit size - UNRESEARCHED: 3.5 ft
+        retirement house size - UNRESEARCHED: 18 x 15 ft"""
     if kind == "privy" and roll is not None:
         return PRIVY_SIZES_FT[int(roll(101.3) * len(PRIVY_SIZES_FT)) % len(PRIVY_SIZES_FT)]
     if kind == "bath" and roll is not None:
@@ -174,7 +219,10 @@ def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
 
 def steading_rects(hw: float, hh: float, kura_side: str | None, ppf: float) -> list[Rect]:
     """The walls of a steading's buildings in the house's unturned frame: the house, and its kura where it keeps one
-    (north, or the west end - `kura_rect`, the table `Settlement.house` draws from)."""
+    (north, or the west end - `kura_rect`, the table `Settlement.house` draws from).
+
+    Research:
+        storehouse annex - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: on the north wall or the west end"""
     rects = [(0.0, 0.0, hw, hh)]
     if kura_side is not None:
         rects.append(kura_rect(hw, hh, kura_side, ppf))
@@ -251,7 +299,14 @@ def lay_fixtures(
     `notes`, where given, receives what the drawing needs beyond the box: each rolled size in feet (`ft`, `fixture_ft`) and
     the wall the bath room took (`bath_seat`). Every kind is laid: the outward paces reach free ground past any parts. Raises
     only for a bath room with no place along the house's three attested walls, or a wood shed with no place a ken off a
-    wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22)."""
+    wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22).
+
+    Research:
+        stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out
+        wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house, its kura, the
+            byre and the retirement house
+        bath room joined - research/questions/0044-baths-on-the-farm-furo.drawing.html: refused rather than walked out
+        no seat, no persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm keeps none"""
     g = px(WALL_GAP_FT)
     # (A grove farm's bands stay roofs here: letting a persimmon's crown reach over them, feature 315 found, let it take the
     # service strip a wood shed or bath room needed, and five cohort rolls could no longer seat their households.)
@@ -300,13 +355,19 @@ def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[f
     """THE WOOD SHED'S RULE (feature 280 M21; settlement-reviews of Inashiro and Kuwabata, where sheds stood 25-37 ft out,
     between farmsteads): a building of its own a ken off its house - clear of the house by the wall gap and `WOODSHED_STEP_FT`
     - and never walked out across the dooryard: within the gap, a ken and one outward pace (`STEP_FT`) of a wall of its
-    steading (`against_a_wall`), overlapping that wall along it. The one predicate the placer and its test read."""
+    steading (`against_a_wall`), overlapping that wall along it. The one predicate the placer and its test read.
+
+    Research:
+        wood shed a ken off a wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
+            the dooryard"""
     return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + px(STEP_FT))
 
 
 def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool:
     """THE BATH ROOM'S RULE (feature 280 M22): a room of the house - one edge on a wall of the `hw` x `hh` house, overlapping
-    it along that wall, and not inside it. The one predicate the placer and its test read."""
+    it along that wall, and not inside it. The one predicate the placer and its test read.
+
+    Research: bath room of the house - research/questions/0044-baths-on-the-farm-furo.drawing.html"""
     gx = abs(seat[0]) - (seat[2] + hw) / 2
     gy = abs(seat[1]) - (seat[3] + hh) / 2
     return (abs(gx) <= tol and gy < 0.0) or (abs(gy) <= tol and gx < 0.0)
@@ -315,7 +376,11 @@ def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool
 def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float]) -> Rect:
     """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken further out than a stack
     stood - then those a pace further, then every place a ken off each wall of the steading; the first that clears the parts
-    laid and keeps `shed_off_a_wall`. None of them walks it out into the dooryard."""
+    laid and keeps `shed_off_a_wall`. None of them walks it out into the dooryard.
+
+    Research:
+        wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
+            never the front yard"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
     offered = chain(seats, outward(seats, px(STEP_FT), 1), wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
@@ -331,7 +396,12 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: 
     Each abuts its wall - a room of the house, not a building beside it. Each seat carries its name, and the record keeps the
     one taken: the work yard lies before the front wall, and where it covers the wall the bath falls to the next seat - the
     reviews of Kuwabata and Sawada (feature 280) found a declared `main_door` never drawn, and then an end-wall corner offered
-    as `main_door` that read as the floored rooms' seat, so the record now says which seat each bath room took."""
+    as `main_door` that read as the floored rooms' seat, so the record now says which seat each bath room took.
+
+    Research:
+        three attested walls - research/questions/0044-baths-on-the-farm-furo.drawing.html: the rolled wall first
+        places along each wall - UNRESEARCHED: 0.22 of the house either side of the door or just past the yard; an end
+            wall's middle and quarters"""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
     # ...AND JUST PAST THE YARD'S SIDES (`yard`: its center x and half-width in the house frame), still on the front wall: the
     # yard is centered before the door and covered both door-side seats on every house, so the seat was never drawn
@@ -349,7 +419,9 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: 
 def bath_room_slides(first: str, hw: float, hh: float, w: float, d: float, step: float) -> list[tuple[Rect, str]]:
     """Every place along the bath room's three attested walls (`bath_room_seats`' walls), `step` apart and at each wall's
     ends, `first`'s wall first: offered after the recorded seats, so a house whose recorded seats are taken by its yard,
-    beds, byre or retirement house still joins its bath to a wall where the room fits (feature 287: every kind is laid)."""
+    beds, byre or retirement house still joins its bath to a wall where the room fits (feature 287: every kind is laid).
+
+    Research: anywhere along the three walls - research/questions/0044-baths-on-the-farm-furo.drawing.html"""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
     table = {
         "main_door": [(u, front, w, d) for u in along(max(0.0, (hw - w) / 2), step)],
@@ -379,7 +451,11 @@ def _trunk(crown: Rect, px: Callable[[float], float]) -> Rect:
 @lru_cache(maxsize=64)
 def _sun_sector(w: float, d: float, radii: tuple[float, ...]) -> tuple[Rect, ...]:
     """The privy's sun-side seats, SE to S (112.5 to 202.5 degrees, every 7.5), at each of `radii` (px), nearest first - the
-    same for every household of one privy size, so built once (seed 44: 73,000 privies each built 91 seats)."""
+    same for every household of one privy size, so built once (seed 44: 73,000 privies each built 91 seats).
+
+    Research:
+        sunny-side sector - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: bearings 112.5 to
+            202.5 degrees, nearest first"""
     sun: list[Rect] = []
     for rr in radii:
         for b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
@@ -391,7 +467,21 @@ def _sun_sector(w: float, d: float, radii: tuple[float, ...]) -> tuple[Rect, ...
 def _seats(
     kind: str, hw: float, hh: float, w: float, d: float, g: float, yard: Rect | None, privy: Rect | None, roll: Callable[[float], float], u: float, forms: FixtureForms, px: Callable[[float], float]
 ) -> list[Rect]:
-    """The recorded seats of one fixture kind in the house frame, first choice first (the late placer's tables)."""
+    """The recorded seats of one fixture kind in the house frame, first choice first (the late placer's tables).
+
+    Research:
+        privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sun-side sector on
+            72.7%, else the four attested places
+        manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: jittered a few feet;
+            behind or beside the house where there is no privy
+        retirement house - UNRESEARCHED: off the back wall or a flank, the side rolled
+        coop seats - research/questions/0045-chickens-and-chicken-coops.drawing.html: the east flank, the back wall or the
+            west flank, rolled
+        wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
+            the flanks
+        shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
+        seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw and -0.25 hh, coop 0.34 hw spread and
+            0.3 hh, wood shed 0.25 hw and 0.1 hh"""
     if kind == "privy":
         seat = {  # the four attested seats (269 B10); -x is the shed end of the house, where the doma and its stable are
             "yard": (hw * 0.3, -(hh / 2 + g + px(PRIVY_YARD_STEP_FT) + d / 2), w, d),
@@ -463,7 +553,9 @@ def sun_turns(lo: float, hi: float) -> tuple[float, ...]:
 def _sunlit(ground: Sequence[Rect], shade: float, turns: Sequence[float]) -> Callable[[float, float, float], bool]:
     """Is a crown of radius r at (x, y) clear of every plot's sun ground at every rake? Each rake turns the crown and the
     plots together about the house's center, the plots' boxes as `turned_box` draws them, and asks `crown_in_ground` (the predicate `crown_shades` reads) in the
-    world's axes, where the sun is."""
+    world's axes, where the sun is.
+
+    Research: persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html"""
     if shade <= 0.0 or not ground:
         return lambda x, y, r: True
     frames = []
@@ -483,7 +575,13 @@ def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect
     """The yard persimmon (269 B14): the dooryard in front - the front corners and straight out - or behind the house,
     rolled against the hamlet's front share; its trunk clear of every part, its crown over no roof and out of every yard's
     and bed's sun (`sunlit`, GM 2026-10-02), so a farm that dries its grain in a front yard keeps its persimmon behind the
-    house. Stepped out until it stands, within the dooryard (`PERSIMMON_DOORYARD_FT`); None where no seat there does."""
+    house. Stepped out until it stands, within the dooryard (`PERSIMMON_DOORYARD_FT`); None where no seat there does.
+
+    Research:
+        persimmon in front or behind - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
+            the front corners and straight out, or the same behind
+        crown over no roof - CONVENTION: the crown kept off every roof so the building stays visible
+        within the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: paced out no farther than `PERSIMMON_DOORYARD_FT`, else none"""
     r = px(PERSIMMON_CROWN_FT)
     trunk = px(TRUNK_FT)
     reach = math.hypot(hw / 2, hh / 2) + r + CANOPY_PAD + 1.0

@@ -8,6 +8,8 @@ That austerity is the point. A reader opens the assembled page from disk, the en
 every test over the record reads it; if the assembly reformatted anything, the record's bytes would
 become an output of a program rather than the thing a session wrote, and the GM's "identical to what we
 have now" would be a claim nobody could check.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

@@ -10,6 +10,8 @@ is a COUNT here instead - a quota by ordinal: household `k`, taken in a seed-shu
 
 The lot is the household's before its seat is sought, so a household refused at one seat keeps its lot at the next:
 nothing about a part depends on where the house lands.
+
+Research: quota, record and registry plumbing - NONE
 """
 
 from __future__ import annotations
@@ -25,17 +27,21 @@ from ..farm_fixtures import kura_rect as kura_rect
 #: The nucleated farmhouse's length and depth factors over its 46 x 28 ft base (`_try_place_bundle`): a minka grew by
 #: adding bays along the ridge, so the length varies a lot and the depth a little (the ranges are the placer's own).
 LENGTH_FACTORS = (0.85, 1.35)
+"""Research: farmhouse length range - research/questions/0029-farmhouses-minka.drawing.html: 0.85 to 1.35 of the 46 ft base"""
 DEPTH_FACTORS = (0.90, 1.10)
+"""Research: farmhouse depth range - research/questions/0029-farmhouses-minka.drawing.html: 0.90 to 1.10 of the 28 ft base"""
 
 #: The share of plain farmhouses that carry a kura storehouse annex: ONE FARM IN EIGHT (feature 280 M20,
 #: research/homesteads/720 - a calibration on the one premodern count read, Kakimochi's 2 storehouses in 16 households,
 #: both powerful). The 0.2993 it was drawn at came from Sugiura's 1972 survey, modern. The headman keeps one always (his by
 #: the GM's ruling of 2026-07-21, `Settlement._try_place_bundle`), outside the lots.
 KURA_SHARE = 0.125
+"""Research: storehouse share - research/questions/0040-farm-storehouses-kura.html, research/questions/0040-farm-storehouses-kura.drawing.html: one farm in eight"""
 
 #: No drawn farmhouse runs longer than this against its width (homes H08): the minka norm is about 1.3-2.5:1, and a
 #: footprint past 2.7:1 reads as a shed. The ladder's corner (1.35 x 46 over 0.90 x 28) is 2.46.
 FARMHOUSE_MAX_ASPECT = 2.7
+"""Research: longest farmhouse proportion - research/questions/0029-farmhouses-minka.drawing.html: no farmhouse longer than 2.7 to 1"""
 
 
 def quota_member(j: int, p: float) -> bool:
@@ -60,12 +66,16 @@ def quota_carriers(seed: int, salt: str, n: int, p: float) -> list[bool]:
 #: and the sheds go to the larger houses first" - the wood shed, a building of its own on about four farmsteads in ten). The
 #: storehouse itself is dealt the same way (`HouseholdLots.kura`, feature 293).
 LARGER_FIRST = frozenset({"woodpile"})
+"""Research: wood shed to the larger houses - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the storehouse and the sheds go to the larger houses first"""
 
 
 def larger_first(seed: int, salt: str, sizes: list[tuple[float, float]], p: float) -> list[bool]:
     """Which households (by seat ordinal) carry a part of share `p` that goes to the larger houses first: exactly as many
     as `quota_carriers` gives (round(n x p)), taken largest footprint first (the size ladder's length x depth factors), the
-    seed-shuffled order breaking ties."""
+    seed-shuffled order breaking ties.
+
+    Research: largest houses first - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: the quota's count dealt down the size ladder, ties by the seeded order
+    """
     n = len(sizes)
     count = sum(quota_carriers(seed, salt, n, p))
     order = _order(seed, salt, n)
@@ -76,7 +86,10 @@ def larger_first(seed: int, salt: str, sizes: list[tuple[float, float]], p: floa
 
 def size_ladder(seed: int, n: int) -> list[tuple[float, float]]:
     """`n` (length, depth) factor pairs, one rung per household by seat ordinal (homes H17): the lengths evenly spaced over
-    `LENGTH_FACTORS`, the depths over `DEPTH_FACTORS`, each ladder in its own seed-shuffled order."""
+    `LENGTH_FACTORS`, the depths over `DEPTH_FACTORS`, each ladder in its own seed-shuffled order.
+
+    Research: house sizes spread evenly - research/questions/0029-farmhouses-minka.drawing.html: a stratified ladder over the length and depth ranges, length and depth shuffled apart
+    """
     if n <= 0:
         return []
 
@@ -100,11 +113,27 @@ class HouseholdLots:
     """The lots of one settlement's `n` declared households: `lot(k)` is household `k`'s size factors, whether it keeps a
     kura and whether it keeps a beast (the byre form's keeper share, `byre_share`; 0 where the settlement's byres are not
     the households' own). Built once per seating (`stage_homesteads` sets it on the settlement); the `k`-th house seated
-    takes lot `k`."""
+    takes lot `k`.
+
+    Research:
+        storehouse to the largest houses - DEVIATION research/questions/0040-farm-storehouses-kura.html: a strict cut down the size ladder where the one village's count shows a tendency
+        storehouse tie - research/questions/0040-farm-storehouses-kura.drawing.html: between two houses of one size, the seeded order decides
+        beast keepers by quota - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: exactly round(n x byre_share) households
+        fixtures by quota - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: exactly round(n x share) households per kind
+    """
 
     __slots__ = ("byre", "fixtures", "kura", "n", "sizes")
 
     def __init__(self, seed: int, n: int, byre_share: float = 0.0, fixture_shares: Mapping[str, float] | None = None) -> None:
+        """Deal the lots: the size ladder, the storehouses, the beasts and each fixture kind.
+
+        Research:
+            storehouse to the largest houses - DEVIATION research/questions/0040-farm-storehouses-kura.html: a strict cut down the size ladder where the one village's count shows a tendency
+            storehouse tie - research/questions/0040-farm-storehouses-kura.drawing.html: between two houses of one size, the seeded order decides
+            beast keepers by quota - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: exactly round(n x byre_share) households, by the shuffled order
+            fixtures by quota - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: exactly round(n x share) households per kind, every kind but the wood shed by the shuffled order
+            wood shed to the larger houses - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the wood shed dealt down the size ladder
+        """
         self.n = n
         self.sizes = size_ladder(seed, n)
         # THE STOREHOUSE GOES TO THE LARGER HOUSES FIRST (feature 293, research/questions/0040-farm-storehouses-kura.html): the count is the quota's,
@@ -134,13 +163,17 @@ class HouseholdLots:
 #: How far a household may live from water, in feet: `settlement_dwellings_watered`'s ~760 real ft to the nearest well,
 #: channel, pond or stream (homes H11) - the figure `place_wells` has always served.
 WATER_REACH_FT = 760.0
+"""Research: farthest a household lives from water - research/questions/0196-communal-wells-ido.drawing.html: 760 real ft to a well, channel, pond or stream"""
 
 
 def needs_pocket(s: Any, x: float, y: float) -> bool:
     """Does a household seated at (x, y) carry a WELL POCKET (feature 287, homes H10 and H11)? The first household
     always does - so a settlement always has a well - and every later one exactly when no pocket stands within
     `WATER_REACH_FT` of it and no surface water serves it (`surface_water_dist`, the watered rule's own measure): so every
-    household is within reach of a well or open water by construction, and two pockets stand at least that far apart."""
+    household is within reach of a well or open water by construction, and two pockets stand at least that far apart.
+
+    Research: wells shared, one where none is near - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the first household carries a well, a later one only beyond every well's and water's reach
+    """
     pockets = getattr(s, "_pockets", None)
     if pockets is None:
         return False
@@ -173,7 +206,10 @@ def watered(s: Any, x: float, y: float, well: bool) -> bool:
     household whose house stands at (x, y) reaches water - it carries its own well pocket (`well`), or a pocket already laid
     or surface water stands within `WATER_REACH_FT` (`needs_pocket` asks no more of it). Asked of the house where it is
     PLACED: the pocket was decided at the point the seat was sought from, and the placer may move the house off it (the
-    envelope's computed move, the dispersed slides), so a candidate carried out of every pocket's reach is refused."""
+    envelope's computed move, the dispersed slides), so a candidate carried out of every pocket's reach is refused.
+
+    Research: every household watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within `WATER_REACH_FT`
+    """
     return well or not needs_pocket(s, x, y)
 
 
@@ -182,7 +218,12 @@ def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[t
     k), the byre form its bundle reserves a stall for (a keeper on a household form), whether it carries a well pocket, and
     its farmstead fixtures (the lot's kinds). Set on the settlement for the seat search (`_household_byre`,
     `_household_well`, `_household_fixtures`, and `_household_watered`, which holds its candidates to `watered`), where
-    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down."""
+    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down.
+
+    Research:
+        quota, record and registry plumbing - NONE: the k-th plain household takes lot k; the parts set on the settlement for the seat search
+        a role household gets no byre and no farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: a household with a role (the headman) takes no lot, so no stall and no fixtures, where 0028 says a headman's carries several
+    """
     lots = getattr(s, "_lots", None)
     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
     lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None

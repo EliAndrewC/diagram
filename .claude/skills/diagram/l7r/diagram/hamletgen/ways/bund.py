@@ -11,6 +11,8 @@ Two passes, both after the lanes are laid: `run_lanes_on_to_the_bund` carries ev
 the field's neighborhood on to its edge (before the trims, which pull back an end that reaches nothing - `end_serves` counts
 the bund, and no longer counts "within 60 ft of the field"); `a_way_onto_the_bund` makes sure the paddy is reached at all,
 running the nearest lane end on, or a short field path off the nearest lane, where nothing else reaches it.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -31,22 +33,30 @@ from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_grou
 # The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
 # bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
 TIP_MARGIN_FT = 1.0
+"""Research: tread cap on the bund line - CONVENTION: 1 ft past the half-tread"""
 # How far an end that reaches nothing may be carried on to the bund: the gate's own reach to another way, the distance at
 # which the old rule counted the field as reached - so an end the old rule passed as "near the field" is carried onto it.
 RUN_ON_REACH_FT = WAY_END_REACH_FT
+"""Research: run-on reach - research/questions/0081-village-lanes.drawing.html: an end within 60 ft of the field is carried on"""
 # A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
 # behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
 RUN_ON_TURN_DEG = 60.0
+"""Research: run-on turn limit - research/questions/0081-village-lanes.drawing.html: at most 60 degrees off the way walked"""
 # The nearest lane is sampled every this many feet when a field path must branch off it (a map drawing convention).
 BRANCH_STEP_FT = 8.0
 # The branch is drawn at the field spur's own tread (`stage_track`: width 5, worn).
 BRANCH_WIDTH = 5
+"""Research: field path width - research/questions/0081-village-lanes.drawing.html: 5 ft, the field spur's tread"""
 
 
 def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float = RUN_ON_REACH_FT) -> Pt | None:
     """Where an end at `q` is carried to: straight toward the nearest point of the worked ground's edge, stopped the
     half-tread and `TIP_MARGIN_FT` outside it. None for an end already on the bund or inside the ground, or further than
-    `reach` from it. The open segment to a set's nearest point meets nothing of the set, so the run-on cannot cross a plot."""
+    `reach` from it. The open segment to a set's nearest point meets nothing of the set, so the run-on cannot cross a plot.
+
+    Research:
+        joins at the nearest point - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: straight to
+            the worked ground's nearest edge point, stopped on the bund"""
     if ground.inside(q):
         return None
     p = ground.nearest(q)
@@ -63,7 +73,11 @@ def run_on_target(q: Pt, ground: WorkedGround, half_tread: float, reach: float =
 def pulled_out_of_the_ground(pts: Sequence[Pt], ground: WorkedGround, half_tread: float) -> list[Pt]:
     """A path whose LAST point lies inside the worked ground, cut back along itself to the first point that stands the
     half-tread and `TIP_MARGIN_FT` clear of it - on the bund, not in the crop (Sawada's spur stopped 4 ft into the rice,
-    and 19 ft inside the outline, measured). A path that is in the ground end to end comes back as one point."""
+    and 19 ft inside the outline, measured). A path that is in the ground end to end comes back as one point.
+
+    Research:
+        no lane into the crop - research/questions/0081-village-lanes.drawing.html,
+            research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end inside the worked ground cut back"""
     out = [(float(p[0]), float(p[1])) for p in pts]
     stop = half_tread + TIP_MARGIN_FT
     if len(out) < 2 or not ground.inside(out[-1]):
@@ -84,7 +98,9 @@ def pulled_out_of_the_ground(pts: Sequence[Pt], ground: WorkedGround, half_tread
 
 def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
     """Would carrying `end` on to `tgt` turn the path more than `RUN_ON_TURN_DEG` off the way it was walking? A bund that
-    lies behind the end is not one the path runs ON to, and the turn draws a hook (`lanes_end_in_no_hook`)."""
+    lies behind the end is not one the path runs ON to, and the turn draws a hook (`lanes_end_in_no_hook`).
+
+    Research: no hook onto the bund - research/questions/0081-village-lanes.drawing.html: a run-on turning past the limit is refused"""
     u, v = (end[0] - prev[0], end[1] - prev[1]), (tgt[0] - end[0], tgt[1] - end[1])
     nu, nv = math.hypot(*u), math.hypot(*v)
     if nu <= 1e-9 or nv <= 1e-9:
@@ -94,7 +110,9 @@ def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
 
 def tip_onto_the_bund(pts: Sequence[Pt], ground: WorkedGround, half_tread: float, blocks: RunOnBlocks | None = None) -> list[Pt]:
     """A path's LAST point set on the bund: pulled back out of the worked ground where it ends inside it, carried on to it
-    where it stops short and the way is clear, straight on (`run_on_target`, `turns_back`). Otherwise as it came."""
+    where it stops short and the way is clear, straight on (`run_on_target`, `turns_back`). Otherwise as it came.
+
+    Research: spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: never short of it, never in it"""
     out = [(float(p[0]), float(p[1])) for p in pts]
     if len(out) < 2:
         return out
@@ -111,6 +129,15 @@ class RunOnBlocks:
     this pass does not lay), the marsh and the wet toe, and the steadings' built ground at a footpath's clearance."""
 
     def __init__(self, s: Settlement) -> None:
+        """Read the blocks once.
+
+        Research:
+            water crossed only by plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: every
+                drawn course blocks, a crossing between fords needs a plank
+            off the wet ground - research/questions/0081-village-lanes.drawing.html: the marsh and the wet toe block
+            off the steadings - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, the built ground blocks
+            off the crop - research/questions/0081-village-lanes.drawing.html: the dry plots block
+            across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely"""
         self.s = s
         self.water = drawn_water_segs(s)
         toe = s.toe_band()
@@ -126,7 +153,14 @@ class RunOnBlocks:
 
     def clear(self, a: Pt, b: Pt, width: float, over_water: int = 0) -> bool:
         """Is the stretch a -> b clear - crossing no more than `over_water` water courses (a crossing the crossings stage
-        squares and planks), no marsh, crop, steading or farmstead fixture (`off_the_fixtures`)?"""
+        squares and planks), no marsh, crop, steading or farmstead fixture (`off_the_fixtures`)?
+
+        Research:
+            water crossed on a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: at most
+                `over_water` courses, each bridged by the crossings stage
+            off the wet ground - research/questions/0081-village-lanes.drawing.html: no marsh, no wet toe
+            off the crop - research/questions/0081-village-lanes.drawing.html: never across a dry plot
+            off the steadings - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, 4 ft footpath gap"""
         if not off_the_fixtures(self.s, [a, b], width):
             return False
         if sum(1 for c, d in self.water if segments_cross(a, b, c, d)) > over_water:
@@ -145,7 +179,9 @@ def off_the_fixtures(s: Settlement, pts: Sequence[Pt], width: float) -> bool:
     """Does a run on along `pts`, `width` wide, keep off every farmstead fixture - the lane law's own predicate
     (`law.over_a_fixture`, the privies, heaps, baths, coops, hokora and persimmon trunks)? Feature 302 (Kashikawa): a door
     path, a tree lane no settle repair may cut, was carried on to the bund past its own farm's persimmon trunk, and the web was
-    refused for a fault the run on had written."""
+    refused for a fault the run on had written.
+
+    Research: off the fixtures - research/questions/0081-village-lanes.drawing.html: no fixture stands on a lane's tread"""
     from .law import fixture_quads, over_a_fixture  # local: the law sits above the run on
 
     return over_a_fixture(list(pts), width, fixture_quads(s.M)) is None
@@ -160,7 +196,12 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
     that reaches nothing - no way, no farmhouse, no dooryard (`end_serves`) - but
     stands within `RUN_ON_REACH_FT` of the worked ground (269 B17: "runs on to reach something a reader can see"), where the
     trims would otherwise pull it back. The connector is left alone - it leaves the map. Returns how many ends moved; each
-    lane's ink is rewritten with its record."""
+    lane's ink is rewritten with its record.
+
+    Research:
+        lane end runs on to the bund - research/questions/0081-village-lanes.drawing.html,
+            research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end reaching nothing carried onto the field
+        connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map"""
     lanes = s.M.get("lanes") or []
     steadings = steading_footprints(s.M)
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
@@ -196,7 +237,11 @@ def _build_paddy_ground(M: Mapping[str, Any]) -> WorkedGround:
 
 
 def paddy_ground(s: Settlement) -> WorkedGround:
-    """The paddy itself - the fields' outlines and their drawn rice, without the dry plots: the bund a field path joins."""
+    """The paddy itself - the fields' outlines and their drawn rice, without the dry plots: the bund a field path joins.
+
+    Research:
+        the paddy's outer bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field path
+            joins the paddy, not a dry plot"""
     return memo_ground(s, "paddy", _build_paddy_ground)
 
 
@@ -205,7 +250,14 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     records as `meta.field_path`: "joined" where a lane end already stands on it; "run_on" where the lane end nearest the
     paddy is carried on to it; "branch" where a field path is drawn off the nearest point of the lanes; "none: ..." where
     every straight way to it crosses the marsh, a steading, or more than one water - the reason a reader needs, stated
-    rather than swallowed."""
+    rather than swallowed.
+
+    Research:
+        some way joins the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: joined, run on, or a
+            field path branched off the nearest lane
+        nearest lane runs on - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the end nearest the paddy
+        water between is crossed - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one water
+            course at most, bridged by the crossings stage"""
     paddy = paddy_ground(s)
     if paddy.edge is None:
         return "none: no paddy"
@@ -256,14 +308,18 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
 
 
 SQUARE_APPROACH_FT = 12.0
-"""How far before the water a step bends onto its square crossing (a map drawing convention: a few paces)."""
+"""How far before the water a step bends onto its square crossing (a map drawing convention: a few paces).
+
+Research: square approach - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 12 ft before the water"""
 
 
 def squared_step(q: Pt, to: Pt, water: Sequence[tuple[Pt, Pt]], tol_deg: float = 10.0) -> list[Pt]:
     """The step from `q` to `to` (without `q`): straight where it crosses no water or crosses it within `tol_deg` of square;
     else bent onto a square crossing - to a point `SQUARE_APPROACH_FT` before the water on its normal, then across to the
     water's far side as far out as `to` stood (Kashikawa, settlement-review 2026-09-30: a field path's short step crossed
-    the brook 45 degrees off square, too near its end for the crossings stage to square it)."""
+    the brook 45 degrees off square, too near its end for the crossings stage to square it).
+
+    Research: square crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: within 10 degrees"""
     from l7r.diagram.settlement import seg_intersect
 
     hit = next(((c, d) for c, d in water if segments_cross(q, to, c, d)), None)
@@ -288,7 +344,11 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
     lane's tread, when the step is drawn as a field path of its own from `q` (feature 291: Mizuguchi's door path met its
     street there, was carried on over it to the bund, and the junction became a crossing - the web in two pieces at the
     4 ft its one-network rule joins at). Either way the overlap matrix is asked first (feature 287 M8): False, and
-    nothing is drawn, where it refuses."""
+    nothing is drawn, where it refuses.
+
+    Research:
+        a junction stays a T - research/questions/0081-village-lanes.drawing.html: one network, so the step is its own
+            field path"""
     lanes = s.M.get("lanes") or []
     step = squared_step(q, to, drawn_water_segs(s))
     if not off_the_fixtures(s, [q, *step], float(lanes[i].get("w") or 3)):
@@ -309,6 +369,7 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
 # ft past the centerline of the water crossed that a carried end stops, on the bund: a supply canal is ~4.5 ft wide and its
 # outer bund stands 3-4 ft past the centerline (measured on Mizuguchi by the landing's round-3 review). A map drawing convention.
 OVER_THE_WATER_FT = 3.5
+"""Research: end on the far bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: 3.5 ft past the centerline"""
 
 
 def over_the_water(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> Pt:
@@ -316,7 +377,9 @@ def over_the_water(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> Pt:
     the step crosses, square to it, and `OVER_THE_WATER_FT` past its centerline, so the path ends ON the bund rather than
     on the canal's centerline where the paddy's outline runs (the round-3 review of Mizuguchi). The carried deck's
     paddy-side landing still runs onto the field - the gate's carried-way landing floor holds it; open in future-work.
-    `p` itself where the step crosses nothing."""
+    `p` itself where the step crosses nothing.
+
+    Research: carried over the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path ends on the bund"""
     from l7r.diagram.settlement import seg_closest
 
     seg = next(((c, d) for c, d in water if segments_cross(q, p, c, d)), None)
@@ -340,6 +403,7 @@ def worked_ground_of(s: Settlement, fallback: Poly) -> WorkedGround:
 
 
 _PAST_JUNCTION_FT = 40.0  # ft: a free end's run past the junction it met, this short, is a stub (a map drawing convention)
+"""Research: stub past a junction - research/questions/0081-village-lanes.drawing.html: under 40 ft is cut"""
 
 
 def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
@@ -350,7 +414,9 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
     ran 28 ft to the junction where another lane met it, then turned over the bridge - a stub reaching nothing, which the
     end rule counted as served because it stood within reach of the very lane it had just met, and which
     `trim_free_stub` misses because its corner is a single turn, not a kink (research/questions/0081-village-lanes.drawing.html: a lane ends at the
-    last house it serves)."""
+    last house it serves).
+
+    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a free end's short run cut back"""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
     ground = worked_ground_of(s, []) if s.M.get("fields") or s.M.get("dry_plots") else WorkedGround([])
@@ -369,7 +435,9 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
 
 
 def cut_stub_ends(p: list[Pt], others: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], ground: WorkedGround, touch: float = 4.0) -> list[Pt]:
-    """`p` with each free end's short run past its first junction cut off (see `cut_past_the_junction`); plain inputs."""
+    """`p` with each free end's short run past its first junction cut off (see `cut_past_the_junction`); plain inputs.
+
+    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: unless it serves a house or the bund"""
     from l7r.diagram.settlement import seg_dist
     from l7r.diagram.settlement.water_ways._helpers import HOUSE_SERVE_FT
 

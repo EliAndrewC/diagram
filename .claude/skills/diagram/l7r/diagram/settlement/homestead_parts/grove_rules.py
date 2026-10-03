@@ -17,6 +17,8 @@ VEGETATION against every structure and lane). These are the rest, pure functions
 
 Each returns the offending records, empty when the map keeps the rule - and says what it FOUND, so a caller can assert
 the rule was not vacuous (`grove_farms`).
+
+Research: map checks plumbing - NONE: each check's rule is claimed at its function
 """
 
 from __future__ import annotations
@@ -28,6 +30,7 @@ from typing import Any
 from .grove_sides import grove_faces
 
 EAST_REACH_PX = 22.0  # at the village grain; scaled by the map's `bscale` (`_east_trees`)
+"""Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a band within 22 bscale units east of a garden"""
 
 Pt = tuple[float, float]
 
@@ -57,7 +60,9 @@ def _bands_by_farm(M: Mapping[str, Any]) -> dict[Pt, list[Mapping[str, Any]]]:
 
 
 def grove_sides_missing(M: Mapping[str, Any]) -> list[tuple[Pt, list[tuple[int, int]]]]:
-    """Each farm whose drawn grove lacks a face its settlement rolled, as (farm, the faces missing)."""
+    """Each farm whose drawn grove lacks a face its settlement rolled, as (farm, the faces missing).
+
+    Research: a band on every rolled face - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: no farm on fewer sides"""
     meta = M.get("meta") or {}
     if meta.get("settlement_form", "nucleated") == "nucleated" or meta.get("grove_sides") is None:
         return []
@@ -73,7 +78,9 @@ def grove_sides_missing(M: Mapping[str, Any]) -> list[tuple[Pt, list[tuple[int, 
 
 
 def groves_off_windward(M: Mapping[str, Any]) -> list[Mapping[str, Any]]:
-    """Each deep band on a face the wind does not blow on, or not on that side of its own house."""
+    """Each deep band on a face the wind does not blow on, or not on that side of its own house.
+
+    Research: deep bands to windward - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: on a windward face, on that side of the house"""
     meta = M.get("meta") or {}
     if meta.get("grove_sides") is None:
         return []
@@ -92,7 +99,9 @@ def groves_off_windward(M: Mapping[str, Any]) -> list[Mapping[str, Any]]:
 def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str, Any]]]:
     """Each (lane index, band) where a lane's drawn tread - each segment stroked square-ended at half its width - overlaps a
     farm grove band (feature 291; the settlement-review found lanes through 19 of Kashikawa's 40 windward bands, which the
-    matrix, classing groves as VEGETATION, lets pass). A farm's way in comes by its open front, never through its grove."""
+    matrix, classing groves as VEGETATION, lets pass). A farm's way in comes by its open front, never through its grove.
+
+    Research: no lane through a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way in by the open front"""
     from .._geom import poly_gap  # the matrix's own quad gap, exact for convex quads
 
     bands = [
@@ -118,7 +127,9 @@ def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str
 
 def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any]]]:
     """Each (garden, band) where a grove band's west edge stands within the east reach of the garden's east edge and
-    overlaps its height - the garden's morning sun cut off."""
+    overlaps its height - the garden's morning sun cut off.
+
+    Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band within `EAST_REACH_PX` east of a garden across its height"""
     meta = M.get("meta") or {}
     bscale = 1.0 / float(meta.get("ftpx", 1.0)) if meta.get("toscale") else 1.0
     reach = EAST_REACH_PX * bscale
@@ -138,7 +149,9 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
 def fixtures_on_groves(M: Mapping[str, Any]) -> list[tuple[str, Mapping[str, Any]]]:
     """Each (fixture kind, band) where a farm fixture's drawn box - its recorded size turned by its `rot`, so a flank seat's
     shed lying along the wall is 12 ft across, not 24 (cohort seeds 6, 11, 16) - overlaps a grove band's box (both
-    recorded centered)."""
+    recorded centered).
+
+    Research: no fixture in a grove band - UNRESEARCHED: its drawn box, turned by its `rot`"""
     bands = [g for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
     out = []
     for f in M.get("farm_fixtures") or ():

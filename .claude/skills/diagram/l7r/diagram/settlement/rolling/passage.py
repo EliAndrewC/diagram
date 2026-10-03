@@ -27,6 +27,8 @@ the tight seat, and one that finds none is admitted where:
 The walk is NOT DRAWN as a lane: a dooryard and a yard are open trodden ground and the walk across them is the custom, not a
 way (this record's reading, a GUESS). It is kept clear of every later homestead as a corridor is (`AccessTree.bar`), and the
 ways count the household reached where its neighbor is (`hamletgen/ways/checks.py:unreached_houses`).
+
+Research: passage machinery - NONE: box geometry, the chain's bookkeeping and the walk's sampling; the units that decide carry their own claims
 """
 
 from __future__ import annotations
@@ -36,7 +38,7 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt
 from .._knobs import knob_rng
-from .access import access_corridor, doors_of, fixtures_clear, house_clear, house_gap, parts_clear, seg_box_within, site_edge_samples, site_samples_clear
+from .access import access_corridor, doors_of, fixtures_clear, house_clear, house_gap, parts_clear, reserve, seg_box_within, site_edge_samples, site_samples_clear
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -44,28 +46,38 @@ if TYPE_CHECKING:
 #: How far beyond the growth's 2 px parting a household's envelope may stand from its neighbor's land and still ADJOIN it, in
 #: feet: a GUESS - a foot of tolerance for the placer's rounding; the custom's condition is land against land, not a reach.
 PASSAGE_ADJOIN_FT = 1.0
+"""Research: land against land - GUESS research/questions/0081-village-lanes.drawing.html: a foot beyond the growth's 2 px parting"""
 #: The longest chain of passages from a household to a corridor: a GUESS citing Wigmore's Echigo entry, where plot C passes over
 #: both B's and A's to the highway - the longest chain the record reads.
 PASSAGE_CHAIN = 2
+"""Research: chain of passages - GUESS research/questions/0081-village-lanes.drawing.html: across one neighbor reached across another and no farther, the Echigo chain"""
 #: The share of a nucleated settlement's households that may be reached by passage, rolled per settlement: a GUESS - the record
 #: attests the custom, not how common it was, and a clustered village whose rear households all walked through their neighbors'
 #: yards is not what its entries describe (alleys to the rear houses, Morse; blind alleys to the houses, the Manchu survey).
 PASSAGE_SHARE_BAND = (0.0, 0.25)
+"""Research: share reached by passage - GUESS research/questions/0081-village-lanes.drawing.html: from none up to a quarter of the households"""
 #: The pitch the walk is sampled at to ask that it stays on the two households' land, in px.
 WALK_STEP_PX = 4.0
+"""Research: walk sampling pitch - NONE: 4 px"""
 
 Box = tuple[float, float, float, float]
 
 
 def passage_share(seed: int) -> float:
     """The settlement's share of households that may be reached by passage, rolled from the map's seed within
-    `PASSAGE_SHARE_BAND` (the knob doctrine: it depends on the seed and the knob's name, never on draw order)."""
+    `PASSAGE_SHARE_BAND` (the knob doctrine: it depends on the seed and the knob's name, never on draw order).
+
+    Research: share reached by passage - GUESS research/questions/0081-village-lanes.drawing.html: rolled per settlement within the band
+    """
     lo, hi = PASSAGE_SHARE_BAND
     return round(lo + knob_rng(seed, "passage_share").random() * (hi - lo), 3)
 
 
 def passage_budget(share: float, households: int) -> int:
-    """How many of a settlement's `households` may be reached by passage at its rolled `share`."""
+    """How many of a settlement's `households` may be reached by passage at its rolled `share`.
+
+    Research: share reached by passage - GUESS research/questions/0081-village-lanes.drawing.html: rounded down to whole households
+    """
     return int(math.floor(share * households))
 
 
@@ -79,7 +91,10 @@ def depth_of(rec: Any) -> int | None:
 
 def crossable(rec: Any) -> bool:
     """May a passage cross to this seated household - reached within the chain (`depth_of` under `PASSAGE_CHAIN`), with a
-    threshing yard to arrive on?"""
+    threshing yard to arrive on?
+
+    Research: chain of passages - GUESS research/questions/0081-village-lanes.drawing.html: a neighbor reached within the chain, with a threshing yard to arrive on
+    """
     depth = depth_of(rec)
     return depth is not None and depth < PASSAGE_CHAIN and ((rec.get("geom") or {}).get("boxes") or {}).get("yard") is not None
 
@@ -105,12 +120,18 @@ def apart(a: Any, b: Any) -> float:
 
 
 def adjoins(own: Any, land: Any, tol: float) -> bool:
-    """Does the envelope `own` stand against the neighbor's `land` - no farther from it than `tol`?"""
+    """Does the envelope `own` stand against the neighbor's `land` - no farther from it than `tol`?
+
+    Research: land against land - research/questions/0081-village-lanes.html: the household's land adjoins the neighbor's it passes over
+    """
     return apart(own, land) <= tol
 
 
 def on_their_land(a: Pt, b: Pt, lands: Any, step: float) -> bool:
-    """Does every point of the walk a-b, sampled every `step`, lie on one of the `lands` (boxes `(cx, cy, w, h)`)?"""
+    """Does every point of the walk a-b, sampled every `step`, lie on one of the `lands` (boxes `(cx, cy, w, h)`)?
+
+    Research: walk on the two holdings - research/questions/0081-village-lanes.drawing.html: the walk keeps to the two households' land
+    """
     n = max(1, int(math.ceil(math.dist(a, b) / step)))
     for k in range(n + 1):
         t = k / n
@@ -123,7 +144,10 @@ def on_their_land(a: Pt, b: Pt, lands: Any, step: float) -> bool:
 def walk_clear(s: Settlement, door: Pt, foot: Pt, geom: Any, rec: Any, hgap: float, half: float, wood: Any) -> bool:
     """Is the walk `door`-`foot` clear (`passage_of`)? Of the household's own house, beds and fixtures by the corridor's own
     leg tests; of the neighbor's house, beds, sheds and fixtures by the same (its yard is the ground the walk arrives on); of
-    every other placed homestead whole; of the static ground the site refuses; of the reserved wood seats."""
+    every other placed homestead whole; of the static ground the site refuses; of the reserved wood seats.
+
+    Research: walk crosses nothing standing - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture of either household; every other homestead, the refused ground and the wood seats kept clear as a corridor keeps them
+    """
     if not (house_clear(door, foot, geom, hgap) and fixtures_clear(s, door, foot, geom) and parts_clear(s, door, foot, geom)):
         return False
     nb = rec.get("geom") or {}
@@ -147,7 +171,10 @@ def walk_of(s: Settlement, geom: Any, rec: Any, door: Pt, yard: Any, lands: Any,
     """The walk from `door` to the neighbor's `yard`, routed on the map's own router (`route.search`, `route.taut`) over the
     cells on the two households' `lands` that clear both households' houses, beds, sheds and fixtures (`route.own_parts`), every
     other placed homestead, the site's taken ground and the reserved wood seats, and pulled taut through `walk_clear` and
-    `on_their_land`; its last point on the yard's edge. None where no walk is found."""
+    `on_their_land`; its last point on the yard's edge. None where no walk is found.
+
+    Research: walk to the neighbor's threshing yard - research/questions/0081-village-lanes.drawing.html: from the household's dooryard to the neighbor's yard, on the two lands, round what stands
+    """
     from .access import doubles_back
     from .route import ROUTE_LEGS, ROUTE_STEP_PX, ROUTE_WEIGHT, own_parts, search, taut
 
@@ -204,7 +231,10 @@ def landlocked(s: Settlement, layouts: Any) -> bool:
     (`passage_of`) and none with a corridor of its own (`access.access_corridor`)? The household's LAND, not one layout: a
     household lays its beds where its way can run. Judged a layout at a time, 10 of the 13 passages at 15 households on 13
     settlements, and 6 of the 20 at 40 on four, were households another layout at the seat would have given a way of its own
-    (research R8). The walks are asked first, the cheaper and the rarer."""
+    (research R8). The walks are asked first, the cheaper and the rarer.
+
+    Research: no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a corridor under none
+    """
     lays = [g for g in layouts if g is not None and not g.get("unlaid")]
     if not any(passage_of(s, g) is not None for g in lays):
         return False
@@ -215,7 +245,10 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
     """The passage a household laid as `geom` at a TIGHT seat (`s._tight_of`: the neighbor's record, its land as the growth
     parts it, the household's own allotted reach, the parting) is reached by, or None (the module's account):
     `{"walk", "of", "depth"}`, the walk from its first dooryard door that has one (`walk_of`). None off a tight seat, past the
-    settlement's share (`s._passage_left`), or where the chain would run past `PASSAGE_CHAIN`."""
+    settlement's share (`s._passage_left`), or where the chain would run past `PASSAGE_CHAIN`.
+
+    Research: passage across a neighbor's yard - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household against a reached neighbor's land, within the settlement's share and the chain, with a walk to the neighbor's threshing yard
+    """
     tight = getattr(s, "_tight_of", None)
     tree = getattr(s, "_access", None)
     if tight is None or tree is None or getattr(s, "_passage_left", 0) <= 0:
@@ -244,3 +277,24 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
             break
     walks[id(geom)] = got
     return got
+
+
+def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
+    """Reserve the way the household seated at `at` as `rec` was admitted with: its corridor (`access.reserve`, feature 287 plan
+    M3), or its walk across a neighbor's yard (`passage_of`) - kept clear of every later homestead as a corridor is
+    (`AccessTree.bar`), counted against the settlement's share, and recorded on `rec`: whom it is reached across, the chain's
+    depth and the walk.
+
+    Research: walk not drawn as a lane - GUESS research/questions/0081-village-lanes.drawing.html: the walk is recorded and kept clear, never drawn
+    """
+    if geom.get("access") is not None:
+        reserve(s, geom["access"], at)
+    passage = geom.get("passage")
+    if passage is None:
+        return
+    for a, b in zip(passage["walk"], passage["walk"][1:], strict=False):
+        s._access.bar(a, b)
+    s._passage_left = getattr(s, "_passage_left", 0) - 1  # type: ignore[attr-defined]
+    rec["reached_across"] = [round(passage["of"][0], 1), round(passage["of"][1], 1)]
+    rec["passage_depth"] = passage["depth"]
+    rec["passage"] = [[round(q[0], 1), round(q[1], 1)] for q in passage["walk"]]

@@ -1,6 +1,8 @@
 """Walled compounds shown as a glyph on a settlement map: the samurai manor and the merchant estate.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -62,7 +64,20 @@ class CompoundsMixin:
         `ink` recolors the walls and gate (recorded in the manifest): feature 020 uses it for the
         Imperial Magistrate's compound, which is FOREIGN SOVEREIGN ground and must not read as
         another domain office - the manor form, in its own ink, the way state violet marks the
-        ministries (research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html)."""
+        ministries (research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html).
+
+        Research:
+            wall, gate and blank court - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: the interior left to the building plan
+            box glyph - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: always a rectangle, a simplification of the plan
+            gate faces what it fronts - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: `gate_dir` and `rot` from the caller
+            wall thickness - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft, floored at 2 px
+            gate width - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: 12 ft default
+            gate posts - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft squares, floored at 3 px
+            south gate fallback - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: south when the caller names no side
+            foreign compound ink - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html: `ink` recolors the walls
+            wall and court colors - CONVENTION
+            building margin around the walls - UNRESEARCHED: 36 ft at the map's grain, floored at 26 px
+            captions - CONVENTION"""
         hw, hh = w / 2, h / 2
         wall = ink or '#2D2A24'
         gg = max(self.px(gate_ft) / 2, 2.0)  # gate HALF-gap: real feet, floored so the opening stays visible
@@ -172,7 +187,13 @@ class CompoundsMixin:
         `marg` px of daylight. A fire tower ENCLOSED inside the court is refused too (the watch
         reaches its tower from public ground). Mirrors the merchant_estate_wall_clear_of_* gate
         geometry (which enforces 1.5px; the engine demands a little more so placement never sits
-        at the check's edge)."""
+        at the check's edge).
+
+        Research:
+            compound wall never in water - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: clear of canal, dock, moat, river and pond
+            compound wall clear of streets - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: may line a street, never stand in its bed
+            fire tower not walled in - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a tower inside or on the wall refuses the seat
+            daylight margin - NONE: 2.5 px over the check's 1.5"""
         ex0, ey0, ex1, ey1 = x - w / 2, y - h / 2, x + w / 2, y + h / 2
         if any(abs(t["x"] - x) < w / 2 and abs(t["y"] - y) < h / 2 for t in self.M.get("fire_towers", []) if "w" in t):
             return False  # tower walled inside the private court
@@ -217,7 +238,17 @@ class CompoundsMixin:
         (the municipal watch cannot be embedded in a private wall). Draw those features BEFORE
         the estate; if the requested spot violates, a small candidate fan slides the estate to
         the nearest clear seat, and if none exists within ~36px this raises rather than drawing
-        a wall the gate will reject."""
+        a wall the gate will reject.
+
+        Research:
+            court size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: ~230 x 170 ft at the building grain
+            light wall - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: ~2 ft, floored at 1.6 px
+            cart gate - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: ~10 ft, floored at 3.5 px
+            one large house inside - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a merchant_large dwelling inside the court
+            house at the court's center - UNRESEARCHED: seated 2 px above the court's center
+            building margin round the court - UNRESEARCHED: 18 ft at the building grain
+            slide fan - NONE: nearest clear seat within 48 px
+            court and wall colors - CONVENTION"""
         if w is None:
             w, h = 186 * self.bscale, 138 * self.bscale  # ~230x170 ft very-rich urban compound, scaled with the building grain
         # ring-ordered fan: near seats first, then wider; includes half-steps so the estate can
@@ -264,7 +295,11 @@ class CompoundsMixin:
         so a stale hand count can never ship again (the pre-roll state: both cities hand-placed
         exactly 1, a copied pattern with no recorded reasoning). The roll consumes NO main-stream
         RNG (dedicated Random seeded on the map seed), so a map that rolls its old count stays
-        byte-identical."""
+        byte-identical.
+
+        Research:
+            walled compound count - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one, two or three at 30/40/30
+            capital compound count - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html: 4-8 (MERCHANT_ESTATE_WEIGHTS['capital'])"""
         scale = str(self.M.get("meta", {}).get("scale", "village"))
         n = int(count) if count is not None else roll_merchant_estate_count(scale, random.Random(self.seed * 1201 + 89))
         if n > len(seats):

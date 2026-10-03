@@ -1,4 +1,7 @@
-"""The city crop (feature 145: moved out of core.py, which every map executes)."""
+"""The city crop (feature 145: moved out of core.py, which every map executes).
+
+Research: map frame - CONVENTION: how much of the city and its country the sheet shows
+"""
 
 from typing import TYPE_CHECKING
 

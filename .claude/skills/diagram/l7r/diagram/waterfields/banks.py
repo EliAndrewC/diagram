@@ -1,4 +1,7 @@
-"""Layer-1 bank clearance: how plots hem to supply canals and delivery ditches (clearance, toe, overhang), plus channel-joint rounding."""
+"""Layer-1 bank clearance: how plots hem to supply canals and delivery ditches (clearance, toe, overhang), plus channel-joint rounding.
+
+Research: bank geometry - NONE: arc lengths, nearest segments, the stroke index, ring solidity and dedup, rounding slack
+"""
 
 import math
 from collections.abc import Sequence
@@ -56,7 +59,10 @@ def taper_pieces(pts: Poly, w0: float, w1: float) -> list[tuple[Poly, float]]:
     every scripted map, so it wants its own pass with a `settlement-review` per map. The alternative
     fix - densifying the polylines before stroking - would also close the collector's residual 1.64
     px step notch at (1521.7, 1540.7), which the per-segment split did not remove because that
-    stroke has only 10 vertices over 1240 px."""
+    stroke has only 10 vertices over 1240 px.
+
+    Research: drawn taper - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: each segment inked at the taper law's width at its arc midpoint
+    """
     if len(pts) < 2:
         return []
     cum = polyline_cum(pts)
@@ -80,7 +86,10 @@ def drain_bank_clearance(q: Pt, dpts: Poly, dv: Pt, w0: float, w1: float, cum: l
     ONE predicate, shared by the generator (`hem_to_bank`) and by the gate
     (`paddy_bunds_clear_the_collector`), because a placer and a checker that classify the same
     ground from two separate formulas drift apart - the trap the diagram CLAUDE.md records under
-    'Placement and its check must read the SAME manifest source'."""
+    'Placement and its check must read the SAME manifest source'.
+
+    Research: bank of the collector - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half the drain's drawn width there plus half a bund
+    """
     off, cx, cy, arc, past, nrm = 1e9, 0.0, 0.0, 0.0, False, (0.0, 0.0)
     for i in range(len(dpts) - 1):
         ax, ay = dpts[i]
@@ -120,7 +129,10 @@ def supply_bank_clearance(q: Pt, pts: Poly, w0: float, w1: float, cum: list[floa
     ONE predicate, shared by the placer (`_carve`'s `clear_supply`) and by the gate
     (`paddy_bunds_clear_the_supply_channels`), for the same reason `drain_bank_clearance` is: a
     placer and a checker that classify the same ground from two formulas drift into disagreeing
-    about which side of a ditch a point is on."""
+    about which side of a ditch a point is on.
+
+    Research: bund runs along the supply channel - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: held off perpendicular by the stroke's local half-width
+    """
     return _stroke_verdict(q, pts, w0, w1, cum, _nearest_segment(q, pts, cum, range(len(pts) - 1)))
 
 
@@ -249,7 +261,12 @@ def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:
     head across ~350 ft of bare floor to the outer thread's tail). ONE predicate, shared by
     `build_comb`'s envelope trim and by the gate (`comb_floor_ends_at_the_collector`), for the
     same reason `supply_bank_clearance` is: a trimmer and a checker that classify the same ground
-    from two formulas drift into disagreeing about where the command area ends."""
+    from two formulas drift into disagreeing about where the command area ends.
+
+    Research:
+        command area ends at the collector - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the drain on the field's lowest line, ground down-fall of it unplanted
+        past the drain's ends - UNRESEARCHED: the drain line extended level beyond both ends, ground down-fall of it unplanted
+    """
     F = _Frame(down_deg)
     u0 = F.to_uf(*dpts[0])[0]
     u1 = F.to_uf(*dpts[-1])[0]
@@ -287,7 +304,12 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     deliberate trade: it enforces one physical invariant (a basin's wall cannot stand in the ditch)
     on geometry those engines have finished with, in the same spirit as the comb's own terminal
     thin-plot drop. The move is along the FALL, so a lifted vertex slides up its own column and the
-    parcel keeps its shape."""
+    parcel keeps its shape.
+
+    Research:
+        no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a vertex inside the collector's bank lifted up the fall onto it
+        drain with the fall left alone - UNRESEARCHED: a collector within ~12 deg of the fall (lean under 0.2) leaves vertices in its water unmoved
+    """
     dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
     cum = polyline_cum(dpts)
     out: Poly = []
@@ -305,7 +327,12 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
 def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: float, w1: float) -> list[Poly]:
     """`hem_to_bank` for every ring at once (feature 297, FR-007): every vertex of every ring asked of the collector in ONE array
     computation - a comb's plots are a few corners each, and asked a ring at a time the array's fixed cost outweighed the
-    loop it replaced (Sawada's field, 1.2 s -> 2.1 s). Each ring comes back as `hem_to_bank` would return it."""
+    loop it replaced (Sawada's field, 1.2 s -> 2.1 s). Each ring comes back as `hem_to_bank` would return it.
+
+    Research:
+        no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: as `hem_to_bank`, for many rings
+        drain with the fall left alone - UNRESEARCHED: a collector within ~12 deg of the fall (lean under 0.2) leaves vertices in its water unmoved
+    """
     flat = [q for ring in rings for q in ring]
     if not flat or len(dpts) < 2:
         return [list(r) for r in rings]
@@ -328,7 +355,10 @@ def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: fl
 
 def drain_bank_clearance_many(qs: Poly, dpts: Poly, dv: Pt, w0: float, w1: float, cum: list[float]) -> tuple[list[float], list[float], list[float], list[bool]]:
     """`drain_bank_clearance` for many points against one collector, as numpy arrays (feature 297): the same nearest segment
-    (the first of equals, as the loop's strict `<` kept), the same signed gap, need, lean and past, per point, as lists."""
+    (the first of equals, as the loop's strict `<` kept), the same signed gap, need, lean and past, per point, as lists.
+
+    Research: bank of the collector - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: as `drain_bank_clearance`, for many points
+    """
     import numpy as np
 
     q = np.asarray([(float(p[0]), float(p[1])) for p in qs])
@@ -370,6 +400,7 @@ def drain_bank_clearance_many(qs: Poly, dpts: Poly, dv: Pt, w0: float, w1: float
 # paddy_fan_gapless included, so the fans still read as covered - but a city fan is the place to LOOK
 # if this is ever retuned, and the gate is not the eye.
 _TOE_MIN_THICKNESS = 0.16
+"""Research: least thickness - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 2A/P under 0.16 plot widths is too thin to be a basin"""
 # ...and a SECOND, independent way to be unbundable, because thickness alone misses it. A wedge
 # that tapers to a point can carry a respectable inradius while its last yards are unworkable: at
 # 7.5 deg a plot is 5 ft wide 40 ft back from its apex and 2.6 ft at 20 ft, and an aze is ~1.5 ft
@@ -380,6 +411,7 @@ _TOE_MIN_THICKNESS = 0.16
 # threshold (pool-wide, seam wedges run 7-23 deg and honest hem strips 45+), and the gate
 # `paddy_plots_are_workable_basins` fires at 15 - placer stricter than gate, as everywhere else.
 _TOE_MIN_APEX = 25.0
+"""Research: no point sharper than 25 deg - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the placer refuses a basin's apex under 25 deg"""
 # THE WELD GETS ITS OWN, TIGHTER MARGIN, because refusing is not free there. The carve and `_plant`
 # can refuse a needle at a generous 25 deg and lose nothing: the ground simply returns to the bare
 # pocket for `close_seams` to place another way. `_absorb` is the LAST resort - refuse there and the
@@ -390,6 +422,7 @@ _TOE_MIN_APEX = 25.0
 # generous margin was buying nothing and costing a real defect. This sits just above the gate's 15
 # with enough room that rounding cannot slip a needle through.
 _WELD_MIN_APEX = 18.0
+"""Research: weld apex - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a weld refused under 18 deg, so a welded basin may keep an 18-25 deg point"""
 # THE TINT DEMOTION ASKS A DIFFERENT QUESTION, so it measures a different ring - not a different
 # threshold. Two settlement-reviews shaped this, and the second corrected the first.
 #
@@ -413,12 +446,15 @@ _WELD_MIN_APEX = 18.0
 # 5 ft is the narrowest end that can hold water at all: two aze at AZE_FT 1.5 each is 3 ft of wall,
 # leaving ~2 ft of standing water between them. Below that a basin has no end, it has a point.
 _TINT_MIN_APEX = 25.0
+"""Research: pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: an apex under 25 deg loses the tint"""
 _TINT_END_FT = 5.0
+"""Research: an end that holds water - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: an end under 5 ft is read as a point"""
 # The GATE's own line, kept here so the placer margins above are all expressed against ONE number
 # rather than each carrying a copy of it. `paddy_plots_are_workable_basins` fires below this; every
 # constant above it is a margin over it, and the invariant the calibration rests on is that all of
 # them are strictly greater.
 _GATE_MIN_APEX = 15.0
+"""Research: needle at the rule - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the rule fires under 15 deg"""
 # ...and a THIRD way to be unworthy of a bund of its own, which is neither thinness nor a point:
 # being TOO SMALL RELATIVE TO THE FAN IT SITS IN. GM question 2026-08-17, reading a hamlet sheet:
 # "most of the rice paddy fields are rectangular, but then there are a few very small triangles ...
@@ -498,6 +534,7 @@ _GATE_MIN_APEX = 15.0
 # grounded true-scale on Buck's ~1 mu figure and are not cascade basins at all. Only the valley-floor
 # fan carries this floor, because only there is the aze a pure, unshared cost.
 _TOE_MIN_AREA = 0.25
+"""Research: a quarter of the design cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no comb basin under 0.25 of its cell"""
 # THE GATE'S OWN LINE, and it is NOT 0.6 of the placer's the way the apex pair is 15 of 25. It
 # cannot be: the thickness rule's implicit floor sits at ~0.16, so a gate at 0.15 would be a check
 # that can never fire - the failure mode this package's own doctrine names first ("a check that
@@ -508,6 +545,7 @@ _TOE_MIN_AREA = 0.25
 # regression that reopens the band. On the pre-floor manifests it flags 2 basins on Inashiro, 1 on
 # Kashikawa, 4 on Mizuguchi and 6 on Sawada; two of those are frozen in pool/regressions/.
 _GATE_MIN_AREA = 0.20
+"""Research: area floor at the rule - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the rule fires under 0.20 of the cell"""
 # A WELD MUST NOT MAKE A LUMP OUT OF THE BASIN THAT TAKES THE SCRAP, which is the size rule's own
 # second-order defect and was found by settlement-review on the first pass (Sawada and Mizuguchi,
 # 2026-08-17). `_absorb` ranks candidate hosts by SHARED BUND LENGTH, which is the right first
@@ -528,6 +566,7 @@ _GATE_MIN_AREA = 0.20
 # outright trades a lump for a doubled bund, which is worse. A lumpy weld is remembered and the
 # next-best host tried; the best of the lumpy candidates is taken only if no host is clean.
 _WELD_MIN_SOLIDITY = 0.85
+"""Research: weld lump - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a scrap goes to the basin it shares the most bund with unless that leaves the host under 0.85 solidity and a clean host exists"""
 # ...and the same measure guards the TINT, for a defect the apex guards likewise could not see
 # (settlement-review, Sawada 2026-08-17). Absorbing a fragment into the fan's ONE flooded plot grew
 # it a lobe: 94 x 24 ft became 94 x 38 ft at solidity 0.731, and at fit zoom it reads as an
@@ -537,6 +576,7 @@ _WELD_MIN_SOLIDITY = 0.85
 # a blue plot has to READ as a leveled basin; the same 0.85 demotes it to rice green, and the check
 # runs after the absorb pass because that is what reshaped it.
 _TINT_MIN_SOLIDITY = 0.85
+"""Research: lobed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: solidity under 0.85 loses the tint"""
 # ...and a FILL clause, for the one shape both the apex and the hull measures pass: the TRIANGLE (settlement-review, feature
 # 230 pass 10). A triangle's solidity is 1.0, and a wedge whose narrow end is capped by a short edge has no sharp vertex, so
 # Sawada shipped a notched triangle and Kashikawa a 67 x 24 ft wedge in blue, each reading as a little triangular pond - the
@@ -544,6 +584,7 @@ _TINT_MIN_SOLIDITY = 0.85
 # rectangle they fill: measured over all 2,653 basins on the four brook maps, the median is 0.93 and the first quartile
 # 0.85, while those two plots fill 0.55 and about 0.6. 0.80 leaves four in five basins free to take the tint.
 _TINT_MIN_RECTANGULARITY = 0.80
+"""Research: triangle left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: filling under 0.80 of its least rectangle loses the tint"""
 # AND A BLUE PLOT MUST BE SHAPED LIKE A BASIN, NOT LIKE A CHANNEL (settlement-review, Inashiro
 # 2026-08-19). The three tests above all ask about a POINT - the apex, the truncated end, the lobe -
 # and a long parallel-sided WEDGE passes every one of them: Inashiro shipped two tinted plots at
@@ -555,11 +596,13 @@ _TINT_MIN_RECTANGULARITY = 0.80
 # anything a leveled basin runs at (the median plot on a hamlet fan is ~37 x 38 ft, aspect ~1, and
 # the whole map's worst is 7.2), so it demotes the two wedges and touches no basin that reads as one.
 _TINT_MAX_ASPECT = 4.0
+"""Research: channel-shaped plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: aspect over 4 loses the tint"""
 # A BASIN FAR LARGER THAN ITS NEIGHBORS DOES NOT READ AS A BASIN (feature 152 T10). 2.0x the map's own
 # MEDIAN plot: Sawada's offender was 4.9x and the largest of 776, and the reviewer's own suggested bar was
 # "2x would demote this one and leave every honest wet row". Relative to the map rather than absolute,
 # because a basin's size is set by the fan's design cell and that differs per settlement.
 _TINT_MAX_AREA_RATIO = 2.0
+"""Research: outsized plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: over twice the median plot loses the tint"""
 
 
 # A CHEVRON IS POINTED **AND** NOTCHED - neither measure alone can see one, and that is the whole
@@ -585,9 +628,13 @@ _TINT_MAX_AREA_RATIO = 2.0
 #
 # CAUGHT AT 40/0.90, GATED AT 35/0.85 - placer stricter than gate, as everywhere else here.
 _CHEVRON_MIN_APEX = 40.0
+"""Research: arrowhead point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: sharper than 40 deg"""
 _CHEVRON_MIN_SOLIDITY = 0.90
+"""Research: arrowhead notch - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: solidity under 0.90"""
 _GATE_CHEVRON_APEX = 35.0
+"""Research: arrowhead point at the rule - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 35 deg"""
 _GATE_CHEVRON_SOLIDITY = 0.85
+"""Research: arrowhead notch at the rule - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.85"""
 
 
 def ring_solidity(poly: Poly) -> float:
@@ -622,7 +669,10 @@ def ring_solidity(poly: Poly) -> float:
 
 def is_chevron(poly: Poly, min_apex: float = _CHEVRON_MIN_APEX, min_solidity: float = _CHEVRON_MIN_SOLIDITY) -> bool:
     """Does this ring read as an arrowhead - pointed AND notched? See `_CHEVRON_MIN_APEX` for why
-    the conjunction is the rule and why neither half alone can be."""
+    the conjunction is the rule and why neither half alone can be.
+
+    Research: arrowhead - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: pointed and notched together
+    """
     ring = dedup_ring([(float(p[0]), float(p[1])) for p in poly], 1.0)
     return len(ring) >= 3 and pointed_ring(ring, min_apex) and ring_solidity(ring) < min_solidity
 
@@ -650,7 +700,10 @@ def hem_on_paddy(quad: Poly, paddy_outline: Poly) -> bool:
     Tolerance is built in by testing the quad SHRUNK 15% toward its centroid (~2-4px at real hem
     plot sizes - the same spirit as no_structure_on_paddy's 3px penetration rule): a hem plot
     legitimately KISSES its own fan's envelope across the berm, and two fans' margins may abut, so
-    only real interpenetration counts."""
+    only real interpenetration counts.
+
+    Research: no dry plot on rice - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a hem plot lapping onto a fan's paddy is dropped
+    """
     cx = sum(p[0] for p in quad) / len(quad)
     cy = sum(p[1] for p in quad) / len(quad)
     sq = [(cx + (px - cx) * 0.85, cy + (py - cy) * 0.85) for px, py in quad]
@@ -675,7 +728,10 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
 
     Only a TRUE continuation is rounded: exactly two channels meeting, one ending and one starting.
     A node where a branch ALSO leaves is a junction, not a bend - an offtake is a notch cut in the
-    bank, and the main running past it is not turning there anyway."""
+    bank, and the main running past it is not turning there anyway.
+
+    Research: swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: about 2.5 channel widths, capped at 35% of each run, a turn under 8 deg or a junction left sharp
+    """
     ends: dict[tuple[float, float], list[tuple[int, int]]] = {}
     for i, c in enumerate(channels):
         if len(c["pts"]) >= 2:
@@ -725,7 +781,10 @@ def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> boo
     which is what "reads as a point" means, and is invariant to how deep the truncation went.
 
     `arm` is 4x the end width: a staircase's neighbors are themselves short, so requiring the arms
-    to be several times the end separates a capped taper from a chamfered corner without tuning."""
+    to be several times the end separates a capped taper from a chamfered corner without tuning.
+
+    Research: truncated point - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a short end capping two diverging arms is read as the point it would have had
+    """
     n = len(poly)
     if n < 4:
         return False
@@ -776,9 +835,13 @@ def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> boo
 # the four maps where the gate reports 7 - each refused by a guard
 # protecting another rule (see `_unjog`), and `future-work/` carries them.
 _JOG_OFF_FT = 2.0
+"""Research: step offset - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a sideways hop of 2 ft or more"""
 _JOG_RUN_FT = 6.0
+"""Research: step runs - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: runs of 6 ft or more either side of the hop"""
 _JOG_LINK_FT = 30.0
+"""Research: step or L-shape - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a hop over 30 ft is a limb of the plot, not a step"""
 _JOG_PARALLEL_DEG = 20.0
+"""Research: the run resumes - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the two runs within 20 deg of one heading"""
 # AND THE HOP MUST BE ACROSS THE WALL, NOT ALONG IT. Without this the test fires on a gently CURVING
 # bund: sample a curve into ~30 px segments and every three of them read as a run, a link and a run
 # resuming near-parallel, with a perpendicular offset of a few feet purely from the bend. Measured
@@ -789,10 +852,14 @@ _JOG_PARALLEL_DEG = 20.0
 # needing to be tuned. (The two turns are opposite in sign by construction once the runs are
 # required to be near-parallel, so only the magnitude is tested.)
 _JOG_CORNER_DEG = 55.0
+"""Research: a step turns hard - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a 55 deg turn at each end of the hop makes a step; a gentler dogleg is a wall that bends"""
 
 
 def jog_steps(ring: Poly, g: float) -> int:
-    """How many times `ring` steps sideways and carries on parallel to itself."""
+    """How many times `ring` steps sideways and carries on parallel to itself.
+
+    Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the count of jog vertices
+    """
     return len(jog_vertices(ring, g))
 
 
@@ -805,7 +872,10 @@ def jog_vertices(ring: Poly, g: float) -> list[tuple[Pt, Pt]]:
     HEADINGS ARE COMPARED OVER THE FULL CIRCLE, not modulo 180 deg. Modulo 180 the test also matches
     a plain thin rectangle (long side, short end, long side coming back), so every narrow basin the
     fabric legitimately carries would report a step on its own end wall - measured 2026-08-18 on the
-    shipped Inashiro, 78 hits against 28 for the directed test, the extra 50 all end walls."""
+    shipped Inashiro, 78 hits against 28 for the directed test, the extra 50 all end walls.
+
+    Research: a bund never steps sideways - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a run, a short hop across the wall, the run resuming the same way
+    """
     ring = dedup_ring(ring, 0.5)
     n = len(ring)
     if n < 5:
@@ -849,7 +919,10 @@ def pointed_ring(poly: Poly, min_deg: float = 25.0) -> bool:
     the carve demotes the tint at 25 deg (generous - a green sliver among green slivers costs
     nothing), the gate (`flooded_plots_read_as_basins`) fires at 15 deg (only the unmistakable
     needles), so a borderline plot the carve demotes cannot false-fire the check - the same
-    placer-stricter-than-gate calibration as the supply-bank margins."""
+    placer-stricter-than-gate calibration as the supply-bank margins.
+
+    Research: tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an interior angle sharper than `min_deg`
+    """
     n = len(poly)
     for i in range(n):
         a, v, c = poly[i - 1], poly[i], poly[(i + 1) % n]

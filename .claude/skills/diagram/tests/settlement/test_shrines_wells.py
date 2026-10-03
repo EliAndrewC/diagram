@@ -38,6 +38,13 @@ def test_torii_even_runs():
     assert len(s.M["torii"]) == 4
 
 
+def test_torii_even_takes_a_single_arch():
+    # the commonest torii roll is one arch; `count - 1` divided by zero (found by the feature-316 audit)
+    s = _town()
+    s.torii_even([(0, 0), (100, 0), (100, 100)], 1)
+    assert len(s.M["torii"]) == 1
+
+
 def test_tree_stand_canopy_is_deferred_and_never_drawn_over_a_building_or_well():
     # the canopy is QUEUED at forest_patch() time and drawn at flush, so it is filtered against the
     # COMPLETE map: a building and a well placed AFTER the wood still end up with clear roofs.

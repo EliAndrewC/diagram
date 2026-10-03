@@ -18,6 +18,8 @@ per-call bounding-box prefilter measured. Measuring a superset with the same pre
 the answer; the early exit (`any` instead of `min(...) < m`) cannot either. Feature 138's
 byte-identity sweep over every gate roll and every live pool map is the proof, and
 `tests/hamletgen/test_clearance.py` pins the superset property on random fabric.
+
+Research: fabric index - NONE: spatial indexing and memo plumbing, byte-identical verdicts
 """
 
 from __future__ import annotations

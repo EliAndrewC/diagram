@@ -1,6 +1,8 @@
 """Unbuilt GROUND SURFACES that reserve placement rather than structures that occupy it.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: ground surface glyphs and captions - CONVENTION
 """
 
 import random
@@ -21,6 +23,7 @@ if TYPE_CHECKING:
 
 #: the trunk road's default real width, feet - 5 ken (the 1604 Tokaido standard) drawn at 30 (feature 144)
 ROAD_W_FT = 30.0
+"""Research: trunk road width - research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html: 30 ft, the Tokaido's 5 ken"""
 
 
 class GroundMixin:
@@ -35,7 +38,13 @@ class GroundMixin:
         label_xy overrides the label anchor (default: the polyline midpoint). For a city the
         midpoint is the city CENTER, but the road label names the *Imperial* road, which is an
         Imperial responsibility only OUTSIDE the walls - inside, the same roadway is a city
-        street the city maintains - so a city must pass label_xy a point beyond the gates."""
+        street the city maintains - so a city must pass label_xy a point beyond the gates.
+
+        Research:
+            road width - research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html: ROAD_W_FT by default
+            building setback from the road - UNRESEARCHED: half-width plus 32 ft at the map's grain, floored at 17 px
+            roadbed glyph - CONVENTION: bordered bed with a dashed center
+            caption - CONVENTION: deferred to the label phase"""
         if width is None:
             width = self.lw(ROAD_W_FT)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
@@ -63,7 +72,12 @@ class GroundMixin:
 
     def pasture(self: Settlement, shape: Any, label: Any = None, amp: float = 40, label_xy: Any = None) -> None:  # type: ignore[misc]
         """Hayfield / grazing land (pastureland, around the barns) - open grass with
-        the odd hay bale, distinct from the cultivated paddy fields. Blocks placement."""
+        the odd hay bale, distinct from the cultivated paddy fields. Blocks placement.
+
+        Research:
+            hay bales in the grass - UNRESEARCHED: about one mark in ten a bale
+            grass and bale glyphs - CONVENTION
+            organic outline - CONVENTION: the shape is the caller's"""
         # SCOPED (2026-08-08): the pasture OUTLINE is stream-drawn (organic_bbox), and the fill
         # block below re-seeds only itself - so an upstream change reshaped the paddock, which
         # moved which sample points land inside it, which changed the draw sequence for

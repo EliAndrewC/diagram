@@ -12,6 +12,8 @@ things happen at an emit site:
   a fill-only copy and a stroke-only copy so the two highlight apart (spec US3).
 
 `None` is "nobody ruled on this" - what the FR-009 census reports.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

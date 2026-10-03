@@ -20,6 +20,8 @@ A MAP DRAWING CONVENTION (spec Decisions; plan D3): the routing is how a seat's 
 unchanged lane law. The paths it draws bend between the homesteads, as the record's accretion form of village lanes has them -
 each household cutting its own way (research/contents.json#ways). Only a tree that asks for it routes (`AccessTree.routed`,
 the nucleated seating's): the other forms keep their straight corridors (spec, the round-1 rulings).
+
+Research: grid search plumbing - NONE
 """
 
 from __future__ import annotations
@@ -42,11 +44,13 @@ ROUTE_STEP_PX = 12.0
 #: How far from its door a route is sought, in px: a guess, the reach of a neighborhood (about three homesteads); a door with
 #: no tree within it has no routed path, and the seat is refused as before.
 ROUTE_REACH_PX = 320.0
+"""Research: how far a routed path is sought - GUESS: 320 px from the door, about three homesteads; a door with no tree within it is refused"""
 #: The search's weight on its aim (weighted A*): 1.5 finds a near-shortest route in a fraction of the plain search's grid
 #: points; the route is pulled taut after, so its length beyond the shortest costs nothing drawn.
 ROUTE_WEIGHT = 1.5
 #: The most legs a routed path takes: a guess - a path round two or three homesteads; the web's bend law judges each joint.
 ROUTE_LEGS = 5
+"""Research: most legs of a routed path - GUESS: 5, a path round two or three homesteads"""
 
 Cell = tuple[int, int]
 
@@ -114,7 +118,10 @@ def search(
 def taut(pts: Sequence[Pt], leg_ok: Callable[[Pt, Pt], bool], turns_back: Callable[[Pt, Pt, Pt], bool], most: int) -> tuple[Pt, ...] | None:
     """The polyline through `pts` pulled taut: from each point, the farthest later point a leg to it is admitted (`leg_ok`)
     without turning back on the leg before (`turns_back`). None where a point admits no leg onward or more than `most` legs
-    are needed."""
+    are needed.
+
+    Research: path pulled taut - research/questions/0081-village-lanes.drawing.html: straight from point to point where it can, never doubling back
+    """
     out = [pts[0]]
     k = 0
     while k < len(pts) - 1:
@@ -130,7 +137,10 @@ def taut(pts: Sequence[Pt], leg_ok: Callable[[Pt, Pt], bool], turns_back: Callab
 
 def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:
     """The routed paths from the homestead's two dooryard doors (`doors_of`: the forecourt, the yard's far edge), each searched
-    once while nothing standing changes (`_standing_memo`)."""
+    once while nothing standing changes (`_standing_memo`).
+
+    Research: path routed round what stands - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a house no straight path reaches gets one bending between the homesteads, from its dooryard
+    """
     from . import access as A
 
     half = float(tree.half)
@@ -194,7 +204,10 @@ def _route_from(
     leg_ok: Callable[[Pt, Pt], bool],
     geom: Any,
 ) -> tuple[Pt, ...] | None:
-    """One door's routed path (`routed_corridors`), or None."""
+    """One door's routed path (`routed_corridors`), or None.
+
+    Research: path leaves its own yard once - UNRESEARCHED: kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again
+    """
     from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard
 
     found = _cells_to_tree(s, tree, door, mine, half, hgap, fg, wood, placed, step, geom)
@@ -210,7 +223,10 @@ def _route_from(
 def _cells_to_tree(
     s: Settlement, tree: AccessTree, door: Pt, mine: Sequence[tuple[Any, float]], half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, geom: Any
 ) -> tuple[list[Cell], Pt] | None:
-    """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None."""
+    """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None.
+
+    Research: path kept off what stands - UNRESEARCHED: off the household's own house and parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
+    """
     from . import access as A
     from .access import seg_box_within
 

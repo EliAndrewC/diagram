@@ -25,6 +25,7 @@ CHECKS = frozenset(
         "spec-fidelity", "spec-fidelity-verify", "quote-check", "record-format", "record-style", "source-reader",
         "source-applicability", "entry-drift", "translation-check", "escalation-check", "perf-audit",
         "intro-check",  # GUARD_EDIT_OK: feature 311 - a new record check the ledger logs; nothing loosened
+        "impl-drift",  # GUARD_EDIT_OK: feature 316 - the claims check the ledger logs; nothing loosened
     }
 )  # fmt: skip
 CLASSES = frozenset({"geometric", "judgment", "paperwork", "nothing"})

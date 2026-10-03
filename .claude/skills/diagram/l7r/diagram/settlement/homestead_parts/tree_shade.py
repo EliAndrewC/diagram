@@ -10,6 +10,8 @@ from it. Measured as a rectangle, the record's knowing simplification of the wed
 (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). Bamboo is held too, at its own reach (`BAMBOO_SHADE_FT`,
 feature 315: the GM asked whether its shade needs the distance, and the timber bamboos stand as tall as the tree the canopy
 reach is reckoned from); the coppiced mulberry and the clipped tea hedge are not, being low (spec 310's Decisions).
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -22,6 +24,7 @@ from typing import Any
 #: 9 am shadow mirrors it west - held as the windbreak's lane is, a rectangle from the plot's north edge to 50 ft below its
 #: south edge, on both sides and below. A GUESS for the height (the record's least; taller trees would reach further).
 CANOPY_SHADE_FT = 50.0
+"""Research: canopy shade reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft east, west and south of a plot"""
 
 #: BAMBOO'S REACH (GM 2026-10-02, feature 315: "figure out whether it would need to be far away and then make it be the distance
 #: away that it would have to be"). The same derivation as the canopy reach, from the timber bamboos' least cited height: madake
@@ -30,6 +33,7 @@ CANOPY_SHADE_FT = 50.0
 #: patch drawn without a kind is held at the tall ones' reach. Its own constant, so a revised height moves only its own reach.
 #: A GUESS for the height (the least; taller stands would reach further), as the canopy reach's is.
 BAMBOO_SHADE_FT = 50.0
+"""Research: bamboo shade reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft east, west and south of a plot"""
 
 Box = Sequence[float]  # (center x, center y, width, height), +y south
 
@@ -43,7 +47,11 @@ def crown_shades(cx: float, cy: float, r: float, plot: Box, reach: float) -> boo
 def sun_ground(plot: Box, reach: float) -> tuple[float, float, float, float]:
     """`plot`'s sun ground as `(x0, x1, y0, y1)`: the plot widened by `reach` east and west and deepened by `reach` to the south,
     from its north edge. Taken once per plot by a caller asking many crowns of the same plots (feature 314: the persimmon's
-    seat asked it of every plot at every rake for every pace, a tenth of the homesteads stage)."""
+    seat asked it of every plot at every rake for every pace, a tenth of the homesteads stage).
+
+    Research:
+        sun ground as a rectangle - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: from the plot's
+            north edge, widened east and west and deepened south by the reach"""
     px, py, pw, ph = (float(v) for v in plot[:4])
     return px - pw / 2 - reach, px + pw / 2 + reach, py - ph / 2, py + ph / 2 + reach
 
@@ -77,7 +85,11 @@ def plot_box(o: Mapping[str, Any]) -> tuple[float, float, float, float] | None:
 
 def map_trees(M: Mapping[str, Any]) -> list[tuple[str, float, float, float]]:
     """Every canopy tree the map records, as (kind, x, y, r): the crowns (`tree_crowns`, the persimmon's among them), the
-    scrub's pines (`scrub_pines`) and the planted dikes' trees (`planted_trees`, each run's kept trees)."""
+    scrub's pines (`scrub_pines`) and the planted dikes' trees (`planted_trees`, each run's kept trees).
+
+    Research:
+        which trees are canopy - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: crowns, scrub pines
+            and dike trees; bamboo held apart (`map_bamboo`), mulberry and tea not held"""
     tc = M.get("tree_crowns") or []
     out = [("crown", float(tc[i]), float(tc[i + 1]), float(tc[i + 2])) for i in range(0, len(tc) - 2, 3)]
     out += [("pine", float(t[0]), float(t[1]), float(t[2])) for t in M.get("scrub_pines") or ()]
@@ -87,7 +99,9 @@ def map_trees(M: Mapping[str, Any]) -> list[tuple[str, float, float, float]]:
 
 def map_bamboo(M: Mapping[str, Any]) -> list[tuple[str, float, float, float, float]]:
     """Every bamboo the map records, as (kind, x0, y0, x1, y1) - its box: each culm mark (`bamboo_marks`, [x, y, r], a disc
-    of the mark's reach) and each stand (`bamboo_stands`, by its outline's extent, else its recorded box)."""
+    of the mark's reach) and each stand (`bamboo_stands`, by its outline's extent, else its recorded box).
+
+    Research: which bamboo is held - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark and stand, of any kind, at the timber bamboos' reach"""
     out = [("mark", float(m[0]) - float(m[2]), float(m[1]) - float(m[2]), float(m[0]) + float(m[2]), float(m[1]) + float(m[2])) for m in M.get("bamboo_marks") or ()]
     for st in M.get("bamboo_stands") or ():
         ring = st.get("poly") or [(float(st["x"]) - float(st["w"]) / 2, float(st["y"]) - float(st["h"]) / 2), (float(st["x"]) + float(st["w"]) / 2, float(st["y"]) + float(st["h"]) / 2)]
@@ -105,7 +119,9 @@ def box_shades(x0: float, y0: float, x1: float, y1: float, plot: Box, reach: flo
 def bamboo_shading_plots(M: Mapping[str, Any], reach_ft: float) -> list[tuple[str, str, tuple[float, float], tuple[float, float]]]:
     """Each (plot kind, bamboo kind, bamboo center, plot center) where recorded bamboo - a culm mark or a stand - stands in a
     threshing yard's or a garden bed's sun ground, `reach_ft` feet (feature 315). A mark is tested by its box, which holds
-    its disc, so the check is the stricter of the two."""
+    its disc, so the check is the stricter of the two.
+
+    Research: bamboo out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no stand or mark in a yard's or bed's sun ground"""
     meta = M.get("meta") or {}
     reach = reach_ft / float(meta.get("ftpx", 1.0) or 1.0)
     plots = [(kind, b) for kind in ("threshing_yards", "gardens") for o in M.get(kind) or () if (b := plot_box(o)) is not None]

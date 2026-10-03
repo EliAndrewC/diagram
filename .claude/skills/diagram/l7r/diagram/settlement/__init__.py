@@ -12,6 +12,8 @@ irrigation source (pond vs stream vs field-to-field), torii count, whether a hil
 carries the shrine, whether blight left abandoned houses - is passed in, not baked
 here. Those declarations are echoed into manifest["meta"] so the validator can
 adapt its checks per village instead of assuming one village's specifics.
+
+Research: package re-exports - NONE
 """
 
 from ._geom import BUNDLE_PITCH_FT as BUNDLE_PITCH_FT

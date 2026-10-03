@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: lane geometry - NONE
+"""
 
 import math
 from typing import TYPE_CHECKING, Any
@@ -16,6 +19,7 @@ if TYPE_CHECKING:
 
 
 _FRAY_DEG = 20.0  # below this the two ways are the same track fraying, not a junction (see trim_lane_stubs)
+"""Research: fraying track - UNRESEARCHED: two ways meeting under 20 degrees are one track, not a junction"""
 
 
 def _angle_between(run: Any, other: Any) -> float:
@@ -31,6 +35,7 @@ def _angle_between(run: Any, other: Any) -> float:
 
 
 _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nobody (see trim_lane_stubs)
+"""Research: shortest lane - UNRESEARCHED: an internal lane under 71 ft, one homestead's frontage, is dropped"""
 
 # A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/questions/0081-village-lanes.drawing.html - "a lane that serves a farmhouse
 # ends at that house's dooryard, or runs on to reach something a reader can see"; how close counts as serving is the
@@ -38,9 +43,11 @@ _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nob
 # grass. The figure is hamletgen's `STEADING_ARRIVAL_FT`, derived there from the clip (a tread that reaches a plot records
 # its last point 7-11 ft off it), and a test holds the two equal; the settlement engine cannot import the scripted tier.
 DOORYARD_REACH_FT = 12.0
+"""Research: dooryard reach - research/questions/0081-village-lanes.drawing.html: an end within 12 ft of the yard or beds serves the house"""
 # ...or stands beside the house, within this of its center and not past it: the scripted tier's `WAY_END_REACH_FT`, the gate's
 # own reach for an end (a test holds the two equal). It was 90 here, the looser figure feature 227 retired everywhere else.
 HOUSE_SERVE_FT = 60.0
+"""Research: beside-the-house reach - research/questions/0081-village-lanes.drawing.html: an end within 60 ft of the house's center, not past it, serves it"""
 # An end has walked past a house when the foot of the perpendicular from the house falls more than this far back along
 # its last segment - the 4 ft grain `_trim_to_service` walks in, and the `_stop_at_closest_approach` cut's own.
 PAST_GRAIN_FT = 4.0
@@ -49,6 +56,7 @@ PAST_GRAIN_FT = 4.0
 # within a bund's width (~1.5 ft) and the widest lane's half-tread (3 ft) of the worked ground's edge, with a foot and a
 # half of drawing margin: the cap of the tread then lies on the bund line. A map drawing convention.
 BUND_REACH_FT = 6.0
+"""Research: arrival at the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end within 6 ft of the worked ground's edge has arrived"""
 
 
 def walked_past(prev: Pt, q: Pt, house: Pt) -> bool:
@@ -96,7 +104,12 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
     more than two remain. NEVER trims below `keep_frac` of the original length and never below two
     points: a lane whose whole run serves nothing is a siting problem, not something to delete - the
     map still needs the way it drew, and silently removing one would trade a visible stub for an
-    invisible missing lane."""
+    invisible missing lane.
+
+    Research:
+        end pulled back to what it serves - research/questions/0081-village-lanes.drawing.html: to the shortest end that still reaches something
+        trim floor - DEVIATION research/questions/0081-village-lanes.drawing.html: never below 40% of the lane's length, which can stop short of the last house served; a lane reaching nothing is left whole, where the page pulls it back to the last house it serves
+    """
     full = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:], strict=False))
     # `min_len` is the HARD floor a junction sets - see `_junction_floor`. It is a maximum with the
     # proportional guard rather than a replacement for it: a lane may not be trimmed past a way that
@@ -161,6 +174,8 @@ def junction_floor(pts: list[Pt], lanes: Any, drop: Any, way_reach: float, me: i
 
     Lifted out of `trim_lane_stubs`'s closure so it can be asked with plain lists (GM 2026-08-28 on
     testability); the inner one delegates here, so there is ONE body.
+
+    Research: junction kept - research/questions/0081-village-lanes.drawing.html: a trim never cuts past the last way crossing the lane at 20 degrees or more
     """
     acc, keep = 0.0, 0.0
     for n in range(len(pts) - 1):
@@ -186,7 +201,9 @@ def fan_rival(lanes: Any, q: Pt, bearing: float, house: Pt, mine: float, me: int
 
     LIFTED OUT OF `trim_lane_stubs` (feature 146, GM 2026-08-28 on making inner functions testable): it took
     only these values from the closure, and a test can now hand it two lane dicts instead of building a
-    settlement whose web happens to fan."""
+    settlement whose web happens to fan.
+
+    Research: one approach per house - UNRESEARCHED: a second end within the fan spread and bearing of another is the same approach drawn twice"""
     for k, other in enumerate(lanes):
         if k == me or len(other.get("pts") or []) < 2:
             continue

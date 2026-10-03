@@ -15,6 +15,8 @@ placement rule moves here (spec D2); the house's own wall rule (`_wall_on_the_bu
 
 Measured before (specs/226 research R1): 1,090-2,755 rectangles per house each walked ~150-200 polygons by
 bounding box; 7,778-13,075 chord tests and 66,000-99,000 segment distances per house.
+
+Research: site boundary - NONE: the ground tests indexed once, every member at the pad its own test held it to; no placement rule moves here
 """
 
 from __future__ import annotations
@@ -454,7 +456,10 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
 
 def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
-    `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001)."""
+    `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001).
+
+    Research: no house on the toe marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the reed toe hard ground before it is drawn
+    """
     seat = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     # THE REED-MARSH TOE IS HARD GROUND FROM HERE ON, ASKED BEFORE IT IS DRAWN (settlement-review of this feature,
     # 2026-09-12). `hinterland()` lays the toe marsh after the structures, so `wet_polys` does not hold it at seat time -

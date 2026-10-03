@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: lane records and their ink - NONE
+"""
 
 import math
 import re
@@ -43,7 +46,8 @@ def _house_frame(house: Any, q: Pt) -> tuple[float, float]:
 
 
 def behind_house(house: Any, q: Pt) -> bool:
-    """Does `q` stand BEHIND the house - past its back wall, abreast of it (feature 287, water W57)?"""
+    """Does `q` stand BEHIND the house - past its back wall, abreast of it (feature 287, water W57)?
+    Research: behind the back wall is not the dooryard - research/questions/0081-village-lanes.drawing.html: within the house's width plus its depth, past the back wall"""
     lx, ly = _house_frame(house, q)
     return ly < -float(house["h"]) / 2 and abs(lx) <= float(house["w"]) / 2 + float(house["h"])
 
@@ -54,7 +58,9 @@ def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> boo
 
     Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
     arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - future-work, "A lane end behind a house
-    counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it."""
+    counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it.
+
+    Research: a lane reaches the dooryard - research/questions/0081-village-lanes.drawing.html: within the reach of the yard or beds, or in the band before the front face"""
     rot = float(house.get("rot") or 0.0)
     g = house.get("geom") or {}
     for r in [g[k] for k in ("yard",) if g.get(k) is not None] + list(g.get("gardens") or ()):
@@ -75,7 +81,14 @@ class LanesMixin:
         lane (the dispersed pool maps until they are rebuilt). `clearance` is the no-build corridor
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
-        See research/questions/0081-village-lanes.html."""
+        See research/questions/0081-village-lanes.html.
+
+        Research:
+            a worn earth track - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline
+            lane width - research/questions/0081-village-lanes.drawing.html: the caller's width, 16 px by default
+            nothing built on a lane - research/questions/0081-village-lanes.drawing.html: a no-build corridor of the clearance, 22 px by default
+            the track out runs off the map - research/questions/0081-village-lanes.drawing.html: the connector flag
+        """
         # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
         # registry of what stands at the write (`Kept`) - so a repair cannot lay a lane on what the overlap matrix forbids
         # ...AND IT IS ASKED BEFORE IT IS RECORDED OR INKED (feature 287, water W53): every placer that lays a lane chose it among
@@ -139,7 +152,12 @@ class LanesMixin:
         problem because they go through `_ground`: every SHOULDER (edge) in one sub-layer at the bottom,
         every TREAD (bed) above - so treads merge into one continuous surface and no shoulder crosses a
         tread. Lanes now take the same path; `zpri` is the width, so a wider way still wins where two
-        treads overlap. `reink_lane` and the stub trimmer rewrite the ground entry, not stream slots."""
+        treads overlap. `reink_lane` and the stub trimmer rewrite the ground entry, not stream slots.
+
+        Research:
+            lane strokes - CONVENTION: a soft shoulder and an earth tread; the legacy lane a dashed center line
+            junctions as one surface - CONVENTION: every shoulder under every tread
+        """
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         if worn:
             edge = f'<path d="{dd}" fill="none" stroke="#A98C58" stroke-width="{width + 2.5:.1f}" opacity="0.4" stroke-linejoin="round" stroke-linecap="round"/>'  # soft worn-earth shoulder
@@ -237,7 +255,17 @@ class LanesMixin:
         TRIMMING ONLY EVER SHORTENS, which is what makes it safe to run after placement: a corridor
         that shrinks cannot invalidate a house already seated against it. The CONNECTOR is exempt and
         must stay whole - it is the track out of the settlement and `connector_lane_runs_off_edge`
-        requires it to reach the frame; a path stopping mid-landscape is the defect, not the cure."""
+        requires it to reach the frame; a path stopping mid-landscape is the defect, not the cure.
+
+        Research:
+            an end reaching nothing is pulled back - research/questions/0081-village-lanes.drawing.html: to the last house, way or bund it serves
+            served at the dooryard - research/questions/0081-village-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
+            arrival at the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge
+            meeting another way - UNRESEARCHED: within 40 ft of it, at 20 degrees or more
+            one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
+            short lanes dropped - UNRESEARCHED: an internal lane under 71 ft
+            the track out, the field spur and a row street stay whole - research/questions/0081-village-lanes.drawing.html
+        """
         lanes = self.M.get("lanes") or []
         houses = self.M.get("houses") or []
         # the worked ground a lane may end on: the fields' outlines and the dry plots (hamletgen reads the drawn rice too)
@@ -340,7 +368,13 @@ class LanesMixin:
     def street(self: Settlement, pts: Any, width: float | None = None, label: Any = None, main: bool = False) -> None:  # type: ignore[misc]
         """A town street (packed earth): the gate-to-yamen main avenue (main=True) or a
         cross lane off it. Buildings front it; a no-build corridor runs down its center.
-        Default real width 24 ft (converted at the map's ftpx, linework-floored)."""
+        Default real width 24 ft (converted at the map's ftpx, linework-floored).
+
+        Research:
+            street width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: 24 ft by default
+            buildings front the street - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: a no-build corridor of the half-width plus max(32 x bscale, 17) px
+            street strokes - CONVENTION: an earth edge and a lighter bed
+        """
         if width is None:
             width = self.lw(24)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)

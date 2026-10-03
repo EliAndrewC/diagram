@@ -1,4 +1,7 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research: plumbing - NONE: the composed mixin; its parts carry their own claims
+"""
 
 from .farmstead import FarmsteadMixin
 from .gardens import GardensMixin

@@ -23,6 +23,8 @@ like the hub and it is not.
 
 The base order below is source order and is behaviorally irrelevant - no name is defined twice, which
 is what the composed-surface guard's second assertion exists to keep true.
+
+Research: package composition - NONE
 """
 
 from .bundle import BundleGeomMixin

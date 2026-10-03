@@ -16,6 +16,8 @@ line start - which would pass on today's record and fail on the first page that 
 Byte-identity would NOT have caught either mistake: splitting and rejoining is lossless wherever you
 cut, so a splitter that cut a comment in half still assembles back byte for byte while writing
 fragments no reader's page has. That is why the tests assert the section count and the heading ids too.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

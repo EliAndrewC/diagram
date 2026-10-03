@@ -8,7 +8,10 @@ than its roll, drew 14,023 against 12,136. Now the roll is taken within the part
 hold - no less than the belt and the farm groves already give, no more than the belt, the groves and the fullest copse the
 ground takes - and the copse is filled to the ground's capacity and trimmed back to the roll. The rolled size is then the
 drawn size, and it is still inside the register's range: the range is the rule the record gives (the attainable bound is a
-map drawing convention; the roll's log-uniform shape is the existing GUESS)."""
+map drawing convention; the roll's log-uniform shape is the existing GUESS).
+
+Research: plumbing - NONE
+"""
 
 from __future__ import annotations
 
@@ -21,7 +24,14 @@ from .groves import HOMESTEAD_WOOD_FT2
 def attainable_band(given_ft2: float, capacity_ft2: float) -> tuple[float, float]:
     """The part of the register's range one homestead's wood can be drawn at: no less than what the belt and the farm groves
     already give it (`given_ft2`), no more than the most the ground holds (`capacity_ft2`), within `HOMESTEAD_WOOD_FT2`. Where
-    the ground gives more than the register's largest wood, the band is that one value (the wood drawn is the wood given)."""
+    the ground gives more than the register's largest wood, the band is that one value (the wood drawn is the wood given).
+
+    Research:
+        homestead wood range - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within
+            6,000-28,000 sq ft
+        held to what the ground holds - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the
+            roll's floor what already stands, its ceiling the fullest copse the ground takes
+    """
     lo = max(HOMESTEAD_WOOD_FT2[0], given_ft2)
     hi = max(lo, min(HOMESTEAD_WOOD_FT2[1], capacity_ft2))
     return lo, hi
@@ -29,7 +39,12 @@ def attainable_band(given_ft2: float, capacity_ft2: float) -> tuple[float, float
 
 def rolled_wood(u: float, band: tuple[float, float]) -> float:
     """One homestead's wood from its positional roll `u` in [0, 1), log-uniform over `band` - the shape the register's own
-    roll has (`homestead_wood_ft2`), taken over the attainable part of the range."""
+    roll has (`homestead_wood_ft2`), taken over the attainable part of the range.
+
+    Research:
+        log-uniform roll - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each doubling
+            as likely as the next
+    """
     lo, hi = band
     return float(lo * (hi / lo) ** u)
 
@@ -38,7 +53,12 @@ def copse_goal(rolls: Sequence[float], given_px2: float, kept_px2: float, capaci
     """(the copse's goal in px^2, the mean rolled wood a homestead in sq ft): every homestead's wood rolled within the
     attainable band, their sum less what the belt and the groves already give. The band's floor counts what always stands -
     the belt, the groves and the households' reserved copse seats (`kept_px2`, never trimmed); its ceiling, the copse at its
-    fullest (`capacity_px2`)."""
+    fullest (`capacity_px2`).
+
+    Research:
+        copse makes up the wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the
+            rolled woods less what the belt and the groves give
+    """
     n = len(rolls)
     if not n:
         return 0.0, 0.0

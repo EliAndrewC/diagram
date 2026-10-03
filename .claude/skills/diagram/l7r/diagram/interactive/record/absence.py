@@ -12,6 +12,8 @@ What was searched and when - the terms, the date - is for a later session, not t
 searched and what the web searches were is not information the human reader needs to see"*): it is written in an HTML
 comment after the marker, `no publicly readable source<!-- searched 2026-09-28: ... -->`, and what the search found is
 the note's visible text, a list of `<span class="pass">` items (`pass sub` nested) where it is several things.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

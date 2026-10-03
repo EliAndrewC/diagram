@@ -9,6 +9,8 @@ a vertex, so the two share one vertex exactly (a record keeps 0.1 px, `reshape_l
 would be rounded back off it). Only a SLIVER is welded - a face whose mean width is under `WELD_PX` - and only a corner
 within `WELD_PX` of the other tread: a real needle, a way drawn round ground a person could stand on, is the cut's
 (`settle.settle_needles`) or the tree's. A map drawing convention: the weld moves a line by under a foot.
+
+Research: weld plumbing - NONE
 """
 
 from __future__ import annotations
@@ -21,6 +23,7 @@ from ..consts import Poly, Pt
 
 #: a face narrower than this on average is a sliver of noding, not ground (px; under a foot at every map scale we draw)
 WELD_PX = 2.0
+"""Research: a sliver, not ground - CONVENTION: a face under 2 px wide on average"""
 
 
 def _at(p: Poly, along: float) -> tuple[int, Pt]:
@@ -38,7 +41,9 @@ def _at(p: Poly, along: float) -> tuple[int, Pt]:
 def weld_corner(lanes: Sequence[Mapping[str, Any]], face: Any, bounding: Sequence[int]) -> dict[int, Poly] | None:
     """{lane: its new points} for the two lanes bounding the sliver `face` - one lane's corner inside it moved onto the other's
     tread, and the shared point written into that tread - or None where `face` is no sliver or no corner stands within
-    `WELD_PX` of the other tread."""
+    `WELD_PX` of the other tread.
+
+    Research: two ways that meet share a vertex - CONVENTION: the corner moved under a foot onto the other tread"""
     from shapely.geometry import LineString, Point
 
     if face.length <= 0 or 2.0 * face.area / face.length >= WELD_PX:

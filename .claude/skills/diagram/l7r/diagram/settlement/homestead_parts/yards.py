@@ -1,4 +1,7 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE
+"""
 
 import math
 from typing import TYPE_CHECKING, Any
@@ -13,27 +16,34 @@ if TYPE_CHECKING:
 # width, in rows (a GUESS: no page read says how they lay); what keeps the outer row off the floor's outline stroke is the
 # edge clearance below (settlement-review, Kashikawa, 2026-09-28).
 MAT_FT = (6.0, 3.0)
+"""Research: straw mat size - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 3 x 6 ft, in rows"""
 # ...and every mat corner at least this far inside the floor's DRAWN outline, which `_quad` pulls in at its corners: the
 # rect inset alone left outer mats 0.1 ft off a pulled-in edge (measured on the pool's SVGs, 2026-09-28).
 MAT_EDGE_CLEAR_FT = 1.0
+"""Research: mats inside the outline - CONVENTION: every corner 1 ft inside the floor's drawn edge"""
 MAT_SQ_FT = MAT_FT[0] * MAT_FT[1]
 # THE GAP LEFT BETWEEN DRAWN MATS, widest first (feature 282, a CONVENTION): a real yard's mats lay edge to edge, and drawn
 # so they read as a textured floor. A 2 ft gap on every side leaves each mat on its own - the 2 ft pitch alone is 45% of a
 # full cover - and a yard too small or too clipped (by its pulled-in corners and the rack) to reach a third of one at that
 # gap closes it a step at a time, never below 1 ft; a step that overshoots two thirds is thinned back evenly (FR-004).
 MAT_GAPS_FT = (2.0, 1.5, 1.0)
+"""Research: gap between mats - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 2, 1.5 or 1 ft, a convention"""
 # EACH MAT LAID BY HAND, NOT SET IN A PATTERN (settlement-reviews of 2026-09-28): every REGULAR layout read as paving - a
 # checkered half as pavers meeting at their corners (Sawada), square rows as a tiled grid (Inashiro), rows set over by half
 # a mat as brick bond (Kashikawa). So each mat is nudged off its row by up to this much and turned by up to this many
 # degrees, a positional draw from its row and column (never the map's random stream), and kept at its row position
 # wherever the nudge would carry it off the floor or onto the rack.
 MAT_JITTER_FT = 0.4
+"""Research: mat nudged by hand - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: up to 0.4 ft"""
 MAT_SEARCH_STEP_FT = 0.25  # the grid the lattice's offset is searched on - every gap's pitch is a whole number of it
 MAT_STROKE_FT = 0.2  # half the mat outline's drawn width (0.4 at a hamlet's 1 ft to the px)
+"""Research: mat outline width - CONVENTION: 0.4 ft drawn"""
 MAT_INK_CLEAR_FT = 0.1  # bare ground left between two mats' drawn outlines, at the least
+"""Research: ink between mats - CONVENTION: 0.1 ft at the least"""
 MAT_PROBE_FT = 1e-6  # how far off a crossing the exact solve probes a region cut by the rack (a hair: far above the 1e-9 test tolerance)
 _PROBE_DIRS = tuple((math.cos(k * math.pi / 8), math.sin(k * math.pi / 8)) for k in range(16))
 MAT_JITTER_DEG = 10.0  # up to 10 degrees where the neighbors leave room: at 6 a corner swung under half a pixel at map scale (settlement-review, Mizuguchi, round 7)
+"""Research: mat turned by hand - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: up to 10 degrees"""
 
 
 def _mat_hash(r: int, c: int, salt: float) -> float:
@@ -53,14 +63,19 @@ def _mat_corners(x: float, y: float, mw: float, mh: float, a: float) -> list[tup
 # drawn as a straw-gold LINE of hung sheaves with dark post dots and no box: drawn first as an outlined box, it read as
 # the woodpile beside the same houses (settlement-review, Sawada, 2026-09-28).
 RACK_WIDTH_FT = 2.5
+"""Research: rack drawn wide - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: 2.5 ft, thicker than its poles"""
 RACK_INSET_FT = 2.0  # from the yard's front (house-facing) edge
+"""Research: rack off the house-facing edge - UNRESEARCHED: 2 ft"""
 # ...but only 1 ft from its SIDE, so the rack stands in the slack the centered mat rows leave at the yard's flanks and does
 # not take a column of mats: at 2 ft it cost the smallest yards a third of their floor (Sawada's 20 x 14 ft yard drew 4 mats
 # of a floor of 6, the gate, 2026-09-28).
 RACK_SIDE_INSET_FT = 1.0
+"""Research: rack off the yard's side - UNRESEARCHED: 1 ft"""
 RACK_MIN_FT = 4.0  # shorter than this and it is not drawn: a side clipped by the map-south rule to a stub reads as litter
+"""Research: shortest rack drawn - CONVENTION: 4 ft"""
 RACK_CLEAR_FT = 0.25  # the rack stops this far north of the yard's midline (the manifest rounds to 0.1 px)
 RACK_POST_FT = 6.0  # a post every ~6 ft (a GUESS within the attested racks: posts at even spacing, kotobank-hasa-nipponica)
+"""Research: rack post spacing - GUESS: a post about every 6 ft"""
 
 
 def mat_cells(
@@ -81,7 +96,12 @@ def mat_cells(
     quarter-foot grid, and the one that seats the most is kept, of equals the one nearest the center - a centered lattice
     one column too wide lost both outer columns to the floor's pulled-in corners and drew half what fits
     (settlement-reviews of round 7, Sawada and Kashikawa, 2026-09-28).
-    `salt` is the yard's own: the nudge and the turn are drawn per yard, not repeated from one to the next."""
+    `salt` is the yard's own: the nudge and the turn are drawn per yard, not repeated from one to the next.
+
+    Research:
+        fewer mats than a real yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: a
+            third to two thirds of a full cover
+    """
     import numpy as np  # bound on first use: no heavy library at import time (feature 237)
 
     mw, mh, clear = MAT_FT[0] / ftpx, MAT_FT[1] / ftpx, MAT_EDGE_CLEAR_FT / ftpx
@@ -424,7 +444,12 @@ def rack_segment(w: float, h: float, rot: float, ftpx: float, side: int) -> tupl
     THE HALF NEAREST THE HOUSE YIELDS BEFORE THE KNOB DOES (plan review, 2026-09-28): it is our guess, while the knob is
     the research's - where the weather is changeable EVERY farmstead gathers its rack by the house - so where neither side's
     near half leaves `RACK_MIN_FT`, the whole side is tried, still held off the map-south half. Some part of one side edge
-    always lies map-north of the center, so a yard of the sizes the roll makes always takes a rack."""
+    always lies map-north of the center, so a yard of the sizes the roll makes always takes a rack.
+
+    Research:
+        rack side and length - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: one side, from the
+            house-facing edge to the middle, else the whole side, never the map-south half
+    """
     th = math.radians(rot)
     s, c = math.sin(th), math.cos(th)
     hw, inset, minlen = RACK_WIDTH_FT / 2.0 / ftpx, RACK_INSET_FT / ftpx, RACK_MIN_FT / ftpx
@@ -461,7 +486,13 @@ class ThreshingYardsMixin:
         rack by the house where the settlement's harvest weather is changeable. The outer footprint is a
         slightly-irregular quad (`poly`, absolute corner coords, UNTURNED); the interior is laid out in the local (w,h)
         frame and the whole group turned by `rot`, its farmhouse's rake. Returns what it drew for the manifest: `mats`
-        (the count) and, with a rack, `rack` (its footprint's four corners in MAP coordinates)."""
+        (the count) and, with a rack, `rack` (its footprint's four corners in MAP coordinates).
+
+        Research:
+            yard glyph - CONVENTION: a tamped earthen fill, straw mats, a gold line of sheaves with post dots
+            rack by the house - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: where the harvest
+                weather is changeable; the side rolled per yard
+        """
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         local = [(px - cx, py - cy) for px, py in poly]
         pts = " ".join(f"{px:.1f},{py:.1f}" for px, py in local)
@@ -491,7 +522,13 @@ class ThreshingYardsMixin:
 
     def _yard_fits(self: Settlement, x: float, y: float, w: float, h: float, hx: float, hy: float) -> bool:  # type: ignore[misc]
         """A threshing yard fits where it is in-bounds, on DRY ground (clear of paddies / blocks),
-        off any lane, and clear of every placed footprint EXCEPT its own farmhouse (it abuts that)."""
+        off any lane, and clear of every placed footprint EXCEPT its own farmhouse (it abuts that).
+
+        Research:
+            yard on dry ground - UNRESEARCHED: off every paddy and dry plot, corner and vertex tested
+            yard abuts its own house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:
+                clear of every other footprint
+        """
         if x < 55 or x > self.W - 55 or y < 88 or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):
@@ -566,7 +603,20 @@ class ThreshingYardsMixin:
 
     def _yard_area_ft2(self: Settlement, hx: float, hy: float, hw: float, hh: float) -> float:  # type: ignore[misc]
         """This household's work-yard area in square FEET - the lognormal roll above, correlated with the
-        house. Position-seeded like every other homestead attribute, so it never ripples placement."""
+        house. Position-seeded like every other homestead attribute, so it never ripples placement.
+
+        Research:
+            yard median - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 25 tsubo, rice
+                and dry field alike
+            yard spread - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: lognormal,
+                sigma_ln 0.40
+            larger household, larger yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:
+                the house's log deviation times 2.2
+            least yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 8 tsubo
+            allotted yards - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: every yard
+                the median, a knob
+            ordinary minka - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 46 x 28 ft
+        """
         import math as _m
 
         base = self.px(46.0) * self.px(28.0)  # the ordinary minka footprint in this map's pixels
@@ -592,7 +642,11 @@ class ThreshingYardsMixin:
     def _yard_dims(self: Settlement, hw: float, hh: float, hx: float = 0.0, hy: float = 0.0) -> tuple[float, float]:  # type: ignore[misc]
         """The yard's drawn width and depth: the rolled area at the apron's near-square aspect.
         PREVIEW AND PLACEMENT MUST AGREE - `rolling/bundle.py` reserves what this returns, so changing
-        one without the other makes the placer clear a different rect than the map draws."""
+        one without the other makes the placer clear a different rect than the map draws.
+
+        Research:
+            yard aspect - UNRESEARCHED: 1.45 wide to deep
+        """
         import math as _m
 
         area_px = self._yard_area_ft2(hx, hy, hw, hh) / (self.ftpx * self.ftpx)  # sq ft -> sq px
@@ -602,7 +656,12 @@ class ThreshingYardsMixin:
     def _find_yard_spot(self: Settlement, hx: float, hy: float, hw: float, hh: float) -> tuple[float, float, float, float] | None:  # type: ignore[misc]
         """The first fitting threshing-yard position for a farmhouse: the sunny SOUTH/front side (+y) is
         the maeniwa; fall back to the E/W sides if the paddy blocks due-south, but NEVER the shady north
-        back. Returns (ox, oy, yw, yh) or None if the farmstead is boxed in on all three sides."""
+        back. Returns (ox, oy, yw, yh) or None if the farmstead is boxed in on all three sides.
+
+        Research:
+            yard before the house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: south front
+                first, then east or west, never the north back
+        """
         yw, yh = self._yard_dims(hw, hh, hx, hy)
         for dx, dy in ((0, 1), (1, 0), (-1, 0)):
             ox = hx + dx * (hw / 2 + yw / 2 - 2)
@@ -623,7 +682,14 @@ class ThreshingYardsMixin:
         before the house's front, so its edges run with the front wall. The homestead turns as ONE piece:
         `_rake_parts` has already carried the yard's center round the house's center, and the placer
         cleared the ground there, so this turns the yard in place about that center. Turning it about its
-        own center alone, as first shipped, slid it up to 3 ft along the front wall."""
+        own center alone, as first shipped, slid it up to 3 ft along the front wall.
+
+        Research:
+            every farmhouse a yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html
+            yard turned with its house - research/questions/0029-farmhouses-minka.drawing.html: the house's rake, its house-facing edge level
+            swept outline - CONVENTION: a slightly irregular quad, jitter 0.10
+            no floor without rice - UNRESEARCHED: a no-rice hamlet records a forecourt and draws no floor
+        """
         ox, oy, yw, yh = spot
         # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard
         # is the south front; the legacy fallback may seat it east or west, and the facing edge follows it. Read in the

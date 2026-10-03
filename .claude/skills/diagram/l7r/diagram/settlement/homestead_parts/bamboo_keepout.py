@@ -1,6 +1,9 @@
 """The copse's keep-out round a bamboo stand, and the one predicate every bamboo placer reads to leave the households'
 reserved copse seats outside it (feature 280, the copse off the bamboo; feature 287 woods W25, every reserved seat
-planted where it was reserved). Split out of `stands.py` at the 1,000-line bar."""
+planted where it was reserved). Split out of `stands.py` at the 1,000-line bar.
+
+Research: plumbing - NONE
+"""
 
 import math
 from collections.abc import Sequence
@@ -21,7 +24,10 @@ def grown_ring(ring: Any, by: float) -> list[tuple[float, float]]:
 
 def copse_bamboo_reach(bs: float) -> float:
     """How far the copse keeps its seats off a bamboo stand (feature 280, round 4): TWO of its crowns' radii
-    (`COPSE_CLUMP_BS`, the sparse copse's clump), the margin `village_grove` grows each stand's ring by."""
+    (`COPSE_CLUMP_BS`, the sparse copse's clump), the margin `village_grove` grows each stand's ring by.
+
+    Research: copse off the bamboo - UNRESEARCHED: kept two crown radii off a stand
+    """
     from .wood_share import COPSE_CLUMP_BS
 
     return 2.0 * (COPSE_CLUMP_BS * bs / 2.0)

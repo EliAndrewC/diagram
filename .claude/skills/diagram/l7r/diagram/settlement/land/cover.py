@@ -17,6 +17,8 @@ EDGE, so each land type is defined PURELY by cover that thins to nothing at its 
 has no boundary, just its cover petering out.
 
 Split from settlement/land.py by feature 120 - see settlement/land/CLAUDE.md for the index.
+
+Research: plumbing - NONE: footprints, the bare-ground grid, keep-out indexing and manifest records
 """
 
 import math
@@ -36,18 +38,23 @@ WOOD_FRINGE_FT = 8.0
 scrub showed "broad swaths of the forest with scrubland underneath" - "a tiny bit of overlap" at the edge is fine). The
 record already said the grass fringe "thins out inside the first few paces" (research/contents.json#homesteads, the woodland-edge
 mantle-and-fringe); the woods were handed the marsh's 46 ft reed feather instead, so blades ran 46 ft under the belt.
-A few paces is the record's own figure, so this is ACCURATE as a degree; 8 ft is the calibration within it."""
+A few paces is the record's own figure, so this is ACCURATE as a degree; 8 ft is the calibration within it.
+
+Research: grass under a wood's edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: 8 ft"""
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
 FARMSTEAD_NEIGHBOR_FT = 140.0  # ft: two farmsteads this near share the ground between them - a lane, a gap a copse fills
+"""Research: shared ground between farmsteads - UNRESEARCHED: two within 140 ft keep the ground between them clear of scrub"""
 
 
 def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     """The settlement's scrub keep-out as rings: each farmstead's own outline - its house and the parts nearest it -
-    grown by `margin`, and the outline of each pair of farmsteads within `FARMSTEAD_NEIGHBOR_FT` (feature 261)."""
+    grown by `margin`, and the outline of each pair of farmsteads within `FARMSTEAD_NEIGHBOR_FT` (feature 261).
+
+    Research: no scrub among the farmsteads - UNRESEARCHED: each farmstead and its parts, and each near pair, grown by the margin"""
     hs = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if "x" in h]
     if not hs:
         return []
@@ -68,16 +75,21 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
 
 
 WOODLAND_MIN_CROWNS = 5
-#: a scrub pine's crown for the sun rule (feature 310): its lowest, widest branch, drawn 3.6 bs out, and the stroke's slack
-PINE_SPREAD_BS = 4.6
 """The fewest crowns a woodland commons may record (`test_a_woodland_commons_is_visibly_stocked`, feature 287 woods W13):
 a parcel claiming a wood draws one - under five crowns it reads as a few trees on grass, not a worked wood. A map drawing
-convention on legibility, the rule's own figure; the parcel's real stocking is `COMMONS_SPACING_FT`."""
+convention on legibility, the rule's own figure; the parcel's real stocking is `COMMONS_SPACING_FT`.
+
+Research: stocked wood floor - CONVENTION: at least five crowns, so a wood reads as one"""
+#: a scrub pine's crown for the sun rule (feature 310): its lowest, widest branch, drawn 3.6 bs out, and the stroke's slack
+PINE_SPREAD_BS = 4.6
+"""Research: pine crown reach - CONVENTION: 4.6 bs, the drawn pine's widest branch and its stroke"""
 
 BARE_STEP = 25.0  # px between the samples `bare_cells` takes - the gate's own grid (`margins_form_continuous_ring`)
 BARE_SHARE_CAP = 0.35
 """How much of the rendered view may be ground nothing covers (`margins_form_continuous_ring`). Above this the map has
-holes in it - the margins are meant to form a continuous ring of worked and unworked ground, not islands with gaps."""
+holes in it - the margins are meant to form a continuous ring of worked and unworked ground, not islands with gaps.
+
+Research: bare-ground cap - CONVENTION: a map-completeness threshold, no more than 0.35 of the view uncovered"""
 
 #: The manifest's TREADS - a way or a watercourse is a polyline with a width, not a ring: (key, points key, width key).
 BARE_TREADS = (("lanes", "pts", "w"), ("streams", "poly", "w"), ("channels", "poly", "w"), ("field_ditches", "poly", "w"), ("drawn_channels", "pts", "w0"))
@@ -248,7 +260,9 @@ class GroundCoverMixin:
         stands), counted as cover. The bare sample points (`bare_cells`, the rule's one predicate) are grouped into
         connected blocks and the largest are clothed first, each as one grazing commons over its cells - its record
         covers every one of its points, so the share falls by exactly the block and the fill ends. Returns the commons laid.
-        Rough grazing is what the record puts on ground nothing else claims (research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html)."""
+        Rough grazing is what the record puts on ground nothing else claims (research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html).
+
+        Research: unclaimed ground grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the largest bare blocks laid as grazing until the cap holds"""
         vars(self)["_fills_holes"] = True  # ...and the view the finish grows for the title is clothed the same way (`refill_the_view`)
         probe = {**self.M, "_planned_cover": [[(float(q[0]), float(q[1])) for q in p] for p in planned]}
         bare, total = bare_cells(probe, view)
@@ -273,7 +287,12 @@ class GroundCoverMixin:
 
     def _commons_keep(self: Settlement, box: tuple[float, float, float, float], avoid: Any = ()) -> Any:  # type: ignore[misc]
         """The commons' STATIC keep-outs over `box` (x0, y0, x1, y1), indexed once - lifted out of `commons` (feature 287, woods
-        W13) so the woodland scan asks the very keep-outs a parcel's crowns will be thrown against (`woodland_room`)."""
+        W13) so the woodland scan asks the very keep-outs a parcel's crowns will be thrown against (`woodland_room`).
+
+        Research:
+            off the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: every paddy and dry plot padded by the crop margin
+            off the treads - UNRESEARCHED: 4 ft of bare verge along every lane, street and road
+            off the channels - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the cut-bank margin off every irrigation channel, streams at their drawn width"""
         bs = self.bscale
         halo_rects, halo_circles = self._urban_keepouts(box)  # the urban-clearance halo (see _urban_keepouts)
         corridors = self._corridor_buffers(
@@ -321,7 +340,9 @@ class GroundCoverMixin:
         the commons' crowns are thrown against at the largest crown's lean (`_commons_keep`), off the pond and the fengshui
         pond, and under no crown already standing at the largest radius (feature 287, woods W13). Deterministic - no draw is
         made - so the scan that offers a parcel and the commons that stocks it read one answer: a parcel whose room is
-        under `WOODLAND_MIN_CROWNS` is not offered, and a parcel whose throws seat fewer is stocked from its room."""
+        under `WOODLAND_MIN_CROWNS` is not offered, and a parcel whose throws seat fewer is stocked from its room.
+
+        Research: coppice stocking grid - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown every COMMONS_SPACING_FT on dry ground, none under another"""
         xs, ys = [float(q[0]) for q in poly], [float(q[1]) for q in poly]
         x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
         keep = self._commons_keep((x0, y0, x1, y1))
@@ -360,7 +381,20 @@ class GroundCoverMixin:
         millennium - open pine + grass + erosion; the protected grove is the green EXCEPTION; the back slope
         also carried the graves + dry hill-crops): research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html / 'Grass hills and fodder meadows (kusayama, magusaba)'. Recorded
         in M['commons']. `role` picks the glyph (woodland / pasture / commons); `avoid` is a list of KEEP-OUT
-        polygons (e.g. the hamlet cluster) the scatter stays out of, so ground-cover never creeps onto them."""
+        polygons (e.g. the hamlet cluster) the scatter stays out of, so ground-cover never creeps onto them.
+
+        Research:
+            commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
+            coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
+            no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
+            scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one to 6,000 sq ft, at least two, none on pasture
+            marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
+            wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge
+            edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
+            crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
+            claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
+            woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
+            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as
         # ... outside of the marshland? my guess is that that is a mistake"*). It was: only the toe-side
@@ -663,7 +697,14 @@ class GroundCoverMixin:
         (the toe side) AND orients the marsh itself: the toe is a CONTOUR BAND perpendicular to the fall, so it
         rotates with the map like every other feature (see the comment at the marsh block); the scrub ring is
         radial. A comb-FAN field leaves the opposite bbox corner open; the interior fill (`interior_fill`) clothes the
-        voids, and the woodland patches are drawn over them. See research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html."""
+        voids, and the woodland patches are drawn over them. See research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html.
+
+        Research:
+            marsh at the toe - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the reed marsh on the downhill toe band
+            scrub ring - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: scrub on the frame strips round the cultivated ground and the toe's flank
+            interior voids grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the ground a fan leaves inside its own box clothed as rough grazing
+            no cover among the houses - UNRESEARCHED: 44 px round each farmstead, or each homestead on a dispersed map
+            woodland per map - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the coppice patches added by the generator, not here"""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys
@@ -824,7 +865,11 @@ class GroundCoverMixin:
         SAME-CENTER duplicate registration (within 4px: the reserve_clearing-then-feature pattern) REUSES
         the first blob verbatim, so guard and late collar can never disagree. Also recorded in
         M['clearings'] with the current cover ordinal, so the checks can verify ORDER: a scatter only
-        skips clearings that exist when it runs (scatter_respects_swept_clearings)."""
+        skips clearings that exist when it runs (scatter_respects_swept_clearings).
+
+        Research:
+            swept verge - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: a collar of `extra` round a sacred or funerary feature kept clear of scrub
+            ragged edge - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: inward-only bays up to 0.55 of the collar"""
 
         def record(poly: Poly) -> None:
             self.M.setdefault("clearings", []).append({"poly": [[round(px, 1), round(py, 1)] for px, py in poly], "seq": self._cover_n})
@@ -890,5 +935,7 @@ class GroundCoverMixin:
         scatter only skips clearings that already exist when it runs, so a late precinct must reserve its
         ground FIRST or the scrub covers it. The later shrine_hall/cemetery registers its own clearing too;
         the overlap is harmless. Pass roughly the footprint you will draw (a slightly generous `extra` is
-        fine - over-clearing by a few px reads the same)."""
+        fine - over-clearing by a few px reads the same).
+
+        Research: cleared collar - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: 46 ft cleared round the footprint by default"""
         self._clear_ground(x, y, w, h, extra)

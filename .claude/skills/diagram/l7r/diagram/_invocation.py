@@ -30,6 +30,8 @@ time and can see things no in-process check can - a bare `pytest`, a `make -f` n
 makefile. This module is defense in depth: it catches shapes the hook did not anticipate, and it is
 the ONLY layer that can catch an in-process call (`python3 -c "import ...; generate(...)"`), which
 needs no git diff and reads perfectly as diligence.
+
+Research: invocation guard - NONE: process-tree inspection, no map decision
 """
 
 from __future__ import annotations

@@ -11,6 +11,8 @@ notes file only (spec 303 research R3): a note two questions cite is in both not
 
 Nothing here guesses. A file it does not recognize is a refusal, not something skipped: a skipped fragment is a lost
 entry of the record, and it would be lost silently.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

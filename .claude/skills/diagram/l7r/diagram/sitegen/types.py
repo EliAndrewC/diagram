@@ -6,6 +6,8 @@ to acres the same way - so they are the natural floor of the shared library.
 
 `hamletgen/consts.py` re-exports these three names, so `from .consts import Poly, Pt` keeps working
 inside that package and `hamletgen`'s public surface is unchanged.
+
+Research: types and units - NONE: point types and the acre in square feet
 """
 
 from __future__ import annotations

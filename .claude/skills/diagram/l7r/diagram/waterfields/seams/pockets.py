@@ -1,4 +1,7 @@
-"""Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: pocket plumbing - NONE: lazy shapely binding, polygon parts and recorded rings
+"""
 
 from __future__ import annotations
 
@@ -79,7 +82,12 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
     of the turn. Ten of Inashiro's new basins came out with a bund inside a delivery ditch through
     exactly those notches - the ground looked bare to this pass and was water to the gate. The
     discs close them without the over-claim a round CAP would add past the head and tail, where
-    `supply_bank_clearance` reports `past` and the stroke governs nothing anyway."""
+    `supply_bank_clearance` reports `past` and the stroke governs nothing anyway.
+
+    Research:
+        bund abuts the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: each course's local half-width plus half a bund is ground no bund stands in
+        width along the run - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: the half-width read from the shared taper law
+    """
     _load_shapely()
     strokes: list[tuple[str, BaseGeometry, float]] = []
     for c in channels:
@@ -131,7 +139,13 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
     `floor_overhang` states): the command area's low boundary conceptually continues past the
     drawn water, so a low-u fork wedge still counts as commanded while the floating-diamond ground
     past the outfall does not. Where the canal does not reach a given u there is nothing upslope to
-    exclude, so that sample falls back to a bound outside the fan entirely."""
+    exclude, so that sample falls back to a bound outside the fan entirely.
+
+    Research:
+        command area - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no paddy below the collector's bank or upslope of the supply canal, a canal watering only the ground below it
+        set-back from the canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the planted ground starts 4 grain (8 ft) down the fall from the canal's centerline
+        collector extended level - UNRESEARCHED: past its drawn ends the command area's low edge runs on at the end's fall
+    """
     _load_shapely()
     x0, y0, x1, y1 = field.bounds
     corners = [F.to_uf(x0, y0), F.to_uf(x1, y0), F.to_uf(x1, y1), F.to_uf(x0, y1)]

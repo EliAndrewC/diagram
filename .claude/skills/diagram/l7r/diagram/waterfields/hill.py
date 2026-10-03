@@ -1,4 +1,7 @@
-"""The hill-rice field engines - contour terraces and the ribbon valley (feature 145: moved out of polder.py, whose dike-and-drain builder the hamlet path executes; FIELD_ARCHETYPES deliberately holds neither of these, consts.py)."""
+"""The hill-rice field engines - contour terraces and the ribbon valley (feature 145: moved out of polder.py, whose dike-and-drain builder the hamlet path executes; FIELD_ARCHETYPES deliberately holds neither of these, consts.py).
+
+Research: hill engines - NONE: the module's two builders carry their own claims
+"""
 
 import math
 import random
@@ -37,7 +40,22 @@ def build_terraces(
     most are far smaller (some hold three rice plants), 15,862 terraces in one village. So each step is split
     along the contour into cells of ~`cell_acres` (the universal PADDY_CELL_ACRES target, derived at this
     map's `ftpx`), and `n_terraces` is set so the step DEPTH stays shallow enough that a cell reads wider than
-    deep (a terrace runs long along the contour, short down the fall). See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html."""
+    deep (a terrace runs long along the contour, short down the fall). See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html.
+
+    Research:
+        terraces along the contour - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: stacked curved steps down the fall from the catchment
+        step count - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: `n_terraces` retaining lips across the slope, 32 by default
+        terrace paddy size - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: each step split into cells of the fixed PADDY_CELL_ACRES, not tied to the slope
+        step curvature and narrowing - UNRESEARCHED: each lip bowed by a 12-23 px sine, the hillside narrowing 12% down the fall
+        supply down the flank - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: a canal from the high west shoulder descending diagonally toward the field's center foot
+        drain at the foot - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: a straight descending collector along the foot, widening to its outfall
+        channel widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 6.0 to 3.0 and drain 1.5 to 5.0, in px rather than feet
+        low terraces wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the lowest three steps tinted
+        toe off the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: plots and lips lifted onto the collector's bank
+        retaining wall form - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: one lip drawn, no per-settlement stone wall or earth bank roll
+        drain and outfall course - UNRESEARCHED: the drain descends 40 px along the foot, the outfall turns 66 px downhill, the brook runs 300 px straight downhill
+        acreage scale - NONE: measured at a fixed 2 ft/px although `ftpx` is a parameter
+    """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill unit
     ux, uy = -dy, dx  # cross-slope (contour) unit
@@ -162,7 +180,22 @@ def build_ribbon(
     individual leveled cells - a ribbon paddy is a leveled cell like any other (the same small ~`cell_acres`
     as a comb or terrace paddy; a hill valley floor cannot hold one field-wide sheet level over any slope).
     `n_bands` sets the cross-bund (down-valley) step and the width is split into cells of that target, derived
-    at this map's `ftpx`. See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html."""
+    at this map's `ftpx`. See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html.
+
+    Research:
+        long narrow valley field - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: a strip `width` wide meandering down the valley floor
+        meander - UNRESEARCHED: lateral swing of 0.62 of the width, wavelength a 2.4th of the length
+        brook down the middle - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: the supply traces the valley's centerline
+        cross-bunds step it down - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: `n_bands` level stretches, 48 by default
+        cells across each stretch - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: split into cells of the fixed PADDY_CELL_ACRES, not tied to the valley's slope
+        cross drain at the foot - UNRESEARCHED: a short collector across the ribbon, its outfall at the far end
+        channel widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 5.0 to 3.0 and drain 1.5 to 5.0, in px rather than feet
+        low bands wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the lowest three bands tinted
+        toe off the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: plots lifted onto the collector's bank
+        floor width waver - UNRESEARCHED: the valley floor's width wavers +/-10% on a 90 px period
+        outfall and brook - UNRESEARCHED: an outfall stub 60 px and a brook 300 px straight downhill
+        acreage scale - NONE: measured at a fixed 2 ft/px although `ftpx` is a parameter
+    """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))
     ux, uy = dy, -dx

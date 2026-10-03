@@ -12,6 +12,8 @@ The record behind the two shared passages (JSON carries no comments, so it is ke
 
 - `crop-vs-perimeter`: One text for all four rolled crop-dike values - the distinction from the perimeter dike is identical whichever crop the knob rolled, and four copies is four chances for a later edit to fix one and leave three (settlement-review, 2026-08-29). The walk figures are measured on Kuwabata: the crop dike loops run a median 815 ft (3.1 min at 260 ft/min), the perimeter dike 4,591 ft along its CREST (18 min) - the walkable top of the bank, which is the thing you would walk. The first version of this line said half an hour, on the manifest's `outline`: that is the band POLYGON, outer face plus inner face returned, 1.99x the crest, so it counted the same walk twice (settlement-review round 2).
 - `pond-vs-polder-sluice`: The near-homonym the GM's own list did not name, and the pair a reader is likeliest to confuse on a dike-pond map: both are "sluice", both are boards in a cut (settlement-review, 2026-08-29).
+
+Research: modal explanation - NONE: the explanation's research is its Entry:, checked by entry-drift
 """
 
 from __future__ import annotations

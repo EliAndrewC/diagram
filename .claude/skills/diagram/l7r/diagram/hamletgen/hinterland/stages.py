@@ -1,4 +1,7 @@
-"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: stage plumbing - NONE: ordering, records and canopy measures
+"""
 
 from __future__ import annotations
 
@@ -23,7 +26,9 @@ from .parcels import CROP_MARGIN, open_ground_patches
 
 
 LEE_BAND_FT = 40.0  # ft: the width across the wind of one band of the belt, about a crown and a half
+"""Research: lee band width - UNRESEARCHED: 40 ft across the wind"""
 LEE_DEPTH_FT = 30.0  # ft: a crown's depth, the lee face's thickness in each band
+"""Research: lee face depth - UNRESEARCHED: 30 ft"""
 
 
 def reserved_seats(s: Settlement) -> list[tuple[float, float]]:
@@ -40,7 +45,12 @@ def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -
     keeps stand in the belt's shelter, on the houses' side. Anchored on every belt crown, it could stand anywhere within
     reach of one, and once the belt kept its depth where its fringe turns, 31 of Mizuguchi's 75 copse crowns stood beyond
     its windward face, farther from every house than the belt beside them - one wood 250 ft deep. `wind` points toward
-    where the wind comes from."""
+    where the wind comes from.
+
+    Research:
+        copse on the belt's lee - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: fruit trees planted on the fengshui wood's edges
+        lee side only - UNRESEARCHED: only crowns within LEE_DEPTH_FT of each band's leeward-most crown anchor it
+    """
     wx, wy = wind
     bands: dict[int, list[tuple[float, tuple[float, float]]]] = {}
     for c in clumps:
@@ -61,7 +71,10 @@ def woodland_offsheet(plan: SitePlan) -> dict[str, Any]:
     none), the ways to draw one ON it all change what the feature is: a parcel that sets the frame (against the GM's frame
     rule - the commons never set it), a parcel under the legibility floor, or one on the crop's set-back. The wood is not
     missing - the record says it is beyond the sheet's edge, and which way. The alternative forms were priced in the woods
-    design (`specs/287-placer-guarantees/design/design-woods.json`, `impossible`); the GM chooses between them."""
+    design (`specs/287-placer-guarantees/design/design-woods.json`, `impossible`); the GM chooses between them.
+
+    Research: wood beyond the sheet - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: recorded up the fall, the nearest hill beyond the fields
+    """
     ux, uy = -plan.fall[0], -plan.fall[1]
     deg = math.degrees(math.atan2(ux, -uy)) % 360.0  # compass: 0 = north, screen y points down
     return {"bearing": _COMPASS[int((deg + 22.5) // 45.0) % 8], "bearing_deg": round(deg, 1), "parcels": plan.woodland_patches}
@@ -70,7 +83,10 @@ def woodland_offsheet(plan: SitePlan) -> dict[str, Any]:
 def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> list[Any]:
     """The parcels the scan found, as they are - and where it found none of the parcels the plan rolled, the wood recorded
     beyond the sheet with its bearing (`meta.woodland_offsheet`, plan D11), so a roll either draws a wood or says where
-    it stands."""
+    it stands.
+
+    Research: wood beyond the sheet - DEVIATION research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a roll with no parcel on the sheet records the wood's bearing, not drawn (plan D11)
+    """
     if plan.woodland_patches and not polys:
         s.M["meta"]["woodland_offsheet"] = woodland_offsheet(plan)
     return polys
@@ -83,7 +99,12 @@ def against_the_belt(dented: Sequence[tuple[float, float]], groves: Sequence[Any
     The box is the belt's own footprint (`dented`), stood off the houses so the two stands read as one wood at its back.
     The anchors are on its LEE side of that face: the reach is centered `half` of it leeward of each lee crown, so a copse
     crown stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
-    two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)."""
+    two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns).
+
+    Research:
+        copse against the belt - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: anchored on the belt's lee face, fruit trees on the wood's edges
+        copse reach from the belt - UNRESEARCHED: 0 to COPSE_BELT_REACH_FT (60 ft) leeward, labeled a convention in consts
+    """
     bx = [q[0] for q in dented]
     by = [q[1] for q in dented]
     box = [(min(bx), min(by)), (max(bx), min(by)), (max(bx), max(by)), (min(bx), max(by))]
@@ -95,7 +116,10 @@ def copse_seat(
     siting: str, dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float, box: Any, near: tuple[Any, ...], brook: Any
 ) -> tuple[Any, tuple[Any, ...]]:
     """The copse's box and its reach: the dooryard copse's as given, or - sited against the belt, where it has one - the
-    belt's box and its lee anchors at `half` (`against_the_belt`). Lifted from `stage_hinterland` (feature 291)."""
+    belt's box and its lee anchors at `half` (`against_the_belt`). Lifted from `stage_hinterland` (feature 291).
+
+    Research: copse siting - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: dooryard (0036) or against the belt (0071), by the knob
+    """
     if siting == "against_the_belt" and dented:
         box, anchors = against_the_belt(dented, groves, wind, half)
         return box, (anchors, half, brook)
@@ -132,6 +156,13 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.hinterland.stages.plant_the_belt
         l7r.diagram.hamletgen.hinterland.frame.frame_for
         l7r.diagram.settlement.Settlement.fill_the_holes
+
+    Research:
+        scrub past the fields - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub the dominant cover outside the crops and woods
+        no scrub under a worked wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: brush and pine stop at every wood's line
+        bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
+        share clothed as grazing - UNRESEARCHED: holes in the view filled
+        stage order - NONE
     """
     # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
     # perimeter dike's willows and a fruit dike's trees were drawn in the field stage, before any yard or bed; every plot
@@ -191,6 +222,8 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
 
     Steps:
         l7r.diagram.settlement.Settlement.bamboo_stand
+
+    Research: stand-level bamboo mark - research/questions/0075-bamboo-groves-chikurin.drawing.html: the modern legend's mark over the stand, a convention
     """
     s.M["meta"]["bamboo"] = plan.bamboo
     s.M["bamboo_stands"] = []  # the pending seat-time records (T49) are replaced by the drawn ones
@@ -218,6 +251,8 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
 
     Steps:
         l7r.diagram.settlement.Settlement.commons
+
+    Research: coppice on the scanned parcels - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: each parcel stocked as a worked wood
     """
 
     # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out
@@ -234,7 +269,10 @@ def stock_woodland(s: Settlement, patch: Sequence[Any]) -> None:
     stocks from is this one. A parcel whose room the later fixtures have taken under the floor is not drawn as a wood of
     a few trees on grass: its ground is clothed as rough grazing, as `fill_the_holes` clothes bare ground, and the map
     records it (`meta.woodland_regraded`). Measured over cohort seeds 1-60 on 2026-09-29: no parcel's room was re-read
-    at the draw and the fewest crowns a wood recorded was 134, so the refusal is a guarantee, not a path any map takes."""
+    at the draw and the fewest crowns a wood recorded was 134, so the refusal is a guarantee, not a path any map takes.
+
+    Research: under-stocked parcel regraded - UNRESEARCHED: under WOODLAND_MIN_CROWNS the parcel is drawn as grazing
+    """
     from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS  # noqa: PLC0415 - kept beside its one use
 
     if len(s.woodland_room(patch)) < WOODLAND_MIN_CROWNS:
@@ -252,7 +290,10 @@ def ring_box(ring: Sequence[Any]) -> tuple[float, float, float, float]:
 
 def dent_around(belt: Sequence[tuple[float, float]], pocket: tuple[float, float, float, float]) -> list[tuple[float, float]]:
     """The belt's outline with every vertex inside the title's `pocket` pushed 6 px out of it, to the nearest side - the
-    dent `plant_the_belt` plants and the against-the-belt copse is boxed by (one body, so the two cannot differ)."""
+    dent `plant_the_belt` plants and the against-the-belt copse is boxed by (one body, so the two cannot differ).
+
+    Research: belt dented round the title - CONVENTION: vertices in the title pocket pushed 6 px out
+    """
     out: list[tuple[float, float]] = []
     for bx, by in belt:
         if pocket[0] <= bx <= pocket[2] and pocket[1] <= by <= pocket[3]:
@@ -282,6 +323,11 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
     from the houses (`belt_polygon`): a band of constant depth whose near face follows the cluster's windward
     fringe, column by column, spanning the cluster's width across the wind, ragged along its edges because a
     grove hugs the land and is not a ruled wall.
+
+    Research:
+        belt windward and embracing - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: planted on the band, crowns within the band's reach of a farmhouse
+        belt clipped at the page edge - CONVENTION: only crowns wholly off the frame dropped
+        dented round the title - CONVENTION
     """
     if not plan.belt:
         return
@@ -368,6 +414,12 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.hamletgen.hinterland.frame.title_pocket
         l7r.diagram.settlement.Settlement.village_grove
+
+    Research:
+        copse among the homes - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: over the cluster's own oriented footprint, or against the belt
+        copse reach from a house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within COPSE_HOUSE_REACH_FT (90 ft), a dooryard's reach
+        copse on the house's own bank - UNRESEARCHED
+        copse sized by the homestead woods - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each homestead's wood rolled in the register's range, the copse filled to what the belt and groves leave
     """
     _seats = reserved_seats(s)
     if not plan.belt and not _seats:
@@ -502,7 +554,10 @@ def wood_canopy(s: Settlement, roles: Sequence[str]) -> float:
 def homestead_wood_drawn(s: Settlement) -> float:
     """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html): the wood each
     homestead keeps, in sq ft - the belt, the copse and each farm's own grove (feature 291) together, shared among the
-    houses - which the register puts at no less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it."""
+    houses - which the register puts at no less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it.
+
+    Research: homestead wood floor - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: belt, copse and farm groves shared among the houses
+    """
     houses = s.M.get("houses") or []
     return (wood_canopy(s, ("windbreak", "copse")) + farm_grove_area(s)) / s.px(1.0) ** 2 / len(houses) if houses else 0.0
 

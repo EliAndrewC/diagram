@@ -15,6 +15,8 @@ recorded the same way. Two more variables ride along for attribution and are set
 test, so a `generate` that re-rolls three times inside one test is one roll with three attempts, and two
 tests rolling the same spec are two rolls. The verdict is `ci/rollverdict.py`; the roster is
 `tests/rolls.py`.
+
+Research: roll census and render guard - NONE: test-suite bookkeeping, no map decision
 """
 
 from __future__ import annotations

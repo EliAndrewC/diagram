@@ -32,7 +32,8 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # GUARD_EDIT_OK: feature 303 - the questions are research/questions/NNNN-<slug>.html; the compliant command is read off
 # that path as `make check-bundle Q=NNNN`. A change of layout; nothing loosened.
 # GUARD_EDIT_OK: feature 311 - intro-check is a new bundle-reading check; added, nothing loosened.
-CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check intro-check"
+# GUARD_EDIT_OK: feature 316 - impl-drift is a new bundle-reading check (`make claims-bundle`); added, nothing loosened.
+CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check intro-check impl-drift"
 
 pretool() {
   local verdict kind detail reason

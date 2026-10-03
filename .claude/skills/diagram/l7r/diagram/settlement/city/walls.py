@@ -1,6 +1,8 @@
 """The city's defensive shell: the wall, its towers and walk, and the patrol road inside it.
 
 Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -62,7 +64,15 @@ class WallsMixin:
         a fortified city keeps for moving troops along the wall. Records M['ring_road']; returns the
         loop polygon to use as s.bound (so the quarters pack INSIDE it, off the wall). It is NOT a
         town_street: a fortification road is exempt from the must-be-built-up rule (its wall side is
-        bare by design, and stretches run behind fields/compounds), but the grid still connects to it."""
+        bare by design, and stretches run behind fields/compounds), but the grid still connects to it.
+
+        Research:
+            patrol road inside the wall - research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.drawing.html: a closed loop
+            inset from the rampart - research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.drawing.html: 34 px
+            road width - research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.drawing.html: 20 ft
+            corridor kept clear - research/questions/0149-the-street-along-the-inside-of-a-city-wall-shunchengjie.drawing.html: half the width plus 21 px
+            road bed and edge - CONVENTION
+        """
         if width is None:
             width = self.lw(20)  # the ring/patrol street ~20 ft wide
         cx = sum(p[0] for p in wall_pts) / len(wall_pts)
@@ -97,7 +107,14 @@ class WallsMixin:
         runs along the wall and the depth projects across it (the caller berm-nudges so the outer part sits
         on the berm, not in the moat). A GATE tower (chenglou) passes a smaller ~52 x 30 ft. Strokes keep
         their legibility floor (the stroke convention); the footprint takes no license. Records
-        M['wall_towers'] (w = along, h = deep) and reserves a no-build block. See research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html."""
+        M['wall_towers'] (w = along, h = deep) and reserves a no-build block. See research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html.
+
+        Research:
+            tower footprint - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 62 x 40 ft default, longer along the wall
+            tower building on the spur - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 30 to 40 ft; min(34, 0.55 x along) ft, inset (28.6 ft on a gate tower)
+            no-build margin - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; 12 px at the map's grain
+            glyph - CONVENTION: fills and stroke floor
+        """
         al, dp = self.px(along_ft), self.px(deep_ft)
         tb = self.px(min(34, along_ft * 0.55))  # the enemy-tower building on the spur (~30-40 ft, inset)
         z = self.add_top(
@@ -184,7 +201,10 @@ class WallsMixin:
         centerline - the horse-face bastion's stride, standing dry whatever gap the moat is later
         drawn at (city_wall runs before s.moat, so it cannot measure the bed; 8px clears the
         tightest gap in the pool, Tango's 24 - moat half 11 = 13px berm, with ~4px to spare).
-        Gated by city_wall_furniture_clear_of_moat."""
+        Gated by city_wall_furniture_clear_of_moat.
+
+        Research: tower footing on the berm - UNRESEARCHED: nudged inward to a 6 px outer projection
+        """
         ux, uy = cx - x, cy - y
         ul = math.hypot(ux, uy) or 1.0
         d = tw_ / 2 - 6  # 6px projection: on a slanted stretch the square's rotation swings a corner ~2px closer than the face
@@ -209,7 +229,13 @@ class WallsMixin:
         self._gate_caption(gx, gy, cx, cy, pts, ring_inset)
 
     def _gate_piers(self: Settlement, gx: float, gy: float, g_idx: int, pts: Any, tang: Any, cx: float, cy: float, wc: str, pier_off: float) -> None:  # type: ignore[misc]
-        """The masonry piers framing the opening."""
+        """The masonry piers framing the opening.
+
+        Research:
+            pier size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 15 x 24 ft
+            pier at the jamb - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the clear opening's half plus half a pier
+            pier set inward - UNRESEARCHED: 31.5 ft toward the city
+        """
         _tg = math.radians(tang[g_idx])
         _tx, _ty = math.cos(_tg), math.sin(_tg)  # unit tangent along the wall
         _rox, _roy = gx - cx, gy - cy
@@ -225,7 +251,15 @@ class WallsMixin:
             self.M["gate_structs"].append({"x": round(_pcx, 1), "y": round(_pcy, 1), "w": round(_pw, 1), "h": round(_ph, 1), "rot": round(tang[g_idx], 1), "kind": "gatepost"})
 
     def _gate_flanking_buildings(self: Settlement, g_idx: int, pts: Any, cx: float, cy: float, ring_inset: float, g_east: bool) -> None:  # type: ignore[misc]
-        """The guard house and inspection station, facing each other across the entering roadway."""
+        """The guard house and inspection station, facing each other across the entering roadway.
+
+        Research:
+            posts flank the road at the opening - research/questions/0133-barriers-and-inspection-posts-at-a-towns-entrance-bansho.html: one each side, guard house west by default
+            guard house size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 34 x 20 ft
+            inspection hall size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 44 x 22 ft
+            set on the patrol road - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 105 to 135 ft inside the opening on the patrol road's center; pulled in to the ring road centerline, 6 px past the verge
+            fills and trim - CONVENTION
+        """
         # the GUARD HOUSE and INSPECTION STATION FLANK THE ROAD at the gate throat - one on each
         # side, facing each other across the entering roadway (the Hakone-sekisho pattern: the
         # inspection office and the guard barracks stand OPPOSITE each other just inside the gate,
@@ -276,7 +310,14 @@ class WallsMixin:
                 self.M["inspection_stations"].append({"x": fx, "y": fy, "w": round(fw, 1), "h": round(fh, 1), "rot": round(a, 1), "label": "inspection station"})
 
     def _gate_tower(self: Settlement, g_idx: int, pts: Any, cx: float, cy: float, wc: str, tower_skip: Any, g_east: bool) -> None:  # type: ignore[misc]
-        """The gate guard tower on the wall beside the opening, and its search for a clear flank."""
+        """The gate guard tower on the wall beside the opening, and its search for a clear flank.
+
+        Research:
+            gate tower beside the opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html
+            gate tower size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 52 x 30 ft
+            search along the wall - UNRESEARCHED: 78 to 240 px, both flanks at each step
+            clear of a ward gate - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: KIDO_TOWER_KEEPCLEAR
+        """
         # the gate guard TOWER straddles the WALL beside the gate, tilted to the wall there and NUDGED
         # INWARD so its footing stands on the berm (below). It belongs AT the gate: try the near-gate
         # spot on the PRIMARY flank first, then the OTHER flank at the SAME short arc, and only THEN
@@ -307,7 +348,13 @@ class WallsMixin:
 
     def _gate_caption(self: Settlement, gx: float, gy: float, cx: float, cy: float, pts: Any, ring_inset: float) -> None:  # type: ignore[misc]
         """The pair's shared caption, pushed inward until its own box clears the defenses, plus the
-        ground it and the three gate structures reserve against later packs."""
+        ground it and the three gate structures reserve against later packs.
+
+        Research:
+            gate caption - CONVENTION: one 9 pt italic label pushed inward clear of the defenses
+            ground reserved round the gate works - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; 12 px round the guard buildings
+            ground reserved round the gate tower - GUESS: 30 px (about 90 ft), wider than the 36 ft the drawing page gives
+        """
         # ONE label for the pair, centered on the road just inside the gate and pushed far enough
         # INWARD (along the gate's radial) to clear BOTH flanking buildings - the wide italic text
         # runs across the roadway between them, so it covers neither footprint (GM 2026-07-22: the
@@ -389,7 +436,18 @@ class WallsMixin:
     def _seat_mural_towers(self: Settlement, pts: Any, gates: Any, water_gates: Any, tower_skip: Any, wc: str, cx: float, cy: float) -> None:  # type: ignore[misc]
         """Every mural tower on the curtain: the even fill between gate-tower anchors, then the
         coverage-remediation passes that turn "spacing <= range" into "coverage >= min everywhere"
-        after slides. Split out of `city_wall` by feature 113."""
+        after slides. Split out of `city_wall` by feature 113.
+
+        Research:
+            spacing by defense posture - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: wall_tower_spacing_px, a knob
+            spacing margin - GUESS: 0.85 of the cap, a calibration within the 160 to 400 ft spacings of research/questions/0148-towers-along-the-city-wall-mamian.drawing.html
+            tower separation floor - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: a regular rhythm, no gap under seven tenths of the median; 0.75 of the cap, at least 28 px
+            no tower in a gate or water-gate opening - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 45 px and 40 px
+            slide off a ward gate or gate works - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the drawing page's GUESS bands, 186 ft of a ward gate and 165 ft of guard buildings; 32 px and 40 px, slides of 22 to 46 px
+            coverage remediation - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: towers added where fewer than the posture's minimum reach
+            reach counted from the parapet - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: plus 12 px
+            exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 130 px of a gate, 55 px of its guard buildings
+        """
         # GUARD TOWERS (mamian) around the rampart, in addition to the gate towers, for enfilading
         # flanking fire along the wall face. SPACING is set by the city's DEFENSE POSTURE (GM 2026-07-22,
         # meta wall_defense=): a border/besieged city (`siege`) packs them to the aimed-lethal bowshot so
@@ -508,7 +566,17 @@ class WallsMixin:
         directions tried, shortest slide wins - a full vertex jump left a bare stretch of
         rampart, a defensive hole).
         Records M['wall'], M['gates'], M['gate'], M['gate_structs'] (the guard houses + towers),
-        and M['inspection_stations']."""
+        and M['inspection_stations'].
+
+        Research:
+            closed ring with gates - research/questions/0145-city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang.drawing.html: an opening at each of the caller's gates
+            gate opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 30 ft clear between 15 ft piers
+            water gate opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 60 ft
+            guard house, inspection hall and tower at every gate - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html
+            no barbican - research/questions/0150-barbicans-wengcheng-masugata.drawing.html: none drawn
+            rampart drawn width - UNRESEARCHED: an 11 px stroke
+            wall corridor - UNRESEARCHED: 46 px
+        """
         wc = '#3A352C'
         ring = list(pts) + [pts[0]]
         # the rampart renders in the WALL layer (over the ground lanes - a street running into the wall

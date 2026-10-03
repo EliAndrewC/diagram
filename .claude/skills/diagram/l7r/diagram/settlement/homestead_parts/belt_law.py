@@ -25,7 +25,10 @@ whole"): each round it asks the page the belt will be framed to, trims the hook 
 thin stretch and closes a hole with seats the placer's own tests admit - across the band's depth there, and up to
 `BELT_PUSH_BACK_FT` beyond its far face (the band pushed back for that column, the ladder's own 60 ft) - and where no
 seat is admitted, ENDS the belt there, keeping the longer side. No round leaves a violation standing: the last phase only
-removes crowns, so it terminates, and it stops only when every predicate passes."""
+removes crowns, so it terminates, and it stops only when every predicate passes.
+
+Research: plumbing - NONE
+"""
 
 from __future__ import annotations
 
@@ -41,10 +44,23 @@ View = tuple[float, float, float, float]
 MIN_BELT_DEPTH_FT = (
     30.0  # research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a belt 'shallower than about 30 ft reads as a row of blobs'
 )
+"""The least depth of a judged stretch.
+
+Research:
+    least belt depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+        no judged stretch under 30 ft along the wind
+"""
 DEPTH_BIN_FT = 40.0  # the stretch across the wind a depth is read over - about a crown and a half
 BELT_PUSH_BACK_FT = 60.0  # how far past the band's far face a thin column may be planted: `belt_polygon`'s own ladder tops out at 60 ft back
+"""Research: repair push-back - UNRESEARCHED: a thin stretch planted up to 60 ft past the band's far face"""
 SETTLE_ROUNDS = 12  # rounds that may add seats before the removing phase; each round re-reads the page the belt sets
 BELT_DESIGN_DEPTH_FT = 110.0  # the band `belt_polygon` draws, 36..146 ft behind the fringe: a belt standing against the page has a crown this near its edge
+"""The depth of the band `belt_polygon` draws.
+
+Research:
+    belt band depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+        110 ft, 36 to 146 ft behind the fringe
+"""
 
 #: The compass quarter the wind comes from, as the manifest records it (`meta.windward`), toward that quarter. Normalized
 #: in `wind_unit`, the one place a quarter becomes a vector for these predicates, so the placer and a test read one number.
@@ -94,6 +110,14 @@ class BeltReading:
         reach: float | None = None,
         band: Sequence[Sequence[float]] = (),
     ) -> None:
+        """The exemptions the measure grants, decided once.
+
+        Research:
+            page edge not judged - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a
+                stretch the page cuts, or within the band's depth of it, is exempt
+            tips not judged - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+                a belt tapers at its ends
+        """
         wx, wy = wind
         px, py = -wy, wx
         self.r, self.reach = r, reach
@@ -157,7 +181,12 @@ class BeltReading:
     def _parted(self) -> set[int]:
         """The bins a way or the brook CROSSES face to face: its samples inside the belt's band at a bin span at least half
         the band's depth there. A lane running ALONG the belt inside its band parts nothing - exempting it hid the very
-        defect this measures (Kashikawa's seed-8 windward arm, one row deep beside its main lane)."""
+        defect this measures (Kashikawa's seed-8 windward arm, one row deep beside its main lane).
+
+        Research:
+            lane crossing exempt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a
+                way crossing face to face over half the band's depth
+        """
         r = self.r
         inside: dict[int, list[float]] = {}
         for u, v in self.ways:
@@ -176,7 +205,12 @@ class BeltReading:
         """Is the belt's band at `v` across the wind beyond `reach` of every house (W19) - its near face there (the band's
         most leeward vertex within a bin of `v`), or where no band is recorded, the nearest crowned bins' most leeward crown?
         No crown may stand there (`plant_the_belt` plants within the reach), so a stretch no house stands before is a run
-        break, not a hole."""
+        break, not a hole.
+
+        Research:
+            run break - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a stretch no
+                house stands before is not planted
+        """
         if self.reach is None:
             return False
         near = [u for u, bv in self.band if abs(bv - v) <= DEPTH_BIN_FT]
@@ -189,7 +223,14 @@ class BeltReading:
     def depths(self) -> list[float | None]:
         """THE ONE PREDICATE of W16: the belt's depth ALONG the wind per `DEPTH_BIN_FT` bin ACROSS it, crown edge to crown
         edge (a belt one row deep reads one crown), or None where the bin is not judged - cut by the page, parted by a way,
-        a tip, or an empty stretch between two runs that no house stands before (W19's run break)."""
+        a tip, or an empty stretch between two runs that no house stands before (W19's run break).
+
+        Research:
+            belt depth judged - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+                crown edge to crown edge per 40 ft bin
+            frame-held belt judged whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
+                exemptions void where the belt stands off the page's edge
+        """
         # ...and an empty bin inside an opening a way crosses face to face (`_crossed`): a way crossing on the diagonal parts
         # the belt over more than the one bin its samples span half the band's depth in, and the opening it makes is the
         # crossing's, which W17 judges (no more than `_BELT_GAP_FT` either side of the way)
@@ -235,7 +276,12 @@ class BeltReading:
 
     def holes(self) -> list[tuple[float, float]]:
         """THE ONE PREDICATE of W17: every opening (v1, v2) across the wind wider than `_BELT_GAP_FT` between two crowns
-        that is a HOLE - not where a way crosses the belt, not where the page cuts it, not a run break (W19)."""
+        that is a HOLE - not where a way crosses the belt, not where the page cuts it, not a run break (W19).
+
+        Research:
+            continuous planting - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: an
+                opening over 30 ft across the wind is a hole
+        """
         vs = sorted(v for _u, v in self.cl)
         out: list[tuple[float, float]] = []
         for a, b in zip(vs, vs[1:], strict=False):
@@ -255,7 +301,12 @@ class BeltReading:
         """Is the opening (a, b) across the wind a CROSSING - a way or the brook through it face to face (its samples inside
         the band there spanning at least half the band's depth, as `_parted` reads a bin), with no more than `_BELT_GAP_FT`
         of opening either side of it? A crossing is a declared opening; the belt resuming each side of it is what the gap
-        fill plants, so an opening wider than the crossing explains is still a hole."""
+        fill plants, so an opening wider than the crossing explains is still a hole.
+
+        Research:
+            planting resumes beside a lane - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
+                no more than 30 ft of opening either side of the way
+        """
         band = [*self._near(self.bin(a)), *self._near(self.bin(b))]
         lo, hi = min(band) + self.r, max(band) - self.r
         cross = [(u, v) for u, v in self.ways if a < v < b and lo < u < hi]
@@ -344,7 +395,11 @@ def _close(rd: BeltReading, a: float, b: float, band_uv: Sequence[Pt], seat: Cal
 
 def _cut(rd: BeltReading, seated: list[Pt], v1: float, v2: float) -> list[Pt]:
     """The belt ENDED at the stretch [v1, v2] across the wind: the crowns in it removed, and the side with fewer crowns
-    with them - the belt stands where it can be deep and whole (plan D8), and the longer run is the one kept."""
+    with them - the belt stands where it can be deep and whole (plan D8), and the longer run is the one kept.
+
+    Research:
+        belt ended at a flaw - UNRESEARCHED: the side with more crowns kept
+    """
     uv = [rd.uv(*c) for c in seated]
     left = sum(1 for _u, v in uv if v < v1)
     right = sum(1 for _u, v in uv if v > v2)
@@ -370,7 +425,12 @@ def settle_the_belt(
     every thin stretch and closes every hole with seats `seat` admits (across the band `band` and up to
     `BELT_PUSH_BACK_FT` past its far face), until a round adds nothing. Then, while any stretch is still thin or open, the
     belt is ENDED there (`_cut`), and re-read - removal only, so it terminates, and it returns only a belt every predicate
-    passes (or none at all)."""
+    passes (or none at all).
+
+    Research:
+        deep and whole belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: thin
+            stretches deepened, holes closed, else the belt ended
+    """
     seated = list(seated)
     for phase in ("repair", "end"):
         for _ in range(SETTLE_ROUNDS if phase == "repair" else len(seated) + 1):

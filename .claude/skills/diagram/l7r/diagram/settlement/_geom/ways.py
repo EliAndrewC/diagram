@@ -6,6 +6,8 @@ The placer and the check both read these, which is the whole reason they are sha
 rather than two hand-rolled lists.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: way readers - NONE: the recorded ways read off a manifest, and tolerances on them
 """
 
 import math
@@ -21,7 +23,14 @@ from .primitives import seg_dist
 # research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
 # and research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html.
 PLANK_ABUTMENT = 6.0  # deck = local ditch width + this SHORT abutment (GM 2026-07-22: was 15, far too long for a footplank)
+"""Research: footplank abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: deck is the ditch width plus 6 px"""
 PLANK_BANK_REACH = 11.0  # px past the abutment where a bank opens onto the terrain it lands on
+"""Each bank probed past the abutment for the ground it lands on.
+
+Research:
+    footplank lands on useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: both ends land on ground worth crossing to
+    bank probe distance - GUESS: 11 px past the abutment
+"""
 LANDING_FT = 10.0  # a CARRIED deck runs this many REAL feet of deck onto dry ground past each
 # bank (GM 2026-08-09). Researched: a bridge does not stop at the water's edge - the girder
 # bears on an abutment sill set BACK from the channel edge, both because scour (the current
@@ -30,7 +39,9 @@ LANDING_FT = 10.0  # a CARRIED deck runs this many REAL feet of deck onto dry gr
 # side; 10 ft is mid-band. REAL feet (convert by self.ftpx when drawing), unlike
 # PLANK_ABUTMENT above, which is px and deliberately short: an itabashi footplank simply rests
 # its ends on the bank (GM 2026-07-22), so footplanks do NOT take this landing.
+"""Research: carried deck landing - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: 10 ft of deck past the water each bank"""
 PLANK_VILLAGE_REACH = 55.0  # a bank within this of a dwelling reaches the VILLAGE (a place worth crossing to)
+"""Research: footplank reaches the village - UNRESEARCHED: a bank within 55 px of a dwelling counts as worth crossing to"""
 
 
 # ---- the traveled ways, and the gate that bars one ------------------------------------------
@@ -42,6 +53,7 @@ LANE_THROUGH_TOL = 12.0  # a lane whose centerline passes within this of a gate 
 LANE_CROSSES_MIN_DEG = (
     25.0  # ...and it must actually CROSS the fence rather than run ALONGSIDE it: a street laid parallel to the ward fence never passes through the gate, so it must not be what the gate squares to
 )
+"""Research: lane alongside the fence not barred - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: within 25 degrees of the fence"""
 
 
 def lane_runs(M: Manifest) -> list[tuple[Poly, float]]:
@@ -140,7 +152,10 @@ def lane_through_gate(M: Manifest, x: float, y: float, fence_deg: float) -> tupl
     """The traveled way a ward gate seated at (x, y) BARS, as (tangent degrees, bed half-width), or
     None if the gate stands in open fence with no lane through it. `fence_deg` is the local fence
     tangent, used only to reject a lane running ALONGSIDE the fence (which the gate does not bar).
-    The nearest true crossing wins where several lanes are close."""
+    The nearest true crossing wins where several lanes are close.
+
+    Research: which way a ward gate bars - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: a lane within 25 degrees of the fence rejected, the nearest crossing wins
+    """
     best: tuple[float, float, float] | None = None
     for pts, half in lane_runs(M):
         for i in range(len(pts) - 1):
@@ -158,7 +173,9 @@ def lane_through_gate(M: Manifest, x: float, y: float, fence_deg: float) -> tupl
 def kido_bar_deg(lane_deg: float, fence_deg: float) -> float:
     """The angle a ward gate's roofed bar takes: SQUARE TO THE LANE it bars. Returned as the
     representative nearest the fence direction, so the guard box's ward-interior flank (which s.ward
-    resolves against the bar's local +y) keeps the same sense whichever way the fence was drawn."""
+    resolves against the bar's local +y) keeps the same sense whichever way the fence was drawn.
+
+    Research: ward gate across its way - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the bar squared to the lane it bars"""
     return fence_deg + (((lane_deg + 90.0) - fence_deg + 90.0) % 180.0 - 90.0)
 
 
@@ -166,3 +183,4 @@ def kido_bar_deg(lane_deg: float, fence_deg: float) -> float:
 # floor `bridges_span_their_water` applies to anything that is not a standalone footplank. A real
 # abutment sill sits back from the channel edge so scour cannot undercut the bearing.
 CARRIED_LANDING_FLOOR_FT = 6.0
+"""Research: carried deck corners on dry ground - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: each corner at least 6 ft back from the water"""

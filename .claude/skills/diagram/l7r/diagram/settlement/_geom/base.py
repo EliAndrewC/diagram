@@ -8,6 +8,8 @@ guard must run on ANY import of the package, and it does, because every submodul
 in __init__.py reaches this one.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: plumbing - NONE: type aliases and the main-tree guard
 """
 
 import os
@@ -60,9 +62,13 @@ def _assert_not_main_tree(path: str | None = None) -> None:
 _assert_not_main_tree()
 
 LAND = '#EFE3C2'
+"""Research: land fill - CONVENTION"""
 PADDY_SHADES = ['#A7C49C', '#9FBE93', '#AECBA1', '#9BBA8F', '#B4CCA6']  # rice mid-growth (green)
+"""Research: mid-growth rice fills - CONVENTION"""
 FLOODED_SHADES = ['#93B0A2', '#8AAB9A', '#9DBAAB', '#88A99A', '#9AB6A8']  # just-transplanted paddy (water+shoots, blue-green)
+"""Research: flooded paddy fills - CONVENTION"""
 RIPE_SHADES = ['#CBBB74', '#C4B36A', '#D1C180']  # ripening rice (golden) - a few plots
+"""Research: ripening rice fills - CONVENTION"""
 # CROWN FILLS - every color the engine paints a RECORDED tree crown with. `tools/scatter_audit.py`
 # imports this rather than carrying its own copy.
 #
@@ -92,4 +98,6 @@ CROWN_FILLS = (
     '#BBD06A',  # homestead_parts.py bamboo top
     '#94A23A',  # farm_fixtures.py the yard persimmon (feature 133 T57; yellowed in 315: #7C9A3E stood 7.8 in CIELAB from the grove's #7C9A4E, and the record draws it 'a yellower green than the groves')
 )
+"""Research: tree crown fills - CONVENTION"""
 RICE_GREENS = ['#A6C398', '#A2C094', '#A9C69C']  # rice at ONE stage - near-identical greens (reads uniform)
+"""Research: one-stage rice fills - CONVENTION"""

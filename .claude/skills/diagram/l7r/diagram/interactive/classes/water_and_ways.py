@@ -2,6 +2,8 @@
 
 Each class's DOCSTRING is its explanation - `What:`, `Why:`, `Note:`, optional `Caveat:` - parsed by
 `_base.parse_explanation` (feature 189). Edit the prose here and the page changes; the gate does not re-open.
+
+Research: modal explanation - NONE: the explanation's research is its Entry:, checked by entry-drift
 """
 
 from __future__ import annotations
