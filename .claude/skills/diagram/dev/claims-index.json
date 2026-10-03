@@ -4799,13 +4799,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "code": "9bd5abe38fad9536",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
+  "code": "0f85143073a89f3e",
   "core": "9b77a3b13db01c9e",
   "date": "2026-10-03",
-  "note": "\"no bound from the field\" is not unresearched: page 0032 answers it (\"no house is refused for its distance from the fields\"). Only the nearest-the-seat order is unresearched, so split the claim in two.",
+  "note": "no distance-from-field bound in the code; 0032 says \"no house is refused for its distance from the fields\"",
+  "research": "04b14739a7564aff",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
+  "code": "e81ac74bdb83b758",
+  "core": "9b77a3b13db01c9e",
+  "date": "2026-10-03",
+  "note": "nearest-first over every legal grid point; 0032 is silent on the order seats are offered in",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::margin_ladder#seat search": {
   "code": "0d915cc2edf06a38",
@@ -6328,10 +6336,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seat_geometry.py::in_a_shapes_band#a cluster's longest draw": {
-  "code": "19a89eaf74140c28",
+  "code": "a48fbbea27d8fede",
   "core": "a980e5e3df3f410b",
   "date": "2026-10-03",
-  "note": "elongated's 12:1 ceiling, as coded",
+  "note": "the predicate only reads the 12:1 ceiling and refuses nothing; no question in the bundle bears on it",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -13047,13 +13055,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_joins#ends that nearly meet are joined": {
-  "code": "0fcfdbdc8f689009",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_joins#a join taken back": {
+  "code": "0b3f30a290346861",
   "core": "06e8b97d8c27146f",
   "date": "2026-10-03",
-  "note": "need the value of _LANE_JOIN_FT to check against 0081's \"within 25 ft\", and whether a later pass pulls a taken-back end to \"the last house it serves\" (0081); 0081 records no take-back exception, and the cut of reach + 5 ft is not that rule",
+  "note": "0081 doesn't say what happens when a join is blocked; the trims then pull the end back to its last house, which is 0081's own GUESS rule",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_joins#ends that nearly meet are joined": {
+  "code": "fa2ec0c5fd3465bc",
+  "core": "06e8b97d8c27146f",
+  "date": "2026-10-03",
+  "note": "the join reach is law.JOIN_REACH_FT = 30 ft (through law.near_misses), but 0081 says \"Ends within 25 ft of one another are joined\"; same gap as the one already recorded against law.JOIN_REACH_FT, fix it once (code to 25 ft, or the page to 30)",
   "research": "9525e03c22df776b",
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_needles#a sliver welded shut": {
   "code": "ebb44a10e487a5ed",
@@ -15096,12 +15112,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_shadow_cuts#no doubled band": {
-  "code": "ea6cd8a398f7116a",
+  "code": "812c123643082d06",
   "core": "a3d82ec5deebbb74",
   "date": "2026-10-03",
-  "note": "the rule bars a lane running within WEB_SHADOW_FT (30 ft) of a tree lane for more than a pitch, which is a decision about where lanes run, not how they are shown; label it UNRESEARCHED as admits and walked_shadows label the same rule",
+  "note": "neither question in the bundle covers an ordinary lane running beside a tree lane",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_shadows#no doubled band": {
   "code": "027e3b3caaaf57e8",
