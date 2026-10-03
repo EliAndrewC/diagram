@@ -196,9 +196,35 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     monkeypatch.setattr(fit, "access_corridor", lambda s, g: ((1000.0, 1080.0), (1000.0, 450.0)))
     assert not s.try_place(1000.0, 1100.0, "plain"), "a corridor of its own: not land the custom covers"
     monkeypatch.setattr(fit, "access_corridor", lambda s, g: None)
+    s._tight_of = {**tight, "own_way": False}  # a fresh seat's word, as the growth gives each seat
     assert s.try_place(1000.0, 1100.0, "plain"), "a passage and no corridor: seated"
     rec = s.M["houses"][-1]
     assert rec["reached_across"] == [600.0, 700.0] and rec["passage_depth"] == 1 and rec["passage"] == [[1000.0, 1000.0], [1040.0, 1000.0]]
     assert s._passage_left == 0 and "access" not in rec["geom"]
     assert s._access.covers_box((1020.0, 1000.0, 4.0, 4.0)), "the walk kept clear of later homesteads, as a corridor is"
     assert not s._access.covers_box((1020.0, 1300.0, 4.0, 4.0))
+
+
+def test_a_passage_crosses_only_to_a_reached_household_with_a_yard() -> None:
+    assert passage.crossable({"geom": {"access": ((0.0, 0.0), (1.0, 0.0)), "boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}})
+    assert passage.crossable({"passage_depth": 1, "geom": {"boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}}), "within the chain"
+    assert not passage.crossable({"passage_depth": passage.PASSAGE_CHAIN, "geom": {"boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}}), "at its end"
+    assert not passage.crossable({"geom": {"boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}}), "nothing reaches it"
+    assert not passage.crossable({"geom": {"access": ((0.0, 0.0), (1.0, 0.0)), "boxes": {}}}), "no yard"
+
+
+def test_a_seat_where_one_layout_has_a_way_of_its_own_is_refused_for_every_layout(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_parts_fit` (feature 317, `own_way`): once a garden layout at a tight seat finds a corridor, the household there is not on
+    land the custom covers - its other layouts are refused unasked."""
+    from l7r.diagram.settlement.rolling import fit
+
+    s = _open()
+    _nb, geom, tight = _pair(s)
+    s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
+    s._tight_of = tight
+    s._passage_left = 1
+    asked: list[int] = []
+    monkeypatch.setattr(fit, "passage_of", lambda s, g: asked.append(1) or {"walk": ((0.0, 0.0), (1.0, 0.0)), "of": (600.0, 700.0), "depth": 1})
+    monkeypatch.setattr(fit, "access_corridor", lambda s, g: ((0.0, 0.0), (0.0, -1.0)))
+    assert not s._parts_fit(geom) and tight["own_way"] and asked == [1], "a way of its own from this layout"
+    assert not s._parts_fit(geom) and asked == [1], "...so the next is refused without its walk asked"

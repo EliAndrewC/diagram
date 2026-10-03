@@ -307,3 +307,22 @@ def test_the_seat_s_allotted_reach_is_the_one_it_was_parted_by() -> None:
     assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, lambda q: next(rolls), None, lot) is not None
     assert lot == [big], "moved out to the union, and parted by it - not by the smaller reach rolled at the last seat"
     assert growth.land_box((0.0, 0.0), (10.0, 20.0, 5.0, 15.0)) == (5.0, 5.0, 30.0, 20.0)
+
+
+def test_a_tight_seat_stands_on_its_neighbor_s_yard_side() -> None:
+    """Feature 317 (`TIGHT_BEARING_DEG`): its front and flanks, where a walk to its yard can be had - never behind its house."""
+    center, yard = (0.0, 0.0), (0.0, 10.0)  # the yard to the south (screen axes)
+    assert growth.yard_side(center, yard, math.pi / 2), "toward the yard"
+    assert growth.yard_side(center, yard, 0.0) and growth.yard_side(center, yard, math.pi), "its flanks, 90 degrees off"
+    assert not growth.yard_side(center, yard, -math.pi / 4) and not growth.yard_side(center, yard, -math.pi / 2), "behind the house"
+
+
+def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    s = _Tight(room=30.0)
+    s._passage_left = 1  # type: ignore[attr-defined]
+    seats: list[tuple[float, float]] = []
+    real = s.try_place
+    s.try_place = lambda x, y, k: (seats.append((x, y)) if getattr(s, "_tight_of", None) is not None else None) or real(x, y, k)  # type: ignore[method-assign]
+    grow_the_margin(s, _plan(3), 0, 1e9, (46.0, 28.0))  # type: ignore[arg-type]
+    assert seats and all(y > -1e-6 for _x, y in seats), "the first house's yard lies south: no tight seat north of it"

@@ -41,7 +41,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT
 from l7r.diagram.settlement.rolling.fit import within_field_reach
 from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done
-from l7r.diagram.settlement.rolling.passage import PASSAGE_CHAIN, depth_of
+from l7r.diagram.settlement.rolling.passage import crossable
 
 from ..consts import SUN_CORRIDOR_FT, Pt
 from .capacity import DRY_SPELL, _near_a_house, free_seats, offer_seats
@@ -200,6 +200,22 @@ def grow_gap(s: Settlement) -> float:
 TIGHT_GAP_PX = 2.0
 
 
+#: How far off the bearing from a standing house to its threshing yard a TIGHT seat may stand, in degrees (feature 317): its front and
+#: flanks, where a walk to its yard can be had. MEASURED (research R7): behind the house - 135 and 180 degrees off - a walk had to
+#: go round it and seated 1 household in 194 tight tries on 13 settlements at 15 households, the yard's side 15 in 304; offered
+#: there too, the tight seats cost the stage 12-35%. 112.5 holds the 90-degree band whole. A search breadth, not a rule of the
+#: custom: a household behind its neighbor is still seated, by the growth's ordinary seats and a way of its own.
+TIGHT_BEARING_DEG = 112.5
+
+
+def yard_side(center: Pt, yard: Pt, angle: float) -> bool:
+    """Does the bearing `angle` (radians) from a standing house at `center` stand within `TIGHT_BEARING_DEG` of the bearing to
+    its threshing yard at `yard`?"""
+    to_yard = math.atan2(yard[1] - center[1], yard[0] - center[0])
+    off = abs((math.degrees(angle - to_yard) + 180.0) % 360.0 - 180.0)
+    return off < TIGHT_BEARING_DEG
+
+
 def land_box(center: Pt, reach: Reach) -> tuple[float, float, float, float]:
     """The box `(cx, cy, w, h)` a footprint reaching `reach` (west, east, north, south) from `center` covers - a standing
     household's land as the growth parts it, which a passage's walk may cross (feature 317)."""
@@ -260,15 +276,16 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                             heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, far * ring, None)))
                 # ...AND, WHILE THE SHARE HAS ROOM, ITS TIGHT SEATS (feature 317, plan D2): at the parting with no path's strip,
                 # in the same directions, unjittered in distance - a household there stands against this one's land, and is
-                # taken only by passage across its yard (`fit._parts_fit`, `passage.passage_of`); queued once a house, and only
-                # round one a passage may cross to - itself reached within the chain, with a yard (`passage.depth_of`)
+                # taken only by passage across its yard (`fit._parts_fit`, `passage.passage_of`); queued once a house, only round
+                # one a passage may cross to (`passage.crossable`), and only on its yard's side (`yard_side`)
                 hkey = (round(hx), round(hy))
-                depth = depth_of(rec)
-                crossable = depth is not None and depth < PASSAGE_CHAIN and ((rec.get("geom") or {}).get("boxes") or {}).get("yard") is not None
-                if getattr(s, "_passage_left", 0) > 0 and hkey not in tight and crossable:
+                if getattr(s, "_passage_left", 0) > 0 and hkey not in tight and crossable(rec):
                     tight.add(hkey)
+                    yard = rec["geom"]["boxes"]["yard"]
                     for k in range(ndir):
                         ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * GROW_JITTER_DEG)
+                        if not yard_side((hx, hy), (float(yard[0]), float(yard[1])), ang):
+                            continue
                         q = seat_toward((hx, hy), reach, guess, ang, TIGHT_GAP_PX)
                         d = math.hypot(q[0] - cx, q[1] - cy)
                         if d <= bound:

@@ -464,9 +464,18 @@ class BundleFitMixin:
             # and no corridor of its own is (one that finds a corridor is refused the seat: the growth's ordinary seats keep a
             # path's room). The walk is asked FIRST - the same verdict, both must hold - since it is searched on the two
             # households' land and rarely found, where the corridor is searched over the whole tree and was found at 367 of 476
-            # tight-seat layouts (15 households, seeds 1-16), each a refusal that cost the stage its search
+            # tight-seat layouts (15 households, seeds 1-16), each a refusal that cost the stage its search. And ONCE A SEAT:
+            # a household with a way of its own from one garden layout at the seat is not on land the custom covers, so its
+            # other layouts there are refused unasked (`own_way`; research R7: 93 of 106 corridor searches after a walk found
+            # one, 1.75 s of the tight seats' 4.0)
+            tight = self._tight_of
+            if tight.get("own_way"):
+                return False
             passage = passage_of(self, geom)
-            if passage is None or access_corridor(self, geom) is not None:
+            if passage is None:
+                return False
+            if access_corridor(self, geom) is not None:
+                tight["own_way"] = True
                 return False
             geom["passage"] = passage
         elif tree is not None:

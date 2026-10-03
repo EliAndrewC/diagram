@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "ba49685eb55c0f9177b138376c19a5297a0801cd6c78fb180a91435e7eea6367",
+ "plan_sha256": "b52198dc7010697500f00f25a07bb4b314077f3212a59bc2777c014aba140f70",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -31,15 +31,21 @@
   },
   {
    "id": "D2-adjoin",
-   "summary": "The reach is the custom's condition: the household's envelope within the parting and PASSAGE_ADJOIN_FT (GUESS: the 2 px parting plus a foot) of the neighbor's footprint, not a walking distance",
+   "summary": "The reach is the custom's condition: the household's land - the reach its seat was parted by (settled_seat's allotted reach, over every garden layout, carried with its house) - within the parting and PASSAGE_ADJOIN_FT (GUESS: the 2 px parting plus a foot) of the neighbor's footprint, not a walking distance",
    "class": "within",
-   "why": "The spec's 'across a neighbor's dooryard' and the record's 'passing over' another's land, read literally: a walk across open ground to a yard 40 ft away crosses common ground, not the neighbor's land. A calibrated constant labeled GUESS with its derivation (constitution XII). It replaces the previous record's 40 ft reach, which R3 measured as never met."
+   "why": "Still the spec's 'across a neighbor's dooryard' and the record's 'passing over' another's land, read literally: land against land, never open ground. The amendment changes which ground counts as the household's own - the ground the growth actually reserved for it when parting its seat, rather than one layout's box - which is the household's land in the model (no other homestead may stand on it). It narrows nothing asked: research R6 measured the old measure refusing all but one household at 3-36 px back from the parting (observed 2026-10-03), so the change makes FR-002's 'MUST be able to seat' reachable rather than restricting it."
   },
   {
    "id": "D2-walk",
-   "summary": "A straight leg from one of the household's doors to the neighbor's threshing yard, wholly on the two households' land, clear of both households' houses, beds, sheds, byres, well pockets and fixtures, of every other placed homestead, the refused-ground grid and reserved wood seats; kept clear of later homesteads; not drawn as a lane (GUESS)",
+   "summary": "The walk from one of the household's dooryard doors to the neighbor's threshing yard, wholly on the two households' land, clear of both households' houses, beds, sheds, byres, well pockets and fixtures, of every other placed homestead, the refused-ground grid and reserved wood seats - ROUTED round them on the map's own router (route.search, route.taut); kept clear of later homesteads; not drawn as a lane (GUESS)",
    "class": "within",
-   "why": "FR-002 'never across a house, a garden bed, a shed or a fixture'; US2 'has no lane of its own' and 'the neighbor's yard is not built over'. Keeping the walk on the two households' land is the spec's crossing of a neighbor's dooryard; a third household's land is the chain (D3). Straight-only is a construction choice, not a limit on what was asked, while tight seats put the door against the neighbor's land."
+   "why": "FR-002 'never across a house, a garden bed, a shed or a fixture'; US2 'has no lane of its own' and 'the neighbor's yard is not built over'. Every clearance of the previous version is kept; routing replaces the straight leg, which removes a restriction the request never asked for (R6: the straight leg was blocked on 95 of 109 tight-seat layouts and found 3 passages; routed, 16 households on 9 of 13 settlements whose share allowed one, observed 2026-10-03). Staying on the two lands keeps a third household's land for the chain (D3). Within."
+  },
+  {
+   "id": "D2-walk-order",
+   "summary": "At a tight seat the walk is asked first, then the corridor; both must hold (a walk exists and no corridor of its own), so the verdict is the same",
+   "class": "within",
+   "why": "An evaluation order with the identical verdict as D2-order and D2-tight-refusal: no household is seated or refused differently. A construction choice, not a narrowing of what was asked."
   },
   {
    "id": "D3",
@@ -61,9 +67,9 @@
   },
   {
    "id": "D6",
-   "summary": "The corridor judged as drawn (tree.as_joined per research R2); the route searched per garden layout round the household's own parts, kept because it pays (R4); seed 18's regression closed by judging the household's own parts against the path as the web will lay it (tree.laid_run, own_clear)",
+   "summary": "The corridor judged as drawn, as found: tree.admits asks the needle of the tree with its free ends joined as the web's settle will join them (tree.as_joined, settle.settle_joins / law.near_misses), with an exact box prefilter in law.near_misses and law.free_end (same answers); the route searched per garden layout round the household's own parts, kept because it pays (R4); seed 18's regression closed by tree.laid_run / own_clear",
    "class": "within",
-   "why": "FR-004 and SC-003 (the seating admits a corridor only as the web will draw it, now for the household's own parts too), FR-005 (seed 18's regression closed), FR-006 and the GM's concern about 'disregard[ing] optimizations that we know work': the withdrawn lever was retried and kept only on measurement (seats lost to the path alone 77 -> 21 and 90 -> 22, research R4, observed 2026-10-03)."
+   "why": "FR-004 and SC-003: the seating admits a corridor only in the form the web will draw it, now including the settle's join that research R2 found actually closed feature 314 R12's sliver. The prefilter is a cost measure with identical answers, not a scope change. FR-005 (seed 18), FR-006 and the GM's concern about disregarding optimizations that work: the withdrawn lever retried and kept only on measurement."
   },
   {
    "id": "D7",

@@ -77,6 +77,13 @@ def depth_of(rec: Any) -> int | None:
     return 0 if (rec.get("geom") or {}).get("access") is not None else None
 
 
+def crossable(rec: Any) -> bool:
+    """May a passage cross to this seated household - reached within the chain (`depth_of` under `PASSAGE_CHAIN`), with a
+    threshing yard to arrive on?"""
+    depth = depth_of(rec)
+    return depth is not None and depth < PASSAGE_CHAIN and ((rec.get("geom") or {}).get("boxes") or {}).get("yard") is not None
+
+
 def box_foot(p: Pt, box: Any) -> Pt:
     """The point of the box `(cx, cy, w, h)` nearest `p`."""
     cx, cy, w, h = (float(v) for v in box[:4])
