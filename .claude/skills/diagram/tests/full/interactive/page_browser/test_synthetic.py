@@ -303,7 +303,9 @@ def test_glossary_terms_carry_their_definition_and_the_references_are_a_tab(synt
     assert sizes[0] == sizes[1] == sizes[2], f"the dialog resized between tabs: {sizes}"
     # SET FOR READING (GM 2026-10-03: "blow everything up to 150%"): the modal's text is 1.5x the page's, the dialog is
     # centered, and it may grow past half the window (a fixed box at left 50% could not - it was held to the right half)
-    geo = synthetic.js("() => { const d = document.getElementById('explain'); const r = d.getBoundingClientRect(); return { fs: parseFloat(getComputedStyle(d).fontSize), root: parseFloat(getComputedStyle(document.documentElement).fontSize), left: r.left, right: innerWidth - r.right, w: r.width, W: innerWidth }; }")
+    geo = synthetic.js(
+        "() => { const d = document.getElementById('explain'); const r = d.getBoundingClientRect(); return { fs: parseFloat(getComputedStyle(d).fontSize), root: parseFloat(getComputedStyle(document.documentElement).fontSize), left: r.left, right: innerWidth - r.right, w: r.width, W: innerWidth }; }"
+    )
     assert geo["fs"] == 1.5 * geo["root"], geo
     assert abs(geo["left"] - geo["right"]) <= 1, f"centered: {geo}"
     assert geo["w"] > geo["W"] / 2 or geo["w"] >= 1008 - 1, f"wider than half the window: {geo}"
@@ -425,7 +427,9 @@ def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_o
     assert synthetic.js("() => getComputedStyle(document.querySelector('#explain a.sib')).textDecorationLine") == "none", "feature 186: no dotted underline on a sibling link"
     # the modals' text is 1.5x since feature 319 (GM 2026-10-03), so on the test's small viewport the sibling line can sit
     # below the dialog's fold: scrolled into view first, as a reader would
-    lx, ly = synthetic.js("() => { const a = document.querySelector('#explain a.sib[data-k=\"copse\"]'); a.scrollIntoView({block: 'center'}); const r = a.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    lx, ly = synthetic.js(
+        "() => { const a = document.querySelector('#explain a.sib[data-k=\"copse\"]'); a.scrollIntoView({block: 'center'}); const r = a.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }"
+    )
     synthetic.page.mouse.move(lx, ly)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.settles({"copse": 1}, synthetic.on) == {"copse": 1}, "hovering the link lights the copse instead of the windbreak"

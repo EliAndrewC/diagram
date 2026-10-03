@@ -19,6 +19,7 @@ from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
+from .title import TitleMixin
 from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
 from .houses import HousesMixin
@@ -52,6 +53,7 @@ class Settlement(
     HardGroundMixin,  # feature 278: the hard no-build ground, out of houses.py
     RollingMixin,
     FinishMixin,
+    TitleMixin,  # feature 319: the title placard, out of finish.py
     FarmFixturesMixin,
     PondStockMixin,
 ):

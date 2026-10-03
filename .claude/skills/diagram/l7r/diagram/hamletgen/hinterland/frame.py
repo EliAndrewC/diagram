@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.finish import placard_height
+from l7r.diagram.settlement.title import placard_height
 
 from ..plan import SitePlan
 

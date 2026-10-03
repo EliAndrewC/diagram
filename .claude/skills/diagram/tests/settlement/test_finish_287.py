@@ -205,7 +205,7 @@ def test_the_placard_text_is_set_for_reading_and_the_bar_keeps_its_scale() -> No
     map-px."""
     import re
 
-    from l7r.diagram.settlement.finish import PLACARD_TEXT_SCALE, placard_height
+    from l7r.diagram.settlement.title import PLACARD_TEXT_SCALE, placard_height
 
     s = _crop_settlement()
     s.title("Bandton")
