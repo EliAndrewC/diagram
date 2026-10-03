@@ -67,7 +67,7 @@ class StorageShed(Kind):
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: convention
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-    Entry: research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0052-farm-sheds-and-barns-naya.html; research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html
+    Entry: research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0040-farm-storehouses-kura.html, research/questions/0052-farm-sheds-and-barns-naya.html; research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html
     """
 
     key = 'storage shed'
@@ -337,7 +337,7 @@ class BathRoom(Kind):
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
-    Entry: research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0044-baths-on-the-farm-furo.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+    Entry: research/questions/0044-baths-on-the-farm-furo.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0044-baths-on-the-farm-furo.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
     """
 
     key = 'bath room'

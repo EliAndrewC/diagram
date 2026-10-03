@@ -54,22 +54,22 @@ done (FR-012).
 
 ## Phase 2 - the farmhouse pilot
 
-- [ ] T08 [US1] The research pass for the farmhouse's unanswered standard questions - its walls; whether it closed up (storm
+- [x] T08 [US1] The research pass for the farmhouse's unanswered standard questions - its walls; whether it closed up (storm
   shutters, board doors) - archive first, then the web; recorded and cited on the question pages they belong to (0029 for the
   walls, 0102 or 0117 for the openings) through a write and a check page session (plan D8)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify:
-- [ ] T09 [US1] The farmhouse rewritten in the About form from the guidelines: purpose (one household; work on the earth floor;
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. DONE. research pass (sonnet, archive first; research.md R2); written by the F1 page sessions: new question 0244 Farmhouse walls, 0117 the big door barred at night and the veranda's storm shutters; checked in nine rounds (f1-checks.md) - quote-check, record-format, source-reader, source-applicability, translation-check, intro-check, entry-drift (Door); make record-owed UNANSWERED=1: nothing owed
+- [x] T09 [US1] The farmhouse rewritten in the About form from the guidelines: purpose (one household; work on the earth floor;
   the inner stable), look (thatch on a hipped or gabled roof, the earth floor and the raised rooms, the walls, the big sliding
   door and its wicket), how many (household of about five, low and high), size; guesses as bullets; `Entry:` exactly what it
   rests on; both checks green in at most two rounds; Inashiro's page regenerated in the clone (plan D9)
       research: rendering
-      verify:
+      verify: DONE. DONE. Farmhouse in the About form: purpose, look, how many, size; no guesses; Entry 0029 0028 0004 0048 0244 0107 0117 0029.drawing; modal-form rounds 1-6 (clean), modal-research rounds 1-5 (clean bar one declined clause); all four units answered; page-check green; Inashiro regenerated in the clone
 - [ ] T10 [US6] THE GM'S VERDICT on the farmhouse - each change made in the guidelines first, then the modal, re-checked;
   repeated until the GM is satisfied (FR-010)
       research: rendering
