@@ -140,7 +140,7 @@ class UrbanBuildingMixin:
         Research:
             shop footprint - research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: 48 x 32
             laborer footprints - research/questions/0126-laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house.drawing.html: 34 x 24 and the master's 50 x 34
-            merchant footprints - UNRESEARCHED: 54 x 36 storefront, 50 x 34 home, 86 x 60 large
+            merchant footprints - research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: 54 x 36 storefront, 50 x 34 home, 86 x 60 large
             samurai footprints - UNRESEARCHED: 56 x 40 junior, 82 x 58 senior
             servant footprint - UNRESEARCHED: 30 x 22
             monk house footprint - UNRESEARCHED: the laborer's 34 x 24

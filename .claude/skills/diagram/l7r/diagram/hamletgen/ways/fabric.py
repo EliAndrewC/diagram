@@ -304,7 +304,8 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         shortest way - UNRESEARCHED: under 30 ft drawn only where it brings a house within 100 ft
         no join link through a house - research/questions/0081-village-lanes.drawing.html: nothing built on a lane
         web lanes seat no house - research/questions/0081-village-lanes.drawing.html: the farmhouses placed first, the lanes
-            among them after"""
+            among them after
+        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane"""
     if len(pts) < 2:
         return False
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a

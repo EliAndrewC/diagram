@@ -177,8 +177,12 @@ def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | 
         bath room size - research/questions/0044-baths-on-the-farm-furo.drawing.html: 6 ft out by 6 to 12 ft along
         persimmon crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             twice the crown radius each way
-        other fixtures' sizes - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: each kind's
-            one size, the pit's or the retirement house's
+        other fixtures' sizes - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the wood shed 24 x 12 ft
+        manure heap size - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: 8 x 6 ft
+        coop size - research/questions/0045-chickens-and-chicken-coops.drawing.html: 5 x 5 ft
+        shrine size - research/questions/0219-household-shrines-yashikigami.drawing.html: 6 x 6 ft, larger than life
+        manure pit size - UNRESEARCHED: 3.5 ft
+        retirement house size - UNRESEARCHED: 18 x 15 ft
     """
     if kind == "privy" and roll is not None:
         return PRIVY_SIZES_FT[int(roll(101.3) * len(PRIVY_SIZES_FT)) % len(PRIVY_SIZES_FT)]
@@ -474,6 +478,8 @@ def _seats(
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
             the flanks
         shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
+        seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw and -0.25 hh, coop 0.34 hw spread and
+            0.3 hh, wood shed 0.25 hw and 0.1 hh
     """
     if kind == "privy":
         seat = {  # the four attested seats (269 B10); -x is the shed end of the house, where the doma and its stable are
@@ -574,7 +580,7 @@ def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect
     Research:
         persimmon in front or behind - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             the front corners and straight out, or the same behind
-        crown over no roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
+        crown over no roof - CONVENTION: the crown kept off every roof so the building stays visible
     """
     r = px(PERSIMMON_CROWN_FT)
     trunk = px(TRUNK_FT)

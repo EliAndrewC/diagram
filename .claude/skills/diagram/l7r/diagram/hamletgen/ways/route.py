@@ -180,7 +180,8 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     Research:
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: least cost through the
             steadings, then pulled taut like a string
-        clear of the fabric - research/questions/0081-village-lanes.drawing.html: 7 ft by default, 8 ft off the crop"""
+        clear of the fabric - research/questions/0081-village-lanes.drawing.html: 7 ft by default, 8 ft off the crop
+        lattice off the water - UNRESEARCHED: 14 ft off the water lines"""
     cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:

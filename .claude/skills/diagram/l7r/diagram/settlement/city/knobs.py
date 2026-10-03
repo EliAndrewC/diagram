@@ -66,7 +66,7 @@ def moat_swept_tap(ring: Any, inlet: Pt, outlet: Pt, other: Pt, near: Pt, want_d
 
     Research:
         offtake swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: the rim end walks upstream until the throat is acute
-        wanted sweep angle - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: 50 deg or less
+        wanted sweep angle - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: a GUESS (no premodern angle read), 50 deg or less, which the page records as 47 to 48 deg drawn
         walk limits - NONE: 220 px upstream, 90 px for an arriving drain, sampled every 5 px
     """
     n = len(ring)

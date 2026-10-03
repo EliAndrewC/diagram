@@ -189,7 +189,7 @@ class MoatMixin:
         Research:
             a sluice where a channel changes water - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
             board, posts, crossbeam and windlass - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
-            frame span - UNRESEARCHED: about 8 px, stretched to span when given
+            frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft, a wider channel bank to bank; about 8 px, stretched to span when given
             caption - CONVENTION: 9 pt italic
         """
         rec = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1)}

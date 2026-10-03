@@ -77,7 +77,7 @@ KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0
 
 Research:
     north annex - research/questions/0052-farm-sheds-and-barns-naya.html: 0.46 of the house's length by 0.45 of its depth, on the back wall
-    west annex - UNRESEARCHED: 0.32 x 0.56 of the house on its west wall, for the dispersed farms
+    west annex - DEVIATION research/questions/0052-farm-sheds-and-barns-naya.html: 0.32 x 0.56 of the house (~15 x 16 ft on a 46 x 28 ft house), near square and attached to its west wall, for the dispersed farms, against a shed of 18 to 27 ft at 1.5 to 1.8 to one built apart
 """
 
 
@@ -230,7 +230,7 @@ class FarmFixturesMixin:
 # ---- the stock a dike-pond hamlet keeps on its ponds (feature 150 A3/A4) ---------------------------
 
 STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
-"""Research: sty size - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: 8 x 6 ft"""
+"""Research: sty size - UNRESEARCHED: 8 x 6 ft (0025 gives no size for a sty)"""
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
 # herded in the rice fields, not penned at the fish ponds (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html).

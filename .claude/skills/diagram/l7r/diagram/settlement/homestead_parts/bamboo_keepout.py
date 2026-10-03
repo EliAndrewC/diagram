@@ -26,7 +26,7 @@ def copse_bamboo_reach(bs: float) -> float:
     """How far the copse keeps its seats off a bamboo stand (feature 280, round 4): TWO of its crowns' radii
     (`COPSE_CLUMP_BS`, the sparse copse's clump), the margin `village_grove` grows each stand's ring by.
 
-    Research: copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: kept two crown radii off a stand
+    Research: copse off the bamboo - UNRESEARCHED: kept two crown radii off a stand
     """
     from .wood_share import COPSE_CLUMP_BS
 

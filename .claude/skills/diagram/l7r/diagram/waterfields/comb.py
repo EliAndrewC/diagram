@@ -115,6 +115,10 @@ def carve_comb(
     Research:
         water first - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the head race, canals, ditch threads and drain laid before any plot, the paddies cut between them
         bends swept before clearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every continuation rounded before any ground is cleared against it
+        default skeleton - UNRESEARCHED: canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
+        default paddy grain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: strips 48 px across, rows 26-36 px apart
+        default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
+        default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
     """
     R = random.Random(seed)
     F = _Frame(down_deg)
@@ -193,6 +197,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         plots by partition - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the planted region tiled with shared bunds and held to the ring rules
         one rice green - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: every plot drawn from RICE_GREENS
         furrows vary - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: neighboring dry plots owe a seam only where the spread is 0.3 rad or more
+        paddy acreage scale - NONE: measured at a fixed 2 ft/px (4 sq ft per px^2) whatever the grain, 4x high at 1 ft/px unless the caller rescales
     """
     R, F, channels, envelope, a_pts, dpts, grain = c.R, c.F, c.channels, c.envelope, c.a_pts, c.dpts, c.grain
     W, H, down_deg, plot_across, row_step, fork, bc, threads, brook = c.W, c.H, c.down_deg, c.plot_across, c.row_step, c.fork, c.bc, c.threads, c.brook
@@ -324,6 +329,10 @@ def build_comb(
     Research:
         comb layout - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a head race forking into two supply canals on the high margins, deliveries down the slope, one collector on the low line
         water passes plot to plot - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: below each delivery's end the plots take their water over the bunds
+        default skeleton - UNRESEARCHED: canal A 1250-1450 px, canal B 680-800 px, offtakes at 0.22/0.45/0.68/0.88 and 0.45/0.8 of their canals
+        default paddy grain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: strips 48 px across, rows 26-36 px apart
+        default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
+        default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
     """
     return finish_comb(
         carve_comb(
@@ -449,6 +458,9 @@ def _comb_threads(
         delivery takeoff - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each delivery heads down the fall, -0.15 to +0.1 rad, off a canal running 42 deg off it
         delivery length - UNRESEARCHED: 420-620 px off canal A, 340-560 off canal B
         sub-ditches - UNRESEARCHED: each interior delivery splits once, high on its run, diverging 0.5-0.66 rad
+        sub-ditch length - UNRESEARCHED: 300-430 px
+        canal B delivery takeoff - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each heads -0.2 to 0 rad off the fall, 58-70 deg off its canal
+        canal B tail - UNRESEARCHED: its thread ends 22 px past its last offtake
         delivery widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at DELIVERY_PARENT_FRAC of the canal there, a sub at SUB_PARENT_FRAC of its delivery's head
     """
     # canal B is itself the far-side boundary thread (its dug prefix IS the canal)
@@ -513,7 +525,8 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
 
     Research:
         no channel crosses another - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: threads marched in lockstep, never crossing
-        field depth - research/questions/0010-farmland-around-towns-and-cities.html: capped at `field_fall` so the field sits inside the frame with a margin for the outfall
+        field depth - research/questions/0010-farmland-around-towns-and-cities.drawing.html: capped at `field_fall`, else grown downhill off the frame
+        outfall margin - UNRESEARCHED: a capped field held inside the frame with a low-side margin for the outfall and brook
     """
     for t in threads:
         t.pts = [F.to_xy(t.u0, t.f0)]

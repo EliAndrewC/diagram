@@ -56,7 +56,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: main gate forms - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: yakuimon 6-8.5 ft or nagaya-mon ~12 ft, rolled per plan -->
 <!-- Research: opening ink width - CONVENTION: flanking endpoints pulled back half a stroke -->
 <!-- Research: threshold stones - UNRESEARCHED: the setting's own invention, ~3.3x4.7 ft at Ochiba, a pair flanking the road outside the opening, never in the passage -->
-<!-- Research: divider wall - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft stroke with its own gate -->
+<!-- Research: divider wall - UNRESEARCHED: ~2 ft true-thickness wall with its own gate -->
 <!-- Research: structures abut walls - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft off a compound wall, ~1.5 ft off a divider, privies and curbs included -->
 <!-- Research: gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: freestanding 18 x 12 ft beside the opening, or in the gate range -->
 <!-- Research: threshold wards - research/questions/0240-salt-heaps-at-doorways-morijio.html: a pair outside each opening -->
@@ -73,8 +73,11 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 ### Outer court (administrative / public)
 
 <!-- Research: office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: ~120 x 28 ft block backing the divider, day office and study behind, dais band in front, courtroom a room of it -->
+<!-- Research: clerk positions at the dais - UNRESEARCHED: two clerk positions flanking the dais in the front band -->
 <!-- Research: hearing court - research/questions/0099-the-hearing-court-shirasu.html: roofed, white gravel or river cobbles, south of the dais, size a guess -->
-<!-- Research: hearing mats - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: accused at center ~6x3 ft, plaintiff and village officials behind -->
+<!-- Research: hearing cart slot - UNRESEARCHED: a cart-passable ~8-10 ft slot south of the hearing court -->
+<!-- Research: hearing mats - research/questions/0099-the-hearing-court-shirasu.html: accused at the center, plaintiff and village officials behind -->
+<!-- Research: hearing mat size - UNRESEARCHED: the accused's mat ~6x3 ft -->
 <!-- Research: tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: sealed kura ~32-36 ft, larger than the ~450 sq ft records store the drawing page caps it at -->
 <!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
 <!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
@@ -82,7 +85,10 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span -->
 <!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide -->
 <!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
-<!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.html: swept ground beside the watch's lodging, weapon rack and striking posts, ~90-135 sq ft per samurai, no dojo -->
+<!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.html: swept multi-use ground with striking posts, no dojo -->
+<!-- Research: practice ground placement - UNRESEARCHED: beside the watch's lodging -->
+<!-- Research: practice ground weapon rack - UNRESEARCHED: ~8x2 ft rack flush against the adjacent wall -->
+<!-- Research: practice ground area - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
 <!-- Research: archery bank - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: optional azuchi with a ~90 ft lane -->
 
 - **Office hall (with dais band)** - the working block (~360×84) along the north edge of the outer court, backing onto the divider wall. Rear rooms behind a dashed screen-line: the **day office** (tax and case business) and the **official study** (the magistrate's working desk). Front band on the court face: the magistrate's tatami dais centered, two clerk positions flanking. The courtroom is a room OF the office block, not a freestanding stage (see grounding).
@@ -103,7 +109,9 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: suites as labeled zones - CONVENTION: each labeled area compresses several rooms -->
 <!-- Research: engawa - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html: ~8 px strip along the garden-facing south face -->
 <!-- Research: genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: on the office hall or none with a roji path, a knob; other blocks by informal doors -->
+<!-- Research: genkan porch size - UNRESEARCHED: ~40x14 px, ~13x4.7 ft -->
 <!-- Research: kitchen - research/questions/0107-kitchens-daidokoro.html, research/questions/0107-kitchens-daidokoro.drawing.html: part of the house ~40x33 ft, kamado range, smaller than a living block -->
+<!-- Research: kamado range size - UNRESEARCHED: ~6 x 2.5 ft with two fire mouths -->
 <!-- Research: bath - research/questions/0105-baths-furo.html: a room or small addition on the service side by kitchen and well, 12-15 ft a guess -->
 <!-- Research: inner garden - research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: central stipple with optional pond and lanterns -->
 
@@ -121,9 +129,9 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 ### Wells
 
 <!-- Research: well count - UNRESEARCHED: 2-4 wells for ~50 inhabitants and horses -->
-<!-- Research: kitchen well - research/questions/0107-kitchens-daidokoro.html: inside or beside the kitchen -->
+<!-- Research: kitchen well - research/questions/0105-baths-furo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: inside or beside the kitchen -->
 <!-- Research: garden well - UNRESEARCHED: in the inner garden -->
-<!-- Research: stables well - research/questions/0108-stables-umaya.drawing.html: just outside the stables for watering -->
+<!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
 <!-- Research: bath-area well - research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath -->
 
 A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
@@ -135,7 +143,8 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
 ### Fire-water tubs
 
-<!-- Research: tub glyph - CONVENTION: r5 water-blue circle distinct from square wells -->
+<!-- Research: tub glyph - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~r5 circle (~3.3 ft), where the drawing page's tub is ~2.5 ft across (r~3.8) -->
+<!-- Research: tub glyph colors - CONVENTION: water-blue circle distinct from square wells -->
 <!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs -->
 <!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
 <!-- Research: tub against its wall - UNRESEARCHED: gutter-fed at an eaves corner, within ~3.5 ft of the building -->
@@ -157,7 +166,9 @@ See the "Fire discipline" grounding entry for the why.
 
 ### Latrines and the rear service strip
 
-<!-- Research: privy count - research/questions/0101-privies-setchin.html: one per functional zone, ~3-4 -->
+<!-- Research: privy count - research/questions/0101-privies-setchin.drawing.html: one per functional zone, ~3-4 -->
+<!-- Research: privy size - research/questions/0101-privies-setchin.drawing.html: ~14-20 px square, ~5-7 ft -->
+<!-- Research: privies away from water - research/questions/0101-privies-setchin.drawing.html: away from food prep and water sources -->
 <!-- Research: residence privy attached - research/questions/0101-privies-setchin.html: at a back corner of the house, cesspit toward a service edge -->
 <!-- Research: outer privies by service gates - research/questions/0101-privies-setchin.drawing.html: against service walls near a gate for the night-soil cart -->
 <!-- Research: servants in the rear strip - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: nagaya for ~10 servants behind the residence -->
@@ -175,13 +186,15 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 
 ### Sacred features
 
-<!-- Research: modest compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html: small hall with a torii nearby, shared approach torii allowed -->
+<!-- Research: modest compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html: small wooden hall -->
+<!-- Research: compound shrine arch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: a torii always drawn nearby, shared by adjacent shrines allowed -->
 <!-- Research: hall shrine ceiling - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: at most ~36x30 ft, under half a residence block -->
 <!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
 <!-- Research: sanctuary - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: one-bay honden ~6 ft square at the back on the approach axis -->
 <!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof, hall end toward the arch, dwelling with kitchen, writing room and privy behind -->
-<!-- Research: arch in plan - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 15 ft beam, 1.2 ft posts, 10.3 ft clear, 12 ft pitch -->
-<!-- Research: approach width - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: gravel strip ~10 ft wide -->
+<!-- Research: arch in plan - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft pitch -->
+<!-- Research: arch dimensions - UNRESEARCHED: 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
+<!-- Research: approach width - UNRESEARCHED: gravel strip ~10 ft wide -->
 <!-- Research: precinct unenclosed - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: no fence or hedge round the precinct -->
 <!-- Research: bare precinct earth - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: plain fill, no rake lines -->
 <!-- Research: grave markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: rows of ~2x1 ft markers outside the fence -->
@@ -262,11 +275,11 @@ The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration
 <!-- Research: size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: residence dominant, kitchen, stable, cell, shrine below -->
 <!-- Research: packing coverage - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42%, fire gaps ~6-8 ft, kura ~6-10 ft, apron ~15-20 ft -->
 <!-- Research: clear gateways - UNRESEARCHED: nothing stands in a passage -->
-<!-- Research: gate hierarchy - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the ceremonial main gate widest -->
+<!-- Research: gate hierarchy - UNRESEARCHED: the ceremonial main gate widest -->
 <!-- Research: structures clear of wall ink - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html -->
 <!-- Research: privies and rear strip - research/questions/0101-privies-setchin.html: ~3-4, the residence privy attached -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
-<!-- Research: practice ground sizing - research/questions/0165-martial-training-grounds-and-dojo.html: ~90-135 sq ft per drilling samurai, no dojo -->
+<!-- Research: practice ground sizing - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
 
 This checklist is for **Mode A** (compound/building plans). **Mode B settlement maps** follow their own loop instead - step 5 of the workflow in [`SKILL.md`](SKILL.md): the gate's tests of the placer must be green, then a persona read of the PNG. (Note the Mode B difference: title is the place name only - no subtitle/summary line. Neither mode carries a key/legend box.)
 

@@ -146,7 +146,7 @@ class RollVillageMixin:
         Research:
             cremation ground's seat - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: beside the burial ground or on its own at the edge, even odds
             cremation ground's clearances - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: 120 ft off houses and wells, 6 ft off water, 30 ft off the shrine's approach, scanned to 650 ft
-            cremation ground's size - UNRESEARCHED: a 75 x 52.5 ft cleared core
+            cremation ground's size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: a 75 x 52.5 ft cleared core, inside the 30 to 80 ft across that page gives
             jizo at a lone cremation ground - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: none; they stand at a burial ground
         """
         form = self.knob_pins.get("cremation_seat") or ("beside_burial", "apart")[knob_rng(self.seed, "cremation_seat").randrange(2)]
@@ -268,7 +268,7 @@ class RollVillageMixin:
 
         Research:
             cluster on the dry margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the position knob's margin, leaning away from the sluice
-            band sized from the households - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: `BUNDLE_PITCH_FT` squared per household, a ~3:1 band, depth 112-240 px, length 240-1,500 px
+            band sized from the households - UNRESEARCHED: `BUNDLE_PITCH_FT` squared per household, a ~3:1 band, depth 112-240 px, length 240-1,500 px; 0032 gives only the coverage floor
             band standoff from the rice - UNRESEARCHED: its center beyond the drawn rice by the band's depth plus 30 px
         """
         env = net["envelope"]
@@ -432,7 +432,8 @@ class RollVillageMixin:
 
         Research:
             communal windbreak behind the cluster - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: one belt on the uphill side taken as windward, spanning the houses plus 46 px
-            windbreak standoff and depth - UNRESEARCHED: centered 62 px beyond the uphill-most house, 68 px deep
+            windbreak standoff and depth - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: centered 62 px beyond the uphill-most house, 68 px deep
+            belt always on one side, a straight strip - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: one straight strip on the uphill side, never two sides
         """
         ux, uy = -dy, dx  # cross-slope
         hxs_, hys_ = [h["x"] for h in hs], [h["y"] for h in hs]
@@ -456,6 +457,7 @@ class RollVillageMixin:
             village shrine at the gateway - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: 46 px downslope of the skeleton's gateway
             no shrine in a hamlet - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: civic features on a village only
             torii count and pitch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 1, 3 or 7 on the tier's distribution, marched up the approach at `TORII_PITCH_FT`
+            shrine hall size at the threshold - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: the hall taken as 62 x 42 ft to seat the torii threshold, where that page draws about 60 x 48 ft
         """
         if scale == "village" and civic_shrine:
             gx, gy = sk["gateway"]

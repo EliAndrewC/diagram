@@ -106,7 +106,7 @@ class EdgeGround:
 
         Research:
             beyond the last house - research/questions/0235-village-burial-grounds-bochi.drawing.html: outside the houses' hull
-            clear of houses and wells - NONE: the caller's clear_px
+            clear of houses and wells - research/questions/0235-village-burial-grounds-bochi.drawing.html, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: no set distance for a burial ground, 120 ft for a cremation ground; the caller's clear_px
             out of the water - research/questions/0235-village-burial-grounds-bochi.drawing.html: the caller's stream and ditch margins
             never in a paddy or marsh - research/questions/0235-village-burial-grounds-bochi.drawing.html: the caller's field_px
             off the dry plots - UNRESEARCHED: 3 px

@@ -40,7 +40,11 @@ The backing is one of:
   question finds. The research page holds the FINDINGS; the drawing page says how our maps draw it and which of the four
   classes each choice is (historically accurate, deliberate deviation, map drawing convention, guess).
 - **`DEVIATION <question file>`**: the code knowingly departs from what that question finds.
-- **`GUESS`**: a decision the record was searched for and is silent on.
+- **`GUESS [<question file>]`**: a decision the record was searched for and is silent on; a named file is the drawing
+  page that records the guess (IN-STEP when that page records this figure as a guess).
+- **`CANON`**: a decision the GM made - the GM's setting canon or the GM's ruling - which needs no research (the record's
+  rule: the GM's campaign notes are canon, not evidence). IN-STEP when the claim's account names the ruling; MISLABELED when a
+  question in the bundle actually answers it.
 - **`UNRESEARCHED`**: a decision no research pass has looked for yet.
 - **`CONVENTION`**: a map drawing convention - how a thing is SHOWN (a color, a line weight, a label's offset, a symbol), with no
   claim about how a place was built, farmed, planted or lived in.

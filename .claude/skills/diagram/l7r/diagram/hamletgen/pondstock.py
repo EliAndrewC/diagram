@@ -49,6 +49,10 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
     have moved fixtures between ponds, or lost them, rather than along the bank they belong on. The
     caller walks this list and takes the first seat that fits, and BOUNDS how far down it it may go -
     see `stage_pond_stock`. This function ranks; it does not decide what is acceptable.
+
+    Research:
+        bank seats by distance - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: ranked nearest the houses
+        edge midpoints first - UNRESEARCHED: every midpoint before the bank's eighths, which can pass a nearer free seat
     """
     cx, cy = _centroid(parcel)
     n = len(parcel)
@@ -108,7 +112,7 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
     287 wave 5): the sty it owes could never be seated, and nothing after this may emit a dike-pond hamlet without one.
 
     Research:
-        at least one sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a dike-pond hamlet with a grow-out pond keeps one
+        at least one sty - UNRESEARCHED: a dike-pond hamlet with a grow-out pond keeps one, refused without it; 0025 gives only the band
         nearest pond first - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: grow-out ponds walked nearest the seat
         seat reserved before the houses - NONE: placement order, the sty's rules unchanged"""
     ponds = s.M.get("dikeponds") or []
@@ -174,7 +178,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     Research:
         sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the pig as the dike-pond district's animal
         no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern
-        sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households, at least one
+        sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households
+        at least one sty - UNRESEARCHED: the floor of one is not on the page
         one sty per pond, nursery ponds none - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: nearest the houses first
         sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html
         sty within reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft of a farmhouse

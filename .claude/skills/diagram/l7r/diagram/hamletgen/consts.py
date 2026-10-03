@@ -135,7 +135,7 @@ Research: front row's reach per shape - research/questions/0031-clustered-and-sc
 # four pool hamlets, the long axis grew 51%, 58%, 15% and 97%. This is the lane's own half-tread
 # plus a hand's breadth: enough that a wall is not drawn ON the tread, and no more.
 WEB_CLEARANCE = 28.0
-"""Research: web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html: 28 ft, byres and sheds kept off the tread"""
+"""Research: web lane's no-build corridor - UNRESEARCHED: 28 ft, byres and sheds kept off the tread; 0081 gives no corridor"""
 
 # THE LEAST ROOM BETWEEN TWO STEADINGS A WEB LANE WILL THREAD, in feet. `web_cuts` only cuts where a
 # gap is at least this wide, so a lane is placed where one can actually be walked rather than driven
@@ -186,7 +186,7 @@ WEB_FABRIC_GAP = 7.0
 # 40 px clear corridor between two steadings that a packed cluster does not have, so arms were
 # clipped out of existence entirely. A track only needs to reach the cluster's edge, not thread it.
 TRACK_FABRIC_GAP = 16.0
-"""Research: track off a steading - research/questions/0081-village-lanes.drawing.html: 16 ft"""
+"""Research: track off a steading - UNRESEARCHED: 16 ft to the footprint, set off the houses_off_corridors check's 14"""
 
 # A FOOTPATH IS NOT A LANE, and it may squeeze where a lane may not. This is the clearance for the
 # path from an outlying steading's door to the nearest way - the thing the sources describe as
@@ -286,6 +286,7 @@ Research: a lane end arrives at a steading - research/questions/0081-village-lan
 # the same fact from opposite ends, and letting them disagree would let a lane be connected for one and
 # isolated for the other.
 LANE_JOIN_FT = 40.0
+"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html: treads within 40 ft count as one network (the page joins ends within 25 ft)"""
 
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
 # deliberately not derived from LANE_CLEARANCE, which is the corridor rule: fronting a lane excuses
@@ -294,7 +295,12 @@ LANE_JOIN_FT = 40.0
 # ~61 x 37 ft, a half-diagonal of ~36 px; add the lane's own half-tread and a dooryard's working
 # margin. Tying this to the clearance is what made the clearance look like it had to be 48.
 LANE_FRONTAGE_STANDOFF = 70.0
-"""Research: frontage seat off the lane - research/questions/0081-village-lanes.drawing.html: 70 ft off the centerline"""
+"""How far off a lane's centerline a frontage seat is offered.
+
+Research:
+    farmsteads front a lane - research/questions/0081-village-lanes.drawing.html
+    frontage seat off the lane - UNRESEARCHED: 70 ft off the centerline, with a dooryard's working margin the page does not give
+"""
 
 # How far outside the paddy's outline a field spur's tip stops. The lane is drawn 5 px wide and
 # `fields_clear_of_road` allows w/2 + 2, so 8 px would clear it on paper - but the outline is a
@@ -315,7 +321,12 @@ LANE_FRONTAGE_STANDOFF = 70.0
 # so anything that changes what the fan draws can invalidate it silently. Re-run the cohort after
 # any change to channel widths, carve thresholds or the seam pass, and expect this number to move.
 SPUR_SETBACK = 17.0
-"""Research: field spur's tip - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: stops 17 ft outside the paddy outline"""
+"""How far outside the paddy's outline a field spur's tip stops.
+
+Research:
+    path joins the outer bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
+    field spur's tip - UNRESEARCHED: stops 17 ft outside the paddy outline, the cohort's smallest clear value
+"""
 
 # How much open ground a threshing yard needs to its SOUTH, in feet. A thatched roof is pitched 45
 # degrees or steeper, so the 46 x 28 ft minka's ridge stands ~20 ft up; at 38N in the threshing
@@ -472,7 +483,12 @@ DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
 """Research: wild water outside the dike - CONVENTION: 280 ft drawn, outlasting any crop"""
 LEFTOVER_FORMS = ("rice", "pond")
-"""Research: dike-pond leftover parcels - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: rice or none, even odds"""
+"""What the leftover parcels of a wholesale conversion read as.
+
+Research:
+    dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
+    dike-pond leftover parcels - UNRESEARCHED: rice or none, even odds
+"""
 POND_LAYOUT_MOSAIC = 0.5
 """Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""
 
@@ -498,6 +514,7 @@ DIKEPOND_CONVERSION = 0.9
 # in the mix. Rolling an archetype with open failures mixes them into the valley tier's own numbers
 # and destroys the one measurement that says this process is consistent.
 ROLLED_ARCHETYPES = ("valley_paddy",)
+"""Research: field forms rolled - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: only the valley fan is rolled, the attested polder opt-in until its cohort is green"""
 
 # HOW MUCH GROUND ONE HOMESTEAD TAKES, in px at 1 ft/px - the pitch the cluster band is sized on.
 # A bundle's reserved rects come to ~71 x 57 ft. 92 px per household leaves the cluster dense enough
@@ -553,7 +570,12 @@ BUNDLE_PITCH = 100.0
 # margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
 # left one farmhouse off the way network on seeds 11 and 43 - measured and not taken.
 HOMESTEAD_GROUND_FT = 104.0
-"""Research: ground per homestead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 104 ft square, the 25 tsubo yard"""
+"""The ground one homestead takes, the pitch the cluster band is sized on.
+
+Research:
+    the yard within it - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 25 tsubo
+    ground per homestead - UNRESEARCHED: 104 ft square, the 100 ft row pitch plus 3.8 ft of yard, cohort-measured
+"""
 
 # THE GROUND THE SEATING SPREADS ITS HOUSEHOLDS OVER, as the side of a square (feature 306, FR-010; a GUESS with its reasoning -
 # the record gives no figure for it): `HOMESTEAD_GROUND_FT` counts the house, its yard and the row, and NOT the household's
@@ -625,7 +647,7 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 FALL_BEARINGS = (0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0)
 """Research: land's fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: declared, else rolled among eight points"""
 CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is laid to; see plan_site
-"""Research: polder grid's orientation - UNRESEARCHED: laid to the four cardinal bearings"""
+"""Research: polder grid's orientation - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: laid to the four cardinal bearings, never tilted"""
 
 # WHICH WAY THE COLD WIND COMES FROM: THE NORTHWEST, UNLESS THE MAP DECLARES A LOCAL WIND (feature 261).
 #
@@ -666,7 +688,7 @@ WIND_BACK_MIN_DOT = 0.7071
 COPSE_HOUSE_REACH_FT = 90.0
 """Research: copse among the houses - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: within 90 ft of a house"""
 COPSE_BELT_REACH_FT = 60.0
-"""Research: copse against the belt - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: within 60 ft of the belt"""
+"""Research: copse against the belt - CONVENTION: within 60 ft of the belt, a crown or two; the 0071 drawing page has no belt-side copse"""
 
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),
@@ -839,6 +861,7 @@ LANE_WEBS = ("alleys", "back_lane")
 # matrix and the grove predicates (`homestead_parts/grove_rules.py`) run on every roll by `tools/cohort_audit` -
 # the battery that had caught 126's defects was retired by 166, so the cohort's own verdict no longer saw them.
 _SETTLEMENT_FORMS_WHEN_GROVES_WORK = ("nucleated", "nucleated", "nucleated", "nucleated", "nucleated", "dispersed", "dispersed", "dispersed", "linear", "linear")
+"""Research: settlement-form weights - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: nucleated 5, dispersed 3, linear 2"""
 SETTLEMENT_FORMS = _SETTLEMENT_FORMS_WHEN_GROVES_WORK
 """Research: settlement form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: nucleated 5, dispersed 3, linear 2"""
 

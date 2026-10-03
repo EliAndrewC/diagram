@@ -218,8 +218,9 @@ and mislabeled finding the audit made, with the claim it concerns.
 - **FR-001**: A CLAIM is one line in a `Research:` section of a docstring - a module's, a class's, a function's or a method's - or
   of a string literal placed directly after a module-level constant's assignment. Its grammar is `<label> - <backing>`, with an
   optional `: <what the code does>`; the backing is one or more research question files (`research/questions/NNNN-<id>.html`
-  or its `.drawing.html`), or `GUESS` (a decision the record was searched for and is silent on), `UNRESEARCHED` (a decision no research pass has yet
-  looked for), `CONVENTION`, `DEVIATION <question file>`, or `NONE` (no physical decision). The form is
+  or its `.drawing.html`), or `GUESS` (a decision the record was searched for and is silent on, optionally naming the drawing page that records
+  the guess), `UNRESEARCHED` (a decision no research pass has yet looked for), `CONVENTION`, `DEVIATION <question file>`,
+  `CANON` (a decision the GM made - the setting's canon or the GM's ruling), or `NONE` (no physical decision). The form is
   read from the source text, without importing the engine.
 - **FR-002**: SCOPE in code is every function, method, class and module-level constant (an upper-case name) of the hamlet
   generator package and of every engine module it imports, directly or indirectly - the import graph, computed from the source
@@ -313,6 +314,7 @@ and mislabeled finding the audit made, with the claim it concerns.
 | Calls into other functions are not followed by the fingerprint | this project's decision, stated as the limit | following callees would owe nearly every claim on any edit; per-claim units and constants' own claims carry what is decided where | this spec; the owed command's docstring |
 | Drift found by the audit is recorded, not fixed in the code | the GM's direction | the GM: *"what I am saying is not even about fixing anything it's just about doing an audit and then having an index"*; the push rule accepted makes pre-existing drift a warning | this spec |
 | An unresearched decision is claimed UNRESEARCHED, not GUESS | this project's decision, from the GM's words and the research doctrine | the GM: *"whether something now must be marked as a guess or unresearched"*; the doctrine reserves "guess" for a decision a search pass came back empty on, and the audit runs no search pass | this spec; the engine dev loop |
+| A CANON class, and a GUESS that may name the drawing page recording it (amendment, 2026-10-03) | this project's decision, from the record's own rule | the audit found claims resting on the GM's rulings and campaign notes labeled GUESS or UNRESEARCHED for want of a class; the research doctrine makes the GM's notes *"canon, not evidence"*, needing no citation, so a claim on them is neither a guess nor unresearched. And a figure a drawing page records as a guess had no way to name that page | this spec; `tools/claims.py`; the `impl-drift` contract |
 | The index is committed, not kept per clone | this project's decision | the GM asked for *"an up-to-date index"*; a verdict must travel with the code it judged, unlike feature 311's answer records | this spec |
 | The code scope is the hamlet generator package and every engine module it imports, measured from the import graph; towns, villages and cities as such are out, and so are the hand-drawn maps | the GM's direction | the GM: *"the code that generates a hamlet must have citations for anything that should be research derived"* - a shared module that runs in a hamlet's generation is that code (the dry-field size and placement of the GM's own example live in `settlement/fields/`); *"we're not talking about towns and villages and cities because those will eventually be scripted"*; the hand maps are not procedures, and generator work does not edit them (GM 2026-09-28) | this spec |
 | The procedure scope adds the Mode A building vocabulary (`buildings.md`) to the two program sections | this project's decision, within the GM's words | the GM: *"our procedures for the manually generated maps ... magistracy buildings and country shrines"*; both programs are drawn with that vocabulary (walls, gates, wells, latrines, sacred features), so its rules are part of their procedure | this spec |
@@ -344,3 +346,5 @@ and mislabeled finding the audit made, with the claim it concerns.
   scenario 4. Applied: the code-or-research clause applies only where the base held no row; a finding at both ends is
   pre-existing whatever changed; SC-004 adds the re-checked-DRIFTED case.
 - **Round 3** (`spec-fidelity-verify`, 2026-10-02): **FAITHFUL** - the round-2 item resolved, no new departure.
+- **Amendment after acceptance** (2026-10-03, the audit's second round): FR-001 gains `CANON` and a GUESS that may name its
+  drawing page; one Decisions Recorded row. The counter resets for this amendment.

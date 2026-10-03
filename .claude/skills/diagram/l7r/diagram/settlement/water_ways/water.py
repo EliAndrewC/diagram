@@ -82,8 +82,8 @@ class WaterBodiesMixin:
         the town?") is about the net journey.
 
         Research:
-            flow direction recorded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: the net upstream-to-downstream bearing
-            a level canal has no bearing - UNRESEARCHED: a navigable cut is dug level with the water it joins
+            flow direction recorded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the net upstream-to-downstream bearing
+            a level canal has no bearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a navigable cut is dug level with the water it joins
         """
         if flow not in ("forward", "reverse", "level"):
             raise ValueError(f"watercourse flow must be 'forward', 'reverse' or 'level', got {flow!r}")
@@ -121,8 +121,8 @@ class WaterBodiesMixin:
         checks read ONE number rather than re-deriving direction from anchor semantics.
 
         Research:
-            every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: authored upstream-first
-            stream width - NONE: the caller's width, 9 px by default
+            every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: authored upstream-first
+            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook; the code draws 9 px by default, unscaled (9 ft at 1 ft/px, 18 ft at 2 ft/px)
             bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
             houses kept off the stream - UNRESEARCHED: a no-build corridor of max(30, half-width + 20) px
         """
@@ -197,7 +197,7 @@ class WaterBodiesMixin:
 
         Research:
             a city on its river - research/questions/0175-cities-on-rivers.html: drawn off-map to off-map
-            river width - UNRESEARCHED: 120 ft across by default
+            river width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 20 m (~66 ft) for a town river; the code draws 120 ft across by default
         """
         if width is None:
             width = self.px(120)  # a serious provincial river ~120 ft across
@@ -221,6 +221,7 @@ class WaterBodiesMixin:
             ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: 2.5 px by default, the legibility floor
             ditch class - NONE: drainage when it leaves a drain, else irrigation
             houses kept off the channel - UNRESEARCHED: a 33 px no-build corridor
+            ditch winding - UNRESEARCHED: an auto-routed ditch winds with a 15 px amplitude by default
         """
         poly = [(p[0], p[1]) for p in pts] if pts else winding(start, end, amp=amp)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in poly)

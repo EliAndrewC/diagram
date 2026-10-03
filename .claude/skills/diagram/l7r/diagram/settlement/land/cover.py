@@ -89,7 +89,7 @@ BARE_SHARE_CAP = 0.35
 """How much of the rendered view may be ground nothing covers (`margins_form_continuous_ring`). Above this the map has
 holes in it - the margins are meant to form a continuous ring of worked and unworked ground, not islands with gaps.
 
-Research: bare-ground cap - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: no more than 0.35 of the view uncovered"""
+Research: bare-ground cap - CONVENTION: a map-completeness threshold, no more than 0.35 of the view uncovered"""
 
 #: The manifest's TREADS - a way or a watercourse is a polyline with a width, not a ring: (key, points key, width key).
 BARE_TREADS = (("lanes", "pts", "w"), ("streams", "poly", "w"), ("channels", "poly", "w"), ("field_ditches", "poly", "w"), ("drawn_channels", "pts", "w0"))
@@ -391,7 +391,9 @@ class GroundCoverMixin:
             wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge
             edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
-            claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing"""
+            claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
+            woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
+            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as
         # ... outside of the marshland? my guess is that that is a mistake"*). It was: only the toe-side
@@ -932,5 +934,7 @@ class GroundCoverMixin:
         scatter only skips clearings that already exist when it runs, so a late precinct must reserve its
         ground FIRST or the scrub covers it. The later shrine_hall/cemetery registers its own clearing too;
         the overlap is harmless. Pass roughly the footprint you will draw (a slightly generous `extra` is
-        fine - over-clearing by a few px reads the same)."""
+        fine - over-clearing by a few px reads the same).
+
+        Research: cleared collar - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: 46 ft cleared round the footprint by default"""
         self._clear_ground(x, y, w, h, extra)

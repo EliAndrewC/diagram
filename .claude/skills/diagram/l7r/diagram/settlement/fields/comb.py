@@ -621,7 +621,9 @@ class CombMixin:
         anchors on whichever of the two it was.
 
         Research:
-            source pond - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tameike at the sluice, 40 px of reed fringe, a 10 px no-build margin
+            source pond - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tameike at the sluice, a reed fringe and a no-build block round it
+            fringe and margin widths - UNRESEARCHED: 40 px of reed fringe, a 10 px no-build margin
+            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the feeder stream drawn 6 px wide
             feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says"""
         pond_rec: Any = None
         if source.get("kind") == "pond":
@@ -651,7 +653,9 @@ class CombMixin:
 
         Research:
             ditch net over the paddies - CONVENTION: drawn in the late block, ring trunk last
-            drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run straight down the fall off the map at the collector's tail width"""
+            drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run straight down the fall off the map at the collector's tail width
+            outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 px no-build either side of the outfall run on every map (the record gives it for town and city maps)
+            outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at w 2.5 while inked at the drain's tail width (~5.5)"""
         # The ditch net ALWAYS goes to the LATE water block (GM 2026-07-21: Hoshizora's canals
         # "rendering below the rice paddies"). In the shared block - anchored at the FIRST water
         # call - the net composites UNDER any plots painted after that anchor: a town/city stream
@@ -817,7 +821,9 @@ class CombMixin:
         Keeps its own `kind != 'cascade'` guard: a cascade field is fed plot-to-plot from an
         upstream field and its caller records that connector itself.
 
-        Research: feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice"""
+        Research:
+            feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice
+            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at w 2.5 while it traces the 6.0 ft head race"""
         if source.get("kind") != "cascade":
             hr = net["channels"][0]["pts"]
             fork = hr[-1]
@@ -948,7 +954,7 @@ class CombMixin:
 
         Research:
             furrowed rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every dry plot drawn in ridged rows
-            furrow spacing - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 5 px between rows
+            furrow spacing - GUESS: 5 px between rows
             furrow ink - CONVENTION: 0.8 stroke at 0.8 opacity"""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

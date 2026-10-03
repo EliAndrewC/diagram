@@ -129,7 +129,9 @@ class PlacerMixin:
         """Greedily shove the bundle toward target_fn (a field bund, then a neighbor) in small steps, as
         far as it still fits - the 'pack as close as the rules allow' step.
 
-        Research: dispersed farm packed toward field and neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 2 px steps, up to 48, toward the bund then the nearest neighbor, while it fits
+        Research:
+            dispersed farm packed toward field and neighbor - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the first slide, 2 px steps up to 48 toward the bund, while it fits
+            dispersed farm packed against its nearest neighbor - UNRESEARCHED: the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing
         """
         for _ in range(48):
             tgt = target_fn(cx, cy)

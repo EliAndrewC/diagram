@@ -78,6 +78,9 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
         a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
         strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out
+        strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+        strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
+        strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
     """
     out: list[Poly] = []
     if plan.bamboo not in ("homestead", "both") or not houses:
@@ -175,7 +178,7 @@ def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: floa
     stands are drawn after the belt's crowns, so a strip in the belt painted its culms over the conifers - the reverse of the
     belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280).
 
-    Research: no strip in the belt - CONVENTION: kept out so its culms are not painted over the belt's conifers
+    Research: no strip in the belt - UNRESEARCHED: no strip seated with its center or a corner inside the belt
     """
     if not belt or len(belt) < 3:
         return False
@@ -226,7 +229,9 @@ def _strip_blocked(
     is a reserved box in `skip` (a caller whose parts are each registered passes the homestead BUNDLE boxes: feature 261,
     the fixtures pass, where a steading's own bundle and a neighbor's refused the open ground of its flanks).
 
-    Research: what a strip or fixture keeps off - UNRESEARCHED: 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+    Research:
+        off the paddy - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand on a paddy
+        what a strip or fixture keeps off - UNRESEARCHED: 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
     """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True

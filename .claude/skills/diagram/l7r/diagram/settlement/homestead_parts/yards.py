@@ -686,7 +686,7 @@ class ThreshingYardsMixin:
 
         Research:
             every farmhouse a yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html
-            yard turned with its house - UNRESEARCHED: the house's rake, its house-facing edge level
+            yard turned with its house - research/questions/0029-farmhouses-minka.drawing.html: the house's rake, its house-facing edge level
             swept outline - CONVENTION: a slightly irregular quad, jitter 0.10
             no floor without rice - UNRESEARCHED: a no-rice hamlet records a forecourt and draws no floor
         """

@@ -212,6 +212,9 @@ Research:
     copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: vegetation drawn last in open ground
     stable yard round its stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a ground scatter
     polder dike crossed - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a walked bank lanes and channels cross
+    in-field ditches - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: drawn on the paddy
+    inspection post on the gate - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: may overlap the gate furniture
+    merchant storehouses - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: exempt as an annex abutting its shop
     merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
     bookkeeping records - NONE: districts, quarters, precincts, clearings, row plans and tree records
 """
@@ -476,7 +479,8 @@ OVERLAP_CLASS: dict[str, str] = {
 Research:
     one class a key - CONVENTION: every drawn key in one class, every pair forbidden unless permitted
     annexes - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: abut their own farmhouse and nothing else
-    worked ground - UNRESEARCHED: dry plots, flower beds and resting patches ruined by anything standing on them
+    worked ground - research/questions/0081-village-lanes.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: no lane or well on a dry plot
+    flower beds and resting patches - UNRESEARCHED: worked as a surface, nothing standing on them
 """
 
 # A permissive class may be overlapped by anything, and is never extracted. The reason matters as
@@ -499,7 +503,9 @@ _MATRIX_PERMISSIVE = {
 """The permissive classes.
 
 Research:
-    ground cover takes buildings - UNRESEARCHED: commons, pasture and marsh may be built on, the cover stopping there
+    ground cover takes buildings - research/questions/0196-communal-wells-ido.drawing.html: a well on commons, pasture or marsh permitted
+        as the normal case, though _OVERLAP_LINEAR keeps structures off commons, pastures and marshes
+    house or field on cover - UNRESEARCHED: built on, the cover stopping there
     deferred classes - NONE: vegetation, the ring road, records and paddy are decided by their own rules
 """
 
@@ -552,7 +558,8 @@ Research:
     weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the brook
     ward gate - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: on the ward fence where a way passes
     gate complex and inspection post - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: on the wall and the road at the gate
-    wall tower - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: on the rampart, over the water at its foot
+    wall tower - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: on the rampart
+    wall tower over water - UNRESEARCHED: the moat and its taps at the rampart's foot may pass under a tower
 """
 
 _MATRIX_SAME_CLASS_OK = {

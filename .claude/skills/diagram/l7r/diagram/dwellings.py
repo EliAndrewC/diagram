@@ -34,7 +34,7 @@ DWELLING_KINDS = {
 """Research: which buildings are homes - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: ten kinds, monk houses among them"""
 
 BUSINESS_KINDS = {"shop", "merchant"}
-"""Research: commercial frontages - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.drawing.html: a shop, and the merchant's house counted as house and shop"""
+"""Research: commercial frontages - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: a shop, and the merchant's house-over-shop counted as house and shop"""
 
 HOUSEHOLD = 5
 """Research: inhabitants to a dwelling - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: five, the setting's household"""

@@ -269,7 +269,7 @@ class PaddyMixin:
 
         Research:
             bunds along contour and fall - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a patchwork split along the contour and down the fall, wobbling 0.12 rad
-            plot shape - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.78 of the grain across the fall, 1.7 times that along the contour, split at 0.36-0.64"""
+            plot shape - UNRESEARCHED: 0.78 of the grain across the fall, 1.7 times that along the contour, split at 0.36-0.64"""
         ux, uy = 0.7071, -0.7071  # contour (along-slope) = a plot's LONG axis
         fx, fy = 0.7071, 0.7071  # fall line (downhill SE) = a plot's SHORT axis
         aspect = 1.7
@@ -457,7 +457,9 @@ class PaddyMixin:
             lateral spacing - UNRESEARCHED: a lateral every 4-6 columns
             dry where water fails - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: above the main, below the drain and at the margins, 62% dry grain and the rest soy
             flooded near the ditches - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 30% of plots near the main or drain painted flooded
-            plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default"""
+            plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default
+            canal widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: main 3.3, drain 3.0, lateral 2.0, feed and outfall 2.6 px, untapered
+            ripe share - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 2.5% of rice plots ripe"""
         if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
             bbox = tuple(shape)
             outline = organic_bbox(bbox, amp)

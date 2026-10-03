@@ -263,7 +263,9 @@ def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:
     same reason `supply_bank_clearance` is: a trimmer and a checker that classify the same ground
     from two formulas drift into disagreeing about where the command area ends.
 
-    Research: command area ends at the collector - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: ground down-fall of the drain line, extended level past its ends, is not planted
+    Research:
+        command area ends at the collector - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the drain on the field's lowest line, ground down-fall of it unplanted
+        past the drain's ends - UNRESEARCHED: the drain line extended level beyond both ends, ground down-fall of it unplanted
     """
     F = _Frame(down_deg)
     u0 = F.to_uf(*dpts[0])[0]
@@ -304,7 +306,9 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     thin-plot drop. The move is along the FALL, so a lifted vertex slides up its own column and the
     parcel keeps its shape.
 
-    Research: no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a vertex inside the collector's bank lifted up the fall onto it
+    Research:
+        no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a vertex inside the collector's bank lifted up the fall onto it
+        drain with the fall left alone - UNRESEARCHED: a collector within ~12 deg of the fall (lean under 0.2) leaves vertices in its water unmoved
     """
     dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
     cum = polyline_cum(dpts)
@@ -325,7 +329,9 @@ def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: fl
     computation - a comb's plots are a few corners each, and asked a ring at a time the array's fixed cost outweighed the
     loop it replaced (Sawada's field, 1.2 s -> 2.1 s). Each ring comes back as `hem_to_bank` would return it.
 
-    Research: no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: as `hem_to_bank`, for many rings
+    Research:
+        no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: as `hem_to_bank`, for many rings
+        drain with the fall left alone - UNRESEARCHED: a collector within ~12 deg of the fall (lean under 0.2) leaves vertices in its water unmoved
     """
     flat = [q for ring in rings for q in ring]
     if not flat or len(dpts) < 2:
@@ -560,7 +566,7 @@ _GATE_MIN_AREA = 0.20
 # outright trades a lump for a doubled bund, which is worse. A lumpy weld is remembered and the
 # next-best host tried; the best of the lumpy candidates is taken only if no host is clean.
 _WELD_MIN_SOLIDITY = 0.85
-"""Research: weld lump - UNRESEARCHED: a weld leaving a host under 0.85 solidity is taken only when no clean host exists"""
+"""Research: weld lump - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a scrap goes to the basin it shares the most bund with unless that leaves the host under 0.85 solidity and a clean host exists"""
 # ...and the same measure guards the TINT, for a defect the apex guards likewise could not see
 # (settlement-review, Sawada 2026-08-17). Absorbing a fragment into the fan's ONE flooded plot grew
 # it a lobe: 94 x 24 ft became 94 x 38 ft at solidity 0.731, and at fit zoom it reads as an
@@ -846,7 +852,7 @@ _JOG_PARALLEL_DEG = 20.0
 # needing to be tuned. (The two turns are opposite in sign by construction once the runs are
 # required to be near-parallel, so only the magnitude is tested.)
 _JOG_CORNER_DEG = 55.0
-"""Research: a step turns hard - NONE: a 55 deg turn at each end of the hop tells a step from a sampled curve"""
+"""Research: a step turns hard - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a 55 deg turn at each end of the hop makes a step; a gentler dogleg is a wall that bends"""
 
 
 def jog_steps(ring: Poly, g: float) -> int:

@@ -27,7 +27,9 @@ from l7r.diagram.settlement._geom.primitives import keepout_ring
 from .._geom import Poly, Pt, point_in_poly, seg_dist, smooth_closed, smooth_points
 
 DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water/polder.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
-"""Research: dike cut at a crossing - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band cut 15 px either side of a sluice or crossing"""
+"""Research:
+    dike cut at a crossing - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band and its rows cut where a channel crosses
+    cut width - UNRESEARCHED: 15 px either side of a sluice or crossing, a 30 px gap"""
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 DIKE_IRREGULARITY = 1.4  # a hand-piled dike's widest stretch is at least this many times its narrowest (feature 287, water W40): research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html - built by basket and repaired where the water took most, never a ruled uniform band
@@ -402,6 +404,8 @@ class DikeMixin:
 
         Research:
             dike-top village - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: houses in single file on the crest
+            dike-top house size - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft
+            spacing along the crest - UNRESEARCHED: neighbors at least 1.15 house widths apart
             house platform - UNRESEARCHED: the house plus 14 by 10 ft of widened crest
             off the sluice notch - UNRESEARCHED: no house within 34 px of a gap
             no homestead bundle - UNRESEARCHED: bare houses, the gardens down on the parcels"""

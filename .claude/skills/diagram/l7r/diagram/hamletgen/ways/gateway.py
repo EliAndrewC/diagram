@@ -92,7 +92,12 @@ def gate_on_the_strip(s: Settlement, envelope: Poly, gate: Pt) -> Pt:
     """The connector's start: `gate` pushed out of the field's `envelope` (`push_out_of`, the rule the track has always kept),
     but where the seating reserved an exit strip, ON it - walked out along the strip until the envelope leaves it clear, to
     the strip's end at most - since the web draws the strip as a tree lane up to the connector's start (`tree.strip_run`,
-    feature 287 wave 6), and a start pushed a few feet off it left the strip ending in a hook (cohort seed 37: 8 ft)."""
+    feature 287 wave 6), and a start pushed a few feet off it left the strip ending in a hook (cohort seed 37: 8 ft).
+
+    Research:
+        connector starts off the crop - research/questions/0081-village-lanes.drawing.html: the start pushed out of the field envelope
+        start on the exit strip - research/questions/0081-village-lanes.drawing.html: walked along the strip so the lane up to it ends in no hook
+        setback from the field - UNRESEARCHED: `SPUR_SETBACK` 17 ft clear of the field envelope"""
     strip = s.M.get("access_exit")
     if not strip:
         return push_out_of(envelope, gate, SPUR_SETBACK)

@@ -302,7 +302,10 @@ class CrownIndex:
         self.grid.extend([(x, y, r, x - r, y - r, x + r, y + r)])
 
     def clear(self, x: float, y: float, r: float) -> bool:
-        """`_crown_seat_clear`'s verdict: no seated crown's center within this one, nor this center within it."""
+        """`_crown_seat_clear`'s verdict: no seated crown's center within this one, nor this center within it.
+
+        Research: no crown under another's - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: d >= max(r, cr)
+        """
         return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr, *_ in self.grid.near(x, y, r))
 
 

@@ -322,6 +322,8 @@ def _standing_memo(s: Settlement) -> tuple[Any, dict[Any, Any]]:
 
 
 def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
+    """Research: corridor geometry, memo and search plumbing - NONE: the site raster, the reach index and the exact gap
+    path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
     half = s._access.half
     # THE SITE'S RASTER FIRST: the site ground is what refuses most corridors (seed 44: 82,801 of the 106,061 refused), and
     # a sample in a surely taken cell refuses one with a lookup (`site_edge_samples`)

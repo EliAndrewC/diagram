@@ -39,9 +39,10 @@ class CivicWorksMixin:
 
         Research:
             head-house program - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: residence, kitchen, two dormitories, library, administration
-            program sizes and seats - UNRESEARCHED: hand-set, the service program to the rear
+            program seats - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: kuri and monks' quarters to one side, abbot's behind the hall; hand-set, dormitories on axis at the rear, residence to one side
+            program sizes - UNRESEARCHED: hand-set footprints
             precinct size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: the caller's w x h, default 130 x 100 px
-            parish burial plot in the precinct - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: 24 x 16 px
+            parish burial plot in the precinct - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: a ruled plot; 24 x 16 px (about 0.08 acre at 3 ft/px)
             glyph - CONVENTION: footprint boxes, no captions
         """
         self.M.setdefault("precincts", []).append({"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "rear": rear, "graveyard": graveyard})
@@ -97,7 +98,7 @@ class CivicWorksMixin:
             one roof over the cells - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html, research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: a continuous range with drawn seams
             cell frontage - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 18 ft
             range depth - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 21 ft
-            cell count - NONE: the caller's units, default 6
+            cell count - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: eight households under one roof at Shibata; the caller's units, default 6
         """
         w, h = units * frontage_ft / self.ftpx, depth_ft / self.ftpx
         g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
@@ -135,7 +136,9 @@ class CivicWorksMixin:
             tax-rice granary at a transit town - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: opt-in, a county seat keeps its grain in the yamen
             store size and count - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the caller's n x w x h, default 3 of 58 x 34 px
             the capital's granaries - research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.drawing.html: append, turned to the bank
-            white walls and dark hip roof - CONVENTION
+            white walls and dark hip roof - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the form a knob (takakura or kura); always the earth-walled kura, not rolled
+            store fills and roof band - CONVENTION
+            gap between stores - UNRESEARCHED: 14 px, fixed in pixels
             keep-clear margin - UNRESEARCHED: 30 px, 60 px added when turned
             caption - CONVENTION
         """
@@ -210,8 +213,8 @@ class CivicWorksMixin:
 
         Research:
             a kura behind the shop - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: an annex opposite the awning
-            a minority of shops - UNRESEARCHED: the caller's count, default 6
-            kura size - UNRESEARCHED: 20 x 14 ft at the building grain
+            a minority of shops - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: the drawing page's GUESS, a large merchant house one or two, an ordinary shop-house none; the caller's count, default 6, of kinds merchant and shop
+            kura size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: 14 to 20 ft square; 20 x 14 ft at the building grain
             off the street bed and the neighbor's lot - NONE: overlap rules
         """
         if kw is None:
@@ -273,7 +276,7 @@ class CivicWorksMixin:
 
         Research:
             the merchant family lives behind its shop - research/questions/0154-merchants-townhouses-machiya.html, research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one step behind the shopfront band, aligned to it
-            how many - UNRESEARCHED: the caller's count, default 4
+            how many - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a dozen or so very rich merchant families in a city of about 3,000; the caller's count, default 4
             spread along the band - UNRESEARCHED: 120 px apart
             band margin - UNRESEARCHED: 14 px
         """

@@ -43,14 +43,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 #: The classes a backing may name besides question files (spec FR-001).
-CLASSES = ("GUESS", "UNRESEARCHED", "CONVENTION", "DEVIATION", "NONE")
+CLASSES = ("GUESS", "UNRESEARCHED", "CONVENTION", "DEVIATION", "CANON", "NONE")
 #: A question file, as a claim names it (feature 303's flat directory).
 POINTER = re.compile(r"research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html")
 #: What every refusal prints, so the fix is in the message (the project's guard doctrine).
 GRAMMAR = (
     "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being "
-    "question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS` (searched, silent), "
-    "`UNRESEARCHED` (not yet searched), `CONVENTION`, `DEVIATION <question file>`, or `NONE` (no physical decision); "
+    "question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<question file>]` "
+    "(searched, silent; the file a drawing page that records the guess), `UNRESEARCHED` (not yet searched), `CONVENTION`, "
+    "`DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); "
     "one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly "
     "after its assignment; a module's claims are inherited by its units that carry none"
 )
@@ -97,6 +98,11 @@ def parse_claim(line: str) -> Claim:
     backing, _, account = rest.partition(": ")
     backing = backing.strip()
     head = backing.split(" ", 1)[0]
+    if head == "GUESS" and backing != head:  # a guess a drawing page records, named (feature 316, the audit's second round)
+        parts = [p.strip() for p in backing[len("GUESS") :].split(",")]
+        if not all(POINTER.fullmatch(p) for p in parts):
+            raise ClaimError(f"`{text}`: `GUESS` names question files or nothing")
+        return Claim(label.strip(), "GUESS", tuple(parts), account.strip(), text)
     if head in CLASSES and head != "DEVIATION":
         if backing != head:
             raise ClaimError(f"`{text}`: `{head}` takes no pointer")

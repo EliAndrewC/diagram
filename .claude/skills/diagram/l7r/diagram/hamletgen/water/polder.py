@@ -178,7 +178,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         header reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: outside the dike, uphill at the ring canal's head
-        reservoir size - UNRESEARCHED: an 82 x 54 px ellipse
+        reservoir size - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a pond sized to the paddy it waters; drawn a fixed 82 x 54 px ellipse whatever the acreage
         dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: the block converted to fish ponds, DIKEPOND_CONVERSION or the whole of it
         perimeter dike gapped at crossings - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: cut wherever a channel or recorded course crosses it
         dike uncaptioned - CONVENTION: the scripted tier draws the perimeter dike without a label
@@ -665,7 +665,9 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     `w_toe`; which is the settlement side is read off the seat, not assumed. (A valley hamlet such as the reference has
     no polder: this and the dike gates draw nothing there.)
 
-    Research: crossings where the village lives - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: three on the collector the village abuts, one per lateral, none on the drain
+    Research:
+        no plank on the drain - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: none over the drain at the field's foot
+        crossings where the village lives - UNRESEARCHED: three on the collector the village abuts, one per lateral, none on the feeder or far toe
     """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:

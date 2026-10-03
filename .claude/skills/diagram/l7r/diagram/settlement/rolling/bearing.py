@@ -44,7 +44,7 @@ COMMON_BEARING_DEG = 11.25
 # half a bundle pitch each way, so one ragged outline vertex does not turn a house, and a bend the width of two homesteads
 # does. A map drawing convention.
 FOLLOW_HALF_SPAN_PX = 48.0
-"""Research: lane bend a house reads - research/questions/0029-farmhouses-minka.drawing.html: 48 px either side, labeled a map drawing convention"""
+"""Research: lane bend a house reads - UNRESEARCHED: 48 px of the margin either side, read as the lane's bend"""
 _SAMPLE_PX = 8.0
 # A house within FOLLOW_FULL_PX of the margin stands on the lane that runs along it and follows its whole turn; past
 # that the pull fades to nothing at FOLLOW_REACH_PX, so a house two rows back follows the lanes of its own row rather
@@ -52,9 +52,9 @@ _SAMPLE_PX = 8.0
 # version followed the margin out to 400 px at full strength, and the settlement-review of Sawada at the 269 landing
 # (2026-09-28) found houses 340-400 ft off the margin turned by it, 9 of 16 of them at the spread's edge.
 FOLLOW_FULL_PX = 96.0
-"""Research: full lane turn within reach - research/questions/0029-farmhouses-minka.drawing.html: 96 px off the margin, labeled a map drawing convention"""
+"""Research: full lane turn within reach - UNRESEARCHED: the margin's whole turn within 96 px of it"""
 FOLLOW_REACH_PX = 240.0
-"""Research: lane turn fades out - research/questions/0029-farmhouses-minka.drawing.html: to none at 240 px, labeled a map drawing convention"""
+"""Research: lane turn fades out - UNRESEARCHED: the margin's pull fades to none at 240 px"""
 # The per-house draws key on the seat rounded to this many px (a map drawing convention): a front-row seat moved a pixel or
 # two by the rake's own reach keeps the rake it was moved for.
 KEY_CELL_PX = 4.0
@@ -91,8 +91,9 @@ class MarginBearing:
     across `FOLLOW_HALF_SPAN_PX` either side of it - no scan of the ring per candidate (dev/performance.md).
 
     Research:
-        turn with the field margin - research/questions/0029-farmhouses-minka.drawing.html: the margin stands in for the lane
-            a house stands on, labeled a map drawing convention
+        turn with the lane - research/questions/0029-farmhouses-minka.drawing.html: a house turns with the curve of the lane it stands on
+        turn with the field margin - UNRESEARCHED: the field margin stands in for that lane before any lane is drawn, a proxy
+            0029 neither records nor labels
     """
 
     def __init__(self, ring: Sequence[Pt], along_deg: float) -> None:

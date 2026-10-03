@@ -141,6 +141,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
         houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map
         the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the knob as the drawing resolves it, written to the manifest and the plan
+        a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
@@ -259,7 +260,10 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     anything. Past the last margin the site is refused, naming it: `SiteRefused`, raised HERE rather than at `stage_seat`
     where plan D2 places it, because a margin's capacity is known only by seating it. A margin with no dry way out is
     skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin).
-    Research: every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused"""
+    Research:
+        every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused
+        a seating inside a shape's band - UNRESEARCHED: refused where its houses draw no cluster shape's band (a string past 12:1)
+    """
     want = plan.spec.households
     mark = seating_mark(s)
     placed, cloud = _seat_households(s, plan)
@@ -341,7 +345,10 @@ def reserve_field_corridor(s: Settlement) -> bool:
     (`WoodShares.share`), and it is recorded as the tree's legs are (`field` on each), oriented toward the tree, for the web
     to draw where no way of its own reaches the field (`settle.settle_field`), bowed round a shed on it as a house's
     corridor is. True where one is reserved or the rule asks none (no brook, no field); False where no lawful run reaches
-    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next."""
+    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next.
+
+    Research: field way before the houses - DEVIATION research/questions/0081-village-lanes.drawing.html: the field way's run reserved before any house stands, against houses before lanes; a margin without one seats nobody
+    """
     from ..ways import law
     from ..ways.bund import BRANCH_WIDTH, paddy_ground
     from ..ways.corridors import FIELD_ROLE, field_router, field_runs, routed_field_runs
@@ -389,10 +396,14 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     village - its rows. Returns `(placed, the cloud's share)`; the boundary stays installed for the stage to take down.
 
     Research:
-        a scattered hamlet's seating - UNRESEARCHED: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass
+        a scattered hamlet's seating - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass
         front row across the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_ground_push` (`water_push`) moves a front seat onto the brook's far bank, fronting its field across the water
-        a footpath's room off the outline - UNRESEARCHED: a pushed seat cleared by `WEB_FABRIC_GAP` * 2 + 6 px
+        a footpath's room off the outline - research/questions/0081-village-lanes.drawing.html: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 px of tread, conventions
         a row village's rows - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the rows take every household, stepped at a farmstead's width capped at `ROW_FRONTAGE_MAX_FT`, never ranks behind
+        a household's wood share - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated only where it reserves `HOMESTEAD_WOOD_FT2` of copse within `COPSE_HOUSE_REACH_FT`
+        exit strip before any house - research/questions/0081-village-lanes.drawing.html: on a nucleated hamlet the strip runs from the seat's center before a house stands
+        rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
+        shared byre pockets - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: reserved in the seat band before any house
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
@@ -911,7 +922,8 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         stage order - NONE: each part drawn after the house it stands by and before the grove; counts and seats are the placers' own
-        shared byre sheds - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `draft_byres` asked at `COMMONS_BYRE_FRACTION` and `COMMONS_BYRE_GAP`
+        shared byre sheds - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `draft_byres` asked at `COMMONS_BYRE_FRACTION` (0.22)
+        shared sheds apart - GUESS: `COMMONS_BYRE_GAP`, 60 px between shared sheds
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)

@@ -37,7 +37,10 @@ if TYPE_CHECKING:
 class HousesMixin:
     # ---- houses
     def house(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "plain", rot: float = 0, shed: bool = False, shed_side: str = "W") -> None:  # type: ignore[misc]
-        """Research: farmhouse glyph - CONVENTION: wall tones by position, ridge line, door mark, the big and abandoned variants, the gray annex"""
+        """Research: farmhouse glyph - research/questions/0029-farmhouses-minka.drawing.html: one rectangle under a ridge line with a door mark, the big and abandoned variants
+        farmhouse tones - CONVENTION: wall tones by position, the abandoned house's dashed outline, the gray annex's color
+        big farmhouse wing - research/questions/0029-farmhouses-minka.drawing.html: the big house drawn with a wing (0.40 x 0.5 of the house) off its back corner
+        ridge at 0.6 of the length - research/questions/0029-farmhouses-minka.drawing.html: the ridge drawn at 0.6 of the house's length, a hipped-roof reading"""
         # POSITION-SEEDED (2026-08-08). A house's wall color is a property of the house, and this
         # was the single most-executed stream draw in the engine - one per house, on every map - so
         # it moved the whole sequence for everything drawn afterwards.
@@ -120,7 +123,8 @@ class HousesMixin:
         return any(self._field_blocks_point(cx, cy, gap) for cx, cy in rot_rect(x, y, w, h, rot))  # the outline's chords on the house side (feature 140)
 
     def _in_blocked(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
-        """Research: seat set-back from fields, dry plots and hills - UNRESEARCHED: the center 14 px off a field, 12 px off a dry plot or a hill or pond ellipse"""
+        """Research: seat set-back from fields, dry plots and hills - research/questions/0029-farmhouses-minka.drawing.html: the center 14 px off a field
+        seat set-back from dry plots and hills - UNRESEARCHED: the center 12 px off a dry plot or a hill or pond ellipse"""
         # bbox pre-filter (cached, same idea as _rect_hits): a point outside a polygon's bbox - expanded by
         # the 14px field set-back - can neither be inside it nor within 14px of an edge, so skip the O(vertices)
         # point_in_poly / edge_dist. Matters for the one big field envelope and a city's many block polys.
@@ -226,43 +230,38 @@ class HousesMixin:
     def _record_tread(self: Settlement, pts: Any, half: float) -> None:  # type: ignore[misc]
         """Register a way's DRAWN tread, so `_fits` can keep whole footprints off it (see `_on_a_tread`).
 
-        ONLY `lane` calls this today, and the scope is a deliberate decision rather than an
-        oversight. WATER (streams, channels, canals, the moat, the aqueduct) is out because its
-        keep-out is `hard_polys`, which is already footprint-tested, and so are the BARRIERS (wall,
-        city wall, ward fence), whose corridors are a standoff rather than a surface anything is
-        drawn on. The other TRAFFICKED ways - street, alley, road, ring road, towpath - were tried
-        (2026-08-12) and reverted the same day: each of them already inflates its corridor by a
-        half-diagonal's worth of margin precisely to cover this gap by hand, so the tread test
-        changes no verdict they were getting wrong, and the extra tightening cost Tango a public
-        well, tipping `city_well_density_sufficient` into the documented well-versus-collision-
-        circle squeeze (this skill's CLAUDE.md, "The collision circle is now blocking FEATURES").
-        Extending the registry is one `_record_tread` call per way plus a pool re-roll with a
-        `settlement-review` per map - a job, not a side effect. Do it when the collision circle is
-        replaced by a real footprint test, which frees the ground those wells need."""
+        ONLY `lane` calls this today, and the scope is a deliberate decision rather than an oversight. WATER (streams,
+        channels, canals, the moat, the aqueduct) is out because its keep-out is `hard_polys`, which is already
+        footprint-tested, and so are the BARRIERS (wall, city wall, ward fence), whose corridors are a standoff rather than a
+        surface anything is drawn on. The other TRAFFICKED ways - street, alley, road, ring road, towpath - were tried
+        (2026-08-12) and reverted the same day: each of them already inflates its corridor by a half-diagonal's worth of
+        margin precisely to cover this gap by hand, so the tread test changes no verdict they were getting wrong, and the
+        extra tightening cost Tango a public well, tipping `city_well_density_sufficient` into the documented
+        well-versus-collision-circle squeeze (this skill's CLAUDE.md, "The collision circle is now blocking FEATURES").
+        Extending the registry is one `_record_tread` call per way plus a pool re-roll with a `settlement-review` per map - a
+        job, not a side effect. Do it when the collision circle is replaced by a real footprint test, which frees the ground
+        those wells need."""
         self.treads.append(([(float(q[0]), float(q[1])) for q in pts], float(half), pts))
 
     def _on_a_tread(self: Settlement, x: float, y: float, w: float, h: float, skip: Any = None, rot: float = 0.0) -> bool:  # type: ignore[misc]
         """Would a building of this size, at this spot, have any CORNER on a way's drawn tread?
 
-        THE DEBT THIS PAYS (this skill's CLAUDE.md, "placement tests a different footprint than the
-        one drawn"): `_near_corridor` tests a candidate's CENTER against a way's soft clearance, so
-        a building whose drawn footprint is wider than the placer assumed can stand a legal distance
-        off by its center and still put a corner on the road. Measured: a well-off farmhouse (the
-        minka's length varies to 1.35x) ended 2.4 px from a track's centerline with its center a
-        legal 34 px away, which `houses_clear_of_lanes` reports as a house standing in the lane.
+        THE DEBT THIS PAYS (this skill's CLAUDE.md, "placement tests a different footprint than the one drawn"):
+        `_near_corridor` tests a candidate's CENTER against a way's soft clearance, so a building whose drawn footprint is
+        wider than the placer assumed can stand a legal distance off by its center and still put a corner on the road.
+        Measured: a well-off farmhouse (the minka's length varies to 1.35x) ended 2.4 px from a track's centerline with its
+        center a legal 34 px away, which `houses_clear_of_lanes` reports as a house standing in the lane.
 
-        The two tests are kept SEPARATE on purpose. Footprint-testing the whole clearance was tried
-        once for `block_polys` and reverted, because a clearance is slack that a footprint routinely
-        overhangs by a few px; the TREAD is not slack. So the clearance keeps its center test and
-        the tread gets an exact one, its edge `TREAD_WALL_FT` clear of the wall (feature 294; it was the 2 px hair
-        `houses_clear_of_lanes` allows).
+        The two tests are kept SEPARATE on purpose. Footprint-testing the whole clearance was tried once for `block_polys` and
+        reverted, because a clearance is slack that a footprint routinely overhangs by a few px; the TREAD is not slack. So
+        the clearance keeps its center test and the tread gets an exact one, its edge `TREAD_WALL_FT` clear of the wall
+        (feature 294; it was the 2 px hair `houses_clear_of_lanes` allows).
 
-        `rot` IS THE FOOTPRINT (feature 121). This used to pass 0.0 unconditionally, which made the
-        "exact" test axis-aligned - so it measured a square-on rect while the map drew a raked one,
-        the very substitution the paragraph above is about. It defaults to 0.0 because most callers
-        seat something genuinely unrotated; a caller that knows its rake passes it, and the bundle
-        placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER
-        vs FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
+        `rot` IS THE FOOTPRINT (feature 121). This used to pass 0.0 unconditionally, which made the "exact" test axis-aligned -
+        so it measured a square-on rect while the map drew a raked one, the very substitution the paragraph above is about.
+        It defaults to 0.0 because most callers seat something genuinely unrotated; a caller that knows its rake passes it,
+        and the bundle placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER vs
+        FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
         Research: no building corner on a lane - research/questions/0081-village-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
         if not self.treads:
             return False
@@ -445,7 +444,9 @@ class HousesMixin:
         Research:
             shops face the street - research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html, research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: rows rotated to front the way, a dense row a continuous street wall
             rear row back to back - research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html: a second row turned away, `rowgap` (9 px) behind the first
-            road shoulder setback - UNRESEARCHED: a row on a road stands off half its width plus 18 px, a row on a street at the curb"""
+            road shoulder setback - UNRESEARCHED: a row on a road stands off half its width plus 18 px, a row on a street at the curb, `setback` 10 px by default
+            default 58 px spacing between shops - DEVIATION research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html: `spacing` 58 px, a joint drawn where real shops touched
+            each building's rake jittered up to 4 degrees off the street's normal - UNRESEARCHED: `jitter` 4 degrees, scoped to the street run"""
         # SCOPED (2026-08-08): the per-building rot jitter below was the LAST root cause of a town
         # re-rolling. Its seats were already stable once pack was scoped, but a different rake gives a
         # different footprint, which changes what fits beside it - and the cascade ran through every
@@ -750,7 +751,8 @@ class HousesMixin:
     def _try_place_legacy(self: Settlement, x: float, y: float, kind: str, role: Any = None) -> bool:  # type: ignore[misc]
         """Seat one farmhouse on the legacy house-first path.
         Research:
-            legacy farmhouse size - UNRESEARCHED: 44 x 29 (big 60 x 40) at `bscale`, wealth 0.9 / 1.0 / 1.12 by position
+            legacy farmhouse size - research/questions/0029-farmhouses-minka.drawing.html: 44 x 29 (big 60 x 40) at `bscale`, wealth 0.9 / 1.0 / 1.12 by position
+            legacy farmhouse rake +-5 degrees by position - research/questions/0029-farmhouses-minka.drawing.html: each house turned up to 5 degrees either way, seeded by its seat
             legacy storehouse share - research/questions/0040-farm-storehouses-kura.drawing.html: about three farms in ten, by position"""
         # a farmhouse shares the MAP'S building grain (bscale): at hamlet scale bscale is 1.0 (full size), but
         # a town/city compresses its urban buildings, and a peasant farmhouse must not render LARGER than the

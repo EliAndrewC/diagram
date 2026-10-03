@@ -30,7 +30,8 @@ class FocalMixin:
         Research:
             mill-house size - research/questions/0064-water-mills-suisha.drawing.html: 30 x 24 ft by default
             mill seat beside moving water - research/questions/0064-water-mills-suisha.drawing.html: beside a watercourse with fall, the wheel on the water side
-            wheel glyph - CONVENTION: an eight-spoked ring 9 ft in radius, 5 ft off the house
+            wheel glyph - UNRESEARCHED: an 18 ft wheel (9 ft radius) set 5 ft off the house; 0064 gives no wheel size and seats the wheel in a short race
+            wheel drawing - CONVENTION: an eight-spoked ring
         """
         pw, ph = self.px(w), self.px(h)
         dx, dy = {"E": (1.0, 0.0), "W": (-1.0, 0.0), "N": (0.0, -1.0), "S": (0.0, 1.0)}[wheel_side]
@@ -61,7 +62,7 @@ class FocalMixin:
 
         Research:
             a second shrine - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: a minor shrine besides the tutelary one
-            secondary hall size - UNRESEARCHED: 42 x 30 ft by default
+            secondary hall size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: 42 x 30 ft by default (the page: a wayside hall some 6 ft square, or 12 to 18 ft a side)
         """
         self.shrine(x, y, w_ft, h_ft, kind="shrine")
         self.note_focal("secondary_shrine")

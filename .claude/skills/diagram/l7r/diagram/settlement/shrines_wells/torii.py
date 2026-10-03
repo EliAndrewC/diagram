@@ -140,7 +140,7 @@ class ToriiAvenueMixin:
         _assert_walls_clear_of_torii, and at the manifest by torii_clear_of_walls.
 
         Research:
-            avenue stops short of a wall - UNRESEARCHED: the run scaled back from its first arch
+            avenue stops short of a wall - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the run scaled back from its first arch, closing the stride below 12 ft
             tightest stride - CONVENTION: the arch glyph's depth plus 1 px
         """
         runs = wall_runs(self.M)
@@ -207,6 +207,7 @@ class ToriiAvenueMixin:
 
         Research:
             arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: one at each interior vertex the caller gives
+            arch spacing on the path - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft apart, the innermost 12 ft off the hall; set by the caller's vertices instead
             ascent path - CONVENTION: an 8 px path with a dashed centerline
         """
         dstr = 'M' + ' L'.join(f'{x},{y}' for x, y in ascent)
@@ -220,7 +221,7 @@ class ToriiAvenueMixin:
 
         Research:
             arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the caller's count
-            arches spread over the ascent - UNRESEARCHED: from 6% to 86% of its length
+            arches spread over the ascent - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: from 6% to 86% of its length, not 12 ft apart nor 12 ft off the hall
             ascent path - CONVENTION: an 8 px path with a dashed centerline
         """
         seg = [math.hypot(ascent[i + 1][0] - ascent[i][0], ascent[i + 1][1] - ascent[i][1]) for i in range(len(ascent) - 1)]

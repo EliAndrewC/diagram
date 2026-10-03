@@ -191,8 +191,8 @@ class CompoundsMixin:
 
         Research:
             compound wall never in water - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: clear of canal, dock, moat, river and pond
-            compound wall clear of streets - UNRESEARCHED: may line a street, never stand in its bed
-            fire tower not walled in - UNRESEARCHED: a tower inside or on the wall refuses the seat
+            compound wall clear of streets - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: may line a street, never stand in its bed
+            fire tower not walled in - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a tower inside or on the wall refuses the seat
             daylight margin - NONE: 2.5 px over the check's 1.5"""
         ex0, ey0, ex1, ey1 = x - w / 2, y - h / 2, x + w / 2, y + h / 2
         if any(abs(t["x"] - x) < w / 2 and abs(t["y"] - y) < h / 2 for t in self.M.get("fire_towers", []) if "w" in t):
@@ -244,7 +244,9 @@ class CompoundsMixin:
             court size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: ~230 x 170 ft at the building grain
             light wall - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: ~2 ft, floored at 1.6 px
             cart gate - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: ~10 ft, floored at 3.5 px
-            one large house inside - UNRESEARCHED: a merchant_large dwelling at the court's center
+            one large house inside - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a merchant_large dwelling inside the court
+            house at the court's center - UNRESEARCHED: seated 2 px above the court's center
+            building margin round the court - UNRESEARCHED: 18 ft at the building grain
             slide fan - NONE: nearest clear seat within 48 px
             court and wall colors - CONVENTION"""
         if w is None:
@@ -295,7 +297,9 @@ class CompoundsMixin:
         RNG (dedicated Random seeded on the map seed), so a map that rolls its old count stays
         byte-identical.
 
-        Research: walled compound count - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one, two or three at 30/40/30"""
+        Research:
+            walled compound count - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one, two or three at 30/40/30
+            capital compound count - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.drawing.html: 4-8 (MERCHANT_ESTATE_WEIGHTS['capital'])"""
         scale = str(self.M.get("meta", {}).get("scale", "village"))
         n = int(count) if count is not None else roll_merchant_estate_count(scale, random.Random(self.seed * 1201 + 89))
         if n > len(seats):

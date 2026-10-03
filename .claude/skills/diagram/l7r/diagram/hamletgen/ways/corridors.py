@@ -265,7 +265,7 @@ def field_runs(segs: Sequence[tuple[Pt, Pt]], grounds: Sequence[WorkedGround], h
             the paddy's edge, shortest first
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square,
             at the ford that makes the walk shortest
-        dry hem after the paddy - UNRESEARCHED: the dry plots' edge offered only after the paddy's"""
+        dry hem after the paddy - research/questions/0081-village-lanes.drawing.html: the spur stops at the hem's edge, offered only after the paddy's"""
     out: list[Poly] = []
     pts = samples_along(segs)
     for ground in grounds:
@@ -331,7 +331,12 @@ def routed_field_runs(
 
 
 FORD_LANDING_FT = 22.0
-"""A ford's landing stands this far off the brook square to its reach (`checks.ford_crossing`'s own `landing`)."""
+"""A ford's landing stands this far off the brook square to its reach (`checks.ford_crossing`'s own `landing`).
+
+Research:
+    square at the ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the path runs
+        square to the brook through the landing
+    ford landing - UNRESEARCHED: 22 ft each side of the brook"""
 
 
 def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:

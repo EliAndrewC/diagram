@@ -17,6 +17,8 @@ Research:
     byre_form forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the inner stable, a yard shed, a detached commons shed
     byre_form weights - GUESS: 0.6 inner, 0.3 yard shed, 0.1 commons
     caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html: wagon or hatago, rolled evenly
+    hamlet knobs unrolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet leaves none of these to chance and draws each knob's default
+    hamlet default values - UNRESEARCHED: high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
 """
 
 import hashlib
@@ -262,7 +264,7 @@ def _settlement_form_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 
     Research:
         dike-top needs low ground - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html
-        water town needs a canal - UNRESEARCHED: Lion lands or a declared canal, from the GM's setting canon
+        water town needs a canal - CANON: Lion lands or a declared canal, from the GM's setting canon
     """
     if v in ("nucleated", "linear", "dispersed"):
         return True
@@ -650,7 +652,7 @@ EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
 # WHY (full): research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html.
 
 KIDO_TOWER_KEEPCLEAR = 62.0
-"""Research: no tower at a ward-fence junction - UNRESEARCHED: 62 px of rampart kept tower-free"""
+"""Research: no tower at a ward-fence junction - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the drawing page's GUESS, 62 px (186 ft at 3 ft/px) of rampart kept tower-free"""
 # px of rampart kept tower-free around a `tower_skip` spot - where a ward FENCE meets the city wall
 # (its kido ward-gate stands there; a mamian's footprint would collide the junction). Placement
 # refuses towers inside this band (city_wall's even-fill), so the coverage check EXEMPTS curtain

@@ -137,7 +137,9 @@ def _obstacles(s: Settlement, h: Mapping[str, Any]) -> tuple[list[Poly], list[Po
     """(hard, walls) for farm `h`'s channel: the crop is hard; every building, yard and garden, every OTHER farm's grove,
     and every lane are walls. The farm's own grove is not - the channel runs into its grounds through it.
 
-    Research: routed round the farm - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round buildings, yards, gardens, other groves, other wells and lanes; through its own grove
+    Research:
+        routed round the farm - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round buildings, yards, gardens and other groves; through its own grove
+        walled off lanes, wells and crop - UNRESEARCHED: every lane, other farms' well pockets and the crop and paddy plots walled
     """
     from ..ways.geom import steading_footprints, stroke_quad  # local: the ways are a later stage
 
@@ -172,6 +174,7 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
     Research:
         a channel into the grounds - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shortest route found from the nearest sources
         no way back drawn - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the channel stops in the dooryard
+        crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
     """
     from ..ways.route import _route  # local: the ways are a later stage
 

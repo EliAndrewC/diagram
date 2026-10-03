@@ -180,12 +180,15 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         never below the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html
         clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
         not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
-        not in the reed fringe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: refused centered in it, scored down at an end
+        not in the reed fringe - CANON: refused centered in it, scored down at an end (GM 2026-08-28); 0058 has no fringe rule
+        reed-fringe share weight - UNRESEARCHED: 2.5 times the band's share in the reeds
         wind and upslope weights - UNRESEARCHED: 1.0 for facing the wind, 0.8 for upslope
         dry hem penalty - UNRESEARCHED: 1.6 within two band depths, plus 2.5 times the back's foul
         brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: scored down, never refused
         brook penalty weight - GUESS: 3.0
+        brook reach on the band - UNRESEARCHED: a band point within 30 ft of the brook counts as on the water
         belt room on the canvas - CONVENTION: scored, refused past BELT_ROOM_MAX_OFF
+        band on the canvas - CONVENTION: the seat center at least half the band's length inside the frame
         dry way out - research/questions/0081-village-lanes.drawing.html: a walled-in head is refused"""
     env = plan.envelope
     cen = centroid(env)
@@ -366,7 +369,7 @@ def margin_candidates(env: Poly, cen: Pt, wind: Pt) -> list[tuple[Pt, Pt, int]]:
 
     Research:
         back faces the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html
-        45 degree bar - CONVENTION: WIND_BACK_MIN_DOT, tier 0
+        45 degree bar - UNRESEARCHED: WIND_BACK_MIN_DOT, tier 0; 0072 gives no tolerance
         back turned off a flank - UNRESEARCHED: tier 1, at most 45 degrees off the margin's normal"""
     out: list[tuple[Pt, Pt, int]] = []
     n = len(env)

@@ -157,7 +157,7 @@ def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | N
 
 
 _NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
-"""Research: nub length - research/questions/0081-village-lanes.drawing.html: under 9 ft"""
+"""Research: nub length - CONVENTION: under 9 ft, a splice artifact not a stretch of way"""
 # NOT 5: the pass shipped at 5 ft and a settlement-review then found two nubs on Sawada that cleared it -
 # an 8.25 ft boot turning -87 deg off a 117 ft run, and a 5.74 ft first segment turning 88 deg. The floor
 # was set from the ONE case the pass was written for (3.1 ft) and was therefore calibrated below the defect
@@ -165,7 +165,7 @@ _NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, 
 # MEASURED before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, all three on
 # Sawada, no other map touched; 12 ft catches nothing 9 does not.
 _NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
-"""Research: nub turn - research/questions/0081-village-lanes.drawing.html: an end stretch under 9 ft turning 60 deg is a nub"""
+"""Research: nub turn - CONVENTION: an end stretch under 9 ft turning 60 deg reads as a lump, not the way arriving"""
 
 # THE END SPIKE IS REAL, AND `_NUB_FT` IS THE WRONG LEVER FOR IT - DEFERRED WITH ITS MEASUREMENT
 # (settlement-review, feature 155; constitution Principle XIV's "a deferral is a deliverable").
@@ -209,7 +209,7 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
     would take the lane off the way it was joined to. Lifted out of the pass below so it can be asked with
     plain lists (GM 2026-08-28 on testability).
 
-    Research: a lane's end loses its nub - research/questions/0081-village-lanes.drawing.html: the vertex after the foot dropped
+    Research: a lane's end loses its nub - CONVENTION: the splice artifact's vertex after the foot dropped
     """
 
     def nub_at_head(pts: list[Pt]) -> bool:

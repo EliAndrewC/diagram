@@ -56,8 +56,10 @@ class NearRingMixin:
         Research:
             dry cropland near a town - research/questions/0010-farmland-around-towns-and-cities.drawing.html: a quilt of dry fields and gardens with no channels or water
             cropland nearest the town - research/questions/0010-farmland-around-towns-and-cities.drawing.html: the near ring cropped, the fallow left to the far margins
-            near-ring density - research/questions/0010-farmland-around-towns-and-cities.drawing.html: dense 0.97, medium 0.70, thin 0.52 of the clear cells cropped
-            plot size - UNRESEARCHED: 60 ft cells jittered 0.85-1.2
+            near-ring density - UNRESEARCHED: dense 0.97, medium 0.70, thin 0.52 of the clear cells cropped
+            plot size - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 60 ft cells jittered 0.85-1.2
+            off the groves - UNRESEARCHED: no plot inside a village grove's belt or rect, or over a drawn grove clump
+            flat ground only - UNRESEARCHED: no plot within 1.35x the hill's radii
             garden share - UNRESEARCHED: 0.16 of the plots gardens
             crop runs - UNRESEARCHED: a plot keeps its neighbor's crop 58% of the time
             row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot's furrows turned from its neighbors'"""
@@ -208,6 +210,8 @@ class NearRingMixin:
             moat intake with the current - research/questions/0010-farmland-around-towns-and-cities.drawing.html: tapped from a moat vertex upstream of the basin
             basin size - research/questions/0010-farmland-around-towns-and-cities.drawing.html: 150 ft cells inset 7 px, drawn by `paddy_field` at plot 46
             setbacks - UNRESEARCHED: 60 px off graves, the moat's half-width plus 15 px, 22 px off streams
+            road and street setback - UNRESEARCHED: 34 px off the road, a street's half-width plus 20 px
+            off the hill - UNRESEARCHED: no basin within 1.35x the hill's radii
             farmhouses round a city field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: two rings of farmhouses round each basin on a walled city
             wells beside the basins - research/questions/0196-communal-wells-ido.drawing.html: up to two a basin, within 90 px of a farmhouse"""
         bx0, by0, bx1, by1 = bbox

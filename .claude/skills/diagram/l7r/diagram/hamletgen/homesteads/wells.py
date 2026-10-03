@@ -96,7 +96,8 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
 
     Research:
         shared wells spaced - research/questions/0033-row-villages-resson.drawing.html: one at the middle of each stretch of at most 1.6 reaches
-        beside the street - UNRESEARCHED: off the tread by the wellhead and 8 ft, either side
+        beside the street - research/questions/0196-communal-wells-ido.drawing.html: the lane-side form, on the verge clear of the tread, either side
+        off the tread - GUESS: the wellhead's half-extent and 8 ft off the street's centerline
     """
     if not streets or not houses:
         return 0
@@ -216,9 +217,9 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         well pockets drawn first - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: each household's pocket drawn as a well
         surface water counts - research/questions/0196-communal-wells-ido.drawing.html: a house within 760 ft (over the map's ft per px) of surface water needs no well
         not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
-        neighborhood ladder - UNRESEARCHED: the third-nearest house within 190, 300, 520 px, then two houses
+        neighborhood ladder - research/questions/0196-communal-wells-ido.drawing.html: the third-nearest house within 190, 300, 520 px, then two houses
         wells apart - UNRESEARCHED: 170 px between wells
-        no well past the crop - NONE: a frame rule, refused where the wellhead would widen the crop
+        no well past the crop - CONVENTION: a framing rule, refused where the wellhead would widen the crop
     """
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:

@@ -52,6 +52,9 @@ def build_terraces(
         channel widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 6.0 to 3.0 and drain 1.5 to 5.0, in px rather than feet
         low terraces wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the lowest three steps tinted
         toe off the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: plots and lips lifted onto the collector's bank
+        retaining wall form - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: one lip drawn, no per-settlement stone wall or earth bank roll
+        drain and outfall course - UNRESEARCHED: the drain descends 40 px along the foot, the outfall turns 66 px downhill, the brook runs 300 px straight downhill
+        acreage scale - NONE: measured at a fixed 2 ft/px although `ftpx` is a parameter
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill unit
@@ -189,6 +192,9 @@ def build_ribbon(
         channel widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 5.0 to 3.0 and drain 1.5 to 5.0, in px rather than feet
         low bands wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the lowest three bands tinted
         toe off the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: plots lifted onto the collector's bank
+        floor width waver - UNRESEARCHED: the valley floor's width wavers +/-10% on a 90 px period
+        outfall and brook - UNRESEARCHED: an outfall stub 60 px and a brook 300 px straight downhill
+        acreage scale - NONE: measured at a fixed 2 ft/px although `ftpx` is a parameter
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))

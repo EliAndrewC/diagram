@@ -280,6 +280,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: at most WET_SHARE_CAP in marsh
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
         woods not in a ruled line - UNRESEARCHED
+        nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
+        per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
+        scan reach - UNRESEARCHED: confined to 210 px past the content box
     """
     dx, dy = plan.fall
     keep: list[tuple[float, float, float]] = []  # (x, y, radius) of everything to stay clear of

@@ -35,9 +35,10 @@ class KidoMixin:
         kido_reservation() reserves the ground it will stand on long before it is drawn.
 
         Research:
-            gate glyph proportions - CONVENTION: a 14 px roof bar, 4 x 16 px posts, a 15 x 16 px guard box
+            gate glyph proportions - CONVENTION: a 14 px roof bar, 4 x 16 px posts
+            guard box size - research/questions/0204-night-watch-and-ward-gates-kido.html, research/questions/0204-night-watch-and-ward-gates-kido.drawing.html: a fixed 15 x 16 px box, unscaled (the pages: a keeper's hut about 6 by 9 ft, a samurai-quarter guard box about 12 by 9 ft)
             keeper's hut beside the gate - research/questions/0204-night-watch-and-ward-gates-kido.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the nearest clear spot beside the opening
-            guard box clearances - UNRESEARCHED: 12 ft of verge off every lane bed, clear of towers, walls and the fence
+            guard box clearances - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html, research/questions/0204-night-watch-and-ward-gates-kido.drawing.html: 12 ft of verge off every lane bed, clear of towers, walls and the fence (0204's drawing seats a samurai-quarter guard box set into a compound's wall)
         """
         roof = (-hw, -7.0, 2 * hw, 14.0)
         posts = [(-hw - 1, -8.0, 4.0, 16.0), (hw - 3, -8.0, 4.0, 16.0)]
@@ -187,7 +188,8 @@ class KidoMixin:
 
         Research:
             ward gate across the street - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html, research/questions/0204-night-watch-and-ward-gates-kido.html: a roofed gateway, posts and a guard box over the street
-            barred opening - UNRESEARCHED: spans an 18 ft street plus 5 px a side
+            barred opening - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html, research/questions/0204-night-watch-and-ward-gates-kido.html: spans an 18 ft street plus 5 px a side (the pages: posts about 2 ken, ~12 ft, apart; 12 to 15 ft)
+            guard flank by default - UNRESEARCHED: with no ward side given, the legacy flank, E of a N-S gate and S of an E-W one (kido_mesh)
             gate colors - CONVENTION
         """
         if sw is None:

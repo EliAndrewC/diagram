@@ -128,6 +128,7 @@ class TradesMixin:
         Research:
             dye works on water - research/questions/0209-dyers-weavers-and-papermakers-konya.html: drying racks dominate, rinsing in open water
             dye yard size - research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: an 80 x 52 ft yard, a 36 x 24 ft workshop
+            indigo vats - research/questions/0209-dyers-weavers-and-papermakers-konya.html: two sunken vats by the workshop door (the page: buried four in a row)
             dye glyph - CONVENTION: rack lines hung with indigo cloth
         """
         yw_, yh_ = self.px(80), self.px(52)
@@ -158,7 +159,8 @@ class TradesMixin:
 
         Research:
             lumber yard at a river port - research/questions/0210-timber-yards-and-log-booms-kiba.html
-            lumber yard size - UNRESEARCHED: a 90 x 60 ft yard with a 24 x 16 ft office
+            lumber yard size - research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: the page's GUESS of 3,000 to 8,000 sq ft; a 90 x 60 ft yard
+            lumber office size - UNRESEARCHED: 24 x 16 ft
             stack glyph - CONVENTION
         """
         yw_, yh_ = self.px(90), self.px(60)
@@ -225,8 +227,8 @@ class TradesMixin:
         firewood stack yard behind. Records M['bathhouses'] (city_has_bathhouse).
 
         Research:
-            bathhouse premises - research/questions/0202-public-bathhouses-sento.html: a shophouse-scale bath with a rear furnace and a fuel yard
-            bathhouse size - UNRESEARCHED: 48 x 32 ft with a 22 ft fuel yard
+            bathhouse premises - research/questions/0202-public-bathhouses-sento.drawing.html: the page's GUESS layout, a bath with a rear furnace and a fuel yard behind
+            bathhouse size - research/questions/0202-public-bathhouses-sento.drawing.html: the page's GUESS of about 40 x 30 ft and a 1,000 to 2,000 sq ft yard; the code draws 48 x 32 ft with a 48 x 22 ft yard
             fuel-yard glyph - CONVENTION
         """
         bw_, bh_ = self.px(48) / 2, self.px(32) / 2
@@ -301,7 +303,8 @@ class TradesMixin:
 
         Research:
             a farrier where horses concentrate - research/questions/0205-smiths-and-farriers-kajiya.html, research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: beside a stables only
-            forge and apron size - research/questions/0205-smiths-and-farriers-kajiya.html: a 20 x 18 ft shed, a 28 x 20 ft apron
+            forge and apron size - research/questions/0205-smiths-and-farriers-kajiya.html: a 20 x 18 ft shed (the page's one plan, modern and undated, ~21 x 18 ft with its work floor inside)
+            working apron - UNRESEARCHED: an open-fronted shed with a 28 x 20 ft apron in front
             ox-shoeing frame - research/questions/0205-smiths-and-farriers-kajiya.html: about 7 x 4 ft
             forge furniture glyphs - CONVENTION: hearth, hood, anvil, quench tub, post
         """
@@ -409,7 +412,10 @@ class TradesMixin:
         Research:
             a kiln works with its households - research/questions/0192-pottery-kilns-noborigama.html: kiln, shed, clay pit, fuel, well and two or three cottages
             a chambered climbing kiln - research/questions/0192-pottery-kilns-noborigama.drawing.html: laid up its slope
-            works sizes - UNRESEARCHED: a 140 x 120 ft ground, a 46 x 16 ft kiln, a 32 x 18 ft shed, a 30 x 24 ft pit, 28 x 18 ft cottages
+            works sizes - research/questions/0192-pottery-kilns-noborigama.drawing.html: the page's GUESS; a 140 x 120 ft ground, a 32 x 18 ft shed, a 30 x 24 ft pit, 28 x 18 ft cottages
+            kiln length - DEVIATION research/questions/0192-pottery-kilns-noborigama.drawing.html: a 46 x 16 ft kiln against the measured 55-80 x ~7 ft; the 16 ft width is not recorded as a departure
+            fuel stack at the stoke end - UNRESEARCHED
+            kiln along its haul road - UNRESEARCHED: turned along the nearest way within 400 ft when no rot is given
             kiln glyph - CONVENTION
         """
         if rot is None:
@@ -543,9 +549,9 @@ class TradesMixin:
         Records M['charcoal_yards'] with `sheds` (settlement_has_charcoal_yard).
 
         Research:
-            roofed sheds and a weighing floor - research/questions/0197-charcoal-yards-and-charcoal-stores.html
+            roofed sheds and a weighing floor - research/questions/0197-charcoal-yards-and-charcoal-stores.html, research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: the findings support the weighing floor; the roofed stacking sheds stand on the drawing page only
             no cooling apron - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
-            yard sizes - UNRESEARCHED: an 88 x 58 ft yard, 34 x 18 ft sheds, a 16 x 14 ft weighing floor
+            yard sizes - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: the page's GUESS; an 88 x 58 ft yard, 34 x 18 ft sheds, a 16 x 14 ft weighing floor
             bale glyph - CONVENTION
         """
         yw_, yh_ = self.px(88), self.px(58)
@@ -790,7 +796,9 @@ class TradesMixin:
         Research:
             a tanning yard on water at the edge - research/questions/0193-tanning-yards.html, research/questions/0193-tanning-yards.drawing.html: pits, racks and a shed, the water side on the bank
             pit count by territory - research/questions/0193-tanning-yards.drawing.html: 4 pits by default
-            pit size - research/questions/0193-tanning-yards.html: about 4.6 ft across
+            pit size - UNRESEARCHED: pits drawn 9 x 5 ft (0193 gives no pit size; the docstring's 4.6 ft is not the code's)
+            yard size from pit count - UNRESEARCHED: 14 + 11 ft per pit column by 9 ft per row + 32 ft, one row up to 5 pits
+            work shed - UNRESEARCHED: 14 x 10 ft
             staking frames or an intake cut - research/questions/0193-tanning-yards.drawing.html: by the water kind
             yard glyph - CONVENTION
         """

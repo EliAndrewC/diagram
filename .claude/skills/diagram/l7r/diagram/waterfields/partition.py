@@ -146,7 +146,7 @@ class Sectors:
     def bound(self, T: _Thread, fv: float) -> Pt:
         """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then straight down the fall from where it stopped.
 
-        Research: past a thread's end - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the column bund runs straight down the fall rather than converging along the drain
+        Research: past a thread's end - UNRESEARCHED: the column bund runs straight down the fall rather than converging along the drain
         """
         end = T.pts[-1]
         f_end = self.F.to_uf(*end)[1]
@@ -157,7 +157,7 @@ class Sectors:
     def thread_lines(self) -> list[Any]:
         """Every thread, and each continued straight down the fall past its own end until it meets another thread.
 
-        Research: sector pieces - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: each thread continued straight down the fall until it meets another
+        Research: sector pieces - UNRESEARCHED: each thread continued straight down the fall until it meets another
         """
         import shapely
         from shapely.geometry import LineString

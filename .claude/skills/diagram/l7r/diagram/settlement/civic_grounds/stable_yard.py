@@ -179,6 +179,7 @@ class StableYardMixin:
             trough size - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 4.6 x 2 px
             bucket-pour offset - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: the roof's reach plus 1.5 px
             a yard with no well digs its own - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
+            troughs stacked parallel - UNRESEARCHED: 1.6 px (about 5 ft) apart
         """
         # the WATERING POINT (GM 2026-07-23, researched - research/questions/0195-stable-yards-and-watering-troughs.html ('Stable yard' watering
         # paragraph): a working ox drinks ~10 gal/day, a buffalo more, so a wagon-train needs
@@ -273,6 +274,7 @@ class StableYardMixin:
             heap clear of every rail - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 25 px
             heap size - UNRESEARCHED: 2.5 x 1.8 px
             heap clear of other furniture - UNRESEARCHED: 16 px
+            heap edge off roads and the rampart strip - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: edge points probed at 6 px
         """
         # 1-2 DUNG HEAPS - the little "someone works here" tell; the ellipse's EDGE points are
         # probed too (GM 2026-07-24: a heap must not foul the road tread or the rampart clearance),

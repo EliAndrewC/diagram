@@ -92,6 +92,7 @@ def build_polder(
     Research:
         polder layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a diked block, a ring canal inside the dike, water crossing only at an inlet and an outfall sluice
         module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, 150 by default
+        polder size - UNRESEARCHED: 11 rows by 6 columns of modules by default
         parcel mix - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three strips, a few merged along the fall
         gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every parcel of the two lowest rows tinted
@@ -181,7 +182,7 @@ def _polder_lattice(
     other polder stage places through.
 
     Research:
-        edge wander - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the whole block bent as one piece by a tilt and low-frequency sines, `edge_wander` of a module
+        edge wander - UNRESEARCHED: the whole block bent as one piece by a tilt and low-frequency sines, `edge_wander` of a module
         node jitter - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: interior bund nodes moved up to 6 px, the perimeter pinned
         dike-pond mosaic - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift of the interior lattice fading to nothing at the edge, `mosaic` of 0.32 module
         each line wanders - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: every row and column line bowed on its own, up to `line_wander` of a module, off the boundary lines
@@ -520,7 +521,8 @@ def _polder_channels(
         one lateral a module line - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a lateral on every interior column line, feeder to drain
         laterals join on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each tip set on the trunk's drawn line
         sluices through the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: an inlet stub to the pond and an outfall brook from the drain's middle, the dike notched at each
-        settlement-side toe - UNRESEARCHED: the east toe tagged as the side crossings cluster on
+        settlement-side toe - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the east toe, the village on the dry ground just off the dike to the east
+        crossings cluster - UNRESEARCHED: the settlement-side toe tagged as the side crossings cluster on
         floor inside the ring - CONVENTION: the green floor drawn to the ring canal, not the dike
     """
 

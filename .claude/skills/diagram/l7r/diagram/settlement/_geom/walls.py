@@ -46,7 +46,8 @@ def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, 
     Research:
         torii span - UNRESEARCHED: 16 ft default
         top beam width - UNRESEARCHED: 1.4 ft, floored at 1.9 px
-        posts proud of the beam - CONVENTION: 1.35x the beam, squares beside the bar"""
+        posts proud of the beam - CONVENTION: 1.35x the beam, squares beside the bar
+        post set-in - UNRESEARCHED: posts at 12/19 of the beam's half-span (the kasagi's overhang)"""
     s2 = (span_ft / ftpx) / 2
     beam = max(1.4 / ftpx, 1.9)
     post = beam * 1.35
@@ -83,7 +84,10 @@ def ward_interior(fence: Poly, wall: Poly) -> Poly | None:
     (all three pool cities measure 21-25% of the walled area). Returns None when there is
     nothing to close (no wall ring / a degenerate fence) - callers skip rather than guess.
     check_village re-derives this independently for city_samurai_ward_residents_only: the check
-    must not trust the engine's arithmetic."""
+    must not trust the engine's arithmetic.
+
+    Research: ward is the smaller piece - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the smaller of the two closures
+    """
     if len(wall) < 3 or len(fence) < 2:
         return None
     # ARC-LENGTH closure, not nearest-VERTEX closure: a fence end abuts the rampart mid-EDGE, so

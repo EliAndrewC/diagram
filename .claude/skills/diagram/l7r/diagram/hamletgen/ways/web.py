@@ -78,7 +78,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     Research:
         skeleton laid after the houses - research/questions/0081-village-lanes.drawing.html: the farmhouses are placed first
         skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
-        clear of crop, wet and water - research/questions/0081-village-lanes.drawing.html: 20 ft off the crop, the marsh and the ditches
+        clear of crop, wet and water - UNRESEARCHED: 20 ft off the crop, the marsh and the ditches
         routed round the steadings - research/questions/0081-village-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
     if len(arcs) < 2:
@@ -439,9 +439,14 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         dispersed hamlet draws no web - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
         lane form knob - research/questions/0081-village-lanes.drawing.html: side lanes or a back lane, rolled per map
         lanes after the houses - research/questions/0081-village-lanes.drawing.html
-        lane runs past its last steading - research/questions/0081-village-lanes.drawing.html: 30 ft
-        back lane ties - research/questions/0081-village-lanes.html: cross-ways about three pitches apart frame the back lanes
-        belt crossed not followed - UNRESEARCHED: a lane may cross a shelter belt but not run its length
+        lane runs past its last steading - GUESS: 30 ft
+        back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
+        back lane tie spacing - UNRESEARCHED: the ties about three pitches (3 x BUNDLE_PITCH) apart
+        belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
+            may cross a shelter belt, the planting resuming on both sides, but not run its length
+        door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
+        web cut spacing - UNRESEARCHED: alley and back-lane cuts WEB_REACH_FT 100 ft apart, MIN_WEB_GAP 18 ft at least
+        web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0081-village-lanes.drawing.html
     """

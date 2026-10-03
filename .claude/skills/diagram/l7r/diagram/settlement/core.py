@@ -74,6 +74,7 @@ class Settlement(
         Research:
             a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no rice
             swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: the clearings registry
+            no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
             registries and record streams - NONE
         """
         random.seed(seed)

@@ -129,6 +129,15 @@ class RunOnBlocks:
     this pass does not lay), the marsh and the wet toe, and the steadings' built ground at a footpath's clearance."""
 
     def __init__(self, s: Settlement) -> None:
+        """Read the blocks once.
+
+        Research:
+            water crossed only by plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: every
+                drawn course blocks, a crossing between fords needs a plank
+            off the wet ground - research/questions/0081-village-lanes.drawing.html: the marsh and the wet toe block
+            off the steadings - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, the built ground blocks
+            off the crop - research/questions/0081-village-lanes.drawing.html: the dry plots block
+            across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely"""
         self.s = s
         self.water = drawn_water_segs(s)
         toe = s.toe_band()

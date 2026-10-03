@@ -131,7 +131,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
 
     Research:
         track round the steadings - research/questions/0081-village-lanes.drawing.html: routed round, else clipped, else none
-        gap off the steadings - UNRESEARCHED: `TRACK_FABRIC_GAP` off every footprint, a footpath's gap off a grove band
+        gap off the steadings - DEVIATION research/questions/0081-village-lanes.drawing.html: `TRACK_FABRIC_GAP` 16 ft off every footprint where a lane
+            keeps 7 ft of a garden fence (a convention), a footpath's gap off a grove band
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
@@ -379,6 +380,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         row road width - research/questions/0033-row-villages-resson.drawing.html: 6 ft
         track off the map - research/questions/0081-village-lanes.drawing.html: from the gateway, out of the field, to the frame
         track off the wet - research/questions/0081-village-lanes.drawing.html: the toe band and every drawn marsh are wet
+        spur clip margin - UNRESEARCHED: 12 ft off the dry plots and the toe band
     """
     seat = plan.seat
     ax, ay = seat["along"]

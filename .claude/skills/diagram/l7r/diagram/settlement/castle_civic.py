@@ -108,8 +108,12 @@ class CastleCivicMixin:
             castle moat - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: 80 ft wide, 60 ft off the wall foot
             front and rear gates - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html: ote-mon on gate_dir, an optional karamete-mon opposite
             rampart and gate widths - UNRESEARCHED: a 6 ft ishigaki stroke, a 22 ft gate passage
-            corner yagura and gate towers - UNRESEARCHED: 62 x 40 ft corners, an 88 x 52 ft gatehouse, a 64 x 40 ft rear gatehouse
-            baileys and masugata off by default - CONVENTION: offset walled rectangles with dogleg gates when asked for
+            corner yagura and gate towers - DEVIATION research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the drawing page draws no turrets (its findings attest corner yagura); the code draws four corner yagura and gate towers
+            yagura and gatehouse sizes - UNRESEARCHED: 62 x 40 ft corners, an 88 x 52 ft gatehouse, a 64 x 40 ft rear gatehouse
+            gatehouse passage - UNRESEARCHED: a third of the gatehouse's span
+            baileys and masugata off by default - DEVIATION research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the 1644 plans drew the baileys; when asked for, offset walled rectangles with dogleg gates
+            bailey and masugata sizes - UNRESEARCHED: bailey fracs 0.64 and 0.34, offset from the ote-mon, a masugata box outside the main gate
+            inner moat - UNRESEARCHED: 0.42 x the moat gap off the honmaru, half the moat width
             ishigaki doubling - CONVENTION: a doubled inner line on the enceinte
             ground reserved - NONE: the moat plus max(36 x bscale, 26) px in both registries
         """
@@ -297,7 +301,7 @@ class CastleCivicMixin:
         Research:
             ministry compound size - research/questions/0167-offices-of-the-six-ministries-liubu.drawing.html: 224 x 148 ft by default
             official violet - CONVENTION
-            office apron - UNRESEARCHED: max(30 x bscale, 26) px kept clear round the compound
+            office apron - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: about 42 ft clear on the page; the code keeps max(30 x bscale, 26) px
         """
         if w is None:
             w, h = self.px(224), self.px(148)  # a ministry office compound ~224x148 ft (was 88px at the 0.42-grain city)
@@ -402,6 +406,8 @@ class CastleCivicMixin:
         Research:
             one state hall per provincial city - research/questions/0165-martial-training-grounds-and-dojo.drawing.html
             hall program sizes - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a 60 x 36 ft hall, a 100 x 26 ft lane with its butt, a 130 x 100 ft walled compound
+            the master's house - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: drawn inside the compound
+            master's house size - UNRESEARCHED: 40 x 24 ft
             state violet - CONVENTION
             hall apron - UNRESEARCHED: max(30 x bscale, 14) px, and a reserved caption band
         """
@@ -516,7 +522,8 @@ class CastleCivicMixin:
         Records M['dojos'] (city_dojo_count_follows_samurai, city_dojos_among_samurai).
 
         Research:
-            private dojo size - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a 76 x 44 ft lot, a 44 x 24 ft hall, no archery lane
+            private dojo size - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a 44 x 24 ft hall
+            private dojo lot - UNRESEARCHED: a 76 x 44 ft lot with a training yard, no archery lane
             dojo colors - CONVENTION: the ordinary building tan
         """
         f = self.px
@@ -728,7 +735,8 @@ class CastleCivicMixin:
         Research:
             a town rampart with a gate - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html: an irregular thick line, gapped at the gate
             guard station and tower - UNRESEARCHED: a 96 x 46 px station and a 40 x 40 px tower beside the gate
-            rampart stroke - CONVENTION: 10 px
+            rampart stroke - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html, research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: drawn 10 to 12 ft thick; the code strokes a fixed 10 px, unscaled
+            gate opening - UNRESEARCHED: 36 px between 14 x 48 px gateposts
             buildings kept off the rampart - UNRESEARCHED: a 46 px corridor, 32 px round the gate structures
         """
         wc = '#3A352C'
@@ -776,7 +784,8 @@ class CastleCivicMixin:
         flat_west keeps the west edge straight so it can run flush against a town wall.
 
         Research:
-            a flower field - research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.html: an organic plot of blooms
+            a flower field - DEVIATION research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.html: no field of flowers kept for a ruler or a provincial town is found; an organic plot of blooms
+            flower field size - UNRESEARCHED: the shape the caller gives
             bloom glyph - CONVENTION: gold blooms on a 15 px jittered grid over green
         """
         outline = (

@@ -160,7 +160,7 @@ class FixtureSitingMixin:
             every settlement carries a board - research/questions/0190-notice-boards-kosatsuba.drawing.html: hamlets included
             board placed last - research/questions/0190-notice-boards-kosatsuba.drawing.html: after the crop, against the view
             placement knob at the lane tiers - research/questions/0190-notice-boards-kosatsuba.html: towns and cities take `center` only
-            probe size - NONE: the drawn marker box"""
+            probe size - research/questions/0190-notice-boards-kosatsuba.drawing.html: probes the drawn 12 x 5 ft marker box"""
         meta = self.M["meta"]
         if not meta.get("kosatsuba", True):
             return None
@@ -269,8 +269,10 @@ class FixtureSitingMixin:
             off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
             seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat, the nearer counted double
             traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
+            waterside siting form - UNRESEARCHED: the `waterside` knob draws the board toward a well
             waterside bonus - UNRESEARCHED: +14 within 40 px of a well, +8 within 90 px
             nearness tie-break - UNRESEARCHED: score less a third of the offset
+            least offset off the tread - UNRESEARCHED: 4 px past the tread edge (8 ft at 2 ft/px, past the 6 ft verge)
             sampling lattice - NONE: 12 px along, 5 px out"""
         lim = KOSATSUBA_WAY_REACH_FT / ftpx
         verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
@@ -347,7 +349,8 @@ class FixtureSitingMixin:
             no main way, the whole network - research/questions/0190-notice-boards-kosatsuba.drawing.html
             service lanes last - UNRESEARCHED: web lanes and the connector only where nothing else stands or an anchor needs them
             anchor reach - UNRESEARCHED: lanes within 120 ft of the anchor admitted
-            nominal widths - NONE: 18 ft roads, 8 ft lanes where none is recorded"""
+            nominal widths - research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html: every road taken at 18 px, its recorded width ignored
+            lane fallback width - NONE: 8 ft where no lane record exists"""
         routes: list[tuple[list[Pt], float, bool]] = []
         if self.M.get("road"):
             routes.append(([(p[0], p[1]) for p in self.M["road"]], 18.0, False))
@@ -395,7 +398,8 @@ class FixtureSitingMixin:
             roadside first - research/questions/0190-notice-boards-kosatsuba.drawing.html: only verge seats where any fit
             entrance board on the approach - UNRESEARCHED: approach seats preferred at a handover
             traffic floor - UNRESEARCHED: 60% of the busiest seat's count
-            open ground preferred - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats only where no open one fits"""
+            board may stand in shade - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats admitted
+            open ground preferred - GUESS: shaded seats only where no open one fits"""
         anchor = kosatsuba_anchor(self.M, placement) if lane_tier else None
         cands = sample(self._board_routes(anchor, placement, widen, ftpx), VERGE_FIRST and lane_tier and not widen)
         if lane_tier and not widen:
@@ -442,6 +446,8 @@ class FixtureSitingMixin:
             within 60 ft of a street - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
             inside the rampart - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
             ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: PUNISHMENT_SPOT_FT
+            nearness tie-break - UNRESEARCHED: score less a third of the offset
+            least offset off the tread - UNRESEARCHED: 4 px past the tread edge
             out from under captions - CONVENTION: a preference, the busiest seat where none is clear
             caption seat - CONVENTION"""
         if not self.M["meta"].get("punishment_spot", True):

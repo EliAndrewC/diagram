@@ -77,10 +77,11 @@ class PackingMixin:
             back-to-back pairs, doors outward - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: never more than two deep
             eave gap inside a pair - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 4 ft, floored at 1.2 px
             alley between pairs - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 12 ft, floored at 4.5 px
-            court every few rows - UNRESEARCHED: 21 ft every second pair
+            court every few rows - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.html: at the default court_every=2 every between-pair gap is a 21 ft court, the 12 ft alley unused
             rows run east-west - UNRESEARCHED
             shop band off streets and the road - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: rows 28 ft back, tight to alleys
-            grown-over-time size jitter - UNRESEARCHED: width 0.94-1.18x, depth 0.95-1.10x
+            grown-over-time size jitter - DEVIATION research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: width 0.94-1.18x, depth 0.95-1.10x
+            rows tight to the ring road - UNRESEARCHED: alley clearance, no shop band
             canvas margins - NONE"""
         # SCOPED (2026-08-08) - see pack(): same stream jitter, same cascade, same bbox key.
         with self.rng_scope("rowpack", *bbox):

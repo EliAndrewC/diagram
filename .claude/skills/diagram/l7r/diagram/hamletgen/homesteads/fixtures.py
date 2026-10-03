@@ -362,7 +362,9 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
     """The flexible form, now the web is laid: a pit at the household's nearest field or road (269 B11) - clear of every
     drawn footprint, lane, paddy, marsh and the pond, on the house's bank - else the seat laid for it.
 
-    Research: a lane between pit and house allowed - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the pit stands at the field or road, the laid seat where none is clear
+    Research:
+        a lane between pit and house allowed - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the pit stands at the field or road, the laid seat where none is clear
+        field pit size - UNRESEARCHED: drawn 3.5 ft square
     """
     if not pending:
         return 0

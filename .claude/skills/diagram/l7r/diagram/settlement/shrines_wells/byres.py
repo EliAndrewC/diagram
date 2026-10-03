@@ -46,7 +46,7 @@ YARD_SHED_GAP_FT = (6.0, 12.0)
 # Exported because `byres_stand_in_their_declared_form` measures the same span - the placer and its
 # check read ONE source, which is the standing rule here.
 COURTYARD_REACH = 18.0
-"""Research: courtyard byre search reach - UNRESEARCHED: 18 px"""
+"""Research: courtyard byre search reach - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the inner stable drawn against the farmhouse; 18 px past the first clear seat"""
 
 
 def courtyard_annex_span(hw: float, hh: float, bh: float) -> float:
@@ -121,7 +121,7 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
     Research:
         inner stable against the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: a 3 ft drip line off the wall, reaching toward the court
         outer stable off the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the caller's gap
-        flank away from the garden - UNRESEARCHED
+        flank away from the garden - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the measured free-standing stables stand toward the road and the gate; drawn on the flank away from the garden
         long side along the wall - UNRESEARCHED
     """
     sx = -1.0 if garden_side in ("E", "SE") else 1.0
@@ -258,7 +258,7 @@ class DraftByresMixin:
         Research:
             stable arm abutting the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the magariya's wing, raked with the house
             drip-line gap - UNRESEARCHED: 3 ft
-            a side wall, toward the work yard - UNRESEARCHED
+            a side wall, toward the work yard - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: round Tono the stable joins the lower end and projects off the south side, both mirror forms recorded; left wall tried first, then right, not rolled
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
         th = math.radians(rot)
@@ -298,7 +298,8 @@ class DraftByresMixin:
         stand at the same bearing. Returns `(x, y, rot, aabb_w, aabb_h)` or None.
 
         Research:
-            outer stable a ken off the back wall or a flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: YARD_SHED_GAP_FT
+            outer stable a ken off the back wall or a flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the measured stables stand toward the road and the gate; seated off the back wall or a flank
+            outer stable gap - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: YARD_SHED_GAP_FT, a ken, then two
             first wall turned per homestead - NONE: hashed from the seat
         """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
@@ -422,6 +423,9 @@ class DraftByresMixin:
             owners ranked by wealth, then footprint - UNRESEARCHED
             shared sheds spread, with borrowers in reach - UNRESEARCHED: minimax, _BORROW_REACH
             spiral reach - UNRESEARCHED: 18 px for a household form, 70 px for a shared shed
+            no free wall falls back - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the form a knob, rolled per settlement; an inner stable with no free wall drawn as an outer stable, then a free shed at rot 0
+            only plain houses keep a byre - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the L-shaped farmhouse common among the better-off households; big farmhouses never own one
+            spiral byre off the paddies - UNRESEARCHED: kept a stall's depth from every field
         """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->

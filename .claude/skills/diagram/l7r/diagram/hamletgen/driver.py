@@ -153,10 +153,10 @@ STAGES = (
 """The order a hamlet is built in.
 
 Research:
-    water, then field, then sink - UNRESEARCHED: the field shaped by its water, the drain by its field
+    water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: the field shaped by its water, the drain along its field's low line
     homesteads before lanes - research/questions/0081-village-lanes.drawing.html: every lane drawn after the farmhouses
     track before the wells - UNRESEARCHED: a well dug where the track already runs
-    web after everything that reserves ground - NONE: fill order
+    web after everything that reserves ground - research/questions/0081-village-lanes.drawing.html: lanes worn round the byres, sheds and wells that stood first
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
     labels last - CONVENTION
 """

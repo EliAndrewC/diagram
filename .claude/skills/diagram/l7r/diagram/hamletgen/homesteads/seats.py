@@ -143,7 +143,9 @@ def lane_frontage(s: Settlement, seat: Mapping[str, Any], step: float = 86.0, co
     hamlet along the road instead of nucleating it (that is the `linear` settlement form, a
     different archetype).
 
-    Research: houses front their lanes - UNRESEARCHED: seats every 86 ft on both verges of each internal lane
+    Research:
+        houses front their lanes - UNRESEARCHED: seats every 86 ft on both verges of each internal lane
+        frontage seat off the lane - UNRESEARCHED: `LANE_FRONTAGE_STANDOFF` (70 ft) off the lane's centerline
     """
     out: list[Pt] = []
     off = LANE_FRONTAGE_STANDOFF

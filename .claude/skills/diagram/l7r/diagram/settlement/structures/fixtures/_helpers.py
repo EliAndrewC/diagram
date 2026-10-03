@@ -59,7 +59,7 @@ others, and then hands the choice to the caption and roadside preferences that a
 Making it TIGHTER would let a caption-blocked seat win on a foot of proximity; making it LOOSER would
 let the traffic term drag the board off the anchor, which is the defect this feature exists to fix.
 
-Research: anchored siting band - research/questions/0190-notice-boards-kosatsuba.drawing.html: 60 ft, the board's siting distance"""
+Research: anchored siting band - UNRESEARCHED: 60 ft from the best seat, the board's siting distance reused"""
 
 
 def kosatsuba_affordances(M: Any) -> dict[str, bool]:

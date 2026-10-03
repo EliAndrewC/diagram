@@ -36,9 +36,9 @@ _LONG_ARM_FT = 90.0
 # `lanes_reach_something`'s two figures, so a cut never trades one failure for the other: after the
 # cut the tip is the lane's END, and an end must reach another way or a farmhouse.
 _END_WAY_FT = 40.0
-"""Research: lane end reaches a way - research/questions/0081-village-lanes.drawing.html: within 40 ft"""
+"""Research: lane end reaches a way - GUESS: within 40 ft (sweeps.py _REACH_FT holds 60 ft for the same reach)"""
 _END_HOUSE_FT = 90.0
-"""Research: lane end reaches a house - research/questions/0081-village-lanes.drawing.html: within 90 ft"""
+"""Research: lane end reaches a house - GUESS: within 90 ft"""
 _JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, not a bend
 """Research: jog chorded - research/questions/0081-village-lanes.drawing.html: a vertex within 6 ft of the chord is a jog"""
 _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several

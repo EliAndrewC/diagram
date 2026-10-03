@@ -129,7 +129,7 @@ class WellsMixin:
             every farmhouse within reach of a well - research/questions/0196-communal-wells-ido.drawing.html: 500 ft
             edge farmhouses exempt - UNRESEARCHED: within 150 ft of the view edge
             seated in a steading's dooryard - research/questions/0196-communal-wells-ido.drawing.html: rings of 20 to 150 px round the densest cluster's houses
-            fallback on field-rim ground off the crop - UNRESEARCHED: a 6 px grid out to 156 px
+            fallback on field-rim ground off the crop - research/questions/0196-communal-wells-ido.drawing.html: a dwelling within about 95 ft on hamlet and town maps; a 6 px grid out to 156 px
             cluster radius - NONE: 0.9 of the reach
         """
         reach = self.px(reach_ft)

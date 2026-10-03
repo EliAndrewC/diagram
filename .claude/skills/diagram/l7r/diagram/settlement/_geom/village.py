@@ -23,7 +23,7 @@ _VILLAGE_POP_DIST = ((200, 10), (250, 10), (300, 15), (350, 30), (400, 15), (450
 # rather than real footprints, so the effective pitch is larger again. See `roll_village`, which
 # explains what the wrong number does and why it does not fail as a shortfall.
 BUNDLE_PITCH_FT = 92.0
-"""Research: homestead bundle pitch - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: 92 ft of ground per bundle in a cluster band"""
+"""Research: homestead bundle pitch - UNRESEARCHED: 92 ft of ground per bundle in a cluster band, derived from the bundle rects and circle spacing"""
 
 
 def village_population(rng: random.Random) -> int:

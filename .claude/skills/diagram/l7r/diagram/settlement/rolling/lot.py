@@ -125,6 +125,15 @@ class HouseholdLots:
     __slots__ = ("byre", "fixtures", "kura", "n", "sizes")
 
     def __init__(self, seed: int, n: int, byre_share: float = 0.0, fixture_shares: Mapping[str, float] | None = None) -> None:
+        """Deal the lots: the size ladder, the storehouses, the beasts and each fixture kind.
+
+        Research:
+            storehouse to the largest houses - DEVIATION research/questions/0040-farm-storehouses-kura.html: a strict cut down the size ladder where the one village's count shows a tendency
+            storehouse tie - research/questions/0040-farm-storehouses-kura.drawing.html: between two houses of one size, the seeded order decides
+            beast keepers by quota - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: exactly round(n x byre_share) households, by the shuffled order
+            fixtures by quota - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: exactly round(n x share) households per kind, every kind but the wood shed by the shuffled order
+            wood shed to the larger houses - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the wood shed dealt down the size ladder
+        """
         self.n = n
         self.sizes = size_ladder(seed, n)
         # THE STOREHOUSE GOES TO THE LARGER HOUSES FIRST (feature 293, research/questions/0040-farm-storehouses-kura.html): the count is the quota's,
@@ -209,7 +218,12 @@ def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[t
     k), the byre form its bundle reserves a stall for (a keeper on a household form), whether it carries a well pocket, and
     its farmstead fixtures (the lot's kinds). Set on the settlement for the seat search (`_household_byre`,
     `_household_well`, `_household_fixtures`, and `_household_watered`, which holds its candidates to `watered`), where
-    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down."""
+    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down.
+
+    Research:
+        quota, record and registry plumbing - NONE: the k-th plain household takes lot k; the parts set on the settlement for the seat search
+        a role household gets no byre and no farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: a household with a role (the headman) takes no lot, so no stall and no fixtures, where 0028 says a headman's carries several
+    """
     lots = getattr(s, "_lots", None)
     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
     lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None

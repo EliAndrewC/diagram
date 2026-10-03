@@ -60,9 +60,9 @@ and using a reach figure as an ink-continuity figure is what let 21-29 ft holes 
 Research: treads touching - CONVENTION: under 6 ft two treads read as one ink"""
 
 _BREAK_SPAN_FT = 150.0
-"""Research: break span bridged - research/questions/0081-village-lanes.drawing.html: a gap up to 150 ft in one way is closed"""
+"""Research: break span bridged - UNRESEARCHED: a gap up to 150 ft in one way is closed"""
 _BREAK_BEARING_DEG = 15.0
-"""Research: break collinearity - research/questions/0081-village-lanes.drawing.html: ends within 15 degrees of facing each other are one way"""
+"""Research: break collinearity - UNRESEARCHED: ends within 15 degrees of facing each other are one way"""
 
 
 _BRIDGE_DETOUR = 2.0
@@ -104,7 +104,9 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
 
     Research:
         one way drawn as two is joined - research/questions/0081-village-lanes.drawing.html: a walkable gap in one way is closed
-        no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists"""
+        no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists
+        bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
+        bridge clearance fallback - DEVIATION research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
     made = 0
     # TWELVE PASSES, not four. Each closure adds a lane whose own ends sit beside existing ones, so a
     # map with several breaks needs several rounds - and Sawada ran out at four with three breaks
@@ -347,7 +349,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
 
 
 _FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need
-"""Research: free-end stub past a kink - research/questions/0081-village-lanes.drawing.html: a last leg of 20 ft or less"""
+"""Research: free-end stub past a kink - UNRESEARCHED: a last leg of 20 ft or less"""
 _KINK_DEG = 50.0  # the `lanes_bend_like_paths` turn: two of them within ...
 """Research: kink turn - research/questions/0081-village-lanes.drawing.html: 50 degrees"""
 _KINK_RUN_FT = 40.0  # ... this run of lane read as a kink, not a bend
@@ -660,7 +662,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
 
     Research:
         lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves
-        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard"""
+        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard
+        dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)"""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
@@ -867,9 +870,9 @@ _DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged ban
 _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
 """Research: doubled share - CONVENTION: half the lane's length"""
 _REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the reach a home-bank drop and a dooryard carry look within
-"""Research: end reach to a way - research/questions/0081-village-lanes.drawing.html: 60 ft"""
+"""Research: end reach to a way - GUESS: 60 ft (smooth.py _END_WAY_FT holds 40 ft for the same reach)"""
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
-"""Research: a way serves a house - research/questions/0081-village-lanes.drawing.html: within 100 ft"""
+"""Research: a way serves a house - GUESS: within 100 ft"""
 
 
 from .tails import (  # noqa: E402, F401 - split out at the 1,000-line bar (feature 280); re-exported for the web and the tests

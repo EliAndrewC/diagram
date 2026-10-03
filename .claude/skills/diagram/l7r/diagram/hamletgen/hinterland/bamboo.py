@@ -171,7 +171,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         thicket by the knob - research/questions/0075-bamboo-groves-chikurin.drawing.html: a thicket only where `bamboo` is thicket or both
         thicket seat - research/questions/0075-bamboo-groves-chikurin.drawing.html: on dry ground behind the back row, nearest a point 40 ft north of the three northernmost houses
         shrunk stand - UNRESEARCHED: 70% size where the full stand fits nowhere, none drawn where that fails too
-        off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, dry plots, marsh and pond, and within 3 ft of a watercourse
+        off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, marsh and pond, and within 3 ft of a watercourse
+        off the dry plots - UNRESEARCHED: refused on the dry crop's plots too
+        crop and water pads - UNRESEARCHED: 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
         keep-out pads - UNRESEARCHED: 2-30 ft round houses, yards, gardens, sheds, wells, persimmons, groves, lanes, belt and woods
         irregular outline - CONVENTION: a hard but not ruled edge inside the tested rect
     """

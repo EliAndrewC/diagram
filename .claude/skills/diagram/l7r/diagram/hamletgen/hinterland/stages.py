@@ -47,7 +47,9 @@ def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -
     its windward face, farther from every house than the belt beside them - one wood 250 ft deep. `wind` points toward
     where the wind comes from.
 
-    Research: copse on the belt's lee - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: only crowns within LEE_DEPTH_FT of each band's leeward-most crown anchor it
+    Research:
+        copse on the belt's lee - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: fruit trees planted on the fengshui wood's edges
+        lee side only - UNRESEARCHED: only crowns within LEE_DEPTH_FT of each band's leeward-most crown anchor it
     """
     wx, wy = wind
     bands: dict[int, list[tuple[float, tuple[float, float]]]] = {}
@@ -83,7 +85,7 @@ def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> li
     beyond the sheet with its bearing (`meta.woodland_offsheet`, plan D11), so a roll either draws a wood or says where
     it stands.
 
-    Research: wood beyond the sheet - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a roll with no parcel on the sheet records the wood's bearing
+    Research: wood beyond the sheet - DEVIATION research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html: a roll with no parcel on the sheet records the wood's bearing, not drawn (plan D11)
     """
     if plan.woodland_patches and not polys:
         s.M["meta"]["woodland_offsheet"] = woodland_offsheet(plan)
@@ -100,7 +102,7 @@ def against_the_belt(dented: Sequence[tuple[float, float]], groves: Sequence[Any
     two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns).
 
     Research:
-        copse against the belt - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: anchored on the belt's lee face
+        copse against the belt - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: anchored on the belt's lee face, fruit trees on the wood's edges
         copse reach from the belt - UNRESEARCHED: 0 to COPSE_BELT_REACH_FT (60 ft) leeward, labeled a convention in consts
     """
     bx = [q[0] for q in dented]
@@ -116,7 +118,7 @@ def copse_seat(
     """The copse's box and its reach: the dooryard copse's as given, or - sited against the belt, where it has one - the
     belt's box and its lee anchors at `half` (`against_the_belt`). Lifted from `stage_hinterland` (feature 291).
 
-    Research: copse siting - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: dooryard or against the belt, by the knob
+    Research: copse siting - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: dooryard (0036) or against the belt (0071), by the knob
     """
     if siting == "against_the_belt" and dented:
         box, anchors = against_the_belt(dented, groves, wind, half)
@@ -158,7 +160,8 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     Research:
         scrub past the fields - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub the dominant cover outside the crops and woods
         no scrub under a worked wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: brush and pine stop at every wood's line
-        bare ground as rough grazing - UNRESEARCHED: holes in the view clothed as grazing
+        bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
+        share clothed as grazing - UNRESEARCHED: holes in the view filled
         stage order - NONE
     """
     # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
@@ -413,8 +416,9 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.village_grove
 
     Research:
-        copse among the homes - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: over the cluster's own oriented footprint, or against the belt
-        copse reach from a house - UNRESEARCHED: within COPSE_HOUSE_REACH_FT (90 ft), on the house's own bank
+        copse among the homes - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: over the cluster's own oriented footprint, or against the belt
+        copse reach from a house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within COPSE_HOUSE_REACH_FT (90 ft), a dooryard's reach
+        copse on the house's own bank - UNRESEARCHED
         copse sized by the homestead woods - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each homestead's wood rolled in the register's range, the copse filled to what the belt and groves leave
     """
     _seats = reserved_seats(s)

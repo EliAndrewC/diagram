@@ -277,8 +277,8 @@ def lane_default(scale: str, place: dict[str, str]) -> str:
     of Inashiro's nine are three-foot stragglers between the farmsteads that lead nowhere at all.
 
     Research:
-        connector leads to the district's village - UNRESEARCHED: the GM's ruling; the village lanes question says
-            nothing of where a hamlet's track leads
+        connector leads to the district's village - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:
+            the district a hamlet belongs to is named for the village its lanes lead to
     """
     district = place.get("district")
     if scale != "hamlet" or not district:
@@ -322,6 +322,7 @@ _SIDES_WORDS = {
     3: "three sides of the house, open only at the front where the yard and the way in are",
     4: "all four sides of the house, broken once at the front for the way in",
 }
+"""Research: card plumbing - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: two sides the windward pair, three open at the front, four broken once at the front"""
 
 
 def homestead_grove_default(meta: dict[str, Any]) -> str:
@@ -334,6 +335,8 @@ def homestead_grove_default(meta: dict[str, Any]) -> str:
             two, three or four sides, one roll a settlement
         full ring on flood ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: four sides rolled more
             often on flood-prone ground
+        no side sentence on a nucleated map - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a
+            clustered village counts each farm's grove with its share of the dooryard copse, so no side count is stated
     """
     sides = meta.get("grove_sides")
     if sides not in _SIDES_WORDS or meta.get("settlement_form", "nucleated") == "nucleated":
@@ -361,7 +364,14 @@ def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
     household is its declared 2,600 exactly, and Nagahara's 600 x 5 is its 3,000 - farmers excluded,
     which is the city convention the GM described. (A town's MANIFEST figure counts its drawn
     farmhouses too and is the depicted slice the housing check keys on; the page states the tier's own
-    1,200 instead - see `Kind.default_population`.)"""
+    1,200 instead - see `Kind.default_population`.)
+
+    Research:
+        card plumbing - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: which
+            building kinds count as homes (DWELLING_KINDS)
+        town and city count no farmhouses - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:
+            a town or city counts only its non-farm dwellings
+    """
     if not kind.excludes_farms:
         return len(manifest.get("houses") or [])
     return sum(1 for b in (manifest.get("buildings") or []) if b.get("kind") in DWELLING_KINDS)

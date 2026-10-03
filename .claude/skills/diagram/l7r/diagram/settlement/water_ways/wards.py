@@ -25,7 +25,7 @@ class WardsMixin:
 
     Research:
         ward fence stroke - CONVENTION: 5 px
-        quarter zones and reserve kinds - NONE: a declared vocabulary; a reserve draws as a drill ground, a garden or farmland
+        quarter zones and reserve kinds - UNRESEARCHED: a declared vocabulary; a reserve draws as a drill ground, a garden or farmland
     """
 
     _WARD_STROKE = 5.0  # the fence's drawn width; recorded so check_village measures the ink, not the vertex

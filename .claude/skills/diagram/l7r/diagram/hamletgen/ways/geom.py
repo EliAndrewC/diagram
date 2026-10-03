@@ -100,7 +100,7 @@ def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | Non
 
     `reach` is the gate's own "is this end ON that way" tolerance, not a tuning knob.
 
-    Research: a lane that goes nowhere - research/questions/0081-village-lanes.drawing.html: both ends on one other way
+    Research: a lane that goes nowhere - UNRESEARCHED: both ends on one other way
     """
     if len(pts) < 2:
         return None
@@ -274,7 +274,9 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
     caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
 
-    Research: track gateway off the fabric - research/questions/0081-village-lanes.drawing.html: 16 ft clear by default
+    Research:
+        track gateway off the fabric - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, walked out until clear
+        gateway clearance - UNRESEARCHED: 16 ft (`TRACK_FABRIC_GAP`) by default
     """
     # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
     # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.

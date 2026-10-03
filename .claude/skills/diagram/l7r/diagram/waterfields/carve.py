@@ -77,9 +77,11 @@ def _dry_fields(
         squared to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot a rectangle square to the canal, neighbors sharing every seam
         behind a bare bank - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the hem starts CANAL_BERM_FT past the stroke's local bank
         hem depth - UNRESEARCHED: a ragged outer edge, each column `band` px deep from the canal line
-        crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops, keeping the last crop with a 55% chance
+        crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops
+        neighbor keeps the crop - UNRESEARCHED: a plot keeps the last plot's crop with a 55% chance, about 0.66 once a re-roll lands on the same crop
         row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each column's tract heading, each plot turned up to TRACT_PLOT_TURN_RAD
-        off the water and the frame - NONE: a cell on a canal's bank, in a keep-out or within 12 px of the frame is dropped
+        off the water and the frame - DEVIATION research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a cell dropped only within 0.5 px of a supply stroke's painted edge, so a plot may stand inside another canal's 5 ft bank
+        keep-out and frame margin - NONE: a cell in a keep-out or within 12 px of the frame is dropped
     """
     plots = []
     plot = plot * g  # the along-canal parcel width and the 36px row depth below are REAL-FEET

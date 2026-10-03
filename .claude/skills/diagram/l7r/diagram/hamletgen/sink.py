@@ -209,6 +209,7 @@ BROOK_JOIN_TRUNK = 150.0
 #: trims a brook's leading vertices before it judges one (`streams_avoid_fields`). Anything past this is a
 #: ditch driven through the rice.
 BROOK_JOIN_LEAD = 0.3
+"""Research: crop lead tolerance - UNRESEARCHED: 0.3 of the drain's run may lie in the rice as the field's own edge"""
 #: How far the confluence must have FALLEN below the outfall, px. A drain runs downhill into the brook it
 #: joins, and a junction level with the outfall is neither a fall nor a join; a stride of the collector's
 #: own tail width is enough to read as one on the sheet.
@@ -242,7 +243,7 @@ def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: 
         not through the rice - UNRESEARCHED: no interior vertex or leg in the field
         runs downhill - research/questions/0060-field-drains-akusuiro.drawing.html: a fifth of the run down the fall
         with the drainage bearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: under 90 degrees off the water's flow
-        brook not crossed mid-run - UNRESEARCHED
+        brook not crossed mid-run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: ditches join rather than cross
         not the brook's twin - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html
         dike crossed only at a gap - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html"""
     lead = (route[1][0] - route[0][0], route[1][1] - route[0][1])
@@ -275,6 +276,7 @@ def hull_route(plan: SitePlan, out: Pt, heading: Pt, brook: Sequence[Pt], pad: f
 
     Research:
         constructed route - NONE: hull geometry under route_refusals' rules
+        hull standoff - UNRESEARCHED: the drain skirts the field's hull 12 ft off
         ends at the brook or off the map - research/questions/0060-field-drains-akusuiro.drawing.html"""
     from shapely.geometry import LineString, Point, Polygon  # noqa: PLC0415 - bound on first use
 
@@ -577,7 +579,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot, the passing brook, or off the map
-        tameike below the fields - research/questions/0061-reservoir-ponds-tameike.drawing.html
+        tameike below the fields - GUESS: a drain ending in a pond of its own, a guess on research/questions/0060-field-drains-akusuiro.drawing.html
         sink before the houses - NONE: stage order, the pond a hard feature
         brook rounded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: bends on a radius
     """
@@ -595,7 +597,8 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         pond area - research/questions/0061-reservoir-ponds-tameike.drawing.html: held below two or three tenths of its paddy
         pond reference size - UNRESEARCHED: 116 x 74 ft radii at 15 households, scaled by the square root
         too far below, no pond - UNRESEARCHED: past POND_SETBACK_LIMIT the field drains off the frame
-        reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore, 44 ft ring
+        reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore
+        reed fringe width - UNRESEARCHED: a 44 ft ring
         no building on the water - UNRESEARCHED: 10 ft round the pond's box
         bowed ditch - CONVENTION"""
     name = f"{plan.spec.name.lower()}-paddies"

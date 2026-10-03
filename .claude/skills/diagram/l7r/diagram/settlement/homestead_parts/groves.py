@@ -282,6 +282,12 @@ def bamboo_mark(x: float, y: float, bs: float, tall: float, lean: float) -> str:
 
 
 class GrovesMixin:
+    """The homestead grove's mixin: its arms, its fit, its clumps.
+
+    Research:
+        which faces for each wind - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: `_GROVE_ARMS`, the windward pair (N + W for NW), the N arm wrapping the corner
+    """
+
     # the windward faces a homestead grove (yashikirin) shelters, by where the prevailing cold wind comes
     # FROM (its compass key). The grove is an L-BELT: a deep stand on each windward face (for a diagonal
     # like NW, an N arm + a W arm wrapping the corner; for a cardinal, one deep band). Default NW - the
@@ -448,7 +454,8 @@ class GrovesMixin:
         test serves - not the conservative half-diagonal circle, which would over-reject the elongated bands.
 
         Research:
-            grove off the crops - UNRESEARCHED: may abut a paddy or dry plot, never overlap it
+            grove off the crops - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: may abut a paddy or dry plot, never overlap it
+            grove off the lanes - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: off every lane corridor (the drawing names the main road)
             grove off the town wall - UNRESEARCHED: every corner 12 px off the rampart
             off a yard's south strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a 22 px strip
                 south of every threshing yard
@@ -510,6 +517,8 @@ class GrovesMixin:
             narrow run - UNRESEARCHED: an arm shortened to 0.55 or 0.5 of its run where a neighbor is close
             every rolled face planted - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 the windward pair deep, the rest one tree
+            windward ladder floor - UNRESEARCHED: no shallower than 12 bscale units
+            windward stand off the wall - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated 1.5 px off the house wall, against a ~24 ft service strip
         """
         # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html): a homestead's own wood is ~6,000-28,000 sq
         # ft, and a lone yashikirin is all the wood its homestead has, so the ~6:1 target never asks for less or more
@@ -702,7 +711,9 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area.
 
         Research:
-            windbreak conifer share - UNRESEARCHED: 38% of a windbreak clump's items
+            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 38% of a
+                windbreak clump's items, against 54% broadleaf, where the grove is led by cedar
+            crowns per clump floor - UNRESEARCHED: at least 5 crowns thrown per clump
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
             dooryard mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:

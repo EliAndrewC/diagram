@@ -36,7 +36,7 @@ SHARP_TURN_DEG = 100.0
 """The collector turns at a hard corner at or past this: the water would pile against the far bank rather than take it
 (`drainage_junction_smooth`).
 
-Research: no hard corner on the collector - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a turn of 100 deg or more is refused
+Research: no hard corner on the collector - UNRESEARCHED: a turn of 100 deg or more is refused, water piling against the far bank
 """
 
 UPHILL_SLACK = 1.0

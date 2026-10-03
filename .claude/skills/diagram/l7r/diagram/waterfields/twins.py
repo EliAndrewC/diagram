@@ -30,7 +30,7 @@ TWIN_DEG = 15.0  # running the same way
 TWIN_RUN_FT = 60.0  # longer than this side by side is a twin
 """Research: twin run - GUESS: more than 60 ft side by side, a sixth of the shortest delivery"""
 TWIN_JOIN_FT = 60.0  # the reach from where one course leaves the other, where running close is the junction itself
-"""Research: junction reach - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: running close within 60 ft of where one course leaves the other is the junction"""
+"""Research: junction reach - GUESS: running close within 60 ft of where one course leaves the other is the junction, excluded before a further 60 ft run counts"""
 _STEP_FT = 5.0
 
 

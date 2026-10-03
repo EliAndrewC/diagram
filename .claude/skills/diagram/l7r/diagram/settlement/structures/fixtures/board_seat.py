@@ -258,7 +258,8 @@ def choose_board(seats: list[BoardSeat], proof: Proof) -> tuple[BoardSeat, Place
     score order asks the same question of each and returns the same seat.
 
     Research:
-        board may stand under a canopy - research/questions/0190-notice-boards-kosatsuba.drawing.html: an open seat preferred, a shaded one allowed
+        board may stand under a canopy - research/questions/0190-notice-boards-kosatsuba.drawing.html: a shaded seat allowed
+        open seat preferred - GUESS: every open seat tried before a shaded one
         seat order - NONE: by score, the first whose caption fits"""
     ranked = sorted(seats, key=lambda c: c.score, reverse=True)
     for group in ([c for c in ranked if not c.shaded], [c for c in ranked if c.shaded]):

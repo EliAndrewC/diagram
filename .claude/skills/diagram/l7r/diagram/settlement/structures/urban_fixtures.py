@@ -29,7 +29,7 @@ class UrbanFixturesMixin:
 
         Research:
             roofed stage facing open ground - research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.html: never a seating bowl
-            stage and ground size - UNRESEARCHED: ~150 x 105 ft, the stage half the width and a quarter the depth
+            stage and ground size - research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: ~150 x 105 ft default (a town's size, also at a city when w is omitted), the stage half the width and a quarter the depth
             stage at one end of its ground - research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.html: `rot` turns the open side toward the hall
             crowd dots, colors and caption - CONVENTION"""
         if w is None:

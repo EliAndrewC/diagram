@@ -80,7 +80,7 @@ class FuneraryGroundsMixin:
 
         Research:
             unplotted ground for a common burial ground - research/questions/0235-village-burial-grounds-bochi.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: organic unless parish
-            parish plot ruled - UNRESEARCHED: a rectangle in the temple precinct
+            parish plot ruled - research/questions/0235-village-burial-grounds-bochi.drawing.html: the drawing page's map drawing convention, a ruled plot in the temple precinct
             rows of low markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: 9 px apart, each wholly inside the ground
             marker heights - CONVENTION: 6 to 8 px
             a taller memorial stone or two - research/questions/0235-village-burial-grounds-bochi.drawing.html: two stupas
@@ -253,6 +253,7 @@ class FuneraryGroundsMixin:
             jizo drawn size - CONVENTION: at least 2.4 x 3.2 px
             ragged outline, bed off center - CONVENTION
             keep-clear margin - UNRESEARCHED: 8 px
+            pyre ground unwalled - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: the pyre stands in a walled yard; drawn as an open ragged ground, no wall
         """
         # TO SCALE (GM 2026-07-19; anchors in research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
@@ -308,7 +309,7 @@ class FuneraryGroundsMixin:
         Research:
             pauper mound - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: one mound by the cremation ground
             mound size - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: 22 ft, floored at 4.5 px
-            marker stupa - UNRESEARCHED: one
+            marker stupa - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: the drawing page's GUESS, low with one weathered stupa
             keep-clear margin - UNRESEARCHED: 8 px
         """
         # TO SCALE (GM 2026-07-19, tightened 2026-07-21): a muenzuka is a 10-30 real-ft mound

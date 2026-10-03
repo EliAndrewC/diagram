@@ -186,7 +186,9 @@ class TreeStandsMixin:
         """The trees of `trees` that keep their seat under `_crown_seat_clear`, biggest first (the
         dominants hold the canopy; a smaller crown yields), appended to `seated` as they are kept.
 
-        Research: dominants seat first - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+        Research:
+            no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+            dominants seat first - UNRESEARCHED: biggest crown first, a smaller one yields
         """
         kept: list[tuple[float, float, float, str]] = []
         for t in sorted(trees, key=lambda t: -t[2]):
@@ -203,10 +205,11 @@ class TreeStandsMixin:
         Each fringe tree becomes a block poly, so a later farmstead cannot land on it.
 
         Research:
-            a fringe of advance growth outside the wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html
+            a fringe of advance growth outside the wood - UNRESEARCHED
             fringe band and thinning - UNRESEARCHED: 2.6 steps deep, thinning with distance
             thickets, not a sprinkle - UNRESEARCHED: a mask about five crowns across
             fringe crown size and conifer share - UNRESEARCHED: 0.55 to 0.95 of the radius, 30% conifer
+            fringe tree spacing - UNRESEARCHED: 1.15 x 1.7 steps, jittered 0.55 step
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

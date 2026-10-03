@@ -73,7 +73,9 @@ def shapes_drawn_at(drawn: float) -> list[str]:
     past round's ceiling (the settlement-review of Inashiro, feature 261: crescent's band starts at 1.9 and round's ends
     at 2.0, and a quarter-disc of houses drawn at 1.97 is round). Past every band, the nearest band's shape.
 
-    Research: shapes a drawing admits - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a shape other than round only past round's ceiling; past every band, the nearest band's
+    Research:
+        shapes a drawing admits - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shapes the page names (lump, string, crescent, split)
+        aspect bands and round first - UNRESEARCHED: round 1.0-2.0, crescent and split 1.9-4.2, elongated 2.8-12; another shape only past round's ceiling; past every band, the nearest band's
     """
     ceiling = CLUSTER_DRAWN_ASPECT["round"][1]
     held = [k for k, (lo, hi) in CLUSTER_DRAWN_ASPECT.items() if (lo if k == "round" else max(lo, ceiling + 1e-9)) <= drawn <= hi]
@@ -86,7 +88,7 @@ def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
     least round's floor, so the one way out is past the longest band's ceiling - elongated's 12:1 - where `shapes_drawn_at`
     could only name the nearest band, which the drawing breaks. `seat_every_household` keeps no seating that fails it.
 
-    Research: a cluster's longest draw - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: past the longest band's ceiling (12:1) no seating is kept
+    Research: a cluster's longest draw - UNRESEARCHED: past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1) no seating is kept
     """
     drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
     return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
@@ -103,7 +105,7 @@ def drawn_in_band(s: Settlement, plan: SitePlan) -> bool:
 
     Research:
         a row takes no band - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the linear form exempt from the cluster band
-        a cluster draws a shape's band - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: every other form held to `in_a_shapes_band`
+        a cluster draws a shape's band - UNRESEARCHED: every other form held to `in_a_shapes_band`
     """
     return plan.settlement_form == "linear" or in_a_shapes_band(s.M.get("houses") or [])
 

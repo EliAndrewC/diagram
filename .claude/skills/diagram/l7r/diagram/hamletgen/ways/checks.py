@@ -338,7 +338,9 @@ def lanes_share_tread(p: Poly, q: Poly, join: float = LANE_JOIN_FT) -> bool:
     """Do two drawn treads come within `join` anywhere - by ANY vertex of either against the other's run?
 
     Lifted from the check's own inner `_fw_touch` so it can be tested with two lists of tuples instead
-    of a settlement (the project's standing rule on closures that are hard to reach)."""
+    of a settlement (the project's standing rule on closures that are hard to reach).
+
+    Research: one network at 40 ft - research/questions/0081-village-lanes.drawing.html: joined where their treads meet, judged as within 40 ft (`LANE_JOIN_FT`)"""
     return any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False)) or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
 
 

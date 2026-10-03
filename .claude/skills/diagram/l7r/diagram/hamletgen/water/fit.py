@@ -190,6 +190,7 @@ def _fit_at_aspect(
     Research:
         fan cut away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook-side supply canal BROOK_FAN_TRIM (0.72) short
         size search - NONE: the multiplier bracketed and predicted
+        fan proportions - UNRESEARCHED: REF_FIELD_FALL 1,150 ft, flank canals REF_CANAL_A 1,250-1,450 and REF_CANAL_B 680-800 ft, Ikegami's hand-drawn fan
     """
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], CombCarve] | None = None

@@ -124,7 +124,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         on the sheet - CONVENTION: stations held inside the field's bounds grown by BROOK_FRAME_MARGIN; past half its stations the course leaves at the first the box binds
         tap run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: straight on down the fall below the tap, never floored, so the race leaves off the brook's downstream heading
         tap run length - UNRESEARCHED: BROOK_TAP_RUN, 70 px
-        corners cut - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
+        corners cut - UNRESEARCHED: each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
     """
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
@@ -266,7 +266,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     `crosses_mid_run`, W11 `monotone_down` below the tap.
 
     Research:
-        no fold-back - CONVENTION: no vertex turns past BROOK_MAX_TURN_DEG (100 deg)
+        no fold-back - UNRESEARCHED: no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
         no ruled run - UNRESEARCHED: the straightest run within its bound (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted
@@ -659,7 +659,8 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     `WEIR_THICK_FT`'s, with its class beside it.
 
     Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
-        oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants WEIR_SKEW_DEG upstream from the intake bank, its root at the mouth's downstream lip
+        oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants upstream from the intake bank, its root at the mouth's downstream lip
+        weir skew angle - UNRESEARCHED: WEIR_SKEW_DEG, 30 deg
         full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention
         bar size - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: WEIR_HALF_FT half-length, WEIR_THICK_FT of its form thick
         seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex

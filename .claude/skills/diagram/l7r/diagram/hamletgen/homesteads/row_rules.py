@@ -76,6 +76,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         street one continuous way - research/questions/0033-row-villages-resson.drawing.html: each planned street drawn unbroken
         far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
         way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: the door within reach of its street, or a door path to it
+        door reach of a street - GUESS: a door within `DOOR_REACH_FT` (40 ft) of its street needs no door path
     """
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []
@@ -154,6 +155,7 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     Research:
         a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or its own well in its frame off its way in
         a row's water - research/questions/0033-row-villages-resson.drawing.html: own wells, or every farm within `WATER_REACH_FT` of a shared one
+        well in the way in - UNRESEARCHED: a private well within 12 ft of the house-to-door line counts as in the way
     """
     meta = M.get("meta") or {}
     form = meta.get("settlement_form")

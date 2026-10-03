@@ -111,8 +111,8 @@ class WallsMixin:
 
         Research:
             tower footprint - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 62 x 40 ft default, longer along the wall
-            tower building on the spur - UNRESEARCHED: up to 34 ft, inset
-            no-build margin - UNRESEARCHED: 12 px at the map's grain
+            tower building on the spur - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 30 to 40 ft; min(34, 0.55 x along) ft, inset (28.6 ft on a gate tower)
+            no-build margin - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; 12 px at the map's grain
             glyph - CONVENTION: fills and stroke floor
         """
         al, dp = self.px(along_ft), self.px(deep_ft)
@@ -257,7 +257,7 @@ class WallsMixin:
             posts flank the road at the opening - research/questions/0133-barriers-and-inspection-posts-at-a-towns-entrance-bansho.html: one each side, guard house west by default
             guard house size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 34 x 20 ft
             inspection hall size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 44 x 22 ft
-            set on the patrol road - UNRESEARCHED: pulled in to the ring road centerline, 6 px past the verge
+            set on the patrol road - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 105 to 135 ft inside the opening on the patrol road's center; pulled in to the ring road centerline, 6 px past the verge
             fills and trim - CONVENTION
         """
         # the GUARD HOUSE and INSPECTION STATION FLANK THE ROAD at the gate throat - one on each
@@ -352,7 +352,8 @@ class WallsMixin:
 
         Research:
             gate caption - CONVENTION: one 9 pt italic label pushed inward clear of the defenses
-            ground reserved round the gate works - UNRESEARCHED: 30 px round the tower, 12 px round the others
+            ground reserved round the gate works - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; 12 px round the guard buildings
+            ground reserved round the gate tower - GUESS: 30 px (about 90 ft), wider than the 36 ft the drawing page gives
         """
         # ONE label for the pair, centered on the road just inside the gate and pushed far enough
         # INWARD (along the gate's radial) to clear BOTH flanking buildings - the wide italic text
@@ -439,10 +440,10 @@ class WallsMixin:
 
         Research:
             spacing by defense posture - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: wall_tower_spacing_px, a knob
-            spacing margin - NONE: 0.85 of the cap
-            tower separation floor - UNRESEARCHED: 0.75 of the cap, at least 28 px
+            spacing margin - GUESS: 0.85 of the cap, a calibration within the 160 to 400 ft spacings of research/questions/0148-towers-along-the-city-wall-mamian.drawing.html
+            tower separation floor - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: a regular rhythm, no gap under seven tenths of the median; 0.75 of the cap, at least 28 px
             no tower in a gate or water-gate opening - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 45 px and 40 px
-            slide off a ward gate or gate works - UNRESEARCHED: 32 px and 40 px, slides of 22 to 46 px
+            slide off a ward gate or gate works - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the drawing page's GUESS bands, 186 ft of a ward gate and 165 ft of guard buildings; 32 px and 40 px, slides of 22 to 46 px
             coverage remediation - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: towers added where fewer than the posture's minimum reach
             reach counted from the parapet - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: plus 12 px
             exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 130 px of a gate, 55 px of its guard buildings

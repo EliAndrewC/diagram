@@ -220,7 +220,9 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
     Research:
         a fold or Z at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: the shorter link the stem
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
-            within 6 ft of the chord dropped"""
+            within 6 ft of the chord dropped
+        ways of two kinds stay two - UNRESEARCHED: a cart route and a footpath, or a web and a non-web lane, met end to end
+            are never straightened as one"""
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         old = [*x, *y[1:]]

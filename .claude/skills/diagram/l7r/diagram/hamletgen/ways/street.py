@@ -238,7 +238,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
 
     Research:
         one street per planned row - research/questions/0033-row-villages-resson.drawing.html: further streets laid beside the first
-        further street joins the streets - research/questions/0033-row-villages-resson.drawing.html: only the first street takes the road
+        further street joins the streets - UNRESEARCHED: only the first street takes the road, a further one joins a street laid
         street join width - UNRESEARCHED: the join is drawn at the street's 6 ft tread
         street join unhooked - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook"""
     centers = [(float(h["x"]), float(h["y"])) for h in houses]

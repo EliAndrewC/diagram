@@ -173,7 +173,9 @@ def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[flo
     `reach`, a point is added where the disc stands windward of the chord; the columns are kept as they are. The face
     goes round the house at the distance the column rule already gives it.
 
-    Research: near face clear of every house - UNRESEARCHED: the stand-off kept from each house all along the face
+    Research:
+        near face clear of every house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove's outline stands back from the houses nearest it, all along the face
+        stand-off reach - UNRESEARCHED: `reach` from each house
     """
     if len(cols) < 2:
         return list(cols)
@@ -221,6 +223,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         off the afternoon sun-lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the near face moved back by the west sun lane, scaled by the wind's westward share
         off the crop - UNRESEARCHED: stands back 22-60 px, then shortens to 0.6 of its span
         no belt under three houses - UNRESEARCHED
+        connector and field spur lanes cross the belt as a way through, not moved past - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses the belt, the planting resumes either side
     """
     houses = s.M.get("houses", [])
     if len(houses) < 3:

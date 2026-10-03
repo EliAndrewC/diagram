@@ -331,7 +331,12 @@ class WetGroundMixin:
         research/questions/0058-ground-too-wet-to-build-on.html + 'Defensive marshland - the engineered wet belt' + research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html. Recorded M['marshes'].
 
         Research:
-            marsh roles - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the toe, a pond fringe, a defensive belt, a polder's waterside
+            marsh roles - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the toe and a defensive belt
+            pond fringe role - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
+            polder waterside role - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a reed fringe along the polder's water side
+            bare treads - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: every trodden way kept bare through the reeds in every role (the record gives the defensive belt's causeway)
+            tread keep-out width - UNRESEARCHED: 3 bs either side of every way
+            reeds off the dooryards - UNRESEARCHED: no reed inside the urban-clearance halo round dooryards
             edge shaped - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: rounded and waved, a pond fringe left as laid
             reeds to the water and the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy
             reeds off the mounds - research/questions/0061-reservoir-ponds-tameike.drawing.html: no reed or tint on a dike crest or a pond bank
@@ -578,7 +583,8 @@ class WetGroundMixin:
         Research:
             toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field, smoothed over three stations
             toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields plus 90 ft each side
-            flaring flanks - UNRESEARCHED: each side bowing out to 1.5 pad past the shoulder downslope"""
+            flaring flanks - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: part of the straight-band deviation, the band's ends bow outward downhill as seepage spreads
+            flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile"""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys

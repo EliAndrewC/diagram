@@ -40,7 +40,7 @@ LOW_ROWS = 2
 """How many row steps from the collector count as low ground: the carve marked the bottom TWO levels (a wet backswamp with width,
 not a one-plot hem - a calibrated liberty, see `apply_land_use`).
 
-Research: low ground depth - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: plots within two row steps of the collector are low ground
+Research: low ground depth - UNRESEARCHED: plots within two row steps of the collector are low ground
 """
 
 
@@ -58,7 +58,7 @@ def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_acro
     leveled basin looks like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also
     its biggest. (Moved from `seams/close.py` `_basin_rank`.)
 
-    Research: which plot is promoted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: fronting the collector first, then the most rectangular, then nearest the median size
+    Research: which plot is promoted - CONVENTION: fronting the collector first, then the most rectangular, then nearest the median size
     """
     # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
     # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
@@ -73,7 +73,8 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
     quarter of a plot's width) - the carve's two marks, set from where each plot lies rather than from the level it was cut in.
 
     Research:
-        low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: within LOW_ROWS row steps of the collector
+        low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the low ground begins at the plots whose foot lies on the collector
+        low ground depth - UNRESEARCHED: within LOW_ROWS (two) row steps of the collector
         wet plots on the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: FLOOD_SAMPLE of the plots within a quarter plot of the collector tinted
     """
     import shapely

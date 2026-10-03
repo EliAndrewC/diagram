@@ -60,7 +60,8 @@ class LodgingMixin:
         Research:
             flophouse size - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: 104 x 46 ft
             a long dormitory with a row of doorways - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html
-            turned to the nearest way - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: within 500 ft, else square
+            turned to the nearest way - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: a roadside work faces its way
+            way-turning threshold - UNRESEARCHED: within 500 ft, else square
             keep-clear margin - UNRESEARCHED: 30 px
             caption - CONVENTION
         """

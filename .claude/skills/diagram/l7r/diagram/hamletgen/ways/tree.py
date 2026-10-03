@@ -186,7 +186,11 @@ def lanes_of(
     """The tree lanes for the runs `chosen` (their chains' closure taken by the caller), squared at their water crossings as
     the web draws every lane (`settle.square_run`, or `square` - the seating's `Lawful.squared`, the same answer asked only
     where water comes near, and remembered per run), the exit strip first. `laid`, where given, is the whole of that - a run
-    rejoined (`rejoined`) and squared - as the seating remembers it per run (`admits`)."""
+    rejoined (`rejoined`) and squared - as the seating remembers it per run (`admits`).
+
+    Research:
+        tree lane tread by role - research/questions/0081-village-lanes.drawing.html: exit strip and house access 3 ft, field way 5 ft
+        tree lanes assembled - NONE: the runs squared and set on their hosts as the web draws them"""
     if laid is not None:
         sq = laid
     else:
@@ -257,7 +261,8 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     Research:
         tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: no hook, needle, fold, hairpin, doubled tail or dangling end among its lanes
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch"""
+        no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
+        free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house"""
     recs: list[dict[str, Any]] = [*tree_records(M), {"role": role, "of": (float(house["x"]), float(house["y"])) if house is not None else None, "pts": _dedup([_pt(q) for q in run])}]
     strip = _strip(M)
     host = hosts(recs, strip)

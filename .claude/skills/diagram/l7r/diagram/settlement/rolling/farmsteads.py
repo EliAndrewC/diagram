@@ -50,7 +50,7 @@ class FarmsteadFlushMixin:
         Research:
             no tree over a building - CONVENTION: the grove bands drawn last, thinning off the walls
             thin band's lesser trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: fruit and flowering broadleaf, no conifer (the mix labeled a GUESS)
-            band drawn at one density - CONVENTION: cut into clumps of the clump cap
+            band drawn at one density - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: cut into clumps of the clump cap, so a deep band stands under canopy as densely as a thin one (0.57 -> 0.78)
             canopy edge at the band's inner edge - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the drawn band gives up one crown radius on the house's side, keeping the service strip clear
             bamboo patch in the windward bands - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft on the house side of each windward band
         """
@@ -116,7 +116,9 @@ class FarmsteadFlushMixin:
         edge within a shade band east of the garden's east edge `gx1`. `own` is the garden's OWN grove arms
         (which sit N/W, never east), excluded. The garden's x is fixed as it shifts S, so this set is stable.
 
-        Research: east shade band - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a neighbor's grove within 22 px (`bscale`) of a garden's east edge
+        Research:
+            east shade band - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a neighbor's grove just east of a garden shades it
+            east shade band width - UNRESEARCHED: the reach 22 px (`bscale`) east of the garden's east edge, a figure 0038 does not give
         """
         band = 22 * self.bscale
         out: list[Any] = []
@@ -243,7 +245,7 @@ class FarmsteadFlushMixin:
 
         Research:
             every farm keeps a yard and a garden - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: a farm with no room for both is dropped
-            wealth size of the drawn house - UNRESEARCHED: the glyph drawn at the wealth factor (0.9-1.12), the reservation at the base
+            wealth size of the drawn house - research/questions/0029-farmhouses-minka.drawing.html: the glyph drawn at the wealth factor, the reservation at the base (the 0.9-1.12 band itself unstated there)
             grove at every farm - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: near-universal (`grove_prevalence`), planted after the yards and gardens
             no grove inside a city wall - UNRESEARCHED: an intramural farm keeps no tree belt unless the map asks
         """

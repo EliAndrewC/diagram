@@ -30,7 +30,7 @@ class CanalsMixin:
             canal width - research/questions/0178-city-canals-horikawa.drawing.html: a 36 ft poling barge canal
             place on the width ladder - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: heavier than a ditch, lighter than the moat
             canal stroke and sheen - CONVENTION
-            no-build corridor - UNRESEARCHED: half the width plus 16 px kept clear of buildings
+            no-build corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: about 33 ft of a centerline; half the width plus 16 px kept clear of buildings
         """
         if width is None:
             width = self.px(36)  # a poling barge canal ~36 ft
@@ -90,7 +90,7 @@ class CanalsMixin:
 
         Research:
             no farmstead below the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the downslope-facing perimeter skipped, and seats below the drain refused
-            farmstead beside its cropland - UNRESEARCHED: no seat within 18 px of a plot's box
+            farmstead beside its cropland - research/questions/0010-farmland-around-towns-and-cities.drawing.html: hard against the dry crop, never on it; no seat within 18 px of a plot's box
             seat pitch along the edge - UNRESEARCHED: one candidate every 26 px at each standoff
             drain berth - UNRESEARCHED: 22% of the field's span, between 18 and 64 px
         """
@@ -180,6 +180,7 @@ class CanalsMixin:
             tap swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
             tap at the nearest vertex - NONE: the pool's fields were sited against the vertex
             farmhouses around each field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: rings of (26 seats, 15 px) and (20, 40), or the upslope walk
+            head race width - UNRESEARCHED: the tap-to-sluice channel drawn 7 px wide
             withdrawn field - NONE: a field whose fan fails is removed whole
             placement bound widened - NONE: 260 px around the field while seating
         """

@@ -568,7 +568,8 @@ class FieldFeaturesMixin:
 
         Research:
             half-moon pond - research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html: a half-disk, its flat bank toward the houses, labeled geomantic pond
-            no inlet - DEVIATION research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html"""
+            no inlet - DEVIATION research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html
+            placement keep-out - research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html: only the bulge kept out, 0.45 r off center at radius 0.95 r"""
         fa = math.radians(facing_deg)
         fx, fy = math.cos(fa), math.sin(fa)  # unit vector toward the village (the flat side)
         perp = (-fy, fx)  # along the flat diameter

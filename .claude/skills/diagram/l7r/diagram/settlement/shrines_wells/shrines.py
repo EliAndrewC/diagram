@@ -29,7 +29,8 @@ class ShrineHallsMixin:
 
         Research:
             stepped rings and hachures - CONVENTION
-            trees on the hill - CONVENTION: 15 seeded crowns
+            trees on the hill - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: every crown at real size and spacing, about 600 a hectare, 17 ft crowns; 15 seeded crowns of 4 to 6 px
+            tree glyph - CONVENTION
             summit seat for the shrine - UNRESEARCHED: 40 px above the center
         """
         rings = [(cx, cy + 28, rx, ry), (cx, cy, rx * 0.76, ry * 0.76), (cx, cy - 26, rx * 0.52, ry * 0.52), (cx, cy - 44, rx * 0.30, ry * 0.32)]
@@ -93,6 +94,7 @@ class ShrineHallsMixin:
             wayside shrine size - research/questions/0216-shrines-in-towns-and-cities.drawing.html: 32 x 24 ft
             small torii in front - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: a 9 ft span in plan
             keep-clear margin - UNRESEARCHED: 16 px, 16 more in front
+            torii before the hall - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 8 ft in front, always on the south
         """
         if w is None:
             w, h = self.px(32), self.px(24)  # ~32x24 ft wayside shrine (town-calibrated glyph)

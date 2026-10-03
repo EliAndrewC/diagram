@@ -104,9 +104,9 @@ figure, so the hairpin the fold repairs and the hairpin this law refuses are one
 # junction itself - under a quarter of the Mizuguchi leg, and short enough that the wedge it leaves is under the treads'
 # own ink. No rule of the record states either figure; they are recorded here, at the constant.
 NEEDLE_DEG = 20.0
-"""Research: a needle, not a T - research/questions/0081-village-lanes.drawing.html: under 20 degrees"""
+"""Research: a needle, not a T - CONVENTION: under 20 degrees two treads read as one smudged wedge"""
 NEEDLE_FT = 20.0
-"""Research: needle leg - research/questions/0081-village-lanes.drawing.html: a leg over 20 ft"""
+"""Research: needle leg - CONVENTION: a leg over 20 ft, shorter is the approach to the junction"""
 
 JOIN_REACH_FT = _LANE_JOIN_FT
 """A free lane end this near another way, making for it, is a join that stops short (`near_misses`) - the web's own join
@@ -464,7 +464,9 @@ def way_targets(M: Mapping[str, Any]) -> list[Pt]:
 
 TARGET_REACH_FT = 14.0
 """A way target is reached where the served network comes this near it: the spur drawn to it ends on it, and a lane passing
-nearer than a doubled tread's distance (`sweeps._ALONG_FT`) stands at it. A map drawing convention."""
+nearer than a doubled tread's distance (`sweeps._ALONG_FT`) stands at it. A map drawing convention.
+
+Research: a way target reached - UNRESEARCHED: within 14 ft of the served network"""
 
 
 def unreached_targets(M: Mapping[str, Any]) -> list[Pt]:

@@ -108,7 +108,7 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
 
     Research:
         end pulled back to what it serves - research/questions/0081-village-lanes.drawing.html: to the shortest end that still reaches something
-        trim floor - UNRESEARCHED: never below 40% of the lane's length; a lane reaching nothing is left whole
+        trim floor - DEVIATION research/questions/0081-village-lanes.drawing.html: never below 40% of the lane's length, which can stop short of the last house served; a lane reaching nothing is left whole, where the page pulls it back to the last house it serves
     """
     full = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:], strict=False))
     # `min_len` is the HARD floor a junction sets - see `_junction_floor`. It is a maximum with the

@@ -54,7 +54,7 @@ if TYPE_CHECKING:
 
 #: The dooryard copse's clump, in bscale units: `village_grove`'s sparse stand (`dense=False`) draws a 22 px clump.
 COPSE_CLUMP_BS = 22.0
-"""Research: copse clump size - UNRESEARCHED: 22 bscale units"""
+"""Research: copse clump size - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: 22 bscale units, an 11 ft radius against the 8.5 ft mean crown"""
 
 #: The seat lattice's pitch, in bscale units: the clump's radius times the square root of two, the widest square lattice
 #: whose crowns leave no point of a cell bare - so the reserved crowns cover their ground without a gap.
@@ -71,7 +71,7 @@ BAR_MARGIN_PX = 0.5
 #: record's "the windward grove at the back" (research/contents.json#homesteads, the yashikirin's north and west): the figures are
 #: the placer's, not the record's.
 FOCUS_DEPTH = 0.7
-"""Research: wood behind its house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: centered 0.7 of the reach behind"""
+"""Research: wood behind its house - UNRESEARCHED: centered 0.7 of the reach behind the house's center, the placer's figure"""
 LATERAL_WEIGHT = 2.0
 """Research: flanks after the back - UNRESEARCHED: a foot aside costs twice a foot deeper"""
 
@@ -261,7 +261,10 @@ class WoodShares:
 
     def file_byre_pockets(self, s: Settlement, pockets: Iterable[Pt]) -> None:
         """File the shared sheds' pockets the seating reserved before any house (`reserve_commons_byres`): each a byre's
-        keep-out, so no seat is reserved under a shed."""
+        keep-out, so no seat is reserved under a shed.
+
+        Research: copse clump kept off a shared byre by its half-diagonal plus the clump radius and 2 px - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
+        """
         bw, bh = s.px(BYRE_FT[0]), s.px(BYRE_FT[1])
         for x, y in pockets:
             self.file([(float(x), float(y), 0.5 * math.hypot(bw, bh) + self.clump / 2.0 + 2.0 + BAR_MARGIN_PX)], [])
@@ -278,8 +281,7 @@ class WoodShares:
         Research:
             within a dooryard's reach - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the
                 reach the caller gives, 90 ft
-            on its house's bank - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
-                no seat across a stream from its house
+            on its house's bank - UNRESEARCHED: no seat across a stream from its house
         """
         if not (6.0 <= x <= self.W - 6.0 and 6.0 <= y <= self.H - 6.0):
             return True
@@ -299,8 +301,8 @@ class WoodShares:
         return any(seg_dist(x, y, a, b) < self.lane_gap for a, b in corridors)
 
     def share(self, geom: Mapping[str, Any], rot: float, corridors: Sequence[tuple[Pt, Pt]]) -> list[tuple[float, float]] | None:
-        """The seats this homestead would reserve: the lattice within reach of its house, nearest a point half the reach
-        behind its back wall first, each seat kept where it is not barred (`seat_barred`) and its crown covers ground no
+        """The seats this homestead would reserve: the lattice within reach of its house, nearest a point `FOCUS_DEPTH` of the
+        reach behind its center first, each seat kept where it is not barred (`seat_barred`) and its crown covers ground no
         other household reserved, until the crowns cover the floor. None when the ground within reach cannot hold it -
         the homestead is refused its seat.
 

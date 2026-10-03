@@ -146,7 +146,12 @@ OFFTAKE_LADDER: tuple[tuple[int, tuple[float, ...], tuple[float, ...]], ...] = (
     (21, (0.30, 0.62, 0.93), (0.55,)),
     (99, (0.26, 0.52, 0.78, 0.93), (0.6,)),
 )
-"""Research: delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B always feeds one"""
+"""The delivery-ditch fractions along canals A and B, by household band.
+
+Research:
+    delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B always feeds one
+    delivery-ditch count and positions - UNRESEARCHED: 2, 3 or 4 offtakes under 11, 21 and 99 households, the last at 0.93
+"""
 
 # THE BROOK IS CROSSED WHERE A WAY NEEDS TO CROSS IT (feature 261, the GM 2026-09-27: "fix the placement algorithm
 # instead"). The record puts a settlement's own small channel through the middle of the place (the Harie finding,
@@ -197,4 +202,9 @@ BROOK_CROSSING_COST_FT = 150.0
 # tameike reservoir at the low foot - the Ikegami case, and the one that gives the map a named
 # feature; `offmap` lets the drain brook leave the frame, which is what most real valleys do.
 SINKS = ("pond", "pond", "offmap")
-"""Research: where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: pond two in three, off the map one"""
+"""Where the field's runoff goes.
+
+Research:
+    where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot (a GUESS there) or off the map
+    sink odds - UNRESEARCHED: pond two in three, off the map one
+"""

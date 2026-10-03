@@ -44,6 +44,7 @@ class TownWaysMixin:
 
         Research:
             water-mouth seat - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: at the stream's exit, where the caller seats it
+            a pavilion at the water mouth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a pavilion drawn (the page attests a grove there, no pavilion)
             pavilion size - UNRESEARCHED: a hexagon of 22 ft radius
             pavilion glyph - CONVENTION: a hexagon with an inner ring
         """

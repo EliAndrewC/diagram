@@ -23,6 +23,13 @@ if TYPE_CHECKING:
 
 
 class ServantRangesMixin:
+    """The servant-range pass and its probes.
+
+    Research:
+        servant range depth - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: 15 ft (SERVANT_RANGE_DEPTH_FT)
+        office standoff - NONE: 15 px, the check's 14 plus a margin
+    """
+
     SERVANT_RANGE_DEPTH_FT = 15.0  # the measured nagayamon depth (Omura Yahei 2.5 ken; the Tokyo ICP gate 4.7 m)
     _OFFICE_STANDOFF = 15.0  # city_government_offices_dont_abut wants 14px of daylight; a px of margin over it
 
@@ -128,7 +135,7 @@ class ServantRangesMixin:
             range depth - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: 15 ft, the full frontage long
             ranges per household - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: two for a senior house, one for a junior
             beside the house, flush with its front - DEVIATION research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: lateral, not across the street front, because the house is unwalled
-            rear row fallback - UNRESEARCHED: behind the house where no flank is free
+            rear row fallback - DEVIATION research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: behind the house where no flank is free
             shortened range - UNRESEARCHED: 0.78 of the frontage before giving up
             no range under three depths long - CONVENTION: below it the range reads as a blob
             inside the ward, off fence, ways and doors - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html

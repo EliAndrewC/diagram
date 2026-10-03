@@ -94,7 +94,11 @@ class HamletSpec:
     are the facts only a person knows (what the place is called, how big it is, and - when the
     surrounding geography is settled - which way its water runs), and everything that follows from
     those is the script's job. A spec of `HamletSpec("Ikegami", seed=4, households=15)` is a
-    complete, gate-passing hamlet."""
+    complete, gate-passing hamlet.
+
+    Research:
+        default households - UNRESEARCHED: 15 when none declared (REF_HOUSEHOLDS), Ikegami's count
+        declared fields honored, the rest rolled - NONE: the spec's plumbing; each knob table carries its own claim in consts"""
 
     name: str
     seed: int
@@ -324,7 +328,9 @@ def _roll(seed: int, knob: str, choices: Sequence[Any]) -> Any:
 def offtakes_for(households: int) -> tuple[tuple[float, ...], tuple[float, ...]]:
     """The delivery-ditch fractions for a hamlet of this size - see `OFFTAKE_LADDER`.
 
-    Research: delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one"""
+    Research:
+        delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one
+        delivery-ditch count and fractions - UNRESEARCHED: 2, 3 or 4 by household band (OFFTAKE_LADDER)"""
     for ceiling, a, b in OFFTAKE_LADDER:
         if households < ceiling:
             return a, b
@@ -370,7 +376,7 @@ def band_extent(households: int, shape: str | None, ground: float | None = None)
     (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect.
 
     Research:
-        band area - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: households times HOMESTEAD_GROUND_FT squared
+        band area - UNRESEARCHED: households times HOMESTEAD_GROUND_FT squared; 0037 sizes only the yard
         band aspect by shape - UNRESEARCHED: CLUSTER_BAND_ASPECT
         band floors and caps - UNRESEARCHED: depth 112 to 300 ft, length 240 to 1,100 ft"""
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
@@ -430,7 +436,7 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
 
     Research:
         high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin
-        fall square to or away from the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html"""
+        fall square to or away from the wind - UNRESEARCHED: 0072 sets the belt to the wind, not the fall"""
     return _fall_into_wind(down_deg, windward) <= 1e-9
 
 
@@ -438,8 +444,9 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream.
 
     Research:
-        polder on the survey grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: falls from the four cardinals
-        dike-pond knobs only on a dike-pond - NONE
+        polder on the survey grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid
+        polder grid's orientation - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: falls from the four cardinals only, the dike-pond mosaic too, never tilted
+        dike-pond knobs only on a dike-pond - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder's layout fixed to the grid
         regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: DEFAULT_WINDWARD unless declared
         rolled fall backs the wind - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: only falls leaving a windward margin
         water flow follows the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: unless declared
@@ -447,7 +454,8 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         paddy by households - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: GROSS_ACRES_PER_HOUSEHOLD each
         row on the edge on flood ground - research/questions/0033-row-villages-resson.drawing.html
         woodland patches - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: 2 to 4, rolled
-        knob rolls - NONE: each table carries its own claim in consts
+        knob rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: cluster_shape, lane_skeleton, plot_size and grain_drift rolled per hamlet; each table's own claim in consts
+        harvest weather default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled unless declared
         canvas - NONE: the field's square, the fan's overhang and the seat's room, cropped later"""
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
     # rather than the eight compass points. This is not a workaround for `polder_fills_its_bbox`

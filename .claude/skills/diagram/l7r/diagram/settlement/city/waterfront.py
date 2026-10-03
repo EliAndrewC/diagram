@@ -196,7 +196,8 @@ class WaterfrontMixin:
         Research:
             planked finger off the bank - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
             jetty length - UNRESEARCHED: 60 ft
-            deck width and seams - CONVENTION: 6.4 px, a seam every 9 px
+            deck width - UNRESEARCHED: a fixed 6.4 px deck (about 19 ft at 3 ft/px)
+            deck seams - CONVENTION: a seam every 9 px
         """
         if length is None:
             length = self.px(60)

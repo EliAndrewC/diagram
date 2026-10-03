@@ -29,11 +29,19 @@ def test_a_pointer_claim_parses_with_its_account() -> None:
     assert (c.label, c.backing, c.pointers, c.account) == ("dry-field share", "POINTER", (Q, D), "rolled per settlement")
 
 
-@pytest.mark.parametrize("cls", ["GUESS", "UNRESEARCHED", "CONVENTION", "NONE"])
+@pytest.mark.parametrize("cls", ["UNRESEARCHED", "CONVENTION", "CANON", "NONE"])
 def test_a_class_claim_parses_and_takes_no_pointer(cls: str) -> None:
     assert cl.parse_claim(f"a thing - {cls}").backing == cls
     with pytest.raises(cl.ClaimError, match="takes no pointer"):
         cl.parse_claim(f"a thing - {cls} {Q}")
+
+
+def test_a_guess_may_name_the_drawing_page_that_records_it() -> None:
+    assert cl.parse_claim("a gap - GUESS").pointers == ()
+    c = cl.parse_claim(f"a gap - GUESS {D}: 12 ft")
+    assert (c.backing, c.pointers, c.account) == ("GUESS", (D,), "12 ft")
+    with pytest.raises(cl.ClaimError, match="names question files or nothing"):
+        cl.parse_claim("a gap - GUESS maybe")
 
 
 def test_a_deviation_names_the_question_it_departs_from() -> None:

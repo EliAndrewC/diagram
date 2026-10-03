@@ -103,7 +103,10 @@ def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[
 
 def stream_segment_index(streams: Any) -> PointGrid:
     """Every stream segment as `(a, b, hw, x0, y0, x1, y1)`, `hw` the stream's half-width plus 5 px and the box widened by
-    it (feature 281, FR-005)."""
+    it (feature 281, FR-005).
+    Research:
+        keep-out geometry, index and cache plumbing - NONE: the segments and their widened boxes in a `PointGrid`
+        stream keep-out at half-width plus 5 px - UNRESEARCHED: `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by"""
     grid = PointGrid()
     for f in streams:
         poly = f.get("poly") or []
@@ -196,7 +199,7 @@ class BundleFitMixin:
         Left at 165 deliberately: widening it would admit nudges the placer currently refuses and re-roll
         the pool, which is a real cost for no gain, since nothing downstream reads the figure as a norm
         once this docstring says it is not one.
-        Research: farmland rail - research/questions/0029-farmhouses-minka.drawing.html: a nudge may not carry a house past 165 px of the field; the record sets no maximum"""
+        Research: farmland rail - GUESS: a nudge may not carry a house past 165 px of the field, an arbitrary rail; 0029 sets no maximum"""
         return self._field_within(x, y, 165) if self.field_polys else True
 
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]
@@ -424,7 +427,8 @@ class BundleFitMixin:
         tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
         ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its
         share of the wood floor (`WoodShares.share`).
-        Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch"""
+        Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
+            persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang"""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -626,7 +630,7 @@ class BundleFitMixin:
         circumscribed radius (dev/placement.md, "CENTER vs FOOTPRINT"). The center-distance test in
         front of it is a PREFILTER - it over-states both extents, so it can only admit a pair the
         exact test then rejects.
-        Research: roofs shed apart - research/questions/0029-farmhouses-minka.drawing.html: `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses"""
+        Research: roofs shed apart - UNRESEARCHED: `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
         lim = self.px(FARMHOUSE_EAVE_GAP_FT + 2.0)
         cx, cy, w, h = rect
         cand = {"x": cx, "y": cy, "w": w, "h": h, "rot": self._house_rot(cx, cy)}  # the candidate as `eave_gap` reads a record
@@ -855,7 +859,8 @@ class BundleFitMixin:
         bands keep the same preference by construction - its deep bands on the wind's side, its thin east band beyond the reach
         (`dispersed.canonical_farmstead`). A preference for whole bands, not the sun rule, which holds every crown where it is
         drawn (`KeepoutsMixin._sun_keepouts`, feature 310).
-        Research: bed's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band within 22 px (`bscale`) east of a bed, a seating preference"""
+        Research: bed's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band just east of a bed, a seating preference
+            bed's morning-sun reach - UNRESEARCHED: the reach 22 px (`bscale`) east of the bed, a figure 0038 does not give"""
         new_groves = tuple(geom.get("groves") or ())
         if not new_groves:  # a nucleated bundle, on a map whose farms carry no grove
             return False
@@ -932,12 +937,12 @@ class BundleFitMixin:
 
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A SEATING PREFERENCE (feature 310): a threshing yard dries rice in the southern sun, so a farm is not seated with a grove
-        BAND in the ~22px strip directly
-        SOUTH of any yard. Tests the candidate's grove against every placed yard's sun-corridor and the
+        BAND in the ~22px strip directly SOUTH of any yard. Tests the candidate's grove against every placed yard's sun-corridor and the
         candidate's yard against every placed grove, so packing never stacks a windbreak over a neighbor's
         drying ground and the bands stay whole. It is not the sun rule: every canopy crown is held out of every plot's sun ground
         where it is drawn (`KeepoutsMixin._sun_keepouts`, `CANOPY_SHADE_FT`), whatever seat a farm takes.
-        Research: yard's drying strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band in the 22 px strip south of a yard, a seating preference"""
+        Research: yard's drying strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band in the yard's southern sun, a seating preference
+            yard's drying strip width - UNRESEARCHED: the 22 px strip in `shades`, a width 0038 does not give"""
 
         def shades(grove: Any, yard: Any) -> bool:
             cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11

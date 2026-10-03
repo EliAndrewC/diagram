@@ -106,7 +106,7 @@ class BoardsMixin:
             board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 12 x 5 ft, from `board_record`
             location marker at coarse tiers - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored on the long axis
             roof and ridge glyph - CONVENTION
-            no-build margin - NONE: 6 px around the drawn box"""
+            no-build margin - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 px kept clear around the drawn box"""
         rec = self.board_record(x, y, rot)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / rec["w"])  # marker floor, aspect preserved: drawn unrounded, recorded to 0.1 px
         vw, vh = rec["w"] * k, rec["h"] * k
