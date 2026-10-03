@@ -388,3 +388,35 @@ def test_a_layout_s_walk_is_searched_once_a_seat(monkeypatch: pytest.MonkeyPatch
     first = passage.passage_of(s, geom)
     n = len(calls)
     assert first is not None and n >= 1 and passage.passage_of(s, geom) is first and len(calls) == n
+
+
+def test_a_margin_short_after_passages_is_seated_again_with_the_passage_withheld(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`stages.seat_the_margin` (feature 317, research R10): the share is a ceiling - a margin that leaves a household without
+    a house after seating some across a yard is seated once more with the passage withheld; one that seats everyone, or spent
+    no passage, is kept as seated."""
+    from l7r.diagram.hamletgen.homesteads import stages
+
+    s = _open()
+    s.M["meta"] = {}
+    calls: list[bool] = []
+
+    def seat(s: Settlement, plan: object) -> tuple[int, int]:
+        withheld = bool(getattr(s, "_passage_withheld", False))
+        calls.append(withheld)
+        s.M["meta"]["passage_share"] = 0.0 if withheld else 0.25
+        s._passage_left = 2 if withheld else 1  # the budget at 0.25 of 10 households is 2: one spent
+        return (10 if withheld else 9), 0
+
+    monkeypatch.setattr(stages, "_seat_households", seat)
+    monkeypatch.setattr(stages, "unseat_to", lambda s, mark: calls.append("unseat"))  # type: ignore[arg-type]
+    plan = type("P", (), {"spec": type("S", (), {"households": 10})()})()
+    assert stages.seat_the_margin(s, plan, (), 10) == (10, 0) and calls == [False, "unseat", True], "short, a passage spent: seated again"
+    assert s.M["meta"]["passage_withheld"] and not s._passage_withheld
+    calls.clear()
+    monkeypatch.setattr(stages, "_seat_households", lambda s, plan: (calls.append(False) or (10, 0)))
+    assert stages.seat_the_margin(s, plan, (), 10) == (10, 0) and calls == [False], "everyone seated: kept"
+    calls.clear()
+    s.M["meta"] = {"passage_share": 0.25}
+    s._passage_left = 2
+    monkeypatch.setattr(stages, "_seat_households", lambda s, plan: (calls.append(False) or (9, 0)))
+    assert stages.seat_the_margin(s, plan, (), 10) == (9, 0) and calls == [False], "short with no passage spent: the ladder's to mend"

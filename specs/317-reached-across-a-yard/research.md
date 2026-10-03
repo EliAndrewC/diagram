@@ -358,3 +358,16 @@ searches all had a branch in reach; seed 47 19.94 / 19.95 with it, 33.37 / 33.58
 with it on and off on seeds 25, 47 and 39 (sha256 of the whole manifest after the homesteads stage), and the whole pool - Inashiro,
 Kashikawa, Kuwabata, Mizuguchi, Sawada - hashes the same with it on and off after every stage but the labels (`pool_hash.py`).
 (observed 2026-10-03, method: as the heading.)
+
+**The share as a ceiling** (the perf-audit's audit of the amended engine's bookends, 2026-10-03: inconsistent, cannot-determine).
+The audit found seed 47 at 40 households seated on its THIRD margin: the first seated 33 and the second 38, both thrown away, the
+third all 40 - against main's first margin. Each cause alone seats 40 on the first. A margin that leaves a household without a
+house after seating some across a yard is now seated once more with the passage withheld before the ladder moves on
+(`stages.seat_the_margin`): seed 47 seats all 40 on its chosen margin, with no household reached across a yard
+(`meta.passage_withheld`), homesteads 9.79 / 10.07 s against main's 3.89 / 3.89 (was 20.0); seed 25 4.05 / 4.20 against 3.01 /
+3.09, 4 passages; seed 39 4.17 / 4.37 against 2.74 / 2.68, no passage - the seat fix. The remaining excess on seed 47 is the one
+passage seating that falls short and is thrown away. The audit also measured the notice stage at 20 households, seed 25,
+0.11 -> 0.77 s, back to 0.23 s with the passage share at 0: the board's seat search (`place_kosatsuba`) tries more boards on the
+layout the passage makes.
+(observed 2026-10-03, method: `control_probe.py`, two takes alternated with main; the perf-audit's `pa317_margin.py`,
+`pa317_notice.py` in the session's scratchpad.)

@@ -251,6 +251,31 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # trims actually exist.
 
 
+def seat_the_margin(s: Settlement, plan: SitePlan, mark: Any, want: int) -> tuple[int, int]:
+    """One margin seated (`_seat_households`) - and, where it leaves a household without a house after seating some across a
+    neighbor's yard, seated again with the passage withheld before the ladder takes the next margin (`meta.passage_withheld`).
+
+    THE SHARE IS A CEILING, NOT A QUOTA (feature 317, research R10): households reached across a yard stand against their
+    neighbors' land, and on seed 47 at 40 households they left the chosen margin two houses short and the next one too, so
+    the map was seated on the third margin, after two seatings thrown away (the perf-audit, 2026-10-03); with the passage
+    withheld the chosen margin seats all 40.
+
+    Research: a share that may be reached by passage - research/questions/0081-village-lanes.drawing.html: the share is how many may be reached that way, never how many must; a margin that seats everyone without it keeps its site
+    """
+    placed, cloud = _seat_households(s, plan)
+    spent = int(passage_budget(float(s.M["meta"].get("passage_share") or 0.0), plan.spec.households)) > int(getattr(s, "_passage_left", 0))
+    if placed >= want or not spent:
+        return placed, cloud
+    unseat_to(s, mark)
+    s._passage_withheld = True  # type: ignore[attr-defined]
+    try:
+        placed, cloud = _seat_households(s, plan)
+    finally:
+        s._passage_withheld = False  # type: ignore[attr-defined]
+    s.M["meta"]["passage_withheld"] = True
+    return placed, cloud
+
+
 def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Every declared household seated, or the site refused (feature 287, homes H14 and plan D2).
 
@@ -269,7 +294,7 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """
     want = plan.spec.households
     mark = seating_mark(s)
-    placed, cloud = _seat_households(s, plan)
+    placed, cloud = seat_the_margin(s, plan, mark, want)
     tried = [placed]
     ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
     toe: Any = None
@@ -286,7 +311,7 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         plan.seat = {**margin, "ladder": ladder}
         s.field_face = (float(margin["cx"]), float(margin["cy"]))
         s.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
-        placed, cloud = _seat_households(s, plan)
+        placed, cloud = seat_the_margin(s, plan, mark, want)
         tried.append(placed)
         banded = drawn_in_band(s, plan)
         if placed >= want and banded:
@@ -548,7 +573,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
     s._seat_region = SeatRegion(s, seat_window(s, s.px(FIELD_REACH_FT))) if getattr(s, "_nucleated", False) else None
     # THE PASSAGE SHARE (feature 317, plan D4; `rolling/passage.py`), rolled from the seed, counted afresh on each margin
-    share = passage_share(plan.spec.seed) if grows(plan) else 0.0
+    share = passage_share(plan.spec.seed) if grows(plan) and not getattr(s, "_passage_withheld", False) else 0.0
     s._passage_left = passage_budget(share, plan.spec.households)  # type: ignore[attr-defined]
     s.M["meta"]["passage_share"] = share
     # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no

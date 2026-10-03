@@ -88,7 +88,10 @@ both B's plot and A's to the highway - the longest chain the record reads.
 **D4 - The share (FR-002).** `PASSAGE_SHARE_BAND = (0.0, 0.25)`: each nucleated settlement rolls its share of households that may
 be reached by passage from the map's seed, a GUESS - the record attests the custom, not how common it was, and a clustered
 village whose rear households all walked through their neighbors' yards is not what the entries describe (alleys to the rear
-houses, Morse; blind alleys to the houses, the Manchu survey). A household beyond the share is seated only with a corridor, as now.
+houses, Morse; blind alleys to the houses, the Manchu survey). A household beyond the share is seated only with a corridor, as now. THE SHARE IS A CEILING (the perf-audit, 2026-10-03; research R10): a margin
+that leaves a household without a house after seating some across a yard is seated once more with the passage withheld before
+the ladder takes the next margin (`stages.seat_the_margin`, `meta.passage_withheld`) - seed 47 at 40 households had seated on its
+third margin after two seatings thrown away; withheld, its chosen margin seats all 40.
 
 **D5 - The reach (FR-003).** The household's record carries `reached_across` (the neighbor's position) and no corridor; the
 ways' one predicate of reach (`checks.unreached_houses`, which the web's settle, its last resort, the tree's judge and the gate
