@@ -231,7 +231,7 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
     tol = gap + s.px(PASSAGE_ADJOIN_FT)
     if not adjoins(own, land, tol):
         return None
-    walks = tight.setdefault("walks", {})  # each layout's walk once a seat: asked by `landlocked`, then by the parts' test
+    walks: dict[int, dict[str, Any] | None] = tight.setdefault("walks", {})  # each layout's walk once a seat: asked by `landlocked`, then by the parts' test
     if id(geom) in walks:
         return walks[id(geom)]
     lands = [grown(own, tol), grown(land, tol)]
