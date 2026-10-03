@@ -34,3 +34,9 @@
 - round 5, quote-check: 0029 page PARTIAL 1 (the survivors' size range scoped to the five Nihon Minka-en houses); 0029 drawing clean (a missing space between two yamamoto quotes fixed); 0117 PARTIAL 1 ('heavy' cut - neither storehouse was both heavy and plastered); 0244 clean
 - round 5, record-format 0029/0117/0244 clean; translation-check 0029 FAITHFUL 4; source-reader nihon-no-minka READ 4, nihonminkaen-kanto READ 2 (its 二つ屋根の家 could replace the bunto reading later - optional)
 - round 5, source-applicability kotobank: MISSING 1 - small farmhouses kept simple, often one-room plans - applied
+- round 6: quote-check 0029 PARTIAL 1 ('neighboring bearings inside the spread'), the 'did not all face' lead kept again (the 87/11/1/1 items follow it); record-format 0117 VOCABULARY 1 (pivot-hung glossed); kotobank applicability HONEST; everything else clean
+- round 7: quote-check 0029 PARTIAL 1 ('the study's earlier count'); record-format 0029 VOCABULARY 1 declined - 'the land survey project' stays undated: the paper's 土地調査事業 is not the 1899 土地整理事業 it names elsewhere
+- rounds 8-9: record-format 0029 clean; quote-check 0029 asked for three footnote marks on the survey block (the -2 note on 'Most', the method note on 'Most' and on the sixteen points), applied as its own EDIT blocks; the mark-only re-owing recorded with REASON (bypass log)
+- source-reader 0029.drawing#yamamoto: recorded with REASON - only a space between two quoted passages changed
+- open, not this session's: modal-accuracy, modal-gaps and modal-references for farmhouse (T09's About-form rewrite); test_synthetic_page_mechanics fails on the About-form Farmhouse's missing label (_driver.py:110)
+- tooling: _apply_edits.py now reads a report whose markup was escaped in a task notification (test_a_report_saved_with_its_markup_escaped_is_applied)

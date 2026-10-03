@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T19:01:24Z",
+  "target": "record-checked",
+  "commit": "8b7cd52ad",
+  "why": "record-format on record-format:0029: only footnote marks were added since the clean round-8 record-format; no visible word changed"
+}

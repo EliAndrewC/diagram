@@ -51,11 +51,22 @@ ROOTS = (RECORD, MODALS, SHEET_MODALS)
 TERMS = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/"
 
 
+def unescaped(text: str) -> str:
+    """A report saved inside a task notification has its markup escaped - `&lt;&lt;&lt;` for `<<<` - and every block in it
+    read as no block at all (feature 319: a session's returned-reports file). Unescaped only when its markers are, so a
+    report that quotes `&amp;` from a record file keeps it."""
+    if "&lt;&lt;&lt;" in text and "\n<<<" not in text:
+        import html  # noqa: PLC0415
+
+        return html.unescape(text)
+    return text
+
+
 def reply_of(path: pathlib.Path) -> str:
     """The report's text: the file itself, or the last assistant reply in a transcript."""
     text = path.read_text(encoding="utf-8", errors="replace")
     if path.suffix not in (".jsonl", ".output"):
-        return text
+        return unescaped(text)
     last = ""
     for line in text.splitlines():
         try:

@@ -2759,6 +2759,7 @@ pit privies	pit privy
 pit privy	pit privy
 pit rank	pit rank
 pit ranks	pit rank
+pivot-hung	pivot-hung
 placer	placer
 plankton	plankton
 plant association	plant association
