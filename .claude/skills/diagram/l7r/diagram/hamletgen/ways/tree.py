@@ -411,11 +411,19 @@ def owed(M: Mapping[str, Any]) -> list[int]:
     the field's where no way reaches the field (`law.field_unreached`) - with every run each hangs from."""
     recs = tree_records(M)
     host = hosts(recs, _strip(M))
-    far = [(float(x), float(y)) for x, y, _d in unreached_houses(M)]
+    # ...AND THE CORRIDOR OF EVERY HOUSE ANOTHER IS REACHED ACROSS (feature 317, `rolling/passage.py`): the walk arrives at that
+    # house's yard and goes on along its way, so its way is drawn however near the lanes its center stands - a glyph-check of
+    # Inashiro found the anchor 90 ft from a lane, its corridor not owed, and the two farmsteads left with no way touching either
+    far = [(float(x), float(y)) for x, y, _d in unreached_houses(M)] + passage_anchors(M)
     want = [i for i, r in enumerate(recs) if r["of"] is not None and any(math.dist(r["of"], c) <= 1.5 for c in far)]
     if law.field_unreached(M):
         want += [i for i, r in enumerate(recs) if r["role"] == FIELD_ROLE]
     return sorted({j for i in want for j in chain_of(recs, host, i)})
+
+
+def passage_anchors(M: Mapping[str, Any]) -> list[Pt]:
+    """Where each household reached across a neighbor's yard is reached from - the neighbors' positions (`reached_across`)."""
+    return [(float(h["reached_across"][0]), float(h["reached_across"][1])) for h in M.get("houses") or [] if h.get("reached_across")]
 
 
 def settle_tree(s: Any) -> int:
@@ -512,6 +520,7 @@ def prune_the_tree(s: Any) -> int:
     at a time neither could go. One a round, as a fragment: two can each be redundant only while the other stands."""
     M = s.M
     lanes = M.get("lanes") or []
+    anchors = passage_anchors(M)  # ...nor the way a household reached across a yard goes on along (feature 317, `owed`)
     order = sorted(
         # ...never a row village's street or a grove farm's own door path (feature 291 FR-017 and FR-019): each is the way its
         # farms are reached by, not a corridor another way stands in for - pruned as one, Mizuguchi's door paths went as
@@ -519,7 +528,13 @@ def prune_the_tree(s: Any) -> int:
         (
             i
             for i, ln in enumerate(lanes)
-            if is_tree(ln) and not ln.get("connector") and not ln.get("street") and not ln.get("serves") and ln.get("role") != STRIP_ROLE and len(ln.get("pts") or []) >= 2
+            if is_tree(ln)
+            and not ln.get("connector")
+            and not ln.get("street")
+            and not ln.get("serves")
+            and ln.get("role") != STRIP_ROLE
+            and len(ln.get("pts") or []) >= 2
+            and not (ln.get("of") and any(math.dist(_pt(ln["of"]), a) <= 1.5 for a in anchors))
         ),
         key=lambda i: -polyline_len(law.lane_pts(lanes[i])),
     )

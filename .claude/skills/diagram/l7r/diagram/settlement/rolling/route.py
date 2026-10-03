@@ -145,37 +145,26 @@ def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tup
     def leg_ok(a: Pt, b: Pt) -> bool:
         return A.house_clear(a, b, geom, hgap) and A.fixtures_clear(s, a, b, geom) and A.parts_clear(s, a, b, geom) and A.standing_ground(s, a, b, memo) and A.lawful_leg(s, a, b, memo)
 
-    mine = own_parts(s, geom, own, hgap, half)
+    # ...OFF THE HOUSE'S OWN BOX ONLY, and once for the seat's house and yard - its layouts share it, each taking it only where
+    # its own beds and fixtures leave it clear (the taut pull's and `access_corridor`'s leg tests). A FIX THAT FAILED (feature
+    # 317, task T06, research R8): searched for each garden layout round its own beds and fixtures (`own_parts`), it seated more
+    # households with a path before feature 315 merged (seats lost to the path alone 77 -> 21 at 15 households), and after it cost
+    # the homesteads stage 3-43% more than this search on the bookend's seeds (calls, passage off), the layouts no longer seated
+    # better and each searched again. Withdrawn: do not retry it without measuring it against main's layouts first.
+    mine = [(own, hgap)]
     for door in A.doors_of(geom, half)[:2]:
-        # ...FIRST, ONCE FOR THE SEAT'S HOUSE: whether the search reaches the tree at all round the house alone (`house_reaches`)
-        # - a layout's search, kept off its parts too, reaches no goal where this reaches none, so a door shut in is searched
-        # once for the four layouts of a seat, not once a layout (feature 317, research R8: failing searches exhaust the reach,
-        # and with each layout searching its own route a shut-in door was searched up to four times)
-        # Asked only after a layout's own search found nothing, so a door that reaches pays no second search
-        hkey = ("reaches", door, tuple(own))
-        if memo.get(hkey) is False:
-            continue
-        key = ("routed", door, tuple(tuple(b) for b, _g in mine), tuple((geom.get("boxes") or {}).get("yard") or ()))
+        key = ("routed", door, tuple(own), tuple((geom.get("boxes") or {}).get("yard") or ()))
         if key not in memo:
             memo[key] = _route_from(s, tree, door, mine, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok, geom)
-            if memo[key] is None and hkey not in memo:
-                memo[hkey] = house_reaches(s, tree, door, own, half, hgap, fg, wood, placed, step)
         if memo[key] is not None:
             yield memo[key]
 
 
 def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> list[tuple[Any, float]]:
-    """What the route keeps off of the household's own, each with the gap its leg test keeps: the house (`house_clear`'s gap),
-    the shed, byre, well and garden beds (`parts_clear`'s), the fixtures by a corridor's half-width - a persimmon by its trunk
-    (`fixtures_clear`'s).
-
-    FEATURE 317 (T06): measured on the reference at 15 households, seeds 1-8, of the 313 layouts whose every other rule passed
-    and whose corridor was refused, 191 had found paths only across their own beds or fixtures - found by a search that kept
-    off the house alone, then refused when pulled taut - 109 had none, and the lane law refused 13 (40 households, seeds 2, 6,
-    10, 13: 260, 67 and 13 of 340; specs/317-reached-across-a-yard/research.md). Feature 314 had kept the search off these parts
-    and withdrawn it (its research R12): the seating then judged a corridor in a form the web reshaped (fixed, `tree.as_joined`),
-    and the route was searched once for the seat's house and yard, so every layout took the route laid round the FIRST
-    layout's beds. Here each layout has its own (`routed_corridors`' key)."""
+    """What a household's own parts keep a WALK off of (`passage.walk_of`, feature 317), each with the gap its leg test keeps:
+    the house (`house_clear`'s gap), the shed, byre, well and garden beds (`parts_clear`'s), the fixtures by a corridor's
+    half-width (`fixtures_clear`'s). The corridor's own route keeps off the house alone (`routed_corridors`: searched per
+    layout round these parts, it was withdrawn - research R8)."""
     from .access import PART_MARGIN_FT, TREAD_HALF_FT
 
     boxes = geom.get("boxes") or {}
@@ -216,13 +205,6 @@ def _route_from(
     run = taut(pts, leg_ok, doubles_back, ROUTE_LEGS)
     # ...AND IT LEAVES ITS OWN YARD, as every straight and round-the-gable corridor must (`_house_candidates`, feature 287 M8)
     return run if run is not None and leaves_its_yard(run, yard, s.px(TREAD_HALF_FT + PART_MARGIN_FT)) else None
-
-
-def house_reaches(s: Settlement, tree: AccessTree, door: Pt, own: Any, half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float) -> bool:
-    """Does the search from `door` reach the tree at all with only the house kept off of the household's own (`_cells_to_tree`)?
-    A layout's search keeps off its own parts too and judges its first step by them, so it searches a part of this one's
-    ground: where this reaches no goal, no layout's search does (feature 317)."""
-    return _cells_to_tree(s, tree, door, [(own, hgap)], half, hgap, fg, wood, placed, step, {"house": own, "boxes": {"house": own}}) is not None
 
 
 def _cells_to_tree(

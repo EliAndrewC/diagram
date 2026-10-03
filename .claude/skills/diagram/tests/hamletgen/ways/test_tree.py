@@ -415,3 +415,15 @@ def test_a_corridor_whose_drawn_form_crosses_its_own_fixture_is_refused(monkeypa
     assert judge(found, geom), "drawn as found: judged by the tree alone"
     monkeypatch.setattr(tree, "laid_run", lambda base, M, run: across)
     assert not judge(found, geom), "drawn across its own privy: refused"
+
+
+def test_a_house_another_is_reached_across_is_owed_its_way_and_never_pruned_of_it() -> None:
+    """Feature 317 (Inashiro's glyph-check F1): the walk of a household reached across a neighbor's yard goes on along the
+    neighbor's way, so the neighbor's corridor is owed however near the lanes its center stands, and never pruned."""
+    M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
+    M["lanes"] += [{"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "role": STRIP_ROLE}, {"pts": [[0.0, 0.0], [260.0, 60.0]], "w": 3}]
+    assert tree.owed(M) == [], "the house is reached by an ordinary lane: its corridor is not owed"
+    M["houses"].append({**_house(300.0, 400.0), "reached_across": [300.0, 100.0], "passage_depth": 1})
+    assert tree.passage_anchors(M) == [(300.0, 100.0)] and tree.owed(M) == [0], "...until another household is reached across it"
+    M["lanes"].append({"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [300.0, 100.0]})
+    assert tree.prune_the_tree(_S(M)) == 0 and any(ln.get("role") == ACCESS_ROLE for ln in M["lanes"]), "its way is not pruned"
