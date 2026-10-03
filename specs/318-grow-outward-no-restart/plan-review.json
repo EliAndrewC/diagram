@@ -1,0 +1,63 @@
+{
+ "feature": "318-grow-outward-no-restart",
+ "plan_sha256": "18987ba4788298a859a5678d8998da85164a4a17a4843fc36b340c405929628c",
+ "reviewed": "2026-10-03",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One margin seated once; the ladder only for a margin that seats no house (no lawful exit bearing or field corridor); a margin seating some but not all refused with SiteRefused; rescue, withheld re-seat, early stop and the 12:1 refusal removed, the declared shape still recorded",
+   "class": "within",
+   "why": "FR-001, FR-004, FR-005 and FR-006 as written: a pre-start skip seats no house so nothing is taken back, and a partial seating is refused rather than reseated elsewhere. The GM: get rid of this pattern completely."
+  },
+  {
+   "id": "D2",
+   "summary": "Growth queues and settles seats with no radius test and keeps widening past GROW_LEVELS (16 directions, rings stepping out) until a level queues no new seat on the canvas; the old radius stays only where it sizes other things",
+   "class": "within",
+   "why": "FR-002: the radius refuses no seat; the GM: keep placing houses outside the boundary. The termination answers FR-005's 'no free ground on the map' with a lattice of ring points, an approximation that SC-003 and the cohort (FR-009) measure; that is a design matter, not a narrowing."
+  },
+  {
+   "id": "D3",
+   "summary": "FIELD_REACH_FT and within_field_reach deleted with their four calls; seat window, free-ground grid box and free_seats' box become the canvas; site_boundary.window records the seat center only; legend and tests updated; ways/law.py's own constant untouched",
+   "class": "within",
+   "why": "FR-003 and SC-002; the GM: get rid of these 700 feet measurement completely. Measured: the grep shows exactly the four predicate calls plus the stages/boundary/capacity uses the plan names. The window recording the center rather than a box 'sized from the map's own extent' (FR-003's words) removes the figure either way; the spec's sentence should be reconciled with it, but it narrows nothing."
+  },
+  {
+   "id": "D4",
+   "summary": "Growth heap keyed by distance to the field's facing chains instead of distance from the margin center, level structure unchanged; unit test pins the order",
+   "class": "within",
+   "why": "FR-003a and SC-002a verbatim: nearest the field first among a level's offers, the level-by-level widening kept so the cluster stays tight. The GM: take the one that is closer to the fields."
+  },
+  {
+   "id": "D5",
+   "summary": "recheck_passages keeps only its in-place arm (a passage the finished map makes unnecessary ended, no house moved); relay, stored layouts and passage_unfit removed",
+   "class": "within",
+   "why": "FR-001 and US2 scenario 2 as accepted: the re-lay is a take-back and goes; the in-place ending moves no house and holds page 0081's condition."
+  },
+  {
+   "id": "D6",
+   "summary": "Quarter-built figure recorded per nucleated map as meta.built_share (houses, yards, gardens, groves inside the convex hull of homestead boxes), refusing nothing",
+   "class": "within",
+   "why": "FR-007; the GM chose 'floor soft'. Premise measured: no engine file names a built share or quarter-built rule, and page 0032's drawing page says hamlets are exempt and no village is laid out by chance today, so reporting is all there is to do."
+  },
+  {
+   "id": "D7",
+   "summary": "Drawing pages 0029, 0032 and 0081 rewritten as US3 states; claims citing the reach removed with their code; impl-drift on changed units",
+   "class": "within",
+   "why": "FR-008 and US3 scenarios 1-3; the GM's preference recorded as canon."
+  },
+  {
+   "id": "D8",
+   "summary": "Declared occasions: placement-changed farmhouse on the nucleated pool maps (Inashiro, Kuwabata, Sawada) and village lane where houses move",
+   "class": "within",
+   "why": "Review process, not the GM's request; automatic occasions (a glyph re-placed) still fire on any other map the removal of the reach moves."
+  },
+  {
+   "id": "V1 (reviewer's label, Verification)",
+   "summary": "The regression check runs make cohort N=24 with the pool against main",
+   "class": "within",
+   "why": "SC-005/FR-009 name 'the cohort'; N=24 is the project's standing cohort run (every recent feature's spec uses it) and includes seed 18. The 30-seed census is FR-005's premise, a separate measurement already taken."
+  }
+ ],
+ "verdict": "CLEAR"
+}
