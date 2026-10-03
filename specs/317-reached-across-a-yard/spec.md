@@ -139,3 +139,4 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
   a neighbor's land is attested, and the province count was wrong; "all known bugs fixed" had no FR or SC. Addressed: a chain is
   allowed, any limit a labeled Decision; the row and the Context give seven provinces, three towns, and label the dooryard a GUESS;
   FR-007 lists each known bug with its owner and SC-006 records each at close.
+- Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - the three items confirmed against the diff.
