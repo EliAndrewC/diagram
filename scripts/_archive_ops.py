@@ -199,27 +199,23 @@ def kept_only(root: pathlib.Path, urls: list[str]) -> list[str]:
 
 
 def consulted(
-    root: pathlib.Path, limit: int = 0
+    root: pathlib.Path, limit: int = 0, workers: int = 4
 ) -> (
     int
-):  # pragma: no cover - the live run; `consulted_urls` and `archive_url` are tested
+):  # pragma: no cover - the live run; `consulted_urls`, `lanes` and `archive_url` are tested
+    """The kept uncited pages archived in lanes, as the cited backfill is: one lane ran 1,086 pages at about 30 s each,
+    some nine hours (2026-10-02), where the backfill's lanes - one host to a lane - share the waiting."""
     todo = kept_only(root, consulted_urls(root) + kept_urls(root))
     todo = todo[:limit] if limit else todo
-    print(f"archive: {len(todo)} kept uncited URL(s) with no copy yet (feature 312: only what the filter kept)", flush=True)
-    store = ar.Archive(ar.home_of(root), env=ar.git_env(ar.token(root)))
-    browser = ar.Browser()
-    try:
-        for n, url in enumerate(todo, 1):
-            if n % ar.RECYCLE_EVERY == 0:
-                browser.close()
-                browser = ar.Browser()
-            row = ar.archive_url(root, url, rec.Cited(), browser, store, push=False)
-            print(f"{row['outcome']:26} {url}", flush=True)
-            if store.unpushed() >= ar.PUSH_EVERY:
-                with store.locked():
-                    store.push()
-    finally:
-        browser.close()
+    print(f"archive: {len(todo)} kept uncited URL(s) with no copy yet, in up to {workers} lane(s) (feature 312: only what the filter kept)", flush=True)
+    home = ar.home_of(root)
+    store = ar.Archive(home, env=ar.git_env(ar.token(root)))
+    with store.locked():
+        store.ensure()
+    jobs = [(str(root), lane, str(home)) for lane in ar.lanes(sorted(todo), workers)]
+    with ar.multiprocessing.get_context("spawn").Pool(len(jobs) or 1) as pool:
+        for _ in pool.imap_unordered(ar._lane, jobs):
+            pass
     with store.locked():
         failure = store.push()
     ar.settle(root)
@@ -432,6 +428,7 @@ def main(
     )
     c = sub.add_parser("consulted")
     c.add_argument("--limit", type=int, default=0)
+    c.add_argument("--workers", type=int, default=4)
     f = sub.add_parser("find")
     f.add_argument("--url", default="")
     f.add_argument("--key", default="")
@@ -447,7 +444,7 @@ def main(
     if args.cmd == "find":
         return find(root, store, args.url, args.key, args.terms)
     if args.cmd == "consulted":
-        return consulted(root, args.limit)
+        return consulted(root, args.limit, args.workers)
     if args.cmd == "relayout":
         print(f"archive: {relayout(root, store)} row(s) moved to the sharded layout")
         return 0
