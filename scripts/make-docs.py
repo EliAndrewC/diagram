@@ -24,8 +24,16 @@ with no help text is REPORTED by `--check` rather than silently omitted - the au
 this found thirteen such targets, `quick`, `maps` and `reference` among them, invisible to
 `make help` for months.
 
-    python3 scripts/make-docs.py --write     # regenerate docs/make-targets.html
-    python3 scripts/make-docs.py --check     # fail if it is stale, untagged, or undocumented
+    python3 scripts/make-docs.py --write        # regenerate docs/make-targets.html
+    python3 scripts/make-docs.py --check        # fail if it is stale, untagged, or undocumented
+    python3 scripts/make-docs.py --forwardable  # the targets the repository root forwards (feature 316)
+
+THE ROOT FORWARDS WHAT THIS DOCUMENTS (GM 2026-10-03: *"That bug keeps recurring where something gets defined but then
+not passed through"*). The root Makefile kept a hand list of the skill targets it forwards, and six features (197, 274,
+285, 295, 313, 316) each added a target here and forgot the list - while `reference`, renamed `_reference`, stayed on it
+and forwarded into a second "No rule to make target". `--forwardable` prints every documented target not flagged
+`{internal}`, and the root reads its FORWARD from it: a target is forwarded the moment it has the `##` line `--check`
+already requires, and a retired one stops being forwarded the moment its line goes.
 """
 
 from __future__ import annotations
@@ -194,6 +202,12 @@ def render(rows: list[dict[str, str]], undocumented: list[str]) -> str:
     return "\n".join(parts) + "\n"
 
 
+def forwardable(makefile: Path) -> list[str]:
+    """Every documented target a person types - not `{internal}` - in name order: what the repository root forwards."""
+    rows, _undocumented = parse(makefile)
+    return [r["name"] for r in rows if r["flag"] != "internal"]
+
+
 def main(argv: list[str]) -> int:
     root = Path(argv[1]).resolve() if len(argv) > 1 and not argv[1].startswith("--") else Path(".").resolve()
     mode = next((a for a in argv[1:] if a.startswith("--")), "--check")
@@ -201,6 +215,9 @@ def main(argv: list[str]) -> int:
     if not mk.is_file():
         print(f"make-docs: no Makefile at {mk}", file=sys.stderr)
         return 2
+    if mode == "--forwardable":
+        print(" ".join(forwardable(mk)))
+        return 0
     rows, undocumented = parse(mk)
     untagged = [r["name"] for r in rows if not r["category"]]
     body = render(rows, undocumented)
