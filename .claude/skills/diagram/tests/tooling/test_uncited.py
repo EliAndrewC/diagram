@@ -315,6 +315,8 @@ def test_an_imported_copy_is_checked_against_the_live_page(tmp_path: pathlib.Pat
     assert got == {"same": 1, "misfiled": 1, "unread": 1}, "a fetched copy is never checked"
     assert {x["raw"]: x["result"] for x in at.read(root, un.MISFILED)} == {"https://w.org/mura": "misfiled", "https://w.org/same": "same", "https://w.org/dead": "unread"}
     assert un.text_of(_home(), "https://w.org/mura") == village.strip() and un.imported(_home(), "https://w.org/mura") is None, "the live text replaces the copy"
+    assert (src.entry_dir(_home(), "https://w.org/mura") / "imported.txt").read_text(encoding="utf-8").startswith("Gravel road"), "a misfiled copy is kept to be read"
+    assert not (src.entry_dir(_home(), "https://w.org/same") / "imported.txt").exists()
     assert un.imported(_home(), "https://w.org/dead") is not None, "an unread page keeps its copy"
     assert un.imported_urls(_home()) == ["https://w.org/dead"]
     assert not un.same_page("", "x")
@@ -466,3 +468,17 @@ def test_the_report_counts_kept_pages_with_no_entry_and_entries_with_no_kept_pag
     (root / un.at.UNCITED / "20530-b.html").write_text("<p>B (https://b.org/corrected)</p>\n", encoding="utf-8")
     un.kept(root, ["https://a.org/1", "https://c.org/2"], "source-filter")
     assert un.report(root).endswith("2 written up, 1 kept with no entry, 1 entr(ies) whose URL is no kept page's (a citation a check corrected)")
+
+
+def test_requeue_clears_a_verdict_and_its_entry_so_the_filter_judges_the_page_again(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "20520-mura.html").write_text("<p>Mura (https://w.org/mura)</p>\n", encoding="utf-8")
+    un.kept(root, ["https://w.org/mura", "https://w.org/keep"], "source-filter")
+    at.write(root, [un.line("https://w.org/stone", ["duplicate"], "rule", "the same work as machiwari")], un.NOT_KEPT)
+    assert un.requeue(root, "https://w.org/mura") == "mura" and not (root / un.at.UNCITED / "20520-mura.html").exists()
+    assert [x["raw"] for x in at.read(root, un.KEPT)] == ["https://w.org/keep"]
+    assert un.requeue(root, "https://w.org/stone") is None and at.read(root, un.NOT_KEPT) == []
+    assert un.judged(root) == {src.norm("https://w.org/keep")}
+    with pytest.raises(ValueError, match="no verdict and no entry"):
+        un.requeue(root, "https://w.org/stone")

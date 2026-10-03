@@ -442,6 +442,10 @@ def verify(root: pathlib.Path, urls: list[str], browser) -> dict[str, int]:  # n
         got = ar.fetch(browser, u)
         live = got.text.strip() if got.text and not got.error and got.status and got.status < 400 else ""
         result = "unread" if len(live) < EMPTY else ("same" if same_page(old, live) else "misfiled")
+        if result == "misfiled":  # kept beside the live text: the 4-gram measure flags a skin change as readily as another page (R5), so a flag is confirmed by reading before `requeue`
+            d = src.entry_dir(where, u)
+            d.mkdir(parents=True, exist_ok=True)
+            (d / "imported.txt").write_text(old, encoding="utf-8")
         if live and result != "unread":
             src.put(where, u, live, origin="fetch")
         at.write(root, [{"url": src.norm(u), "raw": u, "result": result, "date": today()}], MISFILED)
@@ -789,6 +793,27 @@ def unkeep(root: pathlib.Path, raw: str, reasons: list[str], basis: str, note: s
     at.write(root, [line(raw, reasons, basis, note)], NOT_KEPT)
 
 
+def requeue(root: pathlib.Path, raw: str) -> str | None:
+    """A page whose verdict was judged from another page's text (R5, a misfiled import confirmed by reading): its kept or
+    not-kept line and its uncited entry go, so the filter judges it again from the live text. Returns the retired key."""
+    n = work(src.norm(raw))
+    hit = False
+    with src.locked(src.home(root), timeout=30.0):
+        for rel in (KEPT, NOT_KEPT):
+            path = at.base(root) / rel
+            lines = path.read_text(encoding="utf-8").splitlines(keepends=True) if path.is_file() else []
+            keep = [s for s in lines if not s.strip() or work(json.loads(s)["url"]) != n]
+            hit = hit or len(keep) != len(lines)
+            path.write_text("".join(keep), encoding="utf-8")
+    key = entry_holding(root, raw)
+    if key:
+        for f in (at.base(root) / at.UNCITED).glob(f"[0-9]*-{key}.html"):
+            f.unlink()
+    if not hit and not key:
+        raise ValueError(f"{raw} has no verdict and no entry to requeue")
+    return key
+
+
 def merge(root: pathlib.Path, key: str, into: str) -> pathlib.Path:
     """Two entries for one work (a redirect and its target, a script variant): `key`'s uncited entry is retired and its
     page moves from the kept list to the not-kept list as a duplicate of `into` - an uncited or a cited entry - which stays."""
@@ -894,6 +919,7 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     uk.add_argument("reasons")
     uk.add_argument("note")
     sub.add_parser("dedupe").add_argument("--dry", action="store_true")
+    sub.add_parser("requeue").add_argument("url")
     args = ap.parse_args(argv)
     root = src.repo_root()
     if args.cmd == "set":
@@ -939,6 +965,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     elif args.cmd == "dedupe":
         done = dedupe(root, args.dry)
         print("\n".join(f"uncited: duplicate retired - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) retired")
+    elif args.cmd == "requeue":
+        key = requeue(root, args.url)
+        print(f"uncited: {args.url} requeued - its verdict cleared{f', its entry {key} retired' if key else ''}; `make uncited DO=bundle` judges it again")
     elif args.cmd == "unkeep":
         unkeep(root, args.url, args.reasons.split(","), "session", args.note)
         print(f"uncited: {args.url} moved to the not-kept list ({args.reasons})")
