@@ -58,7 +58,7 @@ PHASE_DRAWERS = frozenset({("structures/captions.py", "_draw_queued_label"), ("s
 """The label phase's two drawers: one replays a D8 hand seat, the other draws what the placer chose (feature 287: a seat
 the placer chose in the phase, or one the board's siter proved before it)."""
 
-RAW_TEXT_SETTLEMENT = frozenset({("finish.py", "label"), ("finish.py", "title"), ("structures/captions.py", "_draw_placement"), ("structures/captions.py", "_draw_caption_key")})
+RAW_TEXT_SETTLEMENT = frozenset({("finish.py", "label"), ("title.py", "title"), ("structures/captions.py", "_draw_placement"), ("structures/captions.py", "_draw_caption_key")})
 """Where the settlement engine may write `<text` itself: the caption primitive, the title placard (not a caption - it names
 no feature), the field-name markup the placer seats, and the sheet's key (feature 287, D10 - the words of the captions
 the placer found no seat for, each after its mark's number: sheet furniture like the title)."""
