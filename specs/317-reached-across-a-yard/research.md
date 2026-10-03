@@ -223,3 +223,19 @@ of 456 searches found nothing). Left out of the search's obstacles (the taut pul
 (observed 2026-10-03, method: as the heading.)
 
 (observed 2026-10-03, method: as the heading.)
+
+**The per-layout route withdrawn, and the passage's cost alone** (homesteads stage, profile calls against main f9e8770a5 on the
+bookend's flagged seeds; `houseonly.py` and `NOPASS=1` in the session's scratchpad switch each off): with the passage off, the
+route searched per garden layout round its own parts did 4.72M / 3.26M / 15.52M / 3.48M calls (15 households seeds 4 and 25, 40
+households seed 25, 10 households seed 47) against main's search round the house alone at 4.59M / 2.99M / 11.64M / 2.43M - 3% to
+43% more, where main does 4.40M / 2.87M / 12.34M / 2.29M. Withdrawn (5307dd602). With the passage on, the feature's homesteads
+stage does 6.11M / 4.45M / 24.04M / 3.31M - +39% / +55% / +95% / +44% against main - all of it on settlements whose share allows a
+passage (budgets 1, 3, 9, 2). Where it goes (40 households seed 25, budget 9): the route searches that prove a tight seat has no
+way of its own (143 searches against 87, 3.8 s against 0.7), the seats' landlocked test (1.2 s), the extra tight seats' settles
+and layouts (about 1.7 s), the walks (0.8 s): the stage 4.3 -> 9.1 s.
+(observed 2026-10-03, method: as the heading.)
+
+**The anchor's way** (the village lane's glyph-check on Inashiro, NEEDS-WORK F1): the one passage household there was reached
+across a neighbor whose center stood 90 ft from a lane, inside `WEB_REACH_FT`, so the web owed its corridor nothing and two
+farmsteads showed no way. Fixed (5307dd602): the corridor of every house another is reached across is owed and never pruned.
+(observed 2026-10-03, method: the glyph-check's measurement on the review snapshot.)
