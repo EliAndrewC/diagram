@@ -66,7 +66,11 @@ against the street's tread). The fruit-tree page puts a farm's fruit trees "with
 maps every persimmon but one already stood 35 to 80 ft out (one-shot, observed 2026-10-02; method: each crown's edge
 measured from its house in the house's frame on the main pool).
 
-Where a grove farm's fruit tree goes: the record's sun page has the Tonami grove thin on the east, where the house fronts, "and
-flowering and fruit trees were often planted there" (`research/questions/0038-sunlight-and-shade-on-the-farm.html`, the
-Tonami institute's survey). On our grove farms the yard and bed take the front and the windward band the back, so the side the
-grove leaves open or thin - beside the house, north of the plots' sun - is the attested place, and the persimmon takes it.
+Where a grove farm's fruit tree goes: the fruit-tree page sets the persimmon in front of the house or behind it and never on
+its flank, which no source records; and Sendai's replanting plan describes the traditional igune as tall evergreens such as
+cedar and black pine "with a few fruit trees" planted in it (`research/questions/0075-bamboo-groves-chikurin.html`). On our
+grove farms the yard and bed take the front, so the attested place left is behind the house in the farm's own grove.
+
+The cohort after every fix: 29 of 30 (one-shot, observed 2026-10-02; method: `make cohort N=24` in the clone), against 25 of 30
+on main; the one failure, seed 22 (needle loops on two access lanes), failed on main too, and lies in the access-corridor code
+the Diagram performance session is fixing.
