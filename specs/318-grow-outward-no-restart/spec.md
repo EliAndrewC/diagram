@@ -166,3 +166,5 @@ engine no longer keeps.
 - Round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - the passage recheck's in-place ending is not a take-back and
   holds 0081's condition (kept; only the re-lay goes); the other forms' behavior without the ladder unstated (FR-005: the
   measured premise, refused the same way); the growth model labeled historically accurate where it is the GM's ruling (canon).
+- Round 2 (spec-fidelity-verify, 2026-10-03): FAITHFUL - the three items confirmed against the diff; aside: the 0081 sentence
+  for US3 scenario 2 says the finished map's check asks the drawn layout only.
