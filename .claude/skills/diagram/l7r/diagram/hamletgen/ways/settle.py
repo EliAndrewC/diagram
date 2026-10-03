@@ -68,6 +68,7 @@ from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `set
 from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import left_to_the_tree, prune_the_tree, settle_defer, settle_tree, tree_faults
+from .weld import weld_corner
 
 SETTLE_ROUNDS = 8
 """Repair rounds before the lanes still breaking a rule are dropped whole. Each round runs every rule once; a measured
@@ -644,6 +645,8 @@ def settle_needles(s: Any) -> int:
             pieces = [[(float(x), float(y)) for x, y in g.coords] for g in parts if g.geom_type == "LineString" and not g.is_empty]
             if keeps_the_network(M, i, pieces):
                 return apply_pieces(s, {i: pieces})
+        if (welded := weld_corner(lanes, face, bounding)) is not None:  # a sliver where two ways meet: one vertex, no face (`weld.py`)
+            return apply_pieces(s, {k: [p] for k, p in welded.items()})
     return 0
 
 
