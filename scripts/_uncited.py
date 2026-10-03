@@ -159,6 +159,7 @@ def fingerprint(text: str | None) -> str:
 
 
 BOILERPLATE_DOCS = 4
+SIMILAR_SURE = 0.95  # retired unread only at or above this; below it a pair is listed to read - the North and South magistracy pages of one ward site, two works, scored 0.78 once their live text replaced the saved copies (2026-10-02)
 SIMILAR = 0.65  # measured 2026-10-02 over the kept pages: one article under two URLs (redirects, variants, an import and a fetch) 0.69-1.00; two pages of one site or one property sharing its template (two magistrate offices, two Yokota buildings, two blog posts) 0.51-0.59. Two true pairs fall below (生垣, 庙会, 0.57) - left to source-applicability
 
 
@@ -899,6 +900,9 @@ def dedupe(root: pathlib.Path, dry: bool = False) -> list[str]:
     for raw, into, why in duplicate_works(root):
         into_key = into if not into.startswith("http") else (entry_holding(root, into) or into)
         key = entry_holding(root, raw)
+        if why.startswith("similar") and float(why.split()[1]) < SIMILAR_SURE:
+            done.append(f"{key or raw} ~ {into_key} ({why} - read both; `make uncited DO=merge KEY= INTO=` if one work)")
+            continue
         if dry:
             pass
         elif key:
@@ -1010,14 +1014,16 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
         print(f"uncited: verifying {len(todo)} imported cop(ies) in up to {args.workers} lane(s)", flush=True)
         print(f"uncited: {json.dumps(verify_all(root, todo, args.workers))}")
     elif args.cmd == "draft":
-        print(f"uncited: {len(dedupe(root))} duplicate(s) retired first; {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
+        print(f"uncited: {sum(' ~ ' not in d for d in dedupe(root))} duplicate(s) retired first; {len(draft_bundles(root, pathlib.Path(args.out), args.start))} draft bundle(s) under {args.out}")
     elif args.cmd == "cite":
         dest = cite(root, args.key)
         print(f"uncited: {args.key} moved to {dest.relative_to(root)} - write its Used for: line (the build refuses the placeholder), then `git add -A` the move")
     elif args.cmd == "dedupe":
         done = dedupe(root, args.dry)
         verb = "would be retired" if args.dry else "retired"
-        print("\n".join(f"uncited: duplicate {verb} - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) {verb}")
+        gone, read = [d for d in done if " ~ " not in d], [d for d in done if " ~ " in d]
+        print("\n".join([f"uncited: duplicate {verb} - {d}" for d in gone] + [f"uncited: to read - {d}" for d in read])
+              + f"\nuncited: {len(gone)} duplicate(s) {verb}, {len(read)} similar pair(s) to read")
     elif args.cmd == "copy-verdicts":
         found = copy_verdicts(root)
         print("\n".join(found) + f"\nuncited: {len(found)} verdict(s) blame a saved copy on a page now read live - read each; "

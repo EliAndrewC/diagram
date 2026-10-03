@@ -453,6 +453,20 @@ def test_dedupe_finds_one_work_saved_in_two_forms_on_one_host(tmp_path: pathlib.
     un.kept(root, ["https://w.org/Cremains", "https://w.org/Levee"], "source-filter")
     dups = un.duplicate_works(root)
     assert [(raw, into) for raw, into, _ in dups] == [("https://w.org/Cremains", "cremation-w")] and dups[0][2].startswith("similar")
+    sure = float(dups[0][2].split()[1]) >= un.SIMILAR_SURE
+    got = un.dedupe(root, dry=True)
+    assert (" ~ " in got[0]) is not sure, "a pair below the sure score is listed to read, never retired unread"
+    (root / un.at.UNCITED).mkdir(parents=True, exist_ok=True)
+    (root / un.at.UNCITED / "20530-levee-a.html").write_text("<p>L (https://w.org/LeveeA)</p>\n", encoding="utf-8")
+    (root / un.at.UNCITED / "20540-levee-b.html").write_text("<p>L (https://w.org/LeveeB)</p>\n", encoding="utf-8")
+    def notes(lo: int, hi: int) -> str:  # one template's pages: four in five of their sentences shared
+        return " ".join(f"Levee note {i}: a ridge of year {1700 + i * 3} rose {i * 7 % 11} feet." for i in range(lo, hi))
+
+    src.put(_home(), "https://w.org/LeveeA", notes(0, 100))
+    src.put(_home(), "https://w.org/LeveeB", notes(12, 112))
+    un.kept(root, ["https://w.org/LeveeA", "https://w.org/LeveeB"], "source-filter")
+    mid = [d for d in un.dedupe(root) if "levee" in d]
+    assert mid and all(" ~ " in d for d in mid) and (root / un.at.UNCITED / "20540-levee-b.html").exists()
 
 
 def test_work_folds_one_file_servers_two_names_and_a_github_raw_url() -> None:
