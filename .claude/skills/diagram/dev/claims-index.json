@@ -32744,12 +32744,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "03974109eae17ce1",
+  "code": "0156502c8b71782d",
   "core": "cbdbf49efda26158",
   "date": "2026-10-03",
-  "note": "`getattr(s, \"_sun_corridor_ft\", 22.0)` is a tree clearance south of yards and beds, a physical figure, not how something is shown; cite questions/0038-sunlight-and-shade-on-the-farm.drawing.html as `plots' sun strips` does (or NONE, if it only copies village_grove's `_sun_depth`), not CONVENTION",
+  "note": "the 22 default only mirrors village_grove's figure so the reservation matches the planting; the decision itself is made and claimed elsewhere",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.commit#plumbing": {
   "code": "35922c8d9fdc90bb",
@@ -37232,12 +37232,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::own_corridor#a way of its own on the finished seating": {
-  "code": "e2392dbd45193dcc",
+  "code": "068a0afa3818783d",
   "core": "31a978d71dc66981",
   "date": "2026-10-03",
-  "note": "0081's drawing page answers this (\"A way of its own here means a straight path from its dooryard, or one carried round its house's gable; a path that would have to bend round other homesteads is not looked for\"); cite research/questions/0081-village-lanes.drawing.html, not CANON",
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "matches 0081 drawing page \"a straight path from its dooryard, or one carried round its house's gable; a path that would have to bend round other homesteads is not looked for\" (routed=False, own homestead set aside)",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_budget#share reached by passage": {
   "code": "9922cfb0302ed3e4",
