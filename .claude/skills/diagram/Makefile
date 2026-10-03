@@ -622,9 +622,10 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/entry-gate.sh $$root/scripts/plan-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
+	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/entry-gate.sh $$root/scripts/claims-gate.sh $$root/scripts/plan-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  : "(GUARD_EDIT_OK: feature 311 - entry-gate.sh and plan-gate.sh join it: both refuse at the push, both had companions that nothing ran, and entry-gate's had rotted)"; \
+	  : "(GUARD_EDIT_OK: feature 316 - claims-gate.sh joins it: it refuses at the push)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/scripts/$$t" ]; then \
@@ -1150,6 +1151,20 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 ##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
 	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make record-prepass: Q=<question number> or IN=<section or tag> is required - e.g. make record-prepass Q=0041\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
+
+# GUARD_EDIT_OK: feature 316 - four new operations over the claims index (dev/claims-index.json); the push's refusal is claims-gate.sh, not these.
+claims-owed: ## [project] every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" owed
+
+claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",)
+
+claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read   BUNDLE=<dir> REPLY=<file holding the agent's reply>
+	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
+
+claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" report
 
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
