@@ -15,8 +15,10 @@ be fixed."*
 The engine seats a nucleated household only where a corridor from its door reaches the access tree as a lane the lane law admits
 (features 287, 308), and its research entry says why: *"In the villages we have read about, yes, though no page we read states it
 as a rule"* (`research/questions/0081-village-lanes.html`), on one twentieth-century northern village. The research pass found no
-source stating it as a rule, and found customary rights of passage over a neighbor's land for landlocked plots in five provinces
-(Wigmore 1892, Part V). The corridor search and the lane law over the tree are about 45% of the homesteads stage at 15 households
+source stating it as a rule, and found customary rights of passage over a neighbor's land for land with no road access in seven
+provinces, three of them towns (Idzumi, Uzen, Kaga), four unmarked (Echigo, Idzumo, Suwo, Chikugo), and passage to a well in three
+more (Kai, Rikuzen, Bizen) (Wigmore 1892, Part V Section 8); the one entry naming a house is a town's (Kaga), and Echigo's runs as
+a chain (C passes over both B's plot and A's). The corridor search and the lane law over the tree are about 45% of the homesteads stage at 15 households
 (feature 314 R15). Separately, feature 314 R12 found the seating admitting a corridor the web then cannot draw.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -40,8 +42,9 @@ drawing page says what the maps now draw, each value in its class.
 
 ### User Story 2 - A household may be reached across a neighbor's yard (Priority: P1)
 
-In a nucleated settlement some households are reached not by a lane to their own door but across a neighbor's dooryard to the
-neighbor's way, the share of them rolled per settlement (the record attests the custom, not how common it was). A household so
+In a nucleated settlement some households are reached not by a lane to their own door but across a neighbor's dooryard - or a
+chain of them, as far as the record's reading allows - to a way, the share of them rolled per settlement (the record attests the
+custom, not how common it was). A household so
 reached has no lane of its own; the neighbor's yard is not built over, and no house, bed, shed or fixture is crossed.
 
 **Why this priority**: the GM's *"we should go with it"*; it relieves the costliest part of the seating (feature 314 R15).
@@ -52,8 +55,8 @@ seated, and the share reached across a yard against the rolled share.
 **Acceptance Scenarios**:
 
 1. **Given** a settlement whose rolled share is above zero, **When** it is rolled, **Then** some households are reached across a
-   neighbor's yard, never more than the share allows, and every household still reaches the access tree, directly or through one
-   neighbor.
+   neighbor's yard, never more than the share allows, and every household still reaches the access tree, directly or across the
+   neighbors' yards the plan allows.
 2. **Given** a share of zero, **When** the settlement is rolled, **Then** every household is reached by its own lane, as before.
 
 ---
@@ -76,9 +79,8 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
 
 ### Edge Cases
 
-- A household reached across a neighbor's yard whose neighbor is itself reached across a yard: a chain is not attested; one
-  neighbor at most, unless the record finds more (Wigmore's Echigo plot C passes over B and A - a plot, not a house; the plan
-  decides on the record's reading).
+- A household reached across a neighbor's yard whose neighbor is itself reached across a yard: Wigmore's Echigo entry is such a
+  chain (C over both B's plot and A's), so a chain is allowed; any limit on its length is the plan's, a labeled GUESS citing it.
 - The dispersed and linear forms: a dispersed farm stands in its own holding and a row farm fronts its street - neither has a
   neighbor's yard between it and a way; the change is the nucleated form's.
 
@@ -88,16 +90,21 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
 
 - **FR-001**: The village-lanes entry MUST record the research pass's findings with citations (verbatim passages, translations
   marked), including their limits, and the drawing page MUST state the maps' rule for reaching a house, each value in its class.
-- **FR-002**: A nucleated settlement MUST be able to seat a household reached across one neighbor's dooryard to that neighbor's
-  way, never across a house, a garden bed, a shed or a fixture; the share of such households rolled per settlement within a band
-  the record supports or labels as a guess.
-- **FR-003**: Every household MUST still reach the access tree - by its own lane, or across one neighbor's yard to the neighbor's
-  way.
+- **FR-002**: A nucleated settlement MUST be able to seat a household reached across a neighbor's dooryard, or a chain of them as
+  far as the record's reading allows, to a way - never across a house, a garden bed, a shed or a fixture; the share of such
+  households rolled per settlement within a band the record supports or labels as a guess. Any limit on a chain's length is a
+  Decision Recorded, labeled.
+- **FR-003**: Every household MUST still reach the access tree - by its own lane, or across the neighbors' yards FR-002 allows.
 - **FR-004**: The seating MUST admit a corridor only as the web will draw it, so no admitted corridor breaks the lane law once
   drawn (feature 314 R12).
 - **FR-005**: No pool map or cohort seed may fail a rule it passed before or seat fewer households; maps may move within the
   rules (GM 2026-09-30, feature 297).
 - **FR-006**: The homesteads stage MUST be timed against the base, alternated per seed, at 15 and 40 households, and recorded.
+- **FR-007**: Every known bug on main MUST be listed with its owner and fixed - by this feature, or by the session that owns it by
+  agreement. As measured on 2026-10-02 (feature 314 R12, R15; `make cohort N=24` on origin/main): the seating admitting a corridor
+  the web cannot draw (this feature, FR-004); cohort seeds 14, 15 and 906 (dispersed: `trees_shading_plots`,
+  `gardens_east_shaded`) and seeds 22 and 23 (linear: `WebRefused`) - the Diagram (Inashiro) session, feature 315, agreed by
+  message 2026-10-02. A bug found later joins the list with its owner.
 
 ## Success Criteria *(mandatory)*
 
@@ -110,15 +117,25 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
   last resort on the reference legs or the cohort.
 - **SC-004** (FR-005): the cohort passes every seed the base passes; the pool passes its rules.
 - **SC-005** (FR-006): the homesteads stage at 15 and 40 households, base against clone, recorded in research.md.
+- **SC-006** (FR-007): when this feature closes, research.md lists each known bug as fixed, with the run that shows it, or as owned
+  and in progress by the agreed session, with that session's last word on it; none without an owner.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| Some households reached across a neighbor's dooryard | historically accurate (customary passage over a neighbor's land, Wigmore 1892) | the GM: go with what the research bears out | research 0081; this spec; the seating's comment |
+| Some households reached across a neighbor's dooryard | historically accurate: passage over a neighbor's land for land with no road access (Wigmore 1892, seven provinces, three of them towns); that it ran across a dooryard in a clustered village is this record's reading, a GUESS | the GM: go with what the research bears out | research 0081; this spec; the seating's comment |
 | The share of such households, rolled per settlement | guess, labeled (the record attests the custom, not its frequency) | calibrated liberty along a degree (constitution XII) | the plan; the constant's comment |
 
 ## Assumptions
 
 - Feature 314's harnesses (`refusals.py`, `abab.sh`) are the measure; the Diagram (Inashiro) session owns the cohort failures
   from features 310 and 315 (agreed by message, 2026-10-02).
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-02): CHANGES REQUIRED, 3 items - "one neighbor at most" was a rule the research does not give
+  (Wigmore's Echigo entry is a chain); the Decisions row called the dooryard crossing historically accurate where only passage over
+  a neighbor's land is attested, and the province count was wrong; "all known bugs fixed" had no FR or SC. Addressed: a chain is
+  allowed, any limit a labeled Decision; the row and the Context give seven provinces, three towns, and label the dooryard a GUESS;
+  FR-007 lists each known bug with its owner and SC-006 records each at close.
