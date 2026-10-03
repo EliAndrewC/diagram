@@ -26,7 +26,9 @@ def _record(tmp_path: pathlib.Path) -> pathlib.Path:
     (q / "0001-a.notes.html").write_text(
         '<li data-note="pay"><a href="https://p.org"><code>pay</code></a> - 「x」</li>\n'
         '<li data-note="pay-2"><a href="https://p.org"><code>pay</code></a> - 「y」</li>\n'
-        '<li data-note="open"><a href="https://o.org"><code>open</code></a> - 「z」</li>\n', encoding="utf-8")
+        '<li data-note="open"><a href="https://o.org"><code>open</code></a> - 「z」</li>\n',
+        encoding="utf-8",
+    )
     (tmp_path / cp.CONFIRMED).write_text(json.dumps({"key": "pay", "note": "0001-a.notes.html#pay"}) + "\nnot json\n", encoding="utf-8")
     return tmp_path
 

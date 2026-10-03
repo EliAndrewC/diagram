@@ -103,8 +103,8 @@ before this was seen; the kept copies make the next run's flags calibration data
 **Encoding, the second fault the live read surfaced (same day, the run's resumed half):** some imported copies were
 mis-decoded - a Shift-JIS student essay and a JUGEM blog saved as mojibake and ruled `unreadable`, a village page saved
 as its title and ruled `no-substance` - and read live they are whole pages. And one live read was the mis-decoded one:
-`zj.cnr.cn`'s GBK page came back as replacement characters and replaced a good copy. So: a read with more than 1% U+FFFD
-(`_uncited.garbled`) never replaces a copy; `make uncited DO=copy-verdicts` lists every filter verdict whose note blames
+`zj.cnr.cn`'s GBK page came back as replacement characters and replaced a good copy. So: a read in which more than one character in a hundred is U+FFFD
+(`_uncited.garbled`, a threshold chosen, not measured) never replaces a copy; `make uncited DO=copy-verdicts` lists every filter verdict whose note blames
 the saved copy (mojibake, a shell, a title only, a challenge page) on a page the check has since read live into the cache
 readable; each is read, then requeued or marked `DO=stands URL= NOTE=`. Of the 10 it listed: 3 requeued (2 kept and
 written up, the essay ruled unreliable-kind on its own text), 7 stand (5 Kotobank URLs that serve the entry judged, the
@@ -123,14 +123,14 @@ from one shows a write-up that no longer matches its page, which `source-applica
 **Found:** the Read tool returns about 60,000 characters of a file, and the drafting parts were cut at 20,000 estimated
 tokens - up to 80,000 characters of English. The drafters of two book-length works (Staunton 1797, 11 parts; Esherick and
 Rankin 1990, 17 parts) said so: each read only the head of each part, one skipped whole parts. A whole book is also more
-than one agent can hold (1.4 MB).
+than one agent can hold (Staunton's saved text, 1.4 MB; method: its file size, observed 2026-10-02).
 
 **Decided (deliberate, the contract's "read whole" kept):** parts are capped at 50,000 characters as well
 (`PART_CHARS`, tested); a work too long for one agent is read by several readers, each taking three or four parts whole
 and writing notes (span, every passage on settlements and buildings with a quotation, limits, and the first and last
 line of each part as proof of the whole read), and the drafter writes the entry from all the notes. The partial-read
 entries were set aside unwritten (`entries.partial-read.jsonl`). Priced: one drafter told to page through every part
-(over its context for a 1.4 MB work); write-ups that state what was read (breaks "read whole").
+(over its context for a work that size); write-ups that state what was read (breaks "read whole").
 
 ## R7: SC-007, every ledger row has an attempt line (2026-10-02)
 

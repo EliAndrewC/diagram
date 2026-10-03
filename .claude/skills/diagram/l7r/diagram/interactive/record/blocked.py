@@ -48,8 +48,7 @@ class Rule:
 def _approval(where: str, raw: dict) -> str:
     approved = raw.get("approved")
     if not isinstance(approved, dict) or not approved.get("date") or not approved.get("words"):
-        raise BlockedListError(f"{where}: {raw!r} carries no approval - every entry names the GM's approval as "
-                               '"approved": {"date": "YYYY-MM-DD", "words": "<the GM\'s words>"}')
+        raise BlockedListError(f"{where}: {raw!r} carries no approval - every entry names the GM's approval as \"approved\": {{\"date\": \"YYYY-MM-DD\", \"words\": \"<the GM's words>\"}}")
     return f'{approved["date"]}: {approved["words"]}'
 
 
@@ -71,8 +70,7 @@ def _load(record_dir: str, name: str, field: str) -> list[tuple[str, dict, str]]
 
 @cache
 def domains(record_dir: str = RESEARCH_DIR) -> tuple[Rule, ...]:
-    return tuple(Rule(m.lower().strip("."), raw["reason"], _approval(where, raw))
-                 for m, raw, where in _load(record_dir, DOMAINS, "domain"))
+    return tuple(Rule(m.lower().strip("."), raw["reason"], _approval(where, raw)) for m, raw, where in _load(record_dir, DOMAINS, "domain"))
 
 
 @cache
@@ -113,8 +111,10 @@ def banned(url: str, record_dir: str = RESEARCH_DIR) -> Rule | None:
 
 def refusal(url: str, rule: Rule, what: str) -> str:
     """The one message every refusal prints: what was refused, the list, and why the entry is on it."""
-    return (f"{what} refused: {url} is on the blocked list ({DOMAINS}: {rule.match} - {rule.reason}; approved "
-            f"{rule.approved}). Find the same fact on another page; a blocked site is never read, cited or recorded.")
+    return (
+        f"{what} refused: {url} is on the blocked list ({DOMAINS}: {rule.match} - {rule.reason}; approved "
+        f"{rule.approved}). Find the same fact on another page; a blocked site is never read, cited or recorded."
+    )
 
 
 def check(url: str, what: str, record_dir: str = RESEARCH_DIR) -> None:
@@ -136,6 +136,5 @@ def refusals(record_dir: str = RESEARCH_DIR) -> list[str]:
         if rule:
             where = ", ".join(who.keys + who.notes)
             listed = DOMAINS if blocked(url, record_dir) else CITATIONS
-            out.append(f"banned citation: {url} ({where}) is on {listed} ({rule.match} - {rule.reason}) - cite the fact "
-                       "from another source, or state its absence (feature 312)")
+            out.append(f"banned citation: {url} ({where}) is on {listed} ({rule.match} - {rule.reason}) - cite the fact from another source, or state its absence (feature 312)")
     return out

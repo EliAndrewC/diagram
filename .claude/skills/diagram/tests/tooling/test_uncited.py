@@ -94,7 +94,10 @@ def test_the_rule_rules_searches_and_duplicates_and_leaves_the_rest(tmp_path: pa
     src.put(_home(), "https://a.org/1", "The  cited text. ")
     src.put(_home(), "https://b.org/2", "Something else.")
     src.put(_home(), "https://b.org/3", "Something else.")
-    got = un.rule(root, ["https://duckduckgo.com/?q=x", "https://a.org/1", "https://b.org/2", "https://b.org/3", "https://z.org/none", "https://[^", "https://kotobank.jp/word/${enc}", "https://jstage.jst.go.jp"])
+    got = un.rule(
+        root,
+        ["https://duckduckgo.com/?q=x", "https://a.org/1", "https://b.org/2", "https://b.org/3", "https://z.org/none", "https://[^", "https://kotobank.jp/word/${enc}", "https://jstage.jst.go.jp"],
+    )
     assert got == {"no-substance": 1, "duplicate": 2}
     assert {x["raw"]: x["access"] for x in at.read(root, un.NOT_KEPT) if x["reasons"] == ["unreadable"]} == {"https://[^": "gone", "https://kotobank.jp/word/${enc}": "gone"}
     assert not un.wellformed("https://ja.wikipedia.org/wiki/$u") and not un.wellformed("https://localhost/x") and un.wellformed("https://jstage.jst.go.jp")
@@ -205,8 +208,9 @@ def _bundle(tmp_path: pathlib.Path, verdicts: list[dict]) -> pathlib.Path:
 
 def test_verdicts_are_refused_until_whole_and_well_formed(tmp_path: pathlib.Path) -> None:
     root = _root(tmp_path)
-    d = _bundle(tmp_path, [{"id": "p00001", "verdict": "KEEP"}, {"id": "p00002", "verdict": "NOT-KEPT", "reasons": ["boring"]},
-                           {"id": "p00009", "verdict": "KEEP"}, {"id": "p00003", "verdict": "MAYBE"}])
+    d = _bundle(
+        tmp_path, [{"id": "p00001", "verdict": "KEEP"}, {"id": "p00002", "verdict": "NOT-KEPT", "reasons": ["boring"]}, {"id": "p00009", "verdict": "KEEP"}, {"id": "p00003", "verdict": "MAYBE"}]
+    )
     (d / "verdicts.jsonl").write_text((d / "verdicts.jsonl").read_text() + "not json\n", encoding="utf-8")
     with pytest.raises(ValueError) as err:
         un.apply(root, d)
@@ -219,8 +223,14 @@ def test_verdicts_are_refused_until_whole_and_well_formed(tmp_path: pathlib.Path
 def test_verdicts_are_applied_and_a_prehold_capture_loses_its_row(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture) -> None:
     root = _root(tmp_path)
     ar.write_row(root, "https://e.org/held", {"url": "https://e.org/held", "keys": [], "notes": []})
-    d = _bundle(tmp_path, [{"id": "p00001", "verdict": "KEEP"}, {"id": "p00002", "verdict": "NOT-KEPT", "reasons": ["modern-only"], "note": "mechanized"},
-                           {"id": "p00003", "verdict": "NOT-KEPT", "reasons": ["unreliable-kind"], "propose_block": "ai-wiki.example"}])
+    d = _bundle(
+        tmp_path,
+        [
+            {"id": "p00001", "verdict": "KEEP"},
+            {"id": "p00002", "verdict": "NOT-KEPT", "reasons": ["modern-only"], "note": "mechanized"},
+            {"id": "p00003", "verdict": "NOT-KEPT", "reasons": ["unreliable-kind"], "propose_block": "ai-wiki.example"},
+        ],
+    )
     assert un.apply(root, d) == {"kept": 1, "not-kept": 2, "proposed": 1}
     assert "proposes blocking ai-wiki.example" in capsys.readouterr().out
     assert [x["raw"] for x in at.read(root, un.KEPT)] == ["https://a.org/1"]
@@ -237,8 +247,12 @@ def test_a_calibration_run_is_scored_per_leg(tmp_path: pathlib.Path) -> None:
 
 # ---- the write-ups (FR-012) ----
 
-VOCAB = {"period": [{"id": "premodern", "name": "Premodern", "description": "old"}], "region": [{"id": "japan", "name": "Japan", "description": "j"}],
-         "kind": [{"id": "reference", "name": "Reference", "description": "r"}], "canon": {"id": "canon", "name": "Canon", "description": "c"}}
+VOCAB = {
+    "period": [{"id": "premodern", "name": "Premodern", "description": "old"}],
+    "region": [{"id": "japan", "name": "Japan", "description": "j"}],
+    "kind": [{"id": "reference", "name": "Reference", "description": "r"}],
+    "canon": {"id": "canon", "name": "Canon", "description": "c"},
+}
 
 
 def _vocab(root: pathlib.Path) -> None:
@@ -267,7 +281,12 @@ def test_install_writes_each_good_entry_and_refuses_the_rest(tmp_path: pathlib.P
     (root / un.SOURCES / "010-works-cited" / "0010-taken.html").write_text("<p>x</p>", encoding="utf-8")
     d = tmp_path / "d1"
     un.write_bundle(d, [("p00001", "https://k.org/1", "A"), ("p00002", "https://k.org/2", "B"), ("p00003", "https://k.org/3", "C")])
-    good = {"citation": "Kotobank, 'x' (in Japanese; https://k.org/1)", "what": "What it is: A dictionary entry.", "why": "Why it applies, and its limits: It defines a term.", "tags": "period=premodern; region=japan; kind=reference"}
+    good = {
+        "citation": "Kotobank, 'x' (in Japanese; https://k.org/1)",
+        "what": "What it is: A dictionary entry.",
+        "why": "Why it applies, and its limits: It defines a term.",
+        "tags": "period=premodern; region=japan; kind=reference",
+    }
     lines = [
         {"id": "p00001", "key": "taken", **good},
         {"id": "p00002", "key": "Bad Key", **good},
@@ -460,6 +479,7 @@ def test_dedupe_finds_one_work_saved_in_two_forms_on_one_host(tmp_path: pathlib.
     (root / un.at.UNCITED).mkdir(parents=True, exist_ok=True)
     (root / un.at.UNCITED / "20530-levee-a.html").write_text("<p>L (https://w.org/LeveeA)</p>\n", encoding="utf-8")
     (root / un.at.UNCITED / "20540-levee-b.html").write_text("<p>L (https://w.org/LeveeB)</p>\n", encoding="utf-8")
+
     def notes(lo: int, hi: int) -> str:  # one template's pages: four in five of their sentences shared
         return " ".join(f"Levee note {i}: a ridge of year {1700 + i * 3} rose {i * 7 % 11} feet." for i in range(lo, hi))
 
@@ -512,12 +532,19 @@ def test_copy_verdicts_lists_a_verdict_that_blames_its_saved_copy_once_the_page_
     readable = "A readable page about paddy ecology. " * 60
     for u, text in (("https://w.org/blog", readable), ("https://w.org/stub", readable), ("https://w.org/gbk", "\ufffd" * 2000), ("https://w.org/short", "x" * 200)):
         src.put(_home(), u, text)
-    at.write(root, [un.line("https://w.org/blog", ["unreadable"], "source-filter", "saved text is mojibake throughout"),
-                    un.line("https://w.org/stub", ["no-substance"], "source-filter", "a disambiguation list"),
-                    un.line("https://w.org/gbk", ["unreadable"], "source-filter", "saved text is mojibake"),
-                    un.line("https://w.org/short", ["no-substance"], "source-filter", "title only")], un.NOT_KEPT)
-    at.write(root, [{"url": src.norm(u), "raw": u, "result": "same", "date": "2026-10-02"} for u in
-                    ("https://w.org/blog", "https://w.org/stub", "https://w.org/gbk", "https://w.org/short")], ui.MISFILED)
+    at.write(
+        root,
+        [
+            un.line("https://w.org/blog", ["unreadable"], "source-filter", "saved text is mojibake throughout"),
+            un.line("https://w.org/stub", ["no-substance"], "source-filter", "a disambiguation list"),
+            un.line("https://w.org/gbk", ["unreadable"], "source-filter", "saved text is mojibake"),
+            un.line("https://w.org/short", ["no-substance"], "source-filter", "title only"),
+        ],
+        un.NOT_KEPT,
+    )
+    at.write(
+        root, [{"url": src.norm(u), "raw": u, "result": "same", "date": "2026-10-02"} for u in ("https://w.org/blog", "https://w.org/stub", "https://w.org/gbk", "https://w.org/short")], ui.MISFILED
+    )
     got = ui.copy_verdicts(root)
     assert len(got) == 1 and got[0].startswith("https://w.org/blog") and "unreadable" in got[0]
     ui.stands(root, "https://w.org/blog", "read: the live page is still mojibake past its frame")

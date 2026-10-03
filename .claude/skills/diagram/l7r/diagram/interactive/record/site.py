@@ -207,7 +207,11 @@ class Build:
         self.files: dict[str, str] = {}
         self.errors: list[str] = list(self.catalog.errors)
         canon = canon_keys(record_dir)
-        self.errors += [f"{store.REGISTRY_DIR}/ {k}: an uncited entry links the GM's own campaign notes - canon is never an uncited source (feature 312 FR-013)" for k, g in self.group_of.items() if g == UNCITED_GROUP and k in canon]
+        self.errors += [
+            f"{store.REGISTRY_DIR}/ {k}: an uncited entry links the GM's own campaign notes - canon is never an uncited source (feature 312 FR-013)"
+            for k, g in self.group_of.items()
+            if g == UNCITED_GROUP and k in canon
+        ]
 
     def rewrite(self, markup: str, own: str | None, here: str, where: str, *, single: bool = False) -> str:
         out, errs = links.rewrite(markup, own=own, index=self.index, here=here, single=single, where=where, registry_title=self.registry.title_id)
@@ -248,7 +252,11 @@ class Build:
         keys = cited_keys([(str(p.number), p.body) for p in placed])
         block, missing = works_html(keys, self.entries, "", self.catalog)
         self.errors += [f"{where}: cites `{k}`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)" for k in missing]
-        self.errors += [f"{where}: cites `{k}`, an uncited source's entry - `make cite-uncited KEY={k}` moves it to the works cited, then give it its `Used for:` line (feature 312 FR-014)" for k in keys if self.group_of.get(k) == UNCITED_GROUP]
+        self.errors += [
+            f"{where}: cites `{k}`, an uncited source's entry - `make cite-uncited KEY={k}` moves it to the works cited, then give it its `Used for:` line (feature 312 FR-014)"
+            for k in keys
+            if self.group_of.get(k) == UNCITED_GROUP
+        ]
         return self.rewrite(block, None, here, where)
 
     def _question(self, item: sp.Item, half: str, section: ct.Section, run: list[sp.Item], at: int) -> None:

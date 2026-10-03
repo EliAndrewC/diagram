@@ -62,8 +62,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [x] T25 [US2] the filter run over the uncited set; verdicts applied; pre-hold rows removed where not kept; SC-004 holds
       research: rendering
       verify: DONE. the filter ran over the whole uncited set; make uncited DO=report: 0 not yet judged, 1085 kept, 1759 not kept, each URL one verdict
-- [ ] T26 [US2] the kept pages archived (plan D8)
+- [x] T26 [US2] the kept pages archived (plan D8)
       research: rendering
+      verify: DONE. every kept uncited page has an archive row: 957 archived, 52 from an earlier snapshot, 34 partial, 33 unreachable (rows recorded); make archive-sources CONSULTED=1 finds none owed; make record CHECK=1 builds cleanly (3781 pages)
 
 ## Phase 4 - write-ups and the Uncited part (US4; FR-012 - FR-014)
 

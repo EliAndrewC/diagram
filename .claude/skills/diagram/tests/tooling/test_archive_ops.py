@@ -100,8 +100,9 @@ def test_the_consulted_backfill_takes_the_caches_urls_and_the_ledgers(tmp_path: 
     ar.write_row(root, "https://done.org/y", {"url": "https://done.org/y", "outcome": "archived"})
     src.append(home, [src.line(src.context(root), "done.org/y", "cited:k")])
     src.append(home, [src.line(src.context(root), "https://www.jstage.jst.go.jp/article/a/1/0/1/_article", "pending")])
-    assert ops.consulted_urls(root) == ["https://Cached.org/Page", "https://ledger-only.org/x", "https://www.jstage.jst.go.jp/article/a/1/0/1/_article"], \
+    assert ops.consulted_urls(root) == ["https://Cached.org/Page", "https://ledger-only.org/x", "https://www.jstage.jst.go.jp/article/a/1/0/1/_article"], (
         "a ledger URL keeps the spelling it was read at - J-STAGE answers only at www (feature 312)"
+    )
 
 
 def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
