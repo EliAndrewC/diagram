@@ -1,6 +1,6 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "973046d0a5931ebd6d483d53985b802d91fa3bcfdda8fbee4e6d937ccca69383",
+ "plan_sha256": "39df3fab07847f22a5d963089953d430c32e96a6bae60e5588d5f3540d16ed88",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,26 +8,26 @@
    "id": "D1",
    "summary": "New docstring form: About: paragraphs and a Guesses: bullet list; no feature-level Label: (None in the new form); Form: particular optional; old form parses until the last rollout task removes it",
    "class": "within",
-   "why": "FR-005 makes a guess a property of a statement and the spec's Decisions table keeps the four classes per statement; FR-002 (nothing announced as accurate) holds. Removing the old form at the end serves FR-011. Unchanged from round 1."
+   "why": "FR-005 makes a guess a property of a statement and the spec's Decisions table keeps the four classes per statement; FR-002 (nothing announced as accurate) holds. Removing the old form at the end serves FR-011. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "D2",
    "summary": "One tabbed dialog About / Guesses / References; empty tabs not drawn; the References tab replaces the separate references dialog; the place card gets the same tabs; old-form classes shown on About until rewritten",
    "class": "within",
-   "why": "FR-005, FR-006, FR-007 and the GM's 'about guesses and references'. The old-form display is transitional and never lands (FR-012); FR-011 rewrites every class. Unchanged from round 1."
+   "why": "FR-005, FR-006, FR-007 and the GM's 'about guesses and references'. The old-form display is transitional and never lands (FR-012); FR-011 rewrites every class. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "D3",
    "summary": "The two guideline documents are the checks' single contract, copied into each bundle, rules numbered and findings naming their rule; GM-asked changes go there first",
    "class": "within",
-   "why": "FR-001, FR-003, FR-010 and SC-001. Unchanged from round 1."
+   "why": "FR-001, FR-003, FR-010 and SC-001. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "D4",
    "summary": "Two agents: modal-form (form) and modal-research, which reports THREE verdicts (accuracy, references, gaps), each its own owed unit (modal-accuracy, modal-references, modal-gaps) and its own ledger row; particulars use the same two agents with the particular rules and the canon answer",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-008 says 'Each check is a defined agent' and SC-003 'the three checks', so one agent carrying accuracy and references departs from the letter. Round 1 ruled it legitimate on condition that the three remain separately measurable; the amended D4 meets that condition exactly: three verdicts, three owed units, three ledger rows, so SC-003's 'passed the three checks, recorded in the review ledger with cost' is measured per check. Every criterion FR-008 (b) and (c) names is still checked by an agent independent of the author, owed and enforced at the push, and the GM's own words leave the packaging open ('maybe there's a subagent check specifically for deciding which research things should be linked. I'm not sure'). The purpose is untouched."
+   "why": "FR-008 says 'Each check is a defined agent' and SC-003 'the three checks', so one agent carrying accuracy and references departs from the letter. Round 1 ruled it legitimate on condition that the three remain separately measurable; the amended D4 meets that condition exactly: three verdicts, three owed units, three ledger rows, so SC-003's 'passed the three checks, recorded in the review ledger with cost' is measured per check. Every criterion FR-008 (b) and (c) names is still checked by an agent independent of the author, owed and enforced at the push, and the GM's own words leave the packaging open ('maybe there's a subagent check specifically for deciding which research things should be linked. I'm not sure'). The purpose is untouched. Text unchanged by the amendment; ruling stands."
   },
   {
    "id": "D5",
@@ -39,49 +39,55 @@
    "id": "D6",
    "summary": "modal-form and the three modal-research units owed per new-form class when About/Guesses/Entry text changes; modal-research also owed when an Entry page changes; replaces entry-drift for new-form classes; enforced by entry-gate at the push",
    "class": "within",
-   "why": "FR-008: owed by a changed modal and enforced at the push 'as entry-drift is'. Precision note, not a fidelity finding: the Entry-page trigger still names a unit 'modal-research:<key>', which is no longer one of the three units D4 and D6 define; when built it should owe the three units (at least modal-accuracy), so that entry-drift's question - does the modal still agree with its pages - stays owed for new-form classes. Read either way nothing the spec asks goes unchecked."
+   "why": "FR-008: owed by a changed modal and enforced at the push 'as entry-drift is'. Precision note, not a fidelity finding: the Entry-page trigger still names a unit 'modal-research:<key>', which is no longer one of the three units D4 and D6 define; when built it should owe the three units (at least modal-accuracy), so that entry-drift's question - does the modal still agree with its pages - stays owed for new-form classes. Read either way nothing the spec asks goes unchecked. Unchanged by the amendment; D12 makes _modal_owed read the modal file rather than the docstring, which changes where the text is read, not what is owed."
   },
   {
    "id": "D7",
    "summary": "Both checks first run on the current farmhouse and garden text and must report the farmhouse's missing materials and occupancy, the garden's guess-led opening, and 0004 as a gap",
    "class": "within",
-   "why": "Enforcement of FR-008 (a check proved to fire on the motivating defects); serves the request rather than adding scope. With D5's union it is now reachable."
+   "why": "Enforcement of FR-008 (a check proved to fire on the motivating defects); serves the request rather than adding scope. With D5's union it is now reachable. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "D8",
    "summary": "The farmhouse's standard questions answered from the record first (0029, 0028, 0004, 0048, 0030); unanswered ones get the full research pass before becoming a guess; research: physical tasks",
    "class": "within",
-   "why": "Spec Assumptions (research pass before a guess), US1 scenario 1 and the research doctrine. Unchanged from round 1."
+   "why": "Spec Assumptions (research pass before a guess), US1 scenario 1 and the research doctrine. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "D9",
    "summary": "Pilot hand-off: rewrite, both checks green (two rounds), regenerate Inashiro in the clone, give the GM the path; verdict in tasks.md; farmhouse then garden, a further feature only if the garden's first rewrite needs changes; rollout waits for the go-ahead",
    "class": "within",
-   "why": "FR-010, FR-012, US6 and the GM's sequence. Unchanged from round 1."
+   "why": "FR-010, FR-012, US6 and the GM's sequence. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "D10",
    "summary": "Title card choices (sketch, settled after the pilots): a declared choices.json listing EVERY per-settlement choice, rolled, declared or pinned, with a test holding every declared knob and every meta key a ### Features fact came from; each value a standardized modal in a new registry; ### Features facts become choices or counts; a test holds no hamlet feature modal differs between maps",
    "class": "within",
-   "why": "FR-004, FR-009 ('every per-settlement choice ... each knob's value, and the per-map facts now in ### Features'), US4 and the pinned-knob edge case. Round 1's condition (every choice listed, the table only separating knobs from other meta) is now stated and enforced. Precision note, measured this round: the KNOBS registry lives in settlement/_knobs.py, but only 16 knobs are registered in that file; seven more (family_form, weir_form, fan_middle, footbridge_form, winter_crop, paddy_rest, windbreak_belt) register into it from other modules. The test must read the populated KNOBS registry, not the 16 register_knob lines of the file (the spec's Context count), or 'leaves no knob off' is not what it enforces. Non-knob per-settlement values such as harvest_weather (declared on the plan, never rolled) and hamlet_burial reach the table through the ### Features half of the test. Settling the sketch edits plan.md, which changes this digest and returns it here."
+   "why": "FR-004, FR-009 ('every per-settlement choice ... each knob's value, and the per-map facts now in ### Features'), US4 and the pinned-knob edge case. Round 1's condition (every choice listed, the table only separating knobs from other meta) is now stated and enforced. Precision note, measured this round: the KNOBS registry lives in settlement/_knobs.py, but only 16 knobs are registered in that file; seven more (family_form, weir_form, fan_middle, footbridge_form, winter_crop, paddy_rest, windbreak_belt) register into it from other modules. The test must read the populated KNOBS registry, not the 16 register_knob lines of the file (the spec's Context count), or 'leaves no knob off' is not what it enforces. Non-knob per-settlement values such as harvest_weather (declared on the plan, never rolled) and hamlet_burial reach the table through the ### Features half of the test. Unchanged by the amendment. Consistency note for when the sketch is settled: D10 says each choice value is a class in a new registry interactive/choices/; under D12 its text would live as a file like every other modal - a design matter, not fidelity."
   },
   {
    "id": "D11",
    "summary": "Sheets after the hamlet rollout: each compound kind tagged particular (particulars.py membership, or setting-particular content even when on several sheets) or standard; each sheet's ### Features entries reviewed under the particular guidelines; canon answer in the particular bundle",
    "class": "within",
-   "why": "FR-003, FR-011, US5 and the spec's edge case that reuse across sheets does not make a kind general. Unchanged from round 1."
+   "why": "FR-003, FR-011, US5 and the spec's edge case that reuse across sheets does not make a kind general. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+  },
+  {
+   "id": "D12",
+   "summary": "One file per modal: each Kind's text (both forms, same tags) moved by script to interactive/assets/modals/<hamlet|sheet>/<slug>.md with a field-for-field registry test; Kind keeps key and # comments and reads its file; render fingerprint widened to all of interactive/assets/; every reader of a modal docstring (_modal_owed, _modal_bundle, _entry_owed, _bundle_owed, _check_bundle, _apply_edits) follows the text to its file",
+   "class": "within",
+   "why": "Where modal text is stored is something neither the request nor the accepted spec settles (the spec's Context describes the docstring as the current state; no FR requires it), so the move narrows nothing asked. Checked against each requirement it could touch: FR-004/FR-011 - every modal moves, none exempted (155 files = 56 hamlet classes + 99 sheet kinds, measured this round), and the field-for-field test holds that no text is lost or altered; FR-005/FR-007 - both forms and every tag, siblings included, move intact; FR-008 - the owed/bundle/apply-edits tooling and entry-drift follow the text to its file, so the checks stay owed and enforced at the push; FR-012 - the clone is 19 commits ahead of origin/main, nothing landed. The GM approved the change in words on 2026-10-03 and set aside feature 189's docstring rationale himself. It serves the request's iterate-with-the-GM loop (D9) by making a single modal editable and quotable by the checkers."
   },
   {
    "id": "TC-tiers",
    "summary": "Both new agents pinned on Opus at medium effort, omitClaudeMd true",
    "class": "within",
-   "why": "FR-008 asks for defined agents on pinned tiers; the tier is a cost/design matter, not fidelity."
+   "why": "FR-008 asks for defined agents on pinned tiers; the tier is a cost/design matter, not fidelity. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
   },
   {
    "id": "Risks-count",
    "summary": "The rollout is 56 hamlet classes, the choice values and 99 sheet kinds, each with the checks; parallel writer agents on disjoint modules after the go-ahead",
    "class": "within",
-   "why": "Not a narrowing: every class, value and kind is in scope (FR-011). The figure now carries its method and date; re-run this round, '^class .*(Kind)' across compound_kinds/*.py counts 99 (particulars 18, shrine 16, grounds 22, household 27, office 16)."
+   "why": "Not a narrowing: every class, value and kind is in scope (FR-011). The figure now carries its method and date; re-run this round, '^class .*(Kind)' across compound_kinds/*.py counts 99 (particulars 18, shrine 16, grounds 22, household 27, office 16). Re-run this amendment round: compound_kinds still 99 Kind classes (22+18+16+27+16), and interactive/assets/modals/ holds 56 hamlet + 99 sheet files = 155, matching D12's commit (no kind dropped by the move)."
   }
  ],
  "verdict": "CLEAR"
