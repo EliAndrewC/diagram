@@ -177,7 +177,19 @@ def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> l
 
 
 def _route_from(
-    s: Settlement, tree: AccessTree, door: Pt, mine: Sequence[tuple[Any, float]], yard: Any, half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, leg_ok: Callable[[Pt, Pt], bool], geom: Any
+    s: Settlement,
+    tree: AccessTree,
+    door: Pt,
+    mine: Sequence[tuple[Any, float]],
+    yard: Any,
+    half: float,
+    hgap: float,
+    fg: Any,
+    wood: Any,
+    placed: Any,
+    step: float,
+    leg_ok: Callable[[Pt, Pt], bool],
+    geom: Any,
 ) -> tuple[Pt, ...] | None:
     """One door's routed path (`routed_corridors`), or None."""
     from . import access as A

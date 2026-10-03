@@ -18,6 +18,7 @@ from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, 
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
+from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
@@ -241,6 +242,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"].update(_declared)
     plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
+    s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # feature 317: reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
     s._free_ground = None
@@ -599,6 +601,10 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
     # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
     s._seat_region = SeatRegion(s, seat_window(s, s.px(FIELD_REACH_FT))) if getattr(s, "_nucleated", False) else None
+    # THE PASSAGE SHARE (feature 317, plan D4; `rolling/passage.py`), rolled from the seed, counted afresh on each margin
+    share = passage_share(plan.spec.seed) if grows(plan) else 0.0
+    s._passage_left = passage_budget(share, plan.spec.households)
+    s.M["meta"]["passage_share"] = share
     # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no
     # household's part, so their ground is reserved in the band first and the houses pack round it - AFTER the exit strip
     # and the field's corridor, whose strips a pocket keeps off (`_commons_pocket_clear`; M8: the registry refuses a shed on

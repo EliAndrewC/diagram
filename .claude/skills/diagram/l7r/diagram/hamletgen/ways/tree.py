@@ -266,6 +266,7 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     law_.tree = False
     chain = chain_of(recs, host, k)
     whole = [*range(k), k]
+
     def lay(run: Poly) -> Poly:
         return laid_run(base, M, run)
 

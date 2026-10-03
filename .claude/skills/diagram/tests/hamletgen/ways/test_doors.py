@@ -86,3 +86,14 @@ def test_a_ring_s_east_or_west_front_takes_its_gap_across_y_and_a_yard_on_the_ho
     door = front_door(h, 8.0)
     assert door is not None and door[1] == 0.0 and door[0] > 80.0, "between the two halves, past the yard"
     assert front_door({"x": 5.0, "y": 5.0, "geom": {"yard": [5.0, 5.0, 40.0, 30.0], "groves": [[0, 0, 1, 1]]}}, 8.0) is None
+
+
+def test_a_household_reached_across_its_neighbor_s_yard_gets_no_door_path() -> None:
+    """Feature 317, plan D2: a household reached by passage has no way of its own - the door pass leaves it, however far its
+    door stands from the lanes."""
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    h = {**_farm(700.0, 400.0), "reached_across": [500.0, 400.0], "passage_depth": 1}
+    s.M["houses"] = [h]
+    s.M["lanes"] = [{"pts": [[100.0, 700.0], [1300.0, 700.0]], "w": 6, "connector": True}]
+    assert lay_door_paths(s, [], [], []) == 0 and len(s.M["lanes"]) == 1

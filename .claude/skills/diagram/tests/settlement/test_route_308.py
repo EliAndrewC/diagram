@@ -161,7 +161,10 @@ def test_the_route_keeps_off_the_household_s_own_parts_each_by_its_leg_test_s_ga
     """Feature 317 T06: the house by the house gap, the shed, byre, well and beds by the parts' gap, the fixtures by a corridor's
     half-width - a persimmon by its trunk."""
     s = _open()
-    geom = {"house": (0.0, 0.0, 40.0, 20.0), "boxes": {"shed": (50.0, 0.0, 10.0, 10.0), "gardens": [(0.0, 60.0, 30.0, 20.0)], "fixtures": {"privy": (80.0, 0.0, 6.0, 6.0), "persimmon": (90.0, 40.0, 30.0, 30.0)}}}
+    geom = {
+        "house": (0.0, 0.0, 40.0, 20.0),
+        "boxes": {"shed": (50.0, 0.0, 10.0, 10.0), "gardens": [(0.0, 60.0, 30.0, 20.0)], "fixtures": {"privy": (80.0, 0.0, 6.0, 6.0), "persimmon": (90.0, 40.0, 30.0, 30.0)}},
+    }
     got = route.own_parts(s, geom, geom["house"], 12.0, 7.0)
     pgap = s.px(access.TREAD_HALF_FT + access.PART_MARGIN_FT)
     assert got[0] == ((0.0, 0.0, 40.0, 20.0), 12.0), "the house first, by the house gap"

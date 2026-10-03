@@ -346,6 +346,8 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     steadings = steading_footprints(s.M)
     n = 0
     for h in list(s.M.get("houses", [])):
+        if h.get("reached_across"):
+            continue  # reached across its neighbor's yard: a household with no way of its own (feature 317, `rolling/passage.py`)
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
         if door is not None:
             # ...clear of everything the router keeps off, not the fixtures alone: stepped toward its own well, a door stood in

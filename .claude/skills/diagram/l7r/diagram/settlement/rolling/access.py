@@ -77,7 +77,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes."""
 
-    __slots__ = ("_along", "_targets", "grid", "half", "routed", "segs", "tried")
+    __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
 
     def __init__(self, half: float) -> None:
         self.half = half
@@ -91,6 +91,9 @@ class AccessTree:
         # ...and whether a door no straight corridor clears is routed round what stands (`route.py`, feature 308 plan D3): the
         # nucleated seating's tree only
         self.routed = False
+        # THE WALKS ACROSS A NEIGHBOR'S YARD (feature 317, `passage.py`): kept clear of every later homestead as a corridor is
+        # (`covers_box`), but no corridor is aimed at one, no route ends on one and no lane is drawn along one - a grid apart
+        self.bars = PointGrid(128.0)
 
     def add(self, a: Pt, b: Pt) -> None:
         self.segs.append((a, b))
@@ -100,11 +103,17 @@ class AccessTree:
         h = self.half
         self.grid.extend([(a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)])
 
+    def bar(self, a: Pt, b: Pt) -> None:
+        """Keep the walk a-b clear of every later homestead, as a corridor is, without making it a corridor (a passage)."""
+        h = self.half
+        self.bars.extend([(a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)])
+
     def covers_box(self, box: Any) -> bool:
-        """Does any corridor's strip meet the box `(cx, cy, w, h)`? The ONE test an envelope asks (plan M3: every later
-        placement refuses to cover a corridor)."""
+        """Does any corridor's strip - or a passage's walk (`bar`) - meet the box `(cx, cy, w, h)`? The ONE test an envelope
+        asks (plan M3: every later placement refuses to cover a corridor)."""
         cx, cy, w, h = box
-        for a, b, x0, y0, x1, y1 in self.grid.near(cx, cy, max(w, h) / 2 + self.half):
+        r = max(w, h) / 2 + self.half
+        for a, b, x0, y0, x1, y1 in [*self.grid.near(cx, cy, r), *self.bars.near(cx, cy, r)]:
             if x1 < cx - w / 2 or x0 > cx + w / 2 or y1 < cy - h / 2 or y0 > cy + h / 2:
                 continue
             if seg_box_within(a, b, box, self.half):

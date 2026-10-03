@@ -177,3 +177,17 @@ def test_the_path_checker_matches_on_random_water_crop_and_brook() -> None:
             assert chk.violations(path) == path_violations(path, avoid, pond, brook, waters)
         inside = [(avoid[0][0][0] - 5, avoid[0][0][1] + 5), (avoid[0][0][0] - 6, avoid[0][0][1] + 8)]  # wholly inside a ring
         assert chk.violations(inside) == path_violations(inside, avoid, pond, brook, waters)
+
+
+def test_a_household_reached_across_a_neighbor_s_yard_is_reached_where_its_neighbor_is() -> None:
+    """Feature 317, plan D5: the one reach predicate follows a passage's chain to a reached household - never past one the
+    network does not reach."""
+    meta = {"generated_by": "hamletgen", "settlement_form": "nucleated"}
+    lanes = [{"pts": [(0.0, 0.0), (100.0, 0.0)], "connector": True}]
+    a = {"x": 50.0, "y": 50.0}
+    b = {"x": 50.0, "y": 300.0, "reached_across": [50.0, 50.0], "passage_depth": 1}
+    c = {"x": 50.0, "y": 550.0, "reached_across": [50.0, 300.0], "passage_depth": 2}
+    far = {"x": 900.0, "y": 900.0}
+    d = {"x": 900.0, "y": 1150.0, "reached_across": [900.0, 900.0], "passage_depth": 1}
+    got = unreached_houses({"meta": meta, "houses": [c, b, a, far, d], "lanes": lanes})
+    assert sorted((x, y) for x, y, _d in got) == [(900, 900), (900, 1150)], "B and C by the chain; D's neighbor is unreached"

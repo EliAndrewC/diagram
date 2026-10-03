@@ -481,7 +481,11 @@ def _transcript(path: pathlib.Path, rows: list[dict]) -> None:
 
 
 def _note(name: str) -> dict:
-    return {"type": "queue-operation", "operation": "enqueue", "content": f"<task-notification>\n<summary>Agent \"{name}\" finished</summary>\n<result>{name}: 1 IN-STEP</result>\n</task-notification>"}
+    return {
+        "type": "queue-operation",
+        "operation": "enqueue",
+        "content": f"<task-notification>\n<summary>Agent \"{name}\" finished</summary>\n<result>{name}: 1 IN-STEP</result>\n</task-notification>",
+    }
 
 
 def _turn(stop: str) -> dict:

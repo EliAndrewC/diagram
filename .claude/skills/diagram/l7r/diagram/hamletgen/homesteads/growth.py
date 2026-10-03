@@ -41,6 +41,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT
 from l7r.diagram.settlement.rolling.fit import within_field_reach
 from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done
+from l7r.diagram.settlement.rolling.passage import PASSAGE_CHAIN, depth_of
 
 from ..consts import SUN_CORRIDOR_FT, Pt
 from .capacity import DRY_SPELL, _near_a_house, free_seats, offer_seats
@@ -118,11 +119,12 @@ def union(a: Reach, b: Reach) -> Reach:
     return max(a[0], b[0]), max(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])
 
 
-def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: float, scale: float, reach_at: Any, refused: Any = None) -> Pt | None:
+def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: float, scale: float, reach_at: Any, refused: Any = None, allotted: list[Reach] | None = None) -> Pt | None:
     """The seat along `angle` from `center`, `scale` times its least distance, where the new homestead - its reach rolled AT
     THE SEAT (`reach_at`) - clears the standing one (FR-004's "never closer"): from `guess`, moved out while the reach rolled
     there exceeds the reach it was placed for, each move to the union of the two; None after `SETTLE_TRIES` moves, or as soon
-    as a seat it would roll at is one `refused` refuses (feature 314: the ground is asked before the layout)."""
+    as a seat it would roll at is one `refused` refuses (feature 314: the ground is asked before the layout). `allotted`, where
+    given, is set to the reach the seat was parted by - the household's land as the growth allots it (feature 317)."""
     new = guess
     for _ in range(SETTLE_TRIES):
         base = seat_toward(center, standing, new, angle, gap)
@@ -131,6 +133,8 @@ def settled_seat(center: Pt, standing: Reach, guess: Reach, angle: float, gap: f
             return None
         got = reach_at(q)
         if all(g <= n + 1e-9 for g, n in zip(got, new, strict=True)):
+            if allotted is not None:
+                allotted[:] = [new]
             return q
         new = union(got, new)
     return None
@@ -185,9 +189,22 @@ def next_house(s: Settlement, largest: tuple[float, float]) -> tuple[float, floa
 
 
 def grow_gap(s: Settlement) -> float:
-    """The room left between two footprints: a path's whole reserved strip (2 x `ACCESS_HALF_FT`) and 2 px - the PATH OUT the
-    GM's footprint includes (plan review round 1)."""
-    return 2.0 * s.px(ACCESS_HALF_FT) + 2.0
+    """The room left between two footprints: a path's whole reserved strip (2 x `ACCESS_HALF_FT`) and the parting
+    (`TIGHT_GAP_PX`) - the PATH OUT the GM's footprint includes (plan review round 1)."""
+    return 2.0 * s.px(ACCESS_HALF_FT) + TIGHT_GAP_PX
+
+
+#: The parting a TIGHT seat leaves between two footprints, in px: the 2 px the growth parts every two homesteads by, with no path's
+#: strip - a household seated there stands against its neighbor's land, and is taken only by passage across the neighbor's yard
+#: (feature 317, plan D2; `settlement/rolling/passage.py`).
+TIGHT_GAP_PX = 2.0
+
+
+def land_box(center: Pt, reach: Reach) -> tuple[float, float, float, float]:
+    """The box `(cx, cy, w, h)` a footprint reaching `reach` (west, east, north, south) from `center` covers - a standing
+    household's land as the growth parts it, which a passage's walk may cross (feature 317)."""
+    w, e, n, so = reach
+    return (center[0] + (e - w) / 2.0, center[1] + (so - n) / 2.0, w + e, n + so)
 
 
 def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, largest: tuple[float, float]) -> int:
@@ -219,7 +236,8 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
         gap = grow_gap(s)
         start = guess
         heap: list[tuple[float, int, Pt, Any]] = []
-        seen: set[tuple[int, int]] = set()
+        tight: set[tuple[int, int]] = set()  # the standing houses whose tight seats are queued (feature 317)
+        seen: set[tuple[Any, ...]] = set()
         done = 0
         while placed < want:
             ndir, rings = GROW_LEVELS[level]
@@ -239,16 +257,36 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                         d = math.hypot(q[0] - cx, q[1] - cy)
                         if key not in seen and d <= bound:
                             seen.add(key)
-                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, far * ring)))
+                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, far * ring, None)))
+                # ...AND, WHILE THE SHARE HAS ROOM, ITS TIGHT SEATS (feature 317, plan D2): at the parting with no path's strip,
+                # in the same directions, unjittered in distance - a household there stands against this one's land, and is
+                # taken only by passage across its yard (`fit._parts_fit`, `passage.passage_of`); queued once a house, and only
+                # round one a passage may cross to - itself reached within the chain, with a yard (`passage.depth_of`)
+                hkey = (round(hx), round(hy))
+                depth = depth_of(rec)
+                crossable = depth is not None and depth < PASSAGE_CHAIN and ((rec.get("geom") or {}).get("boxes") or {}).get("yard") is not None
+                if getattr(s, "_passage_left", 0) > 0 and hkey not in tight and crossable:
+                    tight.add(hkey)
+                    for k in range(ndir):
+                        ang = math.radians(360.0 / ndir * k + (s._hjit(hx, hy, _SALT_DIRECTION + k) - 0.5) * 2.0 * GROW_JITTER_DEG)
+                        q = seat_toward((hx, hy), reach, guess, ang, TIGHT_GAP_PX)
+                        d = math.hypot(q[0] - cx, q[1] - cy)
+                        if d <= bound:
+                            seen.add(("tight", round(q[0] / 10.0), round(q[1] / 10.0)))
+                            heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, 1.0, rec)))
             done = len(houses)
             if not heap:
                 if level + 1 >= len(GROW_LEVELS):
                     break
                 level, done = level + 1, 0  # DRY: every standing house offers again, wider
                 continue
-            center, reach, ang, scale = heapq.heappop(heap)[3]
+            center, reach, ang, scale, nb = heapq.heappop(heap)[3]
+            if nb is not None and getattr(s, "_passage_left", 0) <= 0:
+                continue  # the share is spent: a tight seat is no seat
+            parting = TIGHT_GAP_PX if nb is not None else gap
             house = next_house(s, largest)
-            got = settled_seat(center, reach, start, ang, gap, scale, reach_at, lambda q, h=house: seat_refused(s, q, h))
+            lot: list[Reach] = []
+            got = settled_seat(center, reach, start, ang, parting, scale, reach_at, lambda q, h=house: seat_refused(s, q, h), lot)
             if got is not None:  # the next settle starts from the reach this one settled on (fewer rolls a seat)
                 start = union(guess, last[0])
             if got is None or _near_a_house(s, got) or math.hypot(got[0] - cx, got[1] - cy) > bound:
@@ -257,11 +295,15 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
             offered += 1
             s._seat_search["candidates"] += 1
             # the placer's one computed move off a third homestead may not carry it nearer its source than the growth's distance
-            s._grown_keep = lambda box, c=center, r=reach: keeps_its_distance(box, c, r, gap)  # type: ignore[attr-defined]
+            s._grown_keep = lambda box, c=center, r=reach, g=parting: keeps_its_distance(box, c, r, g)  # type: ignore[attr-defined]
+            # ...a tight seat's household told its neighbor, the two lands as the growth parted them (its own: the reach the seat
+            # was parted by, `lot`, carried with its house), and the parting
+            s._tight_of = {"rec": nb, "land": land_box(center, reach), "own": lot[0], "gap": TIGHT_GAP_PX} if nb is not None else None  # type: ignore[attr-defined]
             try:
                 seated = s.try_place(q[0], q[1], "plain")
             finally:
                 s._grown_keep = None  # type: ignore[attr-defined]
+                s._tight_of = None  # type: ignore[attr-defined]
             if seated:
                 placed += 1
                 took += 1

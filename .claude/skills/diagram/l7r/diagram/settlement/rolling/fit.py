@@ -14,6 +14,7 @@ from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
 from .access import access_corridor, legs
 from .lot import bundle_admitted, watered
+from .passage import passage_of
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -457,7 +458,18 @@ class BundleFitMixin:
         # share its search (`access_corridor`).
         tree = getattr(self, "_access", None)
         corridor = None
-        if tree is not None:
+        if tree is not None and getattr(self, "_tight_of", None) is not None:
+            # ...OR, AT A TIGHT SEAT AGAINST A NEIGHBOR'S LAND, A PASSAGE ACROSS ITS YARD (feature 317, `passage.py`): the custom
+            # is for land with no way of its own, so the household is reached across the neighbor's yard where a walk there is
+            # and no corridor of its own is (one that finds a corridor is refused the seat: the growth's ordinary seats keep a
+            # path's room). The walk is asked FIRST - the same verdict, both must hold - since it is searched on the two
+            # households' land and rarely found, where the corridor is searched over the whole tree and was found at 367 of 476
+            # tight-seat layouts (15 households, seeds 1-16), each a refusal that cost the stage its search
+            passage = passage_of(self, geom)
+            if passage is None or access_corridor(self, geom) is not None:
+                return False
+            geom["passage"] = passage
+        elif tree is not None:
             corridor = access_corridor(self, geom)
             if corridor is None:
                 return False

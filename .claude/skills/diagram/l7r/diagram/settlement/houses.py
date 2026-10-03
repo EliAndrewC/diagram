@@ -711,6 +711,11 @@ class HousesMixin:
         self.placed.append(geom["bbox"])  # reserve the whole homestead footprint as one rect
         if geom.get("access") is not None:  # the corridor the seat was admitted with, reserved (feature 287, plan M3)
             reserve(self, geom["access"], (cx, cy))
+        passage = geom.get("passage")
+        if passage is not None:  # ...or the walk across a neighbor's yard, kept clear and counted against the share (feature 317)
+            for a, b in zip(passage["walk"], passage["walk"][1:], strict=False):
+                self._access.bar(a, b)
+            self._passage_left = getattr(self, "_passage_left", 0) - 1
         rec = {
             "x": cx,
             "y": cy,
@@ -724,6 +729,10 @@ class HousesMixin:
             "wealth": wf,
             "geom": geom,
         }  # rot position-seeded, like _shed above
+        if passage is not None:  # reached across the neighbor's yard: its position, the chain's depth and the walk (feature 317)
+            rec["reached_across"] = [round(passage["of"][0], 1), round(passage["of"][1], 1)]
+            rec["passage_depth"] = passage["depth"]
+            rec["passage"] = [[round(q[0], 1), round(q[1], 1)] for q in passage["walk"]]
         record_parts(self, rec, geom, _byre_form)  # the reserved stall and well pocket, on the record
         self.M["houses"].append(rec)
         self._pending_farmsteads.append(rec)

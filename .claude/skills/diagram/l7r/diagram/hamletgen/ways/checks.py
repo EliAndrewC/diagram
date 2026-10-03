@@ -338,13 +338,20 @@ def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[
     segs = served_network(M.get("lanes") or [])
     if not segs:
         return []
-    far: list[tuple[int, int, int]] = []
+    far: dict[tuple[int, int], tuple[int, int, int]] = {}
     for h in M.get("houses") or []:
         cx, cy = float(h["x"]), float(h["y"])  # x, y ARE the center here - the manifest's convention
         d = min(seg_dist(cx, cy, a, b) for a, b in segs)
         if d > reach:
-            far.append((round(cx), round(cy), round(d)))
-    return far
+            far[(round(cx), round(cy))] = (round(cx), round(cy), round(d))
+    # ...AND A HOUSEHOLD REACHED ACROSS A NEIGHBOR'S YARD IS REACHED WHERE ITS NEIGHBOR IS (feature 317, `rolling/passage.py`): the
+    # custom of passage over a neighbor's land - so it is asked of the chain, shallowest first, never of a lane of its own
+    across = sorted((h for h in M.get("houses") or [] if h.get("reached_across")), key=lambda h: int(h.get("passage_depth") or 1))
+    for h in across:
+        me, nb = (round(float(h["x"])), round(float(h["y"]))), (round(float(h["reached_across"][0])), round(float(h["reached_across"][1])))
+        if me in far and nb not in far:
+            del far[me]
+    return list(far.values())
 
 
 FORD_SQUARE_TOL_DEG = 10.0
