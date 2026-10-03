@@ -61,7 +61,6 @@ asked for (the nearest-the-field option tried first); it is measured at the book
 Observed 2026-10-03, method: the scratch prototype (in-memory patches of the clone at a241afe7f: no per-seat search, the 20 ft
 gap, the ring tie-break, a gap pass at the seating's end), each stage's process time on the reference at 15 households (seeds 4,
 25, 39, 47) and cohort seeds 2, 7, 8, 9 and 10.
-
 - Laid after the seating by the corridor router as it is (one search per house against the growing tree): 2-9 houses a map
   unreached. The grid found a route from both doors every time; the taut pull refused it - its own beds and fixtures, which the
   router's grid does not keep off, and at most 5 legs. Laying in the seating's order, or 9 legs, mended one map of nine.
