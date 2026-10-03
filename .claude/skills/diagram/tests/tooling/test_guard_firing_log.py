@@ -363,6 +363,7 @@ _ESCAPES = {
         "a make variable passed as --not-owed-ok to _check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
     ),
     "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/entry-gate.sh (feature 311), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/claims-gate.sh (feature 316), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
     "CHECK_BUNDLE_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "
