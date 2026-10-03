@@ -363,7 +363,9 @@ def recheck_passages(s: Settlement) -> int:
     such households at 15 households and 1 of 12 at 40 (research R9). A layout with a way that no longer fits the finished
     seating is not a way the holding has: the passage stands (`meta.passage_unfit`).
 
-    Research: no way of its own on the finished map - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household with a way of its own from any layout of its holding is reached by it, never across a neighbor's land
+    Research:
+        no way of its own on the finished map - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household with a way of its own from any layout of its holding is reached by it, never across a neighbor's land
+        a re-laid household's garden side - UNRESEARCHED: the first layout in the placer's order (the south corners before the walls) with a way of its own that fits, with no shaded-bed score or left-right roll for this rare re-seat
     """
     if getattr(s, "_access", None) is None:
         return 0
