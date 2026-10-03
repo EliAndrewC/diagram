@@ -6456,178 +6456,154 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline": {
-  "code": "2b91fe2285fa2cb3",
-  "core": "2bb47dad3fb1982e",
+  "code": "1602ad65dbba1314",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "0081's 7 ft fence gap each side plus a tread inside the page's 3-6 ft widths",
+  "note": "two 7 ft lane clearances plus a tread inside the drawn widths; the page calls these conventions",
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
-  "code": "0d191ed217be2338",
-  "core": "2bb47dad3fb1982e",
+  "code": "076ac6cefd1abc90",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "the 6,000 sq ft floor within 90 ft, as 0036 has it",
+  "note": "the 6,000 sq ft floor within the 90 ft dooryard reach; the page lets the copse fall short rather than be pushed out",
   "research": "b7996ceb3c608c18",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks": {
-  "code": "084b2bdffdca2ecb",
-  "core": "2bb47dad3fb1982e",
+  "code": "58bef2333712d719",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "the ranks run only on a dispersed hamlet (`_grown` and `_rows_seated` break the loop), and 0081 says \"A dispersed hamlet has no lanes between its farmhouses\", so `MIN_WEB_GAP` keeps room for a lane the page says that form never has; 0036's \"at least 32 ft apart\" between grove farms is the rule that bears here",
+  "note": "MIN_WEB_GAP is 2 x 7 ft plus 4, matching the page's \"7 ft clear of a garden fence\" convention",
   "research": "9525e03c22df776b",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
-  "code": "8c99c7116f99b28b",
-  "core": "2bb47dad3fb1982e",
+  "code": "0b042f8d0fdc8568",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "a quarter pitch either way, as stated",
+  "note": "the quarter-pitch retry is not answered in the bundle",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
-  "code": "8073cfaa292aae45",
-  "core": "2bb47dad3fb1982e",
+  "code": "3f64792141caa7ef",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "frame pitch capped at 240 ft, no second line of farms behind",
+  "note": "farms one frame apart, never more than 240 ft, no second line of farms behind",
   "research": "176369f54d3c9e23",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
-  "code": "748e6a7c6812930a",
-  "core": "2bb47dad3fb1982e",
+  "code": "8199a5bc5992fe6d",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "the code seats a dispersed hamlet's farms in ranks behind a front row in a brick pattern, but 0031 says \"the whole line is hugged to the field edge in single file\" and \"each farm stands in the middle of its own fields\"; \"off the line only on an alleys hamlet\" also reads a lane knob on a form 0081 draws with no lanes",
+  "note": "the ranks only run on a dispersed hamlet now (grows() and _rows_seated skip them on the other forms), and they seat farms in a brick lattice behind a front row capped at sqrt(N*(lo+hi)); 0031 drawing says a scattered settlement's line \"is hugged to the field edge in single file\" and \"each farm stands in the middle of its own fields\". Either the code seats a dispersed hamlet in single file or the claim becomes a DEVIATION the drawing page records",
   "research": "e67278be3121f7df",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": {
-  "code": "1a2440bb7df67cd2",
-  "core": "2bb47dad3fb1982e",
+  "code": "e7c1f582150321f8",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "39 ft, scaled by the northward part of the step",
+  "note": "39 ft added in proportion to how far north the ranks climb",
   "research": "4c4e1b01edd744e8",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#exit strip before any house": {
-  "code": "a8fa49fb8d9c9506",
-  "core": "2bb47dad3fb1982e",
+  "code": "606ae6c251de9172",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "a corridor is reserved from the seat's center before any house, but 0081 says \"seat every farmhouse before they lay any lane, and each lane follows the houses rather than the houses following it\"; the page records no exit strip and no departure",
+  "note": "nucleated only; the track out's room is reserved while the houses come first and the lanes after",
   "research": "9525e03c22df776b",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front row across the brook": {
-  "code": "01c90343c0cda031",
-  "core": "2bb47dad3fb1982e",
+  "code": "47c5c70cd8dd9834",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "0035: \"a household crosses the water to reach its fields\"",
+  "note": "at a stream's size both forms are attested, and each farmstead stays whole on one bank",
   "research": "959a226b0633f853",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank jitter and the cloud's lean": {
-  "code": "ad945e80e6d336be",
-  "core": "2bb47dad3fb1982e",
+  "code": "583ea123a3736128",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "plus or minus 0.1 pitch, lean 0.75, as coded",
+  "note": "not answered in the bundle",
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank seats offered center-out, the seat nearest the band's center first": {
-  "code": "2bb47dad3fb1982e",
-  "core": "2bb47dad3fb1982e",
-  "date": "2026-10-03",
-  "note": "rank seats offered center-out, the seat nearest the band's center first",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart": {
-  "code": "fb08546c63a983fe",
-  "core": "2bb47dad3fb1982e",
+  "code": "5cd28cb23334d942",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "0.5 pitch, 0.3 pitch in the rescue",
+  "note": "not answered in the bundle",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
-  "code": "ab0293f25c657666",
-  "core": "2bb47dad3fb1982e",
+  "code": "55a9b5257ffa61e7",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "a shared shed on common ground among the houses, reserved first",
+  "note": "the shared shed on common ground among the houses (0048 drawing)",
   "research": "99c9b1245f0b5c96",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the exit strip runs 1.5 times the seating's reach plus a pitch": {
-  "code": "2bb47dad3fb1982e",
-  "core": "2bb47dad3fb1982e",
-  "date": "2026-10-03",
-  "note": "the exit strip runs 1.5 times the seating's reach plus a pitch",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's gaps and the rescue's widening": {
-  "code": "e7e86b8bee1f6fcf",
-  "core": "2bb47dad3fb1982e",
+  "code": "25f3a4b4ceb37cbc",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "1.45 pitches; 22% and 16% a round",
+  "note": "not answered in the bundle",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's offer": {
-  "code": "34171b8681629ba0",
-  "core": "2bb47dad3fb1982e",
+  "code": "52ed9186b9bbb9ea",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "min(households, 12)",
+  "note": "not answered in the bundle",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
-  "code": "a77a8cb830ff15d3",
-  "core": "2bb47dad3fb1982e",
+  "code": "2defd9d9c69bab9e",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "sqrt(N*(lo+hi)), at least 6",
+  "note": "on the only form that reaches this cap (dispersed), 0031 drawing answers how many farms front the field (\"hugged to the field edge in single file\"); the claim should cite 0031 drawing, and against it the sqrt(N*aspect) cap is the drift named on the scattered-seating claim",
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the passage share": {
-  "code": "ea11bed3b258d8e0",
-  "core": "2bb47dad3fb1982e",
+  "code": "569d532c22eb9f4b",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "rolled only where the settlement grows, as 0081 has it",
+  "note": "rolled only where the settlement grows (clustered), none otherwise, as the page has it",
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the rank grows along the field, its ends a pitch out, only after a round seats no one behind": {
-  "code": "2bb47dad3fb1982e",
-  "core": "2bb47dad3fb1982e",
-  "date": "2026-10-03",
-  "note": "the rank grows along the field, its ends a pitch out, only after a round seats no one behind",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
-  "code": "74dabe1b87c307c4",
-  "core": "2bb47dad3fb1982e",
+  "code": "7ea4885d3865c499",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "`SEATING_GROUND_FT` per household; nothing in the bundle answers it",
+  "note": "162 ft of band per household is not answered in the bundle",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach": {
-  "code": "bf8d2d1addade3fd",
-  "core": "2bb47dad3fb1982e",
+  "code": "723774bbcd609ebd",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "`FORM_BOUND` times the half-diagonal; 1.3 times that for the front row",
+  "note": "FORM_BOUND is 1.15 by default and 2.5 linear, and the front row gets 1.3 times that, as the claim says",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": {
-  "code": "8be06515d49c11a9",
-  "core": "2bb47dad3fb1982e",
+  "code": "f2ef3c3cdf282e69",
+  "core": "19faaace7435cb62",
   "date": "2026-10-03",
-  "note": "0038 answers it (\"Rows are set 92 ft apart\": house, yard and 39 ft of sun), and the step also adds `MIN_WEB_GAP` and the sun corridor; it should cite 0038, not UNRESEARCHED",
+  "note": "0038 drawing answers it (\"Rows are set 92 ft apart\": house 28 ft + yard ~26 ft + 39 ft of sun); the claim should cite 0038 drawing, not UNRESEARCHED",
   "research": "",
   "verdict": "MISLABELED"
  },
@@ -6656,10 +6632,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::reserve_the_seating#seating plumbing": {
-  "code": "8cc439d8334c2755",
-  "core": "0f4bffbb802669f5",
+  "code": "101ed1a6c40dc1fb",
+  "core": "3306c03d9d145f89",
   "date": "2026-10-03",
-  "note": "hands reservations already decided to the registry",
+  "note": "hands reservations to the registry; the rule that nothing is built on a lane is claimed on tree.seating_drawn and tree.seating_judge",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -6704,42 +6680,42 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a grove farm's own bamboo": {
-  "code": "3b2b5e7b45a0e3c5",
-  "core": "5feb923f94d5ee69",
+  "code": "e6e4ac3c5ef65144",
+  "core": "b86da436b81eb382",
   "date": "2026-10-03",
-  "note": "set where the bamboo knob is homestead or both, as the page has it",
+  "note": "the bamboo knob's homestead and both values; the bamboo is drawn inside the grove",
   "research": "0511f4b8f09dd539",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a yard's south sun": {
-  "code": "bd8cdf990904116b",
-  "core": "5feb923f94d5ee69",
+  "code": "f455b62882b88917",
+  "core": "b86da436b81eb382",
   "date": "2026-10-03",
-  "note": "sun_corridor(39 ft)",
+  "note": "39 ft as the page gives it",
   "research": "4c4e1b01edd744e8",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#houses before lanes": {
-  "code": "d9a65220e4d611ff",
-  "core": "5feb923f94d5ee69",
+  "code": "e47d119c016d467b",
+  "core": "b86da436b81eb382",
   "date": "2026-10-03",
-  "note": "no lane is drawn until every house stands",
+  "note": "every farmhouse is seated before any lane is laid",
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the belt's afternoon lane": {
-  "code": "d4897c67c53c754f",
-  "core": "5feb923f94d5ee69",
+  "code": "86710aa1aedcbdef",
+  "core": "b86da436b81eb382",
   "date": "2026-10-03",
-  "note": "west_sun_lane(50 ft)",
+  "note": "50 ft west and southwest, as the page gives it",
   "research": "4c4e1b01edd744e8",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
-  "code": "58871f79e6969d5c",
-  "core": "5feb923f94d5ee69",
+  "code": "72fb87e3d7219d46",
+  "core": "b86da436b81eb382",
   "date": "2026-10-03",
-  "note": "the shape knob is declared as the drawing resolves it",
+  "note": "declares the shape the drawing actually shows",
   "research": "e67278be3121f7df",
   "verdict": "IN-STEP"
  },
@@ -14959,6 +14935,14 @@
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::others_clear#nothing built on a lane": {
+  "code": "ba0077a140463545",
+  "core": "afe1400d6216c0f6",
+  "date": "2026-10-03",
+  "note": "every drawn leg cleared of the standing homesteads; \"Nothing is built on a lane\"",
+  "research": "9525e03c22df776b",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::owed#every farmhouse served": {
   "code": "b6417360f18629d7",
   "core": "bf1eeb0283bf1eae",
@@ -15039,11 +15023,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_judge#a corridor judged as the web will lay it": {
-  "code": "512cacd5fac25b68",
-  "core": "4e4e0e3e74f29c07",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_drawn#a corridor kept clear as the web will lay it": {
+  "code": "cd2f2ff640073e0d",
+  "core": "df9c9cf9400fcf78",
   "date": "2026-10-03",
-  "note": "nothing built on a lane; routed off its own parts",
+  "note": "the drawn run is installed so that no homestead stands on its tread",
+  "research": "9525e03c22df776b",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_judge#a corridor judged as the web will lay it": {
+  "code": "458c66a29579f5b6",
+  "core": "e513bd6eb9ea81d2",
+  "date": "2026-10-03",
+  "note": "the squared run is checked against the household's own parts and every other homestead, as the claim states",
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
@@ -35512,10 +35504,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::reserve#corridor geometry, memo and search plumbing": {
-  "code": "be4310d3f73a560d",
-  "core": "9e28fa5f2866ee7e",
+  "code": "b0b2233a9538f95b",
+  "core": "a31811d4c8da2030",
   "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "note": "legs, bars and records; the keep-out rule is claimed on tree.seating_drawn",
   "research": "",
   "verdict": "IN-STEP"
  },

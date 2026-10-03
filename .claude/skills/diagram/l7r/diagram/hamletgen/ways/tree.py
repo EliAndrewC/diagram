@@ -793,7 +793,7 @@ def seating_judge(s: Any) -> Any:
     """The tree's question (`admits`) as the seating asks it of a house's corridor (`access.tree_admits`), installed on the
     settlement as `_corridor_tree` - the settlement package cannot import the hamlet generator.
 
-    Research: a corridor judged as the web will lay it - research/questions/0081-village-lanes.drawing.html: refused where its squared run crosses its own household's house, beds, sheds or fixtures (`own_clear`), nothing built on a lane
+    Research: a corridor judged as the web will lay it - research/questions/0081-village-lanes.drawing.html: refused where its squared run crosses its own household's house, beds, sheds or fixtures (`own_clear`) or another standing homestead (`others_clear`), nothing built on a lane
     """
 
     def judge(corridor: Sequence[Pt], geom: Mapping[str, Any]) -> bool:
