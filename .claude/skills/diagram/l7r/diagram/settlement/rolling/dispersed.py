@@ -90,6 +90,10 @@ def canonical_farmstead(
     # beside the yard, at its far end (the yard keeps the garden's sky open to the south), or against the house's east
     # wall, at its mid-height
     garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard or sun_band else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
+    if sun_band:  # ...and wholly south of the front wall, where the east band ends: a bed taller than the yard, centered on it, rose
+        # past the band's end into its morning shade (feature 315; cohort seeds 14, 15 and 906, which the south nudge had moved into
+        # a persimmon's sun ground instead)
+        garden_r = (garden_r[0], max(garden_r[1], ch / 2 + gap + gh / 2), gw, gh)
     works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)]
     # A GROVE FARM CARRIES ITS OWN WATER FROM ITS SEATING (feature 291 FR-018 and FR-019 on feature 287's seating, homes H09):
     # the pocket a wellhead needs, laid in the dooryard beside the yard - where on the plot the well stood no page read says
@@ -181,4 +185,27 @@ def dispersed_layout(
     out = {"house": (hx, hy, hw, hh), "yard": yard_r, "garden": garden_r, "gardens": [garden_r], "groves": groves, "grove_faces": faces, "_frame": frame}
     if well_r is not None:
         out["well"] = well_r
+    return out
+
+
+def clear_east_of_beds(groves: list[Rect], beds: list[Rect], reach: float) -> list[Rect]:
+    """The bands, each band standing in a bed's east reach (its west edge from 2 px inside the bed's east edge to `reach` past
+    it, `grove_rules.gardens_east_shaded`'s test) and overlapping the bed's height cut back at its near end to a pixel clear of the
+    bed's edge.
+
+    The bands are drawn unraked and the bed is turned with its house about the house's center (`_rake_parts`), so at a rake a
+    bed laid wholly south of the band's end can rise past it by its distance from the house times the rake's sine - 1.3 ft
+    on cohort seed 906 at -8 degrees (feature 315). A band left shorter than it is wide is not cut (its run would be a stub)."""
+    out = []
+    for r in groves:
+        x, y, w, h = r
+        for bx, by, bw, bh in beds:
+            east = bx + bw / 2
+            top, bottom = by - bh / 2, by + bh / 2
+            if not (east - 2 <= x - w / 2 < east + reach and y - h / 2 < bottom and top < y + h / 2):
+                continue
+            y0, y1 = (y - h / 2, top - 1.0) if y < by else (bottom + 1.0, y + h / 2)  # a pixel clear: both records are rounded to 0.1
+            if y1 - y0 >= w:
+                x, y, w, h = x, (y0 + y1) / 2, w, y1 - y0
+        out.append((x, y, w, h))
     return out

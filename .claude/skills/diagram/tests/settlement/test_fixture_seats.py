@@ -175,3 +175,15 @@ def test_the_first_clear_seat_and_the_sun_sector_answer_as_they_were_written() -
     radii = (18.0, 22.0, 26.0)
     plain = [(rr * math.sin(math.radians(b / 10.0)), -rr * math.cos(math.radians(b / 10.0)), 4.0, 5.0) for rr in radii for b in range(1125, 2026, 75)]
     assert list(fs._sun_sector(4.0, 5.0, radii)) == plain
+
+
+def test_a_persimmon_with_no_seat_in_its_dooryard_is_not_laid() -> None:
+    """Feature 315 (cohort seed 23): the persimmon's paces stop at the dooryard - its crown's edge within
+    `PERSIMMON_DOORYARD_FT` of the house - and a farm whose dooryard is all taken keeps none (its other fixtures still laid),
+    where it once walked 80 ft out onto the row's street."""
+    ring = [(0.0, 0.0, HW + 100.0, HH + 100.0)]  # everything within 50 ft of the house is taken
+    laid = _lay(("coop", "persimmon"), roofs=(HOUSE,), ground=ring)
+    assert "coop" in laid and "persimmon" not in laid
+    assert fs.in_dooryard(0.0, HH / 2 + 41.0, 11.5, HW, HH, 30.0), "its crown's edge 29.5 ft off the front wall"
+    assert not fs.in_dooryard(0.0, HH / 2 + 42.0, 11.5, HW, HH, 30.0), "30.5 ft off"
+    assert fs.in_dooryard(HW / 2 + 20.0, -(HH / 2 + 20.0), 11.5, HW, HH, 30.0), "off a corner, by the diagonal"

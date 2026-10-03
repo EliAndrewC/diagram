@@ -52,3 +52,15 @@ degrees north, east component (0038 drawing: about 64 ft long, about 50 ft of it
 bamboo stand reckoned at the timber bamboos' least height, 10 m, throws the same shadow, so `BAMBOO_SHADE_FT` comes to the
 same 50 ft - a constant of its own, with its own derivation, so that if either height is ever revised the other does not
 move with it. (Observed 2026-10-02; method: the 0038 drawing page's worked shadow, read.)
+
+## R3 The regressions feature 310 shipped, and the dooryard (read 2026-10-02)
+
+The cohort on main fell from 28 of 30 to 25 of 30 with feature 310 (the Diagram performance session's roll and this
+session's, each in a detached worktree). Seeds 14, 15 and 906: a bed slid south out of its own east band's morning shade took
+a persimmon into its new sun ground, and a bed taller than its yard, or turned with its house, rose past the east band's
+unturned end. Seeds 22 and 23 bisect to feature 310's grove-farm layout (`c37f631a5`): a crowded farm's persimmon, refused
+every seat in its front (its own plots' sun) and its back (the service strip before its band), paced 80 ft out onto the row's
+street, a tree lane the web could not move. The fruit-tree page puts a farm's fruit trees "within about 30 ft of the house"
+(`research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html`), and on the grove-farm
+maps every persimmon but one already stood 35 to 80 ft out (one-shot, observed 2026-10-02; method: each crown's edge
+measured from its house in the house's frame on the main pool).

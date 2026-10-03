@@ -86,6 +86,11 @@ SHRINE_CORNER_FT = 14.0  # the household shrine a plot corner off the house's co
 TRUNK_FT = 4.0  # the persimmon's trunk box
 CANOPY_PAD = 0.6  # the crown's placement clearance off a roof (`Settlement.CANOPY_PAD`)
 PERSIMMON_STEPS_FT = (10.0, 20.0)  # the persimmon's ring a step out, and two
+#: THE DOORYARD'S REACH (feature 315; research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
+#: the fruit trees stand "within about 30 ft of the house"): the persimmon's paces stop where its crown's edge would stand farther
+#: than this from the house's walls. Paced on without it, a crowded farm's persimmon walked 80 ft out onto the row's street
+#: (cohort seed 23), no dooryard tree at all; a farm with no seat within it keeps no persimmon, as a farm with no room keeps no bamboo.
+PERSIMMON_DOORYARD_FT = 30.0
 SHADE_MARGIN_FT = 2.0  # the seat stricter than the map's check by a hair, as the sun corridor's placer is (`fit._sun_corridor_ok`)
 
 SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
@@ -234,6 +239,7 @@ def lay_fixtures(
     notes: dict[str, Any] | None = None,
     shade: float = 0.0,
     turns: Sequence[float] = (0.0,),
+    groves: Sequence[Rect] = (),
 ) -> dict[str, Rect]:
     """Each of `kinds` laid beside the parts already laid, in the house's unturned frame centered on it: `{kind: (x, y, w,
     h)}`, the box AS LAID (a flank seat turned to lie along its flank). `roofs` are the built parts - the house first, the
@@ -247,7 +253,10 @@ def lay_fixtures(
     only for a bath room with no place along the house's three attested walls, or a wood shed with no place a ken off a
     wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22)."""
     g = px(WALL_GAP_FT)
-    taken: list[Rect] = [*roofs, *ground]
+    # A GROVE FARM'S BANDS (`groves`, feature 291) are ground no fixture and no trunk stands on, but not a roof: a persimmon's crown
+    # may reach over the grove's edge, where its own crowns give way round it (feature 315: held off the bands, a grove farm's
+    # persimmon found no seat in the 24 ft service strip behind its house and walked 35 to 80 ft out, past the dooryard)
+    taken: list[Rect] = [*roofs, *groves, *ground]
     built: list[Rect] = list(roofs)
     laid: dict[str, Rect] = {}
     ft: dict[str, tuple[float, float]] = {}
@@ -257,6 +266,9 @@ def lay_fixtures(
         u = roll(SALT[kind] + 0.5)
         if kind == "persimmon":
             seat = _persimmon(hw, hh, taken, built, u < forms.persimmon_front, px, _sunlit(ground, shade, turns))
+            if seat is None:  # no seat in the dooryard: this farm keeps no persimmon (feature 315)
+                del ft[kind]
+                continue
         elif kind == "woodpile":
             walls = steading_rects(hw, hh, "N" if kura else None, px(1.0)) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
             seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
@@ -467,11 +479,11 @@ def _sunlit(ground: Sequence[Rect], shade: float, turns: Sequence[float]) -> Cal
     return clear
 
 
-def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect], front_first: bool, px: Callable[[float], float], sunlit: Callable[[float, float, float], bool]) -> Rect:
+def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect], front_first: bool, px: Callable[[float], float], sunlit: Callable[[float, float, float], bool]) -> Rect | None:
     """The yard persimmon (269 B14): the dooryard in front - the front corners and straight out - or behind the house,
     rolled against the hamlet's front share; its trunk clear of every part, its crown over no roof and out of every yard's
     and bed's sun (`sunlit`, GM 2026-10-02), so a farm that dries its grain in a front yard keeps its persimmon behind the
-    house. Stepped out until it stands."""
+    house. Stepped out until it stands, within the dooryard (`PERSIMMON_DOORYARD_FT`); None where no seat there does."""
     r = px(PERSIMMON_CROWN_FT)
     trunk = px(TRUNK_FT)
     reach = math.hypot(hw / 2, hh / 2) + r + CANOPY_PAD + 1.0
@@ -484,12 +496,20 @@ def _persimmon(hw: float, hh: float, taken: Sequence[Rect], roofs: Sequence[Rect
         (
             (lx, ly, 2 * r, 2 * r)
             for lx, ly in chain(ring, paced)
-            if clears((lx, ly, trunk, trunk), taken, 2.0) and clears((lx, ly, 2 * r, 2 * r), roofs, CANOPY_PAD) and sunlit(lx, ly, r + px(SHADE_MARGIN_FT))
+            if in_dooryard(lx, ly, r, hw, hh, px(PERSIMMON_DOORYARD_FT))
+            and clears((lx, ly, trunk, trunk), taken, 2.0)
+            and clears((lx, ly, 2 * r, 2 * r), roofs, CANOPY_PAD)
+            and sunlit(lx, ly, r + px(SHADE_MARGIN_FT))
         ),
         None,
     )
-    assert seat is not None, "the persimmon's paces reach free ground"  # noqa: S101 - finite parts, 200 ft of paces behind the house
     return seat
+
+
+def in_dooryard(lx: float, ly: float, r: float, hw: float, hh: float, reach: float) -> bool:
+    """Does a crown of radius `r` at (`lx`, `ly`) in the house's frame keep its edge within `reach` of the house's walls?"""
+    dx, dy = max(abs(lx) - hw / 2, 0.0), max(abs(ly) - hh / 2, 0.0)
+    return math.hypot(dx, dy) - r <= reach
 
 
 def world_fixtures(laid: Mapping[str, Any]) -> list[tuple[str, Rect]]:

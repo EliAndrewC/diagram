@@ -7,12 +7,13 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures, sun_turns
+from ..homestead_parts.grove_rules import EAST_REACH_PX
 from ..homestead_parts.grove_sides import bundle_turn
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
 from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 from .bearing import BEARING_SPREAD_DEG
-from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, dispersed_layout
+from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, clear_east_of_beds, dispersed_layout
 from .lot import kura_rect
 
 if TYPE_CHECKING:
@@ -158,6 +159,8 @@ class BundleGeomMixin:
         frame = base.pop("_frame", None)
         turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
+        if frame is not None:  # dispersed: no unraked band left standing in a turned bed's morning sun (feature 315, seed 906)
+            base["groves"] = clear_east_of_beds(list(base.get("groves") or ()), list(base["gardens"]), EAST_REACH_PX * self.bscale)
         base["turn"] = turn  # the parts' turn, so a reader of their true sizes (`access.doors_of`) measures them as drawn
         # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
         _th = math.radians(turn)
@@ -385,7 +388,7 @@ class BundleGeomMixin:
         def rel(r: Any) -> Any:
             return (r[0] - hx, r[1] - hy, r[2], r[3])
 
-        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well"), *bands) if r is not None]
+        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well")) if r is not None]
         ground = [rel(base["yard"]), *(rel(g) for g in base["gardens"])]
         forms = getattr(self, "_fixture_forms", None) or FixtureForms()
         annex = rel(base["byre"]) if base.get("byre") is not None else None
@@ -397,7 +400,7 @@ class BundleGeomMixin:
         lo, hi = (-5.0, 5.0) if bearing is None else (bearing - BEARING_SPREAD_DEG, bearing + BEARING_SPREAD_DEG)
         shade = self.px(CANOPY_SHADE_FT) if getattr(self, "_sun_corridor_ft", 0.0) else 0.0
         try:
-            laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex, notes, shade, sun_turns(lo, hi))
+            laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex, notes, shade, sun_turns(lo, hi), [rel(b) for b in bands])
         except FixtureUnlaid as refused:  # a bath room or a wood shed with no seat in this layout: the fit refuses it (feature 280)
             base["unlaid"] = str(refused)
             return

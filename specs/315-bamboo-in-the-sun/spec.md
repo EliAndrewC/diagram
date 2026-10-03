@@ -123,13 +123,13 @@ modal still calls bamboo exempt from the sun rule.
 
 ### Measurable Outcomes
 
-- **SC-001**: On the five pool hamlets and on the cohort the gate rolls, zero bamboo marks or stands stand in any plot's
-  sun ground at bamboo's reach, counted from the record (FR-001, FR-004, FR-005).
+- **SC-001** (FR-001, FR-004, FR-005): On the five pool hamlets and on the cohort the gate rolls, zero bamboo marks or stands
+  stand in any plot's sun ground at bamboo's reach, counted from the record.
 - **SC-002**: The count of bamboo marks the record holds equals the count drawn on each pool hamlet (FR-004).
-- **SC-003**: A bamboo mark placed by hand in a plot's sun ground makes the check fail (FR-005), and a placer handed a seat
-  in the sun refuses it (FR-003).
-- **SC-004**: The sun page states bamboo's reach with each height it rests on footnoted and confirmed by the record's
-  checks, and no page or modal calls bamboo exempt (FR-002, FR-006).
+- **SC-003** (FR-003, FR-005): A bamboo mark placed by hand in a plot's sun ground makes the check fail, and a placer handed
+  a seat in the sun refuses it.
+- **SC-004** (FR-002, FR-006): The sun page states bamboo's reach with each height it rests on footnoted and confirmed by the
+  record's checks, and no page or modal calls bamboo exempt.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -139,6 +139,11 @@ modal still calls bamboo exempt from the sun rule.
 | Bamboo's reach is worked out from the timber bamboos' least cited height, by the canopy reach's own derivation | guess (the least height, as for trees; taller stands would reach further) | the GM expected a different distance for different things; the derivation gives each thing its own distance from its own height, and what that height comes to is for the plan's reading to confirm | the sun page; the plan |
 | A grove's bamboo, drawn without a kind, is held at the timber bamboos' reach, not yadake's | guess | the Tonami grove held madake, moso and hachiku beside yadake, a shorter bamboo grass; a patch drawn without a kind may hold any of them, and the tall ones decide its shade | the sun page; the bamboo drawing page |
 | The coppiced mulberry and the tea hedge stay outside the rule | as feature 310 recorded | not tall; unchanged here | feature 310's spec |
+| A bed slid south after the groves stand keeps its new sun ground clear of every standing crown, promised persimmon and bamboo mark | guess - the sun rule's, as feature 310's | the slide that clears a bed's morning shade moved its sun ground over a neighbor's persimmon (cohort seed 14, a regression feature 310 shipped); the rule holds wherever a bed ends up | `rolling/farmsteads.py` `beds_sun_clear` |
+| On a grove farm the bed stands wholly south of the front wall, and a band in a turned bed's east reach is cut back to a pixel clear of it | guess - the layout's, as feature 310's | a bed taller than its yard rose past the east band's end, and a bed turned with its house rises past an unturned band (cohort seeds 15 and 906); the cut is at most a few feet at the band's end | `rolling/dispersed.py` `clear_east_of_beds` |
+| The persimmon's paces stop at the dooryard - its crown's edge within about 30 ft of the house - and a farm with no seat there keeps none | historically accurate for the place (the fruit-tree page: "within about 30 ft of the house"; `research.md` R3); its exact reach a GUESS | paced on, a crowded farm's persimmon walked 80 ft out onto a row's street (cohort seed 23, refused); on the grove-farm maps every persimmon but one already stood 35 to 80 ft out, past any dooryard (one-shot, observed 2026-10-02; method: each persimmon's crown edge measured from its house in the house's frame) | `homestead_parts/fixture_seats.py` `PERSIMMON_DOORYARD_FT` |
+| A grove farm's bands are ground no trunk stands on but a persimmon's crown may reach over | guess | held off the bands, a grove farm's persimmon found no seat in the service strip behind its house; its crown at the grove's edge is where the record's grove pages put fruit trees, and the grove's crowns already give way round it | `fixture_seats.lay_fixtures` (`groves`) |
+| Fewer grove farms keep a persimmon than the record's share | accepted limitation, raised with the GM | the sun rule judged at every rake a house may take (the GM's rule, held whole) and the dooryard's reach leave Kashikawa 7 persimmons of 20 and Mizuguchi 5 of 12, where the record puts one in 80 to 95 of every 100 dooryards (one-shot, observed 2026-10-02; method: the regenerated pool's `persimmons` counted per house). Priced: judging each persimmon at its house's actual rake restored Mizuguchi to 10 of 12 but widened the bundles past what Kashikawa's 20-house row could seat (refused, 7 of 20 seated on every margin), so it was withdrawn; letting a farm's own persimmon shade its own yard or bed would bend the GM's rule, which is the GM's to choose | this spec; the closing report |
 
 ## Assumptions
 
