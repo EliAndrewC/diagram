@@ -320,6 +320,10 @@ def test_an_imported_copy_is_checked_against_the_live_page(tmp_path: pathlib.Pat
     assert un.imported(_home(), "https://w.org/dead") is not None, "an unread page keeps its copy"
     assert un.imported_urls(_home()) == ["https://w.org/dead"]
     assert not un.same_page("", "x")
+    src.put(_home(), "https://w.org/gbk", village, origin="import:/tmp/x")
+    got = un.verify(root, ["https://w.org/gbk"], Stand({"https://w.org/gbk": _page("https://w.org/gbk", body="\ufffd\ufffd mis-decoded " * 40)}))
+    assert got["unread"] == 1 and un.imported(_home(), "https://w.org/gbk") is not None, "a garbled read never replaces the copy"
+    assert un.garbled("\ufffd" * 2 + "x" * 98) and not un.garbled("\ufffd" + "x" * 99) and not un.garbled("\ufffd")
 
 
 def test_cite_moves_an_uncited_entry_to_the_works_cited_with_a_used_for_line(tmp_path: pathlib.Path) -> None:
@@ -484,3 +488,20 @@ def test_requeue_clears_a_verdict_and_its_entry_so_the_filter_judges_the_page_ag
     assert un.judged(root) == {src.norm("https://w.org/keep")}
     with pytest.raises(ValueError, match="no verdict and no entry"):
         un.requeue(root, "https://w.org/stone")
+
+
+def test_copy_verdicts_lists_a_verdict_that_blames_its_saved_copy_once_the_page_reads_live(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    readable = "A readable page about paddy ecology. " * 60
+    for u, text in (("https://w.org/blog", readable), ("https://w.org/stub", readable), ("https://w.org/gbk", "\ufffd" * 2000), ("https://w.org/short", "x" * 200)):
+        src.put(_home(), u, text)
+    at.write(root, [un.line("https://w.org/blog", ["unreadable"], "source-filter", "saved text is mojibake throughout"),
+                    un.line("https://w.org/stub", ["no-substance"], "source-filter", "a disambiguation list"),
+                    un.line("https://w.org/gbk", ["unreadable"], "source-filter", "saved text is mojibake"),
+                    un.line("https://w.org/short", ["no-substance"], "source-filter", "title only")], un.NOT_KEPT)
+    at.write(root, [{"url": src.norm(u), "raw": u, "result": "same", "date": "2026-10-02"} for u in
+                    ("https://w.org/blog", "https://w.org/stub", "https://w.org/gbk", "https://w.org/short")], un.MISFILED)
+    got = un.copy_verdicts(root)
+    assert len(got) == 1 and got[0].startswith("https://w.org/blog") and "unreadable" in got[0]
+    un.stands(root, "https://w.org/blog", "read: the live page is still mojibake past its frame")
+    assert un.copy_verdicts(root) == [], "a page read and found sound leaves the list"

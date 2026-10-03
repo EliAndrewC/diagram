@@ -882,3 +882,25 @@
 {"url": "paddy.mashup76.com/interval", "raw": "https://paddy.mashup76.com/interval/", "result": "same", "date": "2026-10-02"}
 {"url": "gov-online.go.jp/eng/publicity/book/hlj/html/202309/202309_00_en.html", "raw": "https://www.gov-online.go.jp/eng/publicity/book/hlj/html/202309/202309_00_en.html", "result": "same", "date": "2026-10-02"}
 {"url": "isa.cas.cn/kxcb/kpzw/202012/t20201221_5831491.html", "raw": "https://www.isa.cas.cn/kxcb/kpzw/202012/t20201221_5831491.html", "result": "same", "date": "2026-10-02"}
+{"url": "chinawriter.com.cn/n1/2022/0913/c419926-32525271.html", "raw": "http://www.chinawriter.com.cn/n1/2022/0913/c419926-32525271.html", "result": "same", "date": "2026-10-02"}
+{"url": "oki-park.jp/kaiyohaku/inst/80/81", "raw": "https://oki-park.jp/kaiyohaku/inst/80/81", "result": "same", "date": "2026-10-02"}
+{"url": "matsushiro-kankou.com/spot/spot-419", "raw": "https://www.matsushiro-kankou.com/spot/spot-419/", "result": "same", "date": "2026-10-02"}
+{"url": "nougyoudoboku.com/plot-of-paddy-field", "raw": "https://nougyoudoboku.com/plot-of-paddy-field/", "result": "same", "date": "2026-10-02"}
+{"url": "gurutto-aizu.com/detail/510/index.html", "raw": "https://www.gurutto-aizu.com/detail/510/index.html", "result": "same", "date": "2026-10-02"}
+{"url": "news.bjd.com.cn/2022/09/20/10163783.shtml", "raw": "https://news.bjd.com.cn/2022/09/20/10163783.shtml", "result": "same", "date": "2026-10-02"}
+{"url": "osaka-angenet.jp/ange/ange80/2008005", "raw": "https://www.osaka-angenet.jp/ange/ange80/2008005", "result": "same", "date": "2026-10-02"}
+{"url": "hjs.rccsh.sxu.edu.cn/slshsyj/yjdt/135825.htm", "raw": "http://hjs.rccsh.sxu.edu.cn/slshsyj/yjdt/135825.htm", "result": "same", "date": "2026-10-02"}
+{"url": "kumagaya-bunkazai.jp/museum/dokusyo/koramu/teitetu/teitetu.htm", "raw": "https://www.kumagaya-bunkazai.jp/museum/dokusyo/koramu/teitetu/teitetu.htm", "result": "same", "date": "2026-10-02"}
+{"url": "sheke.bjfu.edu.cn/cn/article/pdf/preview/9145.pdf", "raw": "https://sheke.bjfu.edu.cn/cn/article/pdf/preview/9145.pdf", "result": "same", "date": "2026-10-02"}
+{"url": "resci.cn/cn/lexeme/showarticlebylexeme.do?articleid=49240", "raw": "https://www.resci.cn/CN/lexeme/showArticleByLexeme.do?articleID=49240", "result": "misfiled", "date": "2026-10-02"}
+{"url": "waseda.jp/inst/weekly/academics/2018/06/29/40014", "raw": "https://www.waseda.jp/inst/weekly/academics/2018/06/29/40014/", "result": "same", "date": "2026-10-02"}
+{"url": "kotobank.jp/word/雨戸-29722", "raw": "https://kotobank.jp/word/%E9%9B%A8%E6%88%B8-29722", "result": "verdict-stands", "note": "read 2026-10-02: Kotobank serves the entry by its number, so the URL's page is the entry judged", "date": "2026-10-02"}
+{"url": "city.osaka.lg.jp/naniwa/page/0000634484.html", "raw": "https://www.city.osaka.lg.jp/naniwa/page/0000634484.html", "result": "same", "date": "2026-10-02"}
+{"url": "kotobank.jp/word/一里塚-31498", "raw": "https://kotobank.jp/word/一里塚-31498", "result": "verdict-stands", "note": "read 2026-10-02: Kotobank serves the entry by its number, so the URL's page is the entry judged", "date": "2026-10-02"}
+{"url": "kotobank.jp/word/稲架-110636", "raw": "https://kotobank.jp/word/%E7%A8%B2%E6%9E%B6-110636", "result": "verdict-stands", "note": "read 2026-10-02: Kotobank serves the entry by its number, so the URL's page is the entry judged", "date": "2026-10-02"}
+{"url": "kotobank.jp/word/絞油業-74081", "raw": "https://kotobank.jp/word/%E7%B5%9E%E6%B2%B9%E6%A5%AD-74081", "result": "verdict-stands", "note": "read 2026-10-02: Kotobank serves the entry by its number, so the URL's page is the entry judged", "date": "2026-10-02"}
+{"url": "kotobank.jp/word/城下町-79289", "raw": "https://kotobank.jp/word/城下町-79289", "result": "verdict-stands", "note": "read 2026-10-02: Kotobank serves the entry by its number, so the URL's page is the entry judged", "date": "2026-10-02"}
+{"url": "1073shoso.jp/www/sankyo/detail.jsp?id=18665", "raw": "https://1073shoso.jp/www/sankyo/detail.jsp?id=18665", "result": "verdict-stands", "note": "read 2026-10-02: the live text is still font-encoding mojibake past the page frame", "date": "2026-10-02"}
+{"url": "dpm.org.cn/explode/others/206248.html", "raw": "https://www.dpm.org.cn/explode/others/206248.html", "result": "verdict-stands", "note": "read 2026-10-02: the live page is still a PDF viewer shell with a table of contents", "date": "2026-10-02"}
+{"url": "q.hatena.ne.jp/1216205378", "raw": "https://q.hatena.ne.jp/1216205378", "result": "same", "date": "2026-10-02"}
+{"url": "taichi-tokyo.com/minami-machi-bugyosho", "raw": "https://taichi-tokyo.com/minami-machi-bugyosho/", "result": "same", "date": "2026-10-02"}

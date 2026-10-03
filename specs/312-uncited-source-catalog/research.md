@@ -94,6 +94,16 @@ serves 三保の松原 live too - Kotobank picks the entry by its number, so the
 Calibrating one needs pairs known to be the same and known to differ, and the imported copies of the 35 were replaced
 before this was seen; the kept copies make the next run's flags calibration data.
 
+**Encoding, the second fault the live read surfaced (same day, the run's resumed half):** some imported copies were
+mis-decoded - a Shift-JIS student essay and a JUGEM blog saved as mojibake and ruled `unreadable`, a village page saved
+as its title and ruled `no-substance` - and read live they are whole pages. And one live read was the mis-decoded one:
+`zj.cnr.cn`'s GBK page came back as replacement characters and replaced a good copy. So: a read with more than 1% U+FFFD
+(`_uncited.garbled`) never replaces a copy; `make uncited DO=copy-verdicts` lists every filter verdict whose note blames
+the saved copy (mojibake, a shell, a title only, a challenge page) on a page the check has since read live into the cache
+readable; each is read, then requeued or marked `DO=stands URL= NOTE=`. Of the 10 it listed: 3 requeued (2 kept and
+written up, the essay ruled unreliable-kind on its own text), 7 stand (5 Kotobank URLs that serve the entry judged, the
+Tonami bulletin still font mojibake past its frame, the Palace Museum page still a viewer shell).
+
 ## R6: a long work is read whole by several readers (2026-10-02)
 
 **Found:** the Read tool returns about 60,000 characters of a file, and the drafting parts were cut at 20,000 estimated

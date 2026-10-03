@@ -424,6 +424,11 @@ def grams(text: str, n: int = 4) -> set[str]:
     return {t[i : i + n] for i in range(max(0, len(t) - n + 1))}
 
 
+def garbled(text: str) -> bool:
+    """Text decoded in the wrong charset: more than 1% replacement characters (U+FFFD)."""
+    return len(text) >= EMPTY and text.count("�") > len(text) / 100
+
+
 def same_page(a: str, b: str) -> bool:
     """Two texts of one page: their character 4-grams over the first 5,000 characters overlap by a third or more (a page
     re-fetched later differs by its edits and its navigation, never by its subject)."""
@@ -443,6 +448,7 @@ def verify(root: pathlib.Path, urls: list[str], browser) -> dict[str, int]:  # n
             continue
         got = ar.fetch(browser, u)
         live = got.text.strip() if got.text and not got.error and got.status and got.status < 400 else ""
+        live = "" if garbled(live) else live  # a mis-decoded read never replaces a copy (zj.cnr.cn's GBK page, 2026-10-02)
         result = "unread" if len(live) < EMPTY else ("same" if same_page(old, live) else "misfiled")
         if result == "misfiled":  # kept beside the live text: the 4-gram measure flags a skin change as readily as another page (R5), so a flag is confirmed by reading before `requeue`
             d = src.entry_dir(where, u)
@@ -795,6 +801,33 @@ def unkeep(root: pathlib.Path, raw: str, reasons: list[str], basis: str, note: s
     at.write(root, [line(raw, reasons, basis, note)], NOT_KEPT)
 
 
+#: A not-kept note that blames the saved copy rather than the page (2026-10-02: two blogs ruled unreadable from mojibake
+#: imports and a village page ruled no-substance from a title-only shell, each readable live).
+COPY_FAULT = re.compile(r"mojibake|saved text|saved copy|title only|shell|encod|garbage|garbled|JavaScript|captcha|challenge|truncat", re.I)
+
+
+def copy_verdicts(root: pathlib.Path) -> list[str]:
+    """Pages to read and, if the page is readable, `requeue`: a filter verdict whose note blames the saved copy, on a page
+    the import check has since read live into the cache readable (1,500 characters or more, not garbled)."""
+    nk = {x["url"]: x for x in at.read(root, NOT_KEPT) if x.get("basis") == "source-filter"}
+    rows = at.read(root, MISFILED)
+    stood = {x["url"] for x in rows if x["result"] == "verdict-stands"}
+    where, out = src.home(root), []
+    for x in rows:
+        v = None if x["url"] in stood else nk.get(x["url"])
+        if not (v and x["result"] in ("same", "misfiled") and COPY_FAULT.search(v.get("note", ""))):
+            continue
+        text = text_of(where, x["raw"]) or ""
+        if len(text) >= 1500 and not garbled(text):
+            out.append(f"{x['raw']}  ({', '.join(v['reasons'])}: {v.get('note', '')[:90]})")
+    return out
+
+
+def stands(root: pathlib.Path, raw: str, note: str) -> None:
+    """A page `copy_verdicts` listed, read, and its verdict found sound (the live page is as the verdict says): it leaves the list."""
+    at.write(root, [{"url": src.norm(raw), "raw": raw, "result": "verdict-stands", "note": note, "date": today()}], MISFILED)
+
+
 def requeue(root: pathlib.Path, raw: str) -> str | None:
     """A page whose verdict was judged from another page's text (R5, a misfiled import confirmed by reading): its kept or
     not-kept line and its uncited entry go, so the filter judges it again from the live text. Returns the retired key."""
@@ -922,6 +955,10 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     uk.add_argument("note")
     sub.add_parser("dedupe").add_argument("--dry", action="store_true")
     sub.add_parser("requeue").add_argument("url")
+    sub.add_parser("copy-verdicts")
+    st = sub.add_parser("stands")
+    st.add_argument("url")
+    st.add_argument("note")
     args = ap.parse_args(argv)
     root = src.repo_root()
     if args.cmd == "set":
@@ -968,6 +1005,13 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
         done = dedupe(root, args.dry)
         verb = "would be retired" if args.dry else "retired"
         print("\n".join(f"uncited: duplicate {verb} - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) {verb}")
+    elif args.cmd == "copy-verdicts":
+        found = copy_verdicts(root)
+        print("\n".join(found) + f"\nuncited: {len(found)} verdict(s) blame a saved copy on a page now read live - read each; "
+              "requeue a readable one with `make uncited DO=requeue URL=<u>`, or `make uncited DO=stands URL=<u> NOTE=<why>`")
+    elif args.cmd == "stands":
+        stands(root, args.url, args.note)
+        print(f"uncited: {args.url} - its verdict stands ({args.note})")
     elif args.cmd == "requeue":
         key = requeue(root, args.url)
         print(f"uncited: {args.url} requeued - its verdict cleared{f', its entry {key} retired' if key else ''}; `make uncited DO=bundle` judges it again")

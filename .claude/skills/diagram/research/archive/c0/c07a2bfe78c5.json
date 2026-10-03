@@ -1,0 +1,14 @@
+{
+ "captured": "2026-10-03T00:28:33+00:00",
+ "final_url": "http://www.china.org.cn/travel/2014-08/19/content_33276463.htm",
+ "first": "c0/c07a2bfe78c5/20261003T002833Z",
+ "gm_copies": [],
+ "keys": [],
+ "notes": [],
+ "outcome": "partial",
+ "path": "c0/c07a2bfe78c5/20261003T002833Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "0d1e22403961fd8c90038c31204ccad36f0379088954631b499a540bff67d488",
+ "url": "http://www.china.org.cn/travel/2014-08/19/content_33276463.htm"
+}
