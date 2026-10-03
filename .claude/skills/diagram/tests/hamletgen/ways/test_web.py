@@ -248,3 +248,21 @@ def test_a_skeleton_arm_trimmed_under_the_web_floor_is_no_arm(monkeypatch: pytes
     assert web.served_arm(s, [(0.0, 0.0), (5.0, 0.0), (500.0, 0.0)]) == [], "trimmed to 5 ft: under the floor"
     assert web.served_arm(s, [(0.0, 0.0), (400.0, 0.0), (500.0, 0.0)]) == [(0.0, 0.0), (400.0, 0.0)]
     assert web.served_arm(s, [(0.0, 0.0)]) == [(0.0, 0.0)], "a point is passed through untrimmed"
+
+
+def test_a_joint_the_settle_left_straightened_is_settled_again_and_its_record_replaced(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 308's re-settle, lifted by feature 314: where the joint pass rewrites a joint after the settle, the web is settled
+    again and the record replaced, its seconds left out; where it rewrites none, nothing is settled."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways import web as W
+
+    s = SimpleNamespace(M={"meta": {"web_settle": {"rounds": 1}}})
+    settled: list[int] = []
+    monkeypatch.setattr(W, "settle_the_web", lambda s_: settled.append(1) or {"rounds": 2, "seconds": 0.4})
+    monkeypatch.setattr(W, "straighten_joints", lambda *a: 0)
+    W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
+    assert not settled and s.M["meta"]["web_settle"] == {"rounds": 1}, "no joint rewritten: nothing settled"
+    monkeypatch.setattr(W, "straighten_joints", lambda *a: 1)
+    W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
+    assert settled == [1] and s.M["meta"]["web_settle"] == {"rounds": 2}, "settled again, the seconds kept out"

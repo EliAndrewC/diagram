@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Callable, Iterator, Sequence
+from types import SimpleNamespace
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
@@ -429,7 +430,7 @@ def reserve_field_corridor(s: Settlement) -> bool:
     from ..ways.bund import BRANCH_WIDTH, paddy_ground
     from ..ways.corridors import FIELD_ROLE, field_router, field_runs, routed_field_runs
     from ..ways.geom import memo_ground, worked_ground
-    from ..ways.settle import corridor_on_lawful_ground
+    from ..ways.settle import Lawful, corridor_on_lawful_ground
     from ..ways.tree import admits, seating_law
 
     tree = getattr(s, "_access", None)
@@ -450,8 +451,11 @@ def reserve_field_corridor(s: Settlement) -> bool:
 
     # ...AND WHERE THE TREE STAYS LAWFUL WITH IT (feature 287 wave 6, `tree.admits`): the web draws it as a tree lane, never
     # cut, so its joint with the exit strip is judged here with every other rule of the lane law
+    # ...THE GROUND READ ONCE for every candidate (`corridor_on_lawful_ground`'s `lawful`): nothing stands or moves while they are tried
+    lawful = Lawful(SimpleNamespace(M=s.M))
     run = next(
-        (r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH) and admits(seating_law(s), s.M, [(float(x), float(y)) for x, y in r[::-1]], FIELD_ROLE)), None
+        (r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH, lawful) and admits(seating_law(s), s.M, [(float(x), float(y)) for x, y in r[::-1]], FIELD_ROLE)),
+        None,
     )
     if run is None:
         return False

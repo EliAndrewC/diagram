@@ -69,6 +69,12 @@ class _Ground:
     def _bundle_envelope(self, x: float, y: float, w: float, h: float, shed: bool = False) -> tuple[float, float, float, float]:
         return (x, y, 40.0, 40.0)
 
+    def _house_box(self, x: float, y: float, w: float, h: float) -> tuple[float, float, float, float]:
+        return (x, y, w, h)
+
+    def _house_box_refused(self, box: tuple[float, float, float, float]) -> bool:
+        return False
+
     def try_place(self, x: float, y: float, _kind: str) -> bool:
         self.asked.append((x, y))
         if math.hypot(x, y) > self.ring or any(math.hypot(x - h["x"], y - h["y"]) < self.room for h in self.M["houses"]):
@@ -130,6 +136,47 @@ def test_a_seat_is_moved_out_until_its_own_envelope_rolled_there_clears_and_drop
         return (q[0], 5.0, 5.0, 5.0)  # always reaching past where it was placed
 
     assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, grows) is None and len(calls) == SETTLE_TRIES
+
+
+def test_a_seat_the_ground_refuses_is_dropped_before_its_household_is_laid_out() -> None:
+    """Feature 314: the settle asks `refused` of every seat before it rolls the household there, and a refused seat is dropped
+    without the roll."""
+    from l7r.diagram.hamletgen.homesteads.growth import settled_seat
+
+    standing, guess = (10.0, 10.0, 10.0, 10.0), (5.0, 5.0, 5.0, 5.0)
+    rolled: list[tuple[float, float]] = []
+    roll = lambda q: rolled.append(q) or guess  # noqa: E731
+    assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, roll, lambda q: True) is None and rolled == [], "never laid out"
+    assert settled_seat((0.0, 0.0), standing, guess, 0.0, 0.0, 1.0, roll, lambda q: False) == pytest.approx((15.0, 0.0)) and rolled
+
+
+def test_the_seats_own_questions_are_the_placers_asked_of_the_house_alone() -> None:
+    """Feature 314: the field's reach, the house's own box against the canvas, the corridors and the placed homesteads, and the
+    refused-ground grid under it - each refuses the seat; a seat none refuses is laid out."""
+    from l7r.diagram.hamletgen.homesteads.growth import seat_refused
+
+    s = _Ground(room=40.0)
+    assert seat_refused(s, (0.0, 0.0), (46.0, 28.0)) is False, "nothing refuses it"  # type: ignore[arg-type]
+    s._free_ground = SimpleNamespace(rect_refused=lambda box: box[2] == 46.0)  # type: ignore[attr-defined]
+    assert seat_refused(s, (0.0, 0.0), (46.0, 28.0)) is True, "a refused cell under the house's box"  # type: ignore[arg-type]
+    s._free_ground = None  # type: ignore[attr-defined]
+    s._house_box_refused = lambda box: True  # type: ignore[method-assign]
+    assert seat_refused(s, (0.0, 0.0), (46.0, 28.0)) is True, "the canvas, a corridor or two homesteads under the house"  # type: ignore[arg-type]
+    far = _Ground(room=40.0)
+    far._site_chains = [[((0.0, 0.0), (10.0, 0.0), (0.0, 1.0))]]  # type: ignore[attr-defined]
+    assert seat_refused(far, (0.0, 5000.0), (46.0, 28.0)) is True, "past the field's reach"  # type: ignore[arg-type]
+
+
+def test_the_next_house_is_its_lots_rung_or_the_largest() -> None:
+    from l7r.diagram.hamletgen.homesteads.growth import next_house
+
+    s = _Ground(room=40.0)
+    assert next_house(s, (99.0, 98.0)) == (99.0, 98.0), "no lots: the largest"  # type: ignore[arg-type]
+    s._lots = SimpleNamespace(lot=lambda k: (1.5, 1.0, False, False) if k == 1 else None)  # type: ignore[attr-defined]
+    s.M["houses"] = [{"kind": "plain"}, {"kind": "abandoned"}]
+    assert next_house(s, (99.0, 98.0)) == pytest.approx((69.0, 28.0)), "the second plain household's rung"  # type: ignore[arg-type]
+    s.M["houses"].append({"kind": "plain"})
+    assert next_house(s, (99.0, 98.0)) == (99.0, 98.0), "past the declared lots: the largest"  # type: ignore[arg-type]
 
 
 def test_the_next_households_reach_is_rolled_with_its_own_lot_and_its_parts_taken_down_after() -> None:

@@ -1,0 +1,20 @@
+base: 16 seeds, stage 20.3 s, 240 houses
+new: 16 seeds, stage 19.2 s, 240 houses
+base: 10 seeds, stage 46.5 s, 400 houses
+new: 10 seeds, stage 36.1 s, 400 houses
+20hh 4 start314b: homesteads=1.56 web=0.95 
+20hh 4 r12-314: homesteads=1.51 web=0.94 
+20hh 39 start314b: homesteads=1.69 web=1.03 
+20hh 39 r12-314: homesteads=1.13 web=1.05 
+20hh 13 start314b: homesteads=1.88 web=1.02 
+20hh 13 r12-314: homesteads=1.79 web=0.99 
+20hh 25 start314b: homesteads=1.35 web=0.97 
+20hh 25 r12-314: homesteads=1.21 web=0.91 
+20hh 47 start314b: homesteads=1.27 web=1.20 
+20hh 47 r12-314: homesteads=1.33 web=0.82 
+20hh 1 start314b: homesteads=1.37 web=1.57 
+20hh 1 r12-314: homesteads=1.57 web=1.28 
+20hh 2 start314b: homesteads=1.59 web=1.22 
+20hh 2 r12-314: homesteads=0.94 web=0.99 
+20hh 5 start314b: homesteads=1.54 web=1.08 
+20hh 5 r12-314: homesteads=1.53 web=1.34 

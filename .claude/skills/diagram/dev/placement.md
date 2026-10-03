@@ -76,6 +76,16 @@ this reserve ground or fill it" but **"did this way exist before the settlement 
 - **Endogenous** - the internal skeleton, the lane web. These are worn by the settlement, so they
   are derived from where the houses actually went.
 
+**THE HOMESTEADS COME FIRST BECAUSE THAT IS HOW LANES WERE TRODDEN** (the GM, 2026-10-02, declining a
+proposal to lay the lanes first and seat the houses along them for speed): *"Village lanes are footpaths
+that are worn by people walking between houses. But in real life, when these farming communities were set
+up, people built their homesteads, and then the village lanes came after. So it is inauthentic and
+unrealistic for us to place the lanes first."* It was tried before and made the seating harder, not easier;
+and even a measured speedup would not justify drawing a village the way villages were not made. A paved road
+is the exception the GM named - *"planned government projects, which then people build things around"* -
+so an Imperial road may come before the settlement that fronts it. The reader's version is at
+`research/questions/0081-village-lanes.drawing.html`; do not propose lanes-first again.
+
 The older reserve-vs-fill rule was a good approximation and got the WEB right for the right reason,
 but it kept the skeleton first, and the skeleton was sized on the seat band while the houses spread
 wider than the band - which is why it could not be guaranteed to reach them, and is the root of the

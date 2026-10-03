@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "0f6501262",
+    "label": "314-start",
+    "utc": "20261002T222233Z"
+  },
+  "binding": "4a02bec012bae6da123e4b26d142fcc7f52b98eae9162a4dce33a619d7de563e",
+  "end": {
+    "commit": "841232aea",
+    "label": "314-end",
+    "utc": "20261002T222603Z"
+  },
+  "environment": "local",
+  "feature": "314-seat-before-settle",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261002T224051Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -6.7,
+          "39": -6.7,
+          "4": 7.9,
+          "47": -3.6
+        },
+        "total_pct": -1.6
+      },
+      "20": {
+        "seeds": {
+          "25": -3.0,
+          "39": -8.8,
+          "4": -1.6,
+          "47": -1.8
+        },
+        "total_pct": -3.7
+      },
+      "40": {
+        "seeds": {
+          "25": -0.7,
+          "39": 0.0,
+          "4": 2.6,
+          "47": -14.9
+        },
+        "total_pct": -3.1
+      }
+    },
+    "seeds": {
+      "25": -2.6,
+      "39": -18.6,
+      "4": -12.7,
+      "47": 2.5
+    },
+    "total_pct": -8.5
+  },
+  "note": "consistent, by the reviewer's counterfactual (detached worktrees at 841232aea, 2 alternated reps): with growth.py+route.py reverted to start the end engine rolls maps byte-identical to start and the grown stages return to start's times (10hh s4 web 0.58 vs end 1.14 s, notice 0.08 vs 0.25; 15hh s47 notice 0.08 vs 0.14; 40hh s4 hinterland 2.11 vs 3.20), so the downstream growth is the moved map - the web/law/settle/wet/lot edits are exact skips or refactors; 40hh s4 homesteads start 4.56 -> end 5.10 s, pre-check disabled 4.76 s (seats offered 725 -> 426): the pre-check is ~0.34 s of it, the route change (D3) the other ~0.2 s; also 15hh s47 homesteads +0.1 s from the pre-check widening the growth (seats 73 -> 105), below the bookend's resolution",
+  "verdict": "consistent"
+}

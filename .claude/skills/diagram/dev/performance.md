@@ -1057,3 +1057,39 @@ retaken on the final engine is band 0 on every leg: the reference total 20.6 -> 
 **Missed goals.** Eight seeds still take over 4 s at 40 households, and 5.8-62 offers are made per house kept. The placer's other
 rules (the woodlots, the corridors) still refuse most offered seats. A village tier that plans its paths, rather than finding
 them, would be the next lever.
+
+## Seat before settle: a seat's ground asked before its layout, a path refused where it is searched (feature 314, 2026-10-02)
+
+The GM, after the homesteads stage was measured seat by seat: *"the amount of time that it is taking to put 15 homesteads on a
+map just cannot possibly be as optimized as we can make it ... we need to keep iterating until we get there."* The record is
+`specs/314-seat-before-settle/research.md` R1-R16; every lever was timed against the base alternated per seed (`abab.sh`), under
+the load of other sessions, so only alternated legs are compared.
+
+**What shipped, and what it bought** (R13, against main with feature 310): the homesteads stage at 15 households 20.3 -> 19.2 s
+over seeds 1-16 (-5%), at 20 households 12.3 -> 11.0 s over eight seeds (-10%), at 40 households 46.5 -> 36.1 s over ten seeds
+(-22%), every seed on its first margin; the bookends back to back, the reference -8.5%, band 1, confirmed (R16).
+- *The seat's own questions before its layout* (R1, plan D1): the field's reach and the house's own box (the canvas, a reserved
+  corridor, two placed homesteads, the refused-ground grid) are asked at every position the settle would lay the household out
+  at. Laying the household out was 11% of the stage at 40 households on seats the placer then refused in a lookup.
+- *The routed path's ends judged where it is searched* (R2, R12): its first step from the door is judged by the household's own
+  leg tests and its last leg onto the tree by the standing ground, and a cell's heuristic is computed once.
+- *Exact speedups* (R4, R6, R8): the persimmon's sun ground taken once per rake; the surface water indexed for the well pocket;
+  the field's corridor reading its ground once for all its candidates (on seed 13 at 15 households each of 145 candidates had
+  indexed the whole map again); the squaring and the oblique test skipping courses out of a run's reach.
+
+**What did not, measured.**
+- *The route searched off the household's own beds and fixtures* (R2, R12): the largest saving found (-18% at 15 households in R4),
+  but the paths it found broke the lane law once the web drew them - seed 13 at 20 households refused, seeds 4 and 39 a web stage
+  2-3x slower. Withdrawn. It exposed a defect left open: the seating admits a corridor (`tree.admits`) the web's later passes
+  reshape into one it cannot draw.
+- *The map's grid for the route* (R3, R4): the narrow ways between homesteads held no grid point, and seed 6 at 40 households
+  threw two margins away.
+- *The house and its yard asked before the layout* (R5): 4% slower at 15 households, 11% at 40.
+- *A heavier weight on the search's aim* (R7), *the seats with a straight run to the tree offered first* (R10), *the pre-check at
+  the settle's first position only* (R14, seed 8 at 40 households lost a margin): no gain.
+
+**What remains** (R15, at 15 households, 1.17 s a map): the growth 64% (the corridor search and the lane law about 70% of it), the
+field's corridor 13%, the site boundary 10%, the rest 13%. The lever left: the seating judging a corridor as the web will draw
+it, which would let the own-parts search back in. Laying the lanes before the houses was DECLINED by the GM (2026-10-02): lanes
+are trodden by villagers walking between homesteads already built, and it was tried before and made the seating harder
+(`dev/placement.md`, "THE HOMESTEADS COME FIRST"). Do not offer it as a performance lever again.

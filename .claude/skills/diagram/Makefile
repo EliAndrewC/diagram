@@ -415,11 +415,14 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 # session to do after a cohort failure - "reproduce with the same entry point" - could not be done for
 # any seed but 1 without a 48-seed sweep. Feature 230 needed exactly that for the two seeds its cohort
 # failed on. The reference-settlement gate above it is untouched.
-cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=<first seed>]
+cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=<first seed>] [JOBS=<workers>]
 ##  N=<seeds>   how many seeds to roll (default: 48)
 ##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
+##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
+# GUARD_EDIT_OK: feature 314 - the cohort's workers were cpus - 2 with no way to ask fewer: 20 on this host, ~10 GB, past the
+# containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
 	$(REF_FIRST)
-	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),)
+	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),)
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -

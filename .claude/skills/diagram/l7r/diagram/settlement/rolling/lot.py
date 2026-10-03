@@ -146,10 +146,26 @@ def needs_pocket(s: Any, x: float, y: float) -> bool:
         return False
     if not pockets:
         return True
-    from ..land.wet import surface_water_dist  # the leaf stays free of the land package at import
+    from ..land.wet import surface_water_within  # the leaf stays free of the land package at import
 
     reach = s.px(WATER_REACH_FT)
-    return all(math.hypot(x - px, y - py) > reach for px, py in pockets) and surface_water_dist(s.M, x, y) > reach
+    return all(math.hypot(x - px, y - py) > reach for px, py in pockets) and not surface_water_within(s.M, x, y, reach, water_index(s))
+
+
+def water_index(s: Any) -> Any:
+    """The surface water's segments in a `PointGrid`, built once and kept while the water it reads stands (its lines and their
+    each its own list and length, the moat and the pond as they are) - the seating asks `needs_pocket` of every seat it lays out."""
+    from .._geom.indexes import PointGrid
+    from ..land.wet import water_lines
+
+    lines = water_lines(s.M)
+    sig = (tuple((id(ln), len(ln)) for ln in lines), id(s.M.get("moat")), tuple(s.M.get("pond") or ()))
+    got = s.__dict__.get("_water_index")
+    if got is None or got[0] != sig:
+        grid = PointGrid()
+        grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in lines for a, b in zip(ln, ln[1:], strict=False))
+        got = s.__dict__["_water_index"] = (sig, grid)
+    return got[1]
 
 
 def watered(s: Any, x: float, y: float, well: bool) -> bool:

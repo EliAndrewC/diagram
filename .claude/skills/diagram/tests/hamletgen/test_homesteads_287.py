@@ -266,7 +266,7 @@ def test_a_margin_with_no_lawful_field_corridor_seats_no_one(monkeypatch: pytest
     from l7r.diagram.hamletgen.ways import settle
 
     s = _brook_site()
-    monkeypatch.setattr(settle, "corridor_on_lawful_ground", lambda M, run, width=3.0: False)
+    monkeypatch.setattr(settle, "corridor_on_lawful_ground", lambda M, run, width=3.0, lawful=None: False)
     assert stages.reserve_field_corridor(s) is False and not any(c.get("field") for c in s.M["access_corridors"])
     toy, plan = _toy_hamlet(10)
     monkeypatch.setattr(stages, "reserve_field_corridor", lambda s_: False)
