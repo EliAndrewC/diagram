@@ -47,8 +47,9 @@ seats and the crop, water and marsh 1,065, and it seated 12.
 
 A clustered hamlet seats its households as tightly as the ground allows, nearest the cluster first; when the seats near it run
 out, later households are seated further out - at the cluster's edge, as a late arrival in a real village set up beside the
-houses already there - never by moving a house already seated, and never refused for its distance from the field. Of the seats
-the cluster offers at its edge, the one nearest the field is taken first.
+houses already there - never by moving a house already seated, and never refused for its distance from the field. All else
+being equal - of seats in the same ring of distance from the cluster - the one nearer the field is taken first. Neighbors stand a
+lane's threading gap apart, and once every house stands the lanes are laid in the gaps between them.
 
 **Why this priority**: it is the GM's request, and the record (0004) already states it as the rule.
 
@@ -61,8 +62,11 @@ household seated on the chosen margin, the overflow beyond the old radius, no ho
    the same households on the same margin (its houses may move only where a removed rule had refused or re-laid one).
 2. **Given** a nucleated hamlet whose households overflow the old radius, **When** it is rolled, **Then** the overflow stands
    beyond that radius at the cluster's edge, and no seated house is taken back.
-3. **Given** the seats a growth level offers round the standing houses, **When** the next household is seated, **Then** the
-   seat nearest the field is tried first.
+3. **Given** two seats a growth level offers in the same ring of distance from the cluster's seat, **When** the next household is
+   seated, **Then** the one nearer the field is tried first; a seat in a nearer ring is tried before either, however near the
+   field it lies.
+5. **Given** a seated nucleated cluster, **When** its ways are laid, **Then** each runs from its dooryard out into the gap
+   beside its homestead and along the gaps to the way out or to another household's way, joining it at a T.
 4. **Given** a site where no free ground on the whole map can hold every household, **When** it is rolled, **Then** the map is
    refused with the households it could seat named - not reseated elsewhere.
 
@@ -90,8 +94,9 @@ seating, on every form, across the cohort.
 
 ### User Story 3 - The record says what the maps now do (Priority: P2)
 
-The drawing pages say the cluster grows at its edge, nearer the field preferred but never limited by it, that the packing figure
-is reported rather than enforced, and how a passage is judged on the finished map.
+The drawing pages say the cluster grows at its edge, nearer the field preferred all else being equal but never limited by it,
+that neighbors stand a lane's threading gap apart and the ways are laid in the gaps once every house stands, that the packing
+figure is reported rather than enforced, and how a passage is judged on the finished map.
 
 **Why this priority**: every rendering decision is recorded (constitution XII); the record must not describe a rule the
 engine no longer keeps.
@@ -104,8 +109,12 @@ engine no longer keeps.
    rule they keep, and the field reach is no limit.
 2. **Given** the 0081 drawing page, **When** read, **Then** it says a passage the finished map makes unnecessary (its drawn
    layout given a way of its own) is ended in place, and nothing in it says a household is re-laid with another layout.
-3. **Given** the 0029 drawing page, **When** read, **Then** it says that of the seats the cluster offers at its edge the one
-   nearest the field is taken first, and that no distance from the field is a limit.
+3. **Given** the 0029 drawing page, **When** read, **Then** it says that, all else being equal, the seat nearer the field is
+   taken first, and that no distance from the field is a limit.
+4. **Given** the 0081 drawing page, **When** read, **Then** it says neighbors stand a lane's threading gap apart, no way is
+   searched for a household while it is seated, the ways are laid in the gaps once every house stands (the record's own reading
+   of lanes as the gaps between plots, a GUESS), and a household no way reaches is reached across a neighbor's yard; and the
+   claims in the engine that say a corridor is searched and reserved per seat say what the code now does.
 
 ### Edge Cases
 
@@ -132,27 +141,40 @@ engine no longer keeps.
   is not that figure: the predicate `within_field_reach` (the growth's seat test, the nucleated placer, the dispersed form's
   exhaustive pass, the fit test) deleted; the seat window the growth's seat region is built over, the free-ground grid's box and
   the manifest's `site_boundary.window` sized from the map's own extent; the placement-stages page's legend and the tests
-  pinning the figure updated. The hard limits that remain are every rule a seat asks today, with the field reach the only
-  exception: dry ground, nothing on crop or water, the canvas, the reserved corridors, the standing homesteads, the household's
-  water and its way to the access tree.
-- **FR-003a** (Amendment 2): Nearness to the field MUST be a tie-break only - "all else being equal, try this first" (the GM,
-  Amendment 2). The growth's order is main's (level by level from the cluster outward, nearest the cluster first); of seats
-  otherwise equal in that order, the one nearer the field is tried first. Field distance MUST NOT outrank the growth's order,
-  and the growth's search breadth MUST NOT be widened to serve it.
+  pinning the figure updated. The hard limits that remain are every rule a seat asks today, with the field reach and the per-seat
+  path search the exceptions (FR-013): dry ground, nothing on crop or water, the canvas, the exit strip and the field's corridor
+  (the only corridors reserved while houses are seated), the standing homesteads and the threading gap (FR-011), the household's
+  water, and FR-012's check that its yard opens onto lane ground connected to the way out.
+- **FR-003a** (Amendments 2 and 3): Nearness to the field MUST be a tie-break only - "all else being equal, try this first" (the
+  GM, Amendment 2). The growth's order is main's (level by level, nearest the margin's seat center first), with "equal" taken as
+  the same ring of distance from the seat center, rings `TIE_RING_FT` wide (a GUESS: about the parting between two
+  neighbors' houses, so a ring holds the seats one step of growth offers and no more); within a ring, the seat nearer the field
+  is tried first. A distance on a continuous scale is almost never exactly equal, so an exact tie would never fire; a ring
+  wide enough to hold several levels would make field distance the primary order again. Field distance MUST NOT outrank the
+  ring, and the growth's search breadth MUST be main's (the GM: "the tie-break thing for the real speedup").
 - **FR-011** (Amendment 2): Every two homesteads the growth seats MUST stand at least a lane's threading gap apart - the room the
   web needs to lay a lane between two steadings (`MIN_WEB_GAP`: a lane's clearance from each garden fence and its tread) -
-  so a way can always be laid between neighbors. Households reached across a neighbor's yard (feature 317's tight seats) stand
-  against it by design and are exempt.
-- **FR-012** (Amendment 2): A seat MUST be admitted by a cheap check in place of a path search: its yard touches ground
-  connected to the network's start (a reachability raster asked by lookup, kept current as houses stand).
+  so a way can always be laid between neighbors. The exemption is PAIRWISE: a household reached across a neighbor's yard (feature
+  317's tight seat) stands against that one neighbor by design, and keeps the gap from every other homestead.
+- **FR-012** (Amendment 2): A seat MUST be admitted by a cheap check in place of a path search: its yard opens onto LANE GROUND
+  connected to the way out - ground a lane can pass at its width (the standing homesteads held off by a corridor's half-width,
+  the site's taken ground, the households' wood seats), flooded from the exit strip and the field's corridor, a raster asked by
+  lookup and kept current as houses stand.
 - **FR-013** (Amendment 2): The seating MUST search no path for a household - no access corridor is searched for, judged against
   the lane law, or reserved per house ("This does let us drop the search entirely"). Once per map, the exit strip and the
-  field's corridor stay. Feature 317's test of whether a household has a way of its own (a straight or round-the-gable line,
-  no routed search) stays, as the custom's condition for a tight seat.
-- **FR-014** (Amendment 2): The web MUST lay each household's way once every house stands, through the gaps FR-011 leaves. A
-  household no lawful way reaches MUST be reached across a neighbor's yard (canon, the GM: "it's okay for people to cut through
-  neighbors' yards in a pinch") rather than the map refused for want of a way. Placers after the seating no longer keep off
-  per-house corridors; the GM is not concerned that other features may stand in a way.
+  field's corridor stay. Feature 317's condition for a tight seat - the household has no way of its own - is asked of FR-012's
+  predicate: a way of its own is a yard opening onto lane ground connected to the way out, so one predicate admits an ordinary
+  seat and refuses a tight one. FR-001's end-in-place check runs after the ways are laid (FR-014), against the tree they make.
+- **FR-014** (Amendments 2 and 3): Each household's way MUST be laid once every house stands, in the gaps FR-011 leaves (the GM
+  chose this "for how it shapes the map, based on that research finding": page 0081's reading of lanes as the gaps between
+  the house plots): out of its own homestead from its dooryard, then along the gaps - keeping to their middle - to the way out
+  or to a way laid before it, joining at a T; under the lane law the ways keep today. Laid at the seating's end and before the
+  homesteads' other parts are placed, they are kept clear of what is placed after, as the seating's corridors were. A household
+  no lawful way reaches MUST be reached across a neighbor's yard (canon, the GM: "it's okay for people to cut through
+  neighbors' yards in a pinch") rather than the map refused for want of a way.
+- **FR-015** (Amendment 3): The cost is accepted. Option A measured slower than the seating it replaces (homesteads stage +45%, a one-shot observation 2026-10-03, method: the
+  scratch prototype timed per stage on nine nucleated seeds); the GM chose it for the map's shape, and the tie-break (FR-003a) for the speed. FR-010's measurement
+  is still owed, and the band it reaches still owes its records.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
   house is seated on it.
 - **FR-005**: Where no free ground on the map can hold every household, the map MUST be refused, naming the households seated
@@ -179,16 +201,16 @@ engine no longer keeps.
 - **SC-002** (FR-002, FR-003): on the reference spec at 40 households, seeds 4, 25, 39 and 47, and on cohort seed 18, every
   household is seated on the chosen margin; no seat is refused for its distance from the field; no `FIELD_REACH_FT` remains in
   `settlement/rolling/fit.py` and nothing imports it; the ways law's own reach of a way to the field (`ways/law.py`'s `FIELD_REACH_FT`) is unchanged.
-- **SC-002a** (FR-003a): a test fails if field distance outranks the growth's order (a seat farther from the cluster tried
-  before a nearer one for being nearer the field), or if, of seats otherwise equal in that order, the farther from the field
-  is tried first.
+- **SC-002a** (FR-003a): a test fails if field distance outranks the ring (a seat in a farther ring tried before one in a nearer
+  ring for being nearer the field), or if, of two seats in one ring, the farther from the field is tried first; and the
+  growth's breadth equals main's (`GROW_LEVELS`).
 - **SC-007** (FR-011): a test fails if two homesteads the growth seats (neither reached across the other) stand closer than the
   threading gap; measured on the cohort and the pool.
 - **SC-008** (FR-012, FR-013): a test fails if the seating searches, judges or reserves a path for a household (the per-house
   corridor search is not called during the homesteads stage).
 - **SC-009** (FR-014): the cohort and the pool reach every household by a way or across a neighbor's yard, and no map is
   refused for want of a way.
-- **SC-010** (FR-010): the bookends against main recorded with the spread and the house-to-field distances, the perf records owed
+- **SC-010** (FR-010, FR-015): the bookends against main recorded with the spread and the house-to-field distances, the perf records owed
   by the band the change reaches.
 - **SC-003** (FR-005): a constructed site with too little free ground is refused with the shortfall named.
 - **SC-003a** (FR-004): a test fails if a margin that seated no house is not followed by the next, or a margin with no dry way out
@@ -207,7 +229,8 @@ engine no longer keeps.
 | A cluster grows at its edge; no house is moved for a late one | canon: the GM's ruling of 2026-10-03 ("when someone else moved in, everyone did not move their houses"), as 0004's drawing page already states the maps' rule | the GM's request | 0004's drawing page; this spec; the seating's comment |
 | No distance from the field refuses a seat; nearer the field preferred | the record holds no maximum (0029: "No farmhouse is held to a maximum distance from its fields"); the preference is canon, the GM's ruling of 2026-10-03 | the field reach was the drawn villages' back row, not a source's figure | 0029's and 0032's drawing pages |
 | Nearness to the field a tie-break of main's growth order (Amendment 2; the earlier primary order with every direction at once withdrawn) | canon: the GM's "all else being equal, try this first" | the GM's correction of the first reading | `growth.py`, plan D4 |
-| Neighbors a lane's threading gap apart; the seating searches no path; the web lays each way after the houses, a household it cannot reach reached across a neighbor's yard | canon: the GM's rulings of Amendment 2 ("cut through neighbors' yards in a pinch"); the gap the web's own threading figure (0081: `WEB_FABRIC_GAP` off a garden fence each side, the tread between) | the GM's request | `growth.grow_gap`, `access`, `ways/serve.py`, plan D9-D12 |
+| Neighbors a lane's threading gap apart; the seating searches no path; each way laid in the gaps once the houses stand, a household none reaches reached across a neighbor's yard | GUESS (0081's own reading: "if the lanes are the gaps left between the house plots"; no source states it - search of 2026-10-03), with canon for the fallback (the GM, Amendment 2: "cut through neighbors' yards in a pinch"); the gap the web's own threading figure (`MIN_WEB_GAP`) | the GM chose it for the map's shape (Amendment 3) | 0081's drawing page, `growth.grow_gap`, the gap pass, plan D9-D12 |
+| Equal for the tie-break: the same `TIE_RING_FT` ring of distance from the seat center | GUESS: about the parting between neighbors' houses | an exact tie never fires on a continuous distance | `growth.TIE_RING_FT`, plan D4 |
 | The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM chose it as soft | 0032's drawing page |
 | A passage no longer re-laid after the seating; one the finished map makes unnecessary ended in place | historically accurate for the condition (0081: "seated only where it has no way of its own"); the re-lay removed as a take-back (the GM's request) | the re-lay moved a seated house | 0081's drawing page |
 
@@ -239,3 +262,6 @@ engine no longer keeps.
 - Amendment 2 (the GM's three messages in `request.md`, 2026-10-03): the field preference a true tie-break (FR-003a rewritten),
   the threading gap between neighbors (FR-011), a cheap reachability check in place of the path search (FR-012, FR-013), the
   web laying each way after the houses with a neighbor's yard the fallback (FR-014). The review counter restarts.
+- Amendment 3 (the GM, 2026-10-03, `request.md`): option A kept for the map's shape, the tie-break for the speed; FR-015 records
+  the accepted cost. Spec-fidelity round 1 of Amendment 2 applied: the tie-break's equal class (FR-003a), FR-003's remaining
+  limits, US1/US3 restated, FR-008/US3 carry 0081 and the claims, FR-011 pairwise, FR-012 lane ground, FR-013 the own-way target.
