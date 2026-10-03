@@ -42,6 +42,11 @@ Bamboo: no occasion - its rule refuses a mark or stand only in a plot's sun, and
 - [x] T24 D8: the persimmon's dooryard, grove seat, seat rake and settle-in-geometry; unit tests
       research: physical
       verify: DONE. cohort315j: seed 23 passes; pool persimmons match their rolls; sendai-igune-modelplan READ, quote-check and applicability answered
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
 - [x] T25 D9 and D10: the walled-in gateway's fallbacks; the shared wells off the street's bends, the row street unjogged; unit tests
       research: rendering
       verify: DONE. cohort315j: seeds 19 and 903 pass, 29 of 30, seed 22 the one failure (failing on main before)
@@ -52,6 +57,11 @@ Bamboo: no occasion - its rule refuses a mark or stand only in a plot's sun, and
       placed; `tree_shade.py`'s docstring and the `ksun` comment; the ThreshingYard and Garden modals; the record checks the gate owes
       research: physical
       verify: DONE. make record-owed UNANSWERED=1: no record check is owed; grep finds no page or modal calling bamboo exempt
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
 
 ## Phase 4 - close
 

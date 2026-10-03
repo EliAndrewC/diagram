@@ -546,7 +546,7 @@ def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
     before = len(s.out)
     s._draw_grove(300.0, 300.0, 120.0, 80.0, face=(0, -1), mix="windbreak")
     ink = "".join(str(o) for o in s.out[before:])
-    assert "<circle" in ink and "translate(300,300)" in ink
+    assert "<circle" in ink and "translate(300.0,300.0)" in ink
     assert "#BBD06A" not in ink, "no culm: the bamboo arm was unreachable and was removed"
 
 
