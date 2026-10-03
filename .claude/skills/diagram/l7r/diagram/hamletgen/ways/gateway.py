@@ -14,7 +14,8 @@ from l7r.diagram.settlement import Settlement
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .track import NoDryExit, _cluster_gateway, connector_track, gate_on_the_strip
+from .dry_exit import clear_of_bands
+from .track import CONNECTOR_WIDTH, NoDryExit, _cluster_gateway, connector_track, gate_on_the_strip
 
 
 def gateway_track(
@@ -23,7 +24,9 @@ def gateway_track(
     """The connector's track from `gate`, swept (`connector_track`); and where that finds no dry way out - A GATEWAY WALLED IN
     (feature 315, cohort seed 19: walked out clear of every steading, it stopped in the corner of a farm's own grove, and every
     way out of the pocket was narrower than a track's gap) - out along the exit strip where the seating reserved one, else from
-    the cloud's edge on a bearing turned off the downslope, the nearest turn first."""
+    the cloud's edge on a bearing turned off the downslope, the nearest turn first. The gateway is first stepped clear of what
+    stands that a way may not run on (`clear_of_what_stands`)."""
+    gate = clear_of_what_stands(s, gate)
     try:
         return connector_track(plan, gate, avoid=avoid, wet=wet, waters=waters, fabric=fabric)
     except NoDryExit:
@@ -57,3 +60,14 @@ def track_from_the_strip_end(s: Settlement, plan: SitePlan, gate: Pt, avoid: Seq
         raise NoDryExit(f"no dry way out of the frame from the gateway at ({gate[0]:.0f}, {gate[1]:.0f}), and no exit strip")
     out = connector_track(plan, strip[-1], avoid=avoid, wet=wet, waters=waters, fabric=fabric)
     return [gate, *([] if math.dist(gate, strip[-1]) < 1e-6 else [strip[-1]]), *out[1:]]
+
+
+def clear_of_what_stands(s: Settlement, gate: Pt) -> Pt:
+    """`gate` stepped out past half the connector's tread from every footprint the registry of what stands forbids a way on
+    (feature 315, cohort seed 28: the gateway fell 9 px inside a farm's well, so every dry exit the fill sought started walled
+    in, and the map was refused) - as the fill's start is stepped out of a grove band (`dry_exit.clear_of_bands`). A
+    household's reserved wood seat is not a footprint: the way out may yet take one (`track.connector_through`)."""
+    st = getattr(s.M, "standing", None)
+    if st is None:
+        return gate
+    return clear_of_bands(gate, [list(e[1]) for e in st.forbidding("lanes") if e[0] != "wood seat"], CONNECTOR_WIDTH / 2.0)

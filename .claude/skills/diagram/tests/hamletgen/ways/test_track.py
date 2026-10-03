@@ -436,3 +436,22 @@ def test_a_turned_gateway_leaves_the_cloud_on_its_own_bearing() -> None:
     side = tr._cluster_gateway(s, seat, (0.0, 0.0), 90.0)
     assert down[1] > 1000.0 and abs(down[0] - 1120.0) < 1.0, "downslope: below the cloud's middle"
     assert abs(side[1] - 1000.0) < 1.0 and abs(side[0] - 1120.0) > 20.0, "turned a right angle: off to the side"
+
+
+def test_a_gateway_on_a_well_is_stepped_clear_of_it() -> None:
+    """Feature 315, cohort seed 28: a gateway 9 px inside a farm's well walled every dry exit in. It is stepped out past half the
+    connector's tread from what forbids a way; a reserved wood seat is not such a footprint, and no registry leaves it be."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways import gateway
+    from l7r.diagram.hamletgen.ways.track import CONNECTOR_WIDTH
+    from l7r.diagram.settlement import edge_dist
+
+    well = [(0.0, 0.0), (20.0, 0.0), (20.0, 20.0), (0.0, 20.0)]
+    seat = [(30.0, 0.0), (60.0, 0.0), (60.0, 20.0), (30.0, 20.0)]
+    st = SimpleNamespace(forbidding=lambda key: [("wells", well), ("wood seat", seat)])
+    s = SimpleNamespace(M=SimpleNamespace(standing=st))
+    g = gateway.clear_of_what_stands(s, (10.0, 11.0))
+    assert edge_dist(g[0], g[1], well) >= CONNECTOR_WIDTH / 2.0 - 1e-6 and g != (10.0, 11.0)
+    assert gateway.clear_of_what_stands(s, (45.0, 10.0)) == (45.0, 10.0), "a wood seat the way out may take"
+    assert gateway.clear_of_what_stands(SimpleNamespace(M={}), (10.0, 11.0)) == (10.0, 11.0)
