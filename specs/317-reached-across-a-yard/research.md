@@ -110,3 +110,31 @@ slow webs, drew theirs in 0.57 and 0.76 s. The 20-household leg is the bookend's
 | A headless page session resumed after a stall dispatched its returned checks again: their reports sat queued in its transcript, never taken up, and Claude Code told the resumed session they "didn't finish" | this feature (found running R1's checks) | fixed: the resume names a file of the queued reports and resumes early once they are back (`_page_session_runner.undelivered`, `returned_file`, `turn_ended`; fa30940d5, tests in `tests/tooling/test_page_session.py`) |
 | A `resume:` page session that stalled would fail to be resumed (`--session-id` no longer in its command) | this feature | fixed in the same commit, tested |
 | `pair-hooks.sh stop` read a green `make test-file` as a green gate and told sessions (a headless page session sharing the clone among them) to dispatch reviews no gate had earned | this feature | fixed: the stop branch asks the gate stamp as the pretool branch does (b54a76717); the new case fails with the old line (102 passed, 2 failed) and passes with the fix (104) |
+
+## R6 - The passage built: tight seats, the adjoining land, the walk (tasks T03, T04; method: `passage_probe.py` and `tight_cost.py` in the session's scratchpad, `passage_smoke.py`, `abab.sh` against a worktree at 94263ffe1 - per-layout routing, no passage - `t03-*`, `t03b-*`)
+
+The MODE 1 check (2026-10-03) ruled not building the passage NOT LEGITIMATE: the growth parts every two footprints by a path's whole
+strip, so R3's distances were measured on a spacing built for a lane to every house. Plan D2 as amended: tight seats within the
+rolled share, the custom's condition (land against land) as the reach, the walk on the two households' land.
+
+Built step by step on the reference at 15 households (seeds 1, 2, 6, 8, then 1-16), each step measured:
+
+| step | tight-seat layouts with no corridor | refused, and why | passages |
+|---|---|---|---|
+| adjoining asked of the layout's own box | 21 | all 21 not adjoining: 6.6-36 px from the neighbor's land against a 3 px tolerance | 0 |
+| ...of the reach rolled at the final seat | 16 | 14 not adjoining (3-16.6 px: the seat is parted by the union of the reaches rolled while it settled) | 1 |
+| ...of the reach the seat was parted by (`settled_seat`'s allotted reach) | 16 | every one 2.0 px apart; the straight walk off their land 4, blocked 9 | 3 (2 seated) |
+| seeds 1-16, the straight walk | 109 | blocked 95 - by the household's own house, beds or fixtures, or the neighbor's - off their land 9 | 3 (2 seated) |
+| seeds 1-16, the walk ROUTED on the two lands (`walk_of`) | - | - | 18 households on 9 of the 13 settlements whose share allowed one |
+
+With the routed walk, seeds 1-16 at 15 households: every household seated and reached, no settlement past its share (budgets 0-3;
+seeds 1, 7, 12 and 14 drew none with budgets 3, 1, 2, 3). (observed 2026-10-03, method: `passage_smoke.py 15 1,...,16`.)
+
+THE COST. Against the base before it (per-layout routing, no passage), alternated, CPU seconds, 15 households, seeds 1, 2, 4, 6, 7,
+8, 10, 13: the walk asked after the corridor, 12.8 -> 16.3 s (+27%); the walk asked FIRST (the same verdicts), 19.5 -> 21.8 s
+(+12%; the host's load moved even CPU time between the two runs). Where it goes (`tight_cost.py`, one run, 8.1 s stage): the tight
+seats' settles 0.37 s (607 popped), their placer calls 1.12 s (298), of which the walks 0.34 s (179 asked, 90 found) and the
+corridor searches after a walk 0.54 s (90 asked, 75 found - a household that could reach the lanes itself, refused the seat by the
+custom's condition). By bearing from the neighbor's house against its yard's: tried 39 / 74 / 64 / 86 / 35 at 0 / 45 / 90 / 135 /
+180 degrees, seated 5 / 1 / 4 / 1 / 0.
+(observed 2026-10-03, method: as the heading.)

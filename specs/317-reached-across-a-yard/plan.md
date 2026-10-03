@@ -34,14 +34,20 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   distance where the two footprints part plus the 2 px parting (`grow_gap` without the path's strip): a household seated there
   stands against its neighbor's land. A tight seat is taken only by passage: a household that finds a corridor of its own there
   is not land the custom covers and is refused the seat (the growth's ordinary seats keep a path's room).
-- THE CUSTOM'S CONDITION AS THE REACH: the household's own ground adjoins the neighbor's - its envelope within the parting and
-  `PASSAGE_ADJOIN_FT` of the neighbor's footprint, a GUESS (the 2 px the parting leaves and a foot of tolerance) - never a walking
-  distance across open ground (a long walk across open ground is a path, not the custom).
-- THE WALK: a straight leg from one of its doors (`doors_of`) to the nearest point of the neighbor's threshing yard, every point of
-  it on the two households' land (within their two envelopes, the parting between them included), clear of both households'
-  houses, beds, sheds, byres, well pockets and fixtures, of every other placed homestead, of the refused-ground grid and of the
-  reserved wood seats. Kept clear of every later homestead as a corridor is; not drawn as a lane - a dooryard and a yard are open
-  trodden ground, the walk across them is the custom, not a way (this record's reading, a GUESS).
+- THE CUSTOM'S CONDITION AS THE REACH: the household's own ground adjoins the neighbor's - its land (the reach the growth parted
+  its seat by, over every garden layout, carried with its house) within the parting and `PASSAGE_ADJOIN_FT` of the neighbor's
+  footprint, a GUESS (the 2 px the parting leaves and a foot of tolerance) - never a walking distance across open ground (a long
+  walk across open ground is a path, not the custom). Measured (research R6): one layout's box, or the reach rolled at the final
+  seat alone, stands 3-36 px back from the parting, and refused all but one household.
+- THE WALK: from one of its dooryard doors (`doors_of`) to the neighbor's threshing yard, every point of it on the two households'
+  land (within their two lands, the parting between them included), clear of both households' houses, beds, sheds, byres, well
+  pockets and fixtures, of every other placed homestead, of the refused-ground grid and of the reserved wood seats - ROUTED round
+  them on the map's own router (`route.search`, `route.taut`), as a household's path is: a straight leg ran through one of the two
+  households' own house, beds or fixtures on 95 of the 109 tight-seat layouts with no corridor at 15 households, seeds 1-16, and
+  found 3 passages (research R6). Kept clear of every later homestead as a corridor is; not drawn as a lane - a dooryard and a
+  yard are open trodden ground, the walk across them is the custom, not a way (this record's reading, a GUESS).
+- THE ORDER AT A TIGHT SEAT: the walk asked first, then the corridor - the same verdict (both must hold), since the walk is
+  searched on the two households' land and the corridor over the whole tree (research R6).
 
 Every other rule of the placer is asked as before; only the corridor's question is answered by the passage.
 
@@ -62,9 +68,11 @@ predicate. Nothing else of the ways changes.
 **D6 - The corridor judged as drawn (FR-004).** Feature 314 R12's refused web, reproduced (the route's own parts switched on, seed
 13 at 20 households): three access lanes close a sliver because the web begins one at the house's door - (2939, 2606) - where the
 seating's record and its judge (`tree.admits`, through `tree_records` and `lanes_of`) begin it where it leaves the yard - (2929,
-2596). The fix: find the web pass that lays that door leg, and have `lanes_of` lay it the same way for the seating, so `admits`
-asks the needle and every pair rule of the drawn lane. Verified on the reproduction (it must refuse the corridor at seating, or
-the web must draw it lawfully), then the route's own parts re-measured: if the seating now admits only drawable corridors,
+2596). The fix as found (research R2): the web's settle carries a free lane end that stops short of a way onto it
+(`settle.settle_joins`, reading `law.near_misses`), and that join, not the door leg, closed the sliver - so `admits` asks the needle
+of the tree again with its ends joined as the settle will join them (`tree.as_joined`), with an exact box prefilter in
+`law.near_misses` and `law.free_end` (the same answers) that keeps its cost below the host's noise. Verified on the reproduction
+(the seed rolls), then the route's own parts re-measured: if the seating now admits only drawable corridors,
 feature 314 R12's withdrawn lever is retried by `abab.sh` and kept only if it pays (FR-006). Done (research R2, R4): the route is
 searched per garden layout round the household's own parts (feature 314's searched once per house and yard, so every layout took
 the route laid round the first one's beds), and it pays - the seats lost to the path alone 77 -> 21 and 90 -> 22, the stage -6%
