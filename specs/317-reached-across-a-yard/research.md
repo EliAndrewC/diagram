@@ -125,7 +125,7 @@ Built step by step on the reference at 15 households (seeds 1, 2, 6, 8, then 1-1
 | ...of the reach rolled at the final seat | 16 | 14 not adjoining (3-16.6 px: the seat is parted by the union of the reaches rolled while it settled) | 1 |
 | ...of the reach the seat was parted by (`settled_seat`'s allotted reach) | 16 | every one 2.0 px apart; the straight walk off their land 4, blocked 9 | 3 (2 seated) |
 | seeds 1-16, the straight walk | 109 | blocked 95 - by the household's own house, beds or fixtures, or the neighbor's - off their land 9 | 3 (2 seated) |
-| seeds 1-16, the walk ROUTED on the two lands (`walk_of`) | - | - | 18 households on 9 of the 13 settlements whose share allowed one |
+| seeds 1-16, the walk ROUTED on the two lands (`walk_of`) | - | - | 16 households on 9 of the 13 settlements whose share allowed one (seeds 2, 4, 6, 8, 10, 11, 13, 15, 16: 1, 1, 1, 2, 3, 2, 3, 1, 2) - the run before the walk was asked first and before the tight seats were kept to houses a passage may cross to; R7 has the shipped engine's |
 
 With the routed walk, seeds 1-16 at 15 households: every household seated and reached, no settlement past its share (budgets 0-3;
 seeds 1, 7, 12 and 14 drew none with budgets 3, 1, 2, 3). (observed 2026-10-03, method: `passage_smoke.py 15 1,...,16`.)
