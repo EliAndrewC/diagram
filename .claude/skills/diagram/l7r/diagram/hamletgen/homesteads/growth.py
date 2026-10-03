@@ -274,6 +274,7 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
         cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part, jittered, nearest the seat first
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
         tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, nearest the seat first beside the ordinary seats
+        a seating with passages stopped early - research/questions/0081-village-lanes.drawing.html: the share is how many may be reached that way, never how many must, so a seating that has spent passages stops before the widest level and is seated again without them (`stages.seat_the_margin`)
         a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
         the growth's widening - UNRESEARCHED: rings at 1.25 to 2.0 times the parting distance, in 12 and 16 directions, while households are left (`GROW_LEVELS`)
     """

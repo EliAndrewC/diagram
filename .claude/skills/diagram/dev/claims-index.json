@@ -5496,42 +5496,50 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a neighbor's land": {
-  "code": "8c935a751a1262b0",
-  "core": "ecf5410b0f6a6eba",
+  "code": "2170c3f94a1b45bd",
+  "core": "9befabec0497ff04",
   "date": "2026-10-03",
-  "note": "the neighbor's land_box is passed on as the land the household's land must adjoin",
+  "note": "0081 drawing: a passage household's land must adjoin the neighbor's; land_box(center, reach) is the neighbor's land as the growth parted it",
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
-  "code": "3dfae4e3319922f3",
-  "core": "ecf5410b0f6a6eba",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a seating that has seated households by passage stops before the 16-direction level instead of widening, and is seated again without passage (the passages_spent break, feature 317)": {
+  "code": "9befabec0497ff04",
+  "core": "9befabec0497ff04",
   "date": "2026-10-03",
-  "note": "an irregular, compact lump with no fixed spacing measure, a calibrated choice",
+  "note": "a seating that has seated households by passage stops before the 16-direction level instead of widening, and is seated again without passage (the passages_spent break, feature 317)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
+  "code": "e7a9751137fdfc36",
+  "core": "9befabec0497ff04",
+  "date": "2026-10-03",
+  "note": "0031 attests the gathered cluster with no fixed spacing; 0032 asks for a compact cluster, not a wide arc, and nearest-the-seat-first growth gives one",
   "research": "2effb87b98a6ad4f",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
-  "code": "ff9757033c649ee9",
-  "core": "ecf5410b0f6a6eba",
+  "code": "6ef7f2bee0584500",
+  "core": "9befabec0497ff04",
   "date": "2026-10-03",
-  "note": "nothing in the bundle says where the first house stands",
+  "note": "no question in the bundle bears on where the first house stands",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
-  "code": "384268c176d6f7bb",
-  "core": "ecf5410b0f6a6eba",
+  "code": "3b74bf8850d009dd",
+  "core": "9befabec0497ff04",
   "date": "2026-10-03",
-  "note": "GROW_LEVELS as claimed; the record gives no house spacing",
+  "note": "the widening rings (1.5 at 12 directions; 1.25, 1.75, 2.0 at 16) match the account; the record is silent",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#tight seats for a passage household": {
-  "code": "b40844e9724c7698",
-  "core": "ecf5410b0f6a6eba",
+  "code": "eb72b7bf376df636",
+  "core": "9befabec0497ff04",
   "date": "2026-10-03",
-  "note": "offered round crossable houses, on the yard's side, while the share lasts, nearest first in the same heap",
+  "note": "0081: TIGHT_GAP_PX 2 = \"the 2 ft the cluster's growth leaves\"; on the threshing yard's side (yard_side); \"not close by a way\" (near_the_tree); at most one neighbor in the chain (crossable); only while the share has room",
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
@@ -6728,10 +6736,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::seat_the_margin#a share that may be reached by passage": {
-  "code": "0c689835b2f74ced",
-  "core": "844db92e5eee125b",
+  "code": "112caa4fa0534476",
+  "core": "6136a2f765be2c20",
   "date": "2026-10-03",
-  "note": "\"rolls a share ... that may be reached that way, from none\": withheld means none, within range",
+  "note": "0081: a share \"that may be reached that way, from none up to a quarter\" is a ceiling; seating the same margin again with passage withheld follows that",
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
@@ -37309,6 +37317,14 @@
   "date": "2026-10-03",
   "note": "rolled per settlement from the seed within the band",
   "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passages_spent#passage machinery": {
+  "code": "741ca76f98365dca",
+  "core": "db237eaf928b52bf",
+  "date": "2026-10-03",
+  "note": "bookkeeping: compares the rolled budget with what is left of it and decides nothing physical",
+  "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#a re-laid household's garden side": {
