@@ -15,28 +15,25 @@ from ._base import Kind
 class Farmhouse(Kind):
     """
     About: A farmhouse (minka) was the home of one farming household and the farm's main workplace. One side of the house
-    was a wide earth floor for the farm's work, where many households seem to have worked their harvest under cover. Across much of Japan the household's ox or horse lived under the same roof, in a corner of the earth floor; in parts of the north the stable was a wing of an L-shaped house.
+    was a wide earth floor for the farm's work, where many households seem to have worked their harvest.
+    Across much of Japan the household's ox or horse lived under the same roof, in a corner of the earth floor; in parts
+    of the north the stable was a wing of an L-shaped house.
 
-    It was a long rectangle of timber posts under a thatched roof - hipped, gabled or a mix of the two - and thatch
-    seems to have roofed rich and poor alike. In the east the posts showed in the walls; in the west they were
-    plastered over, and some poorer houses in the south were walled with slabs of bark. Beside it rose the
-    wood-floored living rooms, with a sunken hearth. The household came and went through a big sliding
-    door about 6 ft wide, or the low wicket set into it, and the house was shut and barred at night and in bad weather.
+    It was a long rectangle of timber posts under a thatched roof, hipped, gabled or a mix of the two. In the east the
+    posts showed in the walls; in the west they were plastered in, earth on a bamboo lattice, and some
+    poorer houses in the south were walled with slabs of bark. Under the same roof, beside the earth floor, rose the
+    wood-floored living rooms, with a sunken hearth. The household came and went through a big sliding door about 6 ft
+    wide, or the low wicket set into it; the door was barred at night, at least at the larger houses.
 
-    A household averaged about five: often a couple, their married heir and the heir's children. A few counted as many as
-    two dozen. The commonest house had about 700 sq ft of floor, and many under
-    360; the better-off farmers' houses that survive cover 1,100 to 1,600 sq ft. The map draws every farmhouse at that
-    better-off size, about 40 to 60 ft by 25 to 30 ft.
-
-    Guesses:
-    - Which way each house faces: each settlement's houses face near south, each turned up to about 30 degrees with the lane
-      it stands on. No count of farmhouse bearings from before 1868 was found; the spread is taken from a survey of
-      Okinawan villages in 1985.
+    A household averaged about five - often a couple, their married heir and the heir's children - and in one region
+    shrank from about eight in the 1600s to about four by the 1800s. The commonest house had about 700 sq ft of floor,
+    and many under 360; the better-off farmers' houses that survive cover 1,100 to 1,600 sq ft. The map draws every
+    farmhouse at that better-off size.
 
     Name: farmhouse
     Covers: `houses` - the dwelling of each household
-    Sources: sakamoto-tsubaki-1985-omoya-muki, oamishirasato-choshi-kaoku
-    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0040-farm-storehouses-kura.html, research/questions/0044-baths-on-the-farm-furo.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0117-doorways-and-doors-to.html, research/questions/0029-farmhouses-minka.drawing.html
+    Sources: kotobank-minka, morse-1886-homes, miyoshi-kurashi-mingu-1998, oamishirasato-choshi-kaoku
+    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0040-farm-storehouses-kura.html, research/questions/0244-farmhouse-walls.html, research/questions/0044-baths-on-the-farm-furo.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0117-doorways-and-doors-to.html, research/questions/0029-farmhouses-minka.drawing.html
     """
 
     key = 'farmhouse'
