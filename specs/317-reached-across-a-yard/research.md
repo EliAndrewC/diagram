@@ -355,6 +355,6 @@ place of the shared map (plan D8, amended); the map is not built.
 **SC-007, the check on and off** (`control_probe.py` with `NOPRE=1` patching `route.tree_in_reach` to always True; two
 alternated takes, homesteads-stage CPU seconds, 40 households): seed 25 3.95 / 3.96 with it, 3.94 / 3.96 without - its failed
 searches all had a branch in reach; seed 47 19.94 / 19.95 with it, 33.37 / 33.58 without. The seated manifest hashes the same
-with it on and off on seeds 25, 47 and 39 (sha256 of the whole manifest after the homesteads stage), and Inashiro regenerates
-byte-identical.
+with it on and off on seeds 25, 47 and 39 (sha256 of the whole manifest after the homesteads stage), and the whole pool - Inashiro,
+Kashikawa, Kuwabata, Mizuguchi, Sawada - hashes the same with it on and off after every stage but the labels (`pool_hash.py`).
 (observed 2026-10-03, method: as the heading.)
