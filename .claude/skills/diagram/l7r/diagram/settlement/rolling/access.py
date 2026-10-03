@@ -267,7 +267,8 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     and the well was refused when it came to be drawn. Held off by the wellhead's box, as the registry holds it.
 
     Research:
-        path clear of its own fixtures - UNRESEARCHED: the strip off privy, stack and shed; a persimmon by its trunk alone, the crown may overhang
+        path clear of its own fixtures - research/questions/0081-village-lanes.drawing.html: routed round its own garden beds and fixtures - the strip off privy, stack and shed
+        a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path
         path clear of its own well - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     """
     half, trunk = s._access.half, s.px(4.0)

@@ -35488,11 +35488,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
-  "code": "62e0474e2e2f6776",
-  "core": "18cfd0ae99e24169",
+  "code": "e5779a460d2997b2",
+  "core": "a29987cf79a0020b",
   "date": "2026-10-03",
-  "note": "no bundle question answers it",
+  "note": "0081 drawing answers this: \"Where a straight path to it would cross its own garden beds or fixtures, the path is routed around them - a map drawing convention\"; cite research/questions/0081-village-lanes.drawing.html for the strip off privy, stack and shed; only the persimmon held off by its 4 ft trunk with the crown overhanging is unanswered (GUESS)",
   "research": "",
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own well": {
+  "code": "fbb5527e2ae6e127",
+  "core": "a29987cf79a0020b",
+  "date": "2026-10-03",
+  "note": "0081 drawing: \"Nothing is built on a lane\"; holding the corridor off its own wellhead's box at the corridor half-width agrees with that and leaves the well shared",
+  "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::house_clear#corridor geometry, memo and search plumbing": {
