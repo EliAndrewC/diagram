@@ -78,6 +78,22 @@ rule, and so was the filter. The fix (constitution XIV, the defect is the cache'
 replaced (`verify --all-imported`), each recorded `same`, `misfiled` or `unread` in `import-check.jsonl`; a page found
 misfiled loses its verdict and its write-up and is judged again from the live text.
 
+**The measure over-flags, measured 2026-10-02 on the full run's first 720 pages:** 35 flagged misfiled, and reading
+each one's write-up or not-kept note against its URL found 33 of them the right page - 25 entries and 8 notes that
+describe exactly the subject their URL names (平遥文庙, 理坑村, 薬医門, the Sohu county-yamen column ...). Two were
+another page's text: `ja.wikipedia.org/wiki/村` (砂利道, ruled a duplicate of `jarimichi-gravel-jawiki`) and
+`ja.wikipedia.org/wiki/石橋` (ruled a duplicate of `machiwari-jawiki`). Why: a Wikipedia article's first 5,000
+characters are mostly the site's navigation, and the skin changed between the saves and the live read, so a short
+article's 4-grams overlap under a third with its own live page. The live text replaced each copy either way (a cache
+should hold the page as it is), so the fix is in what a flag does, not in the measure: a flagged page's imported copy
+is now kept beside it (`imported.txt` in its cache entry), the flag is confirmed by reading, and only a confirmed one
+loses its verdict and entry through `make uncited DO=requeue URL=<u>`, which sends it back to the filter. Requeued:
+村, 石橋, and two Kotobank URLs whose drafter found another entry's text (`竈-39622` serves 大目付 and `道切り-139424`
+serves 三保の松原 live too - Kotobank picks the entry by its number, so the URL itself names that page), and
+`kunishitei-kaibara-han-jinya`, whose page saves as a 535-character shell. Not built: a better same-page measure.
+Calibrating one needs pairs known to be the same and known to differ, and the imported copies of the 35 were replaced
+before this was seen; the kept copies make the next run's flags calibration data.
+
 ## R6: a long work is read whole by several readers (2026-10-02)
 
 **Found:** the Read tool returns about 60,000 characters of a file, and the drafting parts were cut at 20,000 estimated

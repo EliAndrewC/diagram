@@ -355,6 +355,7 @@ def test_merge_retires_a_duplicate_entry_and_moves_its_page_to_not_kept(tmp_path
 def test_work_folds_chinese_wikipedia_script_variants_and_nothing_else() -> None:
     assert un.work("zh.wikipedia.org/zh-hans/平遥城墙") == un.work("zh.wikipedia.org/wiki/平遥城墙") == "zh.wikipedia.org/wiki/平遥城墙"
     assert un.work("zh.wikipedia.org/zh-tw/X") == "zh.wikipedia.org/wiki/X"
+    assert un.work("zh.wikisource.org/zh-hant/春秋左氏傳/成公") == "zh.wikisource.org/wiki/春秋左氏傳/成公"
     assert un.work("ja.wikipedia.org/wiki/X") == "ja.wikipedia.org/wiki/X" and un.work("a.org/zh-hans/X") == "a.org/zh-hans/X"
 
 
@@ -458,6 +459,7 @@ def test_work_folds_one_file_servers_two_names_and_a_github_raw_url() -> None:
 def test_work_folds_a_kotobank_entry_to_its_number_whatever_word_is_in_front() -> None:
     assert un.work("kotobank.jp/word/竈-39622") == un.work("kotobank.jp/word/かまど-39622") == "kotobank.jp/word/39622"
     assert un.work("kotobank.jp/word/竈") == "kotobank.jp/word/竈" and un.work("kotobank.jp/word/a-1/x") == "kotobank.jp/word/a-1/x"
+    assert un.work("api.openalex.org/works/doi:10.1179/pma.1996.002") == "doi.org/10.1179/pma.1996.002", "OpenAlex's record of a DOI is its work"
 
 
 def test_the_report_counts_kept_pages_with_no_entry_and_entries_with_no_kept_page(tmp_path: pathlib.Path) -> None:

@@ -121,17 +121,19 @@ def cited_marks(root: pathlib.Path) -> set[str]:
 
 
 _KOTOBANK = re.compile(r"^kotobank\.jp/word/[^/]*-(\d+)$")
+_OPENALEX = re.compile(r"^api\.openalex\.org/works/doi:(.+)$")
 _GITHUB_RAW = re.compile(r"^raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/")
 HOST_ALIASES = (("mdpi-res.com/", "res.mdpi.com/"), ("online.bunka.go.jp/", "bunka.nii.ac.jp/"))
-_ZH_VARIANT = re.compile(r"^zh\.wikipedia\.org/(?:zh-(?:hans|hant|cn|tw|hk|sg|mo)|wiki)/")
+_ZH_VARIANT = re.compile(r"^zh\.(wikipedia|wikisource)\.org/(?:zh-(?:hans|hant|cn|tw|hk|sg|mo)|wiki)/")  # Wikisource too: the Zuo zhuan's Duke Cheng was kept under /zh-hant/ beside its cited /wiki/ page (2026-10-02)
 
 
 def work(n: str) -> str:
     """One work under one key: a normalized URL with Chinese Wikipedia's script variants folded into `/wiki/` - the same
     article served as `/zh-hans/X`, `/zh-tw/X` and `/wiki/X` was judged and written up twice (Pingyao's wall, 2026-10-02)."""
-    n = _ZH_VARIANT.sub("zh.wikipedia.org/wiki/", n)
+    n = _ZH_VARIANT.sub(r"zh.\1.org/wiki/", n)
     n = _GITHUB_RAW.sub(r"github.com/\1/\2/blob/\3/", n)  # a file by its raw URL and its page URL (daizhige, 2026-10-02)
     n = _KOTOBANK.sub(r"kotobank.jp/word/\1", n)  # Kotobank serves an entry by its number, whatever word is in front (2026-10-02)
+    n = _OPENALEX.sub(r"doi.org/\1", n)  # OpenAlex's record of a DOI is that DOI's work: a check read the cited Northampton abstract there (2026-10-02)
     for alias, host in HOST_ALIASES:  # one file server under two names (Yannopoulos 2015 on both, 2026-10-02)
         if n.startswith(alias):
             return host + n[len(alias):]
@@ -964,7 +966,8 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
         print(f"uncited: {args.key} moved to {dest.relative_to(root)} - write its Used for: line (the build refuses the placeholder), then `git add -A` the move")
     elif args.cmd == "dedupe":
         done = dedupe(root, args.dry)
-        print("\n".join(f"uncited: duplicate retired - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) retired")
+        verb = "would be retired" if args.dry else "retired"
+        print("\n".join(f"uncited: duplicate {verb} - {d}" for d in done) + f"\nuncited: {len(done)} duplicate(s) {verb}")
     elif args.cmd == "requeue":
         key = requeue(root, args.url)
         print(f"uncited: {args.url} requeued - its verdict cleared{f', its entry {key} retired' if key else ''}; `make uncited DO=bundle` judges it again")
