@@ -1,4 +1,7 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research: civic drawing plumbing - NONE
+"""
 
 import math
 import random
@@ -27,6 +30,13 @@ if TYPE_CHECKING:
 
 
 class CastleCivicMixin:
+    """The castle, the state offices and schools, the dojos and the caption scorer.
+
+    Research:
+        samurai share of a provincial city - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.html: DOJO_SAMURAI_FRAC 10%
+        private dojo per samurai - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: DOJO_PER_SAMURAI, one per full 200
+    """
+
     # ---- the DAIMYO'S CASTLE (feature 019) ---------------------------------------------------
 
     def castle(  # type: ignore[misc]
@@ -91,7 +101,22 @@ class CastleCivicMixin:
         "CENTER vs FOOTPRINT"): `block_polys` is CENTER-tested by the urban packs, `placed` is
         distance-tested. An enclosure this size - roughly 85% of an entire provincial city - has to
         stop a wide building hanging half its roof over the rampart, and only the second registry
-        does that. Records M['castle']."""
+        does that. Records M['castle'].
+
+        Research:
+            blank interior - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: no keep, palace or bailey building drawn
+            castle moat - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: 80 ft wide, 60 ft off the wall foot
+            front and rear gates - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html: ote-mon on gate_dir, an optional karamete-mon opposite
+            rampart and gate widths - UNRESEARCHED: a 6 ft ishigaki stroke, a 22 ft gate passage
+            corner yagura and gate towers - DEVIATION research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the drawing page draws no turrets (its findings attest corner yagura); the code draws four corner yagura and gate towers
+            yagura and gatehouse sizes - UNRESEARCHED: 62 x 40 ft corners, an 88 x 52 ft gatehouse, a 64 x 40 ft rear gatehouse
+            gatehouse passage - UNRESEARCHED: a third of the gatehouse's span
+            baileys and masugata off by default - DEVIATION research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the 1644 plans drew the baileys; when asked for, offset walled rectangles with dogleg gates
+            bailey and masugata sizes - UNRESEARCHED: bailey fracs 0.64 and 0.34, offset from the ote-mon, a masugata box outside the main gate
+            inner moat - UNRESEARCHED: 0.42 x the moat gap off the honmaru, half the moat width
+            ishigaki doubling - CONVENTION: a doubled inner line on the enceinte
+            ground reserved - NONE: the moat plus max(36 x bscale, 26) px in both registries
+        """
         hw, hh = w / 2, h / 2
         wall = "#2D2A24"
         gap = self.px(60) if moat_gap is None else moat_gap  # a castle moat stands ~60 ft off the wall foot
@@ -271,7 +296,13 @@ class CastleCivicMixin:
     def ministry(self: Settlement, x: float, y: float, name: str, w: Any = None, h: Any = None, label_below: bool | None = None, label_inside: bool = False) -> None:  # type: ignore[misc]
         """A provincial ministry office (one of the SIX). Records to M['ministries'] with its
         `name`; exactly one city-wide must be the Ministry of Rites (sited in the temple
-        neighborhood). Official violet roof so it reads apart from housing/commerce."""
+        neighborhood). Official violet roof so it reads apart from housing/commerce.
+
+        Research:
+            ministry compound size - research/questions/0167-offices-of-the-six-ministries-liubu.drawing.html: 224 x 148 ft by default
+            official violet - CONVENTION
+            office apron - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: about 42 ft clear on the page; the code keeps max(30 x bscale, 26) px
+        """
         if w is None:
             w, h = self.px(224), self.px(148)  # a ministry office compound ~224x148 ft (was 88px at the 0.42-grain city)
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="2" fill="#BCA6C4" stroke="#463653" stroke-width="2"/>')
@@ -328,7 +359,8 @@ class CastleCivicMixin:
         """The shared DOJO HALL glyph: a long rectangle with a plank-floor grain running lengthwise
         and the KAMIZA (the head of the hall, where the shrine alcove sits and students bow in)
         marked as a band across the short end. The plank grain is what says 'sprung wooden floor'
-        rather than 'another shophouse' at a glance - the one interior feature a top-down dojo has."""
+        rather than 'another shophouse' at a glance - the one interior feature a top-down dojo has.
+        Research: dojo hall glyph - CONVENTION: lengthwise plank grain and a kamiza band"""
         g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1.5" fill="{fill}" stroke="{edge}" stroke-width="1.6"/>')
         g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{max(w * 0.13, 2.6):.1f}" height="{h:.1f}" fill="{head}" opacity="0.9"/>')  # the kamiza end
         for pi in range(1, 4):  # the plank-floor grain, lengthwise
@@ -340,7 +372,8 @@ class CastleCivicMixin:
         (tategi). Both are sub-glyph at city scale (a rack is ~8x2 real ft = under 3px at 3 ft/px),
         so they follow the Mode A stroke convention and draw as LOCATION MARKERS at a fixed legible
         size rather than to scale. What makes a training ground read as ESTABLISHED is the gear
-        practice leaves behind, so the markers carry more meaning than their footprint does."""
+        practice leaves behind, so the markers carry more meaning than their footprint does.
+        Research: training gear markers - CONVENTION: a weapon rack and striking posts at a fixed legible size"""
         g.append(f'<line x1="{rack[0]:.1f}" y1="{rack[1]:.1f}" x2="{rack[0] + 5.0:.1f}" y2="{rack[1]:.1f}" stroke="{edge}" stroke-width="2.0" stroke-linecap="round"/>')
         for px_, py_ in posts:
             g.append(f'<circle cx="{px_:.1f}" cy="{py_:.1f}" r="1.7" fill="none" stroke="{edge}" stroke-width="1.1"/>')
@@ -368,7 +401,16 @@ class CastleCivicMixin:
         The lane is INSIDE the compound wall: the hall's whole point is that the province's youth
         train in one enclosed place, and an unwalled shooting lane in a city street is a hazard.
         Records M['martial_halls'] with its lane length in real feet (city_has_martial_hall,
-        city_martial_hall_has_archery_range)."""
+        city_martial_hall_has_archery_range).
+
+        Research:
+            one state hall per provincial city - research/questions/0165-martial-training-grounds-and-dojo.drawing.html
+            hall program sizes - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a 60 x 36 ft hall, a 100 x 26 ft lane with its butt, a 130 x 100 ft walled compound
+            the master's house - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: drawn inside the compound
+            master's house size - UNRESEARCHED: 40 x 24 ft
+            state violet - CONVENTION
+            hall apron - UNRESEARCHED: max(30 x bscale, 14) px, and a reserved caption band
+        """
         f = self.px
         cw, ch = f(130) / 2, f(100) / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -435,7 +477,13 @@ class CastleCivicMixin:
         azuchi along the south band (the kyudo 92 ft shot); the rest courts and circulation -
         a school's ground is mostly yard, exactly like a yamen's. Records M['martial_halls']
         with kind='hanko' - the same family the checks read - and blocks placement with the
-        government-office apron."""
+        government-office apron.
+
+        Research:
+            school compound size - research/questions/0166-domain-schools-hanko.drawing.html: 400 x 260 ft by default
+            blank interior - research/questions/0166-domain-schools-hanko.drawing.html: the caption inside an empty court
+            school apron - UNRESEARCHED: max(30 x bscale, 26) px
+        """
         f = self.px
         cw, ch = f(w_ft) / 2, f(h_ft) / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -471,7 +519,13 @@ class CastleCivicMixin:
         band on purpose: the famous commercial dojos were a bakumatsu, million-person-city
         phenomenon, and a provincial seat of ~3,000 has not had that boom. NO archery lane - there
         is no room for a 92 ft shot on a 76 ft lot, and the butt is the state hall's to keep.
-        Records M['dojos'] (city_dojo_count_follows_samurai, city_dojos_among_samurai)."""
+        Records M['dojos'] (city_dojo_count_follows_samurai, city_dojos_among_samurai).
+
+        Research:
+            private dojo size - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a 44 x 24 ft hall
+            private dojo lot - UNRESEARCHED: a 76 x 44 ft lot with a training yard, no archery lane
+            dojo colors - CONVENTION: the ordinary building tan
+        """
         f = self.px
         lw, lh = f(76) / 2, f(44) / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -501,7 +555,12 @@ class CastleCivicMixin:
         `count=` pins the roll. Recorded as meta['dojo_roll'] and gated by
         city_dojo_count_follows_samurai, so a stale hand count can never ship. The roll consumes NO
         main-stream RNG (dedicated Random on the map seed): a map rolling its old count stays
-        byte-identical."""
+        byte-identical.
+
+        Research:
+            dojo count from the samurai - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one per full 200, a remainder roll, at least one
+            samurai share - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.html: 10% of the population, 3,000 by default
+        """
         samurai = round(int(self.M.get("meta", {}).get("population") or 3000) * self.DOJO_SAMURAI_FRAC)
         rolled = max(1, samurai // self.DOJO_PER_SAMURAI + (1 if random.Random(self.seed * 2777 + 91).random() < (samurai % self.DOJO_PER_SAMURAI) / self.DOJO_PER_SAMURAI else 0))
         n = int(count) if count is not None else rolled
@@ -531,7 +590,9 @@ class CastleCivicMixin:
         captioning an empty row is a gen-script bug, not something to draw.
 
         DEFERRED to the label phase: seating a caption at call time judges it against half a map (Tango's north gate
-        market caption took the flank that later filled with the execution ground)."""
+        market caption took the flank that later filled with the execution ground).
+
+        Research: caption seat - CONVENTION: the one placer's ranked positions"""
         if box is None:
             raise ValueError(f"place_caption({text!r}) got no subject box - the feature it names placed nothing")
         x0, y0, x1, y1 = (float(v) for v in box)
@@ -554,7 +615,9 @@ class CastleCivicMixin:
         12px road caption could never come closer than ~29px of true air, which is most of the
         drift the GM caught. Even at 0 the box stays ~13% wider than the one `_record_label`
         writes (0.31/char here against 0.275), which is the slack that keeps glyphs off a
-        neighbor's edge."""
+        neighbor's edge.
+
+        Research: caption scoring - CONVENTION: a caption prefers empty ground, off walls, water, roads, arches and wells"""
         hw, hh = len(text) * size * 0.31 + pad, size * 0.75 + pad
         corners: Poly = [(lx - hw, ly - hh), (lx + hw, ly - hh), (lx + hw, ly + hh), (lx - hw, ly + hh)]
         probes: Poly = [*corners, (lx, ly)]  # the LINE tests below sample the corners + center
@@ -637,7 +700,13 @@ class CastleCivicMixin:
     def forest_patch(self: Settlement, base: Any, label: Any = None, label_xy: Any = None) -> None:  # type: ignore[misc]
         """A bounded copse (organic polygon), as opposed to forest() which fills to the canvas edge.
         Same stand of INDIVIDUAL TREES (see _tree_stand), just a closed one - so it is framed whole,
-        because unlike a canvas-filling wood its SHAPE is the feature. Blocks houses; deterministic."""
+        because unlike a canvas-filling wood its SHAPE is the feature. Blocks houses; deterministic.
+
+        Research:
+            copse stocked as a wood - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: individual trees at the hill-wood density
+            copse outline - CONVENTION: an organic outline round the GM's base polygon
+            houses kept out of the copse - UNRESEARCHED: the whole outline is no-build
+        """
         # SCOPED (2026-08-08): the copse OUTLINE is stream-drawn (organic_poly), and its SHAPE is the
         # feature - so an upstream change reshaped the wood and moved every tree in it. Keyed on the
         # base polygon the GM placed it on, which is the thing that should decide how it looks.
@@ -661,7 +730,15 @@ class CastleCivicMixin:
     def wall(self: Settlement, pts: Any, gate: Any = None, label: Any = None, guardtower: bool = True) -> None:  # type: ignore[misc]
         """An irregular town rampart (thick polyline; may be an open arc anchored to a
         hill). gate=(x,y): a gap with posts, a guard station, and an optional guardtower.
-        Recorded so the gate can check the wall and gate exist. No-build corridor."""
+        Recorded so the gate can check the wall and gate exist. No-build corridor.
+
+        Research:
+            a town rampart with a gate - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html: an irregular thick line, gapped at the gate
+            guard station and tower - UNRESEARCHED: a 96 x 46 px station and a 40 x 40 px tower beside the gate
+            rampart stroke - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html, research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: drawn 10 to 12 ft thick; the code strokes a fixed 10 px, unscaled
+            gate opening - UNRESEARCHED: 36 px between 14 x 48 px gateposts
+            buildings kept off the rampart - UNRESEARCHED: a 46 px corridor, 32 px round the gate structures
+        """
         wc = '#3A352C'
         # the rampart renders in the WALL layer (over the ground lanes - a street running into it passes
         # UNDER it), with a genuine gap at the gate so the road shows through the opening
@@ -704,7 +781,13 @@ class CastleCivicMixin:
     def flower_field(self: Settlement, shape: Any, label: Any = None, amp: float = 30, label_xy: Any = None, kind: str = "chrysanthemum", flat_west: bool = False) -> None:  # type: ignore[misc]
         """An ornamental flower field (e.g. chrysanthemums - the Imperial flower).
         Organic outline like a paddy, but rows of gold blooms instead of rice.
-        flat_west keeps the west edge straight so it can run flush against a town wall."""
+        flat_west keeps the west edge straight so it can run flush against a town wall.
+
+        Research:
+            a flower field - DEVIATION research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.html: no field of flowers kept for a ruler or a provincial town is found; an organic plot of blooms
+            flower field size - UNRESEARCHED: the shape the caller gives
+            bloom glyph - CONVENTION: gold blooms on a 15 px jittered grid over green
+        """
         outline = (
             organic_bbox(shape, amp, flat_edges=cast("tuple[int, ...]", {3} if flat_west else ())) if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape) else organic_poly(shape, amp)
         )

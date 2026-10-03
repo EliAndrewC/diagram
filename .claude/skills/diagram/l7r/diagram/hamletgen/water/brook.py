@@ -1,24 +1,23 @@
 """THE BROOK (feature 230) - the stream that is tapped at an intake and runs on past the fan, and what stands at the tap.
 
 Split from `hamletgen/water.py` by feature 230 (constitution X clause 13); bodies verbatim.
-See `CLAUDE.md` in this directory.
+See `CLAUDE.md` in this directory. The course's leaf helpers moved to `brook_course.py` (feature 316), re-exported here.
+
+Research: plumbing - NONE: geometry, tolerances and the repair's bounds; every unit that decides something carries its own claims
 """
 
 from __future__ import annotations
 
 import math
-import random
 import re
 from collections.abc import Callable, Sequence
 
 from l7r.diagram.overlap.registry import refuse_unadmitted
-from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_dist
-from l7r.diagram.settlement._geom import fillet_polyline
+from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly
 from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 
 from ..consts import (
-    BROOK_BEND_WIDTHS,
     BROOK_FRAME_MARGIN,
     BROOK_MAX_TURN_DEG,
     BROOK_SKIRT,
@@ -33,6 +32,24 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from .brook_course import (  # noqa: F401 - re-exported where callers and tests import them
+    EXIT_BEND_FRAC,
+    EXIT_BEND_MAX_FT,
+    FILLET_MIN_TURN_DEG,
+    JOIN_ON_COURSE,
+    _crop_edge,
+    _off_the_axes,
+    _v_within,
+    _wander,
+    course_corner,
+    drawn_course,
+    exit_bend,
+    exit_legs,
+    finished_course,
+    join_vertices,
+    round_the_brooks,
+    unfold,
+)
 from .brook_rules import (
     AXIS_EPS_DEG,
     BEND_DIP_FT,
@@ -53,7 +70,6 @@ from .brook_rules import (
     ruled_excess,
     tap_index,
     to_edge,
-    turn_deg,
     without_straight_joins,
 )
 
@@ -64,290 +80,11 @@ from .brook_rules import (
 # with an even chance" - the EVEN chance a GUESS, no source counting them. `crib` is the default because it is the
 # one form the glyph drew before the knob. Declared as `meta.weir_form` on a weir hamlet only.
 WEIR_FORM = register_knob(Knob("weir_form", list(WEIR_THICK_FT), default="crib"))
-
-EXIT_BEND_FRAC = 0.12  # an exit leg's midpoint bend, as a share of the leg ...
-EXIT_BEND_MAX_FT = 60.0  # ... at most this far aside
-
-
-def exit_bend(start: tuple[float, float], heading: tuple[float, float], leg: float, side: float) -> tuple[float, float]:
-    """The midpoint of an exit leg from `start` along `heading` for `leg` ft, set aside by `EXIT_BEND_FRAC` of the leg
-    (at most `EXIT_BEND_MAX_FT`) on `side` (+1 or -1) - one gentle bend in a leg the page still shows (feature 261)."""
-    off = side * min(EXIT_BEND_MAX_FT, EXIT_BEND_FRAC * leg)
-    return (start[0] + heading[0] * leg / 2 - heading[1] * off, start[1] + heading[1] * leg / 2 + heading[0] * off)
-
-
-def exit_legs(out: Sequence[Pt], fall: Pt, W: float, H: float) -> list[Pt]:
-    """The course's way OFF the frame from its last station `out[-1]`: four legs turning from the course's own heading onto
-    the fall `fall`, each still on the page bent once at its middle, the last lengthened down the fall until the mouth is
-    off the (0, 0, W, H) canvas (feature 287 wave 5, water:W07) - lifted out of `brook_skirt` so the mouth's guarantee is
-    tested on plain inputs. Returns the points to append."""
-    dx, dy = fall
-    lx, ly = out[-1]
-    legs: list[Pt] = []
-    edge = [((W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
-    span = max(120.0, min(edge)) + 260.0
-    # the heading the exit starts on is the course's own over its LAST FEW stations, and never one that has
-    # stopped descending: a single segment's bearing can point back up the slope where the last station was held
-    # against the frame bound, and the exit then folded the course back on itself (131 and 119 degrees, the last
-    # two corners left on the pool)
-    _back = out[max(0, len(out) - 4)]
-    # the course's own heading, unless it has stopped going downhill - a tail that runs across the fall or back
-    # up it has no heading worth keeping, and the exit takes the fall directly (one expression, so the fall case
-    # is not a branch that only a particular crop shape can reach)
-    _h = unit(lx - _back[0], ly - _back[1]) if len(out) > 1 else (dx, dy)
-    heading = _h if _h[0] * dx + _h[1] * dy > 0.15 else (dx, dy)
-    px_, py_ = lx, ly
-    # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
-    # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
-    # the last four vertices), and the part that leaves the sheet is the one place a straight run costs nothing.
-    for k, (f, blend) in enumerate(((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0))):
-        hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
-        # ...BUT A LEG STILL ON THE PAGE BENDS AT ITS MIDDLE (settlement-review of Sawada, feature 261): the exit starts
-        # where the frame would pin the course, and on a map where that is 940 ft inside the sheet the straight legs drew
-        # 70% of the brook as a ruled line. One gentle bend per leg that starts in frame, alternating side, sized to the
-        # leg (`exit_bend`) - a turn of about 27 degrees, where the long lateral terms that folded the course were 113-129
-        if 0.0 <= px_ <= W and 0.0 <= py_ <= H:
-            legs.append(exit_bend((px_, py_), (hx, hy), span * f, 1.0 if k % 2 == 0 else -1.0))
-        px_, py_ = px_ + hx * span * f, py_ + hy * span * f
-        legs.append((px_, py_))
-    # ...AND THE MOUTH LEAVES THE CANVAS BY CONSTRUCTION (feature 287 wave 5, water:W07): `span` is measured along the fall
-    # from the last station, but the legs run the blend of the course's heading and the fall, so a heading far across
-    # the fall left the mouth on the sheet (cohort seed 48: the brook stopped 60 ft inside it). The last leg runs straight
-    # down the fall (its blend is 1), so it is lengthened along itself past the edge - no new turn, no new vertex.
-    if 0.0 <= px_ <= W and 0.0 <= py_ <= H:
-        reach = to_edge((px_, py_), (dx, dy), W, H) + 60.0
-        legs[-1] = (px_ + dx * reach, py_ + dy * reach)
-    return legs
-
-
-def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
-    """One step of the brook's lateral walk: (how far outside the skirt floor, which way it is going).
-
-    A REFLECTING walk with a floor on the step, not a clamped one. Clamped, the walk saturates at an end and
-    stands still there - which draws exactly the ruled segment the wander exists to prevent, and a segment
-    that stands still on a map whose fall is due south is a line at 90.000 degrees. Reflecting off the ends
-    and stepping at least `BROOK_WANDER_STEP / 4` keeps every station's offset different from the last, so
-    no two consecutive vertices can share a bearing and none can lie on an axis."""
-    step = rng.uniform(BROOK_WANDER_STEP / 4.0, BROOK_WANDER_STEP) * swing
-    nxt = stray + step
-    if not 0.0 <= nxt <= BROOK_WANDER:
-        swing = -swing
-        nxt = min(BROOK_WANDER, max(0.0, stray - step))
-    return nxt, swing
-
-
-def _crop_edge(segs: Sequence[tuple[Pt, Pt]], u: float, window: float, floor: float) -> float:
-    """How far ACROSS the fall the cultivated ground reaches at this point down it - a cross-section, not a
-    bounding box.
-
-    Two cuts got this wrong before it, and both are the same mistake at different scales. Taking each ring's
-    greatest width made the brook jump the fan's whole half-width the moment it left the tap, a 72 to 85 degree
-    elbow that `settlement-review` read as a canal jog cut round the plots. Taking the greatest width of any
-    ring lying ABREAST of the station was no better, because the field envelope is one ring lying abreast of
-    every station: the brook was pushed out to the fan's shoulder for its whole length, 400 to 600 ft from
-    ground it was supposed to be skirting at 34. A fan is narrow at its head and broad at its foot, and the
-    course has to be able to see that. So every edge that CROSSES this station's line is cut there, and the
-    vertices inside a window either side are taken as they stand - the window covering the reach to the next
-    station, so nothing that sticks out between two stations is missed by both."""
-    best = floor
-    for (ua, va), (ub, vb) in segs:
-        if abs(ua - u) <= window:
-            best = max(best, va)
-        if (ua - u) * (ub - u) <= 0 and ua != ub:
-            best = max(best, va + (vb - va) * (u - ua) / (ub - ua))
-    return best
-
-
-def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[float, float, float, float]) -> float:
-    """The largest offset at or below `want` that keeps the station inside `box`, never below `floor`.
-
-    The station is `u * d + v * p`, so each side of the box is one linear bound on `v`; the tightest of the
-    four caps it. The floor is the crop clearance and wins outright: a course held inside the picture at the
-    price of running through the rice would be the wrong trade, and the two only disagree where the field
-    itself reaches the box, which the margin is sized to prevent."""
-    hi = want
-    for coord, lo_b, hi_b in ((0, box[0], box[2]), (1, box[1], box[3])):
-        base, slope = u * d[coord], p[coord]
-        if abs(slope) < 1e-9:
-            continue
-        a, b = (lo_b - base) / slope, (hi_b - base) / slope
-        hi = min(hi, max(a, b))
-    return max(floor, hi)
-
-
-def unfold(course: Poly, limit_deg: float, hold: Sequence[Pt] = ()) -> Poly:
-    """The course with every vertex that turns it more than `limit_deg` taken out, repeated until none does.
-
-    A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): where the last stations are held
-    against the frame box and the corner-cutting pass re-clamps its points onto the same edge, the exit leaves from a
-    point behind the one before it and the course folds - 123 degrees, 51 ft inside the sheet, drawn as an acute V. The
-    exit block above already guards the heading it starts on; this holds the property itself on the finished course,
-    whatever produced the fold. Dropping the vertex keeps the ends and the order of everything else.
-
-    A HELD vertex (`hold` - the tap, feature 287 water:W01) is never the one dropped: where it is the fold, the free
-    vertex before it goes instead (the approach's last wobble), else the one after it. A fold between two held vertices
-    has nothing to drop and stays; the brook's placer judges the result and takes its next candidate."""
-    out = list(course)
-    held = {(float(x), float(y)) for x, y in hold}
-    changed = True
-    while changed and len(out) > 2:
-        changed = False
-        for i in range(1, len(out) - 1):
-            if turn_deg(out[i - 1], out[i], out[i + 1]) <= limit_deg:
-                continue
-            k = next((j for j in (i, i - 1, i + 1) if 0 < j < len(out) - 1 and out[j] not in held), None)
-            if k is not None:
-                del out[k]
-                changed = True
-                break
-    return out
+"""Research: weir form - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: fence, frame, crib or gabion rolled per weir hamlet with even odds, crib the default"""
 
 
 SETTLE_PASSES = 8  # the bounded repair's passes (plan D5: each ruled-run bend halves the run, so a handful suffices)
 RULED_BENDS_PER_PASS = 8  # ...and the ruled runs bent within one pass, each re-read after the last bend
-
-
-def finished_course(course: Sequence[Pt], w: float, taps: Sequence[Pt] = ()) -> Poly:
-    """The brook's course AS DRAWN: `course` with its bends rounded at `BROOK_BEND_WIDTHS` of its width `w`, each vertex
-    within a foot of a tap in `taps` held where it is (feature 287, M2 - lifted out of `Settlement.round_stream`).
-
-    A natural brook turns on a curve like every earthen channel (`fillet_polyline`; research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html; settlement-review of Sawada, feature 261: mitred corners of 27-47 degrees). A held vertex
-    splits the course and each stretch is rounded between its own ends, so the head race still leaves the course at the
-    tap where its offtake angle is measured. A function of the course, its width and the taps only, so the placer that
-    judges a brook and the stage that draws it read ONE geometry; a course of two points has no corner and comes back
-    as it is."""
-    pts = [(float(x), float(y)) for x, y in course]
-    if len(pts) < 3:
-        return pts
-    hold = {min(range(len(pts)), key=lambda k, t=t: math.dist(pts[k], t)) for t in taps if min(math.dist(p, t) for p in pts) <= 1.0}
-    out: Poly = []
-    start = 0
-    for k in [*sorted(k for k in hold if 0 < k < len(pts) - 1), len(pts) - 1]:
-        part = fillet_polyline(pts[start : k + 1], BROOK_BEND_WIDTHS * w)
-        out += part[1:] if out else part
-        start = k
-    return out
-
-
-JOIN_ON_COURSE = 1.0  # px: a declared channel end this near a brook's course lies ON it - the hold's own reach in `finished_course`
-FILLET_MIN_TURN_DEG = 8.0  # `fillet_polyline`'s own threshold: a vertex turning less is left as it is, so holding it rounds nothing less
-
-
-def course_corner(q: Pt, course: Sequence[Pt], tol: float = JOIN_ON_COURSE) -> bool:
-    """Does `q` stand on a CORNER of `course` - within `tol` of an interior vertex the rounding bends (feature 287, labels
-    L16)? Holding such a vertex would leave the bend mitred, which the brook's rounding exists to forbid, so the drain's
-    confluence is not placed on one (`sink.brook_join`) and `join_vertices` does not hold one."""
-    pts = [(float(x), float(y)) for x, y in course]
-    for k in range(1, len(pts) - 1):
-        if math.dist(pts[k], q) > tol:
-            continue
-        v0 = (pts[k - 1][0] - pts[k][0], pts[k - 1][1] - pts[k][1])
-        v1 = (pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1])
-        l0, l1 = math.hypot(*v0), math.hypot(*v1)
-        if l0 < 1e-6 or l1 < 1e-6:
-            continue
-        cosang = max(-1.0, min(1.0, (v0[0] * v1[0] + v0[1] * v1[1]) / (l0 * l1)))
-        if 180.0 - math.degrees(math.acos(cosang)) >= FILLET_MIN_TURN_DEG:
-            return True
-    return False
-
-
-def join_vertices(course: Sequence[Pt], ends: Sequence[Pt], hold_corners: bool = True, tol: float = JOIN_ON_COURSE) -> tuple[Poly, list[Pt]]:
-    """`course` with every channel end in `ends` that lies ON it (within `tol`) made a vertex, and the ends to hold there
-    (feature 287, labels L16). A confluence mid-segment - the drain's `brook_join` walks the brook at a stride - is not a
-    vertex, so `finished_course` could not hold it and the fillet of a nearby bend moved the course off the mouth; it is
-    inserted, and held. An end on a CORNER is held only where `hold_corners` says (the head race's tap, whose run is a
-    deliberate line); a confluence there is left to the rounding, which moves the course at most half its cut-back off
-    the corner - `0.5 * BROOK_BEND_WIDTHS * w * cos(half the angle)`, 8.75 px on the 7 px brook - under the rule's 13."""
-    pts = [(float(x), float(y)) for x, y in course]
-    held: list[Pt] = []
-    for e in ends:
-        q = (float(e[0]), float(e[1]))
-        if len(pts) < 2:
-            break
-        best = min(range(len(pts) - 1), key=lambda k: seg_dist(q[0], q[1], pts[k], pts[k + 1]))
-        if seg_dist(q[0], q[1], pts[best], pts[best + 1]) > tol:
-            continue
-        near = min(range(len(pts)), key=lambda k: math.dist(pts[k], q))
-        if math.dist(pts[near], q) <= tol:
-            if hold_corners or not course_corner(pts[near], pts, tol=1e-9):
-                held.append(pts[near])
-            continue
-        a, b = pts[best], pts[best + 1]
-        ab = (b[0] - a[0], b[1] - a[1])
-        t = ((q[0] - a[0]) * ab[0] + (q[1] - a[1]) * ab[1]) / ((ab[0] ** 2 + ab[1] ** 2) or 1.0)
-        on = (a[0] + ab[0] * t, a[1] + ab[1] * t)
-        pts.insert(best + 1, on)
-        held.append(on)
-    return pts, held
-
-
-def round_the_brooks(s: Settlement) -> None:
-    """Every brook drawn at its `finished_course`, THE FINAL WATER BEFORE ANYTHING READS IT (feature 287, M2).
-
-    Run as the last step of `stage_sink`, the end of the water stages, so every later bank, seat, corridor, ford and deck
-    test reads the course the map draws. It ran in `stage_crossings` until feature 287, six stages after the brook was
-    laid: the houses were seated against one course and the crossings squared and decked against another, and the test
-    of a ford read a course the fords were never set on. The WAYS STILL ROUTE AGAINST THE COURSE AS FIRST DRAWN
-    (`ways.checks.stream_segs` reads its `stations`; the fords and the crossing band read `plan.brook`), for the reason
-    `Settlement.round_stream` records: rounding the brook before the ways were routed moved every way its corners had
-    shaped. The tap - the first point of every head race taken off a stream - is held. Rounded from the `stations` when
-    they are recorded, so a second pass draws the same course rather than rounding the rounded one.
-
-    ...AND EVERY CONFLUENCE IS HELD TOO (feature 287, labels L16): a channel that declares a stream at its far end (the
-    drain's `brook_join`, the constructed route's meeting) has that end made a vertex of the course and held
-    (`join_vertices`), so the rounding cannot draw the brook away from the mouth the record says joins it."""
-    chans = [c for c in s.M.get("channels") or [] if len(c.get("poly") or ()) >= 2]
-    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in chans if (c.get("frm") or {}).get("kind") == "stream"]
-    joins = [(float(c["poly"][-1][0]), float(c["poly"][-1][1])) for c in chans if (c.get("to") or {}).get("kind") == "stream"]
-    for rec in s.M.get("streams") or []:
-        course = rec.get("stations") or rec.get("poly") or []
-        if len(course) < 3:
-            continue
-        s.round_stream(rec, drawn_course(course, heads, joins, float(rec.get("w") or 7.0)))
-
-
-def drawn_course(course: Sequence[Pt], taps: Sequence[Pt], joins: Sequence[Pt] = (), w: float = BROOK_DRAWN_W) -> Poly:
-    """The brook AS THE MAP DRAWS IT (feature 287 wave 5): every tap and confluence on `course` made a vertex and held
-    (`join_vertices` - a confluence on a corner left to the rounding), then rounded (`finished_course`). The ONE geometry
-    `round_the_brooks` draws and `brook_violations` judges, so a confluence the sink adds after the brook was judged is
-    judged with it - where the rounding round a held join changed the course, the judged and the drawn used to differ."""
-    pts, held = join_vertices(course, taps)
-    pts, held_j = join_vertices(pts, joins, hold_corners=False)
-    return finished_course(pts, w, held + held_j)
-
-
-def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:
-    """No segment of a drawn watercourse lies along a screen axis.
-
-    The GM's own words on this map (2026-08-26): a course that "appears to run exactly east to west parallel
-    to the edge of the map ... makes it look like a mistake". The wander makes a held offset impossible and
-    that is the cause; this is the backstop for the coincidence, since a fall on a diagonal can still put one
-    segment of an honest walk on the horizontal. The nudge moves the segment's far end AWAY from the crop -
-    `away` is the flank's own outward normal - and never across it: nudging along the segment's own normal
-    was the first cut and it can push the vertex INWARD, which is how one ended up inside a barley plot.
-
-    `hold` exempts the leading segments - the TAP RUN. That stride is not a coincidence to be broken up: it is
-    the structural line that makes the head race's offtake angle the angle the record states, and on a map whose
-    land falls due east or due south it lies on a screen axis by construction. Nudging it moved Mizuguchi's
-    brook 11 ft off the fall 49 ft below its own intake, so the race left at 87 degrees off the brook's heading
-    where the record says 35. A deliberate line and an accidental one look the same to this function, so the
-    caller says which is which."""
-    out = list(course)
-    for i in range(len(out) - 1):
-        if i < hold:
-            continue  # the tap run - see below
-        (ax, ay), (bx, by) = out[i], out[i + 1]
-        deg = math.degrees(math.atan2(by - ay, bx - ax)) % 90.0
-        if min(deg, 90.0 - deg) < eps:
-            # JUST ENOUGH TO CLEAR THE AXIS, never a fixed kick (settlement-review, feature 230 pass 10). A flat
-            # 11 px nudge on a reach that runs straight down a due-south fall flagged every other leg, moved its
-            # end 11 px out and left the next leg to come back: Inashiro's brook drew a +/-29 degree sawtooth,
-            # fourteen periods down the fan's west flank, x alternating 1370 / 1381. Tilting the leg to twice the
-            # detector's own angle clears it with a turn a reader cannot see, and `nudge` stays the ceiling.
-            step = min(nudge, math.hypot(bx - ax, by - ay) * math.tan(math.radians(2.0 * eps)))
-            out[i + 1] = (bx + away[0] * step, by + away[1] * step)
-    return out
 
 
 def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = (), skirt: float = BROOK_SKIRT, steps: int = 16) -> Poly:
@@ -377,7 +114,18 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     AND IT STAYS ON THE SHEET. The picture is cropped to its content and a stream is not content, so a course
     that strays wide of the field strays off the picture - 77% of it on a diagonal fall, in two pieces, with
     the confluence 123 ft beyond the edge. The stations are held inside the field's bounds grown by
-    `BROOK_FRAME_MARGIN`, and the course leaves the frame from the last one that fits."""
+    `BROOK_FRAME_MARGIN`, and the course leaves the frame from the last one that fits.
+
+    Research:
+        flank passage - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: below the tap the course passes the fan on the flank `side` and runs on down it
+        crop clearance - UNRESEARCHED: every station `skirt` (BROOK_SKIRT, 34 px) outside the cultivated rings and supply canals, in cross-section
+        head crop yields - UNRESEARCHED: a crop ring reaching within one skirt of the fan's head is left out of the profile
+        meander - UNRESEARCHED: the offset strays above the floor on `_wander`, over `steps` (16) stations
+        on the sheet - CONVENTION: stations held inside the field's bounds grown by BROOK_FRAME_MARGIN; past half its stations the course leaves at the first the box binds
+        tap run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: straight on down the fall below the tap, never floored, so the race leaves off the brook's downstream heading
+        tap run length - UNRESEARCHED: BROOK_TAP_RUN, 70 px
+        corners cut - UNRESEARCHED: each station replaced by two points 45 ft (at most 0.3 of the leg) either side, re-floored against the crop
+    """
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
     rings = [[(v[0] * dx + v[1] * dy, v[0] * px + v[1] * py) for v in ring] for ring in [list(plan.envelope), *[list(c) for c in crop]] if ring]
@@ -515,7 +263,18 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     """Which of the brook's rules the DRAWN course (`drawn_course` of `course`, its tap and any confluence `joins` held)
     breaks - empty for a course the placer may take. One predicate per rule: W01 `max_turn_deg`, W02 `level_runs_along_frame` over the whole canvas, W03
     `ruled_excess`, W04 `axis_segments`, W06 `course_enters`, W07 `ends_off_canvas` (the off-map source and the mouth), W08
-    `crosses_mid_run`, W11 `monotone_down` below the tap."""
+    `crosses_mid_run`, W11 `monotone_down` below the tap.
+
+    Research:
+        no fold-back - UNRESEARCHED: no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
+        no level run - CONVENTION: no run held level along the frame, in any view
+        no ruled run - UNRESEARCHED: the straightest run within its bound (`ruled_excess`)
+        no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted
+        out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the course never enters the field's envelope
+        off-map ends - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source and the mouth both off the canvas
+        no crossing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the course crosses no ditch mid-run
+        runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: below the tap every step runs down the fall, a bend dipping BEND_DIP_FT at most
+    """
     fin = drawn_course(course, [sluice], joins)
     W, H = float(plan.W), float(plan.H)
     box = reserved_box(course, plan)
@@ -551,7 +310,12 @@ def axes_off(course: Sequence[Pt], away: Pt, sluice: Pt, fall: Pt, eps: float = 
     far one is pinned (the tap: so the head race keeps its mouth). A segment lying ACROSS the fall, which `away` cannot
     turn, is tilted down the fall instead: its far end moved down it, or its near end up it, whichever leaves its
     neighbor still running downhill (water:W11) - the step round a ditch's tail lies across the fall, and turning it
-    about its own normal made the course climb (the W08 unit case)."""
+    about its own normal made the course climb (the W08 unit case).
+
+    Research:
+        screen axis - CONVENTION: a segment a wander stride or longer within AXIS_EPS_DEG of an axis tilted to twice it, no ceiling, the tap run excepted
+        descent kept - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a segment across the fall tilted down it only where its neighbor still runs downhill
+    """
     out = list(course)
     tap, pinned = _pinned(out, sluice)
     u = lambda q: q[0] * fall[0] + q[1] * fall[1]  # noqa: E731
@@ -585,7 +349,10 @@ def bend_at(course: Sequence[Pt], span: Sequence[Pt], need: Callable[[Pt], tuple
     to the frame box in 8-70 ft legs kept its level run through every pass). Set along `away`: the caller passes the
     flank's normal, so the bend moves no vertex up or down the fall and the course below the tap stays monotone
     (water:W11) - or, for a run lying ACROSS the fall, which no bend across it can break (the step round the fan's head
-    on the W08 unit case: 280 ft straight), the fall itself, a dip of a bend's depth that `BEND_DIP_FT` allows."""
+    on the W08 unit case: 280 ft straight), the fall itself, a dip of a bend's depth that `BEND_DIP_FT` allows.
+
+    Research: bend placement - UNRESEARCHED: one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field
+    """
     tap, _pinned_ = _pinned(course, sluice)
     along = [k for k in range(len(course) - 1) if k not in (tap, tap + 1) and _dist_to_course(((course[k][0] + course[k + 1][0]) / 2, (course[k][1] + course[k + 1][1]) / 2), span) <= 8.0]
     for k in sorted(along, key=lambda q: -math.dist(course[q], course[q + 1])):
@@ -602,7 +369,13 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
     """One bend for each level run along the canvas (water:W02) and for the straightest run where it is over its bound
     (water:W03), each at the run's middle, judged on the drawn course. A level run's bend clears the level by twice its
     tolerance and a foot; a ruled run's bend clears the chord by its tolerance and a foot and a half - so each bend
-    breaks the run it was set in, halving a ruled run, and the repair's passes bound how many it takes."""
+    breaks the run it was set in, halving a ruled run, and the repair's passes bound how many it takes.
+
+    Research:
+        level runs broken - CONVENTION: a bend in every level run along the frame, the longest first
+        ruled runs broken - UNRESEARCHED: a bend in the straightest run while it is over its bound
+        bend across the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a run the flank's normal cannot leave bends down the fall, at most BEND_DIP_FT
+    """
     W, H = float(plan.W), float(plan.H)
     out = list(course)
     # EVERY run over its bound, re-read after each bend - a course can carry several (cohort seed 13: three ruled runs of
@@ -632,14 +405,20 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
 def level_offsets(level: float, axis: int, away: Pt) -> Callable[[Pt], tuple[float, float]]:
     """For a level run held at `level` on `axis`: the two offsets along `away` that set a point `LEVEL_TOL_FT` and a foot
     and a half off that level, either side (water:W02) - measured from the run's own level, not the point's, so the bend
-    breaks the run from its first vertex."""
+    breaks the run from its first vertex.
+
+    Research: level bend depth - CONVENTION: the bend clears the run's level by LEVEL_TOL_FT and 1.5 ft
+    """
     av = away[axis] if abs(away[axis]) >= 0.3 else math.copysign(0.3, away[axis] or 1.0)
     return lambda p: ((level + LEVEL_TOL_FT + 1.5 - p[axis]) / av, (level - LEVEL_TOL_FT - 1.5 - p[axis]) / av)
 
 
 def chord_offsets(a: Pt, b: Pt, away: Pt) -> Callable[[Pt], tuple[float, float]]:
     """For a straight run on the chord a-b: the two offsets along `away` that set a point `RULED_TOL_FT` and a foot and a
-    half off the chord's line, either side (water:W03), measured from the line, not from the course under the point."""
+    half off the chord's line, either side (water:W03), measured from the line, not from the course under the point.
+
+    Research: ruled bend depth - UNRESEARCHED: the bend clears the chord by RULED_TOL_FT and 1.5 ft
+    """
     L = math.dist(a, b) or 1.0
     n = (-(b[1] - a[1]) / L, (b[0] - a[0]) / L)
     an = away[0] * n[0] + away[1] * n[1]
@@ -654,7 +433,12 @@ def clear_of_field(course: Sequence[Pt], envelope: Sequence[Pt], away: Pt, sluic
     the cut points between stations are floored against a narrow window, and a lobe between two of them still took the
     course through the rice (cohort seed 12: eight drawn vertices inside the envelope). Across the fall, so no vertex
     moves up or down it (water:W11); the tap run and the ends are not moved - the tap run stands at the fan's head, where
-    the head race leaves it, and is the intake itself."""
+    the head race leaves it, and is the intake itself.
+
+    Research:
+        out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a segment inside the field moved out across the fall
+        step - UNRESEARCHED: 6 px a step, at most 60, the tap run and the ends not moved
+    """
     out = list(course)
     ring = list(envelope)
     tap, pinned = _pinned(out, sluice)
@@ -691,7 +475,16 @@ def approach_legs(plan: SitePlan, sluice: Pt, th: float, run: float) -> Poly | N
 
     THE SOURCE IS OFF THE CANVAS BY CONSTRUCTION (water:W07): the run is `run` or the distance to the canvas edge along
     the bearing and 60 more, whichever is longer, as the exit sizes its span from the edge - a fixed 420 ft stopped on the
-    map on a canvas wider than that."""
+    map on a canvas wider than that.
+
+    Research:
+        off-map source - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: upslope on bearing `th`, to the canvas edge and 60 more, at least `run`
+        approach bow - UNRESEARCHED: the midpoint set 26 px aside
+        approach wobble - UNRESEARCHED: three points at 0.45, 0.68, 0.86 toward the tap, each seeded within +-16 px aside
+        out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: refused where its chord runs through the rice
+        intake reach - UNRESEARCHED: the last 40 px into the tap not tested against the crop
+        screen axis - CONVENTION: off the screen axes as the course below the tap
+    """
     d = (math.cos(th), math.sin(th))
     run = max(run, to_edge(sluice, d, float(plan.W), float(plan.H)) + 60.0)
     up = (sluice[0] + d[0] * run, sluice[1] + d[1] * run)
@@ -740,7 +533,14 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
     half a skirt clear of the rice - repaired and judged like any other; past them the site is refused (`BrookRefused`).
     The other flank is NOT a
     candidate, though the design proposed it: the head race and the fan's trim were carved for the rolled flank before
-    the brook is laid (`plan.head_deg`, `fit.py`), so a brook on the other side would run where the race leaves."""
+    the brook is laid (`plan.head_deg`, `fit.py`), so a brook on the other side would run where the race leaves.
+
+    Research:
+        brook course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: from an off-map source upslope, tapped at the fan's head on one bank, on down that flank and off the map
+        one flank - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the rolled flank `plan.brook_side` only, the other never a candidate
+        approach bearing - UNRESEARCHED: bearings tried outward from straight upslope in 10 deg steps to 70 either side
+        round the ditches - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a skirt crossing a ditch mid-run is laid again round the ditches' outside stretches
+    """
     dx, dy = plan.fall
     base = math.degrees(math.atan2(-dy, -dx))  # upslope
     ditches = ditch_strokes(plan)
@@ -777,7 +577,12 @@ class BrookRefused(ValueError):
 
 def round_the_field(plan: SitePlan, sluice: Pt, th: float, run: float) -> Poly:
     """The approach from the source on bearing `th` round the field to the tap (`around_the_field`) - the source off the
-    canvas as `approach_legs` sets it; a way the field leaves clear is bowed at its middle as every approach is."""
+    canvas as `approach_legs` sets it; a way the field leaves clear is bowed at its middle as every approach is.
+
+    Research:
+        off-map source - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: on bearing `th`, to the canvas edge and 60 more, at least `run`
+        approach bow - UNRESEARCHED: a clear way set 26 px aside at its middle
+    """
     d = (math.cos(th), math.sin(th))
     reach = max(run, to_edge(sluice, d, float(plan.W), float(plan.H)) + 60.0)
     path = around_the_field(plan.envelope, (sluice[0] + d[0] * reach, sluice[1] + d[1] * reach), sluice)
@@ -795,7 +600,12 @@ def around_the_field(envelope: Sequence[Pt], start: Pt, goal: Pt, pad: float = B
     design. `ways.clearance.route_around`, the design's choice, is the lane router's and was measured failing here: on a
     lobe over the tap it pushed the approach's end back INTO the lobe. A tap the field closes round on every side has no
     such course; `head_sluice` seats the tap at the fan's head, so that is input the fit never makes, and the straight
-    course is returned for the placer's judgment to refuse."""
+    course is returned for the placer's judgment to refuse.
+
+    Research:
+        out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the shortest course from the source to the tap clear of the field
+        clearance - UNRESEARCHED: `pad` (half BROOK_SKIRT, 17 px), the last `intake` 40 ft into the tap exempt
+    """
     from shapely.geometry import LineString, Polygon  # noqa: PLC0415 - bound on first use
 
     field = Polygon(envelope).buffer(0)
@@ -846,7 +656,15 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
 
     One disclosed liberty, in the entry: the bar is drawn as a FULL closure of the brook, a map drawing convention,
     because a half-river closure - the common old form - is a pixel or two at a 7 ft brook. Each form's thickness is
-    `WEIR_THICK_FT`'s, with its class beside it."""
+    `WEIR_THICK_FT`'s, with its class beside it.
+
+    Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
+        oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants upstream from the intake bank, its root at the mouth's downstream lip
+        weir skew angle - UNRESEARCHED: WEIR_SKEW_DEG, 30 deg
+        full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention
+        bar size - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: WEIR_HALF_FT half-length, WEIR_THICK_FT of its form thick
+        seat-search reach - GUESS: the bar steps down the brook a foot at a time, past dry ground, no further than the leg to the next vertex
+    """
     if plan.intake != "weir":
         return
     form = s.M["meta"]["weir_form"] = s.resolve("weir_form")
@@ -926,7 +744,8 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
     intake, and at a two-foot opening either would be smaller than the map can show.
 
     Beds share one opacity group (`_water`), so the brook painting over the race is a join, not a darker seam. A brook
-    with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none."""
+    with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none.
+    Research: bare intake mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race opens out of the brook's bank, no gate or boards drawn"""
     tap = (float(sluice[0]), float(sluice[1]))
     brook = next((st for st in s.M.get("streams", []) if any(math.dist(tap, (float(q[0]), float(q[1]))) < 0.5 for q in st["poly"])), None)
     entry = next((w for w in s.water if w["rec"] is brook and w.get("clip") is None), None) if brook is not None else None
@@ -954,7 +773,8 @@ def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: 
     - `crib`, timber packed with stone: stone gray, the crib's baulks ticked across it (the glyph before the knob);
     - `frame`, stakes and logs packed with clay: clay brown-gray, the logs drawn along it and the stakes as dots;
     - `gabion`, stone-filled baskets: gray, the baskets' seams across it and the weave hatched on the diagonal;
-    - `fence`, stakes with brushwood woven between them: a thin straw-colored band with its stakes as dark dots."""
+    - `fence`, stakes with brushwood woven between them: a thin straw-colored band with its stakes as dark dots.
+    Research: weir glyph - CONVENTION: per-form fill, ticks, stakes and an upstream lip inside the bar"""
     cx, cy = c
     ax, ay = along
     hx, hy = down

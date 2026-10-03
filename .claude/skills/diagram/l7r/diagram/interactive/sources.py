@@ -18,6 +18,8 @@ record reaches every modal without anyone re-typing anything into `classes.py`:
   the registry behind them (`research/sources/`). The page no longer shows these; the tests over the
   record still read them, to prove every entry cites and every source carries a URL where it can be
   read (constitution v2.13.0).
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

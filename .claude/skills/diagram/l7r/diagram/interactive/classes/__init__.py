@@ -4,6 +4,8 @@ Look here when: you are adding a KIND of feature (a class in the family module i
 what a modal SAYS (its docstring), or adding a sibling distinction (`siblings.py`). The mechanics - the
 `FeatureClass` the page reads, the labels, the lead sentence, the docstring parser - are in `_base.py`.
 Everything the old single module exported is exported from here unchanged.
+
+Research: class registry plumbing - NONE
 """
 
 from __future__ import annotations

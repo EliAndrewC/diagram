@@ -18,7 +18,10 @@ rolls, from a layout with no household's parts, unturned - is clear in the build
 reachable raster. The placer still decides every seat it is offered, by all of its rules; the region only stops it being
 offered what free ground already rules out. Painting is conservative (`Region`), so a seat the region offers may still be
 refused, and one it does not offer is one whose smallest homestead would stand on painted ground - the map moves where the
-margin bites (the GM, 2026-09-30: maps "do NOT need to remain identical in output"; the spec's Decisions)."""
+margin bites (the GM, 2026-09-30: maps "do NOT need to remain identical in output"; the spec's Decisions).
+
+Research: seat region - NONE: rasters that prune the seats offered; the placer decides every seat
+"""
 
 from __future__ import annotations
 

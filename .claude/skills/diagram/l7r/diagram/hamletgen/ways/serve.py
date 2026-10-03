@@ -3,7 +3,9 @@
 One web lane, laid (`_lay_web_lane`). The straggler footpath pass that also lived here was dropped by feature 287 (GM
 2026-09-30): the access tree reserves every house's corridor at seating and the settle draws it for any house the web
 leaves unreached (`tree.admits`, `settle.settle_the_web`, `last_resort`), so a second router pass had nothing left to
-guarantee."""
+guarantee.
+
+Research: plumbing - NONE"""
 
 from __future__ import annotations
 
@@ -56,7 +58,9 @@ def sampled(p: Sequence[Pt], step: float = 4.0) -> list[Pt]:
 def shadowed_by(ways: Sequence[Sequence[Pt]], i: int) -> int | None:
     """The first other way that way `i` runs beside - within `WEB_SHADOW_FT`, unbroken, for more than a `BUNDLE_PITCH`
     (`shadow_measure`, way against way) - or None: `_lay_web_lane`'s refusal, asked of a finished lane (`settle_shadows`).
-    Only a way whose box comes within `WEB_SHADOW_FT` of this one's is measured."""
+    Only a way whose box comes within `WEB_SHADOW_FT` of this one's is measured.
+
+    Research: no way drawn twice - CONVENTION: beside another unbroken for more than a bundle pitch"""
     p = ways[i]
     if len(p) < 2:
         return None
@@ -97,7 +101,16 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     Also refuses a run that merely SHADOWS an existing way - Inashiro laid a back lane a median 10 ft
     from a skeleton lane for its whole length, which reads as one lane accidentally drawn twice.
     `MIN_WEB_GAP` keeps the web's own cuts apart; nothing was keeping a cut off the lanes already
-    there."""
+    there.
+
+    Research:
+        a web lane joins the network - research/questions/0081-village-lanes.drawing.html: one network, or not drawn
+        no way drawn twice - CONVENTION: over 60% of the run, or a bundle pitch unbroken, beside a way
+        not along a shelter belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
+            over 60 ft inside a belt refused
+        a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
+        link reach - UNRESEARCHED: a link up to 200 ft to the network
+        a link takes its way's width - CONVENTION"""
     segs = _net_segs(s)
     if len(run) < 2:
         return False
@@ -197,7 +210,11 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
 def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
     """Where a path to a farm with its own grove begins (feature 291): `clear` past the far edge of the farm's yard, straight
     out along the line from the house through the yard - the front, the side a grove leaves open (or breaks for the way
-    in). None for a farm with no grove of its own, or no yard."""
+    in). None for a farm with no grove of its own, or no yard.
+
+    Research:
+        the way in at the front - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
+            past the yard on the grove's open side, at the middle of a ring's break"""
     g = h.get("geom") or {}
     y = g.get("yard")
     if not g.get("groves") or y is None:
@@ -242,7 +259,9 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
     """`door` moved along the front - across the line from the house through it - to the nearest point `gap` clear of every
     quad in `quads` (the walls a route keeps off, the fixtures among them; feature 291 on 287: the yard persimmon stands at
     the middle of the yard's front, where the door is, and Kashikawa's door paths began inside its trunk); the door itself
-    where it is clear, None where no step within `tries` is."""
+    where it is clear, None where no step within `tries` is.
+
+    Research: no path from inside a fixture - research/questions/0081-village-lanes.drawing.html: the door stepped along the front"""
     from l7r.diagram.settlement import edge_dist
 
     fx, fy = door[0] - house[0], door[1] - house[1]
@@ -273,7 +292,11 @@ def pulled(path: Sequence[Pt], clear: Any) -> list[Pt]:
 def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: float, clear: Any = None) -> list[Pt]:
     """A door path ended where it first arrives within `touch` of its way (`segs`) - square onto it, at the way's nearest point
     to the leg's start - so it never runs on beside the street it joins (feature 291 on 287: a door path is a tree lane the settle does not cut, and
-    one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused)."""
+    one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused).
+
+    Research:
+        a door path meets its way as a T - research/questions/0081-village-lanes.drawing.html: ended square at its first
+            arrival"""
     import numpy as np  # bound here, not at import (feature 237)
 
     pts = list(path)
@@ -304,13 +327,17 @@ DOOR_REACH_FT = 40.0
 """How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
 settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
 The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 40 ft
-- about a yard's depth past the door - is a GUESS at 'at the door'."""
+- about a yard's depth past the door - is a GUESS at 'at the door'.
+
+Research: a door reached - GUESS: 40 ft from the network"""
 
 
 def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
     """The index of the street a row farm's way ends on - the nearest to its FRONT DOOR (its house where it has none) - or
     None where no street is laid. By the door, not the house: a farm between two streets faces the one its door is on
-    (cohort seed 903: a door 36 ft from one street, its house nearer the other)."""
+    (cohort seed 903: a door 36 ft from one street, its house nearer the other).
+
+    Research: a row farm fronts its street - research/questions/0033-row-villages-resson.drawing.html: the nearest to its door"""
     if not streets:
         return None
     hx, hy = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or (float(h["x"]), float(h["y"]))
@@ -321,7 +348,14 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     """A footpath from each grove farm's front door (`front_door`) to the ways, where the door stands more than `reach`
     from them: to the connected lane network, or - for a row farm (feature 291 plan D17) - to its OWN street (the nearest
     street laid, `own_street`), routed round the farm's grove when the street lies on its windward side. Each path records
-    the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn."""
+    the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn.
+
+    Research:
+        every grove farm reached at its door - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
+            a 3 ft footpath where the door stands past the reach
+        round the grove to the street - research/questions/0033-row-villages-resson.drawing.html: a path round the grove,
+            a GUESS there
+        off the fixtures and grove bands - research/questions/0081-village-lanes.drawing.html: walls to the path"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
     from .settle import Lawful  # local: the settle sits above serve too
@@ -385,7 +419,11 @@ def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]]
     counts as serving the farm (`end_serves`: within `WAY_END_REACH_FT` of the house, or `STEADING_ARRIVAL_FT` of its built
     ground) - the predicate the settle trims a street's end by. At the door's reach alone, Mizuguchi's east-end farm, its door
     11 ft off the street but its yard 19, took no path; the street's end past the last path then served nothing the law
-    counts, the settle cut it back a frame, and the farm stood off every way (2026-10-01)."""
+    counts, the settle cut it back a frame, and the farm stood off every way (2026-10-01).
+
+    Research:
+        the street serves the farm - research/questions/0081-village-lanes.drawing.html: within 60 ft of the house or
+            12 ft of its built ground"""
     if street is None:
         return True
     q = min((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda p: math.dist(p, door))
@@ -395,7 +433,9 @@ def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]]
 def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
     """A farm's dooryard flanks that face NO BAND of its own grove (`rolling.access.doors_of`, beside the yard carried past
     the gable) - on the grove's open side, so in practice a two-sided grove's (spec-fidelity's condition on FR-019's
-    exception, 2026-09-30) - or none without a yard of its own."""
+    exception, 2026-09-30) - or none without a yard of its own.
+
+    Research: a flank door as fallback - UNRESEARCHED: a dooryard flank facing no grove band"""
     from l7r.diagram.settlement.rolling.access import doors_of
 
     g = h.get("geom") or {}
@@ -448,7 +488,11 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
     its gap of the yard, the well or a trunk - three Mizuguchi doors 35 ft from their street), else the routed way,
     string-pulled (the lattice's few-foot jogs are kinks to the law, cohort seed 904); ended square on the way at its first
     arrival (`to_first_arrival`); squared where it crosses water (`settle.square_run`, as the settle squares every lane
-    first); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`)."""
+    first); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`).
+
+    Research:
+        a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: straight where clear,
+            else routed and pulled taut"""
     from l7r.diagram.overlap.registry import forbidden_segment
 
     from .law import over_a_fixture

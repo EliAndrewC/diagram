@@ -35,6 +35,8 @@ feature."*
 
 Everything else in a `.notes.md` is prose for human readers and is never parsed. The block may sit
 anywhere in the file.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

@@ -9,7 +9,9 @@ the zone is filled with it (`Settlement.flush_covers`). A MAP DRAWING CONVENTION
 spec's Decisions Recorded); the GM does not mind the repetition.
 
 SEAMLESS: a glyph whose extent crosses the tile's edge is laid again at the opposite edge, so the tiles meet without a cut. No
-background: the land shows between the glyphs, as it did between the thrown ones."""
+background: the land shows between the glyphs, as it did between the thrown ones.
+
+Research: cover tiles - CONVENTION: an area cover drawn as one repeating tile of its scatter's glyphs, sizes and densities"""
 
 from __future__ import annotations
 
@@ -35,6 +37,7 @@ REED_GLINT_SHARE = 0.12
 
 #: A fixed seed per kind: the tile is the same on every map (the GM does not mind the repetition), so a re-roll moves nothing.
 _SEED = {"grass": 2981, "reed": 2982, "bamboo": 2983, "grass-clumps": 2991, "reed-clumps": 2992, "fringe": 2993, "reed-bank": 2994}
+"""Research: tile seeds - NONE: fixed seeds"""
 
 
 @dataclass
@@ -42,7 +45,9 @@ class Cover:
     """One zone a tile fills (`Settlement._covers`, drawn by `flush_covers`): its `kind` (a key of `TILES`), the class its shape
     is ruled under on the page (`cls`, the zone's), its `ring`, and the ground its scatter kept bare as shapely geometries
     (`bare` - a clearing swept later is added here, `_cull_cover_in`). `rec` is the zone's manifest record, which is given the
-    drawn shape (`cover`) for the page's hit region."""
+    drawn shape (`cover`) for the page's hit region.
+
+    Research: cover record - NONE: a zone and its bare ground"""
 
     kind: str
     cls: str | None
@@ -52,12 +57,16 @@ class Cover:
 
 
 def pattern_id(kind: str, bs: float) -> str:
-    """The `<pattern>` id of `kind` at scale `bs` - one per kind and scale on a map."""
+    """The `<pattern>` id of `kind` at scale `bs` - one per kind and scale on a map.
+
+    Research: plumbing - NONE: pattern and path assembly"""
     return f"cover-{kind}-{bs:g}".replace(".", "_")
 
 
 def _wrapped(side_w: float, side_h: float, glyph: Callable[[float, float], str], x: float, y: float, reach: float) -> str:
-    """`glyph` drawn at (x, y) and again at each opposite edge its `reach` crosses, so the tile is seamless."""
+    """`glyph` drawn at (x, y) and again at each opposite edge its `reach` crosses, so the tile is seamless.
+
+    Research: plumbing - NONE: pattern and path assembly"""
     out = []
     for dx in (-side_w, 0.0, side_w):
         for dy in (-side_h, 0.0, side_h):
@@ -96,7 +105,9 @@ def grass_tile(bs: float) -> str:
 
 def reed_tile(bs: float) -> str:
     """The marsh's tile: the pale wet tint (`#9FBBAE` at 0.14, r 15-28), the standing-water glints (`#C2D6CE` ellipses) and the
-    reed tufts - four near-vertical `#6E9377` blades 4-7 long within 0.2 rad of upright - at the marsh's densities (`marsh`)."""
+    reed tufts - four near-vertical `#6E9377` blades 4-7 long within 0.2 rad of upright - at the marsh's densities (`marsh`).
+
+    Research: reed tile - CONVENTION: tint, glints and reed tufts at the marsh's densities"""
     import numpy as np
 
     from .wet import MARSH_TINT_R
@@ -141,7 +152,9 @@ BAMBOO_SHADE = 0.18
 
 
 def bamboo_tile(bs: float) -> str:
-    """A bamboo stand's tile: `bamboo_mark` (two culms and a leafy fork, 5-8 ft tall) on the stand's own jittered grid."""
+    """A bamboo stand's tile: `bamboo_mark` (two culms and a leafy fork, 5-8 ft tall) on the stand's own jittered grid.
+
+    Research: bamboo mark - research/questions/0075-bamboo-groves-chikurin.drawing.html: the modern map's bamboo symbol on a 7 ft grid over the thicket's shade"""
     import numpy as np
 
     from ..homestead_parts.groves import BAMBOO_CULM, bamboo_mark
@@ -177,7 +190,9 @@ CLUMP_RADIUS_FT = 6.0
 
 def _tufts(side: float, xs: Any, ys: Any, ang: Any, length: Any) -> str:
     """Tufts of blades rooted at (xs[i], ys[i]), blade k at angle ang[i, k] off upright and length[i, k] long, as one path's `d`,
-    each tuft laid again past any edge it crosses (`_wrapped`)."""
+    each tuft laid again past any edge it crosses (`_wrapped`).
+
+    Research: plumbing - NONE: pattern and path assembly"""
     out = []
     for i in range(len(xs)):
         tips = [(math.sin(float(ang[i, k])) * float(length[i, k]), -math.cos(float(ang[i, k])) * float(length[i, k])) for k in range(ang.shape[1])]
@@ -187,7 +202,9 @@ def _tufts(side: float, xs: Any, ys: Any, ang: Any, length: Any) -> str:
 
 
 def _clump_centers(rng: Any, side: float, n: int, spread: float) -> tuple[Any, Any]:
-    """`n` clumps' tuft roots: clump centers anywhere on the tile, each with 8-14 roots within `spread` of it."""
+    """`n` clumps' tuft roots: clump centers anywhere on the tile, each with 8-14 roots within `spread` of it.
+
+    Research: plumbing - NONE: pattern and path assembly"""
     import numpy as np
 
     xs, ys = [], []
@@ -242,10 +259,13 @@ def grass_overlay_tile(bs: float) -> str:
 #: densities, with a little of the wet tint - so the change is a grading, as the margin itself grades (research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html:
 #: reed, then sedge and grass, then dry ground). A MAP DRAWING CONVENTION; the width is calibrated by eye.
 FRINGE_FT = 30.0
+"""Research: scrub-marsh fringe - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a 30 ft mixed band of grass and reed straddling the edge"""
 
 
 def fringe_tile(bs: float) -> str:
-    """The scrub-marsh fringe's tile: grass and reed tufts at half density each, a few pale tint patches, at the base repeat."""
+    """The scrub-marsh fringe's tile: grass and reed tufts at half density each, a few pale tint patches, at the base repeat.
+
+    Research: fringe tile - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass and reed tufts at half density each"""
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -268,10 +288,13 @@ def fringe_tile(bs: float) -> str:
 #: to the water's drawn edge, and a band `BANK_FT` wide along each bank inside the marsh is drawn with a tighter, darker reed
 #: tile, so the stream stays framed where a bare strip framed it. A MAP DRAWING CONVENTION; the width is calibrated by eye.
 BANK_FT = 6.0
+"""Research: reed bank band - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 6 ft of denser, darker reeds along each bank in the marsh"""
 
 
 def reed_bank_tile(bs: float) -> str:
-    """The bank band's tile: reed tufts at about three times the marsh's density, a shade darker, at the base repeat."""
+    """The bank band's tile: reed tufts at about three times the marsh's density, a shade darker, at the base repeat.
+
+    Research: bank tile - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds at three times the marsh's density, a shade darker"""
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -287,6 +310,7 @@ def reed_bank_tile(bs: float) -> str:
 
 #: The overlay drawn over each base kind (feature 299); bamboo has none.
 OVERLAYS: dict[str, str] = {"grass": "grass-clumps", "reed": "reed-clumps"}
+"""Research: overlay table - NONE: which overlay draws over which base"""
 
 TILES: dict[str, Callable[[float], str]] = {
     "grass": grass_tile,
@@ -300,7 +324,9 @@ TILES: dict[str, Callable[[float], str]] = {
 
 
 def cover_defs(kinds: set[tuple[str, float]]) -> str:
-    """The `<defs>` of every tile a map uses, `(kind, bscale)` each - empty when it uses none."""
+    """The `<defs>` of every tile a map uses, `(kind, bscale)` each - empty when it uses none.
+
+    Research: plumbing - NONE: pattern and path assembly"""
     if not kinds:
         return ""
     return "<defs>" + "".join(TILES[k](bs) for k, bs in sorted(kinds)) + "</defs>"
@@ -309,7 +335,9 @@ def cover_defs(kinds: set[tuple[str, float]]) -> str:
 def cover_rings(shape: Any, tolerance: float = 0.25) -> list[list[tuple[float, float]]]:
     """Every ring of `shape` (a polygon, a multipolygon or a collection) - each outline and each hole - simplified within
     `tolerance` (a quarter foot: a buffered keep-out's arcs carry eight points a quarter-circle the fill cannot show) and at the
-    record's grain, 0.1. Drawn as one even-odd path, the holes are bare."""
+    record's grain, 0.1. Drawn as one even-odd path, the holes are bare.
+
+    Research: plumbing - NONE: pattern and path assembly"""
     out: list[list[tuple[float, float]]] = []
     for g in getattr(shape, "geoms", [shape]):
         if g.geom_type == "Polygon":
@@ -325,6 +353,8 @@ def cover_rings(shape: Any, tolerance: float = 0.25) -> list[list[tuple[float, f
 
 def cover_path(shape: Any, kind: str, bs: float) -> str:
     """One even-odd `<path>` of `shape`'s rings (`cover_rings`) filled with `kind`'s tile at scale `bs`, taking no pointer (the
-    page's hit regions take it, `interactive.page.hit_regions`)."""
+    page's hit regions take it, `interactive.page.hit_regions`).
+
+    Research: plumbing - NONE: pattern and path assembly"""
     d = "".join("M" + "L".join(f"{x},{y}" for x, y in r) + "Z" for r in cover_rings(shape))
     return f'<path d="{d}" fill="url(#{pattern_id(kind, bs)})" fill-rule="evenodd" style="pointer-events: none"/>'

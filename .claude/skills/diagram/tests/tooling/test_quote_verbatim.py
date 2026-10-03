@@ -21,6 +21,8 @@ import pathlib
 import re
 import urllib.error
 
+import pytest
+
 REPO = pathlib.Path(__file__).resolve().parents[5]
 
 

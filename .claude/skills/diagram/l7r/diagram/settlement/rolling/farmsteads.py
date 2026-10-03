@@ -1,18 +1,31 @@
 """The deferred farmstead flush: what actually gets DRAWN, and in what order. This is the module the DRAW ORDER contract is about.
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
+
+Research: draw-order and footprint plumbing - NONE
 """
 
 import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
+from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
+from ..homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, crown_shades
 from .fit import part_box
 from .lot import kura_rect
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def beds_sun_clear(beds: Any, crowns: Any, trees: Any, marks: Any, reach: float, bamboo_reach: float) -> bool:
+    """Is the sun ground of every bed in `beds` (drawn boxes, center x, center y, w, h) clear of every standing crown (`crowns`, the
+    flat [x, y, r, ...] run of `tree_crowns`), every tree promised a seat (`trees`, (x, y, r)) and every bamboo mark (`marks`,
+    [x, y, r]) - the trees at `reach`, the bamboo at `bamboo_reach`? (Feature 315: a garden nudged south after the groves stand
+    must not move its sun ground over a tree the sun rule already kept off its old place - cohort seed 14.)"""
+    discs = [(float(crowns[i]), float(crowns[i + 1]), float(crowns[i + 2])) for i in range(0, len(crowns) - 2, 3)] + [tuple(t) for t in trees]
+    return not any(crown_shades(x, y, r, b, reach) for b in beds for x, y, r in discs) and not any(crown_shades(float(m[0]), float(m[1]), float(m[2]), b, bamboo_reach) for b in beds for m in marks)
 
 
 class FarmsteadFlushMixin:
@@ -30,7 +43,10 @@ class FarmsteadFlushMixin:
     def _farm_rolls_bamboo(self: Settlement, hx: float, hy: float) -> bool:  # type: ignore[misc]
         """Does the farm at (hx, hy) keep a household bamboo stand (feature 291)? The same positional roll the household
         bamboo pass makes (`hamletgen/homesteads/bamboo.py`), under the settlement's `bamboo` knob as the generator sets
-        it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before."""
+        it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before.
+
+        Research: farms keeping their own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: about three in five, rolled per position, under the settlement's bamboo knob
+        """
         on = getattr(self, "_household_bamboo", None)
         return True if on is None else bool(on) and self._hjit(hx, hy, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE
 
@@ -40,7 +56,15 @@ class FarmsteadFlushMixin:
         this pass is pure drawing. Abandoned ruins (no bundle) draw as a lone house. Call LAST. Returns the
         farmhouse count.
         Two sub-passes so the garden EAST-shade nudge can see every neighbor's grove: (1) draw all per-house
-        GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top."""
+        GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top.
+
+        Research:
+            no tree over a building - CONVENTION: the grove bands drawn last, thinning off the walls
+            thin band's lesser trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: fruit and flowering broadleaf, no conifer (the mix labeled a GUESS)
+            band drawn at one density - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: cut into clumps of the clump cap, so a deep band stands under canopy as densely as a thin one (0.57 -> 0.78)
+            canopy edge at the band's inner edge - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the drawn band gives up one crown radius on the house's side, keeping the service strip clear
+            bamboo patch in the windward bands - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft on the house side of each windward band
+        """
         survivors: list[Any] = []
         bundled: list[Any] = []
         arms: list[tuple[float, float, float, float, tuple[int, int], str, bool]] = []
@@ -101,7 +125,12 @@ class FarmsteadFlushMixin:
     def _east_trees(self: Settlement, gx1: float, own: Any) -> list[Any]:  # type: ignore[misc]
         """The y-intervals (y0, y1) of every per-house grove arm standing hard against a garden's EAST - west
         edge within a shade band east of the garden's east edge `gx1`. `own` is the garden's OWN grove arms
-        (which sit N/W, never east), excluded. The garden's x is fixed as it shifts S, so this set is stable."""
+        (which sit N/W, never east), excluded. The garden's x is fixed as it shifts S, so this set is stable.
+
+        Research:
+            east shade band - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a neighbor's grove just east of a garden shades it
+            east shade band width - UNRESEARCHED: the reach 22 px (`bscale`) east of the garden's east edge, a figure 0038 does not give
+        """
         band = 22 * self.bscale
         out: list[Any] = []
         for tx, ty, tw, th in self.grove_rects:
@@ -133,7 +162,10 @@ class FarmsteadFlushMixin:
         once every yashikirin is drawn, a garden left with a NEIGHBOR'S grove hard against its EAST loses the
         morning sun. Where there is open ground, nudge that garden a little SOUTH so the tree falls to its NE
         and the eastern sky opens - the GM's 'move it a bit south' remedy. Best-effort: a garden boxed in to the
-        south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'."""
+        south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'.
+
+        Research: east-shaded garden nudged south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: best effort, 4 px steps up to the bed's height plus the house's plus 6 px
+        """
         step = 4 * self.bscale
 
         def footprints(exclude: int) -> list[Any]:
@@ -168,6 +200,15 @@ class FarmsteadFlushMixin:
             if not any(overlaps((gcy - gh / 2, gcy + gh / 2), t) for t in trees):
                 continue  # not currently east-shaded - nothing to do
             maxshift = gh + rec["h"] + 6  # 'a little' - stays a dooryard garden near the house
+            reach, bamboo_reach = self.px(CANOPY_SHADE_FT), self.px(BAMBOO_SHADE_FT)
+            # the trees near enough to matter, gathered once per garden: within the shift, the reach and the largest crown
+            span = maxshift + max(reach, bamboo_reach) + 3.0 * self.px(PERSIMMON_CROWN_FT)
+            bx0, bx1 = min(b[0] - b[2] / 2 for b in beds) - span, max(b[0] + b[2] / 2 for b in beds) + span
+            by0, by1 = min(b[1] - b[3] / 2 for b in beds) - span, max(b[1] + b[3] / 2 for b in beds) + span
+            tc = self.M.get("tree_crowns") or []
+            near_crowns = [v for i in range(0, len(tc) - 2, 3) if bx0 <= tc[i] <= bx1 and by0 <= tc[i + 1] <= by1 for v in tc[i : i + 3]]
+            near_marks = [m for m in self.M.get("bamboo_marks") or () if bx0 <= m[0] <= bx1 and by0 <= m[1] <= by1]
+            promised = [(t[0], t[1], self.px(PERSIMMON_CROWN_FT + 1.0)) for r in recs if (t := (r["geom"].get("fixtures") or {}).get("persimmon")) is not None]
             others = footprints(i) + [tuple(part_box(geom, "house"))] + ([tuple(part_box(geom, "yard"))] if geom.get("yard") is not None else []) + [tuple(b) for b in geom.get("groves") or ()]
             dy = step
             while dy <= maxshift:
@@ -175,7 +216,9 @@ class FarmsteadFlushMixin:
                 if not any(overlaps(lane, t) for t in trees):
                     shifted = [(b[0], b[1] + dy, b[2], b[3]) for b in beds]
                     drawn = [(b[0], b[1] + dy, b[2], b[3]) for b in part_box(geom, "gardens")]
-                    if self._garden_beds_clear(drawn, others):
+                    # ...and its new sun ground clear of every crown already drawn, every persimmon promised a seat and every bamboo
+                    # mark (feature 315; cohort seed 14: a bed nudged 8 ft south took a neighbor's persimmon into its sun)
+                    if self._garden_beds_clear(drawn, others) and beds_sun_clear(drawn, near_crowns, promised, near_marks, reach, bamboo_reach):
                         geom["gardens"] = shifted
                         if "boxes" in geom:
                             geom["boxes"]["gardens"] = drawn  # the beds' drawn boxes move with them
@@ -195,7 +238,10 @@ class FarmsteadFlushMixin:
         yet. But by the flush every appurtenance IS drawn, so the side can simply be CHOSEN here,
         with no placement change and so no reflow of the belt. If both walls are fouled the west
         stands and the overlap matrix reports it - the engine does not get to hide a homestead with
-        no room for its own storehouse."""
+        no room for its own storehouse.
+
+        Research: legacy storehouse wall - research/questions/0040-farm-storehouses-kura.drawing.html: the west wall, else the north where the west is fouled
+        """
         th = math.radians(rec.get("rot", 0))
         ca, sa = math.cos(th), math.sin(th)
         # the two kura footprints, in the house's local frame - `kura_rect`, the table house() draws from (feature 280 M18's
@@ -217,7 +263,14 @@ class FarmsteadFlushMixin:
         kitchen GARDEN (a sunny side, preferring the east) - both were universal to a farmstead, so every
         farmhouse has one of each. Find spots for both; if they don't fit, nudge the house a little; draw
         garden + yard then the house so the house wins any abutment. A house that cannot host BOTH anywhere
-        nearby is dropped (rare) so the 100% invariants hold. Call LAST in the gen. Returns the count."""
+        nearby is dropped (rare) so the 100% invariants hold. Call LAST in the gen. Returns the count.
+
+        Research:
+            every farm keeps a yard and a garden - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: a farm with no room for both is dropped
+            wealth size of the drawn house - research/questions/0029-farmhouses-minka.drawing.html: the glyph drawn at the wealth factor, the reservation at the base (the 0.9-1.12 band itself unstated there)
+            grove at every farm - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: near-universal (`grove_prevalence`), planted after the yards and gardens
+            no grove inside a city wall - UNRESEARCHED: an intramural farm keeps no tree belt unless the map asks
+        """
         survivors: list[Any] = []
         for rec in self._pending_farmsteads:
             spot = self._solve_homestead(rec)  # shift the homestead to fit yard+garden+grove-room

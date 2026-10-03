@@ -21,6 +21,8 @@ collision is silent - no MRO to catch it, and neither ruff nor mypy reports one)
 
 Layering, so the package stays acyclic: base <- primitives <- overlap <- everything else; seatmemo
 and village import nothing from the package. Respect it when adding a member.
+
+Research: plumbing - NONE: the package's re-exported surface
 """
 
 from .base import *

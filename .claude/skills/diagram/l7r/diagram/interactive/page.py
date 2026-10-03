@@ -11,6 +11,10 @@ The census (`ink_census`) is what the FR-009 gate check reads: it counts drawn e
 and lists the ones that carry NO class - ink nobody has ruled on. Ink that draws nothing (`<defs>`,
 `<pattern>`, `<clipPath>`, a bare `<g>` wrapper) is exempt; a `"-"` tag is a RULING and is counted
 under its own key, never reported.
+
+Research:
+    page plumbing - NONE: wrapping, the ink census, merging, hit geometry and assembly
+    hover and modal presentation - CONVENTION: what lights, how wide a hit band is, what the modal shows
 """
 
 from __future__ import annotations

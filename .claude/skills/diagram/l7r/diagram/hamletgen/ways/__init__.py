@@ -1,6 +1,8 @@
 """STAGE 4b: the lanes, the connector track, and what makes a path legal.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: re-exports - NONE
 """
 
 from __future__ import annotations

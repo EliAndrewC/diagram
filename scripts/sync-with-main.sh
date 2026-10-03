@@ -299,6 +299,9 @@ push_cmd() {
   python3 "$ROOT/scripts/_downloads.py" selftest || die "the download-list check's selftest failed - the guard itself is broken; fix scripts/_downloads.py before pushing"
   ( cd "$ROOT" && python3 "$ROOT/scripts/_downloads.py" check ) || die "the canonical download list is not append-only against main (above) - feature 313; \`make download-add FILE=<draft.md>\` appends an entry"
   "$ROOT/scripts/entry-gate.sh" || exit 1
+  # GUARD_EDIT_OK: feature 316 - the claims gate, on both routes for entry-gate's reason: a research-only delta that moves a
+  # question's findings under a claim takes the DIRECT route, and owes the claim's re-check all the same.
+  "$ROOT/scripts/claims-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 258 - the record's assembly check runs HERE as well as at the gate, and for
   # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where
   # the gate never runs, so a check only at the gate has a hole exactly where this feature's own commits

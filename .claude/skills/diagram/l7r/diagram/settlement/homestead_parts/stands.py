@@ -1,4 +1,5 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
+Research: plumbing - NONE"""
 
 import math
 from collections.abc import Callable, Sequence
@@ -35,10 +36,11 @@ def crown_reach(clump: float, jitter: float = 0.0, lift: float = 0.0) -> float:
 
 
 def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
-    """THE ONE PREDICATE of "no tree is planted in a path" (`test_no_tree_is_planted_in_a_path`; feature 287, woods W21 and
-    homes H43): a trunk at (x, y) stands on a lane's TREAD - within the lane's own half-width of its centerline, the width
-    read from the lane (GM 2026-09-12: a trunk beside a footpath is what a path looks like; one inside it is a tree in the
-    path). `lanes` are manifest lane records (`pts`, `w`)."""
+    """THE ONE PREDICATE of "no tree is planted in a path" (`test_no_tree_is_planted_in_a_path`; feature 287, woods W21 and homes H43): a trunk at
+    (x, y) stands on a lane's TREAD - within the lane's own half-width of its centerline, the width read from the lane (GM 2026-09-12: a trunk beside
+    a footpath is what a path looks like; one inside it is a tree in the path). `lanes` are manifest lane records (`pts`, `w`).
+    Research: no trunk within a lane's half-width - CANON: the GM's ruling of 2026-09-12, no question
+    """
     from .._geom import seg_dist
 
     return any(
@@ -49,7 +51,9 @@ def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
 
 
 BELT_BEARING_MAX_DEG = 45.0  # the belt's center within this of the wind's quarter, seen from the cluster's center
+"""Research: belt on the windward side - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: its center within 45 degrees of the wind's quarter"""
 BELT_SUBTENSE_MAX_DEG = 200.0  # ...and its crowns round the cluster on one or two sides: a hook, never a ring
+"""Research: belt never a ring - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: at most 200 degrees round the cluster"""
 
 
 def belt_bearing_and_subtense(clumps: Any, houses: Any, wind: tuple[float, float]) -> tuple[float, float]:
@@ -79,7 +83,8 @@ def trim_to_the_wind(clumps: list[tuple[float, float]], houses: Any, wind: tuple
     ...AND WHERE THAT CONVERGES OFF THE WIND, NO BELT (feature 287, woods W18): the crown nearest the wind's bearing is never
     the end taken off (the other end lies farther round), so the one crown the loop can converge on is that one - and where
     even it bears more than `BELT_BEARING_MAX_DEG` off, no crown stands in the wind's quarter at all. It was returned as it
-    stood, the one way the trim left the rule broken; a belt with nothing on the wind is no windbreak, so none is kept."""
+    stood, the one way the trim left the rule broken; a belt with nothing on the wind is no windbreak, so none is kept.
+    Research: belt trimmed to a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: end crowns off, or no belt"""
     if not houses:
         return list(clumps)
     out = _trim_ends(clumps, houses, wind)
@@ -110,7 +115,8 @@ def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
     """The marsh deeper than its reed margin: each ring inset by `margin` (feature 287, woods W06). Woody cover stands on
     the dry ground above the marsh and its reed MARGIN carries alder (research/contents.json#vegetation, Reed beds and the marsh's edge), so a
     grove clump may be based in the margin - drawn as alder - and never deeper. A ring the inset empties has no deep
-    ground; a ring the inset splits gives each piece."""
+    ground; a ring the inset splits gives each piece.
+    Research: belt no deeper than the reed margin - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: alder in the margin only"""
     from shapely.geometry import Polygon
 
     out: list[list[tuple[float, float]]] = []
@@ -135,15 +141,16 @@ def reserved_seat_keepouts(seats: Sequence[tuple[float, float]], clump: float, b
 def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
     `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
-    leaves the dooryards it should have greened bare."""
+    leaves the dooryards it should have greened bare.
+    Research: a recorded grove is stocked - UNRESEARCHED: at least 1.5 clumps per 100,000 sq px of its extent"""
     return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
 
 
 def stocked_copse(clumps: list[tuple[float, float]], pad: float, kept: frozenset[tuple[float, float]] = frozenset()) -> list[tuple[float, float]]:
-    """A copse's clumps with its stragglers dropped - the clump farthest from the clumps' centroid, one at a time - until
-    the extent the copse is recorded at (its clumps' box grown by `pad`) is `grove_stocked` (feature 287, woods W15). It
-    terminates: one clump's extent is a square of `2 * pad`, far above the floor. A clump in `kept` - a household's
-    reserved share of the wood floor (woods W25) - is never a straggler: the drop stops when only kept clumps are left."""
+    """A copse's clumps with its stragglers dropped - the clump farthest from the clumps' centroid, one at a time - until the extent the copse is
+    recorded at (its clumps' box grown by `pad`) is `grove_stocked` (feature 287, woods W15). It terminates: one clump's extent is a square of `2 * pad`,
+    far above the floor. A clump in `kept` - a household's reserved share of the wood floor (woods W25) - is never a straggler: the drop stops when only kept clumps are left.
+    Research: copse clumps farthest from the centroid dropped until stocked - UNRESEARCHED"""
     out = list(clumps)
     while len(out) > 1:
         xs, ys = [c[0] for c in out], [c[1] for c in out]
@@ -227,7 +234,8 @@ class StandsMixin:
         yellow-green, on a jittered grid dense enough to read as one block at fit zoom - laid once in the bamboo tile and the
         stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (a strip beside a farmstead that keeps one) or
         "thicket" (the take-yabu behind the back row). Recorded in M['bamboo_stands'] (bbox + role + poly);
-        the marks are decoration keyed to the stand (positional randomness)."""
+        the marks are decoration keyed to the stand (positional randomness).
+        Research: bamboo stand glyph - research/questions/0075-bamboo-groves-chikurin.drawing.html: area to scale, culm marks a convention on a 7 bscale grid"""
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -293,26 +301,35 @@ class StandsMixin:
             monsoon wall and the LARGEST vegetation feature. Nestles against and EMBRACES the cluster.
           - `water_mouth` - a smaller cluster of big old trees at the LOW entrance / water-mouth (水口林);
           - `copse` - the leafy bamboo / fruit-tree greenery scattered through the OPEN gaps among the houses.
-        `poly` is the grove's FOOTPRINT - an IRREGULAR, terrain-following outline, NOT a rectangle (real groves
-        hug the land and wrap the settlement, they are not ruled walls). It is FILLED with dense mixed-stand
-        clumps on a jittered grid; a clump is SKIPPED wherever it would land on a HOUSE / threshing YARD /
-        GARDEN / PADDY (so the wood settles into the open ground and hugs the cluster without ever drawing trees
-        on a building or out in the crops - this is what lets the belt nestle right up to the village edge).
-        `dense=True` packs overlapping clumps into a continuous belt/cluster; `dense=False` scatters them for the
-        leafy fringe among houses. role tunes the species mix (windbreak/water_mouth = conifer-backed forest;
-        copse = bamboo + fruit, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump
-        is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
+        `poly` is the grove's FOOTPRINT - an IRREGULAR, terrain-following outline, NOT a rectangle (real groves hug the land and wrap the
+        settlement, they are not ruled walls). It is FILLED with dense mixed-stand clumps on a jittered grid; a clump is SKIPPED wherever it would land
+        on a HOUSE / threshing YARD / GARDEN / PADDY (so the wood settles into the open ground and hugs the cluster without ever drawing trees on a
+        building or out in the crops - this is what lets the belt nestle right up to the village edge). `dense=True` packs overlapping clumps into a
+        continuous belt/cluster; `dense=False` scatters them for the leafy fringe among houses. role tunes the species mix (windbreak/water_mouth =
+        conifer-backed forest; copse = bamboo + fruit, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
         the stand is filled TO: seating stops once its clumps cover it, and a second pass offers more seats where the first
         fell short (269 B26, the copse sized by the homesteads' woods); `area_from`, given instead, fills to the ground's capacity
         and trims back to the goal it returns for that capacity and the reserved seats' canopy (feature 294 B9, `wood_goal`). `wind` (toward where the wind comes from), given for the
-        windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). `seats` are the
-        households' reserved shares of the wood floor (feature 287, woods W25; `wood_share`), planted FIRST, each through the
-        same rejection chain but `near`, and never dropped as a straggler; a seat's reach is its household's - the dooryard
-        copse's, `seat_near` (points, reach, the brook's reaches: a house within reach on the seat's own bank) - asked of the
-        seat as planted and again of any re-seat, where `near` is the siting's (feature 287, woods W02 and W25: the
-        reservation reserved it within reach, and a seat moved round another grove's crown is asked again rather than
-        trusted); `keep_off` are those seats for a grove that must leave them free (`reserved_seat_keepouts`). Returns the
-        count."""
+        windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). `seats` are the households' reserved shares
+        of the wood floor (feature 287, woods W25; `wood_share`), planted FIRST, each through the same rejection chain but `near`, and never dropped as a
+        straggler; a seat's reach is its household's - the dooryard copse's, `seat_near` (points, reach, the brook's reaches: a house within reach on the
+        seat's own bank) - asked of the seat as planted and again of any re-seat, where `near` is the siting's (feature 287, woods W02 and W25: the
+        reservation reserved it within reach, and a seat moved round another grove's crown is asked again rather than trusted); `keep_off` are those
+        seats for a grove that must leave them free (`reserved_seat_keepouts`). Returns the count.
+
+        Research:
+            three groves - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove, the water-mouth grove and the dooryard copse
+            clump grid - UNRESEARCHED: a 20 or 32 bscale step, clumps 28 or 22 bscale units
+            clump off buildings, wells and shrines - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: half the diagonal plus the clump's radius and 2 px
+            off the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the south strip, the west lane and every crown's sun ground
+            belt off the deep marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: based in the reed margin at most
+            copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by a crown
+            copse filled to the homesteads' wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: reserved seats first, then the grid
+            belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter
+            belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over 30 ft filled, thin stretches deepened
+            canopy kept 0.9 clump off shrines, torii and ponds - UNRESEARCHED
+            clumps kept 12 px plus a crown off paddies and 12 px off dry plots - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the crops stay open; the 12 px and the crown UNRESEARCHED
+            water-mouth grove drawn in the conifer-backed windbreak mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: big old trees, Huangling's mainly yew"""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -921,6 +938,10 @@ class StandsMixin:
         if form == "conifer_led":
             _rows, rows_ink = self._belt_ranks(seated, clump, _wet)
             crowns["conifer"] = len(_rows)
+            # ...AND KNOWN TO EVERY LATER STAND (feature 315): a stand drawn after the belt keeps its broadleaf off a conifer it
+            # knows of (`_draw_grove`'s `_cones`), and the belt's rows were never told it - a re-seated Inashiro drew a copse crown
+            # over a belt cedar (B5b)
+            self._conifer_crowns = [*(getattr(self, "_conifer_crowns", None) or []), *((float(x), float(y), float(r)) for x, y, r in _rows)]
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it

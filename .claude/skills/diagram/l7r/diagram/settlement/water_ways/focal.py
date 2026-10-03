@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: focal-feature plumbing - NONE
+"""
 
 import math
 from typing import TYPE_CHECKING
@@ -22,7 +25,14 @@ class FocalMixin:
         watercourse side, for hulling/grinding. Place it BESIDE a watercourse with fall (a drain outfall or a
         stream), never on still pond water. `wheel_side` (N/E/S/W) is the side the wheel faces the water. Draws
         the house + wheel, records the footprint (M['mills']) + the `mill` focal feature, and reserves the
-        footprint as a placement keep-out (call it before `farmsteads()` if the cluster could reach it)."""
+        footprint as a placement keep-out (call it before `farmsteads()` if the cluster could reach it).
+
+        Research:
+            mill-house size - research/questions/0064-water-mills-suisha.drawing.html: 30 x 24 ft by default
+            mill seat beside moving water - research/questions/0064-water-mills-suisha.drawing.html: beside a watercourse with fall, the wheel on the water side
+            wheel glyph - UNRESEARCHED: an 18 ft wheel (9 ft radius) set 5 ft off the house; 0064 gives no wheel size and seats the wheel in a short race
+            wheel drawing - CONVENTION: an eight-spoked ring
+        """
         pw, ph = self.px(w), self.px(h)
         dx, dy = {"E": (1.0, 0.0), "W": (-1.0, 0.0), "N": (0.0, -1.0), "S": (0.0, 1.0)}[wheel_side]
         self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#C9A57A" stroke="#6B4F2A" stroke-width="2" rx="2"/>')
@@ -38,7 +48,8 @@ class FocalMixin:
         self.placed.append((x, y, pw, ph))
 
     def _focal_block(self: Settlement, x: float, y: float, pw: float, ph: float) -> None:  # type: ignore[misc]
-        """Reserve a focal footprint as a placement keep-out (so a later farmstead can never overlap it)."""
+        """Reserve a focal footprint as a placement keep-out (so a later farmstead can never overlap it).
+        Research: focal keep-out - UNRESEARCHED: the footprint plus 6 px on every side"""
         self.placed.append((x, y, pw, ph))
         self.block_polys.append([(x - pw / 2 - 6, y - ph / 2 - 6), (x + pw / 2 + 6, y - ph / 2 - 6), (x + pw / 2 + 6, y + ph / 2 + 6), (x - pw / 2 - 6, y + ph / 2 + 6)])
 
@@ -47,6 +58,11 @@ class FocalMixin:
         main one (a Benten by the pond, an Inari at a field corner). Records as a 'shrine' kind (so
         religious_matches_scale still sees only shrines) + the focal feature. Grounding: a village often kept a
         minor shrine in addition to its tutelary one; its PRESENCE + placement is a distinctiveness axis.
-        TRUE SCALE: dimensions are real feet (a minor wayside hall ~42x30 ft, smaller than the tutelary)."""
+        TRUE SCALE: dimensions are real feet (a minor wayside hall ~42x30 ft, smaller than the tutelary).
+
+        Research:
+            a second shrine - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: a minor shrine besides the tutelary one
+            secondary hall size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: 42 x 30 ft by default (the page: a wayside hall some 6 ft square, or 12 to 18 ft a side)
+        """
         self.shrine(x, y, w_ft, h_ft, kind="shrine")
         self.note_focal("secondary_shrine")

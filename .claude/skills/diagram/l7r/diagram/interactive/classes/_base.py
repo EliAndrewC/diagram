@@ -32,6 +32,10 @@ record is silent the entry says GUESS in so many words. The record's rule (in it
 "judgment calls to make about what things get highlighted and which things do not"). It is a
 ruling, not an omission: the census in `page.py` reports only ink that carries NO class at all, so
 a `"-"` tag keeps the frame off the report while a forgotten tag still fails the gate.
+
+Research:
+    modal vocabulary plumbing - NONE: the FeatureClass, the labels, the lead sentence, the docstring parser
+    highlighting rulings - CONVENTION: which ink the page lights on hover, and which it rules out
 """
 
 from __future__ import annotations

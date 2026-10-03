@@ -1,6 +1,8 @@
 """The religious hall and shrine GLYPHS, the hill one may stand on, and the hall's caption.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -23,6 +25,14 @@ if TYPE_CHECKING:
 
 class ShrineHallsMixin:
     def hill(self: Settlement, cx: float, cy: float, rx: float, ry: float, steep: bool = False) -> Pt:  # type: ignore[misc]
+        """A hill drawn as stepped rings with hachures and a few trees; returns the summit seat.
+
+        Research:
+            stepped rings and hachures - CONVENTION
+            trees on the hill - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: every crown at real size and spacing, about 600 a hectare, 17 ft crowns; 15 seeded crowns of 4 to 6 px
+            tree glyph - CONVENTION
+            summit seat for the shrine - UNRESEARCHED: 40 px above the center
+        """
         rings = [(cx, cy + 28, rx, ry), (cx, cy, rx * 0.76, ry * 0.76), (cx, cy - 26, rx * 0.52, ry * 0.52), (cx, cy - 44, rx * 0.30, ry * 0.32)]
         self.M["hill"] = [rings[0][0], rings[0][1], rings[0][2], rings[0][3]]
         self.M["summit"] = [rings[3][0], rings[3][1], rings[3][2], rings[3][3]]
@@ -60,7 +70,12 @@ class ShrineHallsMixin:
         (GM 2026-07-21): dimensions are REAL FEET, converted through px() - an ordinary village
         tutelary hall ~62x42 ft (~240 m2, inside the 600 m2 village ceiling). The old signature took
         fixed PIXELS (104x68 default), a latent footgun that would have drawn a 208x136 ft
-        monastery-sized hall on any village that used the default civic_shrine path."""
+        monastery-sized hall on any village that used the default civic_shrine path.
+
+        Research:
+            hall size - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: 62 x 42 ft default
+            vermilion hall glyph - CONVENTION
+        """
         w, h = self.px(w_ft), self.px(h_ft)
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="3" fill="#C9876C" stroke="#6B2A18" stroke-width="2"/>')
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="8" fill="#A03020"/>')
@@ -73,7 +88,14 @@ class ShrineHallsMixin:
         """A small wayside / neighborhood Shinto SHRINE - a vermilion-roofed shed with a little torii
         in front, the kind that dot a temple neighborhood. Non-residential: recorded in M['religious']
         as kind 'small_shrine' (so it is not housing and not a full temple - it needs no torii avenue
-        and is not counted as a dwelling). Placed early so the dense packs flow around it."""
+        and is not counted as a dwelling). Placed early so the dense packs flow around it.
+
+        Research:
+            wayside shrine size - research/questions/0216-shrines-in-towns-and-cities.drawing.html: 32 x 24 ft
+            small torii in front - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: a 9 ft span in plan
+            keep-clear margin - UNRESEARCHED: 16 px, 16 more in front
+            torii before the hall - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 8 ft in front, always on the south
+        """
         if w is None:
             w, h = self.px(32), self.px(24)  # ~32x24 ft wayside shrine (town-calibrated glyph)
         x0, y0 = x - w / 2, y - h / 2
@@ -118,7 +140,10 @@ class ShrineHallsMixin:
 
         The label box measured here is `_record_label`'s recorded box, deliberately: placement and check
         must read the SAME geometry (CLAUDE.md, "Placement and its check must read the SAME manifest
-        source"), or the engine congratulates itself on a clearance the gate does not see."""
+        source"), or the engine congratulates itself on a clearance the gate does not see.
+
+        Research: hall caption kept off its sando - CONVENTION: the requested side, past the avenue, then the other side
+        """
         below, above = y + h / 2 + 22, y - h / 2 - 10
         want, alt = (below, above) if label_below else (above, below)
         if not seats:
@@ -165,7 +190,19 @@ class ShrineHallsMixin:
         coarser map MUST pass s.px(real_ft) - four city temples shipped as fixed 100x64 px = 300x192
         real ft before this was caught (audit 2026-07-21). The guard below refuses a hall whose
         implied real footprint exceeds any real main hall (the largest kondo runs ~150-190 ft;
-        Tango's deliberate Daibutsuden-tier landmark is 200 ft) so unscaled px can't slip through."""
+        Tango's deliberate Daibutsuden-tier landmark is 200 ft) so unscaled px can't slip through.
+
+        Research:
+            hall kind by settlement size - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: the caller's kind
+            hall size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: the caller's w x h, refused past 220 ft
+            arch count rolled per hall - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: roll_torii_count on the tier's weights
+            arch pitch and threshold - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: TORII_PITCH_FT
+            ground kept round each arch - UNRESEARCHED: 28 ft plus 4 px
+            no swept collar under an arch - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html
+            hall keep-clear margin - UNRESEARCHED: 34 px at the grain, at least 22
+            precinct ground kept off the scrub - GUESS: 58 px
+            hall caption - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: bold, the hall caption size
+        """
         if self.ftpx > 1 and max(w, h) * self.ftpx > 220:
             raise ValueError(f"shrine_hall {w}x{h}px at {self.ftpx} ft/px implies a {max(w, h) * self.ftpx:.0f} ft hall - pass s.px(real_ft), not raw pixels")
         n_t = 0

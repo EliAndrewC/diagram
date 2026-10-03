@@ -1,4 +1,7 @@
-"""Town-tier ways and focal features - the market, the ancestral hall, the water mouth, alleys (feature 145: moved out of water_ways.py, which the hamlet path executes, so the module-level coverage floor judges only what a hamlet draws)."""
+"""Town-tier ways and focal features - the market, the ancestral hall, the water mouth, alleys (feature 145: moved out of water_ways.py, which the hamlet path executes, so the module-level coverage floor judges only what a hamlet draws).
+
+Research: town ways plumbing - NONE
+"""
 
 from typing import TYPE_CHECKING
 
@@ -15,7 +18,14 @@ class TownWaysMixin:
         village - broader than any house, a double-eave hall on the auspicious axis fronting the pond/water.
         Draws the hall, records M['ancestral_halls'] + the focal feature, reserves the footprint. Grounding
         (research.md D2): the ancestral hall was the ritual + governance center of a Huizhou/Hakka lineage
-        village, its single most prominent structure - so a village that HAS one reads unmistakably by it."""
+        village, its single most prominent structure - so a village that HAS one reads unmistakably by it.
+
+        Research:
+            hall size - research/questions/0050-ancestral-halls-in-south-china-villages-citang.html, research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: 110 x 74 ft by default
+            porch on the water side - research/questions/0050-ancestral-halls-in-south-china-villages-citang.drawing.html: the entry porch faces +y, the water
+            hall glyph - CONVENTION: an inner eave line and a dark porch block
+            focal keep-out - UNRESEARCHED: the footprint plus 6 px is reserved
+        """
         pw, ph = self.px(w), self.px(h)
         self.add(f'<rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.4" rx="2"/>')
         self.add(
@@ -30,7 +40,14 @@ class TownWaysMixin:
         """A fengshui WATER-MOUTH complex (水口), a focal feature: the guarded outlet where the village stream
         leaves, marked by a small hexagonal pavilion (and, per the gen, a screening grove) to 'lock in' the qi
         of the departing water. Draws the pavilion, records M['water_mouths'] + the focal feature. Grounding:
-        the shuikou was a standard focal ensemble of south-China lineage villages, sited at the stream exit."""
+        the shuikou was a standard focal ensemble of south-China lineage villages, sited at the stream exit.
+
+        Research:
+            water-mouth seat - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: at the stream's exit, where the caller seats it
+            a pavilion at the water mouth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a pavilion drawn (the page attests a grove there, no pavilion)
+            pavilion size - UNRESEARCHED: a hexagon of 22 ft radius
+            pavilion glyph - CONVENTION: a hexagon with an inner ring
+        """
         pr = self.px(r)
         pts = " ".join(f"{x + pr * math.cos(a):.1f},{y + pr * math.sin(a):.1f}" for a in [math.pi / 6 + i * math.pi / 3 for i in range(6)])
         self.add(f'<polygon points="{pts}" fill="#C9876C" stroke="#6B2A18" stroke-width="2" stroke-linejoin="round"/>')
@@ -43,7 +60,13 @@ class TownWaysMixin:
         """A village MARKET clearing (墟/市), a focal feature: an open packed-earth space with a few stalls
         where a periodic market gathers - a widening in the lane fabric, not a building. Draws the open court +
         a row of stall marks, records M['markets'] + the focal feature. Grounding: a market node is exactly
-        where a `cross` lane skeleton reads as a market village rather than a plain farming one."""
+        where a `cross` lane skeleton reads as a market village rather than a plain farming one.
+
+        Research:
+            market ground - research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: an open court 120 x 84 ft by default
+            stalls drawn - research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: a row of 14 x 12 ft stalls, one per 34 ft of width
+            market glyph - CONVENTION: a dashed packed-earth court
+        """
         pw, ph = self.px(w), self.px(h)
         cid = self._cid("mkt")
         self.add(f'<clipPath id="{cid}"><rect x="{x - pw / 2:.1f}" y="{y - ph / 2:.1f}" width="{pw:.1f}" height="{ph:.1f}" rx="3"/></clipPath>')
@@ -68,7 +91,15 @@ class TownWaysMixin:
         Surface (research/contents.json#urban-fabric, "How our maps zone a city's lots"): a line of drain
         boards down the middle over a small ditch - HISTORICALLY ACCURATE, drawn as a dark center line of
         board-length dashes; the ground either side of the boards is read nowhere - a GUESS, drawn as
-        plain beaten earth (the hamlet lane's tread color), no longer the gravel the maps once gave it."""
+        plain beaten earth (the hamlet lane's tread color), no longer the gravel the maps once gave it.
+
+        Research:
+            alley width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: 10 ft, floored at the 4 px linework minimum
+            drain-board line - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.html, research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: boards down the middle over a ditch
+            ground beside the boards - GUESS: plain beaten earth
+            board dashes - CONVENTION: long dashes with a hairline gap at each joint
+            alley setback - UNRESEARCHED: buildings keep the half-width plus 11 px off the alley
+        """
         if width is None:
             width = self.lw(10)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)

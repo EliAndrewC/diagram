@@ -25,6 +25,7 @@ it (the ways phase of feature 287):
   other ways MINUS those at the lane's own far end (a lane counted as arriving because it was still within reach of the way
   it left). The stronger set is the predicate, and it serves both tests.
 - the HOOK (`hooked_ends`): one test asked every lane, the other skipped the connector; the stricter reading is taken.
+Research: plumbing and wrappers - NONE: each rule is claimed at the predicate that decides it
 """
 
 from __future__ import annotations
@@ -61,26 +62,33 @@ Lanes = Sequence[Mapping[str, Any]]
 # the run is a kink rather than a bend: a walker rounding something takes one arc, not a zig and an immediate zag. The
 # figures are `clearance`'s (`lanes_bend_like_paths`, the rule's own thresholds), named here as the rule reads them.
 DOUBLE_BACK_DEG = _HAIRPIN_DEG
+"""Research: hairpin - research/questions/0081-village-lanes.drawing.html: 140 degrees"""
 KINK_DEG = _ZIGZAG_DEG
+"""Research: zigzag turn - research/questions/0081-village-lanes.drawing.html: 50 degrees"""
 BEND_RUN_FT = _ZIGZAG_RUN_FT
+"""Research: zigzag run - research/questions/0081-village-lanes.drawing.html: 40 ft"""
 
 JOIN_TOL = _TOUCH_GAP
 """How near a lane end must come to another lane before the two count as one network - the web's own join tolerance (the
 ink's), which both network tests read; a looser bar would call a near-miss a junction."""
 
 DOORSTEP_FT = 80.0
-"""A free lane end this near a farmhouse's center is discharged by that house (`lane_ends_front_different_houses`)."""
+"""A free lane end this near a farmhouse's center is discharged by that house (`lane_ends_front_different_houses`).
+Research: an end discharged by a house - UNRESEARCHED: within 80 ft of its center"""
 DOORSTEP_MAX = 2
 """...and one farmhouse may absolve this many of them. Three reads as a fan of stubs pointing at one door (consts.py's
-0611 ruling)."""
+0611 ruling).
+Research: ends one house may absolve - UNRESEARCHED: two"""
 
 BREAK_SPAN_FT = 60.0
 """A lane segment longer than this whose midpoint stands in a building's box has run straight through it
-(`lanes_do_not_break_mid_run`): the tread was drawn across the solid, or it vanished there and resumed beyond."""
+(`lanes_do_not_break_mid_run`): the tread was drawn across the solid, or it vanished there and resumed beyond.
+Research: no tread through a building - research/questions/0081-village-lanes.drawing.html: a segment over 60 ft"""
 
 FIELD_REACH_FT = 60.0
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
-the reach `lanes_reach_something` asks of the field (feature 261, FR-012)."""
+the reach `lanes_reach_something` asks of the field (feature 261, FR-012).
+Research: a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 60 ft"""
 
 DECK_NEAR_FT = 40.0
 """A deck this near a recorded watercourse is over it, and is judged against that course's width."""
@@ -96,22 +104,27 @@ figure, so the hairpin the fold repairs and the hairpin this law refuses are one
 # junction itself - under a quarter of the Mizuguchi leg, and short enough that the wedge it leaves is under the treads'
 # own ink. No rule of the record states either figure; they are recorded here, at the constant.
 NEEDLE_DEG = 20.0
+"""Research: a needle, not a T - CONVENTION: under 20 degrees two treads read as one smudged wedge"""
 NEEDLE_FT = 20.0
+"""Research: needle leg - CONVENTION: a leg over 20 ft, shorter is the approach to the junction"""
 
 JOIN_REACH_FT = _LANE_JOIN_FT
 """A free lane end this near another way, making for it, is a join that stops short (`near_misses`) - the web's own join
 reach (`fabric._LANE_JOIN_FT`, 30 ft), ONE tolerance for the placer that draws a join and the rule that asks whether it
 touched. Future-work 2c measured every stopped-short join in the pool inside it (16.7, 28.0, 28.1, 29.2, 29.6 ft) - the
-dead band between the generator's 30 ft and the ink's 4 ft that neither half owned."""
+dead band between the generator's 30 ft and the ink's 4 ft that neither half owned.
+Research: a join that stops short - research/questions/0081-village-lanes.drawing.html: within 30 ft"""
 
 FRAGMENT_FT = _WEB_MIN_FT
 """A lane shorter than this that earns nothing is debris (`short_fragments`) - the web's own debris floor (`_WEB_MIN_FT`),
-asked of the finished web rather than only when a run is drawn."""
+asked of the finished web rather than only when a run is drawn.
+Research: shortest way - UNRESEARCHED: 30 ft"""
 
 AIM_DEG = 60.0
 """...and "making for it" is the way standing within this many degrees of the end's own heading. MAP DRAWING CONVENTION: a
 tread that stops pointing at a way within a turn of 60 degrees reads as meant to meet it; one pointing away from it, or past
-it at a glance, is a lane that ends beside a way, not a broken join."""
+it at a glance, is a lane that ends beside a way, not a broken join.
+Research: making for a way - CONVENTION: within 60 degrees of the end's heading"""
 
 
 def lane_pts(ln: Mapping[str, Any]) -> Poly:
@@ -137,7 +150,8 @@ def _min_dist(pt: Pt, poly: Poly) -> float:
 def kinks(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     """Where a lane fails to bend like a path: a turn of `DOUBLE_BACK_DEG` or more ("doubles back"), or two turns of
     `KINK_DEG` or more whose summed path between them is `BEND_RUN_FT` or less ("kinks") - the whole run between the two
-    turns, not one segment. The body is `clearance.kink_spans`, which every web pass asks too (ways W18, FR-003)."""
+    turns, not one segment. The body is `clearance.kink_spans`, which every web pass asks too (ways W18, FR-003).
+    Research: bends like a path - research/questions/0081-village-lanes.drawing.html: no hairpin, no zigzag"""
     p = list(pts)
     return [(kind, round(p[ka][0]), round(p[ka][1])) for kind, ka, _kb in kink_spans(p)]
 
@@ -148,13 +162,15 @@ def bends_badly(pts: Sequence[Pt]) -> bool:
 
 
 def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
-    """`kinks` over every lane but the connector (`lanes_bend_like_paths`)."""
+    """`kinks` over every lane but the connector (`lanes_bend_like_paths`).
+    Research: bends like a path - research/questions/0081-village-lanes.drawing.html: every lane but the track out"""
     return [k for ln in (M.get("lanes") or []) if not ln.get("connector") for k in kinks(lane_pts(ln))]
 
 
 def hooked(pts: Sequence[Pt]) -> list[int]:
     """Which ends of a run are hooked, as -1 (its last) and 0 (its first): a leg of `_HOOK_FT` or less turning `_HOOK_DEG`
-    or more."""
+    or more.
+    Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: 12 ft, 90 degrees"""
     p = list(pts)
     if len(p) < 3:
         return []
@@ -182,7 +198,8 @@ def husks(M: Mapping[str, Any]) -> list[int]:
 
 def folded_joint_pairs(lanes: Lanes) -> list[tuple[int, int, int, int]]:
     """The joints (`joints`: `(i, end_i, j, end_j)`) where two lanes meeting end to end - one way to the walker - turn
-    `DOUBLE_BACK_DEG` or more."""
+    `DOUBLE_BACK_DEG` or more.
+    Research: lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: no hairpin at the joint"""
     out = []
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
@@ -202,7 +219,8 @@ def folded_joints(lanes: Lanes) -> list[tuple[int, int]]:
 
 def connector_hairpin_ends(lanes: Lanes) -> list[tuple[int, int, int]]:
     """(connector index, lane index, end) wherever a lane's short last leg meets the connector's start and the two double
-    back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first)."""
+    back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first).
+    Research: no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a leg under 25 ft"""
     out = []
     for ci, co in enumerate(lanes):
         cp = lane_pts(co)
@@ -240,7 +258,8 @@ def _tread_bearings(q: Pt, u: Pt, v: Pt) -> list[Pt]:
 def needle_ends(lanes: Lanes) -> list[tuple[int, int, int, Pt, Pt]]:
     """(lane index, end, tread lane index, u, v) wherever a lane's end leg, longer than `NEEDLE_FT`, meets another way's tread `u`-`v`
     (within `JOIN_TOL`) and runs back along it at under `NEEDLE_DEG` - a needle rather than a T. A leg carrying straight on
-    from a way's END is not a needle: the tread it meets does not run back beside it. The end is -1 (last) or 0 (first)."""
+    from a way's END is not a needle: the tread it meets does not run back beside it. The end is -1 (last) or 0 (first).
+    Research: a lane meets another as a T - research/questions/0081-village-lanes.drawing.html: never a needle"""
     ways = [lane_pts(ln) for ln in lanes]
     out = []
     for i, ln in enumerate(lanes):
@@ -272,7 +291,8 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     """The lanes (the connector aside) whose end - EITHER end - runs on beside another way, at `_DOUBLED_DEG` (`along_tail`,
     asked of the lane and of it reversed), whatever the two ways' widths. `along_tail` walks in from a lane's last point, and
     asked only that way it never saw a first end doubled: Mizuguchi's field spur left its street and ran 10-12 ft beside it
-    for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test)."""
+    for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test).
+    Research: no doubled tail - CONVENTION: an end running on beside another way reads as one way drawn twice"""
     ways = _ways(M)
     lanes = M.get("lanes") or []
     return [
@@ -290,7 +310,8 @@ def free_end(ways: Sequence[Poly], i: int, q: Pt) -> bool:
 def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) -> bool:
     """May a short span of tread be laid from `p` to `q`: across no water (`bridge_crossed_waters`), no crop or marsh, no
     farmhouse (`house_hit`), no household's yard or garden, and not along another way (its middle within `JOIN_TOL` of a
-    way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?"""
+    way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?
+    Research: a walkable span - research/questions/0081-village-lanes.drawing.html: off water, crop, marsh, houses and yards"""
     for wpts, _w in bridge_crossed_waters(M):
         wp = [(float(a[0]), float(a[1])) for a in wpts]
         if any(segments_cross(p, q, u, v) for u, v in zip(wp, wp[1:], strict=False)):
@@ -329,7 +350,8 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     own heading, and a walkable span to it (`span_walkable`) that would meet the way cleanly and bend like a path
     (`meets_clean`, `kinks`). Such an end is a JOIN that stops short - a hole the eye reads in one way, or a T one clearance
     shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked,
-    or would fold or kink, is not one: the two are separate ways, each ending at what it serves."""
+    or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
+    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 30 ft, aimed"""
     ways = _ways(M)
     out = []
     for i, ln in enumerate(M.get("lanes") or []):
@@ -363,7 +385,8 @@ NEEDLE_LOOP_FT = 20.0
 """A face of the lane web whose mean width (twice its area over its perimeter) is under this is a NEEDLE OF GRASS: the same
 way drawn twice, forking and rejoining round nothing (homes H39; future-work/farming-communities.md 2c, two
 settlement-reviews: Sawada's triangle 110 ft long and 37.7 ft at its widest, mean width 16 ft, "reading as a street that
-forks and rejoins around nothing"). A village block holds a steading and is five times as wide. A map drawing convention."""
+forks and rejoins around nothing"). A village block holds a steading and is five times as wide. A map drawing convention.
+Research: needle of grass - CONVENTION: a web face under 20 ft mean width"""
 
 
 def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
@@ -395,7 +418,8 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
     (feature 291 on 287; dropped, Mizuguchi's street ends dangled past their last farms and the settle refused the web).
     `ground` is the worked ground where the caller has it; it is built at most once here (the perf-audit of feature 308:
     each `dangling_lane_ends` built it again, though a lane taken away changes no ground - seven builds a web on seed 47 at
-    20 households, the map byte-identical with one)."""
+    20 households, the map byte-identical with one).
+    Research: debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end"""
     lanes = M.get("lanes") or []
     short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
     if not short:
@@ -417,13 +441,15 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
 
 def width_steps(lanes: Lanes) -> list[tuple[int, int]]:
     """The joints (`joints`: two lane ends meeting, no third way there) where one way changes width - a back lane halving
-    its tread where nothing happens (homes H42, future-work "THE WIDTH STEP"): (lane, lane) for each."""
+    its tread where nothing happens (homes H42, future-work "THE WIDTH STEP"): (lane, lane) for each.
+    Research: one width a way - research/questions/0081-village-lanes.drawing.html: no step at a bare joint"""
     return [(i, j) for i, _ei, j, _ej in joints(lanes) if float(lanes[i].get("w") or 3.0) != float(lanes[j].get("w") or 3.0)]
 
 
 def lane_networks(M: Mapping[str, Any]) -> int:
     """How many networks the drawn lanes fall into at the ink tolerance (`JOIN_TOL`): one, or you cannot walk between
-    them."""
+    them.
+    Research: one network - research/questions/0081-village-lanes.drawing.html: joined at 4 ft"""
     ways = [p for p in _ways(M) if len(p) >= 2]
     return len(set(_components(ways, JOIN_TOL)))
 
@@ -438,11 +464,14 @@ def way_targets(M: Mapping[str, Any]) -> list[Pt]:
 
 TARGET_REACH_FT = 14.0
 """A way target is reached where the served network comes this near it: the spur drawn to it ends on it, and a lane passing
-nearer than a doubled tread's distance (`sweeps._ALONG_FT`) stands at it. A map drawing convention."""
+nearer than a doubled tread's distance (`sweeps._ALONG_FT`) stands at it. A map drawing convention.
+
+Research: a way target reached - UNRESEARCHED: within 14 ft of the served network"""
 
 
 def unreached_targets(M: Mapping[str, Any]) -> list[Pt]:
-    """The way targets (`way_targets`) the served network (`served_network`) does not come within `TARGET_REACH_FT` of."""
+    """The way targets (`way_targets`) the served network (`served_network`) does not come within `TARGET_REACH_FT` of.
+    Research: a path runs to the graves - UNRESEARCHED: within 14 ft of the burial ground's edge"""
     targets = way_targets(M)
     if not targets:
         return []
@@ -461,7 +490,8 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
     """(lane index, end) for every internal lane end that reaches nothing (`end_serves`) other than the way its own far
     end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
     worked ground where the caller has it built already (`memo_ground`). A way target (`meta.way_targets`, a burial ground's
-    near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves)."""
+    near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves).
+    Research: an end reaches something seen - research/questions/0081-village-lanes.drawing.html: walked toward it"""
     ways = _ways(M)
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []] + way_targets(M)
     steadings = steading_footprints(M)
@@ -521,7 +551,8 @@ def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> lis
     way is a junction) that stands within `WAY_END_REACH_FT` of a farmhouse, BEHIND the nearest such house - past its back
     wall, abreast of it (`behind_house`) - and at no house's dooryard (`reaches_dooryard`), nor on the bund (water W57; 269
     B17, research/questions/0081-village-lanes.drawing.html: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
-    wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard)."""
+    wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard).
+    Research: a lane ends at the dooryard - research/questions/0081-village-lanes.drawing.html: never behind the house"""
     ways = _ways(M)
     houses = M.get("houses") or []
     if not houses:
@@ -544,7 +575,8 @@ def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> lis
 
 
 def doorstep_ends(M: Mapping[str, Any]) -> dict[int, int]:
-    """The farmhouses that discharge more than `DOORSTEP_MAX` free lane ends apiece (`fronted_ends`)."""
+    """The farmhouses that discharge more than `DOORSTEP_MAX` free lane ends apiece (`fronted_ends`).
+    Research: no fan of stubs at a door - UNRESEARCHED: more than two free ends within 80 ft"""
     return {h: n for h, n in fronted_ends(M).items() if n > DOORSTEP_MAX}
 
 
@@ -563,7 +595,8 @@ def field_unreached(M: Mapping[str, Any]) -> bool:
     every lane vertex against every edge of every paddy outline and dry plot, and the settle and the tree's pruning ask this
     once per round and per lane tried (cohort seed 44: 39,321 distances a roll). No vertex comes within the reach of an edge
     whose box, grown by the reach, does not hold it, so the edges are filed by that box once and a vertex asks only its
-    cell's; the first within the reach answers, by the same `seg_dist`."""
+    cell's; the first within the reach answers, by the same `seg_dist`.
+    Research: a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: on brook maps"""
     if not _brooks(M):
         return False
     rings = [f["outline"] for f in M.get("fields") or [] if f.get("outline")] + [d["poly"] for d in M.get("dry_plots") or [] if d.get("poly")]
@@ -582,7 +615,8 @@ def field_unreached(M: Mapping[str, Any]) -> bool:
 
 FIXTURE_PAD_FT = 0.5
 """How far a lane's tread keeps off a farmstead fixture beyond its own half-width: the ink's edge stroke - a tread that
-touches the glyph reads as walking over it."""
+touches the glyph reads as walking over it.
+Research: fixture pad - CONVENTION: 0.5 ft past the half-tread"""
 
 
 def fixture_quads(M: Mapping[str, Any]) -> list[Poly]:
@@ -590,7 +624,8 @@ def fixture_quads(M: Mapping[str, Any]) -> list[Poly]:
     every yard persimmon's TRUNK box (feature 287, homes H43: the persimmon is seated with its household before the web, so
     the web keeps its trunk off the tread as it keeps a privy - a lane may pass under the crown, never through the trunk;
     cohort seed 42 laid a straggler through a neighbor's persimmon). The box is the seating's own (`fixture_seats.TRUNK_FT`,
-    which its own door corridor keeps off), so a tread clear of it is clear of the trunk (`stands.trunk_on_tread`)."""
+    which its own door corridor keeps off), so a tread clear of it is clear of the trunk (`stands.trunk_on_tread`).
+    Research: under the crown, not the trunk - UNRESEARCHED: the persimmon's trunk box a wall, its crown not"""
     quads = [rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)) for r in M.get("farm_fixtures") or [] if all(k in r for k in ("x", "y", "w", "h"))]
     trunk = TRUNK_FT / float((M.get("meta") or {}).get("ftpx") or 1.0)
     return quads + [rot_rect(float(r["x"]), float(r["y"]), trunk, trunk, 0.0) for r in M.get("persimmons") or [] if "x" in r and "y" in r]
@@ -599,7 +634,8 @@ def fixture_quads(M: Mapping[str, Any]) -> list[Poly]:
 def over_a_fixture(pts: Sequence[Pt], width: float, quads: Sequence[Poly]) -> int | None:
     """The first segment of a lane along `pts`, drawn `width` wide, whose tread meets a farmstead fixture (`fixture_quads`) -
     crosses it, stands in it, or passes within its half-width and `FIXTURE_PAD_FT` of it; None where it meets none. THE ONE
-    PREDICATE: the web's settle cuts what it names, a tree lane is refused by it, and the finished-map rule reads it."""
+    PREDICATE: the web's settle cuts what it names, a tree lane is refused by it, and the finished-map rule reads it.
+    Research: off the fixtures - research/questions/0081-village-lanes.drawing.html: nothing stands on a tread"""
     gap = width / 2.0 + FIXTURE_PAD_FT
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
         for q in quads:
@@ -642,7 +678,8 @@ def breaks_through(pts: Sequence[Pt], solid: Sequence[tuple[float, float, float,
     """(segment index, midpoint) for every segment of a run longer than `BREAK_SPAN_FT` whose midpoint stands inside one of
     the `solid` boxes (`solid_boxes`) - a tread drawn straight through a building. THE ONE PREDICATE of the rule: the
     finished-map reading (`breaks_mid_run`), the web's foul test (`settle.fouled_segment`) and the connector's placer
-    (`track.connector_through`) all ask it."""
+    (`track.connector_through`) all ask it.
+    Research: no tread through a building - research/questions/0081-village-lanes.drawing.html"""
     out = []
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
         if math.dist(a, b) <= BREAK_SPAN_FT:
@@ -662,7 +699,8 @@ def breaks_mid_run(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], fabric: Sequence[tuple[Poly, Pt | None, str]], own: Pt | None = None) -> bool:
     """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another
     household's threshing yard or garden (`_crosses_fabric`)? `fabric` is `_homestead_polys`' (polygon, owner, kind); a door
-    path is exempt only from its OWN steading's yard and garden (`own`, its house's center)."""
+    path is exempt only from its OWN steading's yard and garden (`own`, its house's center).
+    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: 4 ft off another's yard or bed"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]
@@ -677,7 +715,8 @@ def _crossings(p: Poly, course: Poly) -> list[Pt]:
 
 
 def over_and_back(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """(lane index, crossings) for every lane crossing one brook twice or more - out and home, two planks for nothing."""
+    """(lane index, crossings) for every lane crossing one brook twice or more - out and home, two planks for nothing.
+    Research: over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     ways = _ways(M)
     return [(i, n) for brook in _brooks(M) for i, p in enumerate(ways) if (n := len(_crossings(p, brook))) >= 2]
 
@@ -705,7 +744,8 @@ def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
 
 def off_ford_at(M: Mapping[str, Any], reach: float = FORD_HALF) -> list[tuple[int, int, Pt]]:
     """(lane index, segment index, point) for every crossing of the brook by a lane farther than `reach` from every
-    recorded ford (`meta.brook_fords`)."""
+    recorded ford (`meta.brook_fords`).
+    Research: crossed at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     fords = [(float(f[0]), float(f[1])) for f in (M.get("meta") or {}).get("brook_fords") or []]
     return [(i, k, x) for brook in _brooks(M) for i, p in enumerate(_ways(M)) for k, x in crossing_points(p, brook) if min((math.dist(x, f) for f in fords), default=math.inf) > reach]
 
@@ -729,7 +769,10 @@ def off_square(a: Pt, b: Pt, u: Pt, v: Pt) -> float:
 
 def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, int, Pt, float]]:
     """(lane index, segment index, point, degrees off square) for every lane crossing of the brook or a drawn channel
-    (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square."""
+    (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square.
+    Research:
+        square brook crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
+        square ditch crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 10 degrees"""
     out = []
     ways = list(_ways(M))
     boxes = [_bbox(p) for p in ways]
@@ -771,7 +814,8 @@ def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     """Every crossing of water by a lane that no drawn deck covers (`deck_covers`): the brook, and every other course a way
     may have to be carried over (`bridge_crossed_waters`) - a drawn channel, a field ditch, the polder's drain (feature
     287: the drain takes no footplank, `plank_on_supply`, so a way over it is carried on the deck `bridges()` lays where
-    the web's last pass left a crossing it can deck, and cut where it could not - never walked through the water)."""
+    the web's last pass left a crossing it can deck, and cut where it could not - never walked through the water).
+    Research: every crossing decked - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
     decks = M.get("bridges") or []
     waters = [*_brooks(M), *([(float(q[0]), float(q[1])) for q in wpts] for wpts, _w in bridge_crossed_waters(M) if len(wpts) >= 2)]
     hits = {(round(x[0]), round(x[1])) for course in waters for p in _ways(M) for x in _crossings(p, course) if not any(deck_covers(d, x[0], x[1]) for d in decks)}
@@ -781,7 +825,8 @@ def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = (), M: Any = None) -> list[tuple[int, int]]:
     """Every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where no deck seats: `crossing_deck`, the
     very solve `bridges()` makes - grown, then skewed toward square, until every corner clears the whole crossed course
-    (`_deck_corners_clear`) and lands off the flooded rice (`wet`, `flooded_ground`) (`undeckable_at`)."""
+    (`_deck_corners_clear`) and lands off the flooded rice (`wet`, `flooded_ground`) (`undeckable_at`).
+    Research: a deck's corners on dry ground - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
     return [(round(p[0]), round(p[1])) for _k, p in undeckable_at(pts, width, waters, ftpx, wet, M)]
 
 
@@ -795,7 +840,8 @@ def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 
 def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:
     """(x, y, span, water width) for every deck over a recorded watercourse (within `DECK_NEAR_FT` of it) shorter than that
-    course's full width - its abutment stands in the water (`bridges_span_their_water`)."""
+    course's full width - its abutment stands in the water (`bridges_span_their_water`).
+    Research: a deck spans its water - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
     courses = [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0)))) for d in (M.get("field_ditches") or [])]
     courses += [([(float(p[0]), float(p[1])) for p in c["poly"]], float(c.get("w", 3.0))) for c in (M.get("channels") or [])]
     courses += [([(float(p[0]), float(p[1])) for p in s["poly"]], float(s.get("w", 6.0))) for s in (M.get("streams") or [])]
@@ -816,7 +862,8 @@ def plank_faults(M: Mapping[str, Any]) -> tuple[list[tuple[int, int]], list[tupl
     THE LATERAL IS A SUPPLY DITCH (feature 287; Kuwabata's six planks). The test this was lifted from read the comb's two roles
     only, and so named every plank on a polder's laterals and settlement-side ring canal - which record the role `lateral` -
     as laid on a drain. The record answers it: a plank is laid where a bund path meets an IRRIGATION ditch (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html),
-    and the polder's inner ring canal and its field ditches are its distribution water (research/archetypes/110)."""
+    and the polder's inner ring canal and its field ditches are its distribution water (research/archetypes/110).
+    Research: planks on supply ditches - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html"""
     ditches = M.get("field_ditches") or []
     stranded, on_drain = [], []
     for b in M.get("bridges") or []:
@@ -835,7 +882,8 @@ def plank_faults(M: Mapping[str, Any]) -> tuple[list[tuple[int, int]], list[tupl
 
 
 def way_outs_crossing(M: Mapping[str, Any], routes: Sequence[Sequence[Pt]] | None = None) -> list[tuple[int, int, int]]:
-    """(x, y, crossings) for every household's way out (`departure_routes`) that crosses one brook more than once."""
+    """(x, y, crossings) for every household's way out (`departure_routes`) that crosses one brook more than once.
+    Research: no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     routes = departure_routes(M) if routes is None else routes
     out = []
     for brook in _brooks(M):
@@ -877,7 +925,8 @@ def adds_a_way_out_crossing(M: Mapping[str, Any], run: Poly, width: float, lanes
     """Would drawing `run` as a lane `width` wide beside `lanes` (the manifest's own by default) leave more households' ways
     out crossing a brook more than once (`way_outs_crossing`) than without it? A way out is a ROUTE, not a lane: a new lane
     that crosses nothing twice can still hand some household a shorter way out over the brook and back. THE ONE QUESTION the
-    web asks before it lays a tree lane (`settle.Lawful`), which no repair takes away afterwards."""
+    web asks before it lays a tree lane (`settle.Lawful`), which no repair takes away afterwards.
+    Research: no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     if not _brooks(M):
         return False
     lanes = list(M.get("lanes") or []) if lanes is None else list(lanes)

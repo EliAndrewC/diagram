@@ -1,6 +1,8 @@
 """The urban building glyph, its palette, and the per-building helpers that seat ONE of them.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -18,6 +20,8 @@ if TYPE_CHECKING:
 
 
 class UrbanBuildingMixin:
+    """Research: urban building palette - CONVENTION: fill and edge colors by kind"""
+
     # urban building palette and default footprints, keyed by town caste/role
     URBAN = {
         "shop": ('#D8C49A', '#6B4F2A', 48, 32),  # merchant shophouse (modest)
@@ -50,7 +54,14 @@ class UrbanBuildingMixin:
         whose rectangles overlap the ward). The refusal lives HERE, at the one seat every pack,
         frontage and gen-side top-up funnels through, rather than in each gen's region arithmetic -
         a refused candidate simply seats elsewhere on a later pass. Gated by
-        city_samurai_ward_residents_only."""
+        city_samurai_ward_residents_only.
+
+        Research:
+            samurai ward refuses commoners - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html: WARD_BARRED_KINDS refused inside it
+            ward servant bound to a household - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a servant without `of` refused
+            building glyph - CONVENTION: rounded box, ridge, door stub, burakumin dashed
+            awning depth - UNRESEARCHED: 5 ft at the building grain, floored at 2.4 px
+            hanging sign - CONVENTION: a location marker, floored at 6 x 5 px"""
         if self._samurai_ward_interiors and any(point_in_poly(cx, cy, rg) for rg in self._samurai_ward_interiors):
             if kind in WARD_BARRED_KINDS:
                 return False
@@ -124,6 +135,19 @@ class UrbanBuildingMixin:
         return True
 
     def _dims(self: Settlement, kind: str) -> tuple[float, float]:  # type: ignore[misc]
+        """A building kind's default footprint from `URBAN`, at the map's building grain.
+
+        Research:
+            shop footprint - research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: 48 x 32
+            laborer footprints - research/questions/0126-laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house.drawing.html: 34 x 24 and the master's 50 x 34
+            merchant footprints - research/questions/0135-the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami.drawing.html: 54 x 36 storefront, 50 x 34 home, 86 x 60 large
+            samurai footprints - UNRESEARCHED: 56 x 40 junior, 82 x 58 senior
+            servant footprint - UNRESEARCHED: 30 x 22
+            monk house footprint - UNRESEARCHED: the laborer's 34 x 24
+            civic footprint - UNRESEARCHED: 66 x 46
+            barn footprint - UNRESEARCHED: 84 x 56
+            burakumin footprint - UNRESEARCHED: 38 x 26
+            scaled by the building grain - NONE: times bscale"""
         w, h = self.URBAN.get(kind, self.URBAN["shop"])[2:]
         return w * self.bscale, h * self.bscale
 
@@ -135,7 +159,9 @@ class UrbanBuildingMixin:
 
     def _face_street_rot(self: Settlement, x: float, y: float) -> tuple[float | None, float]:  # type: ignore[misc]
         """Rotation that turns a building's frontage toward the nearest street/road, and
-        the distance to it. (None, inf) if there are no streets."""
+        the distance to it. (None, inf) if there are no streets.
+
+        Research: building fronts its street - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: turned toward the nearest street or road"""
         lines = [st["pts"] for st in self.M.get("town_streets", [])]
         if self.M.get("road"):
             lines.append(self.M["road"])
@@ -162,7 +188,11 @@ class UrbanBuildingMixin:
         returns the first whose door-front band (`clear_ft` real feet deep) contains no placed
         footprint; conservative AABB test against self.placed (rotated neighbors are close
         enough to axis-aligned at row scales for a placement-time choice - the gate check does
-        the exact geometry)."""
+        the exact geometry).
+
+        Research:
+            city door onto open ground - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: the first cardinal whose door band is clear
+            door band depth - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 8 ft default"""
         clear = self.px(clear_ft)
         for rot in prefer:
             th = math.radians(rot)

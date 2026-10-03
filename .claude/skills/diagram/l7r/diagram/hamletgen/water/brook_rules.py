@@ -2,6 +2,8 @@
 brook's placer (`brook.py`, `feed_brook`), by the sink's route search (`sink.py`) and by the tests alike, so a rule a
 placer decides and the rule a test asserts are one function. Split from `brook.py` when the placer's repair took that
 file past the 1,000-line bar (constitution X clause 13). See `CLAUDE.md` in this directory.
+
+Research: course measurement - NONE: turns, chords, distances and view bounds read off the drawn course; each rule is claimed on its own unit
 """
 
 from __future__ import annotations
@@ -34,15 +36,24 @@ def max_turn_deg(course: Sequence[Pt]) -> float:
 # pool tests read the same functions. Every one is measured on the DRAWN course, `finished_course`.
 
 LEVEL_NEAR_FT = 80.0  # water:W02 - a stretch this close to the view's edge ...
+"""Research: level run near the frame - CONVENTION: within 80 ft of the view's edge, a line ruled along the frame reads as a mistake (GM 2026-08-26)"""
 LEVEL_TOL_FT = 4.0  # ... that holds one coordinate within this ...
+"""Research: level run tolerance - CONVENTION: a coordinate held within 4 ft"""
 LEVEL_MAX_RUN_FT = 150.0  # ... for longer than this runs ruled along the frame (the GM on Sawada, 2026-08-26)
+"""Research: level run length - CONVENTION: over 150 ft along the frame is refused"""
 RULED_TOL_FT = 3.1  # water:W03 - a straight run: every vertex within this of its chord ...
+"""Research: straight run tolerance - UNRESEARCHED: every vertex within 3.1 ft of its chord"""
 RULED_SHARE = 0.4  # ... may cover at most this share of the brook's length on the page ...
+"""Research: straight run share - UNRESEARCHED: at most 0.4 of the brook's length in view"""
 RULED_MIN_LEN_FT = 300.0  # ... once that length is at least this (settlement-review of Sawada, round 0ae309f0)
+"""Research: straight run floor - UNRESEARCHED: the share rule applies from 300 ft of brook in view"""
 AXIS_EPS_DEG = 1.6  # water:W04 - a segment of a wander stride or more this near a screen axis is a ruled line
+"""Research: screen-axis segment - CONVENTION: a segment within 1.6 deg of a screen axis reads as ruled"""
 CROSSING_END_TOL = 13.0  # water:W08 - a joiner with an end this near the water meets it at a confluence (`TRUNK_TOL`)
 BEND_DIP_FT = 8.0  # water:W11 as the placer asks it - a bend set across a run lying across the fall dips down it by at most its own depth
+"""Research: bend dip allowance - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend across the fall may dip 8 ft down it, the water still running downhill"""
 BROOK_DRAWN_W = 7.0  # the width `draw_comb_field` draws a hamlet's brook at (`settlement/fields/comb.py`, `stream(width=7)`)
+"""Research: brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 ft, mirrored from `draw_comb_field`"""
 # THE ROOM A LEVEL-RUN BEND NEEDS (water:W02): a station held against the frame box still has the skirt's floor 10 px
 # inside it, so a bend of the level tolerance plus a foot either way fits between the two. Asserted at import: a consts
 # change that took the room away fails here, not on a map.
@@ -52,7 +63,9 @@ assert BROOK_FRAME_MARGIN - BROOK_SKIRT >= 2 * (LEVEL_TOL_FT + 1.0), "the frame 
 def level_runs_along_frame(course: Sequence[Pt], view: Sequence[float], near: float = LEVEL_NEAR_FT, tol: float = LEVEL_TOL_FT, max_run: float = LEVEL_MAX_RUN_FT) -> list[tuple[int, int, int, float]]:
     """Every stretch of `course` within `near` of the view's (x, y, w, h) edge that holds one coordinate within `tol` for
     more than `max_run` ft - (axis, first vertex, last vertex, length) - the test's loop, lifted (water:W02). The placer
-    asks it of the whole canvas with `near` infinite, a superset of every view the crop can choose."""
+    asks it of the whole canvas with `near` infinite, a superset of every view the crop can choose.
+    Research: level run along the frame - CONVENTION: the W02 rule, a stretch near the view's edge holding one coordinate
+    """
     x0, y0, w, h = (float(v) for v in view)
     runs = []
     for i in range(len(course)):
@@ -83,12 +96,16 @@ def straightest_run(pts: Sequence[Pt], tol: float) -> float:
     """The longest chord between two vertices of `pts` (at least one vertex apart) with every vertex between within `tol`
     of its line - the pool test's `_straightest`, lifted (water:W03) and made quadratic: from each start, the bearings a
     chord may take narrow with every vertex passed (a vertex `r` out allows those within asin(tol / r) of its own), and
-    once none is left no longer chord from that start can qualify."""
+    once none is left no longer chord from that start can qualify.
+    Research: straight run - UNRESEARCHED: the W03 chord a natural brook is held off
+    """
     return straightest_chord(pts, tol)[0]
 
 
 def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
-    """`straightest_run` with the chord's two vertex indices - what the placer's repair bends at the middle of."""
+    """`straightest_run` with the chord's two vertex indices - what the placer's repair bends at the middle of.
+    Research: straight run - UNRESEARCHED: the W03 chord a natural brook is held off
+    """
     best, at = 0.0, (0, 0)
     for i, (ax, ay) in enumerate(pts):
         arcs: list[tuple[float, float]] | None = None  # None: every bearing is still open
@@ -107,7 +124,9 @@ def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
 
 def ruled_share_ok(course: Sequence[Pt], view: Sequence[float], tol: float = RULED_TOL_FT, share: float = RULED_SHARE, min_len: float = RULED_MIN_LEN_FT) -> bool:
     """No straight run covers more than `share` of the course's length inside the view, when that length is at least
-    `min_len` - the pool test's whole body (water:W03)."""
+    `min_len` - the pool test's whole body (water:W03).
+    Research: straight run share - UNRESEARCHED: no straight run over RULED_SHARE of the brook in view
+    """
     x0, y0, w, h = (float(v) for v in view)
     on = [p for p in course if x0 <= p[0] <= x0 + w and y0 <= p[1] <= y0 + h]
     length = sum(math.dist(a, b) for a, b in zip(on, on[1:], strict=False))
@@ -121,7 +140,9 @@ def tap_index(course: Sequence[Pt], taps: Sequence[Pt]) -> int:
 
 def axis_segments(course: Sequence[Pt], taps: Sequence[Pt], eps: float = AXIS_EPS_DEG, min_len: float = BROOK_WANDER_STEP) -> list[int]:
     """The segments of `min_len` or more lying within `eps` degrees of a screen axis, the two leaving the tap excepted -
-    the pool test's loop, lifted (water:W04, one of the five rules the GM named)."""
+    the pool test's loop, lifted (water:W04, one of the five rules the GM named).
+    Research: screen-axis segment - CONVENTION: the W04 rule, the tap run excepted
+    """
     tap = tap_index(course, taps)
     bad = []
     for i, (a, b) in enumerate(zip(course, course[1:], strict=False)):
@@ -134,12 +155,16 @@ def axis_segments(course: Sequence[Pt], taps: Sequence[Pt], eps: float = AXIS_EP
 
 
 def course_enters(course: Sequence[Pt], rings: Sequence[Sequence[Pt]]) -> bool:
-    """Does any interior vertex of `course` lie inside one of `rings` - a stream through a field (water:W06)."""
+    """Does any interior vertex of `course` lie inside one of `rings` - a stream through a field (water:W06).
+    Research: brook skirts the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: no interior vertex inside a field ring
+    """
     return any(point_in_poly(p[0], p[1], list(r)) for r in rings if len(r) >= 3 for p in course[1:-1])
 
 
 def ends_off_canvas(course: Sequence[Pt], W: float, H: float, ends: Sequence[int] = (0, -1)) -> bool:
-    """Do the named ends of `course` lie off the (0, 0, W, H) canvas - an end declared off-map (water:W07)."""
+    """Do the named ends of `course` lie off the (0, 0, W, H) canvas - an end declared off-map (water:W07).
+    Research: both ends off the map - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source upslope and the mouth below the fan off the canvas
+    """
     return all(not (0.0 <= course[e][0] <= W and 0.0 <= course[e][1] <= H) for e in ends)
 
 
@@ -165,7 +190,9 @@ def _dist_to_course(p: Pt, course: Sequence[Pt]) -> float:
 
 def crosses_mid_run(water: Sequence[Pt], joiner: Sequence[Pt], tol: float = CROSSING_END_TOL) -> bool:
     """Does `joiner` cross `water` away from a confluence - a crossing where neither end of the joiner stands within `tol`
-    of the water (water:W08, the junction test's rule, lifted)."""
+    of the water (water:W08, the junction test's rule, lifted).
+    Research: no crossing mid-run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a ditch meets the brook only at a confluence, never across it
+    """
     if len(joiner) < 2 or len(water) < 2 or min(_dist_to_course(e, water) for e in (joiner[0], joiner[-1])) < tol:
         return False
     return any(_proper_cross(j0, j1, w0, w1) for j0, j1 in zip(joiner, joiner[1:], strict=False) for w0, w1 in zip(water, water[1:], strict=False))
@@ -173,14 +200,18 @@ def crosses_mid_run(water: Sequence[Pt], joiner: Sequence[Pt], tol: float = CROS
 
 def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:
     """Does every step of `course` run down the fall (or level) - the brook below its tap carrying the runoff on
-    downhill (water:W11)."""
+    downhill (water:W11).
+    Research: runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every step below the tap runs down the fall
+    """
     us = [p[0] * fall[0] + p[1] * fall[1] for p in course]
     return all(b >= a - slack for a, b in zip(us, us[1:], strict=False))
 
 
 def bar_on_race(bar: Sequence[Pt], race: Sequence[Pt], race_w: float) -> float:
     """The area of the weir's bar lying on the head race's stroke, sq px - 0 where the bar keys into the bank clear of
-    the mouth (water:W09; future-work "The weir's root lands on the head race's mouth": 17% of the bar lay on it)."""
+    the mouth (water:W09; future-work "The weir's root lands on the head race's mouth": 17% of the bar lay on it).
+    Research: weir root clear of the race - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar keys into the bank below the mouth, none of it on the race
+    """
     from shapely.geometry import LineString, Polygon  # noqa: PLC0415 - bound on first use (plan: numpy/shapely lazily)
 
     if len(race) < 2 or len(bar) < 3:

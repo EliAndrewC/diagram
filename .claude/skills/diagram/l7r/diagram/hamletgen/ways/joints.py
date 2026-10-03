@@ -24,6 +24,8 @@ the first run and can lay a Z across a joint, which the second mends - a Z becom
 the joint moves back one vertex (`_joint_moved_back`). No rewrite may break what the passes before it settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
 and every farmhouse a way served still has one within `_SERVE_FT` (`keeps_the_web`) - and `commit_lane` still
 refuses anything that splits the web.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -85,7 +87,9 @@ def oriented(lanes: Sequence[Mapping[str, Any]], i: int, ei: int, j: int, ej: in
 def tee(x: Poly, y: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> Poly | None:
     """`x` (ending at the joint) re-laid to meet `y`'s first leg as a T, from the vertex before its end: that
     vertex's foot on the leg, when the link is clear at footprint margins and the new last turn is no hairpin.
-    `None` when there is nothing to gain (the foot IS the joint) or the link is not walkable."""
+    `None` when there is nothing to gain (the foot IS the joint) or the link is not walkable.
+
+    Research: a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: met at the other's side"""
     p, n = x[-2], x[-1]
     f = seg_closest(p[0], p[1], n, y[1])
     if math.dist(f, n) <= _JOINT_FT:
@@ -119,7 +123,11 @@ def keeps_the_web(lanes: Sequence[Mapping[str, Any]], mine: set[int], old: Poly,
     """Does replacing lanes `mine` (whose tread is `old`) with the one tread `new` leave the web as it was? Every
     other lane end that touched `old` must still touch a way - `new`, or another lane (Kashikawa: a hook that three
     lanes met at, where the third still meets the second after the hook goes) - the web must stay in as many
-    pieces as it was, and every farmhouse some way served must still be served."""
+    pieces as it was, and every farmhouse some way served must still be served.
+
+    Research:
+        one network - research/questions/0081-village-lanes.drawing.html: no rewrite splits the web
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: within 100 ft"""
     others = [_pts(ln) for k, ln in enumerate(lanes) if k not in mine and len(ln.get("pts") or []) >= 2]
     for n, p in enumerate(others):
         rest_segs = [sg for m, o in enumerate(others) if m != n for sg in _segs(o)]
@@ -140,7 +148,9 @@ def keeps_the_web(lanes: Sequence[Mapping[str, Any]], mine: set[int], old: Poly,
 def unhooked(pts: Poly, others: Sequence[Poly]) -> Poly | None:
     """`pts` (its hook at the END - reverse it for the start) without the hook: ended at the vertex before, when that
     still touches every way the old end touched; else cut where the leg before the hook first reaches such a way.
-    `None` when there is no hook or neither cut keeps the end on its ways."""
+    `None` when there is no hook or neither cut keeps the end on its ways.
+
+    Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: 12 ft, 90 degrees"""
     if len(pts) < 3 or math.dist(pts[-2], pts[-1]) > _HOOK_FT or _turn_deg(pts[-3], pts[-2], pts[-1]) < _HOOK_DEG:
         return None
     end = pts[-1]
@@ -164,7 +174,11 @@ def _rounded(p: Poly) -> list[list[float]]:
 
 
 def straighten_joints(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
-    """The pass (see the module docstring). Returns the number of joints rewritten."""
+    """The pass (see the module docstring). Returns the number of joints rewritten.
+
+    Research:
+        lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: a fold a T, a jog pulled straight
+        a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html"""
     # A FIX THAT FAILED (feature 280, Kashikawa's skeleton lanes 8 and 10, bends 140 and 232 ft out in the grazing): pulling a
     # stray bend in along the line to its neighbors' midpoint. Measured on both lanes, every step of ten was refused - the
     # chord side crosses the farmhouse and its yard, so the clear bend is round the yard's far corner, not on that line. The
@@ -182,7 +196,9 @@ def straighten_joints(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
 def _one_hook(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
     """Take the hook off the first lane end that has one and can lose it; False when none can. The connector is
     read at its START only - the end on the web; its other end runs off the map (Kashikawa, feature 280: the
-    connector overshot a 3 ft lane by 7.6 ft and hooked back onto it, and no pass read a connector's hook)."""
+    connector overshot a 3 ft lane by 7.6 ft and hooked back onto it, and no pass read a connector's hook).
+
+    Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: the connector's web end too"""
     for i, ln in enumerate(lanes):
         p = _pts(ln)
         if len(p) < 3:
@@ -199,7 +215,14 @@ def _one_hook(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], 
 
 
 def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
-    """Rewrite the first joint that can be improved; False when none can."""
+    """Rewrite the first joint that can be improved; False when none can.
+
+    Research:
+        a fold or Z at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: the shorter link the stem
+        a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
+            within 6 ft of the chord dropped
+        ways of two kinds stay two - UNRESEARCHED: a cart route and a footpath, or a web and a non-web lane, met end to end
+            are never straightened as one"""
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         old = [*x, *y[1:]]
@@ -251,7 +274,9 @@ def _joint_moved_back(
     """A Z across a joint no T mends (feature 308, Inashiro: the settle squared a crossing 10 ft from the field spur's end and
     the link joined there turned back across it) mended by moving the joint one vertex back (`moved_back`), where the new
     leg is clear, the walk then bends like a path and the web keeps every house it served. Both records are rewritten;
-    the first is put back if the second is refused."""
+    the first is put back if the second is refused.
+
+    Research: no zigzag at a joint - research/questions/0081-village-lanes.drawing.html: the joint moved back a vertex"""
     i, ei, j, ej = joint
     old = [*x, *y[1:]]
     for nx, ny in moved_back(x, y):
@@ -284,7 +309,9 @@ def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, f
     round end touches the lane's far edge instead of bulging past it and the edge runs straight through - the
     track widens into the junction. The end slides along its own last leg, never sideways, so no kink is made at
     the tip. Returns None when the end is not at a junction, is already where it should be, or its leg runs along
-    the other lane (no slide along it changes the distance), or where the two meet end to end rather than at a T."""
+    the other lane (no slide along it changes the distance), or where the two meet end to end rather than at a T.
+
+    Research: the cap at a T - CONVENTION: the arriving tread's round end on the other's far edge"""
     best: tuple[float, Pt, Pt, float] | None = None
     for a, b, w in others:
         d = seg_dist(q[0], q[1], a, b)
@@ -318,7 +345,9 @@ def centered_end(q: Pt, back: Pt, width: float, others: Sequence[tuple[Pt, Pt, f
 def center_lane_ends(s: Settlement) -> int:
     """Every lane end that stops on another lane's tread is set where `centered_end` says, record and ink together.
     Runs after the first `straighten_joints`; the trims, the bund run-on, the settle and the second joint pass can still
-    move an end, and are not re-centered. Returns the number of ends moved."""
+    move an end, and are not re-centered. Returns the number of ends moved.
+
+    Research: the cap at a T - CONVENTION"""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     moved = 0
     for i, ln in enumerate(lanes):
@@ -340,6 +369,7 @@ def center_lane_ends(s: Settlement) -> int:
 # 7 ft) plus the two treads' half-widths (3 ft for the connector, 1.5 for a footpath), so nothing a lane keeps clear of can
 # stand in the gap - and wider than `_TOUCH_GAP`, where `center_lane_ends` already sets an end on the tread it stops on.
 _MEET_FT = 11.5
+"""Research: ends that nearly meet - research/questions/0081-village-lanes.drawing.html: within 11.5 ft, joined end to end"""
 
 
 def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
@@ -349,7 +379,9 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
 
     FOUND ON KASHIKAWA (269 E3): a straggler path and the skeleton arm stopped 9.6 ft apart end to end; the touch pass's
     end-meets-end branch was refused its move and skipped the end, and the connector the later passes laid there stood
-    6.9 ft off it - one way in the picture, two networks at the 4 ft ink tolerance (`lanes_form_one_network`)."""
+    6.9 ft off it - one way in the picture, two networks at the 4 ft ink tolerance (`lanes_form_one_network`).
+
+    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: the free end moved on"""
     from .clearance import may_write
 
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
@@ -420,13 +452,16 @@ def split_at_crossings(s: Settlement) -> int:
 
 
 _SHORT_LEG_FT = 25.0  # a last leg this short, with the joint beyond it, is read as one turn (a map drawing convention)
+"""Research: two turns read as one - research/questions/0081-village-lanes.drawing.html: across a leg under 25 ft"""
 
 
 def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
     """Do a lane's last two points `a` -> `b`, its short last leg `b` -> `j` and the other way's first leg `j` -> `c`
     double back - more than `_HAIRPIN_DEG` of turn in total, the leg under `_SHORT_LEG_FT`? Each turn alone can stay under
     the limit, which is how the joint pass missed one (the 269 landing's round-2 review of Kuwabata: 79 + 90 degrees
-    across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart)."""
+    across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart).
+
+    Research: no hairpin - research/questions/0081-village-lanes.drawing.html: 140 degrees summed over a short leg"""
     if math.dist(b, j) > _SHORT_LEG_FT:
         return False
 
@@ -440,7 +475,9 @@ def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
 def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
     """Where a lane's short last leg meets the CONNECTOR's start and the two double back (`hairpin_over_a_short_leg`), the
     connector is started at the lane's vertex before that leg instead - a T - and the leg dropped, record and ink
-    together, when the moved connector may be written (`may_write`). Returns the folds made."""
+    together, when the moved connector may be written (`may_write`). Returns the folds made.
+
+    Research: a hairpin at the track becomes a T - research/questions/0081-village-lanes.drawing.html"""
     from .clearance import may_write
     from .law import breaks_through, solid_boxes  # the law sits above this layer (it reads `hairpin_over_a_short_leg`)
 

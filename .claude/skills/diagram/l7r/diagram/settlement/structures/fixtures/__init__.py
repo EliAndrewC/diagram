@@ -1,6 +1,8 @@
 """The settlement's public street furniture and civic fixtures, and the two auto-siters that place them on the traffic.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: plumbing - NONE: the composed mixin surface
 """
 
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX as KOSATSUBA_MARKER_MIN_PX

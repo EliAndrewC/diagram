@@ -18,6 +18,8 @@ Settlement, and it is the ONE predicate shared by the gate's `settlement_dwellin
 here.
 
 Split from settlement/land.py by feature 120 - see settlement/land/CLAUDE.md for the index.
+
+Research: plumbing - NONE: lazy imports, geometry, keyholing and manifest records
 """
 
 import math
@@ -62,7 +64,9 @@ def _load_shapely() -> None:
 
 
 MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
+"""Research: tint radius - CONVENTION: 28 bs"""
 MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts
+"""Research: tuft reach - CONVENTION: 7 bs"""
 
 
 def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
@@ -82,11 +86,14 @@ def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, 
        because the reed scatter read it and, appended first, it cost 45% of the annulus. The reeds are a tile
        now, and the marsh cuts the pond's own ellipse (`pond_cut`) rather than its box, so the order no longer
        thins them.
+
+    Research: pond reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round the shore at the caller's margin
     """
     return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
 
 
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
+"""Research: reed feather - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 46 bs over which grass and reed grade into each other"""
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -143,7 +150,11 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
     "so a degenerate outline cannot lose a feature" - which drew and recorded the marsh OVER the block and the fields it
     exists to be subtracted from. Now an invalid outline or cut is repaired (`make_valid`) and the difference taken again;
     a marsh with no open ground left, or one no repair can clip, is None - no marsh here - and the caller draws and records
-    nothing (`meta.marsh_dropped`)."""
+    nothing (`meta.marsh_dropped`).
+
+    Research:
+        wet wild outside the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a toe or waterside marsh loses the filled diked block
+        marsh below the fields - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: a toe marsh loses the fields, a pond fringe the open water"""
     _load_shapely()
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
     rings += [list(f) for f in fields if len(f) >= 3]
@@ -317,7 +328,20 @@ class WetGroundMixin:
         WILD outside a polder's perimeter dike on its WATERWARD flanks (the fluctuating lake/creek/marsh the dike holds
         back - a polder floor sits BELOW the outside water level, so the wet fringe surrounds it regardless of the fall
         direction; placed by `stage_waterward` from `meta.waterward`). WHY:
-        research/questions/0058-ground-too-wet-to-build-on.html + 'Defensive marshland - the engineered wet belt' + research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html. Recorded M['marshes']."""
+        research/questions/0058-ground-too-wet-to-build-on.html + 'Defensive marshland - the engineered wet belt' + research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html. Recorded M['marshes'].
+
+        Research:
+            marsh roles - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the toe and a defensive belt
+            pond fringe role - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
+            polder waterside role - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a reed fringe along the polder's water side
+            bare treads - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: every trodden way kept bare through the reeds in every role (the record gives the defensive belt's causeway)
+            tread keep-out width - UNRESEARCHED: 3 bs either side of every way
+            reeds off the dooryards - UNRESEARCHED: no reed inside the urban-clearance halo round dooryards
+            edge shaped - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: rounded and waved, a pond fringe left as laid
+            reeds to the water and the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy
+            reeds off the mounds - research/questions/0061-reservoir-ponds-tameike.drawing.html: no reed or tint on a dike crest or a pond bank
+            no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground
+            reed tile - CONVENTION: the drawn ground filled with the reed tile"""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
         # THE RECORD SAYS WHAT THE INK SAYS (feature 150 T54 residue, settlement-review 2026-08-29). The
@@ -507,7 +531,9 @@ class WetGroundMixin:
         trimming cannot fix - that one has to be re-routed (the router keeps off the toe band, `toe_band`).
         Marsh drawn so far is what is checked, so this only helps a way laid AFTER its water; the
         `defense` belt is exempt (its approach IS a causeway, and few constricted approaches are the point
-        of it)."""
+        of it).
+
+        Research: ways stop short of the marsh - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: a way's ends walked back off the reeds, the defensive belt's causeway exempt"""
         wet = marsh_ground(self.M, but=("defense",))
         if not wet or len(pts) < 2:  # a caller may hand over an already-clipped stub; there is nothing to walk back
             return pts
@@ -552,7 +578,13 @@ class WetGroundMixin:
         vector, and since feature 133 T30 its inner edge follows the fan's toe as an arc - at each cross-slope station
         `pad` above the local lowest paddy point, smoothed over three stations - as wide as the fan plus `pad`. An
         axis-aligned rectangle is only an honest contour at a 0/90/180/270 fall, and at a diagonal it slices across
-        the slope - which is the bug this shape was given to fix."""
+        the slope - which is the bug this shape was given to fix.
+
+        Research:
+            toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field, smoothed over three stations
+            toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields plus 90 ft each side
+            flaring flanks - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: part of the straight-band deviation, the band's ends bow outward downhill as seepage spreads
+            flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile"""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys
@@ -642,7 +674,9 @@ def surface_water_dist(M: Any, x: float, y: float) -> float:
     stream-watered houses as needing a well while the check already treated them as watered -
     the objective and the check read two definitions of "needs a well"). Wells are deliberately
     NOT included: the caller asking "does this house need a well" must not have the answer
-    pre-empted by the wells it is deciding to dig."""
+    pre-empted by the wells it is deciding to dig.
+
+    Research: watered by surface water - research/questions/0196-communal-wells-ido.drawing.html: canals, streams, the moat and the pond, never an irrigation ditch"""
     # AN IRRIGATION DITCH IS NOT DOMESTIC WATER (ruled 2026-08-18; settlement-review, Sawada, found
     # the mechanism and did the research pass). This used to count `channels` too, and that made the
     # answer depend on WHICH MANIFEST KEY a watercourse happened to be recorded under rather than on
@@ -674,7 +708,9 @@ def surface_water_dist(M: Any, x: float, y: float) -> float:
 
 
 def water_lines(M: Any) -> list[Any]:
-    """The polylines `surface_water_dist` measures to: the canals, the streams and the moat (never an irrigation ditch)."""
+    """The polylines `surface_water_dist` measures to: the canals, the streams and the moat (never an irrigation ditch).
+
+    Research: watered by surface water - research/questions/0196-communal-wells-ido.drawing.html: canals, streams and the moat, never an irrigation ditch"""
     return [c["poly"] for c in M.get("canals", []) if c.get("poly")] + [st["poly"] for st in M.get("streams", [])] + ([M["moat"]] if M.get("moat") else [])
 
 

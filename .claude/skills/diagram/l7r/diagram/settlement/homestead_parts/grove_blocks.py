@@ -22,6 +22,8 @@ byte-identical (the oracle `dev/performance.md` prescribes for this shape). Noth
 Module-level and built from plain lists (feature 146: an inner function that is hard to test gets
 lifted out), so `tests/settlement/test_homestead_parts.py` can prove the verdicts equal the linear
 expressions on a synthetic layout without rolling a settlement.
+
+Research: index plumbing - NONE: the keep-outs are the callers' decisions, indexed here
 """
 
 from __future__ import annotations
@@ -225,7 +227,12 @@ class BankNear:
     """`near`'s index when the points have a BANK (feature 261, settlement-review of Kashikawa): a clump is near a point
     only within `reach` of it AND on its side of `barriers` - three dooryard-copse clumps stood 79-86 ft from a house as
     the crow flies, across the brook from every farmhouse, where the copse is the trees "in the gaps between the houses".
-    Asked per clump like `Seats.too_near`."""
+    Asked per clump like `Seats.too_near`.
+
+    Research:
+        copse on its house's bank - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            near a house only on its side of the brook
+    """
 
     def __init__(self, points: Any, reach: float, barriers: Any) -> None:
         from .._geom import PointGrid

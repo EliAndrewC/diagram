@@ -7,6 +7,8 @@ See CLAUDE.md in this directory for which submodule holds what.
 `class Settlement(...)` base list - the split is meant to be invisible above this line. Sub-mixin
 methods reach each other through `self.` on the composed Settlement, so a cross-submodule call
 needs no import and the partition can be re-cut later without touching core.py.
+
+Research: package composition - NONE: the field mixins composed
 """
 
 from .comb import CombMixin

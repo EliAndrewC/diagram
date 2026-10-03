@@ -1,6 +1,8 @@
 """STAGE 4a: seating the settlement on the margin the water leaves.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: seat geometry - NONE: segment indexes, ray tests, polyline crossings and the refusal type
 """
 
 from __future__ import annotations
@@ -25,7 +27,11 @@ def below_drain(pt: Pt, drain: Poly, dx: float, dy: float, band: float = 150.0) 
     The question the retired `dwellings_above_field_drain` check asked of every dwelling, asked before the
     dwellings exist. Reading the drain itself rather than approximating it with "downhill of the field
     centroid" is the point: an aggregate cannot stand in for a distributed thing, and
-    the drain is a LINE across the low side, not a point."""
+    the drain is a LINE across the low side, not a point.
+
+    Research:
+        wet side of the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html: no farmhouse on the low ground below a field's drain
+        toe band - UNRESEARCHED: 18 ft past the drain line, within 150 ft of it"""
     near = min(range(len(drain) - 1), key=lambda i: seg_dist(pt[0], pt[1], drain[i], drain[i + 1]))
     d = seg_dist(pt[0], pt[1], drain[near], drain[near + 1])
     proj = seg_closest(pt[0], pt[1], drain[near], drain[near + 1])
@@ -44,7 +50,9 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
 
     Samples a fan of points running out from the anchor along its outward normal, over the depth the
     cluster plus its windbreak will occupy. Returns 0.0 for a clear back and 1.0 for one entirely
-    under the hem."""
+    under the hem.
+
+    Research: depth sampled behind the margin - UNRESEARCHED: 2.6 band depths, the cluster and its belt"""
     if not dry_plots:
         return 0.0
     ax, ay = -out[1], out[0]
@@ -67,12 +75,15 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
 BELT_ROOM_MAX_OFF = 0.2  # share of the belt band that may fall off the canvas before a seat is only a fallback - three of
 # its fifteen sample points, the near corners a band square to a diagonal wind clips on a seat with room (a drawing
 # judgment: the seat's belt room is geometry, not a researched figure)
+"""Research: belt room off the canvas - CONVENTION: at most 0.2 of the band's samples"""
 
 
 def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind: Pt, W: float, H: float) -> float:
     """The share of the windbreak's band that would fall off the canvas behind a cluster seated at `center` (feature 261).
     The band is sampled where `belt_polygon` draws it: 36, 90 and 146 ft upwind of the cluster's windward fringe, across
-    the cluster's width square to the wind."""
+    the cluster's width square to the wind.
+
+    Research: belt distance upwind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: sampled at 36, 90 and 146 ft"""
     wx, wy = unit(*wind)
     px, py = -wy, wx
     reach = abs(wx * along[0] + wy * along[1]) * lat + abs(wx * out[0] + wy * out[1]) * dep  # the fringe, upwind of the middle
@@ -86,7 +97,11 @@ def seat_has_dry_exit(plan: SitePlan, start: Pt, toe: Poly | None = None, wet: S
     the flood fill `dry_exit` when no bearing is clean, and raises `NoDryExit` where the gateway is walled in - a property of
     the SEAT, so the seat is refused here instead. Asked with what stands at seat time, as `connector_dry_exit` walls it:
     the wet toe and the reed fringe grown by the lane's width, the field, the tameike at its 80 ft berth; the drain brook and
-    every watercourse (the brook gapped at its fords) are lines it may not cross. The ONE flood fill, WAYS' own."""
+    every watercourse (the brook gapped at its fords) are lines it may not cross. The ONE flood fill, WAYS' own.
+
+    Research:
+        dry way out of the seat - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground
+        tameike berth - UNRESEARCHED: 80 ft"""
     from .ways.dry_exit import EXIT_CELL_FT, dry_exit
     from .ways.track import wet_grown_by_the_lane
 
@@ -156,7 +171,25 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     Returns the seat frame - a center, an ALONG-the-margin unit, an AWAY-from-the-field unit, and
     the band's half-extents - which the lanes, the house seeds, the connector and the windbreak all
     work in, so every one of them lands correctly at any fall direction; and its `ladder`, the ranked
-    margins the seating falls back to (`seat_every_household`)."""
+    margins the seating falls back to (`seat_every_household`).
+
+    Research:
+        seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy
+        back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the margin facing the northwest unless declared
+        band area - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: households times the homestead's ground
+        never below the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html
+        clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
+        not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
+        not in the reed fringe - CANON: refused centered in it, scored down at an end (GM 2026-08-28); 0058 has no fringe rule
+        reed-fringe share weight - UNRESEARCHED: 2.5 times the band's share in the reeds
+        wind and upslope weights - UNRESEARCHED: 1.0 for facing the wind, 0.8 for upslope
+        dry hem penalty - UNRESEARCHED: 1.6 within two band depths, plus 2.5 times the back's foul
+        brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: scored down, never refused
+        brook penalty weight - GUESS: 3.0
+        brook reach on the band - UNRESEARCHED: a band point within 30 ft of the brook counts as on the water
+        belt room on the canvas - CONVENTION: scored, refused past BELT_ROOM_MAX_OFF
+        band on the canvas - CONVENTION: the seat center at least half the band's length inside the frame
+        dry way out - research/questions/0081-village-lanes.drawing.html: a walled-in head is refused"""
     env = plan.envelope
     cen = centroid(env)
     dx, dy = plan.fall
@@ -332,7 +365,12 @@ def margin_candidates(env: Poly, cen: Pt, wind: Pt) -> list[tuple[Pt, Pt, int]]:
     tier its seat hung on an accident of the outline: Sawada's (down_deg 225, seed 24) was one short edge at the fan's
     upper west corner, facing west-northwest, and 287's brook repair (508bcd511) smoothed it away. A flank above the toe,
     the band beside it turned to the wind, is the same seat by construction. Offered after every tier-0 seat, so a site
-    with an edge facing the wind seats as before."""
+    with an edge facing the wind seats as before.
+
+    Research:
+        back faces the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html
+        45 degree bar - UNRESEARCHED: WIND_BACK_MIN_DOT, tier 0; 0072 gives no tolerance
+        back turned off a flank - UNRESEARCHED: tier 1, at most 45 degrees off the margin's normal"""
     out: list[tuple[Pt, Pt, int]] = []
     n = len(env)
     for i in range(n):
@@ -354,13 +392,17 @@ def margin_candidates(env: Poly, cen: Pt, wind: Pt) -> list[tuple[Pt, Pt, int]]:
 
 
 def _seat_center(anchor: Pt, out: Pt, dep: float) -> Pt:
-    """The band's center on a margin: its half-depth and the standoff out from the margin's midpoint."""
+    """The band's center on a margin: its half-depth and the standoff out from the margin's midpoint.
+
+    Research: standoff from the field - UNRESEARCHED: 12 ft"""
     return (anchor[0] + out[0] * (dep + 12.0), anchor[1] + out[1] * (dep + 12.0))
 
 
 def _seat_frame(anchor: Pt, out: Pt, lat: float, dep: float, wind: Pt) -> dict[str, Any]:
     """The seat frame on one margin: its center, the along and away units, the band's half-extents, the anchor, and
-    whether its back is off the wind."""
+    whether its back is off the wind.
+
+    Research: standoff from the field - UNRESEARCHED: 12 ft, the band's near edge hugging the field"""
     wx, wy = wind
     along = (-out[1], out[0])
     # THE BAND'S NEAR EDGE HUGS THE FIELD. The standoff is the front row's own depth and no more, and
@@ -407,7 +449,9 @@ def _arm_crossing_accidental(arm: Poly, raw: Poly, kept: list[tuple[Poly, Poly]]
     2026-08-16): the clip pipeline bends each arm independently, and two of a Y's arms came back
     CROSSING mid-run in open ground, near-superimposed for ~250 ft. A clipped crossing is designed
     only where the RAW pair crosses within ~40 px of it - existence alone is not enough, since a
-    raw stem poked through its bar "crosses" at the hub while the clipped X sat 87 px away."""
+    raw stem poked through its bar "crosses" at the hub while the clipped X sat 87 px away.
+
+    Research: arms cross only where the layout does - UNRESEARCHED: within 40 ft of the raw crossing"""
     for k_arm, k_raw in kept:
         _h = _arm_hit(arm, k_arm)
         if _h is None:
@@ -427,7 +471,9 @@ def _fork_spur(spur_pts: Poly, kept: list[tuple[Poly, Poly]]) -> Poly:
     regen at 600s); a spur meets at most a handful of arms, so eight passes is generous and
     termination is structural, not numeric. The progress guard matters too: after a truncation
     the new start lies ON the arm, so the same intersection comes straight back on the next pass
-    - a hit at the current start is the fork already made, not a crossing left to cure."""
+    - a hit at the current start is the fork already made, not a crossing left to cure.
+
+    Research: field spur forks from the lane - UNRESEARCHED: starts at its crossing with an arm"""
     for _pass in range(8):
         _cut = False
         if len(spur_pts) < 2:

@@ -5,6 +5,8 @@ The distinction this module exists to keep straight is the one the skill's CLAUD
 edge-to-edge), a PREFILTER may read a circumscribed extent, and the two must never be swapped.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: collision and gap predicates - NONE
 """
 
 import math

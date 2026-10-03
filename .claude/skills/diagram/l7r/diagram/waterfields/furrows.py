@@ -1,4 +1,7 @@
-"""The dry hem's row directions, tract by tract (269 B06) - split out of `carve.py`, which `_dry_fields` calls it from."""
+"""The dry hem's row directions, tract by tract (269 B06) - split out of `carve.py`, which `_dry_fields` calls it from.
+
+Research: row-direction geometry - NONE: angle arithmetic, plot centers and sides, neighbor tests
+"""
 
 import math
 import random
@@ -14,13 +17,18 @@ from typing import Any
 #   TRACT_SEAM_MIN_RAD    the least change at a seam, ~20 deg - a map drawing convention: a seam must read as one, and
 #                         the gate reads two rows within ~6 deg as one direction.
 TRACT_COLUMNS = (2, 4)
+"""Research: tract size - GUESS: two to four hem columns a tract"""
 TRACT_PLOT_TURN_RAD = 0.05
+"""Research: plot turn within a tract - GUESS: about 3 deg either way"""
 TRACT_LEAN_RAD = 0.30
+"""Research: tract lean - GUESS: a tract's rows turned up to about 17 deg off the contour or the fall"""
 TRACT_SEAM_MIN_RAD = 0.35
+"""Research: least turn at a seam - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: about 20 deg, so a seam reads"""
 # Below this spread the hem is steep ground whose rows all converge on the contour (`furrows_vary`, comb.py): every tract
 # runs the contour, turned no further than the spread allows, and no seam is required. Steep or terraced rows on the
 # contour is the record's own inference, a GUESS (0006).
 STEEP_SPREAD_RAD = 0.3
+"""Research: steep ground runs the contour - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: under a 0.3 rad spread every tract runs the contour and no seam is owed"""
 
 
 def furrow_turn(a: float, b: float) -> float:
@@ -36,7 +44,13 @@ def tract_ways(R: random.Random, ncols: int, theta0: float, spread: float) -> li
     contour (`theta0`) or down to its outfall (a right angle off it) - leaned by up to `TRACT_LEAN_RAD` for its own
     ground. A tract that would come out within `TRACT_SEAM_MIN_RAD` of the one before takes the other way, so every
     seam reads. On steep ground (`spread` under `STEEP_SPREAD_RAD`) every tract runs the contour, leaned no further than
-    `spread`."""
+    `spread`.
+
+    Research:
+        two row directions - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each tract along the contour or down to its outfall, a right angle apart, rolled per tract
+        tract lean and size - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: leaned by up to TRACT_LEAN_RAD, TRACT_COLUMNS columns long
+        seam turn - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract too close to the one before takes the other way
+    """
     steep = spread < STEEP_SPREAD_RAD
     lean = min(TRACT_LEAN_RAD, spread)
     out: list[tuple[int, float]] = []
@@ -54,7 +68,10 @@ def tract_ways(R: random.Random, ncols: int, theta0: float, spread: float) -> li
 
 SEAM_READS_RAD = 0.10
 """Two rows within ~6 deg read as ONE direction on the page, so a seam between tracts must turn by more than this, and two
-plots of one tract may differ by no more than twice `TRACT_PLOT_TURN_RAD` (research fields/180; the gate's own figures)."""
+plots of one tract may differ by no more than twice `TRACT_PLOT_TURN_RAD` (research fields/180; the gate's own figures).
+
+Research: one direction on the page - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: two rows within about 6 deg read as one direction
+"""
 
 THETA_ROUNDING_RAD = 0.002
 """The manifest records `theta` to 0.001 rad, so each pair's turn carries up to twice that of rounding."""
@@ -79,7 +96,10 @@ def tract_seams(plots: Sequence[dict[str, Any]], side: float | None = None) -> t
     a tract, `(pairs within a tract, pairs across a seam, tracts run apart, seams that do not turn)`. Neighbors are plots
     whose centers lie within `NEIGHBOR_REACH` sides - the plots' mean side, or `side` where the caller holds a wider one.
     A tract run apart is a pair of one tract turned more than twice `TRACT_PLOT_TURN_RAD`; a seam that does not turn is a
-    pair across tracts turned `SEAM_READS_RAD` or less. Both lists are named by the first plot's center, to the pixel."""
+    pair across tracts turned `SEAM_READS_RAD` or less. Both lists are named by the first plot's center, to the pixel.
+
+    Research: tracts and their seams - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract's plots share one direction, a seam turns far enough to read
+    """
     ps = [p for p in plots if p.get("poly") and p.get("theta") is not None and p.get("tract") is not None]
     if len(ps) < 2:
         return 0, 0, [], []
@@ -115,7 +135,12 @@ def settle_tract_seams(plots: list[dict[str, Any]]) -> None:
     such neighbor: first at the generator's own seam figure, `TRACT_SEAM_MIN_RAD` less the two plots' own turns, then at
     the rule's line. A furrow is modulo pi and each neighbor rules out a window, so only a tract hemmed in by more
     neighbors than fit round the half-circle has no such turn; it joins the neighbor whose rows it is closest to, taking
-    that tract's number and heading - a larger tract, which the record allows (its sizes are open)."""
+    that tract's number and heading - a larger tract, which the record allows (its sizes are open).
+
+    Research:
+        every seam reads - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract whose seam with an earlier neighbor would not read is turned whole
+        hemmed-in tract joins a neighbor - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: it takes the closest neighbor's number and heading, a larger tract
+    """
     ps = [p for p in plots if p.get("poly") and p.get("theta") is not None and p.get("tract") is not None]
     if len(ps) < 2:
         return

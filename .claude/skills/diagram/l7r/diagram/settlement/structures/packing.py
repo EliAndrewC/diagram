@@ -1,6 +1,8 @@
 """The two multi-building placement engines and the shortfall bookkeeping they share.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: packing plumbing - NONE: clipping tests and shortfall bookkeeping
 """
 
 import math
@@ -68,7 +70,19 @@ class PackingMixin:
         Streets/roads/prior placements break a row naturally (the odd firebreak gap is
         historically honest). Dwelling sizes come from URBAN kinds via bscale, with mild
         per-house jitter so the terrace reads grown-up-over-time, not stamped.
-        Returns the number placed."""
+        Returns the number placed.
+
+        Research:
+            contiguous terraces - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: houses touch within a row
+            back-to-back pairs, doors outward - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: never more than two deep
+            eave gap inside a pair - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 4 ft, floored at 1.2 px
+            alley between pairs - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 12 ft, floored at 4.5 px
+            court every few rows - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.html: at the default court_every=2 every between-pair gap is a 21 ft court, the 12 ft alley unused
+            rows run east-west - UNRESEARCHED
+            shop band off streets and the road - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: rows 28 ft back, tight to alleys
+            grown-over-time size jitter - DEVIATION research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: width 0.94-1.18x, depth 0.95-1.10x
+            rows tight to the ring road - UNRESEARCHED: alley clearance, no shop band
+            canvas margins - NONE"""
         # SCOPED (2026-08-08) - see pack(): same stream jitter, same cascade, same bbox key.
         with self.rng_scope("rowpack", *bbox):
             x0, y0, x1, y1 = bbox
@@ -176,7 +190,15 @@ class PackingMixin:
         jittered footprints and clipping one every few maps. It costs a little capacity
         (a ~30px no-build band), so a district that was exactly full may need a slightly
         bigger bbox. Default 0 keeps every existing map bit-identical - no corridor, and
-        no RNG draw that could shift a single downstream spot."""
+        no RNG draw that could shift a single downstream spot.
+
+        Research:
+            district fill - UNRESEARCHED: a jittered grid at `step` px, one building a cell
+            footpaths between rows - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: a 5 px worn path every `footpaths` steps
+            businesses face the street - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: within 92 px a building turns to its street
+            dwellings behind the frontage - research/questions/0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html: `core` skips the 76 px street band
+            door onto open ground - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: a scattered house turns to a clear side
+            turn jitter - UNRESEARCHED: +/-4 to 6 degrees"""
         # SCOPED (2026-08-08). The per-seat jitter below is a stream draw, so any upstream change
         # that consumed a different number of random numbers moved every building this pack seats -
         # and one moved building cascades into the gardens, groves, wells and crowns around it. This

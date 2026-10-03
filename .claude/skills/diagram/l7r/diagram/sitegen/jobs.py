@@ -3,6 +3,8 @@
 Moved verbatim out of `hamletgen/driver.py` by feature 119. It was already the single definition of
 the cpus-minus-2 courtesy that `regen.py` and `cohort_audit.py` extend by hand, and it has nothing
 to do with any one tier - every tier generator's cohort roll wants the same answer.
+
+Research: worker count - NONE: process fan-out
 """
 
 from __future__ import annotations

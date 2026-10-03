@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted (spec-fidelity, round 2)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): *"figure out whether it would need to be far away and then make
 it be the distance away that it would have to be if that is appropriate. On the other hand, if you look it up and you find
@@ -19,12 +19,17 @@ a neighbor's farmhouse, reckoned at a 20 ft ridge, keeps the south strip; a cano
 record gives a working windbreak's tree, keeps the canopy reach east, west and south. Bamboo was left out on the GM's
 earlier "maybe bamboo", which the GM now says was not a ruling.
 
-**What the research says.** Bamboo is not low. Madake, the timber bamboo a farm kept for its baskets and its building, has
-culms of 10-20 m, and hachiku 10-15 m (to be cited from the pages read in the plan's research pass); the record's bamboo page
-already has madake reaching "roughly 20 m" and growing in close thickets that shade out almost everything else
-(`research/questions/0075-bamboo-groves-chikurin.html`). A bamboo stand at its least height is as tall as the tree the
-canopy reach is worked out from, so the same derivation gives it the same reach. Bamboo therefore does not deserve the
-exempt list, and its distance is the one its height gives.
+**What the research says (to be confirmed by the record's checks in the plan).** Bamboo is not low. A bamboo maker's
+page (https://www.taketora.co.jp/c/special/bamboo, saved and grepped 2026-10-02) gives madake, the timber bamboo a farm
+kept for its baskets and its building, culms of 10-20 m; hachiku 10-15 m; moso, the largest, 10-20 m. The record's bamboo
+page already has madake reaching "roughly 20 m" in close thickets that shade out almost everything else, and its Tonami
+passage lists a farm grove's bamboo stands as madake, moso, hachiku and yadake
+(`research/questions/0075-bamboo-groves-chikurin.html`). Yadake is shorter, 2-5 m, and is classed as a bamboo grass (sasa),
+not a bamboo (Kotobank, https://kotobank.jp/word/%E7%9F%A2%E7%AB%B9-648513; a regional plant survey,
+https://mikawanoyasou.org/data/yadake.htm), so in the Tonami grove it stood beside three timber bamboos, not in their
+place. The ministry's bamboo page (https://www.maff.go.jp/j/pr/aff/1301/spe1_02.html) refused the fetch (403) and is not
+relied on. What the plan's reading must confirm: the timber bamboos' least height, and so whether a bamboo stand's reach
+equals the canopy reach.
 
 **Where bamboo stands on our maps** (one-shot count, observed 2026-10-02; method: the recorded stands' outlines and the
 culm marks parsed from each SVG, each tested against every plot's sun ground at the canopy reach):
@@ -95,8 +100,10 @@ modal still calls bamboo exempt from the sun rule.
 
 - **FR-001**: No bamboo - a household's stand, a shared thicket, or a culm mark in a farm grove, a windbreak or a belt -
   MUST stand in a threshing yard's or garden bed's sun ground at bamboo's reach, on any scripted map.
-- **FR-002**: Bamboo's reach MUST be worked out from its least cited height by the same derivation the canopy reach uses
-  (the late-autumn sun at the map's latitude), and stated beside the rule with the heights it comes from.
+- **FR-002**: Bamboo's reach MUST be worked out, by the same derivation the canopy reach uses (the late-autumn sun at the
+  map's latitude), from the least cited height of the bamboo our stands and culm marks stand for - the timber bamboos
+  (madake, hachiku, moso), the kinds the record puts in a farm's stands and grove - and stated beside the rule with the
+  heights it comes from. A grove's bamboo, drawn without a kind, is held at the timber bamboos' reach.
 - **FR-003**: Every bamboo placer MUST test a mark's or a stand's seat against the sun ground before drawing it, as every
   crown placer does.
 - **FR-004**: Every drawn bamboo mark and stand MUST be recorded on the manifest, so the finished map's check reads them.
@@ -116,29 +123,40 @@ modal still calls bamboo exempt from the sun rule.
 
 ### Measurable Outcomes
 
-- **SC-001**: On the five pool hamlets and on the cohort the gate rolls, zero bamboo marks or stands stand in any plot's
-  sun ground at bamboo's reach, counted from the record (FR-001, FR-004, FR-005).
+- **SC-001** (FR-001, FR-004, FR-005): On the five pool hamlets and on the cohort the gate rolls, zero bamboo marks or stands
+  stand in any plot's sun ground at bamboo's reach, counted from the record.
 - **SC-002**: The count of bamboo marks the record holds equals the count drawn on each pool hamlet (FR-004).
-- **SC-003**: A bamboo mark placed by hand in a plot's sun ground makes the check fail (FR-005), and a placer handed a seat
-  in the sun refuses it (FR-003).
-- **SC-004**: The sun page states bamboo's reach with each height it rests on footnoted and confirmed by the record's
-  checks, and no page or modal calls bamboo exempt (FR-002, FR-006).
+- **SC-003** (FR-003, FR-005): A bamboo mark placed by hand in a plot's sun ground makes the check fail, and a placer handed
+  a seat in the sun refuses it.
+- **SC-004** (FR-002, FR-006): The sun page states bamboo's reach with each height it rests on footnoted and confirmed by the
+  record's checks, and no page or modal calls bamboo exempt.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | Bamboo is held to the sun rule, not exempt | historically accurate for the heights; the rule itself a guess, as feature 310's is | the GM asked to look it up and keep the exemption only if bamboo deserves it; the timber bamboos a farm kept stand at least as tall as the tree the canopy reach is reckoned from, in thickets that shade out almost everything else | the sun page; `tree_shade.py` |
-| Bamboo's reach is worked out from its least cited height, by the canopy reach's own derivation | guess (the least height, as for trees; taller stands would reach further) | the GM expected a different distance for different things; the derivation gives each thing its own, and bamboo's least height is the tree's | the sun page; the plan |
+| Bamboo's reach is worked out from the timber bamboos' least cited height, by the canopy reach's own derivation | guess (the least height, as for trees; taller stands would reach further) | the GM expected a different distance for different things; the derivation gives each thing its own distance from its own height, and what that height comes to is for the plan's reading to confirm | the sun page; the plan |
+| A grove's bamboo, drawn without a kind, is held at the timber bamboos' reach, not yadake's | guess | the Tonami grove held madake, moso and hachiku beside yadake, a shorter bamboo grass; a patch drawn without a kind may hold any of them, and the tall ones decide its shade | the sun page; the bamboo drawing page |
 | The coppiced mulberry and the tea hedge stay outside the rule | as feature 310 recorded | not tall; unchanged here | feature 310's spec |
+| A bed slid south after the groves stand keeps its new sun ground clear of every standing crown, promised persimmon and bamboo mark | guess - the sun rule's, as feature 310's | the slide that clears a bed's morning shade moved its sun ground over a neighbor's persimmon (cohort seed 14, a regression feature 310 shipped); the rule holds wherever a bed ends up | `rolling/farmsteads.py` `beds_sun_clear` |
+| On a grove farm the bed stands wholly south of the front wall, and a band in a turned bed's east reach is cut back to a pixel clear of it | guess - the layout's, as feature 310's | a bed taller than its yard rose past the east band's end, and a bed turned with its house rises past an unturned band (cohort seeds 15 and 906); the cut was 1.3 ft on cohort seed 906 at a rake of -8 degrees (one-shot, observed 2026-10-02; method: the farm's band end against its turned bed, probed on the roll) | `rolling/dispersed.py` `clear_east_of_beds` |
+| The persimmon's paces stop at the dooryard - its crown's edge within about 30 ft of the house - and a farm with no seat there keeps none | historically accurate for the place (the dooryard: the fruit-tree page's `jataff-fuyu-kaki` and `toyoko-kaki` put a persimmon in the dooryard of every house; `research.md` R3); the 30 ft is the drawing page's own GUESS, as is its exact reach | paced on, a crowded farm's persimmon walked out past any dooryard onto a row's street (cohort seed 23, refused; observed 2026-10-02, method: the roll probed at the web's refusal, the trunk's box against the street's tread); on the grove-farm maps every persimmon but one stood 35 to 80 ft out (one-shot, observed 2026-10-02; method: each crown's edge measured from its house in the house's frame on the main pool) | `homestead_parts/fixture_seats.py` `PERSIMMON_DOORYARD_FT` |
+| On a grove farm the persimmon may stand in its own grove behind the house, never a neighbor's, never on the flank | historically accurate for the place (the traditional igune held "a few fruit trees", Sendai's replanting plan, `research/questions/0075-bamboo-groves-chikurin.html`); the flank stays unrecorded, as the fruit-tree page says | a grove farm's front is its own plots' sun and its back the service strip before its windward band, so held off its grove it had no dooryard seat (one-shot, observed 2026-10-02; method: the regenerated pool's persimmons counted per house - with the grove seat Kashikawa keeps 16 of 20 and Mizuguchi 10 of 12, every one behind its house within the dooryard) | `fixture_seats.lay_fixtures` (`fruit`), `rolling/fit.py` `_fixtures_in_bands` |
+| A household's own persimmon in a yard's or bed's sun - its own or a placed neighbor's - is dropped, decided where its homestead is laid; a template judges the tree at its seat's own rake | guess | the placer lays a chosen seat's homestead afresh (`_place_bundle`), so a tree dropped by the fit alone came back on the record in a yard's sun (cohort seed 1); and holding the template at every rake the house might take left no seat for it at all | `rolling/fit.py` `_settle_persimmon`, `rolling/bundle.py` `_bundle_geom` |
+| A gateway walled in leaves along the exit strip's end, or from the first bearing turned off the downslope whose sweep is dry | guess - the track's own rule, kept | walked out clear of every steading, a gateway stopped in the corner of a farm's own grove with no way out wider than a track's gap (cohort seed 19); the connector's later fallbacks already started from the strip's end | `hamletgen/ways/track.py` `gateway_track` |
+| A shared row well is not dug in the street's bend, and a row street is laid without the jogs its planned line takes from the field's edge | guess (the bend's 30 degrees over 40 ft either way) | a well in the inside of a step in the street held the street to two sharp turns 40 ft apart (observed 2026-10-02; method: the roll probed at the web's refusal, the street's drawn points), a kink on a tree lane no settle may cut, and the web was refused (cohort seed 903) | `homesteads/wells.py` `street_turns_at`, `ways/street.py` |
 
 ## Assumptions
 
 - The legacy hand-drawn pool is untouched (frozen exhibits).
 - A bamboo mark under a crown is drawn beneath it; holding it out of the sun ground changes no crown.
-- Houses, plots and seats stay where the seating puts them; only bamboo gives way.
+- Houses, plots and seats stay where the seating puts them; what gives way is bamboo, a persimmon (moved into its dooryard or its own grove, or dropped), a bed slid south only where its new sun ground is clear, and a grove band's end cut back out of a turned bed's east reach. Re-seating moves the pool's farms, as any change to what a homestead holds does.
 
 ## Review history
 
 | round | reviewer | verdict | what it found |
 |---|---|---|---|
+| spec 1 | spec-fidelity | CHANGES REQUIRED | the height setting the reach left out yadake, a kind the record puts in the grove, and was stated as settled before the reading |
+| spec 2 | spec-fidelity-verify | FAITHFUL | - |
+| amendment 1 (the regressions 310 shipped; the persimmon) | spec-fidelity | FAITHFUL | two NOT-REVIEWABLE returns first, for unlabeled figures |

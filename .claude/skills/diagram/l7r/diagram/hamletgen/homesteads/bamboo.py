@@ -1,4 +1,7 @@
-"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims
+"""
 
 from __future__ import annotations
 
@@ -11,6 +14,7 @@ from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, 
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
+from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
@@ -33,7 +37,9 @@ from ..plan import SitePlan
 # HOUSEHOLD_BAMBOO_PREVALENCE lives with the grove drawer (settlement/homestead_parts/groves.py) since feature 291: a
 # farm with its own grove draws its bamboo in that grove, so the drawing makes the same positional roll.
 HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
+"""Research: strip size - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft"""
 _HOUSEHOLD_BAMBOO_SIDES = (("back", 0.35), ("shed", 0.25), ("wind", 0.30), ("side", 0.10))
+"""Research: strip side - research/questions/0075-bamboo-groves-chikurin.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: back 35, shed 25, wind 30, other flank 10 in 100"""
 
 
 _DIAGONAL = math.sin(math.radians(22.5))  # a wind component past this on both axes is a diagonal wind (NW, not N)
@@ -45,12 +51,20 @@ def wind_seat(wlx: float, wly: float, hw: float, hh: float, gap: float, sw: floa
     either way `gap` clear of the walls. It used to scale the half-sizes by the wind's components, which for a diagonal
     wind put the strip's center ~0.7 of the way out and its body over the house's own corner: the near seat was refused
     on every NW-wind hamlet in the pool, so the side rolled "wind" fell through to another side and raising its weight
-    moved nothing."""
+    moved nothing.
+
+    Research: windward seat - research/questions/0075-bamboo-groves-chikurin.drawing.html: the windward corner for a diagonal wind, the windward face otherwise
+    """
     if abs(wlx) > _DIAGONAL and abs(wly) > _DIAGONAL:
         return (math.copysign(hw / 2 + gap + sw / 2, wlx), math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
     if abs(wly) >= abs(wlx):
         return (0.0, math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
     return (math.copysign(hw / 2 + gap + sh / 2, wlx), 0.0, sh, sw)
+
+
+def in_the_sun(cx: float, cy: float, w: float, h: float, sun: Sequence[tuple[float, float, float, float]]) -> bool:
+    """Does the `w` x `h` rect centered (`cx`, `cy`) overlap any sun box (center x, center y, half-w, half-h) in `sun`?"""
+    return any(abs(cx - bx) < w / 2 + bw and abs(cy - by) < h / 2 + bh for bx, by, bw, bh in sun)
 
 
 def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
@@ -63,7 +77,17 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     out of it (a soft keep-out, like every wood). Drawn by `stage_bamboo` with the stand glyph. Per house: presence by `HOUSEHOLD_BAMBOO_PREVALENCE`, side by the weighted roll
     above, both from the house's own position (positional randomness). A candidate that lands on a
     footprint, a lane, a paddy, the marsh or the pond is refused and the next side tried; a farmstead
-    with no room keeps none. Returns the count seated."""
+    with no room keeps none. Returns the count seated.
+
+    Research:
+        which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash
+        side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
+        a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
+        strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out
+        strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
+        strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
+        strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
+    """
     out: list[Poly] = []
     if plan.bamboo not in ("homestead", "both") or not houses:
         return out
@@ -76,6 +100,8 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)
     seats = [(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()]
+    # ...AND EVERY PLOT'S SUN GROUND at bamboo's reach (feature 315): gathered once - every plot stands by the hinterland stage
+    sun = s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT)
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
@@ -130,6 +156,8 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 # drawn axis-aligned in (cw, ch) at (cx, cy), the rect the predicate reads
                 if not stand_spares_seats(cx, cy, cw, ch, seats, s.bscale):
                     continue
+                if in_the_sun(cx, cy, cw, ch, sun):  # a stand throws a timber bamboo's shadow: none in a yard's or bed's sun (feature 315)
+                    continue
                 # the household's strip stands on its house's bank (feature 287, homes H01) ...and on its house's side of every lane
                 # (glyph check, feature 302: Sawada's strip across a lane)
                 if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])) or across_a_lane((hx, hy), (cx, cy), lanes):
@@ -148,14 +176,20 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
 def across_a_lane(house: Pt, strip: Pt, lanes: Sequence[tuple[Poly, float]]) -> bool:
     """Does a lane run between a house and its bamboo strip - the line from the house's center to the strip's crossing a lane's
     centerline? The household's bamboo grows in its own grove (research/vegetation/150): the glyph check of Sawada (feature 302)
-    found a strip 6.7 ft past a 3 ft lane from its house, which the stream test (`crosses_a_stream`, homes H01) never asked."""
+    found a strip 6.7 ft past a 3 ft lane from its house, which the stream test (`crosses_a_stream`, homes H01) never asked.
+
+    Research: the strip on its house's side of a lane - research/questions/0075-bamboo-groves-chikurin.html: the household's own bamboo, no lane between
+    """
     return any(segments_cross(house, strip, a, b) for pts, _half in lanes for a, b in zip(pts, pts[1:], strict=False))
 
 
 def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: float) -> bool:
     """Does a household strip centered (cx, cy), cw x ch, reach into the windbreak belt (its center or a corner inside)? The
     stands are drawn after the belt's crowns, so a strip in the belt painted its culms over the conifers - the reverse of the
-    belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280)."""
+    belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280).
+
+    Research: no strip in the belt - UNRESEARCHED: no strip seated with its center or a corner inside the belt
+    """
     if not belt or len(belt) < 3:
         return False
     pts = [(cx, cy)] + [(cx + sx * cw / 2, cy + sy * ch / 2) for sx in (-1.0, 1.0) for sy in (-1.0, 1.0)]
@@ -203,7 +237,12 @@ def _strip_blocked(
 ) -> bool:
     """Would a household bamboo strip centered here stand on something? Its own farmhouse is not something, and neither
     is a reserved box in `skip` (a caller whose parts are each registered passes the homestead BUNDLE boxes: feature 261,
-    the fixtures pass, where a steading's own bundle and a neighbor's refused the open ground of its flanks)."""
+    the fixtures pass, where a steading's own bundle and a neighbor's refused the open ground of its flanks).
+
+    Research:
+        off the paddy - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand on a paddy
+        what a strip or fixture keeps off - UNRESEARCHED: 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+    """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True
     ft = footing or Footing(s, fields, marsh)  # a caller that tests many seats builds one and passes it (feature 218)

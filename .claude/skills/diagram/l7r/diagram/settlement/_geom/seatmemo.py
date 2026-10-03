@@ -5,6 +5,8 @@ Its own module because it is its own subject: not an index (it remembers answers
 and carrying a long measured rationale that a reader of the indexes never needs.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: refusal memo - NONE: caches placement answers
 """
 
 from typing import Any

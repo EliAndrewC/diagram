@@ -1,6 +1,8 @@
 """The torii arch and the whole approach engine: the gen authors the LINE, the engine owns the count, the stride, the threshold and the wall clearance.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -39,7 +41,12 @@ def avenue_along(seats: list[Pt], gaps: list[float], dist: float) -> Pt:
 
 def torii_plan_svg(tx: float, ty: float, ftpx: float, span_ft: float = 16.0) -> str:
     """The plan-view arch at (tx, ty): the beam as a bar across the approach, the two posts as squares on
-    it (`torii_glyph_dims`). A module function so the wayside shrine's small arch draws the same thing."""
+    it (`torii_glyph_dims`). A module function so the wayside shrine's small arch draws the same thing.
+
+    Research:
+        arch drawn in plan - CONVENTION: beam bar, posts proud of it
+        default span - UNRESEARCHED: 16 ft
+    """
     s2, beam, post, p2 = torii_glyph_dims(ftpx, span_ft)
     return (
         f'<g transform="translate({tx:.0f},{ty:.0f})">'
@@ -54,7 +61,10 @@ class ToriiAvenueMixin:
         """Re-ask the torii/wall question the moment a WALL is on the page. A wall drawn AFTER an
         arch cannot be dodged by the arch (see CLAUDE.md "DRAW ORDER"), and neither feature can move
         once drawn - so the honest response is to fail the generator and let the author resite the
-        geometry, exactly as the merchant-estate wall does when its slide fan runs out."""
+        geometry, exactly as the merchant-estate wall does when its slide fan runs out.
+
+        Research: no arch in a wall - UNRESEARCHED: the generator fails
+        """
         bad = torii_wall_conflicts(self.M)
         if bad:
             raise ValueError(
@@ -70,7 +80,10 @@ class ToriiAvenueMixin:
         avenue is re-laid at the pitch (feature 268, GM 2026-09-27: "All maps, ~10-13 ft"), resampled by
         arc length ALONG the authored line - so it keeps its direction and its curve, and its innermost
         arch keeps the seat the gen chose at the hall's threshold; only the stride changes. The old
-        cap-and-band rule, which left an avenue inside the band alone, is retired with the band."""
+        cap-and-band rule, which left an avenue inside the band alone, is retired with the band.
+
+        Research: arch spacing - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: TORII_PITCH_FT along the authored line
+        """
         if len(seats) < 2:
             return seats
         gaps = [math.hypot(seats[i + 1][0] - seats[i][0], seats[i + 1][1] - seats[i][1]) for i in range(len(seats) - 1)]
@@ -99,7 +112,10 @@ class ToriiAvenueMixin:
         in down its own axis, while one authored off to the side is pulled onto the flank it actually
         stands off, which is what makes the beside-the-hall gates read as that hall's. A run authored
         THROUGH the hall is left alone: that is `torii_clear_of_shrine`'s defect to report, not this
-        method's to paper over."""
+        method's to paper over.
+
+        Research: innermost arch one pitch off the hall - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html
+        """
         if not seats:
             return seats
         pitch = math.hypot(seats[1][0] - seats[0][0], seats[1][1] - seats[0][1]) if len(seats) > 1 else self.px(TORII_PITCH_FT)
@@ -121,7 +137,12 @@ class ToriiAvenueMixin:
         never moves, and the search floors out once the stride would close to one rail-span, since
         arches that touch are no avenue at all. Only walls ALREADY DRAWN are visible here (see
         CLAUDE.md "DRAW ORDER"); a wall laid later ACROSS an arch is caught by the wall methods'
-        _assert_walls_clear_of_torii, and at the manifest by torii_clear_of_walls."""
+        _assert_walls_clear_of_torii, and at the manifest by torii_clear_of_walls.
+
+        Research:
+            avenue stops short of a wall - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the run scaled back from its first arch, closing the stride below 12 ft
+            tightest stride - CONVENTION: the arch glyph's depth plus 1 px
+        """
         runs = wall_runs(self.M)
 
         def fit(f: float) -> list[Pt] | None:
@@ -162,7 +183,13 @@ class ToriiAvenueMixin:
         its two posts under it - `torii_glyph_dims` gives the sizes, the posts marked just proud of the
         beam (a drawing convention; real posts hide under it). The elevation glyph it replaces stood
         about 10 ft deep on paper and could not stand at the 12 ft pitch. STROKES keep a legibility floor
-        (stroke convention - see SKILL.md "to scale"), never a footprint license."""
+        (stroke convention - see SKILL.md "to scale"), never a footprint license.
+
+        Research:
+            arch span - UNRESEARCHED: 16 ft default
+            arch in plan - CONVENTION
+            never in a barrier - UNRESEARCHED: raises
+        """
         wall = torii_seat_on_wall(self.M, tx, ty, self.ftpx)  # an arch never stands IN a barrier - see the wall_runs block
         if wall:
             raise ValueError(
@@ -176,7 +203,14 @@ class ToriiAvenueMixin:
 
     def torii_path(self: Settlement, ascent: Any) -> None:  # type: ignore[misc]
         """Place one torii at each interior vertex of the ascent polyline; draw the
-        winding path. Count is village-specific - pass as many points as torii+ends."""
+        winding path. Count is village-specific - pass as many points as torii+ends.
+
+        Research:
+            arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: one at each interior vertex the caller gives
+            arch spacing on the path - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft apart, the innermost 12 ft off the hall; set by the caller's vertices instead
+            ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+            ascent path centerline - CONVENTION: a dashed centerline and its color
+        """
         dstr = 'M' + ' L'.join(f'{x},{y}' for x, y in ascent)
         self.add(f'<path d="{dstr}" fill="none" stroke="#B89A6A" stroke-width="8" opacity="0.7"/>')
         self.add(f'<path d="{dstr}" fill="none" stroke="#6B4F2A" stroke-width="1" stroke-dasharray="3,5"/>')
@@ -184,7 +218,14 @@ class ToriiAvenueMixin:
             self._torii(tx, ty)
 
     def torii_even(self: Settlement, ascent: Any, count: int) -> None:  # type: ignore[misc]
-        """Spread `count` torii by arc-length along an ascent polyline (Kikuta style)."""
+        """Spread `count` torii by arc-length along an ascent polyline (Kikuta style).
+
+        Research:
+            arch count - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the caller's count
+            arches spread over the ascent - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: from 6% to 86% of its length, not 12 ft apart nor 12 ft off the hall
+            ascent path width - UNRESEARCHED: an 8 px stroke, about 24 ft at a city's 3 ft/px
+            ascent path centerline - CONVENTION: a dashed centerline and its color
+        """
         seg = [math.hypot(ascent[i + 1][0] - ascent[i][0], ascent[i + 1][1] - ascent[i][1]) for i in range(len(ascent) - 1)]
         tot = sum(seg)
 
@@ -202,5 +243,5 @@ class ToriiAvenueMixin:
         self.add(f'<path d="{dstr}" fill="none" stroke="#B89A6A" stroke-width="8" opacity="0.7"/>')
         self.add(f'<path d="{dstr}" fill="none" stroke="#6B4F2A" stroke-width="1" stroke-dasharray="3,5"/>')
         for i in range(count):
-            tx, ty = along(0.06 + 0.80 * i / (count - 1))
+            tx, ty = along(0.06 + 0.80 * i / max(count - 1, 1))  # one arch stands at the foot; `count - 1` divided by zero (found by the feature-316 audit)
             self._torii(tx, ty)

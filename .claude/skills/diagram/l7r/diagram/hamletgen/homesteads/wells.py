@@ -1,4 +1,7 @@
-"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: well arithmetic - NONE: distances, scores and ground tests; the units that decide carry their own claims
+"""
 
 from __future__ import annotations
 
@@ -17,7 +20,10 @@ from .holds import release_held
 _WELL_DRAWN_R = 12.0
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop.
 It is the `vr` the glyph draws (not the `r` clearance radius), because the frame follows the ink -
-`crop_not_held_open_by_one_feature` quotes a well's extent as 16 px across."""
+`crop_not_held_open_by_one_feature` quotes a well's extent as 16 px across.
+
+Research: wellhead drawn extent - research/questions/0196-communal-wells-ido.drawing.html: 12 px, the glyph's half-extent
+"""
 
 
 # THE AMONG-THE-DWELLINGS RULE lives with the wellhead (`settlement/shrines_wells/wells.py`: `WELL_AMONG_DWELLINGS_PX`,
@@ -25,7 +31,10 @@ It is the `vr` the glyph draws (not the `r` clearance radius), because the frame
 
 
 def _among_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> bool:
-    """Would a well at (x, y) stand among the dwellings - judged where the manifest will record it, to 0.1 px."""
+    """Would a well at (x, y) stand among the dwellings - judged where the manifest will record it, to 0.1 px.
+
+    Research: among the dwellings - research/questions/0196-communal-wells-ido.drawing.html: a dwelling's wall within `WELL_AMONG_DWELLINGS_PX`
+    """
     return well_gap_to_dwellings(houses, round(x, 1), round(y, 1)) <= WELL_AMONG_DWELLINGS_PX
 
 
@@ -45,7 +54,10 @@ def well_target(households: int) -> int:
     `wells_sized_to_population` wants 2-20 households per well at hamlet scale (the setting's
     deliberate prosperity liberty runs generous wells), so the band for 12 households is 1 to 6.
     One per ~6 households sits mid-band and matches what the authored hamlets draw - a couple of
-    shared wells among the courtyards, not one per farm and not one for the whole place."""
+    shared wells among the courtyards, not one per farm and not one for the whole place.
+
+    Research: how many wells - research/questions/0196-communal-wells-ido.drawing.html: one per 6 households, 1 to 6
+    """
     return max(1, min(6, round(households / 6.0)))
 
 
@@ -70,14 +82,49 @@ def own_well_clear(s: Settlement, x: float, y: float, half: float, boxes: Sequen
 
 
 WATER_REACH_FT = 760.0
-"""The watering rule's reach (`surface_water_dist` against 760 ft, `place_wells` below; the gate's `WATER_REACH_FT`)."""
+"""The watering rule's reach (`surface_water_dist` against 760 ft, `place_wells` below; the gate's `WATER_REACH_FT`).
+
+Research: watering reach - research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: 760 ft
+"""
+
+
+BEND_LOOK_FT = 40.0
+"""How far along the street, either way, a shared well's mark looks for a bend (the law's zigzag run, `law.BEND_RUN_FT`)."""
+
+BEND_WELL_DEG = 30.0
+"""The street's turn, over `BEND_LOOK_FT` either way, past which no shared well is dug at a mark (feature 315): a GUESS, the
+law's zigzag turn (50 degrees) less a margin, so a bend the street may yet be straightened through is left clear."""
+
+
+def street_turns_at(line: Sequence[Pt], arc: Sequence[float], u: float, look: float) -> float:
+    """How far, in degrees, the street `line` (its running lengths `arc`) turns on either side of the point `u` along it - the
+    larger of its turn from `look` before to `u` and from `u` to `look` after. Either side alone, not end to end: a step in
+    the street turns one way and back, and its two turns cancel between the far ends."""
+
+    def heading(at: float) -> float:
+        at = max(0.0, min(arc[-1], at))
+        k = max(0, min(len(arc) - 2, next((j for j in range(len(arc) - 1) if arc[j + 1] >= at), len(arc) - 2)))
+        a, b = line[k], line[k + 1]
+        return math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+
+    def between(p: float, q: float) -> float:
+        turn = abs(heading(q) - heading(p)) % 360.0
+        return min(turn, 360.0 - turn)
+
+    return max(between(u - look, u), between(u, u + look))
 
 
 def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets: Sequence[Sequence[Pt]]) -> int:
     """A row village that shares its water (`row_water` shared, feature 291 plan D18): along each street, wells beside the
     street, one at the middle of each equal stretch of the row no longer than 1.6 reaches (the watering rule's reach), so
     every farm of every row stands within reach of one. A seat is tried at each mark and a half and a quarter lot either
-    way, on either side of the tread. Returns the wells seated."""
+    way, on either side of the tread. Returns the wells seated.
+
+    Research:
+        shared wells spaced - research/questions/0033-row-villages-resson.drawing.html: one at the middle of each stretch of at most 1.6 reaches
+        beside the street - research/questions/0196-communal-wells-ido.drawing.html: the lane-side form, on the verge clear of the tread, either side
+        off the tread - GUESS: the wellhead's half-extent and 8 ft off the street's centerline
+    """
     if not streets or not houses:
         return 0
     half = s._well_vr()
@@ -116,6 +163,9 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
         for u in [us[0] + span * (j + 0.5) / stretches for j in range(stretches)]:
             for du in (0.0, frame_w / 2, -frame_w / 2, frame_w / 4, -frame_w / 4):
                 uu = max(0.0, min(arc[-1], u + du))
+                if street_turns_at(line, arc, uu, s.px(BEND_LOOK_FT)) >= BEND_WELL_DEG:
+                    continue  # ...never in the street's bend (feature 315, cohort seed 903: a well in the inside of a step in the
+                    # street held the street to its two right-angle turns, a kink on a tree lane, and the web was refused)
                 k = max(0, min(len(arc) - 2, next(j for j in range(len(arc) - 1) if arc[j + 1] >= uu)))
                 a, b = line[k], line[k + 1]
                 seg = math.dist(a, b) or 1.0
@@ -142,7 +192,12 @@ def grove_water(s: Settlement, plan: SitePlan, farms: Sequence[Mapping[str, Any]
     laid in its dooryard (`dispersed.canonical_farmstead`, feature 287's guarantee that a household is watered where it is
     seated): a row that SHARES its water digs wells beside its streets (`shared_row_wells`) and a dispersed farm on the
     CHANNEL form takes a channel into its grounds (`farm_channels`); a farm either serves releases its pocket, and every
-    other farm draws its own well there. Returns the private wells drawn."""
+    other farm draws its own well there. Returns the private wells drawn.
+
+    Research:
+        a row's water - research/questions/0033-row-villages-resson.drawing.html: shared wells along the streets, or a well at every farm
+        a scattered farm's water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a channel, or its own well in its dooryard pocket
+    """
     streets = getattr(s, "_row_streets", None) or []
     served: list[Mapping[str, Any]] = []
     if plan.settlement_form == "linear" and plan.row_water == "shared" and streets:
@@ -184,7 +239,17 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     farm takes its own water; the communal wells beyond them are seated here. Their seats are derived from the HOUSES: a
     candidate must have several homesteads around it and none too far, which is what "among the dwellings" means, and
     the innermost candidates are tried first. `well_at` gives the engine's own verdict on each - it refuses a seat on a lane, a crop, a
-    footprint or too near another well - so nothing here restates a placement rule."""
+    footprint or too near another well - so nothing here restates a placement rule.
+
+    Research:
+        wells among the houses - research/questions/0196-communal-wells-ido.drawing.html: seats with a dwelling near and a neighborhood round them, the first innermost, each later one serving the worst-served household
+        well pockets drawn first - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: each household's pocket drawn as a well
+        surface water counts - research/questions/0196-communal-wells-ido.drawing.html: a house within 760 ft (over the map's ft per px) of surface water needs no well
+        not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
+        neighborhood ladder - research/questions/0196-communal-wells-ido.drawing.html: the third-nearest house within 190, 300, 520 px, then two houses
+        wells apart - UNRESEARCHED: 170 px between wells
+        no well past the crop - CONVENTION: a framing rule, refused where the wellhead would widen the crop
+    """
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:
         grove_water(s, plan, grove_farms)

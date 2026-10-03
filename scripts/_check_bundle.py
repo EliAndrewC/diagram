@@ -69,7 +69,7 @@ def url_of(entry_html: str) -> str:
     if not found:
         return ""
     url = html.unescape(found.group(0))  # the entry is HTML: `&amp;` in a query string is `&` (feature 268: the NDL records fetched as the home page)
-    while url.endswith((".", ",", ";")) or (url.endswith(")") and url.count(")") > url.count("(")):
+    while url.endswith((".", ",", ";", ":")) or (url.endswith(")") and url.count(")") > url.count("(")):
         url = url[:-1]
     return url
 

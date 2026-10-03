@@ -11,7 +11,10 @@ finished basins the pocket pass merges into.
 
 Both are PREFILTERS in the engine's sense (`settlement/_geom/indexes.py`): the tree returns every plot
 whose box touches the query box, exactly the set the strict `<`/`>` gate let through, and the exact
-shapely tests that follow still decide - so the passes' verdicts, and the map, are unchanged."""
+shapely tests that follow still decide - so the passes' verdicts, and the map, are unchanged.
+
+Research: geometry index - NONE: one polygon per ring and a spatial tree, deciding nothing
+"""
 
 from __future__ import annotations
 

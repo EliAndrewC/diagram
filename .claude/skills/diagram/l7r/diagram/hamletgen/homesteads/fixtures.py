@@ -8,6 +8,8 @@ them beside the house (`settlement/homestead_parts/fixture_seats.py`), and `farm
 were laid - so every rolled fixture is drawn and none is recorded short. Feature 280 eliminated the modern-only forms:
 the bath is a room of the house, the firewood a wood shed of its own (the eaves stack and the kizuma are gone), and the
 privy and the bath room take a size rolled per household.
+
+Research: fixture drawing plumbing - NONE: indexes, records and drawing what was laid; the units that decide carry their own claims
 """
 
 from __future__ import annotations
@@ -110,6 +112,17 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
     "shrine": (0.03, 0.08),
     "persimmon": (0.80, 0.95),
 }
+"""Each fixture kind's per-hamlet share band.
+
+Research:
+    privy share - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 0.85-0.95
+    wood shed share - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: 0.35-0.45
+    manure heap share - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: 0.40-0.70
+    bath room share - research/questions/0044-baths-on-the-farm-furo.drawing.html: 0.20-0.30
+    coop share - research/questions/0045-chickens-and-chicken-coops.drawing.html: 0.72-0.92
+    household shrine share - research/questions/0219-household-shrines-yashikigami.drawing.html: 0.03-0.08
+    persimmon share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: 0.80-0.95
+"""
 # THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern
 # Miyagi, "usually"), and inside the barn (Suzuki 1959, "several farms"). The record says how often each is drawn is a
@@ -118,13 +131,18 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
 # off the wall, is a GUESS. A privy inside the barn is a tub under its floor, which a top-down map cannot show; it is
 # drawn as the privy glyph against the barn's outer wall - a MAP DRAWING CONVENTION.
 _PRIVY_SEATS = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
+"""Research: four privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: yard 35, front 30, stable 20, barn 15 in 100"""
 _PRIVY_WEIGHT_SPREAD = (0.5, 1.5)  # each base weight scaled by a factor in this range per hamlet, then renormalized (calibrated liberty)
+"""Research: privy weights per hamlet - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: each base weight scaled 0.5-1.5"""
 # THE NIGHT-SOIL PIT AT THE FIELDS (269 B11, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): Suzuki 1959 found the pit "beside the privy, or in
 # a field pit (nodame) away from the house" near the household's fields or the roadside, in 2 of 83 households (Saitama),
 # 19 of 53 (Tokyo), 15 of 18 (Miyagi) - so the field share is rolled per hamlet across that span.
 PIT_FIELD_SHARE_BAND = (0.02, 0.85)
+"""Research: field pit share - research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 0.02-0.85 rolled per hamlet"""
 PIT_FIELD_REACH_FT = 160.0  # how far from the house the field or road edge is looked for: the household's NEAREST paddy or road (GUESS)
+"""Research: field pit reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the nearest paddy or road within 160 ft"""
 _PIT_EDGE_CLEAR_FT = 8.0  # off the paddy's edge: the placer's 6 ft paddy margin plus two (the pit stands on the bund-side ground)
+"""Research: pit off the paddy edge - UNRESEARCHED: 8 ft"""
 _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
 # THE BATH ROOM'S THREE SEATS (feature 280 M22, research/homesteads/740): joined to the main house beside its main door, at
 # the far end of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the
@@ -132,9 +150,11 @@ _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
 # houses, most of them headmen's", is the last wall offered (the headman keeps no lot of fixtures, feature 287). The odds are
 # a GUESS. The room abuts the wall: joined, not beside (`fixture_seats.bath_room_seats`, `joined_to_house`).
 BATH_SEATS = ("main_door", "stable_end")
+"""Research: bath room wall - research/questions/0044-baths-on-the-farm-furo.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: the main door or the stable end, rolled per hamlet"""
 # THE PERSIMMON'S SIDE (269 B14, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html): "the dooryard in front of the house, most often, and behind it" -
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)
+"""Research: persimmon in front - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the front share 0.60-0.85 per hamlet"""
 
 
 _roll = weighted  # the weighted roll the seat tables read (`fixture_seats.weighted`), under its old name
@@ -143,7 +163,10 @@ _roll = weighted  # the weighted roll the seat tables read (`fixture_seats.weigh
 def privy_seat_weights(seed: int) -> tuple[tuple[str, float], ...]:
     """This hamlet's weights over the four attested privy seats (269 B10): each base weight in `_PRIVY_SEATS` scaled by a
     factor rolled from the seed within `_PRIVY_WEIGHT_SPREAD`, then renormalized - two hamlets differ where the record
-    gives the forms but not their frequency."""
+    gives the forms but not their frequency.
+
+    Research: privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: rolled once per hamlet, renormalized
+    """
     rng = knob_rng(seed, "privy_seats")
     lo, hi = _PRIVY_WEIGHT_SPREAD
     raw = [(k, w * (lo + rng.random() * (hi - lo))) for k, w in _PRIVY_SEATS]
@@ -152,14 +175,20 @@ def privy_seat_weights(seed: int) -> tuple[tuple[str, float], ...]:
 
 
 def fixture_shares(seed: int) -> dict[str, float]:
-    """This hamlet's share of households keeping each fixture kind, rolled once inside its band (`FIXTURE_BANDS`)."""
+    """This hamlet's share of households keeping each fixture kind, rolled once inside its band (`FIXTURE_BANDS`).
+
+    Research: shares rolled per hamlet - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: once per map inside each kind's band
+    """
     rng = knob_rng(seed, "farm_fixtures")
     return {k: round(lo + rng.random() * (hi - lo), 3) for k, (lo, hi) in FIXTURE_BANDS.items()}
 
 
 def fixture_quota(seed: int, households: int, mins: Mapping[str, int]) -> dict[str, float]:
     """The share each kind's household quota is drawn at (feature 287, homes H32): the rolled share, raised where a spec
-    floor asks more (`fixtures_min`) - so exactly `max(round(share x n), floor)` of `n` households keep it."""
+    floor asks more (`fixtures_min`) - so exactly `max(round(share x n), floor)` of `n` households keep it.
+
+    Research: count to the share - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0219-household-shrines-yashikigami.drawing.html: exactly the share's count, raised to a spec's floor
+    """
     n = max(1, households)
     return {k: max(p, float(mins.get(k, 0)) / n) for k, p in fixture_shares(seed).items()}
 
@@ -167,7 +196,13 @@ def fixture_quota(seed: int, households: int, mins: Mapping[str, int]) -> dict[s
 def fixture_forms(seed: int, manure_form: str) -> FixtureForms:
     """The hamlet's fixture forms, rolled once from the seed: the privy seats' weights (269 B10), the bath room's wall
     (feature 280 M22), the persimmon's front share (B14) and the manure's form (the plan's knob). The woodpile has one form
-    left, the wood shed (feature 280 M21), so it rolls none."""
+    left, the wood shed (feature 280 M21), so it rolls none.
+
+    Research:
+        privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: this hamlet's weights
+        bath room wall - research/questions/0044-baths-on-the-farm-furo.drawing.html: one of two walls at even odds
+        persimmon side - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: this hamlet's front share
+    """
     lo, hi = PERSIMMON_FRONT_BAND
     return FixtureForms(
         privy_weights=privy_seat_weights(seed),
@@ -195,7 +230,10 @@ def field_edge_seats(index: tuple[Any, list[tuple[Any, float]]], hx: float, hy: 
     stepped TOWARD the house by `clear` (plus a road's own keep-out), so the pit stands on the house's side of its field
     or road; nearest first, at most `_PIT_CANDIDATES`. Each carries whether its edge is a ROAD, so the pit is recorded
     as the seat it took - `roadside` or `field_edge` (settlement-review of Kuwabata at the 269 landing: two pits by the
-    road were recorded as field-edge pits)."""
+    road were recorded as field-edge pits).
+
+    Research: pit at the field or road edge - research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the nearest edge points, on the house's side
+    """
     from shapely import Point
 
     tree, items = index
@@ -231,7 +269,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     TWO CALLS. `early` (from `stage_appurtenances`, after the byres): the hamlet's rolls declared, and every laid fixture
     drawn but the one whose attested form reads ground the web lays later - a night-soil pit at the household's field or
     road (269 B11). The later call (the hinterland stage's) offers it that seat first and draws the laid seat where it has
-    none - the record's own alternative, the pit beside the privy. A call with no early call before it makes both."""
+    none - the record's own alternative, the pit beside the privy. A call with no early call before it makes both.
+
+    Research: field pit, else beside the privy - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the field seat sought after the web, the laid seat its fallback
+    """
     if not houses:
         return 0
     meta = s.M["meta"]
@@ -248,7 +289,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
 
 
 def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
-    """Declare the hamlet's fixture rolls and draw every fixture the seating laid, holding back the flexible form."""
+    """Declare the hamlet's fixture rolls and draw every fixture the seating laid, holding back the flexible form.
+
+    Research: which pits go to the field - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: on a pit hamlet, each house's position hash against the rolled field share
+    """
     forms = getattr(s, "_fixture_forms", None) or fixture_forms(s.seed, plan.manure_form)
     meta = s.M["meta"]
     shares = fixture_shares(s.seed)
@@ -268,6 +312,10 @@ def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]
     # the lots' own count (`quota_carriers`: floor(n x p + 0.5), a half rounded up - not Python's round, which rounds a half
     # to even and so declared 10 privies where the lots, rightly, laid 11)
     meta["farm_fixtures_target"] = {k: max(math.floor(shares[k] * n_h + 0.5), mins.get(k, 0)) for k in FIXTURE_BANDS}
+    # ...A ROLLED TREE A HOUSEHOLD COULD NOT KEEP, KEPT BY ONE THAT CAN (feature 315, B10): the roll is honored by what is drawn
+    from .persimmon_reseat import reseat_persimmons
+
+    reseat_persimmons(s, houses, int(meta["farm_fixtures_target"].get("persimmon", 0)), forms)  # type: ignore[arg-type]
     pending: list[tuple[Mapping[str, Any], dict[str, Any], dict[str, Any] | None]] = []
     count = 0
     for h in houses:
@@ -316,7 +364,12 @@ def _ring(b: Sequence[float]) -> list[Pt]:
 
 def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]], pending: Sequence[tuple[Mapping[str, Any], dict[str, Any], Any]]) -> int:
     """The flexible form, now the web is laid: a pit at the household's nearest field or road (269 B11) - clear of every
-    drawn footprint, lane, paddy, marsh and the pond, on the house's bank - else the seat laid for it."""
+    drawn footprint, lane, paddy, marsh and the pond, on the house's bank - else the seat laid for it.
+
+    Research:
+        a lane between pit and house allowed - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the pit stands at the field or road, the laid seat where none is clear
+        field pit size - UNRESEARCHED: drawn 3.5 ft square
+    """
     if not pending:
         return 0
     forms = getattr(s, "_fixture_forms", None) or fixture_forms(s.seed, plan.manure_form)
@@ -369,7 +422,12 @@ def under_a_lane(M: Mapping[str, Any], fixture: tuple[float, float, float, float
 def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float, float], fields: Any, marsh: Any, pond: Any, lanes: Any, footing: Footing) -> bool:
     """May the field pit stand at `q`: off every drawn footprint and the ground (`_strip_blocked`), on its house's bank. A
     lane between it and the house is allowed - it stands at the field or the road (the kizuma, which kept to its yard's side
-    of every lane, went with feature 280's modern-only forms)."""
+    of every lane, went with feature 280's modern-only forms).
+
+    Research:
+        pit on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no brook between pit and house
+        pit off every grove - UNRESEARCHED: clear of every farm's grove band
+    """
     hx, hy = float(h["x"]), float(h["y"])
     if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
         return False
@@ -400,7 +458,10 @@ def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
     """Would this fixture stand across a stream from the house it serves (feature 261 FR-013)? The same rule, and the
     same guess, as `Settlement._parts_across_stream` for the homestead's own parts: the line from the house to the
     seat crosses no reach of any stream. The body is `crosses_a_stream`, the one predicate the homestead's own parts and
-    the finished-map test read too (feature 287, FR-003)."""
+    the finished-map test read too (feature 287, FR-003).
+
+    Research: a farmstead whole on one bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the line from house to fixture crosses no reach of a stream
+    """
     return crosses_a_stream(house, seat, s.M.get("streams", []))
 
 
@@ -408,5 +469,8 @@ def across_a_lane(lanes: Sequence[tuple[Poly, float]], house: Pt, seat: Pt) -> b
     """Would a lane run between this fixture and the house it serves (settlement-review of Mizuguchi, feature 261)? A
     shrine stands "in a corner of the house plot" and a coop in the yard (research/contents.json#homesteads), and a shared lane
     between the house and the seat puts the seat outside the plot. The same line test as `across_the_brook`, against the
-    lanes' centerlines - the predicate the web asks of a run between a house and its own fixtures (homes H32)."""
+    lanes' centerlines - the predicate the web asks of a run between a house and its own fixtures (homes H32).
+
+    Research: fixtures inside the plot - research/questions/0219-household-shrines-yashikigami.html, research/questions/0045-chickens-and-chicken-coops.html: no shared lane between a house and its fixture
+    """
     return any(segments_cross(house, seat, pts[k], pts[k + 1]) for pts, _half in lanes for k in range(len(pts) - 1))

@@ -1,4 +1,7 @@
-"""City fixtures - the theater stage and the drum tower (feature 145: moved out of fixtures.py, whose kosatsuba the hamlet path executes)."""
+"""City fixtures - the theater stage and the drum tower (feature 145: moved out of fixtures.py, whose kosatsuba the hamlet path executes).
+
+Research: plumbing - NONE
+"""
 
 from typing import TYPE_CHECKING
 
@@ -22,7 +25,13 @@ class UrbanFixturesMixin:
         matrix in both directions (settlement-review). `kind` says which siting doctrine the stage owes:
         "monzen" (default) is a temple/shrine performance stage and must sit at its hall;
         "machi" is a commercial quarter theater and sits in the fabric. Reserves its footprint so
-        packing avoids it."""
+        packing avoids it.
+
+        Research:
+            roofed stage facing open ground - research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.html: never a seating bowl
+            stage and ground size - research/questions/0130-market-days-and-the-market-ground-ichi.drawing.html: ~150 x 105 ft default (a town's size, also at a city when w is omitted), the stage half the width and a quarter the depth
+            stage at one end of its ground - research/questions/0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.html: `rot` turns the open side toward the hall
+            crowd dots, colors and caption - CONVENTION"""
         if w is None:
             w, h = self.px(150), self.px(105)  # stage + viewing ground ~150x105 ft (town-calibrated)
         hw, hh = w / 2, h / 2
@@ -75,7 +84,14 @@ class UrbanFixturesMixin:
         a town - the record's 30-45 ft band, research/questions/0194-the-bell-and-drum-tower-zhonggulou.html) carrying
         a timber pavilion with the drum and the bell - visibly heavier-built than the skeletal
         braced-frame fire towers. Stands at the main street crossing, near (not inside) the yamen.
-        Records M['drum_towers'] (an overlap-checked struct) and reserves a no-build block."""
+        Records M['drum_towers'] (an overlap-checked struct) and reserves a no-build block.
+
+        Research:
+            one combined bell-and-drum tower - research/questions/0194-the-bell-and-drum-tower-zhonggulou.drawing.html
+            platform size - research/questions/0194-the-bell-and-drum-tower-zhonggulou.drawing.html: 36 ft square default at every tier
+            masonry platform with a timber pavilion - research/questions/0194-the-bell-and-drum-tower-zhonggulou.drawing.html
+            no-build block and caption band - NONE: 12 px around, 40 px band below
+            colors and two-line caption - CONVENTION"""
         if tw is None:
             tw = self.px(
                 36

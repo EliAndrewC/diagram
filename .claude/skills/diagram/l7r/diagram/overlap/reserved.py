@@ -23,6 +23,8 @@ THE SEAT'S RULE is the copse's own planting test, so a seat kept clear here is a
 within a house's, a yard's, a bed's, a byre's, a shed's, a kura's or a retirement house's occupancy disc (half its
 diagonal, the clump's radius and 2 px - `village_grove`'s `occ`), within a wellhead's (its drawn half-size, 1.05 clumps
 and 1 px), and within a lane's half-width and the copse's lane buffer of its line (`_corridor_buffers`).
+
+Research: reservation bookkeeping - NONE: binning, release and geometry
 """
 
 from __future__ import annotations
@@ -39,10 +41,12 @@ Poly = Sequence[Sequence[float]]
 
 #: The classes a corridor is kept clear of: built and worked ground. A way runs along it; water and a deck cross it.
 CORRIDOR_KEEPERS = frozenset({"SOLID", "ANNEX", "GROUND"})
+"""Research: a lane to every house - research/questions/0081-village-lanes.drawing.html: built and worked ground keeps off a household's access corridor"""
 
 #: The records whose occupancy disc a copse clump may not stand in (`village_grove`'s `occ`), the kura among them - a crown
 #: may not stand on a store either (`CANOPY_STRUCT_KEYS`).
 SEAT_OCCUPIERS = frozenset({"houses", "threshing_yards", "gardens", "byres", "farm_sheds", "retirement_houses", "storehouses"})
+"""Research: no clump on a roof, yard or bed - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the records a copse clump keeps off"""
 
 CELL = 120.0
 
@@ -62,7 +66,13 @@ def poly_seg_gap(poly: Poly, a: Sequence[float], b: Sequence[float]) -> float:
 
 def seat_radius(key: str, o: Any, clump: float) -> float | None:
     """How near a copse clump's seat a record of `key` may come (`village_grove`'s occupancy discs), None for a record the
-    copse does not refuse a clump for."""
+    copse does not refuse a clump for.
+
+    Research:
+        clump clearances - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            a building's half diagonal, half a clump and 2 px
+        wellhead clearance - CONVENTION: the well's drawn radius, 1.05 clumps and 1 px, so no clump is drawn over the wellhead
+    """
     if key in SEAT_OCCUPIERS and "x" in o and "w" in o and "h" in o:
         return 0.5 * math.hypot(float(o["w"]), float(o["h"])) + clump * 0.5 + 2.0
     if key == "wells" and "x" in o:
@@ -122,7 +132,12 @@ class Reservations:
 
     def conflicts(self, key: str, o: Any, extents: Sequence[tuple[str, Poly, Any, Any]]) -> list[tuple[str, str, float, float]]:
         """Every reservation recording `o` under `key` (drawn as `extents`) would cover: (key, "access corridor" or "wood
-        seat", x, y)."""
+        seat", x, y).
+
+        Research:
+            access corridor - research/questions/0081-village-lanes.drawing.html: a household's strip to the lanes kept clear, but its own parts
+            wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a reserved copse seat kept off occupied ground and a lane's buffer
+        """
         if not self:
             return []
         out: list[tuple[str, str, float, float]] = []

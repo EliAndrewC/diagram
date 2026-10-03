@@ -5,6 +5,8 @@ on the bottom two levels, FLOODED on a random 45% of the level whose bottom edge
 re-judged the tint at its end against every plot's final ring. With the plots laid as a partition (`partition.py`) there is no
 closing rank to cut, so both are set here from where each plot lies, and the re-judgment - moved here verbatim from
 `seams/close.py`, its six clauses and its promotion - runs on the finished plots as it always did.
+
+Research: tint plumbing - NONE: ring rounding for the needle test
 """
 
 from __future__ import annotations
@@ -29,11 +31,17 @@ from .palette import FLOODED, RICE_GREENS
 from .ring_rules import needle
 
 FLOOD_SAMPLE = 0.45
-"""The share of the plots ON the collector drawn FLOODED, for texture - the carve's own figure (`_sector_closing_rank`)."""
+"""The share of the plots ON the collector drawn FLOODED, for texture - the carve's own figure (`_sector_closing_rank`).
+
+Research: wet-paddy sample - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: each plot on the collector a 45% chance of the tint
+"""
 
 LOW_ROWS = 2
 """How many row steps from the collector count as low ground: the carve marked the bottom TWO levels (a wet backswamp with width,
-not a one-plot hem - a calibrated liberty, see `apply_land_use`)."""
+not a one-plot hem - a calibrated liberty, see `apply_land_use`).
+
+Research: low ground depth - UNRESEARCHED: plots within two row steps of the collector are low ground
+"""
 
 
 def _needle(poly: Poly) -> bool:
@@ -48,7 +56,10 @@ def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_acro
     First, whether it lies ON the collector (within a quarter of a plot's width): blue means the closing rank pooling before the
     outfall, and a promoted plot owes the same reading. Then how far it falls short of filling its own rectangle, which is what a
     leveled basin looks like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also
-    its biggest. (Moved from `seams/close.py` `_basin_rank`.)"""
+    its biggest. (Moved from `seams/close.py` `_basin_rank`.)
+
+    Research: which plot is promoted - CONVENTION: fronting the collector first, then the most rectangular, then nearest the median size
+    """
     # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
     # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
     # the drain when a real length of its boundary runs along it - a quarter of a plot's width.
@@ -59,7 +70,13 @@ def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_acro
 
 def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_step: tuple[float, float], R: random.Random) -> None:
     """`low` on every plot within `LOW_ROWS` row steps of the collector, and FLOODED on `FLOOD_SAMPLE` of those ON it (within a
-    quarter of a plot's width) - the carve's two marks, set from where each plot lies rather than from the level it was cut in."""
+    quarter of a plot's width) - the carve's two marks, set from where each plot lies rather than from the level it was cut in.
+
+    Research:
+        low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the low ground begins at the plots whose foot lies on the collector
+        low ground depth - UNRESEARCHED: within LOW_ROWS (two) row steps of the collector
+        wet plots on the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: FLOOD_SAMPLE of the plots within a quarter plot of the collector tinted
+    """
     import shapely
     from shapely.geometry import LineString, Polygon
 
@@ -75,7 +92,13 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
 def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: float) -> None:
     """Every FLOODED plot that would not read as a basin goes back to rice green; if none survives, the most basin-like compliant
     low plot is tinted. Moved verbatim from the end of `seams/close.py` `close_seams` - its comments carry the research and the
-    defects each clause answers."""
+    defects each clause answers.
+
+    Research:
+        pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a needle, a truncated point or an apex under 25 deg loses the tint
+        tint reads as a basin - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a lobed, channel-shaped, triangular, outsized or outfall plot loses the tint
+        one wet plot at least - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: when none survives, the most basin-like low plot is tinted
+    """
     import shapely
     from shapely.geometry import LineString, Polygon
 

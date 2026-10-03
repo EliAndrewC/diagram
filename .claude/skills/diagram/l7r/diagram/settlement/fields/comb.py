@@ -1,6 +1,8 @@
 """The comb-field builder, its base fill, its bund junctions, and its furrows.
 
 Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md for the index.
+
+Research: plumbing - NONE: geometry, indexing, tolerances and manifest records
 """
 
 import hashlib
@@ -65,6 +67,8 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: 
     used to render it blind - it was the ONLY placer that consulted nothing, so a hem plot could be drawn
     straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
     different geometry and want asking separately, which through the method meant building a whole comb net.
+
+    Research: hem off water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot across a watercourse or over the pond is not a field
     """
     if (wet if isinstance(wet, WetLines) else WetLines(wet)).hit(poly):  # a caller asking many plots hands the index in
         return True
@@ -77,7 +81,9 @@ STREAM_JOIN_TOL = 13.0  # px: a channel declaring a stream end has that end with
 def channel_end_on_stream(end: Sequence[float], stream: Sequence[Sequence[float]], tol: float = STREAM_JOIN_TOL) -> bool:
     """THE RULE (feature 287, labels L16; `channels_join_streams_at_confluence`): a channel end that declares a stream lies
     within `tol` of that stream's centerline - the mouth reaches INTO the water, never dying in the grass beside it. The
-    intake that declares it and the test of it read this one predicate."""
+    intake that declares it and the test of it read this one predicate.
+
+    Research: mouth reaches the water - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a channel end declaring a stream lies within 13 px of its centerline"""
     pts = [(float(q[0]), float(q[1])) for q in stream]
     return any(seg_dist(float(end[0]), float(end[1]), a, b) <= tol for a, b in zip(pts, pts[1:], strict=False))
 
@@ -85,12 +91,15 @@ def channel_end_on_stream(end: Sequence[float], stream: Sequence[Sequence[float]
 DOWNHILL_FRACTION = 0.2
 #: How much of a watercourse's net travel must run down the fall (water:W10, `channels_flow_downhill`): a delivery may take
 #: an oblique line, but not one whose net travel is level or uphill. The retired gate test's own figure.
+"""Research: downhill share - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a fifth of a course's length net down the fall"""
 
 
 def runs_downhill(course: Sequence[Sequence[float]], fall: Sequence[float], frac: float = DOWNHILL_FRACTION) -> bool:
     """Does `course`'s net displacement, first point to last, run down `fall` by at least `frac` of its length - the
     channel rule (water:W10), ONE predicate for every writer of `M['channels']`: the sink's routes (`hamletgen/sink.py`)
-    and the hairline feed (`_comb_source_channel`). A course that ends where it starts has no direction to judge."""
+    and the hairline feed (`_comb_source_channel`). A course that ends where it starts has no direction to judge.
+
+    Research: water runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: net travel down the fall, at least DOWNHILL_FRACTION of the length"""
     vx, vy = float(course[-1][0]) - float(course[0][0]), float(course[-1][1]) - float(course[0][1])
     L = math.hypot(vx, vy)
     return L == 0 or vx * float(fall[0]) + vy * float(fall[1]) >= frac * L
@@ -111,7 +120,9 @@ def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float],
     `b1`) for a smooth junction, then `reach` px straight down the unit `fall` off the map - taken only where it
     `runs_downhill`, which at the drawn 70 and 520 it always does (the lead can take back at most 70 of 520 px down the
     fall, so the run's net descent never drops under three quarters of its length). Where it would not, the run goes
-    straight down the fall from the drain's end, which runs downhill by construction."""
+    straight down the fall from the drain's end, which runs downhill by construction.
+
+    Research: drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: 70 px on along the drain's exit, then 520 px straight down the fall off the map"""
     ex, ey = float(b1[0]) - float(b0[0]), float(b1[1]) - float(b0[1])
     el = math.hypot(ex, ey) or 1.0
     start = (float(b0[0]), float(b0[1]))
@@ -125,7 +136,9 @@ def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float],
 def bead_drowned(q: Pt, water: Any, ellipses: Sequence[tuple[float, float, float, float]]) -> bool:
     """THE RULE (feature 287, water W33; `bund_beans_on_bunds`): an azemame bead stands on water paint - inside a pond's rim
     (`ellipses`, each grown by the rim stroke and a bead radius) or nearer than a ditch's or channel's half-width to its
-    stroke (`water`, a `seg_reach_index` of (run, half) pairs). The bead drop and the test of it read this one predicate."""
+    stroke (`water`, a `seg_reach_index` of (run, half) pairs). The bead drop and the test of it read this one predicate.
+
+    Research: beads off water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: no bean bead on a pond's rim or under a ditch's stroke"""
     if any(((q[0] - ex) / erx) ** 2 + ((q[1] - ey) / ery) ** 2 <= 1.0 for ex, ey, erx, ery in ellipses):
         return True
     return any(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) < half for a, b, half, x0, y0, x1, y1 in water.near(q[0], q[1]))
@@ -155,7 +168,9 @@ class CombMixin:
         tight crop, no surrounding scrub, so edge junctions must be covered too); otherwise the fill is
         clipped to the PLOTS' union bbox (villages/hamlets: hides the nucleated map's harmless phantom
         tail - the over-declared field_fall - and the scrub matrix covers the rest). Gated by
-        paddy_fan_has_floor. Villages default to a paddy-green floor, cities pass a soil tan."""
+        paddy_fan_has_floor. Villages default to a paddy-green floor, cities pass a soil tan.
+
+        Research: field floor - CONVENTION: a paddy-green or soil-tan wash under the plots so no parchment shows"""
         from l7r.diagram.waterfields import _RICE_GREEN
 
         pv = [v for p in net["plots"] for v in p["poly"]]
@@ -215,7 +230,11 @@ class CombMixin:
         with its own two independently-drawn legs and its own outward bulge, and roughly a quarter of
         quadrants left bare (nobody re-piles all four corners of a crossing in the same season). The
         irregularity is then structural rather than cosmetic: a junction can be piled heavily on one
-        side and untouched on the other, and no two crossings on a map carry the same mark."""
+        side and untouched on the other, and no two crossings on a map carry the same mark.
+
+        Research:
+            junction pile size - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: about 5 ft of earth, floored at the drawn aze
+            pile by quadrant - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a fillet per corner, legs 0.5-2x, a quarter of corners left bare"""
         from l7r.diagram.waterfields import AZE, aze_w
 
         cells: dict[tuple[int, int], list[list[tuple[float, float] | list[tuple[int, int]]]]] = {}
@@ -349,7 +368,14 @@ class CombMixin:
 
     def _comb_draw_hem(self: Settlement, net: dict[str, Any], source: dict[str, Any] | None = None, name: str = "") -> None:  # type: ignore[misc]
         """Draw the dry upslope hem, skipping any plot that falls on an earlier fan's rice or on standing water -
-        including the brook the field is being cut around, which `source` carries and the manifest does not yet."""
+        including the brook the field is being cut around, which `source` carries and the manifest does not yet.
+
+        Research:
+            hem placement - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots upslope of the supply canal, as the net lays them
+            hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
+            bank beside the source brook - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a bund's width, 3 px, past the brook's bank
+            plot size and crop - NONE: taken from the net as build_comb laid them
+            dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
 
         # a fan's hem is generated blind to the OTHER fans on a multi-fan map, so drop any hem plot
@@ -423,7 +449,12 @@ class CombMixin:
         `grain.py`, research/contents.json#fields 0011): none where the hamlet grows its barley on its drained paddy over the
         winter and that covers the need, the middle's plots nearest the toe first where it does not. The winter crop is
         rolled only among the forms this ground can feed (`WINTER_CROP`'s typing rule), so the band returned holds the
-        need by construction. A generated comb hamlet only - it alone rolls `fan_middle`; the form and the acreage go in the meta."""
+        need by construction. A generated comb hamlet only - it alone rolls `fan_middle`; the form and the acreage go in the meta.
+
+        Research:
+            top-up scope - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a generated comb hamlet whose fan middle is wild
+            drained acres - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every plot not painted as wet paddy counts as drained
+            need and count - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the winter crop rolled among the site's forms, the band topped up to the need"""
         from l7r.diagram.waterfields import FLOODED
 
         meta = self.M["meta"]
@@ -448,7 +479,11 @@ class CombMixin:
 
     def _comb_draw_paddies(self: Settlement, net: dict[str, Any], name: str = "") -> None:  # type: ignore[misc]
         """Draw the flooded paddy plots, and write the topography record and the paint record the overlay
-        and flooded-wedge checks read."""
+        and flooded-wedge checks read.
+
+        Research:
+            resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: whole basins neither low nor blue, along the fan's fall; none on a dike-pond block
+            blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the flooded tint is drawn and classed as wet paddy"""
         from l7r.diagram.waterfields import AZE  # noqa: I001 - FLOODED is aliased for the picture record below
         from l7r.diagram.waterfields import FLOODED as _WF_FLOODED
         from l7r.diagram.waterfields import aze_w
@@ -505,7 +540,9 @@ class CombMixin:
         glyphs on any bund segment that has beans). The net's `bund_bean_runs` are `_bund_beans`' contiguous
         lines; each is split where a bead drowns and judged part by part by `bead_runs`, the one place the
         rule lives, and the flat `bund_beans` list the draw and the record read is re-flattened from what
-        survives, so the three - the runs, the dots and the manifest - agree."""
+        survives, so the three - the runs, the dots and the manifest - agree.
+
+        Research: beads on bunds - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bead on water or a grave mound is dropped, a run left with one bead loses it"""
         from l7r.diagram.waterfields import bead_runs
 
         _bw: list[tuple[float, float, float, float]] = []
@@ -536,7 +573,9 @@ class CombMixin:
         net["bund_beans"] = [q for run in net["bund_bean_runs"] for q in run]
 
     def _comb_draw_beads(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
-        """Draw what survived `_comb_drop_drowned_beads` - the ink, after the record it agrees with."""
+        """Draw what survived `_comb_drop_drowned_beads` - the ink, after the record it agrees with.
+
+        Research: bead glyph - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: r 1.4 px, BEAN_GREEN at 0.85"""
         from l7r.diagram.waterfields import BEAN_GREEN
 
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
@@ -552,7 +591,9 @@ class CombMixin:
         the sink's drain run (`hamletgen/sink.py` `drain_run`) leaves the field over its bunds. So the rule is held
         where the LAST water writer has run: each field's bead ink is rewritten in its own slot from the runs that
         survive `bead_drowned` over every ditch and channel then recorded, each run re-split by `bead_runs` (a run left
-        under two beads goes), and the field's record re-flattened from the same runs - the dots and the manifest agree."""
+        under two beads goes), and the field's record re-flattened from the same runs - the dots and the manifest agree.
+
+        Research: beads off later water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the drowned-bead rule re-run after the last water writer"""
         from l7r.diagram.waterfields import BEAN_GREEN, bead_runs
 
         water = recorded_water(self.M)
@@ -577,7 +618,13 @@ class CombMixin:
         """Draw the water SOURCE - a tameike with its fringe and no-build block, or a feeder stream.
 
         Returns the pond center when a pond was drawn, else None: the hairline topology channel
-        anchors on whichever of the two it was."""
+        anchors on whichever of the two it was.
+
+        Research:
+            source pond - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tameike at the sluice, a reed fringe and a no-build block round it
+            fringe and margin widths - UNRESEARCHED: 40 px of reed fringe, a 10 px no-build margin
+            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the feeder stream drawn 6 px wide
+            feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says"""
         pond_rec: Any = None
         if source.get("kind") == "pond":
             pcx, pcy, prx, pry = source["pond"]
@@ -602,7 +649,13 @@ class CombMixin:
         return pond_rec
 
     def _comb_draw_ditches(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
-        """Draw the ditch net into the LATE water block, then the drain-outfall brook."""
+        """Draw the ditch net into the LATE water block, then the drain-outfall brook.
+
+        Research:
+            ditch net over the paddies - CONVENTION: drawn in the late block, ring trunk last
+            drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run straight down the fall off the map at the collector's tail width
+            outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 px no-build either side of the outfall run on every map (the record gives it for town and city maps)
+            outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at w 2.5 while inked at the drain's tail width (~5.5)"""
         # The ditch net ALWAYS goes to the LATE water block (GM 2026-07-21: Hoshizora's canals
         # "rendering below the rice paddies"). In the shared block - anchored at the FIRST water
         # call - the net composites UNDER any plots painted after that anchor: a town/city stream
@@ -766,7 +819,11 @@ class CombMixin:
         """Record the hairline SOURCE -> field feed channel that carries the water topology.
 
         Keeps its own `kind != 'cascade'` guard: a cascade field is fed plot-to-plot from an
-        upstream field and its caller records that connector itself."""
+        upstream field and its caller records that connector itself.
+
+        Research:
+            feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice
+            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at w 2.5 while it traces the 6.0 ft head race"""
         if source.get("kind") != "cascade":
             hr = net["channels"][0]["pts"]
             fork = hr[-1]
@@ -893,7 +950,12 @@ class CombMixin:
             self.M["channels"].append(_feed)
 
     def _draw_furrows(self: Settlement, poly: Any, color: str, theta: float, cls: str | None = None) -> None:  # type: ignore[misc]
-        """Stylised ridge/furrow lines within a dry-field plot (dry crops are row-cultivated)."""
+        """Stylised ridge/furrow lines within a dry-field plot (dry crops are row-cultivated).
+
+        Research:
+            furrowed rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every dry plot drawn in ridged rows
+            furrow spacing - GUESS: 5 px between rows
+            furrow ink - CONVENTION: 0.8 stroke at 0.8 opacity"""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)

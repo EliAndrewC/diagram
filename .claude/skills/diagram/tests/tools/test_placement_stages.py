@@ -711,3 +711,63 @@ def test_the_closing_section_names_what_this_map_cannot_draw(tmp_path: Path) -> 
     assert rest["privy"] == "", "a class no map here draws (a zero count) is named with no map rather than omitted"
     assert ps.elsewhere_in_the_pool(set(CLASSES), str(tmp_path)) == [], "nothing is left when every class is named"
     assert ps.elsewhere_in_the_pool({"farmhouse"}, str(tmp_path / "nothing-here")) != [], "a missing pool names everything"
+
+
+# ---- THE RESEARCH UNDER EVERY STAGE AND STEP (feature 316) ----------------------------------------------------------
+
+
+def _claimed() -> None:
+    """Probe.
+
+    Research:
+        dry share - research/questions/0033-row-villages-resson.html: rolled
+        a drawn thing - CONVENTION
+    """
+
+
+def _unclaimed() -> None:
+    pass
+
+
+def test_research_of_reads_own_claims_with_their_questions_and_verdicts(monkeypatch: pytest.MonkeyPatch) -> None:
+    key = ".claude/skills/diagram/tests/tools/test_placement_stages.py::_claimed#dry share"
+    monkeypatch.setattr(ps, "_verdicts", lambda: {key: "DRIFTED"})
+    got = ps.research_of(_claimed)
+    assert [(c["label"], c["backing"], c["verdict"]) for c in got] == [("dry share", "POINTER", "DRIFTED"), ("a drawn thing", "CONVENTION", "unchecked")]
+    assert got[0]["questions"] == [{"text": got[0]["questions"][0]["text"], "site": "q/row-villages-resson.html"}] and got[0]["account"] == "rolled"
+
+
+def test_research_of_falls_back_to_the_modules_claims(monkeypatch: pytest.MonkeyPatch) -> None:
+    import sys
+
+    monkeypatch.setattr(sys.modules[__name__], "__doc__", "Mod.\n\nResearch: plumbing - NONE")
+    assert [c["label"] for c in ps.research_of(_unclaimed)] == ["plumbing"]
+
+
+def test_research_html_links_each_question_and_names_each_class() -> None:
+    items = [
+        {"label": "share", "account": "0.5", "backing": "POINTER", "questions": [{"text": "Row villages", "site": "q/x.html"}], "verdict": "IN-STEP"},
+        {"label": "grove", "account": "", "backing": "DEVIATION", "questions": [{"text": "Groves", "site": "q/g.html"}], "verdict": "DRIFTED"},
+        {"label": "gap", "account": "", "backing": "UNRESEARCHED", "questions": [], "verdict": "unchecked"},
+    ]
+    html = ps.research_html(items, "../../research/site/")
+    assert '<a href="../../research/site/q/x.html">Row villages</a> <span class="acc">(0.5)</span> <span class="vd vd-in-step">IN-STEP</span>' in html
+    assert "deviates from <a" in html and "not yet researched" in html and 'vd-drifted' in html
+    assert ps.research_html([], "x/") == ""
+
+
+def test_every_stage_and_every_step_states_its_research_and_every_link_lands() -> None:
+    import re
+
+    questions = Path(ps.SKILL, "research", "questions")
+    # the site names a page by its HEADING id (a drawing page's differs from its file's), so the ids are read off the headings
+    ids = {m.group(1) for p in questions.glob("*.html") for m in [re.search(r'<h[23] id="([^"]+)"', p.read_text(encoding="utf-8"))] if m}
+    for stage in STAGES:
+        items = ps.research_of(stage)
+        assert items, f"{stage.__name__} states no research claim"
+        for path in ps.stage_doc(stage)[2]:
+            assert ps.research_of(ps.resolve_step(path)), f"{path} states no research claim"
+            items += ps.research_of(ps.resolve_step(path))
+        for c in items:
+            for q in c["questions"]:
+                assert q["site"].removeprefix("q/").removesuffix(".html") in ids, q

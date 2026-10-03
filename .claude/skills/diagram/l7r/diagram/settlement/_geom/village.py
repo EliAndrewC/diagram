@@ -6,6 +6,8 @@ isolated in a module of their own so that the eventual move is a one-file change
 seats.py/byres.py precedent.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: village population - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: 200-500 inhabitants, mode 350, households of five
 """
 
 import random
@@ -21,6 +23,7 @@ _VILLAGE_POP_DIST = ((200, 10), (250, 10), (300, 15), (350, 30), (400, 15), (450
 # rather than real footprints, so the effective pitch is larger again. See `roll_village`, which
 # explains what the wrong number does and why it does not fail as a shortfall.
 BUNDLE_PITCH_FT = 92.0
+"""Research: homestead bundle pitch - UNRESEARCHED: 92 ft of ground per bundle in a cluster band, derived from the bundle rects and circle spacing"""
 
 
 def village_population(rng: random.Random) -> int:
@@ -42,3 +45,4 @@ def village_population(rng: random.Random) -> int:
 # a placer and its check drift into disagreeing, which this engine has on record several times.
 # The placer adds its own hair of margin on top; the gate measures this figure exactly.
 FARMHOUSE_EAVE_GAP_FT = 8.0
+"""Research: farmhouse wall-to-wall clearance - UNRESEARCHED: 8 ft, two drip lines and a footpath"""

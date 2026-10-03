@@ -54,6 +54,8 @@ INSIDE the stage against the placer's own verdict, which is cheaper and more pre
 Run it:
     python3 -m l7r.diagram.hamletgen --name Ikegami-scripted --seed 4 --households 15 --out wip/x
     python3 -m l7r.diagram.hamletgen --batch 12          # roll a whole cohort and gate every one
+
+Research: package surface - NONE: the path bootstrap and the re-exports
 """
 
 from __future__ import annotations

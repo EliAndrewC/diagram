@@ -17,6 +17,8 @@ Classes (the four labels, research/CLAUDE.md):
 - the need per household (`COARSE_GRAIN_ACRES_PER_HOUSEHOLD`): a GUESS resting on the attested assessed rates; the winter
   crop counted acre for acre against it: GUESS (no yield for a winter barley crop was read; 0011 records the search);
 - the order of the top-up, nearest the toe first: GUESS (no page read says from which end a fan's middle was cleared).
+
+Research: plumbing - NONE: unit conversion and ring area
 """
 
 from __future__ import annotations
@@ -36,12 +38,18 @@ from .._knobs import Knob, register_knob
 # leaves. The draw puts the hamlet's households, its drained acres and that room in the context; a context without them
 # (anything else that resolves the knob) offers both. A site that allows neither is a loud error, never a short band.
 def _grows_on_this_ground(form: str, context: Mapping[str, Any]) -> bool:
+    """Research: forms the site can feed - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a bare winter only where the toe and the whole wild middle hold the need"""
     if "grain_room_acres" not in context:
         return True
     return dry_need_acres(int(context["grain_households"]), float(context["grain_drained_acres"]), form) <= float(context["grain_room_acres"])
 
 
 WINTER_CROP = register_knob(Knob("winter_crop", ["barley", "none"], default="none", typing_rule=_grows_on_this_ground, weights={"barley": 0.5, "none": 0.5}))
+"""
+Research:
+    winter-crop forms - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley on the drained paddy, or a bare winter
+    winter-crop weights - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: even odds, 0.5 each, whatever the drainage or a town's nearness
+"""
 
 # THE COARSE-GRAIN NEED, in acres of dry field per household (0011). The sizing rule (0017) gives ~0.8-1.0
 # tan of gross paddy a person for rice's two-thirds of the diet, which is the engine's 1.3 acres a household
@@ -52,13 +60,19 @@ WINTER_CROP = register_knob(Knob("winter_crop", ["barley", "none"], default="non
 # so a middle one 9 to) would give 0.94. Assessed rates in rice-equivalent koku, not harvests; the middle grade on both
 # sides is this project's reading, so the figure is a GUESS resting on attested rates.
 COARSE_GRAIN_ACRES_PER_HOUSEHOLD = 0.85
+"""Research: coarse-grain need - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: 0.85 acre of dry field a household"""
 SQ_FT_PER_ACRE = 43560.0
 
 
 def dry_need_acres(households: int, drained_acres: float, winter_crop: str) -> float:
     """The acres of dry field a hamlet's coarse grain needs: the whole need where the paddy lies bare over the winter, and
     what the drained paddy's winter barley leaves where it does not - counted acre for acre (a GUESS, module docstring).
-    A wet paddy carries no barley (0009), so only the drained acres count."""
+    A wet paddy carries no barley (0009), so only the drained acres count.
+
+    Research:
+        need by winter crop - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the whole need on a bare winter, the need less the drained acres on barley
+        barley acre for acre - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: one drained acre of winter barley spares one acre of dry field
+        drained acres only - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: a wet paddy carries no winter barley"""
     need = households * COARSE_GRAIN_ACRES_PER_HOUSEHOLD
     if winter_crop == "barley":
         need -= drained_acres
@@ -68,7 +82,12 @@ def dry_need_acres(households: int, drained_acres: float, winter_crop: str) -> f
 def top_up(drawn_px2: float, reserve: Sequence[dict[str, Any]], need_px2: float, refused: Callable[[Any], bool]) -> list[dict[str, Any]]:
     """The reserve plots that bring a dry band of `drawn_px2` up to `need_px2`: taken in the reserve's order (nearest the
     toe first), each one `refused` skipped (a plot on water or another fan's rice is no field), until the band holds the
-    need. The placer's guarantee: the band returned holds the need, or every plot the ground offers is in it."""
+    need. The placer's guarantee: the band returned holds the need, or every plot the ground offers is in it.
+
+    Research:
+        dry-field count - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: reserve plots added until the band holds the need, and no further
+        top-up order - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: nearest the toe first
+        refused ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on water or on another fan's rice is skipped"""
     out: list[dict[str, Any]] = []
     for p in reserve:
         if drawn_px2 >= need_px2:

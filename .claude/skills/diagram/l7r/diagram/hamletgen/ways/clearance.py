@@ -1,4 +1,7 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE
+"""
 
 from __future__ import annotations
 
@@ -27,7 +30,11 @@ def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt
 
 def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP, index: FabricIndex | None = None) -> bool:
     """Is the short run between two points walkable? Used before extending a lane end onto the way
-    it meets, so a junction is drawn as a touch without the touch crossing anything."""
+    it meets, so a junction is drawn as a touch without the touch crossing anything.
+
+    Research:
+        link clear of the fabric - research/questions/0081-village-lanes.drawing.html: 7 ft off a garden fence
+        link clear of the crop and wet ground - research/questions/0081-village-lanes.drawing.html: 8 ft off, 14 ft off water"""
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -150,6 +157,7 @@ def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | N
 
 
 _NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
+"""Research: nub length - CONVENTION: under 9 ft, a splice artifact not a stretch of way"""
 # NOT 5: the pass shipped at 5 ft and a settlement-review then found two nubs on Sawada that cleared it -
 # an 8.25 ft boot turning -87 deg off a 117 ft run, and a 5.74 ft first segment turning 88 deg. The floor
 # was set from the ONE case the pass was written for (3.1 ft) and was therefore calibrated below the defect
@@ -157,6 +165,7 @@ _NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, 
 # MEASURED before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, all three on
 # Sawada, no other map touched; 12 ft catches nothing 9 does not.
 _NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
+"""Research: nub turn - CONVENTION: an end stretch under 9 ft turning 60 deg reads as a lump, not the way arriving"""
 
 # THE END SPIKE IS REAL, AND `_NUB_FT` IS THE WRONG LEVER FOR IT - DEFERRED WITH ITS MEASUREMENT
 # (settlement-review, feature 155; constitution Principle XIV's "a deferral is a deliverable").
@@ -198,7 +207,10 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
 
     Only the vertex AFTER the end is dropped, never the end itself: the end is the foot, and moving it
     would take the lane off the way it was joined to. Lifted out of the pass below so it can be asked with
-    plain lists (GM 2026-08-28 on testability)."""
+    plain lists (GM 2026-08-28 on testability).
+
+    Research: a lane's end loses its nub - CONVENTION: the splice artifact's vertex after the foot dropped
+    """
 
     def nub_at_head(pts: list[Pt]) -> bool:
         """Is `pts[1]` a nub - a short first stretch that then turns back on itself?
@@ -251,6 +263,11 @@ def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric
     than it already was, or than its own keep-out allows - whichever is the more forgiving - and no
     worse bent than it already was. A lane already inside the bar is never made worse, but is not
     required to fix itself either, because the pass that is moving it is not the pass that owns it.
+
+    Research:
+        no nearer the fabric - research/questions/0081-village-lanes.drawing.html: half the width plus 2 ft, at least 4 ft
+        no tread on the fabric - research/questions/0081-village-lanes.drawing.html: nothing built on a lane
+        no new bad bend - research/questions/0081-village-lanes.drawing.html: no hairpin or zigzag added
     """
     bar = max(_TOUCH_GAP, float(width or 5.0) / 2.0 + 2.0)
     if fabric_clearance(new_pts, fabric) < min(fabric_clearance(old_pts, fabric), bar) - 1e-9:
@@ -300,7 +317,9 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     4.5 ft and one on a 3 ft lane owes 3.5. At the flat 4.0 the smoother was allowed to draw exactly
     what the check forbids, which is cohort seed 6: a farmhouse corner 4.09 ft from a 5 ft web lane,
     put there by a string-pull that tested its own chord and passed. Deriving it leaves the common 3 ft
-    lane untouched (3.5 is below the default) and tightens only the wide ways."""
+    lane untouched (3.5 is below the default) and tightens only the wide ways.
+
+    Research: junction link margin - research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric, or the caller's"""
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -325,9 +344,13 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
 # turns past 50 degrees within 40 ft of path (about a dozen paces); an arm is worth removing only
 # when it is shorter than 40 ft and reaches nothing of its own.
 _HAIRPIN_DEG = 140.0
+"""Research: hairpin - research/questions/0081-village-lanes.drawing.html: a turn past 140 degrees"""
 _ZIGZAG_DEG = 50.0
+"""Research: zigzag turn - research/questions/0081-village-lanes.drawing.html: two turns past 50 degrees"""
 _ZIGZAG_RUN_FT = 40.0
+"""Research: zigzag run - research/questions/0081-village-lanes.drawing.html: within 40 ft of path"""
 _ARM_FT = 40.0
+"""Research: stray tail - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft past a crossing is cut"""
 
 
 @kept
@@ -339,7 +362,11 @@ def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     ONE BEND PREDICATE (feature 287, ways W18, FR-003). The web's passes asked a one-segment reading here - two big turns
     separated by ONE short segment - while the finished-map tests summed the run between them, so a lattice step of two
     short legs passed every pass and failed the test (seed 43). The test's reading is the rule; `law.kinks` and every pass
-    that asks `_bends_badly` now read this one body."""
+    that asks `_bends_badly` now read this one body.
+
+    Research:
+        no hairpin - research/questions/0081-village-lanes.drawing.html: 140 degrees or more
+        no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft of path"""
     p = list(pts)
     bad: list[tuple[str, int, int]] = []
     if len(p) < 3:
@@ -364,7 +391,9 @@ def _bends_badly(pts: Sequence[Pt]) -> bool:
 
     Stated here so a pass that is about to DRAW a run can ask before drawing, rather than leaving the
     gate to discover it. The thresholds are the check's own, deliberately: a repair that measures
-    something other than what the check measures is the defect this file has now met three times."""
+    something other than what the check measures is the defect this file has now met three times.
+
+    Research: bends like a path - research/questions/0081-village-lanes.drawing.html: the hairpin and zigzag limits"""
     return bool(kink_spans(pts))
 
 
@@ -375,6 +404,8 @@ def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None
     LIFTED OUT OF `_smooth_web` (feature 146). The head arm - the crossing near the lane's START, so the
     beginning is the stray - never ran on a live map; which arm a roll takes is an accident of which
     direction the lane happened to be recorded in, so the two want asking directly.
+
+    Research: no stub past a crossing - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft is cut
     """
     head = polyline_len(pts[: k + 1]) + math.dist(pts[k], x)
     tail = math.dist(x, pts[k + 1]) + polyline_len(pts[k + 1 :])
@@ -403,7 +434,11 @@ def route_around(poly: Poly, path: Poly, margin: float, rounds: int | None = Non
     UNTIL NO LEG CROSSES, OR NONE (feature 287, ways W24, FR-005). Six rounds and then the result as it stood - a leg
     still across the field shipped. The rounds are now bounded by the ring's own vertex count (each splice walks ring
     edges, so a detour that needs more rounds than the ring has vertices is not converging), and a path that still crosses
-    after them comes back as None: the caller takes another way out, never this one."""
+    after them comes back as None: the caller takes another way out, never this one.
+
+    Research:
+        a track goes round the field - research/questions/0081-village-lanes.drawing.html: never across the crop, the
+            shorter way round its outline"""
     ring = list(poly)
     n = len(ring)
     out = [push_out_of(poly, q, margin) for q in path]
@@ -472,7 +507,12 @@ def clear_runs(
     by a steading is two lanes, not one shortened one - and returning only the longest threw away
     ground that genuinely serves houses at the other end.
 
-    A stub below the floor is not a lane, whichever way it was measured."""
+    A stub below the floor is not a lane, whichever way it was measured.
+
+    Research:
+        off the crop and wet ground - research/questions/0081-village-lanes.drawing.html: the full margin
+        threads between steadings - research/questions/0081-village-lanes.drawing.html: a hand's breadth off the fabric
+        shortest lane - UNRESEARCHED: a run under 70 ft by default is not a lane"""
     if not obstacles and not lines and not tight:
         return [list(pts)]
 
@@ -518,7 +558,11 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
     FIRST version, which fell back to the original first segment - and that fallback drew a lane
     blocked immediately in full and unclipped, doing the exact opposite of this function's job. The
     fallback went; the sentence describing it did not. A run shorter than 70 px is dropped, so the
-    caller must handle an empty result rather than assuming a lane."""
+    caller must handle an empty result rather than assuming a lane.
+
+    Research:
+        an arm stops at the crop - research/questions/0081-village-lanes.drawing.html: a lane ends where the crop begins
+        shortest arm - UNRESEARCHED: under 70 ft is not drawn"""
     if not obstacles and not lines:
         return pts
 

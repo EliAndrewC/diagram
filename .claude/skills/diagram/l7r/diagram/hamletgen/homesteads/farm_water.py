@@ -12,6 +12,8 @@ ditches are fed from, a GUESS) - to the farm's dooryard, a step off the edge of 
 return is not drawn (a deliberate deviation). It is routed round every building, yard and garden, every OTHER farm's
 grove, the crop, the lanes and all other water, and may cross the farm's own grove band - it is led INTO the
 grounds, through the wood that surrounds them. A later farm's channel may be led off one already drawn (amendment 6, a GUESS).
+
+Research: channel routing - NONE: candidate points, lattices, crossings and search budgets; the units that decide carry their own claims
 """
 
 from __future__ import annotations
@@ -31,15 +33,24 @@ FARM_CHANNEL = "farm channel"
 
 FARM_CHANNEL_W_FT = 2.5
 """The channel's drawn bed: the field channel's legibility floor (`Settlement.channel`'s 2.5 ft) - a map drawing
-convention; no page read gives the width of a channel into a farm's grounds."""
+convention; no page read gives the width of a channel into a farm's grounds.
+
+Research: channel width - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: drawn at the field channel's 2.5 ft bed
+"""
 
 DOORYARD_STEP_FT = 6.0
 """How far off its threshing yard's edge the channel ends: a step, so the water stands in the dooryard beside the yard
-rather than on its floor (a map drawing convention)."""
+rather than on its floor (a map drawing convention).
+
+Research: channel end off the yard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a 6 ft step off the threshing yard
+"""
 
 DOORYARD_STEPS = (1.0, 2.0, 3.5)
 """The multiples of `DOORYARD_STEP_FT` a channel's end is offered at off each side of the yard, nearest first (feature 291 on
-287; where in the dooryard the channel ended no page read says - a GUESS, as the one step was)."""
+287; where in the dooryard the channel ended no page read says - a GUESS, as the one step was).
+
+Research: where in the dooryard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one, two or three and a half steps off the yard
+"""
 SOURCE_TRIES = 6
 """The nearest candidate points on the irrigation water tried per farm, nearest first (the router's own budget)."""
 
@@ -58,7 +69,10 @@ SOURCE_SPREAD_FT = 60.0
 
 def supply_courses(M: Mapping[str, Any]) -> list[list[Pt]]:
     """The irrigation water a channel may be led off: every supply ditch (`field_ditches` whose role is not the drain) and
-    every brook (`streams`)."""
+    every brook (`streams`).
+
+    Research: led off the irrigation water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a main or branch ditch or the brook, never the drain
+    """
     out = [[(float(x), float(y)) for x, y in d["poly"]] for d in M.get("field_ditches") or [] if d.get("role") != "drain" and len(d.get("poly") or ()) >= 2]
     out += [[(float(x), float(y)) for x, y in r["poly"]] for r in M.get("streams") or [] if len(r.get("poly") or ()) >= 2]
     return out
@@ -66,7 +80,10 @@ def supply_courses(M: Mapping[str, Any]) -> list[list[Pt]]:
 
 def source_points(courses: Sequence[Sequence[Pt]], near: Pt, step: float, n: int, spread: float = 0.0) -> list[Pt]:
     """The `n` points along `courses`, every `step` and at each course's point nearest `near`, nearest `near` first - each
-    at least `spread` from those before it, so the tries are not one stretch of water taken six times."""
+    at least `spread` from those before it, so the tries are not one stretch of water taken six times.
+
+    Research: the nearest water first - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: candidate sources nearest the yard first
+    """
     pts: list[Pt] = []
     for c in courses:
         for a, b in zip(c, c[1:], strict=False):
@@ -84,7 +101,10 @@ def source_points(courses: Sequence[Sequence[Pt]], near: Pt, step: float, n: int
 
 def dooryard_end(yard: Sequence[Sequence[float]], toward: Pt, step: float) -> Pt:
     """Where the channel ends: `step` off the threshing yard's ring, at the ring's point nearest `toward` (the water),
-    out along the line from the yard's middle."""
+    out along the line from the yard's middle.
+
+    Research: ends in the dooryard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: off the yard's edge toward the water
+    """
     ring = [(float(p[0]), float(p[1])) for p in yard]
     cx, cy = sum(p[0] for p in ring) / len(ring), sum(p[1] for p in ring) / len(ring)
     edge = min((seg_closest(toward[0], toward[1], a, b) for a, b in zip(ring, [*ring[1:], ring[0]], strict=False)), key=lambda q: math.dist(q, toward))
@@ -115,7 +135,12 @@ def cross_t(a: Pt, b: Pt, c: Pt, d: Pt) -> float:
 
 def _obstacles(s: Settlement, h: Mapping[str, Any]) -> tuple[list[Poly], list[Poly]]:
     """(hard, walls) for farm `h`'s channel: the crop is hard; every building, yard and garden, every OTHER farm's grove,
-    and every lane are walls. The farm's own grove is not - the channel runs into its grounds through it."""
+    and every lane are walls. The farm's own grove is not - the channel runs into its grounds through it.
+
+    Research:
+        routed round the farm - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round buildings, yards, gardens and other groves; through its own grove
+        walled off lanes, wells and crop - UNRESEARCHED: every lane, other farms' well pockets and the crop and paddy plots walled
+    """
     from ..ways.geom import steading_footprints, stroke_quad  # local: the ways are a later stage
 
     me = (round(float(h["x"]), 1), round(float(h["y"]), 1))
@@ -144,7 +169,13 @@ def _obstacles(s: Settlement, h: Mapping[str, Any]) -> tuple[list[Poly], list[Po
 
 
 def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence[Pt]], water: Sequence[tuple[Pt, Pt]]) -> Poly:
-    """The channel into farm `h`'s grounds - drawn, and returned - or [] where no course reaches its dooryard."""
+    """The channel into farm `h`'s grounds - drawn, and returned - or [] where no course reaches its dooryard.
+
+    Research:
+        a channel into the grounds - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shortest route found from the nearest sources
+        no way back drawn - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the channel stops in the dooryard
+        crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
+    """
     from ..ways.route import _route  # local: the ways are a later stage
 
     hx, hy = float(h["x"]), float(h["y"])
@@ -225,7 +256,13 @@ def farm_channels(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Ma
     NEAREST THE WATER FIRST: taken in the order given, the long channels to the far farms walled the near farms off their
     water, and three of Audit-905's sixteen fell back to a well. And A LATER CHANNEL MAY BE LED OFF AN EARLIER ONE (FR-018
     amendment 6, a GUESS - whether neighbors shared a channel no page read says): measured 2026-09-30, Audit-19's farms,
-    whose only irrigation water is the field's head, drew 1 channel in 11 without it and 11 in 11 with it."""
+    whose only irrigation water is the field's head, drew 1 channel in 11 without it and 11 in 11 with it.
+
+    Research:
+        farms nearest the water first - UNRESEARCHED: the order channels are laid
+        led off an earlier channel - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each drawn channel a source for the next
+        a farm no channel reaches - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: returned for a well of its own
+    """
     from ..ways.checks import drawn_water_segs  # local: the ways are a later stage
 
     courses = supply_courses(s.M)

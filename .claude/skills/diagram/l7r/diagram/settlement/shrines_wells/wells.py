@@ -1,6 +1,8 @@
 """The wellhead glyph, and the four passes that put wells on a map.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -26,7 +28,10 @@ yard and refuses a layout whose pocket would stand farther (`rolling/bundle.py:p
 recorded beside it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the
 dooryard well of the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons. MOVED here from
 `hamletgen/homesteads/wells.py` (feature 287, homes H09) so the bundle's pocket asks the same predicate the placer does;
-the hamlet module imports it back."""
+the hamlet module imports it back.
+
+Research: a well among the dwellings it serves - research/questions/0196-communal-wells-ido.drawing.html: 95 px from the nearest dwelling's wall
+"""
 
 
 def well_gap_to_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> float:
@@ -52,7 +57,10 @@ class WellsMixin:
         it scales with the urban glyph grain. Factored out of well() because PLACEMENT has to
         predict the glyph before it is drawn: the stable yard's dig-your-own-well fallback needs
         the head's size to keep it off a hitching rail or a neighboring yard's troughs
-        (wellhead_quad / wells_troughs_rails_clear_of_each_other)."""
+        (wellhead_quad / wells_troughs_rails_clear_of_each_other).
+
+        Research: wellhead marker larger than life - research/questions/0196-communal-wells-ido.drawing.html: a 12.376 ft half-size roof, 11.9 x bscale on the legacy tiers
+        """
         return self.px(12.376) if self._toscale() else 11.9 * self.bscale
 
     def well(self: Settlement, x: float, y: float, r: float = 8, shrine: bool = False, private: bool = False, kind: str | None = None) -> None:  # type: ignore[misc]
@@ -61,7 +69,13 @@ class WellsMixin:
         served a courtyard / cluster of ~10-20 households. SMALLER than a house and sits in a block
         INTERIOR off the lanes. Records M['wells'] and blocks placement so the quarter's houses flow
         around it - place BEFORE the quarter's pack. The underground end of a city's water system
-        (aqueducts, cisterns, rain barrels feeding the shaft) stays off the map; only the head shows."""
+        (aqueducts, cisterns, rain barrels feeding the shaft) stays off the map; only the head shows.
+
+        Research:
+            wellhead marker - research/questions/0196-communal-wells-ido.drawing.html: a round curb of 9.36 ft radius under a square roof on every well
+            cistern-well on the aqueduct - research/questions/0141-the-capitals-aqueduct-josui.drawing.html: kind recorded when declared
+            keep-clear margin - UNRESEARCHED: 8 px round the roof
+        """
         # THE WELL IS A LOCATION MARKER, NOT A TO-SCALE FOOTPRINT (GM ruling 2026-07-21). A real stone
         # well curb is ~3-4 ft - sub-glyph at every map scale - so the wellhead denotes the well's
         # TO-SCALE LOCATION relative to its surroundings with a legible marker whose own pixels are NOT
@@ -100,12 +114,24 @@ class WellsMixin:
         like the fields that run off-edge). Deterministic - no RNG draws, so a map whose
         farm belt is already covered (Hoshizora) is byte-identical with or without the call.
         Greedy cluster cover: seat a well near the densest uncovered cluster's centroid via
-        well_at's clear-spot test, repeat. Gated by farm_wells_within_reach."""
+        well_at's clear-spot test, repeat. Gated by farm_wells_within_reach.
+
+        Research: scoped farm-well pass - NONE: delegates to _farm_wells
+        """
         # SCOPED (2026-08-08): the rural well pass, keyed as one phase like farmsteads().
         with self.rng_scope("farm_wells", "belt"), self.frozen_terrain():  # as place_wells: the farm belt does not move rivers while it sinks wells
             return self._farm_wells(reach_ft, edge_ft)
 
     def _farm_wells(self: Settlement, reach_ft: float, edge_ft: float) -> int:  # type: ignore[misc]
+        """The farm-belt well pass itself.
+
+        Research:
+            every farmhouse within reach of a well - research/questions/0196-communal-wells-ido.drawing.html: 500 ft
+            edge farmhouses exempt - UNRESEARCHED: within 150 ft of the view edge
+            seated in a steading's dooryard - research/questions/0196-communal-wells-ido.drawing.html: rings of 20 to 150 px round the densest cluster's houses
+            fallback on field-rim ground off the crop - research/questions/0196-communal-wells-ido.drawing.html: a dwelling within about 95 ft on hamlet and town maps; a 6 px grid out to 156 px
+            cluster radius - NONE: 0.9 of the reach
+        """
         reach = self.px(reach_ft)
         edge = self.px(edge_ft)
         vx, vy, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
@@ -203,7 +229,13 @@ class WellsMixin:
         scrub_clear_of_urban_fabric when a torii-count ripple reseated three Hirameki farm wells
         into the grazing commons): a wellhead stands in worked dooryard/margin ground, never out
         in the grazed waste - and the cover scatter is drawn long before the farm wells, so the
-        well must yield, not the commons."""
+        well must yield, not the commons.
+
+        Research:
+            wellhead off the commons - research/questions/0196-communal-wells-ido.drawing.html
+            ground fit for a wellhead - research/questions/0196-communal-wells-ido.drawing.html: _well_ground_clear
+            standing room demanded - UNRESEARCHED: a fixed 2r + 14 px box
+        """
         if self._in_scrub_cover(x, y) or not self._well_ground_clear(x, y):
             return False
         # THE 30x30 IS A FIXED-PIXEL CONSTANT IN A SCALE-AWARE FAMILY, AND IT NO LONGER MEANS ONE
@@ -254,12 +286,24 @@ class WellsMixin:
         it. Call BEFORE the quarter's house pack so the houses flow around the wells. Returns the
         placed (x, y) list. Pass coverage=False to keep `near` as a PER-CANDIDATE gate only - the
         coverage pass sweeps ALL dwellings map-wide, which a district-scoped call must not do (it
-        would drop wells beside the samurai compounds, which keep no public wells)."""
+        would drop wells beside the samurai compounds, which keep no public wells).
+
+        Research: scoped well scatter - NONE: delegates to _place_wells
+        """
         # SCOPED (2026-08-08): well siting jitters over a grid; keyed on the bbox it covers.
         with self.rng_scope("place_wells", *bbox), self.frozen_terrain():  # one well index for the whole scatter, not one revalidation per candidate seat
             return self._place_wells(bbox, spacing, r, near, coverage, kind)
 
     def _place_wells(self: Settlement, bbox: Any, spacing: float, r: float, near: Any, coverage: bool, kind: str | None = None) -> list[Pt]:  # type: ignore[misc]
+        """The well scatter itself.
+
+        Research:
+            wells inside the blocks, off lanes and compounds - research/questions/0196-communal-wells-ido.drawing.html: a grid at the caller's spacing
+            cell offsets - NONE: the center, then four at 0.26 of the spacing
+            a dwelling within reach - research/questions/0196-communal-wells-ido.drawing.html: the caller's near
+            no dwelling left without a well - research/questions/0196-communal-wells-ido.drawing.html: the coverage pass, six seats at 0.45 to 0.6 of near
+            standing room demanded - UNRESEARCHED: a fixed 2r + 14 px box
+        """
         x0, y0, x1, y1 = bbox
         # a modest footprint => wells sit in the courtyards, not crammed on a lane. The SAME box
         # `well_at` computes, and it carries the same caveat: 30px is fixed while the drawn head
@@ -316,7 +360,12 @@ class WellsMixin:
         positions on widening rings until one fits clear of the hall, torii, graveyard, lanes, and any other
         placed footprint (`well_at`'s test). A larger hall pushes its well onto an outer ring. Call AFTER the
         hall, houses, and village wells are placed. Returns the placed (x, y), or None if it is walled in.
-        For a remote shrine that cannot use the village's shared wells (`remote_shrine_has_own_well`)."""
+        For a remote shrine that cannot use the village's shared wells (`remote_shrine_has_own_well`).
+
+        Research:
+            a set-apart shrine keeps its own well - research/questions/0196-communal-wells-ido.drawing.html
+            rings round the hall - UNRESEARCHED: 54 to 112 px, every 30 deg
+        """
         for rr in (54, 66, 80, 96, 112):
             for a in range(0, 360, 30):
                 x, y = cx + rr * math.cos(math.radians(a)), cy + rr * math.sin(math.radians(a))

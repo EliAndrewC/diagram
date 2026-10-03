@@ -6,6 +6,8 @@ entrance of its own. A choice between forms, so the `family_form` knob rolls it 
 declares it as `meta.family_form`. A retirement house belongs to its farmhouse's household - one family living as two
 households - so it is recorded under its own key, `retirement_houses`, never in `houses`: it counts neither toward the
 households nor against the band of occupied farmhouses (research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html).
+
+Research: retirement plumbing - NONE: geometry and records; the units that decide carry their own claims
 """
 
 from __future__ import annotations
@@ -27,23 +29,28 @@ if TYPE_CHECKING:
 # are weighted against each other in the roll" is a GUESS), so the roll is even. `one_roof` is the default: it is the
 # no-pin, no-roll fallback and what every map drew before the knob.
 FAMILY_FORMS = ("one_roof", "retirement_house")
+"""Research: two family forms - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: one roof, or a retirement house in the yard"""
 FAMILY_FORM = register_knob(Knob("family_form", list(FAMILY_FORMS), default="one_roof"))
+"""Research: family form rolled - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: even odds per settlement, one roof the default"""
 
 # HOW MANY OF A SETTLEMENT'S HOMESTEADS KEEP ONE, where the custom is kept (0004): "where the custom was kept
 # thoroughly, every house had one", and no page read gives a share (the entry's absence note). A degree, so a band rolled
 # per settlement: the top stops short of every house because a household holds a retired couple for only part of its
 # cycle, and the bottom keeps the form legible on the sheet - both ends a GUESS.
 RETIREMENT_SHARE = (0.30, 0.70)
+"""Research: share keeping one - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: 0.30-0.70 rolled per settlement"""
 
 # ITS SIZE (0004 says "a small retirement house" and gives no dimension; no page read does). Three ken by two
 # and a half, about eight tsubo - a room or two and an earth-floored entry, well under the farmhouse's 1,000-1,700 sq ft
 # and a size apart from the 16 x 11 ft byre and the kura: a GUESS.
 RETIREMENT_FT = (18.0, 15.0)
+"""Research: retirement house size - GUESS: 18 x 15 ft, about eight tsubo"""
 
 # WHERE IN THE YARD (0004: "most retirement houses stood inside the family's house plot, with an entrance of
 # their own"). How far from the farmhouse no page gives: one ken off the back wall or a flank, a second ken out when that
 # is taken - the eaves drip and a path between the two roofs - is a GUESS. The front is the work yard and garden's.
 RETIREMENT_GAP_FT = (6.0, 12.0)
+"""Research: gap off the farmhouse - GUESS: one ken, then two"""
 
 # WHICH SIDE is a GUESS, rolled per homestead among the back wall and the two flanks. The record holds one lead
 # (research/questions/0047-farm-privies-and-their-night-soil-benjo.html, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
@@ -59,7 +66,10 @@ RETIREMENT_GAP_FT = (6.0, 12.0)
 
 
 def retirement_share(seed: int) -> float:
-    """The settlement's share of homesteads keeping a retirement house, rolled once within `RETIREMENT_SHARE`."""
+    """The settlement's share of homesteads keeping a retirement house, rolled once within `RETIREMENT_SHARE`.
+
+    Research: share rolled - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: once per settlement inside the band
+    """
     lo, hi = RETIREMENT_SHARE
     return round(lo + knob_rng(seed, "retirement_house").random() * (hi - lo), 3)
 
@@ -67,7 +77,10 @@ def retirement_share(seed: int) -> float:
 def retirement_quota(s: Settlement, households: int) -> dict[str, float]:
     """The retirement house as a household's part (feature 287, homes H32 and plan D9): on the `retirement_house` form, the
     share the households' lots keep it at - at least one household, as the settlement always asked - and nothing on
-    `one_roof`. The lots lay it in the bundle, off the back wall or a flank, before the fixtures (`fixture_seats`)."""
+    `one_roof`. The lots lay it in the bundle, off the back wall or a flank, before the fixtures (`fixture_seats`).
+
+    Research: households keeping one - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: the rolled share, at least one household, none on one roof
+    """
     if s.resolve("family_form") != "retirement_house":
         return {}
     return {"retirement": max(retirement_share(s.seed), 1.0 / max(1, households))}
@@ -78,7 +91,12 @@ def retirement_seats(h: Mapping[str, Any], w: float, d: float, gaps: Sequence[fl
 
     In the house's own frame: the back wall and each flank, at each gap in turn; `turn` rotates the three sides so the
     houses of one hamlet do not all stand at the same bearing. The house is turned so its long side faces the farmhouse
-    wall and its own door (drawn on its local +y face) opens AWAY from the farmhouse - its own entrance."""
+    wall and its own door (drawn on its local +y face) opens AWAY from the farmhouse - its own entrance.
+
+    Research:
+        inside the plot, its own entrance - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: off the farmhouse's back wall or a flank, its door facing away
+        which side - GUESS: back wall or either flank, the order rotated per homestead
+    """
     hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
     hx, hy = float(h["x"]), float(h["y"])
     th = math.radians(rot)
@@ -100,7 +118,10 @@ def turned_box(w: float, d: float, rot: float) -> tuple[float, float]:
 
 def retirement_glyph(cx: float, cy: float, w: float, d: float, rot: float) -> str:
     """A small thatched dwelling in the farmhouse's own vocabulary - the two-tone roof and its ridge - smaller, and with
-    its door on the face away from the farmhouse (local +y)."""
+    its door on the face away from the farmhouse (local +y).
+
+    Research: retirement house glyph - CONVENTION: the farmhouse's two-tone thatch and ridge, smaller
+    """
     return (
         f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">'
         f'<rect x="{-w / 2:.1f}" y="{-d / 2:.1f}" width="{w:.1f}" height="{d / 2:.1f}" fill="#A98C58"/>'
@@ -123,7 +144,12 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
     next one. Each record's geometry is complete when appended, and names its farmhouse (`of`). WHERE THE HOUSEHOLDS WERE
     SEATED WITH THEIR LOTS (feature 287, homes H32, plan D9) nothing is sought: each keeper's house was laid in its bundle
     (`retirement_quota`, `fixture_seats`) and is drawn where it stands, so none is dropped - the search above is the
-    path of a settlement seated without lots."""
+    path of a settlement seated without lots.
+
+    Research:
+        family form declared - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: none on one roof, the rolled share on the retirement form, never counted a household
+        which households keep one - UNRESEARCHED: owners in an order rolled from the seed, not by wealth
+    """
     form = s.M["meta"]["family_form"] = s.resolve("family_form")
     s.M.setdefault("retirement_houses", [])
     if form != "retirement_house":
@@ -165,7 +191,10 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
 
 def retirement_face(h: Mapping[str, Any], x: float, y: float) -> float:
     """The turn a retirement house laid at (x, y) is drawn at: its farmhouse's, plus the face its seat takes off the back
-    wall (180) or a flank (-90 east, 90 west) - its long side to the farmhouse wall, its door away (`retirement_seats`)."""
+    wall (180) or a flank (-90 east, 90 west) - its long side to the farmhouse wall, its door away (`retirement_seats`).
+
+    Research: its own entrance - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: the door turned away from the farmhouse
+    """
     rot = float(h.get("rot", 0.0) or 0.0)
     th = math.radians(rot)
     dx, dy = x - float(h["x"]), y - float(h["y"])

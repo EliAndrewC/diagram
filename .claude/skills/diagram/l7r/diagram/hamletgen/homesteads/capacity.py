@@ -12,6 +12,8 @@ dispersed form keeps this pass and its rescue.
 What it cannot seat, no seat within reach of this margin can. `stage_homesteads` then takes the next margin of
 `seat_cluster`'s ranking (`seat["ladder"]`), and past the last it refuses the site (`SiteRefused`), naming it - D2's
 refusal of an impossible input, before the map exists, never a shortfall and never a re-roll.
+
+Research: seat search - NONE: grids, offer order, give-up counts and registry marks; the placer's own tests decide fit
 """
 
 from __future__ import annotations
@@ -57,7 +59,10 @@ RESCUE_DRY_SPELL = 600
 class SiteRefused(ValueError):
     """No margin of the site seats every declared household (plan D2): the site is refused as impossible input, naming
     the map and the count, before any later stage runs. Raised inside `stage_homesteads` - D2 names `stage_seat` as
-    the refusal point, but the ladder can only be judged by seating it, which is the homestead stage's work."""
+    the refusal point, but the ladder can only be judged by seating it, which is the homestead stage's work.
+
+    Research: every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: a site that cannot seat every declared household is refused
+    """
 
 
 def _near_a_house(s: Settlement, q: Pt) -> bool:

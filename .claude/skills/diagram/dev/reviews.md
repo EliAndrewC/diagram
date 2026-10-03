@@ -175,3 +175,10 @@ Fixed: a `PAIR_OK` gate run now records `waived_key` against that exact engine k
 it. Per content, so an engine edit after a waived gate is guarded again rather than riding the old
 waiver. `scripts/test-pair-hooks.sh` gained four cases (21 total), and deleting the one line that
 records the waiver turns two of them red.
+
+## `impl-drift` is owed by the claims index, not by an occasion (feature 316)
+
+`impl-drift` judges the engine's and the Mode A procedures' research claims against the questions they cite. It is not a map
+review: it is owed when `make claims-owed` names a claim (new, its code changed, or its question's findings moved), and the push
+(`scripts/claims-gate.sh`) holds it. One bundle per file or per batch (`make claims-bundle MODULE=<file>`), the reply recorded
+with `make claims-checked BUNDLE=<dir> REPLY=<file>`, a row of the ledger's measured table per pass as for any check.

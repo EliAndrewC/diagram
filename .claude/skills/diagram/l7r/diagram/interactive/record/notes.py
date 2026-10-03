@@ -15,6 +15,8 @@ of order, and 1,860 references is far too many to renumber by hand. Two defects 
 instead of typing: 4 references carry no `id` at all, so no back link can return to them, and 2 pages
 carry a duplicated reference id, which is invalid HTML and a back link that can only resolve to one of
 the two. Both disappear here rather than being separately fixed.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

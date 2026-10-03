@@ -1,4 +1,7 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE
+"""
 
 import math
 from typing import TYPE_CHECKING, Any
@@ -15,7 +18,12 @@ class GardensMixin:
         of greens. Distinct from the tan threshing yard (bare swept earth) and the blue-green paddy quilt.
         The bed's outer footprint is an irregular quad (`poly`, absolute corner coords, UNTURNED) - a
         hand-worked plot bent to paths and soil, not surveyed square; the rows are laid out in the local
-        (w,h) frame, and the whole group is turned by `rot`, its farmhouse's rake."""
+        (w,h) frame, and the whole group is turned by `rot`, its farmhouse's rake.
+
+        Research:
+            bed glyph - CONVENTION: a tilled fill with three rows of greens
+            turned with its house - UNRESEARCHED: the bed takes the farmhouse's rake
+        """
         x0, y0 = -w / 2, -h / 2
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">']
         pts = " ".join(f"{px - cx:.1f},{py - cy:.1f}" for px, py in poly)
@@ -31,13 +39,24 @@ class GardensMixin:
         self.add(''.join(g), cls="garden")
 
     def _garden_dims(self: Settlement, hw: float, hh: float) -> tuple[float, float]:  # type: ignore[misc]
-        """PREVIEW: garden scaled to the (now smaller) house, capped."""
+        """PREVIEW: garden scaled to the (now smaller) house, capped.
+
+        Research:
+            garden size - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.55 of the
+                house each way, capped at 24 x 16 bscale units
+        """
         return min(0.55 * hw, 24 * self.bscale), min(0.55 * hh, 16 * self.bscale)
 
     def _farm_shed_rect(self: Settlement, hx: float, hy: float, hw: float, hh: float, rot: float, kind: str, shed: Any) -> tuple[float, float, float, float] | None:  # type: ignore[misc]
         """The footprint of a plain farmhouse's attached STOREHOUSE/shed (kura), drawn as a sub-glyph on
         the house's WEST side (local -x), or None if it has none. Derived here (the shed is not a separate
-        recorded struct) so the garden can be kept OFF it - shed and garden sit on opposite sides."""
+        recorded struct) so the garden can be kept OFF it - shed and garden sit on opposite sides.
+
+        Research:
+            storehouse as a west annex - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: on the house's
+                west wall
+            storehouse size - research/questions/0040-farm-storehouses-kura.drawing.html: 0.32 of the house wide by 0.56 deep
+        """
         if not (shed and kind == "plain"):
             return None
         th = math.radians(rot)
@@ -47,7 +66,13 @@ class GardensMixin:
     def _garden_fits(self: Settlement, x: float, y: float, w: float, h: float, hx: float, hy: float, yard: Any, shed_rect: Any = None) -> bool:  # type: ignore[misc]
         """A garden fits where it is in-bounds, on DRY ground (clear of paddies / blocks), off any lane,
         clear of every placed footprint EXCEPT its own farmhouse, clear of that farmhouse's YARD, and clear
-        of its SHED (the yard, shed, and garden all sit on different sides of the house, never overlapping)."""
+        of its SHED (the yard, shed, and garden all sit on different sides of the house, never overlapping).
+
+        Research:
+            dry ground - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: off every paddy by its
+                half-diagonal and 4 px
+            own side - UNRESEARCHED: clear of its own yard and storehouse and of every other footprint
+        """
         if x < 55 or x > self.W - 55 or y < 88 or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):
@@ -76,7 +101,14 @@ class GardensMixin:
         shed. The grove's belt sits on the windward WALL (the W face for the default NW wind), so the garden
         takes that wall only as a last resort - the windward CORNER (SW) is still fine, it tucks below the
         grove's arm. Keeping the garden off the windward wall is what frees it for the grove (a garden there
-        was the #1 reason a windward arm went missing - e.g. a farm whose EAST faces the paddy). Spot or None."""
+        was the #1 reason a windward arm went missing - e.g. a farm whose EAST faces the paddy). Spot or None.
+
+        Research:
+            garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: east first, then the SE and SW
+                corners, the windward wall last, never the north back or the south front
+            richer farm, bigger garden - UNRESEARCHED: the garden scaled by the farm's wealth
+            stepped out - UNRESEARCHED: flush, then 15 and 30 bscale units out
+        """
         gw, gh = self._garden_dims(hw * wealth, hh * wealth)  # PREVIEW: richer farm -> bigger garden
         wx = self._windward_x()  # windward horizontal sign (-1 W / +1 E / 0)
         wall = (wx, 0) if wx else None  # the windward wall the grove's belt wants
@@ -103,7 +135,15 @@ class GardensMixin:
         house and `garden_area_within_norms` sums their areas. Each bed is drawn as a slightly-irregular hand-
         worked quad (real dooryard beds were bent to paths and soil, not surveyed square); a lone bed can be more
         irregular than a split strip. Each bed takes its house's rake (`rot`) about its own center, for the
-        reason `_attach_yard` gives."""
+        reason `_attach_yard` gives.
+
+        Research:
+            every farmhouse a garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: one per house
+            split into beds - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: one or two
+                beds, measured as one garden
+            hand-worked outline - CONVENTION: an irregular quad, jitter 0.18 for one bed and 0.13 for a split
+            turned with its house - UNRESEARCHED: each bed takes the farmhouse's rake
+        """
         jit = 0.18 if len(beds) == 1 else 0.13
         for i, (bx, by, bw, bh) in enumerate(beds):
             flat = self._quad(bx, by, bw, bh, jit, 71.0 + i * 5.0)

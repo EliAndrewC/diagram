@@ -2,6 +2,8 @@
 
 Moved out of `page.py` by feature 278, when the bucket grids (`_BoxGrid`, FR-011) took that file past the 1,000-line
 bar; `page.py` imports every name back, so nothing that reads them moved.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

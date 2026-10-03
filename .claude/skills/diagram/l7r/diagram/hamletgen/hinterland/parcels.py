@@ -1,4 +1,7 @@
-"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: woodland scan plumbing - NONE: lattices, indexes, measures and ring geometry
+"""
 
 from __future__ import annotations
 
@@ -17,6 +20,7 @@ from .frame import content_box, frame_bounds, title_pocket
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
 # predicted-kept-window math in open_ground_patches - two hardcoded 48s would drift
+"""Research: crop margin - CONVENTION: 48 px round the framed content"""
 
 # How much of a woodland parcel's ROTATED bbox must fall inside the predicted kept window for the
 # scan to seat it. Module-level so the attribution census can drive it - a floor buried in a closure
@@ -29,6 +33,7 @@ CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_conte
 # that measurement says does not happen; carrying 0.8 over to the rotated bbox cost seed 33 its
 # woodland outright. See future-work/, "the woodland scan vetted a SQUARE".
 WOODLAND_BBOX_FLOOR = 0.72
+"""Research: woods on the page - CONVENTION: 72% of a parcel's box inside the predicted view"""
 
 _COMMONS_REACH = 1.49
 """How much further a rotated parcel reaches than the equal-AREA square, worst case.
@@ -48,7 +53,9 @@ times a per-parcel band multiplier took Kashikawa to 103 ft. The number is our o
 judgment - when the first (shrink-only) size roll produced a 116 ft parcel on Mizuguchi the reading
 was "a copse, not a commons", which is what made the roll two-sided - so 120 ft is just above the
 size we have already said does not read. A settlement whose ground genuinely cannot hold one draws
-FEWER parcels rather than smaller ones."""
+FEWER parcels rather than smaller ones.
+
+Research: commons legibility floor - CONVENTION: no woodland parcel under 120 ft"""
 
 
 def parcel_bbox_ok(x: float, y: float, hw: float, hh: float, bc: float, bs: float, frame: tuple[float, float, float, float]) -> bool:
@@ -70,6 +77,8 @@ def parcel_bbox_ok(x: float, y: float, hw: float, hh: float, bc: float, bs: floa
     keeps a 2-point cushion over the gate for float ordering.
 
     Lifted out of `open_ground_patches` so it can be asked with plain numbers (GM 2026-08-28).
+
+    Research: woods on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the rotated box inside the frame
     """
     fx0, fy0, fx1, fy1 = frame
     bw, bh = abs(hw * bc) + abs(hh * bs), abs(hw * bs) + abs(hh * bc)
@@ -81,7 +90,10 @@ def parcel_inside_share(ring: Sequence[Pt], frame: tuple[float, float, float, fl
     """The share of a parcel's DRAWN ring's bounding box inside `frame` (x0, y0, x1, y1) - the gate's own measure
     (`test_a_woodland_commons_is_mostly_inside_the_picture`, over the view). ONE PREDICATE (feature 287, FR-003; woods
     W14): `parcel_bbox_ok` measures the rotated RECTANGLE the ring is drawn inside, whose box is not the ring's, so the
-    scan asks this of the ring it is about to draw as well."""
+    scan asks this of the ring it is about to draw as well.
+
+    Research: woods on the page - CONVENTION: the drawn ring's box share inside the frame
+    """
     xs = [float(p[0]) for p in ring]
     ys = [float(p[1]) for p in ring]
     box = max(1e-9, (max(xs) - min(xs)) * (max(ys) - min(ys)))
@@ -105,6 +117,8 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
     entry's stored coverage outliving the key it was recorded under - and the park came off. This is
     what should have happened instead of the park: the ladder is a decision about numbers, and it can
     be asked about numbers.
+
+    Research: shrink before dropping - UNRESEARCHED: a square parcel tried at 0.9-0.6 of its size, never under the floor
     """
     for sh in (0.9, 0.8, 0.7, 0.6):
         cand = max(half * sh, floor_half)
@@ -115,7 +129,9 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
 
 WET_SHARE_CAP = 0.5
 """The most of a woodland parcel that may stand in marsh: half its sample grid (`woodland_commons_on_dry_ground`). A
-managed coppice is not a swamp forest - standing water rots the stools and the cut cannot be carried out."""
+managed coppice is not a swamp forest - standing water rots the stools and the cut cannot be carried out.
+
+Research: woods mostly on dry ground - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: at most half a parcel in marsh"""
 
 
 def parcel_wet_share(ring: Sequence[Pt], marshes: Sequence[list[Pt]]) -> float:
@@ -173,7 +189,10 @@ def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> i
     """Where the record puts a village's fuel wood, as a rank (269 B27, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): 0 - higher than the field
     it adjoins and not below the lowest house (the nearest hill ground beyond the fields); 1 - not below the houses but
     not above that field (the level beside the fields, the record's fallback); 2 - downslope of every house, where the
-    record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall."""
+    record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall.
+
+    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: higher ground beyond the fields first, the level next, never below the houses
+    """
     h = -(p[0] * fall[0] + p[1] * fall[1])
     if h < house_floor:
         return 2
@@ -181,13 +200,17 @@ def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> i
 
 
 _CHAIN_OFF = 0.2  # a third parcel within this fraction of the span off the line through two others stands in their row
+"""Research: woods not in a ruled line - UNRESEARCHED: a third parcel within 0.2 of the span off two others' line"""
 
 
 def in_a_ruled_line(p: tuple[float, float], centers: Sequence[tuple[float, ...]], frac: float = _CHAIN_OFF) -> bool:
     """Would a parcel at `p` stand in a ruled line with two parcels already placed - off the line through them by less
     than `frac` of the three's span (settlement-review of Inashiro, feature 261)? Varying the stride did not break the
     CHAIN the 2026-08-18 reviews recorded: the monotone score still seats each parcel on the first legal ground along the
-    crop's keep-out edge, and Inashiro's three stood 5 ft off one line over 1,104 ft, Kashikawa's in a column."""
+    crop's keep-out edge, and Inashiro's three stood 5 ft off one line over 1,104 ft, Kashikawa's in a column.
+
+    Research: woods not in a ruled line - UNRESEARCHED: three parcels off one line by less than 0.2 of their span refused
+    """
     for i in range(len(centers)):
         for j in range(i + 1, len(centers)):
             a, b = (float(centers[i][0]), float(centers[i][1])), (float(centers[j][0]), float(centers[j][1]))
@@ -243,7 +266,24 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     Among the candidates that qualify it prefers the ones furthest from the crop and highest up the
     slope, and it keeps them apart from each other so three patches read as three woods rather than
     one ragged mass. This is the stage that most obviously could not be done by pinning coordinates:
-    "where is there still room" is a question about the map as it stands at that moment."""
+    "where is there still room" is a question about the map as it stands at that moment.
+
+    Research:
+        parcel count and size - UNRESEARCHED: `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
+        crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
+        keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
+        where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
+        near side of the field preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: seats not across the field from the houses taken first
+        parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
+        aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
+        line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH of a lane, brook or field the line runs alongside
+        mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: at most WET_SHARE_CAP in marsh
+        on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
+        woods not in a ruled line - UNRESEARCHED
+        nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
+        per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
+        scan reach - UNRESEARCHED: confined to 210 px past the content box
+    """
     dx, dy = plan.fall
     keep: list[tuple[float, float, float]] = []  # (x, y, radius) of everything to stay clear of
     for h in s.M.get("houses", []):
@@ -712,7 +752,10 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     harmonics seeded from the parcel's own position (`_hjit`), so the ring is smooth rather than
     spiky - a wood's edge wanders, it does not serrate - and the AREA comes out at ~85% of the
     ellipse's: the size rules above still bound it, from above. Recorded in research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html, with the one form deliberately NOT drawn here: the strip
-    holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob."""
+    holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob.
+
+    Research: wandering edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: radius 0.80-1.00 of the ellipse on two low harmonics, never a rectangle
+    """
     p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)
     ring: Poly = []
     for i in range(n):
@@ -732,13 +775,17 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
 # the record does attest as rectilinear (the Musashino strip holdings) is a settlement form and is not drawn here.
 
 LANE_LOT_LINE = 70.0  # px from a lane's centerline: the scan's own lane keep-out (`open_ground_patches`), the lot's line along it
+"""Research: lot line along a lane - UNRESEARCHED: 70 px from its centerline"""
 STREAM_LOT_LINE = 60.0  # px from a brook's centerline: the scan's own stream keep-out, the lot's line along it
+"""Research: lot line along a brook - UNRESEARCHED: 60 px from its centerline"""
 LOT_BOUND_REACH = 45.0
 """How near (px, 1 ft at the hamlet scale) a lot's outline must come to a feature's line before the line bounds it.
 
 GUESS, a calibrated degree (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html is silent on any distance): half the scan's 90 px lattice step, so a
 seat the lattice put within one half-step of a keep-out has its facing side drawn along that keep-out, while a lot a whole
-step or more away keeps its free wandering edge. A larger reach would bound more lots and cut more of their ground."""
+step or more away keeps its free wandering edge. A larger reach would bound more lots and cut more of their ground.
+
+Research: lot line reach - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: 45 ft"""
 
 Bound = tuple[list[tuple[Pt, Pt]], float, "Poly | None"]  # (segments, the lot's line distance, the ring when closed)
 
@@ -775,7 +822,10 @@ def lot_follows_its_bounds(ring: Sequence[Pt], bounds: Sequence[Bound], reach: f
     """THE ONE PREDICATE (feature 287, woods W26 - GUESS, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): does a coppice lot's line follow what
     bounds it? Where a vertex comes within `reach` of a brook's, a lane's or a field's line it lies on that line or keeps
     off it by the reach - a ragged wander near a feature, or a vertex over its line, is refused; and no edge of the lot
-    crosses a feature. `open_ground_patches` draws only rings this admits, cut by `follow_the_bounds`."""
+    crosses a feature. `open_ground_patches` draws only rings this admits, cut by `follow_the_bounds`.
+
+    Research: line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on the feature's line or clear of it by the reach, never across it
+    """
     edges = list(zip(ring, [*ring[1:], ring[0]], strict=False))
     for b in bounds:
         if any(segments_cross(a, c, s0, s1) for a, c in edges for s0, s1 in b[0]):
@@ -805,7 +855,10 @@ def follow_the_bounds(ring: Sequence[Pt], center: Pt, bounds: Sequence[Bound], r
     `lot_follows_its_bounds` would refuse is pulled in along its ray toward the lot's own `center` until it keeps off
     every bound by that bound's line plus the reach - so the lot's facing side runs parallel to the brook, lane or field
     edge. Only ever pulled IN: the ring stays inside the reach the scan tested, so no keep-out can be crossed by the cut.
-    A vertex no point of its ray can clear (the center itself too near) is left, and the predicate refuses the ring."""
+    A vertex no point of its ray can clear (the center itself too near) is left, and the predicate refuses the ring.
+
+    Research: line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: vertices pulled in until they run alongside the feature
+    """
     out: Poly = []
     cx, cy = center
     for p in ring:
@@ -899,7 +952,10 @@ def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0
     against every edge of every crop to return the nearest distance, and its only caller asked
     whether that was None. The distance is asked of the index only under the widest set-back this
     crop could apply (+1 px of slack), and the refusal is the expression the scan ran - `d - half <
-    set-back` on the true distance - so the verdict is the same to the bit."""
+    set-back` on the true distance - so the verdict is the same to the bit.
+
+    Research: crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side
+    """
     cx, cy = center
     if crop.inside(cx, cy):
         return True

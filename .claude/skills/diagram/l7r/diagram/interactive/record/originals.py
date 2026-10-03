@@ -16,6 +16,8 @@ behind a click.
 A UNIT is `original: 「...」` with any originals joined to it in one run (`original: 「O1」 and 「O2」`, `...; original:
 「O2」`): one placeholder per run keeps the bytes between the originals, so restoring is exact. Brackets nest
 (`「...「...」...」`), so a unit closes at depth zero.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

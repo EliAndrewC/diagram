@@ -1,4 +1,7 @@
-"""The parts the seating laid, held in the registry of what stands until they are drawn (feature 287 M8)."""
+"""The parts the seating laid, held in the registry of what stands until they are drawn (feature 287 M8).
+
+Research: registry holds - NONE: bookkeeping of what stands
+"""
 
 from __future__ import annotations
 

@@ -166,3 +166,23 @@ def test_a_thin_dooryard_band_runs_its_trees_its_whole_length() -> None:
         discs = [(tc[i + 1] if h > w else tc[i], tc[i + 2]) for i in range(0, len(tc), 3)]
         bare = (min(c - r for c, r in discs) - lo, hi - max(c + r for c, r in discs))
         assert max(bare) <= 0.0, ("a crown reaches each end of the band, where it joins the belt", w, h, bare)
+
+
+def test_a_clumps_bamboo_marks_keep_out_of_a_plots_sun_and_are_recorded() -> None:
+    """Feature 315: a culm mark in a yard's sun ground at bamboo's reach is not inked, and every inked mark is recorded in
+    `bamboo_marks` [x, y, r] - the record the map's check reads."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT, bamboo_shading_plots
+
+    def draw(yard: bool) -> tuple[int, Settlement]:
+        s = _hamlet()
+        s.sun_corridor(39)
+        if yard:
+            s.M["threshing_yards"] = [{"x": 400.0, "y": 380.0, "w": 40.0, "h": 30.0}]  # its sun ground covers the grove's south half
+        n = s._draw_grove(400.0, 400.0, 160.0, 120.0, (0, -1), mix="windbreak", cls="homestead grove", bamboo=True)
+        return n, s
+
+    n_open, open_ = draw(False)
+    n_sun, sunny = draw(True)
+    assert n_open == len(open_.M["bamboo_marks"]) > 0, "non-vacuity: marks inked and recorded"
+    assert n_sun == len(sunny.M.get("bamboo_marks") or []) < n_open, "the sun ground took some"
+    assert bamboo_shading_plots(sunny.M, BAMBOO_SHADE_FT) == []

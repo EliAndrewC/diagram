@@ -32,6 +32,8 @@ WHO HOLDS THE REST: the copse plants the reserved seats before any other clump (
 them (`reserved_seat_keepouts`); every placer after the seating - the web's lanes by the copse's own lane buffer, the
 title's pocket, the shared sheds, the wells, the parts laid after it - is kept off them by the registry of what stands
 (`overlap/reserved.py`, plan M8), to which the seating hands them (`homesteads/stages.reserve_the_seating`).
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -52,6 +54,7 @@ if TYPE_CHECKING:
 
 #: The dooryard copse's clump, in bscale units: `village_grove`'s sparse stand (`dense=False`) draws a 22 px clump.
 COPSE_CLUMP_BS = 22.0
+"""Research: copse clump size - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: 22 bscale units, an 11 ft radius against the 8.5 ft mean crown"""
 
 #: The seat lattice's pitch, in bscale units: the clump's radius times the square root of two, the widest square lattice
 #: whose crowns leave no point of a cell bare - so the reserved crowns cover their ground without a gap.
@@ -68,17 +71,28 @@ BAR_MARGIN_PX = 0.5
 #: record's "the windward grove at the back" (research/contents.json#homesteads, the yashikirin's north and west): the figures are
 #: the placer's, not the record's.
 FOCUS_DEPTH = 0.7
+"""Research: wood behind its house - UNRESEARCHED: centered 0.7 of the reach behind the house's center, the placer's figure"""
 LATERAL_WEIGHT = 2.0
+"""Research: flanks after the back - UNRESEARCHED: a foot aside costs twice a foot deeper"""
 
 #: The strip the morning lane runs east of a garden bed, in px: `village_grove`'s `east` rectangle (24 px past the bed).
 EAST_LANE_PX = 24.0
+"""Research: bed's morning lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 24 px east of a bed"""
 
 
 def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
     """The copse keep-outs of one homestead's parts, as `(circles, rects)`: the discs a clump's center may not enter and
     the open rectangles it may not stand in, each `village_grove`'s own figure (see the module's note) grown by
     `BAR_MARGIN_PX`. `parts` holds `(cx, cy, w, h)` rects - the unturned size at the drawn center, as a record is: `house`,
-    `yard`, `gardens` (a list), `shed`, `byre`, `retirement` and `well` (the pocket; `well_vr` its drawn half-size)."""
+    `yard`, `gardens` (a list), `shed`, `byre`, `retirement` and `well` (the pocket; `well_vr` its drawn half-size).
+
+    Research:
+        clump beside, never on, a building - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            half the diagonal plus the clump's radius and 2 px
+        copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
+        plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: south of each yard and bed,
+            east of each bed
+    """
     cr, m = clump / 2.0, BAR_MARGIN_PX
     circles: list[tuple[float, float, float]] = []
     rects: list[tuple[float, float, float, float]] = []
@@ -122,7 +136,14 @@ def in_keepouts(x: float, y: float, circles: Iterable[tuple[float, float, float]
 def ground_blocks(s: Settlement, clump: float) -> GroveBlocks:
     """The ground a dooryard copse clump may not stand on, indexed once: the crop within 12 px plus the clump's radius, the
     dry plots within 12, the dike outlines and the marsh (inside), open water within its half-width plus the clump's
-    radius - `village_grove`'s hard keep-outs for the copse, each `BAR_MARGIN_PX` stricter. Only `hard` is asked of it."""
+    radius - `village_grove`'s hard keep-outs for the copse, each `BAR_MARGIN_PX` stricter. Only `hard` is asked of it.
+
+    Research:
+        copse off the crops - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            12 px plus the clump's radius off a paddy, 12 off a dry plot
+        copse off the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
+        copse off open water - UNRESEARCHED: half-width plus the clump's radius
+    """
     cr, m = clump / 2.0, BAR_MARGIN_PX
     water = [(st["poly"], st.get("w", 9) / 2 + cr + m) for st in s.M.get("streams", [])]
     water += [(ch["poly"], ch.get("w", 2.5) / 2 + cr + m) for ch in s.M.get("channels", [])]
@@ -152,7 +173,11 @@ def open_water_discs(M: Mapping[str, Any], clump: float) -> list[tuple[float, fl
     pond - the tameike or a polder's header reservoir - by its longer semi-axis, a crescent pond by its radius, a shrine's
     hall by half its diagonal, each plus 0.90 of the clump; a torii by its glyph), `BAR_MARGIN_PX` stricter: the planting
     refuses a clump inside them, and Kuwabata's header reservoir took a reserved seat 3.5 px off its fringe so (feature
-    287 M8)."""
+    287 M8).
+
+    Research:
+        copse off ponds and sacred ground - UNRESEARCHED: each plus 0.90 of the clump
+    """
     reach = clump * 0.90 + BAR_MARGIN_PX
     out = [(float(o["x"]), float(o["y"]), 0.5 * math.hypot(float(o["w"]), float(o["h"])) + reach) for k in ("religious", "shrines") for o in M.get(k) or [] if "w" in o and "h" in o]
     out += [(float(t[0]), float(t[1]) + 4.0, math.hypot(19.0, 14.0) + reach) for t in M.get("torii") or []]
@@ -203,6 +228,13 @@ class WoodShares:
     keep-outs of every homestead admitted, the seats every household reserved, and the canopy cells they cover."""
 
     def __init__(self, s: Settlement, floor_ft2: float, reach_ft: float, corridor_half: float) -> None:
+        """The reservations' state for one seating.
+
+        Research:
+            sun strip default - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 22 ft where the map
+                declares none
+            seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
+        """
         self.clump = COPSE_CLUMP_BS * s.bscale
         self.cr = round(self.clump / 2.0, 1)  # the radius the planted copse records and `wood_canopy` counts at
         self.pitch = SEAT_PITCH_BS * s.bscale
@@ -229,7 +261,10 @@ class WoodShares:
 
     def file_byre_pockets(self, s: Settlement, pockets: Iterable[Pt]) -> None:
         """File the shared sheds' pockets the seating reserved before any house (`reserve_commons_byres`): each a byre's
-        keep-out, so no seat is reserved under a shed."""
+        keep-out, so no seat is reserved under a shed.
+
+        Research: copse clump kept off a shared byre by its half-diagonal plus the clump radius and 2 px - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
+        """
         bw, bh = s.px(BYRE_FT[0]), s.px(BYRE_FT[1])
         for x, y in pockets:
             self.file([(float(x), float(y), 0.5 * math.hypot(bw, bh) + self.clump / 2.0 + 2.0 + BAR_MARGIN_PX)], [])
@@ -241,7 +276,13 @@ class WoodShares:
         """THE ONE PREDICATE of a reserved seat: may the copse stand a clump at (x, y) for the house at `house`, among its own
         keep-outs `own` and the reserved `corridors`? Off the canvas, past the reach, in a keep-out of its own or of any
         homestead admitted, on hard ground, across a bank (`banks`: the stream reaches to ask, every one by default) or on
-        a corridor, it may not."""
+        a corridor, it may not.
+
+        Research:
+            within a dooryard's reach - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the
+                reach the caller gives, 90 ft
+            on its house's bank - UNRESEARCHED: no seat across a stream from its house
+        """
         if not (6.0 <= x <= self.W - 6.0 and 6.0 <= y <= self.H - 6.0):
             return True
         if math.dist((x, y), house) > self.reach - BAR_MARGIN_PX:
@@ -260,10 +301,15 @@ class WoodShares:
         return any(seg_dist(x, y, a, b) < self.lane_gap for a, b in corridors)
 
     def share(self, geom: Mapping[str, Any], rot: float, corridors: Sequence[tuple[Pt, Pt]]) -> list[tuple[float, float]] | None:
-        """The seats this homestead would reserve: the lattice within reach of its house, nearest a point half the reach
-        behind its back wall first, each seat kept where it is not barred (`seat_barred`) and its crown covers ground no
+        """The seats this homestead would reserve: the lattice within reach of its house, nearest a point `FOCUS_DEPTH` of the
+        reach behind its center first, each seat kept where it is not barred (`seat_barred`) and its crown covers ground no
         other household reserved, until the crowns cover the floor. None when the ground within reach cannot hold it -
-        the homestead is refused its seat."""
+        the homestead is refused its seat.
+
+        Research:
+            each household's floor reserved - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
+                crowns covering the floor on ground no other household holds, or the seat refused
+        """
         hx, hy = float(geom["house"][0]), float(geom["house"][1])
         th = math.radians(rot)
         back, side = (math.sin(th), -math.cos(th)), (math.cos(th), math.sin(th))  # the house frame's -y and +x, turned with it
@@ -372,5 +418,8 @@ class ReservedSeats:
 
 def well_keepout(s: Settlement) -> float:
     """The disc a wellhead keeps the dooryard copse's clumps out of, from its center (`village_grove`'s `vr + 1.05 clumps
-    + 1`), `BAR_MARGIN_PX` stricter."""
+    + 1`), `BAR_MARGIN_PX` stricter.
+
+    Research: copse off the wellhead - UNRESEARCHED: drawn half-size plus 1.05 clumps and 1 px
+    """
     return float(s._well_vr()) + COPSE_CLUMP_BS * s.bscale * 1.05 + 1.0 + BAR_MARGIN_PX

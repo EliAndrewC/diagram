@@ -1,6 +1,8 @@
 """The primitives a siter uses to ask whether a caption fits, and whether a footprint would land under one.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: caption placement - CONVENTION: where and how a map caption is seated, and what it keeps clear of
 """
 
 import math

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T05:56:45Z",
+  "target": "perf-explain",
+  "commit": "3a72b7e88",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the control was the perf-audit's own six-run A/B in detached worktrees (end commit with and without the weld and kbam; the start commit), not recorded as a measurements.json key"
+}

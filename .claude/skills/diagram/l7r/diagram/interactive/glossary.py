@@ -11,6 +11,8 @@ explanations cite; a term here is a term the prose in `classes.py` actually uses
 THE ENTRIES ARE DATA - `assets/glossary.json` (feature 207): one object per term, `variants` and `def`.
 Adding a term is a page-content edit that owes `make page-check`, not the gate (see `content.py`); the
 record's derived `research/assets/glossary.js` is then rewritten by `make glossary` (feature 209).
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

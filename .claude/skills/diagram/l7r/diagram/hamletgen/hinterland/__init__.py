@@ -1,6 +1,8 @@
 """STAGE 7: the ground between everything - open-ground scan, woodland, windbreak.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: package index - NONE: re-exports only
 """
 
 from __future__ import annotations

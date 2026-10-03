@@ -1,4 +1,7 @@
-"""Layer-0 palette and parcels: paddy/crop colors, the real-feet paddy-cell calibration (paddy_grain), aze width, organic dry-crop parcel outlines."""
+"""Layer-0 palette and parcels: paddy/crop colors, the real-feet paddy-cell calibration (paddy_grain), aze width, organic dry-crop parcel outlines.
+
+Research: palette plumbing - NONE: unit conversion and polygon sampling
+"""
 
 import math
 import random
@@ -26,6 +29,7 @@ from .frame import Poly, Pt
 # smaller cells - total paddy area, farmhouse rings, and the household count are all unchanged. See
 # research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html.
 PADDY_CELL_ACRES = 0.05
+"""Research: one leveled basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.05 acre, about 47 ft square, in real feet at every scale"""
 
 
 def paddy_grain(ftpx: float, target_acres: float = PADDY_CELL_ACRES, aspect: float = 0.66, spread: float = 0.16) -> tuple[float, tuple[float, float]]:
@@ -34,7 +38,13 @@ def paddy_grain(ftpx: float, target_acres: float = PADDY_CELL_ACRES, aspect: flo
     across-canal x along-canal cell of the given `aspect` (= along/across; 0.66 is the mild
     across-elongation the GM-vetted village paddies already read as). `row_step` is (min, max) at
     +/-`spread` around the along mean, carrying the organic row variation. This is THE paddy-size
-    calibration lever - one real-feet target in, consistent paddy size out, replacing hand-set px."""
+    calibration lever - one real-feet target in, consistent paddy size out, replacing hand-set px.
+
+    Research:
+        basin area - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the target area in real feet, converted at the map's scale
+        basin proportion - UNRESEARCHED: along/across 0.66, the elongation the vetted village paddies read as
+        row variation - UNRESEARCHED: the row step +/-16% around its mean
+    """
     target_px2 = target_acres * 43560.0 / (ftpx * ftpx)
     across = math.sqrt(target_px2 / aspect)
     along = aspect * across
@@ -48,10 +58,15 @@ def paddy_grain(ftpx: float, target_acres: float = PADDY_CELL_ACRES, aspect: flo
 # drain-plots stay byte-for-byte unchanged; only the body color goes uniform. (The MEANINGFUL colors remain:
 # FLOODED blue-green for the low plots that sit on the drain, and RIPE_GOLD, when a map uses it.)
 _RICE_GREEN = '#A6C398'
+"""Research: rice green - CONVENTION: the hue of a growing paddy"""
 RICE_GREENS = [_RICE_GREEN, _RICE_GREEN, _RICE_GREEN]
+"""Research: one green - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: every rice basin drawn one green"""
 FLOODED = '#93B7AC'
+"""Research: wet-paddy tint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a blue-green marking wetter ground"""
 RIPE_GOLD = '#C9BA79'
+"""Research: early-ripening plot - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: gold for the odd plot ripening early"""
 BUND = '#C2A772'
+"""Research: bare-earth tan - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: kept for earthworks of real width, dikes and pads"""
 # AZE: the paddy plot-boundary stroke, split from BUND (GM 2026-07-24). BUND stays the broad
 # exposed-earth AREA fill (perimeter dikes, dike-top house pads - true-width earthworks); AZE is
 # the LINE between paddies: the puddled-mud ridge (aze / tiangeng) re-plastered each spring
@@ -67,12 +82,17 @@ BUND = '#C2A772'
 # but vanish, so a dark visible bund network is a stylization that keeps the field structure
 # readable. See research/questions/0005-rice-paddies-and-their-plots-suiden.html.
 AZE = '#6E4520'
+"""Research: bund color - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a dark red-leaning mud brown, shown in summer by convention"""
 AZE_FT = 1.5  # drawn aze width in real feet; convert at the map's ftpx, floored for raster visibility
+"""Research: dividing bund width - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: about 1.5 ft, its real width"""
 
 
 def aze_w(ftpx: float) -> float:
     """Paddy bund stroke width in px at this map's scale: AZE_FT real feet, floored at 0.5 px
-    so the city scale (3 ft/px) keeps a faint-but-present line instead of vanishing."""
+    so the city scale (3 ft/px) keeps a faint-but-present line instead of vanishing.
+
+    Research: bund stroke - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: AZE_FT at the map's scale, never thinner than half a pixel
+    """
     return max(AZE_FT / ftpx, 0.5)
 
 
@@ -82,6 +102,7 @@ BEAN_GREEN = '#2F6B35'  # azemame (bund soybeans) - the beaded-bund accent. Deep
 # (real soybean foliage is lighter): dark enough to punch against the pale rice, green enough to
 # still read as a plant against the near-black bund stroke. Picked from a 3-color ladder rendered
 # on Inashiro (hunter #355E3B grayed out, forest #1F4A28 read as black).
+"""Research: bean bead color - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a deep pine green, darker than the plant"""
 
 
 # HAND-PILED EARTHWORK IS NEVER RULED (GM 2026-07-24). A farmer building a rectangular basin out of
@@ -117,7 +138,12 @@ def organic_parcel(
     dike-pond overlay - keeps working on an ordinary polygon; `arc`/`bows` set the sampling density.
 
     `bow_cap` is the caller's guarantee that two neighboring parcels cannot bow into each other: it
-    must leave a positive gap given the inset the caller applied, or the drawn bunds would touch."""
+    must leave a positive gap given the inset the caller applied, or the drawn bunds would touch.
+
+    Research:
+        corners rounded - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each corner filleted with its own reach on each leg, from all but square to a broad sweep, the arc roughened
+        edges wander - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each straight run offset by eye, capped at `bow` of its length and a tenth of it
+    """
     n = len(poly)
     if n < 3:
         return list(poly)
@@ -194,3 +220,4 @@ DRY_CROPS = {
     "buckwheat": ("#D3C2A6", "#C69C86"),  # soba - pale, reddish stems
     "soy": ("#A9B36A", "#8E9A50"),  # daizu as a field crop - soybean green
 }
+"""Research: four dry crops at their ripest color - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: barley, millet, buckwheat and soybean, each with a furrow color"""

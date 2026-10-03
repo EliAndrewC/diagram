@@ -132,18 +132,30 @@ def test_sun_corridor_covers_a_neighbors_garden_and_this_bundles_gardens():
 
 
 def test_a_persimmon_keeps_out_of_its_own_and_its_neighbors_yards_and_beds_sun():
-    """GM 2026-10-02: the placer refuses a bundle whose persimmon stands in a yard's or bed's sun - its own as drawn, a
-    standing neighbor's - and one whose plots a standing neighbor's persimmon shades; off where the sun corridor is."""
+    """GM 2026-10-02: a household's persimmon in a yard's or bed's sun - its own as drawn, a standing neighbor's - is dropped,
+    and the seat judged without it (feature 315: a dooryard tree never refuses a household); a seat whose plots a standing
+    neighbor's persimmon shades is refused; off where the sun corridor is."""
     s = _nuc_village()
     tree = (500, 300, 23, 23)
     assert s._persimmon_sun_conflict({"yard": (500, 330, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is False, "off by default"
     s.sun_corridor(39)
-    assert s._persimmon_sun_conflict({"yard": (440, 300, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is True, "its own yard"
+    own = {
+        "yard": (440, 300, 36, 26),
+        "gardens": [],
+        "fixtures": {"persimmon": tree},
+        "fixture_notes": {"ft": {"persimmon": (23.0, 23.0), "privy": (24.0, 12.0)}},
+        "boxes": {"fixtures": {"persimmon": tree}},
+    }
+    assert s._persimmon_sun_conflict(own) is False and "persimmon" not in own["fixtures"], "its own yard: the tree is dropped, the seat stands"
+    assert own["boxes"]["fixtures"] == {} and own["fixture_notes"]["ft"] == {"privy": (24.0, 12.0)}, "its box and its rolled size go with it"
     assert s._persimmon_sun_conflict({"yard": (500, 400, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is False, "behind its house"
     assert s._persimmon_sun_conflict({"yard": (500, 400, 36, 26), "gardens": []}) is False, "a household with no tree"
     s.M["houses"].append({"x": 420, "y": 260, "w": 46, "h": 28, "geom": {"yard": (420, 300, 36, 26), "gardens": [(470, 260, 22, 24)], "fixtures": {"persimmon": (380, 330, 23, 23)}}})
-    assert s._persimmon_sun_conflict({"yard": (500, 400, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}) is True, "a neighbor's yard to its east"
-    assert s._persimmon_sun_conflict({"yard": (360, 380, 36, 26), "gardens": [], "fixtures": {"persimmon": (360, 340, 23, 23)}}) is True, "a neighbor's tree over this yard"
+    near = {"yard": (500, 400, 36, 26), "gardens": [], "fixtures": {"persimmon": tree}}
+    assert s._persimmon_sun_conflict(near) is False and "persimmon" not in near["fixtures"], "a neighbor's yard to its east: dropped"
+    assert s._persimmon_sun_conflict({"yard": (440, 310, 36, 26), "gardens": []}) is True, "a neighbor's tree in this yard's sun: the seat is refused"
+    own_shade = {"yard": (360, 380, 36, 26), "gardens": [], "fixtures": {"persimmon": (360, 340, 23, 23)}}
+    assert s._persimmon_sun_conflict(own_shade) is False and own_shade["fixtures"] == {}, "its own tree over its own yard: dropped"
     assert s._persimmon_sun_conflict({"yard": (700, 600, 36, 26), "gardens": [], "fixtures": {"persimmon": (700, 560, 23, 23)}}) is False, "far from both"
 
 

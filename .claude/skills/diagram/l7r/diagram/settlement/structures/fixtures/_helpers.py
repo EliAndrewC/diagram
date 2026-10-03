@@ -1,4 +1,7 @@
-"""Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: board-siting plumbing - NONE: walks, joins, routes and their indexes
+"""
 
 import math
 from collections.abc import Callable, Sequence
@@ -15,6 +18,7 @@ from ..._geom import (
 # (is there room for a caption here?), not a caption seat: the caption itself is seated by the one placer
 # (feature 266), which scores a lane crossed within the gate's 2 ft notch at Esri's way weight.
 CAPTION_LANE_TARGET_FT = 3.0
+"""Research: caption room beside a board - CONVENTION: 3 ft lane clearance for the caption probe"""
 
 # THE BOARD IS ROADSIDE (GM 2026-08-26, feature 133 T13: *"I would expect it to be essentially
 # roadside ... puts it right next to one of the village lanes"*). Real feet from the tread's EDGE to
@@ -26,6 +30,7 @@ CAPTION_LANE_TARGET_FT = 3.0
 # (the 60 ft band remains the fallback, and `kosatsuba_by_the_road` tightens to this band at those
 # tiers); towns and cities keep the 60 ft rule until their pool maps are re-rolled at unlock.
 KOSATSUBA_VERGE_FT = 6.0
+"""Research: board at the roadside - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the tread's edge at a hamlet or village"""
 
 KOSATSUBA_ENTRANCE_REACH_FT = 100.0
 """How near a dwelling the approach must come before it counts as having ARRIVED at the settlement.
@@ -40,7 +45,9 @@ an `entrance` placement it had not drawn.
 
 100 ft is not a new figure: it is the reach `farmhouses_reach_a_way` uses to decide whether a dwelling
 is served by a way at all. Where the approach first comes within serving distance of a house is where
-a walker would say the hamlet begins, and it is the same measure the rest of the engine already makes."""
+a walker would say the hamlet begins, and it is the same measure the rest of the engine already makes.
+
+Research: where the settlement begins - UNRESEARCHED: the approach within 100 ft of a dwelling"""
 
 KOSATSUBA_ANCHOR_BAND_FT = 60.0
 """How far from the best seat at an anchored placement another seat may stand and still compete.
@@ -50,7 +57,9 @@ counts as belonging to the way it stands on (`kosatsuba_by_the_road`'s fallback 
 here so an anchored placement admits the seats that genuinely front the entrance or the gate, and no
 others, and then hands the choice to the caption and roadside preferences that already existed.
 Making it TIGHTER would let a caption-blocked seat win on a foot of proximity; making it LOOSER would
-let the traffic term drag the board off the anchor, which is the defect this feature exists to fix."""
+let the traffic term drag the board off the anchor, which is the defect this feature exists to fix.
+
+Research: anchored siting band - UNRESEARCHED: 60 ft from the best seat, the board's siting distance reused"""
 
 
 def kosatsuba_affordances(M: Any) -> dict[str, bool]:
@@ -78,12 +87,16 @@ KOSATSUBA_HANDOVER_BAND_FT = 20.0
 """How far from the connector's handover an `entrance` board may stand. Every departure ends its walk through the lanes
 at the handover, so a board beside it is passed by all of them; the wider anchor band let the caption and structure
 preferences carry the board 70-100 ft off it, onto a lane two of Kashikawa's households and one of Sawada's never took
-(feature 261). 20 ft is the board's own verge off the tread plus a board's length either way along it."""
+(feature 261). 20 ft is the board's own verge off the tread plus a board's length either way along it.
+
+Research: entrance board beside the handover - UNRESEARCHED: within 20 ft of where every departure passes"""
 
 
 DWELLING_REACH_FT = 150.0
 """How far from a way a dwelling may stand and still be walked out by it - `departure_routes`' `reach`, one number for
-both, so the entrance and the routes it must be passed by cannot disagree."""
+both, so the entrance and the routes it must be passed by cannot disagree.
+
+Research: dwelling served by a way - UNRESEARCHED: within 150 ft"""
 
 
 def dwellings_joining(M: Any, track: Sequence[tuple[float, float]], houses: Sequence[tuple[float, float]]) -> list[tuple[float, float]]:
@@ -147,7 +160,9 @@ def outermost_join(track: Sequence[tuple[float, float]], others: Sequence[Sequen
 
 def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
     """Where a hamlet's connector hands over to its lanes - the connector's end nearest the dwellings, when another way
-    meets it there - or None (no connector, no dwellings, or a connector that runs on through the houses meeting none)."""
+    meets it there - or None (no connector, no dwellings, or a connector that runs on through the houses meeting none).
+
+    Research: entrance is the handover - research/questions/0190-notice-boards-kosatsuba.html: the board at the village entrance, read as the last join on the way out"""
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses:
         return None
@@ -190,6 +205,10 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
     is walked from its far end inward and the anchor is where it first reaches the cluster. Taking the nearest point instead would put the
     anchor at the deepest point of the track's run past the houses, i.e. inside the settlement, which
     is the opposite of an entrance.
+
+    Research:
+        board placements - research/questions/0190-notice-boards-kosatsuba.html: center, entrance, or the headman's gate (frontage)
+        entrance anchor - research/questions/0190-notice-boards-kosatsuba.html: the handover, else where the approach first reaches a dwelling
     """
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses or placement == "center":
@@ -349,13 +368,16 @@ class RouteReach:
 
 
 CAPTION_HALO_FT = 1.5  # the caption's background halo, drawn past its box (`label()`'s stroke) - what notches a crown
+"""Research: caption halo - CONVENTION: 1.5 ft"""
 
 
 def quad_on_canopy(quad: Sequence[tuple[float, float]], near: Callable[[float, float, float], Any]) -> bool:
     """Does a caption DRAWN as `quad` - with its halo - lie on any tree crown? `near(x, y, pad)` returns the crowns (x, y,
     r, ...) whose boxes come within `pad` of a point (a `canopy_index` grid's `near`). The drawn shape against the drawn
     crowns (feature 261, settlement-review of Kuwabata): the old test asked whether the caption's CENTER stood within a
-    radius of a crown, a stand-in for a 53 ft caption whose ends can lie in trees while its middle is clear."""
+    radius of a crown, a stand-in for a 53 ft caption whose ends can lie in trees while its middle is clear.
+
+    Research: caption off the canopy - CONVENTION: the drawn caption and halo against the drawn crowns"""
     from ..._geom import point_in_poly, seg_dist
 
     cx, cy = sum(p[0] for p in quad) / len(quad), sum(p[1] for p in quad) / len(quad)

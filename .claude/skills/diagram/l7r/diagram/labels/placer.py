@@ -15,6 +15,8 @@ leader line ties them back. The standard, in the order it decides:
    labels as mandatory") and never drawn overlapping (feature 287, D10) - with no free seat it goes in the sheet's key.
 4. A caption not at the preferred offset is no longer directly beside its feature, so a LEADER line joins it back
    (QGIS callouts, Esri's leader, PSU: "labels that do not fit on or directly adjacent to their respective feature").
+
+Research: caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds
 """
 
 from __future__ import annotations
@@ -126,14 +128,20 @@ HUG_RING = HUG_PX - NUDGE_PX * math.sqrt(2.0)
 
 def rings(size: float) -> list[float]:
     """The ring distances for a caption of `size`: the preferred offset, then a step at a time out to the reach - never
-    past the hug (`HUG_RING`), whatever the caption's size."""
+    past the hug (`HUG_RING`), whatever the caption's size.
+
+    Research: nearer first - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the preferred offset, then a half em a ring out to the reach, never past the hug
+    """
     n = int(round((REACH_EM - PREFERRED_OFFSET_EM) / RING_STEP_EM)) + 1
     return [min((PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size, HUG_RING) for k in range(n) if k == 0 or (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size <= HUG_RING]
 
 
 def outer_rings(size: float) -> list[tuple[int, float]]:
     """The LEADER rings (feature 287, D10): past the standard's reach, a step at a time out to the hug, each with its ring
-    number - where a caption with no free seat in reach looks next, tied back by its leader, before it goes in the key."""
+    number - where a caption with no free seat in reach looks next, tied back by its leader, before it goes in the key.
+
+    Research: leader rings - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: past the reach out to the hug, each seat tied back by a leader
+    """
     k = len(rings(size))
     out: list[tuple[int, float]] = []
     while (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size <= HUG_RING:
@@ -165,6 +173,7 @@ def _box_frame(subject: Subject, ang: float) -> tuple[Pt, Pt, Pt, float, float]:
 def _point_cands(
     text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None, ring_gaps: list[tuple[int, float]] | None = None
 ) -> Iterator[_Cand]:
+    """Research: seats round a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the ranked positions in the feature's own turned frame, the gap from its drawn edge"""
     ang = upright(subject.angle)
     c, u, v, su, sv = _box_frame(subject, ang)
     for ring, g in _ringed(size, ring_gaps):
@@ -184,6 +193,12 @@ def _point_cands(
 def _line_cands(
     text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None, ring_gaps: list[tuple[int, float]] | None = None
 ) -> Iterator[_Cand]:
+    """Seats along a line.
+
+    Research:
+        a line's caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: along the line at its bearing, above before below, never upside down
+        stations along the line - NONE: two ems apart from the hint, a search bound
+    """
     pts = list(subject.poly)
     segs = list(zip(pts, pts[1:], strict=False))
     lengths = [math.dist(a, b) for a, b in segs]
@@ -223,6 +238,7 @@ def _line_cands(
 
 
 def _area_cands(text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
+    """Research: an area's caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: inside the area, its centroid first"""
     ang = upright(subject.angle)
     c = area_centroid(subject.poly)
     x0, y0, x1, y1 = bbox(subject.poly)
@@ -239,7 +255,10 @@ def _extended_cands(
     """THE FALLBACK SEARCH (feature 286), tried only when the standard's candidates found no free seat: an area's inside
     sampled over its whole extent, the step set by its size rather than one em (a large court's free ground lay beyond
     the 400 seats nearest its centroid); round a point subject, the block slid along each side between the ranked
-    positions, ring by ring. A line subject's stations already walk its length, so it adds nothing."""
+    positions, ring by ring. A line subject's stations already walk its length, so it adds nothing.
+
+    Research: fallback seats - CONVENTION: slides between the ranked seats, and a finer grid inside an area, when none is free
+    """
     lays = [lines] if lines else layouts(text)
     sizes = line_sizes if lines else None
     ang = upright(subject.angle)
@@ -291,7 +310,10 @@ def _cands(
 def _leader_cands(text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
     """THE LEADER SEARCH (feature 287, D10), tried only when nothing in the standard's reach is free: the standard's
     positions and the fallback's slides on the rings past the reach, out to the hug (`outer_rings`), every seat tied back
-    by its leader. An area's name lies inside it, so it adds nothing for an area."""
+    by its leader. An area's name lies inside it, so it adds nothing for an area.
+
+    Research: leader search - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a displaced caption tied to its feature by a leader line
+    """
     outer = outer_rings(size)
     if not outer or subject.kind == "area":
         return
@@ -424,7 +446,14 @@ def place(
     search's every answer, so only a strict caller passes it - and a seat it refuses is passed over as if it were not
     free (feature 287, labels L6: the board's siter asks whether the caption stands nearest its board AS IT WILL BE
     RECORDED, `board_seat.board_caption_seat`). The search then goes on to the next seat, so a refused seat costs the
-    caption no seat another would have given it."""
+    caption no seat another would have given it.
+
+    Research:
+        free space wins - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the first seat covering nothing is taken
+        never clipped - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a seat leaving the picture is never a candidate
+        never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the least-cost soft seat, else the sheet's key, never an overlap
+        the hug - CONVENTION: no seat past the hug from what it names
+    """
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
     point = subject.kind == "point"
@@ -517,7 +546,12 @@ def _score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear:
     and it cannot be: a ring-k block in a position whose ring-0 block an obstacle blocked stands within that obstacle's
     gap plus the ring's step of it - under `clear + (g_k - g_0) = g_k`, its own gap - so every leader seat would be
     refused and a caption with a leader could only go in the key. A leader carries the association itself (QGIS's
-    callouts, Esri's leaders: the line ties the words to their feature), so the term holds where the words alone must."""
+    callouts, Esri's leaders: the line ties the words to their feature), so the term holds where the words alone must.
+
+    Research:
+        association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat with no leader
+        an area's name inside it - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: spilling out costs an obstacle
+    """
     og = poly_gap(block, list(subject.poly)) if subject.kind == "point" and c.ring == 0 else None
     cost, hard = index.score(block, clear, own, text, subject.civic, og)
     if subject.kind == "area" and not all(inside(p[0], p[1], subject.poly) for p in block):
@@ -531,7 +565,10 @@ def _score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear:
 def keyed(text: str, size: float, subject: Subject, lines: list[str] | None, cost: float) -> Placement:
     """A caption with no seat on the sheet, entered in the sheet's KEY (feature 287, D10): its `block` is the numbered
     mark's, set on what it names (a point's or an area's center, a line's hint or middle), and its lines are the words the
-    key carries. The caller draws the mark and the key."""
+    key carries. The caller draws the mark and the key.
+
+    Research: caption in the key - CONVENTION: a numbered mark on the feature, the words in a key beside the map
+    """
     if subject.kind == "area":
         c = area_centroid(subject.poly)
     elif subject.kind == "line":
@@ -546,7 +583,10 @@ def keyed(text: str, size: float, subject: Subject, lines: list[str] | None, cos
 
 
 KEY_MARK_EM = 1.2
-"""A key mark's width in ems - room for a two-digit number."""
+"""A key mark's width in ems - room for a two-digit number.
+
+Research: key mark width - CONVENTION: 1.2 em
+"""
 
 
 def nudge(
@@ -583,7 +623,10 @@ def nudge(
 
 def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
     """The leader a seat off the preferred offset draws: from the caption's block to the nearest point of what it names,
-    trimmed a little at each end. None at ring 0 and for an area, whose name lies inside it."""
+    trimmed a little at each end. None at ring 0 and for an area, whose name lies inside it.
+
+    Research: when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: every seat off the preferred offset, to the nearest point of the feature
+    """
     if ring == 0 or subject.kind == "area":
         return None
     a, b = nearest_points(block, list(subject.poly), closed=subject.kind != "line")
@@ -601,7 +644,10 @@ def leader_cost(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, c
 def leader_score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str) -> tuple[float, bool]:
     """What a seat's leader line passes over or ends against, of the things `index` holds, and whether that is an
     overlap: a leader through another caption, or ending on a tub beside the feature it names, reads as naming the wrong
-    thing (feature 283: Ochiba's RESIDENCE led through INNER COURT to a tub at the house's corner)."""
+    thing (feature 283: Ochiba's RESIDENCE led through INNER COURT to a tub at the house's corner).
+
+    Research: leader keeps clear - CONVENTION: a leader through a caption or ending on a small glyph counts as covering it
+    """
     seg = leader_of(c.ring, block, subject)
     if seg is None or math.dist(*seg) < 1e-6:
         return 0.0, False

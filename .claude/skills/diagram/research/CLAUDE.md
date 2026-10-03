@@ -284,6 +284,12 @@ When a check returns: `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<c
 refuses a unit with no answer at the content pushed. A fix that applies a check's findings is owed its second round; a
 `NOT_OWED_OK`, `CHECK_NOT_OWED_OK`, `RECORD_CHECKS_OK` or `REASON=` goes to the audit with its reason.
 
+**A question's findings changing owes the CODE's claims too (feature 316).** The engine and the Mode A procedures cite the
+record claim by claim (`Research:` docstring lines, `<!-- Research: ... -->` in a procedure); `make claims-owed` names every
+claim whose cited question's findings (its words less its intro) moved, and the push (`scripts/claims-gate.sh`) refuses it
+until `impl-drift` has judged it (`make claims-bundle`, then `make claims-checked`). `make claims-report` lists every claim
+out of step and every UNRESEARCHED decision - the open research on the code's side.
+
 ## A question's notes stand at its foot; every cited work says what it is (GM 2026-09-07, feature 211; feature 301)
 
 - A note is written in the notes file of the page that cites it (feature 303: a note two pages cite is in both); the

@@ -4,6 +4,8 @@ The GM: *"adopt this standard into our project, after looking up the details eno
 faithfully."* Every constant here is either the standard's own - with the page it is read from - or a calibration
 this project chose where the standard names a rule and leaves its number to the mapmaker; each says which. The
 finding is research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html; the evidence is specs/266-*/research.md R1.
+
+Research: caption block measure - NONE: the text metrics applied
 """
 
 from __future__ import annotations
@@ -34,6 +36,7 @@ POSITIONS: tuple[tuple[str, float, float], ...] = (
     ("upper left", -1.0, -1.0),
     ("lower left", -1.0, 1.0),
 )
+"""Research: ranked positions around a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: above, below, right, upper right, lower right, left, upper left, lower left"""
 
 # THE GAP, measured from the subject's drawn edge to the caption's nearest edge ("The offset is measured from the
 # boundary of the feature symbol to the outer edge of the label", esri-offset-point-labels). No readable source
@@ -42,6 +45,7 @@ POSITIONS: tuple[tuple[str, float, float], ...] = (
 # our CALIBRATION (spec D2): about the air the engine's house standoff gave a caption by eye (LABEL_MIN_AIR, 5 px on
 # a 9 pt caption), the same for every caption of a size.
 PREFERRED_OFFSET_EM = 0.5
+"""Research: the gap from a feature - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half the caption's letter height, from the drawn edge"""
 
 # NEARER FIRST (QGIS's default, "Prefer closer labels"): every position at the preferred offset is tried before any
 # seat further out, then ring by ring outward. The step and the reach are CALIBRATIONS (plan P2): half an em a ring,
@@ -50,18 +54,22 @@ PREFERRED_OFFSET_EM = 0.5
 # it never overlaps (feature 287, D10): past the reach it takes a leader to a free seat out to the hug, and failing
 # that it goes in the sheet's key. The least-cost overlapping seat is retired.
 RING_STEP_EM = 0.5
+"""Research: nearer first - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: further seats a half em a ring outward"""
 REACH_EM = 8.0
+"""Research: how far a caption may move - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: out to eight ems before the leader rings"""
 
 # THE HUG: a caption never stands more than this far, box to box, from the feature it names (`label_hugs_its_referent`,
 # the gate's 120 px since feature 133). Past it the reader has to guess which feature a name belongs to, so it bounds
 # every seat the placer offers - the standard's rings, the fallback slides, the leader rings past the reach and the
 # nudge (feature 287, labels L10). A CALIBRATION carried from the gate test, where it was stated first.
 HUG_PX = 120.0
+"""Research: the hug - CONVENTION: never more than 120 px box to box from what it names, a calibration from the gate"""
 
 # A CAPTION WITH NO SEAT ON THE SHEET GOES IN THE SHEET'S KEY (feature 287, D10): a numbered mark at the feature and
 # the words in a key beside the map - a map drawing convention. It costs more than any seat on the sheet, so a caller
 # comparing seats, or a repair lifting a neighbor, takes any seat that is drawn before the key.
 WEIGHT_KEY = 1_000_000.0
+"""Research: the key's cost - CONVENTION: dearer than any seat on the sheet"""
 
 # THE WEIGHTS, on Esri's scale: "A feature weight of 0 indicates that the feature should be treated as available
 # space, while a weight of 1,000 indicates that the feature is considered an obstacle" (esri-weight-labels-features).
@@ -74,30 +82,42 @@ WEIGHT_KEY = 1_000_000.0
 # nested ground, a road); such an obstacle is `soft`, and only the rest - another caption, ink painted over one, dark
 # ink - is an overlap the placer never draws.
 WEIGHT_OBSTACLE = 1000.0
+"""Research: an obstacle's weight - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption covers nothing while another choice exists"""
 WEIGHT_WAY = 500.0
+"""Research: a way crossed - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half an obstacle, so crossing one beats crossing two"""
 WEIGHT_FREE = 0.0
+"""Research: free ground - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: fields, scrub, groves and open ground are available space"""
 
 # ASSOCIATION: a caption standing as close to a neighbor as to its own subject is not plainly its subject's (the
 # point label's second job, "association", psu-geog486-point-labels). So a block nearer than the preferred offset to
 # any obstacle but its subject counts as covering it. A CALIBRATION (plan P1).
 CLEAR_EM = PREFERRED_OFFSET_EM
+"""Research: association - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption as near a neighbor as its subject counts as covering it"""
 
 # A way is crossed when the block comes within its drawn half-width plus this notch: the caption's halo paints out
 # what is under it, and a halo on a tread reads as a bite out of the path (the gate's NOTCH_CLEARANCE, 2 ft).
 WAY_NOTCH = 2.0
+"""Research: way notch - CONVENTION: 2 ft past a way's half-width, where a halo would bite the tread"""
 
 # THE TEXT METRICS `label()` draws with - one source for the placer, the settlement engine and the tools: a line is
 # 0.55 em a character wide, one line 1.05 em tall, lines 1.15 em apart, and the block's center 0.275 em above the
 # first line's baseline.
 CHAR_W_EM = 0.55
+"""Research: character width - CONVENTION: 0.55 em"""
 LINE_H_EM = 1.05
+"""Research: line height - CONVENTION: 1.05 em"""
 PITCH_EM = 1.15
+"""Research: line pitch - CONVENTION: 1.15 em"""
 CENTER_ABOVE_BASELINE_EM = 0.275
+"""Research: block center above the baseline - CONVENTION: 0.275 em"""
 
 
 def upright(angle: float) -> float:
     """An angle in degrees turned into (-90, 90], so the words never read upside down (psu-geog486-point-labels:
-    "don't write upside down"). A feature at 126 degrees and one at -54 carry their caption the same way."""
+    "don't write upside down"). A feature at 126 degrees and one at -54 carry their caption the same way.
+
+    Research: never upside down - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a half turn where the angle would invert the words
+    """
     a = math.fmod(angle, 180.0)
     if a <= -90.0:
         a += 180.0

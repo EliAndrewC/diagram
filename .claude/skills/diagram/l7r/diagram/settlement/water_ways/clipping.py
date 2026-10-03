@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: mouths drawn as joins - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a channel's end is snapped onto the water it meets
+"""
 
 import math
 from typing import TYPE_CHECKING, Any, cast
@@ -229,7 +232,14 @@ class WaterClipMixin:
         the fill). The widths ride along because water_channels_join_not_cross judges a junction by
         whether the joining stroke's tip lands inside the OTHER stroke's drawn band - which needs
         that band's width, and needs it from the post-clip record rather than the pre-clip
-        field_ditches/channels (the two diverge wherever a mouth was snapped onto open water)."""
+        field_ditches/channels (the two diverge wherever a mouth was snapped onto open water).
+
+        Research:
+            mouths drawn as joins - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: snapped onto the pond, moat, river or stream it meets
+            bends swept - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: filleted at 2.5 channel widths
+            taper along the run - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: w0 to w1 by the square-root law
+            ditch class - NONE: the caller's, from the record's role
+        """
         pts = self._clip_to_stream(self._clip_to_river(self._clip_to_moat(self._clip_to_pond(pts), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2), capr=max(w0, w1) / 2)
         # ROUND THE BENDS: an earthen ditch turns on a swept curve, never a mitred corner (see
         # fillet_polyline for the why and the ~2.5-widths radius). Applied AFTER the mouth clips so a

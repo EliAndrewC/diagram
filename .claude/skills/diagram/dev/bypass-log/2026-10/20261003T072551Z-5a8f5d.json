@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T07:25:51Z",
+  "target": "claims-gate",
+  "commit": "cc4d18e8c",
+  "why": "CLAIMS_OK: torii_even's arch-spread drift predates this feature's one-line divide-by-zero fix to that function; the audit found it on unchanged code"
+}

@@ -1,4 +1,7 @@
-"""Overlap taxonomy (was: shared gate helpers (geometry): Manifest, Pt, Poly, Check, load, rect_corners, _struct_rect, _box_hits_poly, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
+"""Overlap taxonomy (was: shared gate helpers (geometry): Manifest, Pt, Poly, Check, load, rect_corners, _struct_rect, _box_hits_poly, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py).
+
+Research: geometry and bookkeeping - NONE: types, loaders and polygon measures
+"""
 
 import json
 import math
@@ -124,10 +127,12 @@ _OVERLAP_STRUCTS = (
     # in solid_structs, which is the record shape feature 019 proved invisible.
     "granaries",
 )
+"""Research: solid footprints - CONVENTION: a solid feature's drawn footprint overlaps nothing it is not exempted for"""
 
 # `shrines` duplicates the primary religious halls (shrine_hall records both), so it rides along with
 # `religious`; both are halls that structs must AVOID, gated by no_structure_on_religious.
 _OVERLAP_TARGETS = ("manors", "religious", "shrines", "gate_structs", "docks")
+"""Research: halls kept clear - CONVENTION: no structure drawn on a manor, hall, gate complex or dock"""
 
 _OVERLAP_LINEAR = (
     "fields",
@@ -152,6 +157,7 @@ _OVERLAP_LINEAR = (
     "quays",  # the revetted bank face at a wharf - a LINE feature, classified WAY like the towpath
     "aqueducts",
 )  # linear / area features structs avoid (canals = the cargo canal; roads = the multi-road list, same ground the single M['road'] covers; crescent_ponds = the fengshui 半月塘 focal pond, reserved as a placement keep-out so the cluster packs around it; towpaths = the riverbank haulage path and aqueducts = the open supply cut, both feature 020 - ground a structure must keep off)
+"""Research: ground kept clear - CONVENTION: no structure drawn on a field, water, way, pond, cover or wood"""
 
 _OVERLAP_EXEMPT = {
     "drawn_channels": "z-order record of the drawn field-channel strokes (post-clip geometry + stroke widths w0/w1 + bedz), not a placement feature: the strokes duplicate the field_ditches/channels ground the structs already avoid, and their mouths deliberately touch the pond/moat/stream they join (pond_fill_covers_channel_mouths and water_channels_join_not_cross read this record - it is the only source that says what was actually stroked, and how wide)",
@@ -163,6 +169,7 @@ _OVERLAP_EXEMPT = {
     "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 150 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
     "farm_fixtures": "a farmstead's small fixtures - privy, wood shed, manure heap, bath room, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
     "scrub_pines": "the scrub's hill pines as (x, y, r) records for the sun rule (feature 310): bookkeeping - their ink is the scrub's own marks, whose extents the commons already keep off every footprint",
+    "bamboo_marks": "every inked bamboo culm mark as (x, y, r) records for the sun rule (feature 315): bookkeeping - the ink is the clump's own group, ruled on there",
     "planted_trees": "the willows and fruit trees a dike's planting drew before the plots, as (x, y, r) records per planted run (feature 310): bookkeeping - their ink is the dike's planted string, on the dike's own keep-out",
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
@@ -193,6 +200,25 @@ _OVERLAP_EXEMPT = {
     "stable_yards": "the gate stables' beaten-earth working yard (s._stable_yard) - a feathered ground scatter (hitching rails, trough, dung heaps, litter; no animal glyphs - the maps render no humans or animals) that deliberately SURROUNDS its stables and fills the open pocket; a ground record, not a keep-clear structure (validated by stables_have_yards). `troughs` counts the watering point's troughs and `troughs_at` records the cluster center, which must hug a wellhead (validated by stable_troughs_beside_well); `troughs_box` and `rails` record the furniture's DRAWN extents, which must not intersect each other or any wellhead (wells_troughs_rails_clear_of_each_other)",
     "dikes": "the reclaimed-polder PERIMETER dike earthwork band (s.perimeter_dike) - a walked, lived-on planted bank the village lines and the feeder/drain channels + footbridges cross by design; a broad ground feature, not a keep-clear structure (validated by polder_dike_is_earthwork)",
 }
+"""Overlap exemptions.
+
+Research:
+    annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura, yard, garden, grove and fixtures against their own farmhouse
+    pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the pond bank
+    wellhead among the houses - research/questions/0196-communal-wells-ido.drawing.html: in the gaps between dwellings
+    border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.html: no mound drawn, nothing keeps clear
+    built on what it serves - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: bridges, weirs, gates, jetties, towers, booms
+    mill beside its stream - research/questions/0064-water-mills-suisha.drawing.html: its wheel in the water
+    in-field ponds, rocks and graves - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: drawn on the paddy
+    copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: vegetation drawn last in open ground
+    stable yard round its stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a ground scatter
+    polder dike crossed - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a walked bank lanes and channels cross
+    in-field ditches - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: drawn on the paddy
+    inspection post on the gate - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: may overlap the gate furniture
+    merchant storehouses - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: exempt as an annex abutting its shop
+    merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
+    bookkeeping records - NONE: districts, quarters, precincts, clearings, row plans and tree records
+"""
 
 # ---- label classification registry (GM 2026-07-26) --------------------------------------------
 # The sibling of _OVERLAP_STRUCTS, for the OTHER thing a new feature has to be protected from: a
@@ -279,6 +305,12 @@ _LABEL_GROUP = {
     # recorded as a bare [x, y, z] triple, so the registry loop cannot pick it up on its own.
     "torii": "torii",
 }
+"""Caption groups.
+
+Research:
+    a caption covers its own group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: the group word a caption names, and nothing else
+    an arch is never covered - CONVENTION: the torii group word is in no caption
+"""
 
 # STILL UNCLASSIFIED, and known to be (2026-07-27): the other six FIXTURE keys - `bridges`,
 # `water_gates`, `sluice_gates`, `inspection_stations`, `jetties`, `wall_towers`. They are drawn
@@ -304,6 +336,7 @@ _LABEL_EXEMPT = {
     # near enough that a caption cleared for the house is cleared for it - and the form-specific
     # geometry is gated by `byres_stand_in_their_declared_form` instead of asserted here.
 }
+"""Research: nothing to bury - CONVENTION: undrawn regions, a weir no caption names, a line of law"""
 
 _LABEL_CLASSIFIED = set(_LABEL_GROUP) | set(_LABEL_BY_KIND) | set(_LABEL_EXEMPT)
 
@@ -442,6 +475,14 @@ OVERLAP_CLASS: dict[str, str] = {
     **{k: "RING_ROAD" for k in ("ring_road",)},
     **{k: "VEGETATION" for k in ("village_groves", "bamboo_stands", "groves", "forest", "tree_stands", "tree_crowns")},
 }
+"""The overlap classes.
+
+Research:
+    one class a key - CONVENTION: every drawn key in one class, every pair forbidden unless permitted
+    annexes - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: abut their own farmhouse and nothing else
+    worked ground - research/questions/0081-village-lanes.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: no lane or well on a dry plot
+    flower beds and resting patches - UNRESEARCHED: worked as a surface, nothing standing on them
+"""
 
 # A permissive class may be overlapped by anything, and is never extracted. The reason matters as
 # much as the fact - these are the rows that stop the matrix crying wolf.
@@ -460,6 +501,14 @@ _MATRIX_PERMISSIVE = {
     "RECORD": "bookkeeping geometry or an in-field flourish drawn ON its own paddy by design - not ground the matrix reasons about",
     "PADDY_RECONSTRUCTED": "a paddy plot's extent is reconstructed from recorded spans rather than stored, so it is an approximation - the precise paddy checks (harvest_yards_clear_of_paddies, structures_clear_of_dry_plots, streams_avoid_fields, tanning_yard_clear_of_fields) test real geometry and remain authoritative",
 }
+"""The permissive classes.
+
+Research:
+    ground cover takes buildings - research/questions/0196-communal-wells-ido.drawing.html: a well on commons, pasture or marsh permitted
+        as the normal case, though _OVERLAP_LINEAR keeps structures off commons, pastures and marshes
+    house or field on cover - UNRESEARCHED: built on, the cover stopping there
+    deferred classes - NONE: vegetation, the ring road, records and paddy are decided by their own rules
+"""
 
 # WHAT EACH FIXTURE IS MOUNTED ON (GM 2026-07-26). FIXTURE used to be a PERMISSIVE class, which had
 # two compounding effects: `matrix_extents` skips permissive classes entirely, so all ten fixture keys
@@ -500,6 +549,19 @@ _FIXTURE_MOUNTS: dict[str, frozenset[str]] = {
     # still a defect.
     "wall_towers": frozenset({"WATER", "wall"}),
 }
+"""What each fixture stands on.
+
+Research:
+    bridge - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: on water and the way it carries, and on the rampart at a water gate
+    dock and jetty - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: at and over the water, a dock reached from the quay
+    log boom - research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: on the river
+    sluice and water gate - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a board on its channel, an arch over its canal on the wall
+    weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the brook
+    ward gate - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: on the ward fence where a way passes
+    gate complex and inspection post - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: on the wall and the road at the gate
+    wall tower - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: on the rampart
+    wall tower over water - UNRESEARCHED: the moat and its taps at the rampart's foot may pass under a tower
+"""
 
 _MATRIX_SAME_CLASS_OK = {
     "WATER": "watercourses meet at confluences",
@@ -509,6 +571,13 @@ _MATRIX_SAME_CLASS_OK = {
     # annex touching a DIFFERENT household's annex is still a defect
     "ANNEX": None,
 }
+"""Same-class permissions.
+
+Research:
+    watercourses meet - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: at confluences
+    ways meet - research/questions/0081-village-lanes.drawing.html: at junctions, one network
+    annexes of one household - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: abut one another
+"""
 
 # same-KEY permissions: records of one kind that legitimately touch each other
 _MATRIX_SAME_KEY_OK = {
@@ -518,6 +587,14 @@ _MATRIX_SAME_KEY_OK = {
     "dry_plots": "adjacent hatake plots in one quilt abut and share their headlands, exactly as paddy plots share bunds",
     "fields": "paddy plots in one fan abut and share their bunds - and a plot's extent is reconstructed from recorded spans, not a stored polygon, so the reconstruction slightly overstates an irregular plot",
 }
+"""Same-key permissions.
+
+Research:
+    one continuous work - NONE: rampart and fence segments meet at their corners
+    arches in a row - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: along the approach
+    dry plots abut - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: neighbors share their edges
+    paddies share bunds - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: one shared bund
+"""
 
 _MATRIX_ALLOWED_PAIRS: dict[frozenset[str], str] = {
     frozenset({"WATER", "WAY"}): "a way crosses water at a bridge; unbridged crossings are gated separately by roads_bridge_watercourses",
@@ -525,6 +602,12 @@ _MATRIX_ALLOWED_PAIRS: dict[frozenset[str], str] = {
         {"WAY", "BARRIER"}
     ): "a way PIERCES a ward fence - that is what a kido is for. The rule that matters is not whether a street crosses the fence but whether every crossing has a gate, and that is held by city_samurai_ward_sealed + city_kido_on_ward_fence, which fire on an ungated crossing",
 }
+"""Class-pair permissions.
+
+Research:
+    way over water - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: on a bridge
+    way through a ward fence - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: at its gate
+"""
 
 # per-KEY-PAIR permissions for genuine one-offs the class policy is too coarse to express
 _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
@@ -568,6 +651,21 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
         {"wall", "flower_fields"}
     ): "an ornamental bed laid FLUSH against the inside of the town wall - s.flower_field's `flat_west` flag exists for exactly that (it straightens the edge so it can run against the rampart), so the bed's straight face meeting the wall's drawn stroke is the feature working, not a defect. Anything BUILT on the rampart is still governed by no_structure_on_wall; this permits planting, which occupies no rampart",
 }
+"""Key-pair permissions.
+
+Research:
+    pier from the quay - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: springs from the faced bank
+    ways and water through the rampart - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: at a gate or a water gate
+    castle towers on the rampart - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a corner tower stands on the works
+    arch over its approach - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: spans the sando
+    one object under two keys - NONE: a hall as religious and shrines, a gate tower twice
+    ward fence meets the wall - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: ends at the rampart
+    castle moat bridge - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a deck over the castle's own moat to its gate
+    supply canal along the dry hem - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid along the canal
+    notice board at the roadside - research/questions/0190-notice-boards-kosatsuba.drawing.html: stands beside the main road
+    merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
+    flower bed against the town wall - UNRESEARCHED: a bed laid flush inside the rampart
+"""
 
 # A record naming its PARENT may overlap that parent and nothing else - strictly stronger than the
 # blanket per-pair exemptions this replaces, because an annex on somebody ELSE's building stays a defect.
@@ -576,7 +674,7 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
 # in the wall (the furniture in the gap is `gate_structs`); `wall_tower_keepclears` is a reservation,
 # not ink; `forest_edge` is an envelope whose ink is `tree_crowns` and is classified RECORD above.
 _MX_NOT_GEOMETRY = frozenset(
-    {"labels", "tree_crowns", "scrub_pines", "planted_trees", "wet_plots", "flooded_plots", "bund_junctions", "footbridges", "knobs", "clearings", "gates", "wall_tower_keepclears"}
+    {"labels", "tree_crowns", "scrub_pines", "bamboo_marks", "planted_trees", "wet_plots", "flooded_plots", "bund_junctions", "footbridges", "knobs", "clearings", "gates", "wall_tower_keepclears"}
 )
 
 _MATRIX_PARENT_FIELD = {
@@ -592,6 +690,13 @@ _MATRIX_PARENT_FIELD = {
     "fallow_patches": "field",  # a resting basin is one of its field's paddy plots (`rest_basin`)
     "channels": "field",  # the hairline feed from a field's source names the field it feeds (`_comb_source_channel`)
 }
+"""Records that name a parent.
+
+Research:
+    annexes name their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: may lie on it
+    a field's own ditches and feed - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: drawn on the field they serve
+    a resting plot in its field - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: one of the field's own plots
+"""
 
 # SIBLINGS OF ONE PARENT that may share ground, by key pair (feature 287, water W53). A resting basin (`fallow_patches`) is
 # one of its field's paddy plots with grass where the rice would be, inside its own bunds, and the field's own ditches run
@@ -607,6 +712,7 @@ _MATRIX_SAME_PARENT_OK: dict[frozenset[str], str] = {
     # it meets the same basin wherever the race does
     frozenset({"channels", "fallow_patches"}): "a field's own feed from its source traces its head race to the fork, along its own resting basin as the race does",
 }
+"""Research: ditch along its resting plot - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a field's own ditch and feed may meet its resting plot"""
 
 
 def matrix_policy(ka: str, kb: str) -> str | None:
@@ -698,8 +804,10 @@ _MX_FIXTURE_BOX: dict[str, Any] = {
     "sluice_gates": lambda o: (11.0, 11.0),  # the board and its cheeks - a small square control structure
     "weirs": lambda o: (float(o["len"]), float(o["w"])),  # the oblique bar: its length across the brook, its thickness along it
 }
+"""Research: drawn fixture box - NONE: mirrors each glyph's drawn size"""
 
 _MX_LINE_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 1.5, "canals": 14.0, "town_streets": 20.0, "alleys": 6.0, "lanes": 6.0, "roads": 26.0, "towpaths": 2.4, "aqueducts": 4.0, "quays": 3.4}
+"""Research: fallback line widths - NONE: used only where a record carries no width"""
 
 _OVERLAP_SINGLETONS = ("governor_mansion",)  # solid footprints the manifest stores as ONE dict, not a list
 
@@ -733,6 +841,7 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
 #                   holding forest usufruct, rather than two great complexes (Minami; l7r.md
 #                   "Fox Temples", research/contents.json#religion-and-the-dead)
 TEMPLE_EXCEPTIONS = {"large", "pious", "changed_hands", "fox_structure"}
+"""Research: temple exceptions - research/questions/0234-how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi.drawing.html: more than two only for a declared reason"""
 
 CLAN_FORTUNES = {
     "crab": {"Bishamon", "Ebisu"},
@@ -743,6 +852,7 @@ CLAN_FORTUNES = {
     "scorpion": {"Benten", "Jurojin"},
     "unicorn": {"Fukurokujin", "Jurojin"},
 }
+"""Research: patron Fortunes - research/questions/0228-town-monasteries.drawing.html: one monastery for each of the clan's two"""
 
 
 def segments_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> bool:

@@ -1,6 +1,8 @@
 """The pipeline itself: STAGES, and everything that drives it.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: driving the roll - NONE: building, finishing, staging, cohorts, the baseline and the CLI
 """
 
 from __future__ import annotations
@@ -148,6 +150,16 @@ STAGES = (
     # any caption that moves in this feature to the seat rules rather than to the reorder.
     stage_labels,
 )
+"""The order a hamlet is built in.
+
+Research:
+    water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: the field shaped by its water, the drain along its field's low line
+    homesteads before lanes - research/questions/0081-village-lanes.drawing.html: every lane drawn after the farmhouses
+    track before the wells - UNRESEARCHED: a well dug where the track already runs
+    web after everything that reserves ground - research/questions/0081-village-lanes.drawing.html: lanes worn round the byres, sheds and wells that stood first
+    notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
+    labels last - CONVENTION
+"""
 
 
 # ---- driving it ---------------------------------------------------------------------------------

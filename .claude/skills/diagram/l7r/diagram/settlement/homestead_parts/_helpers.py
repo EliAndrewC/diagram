@@ -1,4 +1,7 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE
+"""
 
 import math
 from collections.abc import Sequence
@@ -19,6 +22,7 @@ _BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill cl
 # a lane must cut a belt it should cut it at an ANGLE to the prevailing wind - NOT, as this comment used to
 # say, by rebuilding the crossing to the belt's own porosity, which is on no page read). Hence: close holes
 # WITHIN the run, never wrap the settlement.
+"""Research: belt hole width - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a bare run over 30 ft across the wind is a hole"""
 
 
 def _belt_axis(pts: Sequence[tuple[float, float]]) -> tuple[float, float]:

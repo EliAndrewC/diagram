@@ -21,6 +21,8 @@ and the record-time verdict cannot disagree about a pair both see.
 INDEXED, NEVER WALKED (the root CLAUDE.md's rule for an overlap check against the features already on the map). Each
 extent is binned once, when it is recorded, in a uniform grid of `CELL` px; a question walks only the cells its own
 extents cover, and the exact test (the separating axes) runs only on the pairs whose boxes meet.
+
+Research: registry plumbing - NONE: recording, indexing and asking the matrix
 """
 
 from __future__ import annotations
@@ -83,7 +85,10 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
     surrounds a sparse grass scatter. A survey that compared envelopes reported 101 overlapping pairs pool-wide, roughly
     half of them artifacts of exactly that; a matrix built on envelopes would inherit those, cry wolf, and be switched
     off. So this reads what is actually inked, and permissive classes are not extracted at all (`tested`). `M` supplies
-    the widths a record does not carry (the road's, the moat's) and the scale a torii's box is drawn at."""
+    the widths a record does not carry (the road's, the moat's) and the scale a torii's box is drawn at.
+
+    Research: drawn extents - NONE: reads each record's ink; the fallback widths mirror the drawing
+    """
     out: list[Extent] = []
     pfield = _MATRIX_PARENT_FIELD.get(k)
     if k == "wards":
@@ -161,7 +166,16 @@ def pair_permitted(a: Extent, b: Extent, priv: Iterable[Any] | set[Any]) -> bool
     """May the extents `a` and `b` overlap? The class policy (`matrix_policy`) and the permissions that depend on the two
     RECORDS rather than on their classes alone: an annex may lie on its own parent (and only its own), two annexes of
     one household may abut, and a trade work's private well stands inside its own court (`priv`, the private wells'
-    ids). A channel reaching the field it feeds is a parent permission too (`field_ditches` names its field)."""
+    ids). A channel reaching the field it feeds is a parent permission too (`field_ditches` names its field).
+
+    Research:
+        an annex on its own house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura, yard, garden, shed and fixtures abut their own farmhouse
+        two annexes of one household - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: abut one another
+        a ditch along its own resting plot - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a
+            resting basin is one of its field's plots
+        a trade work's private well - research/questions/0183-shops-and-trades-in-towns-and-villages.drawing.html: inside
+            its own court
+    """
     ki, _pi, idi, pari = a
     kj, _pj, idj, parj = b
     if matrix_policy(ki, kj):

@@ -287,6 +287,14 @@ you have seen. And when a fix attempt FAILS, record it at the point of change: `
 carries two dead ends for the front-row lane cap, either of which a later session would otherwise
 re-try.
 
+**Research claims** (feature 316, GM 2026-10-02: *"the code that generates a hamlet must have citations for anything that
+should be research derived"*). Every function, method, class and UPPER_CASE constant of the code a hamlet's generation imports
+carries `Research:` claims in its docstring - one line per decision, `<label> - <question file | GUESS | UNRESEARCHED |
+CONVENTION | DEVIATION <question file> | NONE>[: <what the code does>]` (a constant's claim is the string literal after it; a
+module docstring's claims are inherited by its units with none). A new unit owes its claim (the gate's coverage test says so,
+with the form); a changed unit owes an `impl-drift` check of its claims at the push (`make claims-owed`, `claims-bundle`,
+`claims-checked`; `make claims-report` is the index). A `Kind` class docstring never takes one - its module does.
+
 **Recording decisions** ([`dev/decisions.md`](../../dev/decisions.md)) - before you build on a property of
 the engine, check whether anyone DECIDED it; a side effect is not a rule. And an open decision
 carries the 2-3 line implementation sketch, not just the question.

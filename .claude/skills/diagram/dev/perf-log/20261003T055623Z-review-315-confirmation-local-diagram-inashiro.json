@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "8f13ae931",
+    "label": "315-start",
+    "utc": "20261002T220503Z"
+  },
+  "binding": "7ff4c62d5a9673532a6d3e112dceb1d01e2dd2f3c3686723c852388d4d38e277",
+  "end": {
+    "commit": "3a72b7e88",
+    "label": "315-end",
+    "utc": "20261003T055219Z"
+  },
+  "environment": "local",
+  "feature": "315-bamboo-in-the-sun",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ba150eae-6164-4e48-ab0e-3ebcacdf35b5",
+    "utc": "20261003T055623Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -32.3,
+          "39": -27.6,
+          "4": -40.0,
+          "47": -36.7
+        },
+        "total_pct": -34.6
+      },
+      "20": {
+        "seeds": {
+          "25": -39.1,
+          "39": -30.5,
+          "4": -19.0,
+          "47": -39.3
+        },
+        "total_pct": -32.0
+      },
+      "40": {
+        "seeds": {
+          "25": -35.3,
+          "39": -42.8,
+          "4": -30.3,
+          "47": -45.0
+        },
+        "total_pct": -37.9
+      }
+    },
+    "seeds": {
+      "25": -26.3,
+      "39": -22.0,
+      "4": -21.8,
+      "47": 5.0
+    },
+    "total_pct": -16.7
+  },
+  "note": "Reviewer counterfactual, seed 47 at 3a72b7e88, both legs in detached worktrees, 6 runs each, interleaved: weld_corner is called 0 times on seed 47, and with the weld and the kbam culm test both disabled the web stage is unchanged (median 0.92 s live vs 0.93 s disabled), so the web +0.3 s is not the weld. The culm sun test costs about 0.03 s in windbreak (0.41 vs 0.375 s), which fits windbreak +0.1 s only in part. Seed 47 rolls a different map at the end commit (13 lanes vs 11 at 8f13ae931, 51 culm marks); the web growth follows that, which comes from the merged engine (314 + 315 seating/gateway), not from settle_needles. Rewrite the web attribution.",
+  "verdict": "inconsistent"
+}

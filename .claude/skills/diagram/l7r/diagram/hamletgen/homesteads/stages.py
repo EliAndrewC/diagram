@@ -1,28 +1,29 @@
-"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index.
+Research: seating plumbing - NONE: stage order, margins, reservations and bookkeeping; the rules are the callees' and the constants' own"""
 
 from __future__ import annotations
 
 import math
 import random
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Iterator
 from types import SimpleNamespace
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, install_wood_shares
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
-from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
+from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SEATING_GROUND_FT, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
-from ..plan import SitePlan, _roll, band_extent
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SEATING_GROUND_FT, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
+from ..plan import SitePlan, band_extent
 from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
@@ -30,13 +31,15 @@ from .growth import grow_the_margin, grows
 from .holds import hold_laid_parts
 from .region import SeatRegion, seat_window
 from .retirement import retirement_houses, retirement_quota
-from .seats import cluster_aspect, front_row
+from .seat_geometry import bank_of, declare_cluster_shape, drawn_in_band, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
+from .seats import front_row
 from .wells import place_wells
 
 #: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
 #: settlement-review of Mizuguchi): a GUESS calibrated against main's roll of that map, whose rows spread 24 and 78 ft - a
 #: quarter pitch keeps a rank a rank while taking it off the surveyed line.
 RANK_DEPTH_JITTER = 0.25
+"""Research: rank depth jitter - GUESS: a quarter pitch, half each way, on an alleys hamlet's ranks"""
 
 FORM_BOUND: dict[str, float] = {"linear": 2.5}
 """Per-FORM override of how far from the seat center a homestead may stand, as a multiple of the
@@ -53,26 +56,8 @@ A FAILED FIX, recorded so it is not tried again (feature 126). Dispersed and lin
 fit, and fixing that fixed the count. Measured afterwards on Sawada, the dispersed pool map:
 19/19 households in 53.4s at the uniform 1.15, against 19/19 in 53.7s at 2.2 - no seats gained, no
 time lost, nothing bought. A wider search bound only permits sprawl the feature exists to prevent,
-so the honest value is no override at all."""
-
-
-def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_lat: float, near: float, far: float) -> float:
-    """How far a box must move along `n` so that no water course (`(a, b, clearance)` segments) lies within its clearance
-    of the box: the box spans `near`-`far` along `n` and `half_lat` either side of `center` across it. Zero when clear.
-    Each segment is sampled every 8 ft, which is finer than any clearance the courses carry (half-width + 5)."""
-    lx, ly = -n[1], n[0]
-    push = 0.0
-    for a, b, clr in water:
-        if seg_dist(center[0], center[1], a, b) > half_lat + (far - near) + clr:
-            continue
-        k = max(1, int(math.dist(a, b) / 8.0))
-        for j in range(k + 1):
-            x, y = a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k
-            if abs((x - center[0]) * lx + (y - center[1]) * ly) <= half_lat + clr:
-                d = x * n[0] + y * n[1]
-                if near - clr <= d <= far + clr:
-                    push = max(push, d + clr - near)
-    return push
+so the honest value is no override at all.
+Research: a row's reach - GUESS: 2.5 seat-band diagonals for the linear form, 1.15 for every other"""
 
 
 def face_the_houses(s: Settlement, plan: SitePlan) -> None:
@@ -81,40 +66,13 @@ def face_the_houses(s: Settlement, plan: SitePlan) -> None:
     The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
     along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
     turns from it with the field margin its lanes will follow (`MarginBearing`, on the paddy's envelope and the seat's
-    own axis), plus its own by-eye spread, and one in ten a quarter turn (`Settlement._house_rot`)."""
+    own axis), plus its own by-eye spread, and one in ten a quarter turn (`Settlement._house_rot`).
+    Research: house bearing - research/questions/0029-farmhouses-minka.html, research/questions/0029-farmhouses-minka.drawing.html: a common bearing within `COMMON_BEARING_DEG` of south, turned with the field margin"""
     common = round((knob_rng(s.seed, "house_bearing").random() * 2.0 - 1.0) * COMMON_BEARING_DEG, 2)
     s._house_bearing = common
     ax, ay = plan.seat["along"]
     s._bearing_follow = MarginBearing(plan.envelope, math.degrees(math.atan2(ay, ax))) if len(plan.envelope) >= 3 else None
     s.M["meta"]["house_bearing_deg"] = common
-
-
-def turn_the_seat(s: Settlement, seat: Pt, n: Pt, core: tuple[float, float, float, float]) -> Pt:
-    """A front-row seat moved out along `n` by how much further the homestead's core reaches toward its chord once
-    turned (269 B18). `front_row` offsets every seat by the unturned core (`core`: left, top, right, bottom about the house
-    center); the turn is the seat's own, known before it is offered, so the extra is measured, not a slack. Asked twice -
-    the seat it moves to may take a different turn - and the larger move kept; the placer's own tests stay the judge."""
-    toward = (-n[0], -n[1])
-    base = turned_reach(core, 0.0, toward)
-    extra = 0.0
-    q = seat
-    for _ in range(2):
-        extra = max(extra, turned_reach(core, s._house_rot(q[0], q[1]), toward) - base)
-        q = (seat[0] + n[0] * extra, seat[1] + n[1] * extra)
-    return q
-
-
-def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
-    """Which side of the brook a point stands on: the sign of its offset from the NEAREST reach of the course.
-
-    A CROSSING TEST IS NOT A SIDE TEST, and that mistake cost two rolls. Asking whether the line from one house
-    to another crosses the brook reads a curving course wrongly - the brook comes down one flank and wraps the
-    field's toe, so two houses on the same bank can have the water between them as the crow flies, and every
-    candidate after the first was refused (1 house of 15 seated on three maps). The side of the nearest reach is
-    local, so a bend cannot invert it."""
-    j = min(range(len(brook) - 1), key=lambda i: seg_dist(x, y, brook[i], brook[i + 1]))
-    (ax, ay), (bx, by) = brook[j], brook[j + 1]
-    return 1 if (bx - ax) * (y - ay) - (by - ay) * (x - ax) >= 0 else -1
 
 
 def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
@@ -174,9 +132,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share
         l7r.diagram.settlement.rolling.lot.record_parts
         l7r.diagram.settlement.rolling.access.reserve
-        l7r.diagram.hamletgen.homesteads.stages.declare_cluster_shape
+        l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape
         l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating
         l7r.diagram.settlement.Settlement.farmsteads
+
+    Research:
+        a yard's south sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `SUN_CORRIDOR_FT` (39 ft) clear south of every yard and bed
+        the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
+        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map
+        the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the knob as the drawing resolves it, written to the manifest and the plan
+        a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
@@ -283,55 +248,6 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # trims actually exist.
 
 
-def shapes_drawn_at(drawn: float) -> list[str]:
-    """The cluster shapes whose drawn band (`CLUSTER_DRAWN_ASPECT`) holds a drawn aspect - a shape other than round only
-    past round's ceiling (the settlement-review of Inashiro, feature 261: crescent's band starts at 1.9 and round's ends
-    at 2.0, and a quarter-disc of houses drawn at 1.97 is round). Past every band, the nearest band's shape."""
-    ceiling = CLUSTER_DRAWN_ASPECT["round"][1]
-    held = [k for k, (lo, hi) in CLUSTER_DRAWN_ASPECT.items() if (lo if k == "round" else max(lo, ceiling + 1e-9)) <= drawn <= hi]
-    return held or [min(CLUSTER_DRAWN_ASPECT, key=lambda k: min(abs(drawn - CLUSTER_DRAWN_ASPECT[k][0]), abs(drawn - CLUSTER_DRAWN_ASPECT[k][1])))]
-
-
-def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
-    """THE ONE PREDICATE of `test_the_cluster_draws_inside_the_band_of_the_shape_it_declared` (feature 287, homes wave 5):
-    do the houses draw an aspect (`cluster_aspect`) some shape's band holds (`CLUSTER_DRAWN_ASPECT`)? Every aspect is at
-    least round's floor, so the one way out is past the longest band's ceiling - elongated's 12:1 - where `shapes_drawn_at`
-    could only name the nearest band, which the drawing breaks. `seat_every_household` keeps no seating that fails it."""
-    drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
-    return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
-
-
-def drawn_in_band(s: Settlement, plan: SitePlan) -> bool:
-    """Does this seating draw a shape's band - or is it a row village, which is no cluster and takes no band?
-
-    A ROW VILLAGE IS A ROW (the GM, 2026-10-01, tripwire seed 33): its farms stand one frontage apart along their street,
-    54 to 240 ft on the measured planned rows (research/questions/0033-row-villages-resson.html), so ten farms run 490 to
-    2,160 ft - 5:1 to 22:1 against one homestead's depth - and the 12:1 ceiling, a CLUSTER's (`CLUSTER_DRAWN_ASPECT`),
-    refused every margin of a ten-farm row. The linear form's row is held by `row_rules` (each farm on its street, none
-    behind another); the band holds the forms that draw a cluster."""
-    return plan.settlement_form == "linear" or in_a_shapes_band(s.M.get("houses") or [])
-
-
-def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, seed: int) -> dict[str, Any]:
-    """The cluster shape the manifest declares, and the plan keeps: the rolled shape wherever the houses draw it, and
-    otherwise the knob RESOLVED OVER THE SHAPES THE DRAWING ADMITS (feature 287, homes H05, plan D4) - `shapes_drawn_at`,
-    rolled from the map's seed with the knob's own weights (`CLUSTER_SHAPES`). The drawn shape is the declared shape on
-    every map; there is no `cluster_shape_unhonored` record. The stage and its unit test read this one function.
-
-    D4'S OTHER HALF WAS TRIED FIRST AND MEASURED A NO-OP (2026-09-29): steering the rank rounds toward the rolled shape -
-    the along-the-field ends offered before the ranks while the standing houses draw rounder than the shape's band - left
-    31 of 64 maps (pool and cohort 1-60) drawing a crescent or a string rounder than its band, the same 31 as without it:
-    the front row, the brook's far bank and the field's chords seat the cluster, and the ends are refused where the ranks
-    were. The record of three earlier failed bindings (`CLUSTER_BAND_ASPECT`) says the same. So the knob is narrowed to
-    what the band draws, which D4 allows: on that measurement round is declared on 57 of the 64 maps, crescent on
-    6, elongated on 1."""
-    drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
-    space = shapes_drawn_at(drawn)
-    rolled = shape or "crescent"
-    resolved = rolled if rolled in space else str(_roll(seed, "cluster_shape", tuple(v for v in CLUSTER_SHAPES if v in space) or tuple(space)))
-    return {"cluster_shape": resolved, "cluster_aspect_drawn": round(drawn, 2)}
-
-
 def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Every declared household seated, or the site refused (feature 287, homes H14 and plan D2).
 
@@ -343,7 +259,11 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     no cluster shape's band (`drawn_in_band`). The seating kept is the one pass that seated everyone - no second roll of
     anything. Past the last margin the site is refused, naming it: `SiteRefused`, raised HERE rather than at `stage_seat`
     where plan D2 places it, because a margin's capacity is known only by seating it. A margin with no dry way out is
-    skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin)."""
+    skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin).
+    Research:
+        every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused
+        a seating inside a shape's band - UNRESEARCHED: refused where its houses draw no cluster shape's band (a string past 12:1)
+    """
     want = plan.spec.households
     mark = seating_mark(s)
     placed, cloud = _seat_households(s, plan)
@@ -425,7 +345,10 @@ def reserve_field_corridor(s: Settlement) -> bool:
     (`WoodShares.share`), and it is recorded as the tree's legs are (`field` on each), oriented toward the tree, for the web
     to draw where no way of its own reaches the field (`settle.settle_field`), bowed round a shed on it as a house's
     corridor is. True where one is reserved or the rule asks none (no brook, no field); False where no lawful run reaches
-    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next."""
+    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next.
+
+    Research: field way before the houses - DEVIATION research/questions/0081-village-lanes.drawing.html: the field way's run reserved before any house stands, against houses before lanes; a margin without one seats nobody
+    """
     from ..ways import law
     from ..ways.bund import BRANCH_WIDTH, paddy_ground
     from ..ways.corridors import FIELD_ROLE, field_router, field_runs, routed_field_runs
@@ -470,7 +393,18 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
     corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
     the ranks, the rescue rounds and the exhaustive pass over the legal ground within reach (homes H14), or - a row
-    village - its rows. Returns `(placed, the cloud's share)`; the boundary stays installed for the stage to take down."""
+    village - its rows. Returns `(placed, the cloud's share)`; the boundary stays installed for the stage to take down.
+
+    Research:
+        a scattered hamlet's seating - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass
+        front row across the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_ground_push` (`water_push`) moves a front seat onto the brook's far bank, fronting its field across the water
+        a footpath's room off the outline - research/questions/0081-village-lanes.drawing.html: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 px of tread, conventions
+        a row village's rows - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the rows take every household, stepped at a farmstead's width capped at `ROW_FRONTAGE_MAX_FT`, never ranks behind
+        a household's wood share - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated only where it reserves `HOMESTEAD_WOOD_FT2` of copse within `COPSE_HOUSE_REACH_FT`
+        exit strip before any house - research/questions/0081-village-lanes.drawing.html: on a nucleated hamlet the strip runs from the seat's center before a house stands
+        rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
+        shared byre pockets - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: reserved in the seat band before any house
+    """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
@@ -985,6 +919,11 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.draft_byres
         l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures
         l7r.diagram.hamletgen.homesteads.retirement.retirement_houses
+
+    Research:
+        stage order - NONE: each part drawn after the house it stands by and before the grove; counts and seats are the placers' own
+        shared byre sheds - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `draft_byres` asked at `COMMONS_BYRE_FRACTION` (0.22)
+        shared sheds apart - GUESS: `COMMONS_BYRE_GAP`, 60 px between shared sheds
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)

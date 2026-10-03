@@ -3,6 +3,8 @@ seating planned (`homesteads/rows.py`, `s._row_streets`) laid as ONE continuous 
 the lanes off it, joined to the connector or to the street before it; and each row farm's way ending on its OWN street.
 
 A layer between `serve` (the door paths) and `web` (the stage that calls it).
+
+Research: street plumbing - NONE
 """
 
 from __future__ import annotations
@@ -17,21 +19,29 @@ from ..consts import BUNDLE_PITCH, FOOTPATH_FABRIC_GAP, Poly, Pt
 from . import law
 from .corridors import FORD_LANDING_FT
 from .fabric import _crosses_fabric, _draw_web
-from .route import _route
+from .route import _route, _unjog
 from .serve import door_path
 from .settle import Lawful
 
 STREET_WIDTH = 6
-"""The street's tread: the connector's, a rank wider than the web's 3-5 lanes (FR-017)."""
+"""The street's tread: the connector's, a rank wider than the web's 3-5 lanes (FR-017).
+
+Research: street width - research/questions/0033-row-villages-resson.drawing.html: 6 ft"""
 
 _VERTEX_FT = 40.0
 """The street's vertex spacing once laid: the planned line is sampled every 8 ft; a worn way keeps a vertex every two
-treads' lengths or so - a map drawing convention."""
+treads' lengths or so - a map drawing convention.
+
+Research: street vertex spacing - CONVENTION: a vertex every 40 ft"""
 
 
 def row_reach(houses: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
     """How far off a planned street a farm may stand and still be its own (1.5 frames), and how far the street runs past its
-    end farms (half a frame) - the widest farm's frame (`geom.bbox`), or the nucleated pitch where none is recorded."""
+    end farms (half a frame) - the widest farm's frame (`geom.bbox`), or the nucleated pitch where none is recorded.
+
+    Research:
+        a farm's own street - UNRESEARCHED: a farm within 1.5 frames of the street is its own
+        street run past its end farms - UNRESEARCHED: half a frame"""
     fw = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
     return 1.5 * fw, fw / 2
 
@@ -52,7 +62,9 @@ def drawn_span(s: Settlement, k: int, houses: Sequence[Mapping[str, Any]], brook
 def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> list[Pt]:
     """The road a row's street runs on as (feature 291 plan D17): from the street's end nearer the sheet's edge, straight on
     along its last leg until `beyond` past the edge. The end chosen is the one whose run to the edge is shorter. (Here, beside
-    the street's span, since feature 304 took `track.py` over the 1,000-line bar; `track.stage_track` calls it.)"""
+    the street's span, since feature 304 took `track.py` over the 1,000-line bar; `track.stage_track` calls it.)
+
+    Research: street runs on as the road - research/questions/0033-row-villages-resson.drawing.html, research/questions/0081-village-lanes.drawing.html: straight on along its last leg off the nearer sheet edge"""
 
     def run(end: Pt, prev: Pt) -> tuple[float, list[Pt]]:
         dx, dy = end[0] - prev[0], end[1] - prev[1]
@@ -113,7 +125,9 @@ def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: flo
     """The stretch of a planned street its farms stand along: from the first farm's projection less `pad` to the last's
     plus `pad`, over the farms within `reach` of the line, its run past an end farm stopped a ford's landing short of where
     the line crosses the `brook` (`brook_bounds`); [] when no farm is. The line's own vertices are kept, thinned to
-    `_VERTEX_FT`."""
+    `_VERTEX_FT`.
+
+    Research: street spans its farms - research/questions/0033-row-villages-resson.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: from its first farm to its last, plus the run past them"""
     if len(line) < 2:
         return []
     arc = [0.0]
@@ -160,7 +174,9 @@ def brook_bounds(line: Sequence[Pt], arc: Sequence[float], first: float, last: f
     landing short of the crossing along the line (a map drawing convention: the one figure the ways already keep between a
     way's turn and the brook), or at the end farm where the crossing is nearer than that (seed 11: 12 ft past it) - and the
     road runs out from there (`track.stage_track` reads the same span), over the brook at a ford as every way crosses it.
-    A crossing BETWEEN farms is left to the street: its farms stand on both banks."""
+    A crossing BETWEEN farms is left to the street: its farms stand on both banks.
+
+    Research: street end short of the brook - UNRESEARCHED: the run past an end farm stops a ford's landing short of a brook crossing"""
     if len(brook) < 2 or len(line) < 2:
         return lo, hi
     at = [arc[k] + math.dist(line[k], x) for k, x in law.crossing_points([(float(p[0]), float(p[1])) for p in line], [(float(p[0]), float(p[1])) for p in brook])]
@@ -174,7 +190,9 @@ def brook_bounds(line: Sequence[Pt], arc: Sequence[float], first: float, last: f
 def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: list[tuple[Pt, Pt]], half: float = STREET_WIDTH / 2 + 1.0) -> list[Pt]:
     """`path` with every leg whose TREAD - `half` either side of the line - meets a steading replaced by a route round it
     (`_route`, a footpath's gap) between the clear vertices either side; a vertex whose tread meets one is dropped. The
-    street stays one way. (Tested at the centerline, a street grazed a grove band with its drawn tread - cohort seed 904.)"""
+    street stays one way. (Tested at the centerline, a street grazed a grove band with its drawn tread - cohort seed 904.)
+
+    Research: street threaded round the steadings - research/questions/0081-village-lanes.drawing.html: nothing is built on a lane"""
     clear = [p for p in path if not _crosses_fabric([p, p], walls, half)]
     if len(clear) < 2:
         return list(clear)
@@ -194,7 +212,9 @@ def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: l
 
 def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> list[Pt]:
     """`path` extended from whichever of its ends is nearer the `network` to the nearest point on it, routed round the
-    steadings; unchanged when the network is empty, already touched, or no route is found."""
+    steadings; unchanged when the network is empty, already touched, or no route is found.
+
+    Research: street joined to the network - research/questions/0081-village-lanes.drawing.html: one network"""
     if len(path) < 2 or not network:
         return path
 
@@ -214,7 +234,13 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
 def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], brook: Sequence[Pt] = ()) -> int:
     """Lay each planned street of `s._row_streets` as one way: its farms' stretch (`street_span`, short of the `brook` past
     its end farms), threaded round any steading in its way (`thread`), joined to the connector or a street already laid (`join_to`), drawn at the street's
-    tread and recorded `street` with its index. Returns the streets drawn."""
+    tread and recorded `street` with its index. Returns the streets drawn.
+
+    Research:
+        one street per planned row - research/questions/0033-row-villages-resson.drawing.html: further streets laid beside the first
+        further street joins the streets - UNRESEARCHED: only the first street takes the road, a further one joins a street laid
+        street join width - UNRESEARCHED: the join is drawn at the street's 6 ft tread
+        street join unhooked - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook"""
     centers = [(float(h["x"]), float(h["y"])) for h in houses]
     # EACH STREET SPANS ITS OWN FARMS, as `seat_rows` seated them: spanned over every farm within reach, Mizuguchi's second
     # street, set out 238 ft behind the first row, took all twelve and ran 1,642 ft for the one farm of its own
@@ -222,6 +248,11 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     n = 0
     for k, _line in enumerate(getattr(s, "_row_streets", None) or []):
         path = thread(drawn_span(s, k, houses, brook), walls, hard, water)
+        # ...WITHOUT THE JOGS ITS PLANNED LINE TAKES FROM THE FIELD'S EDGE (feature 315, cohort seed 903): an edge row's street ran
+        # south, 40 ft east along a step in the edge and south again - two turns past the law's zigzag within its run, a kink on a
+        # tree lane no settle may cut, and the web was refused; each jog is replaced by its chord where that clears (`_unjog`),
+        # which the shared wells leave room for by keeping out of the street's bends (`homesteads.wells.street_turns_at`)
+        path = _unjog(path, hard, walls, water)
         # A FURTHER STREET JOINS THE ROW'S STREETS, NOT THE ROAD: joined to the nearest of either, Mizuguchi's second street
         # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
         # (settlement-review, 2026-09-30); only the first street takes the road
@@ -255,14 +286,18 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
 
 MEET_THE_ROAD_FT = 60.0
 """How far short of the road's start a row's first street may end and be carried on to it rather than joined by a lane of its
-own (a map drawing convention: the road runs on from the street's end, `street.street_run_out`)."""
+own (a map drawing convention: the road runs on from the street's end, `street.street_run_out`).
+
+Research: street carried on to the road - research/questions/0033-row-villages-resson.drawing.html: within 60 ft of the road's start"""
 
 
 def meet_the_road(street: Sequence[Pt], road: Sequence[Pt], reach: float = MEET_THE_ROAD_FT) -> list[Pt]:
     """The row's first street carried on to the road's start where it ends within `reach` of it, so the two meet end to end as
     one way - else as it is. Joined by a lane of its own, the gap's join lay back along the road once a later pass carried the
     road's end onto it: the street ran on beside the road, a doubled tail no settle may cut, both being tree lanes (feature
-    291 on 287, Kashikawa)."""
+    291 on 287, Kashikawa).
+
+    Research: street and road meet end to end - research/questions/0033-row-villages-resson.drawing.html: the street runs on as the road"""
     if len(street) < 2 or len(road) < 2:
         return list(street)
     r0 = road[0]
@@ -273,7 +308,9 @@ def meet_the_road(street: Sequence[Pt], road: Sequence[Pt], reach: float = MEET_
 
 
 def unhooked_both(leg: Sequence[Pt]) -> list[Pt]:
-    """`leg` with a hook taken off either end (`geom.door_unhooked`, asked of the leg and of it reversed)."""
+    """`leg` with a hook taken off either end (`geom.door_unhooked`, asked of the leg and of it reversed).
+
+    Research: lane end loses its hook - research/questions/0081-village-lanes.drawing.html"""
     from .geom import door_unhooked
 
     out = door_unhooked(list(leg), lambda a, b: True)  # every straightened leg is the join's own ground: judged whole after
@@ -293,7 +330,9 @@ def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> lis
     """A street cut back to the stretch between its outermost joints - the points on it nearest each other lane end within
     `touch` of it (a farm's door path, the join, the road run on from it) - or as it is where fewer than one joint stands on
     it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
-    frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi)."""
+    frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi).
+
+    Research: street cut to its outermost joints - research/questions/0081-village-lanes.drawing.html: an end reaching nothing is pulled back"""
     arc, at = joints_along(street, ends, touch)
     if not at:
         return list(street)
@@ -326,7 +365,9 @@ def joints_along(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> tupl
 def end_to_its_joint(street: Sequence[Pt], ends: Sequence[Pt], touch: float, end: int) -> list[Pt]:
     """The street's `end` (-1 its last point, 0 its first) cut back to the joint nearest it (`to_its_joints`' outermost
     joint on that side), the other end left as it is; the street as it is where no joint stands on it. The settle asks it of
-    a street end the lane law calls dangling (`settle_dangling`)."""
+    a street end the lane law calls dangling (`settle_dangling`).
+
+    Research: street end cut to its joint - research/questions/0081-village-lanes.drawing.html: an end reaching nothing is pulled back"""
     arc, at = joints_along(street, ends, touch)
     if not at:
         return list(street)
@@ -350,7 +391,9 @@ def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: f
     """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`) - and to the nearest point of
     each front door in `doors` within `reach` of it, a farm the street serves without a path of its own (`lay_door_paths`
     lays none within that reach): cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm,
-    whose door stood 12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut."""
+    whose door stood 12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut.
+
+    Research: street cut to its joints - research/questions/0081-village-lanes.drawing.html: pulled back to the last way or door it serves"""
     lanes = s.M.get("lanes") or []
     n = 0
     for i, ln in enumerate(lanes):
