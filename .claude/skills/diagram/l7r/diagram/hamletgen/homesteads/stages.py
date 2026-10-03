@@ -409,6 +409,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         shared byre pockets - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: reserved in the seat band before any house
         seats kept apart - UNRESEARCHED: a seat within half a pitch (0.3 in the rescue) of another seat or a house is not offered
         the front row's gaps and the rescue's widening - UNRESEARCHED: a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round
+        a pushed front seat's retry - UNRESEARCHED: a front seat pushed across the brook retried a quarter pitch either way along the row
+        the front row's offer - UNRESEARCHED: at most 12 front-row seats offered on a form other than a row
         the passage share - research/questions/0081-village-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
         the seating's reach - UNRESEARCHED: a homestead within `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, 1.3 times that for the front row
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding

@@ -6487,14 +6487,6 @@
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round": {
-  "code": "e8fc83c0852784b1",
-  "core": "e8fc83c0852784b1",
-  "date": "2026-10-03",
-  "note": "a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
   "code": "55739f988c8b9f82",
   "core": "e8fc83c0852784b1",
@@ -6509,6 +6501,14 @@
   "date": "2026-10-03",
   "note": "MIN_WEB_GAP = 7 ft fence clearance on each side plus a 4 ft tread",
   "research": "758d560b5828a167",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
+  "code": "308f6bf0d38f32ad",
+  "core": "e8fc83c0852784b1",
+  "date": "2026-10-03",
+  "note": "the `_tries` offsets of plus and minus `BUNDLE_PITCH / 4.0` along the row, only when `_by_water`, match the claim; no cited question (0035 included) says how far along the bank a seat moves",
+  "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
@@ -6559,13 +6559,13 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats deduped at 0.5 of a pitch (0.3 in the rescue) from another seat or a house": {
-  "code": "e8fc83c0852784b1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart": {
+  "code": "610909be55eea1fd",
   "core": "e8fc83c0852784b1",
   "date": "2026-10-03",
-  "note": "seats deduped at 0.5 of a pitch (0.3 in the rescue) from another seat or a house",
+  "note": "the code matches the claim (0.5 pitch, 0.3 in the rescue, 0.5 from houses); nothing in the cited pages sets how far apart seats stand",
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
   "code": "ff16ffa61b457d70",
@@ -6573,6 +6573,22 @@
   "date": "2026-10-03",
   "note": "the rare shared shed on common ground among the houses, a GUESS on 0048.drawing",
   "research": "99c9b1245f0b5c96",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's gaps and the rescue's widening": {
+  "code": "68bd3dfbbdf1ac1f",
+  "core": "e8fc83c0852784b1",
+  "date": "2026-10-03",
+  "note": "the code matches the claim (gap over 1.45 pitches filled at the row's depth; band widened 0.22 and 0.16 a round); the record is silent",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's offer": {
+  "code": "2348326542919a6e",
+  "core": "e8fc83c0852784b1",
+  "date": "2026-10-03",
+  "note": "`min(plan.spec.households, 12)` applies except on the linear form, where it is `households`, as the claim says; no cited question gives a front row's seat count",
+  "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
@@ -13775,21 +13791,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a bridge refused where its route runs over _PATH_DIRECTNESS (2x) the gap": {
-  "code": "9c942275ab414a4d",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a bridge as direct as a path": {
+  "code": "e7105fbffd3c5da5",
   "core": "9c942275ab414a4d",
   "date": "2026-10-03",
-  "note": "a bridge refused where its route runs over _PATH_DIRECTNESS (2x) the gap",
+  "note": "the check `polyline_len(span) > _PATH_DIRECTNESS * max(gap, 1.0)` matches the claim; the drawing page says \"shortest or easiest way\" but gives no figure",
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a short gap closed at any bearing": {
-  "code": "75aeabc1e9883d7f",
+  "code": "60706f55357d4e4b",
   "core": "9c942275ab414a4d",
   "date": "2026-10-03",
-  "note": "0081 drawing answers it: \"Ends within 25 ft of one another are joined\"; cite that page, and either hold the bearing-free join to 25 ft or record the 25-30 ft extension as a GUESS on it",
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the code skips the bearing test up to `_LANE_JOIN_FT` (30 ft), but the drawing page says \"Ends within 25 ft of one another are joined at a single point\", so 30 against 25 ft; it also lays a routed bridge where the page joins the ends at one point. Either the figure moves to 25 ft, or the claim should say UNRESEARCHED/GUESS for a bridge rule the page does not record",
+  "research": "758d560b5828a167",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback": {
   "code": "d2db5089cecf1a46",
@@ -13871,13 +13887,13 @@
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a lane whittled under _WEB_MIN_FT (30 ft) emptied as debris": {
-  "code": "df8f004272294cf1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a whittled lane emptied": {
+  "code": "ce5745642cf6b209",
   "core": "df8f004272294cf1",
   "date": "2026-10-03",
-  "note": "a lane whittled under _WEB_MIN_FT (30 ft) emptied as debris",
+  "note": "`polyline_len(pts) < _WEB_MIN_FT` empties the lane, except one another lane ends on (a link); the page sets no minimum lane length",
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#dooryard carry reach": {
   "code": "f6ac72c618bd584b",
@@ -37104,12 +37120,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#no way of its own on the finished map": {
-  "code": "d2832a0d3aa71d59",
+  "code": "5f2c51c98884424b",
   "core": "57067372af64bad5",
   "date": "2026-10-03",
-  "note": "the page judges a way of its own \"by its whole holding ... if any layout of the homestead would leave it a way\"; I need access_corridor's body to tell whether it tries every layout or only the drawn geom",
+  "note": "`access_corridor(s, geom)` tests only the drawn layout on the finished map, but the drawing page says a way of its own \"is judged by its whole holding, not by one way of laying out its beds: if any layout of the homestead would leave it a way of its own, it has one\"; a later corridor that only another layout would reach is missed. Either the recheck tries every layout there, as `landlocked` does, or the drawing page records the finished-map recheck as drawn-layout-only (a DEVIATION)",
   "research": "f68a5722ae2f0b2b",
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#walk not drawn as a lane": {
   "code": "90ae717eccba12c4",
