@@ -1,6 +1,8 @@
 """A lane as a run of arc length: the part of a run between two lengths, a point's length along it, a stretch cut out of it.
 
 Lifted out of `settle.py` at the 1,000-line bar (feature 315); `settle` re-exports all three, which `tree.py` and the tests name.
+
+Research: arc-length plumbing - NONE
 """
 
 from __future__ import annotations

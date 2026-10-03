@@ -7,6 +7,8 @@ drawn of 16 rolled, B10). Here each tree short of the count is offered, in turn,
 that household's own dooryard by the same seat search (`fixture_seats._persimmon`), judged at the rake its house is drawn at,
 clear of its parts, its own and its neighbors' plots' sun, every grove's conifers (B5b: the groves are drawn by now) and every
 neighbor's grove.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -30,7 +32,13 @@ def _turned(r: Sequence[float], hx: float, hy: float, deg: float) -> tuple[float
 
 
 def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> dict[str, Any] | None:
-    """A persimmon fixture record for household `h`, laid in its dooryard at its house's rake where the rules allow one, or None."""
+    """A persimmon fixture record for household `h`, laid in its dooryard at its house's rake where the rules allow one, or None.
+
+    Research:
+        persimmon in the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: by the seat search every persimmon takes, front or behind
+        out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: its own plots' and its neighbors', `CANOPY_SHADE_FT`
+        under no conifer's crown - CONVENTION: a conifer reads on top
+        in no other farm's grove - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a neighbor's grove refuses the tree"""
     g = h.get("geom") or {}
     if not g.get("house"):
         return None
@@ -68,7 +76,11 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
 
 def reseat_persimmons(s: Settlement, houses: Sequence[dict[str, Any]], target: int, forms: FixtureForms) -> int:
     """Lay, for each tree the hamlet's rolled `target` is short of, a persimmon at the next household without one that has a
-    seat for it (`persimmon_for`), in the houses' own order; the trees laid. Only on the map that keeps the sun corridor."""
+    seat for it (`persimmon_for`), in the houses' own order; the trees laid. Only on the map that keeps the sun corridor.
+
+    Research:
+        the rolled count honored - CANON: each tree short of the hamlet's rolled count offered to a household without one
+        which household takes it - UNRESEARCHED: the next in the houses' own order that has a seat"""
     if not getattr(s, "_sun_corridor_ft", 0.0):
         return 0
     short = target - sum(1 for h in houses for f in h.get("fixtures") or () if f.get("kind") == "persimmon")

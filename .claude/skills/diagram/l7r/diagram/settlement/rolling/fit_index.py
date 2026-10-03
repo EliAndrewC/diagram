@@ -2,6 +2,8 @@
 
 Split out of `fit.py` at the 1,000-line bar (feature 315): `house_extent`, `houses_meeting`, `part_box`, `house_box`,
 `recorded_box` and `drop_persimmon`, imported back by `fit` so every caller's name still resolves there.
+
+Research: index plumbing - NONE: each rule that reads these boxes is claimed in `fit`
 """
 
 import math
