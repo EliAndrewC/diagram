@@ -38,7 +38,9 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   side - within `TIGHT_BEARING_DEG` (112.5) of the bearing to its yard, its front and flanks - a search breadth MEASURED (research
   R7): with every bearing offered, behind its house a walk to the yard was found once in 194 tries on 13 settlements, and 15 of
   the 16 passages came within 90 degrees of the yard. A household behind its neighbor is still seated, by the ordinary seats and
-  a way of its own.
+  a way of its own. Nor is a tight seat offered within `TIGHT_TREE_FT` (80 ft) of the access tree, where a household has a way of
+  its own and the custom's condition fails - measured (research R8): no passage came from nearer than 87 ft, and of the 135 of 343
+  tight tries nearer than 80 every one whose walk was found had a corridor of its own.
 - THE CUSTOM'S CONDITION AS THE REACH: the household's own ground adjoins the neighbor's - its land (the reach the growth parted
   its seat by, over every garden layout, carried with its house) within the parting and `PASSAGE_ADJOIN_FT` of the neighbor's
   footprint, a GUESS (the 2 px the parting leaves and a foot of tolerance) - never a walking distance across open ground (a long
