@@ -32,8 +32,9 @@
 - [x] T06 the route's own parts retried on the fixed judge, kept only if it pays (D6, FR-006)
       research: rendering
       verify: DONE. retried on the fixed judge and WITHDRAWN: the route searched per garden layout round its own parts paid before feature 315 merged and cost the homesteads stage 3-43% more after it (research R4, R8); the corridor's route keeps off the house alone, as on main; the judge defect its cohort run exposed (seed 18) stays closed (tree.laid_run, own_clear)
-- [ ] T07 timing against main at 15 and 40 households; the cohort and the pool against main (FR-005, FR-006)
+- [x] T07 timing against main at 15 and 40 households; the cohort and the pool against main (FR-005, FR-006)
       research: rendering
+      verify: DONE. the final bookends, three alternated takes on 2ba1f3cf against main 38901e2df: band 2 - 15 households -5.0%, 10 -5.1%, 20 +2.5%, 40 +1.1%; seeds 25 and 47 at 20 households and 47 at 40 cross 10%, explained with a control (perf-317-control-nopass: the passage share at 0 leaves the homesteads stage within 8-10% of main); the cohort (make cohort N=24 JOBS=2, the six pinned seeds included) 30 of 30 on main and on the clone; the pool on the gate, green
 - [x] T08 the known bugs listed with their owners and states (D7, FR-007, SC-006)
       research: rendering
       verify: DONE. research R5 lists every bug found with its owner and state: the feature's own fixed (the judge as drawn, seeds 18 and 47, the persimmon reseat, the kura and byre, the passage on the finished seating, four tooling bugs); 315's cohort seeds with the Diagram (Inashiro) session (landed in 315); the lane code's pre-existing figures against its page and the sliver joint, to a follow-up put to the GM
