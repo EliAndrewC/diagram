@@ -681,7 +681,9 @@ class GrovesMixin:
                 if t is not None and cx - w / 2 - _cpad - t[2] <= t[0] <= cx + w / 2 + _cpad + t[2] and cy - h / 2 - _cpad - t[2] <= t[1] <= cy + h / 2 + _cpad + t[2]
             ]
             high: list[str] = []
-            g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
+            # ...TRANSLATED TO THE TENTH, as its crowns are written (feature 315): rounded to the whole pixel, every crown was inked up
+            # to half a pixel from where its tests seated it, and a Mizuguchi broadleaf tested clear of a cedar was drawn over it (B5b)
+            g = [f'<g transform="translate({cx:.1f},{cy:.1f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
             # emergents larger) - that is the to-scale reading, and it is unchanged. We deliberately DROP two kinds
             # of detail that cost ~half the stand's SVG elements without buying scale accuracy: the per-tree trunk

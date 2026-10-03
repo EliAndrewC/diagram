@@ -159,3 +159,4 @@ modal still calls bamboo exempt from the sun rule.
 |---|---|---|---|
 | spec 1 | spec-fidelity | CHANGES REQUIRED | the height setting the reach left out yadake, a kind the record puts in the grove, and was stated as settled before the reading |
 | spec 2 | spec-fidelity-verify | FAITHFUL | - |
+| amendment 1 (the regressions 310 shipped; the persimmon) | spec-fidelity | FAITHFUL | two NOT-REVIEWABLE returns first, for unlabeled figures |
