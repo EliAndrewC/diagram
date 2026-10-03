@@ -174,6 +174,15 @@ def test_an_answer_record_is_current_until_its_content_moves(tmp_path: pathlib.P
     assert saved["unit"] == "record-format:0094" and saved["result"] == "0/0/0"
 
 
+def test_a_bundle_answers_a_modal_key_with_a_space(tmp_path: pathlib.Path) -> None:
+    """Feature 317: `unit: entry-drift:cart yard <fp>` was skipped by a `\\S+` slug, so the unit stayed owed forever."""
+    bundle = tmp_path / "b"
+    bundle.mkdir()
+    (bundle / "MANIFEST.md").write_text("## Owed\n\nunit: entry-drift:cart yard fp1\nunit: entry-drift:road fp2\n", encoding="utf-8")
+    assert ro.answer(tmp_path, "entry-drift", "IN-STEP", bundle=str(bundle)) == ["entry-drift:cart yard", "entry-drift:road"]
+    assert ro.answered(ro.store(tmp_path), "entry-drift:cart yard", "fp1")
+
+
 # --- the whole command, on a real repository ------------------------------------------------------------------------------
 
 

@@ -15356,5 +15356,25 @@
    "Chikugo",
    "Chikugo Province"
   ]
+ },
+ "servitude": {
+  "def": "In law, a right to use land that belongs to someone else for a set purpose, such as crossing it to reach the road or drawing water from a well on it.",
+  "variants": [
+   "servitude",
+   "servitudes"
+  ]
+ },
+ "kori": {
+  "def": "In old Japan, a district: a division of a province, as the Ishikawa district of Kaga or the Kambara district of Echigo.",
+  "variants": [
+   "kori",
+   "kōri"
+  ]
+ },
+ "kuni": {
+  "def": "In old Japan, a province, the largest division of the country, as Idzumi kuni, the province of Izumi.",
+  "variants": [
+   "kuni"
+  ]
  }
 }

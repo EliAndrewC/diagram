@@ -232,6 +232,13 @@ def test_a_quote_check_on_notes_over_the_budget_is_split_into_batches(tmp_path: 
     assert len(cb.note_batches(REPO, "0036-groves-of-trees-around-farmhouses-yashikirin.html")) == 1
 
 
+def test_a_batch_carries_only_the_owed_units_of_its_own_notes() -> None:
+    """Feature 317: every batch carried every owed unit, so the batch holding none of the changed notes answered them all."""
+    units = [cb.bo.ru.Unit("quote-check:0081#morse", "", "f1"), cb.bo.ru.Unit("quote-check:0081#aze", "", "f2"), cb.bo.ru.Unit("quote-check:0081.drawing#unfootnoted", "", "f3")]
+    assert [u.slug for u in cb.bo.batch_units(units, frozenset({"aze", "lilong"}))] == ["quote-check:0081#aze", "quote-check:0081.drawing#unfootnoted"]
+    assert [u.slug for u in cb.bo.batch_units(units, frozenset({"lilong"}))] == ["quote-check:0081.drawing#unfootnoted"]
+
+
 def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:
     """Feature 268: the compound kinds (feature 262) are modals too, and entry-drift could not be pointed at one."""
     found = cb.kind_docstring(REPO, "ShrineGrove")

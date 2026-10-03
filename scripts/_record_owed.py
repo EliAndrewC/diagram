@@ -239,7 +239,8 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
     s, done = store(root), []
     if bundle:
         manifest = pathlib.Path(bundle) / "MANIFEST.md"
-        for m in re.finditer(r"^unit: (\S+) (\S+)$", manifest.read_text(encoding="utf-8") if manifest.is_file() else "", re.M):
+        # the slug may hold a space - an entry-drift modal key such as "cart yard" - so the fingerprint is the LAST token
+        for m in re.finditer(r"^unit: (.+) (\S+)$", manifest.read_text(encoding="utf-8") if manifest.is_file() else "", re.M):
             if m.group(1).split(":", 1)[0] == check:
                 write_answer(s, m.group(1), m.group(2), result)
                 done.append(m.group(1))

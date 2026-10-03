@@ -2014,6 +2014,7 @@ kondo	kondo
 konya	kon-ya
 konyamachi	Kon'yamachi
 koraimon	koraimon
+kori	kori
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
 koshin	Kōshin
@@ -2042,6 +2043,7 @@ kumigashira	kumigashira
 kundoku	kundoku
 kune	kune
 kune-gaki	kune
+kuni	kuni
 kunugi	kunugi
 kura	kura
 kuramai	kuramai
@@ -2077,6 +2079,7 @@ kyūnin	kyunin
 kyūyō	Kyuyo
 kō	kō
 kō group	kō
+kōri	kori
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
@@ -3174,6 +3177,8 @@ seral stage	seral
 seral stages	seral
 seri	seri
 sericulture	sericulture
+servitude	servitude
+servitudes	servitude
 ses	SES
 sess	SES
 sessha	subsidiary shrine

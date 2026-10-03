@@ -112,6 +112,12 @@ def manifest_lines(units: list[ru.Unit], owed_checks: str, escape: str = "") -> 
     return "\n".join(lines) + "\n"
 
 
+def batch_units(units: list[ru.Unit], batch: frozenset[str]) -> list[ru.Unit]:
+    """The owed units ONE quote-check batch can answer: its own notes', and the unfootnoted reading every batch carries.
+    Feature 317: each batch carried every owed unit, so the batch holding none of the changed notes answered them all."""
+    return [u for u in units if u.subject.partition("#")[2] in batch or u.subject.partition("#")[2] == "unfootnoted"]
+
+
 def unfootnoted_owed(units: list[ru.Unit]) -> bool:
     """Is a quote-check of the page's unfootnoted blocks among the owed units (`quote-check:<stem>#unfootnoted`)?"""
     return any(u.check == "quote-check" and u.subject.partition("#")[2] == "unfootnoted" for u in units)
