@@ -1,0 +1,159 @@
+{
+ "feature": "316-research-referencing",
+ "plan_sha256": "cdc7dee9922da158fa0ea45eb492e1c8a3ff9097d57cb64d45e835709d655677",
+ "reviewed": "2026-10-02",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "TC-scope-route",
+   "summary": "claims.py engine module + scripts/_claims.py + claims-gate.sh; scope counted at 3,728 units by claims.all_units (2026-10-02); docstrings make the delta GATED",
+   "class": "within",
+   "why": "Implements FR-001/FR-002/FR-006..FR-011; the route follows from the delta, not a choice."
+  },
+  {
+   "id": "TC-reuse-cache",
+   "summary": "Reuses _record_units.read_page, _entry_owed, sources.research_questions, reason-ok; gencache invalidated once by the docstrings, pool re-rolled, no map output change",
+   "class": "within",
+   "why": "Cost noted, nothing requested is dropped."
+  },
+  {
+   "id": "D1",
+   "summary": "Claim grammar: Research: section, one claim per line, single-line header form for one claim, string literal after a constant, <!-- Research: ... --> in a procedure section",
+   "class": "within",
+   "why": "FR-001 and FR-003; the one-line header is a form of the same grammar."
+  },
+  {
+   "id": "D2",
+   "summary": "Units: module/class-level functions and methods, classes, upper-case module constants; nested functions part of parent; module claims inherited; scope by import graph from hamletgen; keys path::qualname#label; sections split at ##-####",
+   "class": "within",
+   "why": "FR-002, FR-004 and the inheritance, nesting and procedure-section Edge Cases."
+  },
+  {
+   "id": "D3-constants",
+   "summary": "A unit's code fingerprint takes the constants it names resolved only through its module's own constants and `from X import NAME` imports",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 fingerprints the values of the in-scope module constants the unit NAMES, and US3 scenario 2 / SC-002 require every reader of a changed constant to be owed. A read through a module binding (`from . import law` then `law.JOIN_TOL`) names the constant but is not resolved by D3 or by the draft claims.py `values()` (Name nodes only). Observed 2026-10-02 by grep over the in-scope trees: 36 `law.<UPPER>` reads in hamletgen/ways alone (JOIN_TOL 12, DOORSTEP_MAX 7, DOORSTEP_FT 5, ...), whose readers would not be owed when that value changes. Fix: resolve `<alias>.<NAME>` where the alias is bound to an in-scope module (`from . import m`, `import ... as m`)."
+  },
+  {
+   "id": "D3-core",
+   "summary": "core = the code fingerprint less the claim line; procedure section text with non-claim comments removed and whitespace collapsed; callees not followed",
+   "class": "within",
+   "why": "FR-004, FR-010's 'fingerprint less the claim line', and the recorded callee limit."
+  },
+  {
+   "id": "D4",
+   "summary": "Research fingerprint = _entry_owed.findings of each cited page (heading + non-intro words); claim line enters the code fingerprint with pointers reduced to heading ids so fragment-move owes nothing",
+   "class": "within",
+   "why": "FR-004(b), the recorded findings-not-whole-text decision and the rename/intro/drawing-page Edge Cases."
+  },
+  {
+   "id": "D5-verdicts",
+   "summary": "Index verdict set is IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED, CANNOT-TELL; D7's refusing set lists the same four findings",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 has six verdicts including UNCLAIMED, and FR-010 refuses every introduced FINDING, UNCLAIMED included (US4: 'unclaimed or undecided'). Dropping UNCLAIMED from the index and from D7's set removes a verdict and a refusal the accepted spec carries. Fix: add UNCLAIMED to D5's verdicts and to D7's refusing set."
+  },
+  {
+   "id": "D6-record",
+   "summary": "record writes VERDICT rows; UNCLAIMED lines are printed back for the session to write a claim, not recorded",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-009: an UNCLAIMED finding 'is recorded as a row of its own on the unit (its label is the decision the check named); it stays a finding until a claim covering the decision is written and checked'; US3 scenario 4: 'it is recorded as needing a claim'. Printing it back leaves it in no index, which is the very state the spec's UNCLAIMED row exists to prevent. Fix: record an UNCLAIMED row keyed <path>::<qualname>#<decision>, dropped when a covering claim is checked."
+  },
+  {
+   "id": "D6-owed-bundle-report",
+   "summary": "claims-owed (new / code changed / research changed, bundle command per module group), claims-bundle outside the repo with fingerprints and REASON= for a unit not owed, claims-report with counts, non-IN-STEP rows and UNRESEARCHED claims",
+   "class": "within",
+   "why": "FR-006, FR-007, FR-011; listing UNRESEARCHED serves US6 scenario 2."
+  },
+  {
+   "id": "D7-rename",
+   "summary": "'Changed the code' asked across keys: a unit whose core matches the core of any unit at the base is pre-existing, 'so a move or a rename with its code intact is pre-existing'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The mechanism does not reach the stated purpose. D3's core is ast.dump of the def/class/Assign node, which includes the unit's own name (draft claims.py `_dump(node)` on the FunctionDef / ClassDef / Assign), so a RENAMED unit's core matches nothing at the base and its first finding is refused - against FR-010, which names 'a unit merely renamed, whose code is unchanged under its new key' as PRE-EXISTING. Separately, matching ANY base unit lets a copy (same name and body newly added in a second module while the original stays) pass as pre-existing, though the delta created it. Fix: compare a name-stripped core for the cross-key test, and count only a match against a base unit whose key is gone at the head. (Aside: the constant-value hits carry the defining module's path, so a file split that moves a constant changes its readers' cores without changing a value - check this against the split work.)"
+  },
+  {
+   "id": "D7-rest",
+   "summary": "Push refuses owed units and introduced findings (base IN-STEP, or no row and code/cited findings changed), warns on pre-existing, finding at both ends pre-existing, CANNOT-TELL refuses, CLAIMS_OK reason to guard log and bypass log, silent when nothing in scope changed, both routes",
+   "class": "within",
+   "why": "FR-010 and US4 scenarios 1-7."
+  },
+  {
+   "id": "D8",
+   "summary": "Coverage test runs claims.coverage() over hamletgen/**/*.py and the three procedure documents",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-002 scopes coverage to the hamlet generator package AND every engine module it imports, 'computed from the source each time coverage is checked'; SC-001 says the same; round 1 of the spec review required exactly this widening (the dry-field size and placement live in settlement/fields/). Coverage over hamletgen/** alone leaves the other 179 in-scope modules unenforced. Fix: run coverage over claims.scope / all_units, as D2 defines the scope."
+  },
+  {
+   "id": "D9",
+   "summary": "Procedure scope: every section of buildings.md and the magistrate's-manor and country-shrine sections of programs.md with their subheadings",
+   "class": "within",
+   "why": "FR-003 and the recorded buildings.md decision."
+  },
+  {
+   "id": "D10",
+   "summary": "Walk-through renders each stage's and step's claims with links to the built record, class for non-pointer backings, verdict from the index; test asserts non-empty lists and resolvable heading ids",
+   "class": "within",
+   "why": "FR-012, SC-006, US5."
+  },
+  {
+   "id": "D11",
+   "summary": "impl-drift: Opus at medium effort, omitClaudeMd, Read+Grep, verdict lines plus UNCLAIMED lines, NONE on physical code MISLABELED, GUESS/UNRESEARCHED rules; tier table; dispatched as general-purpose on Opus adopting the file this session",
+   "class": "within",
+   "why": "FR-008 (Opus, pinned, no auto-loaded files) and FR-005's MISLABELED definition."
+  },
+  {
+   "id": "D12-writers",
+   "summary": "Audit: Opus writer agents per module group on disjoint files, existing pointers/labels moved into claims, NONE for plumbing, UNRESEARCHED where nothing bears and no GUESS stood; impl-drift per group; MISLABELED and UNCLAIMED applied and re-checked, two rounds; ledger rows",
+   "class": "within",
+   "why": "FR-013 and US6; a finding left after the round cap stands in the index, as US6's independent test expects."
+  },
+  {
+   "id": "D12-needs-research",
+   "summary": "NEEDS-RESEARCH findings from the audit 'stand in the index' with DRIFTED, not corrected",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-013: 'the claims are corrected (written, relabeled, an unresearched decision labeled UNRESEARCHED), and a DRIFTED finding stays in the index' - DRIFTED is the only finding the spec leaves standing; US6 likewise. A NEEDS-RESEARCH finding is by FR-005's definition a decision the record does not cover whose claim does not say unresearched, i.e. exactly the claim FR-013 says to relabel UNRESEARCHED (which also puts it on the report's open-research list, US6 scenario 2). Fix: treat NEEDS-RESEARCH like MISLABELED in the audit - relabel UNRESEARCHED and re-check within the same two rounds."
+  },
+  {
+   "id": "D13",
+   "summary": "296 marked superseded, its stale pointers rewritten to 0033, its two claims written on the deciding functions with DRIFTED rows naming 296",
+   "class": "within",
+   "why": "FR-014, SC-007."
+  },
+  {
+   "id": "D14",
+   "summary": "Seeded impl-drift runs: four known units, three runs, recorded in research.md",
+   "class": "within",
+   "why": "SC-005."
+  },
+  {
+   "id": "D15",
+   "summary": "Doctrine in the engine dev loop, research CLAUDE.md, root guard table, docs/guards.md, dev/reviews.md; failure messages name the command",
+   "class": "within",
+   "why": "FR-015, SC-008."
+  },
+  {
+   "id": "CC-XII-XIII-XIV-XVI",
+   "summary": "No rendering change, maps unchanged and re-rolled against manifests, tooling defects fixed and DRIFTED recorded per the spec, nothing exempted",
+   "class": "within",
+   "why": "Restates the spec's recorded decisions."
+  },
+  {
+   "id": "CC-file-scale",
+   "summary": "Files pushed past 1,000 lines by claims are split mechanically, never FILE_SIZE_OK",
+   "class": "within",
+   "why": "Forced by the gate's bar; narrows nothing the GM asked for."
+  },
+  {
+   "id": "Risks",
+   "summary": "Disjoint writer files, coverage about 4 s (measured 2026-10-02), sorted index rows",
+   "class": "within",
+   "why": "Operational notes, no decision against the spec."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

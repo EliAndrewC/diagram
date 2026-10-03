@@ -14,8 +14,8 @@ agents and checked by `impl-drift` once (the audit); feature 296 is closed with 
 ## Technical Context
 
 - Engine: one new module `l7r/diagram/tools/claims.py` (parsing, units, code fingerprints, the import-graph scope, coverage)
-  under the 100% rule, and `tools/placement_stages.py` (the walk-through). The scope is 241 modules, 74,331 lines (spec
-  Context): 1,654 functions, 800 methods, 237 classes, 1,019 constants and 18 procedure sections - 3,728 units before
+  under the 100% rule, and `tools/placement_stages.py` (the walk-through). The scope is 245 modules (the spec Context's
+  241 counted imports only; importing a submodule runs every package `__init__` above it, so those four are in scope too): 1,654 functions, 800 methods, 237 classes, 1,019 constants and 18 procedure sections - 3,728 units before
   inheritance, counted by `claims.all_units` on 2026-10-02. Every in-scope file gains docstrings: engine code, so the delta
   takes the GATED route.
 - Scripts: `scripts/_claims.py` (research fingerprints, the index, owed, bundle, record, report, the push check),
@@ -50,11 +50,13 @@ takes the module docstring's claims (inherited). A module is in scope when `clai
 split at every `##`/`###`/`####` heading. (spec FR-002, FR-004)
 
 **D3 - The code fingerprint.** For a function or method: `ast.dump` of its node with every docstring removed (its own and any
-nested function's), without positions - so comments, blank lines and formatting do not count, and docstring prose does not
-count. For a class: its class-level statements only, methods excluded (each method is its own unit). For a constant: its value
-node. Each is joined with (a) the claim line itself, normalized for whitespace, and (b) the dumped value of every package
-constant the unit names - resolved through the module's `from .x import NAME` imports and its own module-level constants,
-across the in-scope modules. The fingerprint WITHOUT the claim line is kept beside it as the unit's `core`, which D7 uses to
+nested function's), without positions and WITHOUT ITS OWN NAME - so comments, blank lines, formatting and docstring prose do not
+count, and a rename or a move with the code intact keeps the core (D7). For a class: its class-level statements only, methods
+excluded (each method is its own unit), name removed. For a constant: its value node (its name is its key). Each is joined with
+(a) the claim line itself, normalized for whitespace, and (b) `NAME=<dumped value>` for every in-scope constant the unit reads -
+by its own module's name, through a `from x import NAME`, or as `<alias>.NAME` where the alias is an in-scope module (`from .
+import law` then `law.JOIN_TOL`: 36 such reads in `hamletgen/ways` alone, grep 2026-10-02) - keyed by the constant's name,
+not its module, so a file split that moves a constant owes nothing. The fingerprint WITHOUT the claim line is kept beside it as the unit's `core`, which D7 uses to
 tell a drift the delta introduced from one that was already there. For a procedure section: its text with HTML comments other
 than claim markers removed and whitespace collapsed. Callees are not followed (spec Decisions Recorded). (spec FR-004)
 
@@ -67,7 +69,7 @@ fingerprint with each pointer reduced to its heading id (`research/questions/003
 
 **D5 - The index.** `.claude/skills/diagram/dev/claims-index.json`, sorted keys, one object per unit:
 `{"verdict", "code", "core", "research", "date", "note"}`. Verdicts: IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED,
-CANNOT-TELL (spec FR-005). Rows whose unit no longer exists are dropped by the next `record` (a renamed function is a new unit).
+UNCLAIMED, CANNOT-TELL (spec FR-005). Rows whose unit no longer exists are dropped by the next `record` (a renamed function is a new unit).
 
 **D6 - Owed, bundle, record, report** (`scripts/_claims.py`, Make targets `claims-owed`, `claims-bundle`, `claims-checked`,
 `claims-report`):
@@ -80,24 +82,28 @@ CANNOT-TELL (spec FR-005). Rows whose unit no longer exists are dropped by the n
   plus `units.json` with each unit's fingerprints as read. A unit not owed is refused unless `REASON=` is given (logged).
   (FR-007)
 - `record --bundle DIR --reply FILE`: reads the check's reply lines `VERDICT <key> <VERDICT> - <note>` and writes the rows
-  with the bundle's fingerprints; a key not in the bundle is refused; `UNCLAIMED <path>::<qualname> - <decision>` lines are
-  printed back for the session to write a claim (FR-009, spec US3 scenario 4).
+  with the bundle's fingerprints; a key not in the bundle is refused. An `UNCLAIMED <path>::<qualname> - <decision>` line is written as a row of its own,
+  keyed `<path>::<qualname>#<decision>`, verdict UNCLAIMED, with that unit's core as its code fingerprint; it is printed for the
+  session too. It stays a finding until a claim covering the decision is written and checked: `record` drops an UNCLAIMED row
+  of a unit when a later verdict on that unit's claims does not report it again (FR-009, spec US3 scenario 4).
 - `report`: counts by verdict, owed count, then every non-IN-STEP row and every UNRESEARCHED claim with location. (FR-011)
 
 **D7 - The push** (`scripts/claims-gate.sh`, in `sync-with-main.sh` beside `entry-gate.sh`, on both routes): refuse when (a)
-any unit is owed; or (b) a row is DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL at the head and, at the merge base, the
-row was IN-STEP, or there was no row and the delta changed the unit's code or a cited question's findings - an
-introduced finding. "Changed the code" is asked across keys, because a renamed unit has no base row under its new key: the
-unit's `core` matches the `core` of NO unit at the merge base (computed from the base's trees, read with one `git ls-tree`
-and one `cat-file --batch`), so a move or a rename with its code intact is pre-existing, and a new or edited one is not.
+any unit is owed; or (b) a row is a FINDING (DRIFTED, NEEDS-RESEARCH, MISLABELED, UNCLAIMED or CANNOT-TELL) at the head and, at
+the merge base, the row was IN-STEP, or there was no row and the delta changed the unit's code or a cited question's findings -
+an introduced finding. "Changed the code" is asked across keys, because a renamed unit has no base row under its new key: the
+unit's nameless `core` (D3) matches NO base unit's core among the units whose `<path>::<qualname>` no longer exists at the head
+(computed from the base's trees, read with one `git ls-tree` and one `cat-file --batch`) and no base unit's core under its own
+key - so a move or a rename with its code intact is pre-existing, while a new copy beside an original that still exists, or an
+edited unit, is not.
 "Changed a cited question's findings": D4's research fingerprint of the question at the base differs from the head's. A unit
 with a finding at both ends is pre-existing whatever changed (spec FR-010). Print without refusing every non-IN-STEP row that is not introduced (pre-existing; for
 this feature's own landing, where the base has no index, every audit finding on unchanged code is pre-existing). CANNOT-TELL
 is in the refusing set because an unanswered check is an owed check in substance. `CLAIMS_OK="<reason>"` discharges, to the
 guard log and `dev/bypass-log/`. Silent when nothing in scope and no cited question changed. (FR-010)
 
-**D8 - Coverage at the gate.** `tests/tooling/test_claims_coverage.py` runs `claims.coverage()` over `hamletgen/**/*.py` and
-the three procedure documents: no unit without a claim, no malformed claim, no pointer to a missing question file. Fixture
+**D8 - Coverage at the gate.** `tests/tooling/test_claims_coverage.py` runs `claims.coverage()` over `claims.all_units` - every
+module `claims.scope` reaches (D2, spec FR-002) and the procedure sections (D9): no unit without a claim, no malformed claim, no pointer to a missing question file. Fixture
 tests in `tests/tools/test_claims.py` cover the parser, units, inheritance, fingerprints (comment/format/prose-insensitive,
 code/claim/constant-sensitive) to 100%. (FR-002, FR-003, SC-001)
 
@@ -124,8 +130,9 @@ gotcha). (FR-008)
 4,000-5,000 lines each, by subpackage - about 16 groups over the 74,331 lines), each writing the `Research:` claims into its own files only - moving the
 existing comment pointers and labels into claim lines, choosing pointers by grepping question headings, NONE for plumbing (a
 module-level NONE where the whole module is), UNRESEARCHED where nothing in the record bears and no GUESS label already stood.
-Then `make claims-owed` and one `impl-drift` per group bundle. MISLABELED and UNCLAIMED findings are applied to the claims and
-re-checked (two rounds at most, as review checks); DRIFTED and NEEDS-RESEARCH stand in the index. The procedure documents get
+Then `make claims-owed` and one `impl-drift` per group bundle. MISLABELED and UNCLAIMED findings are applied to the claims, and a
+NEEDS-RESEARCH finding's claim is relabeled UNRESEARCHED (spec FR-013), each re-checked (two rounds at most, as review checks);
+DRIFTED alone stands in the index, with any CANNOT-TELL the second round still returns. The procedure documents get
 one writer and one check. Every pass a row in `docs/review-ledger.md` with its cost. (FR-013)
 
 **D13 - Feature 296.** Its spec's Status reads "Superseded by feature 316 (2026-10-02)"; its stale pointers (homesteads/158,

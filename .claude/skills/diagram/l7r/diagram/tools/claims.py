@@ -35,8 +35,8 @@ modules on 2026-10-02.
 from __future__ import annotations
 
 import ast
-import copy
 import hashlib
+import inspect
 import re
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
@@ -93,18 +93,18 @@ def parse_claim(line: str) -> Claim:
     text = " ".join(line.split())
     label, sep, rest = text.partition(" - ")
     if not sep or not label.strip() or not rest.strip():
-        raise ClaimError(f"`{text}` has no `<label> - <backing>`; {GRAMMAR}")
+        raise ClaimError(f"`{text}` has no `<label> - <backing>`")
     backing, _, account = rest.partition(": ")
     backing = backing.strip()
     head = backing.split(" ", 1)[0]
     if head in CLASSES and head != "DEVIATION":
         if backing != head:
-            raise ClaimError(f"`{text}`: `{head}` takes no pointer; {GRAMMAR}")
+            raise ClaimError(f"`{text}`: `{head}` takes no pointer")
         return Claim(label.strip(), head, (), account.strip(), text)
     kind, tail = ("DEVIATION", backing[len("DEVIATION") :].strip()) if head == "DEVIATION" else ("POINTER", backing)
     parts = [p.strip() for p in tail.split(",")]
     if not tail or not all(POINTER.fullmatch(p) for p in parts):
-        raise ClaimError(f"`{text}`: the backing `{backing}` is not question files or a class; {GRAMMAR}")
+        raise ClaimError(f"`{text}`: the backing `{backing}` is not question files or a class")
     return Claim(label.strip(), kind, tuple(parts), account.strip(), text)
 
 
@@ -160,7 +160,7 @@ def claims_of(doc: str | None) -> tuple[list[Claim], list[str]]:
         except ClaimError as exc:
             errors.append(str(exc))
     if section_lines(doc) == []:
-        errors.append(f"an empty `Research:` section; {GRAMMAR}")
+        errors.append(f"an empty `Research:` section")
     return claims, errors
 
 
@@ -251,8 +251,37 @@ def resolve_from(pkg: str, node: ast.ImportFrom) -> str:
     return ".".join(base) + (f".{node.module}" if node.module else "")
 
 
-def _names(node: ast.AST) -> set[str]:
-    return {n.id for n in ast.walk(node) if isinstance(n, ast.Name)}
+def _own_statements(node: ast.AST) -> ast.AST:
+    """A class as its own statements only (each method is a unit of its own); any other node as it is."""
+    if not isinstance(node, ast.ClassDef):
+        return node
+    shell = ast.ClassDef(name=node.name, bases=node.bases, keywords=node.keywords, decorator_list=node.decorator_list, type_params=getattr(node, "type_params", []))
+    shell.body = [s for s in node.body if not isinstance(s, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))] or [ast.Pass()]
+    return shell
+
+
+def nameless_dump(node: ast.AST) -> str:
+    """A unit's syntax tree without its own NAME (and, for a class, without its methods), so a unit renamed or moved with
+    its code intact keeps its core - the push matches it across keys (spec FR-010, plan D7). A constant is its value."""
+    if isinstance(node, (ast.Assign, ast.AnnAssign)):
+        return _dump(node.value) + ("" if isinstance(node, ast.Assign) else "\x1c" + _dump(node.annotation))  # type: ignore[arg-type]
+    shell = _own_statements(node)
+    name = shell.name  # type: ignore[attr-defined]
+    shell.name = ""  # type: ignore[attr-defined]
+    try:
+        return _dump(shell)
+    finally:
+        shell.name = name  # type: ignore[attr-defined]
+
+
+def module_aliases(tree: ast.Module, table: dict[str, tuple[str, str]], modules: set[str]) -> dict[str, str]:
+    """local name -> in-scope module, for `from pkg import mod [as m]` and `import pkg.mod as m` - so `m.NAME` is a read
+    of that module's constant (36 such reads in `hamletgen/ways` alone, counted 2026-10-02)."""
+    out = {local: f"{src}.{real}" for local, (src, real) in table.items() if f"{src}.{real}" in modules}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            out |= {a.asname: a.name for a in node.names if a.asname and a.name in modules}
+    return out
 
 
 def module_units(source: str | ast.Module, path: str, module: str = "", is_package: bool = False, constants: dict[str, dict[str, str]] | None = None) -> tuple[list[Claim], list[str], list[Unit]]:
@@ -282,30 +311,36 @@ def module_units(source: str | ast.Module, path: str, module: str = "", is_packa
         name = _const_target(stmt)
         if name is not None:
             nxt = tree.body[i + 1] if i + 1 < len(tree.body) else None
-            found.append((name, "constant", stmt, nxt.value.value if _is_doc_literal(nxt) else None))  # type: ignore[union-attr]
+            found.append((name, "constant", stmt, inspect.cleandoc(nxt.value.value) if _is_doc_literal(nxt) else None))  # type: ignore[union-attr]
     _strip_docstrings(tree)
 
+    aliases = module_aliases(tree, table, set(constants))
+
     def values(node: ast.AST) -> tuple[str, tuple[str, ...]]:
-        hits: list[str] = []
-        for name in sorted(_names(node)):
-            if name in own:
-                hits.append(f"{name}={own[name]}")
-            elif name in table and table[name][1] in constants.get(table[name][0], {}):
-                src, real = table[name]
-                hits.append(f"{src}.{real}={constants[src][real]}")
-        return "\x1e".join(hits), tuple(hits)
+        """`NAME=<value>` for each in-scope constant the node reads - by its own name, through a `from` import, or as
+        `<module alias>.NAME` - keyed by the constant's NAME and not its module, so a file split that moves a constant
+        owes nothing (plan review, 2026-10-02)."""
+        hits: set[str] = set()
+        for sub in ast.walk(node):
+            if isinstance(sub, ast.Name):
+                if sub.id in own:
+                    hits.add(f"{sub.id}={own[sub.id]}")
+                elif sub.id in table and table[sub.id][1] in constants.get(table[sub.id][0], {}):
+                    src, real = table[sub.id]
+                    hits.add(f"{real}={constants[src][real]}")
+            elif isinstance(sub, ast.Attribute) and isinstance(sub.value, ast.Name) and sub.value.id in aliases:
+                mod = aliases[sub.value.id]
+                if sub.attr in constants.get(mod, {}):
+                    hits.add(f"{sub.attr}={constants[mod][sub.attr]}")
+        found_ = tuple(sorted(hits))
+        return "\x1e".join(found_), found_
 
     units: list[Unit] = []
     for qual, kind, node, doc in found:
         claims, errors = claims_of(doc)
         inherited = not claims and not errors
-        if isinstance(node, ast.ClassDef):  # its own statements only: each method is a unit of its own
-            body = node.body
-            node.body = [s for s in body if not isinstance(s, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))] or [ast.Pass()]
-            dump, (vals, names) = _dump(node), values(node)
-            node.body = body
-        else:
-            dump, (vals, names) = _dump(node), values(node)
+        read = node.value if isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value is not None else _own_statements(node)  # a constant names itself only as its target
+        dump, (vals, names) = nameless_dump(node), values(read)
         end = node.end_lineno or node.lineno  # type: ignore[attr-defined]
         units.append(Unit(path, qual, kind, node.lineno, end, claims or (mod_claims if inherited else []), inherited, _sha(dump + "\x1d" + vals), errors, names))  # type: ignore[attr-defined]
     units.sort(key=lambda u: u.lineno)
@@ -373,8 +408,10 @@ def _imports_of(tree: ast.Module, module: str, is_package: bool, known: dict[str
     for name in names:
         while name and name not in known:
             name = name.rsplit(".", 1)[0] if "." in name else ""
-        if name:
-            out.add(name)
+        while name:  # importing a submodule runs every package above it
+            if name in known:
+                out.add(name)
+            name = name.rsplit(".", 1)[0] if "." in name else ""
     return out
 
 
@@ -417,12 +454,12 @@ def coverage(units: Iterable[tuple[Unit, list[str]]], questions: set[str]) -> li
     """Every coverage failure (FR-002, FR-003): a unit with no claim own or inherited, a claim that does not parse, a pointer
     to a question file that does not exist (`questions` holds the file names). Each line names the unit and the fix."""
     problems: list[str] = []
-    seen_module_errors: set[str] = set()
+    seen: set[tuple[str, str]] = set()
     for unit, module_errors in units:
         where = f"{unit.path}:{unit.lineno} {unit.qualname}"
         for err in module_errors:
-            if (unit.path, err) not in seen_module_errors:  # type: ignore[comparison-overlap]
-                seen_module_errors.add((unit.path, err))  # type: ignore[arg-type]
+            if (unit.path, err) not in seen:
+                seen.add((unit.path, err))
                 problems.append(f"{unit.path} module docstring: {err}")
         problems += [f"{where}: {err}" for err in unit.errors]
         if not unit.claims and not unit.errors:
