@@ -17,7 +17,13 @@ proposed, and per-claim granularity.
 ## Context (observed 2026-10-02)
 
 The hamlet generator (the `hamletgen` package) holds 901 functions and methods, 25 classes and 365 module-level constants
-(an `ast` count over its 62 files). Its research pointers are COMMENTS: 141 distinct questions named across 118 engine files,
+(an `ast` count over its 62 files). The code that runs when a hamlet is generated is wider: the engine modules `hamletgen`
+imports, directly or through others, are 241 modules in all (62 of them `hamletgen`, 112 under `settlement/`, 31
+`interactive/`, 19 `waterfields/`, the rest `labels/`, `overlap/`, `sitegen/` and five single modules), 74,331 lines - counted
+2026-10-02 by walking every `import` in the syntax tree from the `hamletgen` package outward. Decisions the GM named live
+outside `hamletgen`: how much dry field a hamlet gets (`settlement/fields/grain.py`), where the dry hem is laid
+(`settlement/fields/comb.py`), a grove's sides (`settlement/homestead_parts/grove_sides.py`), yard sizes
+(`settlement/homestead_parts/yards.py`). Its research pointers are COMMENTS: 141 distinct questions named across 118 engine files,
 about 85 GUESS labels, 27 "map drawing convention" labels and one "deliberate deviation" in `hamletgen` alone. The gate checks
 that a pointer names a question that exists (`check-research-pointers.py`); nothing records what a pointer claims, whether any
 check ever compared the code beside it with the question, or whether either side has changed since.
@@ -114,8 +120,8 @@ other; build its bundle, dispatch the check, record the verdict; the claim is no
 ### User Story 4 - The push holds it (Priority: P1)
 
 A push whose delta owes a claim check that has not been answered is refused, naming each claim and the command that builds its
-bundle. A claim the delta newly turned drifted, in need of research or mislabeled is refused too. A claim that was already
-drifted before the delta is not refused: it is printed as a warning.
+bundle. A finding the delta introduced - drifted, in need of research, mislabeled, unclaimed or undecided - is refused too. A
+finding that was already there before the delta is not refused: it is printed as a warning.
 
 **Why this priority**: the GM accepted the session's rule: an owed row blocks; a drifted row the change introduces blocks; a
 pre-existing drifted row is a warning, as feature 296 was treated.
@@ -127,6 +133,8 @@ drifted passes with the warning.
 **Acceptance Scenarios**:
 
 1. **Given** an owed claim with no current verdict, **When** the push runs, **Then** it is refused, naming the claim.
+7. **Given** a unit judged for the first time with a finding, on code and research the delta did not change, **When** the push
+   runs, **Then** it passes and prints the finding as pre-existing.
 2. **Given** a verdict recorded before the claim's code or research changed again, **When** the push runs, **Then** it is refused
    as stale.
 3. **Given** a claim in step at the merge base and drifted at the head, **When** the push runs, **Then** it is refused.
@@ -197,7 +205,8 @@ and mislabeled finding the audit made, with the claim it concerns.
 - **A function nested inside another**: part of its enclosing function's code; not a unit of its own.
 - **A procedure section** of the magistracy or country-shrine procedure, or of the building vocabulary they draw on: a unit is a
   section, fingerprinted by its text with comments removed and its claim markers kept.
-- **A delta in another engine package** that the hamlet generator calls: not followed (the stated limit); claims are per unit.
+- **A change in a function another unit calls**: not followed into the caller's fingerprint (the stated limit); the callee's own
+  claims are units of their own and are owed.
 - **The audit's own dispatches** are the declared occasion of this feature; the owed command treats every claim as owed until its
   first verdict.
 - **A verdict recorded in another clone** travels with the commit, since the index is committed.
@@ -213,7 +222,8 @@ and mislabeled finding the audit made, with the claim it concerns.
   looked for), `CONVENTION`, `DEVIATION <question file>`, or `NONE` (no physical decision). The form is
   read from the source text, without importing the engine.
 - **FR-002**: SCOPE in code is every function, method, class and module-level constant (an upper-case name) of the hamlet
-  generator package. Each carries at least one claim of its own or inherits its module's `Research:` claims. A unit with
+  generator package and of every engine module it imports, directly or indirectly - the import graph, computed from the source
+  each time coverage is checked, so a module newly imported into hamlet generation comes into scope with it. Each carries at least one claim of its own or inherits its module's `Research:` claims. A unit with
   neither, a malformed claim, or a pointer to a question file that does not exist fails the gate, naming the unit and the claim
   form.
 - **FR-003**: SCOPE in the procedures is every section of the magistrate's-manor and country-shrine procedures and of the Mode A
@@ -221,13 +231,15 @@ and mislabeled finding the audit made, with the claim it concerns.
   none fails the gate.
 - **FR-004**: A UNIT of the index is one claim of one function, method, class, constant or procedure section (own or inherited).
   Its fingerprint is (a) the code: the unit's syntax tree with docstrings removed (so comments and formatting do not count),
-  plus the claim line itself, plus the values of the module-level constants of the hamlet generator package the unit names; for
+  plus the claim line itself, plus the values of the module-level constants of in-scope modules the unit names; for
   a procedure section, its text with HTML comments other than claim markers removed and whitespace normalized; and (b) the
   research: the findings of each question the claim cites (its words less its intro, as feature 311 reads them).
 - **FR-005**: The INDEX is one committed file: per unit, its verdict, both fingerprints as the check read them, the date, and a
   one-line note of what the check found. Its verdicts are IN-STEP, DRIFTED, NEEDS-RESEARCH (the code decides something the
-  record does not cover and the claim does not label a guess), MISLABELED (the claim's class or pointer is wrong - a guess the
-  record answers, a pointer to a question that does not bear on it) and CANNOT-TELL.
+  record does not cover and the claim does not label a guess or unresearched), MISLABELED (the claim's class or pointer is wrong
+  - a guess the record answers, a pointer to a question that does not bear on it, NONE on code that decides something
+  physical), UNCLAIMED (the check found a physical decision in the unit that no claim covers; the note names it) and
+  CANNOT-TELL (the check could not decide; UNRESOLVED, never a pass). Every verdict but IN-STEP is a FINDING.
 - **FR-006**: One command names every OWED unit: a unit with no row, or whose current fingerprints differ from its row's; one per
   line, with the reason (new, code changed, research changed) and the command that builds its bundle.
 - **FR-007**: One command builds a check BUNDLE outside the repository for a set of owed units: each unit's source (the function
@@ -237,10 +249,14 @@ and mislabeled finding the audit made, with the claim it concerns.
   the code that no claim covers. It is pinned to a tier (a judging check: Opus) like every defined check and launches without the
   project's auto-loaded files.
 - **FR-009**: One command records a returned verdict into the index with the fingerprints the bundle recorded, so a verdict is
-  stale once either side changes again.
-- **FR-010**: The push, on both routes, refuses a delta with an owed unit unanswered or stale, or with a unit whose verdict is
-  DRIFTED, NEEDS-RESEARCH or MISLABELED where the merge base's index held it IN-STEP or held no row; it prints, without refusing,
-  each unit DRIFTED at the merge base and at the head. One stated reason discharges the refusal and is written to the bypass log.
+  stale once either side changes again. An UNCLAIMED finding is recorded as a row of its own on the unit (its label is the
+  decision the check named); it stays a finding until a claim covering the decision is written and checked, when the row is
+  dropped.
+- **FR-010**: The push, on both routes, refuses a delta with an owed unit unanswered or stale, or with an INTRODUCED finding: a
+  unit whose verdict is a finding at the head where the merge base's index held it IN-STEP, or where the delta created or
+  changed the unit's code (its fingerprint less the claim line) or the findings of a question it cites. A finding on code and
+  research the delta did not touch is PRE-EXISTING - the audit's own findings, feature 296's two rows, a unit merely renamed -
+  and is printed as a warning, never refused. One stated reason discharges the refusal and is written to the bypass log.
 - **FR-011**: One command prints the index as a REPORT: counts by verdict, then every unit not IN-STEP with its location, its
   claim and its note.
 - **FR-012**: The hamlet walk-through shows, under each stage and step, its claims (own or inherited), each pointer a link to that
@@ -266,7 +282,8 @@ and mislabeled finding the audit made, with the claim it concerns.
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001, FR-002, FR-003): Every function, method, class and constant in the hamlet generator package and every section
+- **SC-001** (FR-001, FR-002, FR-003): Every function, method, class and constant in the hamlet generator package and the engine
+  modules it imports, and every section
   of the three procedure documents carries a claim, own or inherited, and the gate fails on a fixture that removes one.
 - **SC-002** (FR-004, FR-006): On prepared deltas, the owed command names exactly: one function's claims for an edit to its code;
   nothing for a comment, formatting or prose edit; a constant's claims and its readers' claims for a change to its value; every
@@ -274,7 +291,8 @@ and mislabeled finding the audit made, with the claim it concerns.
 - **SC-003** (FR-005, FR-007, FR-008, FR-009, FR-011, FR-013): At landing the report shows every unit with a verdict and none owed,
   and lists every non-IN-STEP unit.
 - **SC-004** (FR-010): Dry pushes in tests: an owed unit refuses; a recorded verdict passes; an IN-STEP-to-DRIFTED unit refuses; a
-  DRIFTED-to-DRIFTED unit passes with the warning; a reason passes and is logged.
+  DRIFTED-to-DRIFTED unit passes with the warning; a first verdict DRIFTED on untouched code passes with the warning, and on
+  changed code refuses; a reason passes and is logged.
 - **SC-005** (FR-008): The new check, seeded with known units - one in step, one drifted (feature 296's dry-field share), one
   mislabeled (a guess the record answers), one unclaimed decision - returns the known verdict on each, three runs a leg.
 - **SC-006** (FR-012): Every stage and every step of the built walk-through shows its claims, and every question pointer on it is a
@@ -294,7 +312,11 @@ and mislabeled finding the audit made, with the claim it concerns.
 | Drift found by the audit is recorded, not fixed in the code | the GM's direction | the GM: *"what I am saying is not even about fixing anything it's just about doing an audit and then having an index"*; the push rule accepted makes pre-existing drift a warning | this spec |
 | An unresearched decision is claimed UNRESEARCHED, not GUESS | this project's decision, from the GM's words and the research doctrine | the GM: *"whether something now must be marked as a guess or unresearched"*; the doctrine reserves "guess" for a decision a search pass came back empty on, and the audit runs no search pass | this spec; the engine dev loop |
 | The index is committed, not kept per clone | this project's decision | the GM asked for *"an up-to-date index"*; a verdict must travel with the code it judged, unlike feature 311's answer records | this spec |
-| The scope is the hamlet generator package and the three Mode A procedure documents; towns, villages and cities are out, and so are the hand-drawn maps themselves | the GM's direction | the GM: *"we're not talking about towns and villages and cities because those will eventually be scripted"*; the hand maps are not procedures, and generator work does not edit them (GM 2026-09-28) | this spec |
+| The code scope is the hamlet generator package and every engine module it imports, measured from the import graph; towns, villages and cities as such are out, and so are the hand-drawn maps | the GM's direction | the GM: *"the code that generates a hamlet must have citations for anything that should be research derived"* - a shared module that runs in a hamlet's generation is that code (the dry-field size and placement of the GM's own example live in `settlement/fields/`); *"we're not talking about towns and villages and cities because those will eventually be scripted"*; the hand maps are not procedures, and generator work does not edit them (GM 2026-09-28) | this spec |
+| The procedure scope adds the Mode A building vocabulary (`buildings.md`) to the two program sections | this project's decision, within the GM's words | the GM: *"our procedures for the manually generated maps ... magistracy buildings and country shrines"*; both programs are drawn with that vocabulary (walls, gates, wells, latrines, sacred features), so its rules are part of their procedure | this spec |
+| The research fingerprint is the question's findings - its words less its intro and its comments - not its whole text | this project's decision, narrowing the proposal's "a hash of the cited question's text" | an intro (feature 311) cites nothing and says only why the question is asked, and a comment or a re-wrap changes nothing a reader is told; hashing the whole text would owe every claim on a maintenance sweep, the waste feature 311 removed | this spec; the owed command's docstring |
+| A NEEDS-RESEARCH, MISLABELED, UNCLAIMED or CANNOT-TELL finding the delta introduces blocks the push, as a DRIFTED one does; pre-existing ones warn | this project's decision, extending the accepted rule, which named drifted rows | each is the implementation out of step with what the record backs, the GM's citation requirement; a CANNOT-TELL is a check that did not answer, so treating it as a pass would let the index claim what no check confirmed | this spec |
+| UNCLAIMED and CANNOT-TELL are verdicts of their own | this project's decision | the proposal had the check flag an unclaimed decision; recording it as a row keeps it in the index until a claim is written; CANNOT-TELL keeps an undecided check visible rather than silently clearing the owed state | this spec |
 
 ## Assumptions
 
@@ -306,3 +328,12 @@ and mislabeled finding the audit made, with the claim it concerns.
   pass came back empty on (CLAUDE.md, Research). The report lists the UNRESEARCHED claims as the open research.
 
 ## Review history
+
+- **Round 1** (`spec-fidelity`, 2026-10-02): CHANGES REQUIRED - six items: the code scope cut to `hamletgen` where the GM said
+  the code that generates a hamlet (the dry-field size and placement live in `settlement/fields/`); FR-010's "or held no row"
+  refusing the audit's and 296's pre-existing findings at this feature's own landing; NEEDS-RESEARCH and MISLABELED blocking
+  unrecorded and silent when pre-existing; CANNOT-TELL unproposed and clearing the owed state; no requirement recording an
+  unclaimed decision; two departures unrecorded (the research fingerprint, `buildings.md`). All six applied: FR-002 scopes the
+  import graph (measured in Context); FR-010 defines INTRODUCED and PRE-EXISTING, with a seventh scenario; every non-IN-STEP
+  verdict is a FINDING, refused when introduced and warned when pre-existing; CANNOT-TELL is unresolved; UNCLAIMED is a verdict
+  recorded per FR-009; four Decisions Recorded rows added and the scope row rewritten.
