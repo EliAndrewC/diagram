@@ -132,5 +132,14 @@
   "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47), every seating on its first margin: main (38901e2df) 3.01/2.74/4.00 and 2.98/2.79/3.90; the clone as built 4.18/4.34/10.13 and 4.24/4.33/9.68 (seed 47: its passage seating falls short and is seated again with the passage withheld, meta.passage_withheld); the wood reservation without the afternoon lane (WEST0) 4.33/2.82/5.02 and 4.64/3.02/5.15; the passage share at 0 (NOPASS) 3.80/4.14/4.44 and 3.88/4.21/4.47; both off 3.16/2.90/4.13 and 3.32/2.84/4.14 - within 3-11% of main",
   "source": "control_probe.py in the session's scratchpad (WEST0=1, NOPASS=1), against /tmp/main317c and the clone at 529daac23",
   "observed": "2026-10-03"
+ },
+ "perf-317-control-40d": {
+  "verifies": "the band-3 reading of the bookends on the engine with the early stop (growth.grow_the_margin, passage.passages_spent): 40 households total +12.3%, seed 47 +34.1%, seed 25 +16.0%, seed 39 +11.6%; 20 households seeds 25 +14.7%, 47 +11.1%; 10 households seed 47 +17.9%",
+  "subject": "perf bookend, reference spec, 40 households, seeds 25, 39 and 47, the homesteads stage",
+  "value": 8.23,
+  "unit": "s, the homesteads stage's CPU at seed 47, 40 households, as built with the early stop (mean of two takes)",
+  "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47): main (38901e2df) 3.02/2.70/3.96 and 3.26/2.78/3.96; the clone with the early stop 4.17/4.30/8.20 and 4.06/4.20/8.26, seeds 25 and 39 seating the same manifests as without it (sha256 after the homesteads stage). With the causes switched off on the engine before the early stop, which changes nothing where no passage is spent (perf-317-control-40c): both off 3.16/2.90/4.13 and 3.32/2.84/4.14, within 3-11% of main",
+  "source": "control_probe.py in the session's scratchpad (HASH=1), against /tmp/main317c and the clone at 226d6517e; perf-317-control-40c for the switched-off arms",
+  "observed": "2026-10-03"
  }
 }

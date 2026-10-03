@@ -5503,13 +5503,13 @@
   "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a seating that has seated households by passage stops before the 16-direction level instead of widening, and is seated again without passage (the passages_spent break, feature 317)": {
-  "code": "9befabec0497ff04",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a seating with passages stopped early": {
+  "code": "7c9316ff6caa051a",
   "core": "9befabec0497ff04",
   "date": "2026-10-03",
-  "note": "a seating that has seated households by passage stops before the 16-direction level instead of widening, and is seated again without passage (the passages_spent break, feature 317)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the page rolls a share of households \"that may be reached that way\", so a seating that ends up with fewer is allowed; line 92's `level + 2 == len(GROW_LEVELS) and passages_spent(...)` stops before the widest level, as the claim says",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
   "code": "e7a9751137fdfc36",
