@@ -1,0 +1,378 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "f9e8770a5",
+    "label": "317-start",
+    "utc": "20261003T063308Z"
+  },
+  "binding": "eb32c435e5e9a851fb7f25650837b368b679ffc8fcc4b84839a848ded478c16a",
+  "end": {
+    "commit": "ec50fc817",
+    "label": "317-end",
+    "utc": "20261003T063519Z"
+  },
+  "environment": "local",
+  "explanation": "Feature 317 moves where households sit on every grown map - each garden layout's path routed round its own beds, the passage within the rolled share, a joint's pull never taken into a kink - so the bookend's maps are not main's. The total fell 6.5% (20 households -35.8%, 40 households -30.1%); three seeds rose, each in the stages that run on the moved map: 15 households seed 25 +11.5% (notice +0.2 s, homesteads +0.2 s), 10 households seed 47 +16.7% (web +0.2 s, homesteads +0.1 s, notice +0.1 s), 40 households seed 47 +12.9% (notice +1.2 s, web +0.3 s, homesteads +0.2 s). The one band-3 seed found on the way (40 households seed 39, +48-58%) was a defect - the route's search shut in by the persimmon feature 315 holds by the door - fixed (ec50fc817), now -4.5% (research R8).",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T070213Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 11.1,
+          "39": -10.5,
+          "4": 4.8,
+          "47": 16.7
+        },
+        "total_pct": 5.3
+      },
+      "20": {
+        "seeds": {
+          "25": 7.5,
+          "39": -7.7,
+          "4": -8.7,
+          "47": 15.6
+        },
+        "total_pct": 0.6
+      },
+      "40": {
+        "seeds": {
+          "25": 14.5,
+          "39": 9.0,
+          "4": 3.3,
+          "47": 29.6
+        },
+        "total_pct": 13.0
+      }
+    },
+    "seeds": {
+      "25": 26.1,
+      "39": -3.7,
+      "4": 25.0,
+      "47": -24.2
+    },
+    "total_pct": 3.6
+  },
+  "render": "perf bands [local]: 317-end vs 317-start -> band 3\n  seed   4   +25.0%; grew: notice +0.3s, homesteads +0.3s, hinterland +0.2s\n  seed  25   +26.1%; grew: homesteads +0.2s, notice +0.2s\n  seed  39    -3.7%\n  seed  47   -24.2%\n  TOTAL       +3.6%\n  10 households: TOTAL   +5.3% -> band 2\n    seed   4    +4.8%; grew: web +0.1s, homesteads +0.1s\n    seed  25   +11.1%; grew: notice +0.1s, web +0.1s\n    seed  39   -10.5%\n    seed  47   +16.7%; grew: web +0.2s, homesteads +0.1s, notice +0.1s\n  20 households: TOTAL   +0.6% -> band 2\n    seed   4    -8.7%\n    seed  25    +7.5%; grew: homesteads +0.6s\n    seed  39    -7.7%\n    seed  47   +15.6%; grew: homesteads +0.3s, notice +0.1s\n  40 households: TOTAL  +13.0% -> band 3\n    seed   4    +3.3%; grew: homesteads +0.8s\n    seed  25   +14.5%; grew: homesteads +1.2s, web +0.2s, notice +0.1s\n    seed  39    +9.0%; grew: homesteads +0.5s, web +0.2s, hinterland +0.1s\n    seed  47   +29.6%; grew: notice +1.2s, homesteads +0.6s, web +0.5s\n  crossed: seed 4 +25.0% > 10%\n  crossed: seed 4 +25.0% > 20%\n  crossed: seed 25 +26.1% > 10%\n  crossed: seed 25 +26.1% > 20%\n  crossed: 10 households: total +5.3% > 5%\n  crossed: 10 households: seed 25 +11.1% > 10%\n  crossed: 10 households: seed 47 +16.7% > 10%\n  crossed: 20 households: seed 47 +15.6% > 10%\n  crossed: 40 households: total +13.0% > 5%\n  crossed: 40 households: total +13.0% > 10%\n  crossed: 40 households: seed 25 +14.5% > 10%\n  crossed: 40 households: seed 47 +29.6% > 10%\n  crossed: 40 households: seed 47 +29.6% > 20%\n  owes: bands 1 and 2, plus the GM's personal sign-off before the push (make perf-signoff, at a terminal)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.05,
+        0.06
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.0,
+        0.0
+      ],
+      "field": [
+        0.41,
+        0.43
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.47,
+        0.49
+      ],
+      "homesteads": [
+        0.46,
+        0.71
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.06,
+        0.3
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.01,
+        0.01
+      ],
+      "sink": [
+        0.03,
+        0.03
+      ],
+      "track": [
+        0.04,
+        0.04
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.44,
+        0.47
+      ],
+      "windbreak": [
+        0.3,
+        0.29
+      ],
+      "woodland": [
+        0.04,
+        0.03
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.06,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.38,
+        0.38
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.55,
+        0.51
+      ],
+      "homesteads": [
+        0.52,
+        0.61
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.15,
+        0.2
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.01,
+        0.01
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.04,
+        0.04
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.6,
+        0.45
+      ],
+      "windbreak": [
+        0.32,
+        0.31
+      ],
+      "woodland": [
+        0.07,
+        0.03
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.05,
+        0.06
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.55,
+        0.57
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.52,
+        0.67
+      ],
+      "homesteads": [
+        0.67,
+        0.93
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.39
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.11,
+        0.07
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.34,
+        0.4
+      ],
+      "windbreak": [
+        0.33,
+        0.28
+      ],
+      "woodland": [
+        0.1,
+        0.05
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.05,
+        0.05
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.0,
+        0.0
+      ],
+      "field": [
+        0.41,
+        0.41
+      ],
+      "frame": [
+        0.01,
+        0.0
+      ],
+      "hinterland": [
+        0.48,
+        0.43
+      ],
+      "homesteads": [
+        0.83,
+        0.75
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.13,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.01,
+        0.01
+      ],
+      "sink": [
+        0.03,
+        0.03
+      ],
+      "track": [
+        0.05,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.83,
+        0.35
+      ],
+      "windbreak": [
+        0.37,
+        0.31
+      ],
+      "woodland": [
+        0.06,
+        0.04
+      ]
+    }
+  },
+  "unverified": "the cause is the moved map itself, so no control run of the same map without it exists; the bookend rolls each seed once in wall-clock at host load 10-15, and across three back-to-back takes 10-household seed 47 read +22.2%, +16.7%, +16.7% (research R8 records the takes)",
+  "verdict": "pending"
+}

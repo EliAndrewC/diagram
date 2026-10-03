@@ -1,0 +1,6 @@
+{
+  "utc": "20261003T070150Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the prior round's findings (F1-F6: four confirmations and two questionables carried with feature 314) judged feature 314's map; feature 317 re-rolled inashiro, and this round judges the re-rolled map afresh"
+}

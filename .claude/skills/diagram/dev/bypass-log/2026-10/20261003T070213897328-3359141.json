@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T07:02:13Z",
+  "target": "perf-explain",
+  "commit": "4287a5bf3",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the cause is the moved map itself, so no control run of the same map without it exists; the bookend rolls each seed once in wall-clock at host load 10-15, and across three back-to-back takes 10-household seed 47 read +22.2%, +16.7%, +16.7% (research R8 records the takes)"
+}
