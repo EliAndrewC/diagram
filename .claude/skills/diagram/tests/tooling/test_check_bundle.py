@@ -142,6 +142,22 @@ def test_a_recheck_bundle_carries_only_the_named_notes_and_their_blocks() -> Non
     assert cb.notes_subset(notes, {"a-2"}) == '<li data-note="a-2">A2</li>\n'
 
 
+def test_an_excerpt_for_the_unfootnoted_blocks_keeps_every_block_that_carries_no_note() -> None:
+    """Feature 314: a batched quote-check owed `#unfootnoted` read only its notes' blocks, and the note-less block the unit was
+    owed for was in no batch - with `bare`, the excerpt keeps every block carrying no note as well."""
+    fragment = '<h2 id="q">Q</h2>\n<p>One.<sup class="fn" data-note="a"></sup></p>\n<p>Bare claim.</p>\n<p>Two.<sup class="fn" data-note="b"></sup></p>\n'
+    assert "Bare claim." not in cb.excerpt(fragment, {"a"}), "a note's re-check reads only its blocks"
+    cut = cb.excerpt(fragment, {"a"}, bare=True)
+    assert "One." in cut and "Bare claim." in cut and "Two." not in cut and "every block carrying none" in cut
+
+
+def test_the_unfootnoted_check_is_owed_only_where_a_quote_check_unit_names_it() -> None:
+    bo = cb.bo
+    unit = lambda check, subject: type("U", (), {"check": check, "subject": subject})()  # noqa: E731
+    assert bo.unfootnoted_owed([unit("quote-check", "0081.drawing#unfootnoted")])
+    assert not bo.unfootnoted_owed([unit("quote-check", "0081.drawing#aze-jawiki"), unit("record-format", "0081#unfootnoted")])
+
+
 def test_a_recheck_excerpt_keeps_a_block_whose_close_tag_is_implicit() -> None:
     fragment = '<h2 id="q">Q</h2>\n<p>One.<sup class="fn" data-note="b"></sup>\n<p>Last.<sup class="fn" data-note="a"></sup>\n'
     cut = cb.excerpt(fragment, {"a"})

@@ -322,8 +322,9 @@ class VillageLane(Kind):
     states it as a rule, and the narrow lateral lanes are taken over as semi-private space by the houses
     beside them, which in this record's reading is why they are narrow and irregular (the one readable case
     is Shanghai's lane housing, a city form standing in for a village's). A lane bends like a line feet wear: as few
-    turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates
-    the settlement; the lanes between the farmsteads were trodden by the households already living there.
+    turns as the plots allow, none sharp, never back on itself. The houses came first and the lanes after: a
+    village lane is a footpath worn by villagers walking between homesteads already standing, and only an Imperial
+    road, a planned work, may run before the houses that front it.
     And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main
     village of the district the settlement belongs to. Past its last farmhouse a lane stops at that house's
     dooryard, or runs on until it reaches something a reader can see - the fields, another way; it never
