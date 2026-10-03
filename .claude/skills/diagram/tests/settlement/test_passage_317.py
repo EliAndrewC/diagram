@@ -182,7 +182,7 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     """`_parts_fit` at a tight seat (plan D2): no passage, or a corridor of its own, refuses it; a passage and no corridor
     seats it, and the seat records the walk, the neighbor and the chain's depth, bars the walk (`AccessTree.bar`) and spends
     the share."""
-    from l7r.diagram.settlement.rolling import fit
+    from l7r.diagram.settlement.rolling import fit, place
 
     s = _open()
     nb, _geom, tight = _pair(s)
@@ -190,11 +190,14 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     s._tight_of = tight
     s._passage_left = 1
     walk = ((1000.0, 1000.0), (1040.0, 1000.0))
+    monkeypatch.setattr(place, "landlocked", lambda s, lays: False)
+    assert not s.try_place(1000.0, 1100.0, "plain"), "not land the custom covers (a way of its own, or no walk): refused"
+    monkeypatch.setattr(place, "landlocked", lambda s, lays: True)
     monkeypatch.setattr(fit, "passage_of", lambda s, g: None)
-    assert not s.try_place(1000.0, 1100.0, "plain"), "no passage: refused"
+    assert not s.try_place(1000.0, 1100.0, "plain"), "this layout's walk: none - refused"
     monkeypatch.setattr(fit, "passage_of", lambda s, g: {"walk": walk, "of": (600.0, 700.0), "depth": 1})
     monkeypatch.setattr(fit, "access_corridor", lambda s, g: ((1000.0, 1080.0), (1000.0, 450.0)))
-    assert not s.try_place(1000.0, 1100.0, "plain"), "a corridor of its own: not land the custom covers"
+    assert not s.try_place(1000.0, 1100.0, "plain"), "a corridor of its own from this layout: refused"
     monkeypatch.setattr(fit, "access_corridor", lambda s, g: None)
     s._tight_of = {**tight, "own_way": False}  # a fresh seat's word, as the growth gives each seat
     assert s.try_place(1000.0, 1100.0, "plain"), "a passage and no corridor: seated"
@@ -228,3 +231,34 @@ def test_a_seat_where_one_layout_has_a_way_of_its_own_is_refused_for_every_layou
     monkeypatch.setattr(fit, "access_corridor", lambda s, g: ((0.0, 0.0), (0.0, -1.0)))
     assert not s._parts_fit(geom) and tight["own_way"] and asked == [1], "a way of its own from this layout"
     assert not s._parts_fit(geom) and asked == [1], "...so the next is refused without its walk asked"
+
+
+def test_a_household_is_landlocked_only_where_some_layout_walks_and_none_has_a_way(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`landlocked` (feature 317, research R8): the household's land, not one layout - a walk from some layout, a corridor from
+    none; the walks asked first."""
+    asked: list[str] = []
+    walks = {"a": None, "b": {"walk": ()}}
+    ways = {"a": None, "b": None}
+    monkeypatch.setattr(passage, "passage_of", lambda s, g: asked.append("walk") or walks[g["id"]])
+    monkeypatch.setattr(passage, "access_corridor", lambda s, g: asked.append("way") or ways[g["id"]])
+    lays = [{"id": "a"}, {"id": "b"}, None, {"id": "a", "unlaid": True}]
+    assert passage.landlocked(None, lays), "b walks, neither has a way"
+    ways["a"] = ((0.0, 0.0), (1.0, 0.0))
+    assert not passage.landlocked(None, lays), "a has a way of its own: the land is not landlocked"
+    walks["b"] = None
+    asked.clear()
+    assert not passage.landlocked(None, lays) and "way" not in asked, "no walk from any layout: no corridor asked"
+
+
+def test_a_layout_s_walk_is_searched_once_a_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`passage_of` remembers each layout's walk on the seat's word (`walks`): `landlocked` asks it, the parts' test again."""
+    s = _open()
+    _nb, geom, tight = _pair(s)
+    s._tight_of = tight
+    s._passage_left = 1
+    calls: list[int] = []
+    real = passage.walk_of
+    monkeypatch.setattr(passage, "walk_of", lambda *a: calls.append(1) or real(*a))
+    first = passage.passage_of(s, geom)
+    n = len(calls)
+    assert first is not None and n >= 1 and passage.passage_of(s, geom) is first and len(calls) == n

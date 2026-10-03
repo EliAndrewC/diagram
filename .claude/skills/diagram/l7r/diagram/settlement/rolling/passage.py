@@ -36,7 +36,7 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt
 from .._knobs import knob_rng
-from .access import doors_of, fixtures_clear, house_clear, house_gap, parts_clear, seg_box_within, site_edge_samples, site_samples_clear
+from .access import access_corridor, doors_of, fixtures_clear, house_clear, house_gap, parts_clear, seg_box_within, site_edge_samples, site_samples_clear
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -199,6 +199,18 @@ def walk_of(s: Settlement, geom: Any, rec: Any, door: Pt, yard: Any, lands: Any,
     return taut([door, *(at(c) for c in cells[1:]), q], leg_ok, doubles_back, ROUTE_LEGS)
 
 
+def landlocked(s: Settlement, layouts: Any) -> bool:
+    """Is the household at a tight seat on land the custom covers - some garden layout here with a walk to the neighbor's yard
+    (`passage_of`) and none with a corridor of its own (`access.access_corridor`)? The household's LAND, not one layout: a
+    household lays its beds where its way can run. Judged a layout at a time, 10 of the 13 passages at 15 households on 13
+    settlements, and 6 of the 20 at 40 on four, were households another layout at the seat would have given a way of its own
+    (research R8). The walks are asked first, the cheaper and the rarer."""
+    lays = [g for g in layouts if g is not None and not g.get("unlaid")]
+    if not any(passage_of(s, g) is not None for g in lays):
+        return False
+    return not any(access_corridor(s, g) is not None for g in lays)
+
+
 def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
     """The passage a household laid as `geom` at a TIGHT seat (`s._tight_of`: the neighbor's record, its land as the growth
     parts it, the household's own allotted reach, the parting) is reached by, or None (the module's account):
@@ -219,10 +231,16 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
     tol = gap + s.px(PASSAGE_ADJOIN_FT)
     if not adjoins(own, land, tol):
         return None
+    walks = tight.setdefault("walks", {})  # each layout's walk once a seat: asked by `landlocked`, then by the parts' test
+    if id(geom) in walks:
+        return walks[id(geom)]
     lands = [grown(own, tol), grown(land, tol)]
     hgap, half, wood = house_gap(s), float(tree.half), getattr(s, "_wood", None)
+    got = None
     for door in doors_of(geom, half)[:2]:
         walk = walk_of(s, geom, rec, door, yard, lands, hgap, half, wood)
         if walk is not None:
-            return {"walk": walk, "of": (float(rec["x"]), float(rec["y"])), "depth": depth + 1}
-    return None
+            got = {"walk": walk, "of": (float(rec["x"]), float(rec["y"])), "depth": depth + 1}
+            break
+    walks[id(geom)] = got
+    return got

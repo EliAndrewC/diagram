@@ -10,6 +10,7 @@ from .._geom import Indexed, Pt, point_in_poly
 from .access import seat_reaches_tree
 from .fit import part_box, within_field_reach
 from .lot import watered
+from .passage import landlocked
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -245,6 +246,11 @@ class PlacerMixin:
         _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}
         _env = self._bbox_of([g["bbox"] for g in _at.values()])
         _union_clear = not (_fg is not None and _fg.rect_refused(_env)) and self._envelope_blocked(_env) is None
+        # A TIGHT SEAT IS JUDGED BY ITS LAND, NOT ONE LAYOUT (feature 317, `passage.landlocked`): the custom is for land with no
+        # way of its own, and a household lays its beds where its way can run - so the seat is taken only where some layout here
+        # has a walk to the neighbor's yard and none has a corridor of its own
+        if getattr(self, "_tight_of", None) is not None and not landlocked(self, list(_at.values())):
+            return None
         best: Any = None
         _reaches: bool | None = None
         for rank, side in enumerate(self._NUC_SIDES):
