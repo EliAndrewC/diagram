@@ -9,13 +9,22 @@
   "verifies": "F1",
   "answers": "86f173b401a2"
  },
+ "perf-317-route-shared": {
+  "verifies": "the 0.3 s of the homesteads stage at seed 39, 40 households, the perf-audit's second confirmation found unexplained with the passage share at 0",
+  "subject": "perf, reference spec, seed 39 at 40 households, the homesteads stage (no passage on either engine)",
+  "value": 1.64,
+  "unit": "s, the homesteads stage's CPU at seed 39, 40 households, the routes back in the seat's shared stream (median of three)",
+  "quantity": "three alternated takes, 2026-10-03, homesteads CPU seconds: main (38901e2df) 1.58/1.57/1.55; the clone with the routes back in `_house_candidates`' shared stream (014cb1a20) 1.64/1.64/1.78, and with the passage share at 0 1.61/1.76/1.78 - where before it, with `access_corridor` routing again per layout, the perf-audit measured 1.91-2.02 with the share at 0",
+  "source": "control_probe.py in the session's scratchpad, run against both trees",
+  "observed": "2026-10-03"
+ },
  "perf-317-control-judge": {
   "verifies": "the cost the perf-audit's confirmation found apart from the passage: the homesteads stage over main with the passage share at 0 (seed 39 at 40 households, +5.1% on the bookend)",
   "subject": "perf bookend, reference spec, seed 39 at 40 households and seed 25 at 15, the homesteads stage",
-  "value": 1.77,
-  "unit": "s, the homesteads stage's CPU at seed 39, 40 households, the passage share at 0 and the seating judge as on main (median of three)",
-  "quantity": "three alternated takes each, 2026-10-03, homesteads stage CPU seconds at seed 39, 40 households: main 1.56/1.64/1.68; the clone with the passage share at 0 1.80/2.00/2.07; the same with the seating judge as on main (`tree.as_joined` and `tree.laid_run` switched off) 1.76/1.84/1.77 - the corridor judged as the web will draw it (plan D6, FR-004) accounts for about 0.23 s of the 0.36 s, the rest within the run-to-run spread; at seed 25, 15 households: 0.50/0.53/0.53, 0.56/0.55/0.57 and 0.56/0.57/0.57 - within it",
-  "source": "control_probe.py in the session's scratchpad (NOPASS=1: stages.passage_share 0; JUDGE_OFF=1: tree.as_joined returns no lanes, tree.laid_run the run as found), run against both trees",
+  "value": 0.05,
+  "unit": "s, what the seating judge's feature-317 additions alone cost the homesteads stage at seed 39, 40 households, the passage share at 0",
+  "quantity": "CORRECTED on the perf-audit's second confirmation: the session's first arm (JUDGE_OFF: `tree.as_joined` returning no lanes AND `tree.laid_run` the run as found, homesteads 1.76/1.84/1.77 s against 1.80/2.00/2.07 with the share at 0) switched off main's own rejoin-and-square in `admits` too, which feature 317 only moved into `laid_run`, so its 0.23 s was not the new judge's. The perf-audit's arm with only the new judge off (`as_joined` returning no lanes, `laid_run` the run as found only where `seating_judge` asks it) ran 1.91/1.95/1.97 s against 1.94/1.91/1.94 with the judge on: about 0.05 s. The rest of the gap to main (1.55-1.70 s) was the per-layout routing left over from T06 (`perf-317-route-shared`)",
+  "source": "the perf-audit's `audit_judge317.py` (JUDGE=session|judgeonly|new arms, detached worktrees) and the session's control_probe.py, in the session's scratchpad",
   "observed": "2026-10-03"
  },
  "perf-317-control-nopass": {

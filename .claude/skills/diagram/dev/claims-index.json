@@ -35224,18 +35224,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::_house_candidates#a corridor's order": {
-  "code": "7aa8ca062bdae000",
-  "core": "cdbbeed0cb4fd912",
+  "code": "4dbd3e25c2fb6f5f",
+  "core": "5dd8d80d8ab41b66",
   "date": "2026-10-03",
-  "note": "straight legs, then round the gable, then routed: fewest turns first",
+  "note": "straight legs come first, then two legs round the gable, then routed ones, with doubling back refused; matches \"as few turns as the plots allow ... never doubling back\"",
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::_house_candidates#path leaves its own yard": {
-  "code": "3f52315a7e5a6bac",
-  "core": "cdbbeed0cb4fd912",
+  "code": "6e9c3b1aeebcefca",
+  "core": "5dd8d80d8ab41b66",
   "date": "2026-10-03",
-  "note": "0.5 ft clear of its own yard; nothing in the bundle answers it",
+  "note": "the 0.5 ft margin clear of the household's own yard; the page is silent on it (its 7 ft rule is for garden fences)",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -35280,18 +35280,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#routed where none is straight": {
-  "code": "cd9a1dd075c981ca",
-  "core": "0851421e4dd2a502",
+  "code": "8bb5d52f4f6e77bd",
+  "core": "d3f5b0a8f1214dfa",
   "date": "2026-10-03",
-  "note": "routed last, only on the nucleated tree",
+  "note": "routed corridors are tried after the straight and round-the-gable ones and come from the shared stream; matches \"the path is routed around them - a map drawing convention\"",
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#seat refused without a path": {
-  "code": "aa00046a69c22dd3",
-  "core": "0851421e4dd2a502",
+  "code": "e1c0a90fe4657598",
+  "core": "d3f5b0a8f1214dfa",
   "date": "2026-10-03",
-  "note": "None refuses the seat; for a tight seat None is the custom's condition",
+  "note": "returns None when no corridor is admitted; matches \"reaching every farmhouse but the few reached across a neighbor's land\"",
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
