@@ -2593,6 +2593,7 @@ ohaguro-dobu	ohaguro-dobu
 ohkaji	ōkaji
 ojoya	ogashoya
 okabasho	okabasho
+okabe	okabe
 okaji	ōkaji
 okajiba	ōkaji
 okazaki	Okazaki
@@ -3265,6 +3266,7 @@ shinano	Shinano
 shinano province	Shinano
 shinden	shinden
 shinden togashi	Shinden Togashi
+shinkabe	shinkabe
 shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shinshu	Jodo Shinshu
@@ -4252,6 +4254,7 @@ zōkibayashi	zokibayashi
 ōei	Oei
 ōgashoya	ogashoya
 ōiya	ōiya
+ōkabe	okabe
 ōkaji	ōkaji
 ōkajiba	ōkaji
 ōkido	Okido
