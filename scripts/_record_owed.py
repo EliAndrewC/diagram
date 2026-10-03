@@ -195,8 +195,30 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
     if check == "entry-drift":
-        return f"make check-bundle Q={q or '<its section>'} FOR=entry-drift KIND=<the class of {u.subject}>"
+        found = re.search(r"\b(\d{4})-", u.occasion)  # the subject is a modal key ("threshing yard"), never a question
+        kinds = modal_classes(u.subject) or [f"<the class of {u.subject}>"]
+        qq = found.group(1) if found else "<its section>"
+        return " ; ".join(f'make check-bundle Q={qq} FOR=entry-drift KIND="{k}"' for k in kinds) + \
+            f'  then  make record-checked CHECK=entry-drift KIND="{u.subject}" BUNDLE=<its bundle> RESULT=<verdict>'
     return f"make check-bundle Q={q} FOR={check}"
+
+
+_KINDS = pathlib.Path(__file__).resolve().parent.parent / ".claude/skills/diagram/l7r/diagram/interactive"
+
+
+def modal_classes(key: str, base: pathlib.Path = _KINDS) -> list[str]:
+    """The modal class(es) whose `key` is this one, as `make check-bundle KIND=` takes them - module-qualified when the
+    key lives in more than one module (the map's Well and the sheet's). A tip that left `<the class of ...>` for the
+    session to look up sent it searching three files (2026-10-03)."""
+    hits = []
+    for path in sorted([*base.glob("classes/*.py"), *base.glob("compound_kinds/*.py")]):
+        cls = ""
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if m := re.match(r"class (\w+)\(", line):
+                cls = m.group(1)
+            elif cls and re.match(rf"\s+key = ['\"]{re.escape(key)}['\"]\s*$", line):
+                hits.append((path.stem, cls))
+    return [f"{mod}.{cls}" if len(hits) > 1 else cls for mod, cls in hits]
 
 
 def report(rows: Sequence[ru.Unit], now: ru.Record | None = None) -> str:

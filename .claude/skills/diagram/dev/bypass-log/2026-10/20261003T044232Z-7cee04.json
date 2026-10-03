@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T04:42:32Z",
+  "target": "record-checked",
+  "commit": "0cbdbd61a",
+  "why": "record-format on record-format:0037: second round: the record checks own wording fixes applied, no third round"
+}
