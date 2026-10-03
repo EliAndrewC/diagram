@@ -110,3 +110,16 @@ def test_every_modal_is_its_own_file_and_no_class_carries_its_text() -> None:
     assert tagged == [], f"modal text left in a class docstring: {tagged}"
     files = set(glob.glob(os.path.join(MODALS_DIR, "*", "*.md")))
     assert files == paths, f"orphan modal files: {sorted(files - paths)}"
+
+
+@pytest.mark.parametrize("missing", ["Name", "Covers", "Sources", "Entry"])
+def test_an_about_form_without_a_data_tag_fails_loudly_naming_the_class(missing: str) -> None:
+    """The About form's four data tags are required, as the old form's were (feature 207)."""
+    doc = "About: a.\n\n" + "".join(line + "\n" for line in _DATA.splitlines() if not line.startswith(missing + ":"))
+    Probe = _probe(doc)
+    try:
+        with pytest.raises(ValueError, match=f"no {missing}: section") as e:
+            Probe.feature()
+        assert "Probe" in str(e.value)
+    finally:
+        Kind.registry.remove(Probe)
