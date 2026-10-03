@@ -7736,7 +7736,8 @@
  "Izumo": {
   "def": "A region of western Japan on the Sea of Japan coast, the east of present Shimane Prefecture, whose homestead grove is the tsuijimatsu.",
   "variants": [
-   "Izumo"
+   "Izumo",
+   "Idzumo"
   ]
  },
  "shelter belt": {
@@ -12895,7 +12896,8 @@
   "def": "An old province of Japan on Osaka Bay, south of today's Osaka.",
   "variants": [
    "Izumi",
-   "Izumi province"
+   "Izumi province",
+   "Idzumi"
   ]
  },
  "Hizen": {
@@ -15317,6 +15319,42 @@
   "def": "\"Homestead hill-wood\": the word a 1684 register of hill land in the Mito domain uses for a household's wood, which the paper quoting it takes to be a homestead grove (yashikirin).",
   "variants": [
    "yashikiyama"
+  ]
+ },
+ "Kaga": {
+  "def": "An old province on the Sea of Japan coast of central Honshu, the south of today's Ishikawa Prefecture.",
+  "variants": [
+   "Kaga",
+   "Kaga Province"
+  ]
+ },
+ "Uzen": {
+  "def": "An old province of northern Honshu, split off from Dewa in 1868; today's Yamagata Prefecture.",
+  "variants": [
+   "Uzen",
+   "Uzen Province"
+  ]
+ },
+ "Rikuzen": {
+  "def": "An old province of northeast Honshu, split off from Mutsu in 1868; most of today's Miyagi Prefecture.",
+  "variants": [
+   "Rikuzen",
+   "Rikuzen Province"
+  ]
+ },
+ "Suo": {
+  "def": "An old province at the western end of Honshu, the east of today's Yamaguchi Prefecture.",
+  "variants": [
+   "Suo",
+   "Suwo",
+   "Suo Province"
+  ]
+ },
+ "Chikugo": {
+  "def": "An old province in northern Kyushu, the south of today's Fukuoka Prefecture.",
+  "variants": [
+   "Chikugo",
+   "Chikugo Province"
   ]
  }
 }

@@ -401,6 +401,8 @@ chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
 chigaya	chigaya
 chikaraishi	chikaraishi
+chikugo	Chikugo
+chikugo province	Chikugo
 chimei	chimei
 chinese toon	toon
 chinese-style gate	Chinese-style gate
@@ -1576,6 +1578,8 @@ ido-yakata	idoyakata
 idobata	idobata
 idowaku	igeta
 idoyakata	idoyakata
+idzumi	Izumi
+idzumo	Izumo
 ie	ie
 ieyasu	Ieyasu
 ieyasu hundred articles	hundred articles
@@ -1794,6 +1798,8 @@ kabuki	kabuki
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
+kaga	Kaga
+kaga province	Kaga
 kagawa	Kagawa
 kai	Kai
 kai province	Kai
@@ -2960,6 +2966,8 @@ ridge-divided	ridge-divided nagaya
 ridge-divided nagaya	ridge-divided nagaya
 riffle	riffle
 riffles	riffle
+rikuzen	Rikuzen
+rikuzen province	Rikuzen
 rin	rin
 ring canal	ring canal
 ring canals	ring canal
@@ -3498,6 +3506,8 @@ sumigama	sumigama
 summer-green	summer-green
 summer-green broadleaf forest	summer-green
 summer-green forest	summer-green
+suo	Suo
+suo province	Suo
 superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
@@ -3511,6 +3521,7 @@ susuki	susuki
 sutra house	sutra house
 sutra houses	sutra house
 suwa	Suwa
+suwo	Suo
 suzaku avenue	Suzaku-oji
 suzaku boulevard	Suzaku-oji
 suzaku oji	Suzaku-oji
@@ -3913,6 +3924,8 @@ ushiwaku	ushi-waku
 ussuriland	Ussuriland
 usufruct	usufruct
 uwadori	uwadori
+uzen	Uzen
+uzen province	Uzen
 uzumimon	umon
 vaiśravaṇa	Bishamon
 valley fan	valley fan

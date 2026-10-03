@@ -318,7 +318,7 @@ class VillageLane(Kind):
     What: A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no
     center line.
 
-    Why: Every house in the clustered villages this record has read about is reached by a lane, though no page
+    Why: Most houses in the clustered villages this record has read about are reached by a lane, but not every one - a household shut off from the road might cross a neighbor's land by custom - and no page
     states it as a rule, and the narrow lateral lanes are taken over as semi-private space by the houses
     beside them, which in this record's reading is why they are narrow and irregular (the one readable case
     is Shanghai's lane housing, a city form standing in for a village's). A lane bends like a line feet wear: as few
@@ -334,8 +334,8 @@ class VillageLane(Kind):
     path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
     instead - a street laid out first, or the line the ground gives, a natural levee or a dike.
 
-    Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
-    forms, the planned back lane is read, and alleys off the streets are read only in that surveyed village, no
+    Note: That every house on the map is reached by a lane is the map's own simplification: the record reads lanes reaching the houses of a surveyed village, but also households with no way of their own crossing a neighbor's land by custom (an 1892 edition of local customs, mostly of plots rather than houses, some of them in towns), and no page states every house reached as a rule; of the two
+    forms, the planned back lane is read, and alleys off the streets are read only in that surveyed village and in Enoshima, where the narrowest of alleys reached the houses behind its street, no
     general article describing side lanes to a back row; the drawn WIDTHS (3, 5 and 6 ft; a row village's street
     takes the 6 ft, a rank wider than the lanes off it, where Santome's planned roads were 6 ken, about 36 ft) are a
     map drawing CONVENTION: the footpath takes the 3
