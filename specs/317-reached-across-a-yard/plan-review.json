@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "72d0fea7d780501f76fbe375b2afc2825bcc53c1c57a7b8a7661f056b067b6dd",
+ "plan_sha256": "e735c8344d41cab89eb4a2ebdd9e59fef812bf974610d9d2c7b39adbfa45a375",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -47,7 +47,7 @@
    "summary": "No tight seat offered within TIGHT_TREE_FT (80 ft) of the access tree",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "A narrowing: it is a distance proxy for the custom's condition, not the condition, so in principle a household near the tree that is nonetheless shut in by its neighbors could no longer be reached by passage; the record says nothing of distance to a way. Legitimate on the same ground as D2-tight-yard-side: the excluded zone is emptied by the request's own research condition as D2-order applies it (a household with a way of its own is not land the custom covers). Measured (R8, 15 households, 13 settlements): no passage from nearer than 87 ft; of 135 of 343 tight tries nearer than 80 ft, every walk found (9 of 9) had a corridor of its own - so the cut removes no household the custom covers on the measured run, and passages remain (7 at 15 households, 8 at 40). It is not a historical claim and must not be recorded as one (the constant's comment and R2 brief: a search breadth, measured). Caveat for the record: R8 measured it at 15 households only; the plan's sentence omits that scope."
+   "why": "A narrowing: it is a distance proxy for the custom's condition, not the condition, so in principle a household near the tree that is nonetheless shut in by its neighbors could no longer be reached by passage; the record says nothing of distance to a way. Legitimate on the same ground as D2-tight-yard-side: the excluded zone is emptied by the request's own research condition as D2-order applies it (a household with a way of its own is not land the custom covers). Measured (R8, 15 households, 13 settlements): no passage from nearer than 87 ft; of 135 of 343 tight tries nearer than 80 ft, every walk found (9 of 9) had a corridor of its own - so the cut removes no household the custom covers on the measured run, and passages remain (R9 as the feature lands: 14 at 15 households, 11 at 40). It is not a historical claim and must not be recorded as one (the constant's comment and R2 brief: a search breadth, measured). Caveat for the record: R8 measured it at 15 households only; the plan's sentence omits that scope."
   },
   {
    "id": "D2-own-way",
@@ -86,14 +86,20 @@
    "summary": "ON THE FINISHED SEATING (passage.recheck_passages): once all are seated, each passage household is asked again, its homestead set aside, whether it has a corridor of its own; one that has is seated by it and loses its passage (meta.passage_revoked)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrows what the engine admits (R9: 23 -> 15 passage households at 15 households, band and recheck together), not what was asked: the GM's 'if that is what the research bears out, then we should go with it', and every Wigmore entry conditions passage on land that cannot reach the highway without passing over another's. A household with a drawn lane a few feet off (Inashiro, the farmhouse glyph check F5) is not land the custom covers. Same ground as D2-order and D2-land; FR-002's 'MUST be able to seat' still holds (15 and 12)."
+   "why": "Unchanged ruling: narrows what the engine admits, not what was asked - every Wigmore entry conditions passage on land that cannot reach the highway without passing over another's, and a household with a drawn lane a few feet off (Inashiro, farmhouse glyph check F5) is not land the custom covers. Same ground as D2-order and D2-land. FR-002's 'MUST be able to seat' still holds: R9 now records 14 reached at 15 households and 11 at 40, with the whole-holding recheck."
   },
   {
-   "id": "D2-recheck-drawn-layout",
-   "summary": "Accepted limitation: the recheck asks only the layout drawn, where the seat asked every layout; another layout at the seat would give a way of its own to 2 of 15 passage households at 15 households and 3 of 12 at 40 (R9); accepted for this landing and put to the GM",
+   "id": "D2-recheck-whole-holding",
+   "summary": "On the finished seating the recheck asks the drawn layout, then every other layout built at the seat (_tight_of['layouts'], the lot installed; unlaid layouts skipped as landlocked skips them); one whose corridor fits the finished seating, judged as the placer judges a layout with the household's own record, homestead, walk and wood reservations set aside, re-seats the household (passage.relay) and ends its passage",
+   "class": "within",
+   "why": "Implements the previous round's ruling exactly: the research condition is the LAND's and the drawing page's 'if any layout of the homestead would leave it a way of its own, it has one'; the recheck now asks the same layouts landlocked asked at the seat (passage.py recheck_passages / relay, place.py:282). It narrows nothing the GM asked: it removes passages only where the household has a way of its own, i.e. it keeps the passage within 'what the research bears out'. FR-002's 'MUST be able to seat' still holds (R9: 14 reached at 15 households, seeds 1-16; 11 at 40, seeds 2/25/39/47)."
+  },
+  {
+   "id": "D2-recheck-unfit",
+   "summary": "A layout that has a corridor but does not fit the finished seating (its box refused, its envelope blocked, or its parts not fitting) is not a way the holding has; the passage stands, counted as meta.passage_unfit (measured 0 at 15 and 40 households, R9)",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "An exception carved from the plan's own D2-land rule (ruled LEGITIMATE precisely because the research's condition is the LAND's: 'a household lays its beds where its way can run') and from FR-007 / the GM's 'I do want all known bugs to be fixed'. The impl-drift check returned it DRIFTED against the drawing page's 'if any layout of the homestead would leave it a way of its own, it has one', which the page calls historically accurate. So 2 of 15 and 3 of 12 finished maps draw the custom where the research says it does not apply - the passage going beyond 'what the research bears out', the reverse of the request's purpose. None of the legitimating grounds holds: not physically impossible (R9 itself names the fix - re-lay the household with the layout that has a way, in the engine's one guarded place, _solve_homestead - or unseat and re-seat it); not implied by the GM's words; honoring the rule serves the request's purpose rather than defeating it. The reasons given are cost: an in-place re-lay is work, and recording a drawn-layout deviation re-owes ~300 claims. 'This will be hard' is not a fidelity ground, and recording a deviation from the research for cost would not be 'go with it' either. The plan should say: on the finished seating every layout at a passage household's seat is asked, as landlocked asks at the seat; a household with a way of its own under any layout is given it (re-laid or re-seated) and loses its passage; measured 0 such households on the reference at 15 and 40. If that proves impossible, an impossibility investigation goes to the GM before landing, not after."
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing of the drawing page's 'any layout' read literally, but implied by the request's own research condition: Wigmore's custom is for land that 'cannot reach the highway without passing over' another's, and a layout that can only stand by occupying ground the finished seating gives to other homesteads (or refused ground) is not a way over the household's own land - its way would pass over another's. Not cost-motivated, not completing the GM's thought: it is the same rule the placer applies to every layout everywhere. It is made visible, not hidden (meta.passage_unfit), and measured 0 on the reference at 15 and 40 households (R9, one-shot labeled 2026-10-03, relay_probe.py), so it carves out no household on the measured run. Uprooting such a household to an unrelated seat elsewhere is not something the request or the research asks for."
   },
   {
    "id": "D3",
@@ -168,5 +174,5 @@
    "why": "Constitution VI; serves FR-006."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

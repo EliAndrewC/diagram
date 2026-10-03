@@ -32648,20 +32648,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
-  "code": "e9fd60577ea9c694",
-  "core": "788e23a17504d86c",
+  "code": "6c5d90b30bd9d1da",
+  "core": "470a212559512d08",
   "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+  "note": "the page gives no clearance between a lane and a tree's crown, so UNRESEARCHED holds",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "f551c87ac9c08086",
-  "core": "788e23a17504d86c",
+  "code": "ecbe69703ef7ee7f",
+  "core": "470a212559512d08",
   "date": "2026-10-03",
-  "note": "0038 gives 39 ft (house) and 50 ft (tree) and exempts hand-drawn maps; 22 ft is on no page - label UNRESEARCHED",
+  "note": "`getattr(s, \"_sun_corridor_ft\", 22.0)` uses 22 ft, but the page's sun strip is \"39 ft of clear ground to the south\" (house) and \"50 ft to its east, west and south for a tree\"; 22 ft appears there only as a ridge height (\"a ridge of about 20-22 ft\"); the default should be the page's figure, or the claim should say what 22 ft is",
   "research": "4c4e1b01edd744e8",
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.commit#plumbing": {
   "code": "35922c8d9fdc90bb",
@@ -32749,6 +32749,14 @@
   "date": "2026-10-03",
   "note": "floor reserved per 0036 drawing (docstring's \"half the reach\" is stale vs FOCUS_DEPTH 0.7)",
   "research": "b7996ceb3c608c18",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.without#reservations plumbing": {
+  "code": "a78080b8cff787ab",
+  "core": "e15be22a22cfb68e",
+  "date": "2026-10-03",
+  "note": "rebuilds the reservations without the one household",
+  "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::bundle_parts#plumbing": {
@@ -35064,18 +35072,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
-  "code": "6a9524f21f4c740f",
-  "core": "459a9e8adab60d5a",
+  "code": "ba70da639a8c1240",
+  "core": "df8575f355300bb7",
   "date": "2026-10-03",
-  "note": "every door has a reserved corridor, and the passage few have a held walk",
+  "note": "matches \"one network reaching every farmhouse but the few reached across a neighbor's land\"",
   "research": "f68a5722ae2f0b2b",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.__init__#corridor geometry, memo and search plumbing": {
-  "code": "34db26f5de07ae52",
-  "core": "972913fe2c30790a",
+  "code": "20bbf13137613af5",
+  "core": "376edb07f5bb32ed",
   "date": "2026-10-03",
-  "note": "index grids, search breadth and flags only",
+  "note": "containers and settings only",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -35088,18 +35096,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.bar#a passage walk kept clear": {
-  "code": "0a91e3406b3dc6b7",
-  "core": "63253b16d04f808c",
+  "code": "5c7f0a0b4907609f",
+  "core": "200bdabf514dda5d",
   "date": "2026-10-03",
-  "note": "the walk is kept clear without becoming a corridor, so it is never drawn",
+  "note": "the walk is kept clear of later homesteads and never becomes a lane, as the page says",
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.bar#the walk's clearance": {
-  "code": "ddf25e583b7fb4a6",
-  "core": "63253b16d04f808c",
+  "code": "3d8ddd01ba0091c7",
+  "core": "200bdabf514dda5d",
   "date": "2026-10-03",
-  "note": "the corridor's half-width; nothing in the bundle sets it",
+  "note": "the page gives no width for the walk",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -35111,11 +35119,27 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.rebar#corridor geometry, memo and search plumbing": {
+  "code": "69a7b1f341202338",
+  "core": "3e697e78f2e25a7c",
+  "date": "2026-10-03",
+  "note": "files the entries back",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.targets#corridor geometry, memo and search plumbing": {
   "code": "45e3f27d3881dc23",
   "core": "8eded7b5620888db",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.unbar#corridor geometry, memo and search plumbing": {
+  "code": "523de81547bc97a1",
+  "core": "b24fbf8bc461ad79",
+  "date": "2026-10-03",
+  "note": "removes entries and rebuilds the index",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -37095,6 +37119,14 @@
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::own_corridor#passage machinery": {
+  "code": "530f3d4e399352e1",
+  "core": "bd2cefae1630199f",
+  "date": "2026-10-03",
+  "note": "asks a question and decides nothing itself",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_budget#share reached by passage": {
   "code": "9922cfb0302ed3e4",
   "core": "ae3bddb41eb85c60",
@@ -37119,19 +37151,35 @@
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#no way of its own on the finished map": {
-  "code": "5f2c51c98884424b",
-  "core": "57067372af64bad5",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#garden side of a re-laid household: the first layout that fits in the fixed `_NUC_SIDES` order (SE, SW, E, W), with no fewest-shaded-beds score and no left/right roll": {
+  "code": "d9ae159f34da17d9",
+  "core": "d9ae159f34da17d9",
   "date": "2026-10-03",
-  "note": "`access_corridor(s, geom)` tests only the drawn layout on the finished map, but the drawing page says a way of its own \"is judged by its whole holding, not by one way of laying out its beds: if any layout of the homestead would leave it a way of its own, it has one\"; a later corridor that only another layout would reach is missed. Either the recheck tries every layout there, as `landlocked` does, or the drawing page records the finished-map recheck as drawn-layout-only (a DEVIATION)",
+  "note": "garden side of a re-laid household: the first layout that fits in the fixed `_NUC_SIDES` order (SE, SW, E, W), with no fewest-shaded-beds score and no left/right roll",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#no way of its own on the finished map": {
+  "code": "9e6407b4b9406131",
+  "core": "d9ae159f34da17d9",
+  "date": "2026-10-03",
+  "note": "asks the drawn layout, then every layout built at the seat, as in \"judged by its whole holding ... if any layout ... it has one\"",
   "research": "f68a5722ae2f0b2b",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::relay#a household lays its beds where its way can run": {
+  "code": "9e45557391e1f7be",
+  "core": "470243a45bd989e6",
+  "date": "2026-10-03",
+  "note": "re-seats the household with a layout that has its own corridor and fits the finished seating, and drops the passage",
+  "research": "758d560b5828a167",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#walk not drawn as a lane": {
-  "code": "90ae717eccba12c4",
-  "core": "95292eddacb0058b",
+  "code": "455f9bca68330b2d",
+  "core": "e4a3ce3c6e875d3d",
   "date": "2026-10-03",
-  "note": "walk barred and recorded, no lane drawn, the page's GUESS",
+  "note": "the page records \"The walk is not drawn as a lane ... a GUESS\"",
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
@@ -37232,34 +37280,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#a tight seat only on landlocked land": {
-  "code": "594fbbfc6c2b9cf3",
-  "core": "6935cdb73219e0ef",
+  "code": "ed3e0b6b75105352",
+  "core": "52cb7ac7202f5d71",
   "date": "2026-10-03",
-  "note": "judged by the whole holding through landlocked, as the page says",
+  "note": "`landlocked` asks all four layouts at the seat, as in \"seated only where it has no way of its own\" and \"judged by its whole holding\"",
   "research": "f68a5722ae2f0b2b",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#garden side chosen by the sun": {
-  "code": "048ff30e1f3b07ed",
-  "core": "6935cdb73219e0ef",
+  "code": "6865bd1bc03363de",
+  "core": "52cb7ac7202f5d71",
   "date": "2026-10-03",
-  "note": "fewest shaded beds; SE/SW/E/W as the page allows",
+  "note": "fewest shaded beds first, then the south corners before the walls",
   "research": "4c4e1b01edd744e8",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#left or right garden": {
-  "code": "2ca8c2b79de59729",
-  "core": "6935cdb73219e0ef",
+  "code": "bed83d5a2febc6c8",
+  "core": "52cb7ac7202f5d71",
   "date": "2026-10-03",
-  "note": "the record says nothing on left against right",
+  "note": "the side within a tier is chosen by position, so it varies",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#one computed move off a neighbor": {
-  "code": "d8ca151fb9bb4b48",
-  "core": "6935cdb73219e0ef",
+  "code": "a115298c15318a49",
+  "core": "52cb7ac7202f5d71",
   "date": "2026-10-03",
-  "note": "placement mechanics; the 2 px is the placed-box test's",
+  "note": "a search step that moves by the measured overlap plus the placed-box margin",
   "research": "",
   "verdict": "IN-STEP"
  },
