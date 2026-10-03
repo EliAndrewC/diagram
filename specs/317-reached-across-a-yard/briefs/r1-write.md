@@ -39,7 +39,7 @@ first, then the `source-reader` agent from a bundle, as the record's CLAUDE.md s
   alley-ways leading to the houses in the rear"); Embree, *Suye Mura*; Fei, *Peasant Life in China*; Yang, *A Chinese Village*.
   Cite only what you read; an absence note may say what was searched.
 
-## Your item (one question; at most two new registry keys)
+## Your items (one question; at most two new registry keys)
 
 - 0081 (`research/questions/0081-village-lanes.html`): rewrite the bullet "Was every house in a clustered village reached by a
   lane?" from what you read - no page states it as a rule; customary passage over a neighbor's land for land with no way of its
