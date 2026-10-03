@@ -2,14 +2,16 @@
  "captured": "2026-10-02T18:10:15+00:00",
  "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7048742/",
  "first": "6c/6c64bad12f78/20261002T161244Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/41598_2020_Article_60169.pdf"
+ ],
  "keys": [
   "kaifeng-pmc7048742"
  ],
  "notes": [
   "0175-cities-on-rivers.notes.html"
  ],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "6c/6c64bad12f78/20261002T181013Z",
  "reason": "HTTP 403",
  "revision": "",

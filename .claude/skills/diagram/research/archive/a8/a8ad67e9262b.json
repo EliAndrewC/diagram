@@ -2,12 +2,15 @@
  "captured": "2026-10-02T18:11:47+00:00",
  "final_url": "https://www.tandfonline.com/doi/full/10.1179/014703703788762953",
  "first": "a8/a8ad67e9262b/20261002T123557Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/FROM SMALL FRY TO BIG FISH_ REPRESENTING THE RISE OF JIUJIANG TOWNSHIP, NANHAI COUNTY, 1395–1657_ Ming Studies_ Vol 2003, No 1.html",
+  "gm-copies/FROM SMALL FRY TO BIG FISH_ REPRESENTING THE RISE OF JIUJIANG TOWNSHIP, NANHAI COUNTY, 1395–1657_ Ming Studies_ Vol 2003, No 1_files"
+ ],
  "keys": [
   "miles-2003"
  ],
  "notes": [],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "a8/a8ad67e9262b/20261002T181146Z",
  "reason": "HTTP 403",
  "revision": "",

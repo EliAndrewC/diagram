@@ -2,7 +2,9 @@
  "captured": "2026-10-02T15:15:14+00:00",
  "final_url": "https://www.nature.com/articles/s41598-020-60169-1",
  "first": "42/421fe694b9e9/20261002T123551Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/41598_2020_Article_60169.pdf"
+ ],
  "keys": [
   "kaifeng-pmc7048742"
  ],

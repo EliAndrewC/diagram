@@ -2,12 +2,15 @@
  "captured": "2026-10-02T18:08:39+00:00",
  "final_url": "https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706",
  "first": "13/13ba728086be/20261002T124204Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/Hydrological influences on the distribution of vegetation and tree height of Alnus japonica (Thunb.) Steud. in the Kushiro Mire, Japan - ScienceDirect.html",
+  "gm-copies/Hydrological influences on the distribution of vegetation and tree height of Alnus japonica (Thunb.) Steud. in the Kushiro Mire, Japan - ScienceDirect_files"
+ ],
  "keys": [
   "kushiro-mire-2014"
  ],
  "notes": [],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "13/13ba728086be/20261002T180838Z",
  "reason": "HTTP 403",
  "revision": "",

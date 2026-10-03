@@ -2,12 +2,15 @@
  "captured": "2026-10-02T18:10:23+00:00",
  "final_url": "https://baike.baidu.com/item/%E6%9D%91%E5%BA%99/3494869",
  "first": "7f/7fe7f58f0f08/20261002T124400Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/村庙（民间信仰性质的公共性庙宇）_百度百科.html",
+  "gm-copies/村庙（民间信仰性质的公共性庙宇）_百度百科_files"
+ ],
  "keys": [
   "cunmiao-baike"
  ],
  "notes": [],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "7f/7fe7f58f0f08/20261002T181022Z",
  "reason": "HTTP 403",
  "revision": "",
