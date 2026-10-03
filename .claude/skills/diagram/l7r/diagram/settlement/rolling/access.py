@@ -494,21 +494,12 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
         if k == len(seen):
             nxt = next(more, None)
             if nxt is None:
-                break
+                return None
             seen.append(nxt)
         corridor = seen[k]
         k += 1
         if corridor is not ROUTE_LATER and (drawn := admitted(s, corridor, geom, memo)) is not None:
             return drawn
-    # ...THEN THE PATH ROUTED ROUND WHAT STANDS AND ROUND THIS LAYOUT'S OWN PARTS (feature 308; feature 317 T06), searched for
-    # this layout - its beds and fixtures are its own - where the straight and round-the-gable candidates are the seat's
-    if tree.routed:
-        from .route import routed_corridors
-
-        for corridor in routed_corridors(s, tree, geom):
-            if (drawn := admitted(s, corridor, geom, memo)) is not None:
-                return drawn
-    return None
 
 
 def admitted(s: Settlement, corridor: tuple[Pt, ...], geom: Any, memo: dict[Any, Any]) -> tuple[Pt, ...] | None:
@@ -667,8 +658,14 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
             # ...never back past the house it went round (`doubles_back`): the web could not draw it (cohort seed 32)
             if math.dist(turn, q) < 1e-6 or (not doubles_back(door, turn, q) and clear(turn, q) and leaves_its_yard((door, turn, q), yard, gap)):
                 yield (door, turn, q)
-    if tree.routed:  # ...then the path routed round what stands (feature 308, plan D3; FR-005) - searched per layout, by `access_corridor`
+    if tree.routed:  # ...then the path routed round what stands (feature 308, plan D3; FR-005)
+        from .route import routed_corridors
+
         yield ROUTE_LATER  # the seat MAY be reached by a route: `seat_reaches_tree` says so without searching for one
+        # ...IN THE SEAT'S OWN STREAM, SHARED BY ITS LAYOUTS (as on main): searched per layout round each one's own parts, it
+        # was withdrawn (feature 317 T06, research R8), and the per-layout call left in `access_corridor` after it re-asked the
+        # same routes for each of a seat's four layouts - 0.3 s of the homesteads stage at seed 39, 40 households (the perf-audit)
+        yield from routed_corridors(s, tree, geom)
 
 
 #: The marker `_house_candidates` yields between its straight corridors and its routed ones (feature 308): the seat's own
