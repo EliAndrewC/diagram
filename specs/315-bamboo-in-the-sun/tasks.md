@@ -65,10 +65,10 @@ Bamboo: no occasion - its rule refuses a mark or stand only in a plot's sun, and
 
 ## Phase 4 - close
 
-- [ ] T40 `make done` green; `315-end` and `make perf-report AGAINST=315-start`, any band explained; the cohort at zero new failures;
+- [x] T40 `make done` green; `315-end` and `make perf-report AGAINST=315-start`, any band explained; the cohort at zero new failures;
       the closing re-read of the rendered Kuwabata and Kashikawa bamboo against R0
       research: rendering
-      verify: the gate, the perf band, the cohort
-- [ ] T41 Report to the GM through escalation-check: the finding (bamboo held, 50 ft, from the timber bamboos' height) and what moved
+      verify: DONE. make done green (incremental, 5 workers); perf band 1 (seed 47 +5.0% at 15 hh, total -16.7%) explained and confirmed consistent by perf-audit; cohort 54/54; Kuwabata and Kashikawa re-read at fit zoom against R0: bamboo north of its grove, every yard and bed clear
+- [x] T41 Report to the GM through escalation-check: the finding (bamboo held, 50 ft, from the timber bamboos' height) and what moved
       research: rendering
-      verify: the closing report
+      verify: DONE. escalation-check on the closing report: 3 KEEP, 1 REWRITE (seed 28 cut as process narrative), 1 CUT (the persimmon seat's regularity, no norm, left in the ledger); reported to the GM
