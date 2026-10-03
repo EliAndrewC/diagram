@@ -406,6 +406,11 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         exit strip before any house - research/questions/0081-village-lanes.drawing.html: on a nucleated hamlet the strip runs from the seat's center before a house stands
         rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
         shared byre pockets - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: reserved in the seat band before any house
+        the passage share - research/questions/0081-village-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
+        the seating's reach - UNRESEARCHED: a homestead within `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, 1.3 times that for the front row
+        the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
+        the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
+        the step between ranks - UNRESEARCHED: an envelope's depth and `MIN_WEB_GAP`, and `SUN_CORRIDOR_FT` more where the ranks climb north
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,

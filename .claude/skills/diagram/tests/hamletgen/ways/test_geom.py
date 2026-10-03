@@ -629,3 +629,13 @@ def test_a_turn_at_a_repeated_vertex_is_no_turn() -> None:
     assert _turn_deg((0.0, 0.0), (0.0, 0.0), (10.0, 0.0)) == 0.0
     assert _turn_deg((0.0, 0.0), (10.0, 0.0), (10.0, 0.0)) == 0.0
     assert _turn_deg((0.0, 0.0), (10.0, 0.0), (0.0, 0.0)) == pytest.approx(180.0), "control: a real reversal reads 180"
+
+
+def test_a_lane_is_owed_to_every_farmhouse_but_one_reached_across_a_yard() -> None:
+    """`lane_houses` (feature 317): the houses a pass may keep a lane for or carry one to - never a household reached across
+    its neighbor's yard, whose neighbor's way is its way in."""
+    from l7r.diagram.hamletgen.ways.geom import lane_houses
+
+    M = {"houses": [{"x": 1.0, "y": 2.0}, {"x": 3.0, "y": 4.0, "reached_across": [1.0, 2.0]}]}
+    assert lane_houses(M) == [(1.0, 2.0)]
+    assert lane_houses({}) == []

@@ -259,7 +259,8 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     it before it admits a corridor.
 
     Research:
-        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: no hook, needle, fold, hairpin, doubled tail or dangling end among its lanes
+        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: no hook, fold, hairpin or dangling end among its lanes
+        no sliver between the tree's lanes - UNRESEARCHED: no needle (`needle_loops`), asked of the tree with its ends joined as the settle joins them (`as_joined`), and no doubled tail
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
         free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house"""
@@ -431,7 +432,8 @@ def owed(M: Mapping[str, Any]) -> list[int]:
     the field's where no way reaches the field (`law.field_unreached`) - with every run each hangs from.
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: the corridor of each unreached house
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: the corridor of each unreached house, a household reached across a neighbor's yard counted reached through its neighbor (`unreached_houses`)
+        the way of a household another is reached across - research/questions/0081-village-lanes.drawing.html: its corridor always owed, its own way always drawn (`passage_anchors`)
         field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field's corridor where no way reaches its bund"""
     recs = tree_records(M)
     host = hosts(recs, _strip(M))
@@ -551,6 +553,7 @@ def prune_the_tree(s: Any) -> int:
 
     Research:
         redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs
+        the way of a household another is reached across - research/questions/0081-village-lanes.drawing.html: its corridor never pruned (`passage_anchors`)
         street and door path never pruned - research/questions/0033-row-villages-resson.drawing.html: the way a row's farms are reached by"""
     M = s.M
     lanes = M.get("lanes") or []
@@ -736,7 +739,10 @@ def records_of(geom: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any] 
 
 def seating_judge(s: Any) -> Any:
     """The tree's question (`admits`) as the seating asks it of a house's corridor (`access.tree_admits`), installed on the
-    settlement as `_corridor_tree` - the settlement package cannot import the hamlet generator."""
+    settlement as `_corridor_tree` - the settlement package cannot import the hamlet generator.
+
+    Research: a corridor judged as the web will lay it - research/questions/0081-village-lanes.drawing.html: refused where its squared run crosses its own household's house, beds, sheds or fixtures (`own_clear`), nothing built on a lane
+    """
 
     def judge(corridor: Sequence[Pt], geom: Mapping[str, Any]) -> bool:
         house, yard = records_of(geom)
@@ -755,7 +761,10 @@ def seating_judge(s: Any) -> Any:
 
 def own_clear(s: Any, run: Poly, geom: Mapping[str, Any]) -> bool:
     """Does every leg of `run` clear the household's own house, beds, sheds and fixtures, by the corridor's own leg tests
-    (`access.house_clear`, `fixtures_clear`, `parts_clear`) - the leg onto the tree passing unasked where it has no length?"""
+    (`access.house_clear`, `fixtures_clear`, `parts_clear`) - the leg onto the tree passing unasked where it has no length?
+
+    Research: a lane clear of its own household - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; a path routed round its own beds and fixtures, at the corridor's own leg gaps
+    """
     from l7r.diagram.settlement.rolling import access as A
 
     hgap, last = A.house_gap(s), len(run) - 2

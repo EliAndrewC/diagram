@@ -237,12 +237,13 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/questions/0081-village-lanes.html, and research/questions/0081-village-lanes.drawing.html - the
-# record is decisive that a house in a nucleated cluster IS reached by a way. The previous 90 ft in
+# Grounding: research/questions/0081-village-lanes.html, and research/questions/0081-village-lanes.drawing.html - a house
+# in a nucleated cluster is reached by a way, but for the few reached across a neighbor's land (feature 317), which
+# `ways/checks.py` `unreached_houses` counts reached through their neighbor. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
-"""Research: every farmhouse reached by a way - research/questions/0081-village-lanes.drawing.html: within 100 ft"""
+"""Research: every farmhouse reached by a way - research/questions/0081-village-lanes.drawing.html: within 100 ft, but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0
 """How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.

@@ -456,7 +456,7 @@ def split_at_crossings(s: Settlement) -> int:
 
 
 _SHORT_LEG_FT = 25.0  # a last leg this short, with the joint beyond it, is read as one turn (a map drawing convention)
-"""Research: two turns read as one - research/questions/0081-village-lanes.drawing.html: across a leg under 25 ft"""
+"""Research: two turns read as one - UNRESEARCHED: across a leg under 25 ft"""
 
 
 def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
@@ -465,7 +465,7 @@ def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
     the limit, which is how the joint pass missed one (the 269 landing's round-2 review of Kuwabata: 79 + 90 degrees
     across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart).
 
-    Research: no hairpin - research/questions/0081-village-lanes.drawing.html: 140 degrees summed over a short leg"""
+    Research: no hairpin - UNRESEARCHED: 140 degrees summed over a leg under 25 ft"""
     if math.dist(b, j) > _SHORT_LEG_FT:
         return False
 

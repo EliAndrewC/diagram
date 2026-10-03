@@ -112,6 +112,10 @@ def test_a_grove_farm_is_refused_on_the_access_tree_or_with_a_fixture_in_a_band(
     tree.add((0.0, 900.0), (1000.0, 900.0))
     s._access = tree
     assert not s._on_the_access(geom)
+    for part in ("shed", "byre"):  # the kura and the byre are parts too (feature 317's impl-drift check)
+        geom["boxes"][part] = (500.0, 900.0, 12.0, 10.0)
+        assert s._on_the_access(geom), f"the {part} stands on the corridor"
+        del geom["boxes"][part]
     tree.add((560.0, 0.0), (560.0, 1000.0))
     assert s._on_the_access(geom), "the privy stands on the corridor"
     assert not s._fixtures_in_bands(geom)

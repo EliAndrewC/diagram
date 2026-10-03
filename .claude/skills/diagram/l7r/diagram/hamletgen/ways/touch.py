@@ -18,7 +18,7 @@ from ..consts import (
 )
 from .clearance import _bends_badly, _clear_touch, may_write
 from .fabric import _LANE_JOIN_FT, _draw_web
-from .geom import _TOUCH_GAP, _components, _stop_at_network, _unretrace, polyline_len
+from .geom import _TOUCH_GAP, _components, _stop_at_network, _unretrace, lane_houses, polyline_len
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _SERVE_FT
 
@@ -38,7 +38,7 @@ def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, 
     only on a seed that happened to strand a way at the right distance.
 
     Research:
-        detour link directness - research/questions/0081-village-lanes.html: up to 8 times the straight gap
+        detour link directness - UNRESEARCHED: up to 8 times the straight gap
         shortest route wins - research/questions/0081-village-lanes.html: of three routable targets, the shortest walk is drawn
     """
     found: list[tuple[float, Pt, Poly]] = []
@@ -132,7 +132,7 @@ def _touch_junctions(
     Research:
         ends touch the way they near - research/questions/0081-village-lanes.drawing.html: one network, joined where treads meet
         end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
-        orphan piece dropped - research/questions/0081-village-lanes.drawing.html: unless it is a farmhouse's only way
+        orphan piece dropped - research/questions/0081-village-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
         final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
@@ -385,7 +385,7 @@ def _touch_junctions(
                     break
         if not joined:
             _others = [sg for j in range(len(ways)) if j not in orphans and len(ways[j]) >= 2 for sg in zip(ways[j], ways[j][1:], strict=False)]
-            _houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+            _houses = lane_houses(s.M)  # a household reached across a yard is owed no way of its own (feature 317)
 
             def _near(pt: Pt, segs: list[tuple[Pt, Pt]]) -> float:
                 return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
@@ -528,10 +528,10 @@ def _clear_within(run: Poly, verts: PointGrid, cap: float) -> float:
 
 
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
-"""Research: orphan link reach - research/questions/0081-village-lanes.drawing.html: a stranded piece within 150 ft is linked to the network"""
+"""Research: orphan link reach - UNRESEARCHED: a stranded piece within 150 ft is linked to the network"""
 _SHORTEST_OF = 3  # the detour rung compares this many routable targets by route length before drawing one
 _DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the straight gap (a 29 ft gap -> a 230 ft way round)
-"""Research: detour directness - research/questions/0081-village-lanes.html: up to 8 times the straight gap"""
+"""Research: detour directness - UNRESEARCHED: up to 8 times the straight gap"""
 # AIMING ALONG A WAY, ON A FINER LATTICE - the rung below the detour (feature 134 T50, 2026-08-28).
 # Two things kept the joiner from a route that plainly exists, measured on tripwire seed 27 by grid
 # search over that map's own footprints:

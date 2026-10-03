@@ -1,0 +1,22 @@
+{
+ "gc-vl-f1-anchor-way": {
+  "value": 1,
+  "unit": "lane",
+  "quantity": "the household another is reached across, at (2600.5, 1960.7), has its own access lane (lane 3, its `of` within 1.5 px of the house) on the re-rolled map; the household reached across it, at (2567.0, 2120.9), has none, by design",
+  "source": "pool/hamlets/inashiro/inashiro.json at 91805d323 - lanes[].of against houses[] carrying reached_across, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F1",
+  "answers": "86f173b401a2"
+ },
+ "gc-fh-f7-notes": {
+  "value": 1,
+  "unit": "entry",
+  "quantity": "inashiro.notes.md carries a feature 317 entry, dated 2026-10-03: the household reached across its neighbor's yard, the share 0.099, the drawn aspect 1.98 against main's 1.54, the persimmons 12 of 12",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md at 91805d323, the last section",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--farmhouse",
+  "verifies": "F7",
+  "answers": "86f173b401a2"
+ }
+}

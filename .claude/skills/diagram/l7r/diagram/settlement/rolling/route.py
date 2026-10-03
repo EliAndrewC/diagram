@@ -174,7 +174,10 @@ def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> l
     """What a household's own parts keep a WALK off of (`passage.walk_of`, feature 317), each with the gap its leg test keeps:
     the house (`house_clear`'s gap), the shed, byre, well and garden beds (`parts_clear`'s), the fixtures by a corridor's
     half-width (`fixtures_clear`'s). The corridor's own route keeps off the house alone (`routed_corridors`: searched per
-    layout round these parts, it was withdrawn - research R8)."""
+    layout round these parts, it was withdrawn - research R8).
+
+    Research: a walk crosses nothing of either household - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture, each kept at its leg test's gap
+    """
     from .access import PART_MARGIN_FT, TREAD_HALF_FT
 
     boxes = geom.get("boxes") or {}
@@ -225,7 +228,7 @@ def _cells_to_tree(
 ) -> tuple[list[Cell], Pt] | None:
     """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None.
 
-    Research: path kept off what stands - UNRESEARCHED: off the household's own house and parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
+    Research: path kept off what stands - research/questions/0081-village-lanes.drawing.html: nothing built on a lane - off the household's own house and the parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
     """
     from . import access as A
     from .access import seg_box_within

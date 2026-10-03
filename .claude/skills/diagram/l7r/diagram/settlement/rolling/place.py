@@ -240,6 +240,7 @@ class PlacerMixin:
             garden side chosen by the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: fewest shaded beds, then the south corners before the walls
             left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
             one computed move off a neighbor - NONE: the measured overlap plus 2 px, once
+            a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
         """
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the

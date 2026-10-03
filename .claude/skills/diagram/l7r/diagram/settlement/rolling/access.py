@@ -80,7 +80,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes.
 
-    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a corridor reserved from each door to the tree, no later homestead covering it
+    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a corridor reserved from each door to the tree, no later homestead covering it - but for the few households reached across a neighbor's yard, whose walk is held clear the same way (`bar`)
     """
 
     __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
@@ -110,7 +110,12 @@ class AccessTree:
         self.grid.extend([(a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)])
 
     def bar(self, a: Pt, b: Pt) -> None:
-        """Keep the walk a-b clear of every later homestead, as a corridor is, without making it a corridor (a passage)."""
+        """Keep the walk a-b clear of every later homestead, as a corridor is, without making it a corridor (a passage).
+
+        Research:
+            a passage walk kept clear - research/questions/0081-village-lanes.drawing.html: on the two households' land, never drawn as a lane
+            the walk's clearance - GUESS: the corridor's own half-width either side
+        """
         h = self.half
         self.bars.extend([(a, b, min(a[0], b[0]) - h, min(a[1], b[1]) - h, max(a[0], b[0]) + h, max(a[1], b[1]) + h)])
 
@@ -445,7 +450,9 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
     only as far as asked (`_house_candidates`), and each homestead takes the first of them its own fixtures leave clear -
     the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused).
 
-    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane
+    Research:
+        seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane but the few reached across a neighbor's yard, for whom finding none is the custom's condition (`passage.landlocked`)
+        routed where none is straight - research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, on the nucleated tree, round what stands (`route.routed_corridors`)
     """
     tree = getattr(s, "_access", None)
     if tree is None:
@@ -504,7 +511,7 @@ def seat_reaches_tree(s: Settlement, core: Any) -> bool:
     layout is built: the memo entry `access_corridor` keys on the same house and yard is the one created and peeked here, so a
     layout's corridor search continues from it rather than starting again. True where no tree is installed.
 
-    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane
+    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane but the few reached across a neighbor's yard, where a False is the custom's condition
     """
     tree = getattr(s, "_access", None)
     if tree is None:
@@ -605,7 +612,12 @@ def tree_admits(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> bool:
 
 def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:
     """The corridors `access_corridor` would try, in its order, that clear the house and the standing ground - a leg onto
-    the tree of no length (a door on the tree) passes unasked, as the search passed it."""
+    the tree of no length (a door on the tree) passes unasked, as the search passed it.
+
+    Research:
+        a corridor's order - research/questions/0081-village-lanes.drawing.html: as few turns as the plots allow - each door's straight leg before a flank door's round the gable
+        path leaves its own yard - UNRESEARCHED: the tread kept 0.5 ft clear of the yard it leaves (`leaves_its_yard`)
+    """
     doors = doors_of(geom, tree.half)
     turns = {door: round_the_gable(geom, door, tree.half) for door in doors[2:]}
     prime_site(s, [(door, q) for door in doors for q in tree.targets(door)] + [seg for door, turn in turns.items() for seg in [(door, turn), *((turn, q) for q in tree.targets(turn))]])

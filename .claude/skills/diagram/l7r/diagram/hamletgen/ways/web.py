@@ -448,14 +448,16 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         web cut spacing - UNRESEARCHED: alley and back-lane cuts WEB_REACH_FT 100 ft apart, MIN_WEB_GAP 18 ft at least
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
 
-    WHY IT EXISTS. The record is decisive that a house in a nucleated cluster is reached by a way:
-    "every house in the nucleated village is accessible via the interconnected system of narrow lanes
-    and alleys" (research/contents.json#homesteads). The skeleton alone does not deliver that - it is sized on
+    WHY IT EXISTS. The record finds a house in a nucleated cluster reached by a way - "every house in the nucleated
+    village is accessible via the interconnected system of narrow lanes and alleys" (research/contents.json#homesteads) -
+    but not always: a household whose land has no way of its own is reached across its neighbor's (feature 317,
+    research/questions/0081-village-lanes.html), and counts reached through its neighbor (`checks.unreached_houses`), so
+    the web owes it no lane. The skeleton alone does not deliver the rest - it is sized on
     the seat band while the houses spread wider - and before this stage a third of the pool's
     farmhouses stood more than 100 ft from any way, with a whole block of Sawada touched by nothing.
 
@@ -503,7 +505,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _anchor = plan.seat["anchor"]
     _reach_along = max(abs((float(h["x"]) - _anchor[0]) * _ax + (float(h["y"]) - _anchor[1]) * _ay) for h in houses)
     frame = _margin_frame(plan, max(plan.seat["lat"] * CLUSTER_SPAN_FACTOR, _reach_along + BUNDLE_PITCH), near=[(float(h["x"]), float(h["y"])) for h in houses])
-    proj = [frame.project((float(h["x"]), float(h["y"]))) for h in houses]
+    # ...the cuts cover every house BUT one reached across its neighbor's yard, which is owed no lane (feature 317)
+    proj = [frame.project((float(h["x"]), float(h["y"]))) for h in houses if not h.get("reached_across")]
     arcs = [a for a, _ in proj]
     stands = [d for _, d in proj]
     # THE SKELETON GOES IN FIRST, in this same house-fitted frame (feature 126). It used to be laid

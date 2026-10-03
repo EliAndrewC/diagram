@@ -169,6 +169,18 @@ def test_the_debris_sweep_needs_two_live_lanes_before_it_can_call_one_alone() ->
     assert hg.ways._sweep_debris(_StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)], [(50.0, 50.0)]])) == 0
 
 
+def test_the_debris_sweep_keeps_a_fragment_a_house_needs_but_not_one_only_a_passage_household_stands_by() -> None:
+    """A lone fragment under the minimum is kept while some farmhouse has no other way within `_SERVE_FT` - and a household
+    reached across its neighbor's yard is owed no way of its own (feature 317, `geom.lane_houses`), so it keeps none."""
+    lanes = [[(0.0, 0.0), (0.0, 400.0)], [(500.0, 500.0), (520.0, 500.0)]]
+    assert hg.ways._sweep_debris(_StubSettlement(lanes=lanes, houses=[(510.0, 530.0)])) == 0, "a house's only way"
+    s = _StubSettlement(lanes=lanes, houses=[(510.0, 530.0)])
+    s.M["houses"][0]["reached_across"] = [600.0, 600.0]
+    s.M["meta"] = {}
+    assert hg.ways._sweep_debris(s) == 1, "a passage household's neighbor is its way in"
+    assert [ln["pts"] for ln in s.M["lanes"] if ln["pts"]] == [[[0.0, 0.0], [0.0, 400.0]]]
+
+
 def test_a_steading_foul_at_the_HEAD_of_a_lane_is_trimmed_from_the_head() -> None:
     """Both ends are swept, and the head is the one that had no test. A lane rewritten by a later pass
     can end up with its ink on a farmhouse at either end - `houses_clear_of_lanes` allows a lane no

@@ -201,7 +201,7 @@ def grow_gap(s: Settlement) -> float:
     """The room left between two footprints: a path's whole reserved strip (2 x `ACCESS_HALF_FT`) and the parting
     (`TIGHT_GAP_PX`) - the PATH OUT the GM's footprint includes (plan review round 1).
 
-    Research: a path's room between homesteads - UNRESEARCHED: the access corridor's whole width and 2 px
+    Research: a path's room between homesteads - research/questions/0081-village-lanes.drawing.html: a lane 7 ft clear of a garden fence on each side (the access corridor's whole width) and the 2 ft the growth leaves between neighbors
     """
     return 2.0 * s.px(ACCESS_HALF_FT) + TIGHT_GAP_PX
 
@@ -212,7 +212,7 @@ def grow_gap(s: Settlement) -> float:
 TIGHT_GAP_PX = 2.0
 """Research:
     household against its neighbor's land - research/questions/0081-village-lanes.html: land with no way of its own to the road, reached by passage over a neighbor's
-    the parting - UNRESEARCHED: 2 px, with no path's strip
+    the parting - GUESS research/questions/0081-village-lanes.drawing.html: the 2 ft the growth leaves between neighbors, with no path's strip
 """
 
 
@@ -222,7 +222,7 @@ TIGHT_GAP_PX = 2.0
 #: there too, the tight seats cost the stage 12-35%. 112.5 holds the 90-degree band whole. A search breadth, not a rule of the
 #: custom: a household behind its neighbor is still seated, by the growth's ordinary seats and a way of its own.
 TIGHT_BEARING_DEG = 112.5
-"""Research: a passage household on its neighbor's yard side - CONVENTION: offered within 112.5 degrees of the bearing to the neighbor's threshing yard, where the walk to the yard can be had"""
+"""Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: offered within 112.5 degrees of the bearing to the neighbor's threshing yard, where the walk to the yard can be had"""
 
 
 #: How near the access tree a TIGHT seat may stand and still be offered, in feet (feature 317): a household that close to a way has
@@ -230,13 +230,13 @@ TIGHT_BEARING_DEG = 112.5
 #: from a tight seat nearer the tree than 87 ft, and of the 135 of 343 tight tries nearer than 80 every one whose walk was found had
 #: a corridor of its own; the tries the cut spares are a search breadth, never a rule - each is refused unasked as it would have been.
 TIGHT_TREE_FT = 80.0
-"""Research: a passage household away from a way - CONVENTION: no tight seat offered within 80 ft of the access tree, a household near a way having one"""
+"""Research: a passage household away from a way - research/questions/0081-village-lanes.drawing.html: no tight seat offered within 80 ft of the access tree, a household near a way having one"""
 
 
 def near_the_tree(s: Settlement, seat: Pt) -> bool:
     """Does a tight seat stand within `TIGHT_TREE_FT` of the access tree's nearest point (`AccessTree.targets`)?
 
-    Research: a passage household away from a way - CONVENTION: the distance to the access tree's nearest point
+    Research: a passage household away from a way - research/questions/0081-village-lanes.drawing.html: the distance to the access tree's nearest point
     """
     tree = getattr(s, "_access", None)
     near = tree.targets(seat)[:1] if tree is not None else []
@@ -247,7 +247,7 @@ def yard_side(center: Pt, yard: Pt, angle: float) -> bool:
     """Does the bearing `angle` (radians) from a standing house at `center` stand within `TIGHT_BEARING_DEG` of the bearing to
     its threshing yard at `yard`?
 
-    Research: a passage household on its neighbor's yard side - CONVENTION: the bearing off the bearing to the yard
+    Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: the bearing off the bearing to the yard
     """
     to_yard = math.atan2(yard[1] - center[1], yard[0] - center[0])
     off = abs((math.degrees(angle - to_yard) + 180.0) % 360.0 - 180.0)
@@ -272,6 +272,9 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
     Research:
         cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part, jittered, nearest the seat first
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
+        tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, nearest the seat first beside the ordinary seats
+        a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
+        the growth's widening - UNRESEARCHED: rings at 1.25 to 2.0 times the parting distance, in 12 and 16 directions, while households are left (`GROW_LEVELS`)
     """
     want = plan.spec.households
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])

@@ -97,7 +97,8 @@ def strands_only_ordinary(M: Mapping[str, Any], i: int) -> bool:
 
     Research:
         one network - research/questions/0081-village-lanes.drawing.html: lanes stranded off the connector's network
-            dropped where no farmhouse loses its way"""
+            dropped where no farmhouse loses its way (`unreached_houses`, which counts a household reached across a neighbor's
+            land reached through its neighbor's chain)"""
     lanes = M.get("lanes") or []
     before = _on_the_connector(lanes, range(len(lanes)))
     lost = before - _on_the_connector(lanes, [k for k in range(len(lanes)) if k != i]) - {i}
