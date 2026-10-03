@@ -50,5 +50,6 @@ Recorded), so each is `research: rendering`.
   (FR-015, SC-008; plan D15)
       research: rendering
       verify: DONE. engine dev loop, research CLAUDE.md, root guard table, docs/guards.md, dev/reviews.md
-- [ ] T11 `make done` green; the push (spec-wide)
+- [x] T11 `make done` green; the push (spec-wide)
       research: rendering
+      verify: DONE. make done green (the whole suite, every pool map; 2026-10-03); the push follows
