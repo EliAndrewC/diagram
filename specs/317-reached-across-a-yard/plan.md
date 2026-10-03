@@ -4,9 +4,9 @@
 
 ## Summary
 
-The record answers the GM's question from what was read (R1, a page session); the seating may then admit a nucleated household
-whose own corridor the tree cannot take by passage across a neighbor's dooryard to the neighbor's way (Wigmore's custom of passage
-for land with no road access), up to a share rolled per settlement; the seating judges a corridor in the form the web will draw it
+The record answers the GM's question from what was read (R1, a page session); the grown cluster may then seat a nucleated household
+against a neighbor's land, with no corridor of its own, reached by passage across the neighbor's yard to the neighbor's way
+(Wigmore's custom of passage for land with no road access), up to a share rolled per settlement; the seating judges a corridor in the form the web will draw it
 (the defect feature 314 R12 found); and every known bug is listed with its owner.
 
 ## Performance bookends (constitution VI)
@@ -23,15 +23,27 @@ a clustered village reached by a lane?" rewritten from what was read - no page s
 for land with no road access in seven provinces (three towns), and a chain of it (Echigo) - each passage quoted from the scan,
 its limits stated. A second brief (R2) brings the drawing page's rule once D2-D4 land, each value in its class.
 
-**D2 - The passage, offered only where no corridor is (FR-002).** Wigmore's custom is for land that "cannot reach the highway
-without passing over" another's, so the seating asks for a corridor first, as now; only where `access_corridor` finds none does
-it ask for a passage: a straight leg from the household's dooryard door to the nearest point of a standing neighbor's threshing
-yard within `PASSAGE_REACH_FT`, clear of every house, garden bed, shed, byre, well pocket and fixture (its own and every
-other's), of every other placed homestead, of the refused-ground grid and of the reserved wood seats - so it crosses only open
-ground and the neighbor's yard. `PASSAGE_REACH_FT` is a GUESS (a neighbor's yard across the path's room the growth leaves,
-`grow_gap`, and a dooryard's depth - about 40 ft); the leg is not drawn as a lane - a yard and a dooryard are open trodden ground,
-the walk across them is the custom, not a way (this record's reading, a GUESS). Every rule of the placer is asked as before;
-only the corridor's question is answered by the passage.
+**D2 - The passage, offered only where no corridor is (FR-002; amended 2026-10-03 on a MODE 1 ruling).** Wigmore's custom is for
+land that "cannot reach the highway without passing over" another's, so a household asks for a corridor first, as now; only where
+`access_corridor` finds none may it be reached by passage. The first build (a leg from the door to a neighbor's yard within 40 ft)
+seated no household: the growth parts every two footprints by a path's whole strip (`grow_gap`, 16 ft at 1 ft a pixel), so the
+custom's condition - land behind a neighbor's - never arose (research R3). The MODE 1 check ruled not building the passage NOT
+LEGITIMATE: the spacing that kept the condition from arising was built for a lane to every house. So:
+
+- TIGHT SEATS. While the settlement's share has room (D4), each standing house of the grown cluster also offers seats at the
+  distance where the two footprints part plus the 2 px parting (`grow_gap` without the path's strip): a household seated there
+  stands against its neighbor's land. A tight seat is taken only by passage: a household that finds a corridor of its own there
+  is not land the custom covers and is refused the seat (the growth's ordinary seats keep a path's room).
+- THE CUSTOM'S CONDITION AS THE REACH: the household's own ground adjoins the neighbor's - its envelope within the parting and
+  `PASSAGE_ADJOIN_FT` of the neighbor's footprint, a GUESS (the 2 px the parting leaves and a foot of tolerance) - never a walking
+  distance across open ground (a long walk across open ground is a path, not the custom).
+- THE WALK: a straight leg from one of its doors (`doors_of`) to the nearest point of the neighbor's threshing yard, every point of
+  it on the two households' land (within their two envelopes, the parting between them included), clear of both households'
+  houses, beds, sheds, byres, well pockets and fixtures, of every other placed homestead, of the refused-ground grid and of the
+  reserved wood seats. Kept clear of every later homestead as a corridor is; not drawn as a lane - a dooryard and a yard are open
+  trodden ground, the walk across them is the custom, not a way (this record's reading, a GUESS).
+
+Every other rule of the placer is asked as before; only the corridor's question is answered by the passage.
 
 **D3 - The chain (FR-002, the spec's edge case).** The neighbor must itself reach the tree - by its own corridor, or by a passage
 whose chain to a corridor is at most `PASSAGE_CHAIN` households: 2, a GUESS citing Wigmore's Echigo entry, where C passes over
@@ -53,15 +65,23 @@ seating's record and its judge (`tree.admits`, through `tree_records` and `lanes
 2596). The fix: find the web pass that lays that door leg, and have `lanes_of` lay it the same way for the seating, so `admits`
 asks the needle and every pair rule of the drawn lane. Verified on the reproduction (it must refuse the corridor at seating, or
 the web must draw it lawfully), then the route's own parts re-measured: if the seating now admits only drawable corridors,
-feature 314 R12's withdrawn lever is retried by `abab.sh` and kept only if it pays (FR-006).
+feature 314 R12's withdrawn lever is retried by `abab.sh` and kept only if it pays (FR-006). Done (research R2, R4): the route is
+searched per garden layout round the household's own parts (feature 314's searched once per house and yard, so every layout took
+the route laid round the first one's beds), and it pays - the seats lost to the path alone 77 -> 21 and 90 -> 22, the stage -6%
+and -10% in CPU seconds. Its one regression on the cohort (seed 18: squaring a water crossing straightened a routed path across
+the household's own privy) is closed the same way as R12: the seating judge asks the household's own house, beds and fixtures of
+the path as the web will lay it (`tree.laid_run`, `own_clear`).
 
 **D7 - The known bugs (FR-007).** research.md lists each: the D6 defect (this feature); cohort seeds 14, 15, 906 and 22, 23 (the
 Diagram (Inashiro) session, feature 315). At close, each is fixed with its run or in progress with its owner's last word.
 
 ## Verification
 
-- Unit tests: the passage (offered only without a corridor, its leg's clearances, the chain limit, the share), the reach
-  predicate with passages, `lanes_of`'s door leg; the reproduction as a test where it can be built small.
+- Unit tests: the tight seats (offered only while the share has room, at the parting without the path's strip), the passage
+  (taken only without a corridor, the adjoining ground, the walk on the two households' land and its clearances, the chain
+  limit, the share), the reach predicate with passages; the reproduction as a test where it can be built small.
+- SC-002: at 15 households, seeds 1-16, households reached by passage where the share is above zero, never more than it allows
+  (`meta.passage_share`, `meta.passage_reached`).
 - `refusals.py`/`abab.sh` at 15 and 40 households against main; the cohort (`make cohort N=24 JOBS=4`) against main; `make done`
   with five workers; the bookends back to back.
 
