@@ -54,16 +54,23 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   households' own house, beds or fixtures on 95 of the 109 tight-seat layouts with no corridor at 15 households, seeds 1-16, and
   found 3 passages (research R6). Kept clear of every later homestead as a corridor is; not drawn as a lane - a dooryard and a
   yard are open trodden ground, the walk across them is the custom, not a way (this record's reading, a GUESS).
-- THE ORDER AT A TIGHT SEAT: the walk asked first, then the corridor - the same verdict (both must hold), since the walk is
-  searched on the two households' land and the corridor over the whole tree (research R6). And once a seat: a household that has
-  a way of its own from one garden layout at the seat is not on land the custom covers, so its other layouts there are refused
-  unasked (research R7: the corridor found at 93 of 106 searches after a walk; the tight seats' work 4.0 -> 2.15 s).
+- A WAY OF ITS OWN, WITHOUT THE ROUTED SEARCH (amended 2026-10-03 on the GM's ruling, `request.md`: *"we don'y need to be
+  rigorous because people cut through their neighbors yards all the time"*; *"even if there IS a lane you might do it anyway if
+  it was faster or more direct"*). The corridor a tight seat asks for is a straight one or one round the gable
+  (`access.access_corridor`, `routed` False): no path bending round the homesteads is searched for, so a household such a path
+  alone would reach may be seated across its neighbor's yard. Proving that none reached the tree was the passage's cost at 40
+  households (the band-3 cell, research R9); measured after, research R10. CANON (the GM's ruling), recorded on the drawing page.
+- THE ORDER AT A TIGHT SEAT: the corridors asked first, now the cheaper (`landlocked`), then the walks; at each layout the walk and
+  the corridor again as the one predicate - the same verdict (both must hold). And once a seat: a household that has a way of its
+  own from one garden layout at the seat is not on land the custom covers, so its other layouts there are refused unasked
+  (research R7: the corridor found at 93 of 106 searches after a walk; the tight seats' work 4.0 -> 2.15 s).
 - THE LAND, NOT ONE LAYOUT (`passage.landlocked`): the seat is taken only where some garden layout at it has a walk to the
-  neighbor's yard and none has a corridor of its own, asked once a seat before any layout is judged - a household lays its beds
-  where its way can run. Judged a layout at a time, 10 of 13 passages at 15 households and 6 of 20 at 40 were households another
-  layout would have given a way of its own (research R8).
+  neighbor's yard and none has a straight or round-the-gable corridor of its own, asked once a seat before any layout is judged -
+  a household lays its beds where its way can run. Judged a layout at a time, 10 of 13 passages at 15 households and 6 of 20 at
+  40 were households another layout would have given a way of its own (research R8).
 - ON THE FINISHED SEATING (`passage.recheck_passages`): once every household is seated, each household reached across a yard is
-  asked again - its own homestead set aside, as when it was first asked - whether it has a corridor of its own now; one that has
+  asked again - its own homestead set aside, as when it was first asked - whether it has a straight or round-the-gable corridor
+  of its own now; one that has
   is seated by it as any other household and loses its passage (`meta.passage_revoked`). A later household's corridor reserved
   past its beds had given Inashiro's one such household a drawn lane a few feet off (the farmhouse glyph check, research R9).
   By its WHOLE HOLDING, as at the seat (the plan review's ruling): the layout drawn is asked first; then every other layout
@@ -118,7 +125,16 @@ at the gate and closed (research R8): feature 315's persimmon reseat asked a nei
 on the household's rolled side alone, and gave the tree up where a later seat or the other side shaded no one - Inashiro, moved by
 the tight seats, drew 11 persimmons of 12 rolled (B10). It now asks the neighbor's sun of every seat it tries, on the rolled side
 and then the other (`persimmon_reseat.persimmon_for`). Found by the impl-drift check and closed (research R9): a grove farm's
-test that no part of it stands on a corridor (`fit._on_the_access`) left out its kura and its byre.
+test that no part of it stands on a corridor (`fit._on_the_access`) left out its kura and its byre. Found by the village lane's
+glyph check, round 3 (F5: lane 14 on Inashiro bulged 27 ft round bare scrub), and closed (research R10): feature 310 holds the copse
+out of the afternoon lane west of every yard and bed, and the seating's reservation of each household's wood floor
+(`wood_share.copse_keepouts`) did not keep that lane, so seats were reserved where the copse never plants - 18, 16 and 34 of them
+on main's Inashiro, Kuwabata and Sawada - and a neighbor's path was routed round two of them. The reservation now keeps the lane
+by the copse's own figure, and a gate test holds every reserved seat planted (`tests/gate/test_wood_shares_planted.py`).
+
+**D8 - The route search shared (the GM, 2026-10-03: *"Yes, definitely do this"*).** The perf audit's lever - one map of what is
+reachable shared across the route searches, instead of each searching from scratch - is a feature of its own, the next one: with
+the passage unrouted (D2) it no longer carries the passage's cost, and it speeds every household's routed path, main's included.
 
 ## Verification
 

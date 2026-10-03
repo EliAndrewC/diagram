@@ -93,7 +93,9 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
 - **FR-002**: A nucleated settlement MUST be able to seat a household reached across a neighbor's dooryard, or a chain of them as
   far as the record's reading allows, to a way - never across a house, a garden bed, a shed or a fixture; the share of such
   households rolled per settlement within a band the record supports or labels as a guess. Any limit on a chain's length is a
-  Decision Recorded, labeled.
+  Decision Recorded, labeled. A household has no way of its own where no straight path, nor one round its house, reaches a way;
+  no path bending round the homesteads is searched for (amended 2026-10-03, the GM's ruling in `request.md`: cutting through a
+  neighbor's yard "is not some kind of huge deal").
 - **FR-003**: Every household MUST still reach the access tree - by its own lane, or across the neighbors' yards FR-002 allows.
 - **FR-004**: The seating MUST admit a corridor only as the web will draw it, so no admitted corridor breaks the lane law once
   drawn (feature 314 R12).
@@ -104,7 +106,10 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
   agreement. As measured on 2026-10-02 (feature 314 R12, R15; `make cohort N=24` on origin/main): the seating admitting a corridor
   the web cannot draw (this feature, FR-004); cohort seeds 14, 15 and 906 (dispersed: `trees_shading_plots`,
   `gardens_east_shaded`) and seeds 22 and 23 (linear: `WebRefused`) - the Diagram (Inashiro) session, feature 315, agreed by
-  message 2026-10-02. A bug found later joins the list with its owner.
+  message 2026-10-02. A bug found later joins the list with its owner; found 2026-10-03 (this feature): the seating reserving
+  wood seats in the afternoon sun lane feature 310 holds the copse out of, so the copse never plants them.
+- **FR-008**: The route search shared across searches (the GM, 2026-10-03: "Yes, definitely do this") is the next feature, not
+  this one; this feature's spec and plan name it as the follow-up.
 
 ## Success Criteria *(mandatory)*
 
@@ -126,6 +131,7 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
 |---|---|---|---|
 | Some households reached across a neighbor's dooryard | historically accurate: passage over a neighbor's land for land with no road access (Wigmore 1892, seven provinces, three of them towns); that it ran across a dooryard in a clustered village is this record's reading, a GUESS | the GM: go with what the research bears out | research 0081; this spec; the seating's comment |
 | The share of such households, rolled per settlement | guess, labeled (the record attests the custom, not its frequency) | calibrated liberty along a degree (constitution XII) | the plan; the constant's comment |
+| "No way of its own" asked of straight and round-the-house paths only, no routed search | canon: the GM's ruling, 2026-10-03 (`request.md`) | cutting through a neighbor's yard was ordinary; the routed proof was the passage's cost at 40 households | research 0081's drawing page; plan D2; `passage.landlocked` |
 
 ## Assumptions
 
@@ -140,3 +146,6 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
   allowed, any limit a labeled Decision; the row and the Context give seven provinces, three towns, and label the dooryard a GUESS;
   FR-007 lists each known bug with its owner and SC-006 records each at close.
 - Round 2 (spec-fidelity, verify, 2026-10-02): FAITHFUL - the three items confirmed against the diff.
+- Amendment (2026-10-03, the GM's ruling in `request.md`): FR-002 asks a way of its own of straight and round-the-house paths
+  only, no routed search; FR-007 adds the wood seats reserved in the afternoon sun lane; FR-008 names the shared route search as
+  the next feature. The review counter restarts with this amendment.

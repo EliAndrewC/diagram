@@ -9,8 +9,9 @@ WHERE IT CAN ARISE: the grown cluster parts every two homesteads by a path's who
 stood behind a neighbor's land and the custom's condition never arose (research R3: the nearest neighbor's yard 64 ft at the
 least from any door refused a path). So, within the settlement's rolled share (`passage_budget`), each standing house also
 offers TIGHT seats - at the parting with no path's strip (`hamletgen/homesteads/growth.py`) - and a household offered one is
-seated there only by passage: it asks for a corridor first (`access.access_corridor`), a household that finds one is refused
-the tight seat, and one that finds none is admitted where:
+seated there only by passage: it asks for a straight or round-the-gable corridor first (`access.access_corridor`, `routed`
+False - no path bending round the homesteads is searched for, the GM's ruling of 2026-10-03), a household that finds one is
+refused the tight seat, and one that finds none is admitted where:
 
 - its own ground ADJOINS the neighbor's: its land (the reach the growth parted its seat by, `growth.settled_seat`'s allotted
   reach over every garden layout, carried with its house) within the parting and `PASSAGE_ADJOIN_FT` of the neighbor's land
@@ -230,17 +231,25 @@ def walk_of(s: Settlement, geom: Any, rec: Any, door: Pt, yard: Any, lands: Any,
 
 def landlocked(s: Settlement, layouts: Any) -> bool:
     """Is the household at a tight seat on land the custom covers - some garden layout here with a walk to the neighbor's yard
-    (`passage_of`) and none with a corridor of its own (`access.access_corridor`)? The household's LAND, not one layout: a
-    household lays its beds where its way can run. Judged a layout at a time, 10 of the 13 passages at 15 households on 13
-    settlements, and 6 of the 20 at 40 on four, were households another layout at the seat would have given a way of its own
-    (research R8). The walks are asked first, the cheaper and the rarer.
+    (`passage_of`) and none with a straight or round-the-gable corridor of its own (`access.access_corridor`, `routed`
+    False)? The household's LAND, not one layout: a household lays its beds where its way can run. Judged a layout at a
+    time, 10 of the 13 passages at 15 households on 13 settlements, and 6 of the 20 at 40 on four, were households another
+    layout at the seat would have given a way of its own (research R8).
 
-    Research: no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a corridor under none
+    NO ROUTED SEARCH FOR A WAY OF ITS OWN (the GM, 2026-10-03: *"we don't need to be rigorous because people cut through their
+    neighbors yards all the time"*, and *"even if there IS a lane you might do it anyway if it was faster or more direct"*).
+    Proving that no path bending round the homesteads reached the tree ran the route search to the end of its reach at every
+    tight seat (the passage's cost, research R9). So the corridors are asked first now, the cheaper, and the walks only of land
+    none of them reaches.
+
+    Research:
+        no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a corridor under none
+        no routed search for one - CANON: the GM's ruling of 2026-10-03, a path that must bend round other homesteads is not sought
     """
     lays = [g for g in layouts if g is not None and not g.get("unlaid")]
-    if not any(passage_of(s, g) is not None for g in lays):
+    if any(access_corridor(s, g, routed=False) is not None for g in lays):
         return False
-    return not any(access_corridor(s, g) is not None for g in lays)
+    return any(passage_of(s, g) is not None for g in lays)
 
 
 def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
@@ -282,17 +291,17 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
 
 
 def own_corridor(s: Settlement, rec: Mapping[str, Any], geom: Any) -> tuple[Pt, ...] | None:
-    """The corridor of its own the household `rec` would have laid as `geom`, its own homestead set aside (as it stood
-    unseated when its seat was judged), or None.
+    """The straight or round-the-gable corridor of its own the household `rec` would have laid as `geom`, its own homestead
+    set aside (as it stood unseated when its seat was judged), or None - `landlocked`'s question, asked of a seated household.
 
-    Research: passage machinery - NONE: the seat's own corridor question (`access.access_corridor`), asked of a seated household
+    Research: passage machinery - NONE: the seat's own corridor question (`access.access_corridor`, unrouted as `landlocked` asks it), asked of a seated household
     """
     own = (rec.get("geom") or {}).get("bbox")
     k = next((i for i, b in enumerate(s.placed) if b is own), None)
     if k is not None:
         s.placed.pop(k)
     try:
-        return access_corridor(s, geom)
+        return access_corridor(s, geom, routed=False)
     finally:
         if k is not None:
             s.placed.insert(k, own)
@@ -351,7 +360,8 @@ def relay(s: Settlement, rec: dict[str, Any], lay: Any, walk: Sequence[Pt]) -> b
 
 def recheck_passages(s: Settlement) -> int:
     """Ask each household reached across a yard again, once every household is seated, whether its holding has a way of its
-    own now - its own homestead set aside, as it stood unseated when first asked; the count of passages so ended. The layout
+    own now - a straight or round-the-gable corridor (`own_corridor`, as `landlocked` asks it), its own homestead set aside,
+    as it stood unseated when first asked; the count of passages so ended. The layout
     it is drawn with is asked first: one with a corridor is seated by it as any other household is (`reserve`). Then every
     other layout built at its seat: one with a corridor that fits the finished seating re-seats it (`relay`). Repeated until
     none is ended, an ended passage's corridor being a way another may now reach.

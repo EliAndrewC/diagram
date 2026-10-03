@@ -357,7 +357,7 @@ class BundleFitMixin:
 
         Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
             persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
-            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where it finds a corridor of its own"""
+            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where it finds a straight or round-the-gable corridor of its own (no routed one sought: the GM's ruling of 2026-10-03)"""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -401,9 +401,9 @@ class BundleFitMixin:
             # ...OR, AT A TIGHT SEAT AGAINST A NEIGHBOR'S LAND, A PASSAGE ACROSS ITS YARD (feature 317, `passage.py`): the custom
             # is for land with no way of its own, so the household is reached across the neighbor's yard where a walk there is
             # and no corridor of its own is (one that finds a corridor is refused the seat: the growth's ordinary seats keep a
-            # path's room). The walk is asked FIRST - the same verdict, both must hold - since it is searched on the two
-            # households' land and rarely found, where the corridor is searched over the whole tree and was found at 367 of 476
-            # tight-seat layouts (15 households, seeds 1-16), each a refusal that cost the stage its search. And ONCE A SEAT:
+            # path's room). The seat was taken only where `landlocked` found no layout here with a straight or round-the-gable
+            # corridor (no routed one is sought, the GM's ruling of 2026-10-03), so the walk is asked first and the corridor is
+            # asked again only as the one predicate: the same verdict, both must hold. And ONCE A SEAT:
             # a household with a way of its own from one garden layout at the seat is not on land the custom covers, so its
             # other layouts there are refused unasked (`own_way`; research R7: 93 of 106 corridor searches after a walk found
             # one, 1.75 s of the tight seats' 4.0)
@@ -413,7 +413,7 @@ class BundleFitMixin:
             passage = passage_of(self, geom)
             if passage is None:
                 return False
-            if access_corridor(self, geom) is not None:
+            if access_corridor(self, geom, routed=False) is not None:  # ...a straight one or one round the gable (`landlocked`)
                 tight["own_way"] = True
                 return False
             geom["passage"] = passage

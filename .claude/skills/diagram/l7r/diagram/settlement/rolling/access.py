@@ -461,12 +461,13 @@ def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
     return (door[0] - ux * t, door[1] - uy * t)
 
 
-def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
+def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, ...] | None:
     """The corridor this homestead would be admitted with: from a dooryard door to the first of the tree's nearest points
     that a clear strip reaches (`corridor_clear`) - straight, or, where the tree lies behind the house, from a flank door
     carried past the gable first (`round_the_gable`), two legs, or - on a tree that routes (`AccessTree.routed`, the
     nucleated seating's) - routed round what stands (`route.routed_corridors`), at most `ROUTE_LEGS` legs. None when none
-    of these is admitted - the seat is refused (the ONE predicate the placer reads and its test reads).
+    of these is admitted - the seat is refused (the ONE predicate the placer reads and its test reads). `routed` False asks
+    the straight and round-the-gable corridors alone: the passage's question of a way of its own (`passage.landlocked`).
 
     THE SEARCH IS SHARED BY THE HOMESTEADS THAT SHARE ITS HOUSE AND YARD, while nothing standing changes (`_standing_memo`):
     the four garden sides of one seat have the same doors, the same gable and the same house, and differ only in their
@@ -477,6 +478,7 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
     Research:
         seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane but the few reached across a neighbor's yard, for whom finding none is the custom's condition (`passage.landlocked`)
         routed where none is straight - research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, on the nucleated tree, round what stands (`route.routed_corridors`)
+        a way of its own without the routed search - CANON: the GM's ruling of 2026-10-03, the passage asks the straight and round-the-gable corridors alone (`routed` False)
     """
     tree = getattr(s, "_access", None)
     if tree is None:
@@ -498,6 +500,8 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
             seen.append(nxt)
         corridor = seen[k]
         k += 1
+        if corridor is ROUTE_LATER and not routed:
+            return None  # ...the routed corridors follow the marker, and the passage does not search for one (the GM, 2026-10-03)
         if corridor is not ROUTE_LATER and (drawn := admitted(s, corridor, geom, memo)) is not None:
             return drawn
 

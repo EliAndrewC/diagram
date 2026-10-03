@@ -196,9 +196,9 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     monkeypatch.setattr(fit, "passage_of", lambda s, g: None)
     assert not s.try_place(1000.0, 1100.0, "plain"), "this layout's walk: none - refused"
     monkeypatch.setattr(fit, "passage_of", lambda s, g: {"walk": walk, "of": (600.0, 700.0), "depth": 1})
-    monkeypatch.setattr(fit, "access_corridor", lambda s, g: ((1000.0, 1080.0), (1000.0, 450.0)))
+    monkeypatch.setattr(fit, "access_corridor", lambda s, g, routed=True: ((1000.0, 1080.0), (1000.0, 450.0)))
     assert not s.try_place(1000.0, 1100.0, "plain"), "a corridor of its own from this layout: refused"
-    monkeypatch.setattr(fit, "access_corridor", lambda s, g: None)
+    monkeypatch.setattr(fit, "access_corridor", lambda s, g, routed=True: None)
     s._tight_of = {**tight, "own_way": False}  # a fresh seat's word, as the growth gives each seat
     assert s.try_place(1000.0, 1100.0, "plain"), "a passage and no corridor: seated"
     rec = s.M["houses"][-1]
@@ -220,8 +220,8 @@ def test_a_household_with_a_way_of_its_own_on_the_finished_seating_loses_its_pas
     s.placed.append(geom["bbox"])
     asked: list[bool] = []
 
-    def corridor(s: Settlement, g: dict) -> tuple | None:
-        asked.append(all(b is not g["bbox"] for b in s.placed))
+    def corridor(s: Settlement, g: dict, routed: bool = True) -> tuple | None:
+        asked.append(all(b is not g["bbox"] for b in s.placed) and not routed)  # ...and as `landlocked` asks it, unrouted
         return ((500.0, 680.0), (500.0, 450.0)) if len(asked) > 1 else None
 
     monkeypatch.setattr(passage, "access_corridor", corridor)
@@ -338,26 +338,42 @@ def test_a_seat_where_one_layout_has_a_way_of_its_own_is_refused_for_every_layou
     s._passage_left = 1
     asked: list[int] = []
     monkeypatch.setattr(fit, "passage_of", lambda s, g: asked.append(1) or {"walk": ((0.0, 0.0), (1.0, 0.0)), "of": (600.0, 700.0), "depth": 1})
-    monkeypatch.setattr(fit, "access_corridor", lambda s, g: ((0.0, 0.0), (0.0, -1.0)))
+    monkeypatch.setattr(fit, "access_corridor", lambda s, g, routed=True: ((0.0, 0.0), (0.0, -1.0)))
     assert not s._parts_fit(geom) and tight["own_way"] and asked == [1], "a way of its own from this layout"
     assert not s._parts_fit(geom) and asked == [1], "...so the next is refused without its walk asked"
 
 
 def test_a_household_is_landlocked_only_where_some_layout_walks_and_none_has_a_way(monkeypatch: pytest.MonkeyPatch) -> None:
     """`landlocked` (feature 317, research R8): the household's land, not one layout - a walk from some layout, a corridor from
-    none; the walks asked first."""
+    none; the corridors asked first, straight or round the gable only (the GM's ruling of 2026-10-03: no routed search)."""
     asked: list[str] = []
     walks = {"a": None, "b": {"walk": ()}}
     ways = {"a": None, "b": None}
     monkeypatch.setattr(passage, "passage_of", lambda s, g: asked.append("walk") or walks[g["id"]])
-    monkeypatch.setattr(passage, "access_corridor", lambda s, g: asked.append("way") or ways[g["id"]])
+    monkeypatch.setattr(passage, "access_corridor", lambda s, g, routed=True: asked.append("way" if not routed else "routed") or ways[g["id"]])
     lays = [{"id": "a"}, {"id": "b"}, None, {"id": "a", "unlaid": True}]
     assert passage.landlocked(None, lays), "b walks, neither has a way"
+    assert asked == ["way", "way", "walk", "walk"], "both layouts' unrouted corridors, then the walks until one is found"
     ways["a"] = ((0.0, 0.0), (1.0, 0.0))
-    assert not passage.landlocked(None, lays), "a has a way of its own: the land is not landlocked"
-    walks["b"] = None
     asked.clear()
-    assert not passage.landlocked(None, lays) and "way" not in asked, "no walk from any layout: no corridor asked"
+    assert not passage.landlocked(None, lays) and asked == ["way"], "a has a way of its own: no walk asked"
+    ways["a"], walks["b"] = None, None
+    assert not passage.landlocked(None, lays), "no walk from any layout: not landlocked"
+
+
+def test_the_passage_asks_no_routed_corridor(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`access_corridor`, `routed` False (the GM's ruling of 2026-10-03): the candidates after the routed marker (`ROUTE_LATER`)
+    are not asked - a household that only a path bending round the homesteads would reach has no way of its own."""
+    from l7r.diagram.settlement.rolling import access
+
+    s = _open()
+    _pair(s)
+    route = ((0.0, 0.0), (5.0, 5.0), (5.0, 9.0))
+    monkeypatch.setattr(access, "_house_candidates", lambda s, tree, g: iter([access.ROUTE_LATER, route]))
+    monkeypatch.setattr(access, "admitted", lambda s, c, g, memo: c)
+    geom = s._bundle_geom(900.0, 900.0, 46.0, 28.0, "SE", rot=0.0)
+    assert access.access_corridor(s, geom, routed=False) is None, "the routed corridor is not sought"
+    assert access.access_corridor(s, geom) == route, "the seating's own question still routes"
 
 
 def test_a_layout_s_walk_is_searched_once_a_seat(monkeypatch: pytest.MonkeyPatch) -> None:
