@@ -31,3 +31,6 @@
 - round 4, source-applicability kotobank: MISSING 1 (Heibonsha's caution on one national series, 'almost all' plans) and OVERSTATED 1 ('two' not 'several') applied
 - round 4, source-reader: kotobank READ 4 (0244's 'between the posts / over them' cut to the page's posts-shown / posts-plastered-in); nihonminkaen-kanto READ 2 (the cut projection named in the gloss, 'beside it' cut); minami-alps READ 5 (the gloss honest); ikegami READ 4; mingu READ 4
 - round 4, translation-check: 0117 and 0244 FAITHFUL; 0029 LOOSE 1 - 'the house of an upper-class farming family' applied
+- round 5, quote-check: 0029 page PARTIAL 1 (the survivors' size range scoped to the five Nihon Minka-en houses); 0029 drawing clean (a missing space between two yamamoto quotes fixed); 0117 PARTIAL 1 ('heavy' cut - neither storehouse was both heavy and plastered); 0244 clean
+- round 5, record-format 0029/0117/0244 clean; translation-check 0029 FAITHFUL 4; source-reader nihon-no-minka READ 4, nihonminkaen-kanto READ 2 (its 二つ屋根の家 could replace the bunto reading later - optional)
+- round 5, source-applicability kotobank: MISSING 1 - small farmhouses kept simple, often one-room plans - applied
