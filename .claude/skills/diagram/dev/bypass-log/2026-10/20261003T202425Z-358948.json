@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T20:24:25Z",
+  "target": "record-checked",
+  "commit": "3b1c35aef",
+  "why": "modal-references on modal-references:hamlet/farmhouse: unit renamed by D12, modal text unchanged"
+}

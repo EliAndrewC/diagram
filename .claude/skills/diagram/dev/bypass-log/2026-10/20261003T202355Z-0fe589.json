@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-03T20:23:55Z",
+  "target": "record-checked",
+  "commit": "3b1c35aef",
+  "why": "record-format on record-format:0029: the check's own cut applied verbatim, removing a repeated clause only"
+}
