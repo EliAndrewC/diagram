@@ -135,6 +135,17 @@ def taut(pts: Sequence[Pt], leg_ok: Callable[[Pt, Pt], bool], turns_back: Callab
     return tuple(out) if len(out) - 1 <= most else None
 
 
+def tree_in_reach(segs: Sequence[tuple[Pt, Pt]], door: Pt, reach: float) -> bool:
+    """Does any of the tree's segments come within the square `reach` about `door` (bounding boxes overlapping)? A route search's
+    every grid point lies within `ROUTE_REACH_PX` of its door on each axis and its goal within a step of a segment
+    (`_cells_to_tree`'s `goal_of`), so where none does, no route can be found.
+
+    Research: search breadth - NONE: an exact prefilter of the route search, the same verdict
+    """
+    x0, y0, x1, y1 = door[0] - reach, door[1] - reach, door[0] + reach, door[1] + reach
+    return any(max(a[0], b[0]) >= x0 and min(a[0], b[0]) <= x1 and max(a[1], b[1]) >= y0 and min(a[1], b[1]) <= y1 for a, b in segs)
+
+
 def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:
     """The routed paths from the homestead's two dooryard doors (`doors_of`: the forecourt, the yard's far edge), each searched
     once while nothing standing changes (`_standing_memo`).
@@ -213,6 +224,11 @@ def _route_from(
     """
     from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard
 
+    # ...NOT SEARCHED WHERE NO BRANCH OF THE TREE COMES WITHIN ITS REACH (feature 317, research R10): such a search can find no
+    # goal, and it explored its whole box before failing - 348 of seed 47's 509 failed searches at 40 households, 80% of the cells
+    # they opened. The same verdict, decided before the search
+    if not tree_in_reach(tree.segs, door, int(ROUTE_REACH_PX / step) * step + step):
+        return None
     found = _cells_to_tree(s, tree, door, mine, half, hgap, fg, wood, placed, step, geom)
     if found is None:
         return None
