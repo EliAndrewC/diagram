@@ -70,3 +70,14 @@ def test_the_count_short_of_the_roll_is_laid_at_households_without_a_tree() -> N
     off = Settlement(2000, 2000, seed=1)
     off.meta(name="P", scale="hamlet", ftpx=1)
     assert reseat_persimmons(off, [_house(1000.0, 1000.0)], 1, FixtureForms()) == 0
+
+
+def test_a_household_whose_dooryard_has_no_seat_takes_none_and_the_next_is_offered(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    from l7r.diagram.hamletgen.homesteads import persimmon_reseat
+
+    s = _hamlet()
+    a, b = _house(1000.0, 1000.0), _house(1400.0, 1400.0)
+    s.M["houses"] = [a, b]
+    monkeypatch.setattr(persimmon_reseat, "_persimmon", lambda *args: None)
+    assert persimmon_for(s, a, FixtureForms()) is None, "no seat in its dooryard"
+    assert reseat_persimmons(s, s.M["houses"], 1, FixtureForms()) == 0 and not a["fixtures"] and not b["fixtures"]

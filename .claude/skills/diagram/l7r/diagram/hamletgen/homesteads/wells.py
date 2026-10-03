@@ -82,8 +82,9 @@ law's zigzag turn (50 degrees) less a margin, so a bend the street may yet be st
 
 
 def street_turns_at(line: Sequence[Pt], arc: Sequence[float], u: float, look: float) -> float:
-    """How far, in degrees, the street `line` (its running lengths `arc`) turns between `look` before the point `u` along it
-    and `look` after."""
+    """How far, in degrees, the street `line` (its running lengths `arc`) turns on either side of the point `u` along it - the
+    larger of its turn from `look` before to `u` and from `u` to `look` after. Either side alone, not end to end: a step in
+    the street turns one way and back, and its two turns cancel between the far ends."""
 
     def heading(at: float) -> float:
         at = max(0.0, min(arc[-1], at))
@@ -91,8 +92,11 @@ def street_turns_at(line: Sequence[Pt], arc: Sequence[float], u: float, look: fl
         a, b = line[k], line[k + 1]
         return math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
 
-    turn = abs(heading(u + look) - heading(u - look)) % 360.0
-    return min(turn, 360.0 - turn)
+    def between(p: float, q: float) -> float:
+        turn = abs(heading(q) - heading(p)) % 360.0
+        return min(turn, 360.0 - turn)
+
+    return max(between(u - look, u), between(u, u + look))
 
 
 def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets: Sequence[Sequence[Pt]]) -> int:
