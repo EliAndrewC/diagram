@@ -9,6 +9,16 @@
   "verifies": "F1",
   "answers": "86f173b401a2"
  },
+ "gc-hb-f6-page": {
+  "value": 1,
+  "unit": "paragraph",
+  "quantity": "the drawing page's first paragraph now describes the mark the SVG draws: 'paired culm strokes and a leafy fork in jade green, jittered on a 7 ft grid over a light jade wash' (the SVG's #2F8F4E / #4BA35F strokes over an 18% #2F8F4E wash); the 'pale yellow-green ... no fill' text the finding quoted is gone",
+  "source": "research/questions/0075-bamboo-groves-chikurin.drawing.html at d7c5fb007, line 6, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--homestead-bamboo",
+  "verifies": "F6",
+  "answers": "bf15b1649ecb"
+ },
  "gc-fh-f7-notes": {
   "value": 1,
   "unit": "entry",
