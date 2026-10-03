@@ -62,11 +62,7 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
         # ...and out of every neighbor's plots' sun, asked of each seat the search tries (feature 317): asked only of the seat it
         # chose, the search stopped at the first and the household gave the tree up, where a later seat shaded no one (Inashiro,
         # moved by the feature, kept 11 of 12 rolled)
-        return (
-            sunlit(lx, ly, r)
-            and not any(over_a_conifer(cx, cy, cr, [(wx, wy, r)]) for cx, cy, cr in cones)
-            and not s._persimmon_shades_a_neighbor(g, (wx, wy, 0.0, 0.0), crown, shade)
-        )
+        return sunlit(lx, ly, r) and not any(over_a_conifer(cx, cy, cr, [(wx, wy, r)]) for cx, cy, cr in cones) and not s._persimmon_shades_a_neighbor(g, (wx, wy, 0.0, 0.0), crown, shade)
 
     front = s._hjit(hx, hy, SALT["persimmon"] + 0.5) < forms.persimmon_front
     # ...ITS ROLLED SIDE OF THE HOUSE FIRST, THEN THE OTHER (feature 317): the tree is the hamlet's rolled count's, given here to
