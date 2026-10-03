@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "b29a79cca46a9ad5362fe3263d0037cfe69ae5aa65aee30e89d51eeb1ca6685d",
+ "plan_sha256": "2f258bdce6a45e9875e124b7308785d75e68d3d5fd3ab3f1a5d2550df472d941",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -40,14 +40,21 @@
    "summary": "Tight seats offered only within TIGHT_BEARING_DEG 112.5 of the bearing from the house to its yard (front and flanks), not behind it",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "A narrowing: the research's condition (land with no road access) says nothing of which side of the neighbor's house it lies, so a household behind its neighbor's house can no longer be the one reached by passage. Legitimate on the spec's OWN rules, not on cost: FR-002 requires the walk never cross a house, bed, shed or fixture, and D2-walk keeps it on the two households' land, so from behind the house it must pass the house's flank clear of the beds and fixtures that stand there. Measured with every bearing offered (research R7, observed 2026-10-03): 1 walk to the yard found in 194 tries behind against 15 of 16 passages from within 90 degrees. The excluded sector is all but emptied by FR-002 itself; the restriction carries no historical claim (labeled a search breadth); a household behind its neighbor that finds a way of its own is not land the custom covers (D2-order); and 12 passage households on 8 of 13 settlements remain, so the purpose of US2 is not gutted. Cost is NOT the ground: the plan's 'offered there too the tight seats cost the homesteads stage 12-35%' is the whole every-bearing form against no passage (R7 row 1), and the yard-side form alone measured +18%, inside that range - the behind sector's own cost is not shown. That sentence must be restated as what R7 measured (the tries and the yield)."
+   "why": "A narrowing: the research's condition (land with no road access) says nothing of which side of the neighbor's house it lies. Legitimate on the spec's OWN rules, not on cost: FR-002 forbids the walk crossing a house, bed, shed or fixture and D2-walk keeps it on the two households' land, so from behind the house it must pass the flank clear of what stands there; measured with every bearing offered (R7): 1 walk found in 194 tries behind, 15 of 16 passages within 90 degrees. The excluded sector is all but emptied by FR-002 itself and US2's purpose is not gutted. The previous round's item (a cost sentence R7 did not support) is closed: the plan now states only what R7 measured."
+  },
+  {
+   "id": "D2-tree-cut",
+   "summary": "No tight seat offered within TIGHT_TREE_FT (80 ft) of the access tree",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: it is a distance proxy for the custom's condition, not the condition, so in principle a household near the tree that is nonetheless shut in by its neighbors could no longer be reached by passage; the record says nothing of distance to a way. Legitimate on the same ground as D2-tight-yard-side: the excluded zone is emptied by the request's own research condition as D2-order applies it (a household with a way of its own is not land the custom covers). Measured (R8, 15 households, 13 settlements): no passage from nearer than 87 ft; of 135 of 343 tight tries nearer than 80 ft, every walk found (9 of 9) had a corridor of its own - so the cut removes no household the custom covers on the measured run, and passages remain (7 at 15 households, 8 at 40). It is not a historical claim and must not be recorded as one (the constant's comment and R2 brief: a search breadth, measured). Caveat for the record: R8 measured it at 15 households only; the plan's sentence omits that scope."
   },
   {
    "id": "D2-own-way",
    "summary": "Once one garden layout at a tight seat finds a corridor, the seat's other layouts are refused unasked",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrower than a per-layout verdict: a layout whose beds block its own way, with a walk, is refused because another layout at the seat has a way. Legitimate on the same ground as D2-order: Wigmore's condition is the LAND's - land that cannot reach the highway without passing over another's - and the plan's land is the seat's reach over every garden layout (D2-adjoin). A seat from which a way of its own exists is land with road access; a garden arrangement that blocks one's own path does not make the land landlocked. Note: the plan's and fit.py's '93 of 106 corridor searches after a walk' appears nowhere in research R7 (R7: 55 asked, 43 found; R6: 90 asked, 75 found); record it or correct it."
+   "why": "Legitimate on the same ground as D2-order: Wigmore's condition is the LAND's - land that cannot reach the highway without passing over another's - and a seat from which some garden layout has a way of its own is land with road access. The previous round's item (93 of 106 not in R7) is closed: R7 now records 106 found, 93 corridors after a walk. Now subsumed by D2-land."
   },
   {
    "id": "D2-adjoin",
@@ -66,6 +73,13 @@
    "summary": "At a tight seat the walk is asked first, then the corridor; the same verdict",
    "class": "within",
    "why": "Unchanged: evaluation order with an identical verdict."
+  },
+  {
+   "id": "D2-land",
+   "summary": "THE LAND, NOT ONE LAYOUT (passage.landlocked): a tight seat is taken only where some layout has a walk and none has a corridor of its own, asked once a seat before any layout is judged",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing of what the engine admits (R8: 13 -> 7 passages at 15 households; 20 -> 8 at 40), but not of what was asked: request.md says 'if that is what the research bears out, then we should go with it', and every Wigmore entry the spec cites conditions passage on LAND that 'cannot reach the highway without passing over' another's. A household one of whose garden layouts has a way of its own is on land with road access; admitting it because the first layout tried blocked its own path made the passage depend on evaluation order, which the research does not support. This completes D2-own-way (ruled LEGITIMATE) rather than adding a new limit, and R8 shows the 13 earlier passage households all reached the tree round their house alone (house_reaches) - none was shut in by neighbors. FR-002's 'MUST be able to seat' still holds (7 and 8 passages). Not cost-motivated."
   },
   {
    "id": "D3",
@@ -87,9 +101,9 @@
   },
   {
    "id": "D6",
-   "summary": "The corridor judged as drawn (tree.as_joined, the box prefilter); the route per layout round its own parts, kept because it pays; seed 18 closed by tree.laid_run / own_clear",
+   "summary": "The corridor judged as drawn (tree.as_joined, the box prefilter); the route per layout round its own parts, kept because it pays; seed 18 closed by tree.laid_run / own_clear; and, against main (R8): the joint's pull refused into a kink (seed 47 at 20 hh), route.house_reaches once a seat (exact), the persimmon left out of the route search's obstacles with the taut pull's leg tests keeping its trunk clear (seed 39 at 40 hh)",
    "class": "within",
-   "why": "Unchanged: FR-004, SC-003, FR-005, FR-006."
+   "why": "FR-004, SC-003, FR-005, FR-006, FR-007. The three additions are regressions found against main and closed (FR-005, FR-007: a bug found later joins the list) and an exact shortcut; none changes what a household may be or how it is reached. The persimmon change keeps the trunk clear through the leg tests, so no rule the request or spec set is relaxed."
   },
   {
    "id": "D7",
