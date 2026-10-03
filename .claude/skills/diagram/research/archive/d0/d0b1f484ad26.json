@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:17:13+00:00",
+ "final_url": "https://www.jstage.jst.go.jp/article/jgeography/132/3/132_132.197/_article/-char/ja/",
+ "first": "d0/d0b1f484ad26/20261003T011712Z",
+ "gm_copies": [],
+ "keys": [
+  "kamishina-2023-kanto-shuson-yashikirin"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "d0/d0b1f484ad26/20261003T011712Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "6246a33092f9ab7894fa4014190f4a8a771a5a2f42389b87bf4a7e90daecf234",
+ "url": "https://www.jstage.jst.go.jp/article/jgeography/132/3/132_132.197/_article/-char/ja/"
+}

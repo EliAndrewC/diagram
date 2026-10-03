@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:19:13+00:00",
+ "final_url": "",
+ "first": "0c/0c6f1d81a17a/20261003T011913Z",
+ "gm_copies": [],
+ "keys": [
+  "katsuno-hayama-1987"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "0c/0c6f1d81a17a/20261003T011913Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://www.jstage.jst.go.jp/article/jila1934/50/5/50_5_191/_pdf"
+}

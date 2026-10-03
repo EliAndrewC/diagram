@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:42:24+00:00",
+ "final_url": "https://web.archive.org/web/2024id_/https://www.atariya.net/kiso/nisho.htm",
+ "first": "7a/7a20a7d83d7c/20261003T014224Z",
+ "gm_copies": [],
+ "keys": [
+  "atariya-vegetable-sunlight"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "7a/7a20a7d83d7c/20261003T014224Z",
+ "reason": "HTTP 429",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://web.archive.org/web/2024id_/https://www.atariya.net/kiso/nisho.htm"
+}

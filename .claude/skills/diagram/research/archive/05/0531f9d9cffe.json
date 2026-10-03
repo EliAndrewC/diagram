@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:06:42+00:00",
+ "final_url": "https://web.archive.org/web/20250807191144id_/http://www.senjuji.or.jp/sisetsu/shoro.php",
+ "first": "05/0531f9d9cffe/20261003T020642Z",
+ "gm_copies": [],
+ "keys": [
+  "senjuji-shoro"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "05/0531f9d9cffe/20261003T020642Z",
+ "reason": "APIRequestContext.get: connect ENETUNREACH 64:ff9b::cae5:8683:443 - Local (:::0)",
+ "revision": "",
+ "sha256": "dd60893e4d92615395d0a0b279156317c60eb13767d85b0a567fda0877f23469",
+ "url": "https://senjuji.or.jp/sisetsu/shoro.php"
+}

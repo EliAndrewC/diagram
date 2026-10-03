@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:55:19+00:00",
+ "final_url": "",
+ "first": "30/30a7de43987a/20261003T005519Z",
+ "gm_copies": [],
+ "keys": [
+  "bunka-yano-naya"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "30/30a7de43987a/20261003T005519Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://bunka.nii.ac.jp/heritages/detail/181063"
+}

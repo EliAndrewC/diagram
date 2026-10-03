@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:08:54+00:00",
+ "final_url": "https://iijimajinya.hatenablog.com/entry/2024/04/30/142115",
+ "first": "8e/8e2dd846e499/20261003T010854Z",
+ "gm_copies": [],
+ "keys": [
+  "iijima-jinya-nikki-daikan"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "8e/8e2dd846e499/20261003T010854Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "eace83fe124046fef8ec00900f6359a14d17e0c817316d9859bc8d0e170e3d0b",
+ "url": "https://iijimajinya.hatenablog.com/entry/2024/04/30/142115"
+}

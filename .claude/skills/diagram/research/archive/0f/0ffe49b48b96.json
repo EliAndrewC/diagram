@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:05:50+00:00",
+ "final_url": "https://web.archive.org/web/20250406182655id_/https://www.pref.chiba.lg.jp/kyouiku/bunkazai/bunkaisan/keikan/edogawa.html",
+ "first": "0f/0ffe49b48b96/20261003T020550Z",
+ "gm_copies": [],
+ "keys": [
+  "chiba-kyoiku-tone-edogawa"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "0f/0ffe49b48b96/20261003T020550Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND pref.chiba.lg.jp",
+ "revision": "",
+ "sha256": "ef7b37e2596b55cb94541148949636a30b440b81a66d1244d8365e557dc6a825",
+ "url": "https://pref.chiba.lg.jp/kyouiku/bunkazai/bunkaisan/keikan/edogawa.html"
+}

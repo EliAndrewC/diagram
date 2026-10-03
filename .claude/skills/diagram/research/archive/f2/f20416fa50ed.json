@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:13:31+00:00",
+ "final_url": "https://wlj.nanjing.gov.cn/ztzl/mcq/syyj/202309/t20230905_4003568.html",
+ "first": "f2/f20416fa50ed/20261003T021331Z",
+ "gm_copies": [],
+ "keys": [
+  "nanjing-wlj-shouxian-chengqiang"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "f2/f20416fa50ed/20261003T021331Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "682a7d441ccdb35e7a02665372c4e9af05a20e1a70438a3953942f29374fa942",
+ "url": "https://wlj.nanjing.gov.cn/ztzl/mcq/syyj/202309/t20230905_4003568.html"
+}

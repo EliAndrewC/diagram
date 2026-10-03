@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:11:38+00:00",
+ "final_url": "https://web.archive.org/web/20240903113436id_/https://www.jstage.jst.go.jp/article/journalcpij/43.2/0/43.2_1/_article/-char/ja/",
+ "first": "0f/0f10a2f51563/20261003T011138Z",
+ "gm_copies": [],
+ "keys": [
+  "kitaoka-miyawaki-2008-taito-temple-town"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "0f/0f10a2f51563/20261003T011138Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jstage.jst.go.jp",
+ "revision": "",
+ "sha256": "d08a86cda27e2d786906e07aa94b32f6e45352f07caad79d7687905e1a6f79e3",
+ "url": "https://jstage.jst.go.jp/article/journalcpij/43.2/0/43.2_1/_article/-char/ja"
+}

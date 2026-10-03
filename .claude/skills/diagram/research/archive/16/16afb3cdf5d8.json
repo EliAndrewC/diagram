@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:56:41+00:00",
+ "final_url": "https://web.archive.org/web/20251216001809id_/https://www.jsw.com.cn/2023/0423/1780424.shtml",
+ "first": "16/16afb3cdf5d8/20261003T015641Z",
+ "gm_copies": [],
+ "keys": [
+  "jsw-jiaoshan-dinghuisi"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "16/16afb3cdf5d8/20261003T015641Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jsw.com.cn",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://jsw.com.cn/2023/0423/1780424.shtml"
+}

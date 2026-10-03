@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:02:02+00:00",
+ "final_url": "https://www.gz.gov.cn/zlgz/whgz/content/post_8791801.html",
+ "first": "c4/c495c6ed24a5/20261003T020202Z",
+ "gm_copies": [],
+ "keys": [
+  "gz-gov-daling-village-2023"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "c4/c495c6ed24a5/20261003T020202Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "a8f3a6e384cd452a76604fdc9752c9cbc412a6c7ad65900841daf70cf3d0079b",
+ "url": "https://www.gz.gov.cn/zlgz/whgz/content/post_8791801.html"
+}

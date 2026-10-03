@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:51:07+00:00",
+ "final_url": "",
+ "first": "c2/c21183fc7eba/20261003T005107Z",
+ "gm_copies": [],
+ "keys": [
+  "kato-2022-hikone-shirobito"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "c2/c21183fc7eba/20261003T005107Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://shirobito.jp/article/1670"
+}

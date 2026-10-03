@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:10:07+00:00",
+ "final_url": "https://web.archive.org/web/20230630204727id_/https://tama-meguri.com/blog/2022/07/04/5/15224/",
+ "first": "39/39929b99dd04/20261003T021006Z",
+ "gm_copies": [],
+ "keys": [
+  "hino-yosui-zeki-tama-meguri"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "39/39929b99dd04/20261003T021006Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "98a42ca4bba53418043ed680086b6b3a30d88fd729900c2bb2815c5fd6ab6fb7",
+ "url": "https://tama-meguri.com/blog/2022/07/04/5/15224"
+}

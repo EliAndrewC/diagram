@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:48:50+00:00",
+ "final_url": "https://web.archive.org/web/20260414211045id_/https://www.city.nagaokakyo.lg.jp/cmsfiles/contents/0000005/5235/hurusatofile16.pdf",
+ "first": "8a/8a964d60528a/20261003T014850Z",
+ "gm_copies": [],
+ "keys": [
+  "nagaokakyo-muraoki-2004"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "8a/8a964d60528a/20261003T014850Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND city.nagaokakyo.lg.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://city.nagaokakyo.lg.jp/cmsfiles/contents/0000005/5235/hurusatofile16.pdf"
+}

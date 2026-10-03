@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:04:26+00:00",
+ "final_url": "https://www.kagoshima-kankou.com/guide/11053",
+ "first": "f6/f6ad8fbf23ea/20261003T020426Z",
+ "gm_copies": [],
+ "keys": [
+  "kagoshima-tabi-chiran-bukeyashiki-teien"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "f6/f6ad8fbf23ea/20261003T020426Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "4afe3a751f0785670de86d91b7bec0622079b31d65b35279977129c8023c46e9",
+ "url": "https://www.kagoshima-kankou.com/guide/11053"
+}

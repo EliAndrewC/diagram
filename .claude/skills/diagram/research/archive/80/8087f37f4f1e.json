@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:56:37+00:00",
+ "final_url": "https://www.sohu.com/a/360020475_120209830",
+ "first": "80/8087f37f4f1e/20261003T005637Z",
+ "gm_copies": [],
+ "keys": [
+  "sohu-gaoyang-xianzhi-jiucheng"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "80/8087f37f4f1e/20261003T005637Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "66956d8dea24fcad81963f022502f0d37ffc9e4f40afef3c50f405f611d5a495",
+ "url": "https://www.sohu.com/a/360020475_120209830"
+}

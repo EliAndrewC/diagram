@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:43:22+00:00",
+ "final_url": "https://web.archive.org/web/20260217083157id_/https://www.nihonminkaen.jp/tohoku.html",
+ "first": "89/895b8616bd7c/20261003T014322Z",
+ "gm_copies": [],
+ "keys": [
+  "nihonminkaen-tohoku"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "89/895b8616bd7c/20261003T014322Z",
+ "reason": "APIRequestContext.get: socket hang up",
+ "revision": "",
+ "sha256": "d53618215212809be97326e9094391d0a4d879e1bc1793fbd7fc8b4e230d98d5",
+ "url": "https://www.nihonminkaen.jp/tohoku.html"
+}

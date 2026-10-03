@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:26:45+00:00",
+ "final_url": "https://www.resci.cn/CN/lexeme/showArticleByLexeme.do?articleID=49240",
+ "first": "0d/0d65a734f991/20261003T022645Z",
+ "gm_copies": [],
+ "keys": [
+  "chen-2021-foshan-jitang"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "0d/0d65a734f991/20261003T022645Z",
+ "reason": "HTTP 500",
+ "revision": "",
+ "sha256": "0ba7a095783ee220c3be0eb4795214961ba0d83b3c267d525a31533b7f56672d",
+ "url": "https://www.resci.cn/CN/lexeme/showArticleByLexeme.do?articleID=49240"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:41:49+00:00",
+ "final_url": "https://web.archive.org/web/20220615223249id_/https://web.archive.org/web/20070124042747/http://int.kateigaho.com/spr05/forests-sacred.html",
+ "first": "7b/7b88c455f7a3/20261003T014149Z",
+ "gm_copies": [],
+ "keys": [
+  "kateigaho-sacred-forests"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "7b/7b88c455f7a3/20261003T014149Z",
+ "reason": "HTTP 429",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://web.archive.org/web/20070124042747/http://int.kateigaho.com/spr05/forests-sacred.html"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:37:17+00:00",
+ "final_url": "https://k-rain.repo.nii.ac.jp/record/2480/files/bunotsu_298.pdf",
+ "first": "2e/2e7739a74013/20261003T013717Z",
+ "gm_copies": [],
+ "keys": [
+  "fuyutsuki-2023-kaso-jinja"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "2e/2e7739a74013/20261003T013717Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "f3f3a2b772fc88392c6efc02d9c01c222d22aea9c87dbcf32ee591d8beaa2ae9",
+ "url": "https://k-rain.repo.nii.ac.jp/record/2480/files/bunotsu_298.pdf"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:12:09+00:00",
+ "final_url": "https://web.archive.org/web/20250409015550id_/https://www.jstage.jst.go.jp/article/ajg/2009f/0/2009f_0_96/_article/-char/ja/",
+ "first": "dd/dd962239db22/20261003T011209Z",
+ "gm_copies": [],
+ "keys": [
+  "yamamoto-urayama-shibuya-2009-ishigaki-hogorin"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "dd/dd962239db22/20261003T011209Z",
+ "reason": "APIRequestContext.get: read ECONNRESET",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://www.jstage.jst.go.jp/article/ajg/2009f/0/2009f_0_96/_article/-char/ja/"
+}

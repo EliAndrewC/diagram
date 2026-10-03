@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:11:36+00:00",
+ "final_url": "https://web.archive.org/web/20241026202945id_/https://www.wxrb.com/doc/2024/10/24/371610.shtml",
+ "first": "e9/e9a1e0d34858/20261003T021136Z",
+ "gm_copies": [],
+ "keys": [
+  "wxrb-qinxiang-old-street"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "e9/e9a1e0d34858/20261003T021136Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "79cd5d958ddd4ec5c6864bd9b41eb0f218ad0180c386455953cc00ae8b5a74a1",
+ "url": "https://wxrb.com/doc/2024/10/24/371610.shtml"
+}

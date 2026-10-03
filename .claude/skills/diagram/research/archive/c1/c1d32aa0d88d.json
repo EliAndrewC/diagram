@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:25:14+00:00",
+ "final_url": "https://www.nta.go.jp/about/organization/ntc/sozei/tokubetsu/h30shiryoukan/01.htm",
+ "first": "c1/c1d32aa0d88d/20261003T012514Z",
+ "gm_copies": [],
+ "keys": [
+  "nta-kenchi-h30"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "c1/c1d32aa0d88d/20261003T012514Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "73981bbf640c1fd1c0abfb3b31ec44cfbdc3dea15b802ab010f698836af27681",
+ "url": "https://www.nta.go.jp/about/organization/ntc/sozei/tokubetsu/h30shiryoukan/01.htm"
+}

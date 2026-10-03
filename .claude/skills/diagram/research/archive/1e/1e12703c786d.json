@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:10:58+00:00",
+ "final_url": "https://web.archive.org/web/20250918080454id_/http://www.tokyo-jinjacho.or.jp/goshahou/sekizoutorii/",
+ "first": "1e/1e12703c786d/20261003T021058Z",
+ "gm_copies": [],
+ "keys": [
+  "tokyo-jinjacho-takada-hikawa-torii"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "1e/1e12703c786d/20261003T021058Z",
+ "reason": "APIRequestContext.get: write EPROTO 000E8B11DE720000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://tokyo-jinjacho.or.jp/goshahou/sekizoutorii"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:47:18+00:00",
+ "final_url": "https://web.archive.org/web/20260214124229id_/https://baike.baidu.com/item/%E5%8F%A4%E6%88%8F%E5%8F%B0/8796741",
+ "first": "7c/7ce1cb0dccdf/20261003T014718Z",
+ "gm_copies": [],
+ "keys": [
+  "baike-gu-xitai"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "7c/7ce1cb0dccdf/20261003T014718Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "4fad9181193b155397bf2647ca7fdb37509b55693f9b6042b90fff4bb17e9d0d",
+ "url": "https://baike.baidu.com/item/古戏台/8796741"
+}

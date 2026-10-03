@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:28:58+00:00",
+ "final_url": "https://archive.org/stream/authenticaccount01stau/authenticaccount01stau_djvu.txt",
+ "first": "fc/fc6f012f54bd/20261003T012858Z",
+ "gm_copies": [],
+ "keys": [
+  "staunton-1797-authentic-account"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "fc/fc6f012f54bd/20261003T012858Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "06de173b47f7b4cd3541de2315d2061cd0026b193842d13724f91c60396ccd94",
+ "url": "https://archive.org/stream/authenticaccount01stau/authenticaccount01stau_djvu.txt"
+}

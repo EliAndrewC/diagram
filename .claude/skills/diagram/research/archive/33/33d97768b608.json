@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:38:05+00:00",
+ "final_url": "https://web.archive.org/web/20260902105851id_/https://www.pref.shiga.lg.jp/file/attachment/4040488.pdf",
+ "first": "33/33d97768b608/20261003T013805Z",
+ "gm_copies": [],
+ "keys": [
+  "shiga-jori-jiwari"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "33/33d97768b608/20261003T013805Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND pref.shiga.lg.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://pref.shiga.lg.jp/file/attachment/4040488.pdf"
+}

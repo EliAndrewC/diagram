@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:54:32+00:00",
+ "final_url": "https://shirobito.jp/article/677",
+ "first": "ed/ed7ebfc2e51d/20261003T005432Z",
+ "gm_copies": [],
+ "keys": [
+  "kato-shirobito-gokenin-yakata"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "ed/ed7ebfc2e51d/20261003T005432Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "4f547ce2205391c459efd7d233f8d5936df50d16aa833334fca8c5a9f82381d1",
+ "url": "https://shirobito.jp/article/677"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:43:54+00:00",
+ "final_url": "",
+ "first": "aa/aa4e971cf450/20261003T004354Z",
+ "gm_copies": [],
+ "keys": [
+  "kintaikyo-jawiki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "aa/aa4e971cf450/20261003T004354Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://ja.wikipedia.org/wiki/錦帯橋"
+}

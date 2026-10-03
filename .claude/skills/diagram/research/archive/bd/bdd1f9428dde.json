@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:47:49+00:00",
+ "final_url": "https://web.archive.org/web/20260810063801id_/https://www.nichibun.ac.jp/cgi-bin/YoukaiDB3/youkai_card.cgi%3FID%3DC0410160-000",
+ "first": "bd/bdd1f9428dde/20261003T014749Z",
+ "gm_copies": [],
+ "keys": [
+  "nichibunken-yokai-plant-taboo"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "bd/bdd1f9428dde/20261003T014749Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND nichibun.ac.jp",
+ "revision": "",
+ "sha256": "79dfd4083a8c159697b6b97472a74c813393fb6e36841a39128a6c5931b54492",
+ "url": "https://nichibun.ac.jp/cgi-bin/youkaidb3/youkai_card.cgi?id=c0410160-000"
+}

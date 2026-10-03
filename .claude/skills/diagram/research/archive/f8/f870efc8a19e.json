@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:30:04+00:00",
+ "final_url": "https://chiculture.org.hk/sc/china-five-thousand-years/693",
+ "first": "f8/f870efc8a19e/20261003T013004Z",
+ "gm_copies": [],
+ "keys": [
+  "chiculture-jiangnan-shuixiang-minju"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "f8/f870efc8a19e/20261003T013004Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "3e5424edf2de4387251b15ac1a8c8eff462c3a91612e366a60c60e501df3d067",
+ "url": "https://chiculture.org.hk/sc/china-five-thousand-years/693"
+}

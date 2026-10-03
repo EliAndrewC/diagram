@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:48:27+00:00",
+ "final_url": "https://web.archive.org/web/20250302053144id_/https://www.chinanews.com.cn/cul/2015/04-30/7244333.shtml",
+ "first": "12/124e5c32add4/20261003T014827Z",
+ "gm_copies": [],
+ "keys": [
+  "chinanews-horseshoe-2015"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "12/124e5c32add4/20261003T014827Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND chinanews.com.cn",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://chinanews.com.cn/cul/2015/04-30/7244333.shtml"
+}
