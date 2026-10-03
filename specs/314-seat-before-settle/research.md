@@ -133,7 +133,7 @@ All 144 refused candidates on that seed cross the brook and a channel more than 
 
 | part | share | what it is | what an efficient process would do | where the stage stands |
 |---|---|---|---|---|
-| the growth (`grow_the_margin`) | 59% | 41 ms a house seated: the corridor search (straight runs, the gable, the routed path) and the lane law over the whole tree are about 70% of it (profile, seed 13); the household's layout at each seat offered, the rest | find a house's path once, where its seat is chosen, rather than search for it after: lay the hamlet's lanes first and seat the houses along them, so each corridor is a short spur the lane law has already judged | the cheap form - the same seats, the reachable first - measured no gain (R10). The full form plans the lanes before the houses, which changes the GM's growth (feature 308: the houses grown first, each path laid back as it is placed); put to the GM, not taken here |
+| the growth (`grow_the_margin`) | 59% | 41 ms a house seated: the corridor search (straight runs, the gable, the routed path) and the lane law over the whole tree are about 70% of it (profile, seed 13); the household's layout at each seat offered, the rest | find a house's path once, where its seat is chosen, rather than search for it after: lay the hamlet's lanes first and seat the houses along them, so each corridor is a short spur the lane law has already judged | the cheap form - the same seats, the reachable first - measured no gain (R10). The full form plans the lanes before the houses: DECLINED by the GM (2026-10-02) - lanes are trodden after the homesteads stand, and lanes-first was tried before and made the seating harder (`dev/placement.md`) |
 | the field's corridor | 15% | one corridor per margin, 0.07-0.19 s a map, 0.50 on seed 13 where 144 candidates cross the brook and a channel obliquely | generate the runs that cross square at a ford, instead of generating any run and refusing the oblique ones | NOT DONE: the candidates are the ways package's (`field_runs`, `routed_field_runs`); recorded |
 | the site boundary | 11% | the ground asked once, 0.08-0.17 s a map (feature 226) | already the efficient form: built once, looked up per seat | DONE |
 | the rest of the stage | 15% | the margin's choice, the exit strip, the seat region, the records | each once a margin | DONE |
@@ -211,8 +211,9 @@ Neither form grows, and the failures are main's; the session that owns feature 3
 
 The 15-household stage on the shipped engine (the own parts withdrawn, R12): 18.7 s over seeds 1-16, 1.17 s a map - the growth
 64%, the field's corridor 13%, the site boundary 10%, the rest 13%. R9's shares were taken before R12 at 1.04 s a map; the
-growth's share rose by what the withdrawn lever had saved. R9's account of what an efficient process would do stands, with
-the growth's ceiling now about 45% of the stage (64% of the stage, the path search and the lane law about 70% of the growth).
+growth's share rose by what the withdrawn lever had saved. R9's account stands but for its lanes-first lever, which the GM declined
+(2026-10-02, `dev/placement.md`); the path search and the lane law are about 45% of the stage (64% of it the growth, about 70% of
+that the search and the law).
 (observed 2026-10-02, method: as the heading.)
 
 ## R16 - The bookend's band 1, audited (observed 2026-10-02, method: the perf-audit agent's counterfactual - four worktrees (main, the end, the end with `growth.py` and `route.py` reverted, the end with the pre-check off), every stage timed at 10, 15 and 40 households in two or three alternated runs, the map hashed after the homesteads and the web)

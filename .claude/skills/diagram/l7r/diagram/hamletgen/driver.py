@@ -58,6 +58,14 @@ from .ways import stage_seat, stage_track, stage_web
 # registers a no-build corridor that `_fits` refuses seats against, so it takes ground the houses
 # cannot have - which is the defect, whatever the lane represents. Provenance is not the axis.
 #
+# AND IT IS HOW LANES CAME TO BE (the GM, 2026-10-02, declining lanes laid first to speed the seating):
+# "Village lanes are footpaths that are worn by people walking between houses. But in real life, when these farming
+# communities were set up, people built their homesteads, and then the village lanes came after. So it is inauthentic and
+# unrealistic for us to place the lanes first." Lanes first was tried before and made the seating harder, not easier; and
+# even a measured speedup would not justify it. A PAVED road is the other case - "planned government projects, which then
+# people build things around" - which is why an Imperial road may be laid before the settlement that fronts it. Recorded
+# for the reader at research/questions/0081-village-lanes.drawing.html.
+#
 # WHY THE TRACK SITS BETWEEN THE HOUSES AND THE APPURTENANCES, rather than after both. The GM's rule
 # is about FARMHOUSES - "farmhouses are rendered after the fields and water, but before any village
 # lanes" - and a well, byre or shed is not a farmhouse. Placed after the appurtenances the track had
