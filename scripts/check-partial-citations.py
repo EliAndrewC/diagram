@@ -35,6 +35,8 @@ _KEY = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
 def unreadable_keys(root: pathlib.Path) -> dict[str, str]:
     import _access_tags as tags  # noqa: PLC0415 - feature 313's derivation, the one answer to "what can be read"
 
+    if not (root / tags.ACCESS).is_file():  # a tree with no access states (a push fixture) names no unreadable source
+        return {}
     return {k: t.state for k, t in tags.every(tags.load(root)).items() if t.state in UNREADABLE and not k.startswith("download:")}
 
 

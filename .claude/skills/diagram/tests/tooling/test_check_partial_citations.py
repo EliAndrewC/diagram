@@ -50,3 +50,8 @@ def test_the_command_exits_on_a_finding(tmp_path: pathlib.Path, monkeypatch, cap
 def test_the_unreadable_set_comes_from_the_access_tags() -> None:
     keys = cp.unreadable_keys(REPO)
     assert set(keys.values()) <= set(cp.UNREADABLE) and not any(k.startswith("download:") for k in keys)
+
+
+def test_a_tree_with_no_access_states_names_no_unreadable_source(tmp_path: pathlib.Path) -> None:
+    """A push fixture carries no `source-access.json`: the check passes it rather than crashing (2026-10-02)."""
+    assert cp.unreadable_keys(tmp_path) == {} and cp.main([str(tmp_path)]) == 0
