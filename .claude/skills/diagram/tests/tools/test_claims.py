@@ -189,6 +189,11 @@ def test_resolve_from_handles_absolute_and_relative_imports() -> None:
     assert cl.import_table(ast.parse("from .c import D as E"), "pkg", True) == {"E": ("pkg.c", "D")}
 
 
+def test_a_reexported_constant_resolves_to_its_definition() -> None:
+    out = cl.reexported({"a": {"X": "1"}, "b": {}, "c": {}}, {"b": {"Y": ("a", "X")}, "c": {"Z": ("b", "Y"), "w": ("b", "nothing")}})
+    assert out["c"] == {"Z": "1"} and out["b"] == {"Y": "1"}
+
+
 # ---- procedure sections ----------------------------------------------------------------------------------------
 
 DOC = f"""# Title

@@ -377,6 +377,22 @@ def doc_units(text: str, path: str, tops: tuple[str, ...] | None) -> list[Unit]:
     return units
 
 
+def reexported(constants: dict[str, dict[str, str]], tables: dict[str, dict[str, tuple[str, str]]]) -> dict[str, dict[str, str]]:
+    """Each module's constants with those it RE-EXPORTS added (`from .other import NAME` of a constant), followed through any
+    chain to the defining module - so a reader of a re-exported constant is owed when its value changes (22 such reads in
+    scope, measured 2026-10-02: `hamletgen/plan` reads `GROVE_SIDES` through `hamletgen/consts`)."""
+    out = {m: dict(c) for m, c in constants.items()}
+    changed = True
+    while changed:
+        changed = False
+        for mod, table in tables.items():
+            for local, (src, real) in table.items():
+                if real in out.get(src, {}) and local not in out.setdefault(mod, {}):
+                    out[mod][local] = out[src][real]
+                    changed = True
+    return out
+
+
 def _module_name(path: Path, skill: Path) -> tuple[str, bool]:
     rel = path.relative_to(skill).with_suffix("")
     parts = rel.parts
@@ -438,13 +454,15 @@ def all_units(skill: Path, repo_prefix: str = ".claude/skills/diagram/") -> Iter
     """Every unit in scope with its module's errors: the code (FR-002), then the procedure sections (FR-003). Paths are
     repository-relative, as the index keys them."""
     mods = _scope_trees(skill)
-    constants = {m: module_constants(t) for m, (_p, t) in mods.items()}
+    constants = reexported({m: module_constants(t) for m, (_p, t) in mods.items()}, {m: import_table(t, m, p.name == "__init__.py") for m, (p, t) in mods.items()})
     for mod, (p, tree) in mods.items():
         rel = repo_prefix + p.relative_to(skill).as_posix()
         _claims, errors, units = module_units(tree, rel, mod, p.name == "__init__.py", constants)
         for unit in units:
             yield unit, errors
     for doc, tops in PROCEDURES.items():
+        if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
+            continue
         text = (skill / doc).read_text(encoding="utf-8")
         for unit in doc_units(text, repo_prefix + doc, tops):
             yield unit, []
