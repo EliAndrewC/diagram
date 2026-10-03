@@ -561,8 +561,8 @@ def settle_joins(s: Any) -> int:
     an end it closes is no longer free. Before the network rule, so a piece the ink tolerance would drop is joined first.
 
     Research:
-        ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way; an
-            ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back instead"""
+        ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way
+        a join taken back - UNRESEARCHED: an ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back 5 ft past the join's reach (`JOIN_BACK_PAD_FT`), the settle's trims then pulling it to what it serves"""
     edits: dict[int, list[Poly]] = {}
     # A TREE LANE'S END IS CARRIED ONTO ITS WAY AS ANY LANE'S IS: the span only adds tread, over walkable ground, meeting the
     # way clean (`law.near_misses`), and the lane it reaches is an ordinary one the tree's joint then binds

@@ -543,7 +543,7 @@ def tree_shadow_cuts(lanes: Sequence[Mapping[str, Any]], ways: Sequence[Sequence
     a tree lane beside it (`serve.shadowed_by`, way against way): the middle of the ordinary lane's longest stretch within
     `WEB_SHADOW_FT` of the tree lane - where a cut of `DEFER_GAP_FT` either side leaves no stretch past the pitch.
 
-    Research: no doubled band - CONVENTION: beside another unbroken for more than a bundle pitch; the ordinary lane defers"""
+    Research: no doubled band - UNRESEARCHED: an ordinary lane may not run beside a tree lane for more than a bundle pitch; the ordinary lane defers"""
     from .serve import WEB_SHADOW_FT, sampled, shadowed_by
 
     out: list[tuple[int, int, Pt]] = []

@@ -4799,6 +4799,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
+  "code": "9bd5abe38fad9536",
+  "core": "9b77a3b13db01c9e",
+  "date": "2026-10-03",
+  "note": "\"no bound from the field\" is not unresearched: page 0032 answers it (\"no house is refused for its distance from the fields\"). Only the nearest-the-seat order is unresearched, so split the claim in two.",
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::margin_ladder#seat search": {
   "code": "0d915cc2edf06a38",
   "core": "e43e2956d0ef6fb2",
@@ -5343,6 +5351,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::GROW_LEVELS#the growth's offers": {
+  "code": "03c8643ecf0657b7",
+  "core": "3618dea19a75111f",
+  "date": "2026-10-03",
+  "note": "a search breadth the record is silent on; the 16 directions and rings 1.0/1.5/2.0 match the code",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::SETTLE_TRIES#growth search": {
   "code": "46c13984c367bd0e",
   "core": "163efc716a01606a",
@@ -5399,6 +5415,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::built_share#the built share reported": {
+  "code": "3001c20e82ed5427",
+  "core": "ddece58d7a7a6da0",
+  "date": "2026-10-03",
+  "note": "boxes over hull are measured and nothing is refused, as 0032 says (\"Every clustered hamlet's built share is still measured, and nothing is moved or refused for it\")",
+  "research": "04b14739a7564aff",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::field_distance#nearest the field first": {
+  "code": "ea036f2d794ecb6f",
+  "core": "5b70cc995862898b",
+  "date": "2026-10-03",
+  "note": "CANON naming the GM's ruling of 2026-10-03; used for order only, with no limit",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::footprint#sun owed to the south": {
   "code": "3c5b0aeecb5fee6d",
   "core": "a5ca995c1f2f5078",
@@ -5421,6 +5453,22 @@
   "date": "2026-10-03",
   "note": "2 x 7 ft plus the 2 ft parting",
   "research": "9525e03c22df776b",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_jitter#direction jitter": {
+  "code": "6d64ae455a109df4",
+  "core": "f589731ceb7098f3",
+  "date": "2026-10-03",
+  "note": "12 degrees x 8/ndir; nothing in the bundle answers it",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_level#the growth's widening past the table": {
+  "code": "0154b115519639ac",
+  "core": "d58d23ee724e05fb",
+  "date": "2026-10-03",
+  "note": "the code adds one ring 0.5 further each level, as claimed; the figure is unresearched",
+  "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a neighbor's land": {
@@ -5508,6 +5556,14 @@
   "core": "53ad525f60d2ebed",
   "date": "2026-10-03",
   "note": "matches its backing",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::on_the_canvas#plumbing": {
+  "code": "7ebc85d40203ca09",
+  "core": "7ec007d517943fea",
+  "date": "2026-10-03",
+  "note": "checks the canvas extent only",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -6271,22 +6327,6 @@
   "research": "e67278be3121f7df",
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seat_geometry.py::drawn_in_band#a cluster draws a shape's band": {
-  "code": "b463db265150496f",
-  "core": "6c11330b87a213ba",
-  "date": "2026-10-03",
-  "note": "non-linear forms held to in_a_shapes_band",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seat_geometry.py::drawn_in_band#a row takes no band": {
-  "code": "38b9b5cd29cb2d42",
-  "core": "6c11330b87a213ba",
-  "date": "2026-10-03",
-  "note": "matches its backing",
-  "research": "176369f54d3c9e23",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seat_geometry.py::in_a_shapes_band#a cluster's longest draw": {
   "code": "19a89eaf74140c28",
   "core": "a980e5e3df3f410b",
@@ -6615,20 +6655,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::seat_every_household#a margin on the ladder with no dry way out is skipped": {
-  "code": "c92969241b1676ca",
-  "core": "c92969241b1676ca",
-  "date": "2026-10-03",
-  "note": "a margin on the ladder with no dry way out is skipped",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::seat_every_household#every household drawn": {
   "code": "65edc567dd52bdb5",
   "core": "c92969241b1676ca",
   "date": "2026-10-03",
   "note": "every household seated or the site refused; seated houses stay put (0004)",
   "research": "356a2478a3a02224",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::seat_every_household#no house taken back": {
+  "code": "d0765d7e9f284054",
+  "core": "c92969241b1676ca",
+  "date": "2026-10-03",
+  "note": "the ladder runs only when placed == 0, and a partial seating is refused rather than reseated, matching 0004 (\"searches wider ground rather than starting over\")",
+  "research": "cb688155e12ac9a6",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_appurtenances#shared byre sheds": {
@@ -11263,6 +11303,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::as_walked#lanes met end to end are one": {
+  "code": "f39d777711c7b9af",
+  "core": "3b5dbd9eb996afc3",
+  "date": "2026-10-03",
+  "note": "0081: \"Two lanes that meet end to end are read as one\"",
+  "research": "9525e03c22df776b",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::center_lane_ends#the cap at a T": {
   "code": "2228269e5a642caf",
   "core": "73fd550514d7ad00",
@@ -12783,6 +12831,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::_join_admitted#plumbing": {
+  "code": "5e03aa61120b4ee0",
+  "core": "484541b22e0d9e0d",
+  "date": "2026-10-03",
+  "note": "only asks the registry's admission; the take-back decision lives in settle_joins",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::_ordinary#settle plumbing": {
   "code": "fd6572cf966cba9f",
   "core": "8fd8f989ff716408",
@@ -12992,12 +13048,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_joins#ends that nearly meet are joined": {
-  "code": "5a8502b19b456dbd",
-  "core": "58ff7bd823959dbf",
+  "code": "0fcfdbdc8f689009",
+  "core": "06e8b97d8c27146f",
   "date": "2026-10-03",
-  "note": "the page says only \"Ends within 25 ft ... are joined\"; the take-back (`JOIN_REACH_FT + JOIN_BACK_PAD_FT`) leaves a near-meeting end unjoined, which no page attests; split it as UNRESEARCHED",
+  "note": "need the value of _LANE_JOIN_FT to check against 0081's \"within 25 ft\", and whether a later pass pulls a taken-back end to \"the last house it serves\" (0081); 0081 records no take-back exception, and the cut of reach + 5 ft is not that rule",
   "research": "9525e03c22df776b",
-  "verdict": "MISLABELED"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_needles#a sliver welded shut": {
   "code": "ebb44a10e487a5ed",
@@ -14760,42 +14816,42 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
-  "code": "e52c0c2237e4a1ef",
-  "core": "a9932e46a44ac522",
+  "code": "43de5b11f2024189",
+  "core": "4b36351287e2a14c",
   "date": "2026-10-03",
-  "note": "no bundle question answers it",
+  "note": "DOORSTEP_MAX 2; the record is silent",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
-  "code": "2acf437430618fed",
-  "core": "a9932e46a44ac522",
+  "code": "3bfa885ef39b9684",
+  "core": "4b36351287e2a14c",
   "date": "2026-10-03",
-  "note": "no bundle question answers it",
+  "note": "tree_shadows and walked_shadows; the record is silent on parallel lanes",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
-  "code": "5fecdb6037621ba4",
-  "core": "a9932e46a44ac522",
+  "code": "53d203aa582dbc1c",
+  "core": "4b36351287e2a14c",
   "date": "2026-10-03",
-  "note": "the lanes page is silent on slivers",
+  "note": "needle_loops on the whole tree and on as_joined; the record is silent",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
-  "code": "bb65960eda182b8d",
-  "core": "a9932e46a44ac522",
+  "code": "6385b17ec3db1e0d",
+  "core": "4b36351287e2a14c",
   "date": "2026-10-03",
-  "note": "the page's hook, hairpin and dangling-end rules",
+  "note": "the lane law is asked in the whole tree and in the corridor's own chain, per 0081's hook, hairpin and dangling-end rules",
   "research": "9525e03c22df776b",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
-  "code": "9d957bdcfcbdf4e8",
-  "core": "a9932e46a44ac522",
+  "code": "9c88cef9aa50fb77",
+  "core": "4b36351287e2a14c",
   "date": "2026-10-03",
-  "note": "a way keeps to its own bank",
+  "note": "way_out_once; 0035 charges each crossing about 150 ft and has a way keep to its own bank",
   "research": "d47738a05844fe19",
   "verdict": "IN-STEP"
  },
@@ -15024,10 +15080,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_faults#ordinary lane defers": {
-  "code": "2cdab8836c365beb",
-  "core": "7df0f5579b3342ba",
+  "code": "86f0d33e34794350",
+  "core": "4ef9b08e215aef05",
   "date": "2026-10-03",
-  "note": "repair choice, no physical claim",
+  "note": "chooses which lane a repair cuts and where; the rules themselves are claimed in their own units",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -15039,11 +15095,27 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_shadow_cuts#no doubled band": {
+  "code": "ea6cd8a398f7116a",
+  "core": "a3d82ec5deebbb74",
+  "date": "2026-10-03",
+  "note": "the rule bars a lane running within WEB_SHADOW_FT (30 ft) of a tree lane for more than a pitch, which is a decision about where lanes run, not how they are shown; label it UNRESEARCHED as admits and walked_shadows label the same rule",
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_shadows#no doubled band": {
   "code": "027e3b3caaaf57e8",
   "core": "21169fb348efee46",
   "date": "2026-10-03",
   "note": "bundle silent",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::walked_shadows#no doubled band": {
+  "code": "7060d9cd6263716c",
+  "core": "31a85025f4a153ba",
+  "date": "2026-10-03",
+  "note": "the band is judged on as_walked ways; the band rule itself is unresearched",
   "research": "",
   "verdict": "IN-STEP"
  },

@@ -31,7 +31,7 @@ from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
-from .seat_geometry import bank_of, declare_cluster_shape, drawn_in_band, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
+from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
 from .seats import front_row
 from .wells import place_wells
 
