@@ -90,9 +90,7 @@ def test_the_seating_window_grows_with_the_households_and_stays_on_the_canvas() 
     import math
 
     from l7r.diagram.hamletgen.consts import SEATING_GROUND_FT
-    from l7r.diagram.hamletgen.homesteads.boundary import seating_window
-
-    from l7r.diagram.hamletgen.homesteads.boundary import FREE_GROUND_CELL
+    from l7r.diagram.hamletgen.homesteads.boundary import FREE_GROUND_CELL, seating_window
 
     s = _open(4000.0)
     r = 2.0 * SEATING_GROUND_FT * math.sqrt(15 / math.pi)
