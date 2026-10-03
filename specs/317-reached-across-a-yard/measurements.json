@@ -9,6 +9,15 @@
   "verifies": "F1",
   "answers": "86f173b401a2"
  },
+ "perf-317-control-judge": {
+  "verifies": "the cost the perf-audit's confirmation found apart from the passage: the homesteads stage over main with the passage share at 0 (seed 39 at 40 households, +5.1% on the bookend)",
+  "subject": "perf bookend, reference spec, seed 39 at 40 households and seed 25 at 15, the homesteads stage",
+  "value": 1.77,
+  "unit": "s, the homesteads stage's CPU at seed 39, 40 households, the passage share at 0 and the seating judge as on main (median of three)",
+  "quantity": "three alternated takes each, 2026-10-03, homesteads stage CPU seconds at seed 39, 40 households: main 1.56/1.64/1.68; the clone with the passage share at 0 1.80/2.00/2.07; the same with the seating judge as on main (`tree.as_joined` and `tree.laid_run` switched off) 1.76/1.84/1.77 - the corridor judged as the web will draw it (plan D6, FR-004) accounts for about 0.23 s of the 0.36 s, the rest within the run-to-run spread; at seed 25, 15 households: 0.50/0.53/0.53, 0.56/0.55/0.57 and 0.56/0.57/0.57 - within it",
+  "source": "control_probe.py in the session's scratchpad (NOPASS=1: stages.passage_share 0; JUDGE_OFF=1: tree.as_joined returns no lanes, tree.laid_run the run as found), run against both trees",
+  "observed": "2026-10-03"
+ },
  "perf-317-control-nopass": {
   "verifies": "the band-2 readings of 317-end against 317-start at 20 households, seeds 25 (+17.1%) and 47 (+12.5%), homesteads +0.4 and +0.5 s",
   "subject": "perf bookend, reference spec, seeds 25 and 47, 20 households, the homesteads stage",

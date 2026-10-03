@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T090835Z"
+  },
+  "binding": "6b95a3fb7747235423cf3a3018fabe1250c9189825cc8bffe01ce4936f1c1ffd",
+  "criteria": {
+    "commensurate": "The cost: homesteads +0.5 to +0.6 s at 20hh on s25 and s47, notice +0.4 s on s25, and web +1.2 s at 40hh s47 (the passage layout: one household reached across a yard). It falls only on settlements whose rolled share allows a passage, 3 of 16 seed-size cells. The bookend totals are -5.0% (15hh), -5.1% (10hh), +2.5% (20hh) and +1.1% (40hh). In return the map gains a researched settlement form, a household reached across its neighbor's land, which it could not draw before. Under a second per crossing seed for a new behavior, with every total within +2.5%, is proportionate.",
+    "necessary": "All three crossings are the passage and nothing else: with passage_share at 0 each returns to within 2% of main (reviewer's alternated CPU takes in detached worktrees: 20hh s25 6.30 vs 6.25 s, 20hh s47 3.56 vs 3.52, 40hh s47 9.10 vs 8.95). The passage is the feature: spec FR-002 (a household seated across a neighbor's dooryard) and FR-003 (every household still reaches the tree). The drawing page judges a way of its own by the whole holding (research R9), so every tight seat must prove it has none. A route search that proves no route fails and so exhausts its reach (route._cells_to_tree -> search: 1.02 s over 78 calls at 20hh s47, against 0.24 s on main).",
+    "no_way_around": "R7 and R8 price the alternatives. Offering a tight seat only after an ordinary seat fails seats 3 passages of 16, which fails the MODE 1 ruling. A cap on tries cuts passages as much as cost (passages came from the 3rd to the 42nd try). A straight-line prefilter predicted nothing (5 of 195 vs 5 of 148). The 80 ft cut and one own_way verdict per seat are already taken, and the per-layout route was measured at 3-43% dearer and withdrawn. The hot search is not the static-scan shape: is_open asks indexed structures (free ground, placed.near, the wood) and each door's route is memoized while nothing standing changes. The 40hh s47 web growth is in unchanged settle/last_resort code on the passage layout; stubbing the feature's one web addition (tree.passage_anchors, the owed anchor corridor) left it at 2.50 s vs 2.46 s. The reviewer found no cheaper form."
+  },
+  "end": {
+    "commit": "8ae1ef704",
+    "label": "317-end",
+    "utc": "20261003T091041Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T092827Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -5.3,
+          "39": -10.0,
+          "4": 0.0,
+          "47": -5.6
+        },
+        "total_pct": -5.1
+      },
+      "20": {
+        "seeds": {
+          "25": 17.1,
+          "39": 0.0,
+          "4": -14.9,
+          "47": 12.5
+        },
+        "total_pct": 2.5
+      },
+      "40": {
+        "seeds": {
+          "25": 2.7,
+          "39": 5.1,
+          "4": -10.1,
+          "47": 12.2
+        },
+        "total_pct": 1.1
+      }
+    },
+    "seeds": {
+      "25": 3.8,
+      "39": -6.7,
+      "4": 6.7,
+      "47": -20.6
+    },
+    "total_pct": -5.0
+  },
+  "note": "Covers the three band-2 crossings only. The band-1 confirmation is INCONSISTENT and stands separately: the non-passage corridor-as-drawn cost (40hh s39 homesteads +0.34 s, no passage) is unexplained, and so is s25's notice growth.",
+  "verdict": "justified"
+}
