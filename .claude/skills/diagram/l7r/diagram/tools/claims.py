@@ -315,7 +315,9 @@ def module_aliases(tree: ast.Module, table: dict[str, tuple[str, str]], modules:
     return out
 
 
-def module_units(source: str | ast.Module, path: str, module: str = "", is_package: bool = False, constants: dict[str, dict[str, str]] | None = None, every_module_unit: bool = False) -> tuple[list[Claim], list[str], list[Unit]]:
+def module_units(
+    source: str | ast.Module, path: str, module: str = "", is_package: bool = False, constants: dict[str, dict[str, str]] | None = None, every_module_unit: bool = False
+) -> tuple[list[Claim], list[str], list[Unit]]:
     """(the module's claims, its errors, its units) for one Python source text (or its freshly parsed tree, which is
     consumed: its docstrings are stripped in place).
 
