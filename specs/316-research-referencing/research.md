@@ -13,7 +13,7 @@ inheritance: 1,654 functions, 800 methods, 237 classes, 1,019 constants, 18 proc
 
 `claims.all_units` over the scope took 9.1 s with a copy of every unit's syntax tree before dumping it; stripping docstrings
 in place once per module and parsing once (the scope walk hands its trees on) took it to 4.2 s. The coverage test runs once per
-gate.
+gate. (Observed 2026-10-02; method: the scope's `all_units` timed on the clone before and after the change.)
 
 ## R3 - What the claims cost the generation cache (2026-10-02)
 
@@ -36,7 +36,7 @@ and nothing a test monkeypatches moved: `ways/track.py` (1,000 -> 939, `gateway.
 Per-file bundles with each cited question's page inline measured 23 MB in all, nearly all of it whole question pages repeated
 per file. Writing each question once per bundle as its reader meets it (heading and blocks, no markup), only the files a claim
 cites, and showing a class as its own statements (its methods were inlined twice) brought the round-1 batches to 44 of at most
-393 KB (12.1 MB in all).
+393 KB (12.1 MB in all). (Observed 2026-10-03; method: the bundles' MANIFEST and question files summed with `stat`.)
 
 ## R6 - The audit (2026-10-03)
 
@@ -54,10 +54,11 @@ dry-field share, round 1's verdict), MISLABELED (the `stage_hinterland` rough-gr
 the IN-STEP, MISLABELED and UNCLAIMED seeds 3/3; the DRIFTED seed 1/3 - two runs named the mismatch (depth from the frame's
 shorter side where the page says its width) in an IN-STEP note. The subagent-check procedure (`docs/spec-kit-and-reviews.md`):
 a general rule added to the contract - a mismatch you can name is a finding, never a note on a pass - and the same unfixed
-bundles run three times again: all four seeds 3/3.
+bundles run three times again: all four seeds 3/3. (Observed 2026-10-03; method: the six seeded runs' replies read against the four known verdicts.)
 
 ## R8 - Defects the audit found, fixed in the work (constitution XIV)
 
+Observed 2026-10-02/03; method: each defect reproduced or read in the code, then its fix tested:
 - `claims.py`: a docstring whose first line is `Research:` is dedented whole by `inspect.cleandoc`, so its indented claims were
   lost (found by writer G11); the flat section reads them.
 - `claims.py`: module-level `register_knob(...)` calls belonged to no unit, so `_knobs.py`'s knob claims fingerprinted nothing
@@ -71,11 +72,13 @@ bundles run three times again: all four seeds 3/3.
 - `hamletgen/consts.py`: `POLDER_CELL_FT` read by nothing, and contradicting its question (110 ft against the 190 ft module);
   deleted.
 
+(Observed 2026-10-02/03; method: each defect reproduced or read in the code, then its fix tested.)
+
 ## R9 - An acreage figure that is not a defect (2026-10-03)
 
 Writer G12 found `waterfields/` recording `acres` at a fixed 2 ft/px, four times too high on a 1 ft/px hamlet. The hamlet engine
 does not read it: `hamletgen/water/comb.py` and `polder.py` take `net_acres(net, plan.ftpx)`, which scales. Only tests read the
-`acres` field (`grep` of `l7r/`, `tests/`, `pool/`). Left as recorded, the claims stating the assumption.
+`acres` field (`grep` of `l7r/`, `tests/`, `pool/`). Left as recorded, the claims stating the assumption. (Observed 2026-10-03; method: a grep of every reader of the `acres` field in `l7r/`, `tests/` and `pool/`.)
 
 ## R10 - Feature 296's two rows
 
@@ -88,4 +91,4 @@ the row's note.
 ## R11 - Cost (2026-10-03, `make review-cost`)
 
 The 63 `impl-drift` passes (44 round-1 batches, 12 round-2, six seeded, one targeted): 17,470 s of agent wall time, 105.3M
-tokens in (94.5M cached), 1.41M out. The writer, fix and split agents are not in this figure.
+tokens in (94.5M cached), 1.41M out. The writer, fix and split agents are not in this figure. (Observed 2026-10-03; method: `make review-cost` per agent, summed.)

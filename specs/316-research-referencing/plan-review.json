@@ -1,6 +1,6 @@
 {
  "feature": "316-research-referencing",
- "plan_sha256": "ba8a5e5a09b113ae6c9f497a61466b2bb95c0629e488e14cc258e5348dd70466",
+ "plan_sha256": "aeb4235f996ebb151838cb707ea9e299d8f280fadf7e2c5612024b614c412937",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -20,7 +20,7 @@
    "id": "D1",
    "summary": "Claim grammar gains `GUESS [<question file>]` (the drawing page recording the guess) and `CANON` (the GM's canon or ruling); rest unchanged",
    "class": "within",
-   "why": "Carries the amended FR-001 exactly: CANON as the GM's canon or ruling, a GUESS optionally naming the drawing page that records it. The grammar admits any question file after GUESS where FR-001 says the drawing page; that is a looser parser, not a narrowing (impl-drift judges whether the named page records the guess)."
+   "why": "Carries the amended FR-001: CANON as the GM canon or ruling, a GUESS optionally naming the drawing page that records it. Since round 3, tools/claims.py parse_claim accepts only a .drawing.html after GUESS (test_claims.py pins a plain question file as refused), so the parser now matches FR-001 exactly. The plan text still reads GUESS [<question file>] with the parenthetical naming the drawing page; a wording looseness, not a narrowing."
   },
   {
    "id": "D2",
@@ -102,17 +102,15 @@
   },
   {
    "id": "D12-writers",
-   "summary": "Writers per module group (as run, 14 code groups and one for the procedures), each writing claims: NONE for plumbing, UNRESEARCHED where nothing in the record bears and no GUESS label already stood",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The amended spec excepts the GM's rulings from the record-silent-means-UNRESEARCHED rule (US6 scenario 2: 'and no ruling of the GM decides it (that is CANON)'; Assumptions: 'and no ruling of the GM decides (that is CANON), is claimed UNRESEARCHED'). D12's writer rule was not amended: read literally, a decision the GM ruled on, which the research record is silent on, is written UNRESEARCHED - the exact passage-shape the amendment's own round 1 returned CHANGES REQUIRED on in the spec. Not impossible, not implied, and it defeats the amendment's purpose (claims on the GM's rulings mislabeled for want of a class). Fix: 'UNRESEARCHED where nothing in the record bears, no ruling of the GM decides it (CANON) and no GUESS label already stood'. The group count 'as run' is a record of the run, within."
+   "summary": "Writers per module group (as run, 14 code groups and one for the procedures), each writing claims: NONE for plumbing, UNRESEARCHED where nothing in the record bears, no ruling of the GM decides it (CANON) and no GUESS label already stood",
+   "class": "within",
+   "why": "Round 3 fix applied word for word (plan.md D12, commit 68d580fb9). The writer rule now carries the amended spec exception for the GM rulings (US6 scenario 2; Assumptions): a record-silent decision a GM ruling decides is CANON, not UNRESEARCHED. With the seam closed, the rule restates the spec, so it is within and carries no ruling. The group count as run is a record of the run."
   },
   {
    "id": "D12-needs-research",
-   "summary": "A NEEDS-RESEARCH finding's claim is relabeled UNRESEARCHED and re-checked; DRIFTED alone stands, with any CANNOT-TELL the second round returns",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Same seam as D12-writers: under the amended FR-005 a NEEDS-RESEARCH finding is a decision the record does not cover whose claim labels it neither guess, unresearched nor canon; where a ruling of the GM decides it, the amended US6 scenario 2 and Assumptions make it CANON, yet D12 relabels every NEEDS-RESEARCH claim UNRESEARCHED. FR-013 asks only that 'an unresearched decision' be labeled UNRESEARCHED. Fix: 'relabeled UNRESEARCHED, or CANON where a ruling of the GM decides it'. The CANNOT-TELL part stands as ruled at round 2."
+   "summary": "A NEEDS-RESEARCH finding claim is relabeled UNRESEARCHED, or CANON where a ruling of the GM decides it, and re-checked; DRIFTED alone stands, with any CANNOT-TELL the second round returns",
+   "class": "within",
+   "why": "Round 3 fix applied word for word. Matches FR-005 (NEEDS-RESEARCH excludes a claim labeled canon), FR-013 (an unresearched decision labeled UNRESEARCHED, the claims corrected) and US6 scenario 2. The CANNOT-TELL part stands as ruled at round 2."
   },
   {
    "id": "D13",
@@ -134,9 +132,9 @@
   },
   {
    "id": "CC-XII-XIII-XIV-XVI",
-   "summary": "No rendering change; audit labels the four classes plus UNRESEARCHED and NONE; maps re-rolled against manifests; DRIFTED recorded; nothing exempted",
+   "summary": "No rendering change; audit labels the four classes plus UNRESEARCHED, CANON and NONE; maps re-rolled against manifests; DRIFTED recorded; nothing exempted",
    "class": "within",
-   "why": "Restates the spec's recorded decisions. The XII line's class list omits CANON; a stale enumeration, not a decision, but it should gain CANON with the D12 fix."
+   "why": "Restates the spec recorded decisions; the XII class list now includes CANON (round 3 note applied)."
   },
   {
    "id": "CC-file-scale",
@@ -151,5 +149,5 @@
    "why": "Operational notes."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
