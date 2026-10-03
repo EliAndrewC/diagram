@@ -204,3 +204,4 @@ engine no longer keeps.
 - Amendment round 2 (spec-fidelity-verify, 2026-10-03): CHANGES REQUIRED, 2 small items - SC-002's name check caught the ways
   law's unrelated reach of a way to the field (scoped to the seating's constant); FR-003's closed list of remaining limits left out the
   household's water and its way to the tree (every rule a seat asks today but the reach).
+- Amendment round 3 (spec-fidelity-verify, 2026-10-03): FAITHFUL - both items confirmed; the amended spec accepted.
