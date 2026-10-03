@@ -37,7 +37,7 @@ import sys
 import tarfile
 import tempfile
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -330,6 +330,23 @@ def classify(cur: dict[str, Row], index: dict[str, dict[str, str]], base_index: 
     return intro, pre
 
 
+def split_keys(text: str, known: Mapping[str, Any]) -> list[str]:
+    """The claim keys a comma-separated `text` names. A key's label may hold a comma of its own (`#the track out, the field spur
+    and a row street stay whole`), so the pieces are joined back into the LONGEST run that is a `known` key; a piece no run
+    makes known is returned alone, for the caller to name as unknown. Split on every comma, the feature-317 batches could not
+    name 8 of their 387 owed keys."""
+    parts = text.split(",")
+    keys: list[str] = []
+    i = 0
+    while i < len(parts):
+        j = next((j for j in range(len(parts), i, -1) if ",".join(parts[i:j]).strip() in known), i + 1)
+        key = ",".join(parts[i:j]).strip()
+        if key:
+            keys.append(key)
+        i = j
+    return keys
+
+
 def gate(root: Path) -> tuple[list[str], list[str]]:
     """(refusals, warnings) for the push: owed units, introduced findings; pre-existing findings warn."""
     skill = root / SKILL
@@ -403,7 +420,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         elif args.module:
             keys = sorted(k for k, row in cur.items() if row.unit.path == args.module or row.unit.path.endswith("/" + args.module))
         else:
-            keys = [k.strip() for k in args.units.split(",") if k.strip()]
+            keys = split_keys(args.units, cur)
         unknown = [k for k in keys if k not in cur]
         if unknown or not keys:
             print(f"claims-bundle: no such claim(s): {', '.join(unknown) or '(none selected)'}", file=sys.stderr)
