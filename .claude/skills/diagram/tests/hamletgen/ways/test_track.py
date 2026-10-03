@@ -361,7 +361,7 @@ def test_a_walled_in_gateway_is_left_by_the_strip_or_a_turned_bearing(monkeypatc
     """Feature 315 (cohort seed 19): where the sweep from the gateway finds no dry way out, the track runs out along the exit
     strip from its end (`track_from_the_strip_end`), or - with no strip - from the first gateway on a bearing turned off the
     downslope whose sweep finds one (`turned_gateway_track`); none, and it is refused."""
-    from l7r.diagram.hamletgen.ways import track as tr
+    from l7r.diagram.hamletgen.ways import gateway as tr
 
     class _S:
         def __init__(self, strip):  # type: ignore[no-untyped-def]
@@ -403,7 +403,7 @@ def test_a_walled_in_gateway_is_left_by_the_strip_or_a_turned_bearing(monkeypatc
 def test_the_gateway_track_falls_back_only_when_the_sweep_is_walled(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """Feature 315: `gateway_track` - the sweep's track where it is dry; walled, the strip's end where the seating reserved a
     strip, else a turned bearing."""
-    from l7r.diagram.hamletgen.ways import track as tr
+    from l7r.diagram.hamletgen.ways import gateway as tr
 
     class _S:
         def __init__(self, strip):  # type: ignore[no-untyped-def]

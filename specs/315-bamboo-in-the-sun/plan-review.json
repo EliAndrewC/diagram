@@ -1,50 +1,68 @@
 {
  "feature": "315-bamboo-in-the-sun",
- "plan_sha256": "925bc3ddcf923fe37eab7adc8f40a93226347692ddca488bdab7d473b76fded8",
+ "plan_sha256": "d92bf57cc8ae03abb2221126a9c8b41242e764cadefba5bf8617bdfd4baeebf1",
  "reviewed": "2026-10-02",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "BAMBOO_SHADE_FT its own constant, derived from the timber bamboos' least cited height (10 m, R0/R2) by the canopy reach's derivation: 50 ft",
+   "summary": "BAMBOO_SHADE_FT its own constant from the timber bamboos' least cited height: 50 ft",
    "class": "within",
-   "why": "FR-002 verbatim; the GM's 'the distance away that it would have to be' answered from bamboo's own height; the canopy reach is reckoned at the same 10 m (tree_shade.py line 20), so equal values follow from the derivation, not an alias"
+   "why": "unchanged since round 1 (CLEAR): FR-002"
   },
   {
    "id": "D2",
-   "summary": "_sun_keepouts takes a reach parameter, default the canopy reach",
+   "summary": "_sun_keepouts takes a reach, default the canopy reach",
    "class": "within",
-   "why": "mechanism for FR-002/FR-003; changes no existing caller"
+   "why": "unchanged since round 1: mechanism for FR-002/FR-003"
   },
   {
    "id": "D3",
-   "summary": "culm marks in _draw_grove tested against the sun boxes at bamboo's reach; every inked mark recorded in M['bamboo_marks']; the 'maybe bamboo' comment rewritten",
+   "summary": "culm marks tested against the sun boxes at bamboo's reach and recorded in bamboo_marks",
    "class": "within",
-   "why": "FR-001, FR-003, FR-004 for the grove/windbreak/belt marks, the one placer (groves.py:744) that draws them"
+   "why": "unchanged since round 1: FR-001, FR-003, FR-004"
   },
   {
    "id": "D4",
-   "summary": "household_bamboo refuses a strip meeting a sun box (next side tried); bamboo_seats adds sun boxes to its obstacle index; a stand refused everywhere is not drawn",
+   "summary": "both stand placers refuse a seat in a plot's sun; an unseatable stand is not drawn",
    "class": "within",
-   "why": "FR-001, FR-003 for both stand placers (the only callers, hinterland/stages.py:157-158); the unseated stand is the spec's own Edge Case"
+   "why": "unchanged since round 1: FR-001, FR-003, the spec's Edge Case"
   },
   {
    "id": "D5",
-   "summary": "bamboo_shading_plots over marks (discs) and stands (outline boxes); gate test asserts zero with non-vacuity and record count = SVG culm count; cohort audit reads it; new key classified in taxonomy and cover skip",
+   "summary": "bamboo_shading_plots, the gate test with non-vacuity and SVG count, cohort audit, taxonomy entries",
    "class": "within",
-   "why": "FR-005, SC-001, SC-002, SC-003; the box for a stand is conservative (stricter, not narrower); the taxonomy entries are bookkeeping for FR-004's key"
+   "why": "unchanged since round 1: FR-005, SC-001..SC-003"
   },
   {
    "id": "D6",
-   "summary": "sun page's bamboo bullet rewritten with footnoted heights and yadake placed; tree_shade docstring; ThreshingYard and Garden modals; bamboo pages via entry-drift",
+   "summary": "the sun page, tree_shade docstring, yard and garden modals, bamboo pages via entry-drift",
    "class": "within",
-   "why": "FR-006, SC-004; a grep finds the exemption stated only on 0038's drawing page (line 38), tree_shade.py:10, groves.py:662 and homestead.py:181/221, all named in D3/D6; 0075 states no exemption"
+   "why": "unchanged since round 1: FR-006, SC-004"
   },
   {
-   "id": "CC-VI occasions",
-   "summary": "no review occasion declared because no pool bamboo moves (R0); declared if a regenerated map's bamboo moves",
+   "id": "D7",
+   "summary": "a bed slid south keeps its sun ground clear of standing crowns, persimmons and bamboo marks; a grove farm's bed wholly south of the front wall; a band in a turned bed's east reach cut back clear of it",
    "class": "within",
-   "why": "project process, not a reduction of the request; the rule is held by the D5 gate test on every map"
+   "why": "fixes regressions feature 310 shipped (cohort seeds 14, 15, 906; R3), under the GM's mid-feature 'fixing whatever bugs you encounter' and constitution XIII/XIV; it extends the sun rule (bamboo marks included, serving FR-001) rather than excepting any case from it; narrows nothing in request.md"
+  },
+  {
+   "id": "D8",
+   "summary": "persimmon held to a 30 ft dooryard (none where no seat), may stand in its own grove's band on a grove farm, judged at its seat's rake, dropped where its homestead is laid if in its own or a placed neighbor's plots' sun",
+   "class": "within",
+   "why": "fixes seeds 1, 22, 23 (R3); the 30 ft is the fruit-tree page's 'within about 30 ft of the house' and the grove seat is 0075's igune 'with a few fruit trees' and 0046's persimmon 'in the bamboo grove behind the house' - the research decides, per the GM's persimmon ruling; front-or-behind stays the existing per-hamlet rolled knob (fixture_seats docstring); dropping a tree in a plot's sun applies the sun rule, it carves nothing out of it; no part of the bamboo request is narrowed"
+  },
+  {
+   "id": "D9",
+   "summary": "a walled-in gateway leaves along the exit strip's end, else the first dry bearing off the downslope",
+   "class": "within",
+   "why": "bug fix (cohort seed 19) under the GM's 'fixing whatever bugs'; touches no clause of the request"
+  },
+  {
+   "id": "D10",
+   "summary": "a shared row well is not dug in the street's bend; row streets laid through _unjog",
+   "class": "within",
+   "why": "bug fix (cohort seed 903) under the GM's 'fixing whatever bugs'; touches no clause of the request"
   }
  ],
  "verdict": "CLEAR"
