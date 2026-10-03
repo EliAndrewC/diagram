@@ -27,7 +27,13 @@ Every run meets the bar of 19 verdicts in 20 a leg (R1). The two misses are the 
 each judged `unreliable-kind`: a funeral company's promotional glossary on household graves
 (`ikikata.nishinippon.co.jp/term/6815/`) and a real-estate firm president's blog on persimmon trees in farmyards
 (`ameblo.jp/toyoko-housing/entry-11418946119.html`). The filter reads them correctly as kinds of source the threshold
-does not admit; that the record CITES them is a finding for the GM, not a fault of the filter.
+does not admit; that the record CITES them is not a fault of the filter. **Decided 2026-10-02 by a research pass**
+(research decides, GM 2026-10-02), not put to the GM: both citations stay. For house-plot graves by region the record's
+other sources are a stonemason's blog (`eisi-yashikibaka`) and a personal blog (`yashikibaka-ibaraki-blog`) - nothing
+stronger to put in its place - and `ikikata-yashiki-bochi` is quoted only for its hedged "it is also said"; for the
+persimmon, `takehara-2004-yashikirin` (scholarship) lists it among the most frequent homestead-grove trees at Tonami but
+not "in every dooryard". Both write-ups already state the kind and the limit (a modern writer's impression, never a
+measured prevalence), which is what the record owes a weak source it keeps.
 
 **How the agent was dispatched.** The defined agent file (`.claude/agents/source-filter.md`) is not dispatchable by name
 until a session restarts (the harness lists agent types at session start; measured: "Agent type 'source-filter' not

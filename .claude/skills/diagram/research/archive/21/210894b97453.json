@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:32:37+00:00",
+ "final_url": "",
+ "first": "21/210894b97453/20261003T003237Z",
+ "gm_copies": [],
+ "keys": [
+  "baojia-zhwiki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "21/210894b97453/20261003T003237Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://zh.wikipedia.org/wiki/%E4%BF%9D%E7%94%B2%E5%88%B6%E5%BA%A6"
+}
