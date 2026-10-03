@@ -282,9 +282,22 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     ]
 
 
-def free_end(ways: Sequence[Poly], i: int, q: Pt) -> bool:
-    """Does the end `q` of way `i` touch no other way (within `JOIN_TOL`)?"""
-    return all(len(o) < 2 or min(seg_dist(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)) > JOIN_TOL for k, o in enumerate(ways) if k != i)
+def free_end(ways: Sequence[Poly], i: int, q: Pt, boxes: Sequence[tuple[float, float, float, float] | None] | None = None) -> bool:
+    """Does the end `q` of way `i` touch no other way (within `JOIN_TOL`)? `boxes` (each way's `_bbox`), where the caller
+    has them, pass over a way whose box lies beyond the tolerance (`box_gap`) - the same answer, without its segments."""
+    return all(
+        len(o) < 2 or (boxes is not None and box_gap(q, boxes[k]) > JOIN_TOL) or min(seg_dist(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)) > JOIN_TOL
+        for k, o in enumerate(ways)
+        if k != i
+    )
+
+
+def box_gap(q: Pt, box: tuple[float, float, float, float] | None) -> float:
+    """How far `q` lies from the box `(x0, y0, x1, y1)` (0 inside it; infinite from no box) - never more than its distance to
+    anything in the box, so a box beyond a reach puts all it holds beyond it."""
+    if box is None:
+        return math.inf
+    return math.hypot(max(box[0] - q[0], 0.0, q[0] - box[2]), max(box[1] - q[1], 0.0, q[1] - box[3]))
 
 
 def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) -> bool:
@@ -331,18 +344,22 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked,
     or would fold or kink, is not one: the two are separate ways, each ending at what it serves."""
     ways = _ways(M)
+    # EACH WAY'S BOX ONCE (feature 317): the seating asks this of every corridor it judges (`tree.as_joined`), and the
+    # segment-by-segment search of every way from every free end was 1.26 s of a 40-household seating on seed 2 - 465,270
+    # `seg_closest` - though most ways lie well beyond the reach. A way whose box is beyond it is passed over; same answers.
+    boxes = [_bbox(o) for o in ways]
     out = []
     for i, ln in enumerate(M.get("lanes") or []):
         p = ways[i]
         if ln.get("connector") or len(p) < 2 or polyline_len(p) < 1.0:
             continue
         for end, q, b in ((-1, p[-1], p[-2]), (0, p[0], p[1])):
-            if not free_end(ways, i, q) or math.dist(q, b) < 1e-6:
+            if not free_end(ways, i, q, boxes) or math.dist(q, b) < 1e-6:
                 continue
             head = ((q[0] - b[0]) / math.dist(q, b), (q[1] - b[1]) / math.dist(q, b))
             best: tuple[float, int, Pt] | None = None
             for k, o in enumerate(ways):
-                if k == i or len(o) < 2:
+                if k == i or len(o) < 2 or box_gap(q, boxes[k]) > JOIN_REACH_FT:
                     continue
                 f = min((seg_closest(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)), key=lambda z: math.dist(q, z))
                 d = math.dist(q, f)

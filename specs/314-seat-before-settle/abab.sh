@@ -3,6 +3,7 @@
 h=$1; seeds=$2; base=$3; new=$4; out=$5
 cd "$(dirname "$0")"
 : > $out-base.log; : > $out-new.log
+export CLOCK
 for s in ${seeds//,/ }; do
   ROOT=$base timeout 1500 python3 refusals.py $h $s 2>&1 | grep -E "^ *[0-9]+ " >> $out-base.log
   ROOT=$new timeout 1500 python3 refusals.py $h $s 2>&1 | grep -E "^ *[0-9]+ " >> $out-new.log

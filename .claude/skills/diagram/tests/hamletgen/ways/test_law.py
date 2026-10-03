@@ -428,3 +428,17 @@ def test_two_boxes_meet_within_their_pad_and_an_empty_line_meets_nothing() -> No
     assert not L.boxes_meet([], b, 100.0) and L._bbox([]) is None
     M = {"streams": [{"poly": [[50.0, -10.0], [50.0, 10.0]]}], "lanes": [{"pts": []}, {"pts": [[0.0, 0.0], [100.0, 2.0]]}]}
     assert [i for i, _k, _x, _off in L.oblique_at(M)] == [] or all(i == 1 for i, _k, _x, _off in L.oblique_at(M)), "the empty lane passed"
+
+
+def test_a_point_lies_from_a_box_no_farther_than_from_what_it_holds_and_a_free_end_reads_the_boxes_the_same() -> None:
+    """Feature 317: `box_gap`, read by `free_end` and `near_misses` to pass over a way whose box is beyond reach - zero inside the
+    box, the corner distance off it, infinite from no box; and `free_end` answers alike with the boxes and without them."""
+    from l7r.diagram.hamletgen.ways import law as L
+
+    box = (0.0, 0.0, 10.0, 10.0)
+    assert L.box_gap((5.0, 5.0), box) == 0.0 and L.box_gap((13.0, 14.0), box) == 5.0 and L.box_gap((5.0, -2.0), box) == 2.0
+    assert L.box_gap((0.0, 0.0), None) == math.inf
+    ways = [[(0.0, 0.0), (50.0, 0.0)], [(50.0, 0.5), (50.0, 40.0)], [(200.0, 0.0), (250.0, 0.0)]]
+    boxes = [L._bbox(w) for w in ways]
+    for q, free in (((50.0, 0.0), False), ((0.0, 0.0), True)):
+        assert L.free_end(ways, 0, q) is free and L.free_end(ways, 0, q, boxes) is free, f"{q}: the boxes change no answer"
