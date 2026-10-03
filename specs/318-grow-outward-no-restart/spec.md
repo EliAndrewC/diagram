@@ -31,7 +31,7 @@ that a clustered village of a dozen houses or more keeps at least a quarter of t
 calibration. And `research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html` already
 states the opposite of what the code does: *"When the placer cannot fit enough farmhouses, it searches wider ground rather than
 starting over ... so the houses already placed stay where they are."* The one research-backed limit on how far a house stands is
-the field reach: 700 ft from its field, held as a maximum (pages 0029 and 0032).
+the field reach: within the field reach (`FIELD_REACH_FT`), held as a maximum (pages 0029 and 0032).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -45,15 +45,15 @@ houses already there - never by moving a house already seated.
 
 **Independent Test**: roll a nucleated hamlet whose households do not fit within the old radius (the reference spec at 40
 households, seed 47) and read the manifest: every household seated on the chosen margin, the overflow beyond the old radius,
-every house within 700 ft of its field, no house seated twice.
+every house within the field reach of its field, no house seated twice.
 
 **Acceptance Scenarios**:
 
 1. **Given** a nucleated hamlet whose chosen margin seated every household before, **When** it is rolled, **Then** it seats
    the same households on the same margin (its houses may move only where a removed rule had refused or re-laid one).
 2. **Given** a nucleated hamlet whose households overflow the old radius, **When** it is rolled, **Then** the overflow stands
-   beyond that radius at the cluster's edge, every house within 700 ft of its field, and no seated house is taken back.
-3. **Given** a site where no ground within 700 ft of the field can hold every household, **When** it is rolled, **Then** the map
+   beyond that radius at the cluster's edge, every house within the field reach of its field, and no seated house is taken back.
+3. **Given** a site where no ground within the field reach of the field can hold every household, **When** it is rolled, **Then** the map
    is refused with the households it could seat named - not reseated elsewhere.
 
 ---
@@ -96,7 +96,7 @@ engine no longer keeps.
 ### Edge Cases
 
 - A margin with no dry way out is skipped before any house is seated - a check, not a take-back - and the next margin is tried.
-- The overflow reaches the 700 ft field reach on every side: the map is refused, naming the shortfall.
+- The overflow reaches the field reach (`FIELD_REACH_FT`) on every side: the map is refused, naming the shortfall.
 - A cluster grown past the old radius on a narrow strip of dry ground draws a long cluster: allowed (the 12:1 refusal goes); the
   declared cluster shape records what was drawn.
 - The cluster grows past the old radius and its houses thin: the quarter-built figure is reported, not enforced.
@@ -111,7 +111,7 @@ engine no longer keeps.
 - **FR-002**: A nucleated cluster MUST keep growing outward from its standing houses, nearest first, while households are left
   and seats remain within the field reach; the old seat radius MUST NOT refuse a seat (it may order the offers).
 - **FR-003**: The hard limits on where a house may stand MUST be the research-backed ones and the existing per-house rules: within
-  700 ft of its field (pages 0029, 0032), on dry ground, nothing on crop or water, and every rule a seat already asks.
+  the field reach of its field (pages 0029, 0032), on dry ground, nothing on crop or water, and every rule a seat already asks.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
   house is seated on it.
 - **FR-005**: Where the field reach cannot hold every household, the map MUST be refused, naming the households seated and the
@@ -131,7 +131,7 @@ engine no longer keeps.
 
 - **SC-001** (FR-001): a test fails if the seated-house count falls during any seating; it passes on the cohort and the pool.
 - **SC-002** (FR-002, FR-003): on the reference spec at 40 households, seeds 4, 25, 39 and 47, every household is seated on the
-  chosen margin and every house stands within 700 ft of its field.
+  chosen margin and every house stands within the field reach of its field.
 - **SC-003** (FR-005): a constructed site with too little ground within the field reach is refused with the shortfall named.
 - **SC-004** (FR-007, FR-008): the record checks owed by the page edits answer clean; each nucleated pool map's manifest carries
   its quarter-built figure.
@@ -144,8 +144,8 @@ engine no longer keeps.
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | A cluster grows at its edge; no house is moved for a late one | historically accurate in the record's reading (0004's rule); the GM's understanding of how farming communities grew | the GM's request; 0004 | 0004's drawing page; this spec; the seating's comment |
-| The 700 ft field reach the one hard extent | historically accurate (0029, 0032: the back-row tolerance held as a maximum) | the GM: "700 ft hard" | 0032's drawing page |
-| The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM: "floor soft" | 0032's drawing page |
+| The field reach (`FIELD_REACH_FT`) the one hard extent | historically accurate (0029, 0032: the back-row tolerance held as a maximum) | the GM chose it as the one hard limit | 0032's drawing page |
+| The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM chose it as soft | 0032's drawing page |
 | A passage judged at its seat only | canon: the GM's ruling of 2026-10-03 (feature 317), cutting through a yard is no great matter | the recheck was a take-back | 0081's drawing page |
 
 ## Assumptions
