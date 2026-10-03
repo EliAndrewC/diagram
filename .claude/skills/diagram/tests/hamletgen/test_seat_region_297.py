@@ -92,12 +92,16 @@ def test_the_seating_window_grows_with_the_households_and_stays_on_the_canvas() 
     from l7r.diagram.hamletgen.consts import SEATING_GROUND_FT
     from l7r.diagram.hamletgen.homesteads.boundary import seating_window
 
+    from l7r.diagram.hamletgen.homesteads.boundary import FREE_GROUND_CELL
+
     s = _open(4000.0)
     r = 2.0 * SEATING_GROUND_FT * math.sqrt(15 / math.pi)
-    assert seating_window(s, (2000.0, 2000.0), 15) == (2000.0 - r, 2000.0 - r, 2000.0 + r, 2000.0 + r)
+    lo = math.floor((2000.0 - r) / FREE_GROUND_CELL) * FREE_GROUND_CELL  # snapped to the canvas's own cell grid
+    assert seating_window(s, (2000.0, 2000.0), 15) == (lo, lo, 2000.0 + r, 2000.0 + r)
+    assert lo % FREE_GROUND_CELL == 0.0 and 2000.0 - r - FREE_GROUND_CELL < lo <= 2000.0 - r
     big = seating_window(s, (2000.0, 2000.0), 40)
     assert big[2] - big[0] > 2 * r, "more households, a wider window"
-    assert seating_window(s, (100.0, 3950.0), 15) == (0.0, 3950.0 - r, 100.0 + r, 4000.0), "clipped to the canvas"
+    assert seating_window(s, (100.0, 3950.0), 15) == (0.0, math.floor((3950.0 - r) / FREE_GROUND_CELL) * FREE_GROUND_CELL, 100.0 + r, 4000.0), "clipped to the canvas"
     assert seating_window(s, (2000.0, 2000.0), 0) == seating_window(s, (2000.0, 2000.0), 1)
 
 
