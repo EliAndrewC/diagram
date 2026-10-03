@@ -200,7 +200,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 
 **The modal**
 
-- **FR-005**: A modal MUST be tabs: a first tab carrying the write-up (named per the GM's choice; working name "Overview"), a
+- **FR-005**: A modal MUST be tabs: a first tab carrying the write-up named "About" (the GM's choice, 2026-10-03, FR-013), a
   "Guesses" tab with a bulleted list of what was guessed - shown only when there is a guess - and a "References" tab, shown
   only when there is a reference. A modal MUST NOT open with "This is a guess" because one of its details is guessed; a guess is
   a property of a statement, not of the feature. A deliberate deviation is said in the write-up where it applies; a map drawing
@@ -236,7 +236,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **FR-012**: Nothing but this spec claim lands on main until the rollout is done; the GM reviews pilots in the clone.
 - **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
   them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
-  the pilot before the rollout starts.
+  the pilot before the rollout starts. (Done 2026-10-03: the GM chose "About".)
 
 ## Success Criteria *(mandatory)*
 
@@ -259,7 +259,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 | A guess is a property of a statement, listed on a guesses tab; the feature-level guess lead goes | presentation (the four classes of constitution XII are kept, per statement) | the GM: the garden's lead *"is extremely misleading"* | this spec; the guidelines; `interactive/CLAUDE.md` |
 | Per-settlement facts move from the feature modals to the title card | presentation | the GM: settlement maps *"all pull from a standardized set of modals ... not ... customized modals. For anything"* | this spec; the guidelines |
 | A drawing convention is told in the write-up's appearance part, not the guesses tab | presentation | a convention is not a guess, and the reader needs it where they read about the look | this spec; the guidelines |
-| Working tab name "Overview", pending the GM's choice under FR-013 | presentation | the GM asked for suggestions; the name is one string | this spec |
+| The first tab is "About" | presentation | pitched About / Overview / At a glance / What it was; the GM, 2026-10-03: *"I like 'About' better than overview. So about guesses and references does seem pretty good"* | this spec; the guidelines |
 
 ## Assumptions
 

@@ -1,0 +1,128 @@
+# How a map modal reads - the guidelines for a standardized modal (feature 319)
+
+**Load this file when:** you are writing or rewriting what a hamlet map's modal says about a kind of feature (a `Kind`
+docstring in `l7r/diagram/interactive/classes/`, a general kind of a magistracy or shrine sheet in `compound_kinds/`, or a
+settlement-choice value), or running the `modal-form` / `modal-research` checks. A kind particular to one sheet or to the
+setting follows `modals-particular.md` instead.
+
+The checks read this file as their contract, so every rule is numbered and a finding names its rule. Each rule says where it
+comes from: **GM** (the GM said it - their words are in `specs/319-modal-writeups/request.md`) or **inferred** (the session's
+generalization, open to the GM's verdict on the pilots). Every change the GM asks of a pilot is made HERE first, then in the
+modal.
+
+## Who reads it
+
+**M1. The reader clicked a thing on a map and wants to picture it.** A casual RPG player who knows nothing of the subject:
+what was this, what was it for, what did it look like, how many lived or were kept in it. Not how the map placed it, not what
+the sources disagree on. A million words of research stand behind the map; the modal is the high-level account, and the
+References tab is the door to the rest. (GM: *"if someone clicks on a farmhouse then what do they care about ... what is the
+information that would be most informative to tell you at a high level"*)
+
+**M2. It has a shape, not a list of facts.** The About tab answers its kind's questions (M5-M7) in their order, each in a
+short paragraph, so a reader who stops after the first paragraph still knows what the thing was. (GM: *"a hodgepodge of
+different facts. And there's not really a gestalt to it"*)
+
+**M3. Length.** The About tab runs about 120 to 250 words; a paragraph rarely past four sentences. A guess bullet is one or
+two sentences. (inferred)
+
+## The tabs
+
+**M4. Three tabs: About, Guesses, References.** About is the write-up. Guesses is a bulleted list of what this project had to
+guess, and is absent when there is nothing guessed. References lists the research questions the write-up rests on (M14).
+(GM: *"we could have an overview tab and a guesses tab and a references tab ... not everything would necessarily have a
+guesses tab"*; the name "About", GM 2026-10-03)
+
+## What the About tab answers
+
+**M5. A building** - anything with a roof that people or animals used: farmhouse, storage shed, byre, privy, bath house, wood
+shed, hen coop, a shrine hall.
+1. **What it was for.** Who used it and for what; if a dwelling, whether work was done in it too; if a workplace or store,
+   whether anyone lived in it; whether animals lived under its roof. (GM)
+2. **What it looked like.** What it was built of; its walls; its roof; its floor where that is telling (earth or raised
+   boards); whether its doorways closed (doors, shutters) or stood open. (GM)
+3. **How many.** Residents for a dwelling, the goods or harvest held for a store, the animals for a byre or coop - as a
+   typical figure with a low and a high one, the low and high being ordinary cases, not records. Its size belongs here too
+   when the record gives it. (GM: *"both on average and in terms of the expected 'min' and 'max' ... not in terms of like
+   world records"*)
+
+**M6. A ground or a plot that is not a field crop** - the kitchen garden, the threshing yard, a grave ground, a pond. (inferred,
+to be settled on the garden pilot)
+1. **What it was and what it was for**, and who worked or used it.
+2. **What it looked like** - its surface, its edges, what grew or stood on it, by season where the season changes it.
+3. **How much** - its size, typical with a low and a high one; what it yielded or held where the record gives it.
+
+**M7. Every other kind** (a field crop, water, a way, vegetation, a fixture such as a well or notice board, a settlement-choice
+value): the same three questions as they fit the kind - what it was and for whom, what it looked like, how big or how many.
+Where the three do not fit a kind, the rollout adds a section here for it and the GM sees it in the rollout report. (inferred)
+
+**M8. Answer from the research; say plainly what was not found.** Each answer comes from the research record. A standard
+question the record does not answer gets the research pass before anything is written (constitution XII). If it is still
+unanswered, About either leaves it out or says in a clause that it is not recorded ("how many hens a household kept is not
+recorded"), and the figure the map draws is a guess bullet (M11). Never a figure the record does not give, stated as fact.
+(GM: *"certainly for accuracy, and consistency with the research"*; the spec's Assumption)
+
+**M9. One account for every map.** A hamlet modal is the same on every map: nothing in it is true of one settlement only. What
+varies by settlement - nucleated or dispersed, back lane or side alleys, which bamboo, the harvest weather, how many keep a
+retirement house - is on the settlement's title card, where each choice opens its own modal. About may say in a clause that a
+thing varies by settlement and that the title card says how ("how the houses are grouped differs by settlement; the title
+card says how this one is laid out"). (GM: *"our settlement maps to just all pull from a standardized set of modals. And not
+to get customized modals. For anything"*)
+
+**M10. Where it stands is said only as the reader sees it.** One sentence at most on where the thing is found ("one stands
+beside each farmhouse, on the sunny side of the yard") when that helps a reader find it or picture it. The placement rules -
+bearings, setbacks in feet, shade lanes, how the placer chooses - are on the research drawing pages, not in the modal. (GM, of
+the farmhouse modal's turning and setback rules: *"kind of just like a hodgepodge"*)
+
+## Guesses, deviations and conventions
+
+**M11. A guess is a bullet on the Guesses tab, never the modal's opening.** Each bullet says what was guessed - usually the
+figure the map draws - and, in a clause, why: what was searched and not found, or what it was reckoned from ("Its size, 10 to
+140 sq m (about 110 to 1,500 sq ft): no record of a kitchen bed's area was found, so the range is reckoned from ..."). A
+guess is a property of one statement, not of the feature: a feature whose existence and purpose are known never reads as a
+guess. (GM: the garden's *"this is a guess"* opening *"is extremely misleading"*; *"guesses could be like a bulleted list of
+things that we had to guess about"*)
+
+**M12. A reading is not a guess.** Where the research page calls something this project's reading of its sources (its
+evidence class `reading`), About may state it with an honest hedge ("most", "probably", "seems to have") and it is not a guess
+bullet. Where the page calls it a guess, it is a bullet. The page's evidence comment decides. (inferred)
+
+**M13. A deviation or a convention is told in About, where it applies.** A deliberate deviation - the setting differing from
+the history - is said in the paragraph it changes, plainly as the setting's ("In Rokugan, ..."). A map drawing convention - a
+mark drawn at another size or color so the map reads - is said in the look paragraph as a fact about the drawing, with the
+real thing's size or color: "The map draws the beans as dark beads so they show; the plants were ..." Neither goes on the
+Guesses tab, and neither opens the modal. Nothing is announced as historically accurate: that is presumed (feature 156).
+(inferred; the presumption is GM 2026-08-29)
+
+## References
+
+**M14. References are exactly what the write-up covers.** The References tab lists the research questions a statement in About
+or a guess bullet rests on - every one of them, and no other. A question the modal does not draw on is not listed, however
+close its subject; the reader finds it through the research site's navigation and cross-links. A drawing page ("How our maps
+draw ...") is listed only when a statement rests on it (a convention, a drawn figure). The question the modal draws on most is
+listed first. (GM: *"link specifically to the things which relate to what we decided to cover in the write-up, and then simply
+not link to things which are not covered"*)
+
+**M15. The record is searched for what the modal leaves open.** A standard question (M5-M7) answered "not recorded" or by a
+guess is checked against the record's other questions on the same subject; a question that answers it is used and listed.
+(GM: *"I'm actually a little surprised to see as few references as we are seeing"*)
+
+## Voice
+
+**M16. Plain, past-tense history, no record talk.** About tells what the thing was ("A farming household lived ..."), not what
+the record or the project found: no "this project", "the record", "a page read", "a survey found", "no page states", "GUESS",
+no source names or years unless the date itself is what the reader needs (and then tied to its period, "in the Edo period").
+The sources live behind the References tab. A guess bullet may say what was searched, because that is its point. (inferred,
+from the GM's *"human digestible"*)
+
+**M17. Units.** Feet first, metric in parentheses where the source gave metric; a Japanese unit only with its conversion
+("20 tsubo, about 700 sq ft"). Round in About ("about 700 sq ft"); exact figures stay on the research page. (inferred, the
+record's rule 2 in `research/STYLE.md`)
+
+**M18. Terms.** A Japanese or Chinese term is used only where it is the thing's name a reader will meet again, once, with a
+plain-English gloss or a glossary tooltip (every glossary term in a modal is a hover tooltip). (inferred)
+
+**M19. Gender-neutral, caste-aware.** The house style holds: "people" only of samurai - a farming household's members are its
+household, its family, its inhabitants. (project house style)
+
+**M20. Not to be confused with.** The sibling line closes the About tab, as it does today; it is generated, not written in the
+docstring. (inferred, feature 134's sibling links)
