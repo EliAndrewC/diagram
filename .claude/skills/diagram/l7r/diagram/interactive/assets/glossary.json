@@ -15325,5 +15325,46 @@
   "variants": [
    "Carex rostrata"
   ]
+ },
+ "mori": {
+  "def": "The rate a paddy grade was assessed to yield, counted in to of rice per tan: a middle-grade paddy with a mori of 13 was assessed at 1 koku 3 to a tan.",
+  "variants": [
+   "mori"
+  ]
+ },
+ "ash hut": {
+  "def": "A small farm outbuilding where a household kept the ash from its hearth and stove, saved to spread on its fields as fertilizer.",
+  "variants": [
+   "ash hut",
+   "ash huts"
+  ]
+ },
+ "dead angle": {
+  "def": "Ground at the foot of a wall that its defenders cannot shoot at from the wall top. A tower standing out from the wall covers this ground from the side.",
+  "variants": [
+   "dead angle",
+   "dead angles"
+  ]
+ },
+ "Rakuchu rakugai-zu": {
+  "def": "A painting of the capital, Kyoto, and the country around it; the Machida-family one of 1525 shows a farmer spreading night soil on rice.",
+  "variants": [
+   "Rakuchu rakugai-zu"
+  ]
+ },
+ "Honen": {
+  "def": "The monk who founded the Jodo (Pure Land) sect of Japanese Buddhism; Chion-in in Kyoto, raised over his grave, is the sect's head temple.",
+  "variants": [
+   "Honen",
+   "Honen's"
+  ]
+ },
+ "Noubi plain": {
+  "def": "A low-lying plain of delta land in the Tokai region of Japan, subject to severe flooding, whose villages sat inside ring levees; the kabu-ido well caps arose there.",
+  "variants": [
+   "Noubi plain",
+   "Noubi Plain",
+   "Nobi plain"
+  ]
  }
 }

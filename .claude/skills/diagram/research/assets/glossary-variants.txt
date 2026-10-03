@@ -78,6 +78,8 @@ arresting tools	three arresting tools
 arrow bamboo	yadake
 artesian	artesian
 asakura period	Asakura period
+ash hut	ash hut
+ash huts	ash hut
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
@@ -652,6 +654,8 @@ dazaifu	Dazaifu
 db	dBA
 dba	dBA
 dbh	DBH
+dead angle	dead angle
+dead angles	dead angle
 dead ground	dead ground
 dead space	dead ground
 deep paddies	shitsuden
@@ -1483,6 +1487,8 @@ hon-byakusho	honbyakusho
 honan	Honan
 honbyakusho	honbyakusho
 honden	honden
+honen	Honen
+honen's	Honen
 hongawara	hongawara
 hongawara tile	hongawara
 hongo	hongo
@@ -2365,6 +2371,7 @@ monospecific	monospecific
 montane	montane
 monto	monto
 monzen	monzen
+mori	mori
 morijio	morijio
 morisada manko	Morisada manko
 morisada mankō	Morisada manko
@@ -2524,6 +2531,7 @@ niter beds	nitre bed
 nitre bed	nitre bed
 nitre beds	nitre bed
 niwa	niwa
+nobi plain	Noubi plain
 noborigama	noborigama
 nodame	nodame
 nogu benriron	Nogu benriron
@@ -2546,6 +2554,7 @@ northern zhou	Zhou dynasty
 noshi-board	noshi-buki
 noshi-buki	noshi-buki
 noshi-shingle	noshi-buki
+noubi plain	Noubi plain
 nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
@@ -2850,6 +2859,7 @@ raku	raku
 rakuchu rakugai	Rakuchu rakugai
 rakuchu rakugai screens	Rakuchu rakugai
 rakuchu rakugai zu	Rakuchu rakugai
+rakuchu rakugai-zu	Rakuchu rakugai-zu
 rakugai-zu	Rakugai-zu
 rakugai-zu screen	Rakugai-zu
 rakugai-zu screen painting	Rakugai-zu
