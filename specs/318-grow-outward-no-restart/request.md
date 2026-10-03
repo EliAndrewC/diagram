@@ -36,3 +36,26 @@ is held to a maximum distance from its fields"; page 0032's: the 700 ft is the b
 "which reads as the back of a compact village rather than as a stranded arc". It recommended keeping growing at the edge. The GM:
 
 Gotcha. Uh, yeah, let's just keep going at the edge then. I mean, I guess if we have multiple options in our placement, and one option is closer to the fields, then we should take the one that is closer to the fields, because people generally did not want to have to walk a long way. to get to the fields, but that is not any kind of a limit. And it sounds like we can get rid of these 700 feet measurement completely, because really what we're just talking about is how we grow the settlement. I don't know. Does that make sense? If so, then go with that. Like, do you think there's even a reason to keep the 700 feet as a measurement? If that's some kind of useful thing in our implementation, then I'm not opposed to it in principle. I just am not sure what it's even doing for us at this point, you know?
+
+## Amendment 2 (GM, 2026-10-03, verbatim)
+
+The session explained the band-3 slowdown (+11.9%) as the nearest-the-field order, implemented as the growth's primary
+key with sixteen directions at three rings offered at once, the near-field seats refused only after the access-corridor
+search. The GM:
+
+Okay, so a couple of things:
+-> My "ruling" on preferring to stay close was not a hard requirement; merely an "all else being equal, try this first".  I don't see why that would add time.
+-> You keep talking about the need to calculate the access-path search, but I feel like there's probably a better way.  Like what if we just added a slightly higher minimum distance from your neighbors?  Wouldn't that guarantee space for an access path?
+
+Don't make any changes, just tell me what you think about this.
+
+The session agreed the order should be a tie-break; on the gap, that homesteads kept a path's width apart cannot enclose a
+pocket on their own, but the paddy, water and the map's edge can, and proposed a reachability raster as the cheap check.
+The GM:
+
+But if there is a minimum distance between homesteads then doesn't that guarantee that it will **always** be possible to put a lane connecting the path to the lane network?
+
+The session answered: yes among homesteads alone; the exceptions are pockets against the paddy, water or the map's edge;
+the gap plus a cheap raster check would let the seating drop the path search. The GM:
+
+I would like this folded into 318, both the field preference being made a true tie-breaker and the lane spacing.  This is not going to spread things out by enough to make the map appear too dispersed and I'm not concerned about the other lane-blocking map features because we already know it's okay for people to cut through neighbors' yards in a pinch.  So with this in mind, I think we can do the gap rule plus some kind of cheap check; the lane layout is expensive and could be made relatively cheap if we guaranteed space for lanes during homestead placement.  This does let us drop the search entirely, as you say, which will also be helpful.
