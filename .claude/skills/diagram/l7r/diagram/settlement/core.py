@@ -19,7 +19,6 @@ from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
-from .title import TitleMixin
 from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
 from .houses import HousesMixin
@@ -29,6 +28,7 @@ from .shrines_wells import ShrinesWellsMixin
 from .shrines_wells.forest import ForestMixin
 from .structures import StructuresMixin
 from .structures.urban_fixtures import UrbanFixturesMixin
+from .title import TitleMixin
 from .town_ways import TownWaysMixin
 from .trades import TradesMixin
 from .water_ways import WaterWaysMixin

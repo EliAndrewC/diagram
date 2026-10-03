@@ -243,14 +243,17 @@ when a rewrite is accepted with no changes are the rest rewritten.
 ### Measurable Outcomes
 
 - **SC-001** (FR-001, FR-003): the two guideline documents exist, and each rule in them is held by a named check (FR-008).
-- **SC-002** (FR-005): no modal of a feature whose existence is read opens with a guess label; the garden's guesses are on its
+- **SC-002** (FR-002, FR-005): no modal of a feature whose existence is read opens with a guess label; the garden's guesses are on its
   guesses tab; a test holds that a guesses tab appears exactly when a modal carries a guess.
 - **SC-003** (FR-006, FR-008): every rewritten modal has passed the three checks, recorded in the review ledger with cost.
-- **SC-004** (FR-009): every pool hamlet's title card lists its choices; each value opens its modal; no hamlet feature modal
+- **SC-004** (FR-004, FR-009): every pool hamlet's title card lists its choices; each value opens its modal; no hamlet feature modal
   differs between two pool maps.
-- **SC-005** (FR-010): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts on the GM's go-ahead
+- **SC-005** (FR-010, FR-012): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts on the GM's go-ahead
   after a pilot's first rewrite is accepted with no changes.
-- **SC-006** (FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green.
+- **SC-006** (FR-007, FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green,
+  its browser test holding the sibling links and the glossary tooltips on every tab.
+- **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
+  first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
