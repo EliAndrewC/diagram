@@ -59,7 +59,10 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None) -> list[Pt]
 
     A point is dropped unasked only where the answer is already known: in a cell the static ground surely refuses
     (`FreeGround`), or within half a pitch of a standing house (the envelope would lap the
-    house's own box). Everything else is offered; the placer decides."""
+    house's own box). Everything else is offered; the placer decides.
+
+    Research: the exhaustive seat order - UNRESEARCHED: every legal grid point on the canvas, nearest the seat first, no bound from the field
+    """
     pitch = BUNDLE_PITCH * (FREE_SEAT_STEP if step is None else step)
     x0, y0, x1, y1 = 6.0, 6.0, float(s.W) - 6.0, float(s.H) - 6.0
     fg = getattr(s, "_free_ground", None)

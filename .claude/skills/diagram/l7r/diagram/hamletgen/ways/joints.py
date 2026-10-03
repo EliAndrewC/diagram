@@ -78,6 +78,43 @@ def joints(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, int, int]
     return out
 
 
+def as_walked(lanes: Sequence[Mapping[str, Any]]) -> tuple[list[Poly], list[int]]:
+    """The ways a walker reads: every chain of lanes met end to end at a `joints` joint joined into one polyline (two records
+    meeting end to end are one way, the module's rule), and each lane's index into them. A lane of under two points is a way
+    of its own, as it stands.
+
+    Research: lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: read as one way"""
+    n = len(lanes)
+    link: dict[tuple[int, int], tuple[int, int]] = {}
+    for i, ei, j, ej in joints(lanes):
+        link[(i, ei)], link[(j, ej)] = (j, ej), (i, ei)
+    owner = [-1] * n
+    ways: list[Poly] = []
+    for start in range(n):
+        if owner[start] >= 0:
+            continue
+        # ...walk back to the chain's first lane (one end free of a joint), or round once where the chain is a loop
+        cur, free_end = start, 0
+        seen = {start}
+        while (cur, free_end) in link and link[(cur, free_end)][0] not in seen:
+            nxt, at = link[(cur, free_end)]
+            cur, free_end = nxt, -1 - at
+            seen.add(cur)
+        way: Poly = []
+        k = len(ways)
+        while True:
+            owner[cur] = k
+            p = _pts(lanes[cur]) if len(lanes[cur].get("pts") or []) >= 2 else [tuple(q) for q in lanes[cur].get("pts") or []]
+            p = p if free_end == 0 else p[::-1]
+            way = [*way, *p[1:]] if way else list(p)
+            nxt = link.get((cur, -1 - free_end))
+            if nxt is None or owner[nxt[0]] >= 0:
+                break
+            cur, free_end = nxt[0], nxt[1]
+        ways.append(way)
+    return ways, owner
+
+
 def oriented(lanes: Sequence[Mapping[str, Any]], i: int, ei: int, j: int, ej: int) -> tuple[Poly, Poly]:
     """The two lanes of a joint as one walk: `x` ENDS at the joint and `y` STARTS there."""
     x, y = _pts(lanes[i]), _pts(lanes[j])

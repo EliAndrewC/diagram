@@ -74,6 +74,7 @@ GROW_JITTER_FRAC = 0.12
 #: four against main's 21.5 (every ring 1.0-2.0 in quarters: 405, 361, 386, 352 ft at 44.6 s; twelve directions: 429, 362, 421, 374
 #: at 29.6 s). A search breadth, never a rule - every seat is still asked every rule.
 GROW_LEVELS: tuple[tuple[int, tuple[float, ...]], ...] = ((16, (1.0, 1.5, 2.0)),)
+"""Research: the growth's offers - UNRESEARCHED: 16 directions at 1.0, 1.5 and 2.0 times the least distance, all offered at once (measured: specs/318-grow-outward-no-restart/research.md R1)"""
 #: Half a woodlot clump's width about a reserved wood seat, in px: the copse's clump (`COPSE_CLUMP_BS` at hamlet scale is 24)
 WOOD_CLUMP_PX = 12.0
 #: How many times a seat is moved out to clear its own envelope rolled where it stands (`settled_seat`) before it is dropped:

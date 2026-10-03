@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from l7r.diagram.hamletgen.ways.joints import joints, keeps_the_web, oriented, pulled, straighten_joints, tee, unhooked
+from l7r.diagram.hamletgen.ways.joints import as_walked, joints, keeps_the_web, oriented, pulled, straighten_joints, tee, unhooked
 
 from ._builders import _webbed
 
@@ -292,3 +292,23 @@ def test_two_lanes_meeting_end_to_end_are_never_pulled_into_a_kink(monkeypatch: 
     s = _webbed([{"pts": x, "w": 3}, {"pts": y, "w": 3}])
     straighten_joints(s, [], [], [])
     assert len(_lanes(s)) == 2 and all(not law.kinks([tuple(p) for p in pts]) for pts in _lanes(s)), "not taken: no kink made"
+
+
+def test_lanes_met_end_to_end_are_walked_as_one_way() -> None:
+    """`as_walked` (feature 318): two records meeting end to end at a joint are one way, in walking order whichever way each
+    was drawn; a lane a third way touches at its end, and a lane of one point, stand alone."""
+    lanes = [
+        {"pts": [[0.0, 0.0], [100.0, 0.0]]},
+        {"pts": [[200.0, 0.0], [100.0, 0.0]]},  # drawn backwards, met end to end at (100, 0)
+        {"pts": [[500.0, 0.0], [600.0, 0.0]]},
+        {"pts": [[600.0, 0.0], [700.0, 0.0]]},
+        {"pts": [[600.0, -50.0], [600.0, 50.0]]},  # a third way through the second joint: no joint there
+        {"pts": [[900.0, 900.0]]},
+    ]
+    ways, owner = as_walked(lanes)
+    assert owner[0] == owner[1] and ways[owner[0]] in ([(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)], [(200.0, 0.0), (100.0, 0.0), (0.0, 0.0)])
+    assert len({owner[2], owner[3], owner[4]}) == 3, "a joint a third way touches is no joint"
+    assert ways[owner[5]] == [(900.0, 900.0)] and len(ways) == 5
+    loop = [{"pts": [[0.0, 0.0], [100.0, 0.0], [100.0, 100.0]]}, {"pts": [[100.0, 100.0], [0.0, 100.0], [0.0, 0.0]]}]
+    ways, owner = as_walked(loop)
+    assert len(ways) == 2 and owner == [0, 1], "two lanes meeting at both ends are a loop, not a joint"

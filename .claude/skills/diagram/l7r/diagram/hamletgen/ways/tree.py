@@ -311,7 +311,10 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             # ...NOR RUNS BESIDE ANOTHER TREE LANE PAST A PITCH, either way round (feature 294: a Sawada roll joined one access
             # lane to its neighbor's at a shallow angle, 115 ft within 30 ft of it - the doubled band `_lay_web_lane` refuses
             # of a web run, never asked of the tree; the pool test of feature 293 reads it on the finished map).
-            if tree_shadows([ln["pts"] for ln in lanes]):
+            # ...AND AS THE WALKER READS THEM (feature 318, Inashiro): two records met end to end are one way (`joints.as_walked`),
+            # and a corridor whose host chain ran beside a third access lane for 105 ft passed record by record - until the
+            # web pulled the joint straight and the doubled band stood as one record, two tree lanes no settle may cut
+            if tree_shadows([ln["pts"] for ln in lanes]) or walked_shadows(lanes):
                 return False
     return True
 
@@ -350,6 +353,19 @@ def as_joined(trial: Mapping[str, Any], lanes: Sequence[Mapping[str, Any]]) -> l
             p = [_pt(q) for q in out[i]["pts"]]
             out[i]["pts"] = [*p, f] if end == -1 else [f, *p]
     return out
+
+
+def walked_shadows(lanes: Sequence[Mapping[str, Any]]) -> bool:
+    """Does the way the last lane is read as (`joints.as_walked`: the lanes met end to end joined) run beside another way
+    past a pitch, or another beside it (`tree_shadows`, on the walked ways)?
+
+    Research: no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch, read as the walker reads it"""
+    from .joints import as_walked  # joints reaches the web's smoothing; imported here, where the seating asks it
+
+    ways, owner = as_walked(lanes)
+    k = owner[len(lanes) - 1]
+    order = [*(w for m, w in enumerate(ways) if m != k), ways[k]]
+    return tree_shadows(order)
 
 
 def tree_shadows(ways: Sequence[Sequence[Pt]]) -> bool:
@@ -508,6 +524,10 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
                 if j != i and not is_tree(lanes[j]) and len(o) >= 2 and any(along_tail(r, o, deg=_DOUBLED_DEG) is not None for r in (ways[i], ways[i][::-1])):
                     q = min((ways[i][0], ways[i][-1]), key=lambda e: min(seg_dist(e[0], e[1], a, b) for a, b in zip(o, o[1:], strict=False)))
                     out.append((j, q))
+    # ...OR RUNS BESIDE ONE PAST A PITCH, either way round (feature 318, Sawada): a reserved corridor drawn again where a drop
+    # left its house unreached (`settle_reach`) ran beside the web's orphan link, the link held the network together and the
+    # tree lane is never cut, so the doubled band stood - the ordinary lane is cut at the middle of its stretch beside it
+    out += [(j, q) for i, j, q in tree_shadow_cuts(lanes, ways)]
     for face, bounding in law.needle_loops(M):
         if any(is_tree(lanes[i]) for i in bounding):
             c = face.centroid.coords[0]
@@ -515,6 +535,38 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
     for _h, ends in law.fronting_ends(M).items():
         if len(ends) > law.DOORSTEP_MAX:
             out += [(i, ways[i][e]) for i, e in ends if not is_tree(lanes[i])]
+    return out
+
+
+def tree_shadow_cuts(lanes: Sequence[Mapping[str, Any]], ways: Sequence[Sequence[Pt]]) -> list[tuple[int, int, Pt]]:
+    """(tree lane, ordinary lane, the point to cut it at) for every ordinary lane running beside a tree lane past a pitch, or
+    a tree lane beside it (`serve.shadowed_by`, way against way): the middle of the ordinary lane's longest stretch within
+    `WEB_SHADOW_FT` of the tree lane - where a cut of `DEFER_GAP_FT` either side leaves no stretch past the pitch.
+
+    Research: no doubled band - CONVENTION: beside another unbroken for more than a bundle pitch; the ordinary lane defers"""
+    from .serve import WEB_SHADOW_FT, sampled, shadowed_by
+
+    out: list[tuple[int, int, Pt]] = []
+    for i, p in enumerate(ways):
+        if not is_tree(lanes[i]) or len(p) < 2:
+            continue
+        for j, o in enumerate(ways):
+            if j == i or is_tree(lanes[j]) or lanes[j].get("connector") or len(o) < 2:
+                continue
+            if shadowed_by([p, o], 0) is None and shadowed_by([o, p], 0) is None:
+                continue
+            run = sampled(o)
+            near = [min(seg_dist(q[0], q[1], a, b) for a, b in zip(p, p[1:], strict=False)) < WEB_SHADOW_FT for q in run]
+            best = (0, 0)
+            start = None
+            for k, f in enumerate([*near, False]):
+                if f and start is None:
+                    start = k
+                elif not f and start is not None:
+                    best = max(best, (k - start, start))
+                    start = None
+            if best[0]:
+                out.append((i, j, run[best[1] + best[0] // 2]))
     return out
 
 

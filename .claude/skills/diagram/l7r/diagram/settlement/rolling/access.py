@@ -91,8 +91,8 @@ class AccessTree:
         self.grid = PointGrid(128.0)
         self._targets: dict[Pt, list[Pt]] = {}  # `targets`, remembered while no corridor is added
         self._along: list[list[Pt]] = []  # each corridor's points every `TARGET_STEP_PX`
-        # how many of the tree's nearest points a door's corridor is tried to: `TARGETS_TRIED`, widened for a near miss's rescue
-        # (`capacity.seat_the_rest`, feature 306) and set back after it
+        # how many of the tree's nearest points a door's corridor is tried to: `TARGETS_TRIED` (the rescue that widened it for a
+        # near miss went with feature 318)
         self.tried = TARGETS_TRIED
         # ...and whether a door no straight corridor clears is routed round what stands (`route.py`, feature 308 plan D3): the
         # nucleated seating's tree only

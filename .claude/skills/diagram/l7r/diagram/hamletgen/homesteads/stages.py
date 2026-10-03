@@ -66,7 +66,7 @@ def face_the_houses(s: Settlement, plan: SitePlan) -> None:
     The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
     along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
     turns from it with the field margin its lanes will follow (`MarginBearing`, on the paddy's envelope and the seat's
-    own axis), plus its own by-eye spread, and one in ten a quarter turn (`Settlement._house_rot`).
+    own axis), plus its own by-eye spread, held under 30 degrees with no quarter turn (`Settlement._house_rot`, `bearing.house_rot`).
     Research: house bearing - research/questions/0029-farmhouses-minka.html, research/questions/0029-farmhouses-minka.drawing.html: a common bearing within `COMMON_BEARING_DEG` of south, turned with the field margin"""
     common = round((knob_rng(s.seed, "house_bearing").random() * 2.0 - 1.0) * COMMON_BEARING_DEG, 2)
     s._house_bearing = common
@@ -240,7 +240,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         s.M["meta"]["row_holdings_drawn"] = draw_holdings(s)
     hold_laid_parts(s, s.M.get("houses") or [])  # the pockets and fixtures stand for the ways laid before they are drawn (M8)
     reserve_the_seating(s)  # ...and the corridors and wood seats it reserved, for every placer after it (M8, `overlap/reserved.py`)
-    # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
+    # how many farmhouses stand a quarter turn off the common bearing (269 B18; none since the turn was dropped) - measured on
+    # what was drawn, so the share is a count, not a hope
     s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
     # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
     # before the houses, so its arms had to be shortened afterwards once there was something to

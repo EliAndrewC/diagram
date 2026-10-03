@@ -562,7 +562,7 @@ def settle_joins(s: Any) -> int:
 
     Research:
         ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way; an
-            ordinary end whose join breaks a rule against a tree lane taken back instead"""
+            ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back instead"""
     edits: dict[int, list[Poly]] = {}
     # A TREE LANE'S END IS CARRIED ONTO ITS WAY AS ANY LANE'S IS: the span only adds tread, over walkable ground, meeting the
     # way clean (`law.near_misses`), and the lane it reaches is an ordinary one the tree's joint then binds
@@ -574,13 +574,25 @@ def settle_joins(s: Any) -> int:
         joined = [*p, f] if end == -1 else [f, *p]
         # ...BUT AN ORDINARY LANE WHOSE JOIN WOULD BREAK A RULE AGAINST A TREE LANE DEFERS: it is taken back out of the join's
         # reach instead - the deference would cut the join again, and the two passes took turns until the rounds ran out
-        # (cohort seed 25 under the probes)
-        if not is_tree(lanes[i]) and any(k == i for k, _q in tree_faults(with_edits(s.M, {i: [joined]}))):
+        # (cohort seed 25 under the probes). AND SO DOES ONE WHOSE JOIN THE OVERLAP MATRIX REFUSES (feature 318, Kuwabata): the
+        # law's walkable span reads the centerline 4 ft off a yard or garden, the matrix the whole tread, so a span the law
+        # called walkable was refused at the write (`reshape_lane`) every round and the end left short of its way until the
+        # web was refused - an end whose span is blocked is two ways, each ending at what it serves (`law.near_misses`)
+        if not is_tree(lanes[i]) and (not _join_admitted(s, lanes[i], joined) or any(k == i for k, _q in tree_faults(with_edits(s.M, {i: [joined]})))):
             seq = _as_end(p, end)
             edits[i] = [_back(sub_run(seq, 0.0, polyline_len(seq) - law.JOIN_REACH_FT - JOIN_BACK_PAD_FT), end)]
             continue
         edits[i] = [joined]
     return apply_pieces(s, edits) if edits else 0
+
+
+def _join_admitted(s: Any, ln: Mapping[str, Any], joined: Poly) -> bool:
+    """Would the overlap matrix admit lane `ln` rewritten along `joined` - the question `reshape_lane` asks at the write,
+    asked first so a refused join is taken back rather than left short (`settle_joins`, feature 318).
+
+    Research: plumbing - NONE: the registry's own admission, at the record's 0.1 px
+    """
+    return bool(s.admits("lanes", {**ln, "pts": [[round(float(x), 1), round(float(y), 1)] for x, y in joined]}, ignore=ln))
 
 
 JOIN_BACK_PAD_FT = 5.0

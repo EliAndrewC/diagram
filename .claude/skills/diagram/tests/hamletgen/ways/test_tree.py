@@ -234,7 +234,10 @@ def test_an_ordinary_lane_breaking_a_rule_against_a_tree_lane_is_cut_never_the_t
     assert tree.tree_faults(M) and all(i == 2 for i, _q in tree.tree_faults(M))
     s = _S(M)
     assert tree.settle_defer(s) == 1 and M["lanes"][1]["pts"] == [[100.0, 100.0], [300.0, 100.0]], "the tree stands"
-    assert tree.tree_faults(M) == [] and tree.settle_defer(s) == 0
+    for _ in range(5):  # ...and the stretch the cut left 1 ft beside the tree lane is a doubled band, cut in turn (feature 318)
+        if not tree.settle_defer(s):
+            break
+    assert tree.tree_faults(M) == [] and tree.settle_defer(s) == 0 and M["lanes"][1]["pts"] == [[100.0, 100.0], [300.0, 100.0]]
     doubled = _tree(houses=[], access_corridors=[])
     doubled["lanes"] += [{"pts": [[0.0, 100.0], [300.0, 100.0]], "w": 3, "role": ACCESS_ROLE}, {"pts": [[250.0, 106.0], [600.0, 106.0], [600.0, 400.0]], "w": 3}]
     assert [i for i, _q in tree.tree_faults(doubled)] == [2], "the tree lane's tail beside it: the ordinary lane defers"
@@ -427,3 +430,29 @@ def test_a_house_another_is_reached_across_is_owed_its_way_and_never_pruned_of_i
     assert tree.passage_anchors(M) == [(300.0, 100.0)] and tree.owed(M) == [0], "...until another household is reached across it"
     M["lanes"].append({"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [300.0, 100.0]})
     assert tree.prune_the_tree(_S(M)) == 0 and any(ln.get("role") == ACCESS_ROLE for ln in M["lanes"]), "its way is not pruned"
+
+
+def test_a_corridor_is_judged_beside_another_as_the_walker_reads_it() -> None:
+    """`tree.walked_shadows` (feature 318, Inashiro): two records met end to end, each beside a third way for under a pitch,
+    are one way beside it for more - the doubled band the web's joint pass left standing as one record."""
+    beside = [(0.0, 25.0), (120.0, 25.0)]  # 25 ft off: a record of 60 ft is beside it for under 77 ft, the two together 120
+    halves = [{"pts": [[0.0, 0.0], [60.0, 0.0]]}, {"pts": [[60.0, 0.0], [120.0, 0.0]]}]
+    lanes = [{"pts": [list(q) for q in beside]}, *halves]
+    assert not tree.tree_shadows([[(float(x), float(y)) for x, y in ln["pts"]] for ln in lanes]), "record by record: no band"
+    assert tree.walked_shadows(lanes), "as walked: 120 ft beside it"
+    assert not tree.walked_shadows([{"pts": [[0.0, 200.0], [120.0, 200.0]]}, *halves])
+
+
+def test_an_ordinary_lane_beside_a_tree_lane_past_a_pitch_defers_at_the_middle_of_its_stretch() -> None:
+    """`tree.tree_shadow_cuts` in `tree_faults` (feature 318, Sawada): an ordinary lane running beside a tree lane past a pitch
+    is cut at the middle of its stretch beside it - the tree is never cut; under a pitch, or two ordinary lanes, nothing."""
+    lanes = [
+        {"pts": [[0.0, 0.0], [300.0, 0.0]], "role": ACCESS_ROLE, "w": 3.0},
+        {"pts": [[100.0, 20.0], [260.0, 20.0], [260.0, 200.0]], "w": 5.0},
+    ]
+    faults = tree.tree_faults({"lanes": lanes})
+    assert any(i == 1 and abs(q[1] - 20.0) < 1e-6 and 170.0 <= q[0] <= 190.0 for i, q in faults), faults
+    short = [lanes[0], {"pts": [[100.0, 20.0], [140.0, 20.0], [140.0, 200.0]], "w": 5.0}]
+    assert not tree.tree_shadow_cuts(short, [[(float(x), float(y)) for x, y in ln["pts"]] for ln in short])
+    plain = [{**lanes[0], "role": None}, lanes[1]]
+    assert not tree.tree_shadow_cuts(plain, [[(float(x), float(y)) for x, y in ln["pts"]] for ln in plain])
