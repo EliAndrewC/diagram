@@ -1,146 +1,148 @@
 {
  "feature": "316-research-referencing",
- "plan_sha256": "982e4adb0b51974aae1ec904d38d40116c4dd9c6478e27dd47b7729964bf3264",
- "reviewed": "2026-10-02",
+ "plan_sha256": "ba8a5e5a09b113ae6c9f497a61466b2bb95c0629e488e14cc258e5348dd70466",
+ "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "TC-scope-route",
-   "summary": "claims.py + scripts/_claims.py + claims-gate.sh; scope now 245 modules (the 241 imported plus the four parent package __init__ modules an import runs), 3,728 units by claims.all_units 2026-10-02; GATED route",
+   "summary": "claims.py + scripts/_claims.py + claims-gate.sh; 245 modules (241 imports plus four parent package __init__), 3,728 units by claims.all_units 2026-10-02; GATED route",
    "class": "within",
-   "why": "FR-002 is every engine module hamlet generation imports directly or indirectly; importing a submodule executes each package __init__ above it, so the four are in the import graph. Re-measured 2026-10-02: claims._scope_trees returns 245 modules."
+   "why": "Unchanged since round 2. FR-002 is the import graph; importing a submodule runs each package __init__ above it. The amendment does not touch scope."
   },
   {
    "id": "TC-reuse-cache",
    "summary": "Reuses _record_units.read_page, _entry_owed, sources.research_questions, reason-ok; gencache invalidated once, pool re-rolled, no map output change",
    "class": "within",
-   "why": "Cost noted; nothing requested dropped."
+   "why": "Unchanged; cost noted, nothing requested dropped."
   },
   {
    "id": "D1",
-   "summary": "Claim grammar: Research: section, one claim per line, one-line header form, literal after a constant, marked HTML comment in a procedure section",
+   "summary": "Claim grammar gains `GUESS [<question file>]` (the drawing page recording the guess) and `CANON` (the GM's canon or ruling); rest unchanged",
    "class": "within",
-   "why": "FR-001, FR-003."
+   "why": "Carries the amended FR-001 exactly: CANON as the GM's canon or ruling, a GUESS optionally naming the drawing page that records it. The grammar admits any question file after GUESS where FR-001 says the drawing page; that is a looser parser, not a narrowing (impl-drift judges whether the named page records the guess)."
   },
   {
    "id": "D2",
    "summary": "Units, nesting, module inheritance, import-graph scope, keys path::qualname#label, sections split at ##-####",
    "class": "within",
-   "why": "FR-002, FR-004 and the inheritance, nesting and procedure-section Edge Cases."
+   "why": "Unchanged; FR-002, FR-004 and the inheritance, nesting and procedure-section Edge Cases."
   },
   {
    "id": "D3-constants",
-   "summary": "Code fingerprint takes NAME=<value> for every in-scope constant the unit reads - own module, from x import NAME, or <alias>.NAME for an in-scope module alias - keyed by constant name so a split owes nothing",
+   "summary": "Code fingerprint takes NAME=<value> for every in-scope constant the unit reads, own module, from-import or alias.NAME, keyed by constant name",
    "class": "within",
-   "why": "Round-1 item resolved: the alias route is now in D3 and in the draft (module_aliases, values()). The plan's words cover every in-scope constant read through a from-import. IMPLEMENTATION DEFECT against those words, measured 2026-10-02 (probe over claims._scope_trees): 22 from-imports name a constant through an in-scope module that only RE-EXPORTS it (e.g. hamletgen/plan reads GROVE_SIDES from hamletgen/consts, which imports it from settlement/homestead_parts/grove_sides); the draft values() looks NAME up only in the importing source module's own assignments, so those readers would not be owed when the value changes (SC-002), and the plan's own CC-file-scale split ('re-exported where callers import it') would drop callers' hits and change their cores. Resolve a from-import through re-export chains to the defining module, with a fixture test, before D3 is ticked."
+   "why": "Unchanged text. The round-2 implementation defect (re-exported constants) is addressed in claims.reexported (tools/claims.py:423, commit 8c9aa0fc0), which resolves a from-import through the re-export chain to the defining module."
   },
   {
    "id": "D3-core",
-   "summary": "Core = nameless dump (function/method/class shell less its own name; constant = value) plus constant values, without the claim line; procedure section text less non-claim comments; callees not followed",
+   "summary": "Core = nameless dump plus constant values, without the claim line; procedure section text less non-claim comments; callees not followed",
    "class": "within",
-   "why": "Round-1 D7 mechanism item resolved: nameless_dump strips the unit's own name, so a rename with code intact keeps its core (FR-010's 'unit merely renamed'). Callee limit is a recorded spec decision."
+   "why": "Unchanged; FR-010's renamed unit and the recorded callee limit."
   },
   {
    "id": "D4",
-   "summary": "Research fingerprint = _entry_owed.findings of each cited page; pointers reduced to heading ids in the claim line",
+   "summary": "Research fingerprint = _entry_owed.findings of each cited page; a GUESS naming a page is fingerprinted with it; bare GUESS, UNRESEARCHED, CONVENTION, CANON, NONE empty; pointers reduced to heading ids",
    "class": "within",
-   "why": "FR-004(b) and the rename/intro/drawing-page Edge Cases."
+   "why": "Matches the amended Edge Case word for word: a bare GUESS, UNRESEARCHED, CONVENTION, CANON or NONE claim is owed only on a code change; a GUESS naming its drawing page is owed when that page's findings change."
   },
   {
    "id": "D5-verdicts",
    "summary": "Index verdicts IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED, UNCLAIMED, CANNOT-TELL",
    "class": "within",
-   "why": "Round-1 item resolved: the six verdicts of FR-005."
+   "why": "Unchanged; FR-005's six verdicts."
   },
   {
    "id": "D6-record",
-   "summary": "record writes VERDICT rows; an UNCLAIMED line becomes its own row keyed path::qualname#decision with the unit's core, printed too, dropped when a later verdict on that unit's claims does not report it again",
+   "summary": "record writes VERDICT rows; UNCLAIMED rows keyed path::qualname#decision, dropped when a later verdict on that unit does not report it again",
    "class": "within",
-   "why": "Round-1 item resolved: FR-009 and US3 scenario 4 (recorded as needing a claim, stays a finding until a covering claim is written and checked). Dropping on a later check that no longer reports it is the observable form of 'a claim covering it written and checked'."
+   "why": "Unchanged; FR-009 and US3 scenario 4."
   },
   {
    "id": "D6-owed-bundle-report",
    "summary": "claims-owed, claims-bundle (outside the repo, REASON= for a unit not owed), claims-report (counts, non-IN-STEP rows, UNRESEARCHED claims)",
    "class": "within",
-   "why": "FR-006, FR-007, FR-011, US6 scenario 2."
+   "why": "Unchanged; FR-006, FR-007, FR-011."
   },
   {
    "id": "D7-rename",
-   "summary": "'Changed the code' across keys: a unit's nameless core matching a base unit's core whose key is gone at the head, or the base core under its own key, is unchanged; a copy beside a live original or an edited unit is changed",
+   "summary": "Changed the code asked across keys by the nameless core against vanished base keys",
    "class": "within",
-   "why": "Round-1 item resolved on both counts: the name is out of the core (D3) and only vanished base keys are candidates, so a rename or move is pre-existing per FR-010 and a new copy is introduced."
+   "why": "Unchanged; FR-010."
   },
   {
    "id": "D7-rest",
-   "summary": "Push refuses owed units and introduced findings (all five finding verdicts, UNCLAIMED now included), warns on pre-existing, finding at both ends pre-existing, CLAIMS_OK logged, silent when nothing in scope changed, both routes",
+   "summary": "Push refuses owed units and introduced findings, warns on pre-existing, CLAIMS_OK logged, silent when nothing in scope changed, both routes",
    "class": "within",
-   "why": "FR-010, US4 scenarios 1-7; UNCLAIMED in the refusing set per round-1 D5 item."
+   "why": "Unchanged; FR-010, US4."
   },
   {
    "id": "D8",
-   "summary": "Coverage test over claims.all_units: every module claims.scope reaches plus the procedure sections",
+   "summary": "Coverage test over claims.all_units",
    "class": "within",
-   "why": "Round-1 item resolved: FR-002 and SC-001 scope, computed from the source each run (all_units walks _scope_trees)."
+   "why": "Unchanged; FR-002, SC-001."
   },
   {
    "id": "D9",
-   "summary": "Procedure scope: all of buildings.md; programs.md's magistrate's-manor and country-shrine sections with subheadings",
+   "summary": "Procedure scope: all of buildings.md; programs.md's magistrate's-manor and country-shrine sections",
    "class": "within",
-   "why": "FR-003 and the recorded buildings.md decision."
+   "why": "Unchanged; FR-003 and the recorded buildings.md decision."
   },
   {
    "id": "D10",
    "summary": "Walk-through renders each stage's and step's claims with links, classes and verdicts; tested",
    "class": "within",
-   "why": "FR-012, SC-006, US5."
+   "why": "Unchanged; FR-012 (each class shown as the class it is covers CANON with no change)."
   },
   {
    "id": "D11",
-   "summary": "impl-drift on Opus medium, omitClaudeMd, Read+Grep, VERDICT and UNCLAIMED lines; dispatched as general-purpose on Opus this session",
+   "summary": "impl-drift guidance: GUESS/UNRESEARCHED IN-STEP when cited material is silent (a GUESS naming its drawing page, when that page records the guess), CANON IN-STEP when it names the GM's ruling, MISLABELED when a question in the bundle answers it",
    "class": "within",
-   "why": "FR-008, FR-005."
+   "why": "Carries the amended FR-005: a CANON label is excluded from NEEDS-RESEARCH, and a class the bundle's research answers is MISLABELED. The contract (.claude/agents/impl-drift.md:45-47) says the same."
   },
   {
    "id": "D12-writers",
-   "summary": "Opus writer agents per module group on disjoint files; impl-drift per group; MISLABELED and UNCLAIMED applied, two rounds; ledger rows",
-   "class": "within",
-   "why": "FR-013, US6."
+   "summary": "Writers per module group (as run, 14 code groups and one for the procedures), each writing claims: NONE for plumbing, UNRESEARCHED where nothing in the record bears and no GUESS label already stood",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The amended spec excepts the GM's rulings from the record-silent-means-UNRESEARCHED rule (US6 scenario 2: 'and no ruling of the GM decides it (that is CANON)'; Assumptions: 'and no ruling of the GM decides (that is CANON), is claimed UNRESEARCHED'). D12's writer rule was not amended: read literally, a decision the GM ruled on, which the research record is silent on, is written UNRESEARCHED - the exact passage-shape the amendment's own round 1 returned CHANGES REQUIRED on in the spec. Not impossible, not implied, and it defeats the amendment's purpose (claims on the GM's rulings mislabeled for want of a class). Fix: 'UNRESEARCHED where nothing in the record bears, no ruling of the GM decides it (CANON) and no GUESS label already stood'. The group count 'as run' is a record of the run, within."
   },
   {
    "id": "D12-needs-research",
-   "summary": "A NEEDS-RESEARCH finding's claim is relabeled UNRESEARCHED and re-checked; DRIFTED alone stands, with any CANNOT-TELL the second round still returns",
-   "class": "within",
-   "why": "Round-1 item resolved: FR-013's relabeling. A CANNOT-TELL left after the two-round cap is recorded as the finding FR-005 defines (UNRESOLVED, never a pass), listed by the report (SC-003) and warned at the push; FR-013 names no correction for it, so leaving it recorded removes nothing the spec requires."
+   "summary": "A NEEDS-RESEARCH finding's claim is relabeled UNRESEARCHED and re-checked; DRIFTED alone stands, with any CANNOT-TELL the second round returns",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Same seam as D12-writers: under the amended FR-005 a NEEDS-RESEARCH finding is a decision the record does not cover whose claim labels it neither guess, unresearched nor canon; where a ruling of the GM decides it, the amended US6 scenario 2 and Assumptions make it CANON, yet D12 relabels every NEEDS-RESEARCH claim UNRESEARCHED. FR-013 asks only that 'an unresearched decision' be labeled UNRESEARCHED. Fix: 'relabeled UNRESEARCHED, or CANON where a ruling of the GM decides it'. The CANNOT-TELL part stands as ruled at round 2."
   },
   {
    "id": "D13",
    "summary": "296 superseded, pointers rewritten to 0033, two claims with DRIFTED rows naming 296",
    "class": "within",
-   "why": "FR-014, SC-007."
+   "why": "Unchanged; FR-014, SC-007."
   },
   {
    "id": "D14",
    "summary": "Seeded impl-drift runs: four known units, three runs",
    "class": "within",
-   "why": "SC-005."
+   "why": "Unchanged; SC-005."
   },
   {
    "id": "D15",
-   "summary": "Doctrine in dev loop, research CLAUDE.md, guard table, guards.md, reviews.md; messages name the command",
+   "summary": "Doctrine in dev loop, research CLAUDE.md, guard table, guards.md, reviews.md",
    "class": "within",
-   "why": "FR-015, SC-008."
+   "why": "Unchanged; FR-015."
   },
   {
    "id": "CC-XII-XIII-XIV-XVI",
-   "summary": "No rendering change, maps re-rolled against manifests, DRIFTED recorded per the spec, nothing exempted",
+   "summary": "No rendering change; audit labels the four classes plus UNRESEARCHED and NONE; maps re-rolled against manifests; DRIFTED recorded; nothing exempted",
    "class": "within",
-   "why": "Restates the spec's recorded decisions."
+   "why": "Restates the spec's recorded decisions. The XII line's class list omits CANON; a stale enumeration, not a decision, but it should gain CANON with the D12 fix."
   },
   {
    "id": "CC-file-scale",
-   "summary": "Files pushed past 1,000 lines are split mechanically with re-exports, never FILE_SIZE_OK",
+   "summary": "Files pushed past 1,000 lines split mechanically with re-exports, never FILE_SIZE_OK",
    "class": "within",
-   "why": "Forced by the gate's bar; depends on D3 following re-exports (see D3-constants)."
+   "why": "Unchanged; forced by the gate's bar, and D3 now follows re-exports."
   },
   {
    "id": "Risks",
@@ -149,5 +151,5 @@
    "why": "Operational notes."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

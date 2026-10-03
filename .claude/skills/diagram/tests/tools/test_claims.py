@@ -40,8 +40,9 @@ def test_a_guess_may_name_the_drawing_page_that_records_it() -> None:
     assert cl.parse_claim("a gap - GUESS").pointers == ()
     c = cl.parse_claim(f"a gap - GUESS {D}: 12 ft")
     assert (c.backing, c.pointers, c.account) == ("GUESS", (D,), "12 ft")
-    with pytest.raises(cl.ClaimError, match="names question files or nothing"):
-        cl.parse_claim("a gap - GUESS maybe")
+    for bad in ("a gap - GUESS maybe", f"a gap - GUESS {Q}"):
+        with pytest.raises(cl.ClaimError, match="names the drawing page"):
+            cl.parse_claim(bad)
 
 
 def test_a_deviation_names_the_question_it_departs_from() -> None:

@@ -131,9 +131,10 @@ gotcha). (FR-008)
 **D12 - The audit, in two independent passes.** Writers: `general-purpose` agents on Opus, one per module group (about
 4,000-5,000 lines each, by subpackage - about 16 groups over the 74,331 lines counted in the spec Context; as run, 14 code groups and one for the procedures), each writing the `Research:` claims into its own files only - moving the
 existing comment pointers and labels into claim lines, choosing pointers by grepping question headings, NONE for plumbing (a
-module-level NONE where the whole module is), UNRESEARCHED where nothing in the record bears and no GUESS label already stood.
+module-level NONE where the whole module is), UNRESEARCHED where nothing in the record bears, no ruling of the GM decides it (CANON) and no GUESS label already
+stood.
 Then `make claims-owed` and one `impl-drift` per group bundle. MISLABELED and UNCLAIMED findings are applied to the claims, and a
-NEEDS-RESEARCH finding's claim is relabeled UNRESEARCHED (spec FR-013), each re-checked (two rounds at most, as review checks);
+NEEDS-RESEARCH finding's claim is relabeled UNRESEARCHED, or CANON where a ruling of the GM decides it (spec FR-013), each re-checked (two rounds at most, as review checks);
 DRIFTED alone stands in the index, with any CANNOT-TELL the second round still returns. The procedure documents get
 one writer and one check. Every pass a row in `docs/review-ledger.md` with its cost. (FR-013)
 
@@ -151,7 +152,7 @@ as MISLABELED, an unclaimed decision), three `impl-drift` runs; recorded in `res
 
 ## Constitution Check
 
-- XII research: no rendering decision changes; the audit labels decisions in the four classes plus UNRESEARCHED (the spec's
+- XII research: no rendering decision changes; the audit labels decisions in the four classes plus UNRESEARCHED, CANON (the spec's
   recorded decision) and NONE. No research pass, so no physical task boxes are owed beyond the record's existing state.
 - XIII no regressions: maps unchanged (docstrings only); the gate re-rolls the hamlet pool on the invalidated cache and must
   match its manifests.
