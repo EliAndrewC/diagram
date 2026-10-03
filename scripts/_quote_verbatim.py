@@ -456,12 +456,20 @@ def render(page: str, entries: list[dict], refused: dict[str, str]) -> str:
 
 
 def wanted(spec: str) -> set[str] | None:
-    """`90-108,113` -> the fn ids it names; empty -> None (every note). A scoped check is the usual one."""
+    """`90-108,113` -> the fn ids it names; a registry key or a note id (`wanli-fishpond-summary-2`) names every note
+    citing that key - CLAUDE.md documents NOTES=<ids>, and a note id crashed the parse (2026-10-03). Empty -> None."""
     ids: set[str] = set()
     for part in filter(None, (p.strip() for p in spec.split(","))):
         lo, _, hi = part.removeprefix("fn-").partition("-")
-        ids.update(f"fn-{n}" for n in range(int(lo), int(hi or lo) + 1))
+        if lo.isdigit() and (not hi or hi.isdigit()):
+            ids.update(f"fn-{n}" for n in range(int(lo), int(hi or lo) + 1))
+        else:
+            ids.update({f"key:{part}", f"key:{re.sub(r'-[0-9]+$', '', part)}"})
     return ids or None
+
+
+def is_wanted(note: dict, only: set[str] | None) -> bool:
+    return only is None or note["id"] in only or f"key:{note['key']}" in only
 
 
 def cached_pages():  # noqa: ANN201
@@ -526,7 +534,7 @@ def main(argv: list[str] | None = None) -> int:
     entries: list[dict] = []
     for file in files:
         page_text, cite_text = numbered(research, file)
-        notes = [n for n in footnotes(cite_text) if only is None or n["id"] in only]
+        notes = [n for n in footnotes(cite_text) if is_wanted(n, only)]
         mine = report(notes, assertions(page_text), pages)
         for e in mine:
             e["question"] = file
