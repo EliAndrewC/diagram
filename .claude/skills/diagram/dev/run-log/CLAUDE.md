@@ -3,6 +3,20 @@
 One JSON file per gate run: target, scope, ELAPSED SECONDS, result, commit. Read it with
 `make audit`; never edit or delete an entry to make the history look better.
 
+A `make done` entry that RAN (not an `already-verified` reuse) also carries, since 2026-10-03 (GM: whether
+streaming failures would let a session start fixing early needs these numbers, and an outlier run needs telling
+from a slowdown):
+
+- `first_failure_s`, `last_failure_s` - seconds after the gate's start; a failed test marks its own moment, a
+  failed non-test phase the moment it ended. `failed_tests` - how many tests failed.
+- `host` - `load` and `mem_avail_mb` (MB) as `[start, end]`; `stall_s` - seconds over the run that some task
+  waited for `cpu`, for the disk (`io`, `io_full`: every task waiting) or for `memory` (the kernel's pressure
+  stall totals); `cpu_temp_c` as `[start, end]`; `throttle_ms` - thermal-throttle time over the run (`core`
+  summed over CPUs, `package`). A figure the host does not expose is left out.
+
+Written by `scripts/_runstats.py` (what each figure reads and why only one read each), pinned by
+`tests/tooling/test_runstats.py`.
+
 **A CLAUDE.md rather than a README, deliberately**: this is a rule a session has to KNOW, and a
 README is never loaded. See [`../perf-log/CLAUDE.md`](../perf-log/CLAUDE.md) for what that cost.
 

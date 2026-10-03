@@ -42,6 +42,10 @@ assert_via_make("the test suite", "quick   (lint, types, the unit tests)  or  ma
 
 pytest_plugins = ["pytester"]
 
+# The run log's first and last failure times (GM 2026-10-03): a mark per failed test, only when `make done`
+# names the file. Re-exported so pytest finds the hooks here; the body is in `tests/_gate_failures.py`.
+from tests._gate_failures import pytest_collectreport, pytest_runtest_logreport  # noqa: E402, F401
+
 TIERS = ("hamlet", "village", "town", "city", "capital")
 
 
