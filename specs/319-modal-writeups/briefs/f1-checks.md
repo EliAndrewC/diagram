@@ -26,3 +26,8 @@
 - round 3, source-reader: nihon-no-minka READ 4; minami-alps READ 5, NOT-FOUND 1 (the kannon-biraki gloss, reworded as the name's meaning); ikegami READ 5 (the well-off house hedged 'by its museum's reckoning'); the 0244 absence note recorded with REASON (no key, held against every page it names)
 - round 3, translation-check: 0029 FAITHFUL 3, 0244 FAITHFUL 9, 0117 LOOSE 2 ('Against this background ... around', 'wheat or barley straw') applied in 0117 and 0244
 - tooling: a one-page bundle (Q=<page>.html) listed the other page's owed units and so would have answered checks it never carried; _bundle_owed.py now cuts a page bundle to its page (test_a_one_page_bundle_carries_only_that_pages_units)
+- round 4, quote-check: 0029 page SUPPORTS (bunto glossed as this project's reading; the 'did not all face' lead kept, it sums up the survey items); 0029 drawing PARTIAL 3 ('permitted to move' in 1736, feng shui hedged; 'a quarter' kept, the project's own drawing rule); 0117 PARTIAL 1 ('big doorway', no 'front'); 0117 drawing and 0244 clean
+- round 4, record-format: 0117 and 0244 clean; 0029 VOCABULARY 1 - 'net-owner' dropped from the prose
+- round 4, source-applicability kotobank: MISSING 1 (Heibonsha's caution on one national series, 'almost all' plans) and OVERSTATED 1 ('two' not 'several') applied
+- round 4, source-reader: kotobank READ 4 (0244's 'between the posts / over them' cut to the page's posts-shown / posts-plastered-in); nihonminkaen-kanto READ 2 (the cut projection named in the gloss, 'beside it' cut); minami-alps READ 5 (the gloss honest); ikegami READ 4; mingu READ 4
+- round 4, translation-check: 0117 and 0244 FAITHFUL; 0029 LOOSE 1 - 'the house of an upper-class farming family' applied
