@@ -9,6 +9,15 @@
   "verifies": "F1",
   "answers": "86f173b401a2"
  },
+ "perf-317-control-40": {
+  "verifies": "the band-3 reading of the final bookends: seed 25 at 40 households +21.6% (homesteads +1.4 s), on the engine as it lands (014cb1a20)",
+  "subject": "perf bookend, reference spec, seeds 25 and 47, 40 households, the homesteads stage",
+  "value": 1.89,
+  "unit": "s, the homesteads stage's CPU at seed 25, 40 households, the passage share at 0 (median of three)",
+  "quantity": "three alternated takes, 2026-10-03, homesteads CPU seconds at 40 households: main (38901e2df) seed 25 1.69/1.79/1.87, seed 47 2.25/2.44/2.44; the clone 2.87/3.14/3.10 (5 seated by passage, 4 of them revoked on the finished seating, 1 kept) and 2.41/2.51/2.51; the clone with the passage share at 0 1.87/1.89/2.00 and 2.53/2.57/2.40 - the passage carries the whole of seed 25's growth (the share allows 9 at 40 households, so tight seats are tried all through the growth: 444 seatings tried against main's 284, 472 A* searches against 113, profiled); seed 47's crossing is in the web, on the layout the passage makes",
+  "source": "control_probe.py in the session's scratchpad (NOPASS=1 sets stages.passage_share to 0), run against both trees; the counts by cProfile on the same probe",
+  "observed": "2026-10-03"
+ },
  "perf-317-route-shared": {
   "verifies": "the 0.3 s of the homesteads stage at seed 39, 40 households, the perf-audit's second confirmation found unexplained with the passage share at 0",
   "subject": "perf, reference spec, seed 39 at 40 households, the homesteads stage (no passage on either engine)",
