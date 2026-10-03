@@ -720,3 +720,17 @@ def reserve(s: Settlement, corridor: tuple[Pt, ...], of: Pt | None = None) -> No
         if of is not None and k == 0:
             rec["of"] = [round(of[0], 1), round(of[1], 1)]
         s.M.setdefault("access_corridors", []).append(rec)
+    # ...AND KEPT CLEAR AS THE WEB WILL DRAW IT (feature 318, the reference at 40 households, seed 25): squaring a water crossing
+    # drops a bend that stands in the water (`checks.square_crossings`' elbow pass), so the drawn tread can run where the
+    # reserved one does not - a household seated later stood its privy beside the reserved corridor and on the drawn one, a
+    # tree lane no settle may cut, and the web was refused. Each drawn leg the reserved run lacks is barred (`bar`): kept clear
+    # of every later homestead as a corridor is, without becoming one - and recorded (`access_drawn`), so the registry every
+    # placer after the seating asks keeps it too (`stages.reserve_the_seating`: the privy was placed after the seating)
+    drawn_of = getattr(s, "_corridor_drawn", None)
+    if drawn_of is not None:
+        own = set(legs(corridor))
+        for a, b in legs(tuple(drawn_of(corridor))):
+            if (a, b) not in own:
+                s._access.bar(a, b)
+                leg = {"pts": [[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)]], "of": None if of is None else [round(of[0], 1), round(of[1], 1)]}
+                s.M.setdefault("access_drawn", []).append(leg)

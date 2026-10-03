@@ -806,9 +806,39 @@ def seating_judge(s: Any) -> Any:
         drawn = laid_run(base, s.M, run)
         if drawn != run and not own_clear(s, drawn, geom):
             return False
+        # ...AND EVERY OTHER HOMESTEAD CLEAR OF IT AS THE WEB WILL LAY IT (feature 318, the reference at 40 households, seed 25):
+        # the squaring dropped a bend that stood in a channel and the drawn chord ran through a neighbor's privy - the reserved
+        # legs had cleared the standing homesteads (`access.standing_clear`), the drawn ones were never asked
+        if drawn != run and not others_clear(s, drawn):
+            return False
         return admits(base, s.M, run, ACCESS_ROLE, house, yard)
 
     return judge
+
+
+def seating_drawn(s: Any) -> Any:
+    """A corridor as the web will draw it (`laid_run`: rejoined and squared at its water crossings), installed on the settlement
+    as `_corridor_drawn` for `access.reserve` - the settlement package cannot import the hamlet generator.
+
+    Research: a corridor kept clear as the web will lay it - research/questions/0081-village-lanes.drawing.html: nothing built on a lane
+    """
+
+    def drawn(corridor: Sequence[Pt]) -> Poly:
+        return laid_run(seating_law(s), s.M, [_pt(q) for q in corridor])
+
+    return drawn
+
+
+def others_clear(s: Any, run: Poly) -> bool:
+    """Does every leg of `run` clear the homesteads already standing, by the corridor's own test of them
+    (`access.standing_clear`) - the leg onto the tree passing unasked where it has no length?
+
+    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the strip clears every other homestead, as the web will lay it
+    """
+    from l7r.diagram.settlement.rolling import access as A
+
+    last = len(run) - 2
+    return all((n == last and math.dist(a, b) < 1e-6) or A.standing_clear(s, a, b) for n, (a, b) in enumerate(zip(run, run[1:], strict=False)))
 
 
 def own_clear(s: Any, run: Poly, geom: Mapping[str, Any]) -> bool:

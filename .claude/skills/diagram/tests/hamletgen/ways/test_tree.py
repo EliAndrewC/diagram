@@ -420,6 +420,25 @@ def test_a_corridor_whose_drawn_form_crosses_its_own_fixture_is_refused(monkeypa
     assert not judge(found, geom), "drawn across its own privy: refused"
 
 
+def test_a_corridor_whose_drawn_form_crosses_another_homestead_is_refused(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 318 (the reference at 40 households, seed 25): the squaring dropped a bend in a channel and the drawn chord ran
+    through a neighbor's privy - the reserved legs had cleared the standing homesteads, the drawn ones were never asked. The
+    judge asks `access.standing_clear` of the run as drawn (`others_clear`) where it differs from the run found."""
+    from l7r.diagram.settlement.rolling import access as A
+
+    s = types.SimpleNamespace(M=_tree(), px=lambda ft: ft, _access=types.SimpleNamespace(half=7.0))
+    geom = {"house": (100.0, 100.0, 40.0, 28.0), "yard": (100.0, 60.0, 30.0, 20.0), "turn": 180.0, "boxes": {"fixtures": {}}}
+    found = [(100.0, 48.0), (100.0, 20.0), (100.0, 0.0)]
+    chord = [(100.0, 48.0), (160.0, 0.0)]
+    monkeypatch.setattr(A, "standing_clear", lambda s_, a, b: b != (160.0, 0.0) and a != b)
+    assert tree.others_clear(s, found) and not tree.others_clear(s, chord)
+    assert tree.others_clear(s, [(100.0, 48.0), (100.0, 0.0), (100.0, 0.0)]), "a last leg of no length passes unasked"
+    monkeypatch.setattr(tree, "laid_run", lambda base, M, run: chord)
+    monkeypatch.setattr(tree, "own_clear", lambda s_, run, g: True)
+    assert not tree.seating_judge(s)(found, geom), "drawn through another homestead: refused"
+    assert tree.seating_drawn(s)(found) == chord, "the drawing `access.reserve` keeps clear"
+
+
 def test_a_house_another_is_reached_across_is_owed_its_way_and_never_pruned_of_it() -> None:
     """Feature 317 (Inashiro's glyph-check F1): the walk of a household reached across a neighbor's yard goes on along the
     neighbor's way, so the neighbor's corridor is owed however near the lanes its center stands, and never pruned."""

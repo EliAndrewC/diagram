@@ -217,6 +217,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
     s._corridor_ground = None  # the corridors' ground test is the seating's
     setattr(s, "_corridor_tree", None)  # noqa: B010 - ...and so is the tree's (`ways/tree.py`); read by `access.tree_admits` with a default
+    setattr(s, "_corridor_drawn", None)  # noqa: B010 - ...and its drawing (`tree.seating_drawn`, read by `access.reserve`)
     s._wood = None  # the reservations are the seating's; each household's record keeps its own (`wood_share`)
     s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
@@ -315,6 +316,10 @@ def reserve_the_seating(s: Settlement) -> None:
     exit_seg = s.M.get("access_exit")
     if exit_seg and len(exit_seg) >= 2:
         res.reserve_corridor(exit_seg[0], exit_seg[1], half, None)
+    # ...AND EACH CORRIDOR'S LEGS AS THE WEB WILL DRAW THEM where they differ (feature 318, `access.reserve`'s `access_drawn`):
+    # a bend in the water squared out of a corridor moves its tread, and a later placer kept off the reserved legs alone
+    for c in s.M.get("access_drawn") or []:
+        res.reserve_corridor(c["pts"][0], c["pts"][1], half, c.get("of"))
     clump = COPSE_CLUMP_BS * s.bscale
     seats = [p for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
     res.reserve_seats(seats, clump, max(clump * 0.45 + 4, crown_reach(clump, 0.0, lift=crown_lift(s.bscale))))
@@ -531,10 +536,11 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # strip from the seat's center was a corridor no way of the row follows, and the settle, drawing it, kinked it across the
     # brook off its ford (cohort seed 903)
     if plan.settlement_form == "nucleated":
-        from ..ways.tree import seating_judge
+        from ..ways.tree import seating_drawn, seating_judge
 
         s._corridor_ground = corridor_ground(s)
         setattr(s, "_corridor_tree", seating_judge(s))  # noqa: B010 - ...and the whole tree judged as lanes with each corridor (feature 287 wave 6)
+        setattr(s, "_corridor_drawn", seating_drawn(s))  # noqa: B010 - ...and each corridor reserved as the web will draw it (feature 318)
         _length = bound * 1.5 + BUNDLE_PITCH
         _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
         if _out is None:

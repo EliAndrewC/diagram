@@ -90,6 +90,33 @@ def test_the_seatings_corridors_and_seats_are_kept_off_by_every_later_placer() -
     assert not s.well_at(400.0, 450.0), "the communal well's placer asks it"
 
 
+def test_a_corridor_is_reserved_as_the_web_will_draw_it() -> None:
+    """Feature 318 (the reference at 40 households, seed 25): squaring a water crossing drops a bend in the water, so the drawn
+    tread runs where the reserved one does not. `access.reserve` bars each drawn leg the reserved run lacks and records it
+    (`access_drawn`, with the corridor's owner), and `reserve_the_seating` keeps every later placer off it too."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.settlement.rolling import access
+
+    s = _hamlet()
+    added: list[Any] = []
+    barred: list[Any] = []
+    s._access = SimpleNamespace(add=lambda a, b: added.append((a, b)), bar=lambda a, b: barred.append((a, b)))  # type: ignore[assignment]
+    run = ((100.0, 300.0), (400.0, 360.0), (400.0, 600.0))
+    s._corridor_drawn = lambda corridor: [corridor[0], corridor[-1]]  # type: ignore[attr-defined]
+    access.reserve(s, run, (100.0, 260.0))
+    assert added == [(run[0], run[1]), (run[1], run[2])] and barred == [(run[0], run[2])], "the drawn chord barred, not a corridor"
+    assert s.M["access_drawn"] == [{"pts": [[100.0, 300.0], [400.0, 600.0]], "of": [100.0, 260.0]}]
+    reserve_the_seating(s)
+    assert any(c[3] == [100.0, 260.0] and tuple(c[0]) == (100.0, 300.0) and tuple(c[1]) == (400.0, 600.0) for c in s.standing.reserved.corridors)
+    assert not s.admits("wells", {"x": 250.0, "y": 450.0, "r": 8, "vr": 12.4}), "a wellhead on the drawn chord"
+    t = _hamlet()
+    t._access = s._access  # type: ignore[assignment]
+    t._corridor_drawn = lambda corridor: list(corridor)  # type: ignore[attr-defined]
+    access.reserve(t, run)
+    assert "access_drawn" not in t.M, "drawn as reserved: nothing more to keep"
+
+
 def test_the_parts_laid_at_seating_stand_until_drawn() -> None:
     s = _hamlet()
     s.M["houses"].append(
