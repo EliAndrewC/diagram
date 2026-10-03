@@ -1887,3 +1887,17 @@ crossing laid across the field spur's joint with an orphan link is mended by mov
 (the village-lane check, round 2): a staggered junction south of the house at (2422, 2119), where lane 14 joins lane 12
 8.1 ft from lane 12's own join with lane 9, whose door end runs 8.6 ft past it and stops 10.6 ft short of its yard; and a
 V where the exit strip meets the field way at (2705, 1906), a 59-degree turn in open scrub. Both pass the lane law.
+
+## 2026-10-03 (feature 317): one household reached across its neighbor's yard - the layout moved
+
+A clustered settlement now rolls a share of its households that may be reached across a neighbor's land, with no lane of their
+own (research/questions/0081-village-lanes.html, Wigmore's custom of passage; the share 0-25%, a GUESS on the drawing page). This
+map rolled 0.099, one household of 15. The growth offers such a household a TIGHT seat, against the neighbor's land on the side
+its threshing yard lies (`growth.TIGHT_GAP_PX`, `TIGHT_BEARING_DEG`), and seats it there only where no layout of its homestead has
+a way of its own (`settlement/rolling/passage.py`). Measured against main's manifest (2026-10-03): the household at (2567.0,
+2120.9) is reached across the one at (2600.5, 1960.7), its walk of 4 points recorded and not drawn; the neighbor's own way is drawn
+and never pruned (`tree.passage_anchors`, the village-lane glyph check's F1 on this map). 15 houses on the first margin as before;
+2 of main's 15 house centers kept; 171 seats offered; a drawn aspect of 1.98 (main: 1.54); 14 lanes, 11 of them access, as main.
+The persimmons are 12 of 12 rolled, as on main. Before the fix the moved homesteads left 11 of 12: for each of the four households
+without a tree, the reseat's first seat shaded a neighbor and it tried no other. It now asks the neighbor's sun of every seat it
+tries, on both sides of the house.
