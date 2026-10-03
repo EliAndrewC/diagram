@@ -198,7 +198,8 @@ and mislabeled finding the audit made, with the claim it concerns.
   the question's findings did not change, so nothing is owed.
 - **A question's intro or comments changed only** (feature 311's intro): its findings did not change, so nothing is owed.
 - **A claim citing a question's drawing page**: the drawing page's findings are fingerprinted too.
-- **A GUESS, UNRESEARCHED, CONVENTION or "no physical decision" claim** cites no question; it is owed only when its code changes.
+- **A bare GUESS, an UNRESEARCHED, CONVENTION, CANON or "no physical decision" claim** cites no question; it is owed only when
+  its code changes. A GUESS naming its drawing page is owed when that page's findings change too.
 - **A DEVIATION claim** names the question it deviates from, and is fingerprinted with it.
 - **A module-wide claim** (a module whose units all make no physical decision, say): each unit in the module without its own
   claim inherits it, and each such unit is its own row - an edit to one function owes that function's inherited claim only.

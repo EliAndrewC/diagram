@@ -35,7 +35,8 @@ under it, up to a blank line or the end, is one claim:
     <label> - <backing>[: <what the code does>]
 
 `<backing>` is one of: one or more question files separated by `, ` (`research/questions/NNNN-<id>.html` or
-`.drawing.html`); `GUESS`; `UNRESEARCHED`; `CONVENTION`; `DEVIATION <question file>[, ...]`; `NONE`. The label is free text
+`.drawing.html`); `GUESS [<question file>]` (amendment 2026-10-03: the drawing page recording the guess); `UNRESEARCHED`;
+`CONVENTION`; `DEVIATION <question file>[, ...]`; `CANON` (the GM's canon or ruling); `NONE`. The label is free text
 without ` - `. A unit with one claim may write it on the header's own line, `Research: <label> - <backing>`, so a
 function with no docstring gains one line, not three (the file-scale bar, below). A malformed line fails coverage with the grammar in the message. For a constant, the string literal statement
 directly after its `Assign`/`AnnAssign` is its docstring. For a procedure section, each claim is one comment
@@ -61,8 +62,8 @@ tell a drift the delta introduced from one that was already there. For a procedu
 than claim markers removed and whitespace collapsed. Callees are not followed (spec Decisions Recorded). (spec FR-004)
 
 **D4 - The research fingerprint.** For each question file a claim cites: `_record_units.read_page`'s heading and its non-intro
-blocks' words - exactly `_entry_owed.findings` - hashed; a claim citing several hashes them in order. GUESS, UNRESEARCHED,
-CONVENTION and NONE have an empty research fingerprint. A pointer rewritten by `make fragment-move` must owe nothing
+blocks' words - exactly `_entry_owed.findings` - hashed; a claim citing several hashes them in order. A GUESS naming a page is
+fingerprinted with it; a bare GUESS, UNRESEARCHED, CONVENTION, CANON and NONE have an empty research fingerprint. A pointer rewritten by `make fragment-move` must owe nothing
 (spec Edge Cases), and a renumbering changes a question's NUMBER but not its heading id - so the claim line enters D3's
 fingerprint with each pointer reduced to its heading id (`research/questions/0033-row-villages-resson.html` ->
 `row-villages-resson`), and the research fingerprint is over the words, which a move does not change. (spec Edge Cases)
@@ -121,7 +122,8 @@ heading id exists. (FR-012, SC-006)
 comparison), `omitClaudeMd: true`, tools Read and Grep, reads a bundle's MANIFEST once. Per unit: IN-STEP / DRIFTED /
 NEEDS-RESEARCH / MISLABELED / CANNOT-TELL with a one-line note, in the `VERDICT` line form; plus `UNCLAIMED` lines for a
 physical decision in the bundle's code that no claim covers. A NONE claim on code that decides something physical is
-MISLABELED. A GUESS or UNRESEARCHED claim is IN-STEP when the bundle's cited material is silent and MISLABELED when a question
+MISLABELED. A GUESS or UNRESEARCHED claim is IN-STEP when the bundle's cited material is silent (a GUESS naming its drawing page, when
+that page records the guess), a CANON claim when it names the GM's ruling, and MISLABELED when a question
 in the bundle answers it. Added to `tests/test_agent_models.py`. The harness snapshots agent definitions at session start, so
 this session dispatches it as a `general-purpose` agent on Opus told to adopt the file (docs/spec-kit-and-reviews.md, the
 gotcha). (FR-008)
