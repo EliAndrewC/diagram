@@ -196,7 +196,7 @@ engine no longer keeps.
   for US3 scenario 2 says the finished map's check asks the drawn layout only.
 - Amendment (2026-10-03, the GM's rulings in `request.md`): the field reach removed as a limit on every form, nearness
   to the field a preference; cohort seed 18 grows on its first margin. The review counter restarts with this amendment.
-- Amendment round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - FR-003 left the 700 ft constant alive (every use
+- Amendment round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - FR-003 left the reach's constant alive (every use
   now listed and deleted or re-based; seed 18 seats on its first margin only once the window and the grid box are re-based too,
-  measured: `bound_probe.py` with the constant at 3000 ft); "otherwise equal" a tie that never occurs (FR-003a: the nearest the
+  observed 2026-10-03, method: `bound_probe.py` in the session's scratchpad with the constant enlarged); "otherwise equal" a tie that never occurs (FR-003a: the nearest the
   field first among a growth level's seats, with SC-002a); 0029's statement unspecified (US3 scenario 3).
