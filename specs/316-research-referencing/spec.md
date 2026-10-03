@@ -253,10 +253,12 @@ and mislabeled finding the audit made, with the claim it concerns.
   decision the check named); it stays a finding until a claim covering the decision is written and checked, when the row is
   dropped.
 - **FR-010**: The push, on both routes, refuses a delta with an owed unit unanswered or stale, or with an INTRODUCED finding: a
-  unit whose verdict is a finding at the head where the merge base's index held it IN-STEP, or where the delta created or
-  changed the unit's code (its fingerprint less the claim line) or the findings of a question it cites. A finding on code and
-  research the delta did not touch is PRE-EXISTING - the audit's own findings, feature 296's two rows, a unit merely renamed -
-  and is printed as a warning, never refused. One stated reason discharges the refusal and is written to the bypass log.
+  unit whose verdict is a finding at the head where the merge base's index held that unit IN-STEP, or held no row for it AND the
+  delta created or changed the unit's code (its fingerprint less the claim line) or the findings of a question it cites. A unit
+  that held a finding at the merge base and holds one at the head is PRE-EXISTING whether or not its code or research changed;
+  so is a first finding on code and research the delta did not touch (the audit's own findings, feature 296's two rows, a unit
+  merely renamed, whose code is unchanged under its new key). A pre-existing finding is printed as a warning, never refused.
+  One stated reason discharges the refusal and is written to the bypass log.
 - **FR-011**: One command prints the index as a REPORT: counts by verdict, then every unit not IN-STEP with its location, its
   claim and its note.
 - **FR-012**: The hamlet walk-through shows, under each stage and step, its claims (own or inherited), each pointer a link to that
@@ -291,7 +293,7 @@ and mislabeled finding the audit made, with the claim it concerns.
 - **SC-003** (FR-005, FR-007, FR-008, FR-009, FR-011, FR-013): At landing the report shows every unit with a verdict and none owed,
   and lists every non-IN-STEP unit.
 - **SC-004** (FR-010): Dry pushes in tests: an owed unit refuses; a recorded verdict passes; an IN-STEP-to-DRIFTED unit refuses; a
-  DRIFTED-to-DRIFTED unit passes with the warning; a first verdict DRIFTED on untouched code passes with the warning, and on
+  DRIFTED-to-DRIFTED unit passes with the warning, also when its code changed and it was re-checked DRIFTED; a first verdict DRIFTED on untouched code passes with the warning, and on
   changed code refuses; a reason passes and is logged.
 - **SC-005** (FR-008): The new check, seeded with known units - one in step, one drifted (feature 296's dry-field share), one
   mislabeled (a guess the record answers), one unclaimed decision - returns the known verdict on each, three runs a leg.
@@ -337,3 +339,7 @@ and mislabeled finding the audit made, with the claim it concerns.
   import graph (measured in Context); FR-010 defines INTRODUCED and PRE-EXISTING, with a seventh scenario; every non-IN-STEP
   verdict is a FINDING, refused when introduced and warned when pre-existing; CANNOT-TELL is unresolved; UNCLAIMED is a verdict
   recorded per FR-009; four Decisions Recorded rows added and the scope row rewritten.
+- **Round 2** (`spec-fidelity`, 2026-10-02): all six round-1 items RESOLVED; one new: FR-010's "or the delta changed its code"
+  refused a unit already drifted at the base once its code or research was touched, against the accepted rule and US4
+  scenario 4. Applied: the code-or-research clause applies only where the base held no row; a finding at both ends is
+  pre-existing whatever changed; SC-004 adds the re-checked-DRIFTED case.
