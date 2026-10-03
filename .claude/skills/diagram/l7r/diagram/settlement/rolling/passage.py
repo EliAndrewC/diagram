@@ -279,6 +279,48 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
     return got
 
 
+def recheck_passages(s: Settlement) -> int:
+    """Ask each household reached across a yard again, once every household is seated, whether it has a corridor of its own
+    now - its own homestead set aside, as it stood unseated when first asked - and seat one that has as any other household
+    is (`reserve`), its passage dropped; the count so revoked. Repeated until none is, a revoked household's corridor being
+    a way another may now reach.
+
+    THE CUSTOM'S CONDITION HOLDS ON THE FINISHED MAP, NOT ONLY AT THE SEAT (the farmhouse glyph check on Inashiro, feature
+    317): `landlocked` judged the household when it was seated, and a later household's corridor, reserved past its beds,
+    drew a lane within a few feet of it - a household with a way of its own, reached across its neighbor's yard.
+
+    Research: no way of its own on the finished map - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household with a way of its own is reached by it, never across a neighbor's land
+    """
+    if getattr(s, "_access", None) is None:
+        return 0
+    revoked = 0
+    while True:
+        found = 0
+        for rec in s.M.get("houses") or []:
+            if not rec.get("reached_across"):
+                continue
+            geom = rec.get("geom") or {}
+            own = geom.get("bbox")
+            k = next((i for i, b in enumerate(s.placed) if b is own), None)
+            if k is not None:
+                s.placed.pop(k)
+            try:
+                corridor = access_corridor(s, geom)
+            finally:
+                if k is not None:
+                    s.placed.insert(k, own)
+            if corridor is None:
+                continue
+            reserve(s, corridor, (float(rec["x"]), float(rec["y"])))
+            geom["access"] = corridor
+            for key in ("reached_across", "passage_depth", "passage"):
+                rec.pop(key, None)
+            found += 1
+        revoked += found
+        if not found:
+            return revoked
+
+
 def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
     """Reserve the way the household seated at `at` as `rec` was admitted with: its corridor (`access.reserve`, feature 287 plan
     M3), or its walk across a neighbor's yard (`passage_of`) - kept clear of every later homestead as a corridor is

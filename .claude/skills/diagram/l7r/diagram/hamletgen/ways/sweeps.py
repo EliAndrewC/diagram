@@ -663,12 +663,11 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
 
     Research:
-        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves
+        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves a way, the field or a house - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
         end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)"""
     lanes = s.M.get("lanes") or []
-    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
-    owed = lane_houses(s.M)  # ...the ones a lane is kept for or carried to: a household reached across a yard is owed none (feature 317)
+    owed = lane_houses(s.M)  # the houses an end serves, is kept for or carried to: a household reached across a yard is owed none (feature 317)
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
@@ -693,8 +692,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
         ]
 
-        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:
-            return end_serves(q, _o, houses, ground, steadings)
+        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:  # ...a house it SERVES: never one reached across a yard
+            return end_serves(q, _o, owed, ground, steadings)
 
         _mine = [(float(x), float(y)) for x, y in pts]
         # ...BUT NEVER PAST ANOTHER LANE'S END THAT RESTS ON THIS ONE (269 E4). Pulling an unserving end back takes the

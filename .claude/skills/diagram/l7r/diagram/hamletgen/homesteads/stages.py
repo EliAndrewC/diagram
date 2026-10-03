@@ -19,7 +19,7 @@ from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, 
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
-from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share
+from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share, recheck_passages
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
@@ -207,7 +207,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"].update(_declared)
     plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
-    s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # feature 317: reached across a yard
+    s.M["meta"]["passage_revoked"] = recheck_passages(s)  # feature 317: a way of its own on the finished seating ends a passage
+    s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
     s._free_ground = None

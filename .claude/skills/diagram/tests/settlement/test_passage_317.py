@@ -208,6 +208,33 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     assert not s._access.covers_box((1020.0, 1300.0, 4.0, 4.0))
 
 
+def test_a_household_with_a_way_of_its_own_on_the_finished_seating_loses_its_passage(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`recheck_passages` (the farmhouse glyph check, feature 317): asked again once every household is seated, its own box
+    set aside as when it was first asked, a household that now finds a corridor is seated by it and is no longer reached
+    across its neighbor's yard; one that finds none keeps its passage."""
+    s = _open()
+    nb, geom, _tight = _pair(s)
+    assert passage.recheck_passages(s) == 0, "no household reached across a yard"
+    rec = {"x": 500.0, "y": 700.0, "geom": geom, "reached_across": [600.0, 700.0], "passage_depth": 1, "passage": [[500.0, 690.0], [590.0, 690.0]]}
+    s.M["houses"] = [nb, rec]
+    s.placed.append(geom["bbox"])
+    asked: list[bool] = []
+
+    def corridor(s: Settlement, g: dict) -> tuple | None:
+        asked.append(all(b is not g["bbox"] for b in s.placed))
+        return ((500.0, 680.0), (500.0, 450.0)) if len(asked) > 1 else None
+
+    monkeypatch.setattr(passage, "access_corridor", corridor)
+    assert passage.recheck_passages(s) == 0 and rec["reached_across"] == [600.0, 700.0], "no way of its own: still reached across"
+    assert passage.recheck_passages(s) == 1, "a way of its own now"
+    assert asked == [True, True], "asked with its own homestead set aside"
+    assert any(b is geom["bbox"] for b in s.placed), "...and put back"
+    assert "reached_across" not in rec and "passage" not in rec and rec["geom"]["access"] == ((500.0, 680.0), (500.0, 450.0))
+    assert s.M["access_corridors"][-1]["of"] == [500.0, 700.0], "its corridor reserved for the web to draw"
+    s._access = None
+    assert passage.recheck_passages(s) == 0, "no tree: nothing to ask"
+
+
 def test_a_passage_crosses_only_to_a_reached_household_with_a_yard() -> None:
     assert passage.crossable({"geom": {"access": ((0.0, 0.0), (1.0, 0.0)), "boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}})
     assert passage.crossable({"passage_depth": 1, "geom": {"boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}}), "within the chain"

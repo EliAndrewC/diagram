@@ -216,13 +216,14 @@ TIGHT_GAP_PX = 2.0
 """
 
 
-#: How far off the bearing from a standing house to its threshing yard a TIGHT seat may stand, in degrees (feature 317): its front and
-#: flanks, where a walk to its yard can be had. MEASURED (research R7): behind the house - 135 and 180 degrees off - a walk had to
-#: go round it and seated 1 household in 194 tight tries on 13 settlements at 15 households, the yard's side 15 in 304; offered
-#: there too, the tight seats cost the stage 12-35%. 112.5 holds the 90-degree band whole. A search breadth, not a rule of the
-#: custom: a household behind its neighbor is still seated, by the growth's ordinary seats and a way of its own.
-TIGHT_BEARING_DEG = 112.5
-"""Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: offered within 112.5 degrees of the bearing to the neighbor's threshing yard, where the walk to the yard can be had"""
+#: How far off the bearing from a standing house to its threshing yard a TIGHT seat may stand, in degrees (feature 317): the side of
+#: the house its yard lies on, as the drawing page places such a household. MEASURED (research R7): behind the house - 135 and 180
+#: degrees off - a walk had to go round it and seated 1 household in 194 tight tries on 13 settlements at 15 households, the yard's
+#: side 15 in 304. It was 112.5, past the perpendicular, until the impl-drift check held it to the page (research R9): at 15
+#: households on seeds 1-16, 23 households were reached by passage at either value. A search breadth, not a rule of the custom: a
+#: household behind its neighbor is still seated, by the growth's ordinary seats and a way of its own.
+TIGHT_BEARING_DEG = 90.0
+"""Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: offered within 90 degrees of the bearing to the neighbor's threshing yard, the side its yard lies on"""
 
 
 #: How near the access tree a TIGHT seat may stand and still be offered, in feet (feature 317): a household that close to a way has

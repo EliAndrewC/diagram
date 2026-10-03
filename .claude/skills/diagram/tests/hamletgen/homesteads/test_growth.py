@@ -310,11 +310,15 @@ def test_the_seat_s_allotted_reach_is_the_one_it_was_parted_by() -> None:
 
 
 def test_a_tight_seat_stands_on_its_neighbor_s_yard_side() -> None:
-    """Feature 317 (`TIGHT_BEARING_DEG`): its front and flanks, where a walk to its yard can be had - never behind its house."""
+    """Feature 317 (`TIGHT_BEARING_DEG`): on the side of the house its yard lies on, as the drawing page places such a
+    household - within 90 degrees of the bearing to the yard, never past the perpendicular or behind the house."""
     center, yard = (0.0, 0.0), (0.0, 10.0)  # the yard to the south (screen axes)
     assert growth.yard_side(center, yard, math.pi / 2), "toward the yard"
-    assert growth.yard_side(center, yard, 0.0) and growth.yard_side(center, yard, math.pi), "its flanks, 90 degrees off"
-    assert not growth.yard_side(center, yard, -math.pi / 4) and not growth.yard_side(center, yard, -math.pi / 2), "behind the house"
+    off = math.radians(80.0)
+    assert growth.yard_side(center, yard, math.pi / 2 - off) and growth.yard_side(center, yard, math.pi / 2 + off), "80 degrees off: the yard's side"
+    off = math.radians(100.0)
+    assert not growth.yard_side(center, yard, math.pi / 2 - off) and not growth.yard_side(center, yard, math.pi / 2 + off), "100 degrees off: past it"
+    assert not growth.yard_side(center, yard, -math.pi / 2), "behind the house"
 
 
 def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.MonkeyPatch) -> None:
