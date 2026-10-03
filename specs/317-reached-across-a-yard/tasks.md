@@ -41,12 +41,12 @@
 - [x] T09 `make done`, the bookends, the occasions' reviews
       research: rendering
       verify: DONE. make done green on the engine as it lands (5058ad68); the final bookends, three alternated takes against main 38901e2df: band 3 (seed 25 at 40 households +21.6%), explained with its control (perf-317-control-40), confirmed consistent and audited justified by the perf-audit subagent - the GM's sign-off (make perf-signoff) is owed at the push; the occasions' reviews: farmhouse and village lane on Inashiro to their two-round cap (the farmhouse's round-2 fix verified by measurement), homestead bamboo on Kuwabata PASS; the claims checked in eight impl-drift rounds
-- [ ] T10 the wood seats reserved clear of the afternoon sun lane, held by a gate test (D7, FR-007)
+- [x] T10 the wood seats reserved clear of the afternoon sun lane, held by a gate test (D7, FR-007)
       research: rendering
-      verify:
-- [ ] T11 a way of its own asked of straight and round-the-house paths only, the drawing page saying so (D2 amended, FR-002)
+      verify: DONE. the reservation keeps the afternoon sun lane (wood_share.copse_keepouts, west_ft); tests/gate/test_wood_shares_planted.py red on Inashiro, Kuwabata and Sawada before, green on the gate at 8a929fdc; Inashiro 320 of 320 seats planted; research R5, R10
+- [x] T11 a way of its own asked of straight and round-the-house paths only, the drawing page saying so (D2 amended, FR-002)
       research: rendering
-      verify:
+      verify: DONE. access_corridor(routed=False) asked by landlocked, the fit's own-way test and the recheck (the GM's ruling of 2026-10-03); the drawing page says so (record-format and quote-check rounds 1-2 answered); FR-008's substitution built and measured - route.tree_in_reach, the pool identical on and off (SC-007, R10); impl-drift over the 355 re-owed claims and two follow-up rounds, 0 owed; gate green at 8a929fdc; glyph-checks farmhouse, village lane (round 4, the GM's waiver) and Sawada's woodland commons PASS; cohort 30 of 30
 - [ ] T12 `make done`, the bookends, the occasions' reviews and the claims on the amended engine (FR-005, FR-006)
       research: rendering
       verify:
