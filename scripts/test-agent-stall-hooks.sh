@@ -43,4 +43,12 @@ out=$(AGENT_STALE_S=60 AGENT_TICK_S=0.2 timeout 1 "$HOOK" watch "$D"); n=$(grep 
 [ "$n" -eq 1 ] && ok || bad "watch reports a stall exactly once (got $n)"
 # 10. an acknowledged stall is never reported again
 "$HOOK" ack "$D" stall2; out=$(AGENT_STALE_S=60 "$HOOK" check "$D"); grep -q stall2 <<<"$out" && bad "an acked stall is silent" || ok
+# 11. GUARD_EDIT_OK: hook timeout 2026-10-03 - a session with hundreds of subagents is scanned inside the
+# UserPromptSubmit hook's 15 s timeout (a per-transcript python3 took 24 s on 567 and the check was discarded)
+B="$TMP/big/subagents"; mkdir -p "$B"
+for i in $(seq 1 600); do { rec assistant; rec user; } > "$B/agent-b$i.jsonl"; done; touch -d '-600 seconds' "$B"/agent-b*.jsonl
+s=$(date +%s%N); out=$("$HOOK" check "$B"); ms=$(( ($(date +%s%N) - s) / 1000000 ))
+[ "$(grep -c STALLED <<<"$out")" -eq 600 ] && ok || bad "every stalled transcript of 600 is reported"
+[ "$ms" -lt 5000 ] && ok || bad "600 transcripts scanned in ${ms} ms; the hook times out at 15 s - read them in one process"
+[ "$("$HOOK" pending "$B" | wc -l)" -eq 600 ] && ok || bad "pending lists all 600 awaiting a reply"
 echo "agent-stall-hooks: $pass passed, $fail failed"; [ $fail -eq 0 ]

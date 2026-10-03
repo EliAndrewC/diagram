@@ -32,25 +32,40 @@ MODE=${1:-}
 STALE=${AGENT_STALE_S:-300}
 RECENT=${AGENT_RECENT_S:-172800}
 
-last_type() { # the `type` of the last JSON record of a transcript, or ''
-  tail -n 1 "$1" 2>/dev/null | python3 -c '
-import json,sys
-try: print(json.loads(sys.stdin.read()).get("type",""))
-except Exception: print("")'
+# GUARD_EDIT_OK: hook timeout 2026-10-03 - the transcripts are now read in ONE python process. The old
+# per-transcript `tail | python3` cost ~40 ms a file, and a session with 567 subagents took 24 s, past the
+# hook's 15 s timeout ("UserPromptSubmit hook ... timed out after 15s"), so the check was silently discarded
+# in exactly the long sessions that need it. One process reads the same 567 in well under a second.
+scan() { # scan <dir> <stale> <recent> -> "<id> <age> <type>" per transcript no older than <recent> seconds;
+  # <type> is the `type` of its last JSON record ('-' when unreadable), read only when age >= <stale>
+  python3 - "$@" <<'PY'
+import glob, json, os, sys, time
+d, stale, recent = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+now = time.time()
+def last_type(path):
+    with open(path, "rb") as f:
+        f.seek(0, 2); end = f.tell(); pos = end; buf = b""
+        while pos > 0:  # read back from the end until the last line is whole
+            step = min(65536, pos); pos -= step; f.seek(pos); buf = f.read(step) + buf
+            if buf.rstrip(b"\n").count(b"\n"): break
+    line = buf.rstrip(b"\n").rsplit(b"\n", 1)[-1]
+    try: return json.loads(line).get("type", "") or "-"
+    except Exception: return "-"
+for f in sorted(glob.glob(os.path.join(d, "agent-*.jsonl"))):
+    try: age = int(now - os.stat(f).st_mtime)
+    except OSError: continue
+    if age > recent: continue
+    t = last_type(f) if age >= stale else "-"
+    print(os.path.basename(f)[len("agent-"):-len(".jsonl")], age, t)
+PY
 }
 
 report() { # report <dir> [seen-file] -> prints "STALLED <id> <age>s" per stalled transcript (once, if seen-file)
-  local dir=$1 seen=${2:-} now f id age t
+  local dir=$1 seen=${2:-} id age t
   [ -d "$dir" ] || return 0
-  now=$(date +%s)
-  for f in "$dir"/agent-*.jsonl; do
-    [ -f "$f" ] || continue
-    age=$(( now - $(stat -c %Y "$f") ))
-    [ "$age" -gt "$RECENT" ] && continue
-    id=$(basename "$f" .jsonl); id=${id#agent-}
+  while read -r id age t; do
     [ -e "$dir/../stall-ack/$id" ] && continue
     if [ "$age" -ge "$STALE" ]; then
-      t=$(last_type "$f")
       if [ "$t" = "user" ]; then
         if [ -n "$seen" ] && grep -qx "$id" "$seen" 2>/dev/null; then continue; fi
         [ -n "$seen" ] && echo "$id" >> "$seen"
@@ -66,7 +81,7 @@ report() { # report <dir> [seen-file] -> prints "STALLED <id> <age>s" per stalle
     elif [ -n "$seen" ]; then
       grep -qx "$id" "$seen" 2>/dev/null && sed -i "/^$id\$/d" "$seen"
     fi
-  done
+  done < <(scan "$dir" "$STALE" "$RECENT")
 }
 
 case "$MODE" in
@@ -97,11 +112,8 @@ except Exception: print("")')
     # (last record a tool_result), stalled or not. Feature 151's pairing guard asks whether a
     # settlement-review it launched has finished; that is the SAME determination `report` makes on
     # the stall side, so it is answered here rather than kept as a second copy of the rule.
-    for f in "${2:?subagents dir}"/agent-*.jsonl; do
-      [ -f "$f" ] || continue
-      [ "$(last_type "$f")" = "user" ] || continue
-      id=$(basename "$f" .jsonl); echo "${id#agent-}"
-    done
+    [ -d "${2:?subagents dir}" ] || exit 0
+    scan "$2" 0 2147483647 | awk '$3 == "user" { print $1 }'
     exit 0 ;;
   ack)
     mkdir -p "${2:?subagents dir}/../stall-ack" && touch "$2/../stall-ack/${3:?agent id}"; exit 0 ;;
