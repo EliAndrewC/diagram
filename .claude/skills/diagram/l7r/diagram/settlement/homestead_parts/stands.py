@@ -1,5 +1,4 @@
 """Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
-
 Research: plumbing - NONE"""
 
 import math
@@ -40,7 +39,6 @@ def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
     """THE ONE PREDICATE of "no tree is planted in a path" (`test_no_tree_is_planted_in_a_path`; feature 287, woods W21 and homes H43): a trunk at
     (x, y) stands on a lane's TREAD - within the lane's own half-width of its centerline, the width read from the lane (GM 2026-09-12: a trunk beside
     a footpath is what a path looks like; one inside it is a tree in the path). `lanes` are manifest lane records (`pts`, `w`).
-
     Research: no trunk within a lane's half-width - CANON: the GM's ruling of 2026-09-12, no question
     """
     from .._geom import seg_dist
@@ -86,7 +84,6 @@ def trim_to_the_wind(clumps: list[tuple[float, float]], houses: Any, wind: tuple
     the end taken off (the other end lies farther round), so the one crown the loop can converge on is that one - and where
     even it bears more than `BELT_BEARING_MAX_DEG` off, no crown stands in the wind's quarter at all. It was returned as it
     stood, the one way the trim left the rule broken; a belt with nothing on the wind is no windbreak, so none is kept.
-
     Research: belt trimmed to a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: end crowns off, or no belt"""
     if not houses:
         return list(clumps)
@@ -119,7 +116,6 @@ def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
     the dry ground above the marsh and its reed MARGIN carries alder (research/contents.json#vegetation, Reed beds and the marsh's edge), so a
     grove clump may be based in the margin - drawn as alder - and never deeper. A ring the inset empties has no deep
     ground; a ring the inset splits gives each piece.
-
     Research: belt no deeper than the reed margin - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: alder in the margin only"""
     from shapely.geometry import Polygon
 
@@ -146,7 +142,6 @@ def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
     `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
     leaves the dooryards it should have greened bare.
-
     Research: a recorded grove is stocked - UNRESEARCHED: at least 1.5 clumps per 100,000 sq px of its extent"""
     return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
 
@@ -240,7 +235,6 @@ class StandsMixin:
         stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (a strip beside a farmstead that keeps one) or
         "thicket" (the take-yabu behind the back row). Recorded in M['bamboo_stands'] (bbox + role + poly);
         the marks are decoration keyed to the stand (positional randomness).
-
         Research: bamboo stand glyph - research/questions/0075-bamboo-groves-chikurin.drawing.html: area to scale, culm marks a convention on a 7 bscale grid"""
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
