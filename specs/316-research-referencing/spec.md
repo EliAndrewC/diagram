@@ -182,7 +182,7 @@ and mislabeled finding the audit made, with the claim it concerns.
 **Acceptance Scenarios**:
 
 1. **Given** the audit done, **When** the report runs, **Then** every claim has a verdict.
-2. **Given** a decision the audit found unlabeled and the record silent on, **When** it is recorded, **Then** its claim says
+2. **Given** a decision the audit found unlabeled and the record silent on, and no ruling of the GM decides it (that is CANON), **When** it is recorded, **Then** its claim says
    UNRESEARCHED (a guess is a decision a search pass came back empty on; none is run under this feature), and the report lists
    it, so the open research is visible.
 3. **Given** a drifted finding, **When** the feature lands, **Then** the code is unchanged and the index carries it as drifted.
@@ -238,7 +238,7 @@ and mislabeled finding the audit made, with the claim it concerns.
   research: the findings of each question the claim cites (its words less its intro, as feature 311 reads them).
 - **FR-005**: The INDEX is one committed file: per unit, its verdict, both fingerprints as the check read them, the date, and a
   one-line note of what the check found. Its verdicts are IN-STEP, DRIFTED, NEEDS-RESEARCH (the code decides something the
-  record does not cover and the claim does not label a guess or unresearched), MISLABELED (the claim's class or pointer is wrong
+  record does not cover and the claim does not label a guess, unresearched or canon), MISLABELED (the claim's class or pointer is wrong
   - a guess the record answers, a pointer to a question that does not bear on it, NONE on code that decides something
   physical), UNCLAIMED (the check found a physical decision in the unit that no claim covers; the note names it) and
   CANNOT-TELL (the check could not decide; UNRESOLVED, never a pass). Every verdict but IN-STEP is a FINDING.
@@ -329,7 +329,7 @@ and mislabeled finding the audit made, with the claim it concerns.
 - The tooling is written for any package or document; extending the scope beyond the hamlet generator is a later feature.
 - The audit is dispatched in batches (one check per stage or module group) rather than one per unit, as the bundle allows.
 - Claims are written by this session (or agents it dispatches). No research pass is run under this feature: a decision the record
-  does not cover is claimed UNRESEARCHED, never GUESS, because the research doctrine reserves "guess" for a decision a search
+  does not cover, and no ruling of the GM decides (that is CANON), is claimed UNRESEARCHED, never GUESS, because the research doctrine reserves "guess" for a decision a search
   pass came back empty on (CLAUDE.md, Research). The report lists the UNRESEARCHED claims as the open research.
 
 ## Review history
@@ -348,4 +348,6 @@ and mislabeled finding the audit made, with the claim it concerns.
   pre-existing whatever changed; SC-004 adds the re-checked-DRIFTED case.
 - **Round 3** (`spec-fidelity-verify`, 2026-10-02): **FAITHFUL** - the round-2 item resolved, no new departure.
 - **Amendment after acceptance** (2026-10-03, the audit's second round): FR-001 gains `CANON` and a GUESS that may name its
-  drawing page; one Decisions Recorded row. The counter resets for this amendment.
+  drawing page; the GUESS/CANON edge case updated; one Decisions Recorded row. The counter resets for this amendment.
+  Round 1 (`spec-fidelity-verify`): CHANGES REQUIRED - FR-005 still made an honest CANON claim NEEDS-RESEARCH, and the two
+  passages sending record-silent decisions to UNRESEARCHED did not except the GM's rulings. Applied.

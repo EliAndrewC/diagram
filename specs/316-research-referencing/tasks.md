@@ -26,7 +26,7 @@ Recorded), so each is `research: rendering`.
 - [ ] T05 [US3] `.claude/agents/impl-drift.md`, its tier in `tests/test_agent_models.py`, the ledger lint; the seeded runs,
   three a leg (FR-008, SC-005; plan D11, D14)
       research: rendering
-- [ ] T06 [US6] The claims written: writer agents per module group over the 241 modules, and the three procedure documents;
+- [ ] T06 [US6] The claims written: writer agents per module group over the 245 modules, and the three procedure documents;
   every file that crosses 1,000 lines split; coverage green (FR-002, FR-003, FR-013; plan D12)
       research: rendering
 - [ ] T07 [US6] The audit checked: `impl-drift` on every group's bundle; MISLABELED and UNCLAIMED applied to the claims and

@@ -129,7 +129,7 @@ this session dispatches it as a `general-purpose` agent on Opus told to adopt th
 gotcha). (FR-008)
 
 **D12 - The audit, in two independent passes.** Writers: `general-purpose` agents on Opus, one per module group (about
-4,000-5,000 lines each, by subpackage - about 16 groups over the 74,331 lines), each writing the `Research:` claims into its own files only - moving the
+4,000-5,000 lines each, by subpackage - about 16 groups over the 74,331 lines counted in the spec Context; as run, 14 code groups and one for the procedures), each writing the `Research:` claims into its own files only - moving the
 existing comment pointers and labels into claim lines, choosing pointers by grepping question headings, NONE for plumbing (a
 module-level NONE where the whole module is), UNRESEARCHED where nothing in the record bears and no GUESS label already stood.
 Then `make claims-owed` and one `impl-drift` per group bundle. MISLABELED and UNCLAIMED findings are applied to the claims, and a
