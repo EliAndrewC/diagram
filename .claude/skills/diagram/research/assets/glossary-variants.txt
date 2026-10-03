@@ -2332,6 +2332,7 @@ minote-zeki	minote-zeki
 mio-suji	thalweg
 mire	mire
 mirin	mirin
+miscanthus	susuki
 mise	mise
 mishima	Mishima
 mitochigai	mitochigai

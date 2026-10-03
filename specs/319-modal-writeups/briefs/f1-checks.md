@@ -10,3 +10,12 @@
 - quote-check 0244: PARTIAL 1, unfootnoted 2 - the same Ikegami and Morse fixes; fn-4's DIFFERS is a line-break artifact
 - source-applicability morse-1886-homes, miyoshi-kurashi-mingu-1998, miyoshi-ikegami-house: APPLICABLE-WITH-LIMITS 3 - limits rewritten (bark wall southern and poor, plaster not durable, wealth inferred, the house unusual, the resident's memory scoped)
 - source-reader round 1 (ikegami, mingu, morse, kotobank whole reads): READ 23, NOT-FOUND 9 - write-up fixes applied (kotobank 'count' -> most/many/few, mingu's date and 'rich' moved to the ikegami page, Morse's Restoration inference cut and Satow's 'plastered wattles' named); NOT recorded - the WHOLE bundles held no owed note text (fixed in _check_bundle.py), so round 2 re-reads them
+- round 2, entry-drift Door (0117): DRIFTED 1 - 'about 3 ft' made 'no wider than about 3 ft' in compound_kinds/grounds.py (Note and Caveat); recorded
+- round 2, quote-check 0029 (4 batches): PARTIAL 1, unfootnoted 4 - 'large farmhouses' for 'better-off', the curving-road cause footnoted on both pages, 'we read', the plot edge and long-axis growth labeled as this project's
+- round 2, quote-check 0117 (2 batches): PARTIAL 3, unfootnoted 2 - kannon-biraki glossed as paired, storehouse leaves 'could be' by the end of Edo, 'estimated to have been built', the drawing paragraph footnoted
+- round 2, quote-check 0244: PARTIAL 3 - the folk-house gloss cut, the Ikegami note on the opening, 'its museum's estimate'
+- round 2, record-format 0029 clean; 0117 and 0244 VOCABULARY 1 - miscanthus a variant of susuki
+- round 2, source-applicability: ikegami HONEST, morse HONEST (one sentence merged), mingu HONEST (alcove and smoke vent named), kotobank What it is and one limit fixed
+- round 2, source-reader (the claims now in the bundle): ikegami READ 9, mingu READ 4 (the veranda item scoped to 'such a veranda'), morse READ 4 + absence held, nihon-no-minka READ 4 ('frontage' -> 'along its ridge'); the 0244 absence held against all three pages
+- round 2, translation-check: 0029 FAITHFUL 2; 0244 FAITHFUL 8, LOOSE 1 ('ample economic means'); 本舞 and 牡嘱 are the page's own misprints, kept verbatim
+- page-check: the Door modal edit's interactive tests pass; test_synthetic_page_mechanics fails on the hamlet registry's label assertion (_driver.py:110) - T09's About-form Farmhouse has no label lead, not this session's to change
