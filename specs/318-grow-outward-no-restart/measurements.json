@@ -1,11 +1,29 @@
 {
  "perf-318-control-d4": {
-  "verifies": "the band-3 reading of the 318 bookends: total +25.4% (17.7 s -> 22.2 s), the homesteads stage the growth on every seed",
+  "verifies": "the band-3 reading of the 318 bookends on the landing engine: total +15.8% (17.7 s -> 20.5 s), the homesteads stage on every seed",
   "subject": "perf bookend, reference spec (Inashiro), seeds 4/25/39/47 at 15 households and the 10/20/40 scaling legs",
-  "value": 20.4,
+  "value": 18.6,
   "unit": "s, the bookend total with plan D4 removed (the three-level 8/12/16-direction table, the seat-distance order, the unscaled jitter), everything else as it lands",
-  "quantity": "one-shot bookends, 2026-10-03, this host: 318-start (main ddb924e01) 17.7 s; 318-end (8899f1429 + the corridor fix, 52667ef72) 22.2 s; the control (52667ef72 with D4 reverted, dev/perf-log/20261003T190536Z-318-control-d4-ctl318.json) 20.4 s. D4 is 1.8 s of the 4.5; the rest is the canvas-wide windows plan D3 chose (profile of seed 4 at 15 households, homesteads stage: SeatRegion 0.49 s against main's 0.15, FreeGround 0.32 s and its install 0.39 s) and the growth with no radius (grow_the_margin 4.36 s against 1.78 s under cProfile, D4 included)",
-  "source": "make perf LABEL=318-end in the clone and LABEL=318-control-d4 in a detached worktree of 52667ef72 with growth.py's GROW_LEVELS, field_distance and grow_jitter reverted; scratchpad prof318.py for the stage profile",
+  "quantity": "one-shot bookends, 2026-10-03, this host, one process each: 318-start (main ddb924e01) 17.7 s; 318-end (fdd811294 + ledger, dev/perf-log/20261003T195442Z-318-end-diagram-performance.json) 20.5 s; the control (the landing engine with D4 reverted in a detached worktree, dev/perf-log/20261003T195830Z-318-control-d4b-ctl318.json) 18.6 s. D4 is 1.9 s of the 2.8; the remaining 0.9 s (+5%) is the growth with no radius and the seating's other changes (perf-318-control-windows, perf-318-control-web)",
+  "source": "make perf LABEL=318-end in the clone and LABEL=318-control-d4b in a detached worktree of the landing commit with growth.py's GROW_LEVELS, field_distance and grow_jitter reverted",
+  "observed": "2026-10-03"
+ },
+ "perf-318-control-windows": {
+  "verifies": "the perf-audit's first correction: the canvas-wide seat region and free-ground grid were 2.4 s of the 15-household growth",
+  "subject": "perf, reference spec, seeds 4/25/39/47 at 15 households, the homesteads stage",
+  "value": 7.56,
+  "unit": "s, the homesteads stage's CPU summed over the four seeds, both rasters on the seating window (fdd811294)",
+  "quantity": "one-shot, 2026-10-03, this host, one process: 2.32 / 1.77 / 1.55 / 1.92 s windowed against 2.69 / 2.17 / 2.23 / 2.55 s (9.64) with both rasters canvas-wide; the five pool hamlets regenerate byte-identical either way (the grid decides a cell past the window by the same tests, the window snapped to the canvas's cell grid). The 318-end bookend total fell 22.2 -> 20.5 s",
+  "source": "scratchpad spread318.py on the clone at fdd811294 and with the grid on the canvas; make map of the five pool hamlets diffed against 52667ef72",
+  "observed": "2026-10-03"
+ },
+ "perf-318-control-web": {
+  "verifies": "the perf-audit's second correction: the web stage at 40 households grew (seed 4 1.70 -> 3.5 s CPU) with D4 removed as well",
+  "subject": "perf, reference spec at 40 households, seeds 4 and 25, the web stage",
+  "value": 3.54,
+  "unit": "s, the web stage's CPU at seed 4, 40 households, with feature 318's three web changes stubbed out (`tree_shadow_cuts`, `walked_shadows`, `_join_admitted`)",
+  "quantity": "one-shot, 2026-10-03, one process: seed 4 web 3.52 s as it lands, 3.54 with the three web changes stubbed, 3.53 with the shadow cut alone stubbed, 1.70 on main; seed 25 1.85 / 1.91 / 1.90 against 2.15 on main (faster). The web code 318 changed is not the cause; the layout is: on seed 4 the settle runs twice (153 step calls against main's 51, a straightening after the first settle owing a second) and prunes the tree 9 times against 3",
+  "source": "scratchpad webctl318.py (NOSHADOW, WEBOFF) and webprof318.py (cProfile of the web stage) on the clone at ffb6cbb45..52667ef72 and on main ddb924e01",
   "observed": "2026-10-03"
  }
 }

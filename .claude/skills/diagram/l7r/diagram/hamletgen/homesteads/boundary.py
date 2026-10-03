@@ -361,6 +361,28 @@ class FreeGround:
             got = self._beyond[k] = (taken, clear)
         return got
 
+    def decide_beyond(self, xs: Any, ys: Any) -> None:
+        """Decide at once every cell past the grid's bounds the points `(xs, ys)` stand in and no call has yet decided - the
+        same two tests `_cell_beyond` asks one cell at a time, vectorized (feature 318, the perf-audit's second round: the
+        first house's candidates asked 110,873 such cells, one shapely call each, 1.3 s of a 15-household seating).
+
+        Research: plumbing - NONE: the same answers, asked in one call
+        """
+        import numpy as np
+        import shapely
+
+        ki = np.floor_divide(np.asarray(xs, dtype=np.float64) - self.x0, self.cell).astype(np.int64)
+        kj = np.floor_divide(np.asarray(ys, dtype=np.float64) - self.y0, self.cell).astype(np.int64)
+        out = ~((ki >= 0) & (ki < self.nx) & (kj >= 0) & (kj < self.ny))
+        ks = [k for k in set(zip(ki[out].tolist(), kj[out].tolist(), strict=True)) if k not in self._beyond]
+        if not ks:
+            return
+        a = np.asarray(ks, dtype=np.float64)
+        boxes = shapely.box(self.x0 + a[:, 0] * self.cell, self.y0 + a[:, 1] * self.cell, self.x0 + (a[:, 0] + 1) * self.cell, self.y0 + (a[:, 1] + 1) * self.cell)
+        taken = shapely.contains(self._region, boxes) if self._region is not None else np.zeros(len(ks), dtype=bool)
+        clear = shapely.disjoint(self._grown, boxes) if self._grown is not None else np.ones(len(ks), dtype=bool)
+        self._beyond.update(zip(ks, zip(np.asarray(taken, dtype=bool).tolist(), np.asarray(clear, dtype=bool).tolist(), strict=True), strict=True))
+
     def _inside(self, k: tuple[int, int]) -> bool:
         return 0 <= k[0] < self.nx and 0 <= k[1] < self.ny
 

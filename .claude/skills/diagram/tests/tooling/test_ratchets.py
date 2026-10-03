@@ -260,3 +260,11 @@ def test_the_quick_budget_judges_only_a_warm_selective_run() -> None:
     recipe = (SCRIPTS.parent / ".claude" / "skills" / "diagram" / "Makefile").read_text(encoding="utf-8")
     line = next(ln for ln in recipe.splitlines() if "-gt $(QUICK_BUDGET)" in ln)
     assert '"$$warm" = yes' in line and '[ -z "$(ALL)" ]' in line, line
+
+
+def test_the_type_check_runs_on_the_interpreter_make_runs() -> None:
+    """Feature 318 found it: pyrefly picks a `.venv` beside the engine before the interpreter make runs, and an empty one a
+    tool left behind turned 0 errors into 171 missing imports. The typecheck is pinned to make's own python3."""
+    recipe = (SCRIPTS.parent / ".claude" / "skills" / "diagram" / "Makefile").read_text(encoding="utf-8")
+    line = next(ln for ln in recipe.splitlines() if ln.startswith("TYPECHECK ="))
+    assert "--python-interpreter-path" in line and "command -v python3" in line, line

@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "68e24889406c12c0ca75d30bc96acf6a054acbcaa6e516ce4308827463ebefc3",
+  "end": {
+    "commit": "684848526",
+    "label": "318-end",
+    "utc": "20261003T195442Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T201253Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 10.0,
+          "39": 12.9,
+          "4": 28.6,
+          "47": 26.7
+        },
+        "total_pct": 19.8
+      },
+      "20": {
+        "seeds": {
+          "25": -6.7,
+          "39": 21.8,
+          "4": 17.9,
+          "47": 17.2
+        },
+        "total_pct": 11.4
+      },
+      "40": {
+        "seeds": {
+          "25": 22.5,
+          "39": 21.5,
+          "4": 23.4,
+          "47": -14.9
+        },
+        "total_pct": 12.1
+      }
+    },
+    "seeds": {
+      "25": 23.1,
+      "39": 23.7,
+      "4": 23.5,
+      "47": -4.1
+    },
+    "total_pct": 15.8
+  },
+  "note": "Reviewer counterfactuals at the landing engine (8a374693f, l7r identical to 684848526; homestead CPU, 4 seeds at 15 hh, medians of 5, both legs in worktrees): main 4.34, end 7.66, D4 reverted as perf-318-control-d4 5.60, so D4 is 2.06 s; windowed rasters 7.66 against main-sized boxes 7.67, houses byte-identical, so correction 1 holds; 40-hh seed 4 web 2.88 as landed, 2.71 with the three web changes stubbed, 1.55 on main, so correction 2 holds (layout). The residual 0.9 s 'growth with no radius' matches: it is capacity.free_seats enumerating every canvas grid point for the first house, 105k cells past the seating window decided one by one by FreeGround._cell_beyond (1.3 s timed).",
+  "verdict": "consistent"
+}

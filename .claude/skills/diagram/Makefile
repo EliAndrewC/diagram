@@ -1853,7 +1853,9 @@ QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=te
 # and nothing ever stopped (five daemons, 2.3 GB, one for a session that had ended). pyrefly checks the whole engine
 # cold in ~0.6 s (ty: ~0.5 s, but it has no rule for a missing annotation, research 142 R3), so there is nothing to
 # keep warm and no sweep to run. Same command on CodeBuild. Measurements: specs/142-rust-type-checker/research.md R2.
-TYPECHECK = pyrefly check
+# GUARD_EDIT_OK: feature 318 found it - pyrefly picks a `.venv` beside the engine before the interpreter make runs, and an
+# empty one (a tool's, 2026-10-03) turned 0 errors into 171 missing imports (pytest, shapely); pinned to make's own python3.
+TYPECHECK = pyrefly check --python-interpreter-path "$$(command -v python3)"
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1,)  # GUARD_EDIT_OK: feature 133 T92's env, kept for any test that reads it; feature 135's own full-run signal is L7R_TESTS_FULL

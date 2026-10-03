@@ -1,0 +1,389 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "68e24889406c12c0ca75d30bc96acf6a054acbcaa6e516ce4308827463ebefc3",
+  "control": "perf-318-control-d4",
+  "control_record": {
+    "file": "/diagram/.clones/diagram-performance/specs/318-grow-outward-no-restart/measurements.json",
+    "key": "perf-318-control-d4",
+    "observed": "2026-10-03",
+    "quantity": "one-shot bookends, 2026-10-03, this host, one process each: 318-start (main ddb924e01) 17.7 s; 318-end (fdd811294 + ledger, dev/perf-log/20261003T195442Z-318-end-diagram-performance.json) 20.5 s; the control (the landing engine with D4 reverted in a detached worktree, dev/perf-log/20261003T195830Z-318-control-d4b-ctl318.json) 18.6 s. D4 is 1.9 s of the 2.8; the remaining 0.9 s (+5%) is the growth with no radius and the seating's other changes (perf-318-control-windows, perf-318-control-web)",
+    "source": "make perf LABEL=318-end in the clone and LABEL=318-control-d4b in a detached worktree of the landing commit with growth.py's GROW_LEVELS, field_distance and grow_jitter reverted",
+    "subject": "perf bookend, reference spec (Inashiro), seeds 4/25/39/47 at 15 households and the 10/20/40 scaling legs",
+    "unit": "s, the bookend total with plan D4 removed (the three-level 8/12/16-direction table, the seat-distance order, the unscaled jitter), everything else as it lands",
+    "value": 18.6,
+    "verifies": "the band-3 reading of the 318 bookends on the landing engine: total +15.8% (17.7 s -> 20.5 s), the homesteads stage on every seed"
+  },
+  "end": {
+    "commit": "684848526",
+    "label": "318-end",
+    "utc": "20261003T195442Z"
+  },
+  "environment": "local",
+  "explanation": "Band 3, +15.8% (17.7 -> 20.5 s), on the landing engine after the perf-audit's two corrections. (1) The canvas-wide seat region and free-ground grid (2.4 s of the growth) are now rasterized over a seating window round the seat, snapped to the canvas's cell grid, the grid deciding a cell past it by the same tests - the five pool hamlets byte-identical (perf-318-control-windows: 9.64 -> 7.56 s over the four 15-household seatings; the bookend 22.2 -> 20.5 s). (2) The 40-household web growth is the layout, not the web code 318 changed: seed 4's web is 3.52 s as it lands and 3.54 with the three web changes stubbed, seed 25's faster than main's (perf-318-control-web); seed 4's settle runs a second full pass. What remains: plan D4, the GM's ruling - the open seat nearest the field first, every direction and ring offered at once - is 1.9 s of the 2.8 (the control with D4 removed: 18.6 s), and buys a mean house-to-field distance of 355-394 ft against main's 416-443 (research.md R1); the last 0.9 s (+5%) is the growth with no radius. Seed 18 of the cohort, eleven margins thrown away on main, seats on its first in 2.4 s against 18.7 s.",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T200018Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 10.0,
+          "39": 12.9,
+          "4": 28.6,
+          "47": 26.7
+        },
+        "total_pct": 19.8
+      },
+      "20": {
+        "seeds": {
+          "25": -6.7,
+          "39": 21.8,
+          "4": 17.9,
+          "47": 17.2
+        },
+        "total_pct": 11.4
+      },
+      "40": {
+        "seeds": {
+          "25": 22.5,
+          "39": 21.5,
+          "4": 23.4,
+          "47": -14.9
+        },
+        "total_pct": 12.1
+      }
+    },
+    "seeds": {
+      "25": 23.1,
+      "39": 23.7,
+      "4": 23.5,
+      "47": -4.1
+    },
+    "total_pct": 15.8
+  },
+  "render": "perf bands [local]: 318-end vs 318-start -> band 3\n  seed   4   +23.5%; grew: homesteads +1.1s, hinterland +0.3s\n  seed  25   +23.1%; grew: homesteads +0.8s, hinterland +0.1s\n  seed  39   +23.7%; grew: homesteads +0.7s, windbreak +0.1s, web +0.1s\n  seed  47    -4.1%\n  TOTAL      +15.8%\n  10 households: TOTAL  +19.8% -> band 3\n    seed   4   +28.6%; grew: homesteads +1.2s\n    seed  25   +10.0%; grew: homesteads +0.7s\n    seed  39   +12.9%; grew: homesteads +0.3s, woodland +0.1s\n    seed  47   +26.7%; grew: web +0.4s, homesteads +0.3s, hinterland +0.2s\n  20 households: TOTAL  +11.4% -> band 3\n    seed   4   +17.9%; grew: homesteads +0.8s, web +0.4s, woodland +0.1s\n    seed  25    -6.7%\n    seed  39   +21.8%; grew: web +0.6s, homesteads +0.5s, notice +0.1s\n    seed  47   +17.2%; grew: homesteads +1.3s, windbreak +0.1s, hinterland +0.1s\n  40 households: TOTAL  +12.1% -> band 3\n    seed   4   +23.4%; grew: homesteads +2.6s, web +1.4s, field +0.2s\n    seed  25   +22.5%; grew: homesteads +3.0s, web +0.4s, track +0.1s\n    seed  39   +21.5%; grew: homesteads +2.6s, notice +0.2s, appurtenances +0.1s\n    seed  47   -14.9%\n  crossed: total +15.8% > 5%\n  crossed: total +15.8% > 10%\n  crossed: seed 4 +23.5% > 10%\n  crossed: seed 4 +23.5% > 20%\n  crossed: seed 25 +23.1% > 10%\n  crossed: seed 25 +23.1% > 20%\n  crossed: seed 39 +23.7% > 10%\n  crossed: seed 39 +23.7% > 20%\n  crossed: 10 households: total +19.8% > 5%\n  crossed: 10 households: total +19.8% > 10%\n  crossed: 10 households: seed 4 +28.6% > 10%\n  crossed: 10 households: seed 4 +28.6% > 20%\n  crossed: 10 households: seed 39 +12.9% > 10%\n  crossed: 10 households: seed 47 +26.7% > 10%\n  crossed: 10 households: seed 47 +26.7% > 20%\n  crossed: 20 households: total +11.4% > 5%\n  crossed: 20 households: total +11.4% > 10%\n  crossed: 20 households: seed 4 +17.9% > 10%\n  crossed: 20 households: seed 39 +21.8% > 10%\n  crossed: 20 households: seed 39 +21.8% > 20%\n  crossed: 20 households: seed 47 +17.2% > 10%\n  crossed: 40 households: total +12.1% > 5%\n  crossed: 40 households: total +12.1% > 10%\n  crossed: 40 households: seed 4 +23.4% > 10%\n  crossed: 40 households: seed 4 +23.4% > 20%\n  crossed: 40 households: seed 25 +22.5% > 10%\n  crossed: 40 households: seed 25 +22.5% > 20%\n  crossed: 40 households: seed 39 +21.5% > 10%\n  crossed: 40 households: seed 39 +21.5% > 20%\n  owes: bands 1 and 2, plus the GM's personal sign-off before the push (make perf-signoff, at a terminal)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.12
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.67,
+        0.68
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.74,
+        0.81
+      ],
+      "homesteads": [
+        0.97,
+        1.81
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.14,
+        0.12
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.05
+      ],
+      "track": [
+        0.07,
+        0.07
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.59,
+        0.55
+      ],
+      "windbreak": [
+        0.46,
+        0.47
+      ],
+      "woodland": [
+        0.05,
+        0.05
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.08,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.58,
+        0.59
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.75,
+        0.79
+      ],
+      "homesteads": [
+        0.91,
+        1.65
+      ],
+      "labels": [
+        0.02,
+        0.02
+      ],
+      "notice": [
+        0.18,
+        0.14
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.09,
+        0.08
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.41,
+        0.49
+      ],
+      "windbreak": [
+        0.59,
+        0.67
+      ],
+      "woodland": [
+        0.14,
+        0.15
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.07,
+        0.1
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.93,
+        0.95
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.94,
+        1.21
+      ],
+      "homesteads": [
+        1.38,
+        2.44
+      ],
+      "labels": [
+        0.02,
+        0.02
+      ],
+      "notice": [
+        0.14,
+        0.11
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.17,
+        0.16
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.75,
+        0.58
+      ],
+      "windbreak": [
+        0.53,
+        0.56
+      ],
+      "woodland": [
+        0.15,
+        0.16
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.07,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.65,
+        0.69
+      ],
+      "frame": [
+        0.02,
+        0.01
+      ],
+      "hinterland": [
+        0.87,
+        0.77
+      ],
+      "homesteads": [
+        1.25,
+        1.92
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.63,
+        0.09
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.06,
+        0.07
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.54,
+        0.29
+      ],
+      "windbreak": [
+        0.59,
+        0.62
+      ],
+      "woodland": [
+        0.09,
+        0.07
+      ]
+    }
+  },
+  "verdict": "pending"
+}

@@ -68,9 +68,12 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None) -> list[Pt]
     pitch = BUNDLE_PITCH * (FREE_SEAT_STEP if step is None else step)
     x0, y0, x1, y1 = 6.0, 6.0, float(s.W) - 6.0, float(s.H) - 6.0
     fg = getattr(s, "_free_ground", None)
+    ni, nj = int(max(0.0, x1 - x0) // pitch) + 1, int(max(0.0, y1 - y0) // pitch) + 1
+    if fg is not None:  # ...the cells past the grid's window decided in one call, not one each (`FreeGround.decide_beyond`)
+        fg.decide_beyond([x0 + i * pitch for i in range(ni) for _j in range(nj)], [y0 + j * pitch for _i in range(ni) for j in range(nj)])
     out: list[Pt] = []
-    for i in range(int(max(0.0, x1 - x0) // pitch) + 1):
-        for j in range(int(max(0.0, y1 - y0) // pitch) + 1):
+    for i in range(ni):
+        for j in range(nj):
             q = (x0 + i * pitch, y0 + j * pitch)
             if (fg is not None and fg.point_taken(q[0], q[1])) or _near_a_house(s, q):
                 continue

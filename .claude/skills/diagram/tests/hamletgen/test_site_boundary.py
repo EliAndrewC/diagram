@@ -315,3 +315,24 @@ def test_free_ground_decides_a_cell_past_its_bounds_as_one_inside() -> None:
     assert len(small._beyond) == 4
     bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
     assert not bare.point_taken(500.0, 500.0) and bare.point_clear(500.0, 500.0), "no ground at all: clear everywhere"
+
+
+def test_cells_past_the_window_decided_in_one_call_answer_as_one_at_a_time() -> None:
+    """`FreeGround.decide_beyond` (feature 318, the perf-audit's second round): the cells past the grid's window decided in one
+    vectorized call answer exactly as `_cell_beyond` does one at a time; cells inside, and cells already decided, are left."""
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    water = ([((300.0, 0.0), (300.0, 1000.0), 40.0)], [])
+    pts = [(x, y) for x in range(4, 1000, 37) for y in range(4, 1000, 53)]
+    one = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
+    want = {(x, y): (one.point_taken(x, y), one.point_clear(x, y)) for x, y in pts}
+    batch = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
+    batch.decide_beyond([p[0] for p in pts], [p[1] for p in pts])
+    n = len(batch._beyond)
+    assert n == len(one._beyond) > 0 and all((batch.point_taken(x, y), batch.point_clear(x, y)) == want[(x, y)] for x, y in pts)
+    assert len(batch._beyond) == n, "every cell past the window was decided by the batch"
+    batch.decide_beyond([50.0, float(pts[-1][0])], [50.0, float(pts[-1][1])])
+    assert len(batch._beyond) == n, "inside the window, and already decided: nothing more asked"
+    bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
+    bare.decide_beyond([500.0], [500.0])
+    assert bare._beyond[(62, 62)] == (False, True)
