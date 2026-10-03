@@ -13,8 +13,10 @@ agents and checked by `impl-drift` once (the audit); feature 296 is closed with 
 
 ## Technical Context
 
-- Engine: one new module `l7r/diagram/tools/claims.py` (parsing, units, code fingerprints, coverage) under the 100% rule, and
-  `tools/placement_stages.py` (the walk-through). Every `hamletgen` file gains docstrings: that is engine code, so the delta
+- Engine: one new module `l7r/diagram/tools/claims.py` (parsing, units, code fingerprints, the import-graph scope, coverage)
+  under the 100% rule, and `tools/placement_stages.py` (the walk-through). The scope is 241 modules, 74,331 lines (spec
+  Context): 1,654 functions, 800 methods, 237 classes, 1,019 constants and 18 procedure sections - 3,728 units before
+  inheritance, counted by `claims.all_units` on 2026-10-02. Every in-scope file gains docstrings: engine code, so the delta
   takes the GATED route.
 - Scripts: `scripts/_claims.py` (research fingerprints, the index, owed, bundle, record, report, the push check),
   `scripts/claims-gate.sh` (the push), wired into `sync-with-main.sh`; Makefile targets.
@@ -22,8 +24,8 @@ agents and checked by `impl-drift` once (the audit); feature 296 is closed with 
   `_entry_owed.findings` use), `_entry_owed.base_of`, `interactive.sources.research_questions` (pointer -> heading text and
   the built page's URL), `_hm_escape.py reason-ok`, the bypass-log writer shape of `entry-gate.sh`.
 - Cost noted, not avoided: `pipeline/gencache.py` hashes each function's raw source and the module-level text
-  (`_split_sources`), docstrings included, so the docstrings invalidate every hamlet map's cache once; the gate re-rolls the
-  hamlet pool once on this delta. No map's output changes (docstrings and string-literal statements execute nothing).
+  (`_split_sources`), docstrings included, so the docstrings invalidate every scripted map's cache once (the shared `settlement/` and
+  `waterfields/` modules are in scope); the gate re-rolls the scripted pool once on this delta. No map's output changes (docstrings and string-literal statements execute nothing).
 
 ## Decisions
 
@@ -42,7 +44,8 @@ directly after its `Assign`/`AnnAssign` is its docstring. For a procedure sectio
 **D2 - Units and inheritance.** `claims.units(source, path)` walks the syntax tree: every module-level and class-level
 function and method, every class, every module-level constant (a target name that is upper case, `_` and digits allowed, an
 optional leading `_`). A function nested in a function is part of its parent, not a unit. A unit with no claim of its own
-takes the module docstring's claims (inherited); each (unit, claim) is one index row, keyed
+takes the module docstring's claims (inherited). A module is in scope when `claims.scope` reaches it from
+`l7r.diagram.hamletgen` through `import`/`from` statements at any depth, relative imports resolved (spec FR-002); each (unit, claim) is one index row, keyed
 `<repo path>::<qualname>#<label>`. A procedure section is a unit keyed `<repo path>::<heading text>#<label>`; sections are
 split at every `##`/`###`/`####` heading. (spec FR-002, FR-004)
 
@@ -51,7 +54,7 @@ nested function's), without positions - so comments, blank lines and formatting 
 count. For a class: its class-level statements only, methods excluded (each method is its own unit). For a constant: its value
 node. Each is joined with (a) the claim line itself, normalized for whitespace, and (b) the dumped value of every package
 constant the unit names - resolved through the module's `from .x import NAME` imports and its own module-level constants,
-across the `hamletgen` package. The fingerprint WITHOUT the claim line is kept beside it as the unit's `core`, which D7 uses to
+across the in-scope modules. The fingerprint WITHOUT the claim line is kept beside it as the unit's `core`, which D7 uses to
 tell a drift the delta introduced from one that was already there. For a procedure section: its text with HTML comments other
 than claim markers removed and whitespace collapsed. Callees are not followed (spec Decisions Recorded). (spec FR-004)
 
@@ -83,8 +86,12 @@ CANNOT-TELL (spec FR-005). Rows whose unit no longer exists are dropped by the n
 
 **D7 - The push** (`scripts/claims-gate.sh`, in `sync-with-main.sh` beside `entry-gate.sh`, on both routes): refuse when (a)
 any unit is owed; or (b) a row is DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL at the head and, at the merge base, the
-row was IN-STEP, or there was no row and the unit's `core` differs from the base's (the delta changed the code or its
-constants) - an introduced finding. Print without refusing every non-IN-STEP row that is not introduced (pre-existing; for
+row was IN-STEP, or there was no row and the delta changed the unit's code or a cited question's findings - an
+introduced finding. "Changed the code" is asked across keys, because a renamed unit has no base row under its new key: the
+unit's `core` matches the `core` of NO unit at the merge base (computed from the base's trees, read with one `git ls-tree`
+and one `cat-file --batch`), so a move or a rename with its code intact is pre-existing, and a new or edited one is not.
+"Changed a cited question's findings": D4's research fingerprint of the question at the base differs from the head's. A unit
+with a finding at both ends is pre-existing whatever changed (spec FR-010). Print without refusing every non-IN-STEP row that is not introduced (pre-existing; for
 this feature's own landing, where the base has no index, every audit finding on unchanged code is pre-existing). CANNOT-TELL
 is in the refusing set because an unanswered check is an owed check in substance. `CLAIMS_OK="<reason>"` discharges, to the
 guard log and `dev/bypass-log/`. Silent when nothing in scope and no cited question changed. (FR-010)
@@ -114,7 +121,7 @@ this session dispatches it as a `general-purpose` agent on Opus told to adopt th
 gotcha). (FR-008)
 
 **D12 - The audit, in two independent passes.** Writers: `general-purpose` agents on Opus, one per module group (about
-2,000 lines of `hamletgen` each, by subpackage), each writing the `Research:` claims into its own files only - moving the
+4,000-5,000 lines each, by subpackage - about 16 groups over the 74,331 lines), each writing the `Research:` claims into its own files only - moving the
 existing comment pointers and labels into claim lines, choosing pointers by grepping question headings, NONE for plumbing (a
 module-level NONE where the whole module is), UNRESEARCHED where nothing in the record bears and no GUESS label already stood.
 Then `make claims-owed` and one `impl-drift` per group bundle. MISLABELED and UNCLAIMED findings are applied to the claims and
@@ -150,5 +157,7 @@ as MISLABELED, an unclaimed decision), three `impl-drift` runs; recorded in `res
 
 ## Risks
 
-- Writer agents editing many files: each owns disjoint files; the session runs `make quick` after each group lands.
+- Writer agents editing many files: each owns disjoint files; the session runs the coverage test after each group lands.
+- Coverage speed: `claims.all_units` over the scope is about 4 s (measured 2026-10-02 after removing a copy per unit, 9 s
+  before); the coverage test runs once per gate, inside `make quick`'s budget.
 - Index churn: one JSON file shared by parallel clones; rows are sorted and independent, so conflicts are line-local.

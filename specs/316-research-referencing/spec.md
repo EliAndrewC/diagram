@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Accepted - `spec-fidelity` FAITHFUL, round 3 (2026-10-02)
 
 **Input**: The GM, 2026-10-02 (verbatim in `request.md`): *"I'm less concerned with bringing our current implementation in
 line with our research than I am with having some kind of system that cross references our implementation with the research
@@ -343,3 +343,4 @@ and mislabeled finding the audit made, with the claim it concerns.
   refused a unit already drifted at the base once its code or research was touched, against the accepted rule and US4
   scenario 4. Applied: the code-or-research clause applies only where the base held no row; a finding at both ends is
   pre-existing whatever changed; SC-004 adds the re-checked-DRIFTED case.
+- **Round 3** (`spec-fidelity-verify`, 2026-10-02): **FAITHFUL** - the round-2 item resolved, no new departure.
