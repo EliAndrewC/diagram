@@ -274,3 +274,4 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - Round 1 (spec-fidelity, 2026-10-03): REVISE - the tab-name pitch required (FR-013); a further pilot when the garden needs
   changes (FR-010, US6, SC-005); per-sheet facts on general kinds held to the particular guidelines (Context, FR-003, US5,
   FR-011); the research pass before a guess (Assumptions). All four applied.
+- Round 2 (spec-fidelity, 2026-10-03): ACCEPT (FAITHFUL) - all four round-1 changes confirmed against the diff.
