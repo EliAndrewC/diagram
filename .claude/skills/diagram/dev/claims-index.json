@@ -4599,6 +4599,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.decide_beyond#plumbing": {
+  "code": "06b55c66a9001288",
+  "core": "b2f831ce3daf89ca",
+  "date": "2026-10-03",
+  "note": "fills the cache of cells past the grid with the same two tests (contains the region, disjoint from the grown ground), batched; decides nothing physical",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py::FreeGround.lines_edge_points#site boundary": {
   "code": "2c54edabea024414",
   "core": "746a9f64337137c5",
@@ -4832,18 +4840,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
-  "code": "0f85143073a89f3e",
-  "core": "9b77a3b13db01c9e",
+  "code": "ad6a372cc2a2eb2d",
+  "core": "2613b318e42dbb37",
   "date": "2026-10-03",
-  "note": "no distance-from-field bound in the code; 0032 says \"no house is refused for its distance from the fields\"",
+  "note": "no distance-from-field filter; points are dropped only for refused static ground or a standing house, matching \"no house is refused for its distance from the fields\"",
   "research": "04b14739a7564aff",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "code": "e81ac74bdb83b758",
-  "core": "9b77a3b13db01c9e",
+  "code": "02a3eb043759ce64",
+  "core": "2613b318e42dbb37",
   "date": "2026-10-03",
-  "note": "nearest-first over every legal grid point; 0032 is silent on the order seats are offered in",
+  "note": "every grid point on the canvas, sorted nearest the center first; 0032 does not address seat order",
   "research": "",
   "verdict": "IN-STEP"
  },
