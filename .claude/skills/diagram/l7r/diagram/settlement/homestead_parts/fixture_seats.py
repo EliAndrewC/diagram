@@ -239,7 +239,7 @@ def lay_fixtures(
     notes: dict[str, Any] | None = None,
     shade: float = 0.0,
     turns: Sequence[float] = (0.0,),
-    groves: Sequence[Rect] = (),
+    fruit: Sequence[Rect] = (),
 ) -> dict[str, Rect]:
     """Each of `kinds` laid beside the parts already laid, in the house's unturned frame centered on it: `{kind: (x, y, w,
     h)}`, the box AS LAID (a flank seat turned to lie along its flank). `roofs` are the built parts - the house first, the
@@ -253,10 +253,9 @@ def lay_fixtures(
     only for a bath room with no place along the house's three attested walls, or a wood shed with no place a ken off a
     wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22)."""
     g = px(WALL_GAP_FT)
-    # A GROVE FARM'S BANDS (`groves`, feature 291) are ground no fixture and no trunk stands on, but not a roof: a persimmon's crown
-    # may reach over the grove's edge, where its own crowns give way round it (feature 315: held off the bands, a grove farm's
-    # persimmon found no seat in the 24 ft service strip behind its house and walked 35 to 80 ft out, past the dooryard)
-    taken: list[Rect] = [*roofs, *groves, *ground]
+    # (A grove farm's bands stay roofs here: letting a persimmon's crown reach over them, feature 315 found, let it take the
+    # service strip a wood shed or bath room needed, and five cohort rolls could no longer seat their households.)
+    taken: list[Rect] = [*roofs, *fruit, *ground]  # `fruit`: a grove farm's bands, ground for its persimmon alone (feature 315)
     built: list[Rect] = list(roofs)
     laid: dict[str, Rect] = {}
     ft: dict[str, tuple[float, float]] = {}
@@ -265,7 +264,7 @@ def lay_fixtures(
         w, d = px(ft[kind][0]), px(ft[kind][1])
         u = roll(SALT[kind] + 0.5)
         if kind == "persimmon":
-            seat = _persimmon(hw, hh, taken, built, u < forms.persimmon_front, px, _sunlit(ground, shade, turns))
+            seat = _persimmon(hw, hh, [t for t in taken if t not in fruit], built, u < forms.persimmon_front, px, _sunlit(ground, shade, turns))
             if seat is None:  # no seat in the dooryard: this farm keeps no persimmon (feature 315)
                 del ft[kind]
                 continue

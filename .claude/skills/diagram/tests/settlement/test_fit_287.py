@@ -123,3 +123,15 @@ def test_a_grove_farm_is_refused_on_the_access_tree_or_with_a_fixture_in_a_band(
     s.M["houses"].append({"x": 800.0, "y": 780.0, "w": 40.0, "h": 30.0, "geom": {"groves": [(800.0, 800.0, 100.0, 30.0)], "bbox": (800.0, 790.0, 120.0, 60.0)}})
     geom["bbox"] = (650.0, 650.0, 400.0, 400.0)
     assert s._fixtures_in_bands(geom), "in a neighbor's band"
+
+
+def test_a_grove_farms_persimmon_may_stand_in_its_own_band_never_a_neighbors() -> None:
+    """Feature 315: the traditional igune held a few fruit trees, so `_fixtures_in_bands` passes a household's persimmon in its
+    own grove band; in a neighbor's it still refuses the bundle."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    tree = (500.0, 450.0, 23.0, 23.0)
+    geom = {"boxes": {"fixtures": {"persimmon": tree}}, "fixtures": {"persimmon": tree}, "groves": [(500.0, 440.0, 200.0, 40.0)], "bbox": (500.0, 500.0, 220.0, 160.0)}
+    assert not s._fixtures_in_bands(geom), "in its own band"
+    s.M["houses"].append({"x": 520.0, "y": 420.0, "w": 40.0, "h": 30.0, "geom": {"groves": [(505.0, 452.0, 60.0, 30.0)], "bbox": (520.0, 430.0, 120.0, 80.0)}})
+    assert s._fixtures_in_bands(geom), "in a neighbor's band"

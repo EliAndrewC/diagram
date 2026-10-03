@@ -60,7 +60,13 @@ session's, each in a detached worktree). Seeds 14, 15 and 906: a bed slid south 
 a persimmon into its new sun ground, and a bed taller than its yard, or turned with its house, rose past the east band's
 unturned end. Seeds 22 and 23 bisect to feature 310's grove-farm layout (`c37f631a5`): a crowded farm's persimmon, refused
 every seat in its front (its own plots' sun) and its back (the service strip before its band), paced 80 ft out onto the row's
-street, a tree lane the web could not move. The fruit-tree page puts a farm's fruit trees "within about 30 ft of the house"
+street, a tree lane the web could not move (observed 2026-10-02; method: the roll probed at the web's refusal, the trunk's box
+against the street's tread). The fruit-tree page puts a farm's fruit trees "within about 30 ft of the house"
 (`research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html`), and on the grove-farm
 maps every persimmon but one already stood 35 to 80 ft out (one-shot, observed 2026-10-02; method: each crown's edge
 measured from its house in the house's frame on the main pool).
+
+Where a grove farm's fruit tree goes: the record's sun page has the Tonami grove thin on the east, where the house fronts, "and
+flowering and fruit trees were often planted there" (`research/questions/0038-sunlight-and-shade-on-the-farm.html`, the
+Tonami institute's survey). On our grove farms the yard and bed take the front and the windward band the back, so the side the
+grove leaves open or thin - beside the house, north of the plots' sun - is the attested place, and the persimmon takes it.

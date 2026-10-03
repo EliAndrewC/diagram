@@ -68,7 +68,7 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
     return cut, "folded back short of the field - the ground between is marsh a path may not cross"
 
 
-def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) -> Pt:
+def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt, turn_deg: float = 0.0) -> Pt:
     """Where a track leaves the settlement - measured from the PLACED houses, not the predicted band.
 
     FR-002, and feature 126's unfinished task T009. Until now the gateway came from
@@ -94,6 +94,9 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
         return fallback
     ax, ay = cast(Pt, seat["along"])
     ox, oy = cast(Pt, seat["out"])
+    if turn_deg:  # a bearing turned off the downslope (`stage_track`, where the downslope gateway has no dry way out)
+        c, sn = math.cos(math.radians(turn_deg)), math.sin(math.radians(turn_deg))
+        ox, oy, ax, ay = ox * c - oy * sn, ox * sn + oy * c, ax * c - ay * sn, ax * sn + ay * c
     xs = [float(h["x"]) for h in hs]
     ys = [float(h["y"]) for h in hs]
     cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
@@ -689,7 +692,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # back in `stage_sink`, before this, and a cohort sweep found ways ending in it on two maps.
     toe = s.toe_band()
     drawn_wet = marsh_ground(s.M, but=("defense",))
-    track = connector_track(plan, gate, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
+    track = gateway_track(s, plan, seat, _band_gate, gate, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, drawn_water_segs(s), fabric)
     s.lane(
         connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
         width=CONNECTOR_WIDTH,
@@ -697,6 +700,48 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         worn=True,
         connector=True,
     )
+
+
+def gateway_track(
+    s: Settlement, plan: SitePlan, seat: Mapping[str, object], band_gate: Pt, gate: Pt, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]
+) -> Poly:
+    """The connector's track from `gate`, swept (`connector_track`); and where that finds no dry way out - A GATEWAY WALLED IN
+    (feature 315, cohort seed 19: walked out clear of every steading, it stopped in the corner of a farm's own grove, and every
+    way out of the pocket was narrower than a track's gap) - out along the exit strip where the seating reserved one, else from
+    the cloud's edge on a bearing turned off the downslope, the nearest turn first."""
+    try:
+        return connector_track(plan, gate, avoid=avoid, wet=wet, waters=waters, fabric=fabric)
+    except NoDryExit:
+        if s.M.get("access_exit"):
+            return track_from_the_strip_end(s, plan, gate, avoid, wet, waters, fabric)
+        return turned_gateway_track(s, plan, seat, band_gate, avoid, wet, waters, fabric)
+
+
+GATEWAY_TURNS_DEG = (30.0, -30.0, 60.0, -60.0, 90.0, -90.0)
+"""The bearings off the downslope a walled-in gateway is sought on, nearest first (feature 315, `turned_gateway_track`)."""
+
+
+def turned_gateway_track(
+    s: Settlement, plan: SitePlan, seat: Mapping[str, object], band_gate: Pt, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]
+) -> Poly:
+    """The track from the first gateway, on a bearing turned off the downslope (`GATEWAY_TURNS_DEG`), whose sweep finds a dry way out
+    of the frame; refused where none does, as the downslope gateway was."""
+    for deg in GATEWAY_TURNS_DEG:
+        gate = gate_on_the_strip(s, plan.envelope, _cluster_gateway(s, seat, band_gate, deg))
+        with contextlib.suppress(NoDryExit):
+            return connector_track(plan, gate, avoid=avoid, wet=wet, waters=waters, fabric=fabric)
+    raise NoDryExit("no dry way out of the frame from a gateway on any bearing off the cluster")
+
+
+def track_from_the_strip_end(s: Settlement, plan: SitePlan, gate: Pt, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
+    """The track where the gateway itself is walled in (feature 315, cohort seed 19: a gateway seated in the corner of a farm's
+    own grove): out along the exit strip the seating reserved, and swept from its outer end - the connector starts where the
+    cluster ends (plan M3), as `connector_through`'s later fallbacks already have it. No strip, or none from its end: refused."""
+    strip = [(float(q[0]), float(q[1])) for q in s.M.get("access_exit") or []]
+    if len(strip) < 2:
+        raise NoDryExit(f"no dry way out of the frame from the gateway at ({gate[0]:.0f}, {gate[1]:.0f}), and no exit strip")
+    out = connector_track(plan, strip[-1], avoid=avoid, wet=wet, waters=waters, fabric=fabric)
+    return [gate, *([] if math.dist(gate, strip[-1]) < 1e-6 else [strip[-1]]), *out[1:]]
 
 
 def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach: float = 4000.0, wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:

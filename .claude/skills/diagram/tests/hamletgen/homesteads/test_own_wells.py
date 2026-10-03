@@ -122,3 +122,15 @@ def test_place_wells_hands_the_grove_farms_to_their_own_water_and_seats_the_rest
     plan = SimpleNamespace(settlement_form="dispersed", farm_water="channel", row_water="own")
     assert wells.place_wells(s, plan, [h]) == 0  # type: ignore[arg-type]
     assert got == [[h]]
+
+
+def test_a_streets_turn_is_measured_either_side_of_a_mark() -> None:
+    """Feature 315 (cohort seed 903): `street_turns_at` - straight, 0; at a right-angle corner, 90; past the look either way, 0."""
+    from l7r.diagram.hamletgen.homesteads.wells import street_turns_at
+
+    line = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)]
+    arc = [0.0, 100.0, 200.0]
+    assert street_turns_at(line, arc, 50.0, 20.0) == 0.0
+    assert abs(street_turns_at(line, arc, 100.0, 20.0) - 90.0) < 1e-9
+    assert street_turns_at(line, arc, 160.0, 20.0) == 0.0
+    assert abs(street_turns_at([(0.0, 0.0), (10.0, 0.0), (0.0, 0.1)], [0.0, 10.0, 20.0], 10.0, 5.0) - 179.4) < 0.1, "a turn past 180 read the short way"

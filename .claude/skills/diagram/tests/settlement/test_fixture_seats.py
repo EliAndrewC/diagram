@@ -187,3 +187,18 @@ def test_a_persimmon_with_no_seat_in_its_dooryard_is_not_laid() -> None:
     assert fs.in_dooryard(0.0, HH / 2 + 41.0, 11.5, HW, HH, 30.0), "its crown's edge 29.5 ft off the front wall"
     assert not fs.in_dooryard(0.0, HH / 2 + 42.0, 11.5, HW, HH, 30.0), "30.5 ft off"
     assert fs.in_dooryard(HW / 2 + 20.0, -(HH / 2 + 20.0), 11.5, HW, HH, 30.0), "off a corner, by the diagonal"
+
+
+def test_a_grove_farms_persimmon_may_stand_in_its_own_grove_and_nothing_else_may() -> None:
+    """Feature 315: the traditional igune held "a few fruit trees" among its trees, so on a grove farm (`fruit`, its bands) the
+    persimmon may stand in its own grove behind the house, within the dooryard; no other fixture stands in a band, and the
+    persimmon is never set on the house's flank."""
+    north = (0.0, -(HH / 2 + 3.0 + 22.0), HW + 60.0, 44.0)  # the windward band, hard behind a narrow service strip
+    sunny = [YARD, GARDEN]
+    args = (HW, HH, [HOUSE], sunny, YARD, False, lambda salt: 0.1, fs.FixtureForms(persimmon_front=0.05), _px, None, None, 50.0, (0.0,))
+    laid = fs.lay_fixtures(("coop", "persimmon"), *args, [north])
+    tree = laid["persimmon"]
+    assert tree[1] < -HH / 2 and fs.in_dooryard(tree[0], tree[1], tree[2] / 2, HW, HH, fs.PERSIMMON_DOORYARD_FT), "behind, in the dooryard"
+    assert fs.clears(laid["coop"], [north], 0.0), "the coop stands outside the band"
+    held = fs.lay_fixtures(("persimmon",), *args[:2], [HOUSE, north], *args[3:])
+    assert "persimmon" not in held or held["persimmon"][1] != tree[1], "held off the band, it does not take that seat"

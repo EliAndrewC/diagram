@@ -75,6 +75,18 @@ def _extent_boxed(recs: Any) -> list[Any]:
     return [(rec, *house_extent(rec)) for rec in recs]
 
 
+def drop_persimmon(geom: Any) -> None:
+    """Take a household's persimmon out of its homestead, in place (feature 315): its fixture, its drawn box and its rolled size
+    (the notes are copied first - a template's are shared)."""
+    geom["fixtures"] = {k: v for k, v in (geom.get("fixtures") or {}).items() if k != "persimmon"}
+    boxes = geom.get("boxes")
+    if boxes and boxes.get("fixtures"):
+        boxes["fixtures"] = {k: v for k, v in boxes["fixtures"].items() if k != "persimmon"}
+    notes = geom.get("fixture_notes")
+    if notes and (notes.get("ft") or {}).get("persimmon") is not None:
+        geom["fixture_notes"] = {**notes, "ft": {k: v for k, v in notes["ft"].items() if k != "persimmon"}}
+
+
 def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[Any]:
     """The records of `houses` whose extent meets `box`, each once, in list order (the order the linear scans read)."""
 
@@ -656,7 +668,11 @@ class BundleFitMixin:
         # cleared its farm's north band here at full precision and overlapped it in the record by 0.03 px. A margin instead
         # refused every near touch and moved the pinned seeds (four of seven failed); the record's own boxes refuse only this
         turn = round(float(geom.get("turn") or 0.0), 1)
-        fixtures = [b if k == "persimmon" else recorded_box(r, turn) for k, r in (geom.get("fixtures") or {}).items() for b in (boxes[k],)]
+        fixtures = [recorded_box(r, turn) for k, r in (geom.get("fixtures") or {}).items() if k != "persimmon"]
+        # ...ITS OWN PERSIMMON EXCEPTED, IN ITS OWN GROVE (feature 315): the traditional igune held a few fruit trees among its
+        # trees, so a grove farm's persimmon may stand in its own bands (`_lay_fixtures`); a neighbor's grove it may not
+        tree = boxes.get("persimmon")
+        own = {(round(float(b[0]), 1), round(float(b[1]), 1)) for b in geom.get("groves") or ()}
         bands = list(geom.get("groves") or ())
         cx, cy, bw, bh = geom["bbox"]
         for rec in houses_meeting(self.M["houses"], (cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2)):
@@ -664,7 +680,8 @@ class BundleFitMixin:
             if g and g is not geom:
                 bands += list(g.get("groves") or ())
         bands = [(round(float(b[0]), 1), round(float(b[1]), 1), float(b[2]), float(b[3])) for b in bands]
-        return any(abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2 for f in fixtures for b in bands)
+        meet = lambda f, b: abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2  # noqa: E731
+        return any(meet(f, b) for f in fixtures for b in bands) or (tree is not None and any(meet(tree, b) for b in bands if (b[0], b[1]) not in own))
 
     def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does any part of this bundle - its house, yard, beds, well pocket, fixtures or grove bands - stand on a corridor of
@@ -883,14 +900,19 @@ class BundleFitMixin:
         """Does this household's persimmon stand in a yard's or bed's sun, or a standing neighbor's persimmon in this
         household's (GM 2026-10-02, `CANOPY_SHADE_FT`, `tree_shade.crown_shades`)? Its own plots are kept by its seat
         (`fixture_seats._persimmon`, at every rake the map allows), asked again here as drawn; a neighbor's are this test
-        alone, in both directions, as the sun corridor is (`_sun_corridor_ok`). On the map that keeps the sun corridor."""
+        alone, in both directions, as the sun corridor is (`_sun_corridor_ok`). On the map that keeps the sun corridor.
+
+        THIS HOUSEHOLD'S OWN TREE IS DROPPED, NEVER ITS SEAT (feature 315): where its persimmon would shade its own plots or a
+        neighbor's, the farm keeps no persimmon (`drop_persimmon`) and the seat is judged without it - a dooryard tree is
+        not the reason a household goes unhoused, and refusing seats for it left cohort rows unable to seat everyone. A
+        standing neighbor's persimmon in this household's sun still refuses the seat: that tree is already placed."""
         if not getattr(self, "_sun_corridor_ft", 0.0):
             return False
         reach, r = self.px(CANOPY_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)  # a foot past the crown: the map's check reads the drawn quads
         tree = (geom.get("fixtures") or {}).get("persimmon")
         plots = [p for p in (part_box(geom, "yard"), *(part_box(geom, "gardens") or ())) if p is not None]
-        if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in plots):
-            return True
+        if tree is not None and self._settle_persimmon(geom):
+            tree = None
         # FROM THE INDEX (feature 276's houses grid): a plot this crown shades meets the crown's box grown by the reach (not
         # to the south), and a neighbor's crown shading one of these plots meets a plot's sun ground grown by the crown
         boxes = [] if tree is None else [(tree[0] - r - reach, tree[1] - r - reach, tree[0] + r + reach, tree[1] + r)]
@@ -902,12 +924,34 @@ class BundleFitMixin:
                 if not g or g is geom or id(rec) in seen:
                     continue
                 seen.add(id(rec))
-                theirs = [p for p in (part_box(g, "yard"), *(part_box(g, "gardens") or ())) if p is not None]
-                if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in theirs):
-                    return True
                 other = (g.get("fixtures") or {}).get("persimmon")
                 if other is not None and any(crown_shades(other[0], other[1], r, p, reach) for p in plots):
                     return True
+        return False
+
+    def _settle_persimmon(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Drop this household's persimmon where, as laid, it stands in its own yard's or beds' sun or a standing neighbor's
+        (feature 315); whether it was dropped. On the map that keeps the sun corridor."""
+        tree = (geom.get("fixtures") or {}).get("persimmon")
+        if tree is None or not getattr(self, "_sun_corridor_ft", 0.0):
+            return False
+        reach, r = self.px(CANOPY_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)
+        plots = [p for p in (part_box(geom, "yard"), *(part_box(geom, "gardens") or ())) if p is not None]
+        if any(crown_shades(tree[0], tree[1], r, p, reach) for p in plots) or self._persimmon_shades_a_neighbor(geom, tree, r, reach):
+            drop_persimmon(geom)
+            return True
+        return False
+
+    def _persimmon_shades_a_neighbor(self: Settlement, geom: Any, tree: Any, r: float, reach: float) -> bool:  # type: ignore[misc]
+        """Does `tree` (this household's persimmon) stand in a standing neighbor's yard's or bed's sun? From the houses index,
+        by the crown's box grown by the reach (not to the south)."""
+        box = (tree[0] - r - reach, tree[1] - r - reach, tree[0] + r + reach, tree[1] + r)
+        for rec in houses_meeting(self.M["houses"], box):
+            g = rec.get("geom")
+            if not g or g is geom:
+                continue
+            if any(crown_shades(tree[0], tree[1], r, p, reach) for p in (part_box(g, "yard"), *(part_box(g, "gardens") or ())) if p is not None):
+                return True
         return False
 
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
