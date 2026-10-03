@@ -293,6 +293,14 @@ def test_glossary_terms_carry_their_definition_and_the_references_are_a_tab(synt
     synthetic.js("() => document.getElementById('t-about').click()")
     synthetic.page.wait_for_timeout(30)
     assert synthetic.js(shown)["about"], "the About tab brings the write-up back"
+    # ONE SIZE FOR EVERY TAB (GM 2026-10-03: "it is disorienting to see it resized when clicking between tabs")
+    box = "() => { const r = document.getElementById('explain').getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }"
+    sizes = []
+    for tab in ("t-about", "t-refs", "t-about"):
+        synthetic.js(f"() => document.getElementById('{tab}').click()")
+        synthetic.page.wait_for_timeout(30)
+        sizes.append(synthetic.js(box))
+    assert sizes[0] == sizes[1] == sizes[2], f"the dialog resized between tabs: {sizes}"
     synthetic.js("() => document.getElementById('t-refs').click()")
     synthetic.open("bund")
     assert synthetic.js(shown)["about"], "a fresh open starts on About"

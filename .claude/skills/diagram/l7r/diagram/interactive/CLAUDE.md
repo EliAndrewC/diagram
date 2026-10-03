@@ -6,7 +6,7 @@ it and a modal opens on three TABS (feature 319, GM 2026-10-03): **About** - wha
 project guessed, absent when nothing was; **References** - the QUESTIONS the research asked that the write-up rests on, each
 linking to its answer, since feature 301 the question's own small page in the record's built site, `research/site/` (feature
 180; local since feature 194 - see below). A class not yet rewritten in the About form shows its old what / why / caveat on the
-About tab, with its old label lead.
+About tab, with its old label lead. **Every tab is the same size** (GM 2026-10-03: *"it is disorienting to see it resized when clicking between tabs"*): the panels share one grid cell and a hidden one is invisible, not removed (`page.css` `#x-panels`), and the browser test pins the dialog's box across tabs.
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
 

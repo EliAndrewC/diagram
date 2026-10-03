@@ -836,13 +836,16 @@ def render_page(
         '<button type="button" role="tab" id="t-about" data-tab="about" aria-controls="p-about">About</button>'
         '<button type="button" role="tab" id="t-guesses" data-tab="guesses" aria-controls="p-guesses">Guesses</button>'
         '<button type="button" role="tab" id="t-refs" data-tab="refs" aria-controls="p-refs">References</button></nav></header>'
-        '<div id="p-about" role="tabpanel" aria-labelledby="t-about"><p id="x-label" class="label"></p>'
+        # THE PANELS SHARE ONE GRID CELL (GM 2026-10-03: *"I would like for the tabs to keep the modal the same size because
+        # it is disorienting to see it resized when clicking between tabs"*): a hidden panel keeps its place, invisible, so
+        # the dialog is always the size of its largest panel (page.css `#x-panels`).
+        '<div id="x-panels"><div id="p-about" role="tabpanel" aria-labelledby="t-about"><p id="x-label" class="label"></p>'
         '<section id="x-about"></section><section id="x-what"></section><section id="x-why"></section>'
         '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
         '<section id="x-siblings"></section></div>'
         '<div id="p-guesses" role="tabpanel" aria-labelledby="t-guesses" hidden><ul id="x-guesses"></ul></div>'
         # NO "Record:" LINE (feature 180, GM 2026-09-05) - the references tab lists the QUESTIONS the entry names.
-        f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><p id="r-intro" class="intro">{REFERENCES_LEAD}</p><section id="r-list"></section></div>'
+        f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><p id="r-intro" class="intro">{REFERENCES_LEAD}</p><section id="r-list"></section></div></div>'
         '<footer><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
         # THE GLOSSARY TOOLTIP, a sibling of the dialogs rather than a child of a word (feature 182): a box

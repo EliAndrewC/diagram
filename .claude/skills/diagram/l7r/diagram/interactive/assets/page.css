@@ -147,7 +147,13 @@ a.sib:hover { color: var(--hl-stroke); }
 #x-tabs button:focus { outline: none; }
 #x-tabs button:hover { color: var(--hl-stroke); }
 #x-tabs button[hidden] { display: none; }
-[role="tabpanel"][hidden], #x-about[hidden] { display: none; }
+/* ONE SIZE FOR EVERY TAB (GM 2026-10-03: "it is disorienting to see it resized when clicking between tabs"): the panels
+   stack in one grid cell and a hidden panel is invisible rather than removed, so the cell - and the dialog - is always as
+   wide and as tall as the largest panel. Invisible content takes no pointer and no tooltip. */
+#x-panels { display: grid; }
+#x-panels > [role="tabpanel"] { grid-area: 1 / 1; min-width: 0; }
+#x-panels > [role="tabpanel"][hidden] { display: block; visibility: hidden; }
+#x-about[hidden] { display: none; }
 #p-guesses ul { margin: 0 0 0.7rem; padding-left: 1.2rem; line-height: 1.45; }
 #p-guesses li { margin: 0 0 0.5rem; }
 /* the references tab: one line per QUESTION, each a link to its answer in the record (feature 180) */
