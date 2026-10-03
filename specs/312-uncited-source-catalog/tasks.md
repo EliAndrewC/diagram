@@ -77,8 +77,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [x] T32 [US4] the write-ups drafted and installed for every kept page
       research: rendering
       verify: DONE. every kept page written up: report shows 1091 written, 0 kept with no entry (5 entries carry a URL a check corrected)
-- [ ] T33 [US4] `source-applicability` on every uncited entry; findings applied; SC-006 holds
+- [x] T33 [US4] `source-applicability` on every uncited entry; findings applied; SC-006 holds
       research: rendering
+      verify: DONE. source-applicability answered every uncited entry (batches 008-169; second rounds closed by stated reason); make record-owed reports none owed; SC-006 holds with the Uncited sources part built by test_record_uncited
 
 ## Phase 5 - citation rules and sources no one can read (US6; FR-005, FR-019, FR-020)
 
@@ -90,8 +91,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
       (needs 313's report)
       research: rendering
       verify: DONE. check-partial-citations.py run at the push (sync-with-main.sh) and by the gate; exits 0 on the tree; test_check_partial_citations green
-- [ ] T42 [US6] the footnotes of FR-019's sources confirmed or removed (plan D14); record checks on every changed question
+- [x] T42 [US6] the footnotes of FR-019's sources confirmed or removed (plan D14); record checks on every changed question
       research: rendering
+      verify: DONE. FR-019's sources: 8 footnotes confirmed from the readable part in partial-confirmations.jsonl; check-partial-citations.py exits 0; make record-owed shows no question check owed (0057 and 0193 answered)
 
 ## Phase 6 - the high-risk sources (US7; FR-021) - waits on the GM's downloads
 

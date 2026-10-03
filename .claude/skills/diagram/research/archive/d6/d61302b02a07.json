@@ -1,0 +1,14 @@
+{
+ "captured": "2026-10-03T00:21:32+00:00",
+ "final_url": "http://dfz.gd.gov.cn/index/dqyj/content/post_4616824.html",
+ "first": "d6/d61302b02a07/20261003T002132Z",
+ "gm_copies": [],
+ "keys": [],
+ "notes": [],
+ "outcome": "partial",
+ "path": "d6/d61302b02a07/20261003T002132Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "661186af9e6cfde040e3bcd97a74f2b6dc924657d0c77cd509fe82b6e28135da",
+ "url": "http://dfz.gd.gov.cn/index/dqyj/content/post_4616824.html"
+}
