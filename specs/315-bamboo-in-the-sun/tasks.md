@@ -4,7 +4,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 
 ## Occasions
 
-- none: no pool bamboo is re-placed - every culm mark stands where it stood (Inashiro 20, Kashikawa 47, Kuwabata 63, Sawada 31 recorded; Mizuguchi draws none outside its stand), and Kuwabata's one household strip, which stood 0.3 ft from a garden's sun ground (one-shot, observed 2026-10-02; method: the HEAD manifest's stand against every drawn plot's sun box), found every one of its six seats in the sun and is no longer drawn - an element removed, with nothing left on the map to judge; the gate test (D5) holds the rule.
+- placement-changed: persimmon - on a grove farm the persimmon may stand in its own grove behind the house (Kashikawa)
+Bamboo: no pool bamboo is re-placed - every culm mark stands where it stood (Inashiro 20, Kashikawa 47, Kuwabata 63, Sawada 31 recorded; Mizuguchi draws none outside its stand), and Kuwabata's one household strip, which stood 0.3 ft from a garden's sun ground (one-shot, observed 2026-10-02; method: the HEAD manifest's stand against every drawn plot's sun box), found every one of its six seats in the sun and is no longer drawn - an element removed, with nothing left on the map to judge; the gate test (D5) holds the rule.
 
 ## Phase 0 - baselines (constitution VI, XIII)
 
@@ -32,6 +33,23 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 - [x] T22 [US1] D4: `household_bamboo` and `bamboo_seats` refuse a seat in a plot's sun at bamboo's reach; a unit test each
       research: rendering
       verify: DONE. DONE. household_bamboo refuses a strip in_the_sun (test_homesteads_287), bamboo_seats takes the sun boxes as rects; pool regenerated: Kuwabata's one strip refused at all six seats (0.3 ft from a garden's sun ground), every other stand unchanged
+
+## Phase 2b - the regressions feature 310 shipped (amendment; constitution XIII, XIV)
+
+- [ ] T23 D7: `beds_sun_clear` on the south nudge; the grove farm's bed south of the front wall; `clear_east_of_beds`; unit tests
+      research: rendering
+      verify: cohort seeds 14, 15 and 906 pass
+- [ ] T24 D8: the persimmon's dooryard, grove seat, seat rake and settle-in-geometry; unit tests
+      research: physical
+      verify: cohort seed 23 passes; the pool's grove farms keep their persimmons behind the house, within the dooryard
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T25 D9 and D10: the walled-in gateway's fallbacks; the shared wells off the street's bends, the row street unjogged; unit tests
+      research: rendering
+      verify: cohort seeds 19 and 903 pass; the cohort at 29 of 30 (seed 22 failing on main before)
 
 ## Phase 3 - the record (US2; FR-002, FR-006)
 

@@ -49,6 +49,18 @@ refuse a seat in a plot's sun, every drawn mark is recorded, and the map check c
   and Garden modals ("bamboo is left out", "leaving bamboo out of it"); the bamboo modals and the bamboo drawing page checked by
   `entry-drift` where their section moves. Record checks as the record gate owes them (feature 311).
 
+- **D7 (amendment, the regressions feature 310 shipped)**: a bed slid south after the groves stand keeps its sun ground clear of
+  standing crowns, promised persimmons and bamboo marks (`farmsteads.beds_sun_clear`); a grove farm's bed stands wholly south of
+  the front wall, and a band in a turned bed's east reach is cut back a pixel clear of it (`dispersed.clear_east_of_beds`).
+- **D8 The persimmon** (research R3): held to its dooryard (`fixture_seats.PERSIMMON_DOORYARD_FT`, none where no seat); on a grove
+  farm free to stand in its own grove's bands (`lay_fixtures` `fruit`; `_fixtures_in_bands` passes it in its own band only);
+  its template judged at its seat's own rake; and dropped, where its homestead is laid, if it stands in its own or a placed
+  neighbor's plots' sun (`fit._settle_persimmon`, called in `_bundle_geom` - the placer re-lays a chosen seat's homestead).
+- **D9 A walled-in gateway** leaves along the exit strip's end, else from the first bearing turned off the downslope whose sweep
+  is dry (`track.gateway_track`, `turned_gateway_track`, `track_from_the_strip_end`).
+- **D10 A shared row well is not dug in the street's bend** (`wells.street_turns_at`, `BEND_WELL_DEG`), and a row street is laid
+  through `_unjog` (`street.lay_row_streets`).
+
 ## Constitution Check
 
 - **I, II, III, IV, V, VII, VIII, IX**: N/A - no UI, pool content kind, SOURCE block, in-world prose or setting detail.
