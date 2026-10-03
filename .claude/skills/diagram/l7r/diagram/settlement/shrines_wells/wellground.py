@@ -1,6 +1,8 @@
 """One question - is this ground fit to sink a wellhead in? - and everything that makes asking it cheap.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import contextlib
@@ -23,7 +25,10 @@ if TYPE_CHECKING:
 class WellGroundMixin:
     def _build_well_index(self: Settlement) -> tuple[PointGrid, PointGrid, PointGrid]:  # type: ignore[misc]
         """The three grids `_well_ground_clear` queries - watercourse segments, dry plots, paddy
-        wet rings - each item boxed so a query pads by the wellhead radius alone."""
+        wet rings - each item boxed so a query pads by the wellhead radius alone.
+
+        Research: fallback channel widths - UNRESEARCHED: stream 9, channel 2.5, field ditch 1.5, canal 14 px
+        """
         recs = {key: self.M.get(key, []) or [] for key in ("streams", "channels", "field_ditches", "canals", "dry_plots")}
         water = []
         for key, dw in (("streams", 9.0), ("channels", 2.5), ("field_ditches", 1.5), ("canals", 14.0)):
@@ -103,7 +108,12 @@ class WellGroundMixin:
         structures) and wells are placed EARLY, so by the time the reeds exist the well is already
         in them. `toe_band` is the same derivation the reeds themselves use, which is the point of
         its having been factored out. Memoized for the pass: this is consulted once per candidate
-        seat and the band cannot move while a scatter runs (see `frozen_terrain`)."""
+        seat and the band cannot move while a scatter runs (see `frozen_terrain`).
+
+        Research:
+            no well below the crop's lowest point - research/questions/0058-ground-too-wet-to-build-on.drawing.html: inside the toe band
+            hamlets and villages only - research/questions/0058-ground-too-wet-to-build-on.drawing.html
+        """
         if getattr(self, "_wt_cache", None) is None:
             # ONLY WHERE A TOE MARSH IS ACTUALLY DRAWN. `toe_band` is pure geometry and will happily
             # compute a band below the crop of a map that has no reeds anywhere - and TOWNS AND CITIES
@@ -154,7 +164,14 @@ class WellGroundMixin:
         per candidate turned a ~5s gen into a >45-minute grind (2026-08-02, profiled: 95M
         seg_dist calls, ~90% of gen wall time). The memo is invalidated by a cheap fingerprint
         (record and point counts of everything scanned); the wells are placed long after the
-        terrain is drawn, so the geometry is stable across the whole placement pass."""
+        terrain is drawn, so the geometry is stable across the whole placement pass.
+
+        Research:
+            no well in the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html
+            no well in a watercourse or the pond - UNRESEARCHED: the drawn head off the water
+            no well on a dry crop plot - research/questions/0196-communal-wells-ido.drawing.html
+            no well in a paddy - research/questions/0196-communal-wells-ido.drawing.html
+        """
         # THE CROP DATUM IS ONLY GOOD WHERE THE CROP IS, and the check says the same thing the same
         # way (`wells_off_the_wet_toe`) - the two must not measure differently or they will disagree
         # about a seat. The band's uphill lip carries no reeds only where it tucks UNDER the field;
@@ -181,7 +198,10 @@ class WellGroundMixin:
         """Is (x, y) inside a registered scrub/pasture/coppice/marsh COVER poly? Both well paths
         (well_at hand-seeding + the place_wells grid) refuse such ground - a wellhead stands in
         worked dooryard/margin ground, never out in the grazed waste (scrub_clear_of_urban_fabric).
-        Only covers registered BEFORE the well call are visible, so gens draw their commons first."""
+        Only covers registered BEFORE the well call are visible, so gens draw their commons first.
+
+        Research: no well out on the commons - research/questions/0196-communal-wells-ido.drawing.html: scrub, pasture, coppice or marsh cover
+        """
         for ck in ("commons", "pastures", "forest_patches", "marshes"):
             for o in self.M.get(ck, []) or []:
                 p = o.get("poly") if isinstance(o, dict) else o

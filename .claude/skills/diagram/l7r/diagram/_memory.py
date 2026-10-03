@@ -8,6 +8,8 @@ charged to the container. `malloc_trim(0)` returns the free pages at the top of 
 kernel; it costs a few milliseconds and nothing is lost, since the next roll allocates afresh.
 
 Called from `hamletgen.driver.roll_scope()` when a roll ends - every roll, whatever ran it.
+
+Research: heap trim - NONE: process memory plumbing
 """
 
 from __future__ import annotations

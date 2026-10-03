@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: ward and quarter records - NONE
+"""
 
 import math
 from typing import TYPE_CHECKING, Any
@@ -18,6 +21,13 @@ if TYPE_CHECKING:
 
 
 class WardsMixin:
+    """Ward fences and declared city quarters.
+
+    Research:
+        ward fence stroke - CONVENTION: 5 px
+        quarter zones and reserve kinds - NONE: a declared vocabulary; a reserve draws as a drill ground, a garden or farmland
+    """
+
     _WARD_STROKE = 5.0  # the fence's drawn width; recorded so check_village measures the ink, not the vertex
 
     def _ward_ends_on_wall(self: Settlement, boundary: Poly, reach: float = 24.0) -> Poly:  # type: ignore[misc]
@@ -42,6 +52,10 @@ class WardsMixin:
         the honest fallback. An end further than `reach` from the wall is left exactly as placed: that
         is not a junction at all but a fence that fails to reach the rampart, which is
         `city_ward_fence_meets_wall`'s defect to report, and silently dragging it 200px would hide it.
+
+        Research:
+            the fence ends at the wall - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: an end within reach is carried along its own line onto the rampart
+            snap reach - NONE: 24 px
         """
         wall = self.M.get("wall")
         if not wall or len(boundary) < 2:
@@ -74,7 +88,15 @@ class WardsMixin:
         how the fence runs. Only a gate with no lane through it falls back to the LOCAL FENCE
         TANGENT (never an axis-aligned stamp on a slanted run). Its guard box stands on the
         WARD-INTERIOR flank (the gate watch belongs to the ward it seals), nudged clear of the
-        roadbed by s.kido. Records M['wards']."""
+        roadbed by s.kido. Records M['wards'].
+
+        Research:
+            a fence seals the samurai quarter - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: continuous between gates, its ends on the city wall
+            commoners barred inside - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.html: no commoner dwelling or shop inside the samurai ward
+            a gate at each crossing street - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: square to its lane, guard toward the ward
+            fence glyph - CONVENTION: an earth band with a dotted palisade, the wall capped over each end
+            buildings kept off the fence - UNRESEARCHED: an 11 px no-build corridor
+        """
         boundary = self._ward_ends_on_wall([(p[0], p[1]) for p in boundary])
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in boundary)
         fz = self.add(f'<path d="{dd}" fill="none" stroke="#9C8A5E" stroke-width="{self._WARD_STROKE:g}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>')
@@ -183,7 +205,12 @@ class WardsMixin:
         label ARE the rendering - the faint dashed boundary this used to add read as a stray dotted
         line cutting through the in-wall farmhouses and across the Imperial road above the burakumin
         neighborhood. The quarter stays DECLARED in M['quarters'] either way (recorded by quarter(),
-        not here), so per-quarter density judging is unaffected."""
+        not here), so per-quarter density judging is unaffected.
+
+        Research:
+            reserve glyphs - CONVENTION: swept earth with a dashed perimeter for a drill ground, green rows for a garden
+            farmland draws nothing - CONVENTION: its own fields are its rendering
+        """
         if kind == "agricultural_district":
             return  # no boundary line - the generator's fields carry the whole visual
         pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)

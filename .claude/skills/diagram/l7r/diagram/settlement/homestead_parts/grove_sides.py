@@ -8,6 +8,8 @@ counts farmsteads by shape, so the side count is a knob rolled once per settleme
 A farmstead is laid out in ONE canonical frame - the cold wind from the northwest, the grove's deep bands on the north
 and west, the threshing yard on the south front, the garden on the east - and carried to the map's wind by a symmetry of
 the square (`bundle_turn`). So the faces are named in the canonical frame and turned, and every rule reads them turned.
+
+Research: face geometry - NONE
 """
 
 from __future__ import annotations
@@ -23,17 +25,21 @@ Turn = tuple[int, int, int, int]  # (a, b, c, d): a face (x, y) goes to (a*x + b
 # two sides 50%, three 30%, four 20% - two the form reported in the most regions and the only one with a general
 # statement and an early-Edo date, three Tonami's, four Izumo's.
 GROVE_SIDES = (2, 2, 2, 2, 2, 3, 3, 3, 4, 4)
+"""Research: grove side count - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: two 50%, three 30%, four 20%"""
 # ...and where the farms stand on flood-prone ground the ring rises to 40%, the other two keeping their 5 : 3
 # (37.5 / 22.5 / 40): the Izumo ring's own stated cause was flood (the same ruling; the scaling a GUESS).
 GROVE_SIDES_FLOOD = (2,) * 15 + (3,) * 9 + (4,) * 16
+"""Research: flood ground side count - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: 37.5 / 22.5 / 40"""
 # ...and for a map whose declared wind is a single cardinal, which flank completes the windward pair (`windward_pair`):
 # rolled per settlement, even odds - nothing says which.
 GROVE_FLANKS = (-1, 1)
+"""Research: cardinal wind's second face - UNRESEARCHED: either flank, even odds"""
 
 # A THIN BAND IS ONE TREE DEEP: two mean crown radii (`CANOPY_R_FT` = 8.5 ft, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html). The sides of a grove away from the wind are a band of lesser trees (Tonami's east side: flowering trees,
 # persimmon, fig; its west-to-north side hackberry and alder), far thinner than the windward stand (1.57 house depths -
 # 44 ft at the pool's median house); how deep it was is on no page read, so one tree is a GUESS.
 THIN_BAND_FT = 17.0
+"""Research: thin band depth - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one tree, 17 ft"""
 
 _LETTER = {"N": N, "E": E, "S": S, "W": W}
 _CLOCKWISE = (N, E, S, W)
@@ -52,6 +58,7 @@ _TURNS: dict[str, Turn] = {
     "SW": (0, 1, -1, 0),
     "SE": (0, -1, -1, 0),
 }
+"""Research: yard on the lee face - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the yard turned to the lee face nearest the south"""
 
 
 def turn_face(t: Turn, f: Face) -> Face:
@@ -69,7 +76,12 @@ def windward_pair(windward: str, flank: int) -> str:
     """The diagonal key whose two faces are the windward pair. A diagonal wind is its own pair; a cardinal wind's pair is
     its face and one flank - `flank` -1 the face a quarter turn counterclockwise of it (W for a north wind), +1 the one
     clockwise (E) - because two sides is the least a farmstead grove takes (the GM, 2026-09-29: "It seems like two sides
-    is the minimum")."""
+    is the minimum").
+
+    Research:
+        two sides the least - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a cardinal
+            wind's face and one flank
+    """
     key = windward.upper().strip()
     if key in _TURNS:
         return key
@@ -95,7 +107,14 @@ def grove_faces(windward: str, sides: int, flank: int) -> tuple[tuple[Face, ...]
     Two sides is the windward pair, both deep. Three adds the one face left that is not the FRONT - the lee face where the
     yard and the way in are, which a three-sided grove leaves open (Tonami's east front). Four adds the front too and
     closes the ring (Izumo's). The added faces are thin bands of lesser trees; the windward ones stay the deep stand
-    (Tonami's tall cedar on its windward faces, lesser trees elsewhere; for the ring a GUESS)."""
+    (Tonami's tall cedar on its windward faces, lesser trees elsewhere; for the ring a GUESS).
+
+    Research:
+        which faces - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward pair, then
+            the lee flank, then the front
+        deep and thin - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: windward faces deep,
+            the added faces thin
+    """
     if sides not in (2, 3, 4):
         raise ValueError(f"a farmstead grove takes 2, 3 or 4 sides, not {sides!r}")
     t = bundle_turn(windward, flank)

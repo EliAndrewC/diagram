@@ -1,4 +1,7 @@
-"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: page frame - CONVENTION: what the crop frames, how far the scatter throws and where the map's name may sit; no claim about the place
+"""
 
 from __future__ import annotations
 

@@ -30,6 +30,10 @@ WHAT THE CARD IS NOT ALLOWED TO SAY, and why it is worth knowing (spec `research
     that we have taken when we have chosen to deviate from historical accuracy"* - applied to this
     surface. A hamlet having no headman of its own is the case: it is Rokugan's rule, and the Edo
     record has branch hamlets that did have one.
+
+Research:
+    card plumbing - NONE: wording, joining and assembly; what the card states is read from the map, the notes and
+        the record
 """
 
 from __future__ import annotations
@@ -48,6 +52,7 @@ from .sources import research_questions
 #: point of `dwellings.py` was to stop this module keeping its own copy of what that package knows
 #: (settlement-review round 5 - the move had left the constant behind).
 PER_HOUSEHOLD = HOUSEHOLD
+"""Research: inhabitants per household - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: five"""
 
 #: `l7r.md`'s median-domain table, for the one ranking the card is allowed to make - of TIERS. They are
 #: INTERPOLATED into the hamlet's text below rather than typed into it: writing them out left these
@@ -107,6 +112,7 @@ KINDS: dict[str, Kind] = {
     key: Kind(**{**fields, "what": fields["what"].format(HAMLETS_PER_DOMAIN=HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN=VILLAGES_PER_DOMAIN, HAMLET_SHARE=HAMLET_SHARE)})
     for key, fields in _CONTENT["kinds"].items()
 }
+"""Research: what each tier is - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html"""
 
 #: Which classes are a CROP, and how the card groups them. Read from the classes PRESENT on the map
 #: (spec FR-010, FR-014), never from a per-map list - which is what lets the dike-pond hamlet, whose
@@ -184,7 +190,14 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
 
     The population comes from the tier's own record where it has one - a town and a city carry
     `meta.population`, because their inhabitants are not a multiple of anybody's farmhouses - and
-    otherwise from `l7r.md`'s five to a household. Either may be missing, and then it is not said."""
+    otherwise from `l7r.md`'s five to a household. Either may be missing, and then it is not said.
+
+    Research:
+        population from households - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: five to a
+            drawn household where the tier records no figure of its own
+        households named beside farmhouses - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:
+            stated only where the drawn count differs from the declared households
+    """
     parts = []
     if houses:
         parts.append(f"{houses} {kind.houses_noun}")  # no tilde: the reader can count them
@@ -261,7 +274,12 @@ def lane_default(scale: str, place: dict[str, str]) -> str:
     route says so in its own `### Features` entry, which always wins.
 
     It names the CONNECTOR too, not "the lanes": the class lights every lane on the sheet, and eight
-    of Inashiro's nine are three-foot stragglers between the farmsteads that lead nowhere at all."""
+    of Inashiro's nine are three-foot stragglers between the farmsteads that lead nowhere at all.
+
+    Research:
+        connector leads to the district's village - UNRESEARCHED: the GM's ruling; the village lanes question says
+            nothing of where a hamlet's track leads
+    """
     district = place.get("district")
     if scale != "hamlet" or not district:
         return ""
@@ -283,7 +301,12 @@ def windbreak_default(meta: dict[str, Any]) -> str:
     the pop-up says the side and the reason on every map that records its wind: the regional northwest, or a
     local wind the map declares (the only way a map departs from it, GM 2026-09-26: "only when declared"). A
     manifest that does not record where its wind came from - every frozen hand-authored map - gets nothing, and
-    the class's own explanation stands alone, exactly as the lane default does."""
+    the class's own explanation stands alone, exactly as the lane default does.
+
+    Research:
+        windbreak toward the winter wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
+            the regional northwest unless a local wind is declared
+    """
     quarter, source = str(meta.get("windward") or ""), meta.get("wind_source")
     if quarter not in WIND_NAMES or source not in ("regional", "declared"):
         return ""
@@ -304,7 +327,14 @@ _SIDES_WORDS = {
 def homestead_grove_default(meta: dict[str, Any]) -> str:
     """How many sides THIS settlement's farmstead groves take, and why that roll (feature 291, FR-009): the side count
     and the ground the map records. A map that records no side count - a nucleated one rolls it but draws no farm grove,
-    and the frozen hand-authored maps record none - gets nothing, and the class's own explanation stands alone."""
+    and the frozen hand-authored maps record none - gets nothing, and the class's own explanation stands alone.
+
+    Research:
+        grove side count - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
+            two, three or four sides, one roll a settlement
+        full ring on flood ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: four sides rolled more
+            often on flood-prone ground
+    """
     sides = meta.get("grove_sides")
     if sides not in _SIDES_WORDS or meta.get("settlement_form", "nucleated") == "nucleated":
         return ""

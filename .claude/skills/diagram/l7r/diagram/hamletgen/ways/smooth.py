@@ -1,4 +1,6 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: lane web plumbing - NONE"""
 
 from __future__ import annotations
 
@@ -17,6 +19,7 @@ from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, polylin
 from .sweeps import _SERVE_FT
 
 _STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little past _LANE_JOIN_FT from the run it left (T99 unlock, seed 37)
+"""Research: stub link reach - UNRESEARCHED: a cut stub up to 48 ft from the run it left is linked back"""
 # HOW LONG AN ARM MAY BE AND STILL BE CUT, once the cut has been MEASURED rather than assumed safe
 # (feature 134 T50, 2026-08-28). `_ARM_FT` alone left a gap between this repair and the check it
 # exists to satisfy: `lanes_bend_like_paths` fires on ANY turn past `_HAIRPIN_DEG`, while the repair
@@ -29,12 +32,17 @@ _STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little
 # past 90 ft the arm is reaching ground the rest of the lane cannot, so it is a lane in its own right
 # and not an arm, and it stays (the bends check then fires on it honestly, as it did before).
 _LONG_ARM_FT = 90.0
+"""Research: hairpin arm cut length - research/questions/0081-village-lanes.drawing.html: an arm up to 90 ft is cut where no house loses its way"""
 # `lanes_reach_something`'s two figures, so a cut never trades one failure for the other: after the
 # cut the tip is the lane's END, and an end must reach another way or a farmhouse.
 _END_WAY_FT = 40.0
+"""Research: lane end reaches a way - research/questions/0081-village-lanes.drawing.html: within 40 ft"""
 _END_HOUSE_FT = 90.0
+"""Research: lane end reaches a house - research/questions/0081-village-lanes.drawing.html: within 90 ft"""
 _JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, not a bend
+"""Research: jog chorded - research/questions/0081-village-lanes.drawing.html: a vertex within 6 ft of the chord is a jog"""
 _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several
+"""Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node"""
 
 
 def web_pieces(lanes: Sequence[Mapping[str, Any]]) -> int:
@@ -107,6 +115,8 @@ def commit_lane(
     arm that was a piece's only link to the spine, and tripwire seed 37, gate seed 43, Kashikawa and
     Sawada all came out failing `lanes_form_one_network`), and it is the arm a clean roll never enters -
     so it had no test until it could be called with four plain lists.
+
+    Research: web kept one network - research/questions/0081-village-lanes.drawing.html: a rewrite that splits the web is undone
     """
     if not admit(lanes[m], new_pts):
         return False
@@ -126,7 +136,9 @@ def string_pull_chord_ok(pts: Poly, a: int, b: int, hard: list[Poly], walls: Seq
 
     LIFTED OUT OF `_smooth_web` (tests/CLAUDE.md, the closure rule; feature 287, 2026-09-30): the straggler footpath pass
     that was the only roll reaching the jog-bounded arm was deleted at the GM's instruction, so the arm is tested here
-    with plain points."""
+    with plain points.
+
+    Research: lane pulled taut - research/questions/0081-village-lanes.drawing.html: a chord at the web's margins, or within 6 ft of the old line at its own keep-out"""
     if _clear_link(pts[a], pts[b], hard, walls, water):
         return True
     # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
@@ -164,7 +176,15 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
          less than `_ARM_FT`, that tail is cut back to the crossing, which becomes the junction.
       4. KNOTS - ends of different lanes within `_KNOT_FT` (25 ft) of one another meet at ONE node.
     Ends move only where an arm is cut or a knot gathers them, so every junction `_touch_junctions` made holds.
-    `lanes_bend_like_paths` holds the line. Returns the number of lanes rewritten."""
+    `lanes_bend_like_paths` holds the line. Returns the number of lanes rewritten.
+
+    Research:
+        lane pulled taut - research/questions/0081-village-lanes.drawing.html: string-pulled to the furthest vertex a clear chord reaches
+        hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses its shorter arm
+        bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
+        knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
+        shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
+        web kept one network - research/questions/0081-village-lanes.drawing.html: a rewrite that splits the web is refused"""
     changed = 0
     lanes = s.M.get("lanes") or []
 

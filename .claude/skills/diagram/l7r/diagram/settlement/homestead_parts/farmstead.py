@@ -1,4 +1,7 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE
+"""
 
 from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any
@@ -11,7 +14,12 @@ class FarmsteadMixin:
     def _attach_grove(self: Settlement, hx: float, hy: float, arms: Any) -> None:  # type: ignore[misc]
         """Draw a farmstead's windbreak grove (its belt arms) and record each arm under its parent house.
         Arms go into `grove_rects` (NOT `placed`) so a neighbor's grove may MERGE with it and the wells
-        still avoid it. Drawn in the farmsteads() second pass, after every house/yard/garden is set."""
+        still avoid it. Drawn in the farmsteads() second pass, after every house/yard/garden is set.
+
+        Research:
+            deep and thin arms - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a deep arm
+                in the windbreak mix, a thin band as lesser trees
+        """
         for cx, cy, w, h, face, depth in arms:  # a thin band is lesser trees (feature 291; `_farmsteads_bundle`)
             self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove")
             self.M["groves"].append({"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [hx, hy], "face": list(face), "depth": depth})
@@ -20,7 +28,14 @@ class FarmsteadMixin:
     def _find_appurtenances(self: Settlement, hx: float, hy: float, hw: float, hh: float, rot: float = 0, kind: str = "plain", shed: Any = False, wealth: float = 1.0) -> tuple[Any, Any] | None:  # type: ignore[misc]
         """A farmstead needs room for BOTH its threshing yard (south/front, then a side) AND its dooryard
         kitchen garden (a DIFFERENT sunny side, kept off the west-side shed). Returns (yard_spot, garden_spot)
-        or None if either can't fit."""
+        or None if either can't fit.
+
+        Research:
+            every farm a yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: a farm
+                without room for one is refused
+            every farm a garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: on a side other
+                than the yard's
+        """
         yard = self._find_yard_spot(hx, hy, hw, hh)
         if yard is None:
             return None

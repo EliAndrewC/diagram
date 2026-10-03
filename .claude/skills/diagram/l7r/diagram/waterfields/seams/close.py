@@ -1,4 +1,7 @@
-"""Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: re-hold plumbing - NONE: lazy shapely binding and the split loop's bound
+"""
 
 from __future__ import annotations
 
@@ -70,7 +73,13 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
     Never a violating ring kept because nothing better was found (FR-005). No draw from any random stream: split parts
     keep their parent's fill, so the count of plots may change but no color re-rolls. `only` confines the judgment to the plots
     it names (a later stage that reshaped a few rings - the grave island's carve - asks of those alone); welds still reach
-    any neighbor."""
+    any neighbor.
+
+    Research:
+        staircase split on its hop - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund never steps sideways and carries on, so the step is carried straight across
+        scrap welded to its neighbor - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: into the basin it shares the most bund with
+        scrap left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: what no weld makes lawful stays bare, the fan floor drawn under it
+    """
     _load_shapely()
     bad = [k for k in (range(len(plots)) if only is None else sorted(only)) if ring_violations(as_recorded(plots[k]["poly"]), ctx)]
     if not bad:
@@ -99,7 +108,10 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
 def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[Any], tree: GeomTree, ctx: RingContext) -> bool:
     """Weld `scrap` into the plot it shares the most bund with, among those whose union keeps every ring rule; False,
     and the scrap left bare, when none does. The union is taken as `_absorb` takes it - the scrap grown by 0.02 px so
-    two polygons that only touch merge, and simplified at 0.05 px only when that stays a simple polygon."""
+    two polygons that only touch merge, and simplified at 0.05 px only when that stays a simple polygon.
+
+    Research: weld host - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the lawful neighbor sharing the most bund, else bare
+    """
     reach = scrap.buffer(0.4)
     grown = scrap.buffer(0.02)
     ranked = sorted((-geoms[j].boundary.intersection(reach).length, j) for j in tree.near(scrap.bounds, pad=1.0))
@@ -129,7 +141,10 @@ def _split_steps(poly: Polygon, ctx: RingContext) -> list[Polygon]:
     leaving the fewest parts that break a rule other than the steps still to be cut, then the one whose smallest part is
     largest (first on a tie, in ring order): the cut that makes basins, not scraps - a riser carried across the whole
     basin, not a tread shaved off it. A ring none of whose hops can be cut is handed back whole, and the caller judges it
-    as it stands - a staircase goes to the scrap path, never onto the map."""
+    as it stands - a staircase goes to the scrap path, never onto the map.
+
+    Research: no sideways step - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: cut until no part steps more than MAX_STEPS times, the cut that makes basins not scraps
+    """
     g = float(ctx.g or 0.0)
     done: list[Polygon] = []
     todo = [poly]
@@ -151,7 +166,10 @@ def _cut_on_hop(poly: Polygon, b: Pt, c: Pt) -> list[Polygon]:
 
     The hop runs between a wall and the same wall resumed a few feet over, so exactly one of its two ends is the reflex
     corner the basin's floor lies beyond: the knife starts there and runs on, in the hop's own direction, to where it
-    first leaves the basin. That is the wall the step should have been - carried straight on to the junction."""
+    first leaves the basin. That is the wall the step should have been - carried straight on to the junction.
+
+    Research: wall carried on to the junction - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the hop continued straight across the basin to the far bund
+    """
     from shapely.geometry import LineString as _Line
     from shapely.geometry import Point as _Point
     from shapely.ops import split

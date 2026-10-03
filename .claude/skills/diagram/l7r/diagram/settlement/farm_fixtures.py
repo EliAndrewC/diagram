@@ -8,6 +8,8 @@ persimmon's fruit dots and the shrine's vermilion are RENDERING conventions, rec
 research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html. Research and sources:
 research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
 `farmstead_fixtures`); this mixin only draws and records.
+
+Research: fixture records and class names - NONE
 """
 
 from __future__ import annotations
@@ -36,6 +38,7 @@ FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure he
 # hamlet (`MANURE_FORMS`); the record keeps `kind: manure` (one share, one seat table, every check unchanged)
 # and carries `form: pit` when the pit is drawn. The pit is a ~3.5 ft jar mouth: a dark disc with a pale rim.
 PIT_FT = 3.5
+"""Research: manure pit - research/questions/0042-manure-heaps-and-compost-kyuhi.html: a jar mouth about 3.5 ft across"""
 FIXTURE_CLASS_BY_FORM = {"pit": "manure pit"}
 
 FIXTURE_FT: dict[str, tuple[float, float]] = {
@@ -46,9 +49,20 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
     "coop": (5.0, 5.0),
     "shrine": (6.0, 6.0),  # DRAWN at the small-shed module, not the ~1.3 ft stone: a glyph convention (GM 2026-08-27, T62)
 }
+"""Each fixture's drawn size.
+
+Research:
+    privy size - research/questions/0047-farm-privies-and-their-night-soil-benjo.html: 6 x 6 ft, the one-ken default the placer overrides
+    wood shed size - research/questions/0043-firewood-stacks-and-sheds-kigoya.html: 24 x 12 ft, 4 x 2 ken
+    manure heap size - GUESS: 8 x 6 ft
+    bath room size - research/questions/0044-baths-on-the-farm-furo.html: 6 x 6 ft, the placer passes its length
+    hen coop size - GUESS: 5 x 5 ft
+    household shrine size - CONVENTION: drawn at the 6 x 6 ft small-shed module, not the stone's 1.3 ft
+"""
 # radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, pfaf-kaki;
 # 269 B14) - the full-grown size, which fits the "old giant persimmon in the dooryard" the record remembers. It was 9.0.
 PERSIMMON_CROWN_FT = 11.5
+"""Research: persimmon crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: 11.5 ft radius, a full-grown 23 ft crown"""
 
 FIXTURE_KINDS = tuple(FIXTURE_FT)
 
@@ -59,13 +73,21 @@ FIXTURE_KINDS = tuple(FIXTURE_FT)
 #: reservation, the flush's side choice and the fixtures' wall list read: it was written out in four places, and feature
 #: 280's new proportion reached two of them.
 KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0.46, 0.45), "W": (-0.64, 0.0, 0.32, 0.56)}
+"""The annex footprints.
+
+Research:
+    north annex - research/questions/0052-farm-sheds-and-barns-naya.html: 0.46 of the house's length by 0.45 of its depth, on the back wall
+    west annex - UNRESEARCHED: 0.32 x 0.56 of the house on its west wall, for the dispersed farms
+"""
 
 
 #: THE NORTH ANNEX'S BAND (feature 280 M18, research/questions/0052-farm-sheds-and-barns-naya.html): the farm sheds dated to the end of the Edo period run
 #: about 18 to 27 ft long and 1.5 to 1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m); the 1.8 to 2.4 of
 #: the Meiji-Taisho barns is not drawn.
 ANNEX_LENGTH_FT = (18.0, 27.0)
+"""Research: annex length - research/questions/0052-farm-sheds-and-barns-naya.html: 18 to 27 ft"""
 ANNEX_RATIO = (1.5, 1.8)
+"""Research: annex proportion - research/questions/0052-farm-sheds-and-barns-naya.html: 1.5 to 1.8 times as long as deep"""
 
 
 def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, float, float, float]:
@@ -86,7 +108,12 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
     THE SIZE IS A DELIBERATE DEVIATION: the record reads the annex as the kura (research/questions/0040-farm-storehouses-kura.html), and the kura read
     were about 15 by 18 ft, Kakimochi's two 12 by 18 - so the band's longer annexes are longer than a kura was. Kept: sizing
     it to the kura re-seats every scripted hamlet's houses, in a task that asked only which houses carry it; that resize is
-    priced for the GM (specs/293-effort-level-experiment/outputs/I-port-handoff.md)."""
+    priced for the GM (specs/293-effort-level-experiment/outputs/I-port-handoff.md).
+
+    Research:
+        annex held in its band - research/questions/0052-farm-sheds-and-barns-naya.html: length 18 to 27 ft and 1.5 to 1.8 times its depth, the depth a share of the house
+        annex larger than a kura - DEVIATION research/questions/0040-farm-storehouses-kura.html: the band's longer annexes exceed the 15 x 18 ft kura read
+    """
     fx, fy, fw, fh = KURA_PARTS["N" if side == "N" else "W"]
     if side != "N":
         return (fx * w, fy * h, fw * w, fh * h)
@@ -96,13 +123,20 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
 
 
 SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "red marking" convention
+"""Research: shrine vermilion - CONVENTION"""
 
 
 class FarmFixturesMixin:
     def farm_fixture(self: Settlement, kind: str, cx: float, cy: float, rot: float = 0.0, of: Any = None, form: str | None = None, size_ft: tuple[float, float] | None = None) -> None:  # type: ignore[misc]
         """Draw and record one farmstead fixture of `kind` centered at (cx, cy), raked with its house. `form`
         picks an attested alternative glyph of the same kind (`manure` -> `pit`, feature 150). `size_ft` is the fixture's
-        own size where the placer rolls one (the privy and the bath room, feature 280), else the kind's `FIXTURE_FT`."""
+        own size where the placer rolls one (the privy and the bath room, feature 280), else the kind's `FIXTURE_FT`.
+
+        Research:
+            the farmstead's fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html: privy, wood shed, manure, bath room, hen coop, household shrine
+            manure heap or pit - research/questions/0042-manure-heaps-and-compost-kyuhi.html: the pit form drawn as a jar mouth
+            fixture glyphs - CONVENTION: the privy's jar, the shed's log ends, the cauldron, the coop's slats, the shrine's torii
+        """
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
         if form is not None and (kind, form) != ("manure", "pit"):
@@ -165,7 +199,12 @@ class FarmFixturesMixin:
 
     def persimmon(self: Settlement, cx: float, cy: float, of: Any = None) -> None:  # type: ignore[misc]
         """A yard persimmon: one crown, drawn a yellower green than the groves with four fruit dots -
-        the fruit is the map's convention for "this one tree is the persimmon", not a season."""
+        the fruit is the map's convention for "this one tree is the persimmon", not a season.
+
+        Research:
+            persimmon crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html: one crown of PERSIMMON_CROWN_FT
+            fruit dots - CONVENTION: four jittered orange dots
+        """
         r = self.px(PERSIMMON_CROWN_FT)
         g = [f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9A3E" stroke="#4E6A28" stroke-width="0.8"/>']
         # THE FRUIT IS NOT A STENCIL (feature 152 T11, settlement-review 2026-08-29). The four dots sat at
@@ -191,6 +230,7 @@ class FarmFixturesMixin:
 # ---- the stock a dike-pond hamlet keeps on its ponds (feature 150 A3/A4) ---------------------------
 
 STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
+"""Research: sty size - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: 8 x 6 ft"""
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
 # herded in the rice fields, not penned at the fish ponds (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html).
@@ -203,7 +243,12 @@ class PondStockMixin:
     def pond_fixture_fits(self: Settlement, cx: float, cy: float, rot: float) -> bool:  # type: ignore[misc]
         """Room for a sty at this bank seat: clear of every placed footprint, every recorded sty, and the
         plank crossings; the bank itself is field ground, which the registries hold no structure off -
-        that is what the seat is FOR."""
+        that is what the seat is FOR.
+
+        Research:
+            sty on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the dike is field ground the sty may stand on
+            sty clearance - UNRESEARCHED: its half-diagonal plus 2 ft from every placed structure and crossing
+        """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         half = math.hypot(w, h) / 2 + self.px(2.0)
         for key in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"):
@@ -214,7 +259,12 @@ class PondStockMixin:
         return self.admits("pig_sties", {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)})
 
     def pig_sty(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None) -> None:  # type: ignore[misc]
-        """A pig shed on a pond dike: a small pitched shed with its pen rail, raked along the bank."""
+        """A pig shed on a pond dike: a small pitched shed with its pen rail, raked along the bank.
+
+        Research:
+            sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: raked along the bank
+            sty glyph - CONVENTION: a ridged shed on 0.62 of the length and a railed pen
+        """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         x0, y0 = -w / 2, -h / 2
         edge = "#5A4326"

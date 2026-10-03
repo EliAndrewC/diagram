@@ -1,4 +1,7 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research: map finishing - CONVENTION: captions, the title placard and its band, the neatline, the layer assembly and the render
+    geometry, parsing and I/O - NONE"""
 
 import json
 import os

@@ -1,4 +1,7 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research: the composed mixin - NONE
+"""
 
 from ._helpers import _angle_between as _angle_between
 from ._helpers import _pull_back as _pull_back

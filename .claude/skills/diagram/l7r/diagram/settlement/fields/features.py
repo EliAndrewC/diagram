@@ -1,6 +1,8 @@
 """Non-rice features the paddy tiles around (feature 012), and every standing-water glyph.
 
 Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md for the index.
+
+Research: plumbing - NONE: geometry, substream salts, ring carving and manifest records
 """
 
 import math
@@ -29,7 +31,9 @@ _GRAVE_FORM_SALT = 0x6A5E
 
 def grave_form(seed: int) -> str:
     """The field grave's form on this hamlet - the knob research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html records: "island" (inside a plot, the Chinese form) or "corner" (in a plot's corner
-    against its bunds, the Japanese form), even odds, since no source weighs one against the other."""
+    against its bunds, the Japanese form), even odds, since no source weighs one against the other.
+
+    Research: field grave form - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: island or corner, even odds"""
     return "island" if random.Random((seed ^ _GRAVE_FORM_SALT) & 0xFFFFFFFF).random() < 0.5 else "corner"
 
 
@@ -49,11 +53,15 @@ def turning_corners(poly: Sequence[Pt], min_deg: float = 45.0) -> list[int]:
 
 
 CORNER_MAX = 16.0
-"""A corner grave's step in from its vertex, px - see `corner_seat`."""
+"""A corner grave's step in from its vertex, px - see `corner_seat`.
+
+Research: corner step - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 16 px at most"""
 CORNER_MIN = 12.0
 """The least step: the mound's reach and the stone's rise off a right-angled corner. The step points at the plot's
 centroid, not the corner's bisector, so on an oblong plot the mound can stand hard against one bund - which the
-research's "against its bunds" allows (settlement-review, Kashikawa 2026-09-27: 0.3 px off the SE bund, nothing crossed)."""
+research's "against its bunds" allows (settlement-review, Kashikawa 2026-09-27: 0.3 px off the SE bund, nothing crossed).
+
+Research: corner step floor - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 12 px at least"""
 
 
 def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
@@ -63,7 +71,9 @@ def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
     grazed the bund's beads); a fixed third of the way put the grave mid-plot on a large one (Kashikawa, 2026-09-27),
     where it no longer read as a corner grave; and a third on Kashikawa's typical 25 px plot was 8.7 px, which stood
     the tall stone on the bund's corner junction (settlement-review, 2026-09-27). 12 px is the mound's reach plus the
-    stone's rise plus a clearance at a right-angled corner."""
+    stone's rise plus a clearance at a right-angled corner.
+
+    Research: corner seat - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: in the plot's corner against its bunds, 12-16 px in toward the centroid"""
     cx, cy = _centroid(poly)
     vx, vy = poly[at % len(poly)]
     dist = math.hypot(cx - vx, cy - vy)
@@ -73,7 +83,9 @@ def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
 
 GRAVE_BANK_PX = 1.0
 """How far the basins stand back from a grave mound's reach, px: the mound's own stroke (1.2 px) and a bund's half-stroke
-meet there, so the paddy runs UP to the mound rather than under it (water W28)."""
+meet there, so the paddy runs UP to the mound rather than under it (water W28).
+
+Research: mound bank - CONVENTION: 1 px, the mound's stroke meeting a bund's half-stroke"""
 
 _CUT_SIDES = 64
 """The polygon the mound's disc is cut with. A 64-gon's edges run inside its circle by up to cos(pi / 64) of the radius,
@@ -95,7 +107,11 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
       bund goes round the grave, which is the Japanese form the research names ("in a corner of a field").
 
     Every piece is then judged by every ring rule in `ctx` - the grave among them - and one that fails goes the scrap
-    path (`seams.close.hold_ring_rules`): welded into a neighbor, or left bare under the fan floor."""
+    path (`seams.close.hold_ring_rules`): welded into a neighbor, or left bare under the fan floor.
+
+    Research:
+        paddy carved round the grave - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no basin runs under the mound
+        island host halved - UNRESEARCHED: the host basin split along its long axis through the mound, a bund run to the island"""
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import split
 
@@ -138,7 +154,9 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
 
 
 STONE_INSET = 0.8
-"""A grave stone's base stands within this share of the mound's half-height at its x, so it reads as standing ON the mound."""
+"""A grave stone's base stands within this share of the mound's half-height at its x, so it reads as standing ON the mound.
+
+Research: stone on the mound - CONVENTION: 0.8 of the half-height"""
 
 
 def stone_steps(n: int, rx: float, ry: float) -> list[float]:
@@ -146,7 +164,9 @@ def stone_steps(n: int, rx: float, ry: float) -> list[float]:
     more a stone, at `stone_dx` across), the WHOLE stagger scaled down until every base stands inside the mound's ellipse at its x
     (`STONE_INSET`) - so each stone still steps back from the last. Glyph check, Inashiro (feature 302): the fixed step put the
     third stone's base 2 ft off a mound under 10 ft tall, in the rice; a clamp per stone then set the third level with the
-    second, which the stagger rule refuses (round 2)."""
+    second, which the stagger rule refuses (round 2).
+
+    Research: stone stagger - UNRESEARCHED: each stone 3 ft then 3.5 ft more behind the last, scaled to the mound"""
     steps = [3.0 + i * 3.5 for i in range(n)]
     room = [ry * math.sqrt(max(0.0, 1.0 - (stone_dx(i) / rx) ** 2)) * STONE_INSET if rx > 0 else 0.0 for i in range(n)]
     scale = min([1.0] + [r / st for r, st in zip(room, steps, strict=True)])
@@ -154,13 +174,17 @@ def stone_steps(n: int, rx: float, ry: float) -> list[float]:
 
 
 def stone_dx(i: int) -> float:
-    """Stone `i`'s offset across the mound from its center (the stagger's step to one side)."""
+    """Stone `i`'s offset across the mound from its center (the stagger's step to one side).
+
+    Research: stone offset - UNRESEARCHED: 4.5 px to one side a stone"""
     return -4.0 + i * 4.5
 
 
 def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str, Any]]) -> bool:
     """Whether a grave's mound (its disc) would stand in a field pond: the disc's outline meets the pond's rim, or either
-    center lies inside the other - an island is dry ground, never drawn in open water."""
+    center lies inside the other - an island is dry ground, never drawn in open water.
+
+    Research: grave off the pond - research/questions/0058-ground-too-wet-to-build-on.drawing.html: a grave stands on dry ground"""
     cx, cy, r = disc
     ring = [(cx + r * math.cos(a * math.pi / 16), cy + r * math.sin(a * math.pi / 16)) for a in range(32)]
     return any(
@@ -179,7 +203,11 @@ class FieldFeaturesMixin:
         while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen.
 
         ASKED BEFORE ANYTHING IS DRAWN (feature 287, water W53): its placer has walked its alternatives (the sink's pond
-        falls back to an off-map run, `hamletgen/sink.py`), so a pond the matrix still forbids is refused by name here."""
+        falls back to an off-map run, `hamletgen/sink.py`), so a pond the matrix still forbids is refused by name here.
+
+        Research:
+            pond glyph - CONVENTION: blue fill, a dark rim and an inner sheen
+            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5 px, the lateral tier"""
         refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
@@ -222,6 +250,15 @@ class FieldFeaturesMixin:
             ink.append((svg, cls))
 
     def _paddy_features(self: Settlement, net: dict[str, Any], ink: list[tuple[str, str]] | None = None) -> None:  # type: ignore[misc]
+        """
+        Research:
+            town and city fields plain - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no pond, rock or grave in a town or city field
+            dike-pond none - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no in-field feature among the fish ponds
+            field pond rate - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: 0.55 where a low plot can hold one
+            field pond on a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: tried over the low plots in random order
+            rock outcrops - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: terraces always, ribbon valleys half the time, 1-3 a field
+            field grave rate - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 0.3 on valley, terrace and ribbon fields
+        """
         if self.M.get("meta", {}).get("scale") in ("town", *CITY_TIER_SCALES):
             # the in-field flourishes (low-pocket pond, rock outcrop, rare grave island) are VILLAGE-scale
             # features from the feature-012 archetype matrix. On a town/city map the combs are a SLICE of
@@ -306,7 +343,9 @@ class FieldFeaturesMixin:
         """A small OPEN-WATER pond sunk into one low plot - a low pocket / header tameike the paddy rings.
         Distinct from the reed/lotus BOG (blue-green, choked) and from the main village reservoir at the
         source. Drawn OVER the plot (so it carries no bund grid) with a reed fringe; recorded in
-        M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits (`_pond_fit`)."""
+        M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits (`_pond_fit`).
+
+        Research: field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: open water with a ring of eight reed ticks"""
         fit = self._pond_fit(plot, rings)
         if fit is None:
             return False
@@ -325,7 +364,11 @@ class FieldFeaturesMixin:
 
     def _pond_fit(self: Settlement, plot: dict[str, Any], rings: list[Poly]) -> tuple[float, float, float, float] | None:  # type: ignore[misc]
         """Where `_plot_pond` would sink a legible pond into `plot` - `(cx, cy, rx, ry)`, as recorded - or None where the
-        plot takes none. Asked alone by the pond's roll (plan D9), so a field rolls a pond only where one fits."""
+        plot takes none. Asked alone by the pond's roll (plan D9), so a field rolls a pond only where one fits.
+
+        Research:
+            pond inside one plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: the whole rim inside its low plot, crossing no ring
+            field pond size - UNRESEARCHED: 0.82 of the plot's half-span, 10-46 by 7-32 px, shrunk 0.9 a step"""
         poly = [(float(x), float(y)) for x, y in plot["poly"]]
         _, _, hx, hy = self._plot_center_span(poly)
         cx, cy = _centroid(poly)
@@ -365,7 +408,11 @@ class FieldFeaturesMixin:
 
     def _plot_rock(self: Settlement, plot: dict[str, Any], rng: random.Random, ink: list[tuple[str, str]] | None = None) -> None:  # type: ignore[misc]
         """A bedrock OUTCROP the terrace risers wrap around - a cluster of gray boulders. Recorded in
-        M['field_rocks']. Small (a few plot-fractions), off-center so it reads as a natural obstacle."""
+        M['field_rocks']. Small (a few plot-fractions), off-center so it reads as a natural obstacle.
+
+        Research:
+            outcrop off-center - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: within 0.3 of the plot's half-span of its middle
+            outcrop size - UNRESEARCHED: 2-4 boulders r 3.5-6.5 px"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx += rng.uniform(-hx * 0.3, hx * 0.3)
         cy += rng.uniform(-hy * 0.3, hy * 0.3)
@@ -396,7 +443,11 @@ class FieldFeaturesMixin:
         its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it.
 
         Given the comb's `net`, the basin is carved round it - its bund carried round the grave to the corner (water W28,
-        `carve_around_grave`) - and a corner whose mound would stand in a field pond is refused (False, nothing drawn)."""
+        `carve_around_grave`) - and a corner whose mound would stand in a field pond is refused (False, nothing drawn).
+
+        Research:
+            corner grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound in a plot's corner, against its bunds
+            corner grave size - UNRESEARCHED: mound 13 x 9 px, one or two stones"""
         at = rng.choice(turning_corners(plot["poly"]))
         cx, cy = (round(v, 1) for v in corner_seat(plot["poly"], at))
         disc = (cx, cy, 6.5 + GRAVE_BANK_PX)
@@ -425,7 +476,11 @@ class FieldFeaturesMixin:
         Kashikawa's mound, recorded then as a map drawing convention with the carve as its honest fix. Given the comb's
         `net`, `carve_around_grave` now cuts every ring back off the mound (the host halved through it), so the basins
         run up to the island and the manifest says what the ink shows. The mound stays OPAQUE, as the Kashikawa review
-        asked. A plot whose mound would stand in a field pond is refused (False, nothing drawn)."""
+        asked. A plot whose mound would stand in a field pond is refused (False, nothing drawn).
+
+        Research:
+            grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
+            grave island size - UNRESEARCHED: mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
@@ -456,7 +511,9 @@ class FieldFeaturesMixin:
         """A dug fish-pond within its mulberry-dike parcel: homothetically INSET the parcel (so a green bank
         shows all round - the pond never reaches the parcel edge) and ROUND every corner with a quadratic
         fillet of slightly irregular reach (erosion). Returns (svg path `d`, sampled water polygon) - the
-        sample carries the rounding into the manifest so the checks can see the pond is inset + rounded."""
+        sample carries the rounding into the manifest so the checks can see the pond is inset + rounded.
+
+        Research: pond inset and rounded - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: inset inside its bank, every corner eased"""
         n = len(poly)
         cx = sum(q[0] for q in poly) / n
         cy = sum(q[1] for q in poly) / n
@@ -507,7 +564,11 @@ class FieldFeaturesMixin:
         `facing_deg` is the screen direction the FLAT edge faces (toward the village); default 270 = up / N.
         Draws through the shared water block (so it composites cleanly), records the footprint + the
         `crescent_pond` focal feature on the manifest, and reserves a placement keep-out - so call it BEFORE
-        `farmsteads()` and the cluster packs around it."""
+        `farmsteads()` and the cluster packs around it.
+
+        Research:
+            half-moon pond - research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html: a half-disk, its flat bank toward the houses, labeled geomantic pond
+            no inlet - DEVIATION research/questions/0041-half-moon-ponds-before-southern-chinese-villages-banyuechi.drawing.html"""
         fa = math.radians(facing_deg)
         fx, fy = math.cos(fa), math.sin(fa)  # unit vector toward the village (the flat side)
         perp = (-fy, fx)  # along the flat diameter

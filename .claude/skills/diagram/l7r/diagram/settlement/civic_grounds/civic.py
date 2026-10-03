@@ -2,6 +2,8 @@
 as opposed to what its inhabitants build in order to live.
 
 Split from settlement/civic_grounds.py by feature 115 - see settlement/civic_grounds/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -33,7 +35,15 @@ class CivicWorksMixin:
         M['precincts'] and holds both placement registries, replacing the hand-rolled 020
         reserve, and (graveyard=True) draws the parish burial plot that closes the temple's
         020 `graveyard` claim. Map-scale glyphs are footprint boxes in the religious palette,
-        labeled never - the hall's own caption names the complex (caption-loudness)."""
+        labeled never - the hall's own caption names the complex (caption-loudness).
+
+        Research:
+            head-house program - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: residence, kitchen, two dormitories, library, administration
+            program sizes and seats - UNRESEARCHED: hand-set, the service program to the rear
+            precinct size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: the caller's w x h, default 130 x 100 px
+            parish burial plot in the precinct - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: 24 x 16 px
+            glyph - CONVENTION: footprint boxes, no captions
+        """
         self.M.setdefault("precincts", []).append({"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "rear": rear, "graveyard": graveyard})
         self.block_polys.append([(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)])
         self.placed.append((x, y, w, h))
@@ -64,7 +74,10 @@ class CivicWorksMixin:
         packs and the ground truth for capital_rank_gradient. A declarative overlay like
         quarter() - draws nothing and reserves nothing; the packs it names do the drawing.
         Records M['districts'] {name, kind, poly, rank_band?}; kinds: yashiki, detached,
-        terrace, machi, monzen, entertainment."""
+        terrace, machi, monzen, entertainment.
+
+        Research: district overlay - NONE: draws and reserves nothing
+        """
         rec: dict[str, Any] = {"name": name, "kind": kind, "poly": [list(p) for p in poly]}
         if rank_band is not None:
             rec["rank_band"] = rank_band
@@ -78,7 +91,14 @@ class CivicWorksMixin:
         Kanazawa EXCEPTION, so the glyph is a continuous roof with drawn seams, not houses at
         row pitch. In Rokugan these house junior SAMURAI (Ranks 1-4) - ashigaru are peasants
         and have no capital quarter (GM 2026-08-08). Records M['terraces']
-        {x, y, w, h, rot, units, z}; classified SOLID in the keep-clear contract."""
+        {x, y, w, h, rot, units, z}; classified SOLID in the keep-clear contract.
+
+        Research:
+            one roof over the cells - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html, research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: a continuous range with drawn seams
+            cell frontage - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 18 ft
+            range depth - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 21 ft
+            cell count - NONE: the caller's units, default 6
+        """
         w, h = units * frontage_ft / self.ftpx, depth_ft / self.ftpx
         g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-w / 2:.1f}" y="{-h / 2:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1.5" fill="#C9B892" stroke="#6E5B3A" stroke-width="1.4"/>')
@@ -109,7 +129,16 @@ class CivicWorksMixin:
         first. Per-store records, so the overlap matrix can see each one (feature 019's lesson).
         `rot` turns the whole row (degrees) so a riverside complex can stand parallel to its bank
         (GM 2026-08-09: the wharf granaries belong ON the wharf, aligned with the water they
-        serve); the rot=0 path is byte-identical to the old drawing for every existing map."""
+        serve); the rot=0 path is byte-identical to the old drawing for every existing map.
+
+        Research:
+            tax-rice granary at a transit town - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: opt-in, a county seat keeps its grain in the yamen
+            store size and count - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the caller's n x w x h, default 3 of 58 x 34 px
+            the capital's granaries - research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.drawing.html: append, turned to the bank
+            white walls and dark hip roof - CONVENTION
+            keep-clear margin - UNRESEARCHED: 30 px, 60 px added when turned
+            caption - CONVENTION
+        """
         stores: list[Any] = []
         ga = math.radians(rot)
         gca, gsa = math.cos(ga), math.sin(ga)
@@ -177,7 +206,14 @@ class CivicWorksMixin:
         is drawn as an annex behind the building (opposite its street-facing awning), like the
         farmhouse shed: part of the premises, not a separately-sited structure, so it needs no
         open ground in the packed quarter. Records to M['storehouses']; call AFTER the
-        businesses are placed. Returns the number attached."""
+        businesses are placed. Returns the number attached.
+
+        Research:
+            a kura behind the shop - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: an annex opposite the awning
+            a minority of shops - UNRESEARCHED: the caller's count, default 6
+            kura size - UNRESEARCHED: 20 x 14 ft at the building grain
+            off the street bed and the neighbor's lot - NONE: overlap rules
+        """
         if kw is None:
             kw, kh = 20 * self.bscale, 14 * self.bscale  # a ~20x14 ft kura, scaled with the building grain
         biz = [b for b in self.M["buildings"] if b["kind"] in ("merchant", "shop")]
@@ -233,7 +269,14 @@ class CivicWorksMixin:
         under any seed: each home is set one step DEEPER than the deepest shop (clearing the storefront band),
         parallel to it. Call AFTER the frontage but BEFORE the laborer packs (which then set back further,
         leaving the merchant-band -> gap -> warren order). Uses a true RECTANGULAR overlap test (the circle
-        _fits is far too conservative for a large home in a tight band). Returns count placed."""
+        _fits is far too conservative for a large home in a tight band). Returns count placed.
+
+        Research:
+            the merchant family lives behind its shop - research/questions/0154-merchants-townhouses-machiya.html, research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one step behind the shopfront band, aligned to it
+            how many - UNRESEARCHED: the caller's count, default 4
+            spread along the band - UNRESEARCHED: 120 px apart
+            band margin - UNRESEARCHED: 14 px
+        """
         rd = self.M.get("road")
         biz = [b for b in self.M["buildings"] if b["kind"] in ("merchant", "shop")]
         if not (rd and biz):

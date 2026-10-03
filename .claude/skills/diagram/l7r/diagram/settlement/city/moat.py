@@ -1,6 +1,8 @@
 """The wet defense and every opening through it - water gates, sluices, the inwall drain.
 
 Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -43,7 +45,17 @@ class MoatMixin:
         perpendicular tees (that was an rfoot artifact): the INLET (upstream end) shifts upstream
         by `river_inlet_tilt` degrees off square, the OUTLET sweeps downstream by
         `river_outlet_tilt` - see research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html for the
-        hydrology (confluences merge at downstream angles; intakes stay near-square for sediment)."""
+        hydrology (confluences merge at downstream angles; intakes stay near-square for sediment).
+
+        Research:
+            moat width - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html, research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: 66 ft
+            ring pushed out from the wall - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html: the caller's gap, default 42 px
+            open moat on a river bank - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: the arc within river_cut of the river dropped, both ends onto it
+            junction tilts - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: inlet 10 deg upstream, outlet 22 deg downstream of square
+            inlet and outlet recorded - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html
+            solid water with a sheen - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: no dashed centerline
+            no-build corridor - UNRESEARCHED: 28 px either side
+        """
         if width is None:
             width = self.px(
                 66
@@ -140,7 +152,13 @@ class MoatMixin:
         Suzhou Pan Gate pattern: a paired land-and-water city, the water passage under a grated
         arch with a sluice). Drawn in the TOP layer so the canal flows visibly beneath it; the
         wall itself must be drawn with a matching gap (city_wall(water_gates=[...])). Records
-        M['water_gates'] and reserves a small no-build block."""
+        M['water_gates'] and reserves a small no-build block.
+
+        Research:
+            arch on two piers with a grille - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
+            glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a fixed 36 x 22 px record
+            no-build block - UNRESEARCHED: 16 px round the glyph
+        """
         wc = '#3A352C'
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="-17" y="-9" width="8" height="18" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')  # piers
@@ -166,7 +184,14 @@ class MoatMixin:
         structure with wing posts at the village/city grains. Top layer, above the water. Records
         M['sluice_gates'] for `channel_gates_at_water_junctions`, asked of the registry of what stands before anything is drawn
         (feature 287, water W53): its seat is the junction its caller found, so a gate the matrix forbids there - a fixture is
-        mounted on water alone - is refused by name."""
+        mounted on water alone - is refused by name.
+
+        Research:
+            a sluice where a channel changes water - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
+            board, posts, crossbeam and windlass - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
+            frame span - UNRESEARCHED: about 8 px, stretched to span when given
+            caption - CONVENTION: 9 pt italic
+        """
         rec = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1)}
         refuse_unadmitted(self.M, "sluice_gates", rec)
         wc = '#3A352C'
@@ -211,7 +236,14 @@ class MoatMixin:
         the moat vertex nearest cut+`moat_bias`, with the standard gentle wind channel_winds_gently
         expects) plus its no-build corridor. Returns the trimmed polyline in the caller's original
         orientation - assign it back BEFORE drawing, so the drawn ditch, the field_ditches record,
-        and the conduit all share the same cut geometry (placement and check read the same source)."""
+        and the conduit all share the same cut geometry (placement and check read the same source).
+
+        Research:
+            drain drops through a sluice into a culvert - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: cut short of the patrol road, never through the wall
+            cut clearance - NONE: half the road width plus 10 px, the glyph's own margin
+            undrawn conduit to the moat - NONE: to the nearest moat vertex, a 12 px wind
+            conduit corridor - UNRESEARCHED: 33 px
+        """
         ring = self.M.get("ring_road") or []
         moat = self.M.get("moat") or []
         pts: list[Pt] = [(float(p[0]), float(p[1])) for p in drain_pts]
@@ -264,5 +296,8 @@ class MoatMixin:
         outlet. A closed moat cannot: the ring is dug first and its feeder and outfall are drawn
         afterward, so the gen names the two points. Water runs BOTH ways around the circuit from
         inlet to outlet, which is why a moated city has no single "downstream" side and a rule
-        about downstream siting has to reason from these two points."""
+        about downstream siting has to reason from these two points.
+
+        Research: declared inlet and outlet - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html
+        """
         self.M["moat_flow"] = {"inlet": [round(inlet[0], 1), round(inlet[1], 1)], "outlet": [round(outlet[0], 1), round(outlet[1], 1)]}

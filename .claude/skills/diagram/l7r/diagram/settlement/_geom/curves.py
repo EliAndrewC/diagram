@@ -6,6 +6,8 @@ bends on a swept curve because a sharp corner scours outside and silts inside un
 rounded it itself.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: curve plumbing - NONE: smoothing and sampling of a shape a caller chose
 """
 
 import math
@@ -32,7 +34,12 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
     `radius` is the target cut-back along each leg, capped at 35% of either adjacent segment, so two
     neighboring corners can never eat the segment between them (0.35 + 0.35 < 1) and a short offtake
     stub keeps its shape. Corners gentler than `min_turn_deg` are left alone - there is no visible
-    elbow to round, and rounding them would only add points."""
+    elbow to round, and rounding them would only add points.
+
+    Research:
+        earth channel bends on a sweep - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: every interior corner filleted
+        bend radius scales with width - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: callers pass ~2.5x the drawn width
+        fillet cap and threshold - NONE: 35% of each leg, corners under 8 degrees left alone"""
     if len(pts) < 3 or radius <= 0:
         return [(float(x), float(y)) for x, y in pts]
     out: Poly = [(float(pts[0][0]), float(pts[0][1]))]
@@ -89,7 +96,9 @@ def smooth_points(pts: Poly, steps: int = 10) -> Poly:
 def organic_bbox(bbox: Any, amp: float, flat_edges: tuple[int, ...] = ()) -> Poly:
     """Semi-rectangular core with lobes (outgrowths) and bays (indentations).
     Edges listed in flat_edges (0=N, 1=E, 2=S, 3=W) are kept straight - e.g. a field
-    that must run flush against a town wall flattens the abutting edge."""
+    that must run flush against a town wall flattens the abutting edge.
+
+    Research: organic outline - CONVENTION: lobes and bays so a drawn parcel reads hand-made"""
     x0, y0, x1, y1 = bbox
     edges = [((x0, y0), (x1, y0), (0, -1)), ((x1, y0), (x1, y1), (1, 0)), ((x1, y1), (x0, y1), (0, 1)), ((x0, y1), (x0, y0), (-1, 0))]
     pts = []
@@ -110,7 +119,9 @@ def organic_bbox(bbox: Any, amp: float, flat_edges: tuple[int, ...] = ()) -> Pol
 
 def organic_poly(base: Poly, amp: float) -> Poly:
     """Organic-ize an arbitrary base polygon (handles concave shapes like a V):
-    densify each edge and jitter the samples; smoothing rounds it."""
+    densify each edge and jitter the samples; smoothing rounds it.
+
+    Research: organic outline - CONVENTION: jittered edges so a drawn parcel reads hand-made"""
     pts = []
     n = len(base)
     for i in range(n):
@@ -124,7 +135,9 @@ def organic_poly(base: Poly, amp: float) -> Poly:
 
 
 def winding(start: Pt, end: Pt, amp: float = 15, n: int = 2) -> Poly:
-    """A gently winding path from start to end (a shallow S, not a straight line)."""
+    """A gently winding path from start to end (a shallow S, not a straight line).
+
+    Research: winding path - UNRESEARCHED: a shallow S of amplitude `amp` rather than a straight line"""
     sx, sy = start
     ex, ey = end
     dx, dy = ex - sx, ey - sy

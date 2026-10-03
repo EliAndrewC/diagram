@@ -1,6 +1,8 @@
 """The one civic BUILDING the city tier draws.
 
 Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 from typing import TYPE_CHECKING, Any
@@ -26,7 +28,15 @@ class CityCivicMixin:
         (its reserved caption box "was eating a full housing row"), and Nagahara and Minami took
         the manor default and hung the caption over their samurai quarters. Doing it here makes
         the three cities agree and leaves no hand seat to re-place every time the yamen moves.
-        The size is GOVERNOR_CAPTION_FS, which is what makes the caption fit between the walls."""
+        The size is GOVERNOR_CAPTION_FS, which is what makes the caption fit between the walls.
+
+        Research:
+            compound size - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: the caller's w x h, default 320 x 210 px
+            walls, gate and empty court - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: the manor glyph, interior implied
+            gate width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: an 18 ft yamen gatehouse
+            gate direction - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: the caller's gate_dir, default west
+            caption in the court - CONVENTION: bold, GOVERNOR_CAPTION_FS, optically centered
+        """
         self.manor(x, y, w, h, "", gate_dir=gate_dir, gate_ft=18.0)  # a yamen's formal gatehouse passes ~18 real ft; caption below, not manor's
         self.M["governor_mansion"] = self.M["manors"].pop()  # not an outside samurai estate
         self.M["governor_mansion"]["label"] = label

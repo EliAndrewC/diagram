@@ -1,6 +1,8 @@
 """STAGE 8: the crossings, the notice board, the map frame - and the LABEL PHASE that closes every roll.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: frame geometry - NONE: strip faces, bands to the view edge and ring splicing
 """
 
 from __future__ import annotations
@@ -36,6 +38,12 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.channel_footbridges
         l7r.diagram.settlement.Settlement.dike_gates
         l7r.diagram.hamletgen.water.polder_crossing_caps
+
+    Research:
+        every crossing decked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way over water gets a deck, square
+        ditch footbridge spacing - UNRESEARCHED: 300 ft on a comb, 320 ft on a polder
+        polder crossing caps - UNRESEARCHED: planks on the settlement-side toe collector, as the hand-authored polders had them
+        dike gates at cuts - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a sluice gate at every cut of the perimeter dike
     """
     # THE LANES ARE ALREADY SQUARE (feature 287, M4c): every way crosses the brook and every drawn channel square, and so
     # does its deck (features 261, research 0084) - squared as the first step of `settle_the_web`, the web's last pass
@@ -107,6 +115,11 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.fixture_clear_of_water
         l7r.diagram.settlement.Settlement.place_kosatsuba
         l7r.diagram.settlement.Settlement.kosatsuba
+
+    Research:
+        every hamlet posts a board - research/questions/0190-notice-boards-kosatsuba.drawing.html
+        board placed last - research/questions/0190-notice-boards-kosatsuba.drawing.html: after the crop, seeing the whole map
+        board beside a way - research/questions/0190-notice-boards-kosatsuba.drawing.html: on the verge where passers-by meet it
     """
     s.place_kosatsuba()
 
@@ -133,6 +146,10 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.crop_to_view
         l7r.diagram.settlement.Settlement.title
         l7r.diagram.hamletgen.frame.waterward_to_the_frame
+
+    Research:
+        crop to the decided view - CONVENTION
+        title placard - CONVENTION: placed in the framed window's blank space
     """
     # The margin leaves the TITLE somewhere to stand: `title()` scans the framed window for a box
     # that clears every feature and falls back to a corner overlap when the map is too full, which
@@ -192,7 +209,9 @@ def waterward_to_the_frame(s: Settlement) -> None:
     seat and the view is not final until the title has grown its band; the band depth stays as feature 150 T55 set it,
     and only the ground a view actually shows is added - in practice only where the title's band grew the view, since the
     view otherwise stops at the strip (`to_the_strips`). A strip already reaching the edge is untouched; the extension is
-    always one ground and one record with its strip (`unary_union`)."""
+    always one ground and one record with its strip (`unary_union`).
+
+    Research: reed fringe runs off the frame - CONVENTION: wild water implied past the view, never a ruled edge"""
     from shapely.geometry import Polygon  # noqa: PLC0415 - bound on first use
     from shapely.ops import unary_union  # noqa: PLC0415
 
@@ -272,5 +291,7 @@ def stage_labels(s: Settlement, plan: SitePlan) -> None:
 
     Steps:
         l7r.diagram.settlement.Settlement.place_labels
+
+    Research: labels last - CONVENTION: captions placed against the finished sheet
     """
     s.place_labels()

@@ -2,6 +2,12 @@
 
 Split from `hamletgen/water.py` by feature 230 (constitution X clause 13); bodies verbatim.
 See `CLAUDE.md` in this directory.
+Research: brook course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: from an off-map source upslope, tapped at the fan's head on one bank, on down that flank and off the map
+    crop clearance - UNRESEARCHED: every station BROOK_SKIRT (34 px) outside the cultivated rings, a hem plot at the fan's head yielding
+    bends rounded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every corner filleted at BROOK_BEND_WIDTHS (2.5) of the drawn width
+    meander - UNRESEARCHED: a seeded reflecting walk of BROOK_WANDER, no long straight, level-along-the-frame or screen-axis run
+    no fold-back - CONVENTION: no vertex turns past BROOK_MAX_TURN_DEG (100 deg), labeled a map drawing convention in consts
+    runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: below the tap every step runs down the fall, a bend dipping BEND_DIP_FT at most
 """
 
 from __future__ import annotations
@@ -64,6 +70,7 @@ from .brook_rules import (
 # with an even chance" - the EVEN chance a GUESS, no source counting them. `crib` is the default because it is the
 # one form the glyph drew before the knob. Declared as `meta.weir_form` on a weir hamlet only.
 WEIR_FORM = register_knob(Knob("weir_form", list(WEIR_THICK_FT), default="crib"))
+"""Research: weir form - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: fence, frame, crib or gabion rolled per weir hamlet with even odds, crib the default"""
 
 EXIT_BEND_FRAC = 0.12  # an exit leg's midpoint bend, as a share of the leg ...
 EXIT_BEND_MAX_FT = 60.0  # ... at most this far aside
@@ -846,7 +853,10 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
 
     One disclosed liberty, in the entry: the bar is drawn as a FULL closure of the brook, a map drawing convention,
     because a half-river closure - the common old form - is a pixel or two at a 7 ft brook. Each form's thickness is
-    `WEIR_THICK_FT`'s, with its class beside it."""
+    `WEIR_THICK_FT`'s, with its class beside it.
+    Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
+        oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants WEIR_SKEW_DEG upstream from the intake bank, its root at the mouth's downstream lip
+        full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention"""
     if plan.intake != "weir":
         return
     form = s.M["meta"]["weir_form"] = s.resolve("weir_form")
@@ -926,7 +936,8 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
     intake, and at a two-foot opening either would be smaller than the map can show.
 
     Beds share one opacity group (`_water`), so the brook painting over the race is a join, not a darker seam. A brook
-    with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none."""
+    with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none.
+    Research: bare intake mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race opens out of the brook's bank, no gate or boards drawn"""
     tap = (float(sluice[0]), float(sluice[1]))
     brook = next((st for st in s.M.get("streams", []) if any(math.dist(tap, (float(q[0]), float(q[1]))) < 0.5 for q in st["poly"])), None)
     entry = next((w for w in s.water if w["rec"] is brook and w.get("clip") is None), None) if brook is not None else None
@@ -954,7 +965,8 @@ def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: 
     - `crib`, timber packed with stone: stone gray, the crib's baulks ticked across it (the glyph before the knob);
     - `frame`, stakes and logs packed with clay: clay brown-gray, the logs drawn along it and the stakes as dots;
     - `gabion`, stone-filled baskets: gray, the baskets' seams across it and the weave hatched on the diagonal;
-    - `fence`, stakes with brushwood woven between them: a thin straw-colored band with its stakes as dark dots."""
+    - `fence`, stakes with brushwood woven between them: a thin straw-colored band with its stakes as dark dots.
+    Research: weir glyph - CONVENTION: per-form fill, ticks, stakes and an upstream lip inside the bar"""
     cx, cy = c
     ax, ay = along
     hx, hy = down

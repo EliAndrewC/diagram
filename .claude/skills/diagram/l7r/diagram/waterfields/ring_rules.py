@@ -19,6 +19,8 @@ tested, so the measurement is one call away if the GM rules otherwise.
 
 Rings are judged AS RECORDED: the manifest rounds to 0.1 px, and a caller that judges a candidate ring rounds it
 the same way first, so the placer and the manifest see one ring.
+
+Research: ring plumbing - NONE: ring parsing, areas, validity, stroke records, sampling and rounding tolerances
 """
 
 from __future__ import annotations
@@ -46,21 +48,33 @@ from .frame import BANK_MARGIN, Poly, Pt, _pip, _poly_area
 
 NEEDLE_DEG = _GATE_MIN_APEX
 """The needle line, 15 deg. The carve demotes a ring tapering below 25 deg; the rule fires at 15, so a borderline
-plot the carve deliberately allowed cannot be read as a failure (see `_GATE_MIN_APEX` in banks.py)."""
+plot the carve deliberately allowed cannot be read as a failure (see `_GATE_MIN_APEX` in banks.py).
+
+Research: no basin tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the rule fires under 15 deg, the placer refusing under 25
+"""
 
 AREA_FLOOR = _GATE_MIN_AREA
-"""The smallest basin, 0.20 of the fan's OWN design cell - a ratio, never an absolute floor (see `_GATE_MIN_AREA`)."""
+"""The smallest basin, 0.20 of the fan's OWN design cell - a ratio, never an absolute floor (see `_GATE_MIN_AREA`).
+
+Research: smallest basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.20 of the design cell at the rule, the placer refusing under a quarter
+"""
 
 OVERCOUNT_CEILING = 0.04
 """`plot_rings` is a paint-order STACK, not a partition - a later basin paints out the stretch of bund it laps,
 which is what makes the pair read as the single shared wall a real fan has. So the ring areas double-count the
 lapped ground, and this is a CEILING on that over-count rather than a ban on the lap. Measured over the four
 scripted hamlets and a 48-seed cohort in 2026-08-17: 0.53-1.06% on the pool, cohort median ~0.9%, tail to 2.49%.
-4% is ~1.6x the worst live map and fires on a doubling of it."""
+4% is ~1.6x the worst live map and fires on a doubling of it.
+
+Research: lapped plots allowed - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a plot lapping a little over its neighbor is left alone, the over-count capped at 4%
+"""
 
 MAX_STEPS = 1
 """A STAIRCASE is more than one sideways step on a ring; a single step is one awkward corner where a scrap had
-exactly one home (see `test_a_bund_does_not_build_a_flight_of_steps` for the GM's report and the measurement)."""
+exactly one home (see `test_a_bund_does_not_build_a_flight_of_steps` for the GM's report and the measurement).
+
+Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: one step on a ring allowed, two or more refused
+"""
 
 STROKE_SAMPLE_PX = 3.0
 """Each ring edge is walked at 3 px against a supply stroke: a junction wedge can keep every CORNER dry while its
@@ -87,12 +101,18 @@ basins (about 18 m2 each, the smallest half a meter square) and terrace beds "us
 ('Minimum basin SIZE'), which prices and declines an absolute floor "in the same way and for the same reason that a
 minimum plot WIDTH is the wrong rule for a fan toe". A 12 ft floor would condemn a 2 m (6.6 ft) terrace bed the record
 calls usual. What the review saw - two bunds a few feet apart - is the doubled bund, which `_shed_necks` and
-`_visible_parts` already open at half the width floor; that stays the fabric's answer."""
+`_visible_parts` already open at half the width floor; that stays the fabric's answer.
+
+Research: no least basin width - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the 12 ft floor is recorded and not enforced
+"""
 
 DART_MAX_CELL = 0.75
 """NOT ENFORCED, with `DART_MIN_APEX` (water W27): a basin under ~0.75 of its design cell carrying a tip under
 `DART_MIN_APEX` would read as a dart. A GUESS from the review's measurements (future-work 'A tip-angle companion to the
-area floor'): Mizuguchi's arrowhead at 0.69 cell, and sharp tips on basins of 0.55-0.72 cell."""
+area floor'): Mizuguchi's arrowhead at 0.69 cell, and sharp tips on basins of 0.55-0.72 cell.
+
+Research: dart size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: recorded and not enforced
+"""
 
 DART_MIN_APEX = 30.0
 """NOT ENFORCED - the research contradicts the rule (water W27; deliberate deviation from the design row, recorded). The
@@ -104,11 +124,18 @@ back, which is a workable bunded strip" - so a 27-30 deg tip is inside what the 
 already refuses under 25 (`_TOE_MIN_APEX`). And fields/025 ('The arrowhead') records the review's own request for a
 tip-angle floor on the motivating Mizuguchi ring and that "the measurement said no" (min apex 38.3 deg raw, solidity
 0.878: "an ordinary irregular basin - which is what the fabric is supposed to be full of"); the shape the review meant
-is the arrowhead, pointed AND notched, which `arrowhead` below enforces (W25)."""
+is the arrowhead, pointed AND notched, which `arrowhead` below enforces (W25).
+
+Research: dart tip - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a 30 deg tip floor recorded and not enforced, the arrowhead taking its place
+"""
 
 CHEVRON_APEX = _GATE_CHEVRON_APEX
+"""Research: arrowhead point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 35 deg at the rule, 40 at the placer"""
 CHEVRON_SOLIDITY = _GATE_CHEVRON_SOLIDITY
-"""The arrowhead's gate line, 35 deg AND 0.85 solidity - caught at 40/0.90 by the weld, gated here (banks.py)."""
+"""The arrowhead's gate line, 35 deg AND 0.85 solidity - caught at 40/0.90 by the weld, gated here (banks.py).
+
+Research: arrowhead notch - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: solidity under 0.85 at the rule, 0.90 at the placer
+"""
 
 
 def ring_area(ring: Sequence[Sequence[float]]) -> float:
@@ -166,19 +193,28 @@ def needle(ring: Sequence[Sequence[float]]) -> bool:
     """W18/W20 - the basin tapers to a point: an interior angle under `NEEDLE_DEG` on the ring as recorded.
 
     A paddy is a level, bunded, puddled unit; narrowness and radial convergence are authentic, but no real basin
-    tapers to ZERO - the last yards of a 7.5 deg wedge are two bunds with no floor between them."""
+    tapers to ZERO - the last yards of a 7.5 deg wedge are two bunds with no floor between them.
+
+    Research: needle - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an interior angle under NEEDLE_DEG
+    """
     return pointed_ring(_pts(ring), NEEDLE_DEG)
 
 
 def too_small(ring: Sequence[Sequence[float]], cell: float) -> bool:
-    """W21 - the basin is under `AREA_FLOOR` of the fan's design cell, too small to be worth its own bund."""
+    """W21 - the basin is under `AREA_FLOOR` of the fan's design cell, too small to be worth its own bund.
+
+    Research: worth its own bund - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a ratio of the design cell, never an absolute floor
+    """
     return ring_area(ring) / float(cell) < AREA_FLOOR
 
 
 def staircase(ring: Sequence[Sequence[float]], g: float) -> bool:
     """W23 - the ring's bund steps sideways more than `MAX_STEPS` times: a flight of steps, not a nudge.
 
-    `g` is the engine's grain, `2 / ftpx` - the same conversion `jog_vertices` documents."""
+    `g` is the engine's grain, `2 / ftpx` - the same conversion `jog_vertices` documents.
+
+    Research: staircase - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: more than MAX_STEPS sideways steps on a ring
+    """
     return len(jog_vertices(_pts(ring), g)) > MAX_STEPS
 
 
@@ -213,12 +249,18 @@ def working_width(ring: Sequence[Sequence[float]]) -> float:
 
 
 def narrow(ring: Sequence[Sequence[float]], g: float) -> bool:
-    """W26 - the basin is narrower than `BASIN_MIN_WIDTH_FT` (converted at `g / 2` px per foot)."""
+    """W26 - the basin is narrower than `BASIN_MIN_WIDTH_FT` (converted at `g / 2` px per foot).
+
+    Research: width floor - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a recorded predicate, never asked by `ring_violations`
+    """
     return working_width(ring) < BASIN_MIN_WIDTH_FT * g / 2.0
 
 
 def dart(ring: Sequence[Sequence[float]], cell: float) -> bool:
-    """W27 - a small basin (under `DART_MAX_CELL`) with a tip under `DART_MIN_APEX`, on the raw or the deduped ring."""
+    """W27 - a small basin (under `DART_MAX_CELL`) with a tip under `DART_MIN_APEX`, on the raw or the deduped ring.
+
+    Research: dart - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a recorded predicate, never asked by `ring_violations`
+    """
     if ring_area(ring) / float(cell) >= DART_MAX_CELL:
         return False
     raw = _pts(ring)
@@ -227,7 +269,10 @@ def dart(ring: Sequence[Sequence[float]], cell: float) -> bool:
 
 
 def arrowhead(ring: Sequence[Sequence[float]]) -> bool:
-    """W25 - the basin reads as an arrowhead: pointed AND notched at the gate line (`is_chevron` at 35 / 0.85)."""
+    """W25 - the basin reads as an arrowhead: pointed AND notched at the gate line (`is_chevron` at 35 / 0.85).
+
+    Research: arrowhead - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: pointed and notched together
+    """
     return is_chevron(_pts(ring), CHEVRON_APEX, CHEVRON_SOLIDITY)
 
 
@@ -268,7 +313,10 @@ def supply_intrusions(ring: Sequence[Sequence[float]], strokes: Sequence[SupplyS
     rounded to the pixel. Samples projecting past a stroke's ENDS are not governed by it.
 
     THE BAR IS THE BAND PLUS THE ABUTMENT, NOT THE CENTERLINE: a bund and a ditch ABUT at the bank, and a rule that
-    only forbade crossing the centerline would pass a bund drawn down the inside of the water (GM 2026-08-15)."""
+    only forbade crossing the centerline would pass a bund drawn down the inside of the water (GM 2026-08-15).
+
+    Research: bund abuts the supply stroke - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: no bund nearer than the local half-width plus half a bund
+    """
     out: list[tuple[int, int]] = []
     n = len(ring)
     for s in strokes:
@@ -306,7 +354,10 @@ def collector_strokes(drains: Sequence[dict[str, Any]]) -> list[tuple[Poly, floa
 def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[Poly, float]]) -> list[tuple[int, int]]:
     """W17 - the start of every ring edge that runs ACROSS a collector rather than along it: both ends within
     `COLLECTOR_REACH` of the half-width from its centerline, and the edge longer than the stroke is wide. A paddy's
-    low bund is the collector's bank; a bund across it would dam the thing that drains the field."""
+    low bund is the collector's bank; a bund across it would dam the thing that drains the field.
+
+    Research: bunds run along the drain - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: no bund runs across the collector
+    """
     out: list[tuple[int, int]] = []
     n = len(ring)
     for pts, half in drains:
@@ -333,13 +384,19 @@ def crosses_pond_rim(ring: Sequence[Sequence[float]], pond: Sequence[float]) -> 
     """W29 - a ring edge meets a field pond (`pond` = cx, cy, rx, ry): it crosses the rim, chords it, or stands in the
     water. A field pond is a low pocket dug INTO one basin; a bund through it reads as a flood. The body is
     `settlement._geom.ring_meets_ellipse`, the one predicate `_plot_pond` shrinks the pond against (feature 287, T04):
-    the vertex-parity test this replaced missed a bund chording the pond between two outside vertices."""
+    the vertex-parity test this replaced missed a bund chording the pond between two outside vertices.
+
+    Research: pond inside one basin - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no bund crosses, chords or stands in a field pond
+    """
     return ring_meets_ellipse(ring, float(pond[0]), float(pond[1]), float(pond[2]), float(pond[3]))
 
 
 def under_island(ring: Sequence[Sequence[float]], disc: Sequence[float]) -> bool:
     """W28 - the ring runs under a grave island's mound (`disc` = cx, cy, r): a bund edge passes within the radius of
-    its center, or the basin's floor lies under it. The flat paddy tiles AROUND an in-field grave."""
+    its center, or the basin's floor lies under it. The flat paddy tiles AROUND an in-field grave.
+
+    Research: paddy around a grave island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
+    """
     cx, cy, r = float(disc[0]), float(disc[1]), float(disc[2])
     pts = _pts(ring)
     n = len(pts)
@@ -416,7 +473,14 @@ def ring_violations(ring: Sequence[Sequence[float]], ctx: RingContext) -> set[st
     """Every rule `ring` breaks, by name - empty for a ring a placer may write.
 
     NOT ASKED: `narrow` (W26) and `dart` (W27) - the research contradicts both (see `BASIN_MIN_WIDTH_FT` and
-    `DART_MIN_APEX`), so they are recorded rules, not enforced ones."""
+    `DART_MIN_APEX`), so they are recorded rules, not enforced ones.
+
+    Research:
+        basin shape rules - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: needle, self-crossing, arrowhead and area floor
+        bund rules - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: staircase, a bund in a supply stroke, a bund across the collector
+        in-field features - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a bund through a pond or under a grave island
+        width and dart not asked - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the record sets no least width and calls a 25-30 deg tip workable
+    """
     out = set()
     if needle(ring):
         out.add("needle")

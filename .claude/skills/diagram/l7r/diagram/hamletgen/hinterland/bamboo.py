@@ -1,4 +1,7 @@
-"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: stand seat search - NONE: the lattice walk, the samples and the obstacle tests
+"""
 
 from __future__ import annotations
 
@@ -25,7 +28,9 @@ from .parcels import _parcel_outline
 # (`household_bamboo` in homesteads.py, seated with the sheds and gardens). The thicket's size is a working
 # harvested stand in real feet; a stand under the legibility floor does not read at fit zoom.
 BAMBOO_THICKET_FT = (84.0, 58.0)
+"""Research: thicket size - research/questions/0075-bamboo-groves-chikurin.drawing.html: 84 by 58 ft"""
 BAMBOO_LEGIBLE_FT = 14.0  # the SHORT axis: a household strip is ~16 ft deep and reads; below this, nothing does
+"""Research: legibility floor - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand under 14 ft on its short side, a convention"""
 
 
 def bamboo_blocked(
@@ -45,6 +50,10 @@ def bamboo_blocked(
     its arms - the canvas MARGIN and the TITLE POCKET - are geometry no rolled hamlet ever offers a culm
     for, because the sampler this serves never proposes a candidate that near the frame or under the title
     card. They are real refusals all the same, and want asking directly rather than through a planned site.
+
+    Research:
+        frame margin and title pocket - CONVENTION: no culm within 30 px of the canvas edge or under the title
+        keep-outs - NONE: tests the pads `bamboo_seats` sets
     """
     if x < 30 or y < 30 or x > extent[0] - 30 or y > extent[1] - 30:
         return True
@@ -66,7 +75,12 @@ def bamboo_blocked(
 
 def bamboo_blocked_indexed(x: float, y: float, extent: Pt, pocket: tuple[float, float, float, float], index: BambooObstacles, pond: Any, pond_pad: float) -> bool:
     """`bamboo_blocked` with its rect, lane and polygon arms asked of a `BambooObstacles` index (feature 223);
-    the margin, the pocket and the pond are the same one comparison each."""
+    the margin, the pocket and the pond are the same one comparison each.
+
+    Research:
+        frame margin and title pocket - CONVENTION: no culm within 30 px of the canvas edge or under the title
+        keep-outs - NONE: tests the pads `bamboo_seats` sets
+    """
     if x < 30 or y < 30 or x > extent[0] - 30 or y > extent[1] - 30:
         return True
     if pocket[0] <= x <= pocket[2] and pocket[1] <= y <= pocket[3]:
@@ -83,7 +97,9 @@ BAMBOO_SEAT_STEP_FT = 16.0
 and reach, sampled coarser). It was 8 ft; the walk outward (`nearest_fitting`) removed the tests the whole-square scan wasted
 but on Mizuguchi, whose thicket seats far from its target, the bamboo still asked 226,223 calls (1.23x fewer, against the
 spec's 2x floor), so the spec's fallback is taken: a stand seats at the nearest fitting point of the coarser lattice,
-which can be a step or two from where the 8 ft lattice put it (18 and 24.5 ft on the pool's two thickets, specs/284 R6). The thicket is 84 by 58 ft (`BAMBOO_THICKET_FT`), so a stand on the coarser lattice is the same stand on the same ground."""
+which can be a step or two from where the 8 ft lattice put it (18 and 24.5 ft on the pool's two thickets, specs/284 R6). The thicket is 84 by 58 ft (`BAMBOO_THICKET_FT`), so a stand on the coarser lattice is the same stand on the same ground.
+
+Research: seat lattice - CONVENTION: 16 ft"""
 
 
 def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float, float], bool], box: tuple[float, float, float, float] | None = None) -> tuple[float, float, float] | None:
@@ -120,7 +136,9 @@ def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float
 BAMBOO_SAMPLE_FT = 14.0
 """How far apart a bamboo stand's samples stand across its rect (feature 287, woods W24). A way is refused within its
 half-width and 10 ft of a sample, so a tread anywhere in the rect lies within 14 / sqrt(2) = 9.9 ft of a sample and under
-that reach: a map drawing convention - the density is the geometry's, not a fact about bamboo."""
+that reach: a map drawing convention - the density is the geometry's, not a fact about bamboo.
+
+Research: sample spacing - NONE: 14 ft, the geometry of the lane refusal"""
 
 
 def stand_samples(cx: float, cy: float, hw: float, hh: float, step: float) -> list[Pt]:
@@ -133,7 +151,9 @@ def stand_samples(cx: float, cy: float, hw: float, hh: float, step: float) -> li
 THICKET_REACH_FT = 220.0
 """How far from its target the thicket's seat is looked for first, in feet (a GUESS, named by feature 293 - the literal
 predates it): the thicket marks the edge of the houses it stands behind, so a seat near them wins over any seat farther
-along the back row. Where none fits within it, the whole page behind the back row is searched (`bamboo_seats`)."""
+along the back row. Where none fits within it, the whole page behind the back row is searched (`bamboo_seats`).
+
+Research: near search reach - GUESS: 220 ft from the target before the whole page behind the row"""
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
@@ -145,7 +165,16 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it at full size, then at 70%, and only
     then anywhere on the page behind the back row, full size then 70%; a stand that fits nowhere is dropped - a hamlet
     with no room for bamboo draws none rather than a sliver. Outlines are irregular rings inside the
-    tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge."""
+    tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge.
+
+    Research:
+        thicket by the knob - research/questions/0075-bamboo-groves-chikurin.drawing.html: a thicket only where `bamboo` is thicket or both
+        thicket seat - research/questions/0075-bamboo-groves-chikurin.drawing.html: on dry ground behind the back row, nearest a point 40 ft north of the three northernmost houses
+        shrunk stand - UNRESEARCHED: 70% size where the full stand fits nowhere, none drawn where that fails too
+        off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, dry plots, marsh and pond, and within 3 ft of a watercourse
+        keep-out pads - UNRESEARCHED: 2-30 ft round houses, yards, gardens, sheds, wells, persimmons, groves, lanes, belt and woods
+        irregular outline - CONVENTION: a hard but not ruled edge inside the tested rect
+    """
     forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
     houses = s.M.get("houses", [])
     if not forms or not houses:

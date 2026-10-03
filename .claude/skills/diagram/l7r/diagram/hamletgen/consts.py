@@ -1,6 +1,7 @@
 """The researched constants that size a hamlet, each with the reasoning that fixed it.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+Research: aliases and plumbing - NONE: type aliases, re-exports, unit tables, and every constant here with no claim of its own
 """
 
 from __future__ import annotations
@@ -31,6 +32,7 @@ from l7r.diagram.sitegen.types import Pt as Pt  # noqa: F401
 # and no check reads acreage. A script can close that loop (see `fit_field`), which is the clearest
 # single case in this experiment of scripted beating authored on PRECISION rather than speed.
 GROSS_ACRES_PER_HOUSEHOLD = 1.3
+"""Research: paddy per household - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross"""
 
 
 # LANE CLEARANCE - the no-build corridor a lane reserves, in px.
@@ -204,6 +206,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
+"""Research: every farmhouse reached by a way - research/questions/0081-village-lanes.drawing.html: within 100 ft"""
 
 WAY_END_REACH_FT = 60.0
 """How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.
@@ -278,6 +281,7 @@ SPUR_SETBACK = 17.0
 # is the one that matters - and it costs nothing in row pitch, since house depth (28) + yard depth
 # (~26) + 39 already comes to about the 92 ft the cluster band was independently sized at.
 SUN_CORRIDOR_FT = 39.0
+"""Research: clear ground south of a yard - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 39 ft"""
 
 # How much open ground a threshing yard or a garden bed needs to its WEST and SOUTHWEST of the
 # communal windbreak, in feet - the AFTERNOON sun (feature 133 T10, GM 2026-08-25). The belt is the
@@ -301,6 +305,7 @@ SUN_CORRIDOR_FT = 39.0
 # would no longer be cropped away - 10 m stays because it is the record's measured working height,
 # not because the frame forces it. research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html.
 WEST_SUN_FT = 50.0
+"""Research: clear ground west of a yard or bed - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft from the belt"""
 
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's
 # hamlets span five (`valley_paddy`, `polder_grid`, `mulberry_dike_fishpond`, `contour_terraces`,
@@ -344,6 +349,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
     "polder_grid": {"cell": 190.0, "parcel_mix": (0.52, 0.16, 0.12), "gap": (1.5, 4.0)},
     "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
 }
+"""Research: polder parcel fabric - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: rice 190 ft modules, dike-pond 160 ft"""
 
 # THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/130): the grid is attested for
 # the Song tangpu CANALS, the mosaic for the PONDS, while a uniform chessboard of ponds is found only as today's aerial view
@@ -360,6 +366,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic",)
+"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only"""
 
 # THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
 # delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
@@ -368,6 +375,7 @@ POND_LAYOUTS = ("mosaic",)
 # The third form read, a small fry pit beside each big pond (Nongzheng quanshu, 1639), is OFF the delta, and the block
 # drawn is the delta's mosaic.
 FRY_FORMS = ("none", "none", "none", "fry_village")
+"""Research: fry form - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: one hamlet in four a fry village"""
 
 # THE MANURE FIXTURE'S FORM - heap or pit, two attested forms so a knob (constitution XII; feature 150, GM
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
@@ -375,6 +383,7 @@ FRY_FORMS = ("none", "none", "none", "fry_village")
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
 # the roll is even. research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html.
 MANURE_FORMS = ("heap", "pit")
+"""Research: manure fixture form - research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html: heap or sunk jar, even odds"""
 
 # THE HARVEST WEATHER - an ENVIRONMENT FACT the spec declares, never a roll (feature 282, FR-005). Racks gathered by
 # the house are named for the changeable-weather San'in coast, "so that it is convenient to do the threshing work within
@@ -384,6 +393,7 @@ MANURE_FORMS = ("heap", "pit")
 # gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
 # research/questions/0016-rice-drying-racks-hasa-hasagi.html; the rule at research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html.
 HARVEST_WEATHERS = ("settled", "changeable")
+"""Research: harvest weather - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: declared, never rolled; racks by the house where changeable"""
 DEFAULT_HARVEST_WEATHER = "settled"
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
 # settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).
@@ -391,6 +401,7 @@ COPSE_SITINGS = ("among_the_houses", "against_the_belt")  # a village copse thre
 # tucked against the back grove - both are what a back-village planting is, and they make a settlement
 # read differently at a glance, which is the whole point of a knob rather than a house style.
 KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest built frontage, or at the
+"""Research: notice board siting - research/questions/0190-notice-boards-kosatsuba.drawing.html: busiest frontage or the drawing-water place"""
 # drawing-water place. The takafuda stood at crossroads and bridgeheads AND at the village well; a
 # settlement-review measured Mizuguchi's at the wellhead (7 of 12 households within 250 ft) against 11 of
 # 12 at the frontage optimum and called it defensible-but-off-optimum, which is exactly the shape of a
@@ -406,6 +417,7 @@ KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest
 # is a GUESS, a degree (constitution XII): mulberry the Qing norm at 3 in 6, fruit the oldest form at 2, tea,
 # named after lychee and never as a district's type, at 1.
 DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
+"""Research: dike crop - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: mulberry half, fruit a third, tea a sixth"""
 
 # WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, or no leftover
 # at all (every parcel a pond); the roll is even. A third state, tilled vegetable ground, rested on Fei's 1930s
@@ -422,6 +434,7 @@ POND_LAYOUT_MOSAIC = 0.5
 # The exact share is a DEGREE along the attested continuum (Shunde: rice under one-tenth of the land
 # by c. 1900), a calibrated liberty rather than a measured number - recorded as such.
 DIKEPOND_CONVERSION = 0.9
+"""Research: share of the block converted - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: 0.9, leftovers in rice"""
 
 # ...but only the proven one is ROLLED, and `polder_grid` is opt-in until it survives a COHORT.
 #
@@ -442,6 +455,7 @@ ROLLED_ARCHETYPES = ("valley_paddy",)
 # TRUE-SCALE SIZING note). `fit_polder` scales the GRID, not the cell, so the parcels keep that
 # calibration whatever acreage the household count asks for.
 POLDER_CELL_FT = 110.0
+"""Research: polder module - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: 110 ft"""
 
 # HOW MUCH GROUND ONE HOMESTEAD TAKES, in px at 1 ft/px - the pitch the cluster band is sized on.
 # A bundle's reserved rects come to ~71 x 57 ft. 92 px per household leaves the cluster dense enough
@@ -485,6 +499,7 @@ POLDER_CELL_FT = 110.0
 # seed 18 grew a two-farm satellite 500 px off the nucleus, 777 px from the nearest water against a
 # 760 px reach, with every legal well seat around it already taken by its own two courtyards.
 BUNDLE_PITCH = 100.0
+"""Research: row pitch - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 100 ft, house, yard and the yard's 39 ft of sun"""
 
 # THE GROUND ONE HOMESTEAD TAKES, as the side of a square (feature 280 M16 merged into feature 287, 2026-09-29): the seat
 # band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
@@ -496,6 +511,7 @@ BUNDLE_PITCH = 100.0
 # margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
 # left one farmhouse off the way network on seeds 11 and 43 - measured and not taken.
 HOMESTEAD_GROUND_FT = 104.0
+"""Research: ground per homestead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 104 ft square, the 25 tsubo yard"""
 
 # THE GROUND THE SEATING SPREADS ITS HOUSEHOLDS OVER, as the side of a square (feature 306, FR-010; a GUESS with its reasoning -
 # the record gives no figure for it): `HOMESTEAD_GROUND_FT` counts the house, its yard and the row, and NOT the household's
@@ -507,6 +523,7 @@ HOMESTEAD_GROUND_FT = 104.0
 # over (`homesteads.stages._seat_households`: the lattice and the seat bound); the margin's choice, the canvas's room and the belt
 # keep `HOMESTEAD_GROUND_FT`'s band - growing those as well re-fitted every field and refused sites the base seated (R11, R12).
 SEATING_GROUND_FT = 162.0
+"""Research: seating ground per homestead - GUESS: 162 ft square, the mean envelope plus the least wood floor"""
 
 # How far below the drain outfall a tameike may stand before the map is better off without one.
 # Calibrated against the drawn ponds: an ordinary set-back lands well under 200 px, and the case
@@ -539,6 +556,7 @@ GRAIN = 2.0
 # 10 the place is an outlying farmstead or two rather than a hamlet; above ~20 it is a small village
 # and grows the features a hamlet must not have (a headman, a shrine, tax-free plots).
 HOUSEHOLD_BAND = (10, 20)
+"""Research: hamlet household band - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 10 to 20"""
 
 # The reference fan, at Ikegami's 15 households: the `build_comb` lengths that produced it. Every
 # other size is this fan scaled by a single multiplier (see `fit_field`), so the fan's ASPECT - the
@@ -568,6 +586,7 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 # a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
 # proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
 INTAKE_FORMS = ("weir", "open")
+"""Research: intake form - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: weir or open mouth, even odds"""
 # WHICH FLANK the brook passes the fan on - DERIVED from the wind, not rolled. The cluster is seated on the
 # margin whose outward normal points into the wind (背山面水, back to the hill and face to the water), so the
 # brook takes the other flank and the settlement stands on one side of its own stream. Rolling it was the
@@ -577,16 +596,19 @@ INTAKE_FORMS = ("weir", "open")
 # past it, not through it. The roll survives only as the tie-break where the wind runs along the fall and
 # neither flank is the windward one.
 BROOK_FLANKS = (1, -1)
+"""Research: brook's flank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the flank away from the seat, rolled only on a tie"""
 # HOW FAR THE HEAD RACE RUNS from the intake to the division point, in feet, rolled per map. No source
 # read gives a distance - the Japanese standards treat it as a site variable in the head-loss computation
 # and Tabayashi says only that the small canals run "for short distances" - so the BAND is a guess; what
 # is derived is the shape, a race that leaves the bank at the intake and reaches the fork.
 HEAD_RACE_LEAD = (80.0, 105.0, 130.0)
+"""Research: head race length - GUESS: 80 to 130 ft, rolled"""
 # THE ANGLE THE HEAD RACE LEAVES THE BROOK AT, degrees off the brook's own downstream heading. An offtake
 # leaves its parent pointing downstream at an acute angle - the record's own canal-junction rule, "30 or
 # 45 instead of 90" - and clean mountain water is the case the angled offtake is allowed for (a
 # silt-laden river takes the right angle instead).
 OFFTAKE_DEG = 35.0
+"""Research: offtake angle - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: 35 degrees, leaning downstream"""
 # HOW FAR OUTSIDE THE CROP the continuing brook runs as it passes the fan's flank, px - the FLOOR of the
 # offset, wide enough that neither the paddy's own bund nor the brook's no-build corridor touches the
 # planted ground. `BROOK_WANDER` is how far outside that floor the course strays, a seeded walk rather than
@@ -649,6 +671,7 @@ WEIR_HALF_FT = 7.0
 #   a GUESS - the only dimensions read are river works', and a crib at village scale is not recorded. 5 ft is the
 #   thickness the one crib glyph was drawn at before the knob.
 WEIR_THICK_FT = {"fence": 1.5, "gabion": 2.0, "frame": 5.0, "crib": 5.0}
+"""Research: weir forms and thickness - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: four forms, 1.5 to 5 ft"""
 WEIR_SKEW_DEG = 30.0
 
 # DELIVERY-DITCH DENSITY by household count. A comb's offtakes are how many delivery ditches drop
@@ -678,6 +701,7 @@ OFFTAKE_LADDER: tuple[tuple[int, tuple[float, ...], tuple[float, ...]], ...] = (
     (21, (0.30, 0.62, 0.93), (0.55,)),
     (99, (0.26, 0.52, 0.78, 0.93), (0.6,)),
 )
+"""Research: delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B always feeds one"""
 
 # The fall bearings a rolled hamlet may sit on: the eight compass points, in the engine's screen
 # convention (0 = east, 90 = south). The GM's water-flow doctrine says the bearing is a fact about
@@ -705,6 +729,7 @@ CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is lai
 # asked whether that was a bug; it was. The katabatic finding stays in the record as the reason a map MAY
 # declare a local wind.
 DEFAULT_WINDWARD = "NW"
+"""Research: regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the northwest unless declared"""
 
 # THE SEAT TURNS ITS BACK TO THE WIND, and the wind is never renamed to fit the seat (feature 261). A field
 # margin is a candidate seat only if its outward normal - the direction the settlement's back faces - lies
@@ -730,6 +755,7 @@ WIND_BACK_MIN_DOT = 0.7071
 #     is not square to both reaches.
 FORD_HALF = 30.0
 FORD_SPACING = 160.0
+"""Research: crossing places along the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: every 160 ft"""
 FORD_BEND_DEG = 20.0
 
 # THE COPSE STANDS AMONG WHAT IT IS NAMED FOR (feature 261). The record gives the dooryard copse as "a loose copse of
@@ -760,6 +786,7 @@ BROOK_BEND_WIDTHS = 2.5
 # so the router charges it as this much extra walking; a way that has to reach the far bank still crosses. 150 ft is a
 # GUESS (no page read prices a plank against a detour), about the length of a house row, recorded in research/questions/0035-villages-beside-their-stream-one-bank-or-both.html.
 BROOK_CROSSING_COST_FT = 150.0
+"""Research: cost of crossing the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: 150 ft of walking"""
 
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),
@@ -778,6 +805,7 @@ WIND_VECTORS: dict[str, Pt] = {
 # tameike reservoir at the low foot - the Ikegami case, and the one that gives the map a named
 # feature; `offmap` lets the drain brook leave the frame, which is what most real valleys do.
 SINKS = ("pond", "pond", "offmap")
+"""Research: where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: pond two in three, off the map one"""
 
 CLUSTER_SHAPES = ("round", "round", "elongated", "crescent")
 
@@ -875,6 +903,7 @@ LANE_SKELETONS = ("spine", "T", "Y", "cross")
 # equally, so an even roll is the honest one, and the two read differently enough at a glance
 # (a laid-out double row vs. a grown spine-and-alleys) to be worth a full half of the cohort each.
 LANE_WEBS = ("alleys", "back_lane")
+"""Research: lane web form - research/questions/0081-village-lanes.drawing.html: side lanes or a back lane, even odds"""
 # THE SETTLEMENT FORM - which KIND of settlement this is, not merely what shape its cluster takes.
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.
@@ -933,6 +962,7 @@ LANE_WEBS = ("alleys", "back_lane")
 # the battery that had caught 126's defects was retired by 166, so the cohort's own verdict no longer saw them.
 _SETTLEMENT_FORMS_WHEN_GROVES_WORK = ("nucleated", "nucleated", "nucleated", "nucleated", "nucleated", "dispersed", "dispersed", "dispersed", "linear", "linear")
 SETTLEMENT_FORMS = _SETTLEMENT_FORMS_WHEN_GROVES_WORK
+"""Research: settlement form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: nucleated 5, dispersed 3, linear 2"""
 
 # HOW MANY SIDES A FARMSTEAD GROVE TAKES (feature 291): the roll tables live with the engine that draws the grove
 # (`settlement/homestead_parts/grove_sides.py`, where their reasoning is), so the city path rolls the same ones.
@@ -946,9 +976,11 @@ from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES_FLOOD
 # this project's reading; the row curves with it). Flood-prone ground takes the dike, the edge; otherwise the two at
 # even odds - a GUESS, no page counts them.
 ROW_LINES = ("street", "edge")
+"""Research: row village's line - research/questions/0033-row-villages-resson.drawing.html: street or dry edge, even odds"""
 # ...on ONE side of its street (the field across it, Shimotome) or BOTH (each farm's holding behind it, Santome and
 # Nobidome): both attested, no count - even odds, a GUESS.
 ROW_SIDES = ("one", "both")
+"""Research: row village's sides - research/questions/0033-row-villages-resson.drawing.html: one side or both, even odds"""
 # ...and its WATER: each farm its own well, or wells shared along the street. The record rules only on the dispersed
 # farm (homesteads/200: its own water); the one row it knows (Santome, few deep shared wells on a water-poor upland)
 # does not transfer to a paddy row - even odds, a GUESS.
@@ -962,5 +994,6 @@ FARM_WATERS = ("channel", "well")
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a
 # matter of course - and "none" is the cold-upland minority. Read the knob's note in `_knobs.py`.
 BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
+"""Research: where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none"""
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)

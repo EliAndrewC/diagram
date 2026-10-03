@@ -1,4 +1,7 @@
-"""Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: siting plumbing - NONE: canopy and bed indexes, sampling steps
+"""
 
 import math
 from collections.abc import Callable
@@ -116,7 +119,9 @@ class FixtureSitingMixin:
         INDEXED (feature 138): `place_kosatsuba` asked this 17,407 times on one polder, each call walking
         all ~720 water segments - 12.5 million `seg_dist`. The segments are filed once in a grid (rebuilt
         when any of the four lists changes length, the same rule `_water_obstacles` uses) with each
-        segment's own half-width; a probe measures only its cell's segments. Same predicate, same answer."""
+        segment's own half-width; a probe measures only its cell's segments. Same predicate, same answer.
+
+        Research: fixture out of the water - UNRESEARCHED: no point fixture on a stream, channel or ditch"""
         from l7r.diagram.settlement._geom.water_index import water_index
 
         return water_index(self).clear(x, y, half)
@@ -149,7 +154,13 @@ class FixtureSitingMixin:
         four recorded drifts (features 154, 227, 230, 261), is deleted. Where no seat anywhere takes a board with a clean
         caption, the board is still posted by its way (plan D12, GM 2026-09-30: the clean caption is a preference): the
         caption steps down to one on a leader or in the key that clears every way (`terminal_caption`), then to the one
-        placer's normal fallback (`fallback_caption`). The only map with no board is one with no roadside seat at all."""
+        placer's normal fallback (`fallback_caption`). The only map with no board is one with no roadside seat at all.
+
+        Research:
+            every settlement carries a board - research/questions/0190-notice-boards-kosatsuba.drawing.html: hamlets included
+            board placed last - research/questions/0190-notice-boards-kosatsuba.drawing.html: after the crop, against the view
+            placement knob at the lane tiers - research/questions/0190-notice-boards-kosatsuba.html: towns and cities take `center` only
+            probe size - NONE: the drawn marker box"""
         meta = self.M["meta"]
         if not meta.get("kosatsuba", True):
             return None
@@ -236,7 +247,9 @@ class FixtureSitingMixin:
         `KOSATSUBA_WAY_REACH_FT` of its route (labels L11), off every way's bed, clear of water, fitting the ground (`_fits`),
         inside the view (labels L2) and off the title placard (labels L14). ROADSIDE FIRST (feature 284): with `verge_first`
         the verge band is sampled first, and only when it holds no seat is the whole band sampled, in the order it always
-        was. Each route's seats are sampled once per siting (`cache`), since every placement asks the same routes."""
+        was. Each route's seats are sampled once per siting (`cache`), since every placement asks the same routes.
+
+        Research: roadside first - research/questions/0190-notice-boards-kosatsuba.drawing.html: the 6 ft verge sampled before the 60 ft band"""
         out: list[BoardSeat] = []
         for verge_only in (True, False) if verge_first else (False,):
             if out:
@@ -249,7 +262,16 @@ class FixtureSitingMixin:
         return out
 
     def _route_seats(self: Settlement, pts: list[Pt], rw: float, approach: bool, verge_only: bool, w: float, h: float, ftpx: float, env: SiteEnv) -> list[BoardSeat]:  # type: ignore[misc]
-        """The candidate seats along one route (see `_board_seats`)."""
+        """The candidate seats along one route (see `_board_seats`).
+
+        Research:
+            long axis along the route - research/questions/0190-notice-boards-kosatsuba.drawing.html: broadside to the traffic
+            off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
+            seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat, the nearer counted double
+            traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
+            waterside bonus - UNRESEARCHED: +14 within 40 px of a well, +8 within 90 px
+            nearness tie-break - UNRESEARCHED: score less a third of the offset
+            sampling lattice - NONE: 12 px along, 5 px out"""
         lim = KOSATSUBA_WAY_REACH_FT / ftpx
         verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
         half = math.hypot(w, h) / 2
@@ -318,7 +340,14 @@ class FixtureSitingMixin:
         the mouth is often a web lane), and at a HANDOVER the approach itself, measured to the way's segments (Inashiro's
         700 ft leg). `widen` (labels L4 fallback step 1) admits every web lane: the placement found no clean caption on
         the main ways. TRIED AND REVERTED (feature 140): admitting every web lane unconditionally moved nothing on
-        Inashiro - the room was the constraint, not the routes (`research.md` R6)."""
+        Inashiro - the room was the constraint, not the routes (`research.md` R6).
+
+        Research:
+            main ways only - research/questions/0190-notice-boards-kosatsuba.drawing.html: roads and main streets where the map has any
+            no main way, the whole network - research/questions/0190-notice-boards-kosatsuba.drawing.html
+            service lanes last - UNRESEARCHED: web lanes and the connector only where nothing else stands or an anchor needs them
+            anchor reach - UNRESEARCHED: lanes within 120 ft of the anchor admitted
+            nominal widths - NONE: 18 ft roads, 8 ft lanes where none is recorded"""
         routes: list[tuple[list[Pt], float, bool]] = []
         if self.M.get("road"):
             routes.append(([(p[0], p[1]) for p in self.M["road"]], 18.0, False))
@@ -359,7 +388,14 @@ class FixtureSitingMixin:
         the seats whose caption fits, then the open, then the band beside the handover (Kashikawa, Mizuguchi). ON THE
         TRAFFIC IS THE RULE (the Ubame failure): away from an anchor the busiest node sets a floor, 60% of the best count,
         and the caption and the open ground choose among the seats on it (`choose_board`) - below it only where nothing
-        on it carries a clean caption."""
+        on it carries a clean caption.
+
+        Research:
+            placement chooses the ground - research/questions/0190-notice-boards-kosatsuba.html: entrance, frontage or center
+            roadside first - research/questions/0190-notice-boards-kosatsuba.drawing.html: only verge seats where any fit
+            entrance board on the approach - UNRESEARCHED: approach seats preferred at a handover
+            traffic floor - UNRESEARCHED: 60% of the busiest seat's count
+            open ground preferred - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats only where no open one fits"""
         anchor = kosatsuba_anchor(self.M, placement) if lane_tier else None
         cands = sample(self._board_routes(anchor, placement, widen, ftpx), VERGE_FIRST and lane_tier and not widen)
         if lane_tier and not widen:
@@ -399,7 +435,15 @@ class FixtureSitingMixin:
         including `town_streets`, which the board's village-tier probe does not need. Keeps the spot
         inside the rampart where there is one - the display faces the town, not the road out; that is
         the execution ground's job. No-op under meta(punishment_spot=False). Returns the spot, or
-        None when no verge fits (the presence check then fires - place by hand)."""
+        None when no verge fits (the presence check then fires - place by hand).
+
+        Research:
+            sited by foot traffic - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: buildings within 260 px counted
+            within 60 ft of a street - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
+            inside the rampart - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
+            ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: PUNISHMENT_SPOT_FT
+            out from under captions - CONVENTION: a preference, the busiest seat where none is clear
+            caption seat - CONVENTION"""
         if not self.M["meta"].get("punishment_spot", True):
             return None
         ftpx = float(self.M["meta"].get("ftpx") or 1)

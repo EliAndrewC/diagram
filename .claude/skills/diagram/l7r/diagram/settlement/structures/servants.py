@@ -1,6 +1,8 @@
 """The nagaya pass that attaches a servant range to each ward samurai household, and the four probes that exist to serve it.
 
 Split from settlement/structures.py by feature 114 - see settlement/structures/CLAUDE.md for the index.
+
+Research: plumbing - NONE: manifest sweeps for solid footprints and offices
 """
 
 import math
@@ -45,7 +47,9 @@ class ServantRangesMixin:
         Mirrors `city_house_doors_unblocked`'s own geometry sample for sample - the door face
         center, three lateral offsets, three depths - because placement and its check must read the
         same geometry, not merely the same data (skill CLAUDE.md). A rear service range is the seat
-        that needs this: the ground behind a house is often the roji the row BEHIND it faces."""
+        that needs this: the ground behind a house is often the roji the row BEHIND it faces.
+
+        Research: clear ground before every door - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 7 ft"""
         dc = 7.0 / self.ftpx  # DOOR_CLEAR_FT, the check's own constant
         qx = sum(p[0] for p in quad) / 4.0
         qy = sum(p[1] for p in quad) / 4.0
@@ -68,7 +72,9 @@ class ServantRangesMixin:
 
         The mirror of `_blocks_any_door`, and sampled at exactly the same points the check uses -
         an earlier version approximated the door band with a small rect and let a blocker sitting
-        between 2.0 and 2.33 px of the face slip through, which the gate then reported."""
+        between 2.0 and 2.33 px of the face slip through, which the gate then reported.
+
+        Research: clear ground before every door - research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: 7 ft"""
         dc = 7.0 / self.ftpx
         th = math.radians(rot)
         ux, uy = -math.sin(th), math.cos(th)
@@ -115,7 +121,18 @@ class ServantRangesMixin:
 
         ORDERING: call AFTER every samurai house in the ward is placed (the census fills seat some)
         and AFTER s.ward, which is what defines the interior; but BEFORE the exact-population fill,
-        so it can top the servant count up elsewhere. Returns the number attached."""
+        so it can top the servant count up elsewhere. Returns the number attached.
+
+        Research:
+            servants lodge with their household - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a range bound to its house, never freestanding
+            range depth - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: 15 ft, the full frontage long
+            ranges per household - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: two for a senior house, one for a junior
+            beside the house, flush with its front - DEVIATION research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: lateral, not across the street front, because the house is unwalled
+            rear row fallback - UNRESEARCHED: behind the house where no flank is free
+            shortened range - UNRESEARCHED: 0.78 of the frontage before giving up
+            no range under three depths long - CONVENTION: below it the range reads as a blob
+            inside the ward, off fence, ways and doors - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html
+            office standoff - NONE: 15 px, the check's 14 plus a margin"""
         if not self._samurai_ward_interiors:
             return 0
         depth = self.px(self.SERVANT_RANGE_DEPTH_FT)

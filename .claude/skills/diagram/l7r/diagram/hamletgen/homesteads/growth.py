@@ -29,6 +29,8 @@ What it replaced on the nucleated form (FR-007): the front row along the field, 
 over every free grid point with its rescue - 383 to 5,927 offers for 40 houses, a margin seated whole and thrown away where it fell
 short (specs/308-grow-the-cluster/research.md R4, R6). The dispersed form keeps them, and the linear form seats its rows
 (`rows.seat_rows`) - the spec's round-1 rulings.
+
+Research: growth search - NONE: reaches, settling, search breadth and the placer's own questions; the units that decide carry their own claims
 """
 
 from __future__ import annotations
@@ -54,8 +56,10 @@ if TYPE_CHECKING:
 #: just an unrealistic grid" - a twelfth of the eight-direction ring's 45-degree step either way, so neighboring directions never
 #: cross. The record gives no spacing variance for a nucleated hamlet.
 GROW_JITTER_DEG = 12.0
+"""Research: direction jitter - GUESS: 12 degrees either way"""
 #: ...and on its distance, as a share added to the least distance (never subtracted - the least is the rule): a GUESS, as above.
 GROW_JITTER_FRAC = 0.12
+"""Research: distance jitter - GUESS: up to 0.12 of the least distance added"""
 #: The growth's widening, (directions, rings) - each ring a multiple of the least distance - offered in turn while households are
 #: left and the seats run dry: MEASURED on the reference at 40 households (research R5): at eight directions and one ring a margin
 #: seated 29-36 of 40 and was thrown away; with the three levels all sixteen seeds seat on the first or second margin. A search
@@ -86,7 +90,12 @@ def box_reach(center: Pt, box: Sequence[float]) -> Reach:
 
 def footprint(s: Settlement, rec: dict[str, Any]) -> Reach:
     """A standing homestead's footprint (FR-003): its envelope, its reserved wood seats, and to the south the sun its yard and
-    beds are owed - no house's north wall within `SUN_CORRIDOR_FT` and the placer's 2 ft of a yard's or a bed's south edge."""
+    beds are owed - no house's north wall within `SUN_CORRIDOR_FT` and the placer's 2 ft of a yard's or a bed's south edge.
+
+    Research:
+        sun owed to the south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` and 2 ft south of the yard and each bed
+        the household's wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: its reserved copse seats inside its footprint
+    """
     g = rec.get("geom") or {}
     hx, hy = float(rec["x"]), float(rec["y"])
     w, e, n, so = box_reach((hx, hy), g.get("bbox") or (hx, hy, float(rec.get("w") or 0.0), float(rec.get("h") or 0.0)))  # a bare record: its house
@@ -186,14 +195,22 @@ def next_house(s: Settlement, largest: tuple[float, float]) -> tuple[float, floa
 
 def grow_gap(s: Settlement) -> float:
     """The room left between two footprints: a path's whole reserved strip (2 x `ACCESS_HALF_FT`) and 2 px - the PATH OUT the
-    GM's footprint includes (plan review round 1)."""
+    GM's footprint includes (plan review round 1).
+
+    Research: a path's room between homesteads - UNRESEARCHED: the access corridor's whole width and 2 px
+    """
     return 2.0 * s.px(ACCESS_HALF_FT) + 2.0
 
 
 def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, largest: tuple[float, float]) -> int:
     """Seat `plan.spec.households` on this margin by growth (the module's account); returns the count seated. `bound` is the
     form's reach from the seat, `largest` the largest house `(w, h)` the roll can take. Records `seat_search.grow_offered`,
-    `grow_took` and `grow_level` (the widening levels it needed)."""
+    `grow_took` and `grow_level` (the widening levels it needed).
+
+    Research:
+        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part, jittered, nearest the seat first
+        first house against the field - UNRESEARCHED: the free ground nearest the seat's center
+    """
     want = plan.spec.households
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
     offered = took = 0

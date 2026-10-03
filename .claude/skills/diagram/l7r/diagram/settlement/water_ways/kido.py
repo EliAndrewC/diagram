@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: ward-gate plumbing - NONE
+"""
 
 import math
 from collections.abc import Callable, Sequence
@@ -29,7 +32,13 @@ class KidoMixin:
         with the guard box already slid clear of the roadbed. Local frame: the gateway bar spans the
         X axis and rotate(rot) turns it onto the bar angle, so local +x is ACROSS the lane and local
         +y along it. Factored out because two callers need the SAME geometry: kido() draws it, and
-        kido_reservation() reserves the ground it will stand on long before it is drawn."""
+        kido_reservation() reserves the ground it will stand on long before it is drawn.
+
+        Research:
+            gate glyph proportions - CONVENTION: a 14 px roof bar, 4 x 16 px posts, a 15 x 16 px guard box
+            keeper's hut beside the gate - research/questions/0204-night-watch-and-ward-gates-kido.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the nearest clear spot beside the opening
+            guard box clearances - UNRESEARCHED: 12 ft of verge off every lane bed, clear of towers, walls and the fence
+        """
         roof = (-hw, -7.0, 2 * hw, 14.0)
         posts = [(-hw - 1, -8.0, 4.0, 16.0), (hw - 3, -8.0, 4.0, 16.0)]
         cr, sr = math.cos(math.radians(rot)), math.sin(math.radians(rot))
@@ -90,7 +99,12 @@ class KidoMixin:
         """The (bar angle, guard flank) a kido seated at (x, y) on the ward fence `boundary` will
         take: square to the lane running through it, else along the local fence tangent, with the
         guard box on the ward-interior side. s.ward calls this for every gate it draws; a gen calls
-        it (via kido_reservation) to reserve that ground BEFORE the packs run."""
+        it (via kido_reservation) to reserve that ground BEFORE the packs run.
+
+        Research:
+            gate square to its lane - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: else along the local fence tangent
+            guard on the ward side - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the flank toward the ward interior
+        """
         i = min(range(len(boundary) - 1), key=lambda j: seg_dist(x, y, boundary[j], boundary[j + 1]))
         fence = math.degrees(math.atan2(boundary[i + 1][1] - boundary[i][1], boundary[i + 1][0] - boundary[i][0]))
         lane = lane_through_gate(self.M, x, y, fence)
@@ -125,7 +139,12 @@ class KidoMixin:
         machi-kido and Qing's zhalan; no ward walls, the block's own gate closes at night).
         Reads the SAME machi_mouths source the validator reads, so the two sides cannot
         disagree. Call AFTER streets + districts are declared and BEFORE the packs (each
-        kido reserves its ground). The bar runs ACROSS its street. Returns the count."""
+        kido reserves its ground). The bar runs ACROSS its street. Returns the count.
+
+        Research:
+            every ward mouth gated - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html: a kido across the street at each machi mouth
+            gate ground reserved - NONE: a 60 px square and a 48 px footprint
+        """
         n = 0
         for mx, my in machi_mouths(self.M):
             best, bd = 0.0, 1e9
@@ -164,7 +183,13 @@ class KidoMixin:
         stand in: the box is a small building on the verge, not an obstruction in the road, and a
         ring road that CURVES past the gate walks under a box placed on straight-line arithmetic
         (Tango's east ward gate, GM 2026-07-26). Legacy `horizontal` (True = an E-W street through
-        a N-S fence) remains the fallback when rot is omitted, reproducing the old drawings."""
+        a N-S fence) remains the fallback when rot is omitted, reproducing the old drawings.
+
+        Research:
+            ward gate across the street - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html, research/questions/0204-night-watch-and-ward-gates-kido.html: a roofed gateway, posts and a guard box over the street
+            barred opening - UNRESEARCHED: spans an 18 ft street plus 5 px a side
+            gate colors - CONVENTION
+        """
         if sw is None:
             sw = self.lw(18)  # the barred opening spans a real ~18 ft street
         hw = sw / 2 + 5

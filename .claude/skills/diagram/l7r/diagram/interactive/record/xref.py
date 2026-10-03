@@ -13,6 +13,8 @@ link under BOTH headings: on the research page to the drawing page, on the drawi
 These are bytes the assembly writes rather than copies (the others are footnote numbers, `notes.py`): a link at the
 start of the `<h2>`, marked `class="xref"` so the stylesheet can float it small at the right of the heading's line and
 so every reader of a heading's text can drop it.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

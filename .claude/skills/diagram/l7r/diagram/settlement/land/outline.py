@@ -9,7 +9,9 @@ construction, not a finding, and the shaping is how a mapmaker draws wet ground.
 THE SHAPING ONLY TAKES GROUND AWAY. The outline is rounded by an inward-then-outward buffer (which rounds the convex corners and
 adds nothing) and waved by moving each point of it INWARD by a depth that rises and falls along the edge; the result is cut to
 the rounded outline. So the shaped marsh lies within the laid one, and every rule that reads the marsh - a lane's end off it, a
-house off it, its no-build ground - holds as before; the scrub fills what the marsh gives up."""
+house off it, its no-build ground - holds as before; the scrub fills what the marsh gives up.
+
+Research: marsh edge shape - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: corners rounded at up to 60 ft, edges waved inward up to 40 ft, within the laid band"""
 
 from __future__ import annotations
 
@@ -87,6 +89,8 @@ def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, 
 
 
 def _largest(g: Any) -> Any:
-    """The largest polygon of `g`, or None where it has no area."""
+    """The largest polygon of `g`, or None where it has no area.
+
+    Research: largest piece - NONE: geometry"""
     parts = [p for p in getattr(g, "geoms", [g]) if p.geom_type == "Polygon" and not p.is_empty and p.area > 0.0]
     return max(parts, key=lambda p: p.area) if parts else None

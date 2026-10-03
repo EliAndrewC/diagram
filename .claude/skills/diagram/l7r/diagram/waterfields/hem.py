@@ -3,6 +3,8 @@
 `_comb_dry_and_beans` lays the hem of dry fields above the supply canal and the bund beans; `fan_toe_hem` keeps a wild
 fan's hem on the toe; `middle_reserve` offers the whole wild middle, cleared deep and nearest the toe first, for the
 coarse-grain top-up the draw makes (`settlement/fields/grain.py`, research/contents.json#fields 0011).
+
+Research: hem plumbing - NONE: the canal's run above a cut, ring means, overlap tests and their box index
 """
 
 import math
@@ -34,7 +36,17 @@ def _comb_dry_and_beans(
     fork: Pt,
 ) -> tuple[list[dict[str, Any]], float, list[Poly], list[dict[str, Any]]]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/questions/0014-bunds-between-the-paddies-aze.html."""
+    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/questions/0014-bunds-between-the-paddies-aze.html.
+
+    Research:
+        dry hem above the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem laid upslope of supply canal A
+        fork triangle planted dry - research/questions/0010-farmland-around-towns-and-cities.drawing.html: on a coarse grain a second band along canal B's stretch above its first offtake
+        fork band depth - UNRESEARCHED: 0.6 of the hem's depth
+        fork band skipped on villages - UNRESEARCHED: grain 1.0 maps leave the triangle to the scrub
+        wild middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a wild fan keeps its drawn hem on the toe, the middle held in reserve
+        seams settled - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every band's tracts read apart where the rows spread
+        bund beans - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: beads along a share of the paddy bunds
+    """
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
@@ -92,16 +104,23 @@ def _comb_dry_and_beans(
 # the fan (apex the division point, toe the collector), so the stretch is read along the fall from the fork to the lowest paddy; the fork-triangle
 # band is the fan's HEAD and stays. FAN_TOE_FROM: where the toe begins, a share of that fall - the record gives no proportions, equal thirds is a GUESS.
 FAN_TOE_FROM = 2.0 / 3.0
+"""Research: where the toe begins - GUESS: two-thirds of the fall from the fork to the lowest paddy"""
 
 
 def fan_toe_hem(dry_plots: list[dict[str, Any]], F: _Frame, fork: Pt, plots: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
-    """The hem plots whose center lies at or below the toe's cut (`toe_cut`); all of them on a fan with no fall."""
+    """The hem plots whose center lies at or below the toe's cut (`toe_cut`); all of them on a fan with no fall.
+
+    Research: hem on the toe - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: where the middle stays wild the hem keeps to the fan's toe
+    """
     cut = toe_cut(F, fork, plots)
     return dry_plots if cut is None else [d for d in dry_plots if F.to_uf(*_ring_mean(d["poly"]))[1] >= cut]
 
 
 def toe_cut(F: _Frame, fork: Pt, plots: Sequence[dict[str, Any]]) -> float | None:
-    """The fall at which the toe begins (`FAN_TOE_FROM` of the way from the fork to the lowest paddy); None on a fan with no fall."""
+    """The fall at which the toe begins (`FAN_TOE_FROM` of the way from the fork to the lowest paddy); None on a fan with no fall.
+
+    Research: toe cut - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: FAN_TOE_FROM of the fall from the fork to the lowest paddy
+    """
     f0 = F.to_uf(*fork)[1]
     f1 = max((F.to_uf(float(v[0]), float(v[1]))[1] for p in plots for v in p["poly"]), default=f0)
     return None if f1 - f0 <= 0 else f0 + (f1 - f0) * FAN_TOE_FROM
@@ -126,6 +145,7 @@ def middle_stretch(F: _Frame, a_pts: Poly, cut: float) -> Poly:
 # diagonal from the canal, which reaches every edge, and `_dry_fields` drops a plot within 12 px of one. The draw takes
 # only what the grain needs, so the depth offered costs plots laid and filtered, not ground drawn.
 MIDDLE_DEPTH_OF_CANVAS = 1.0
+"""Research: middle offered to the canvas edge - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the plots may climb out as far from the canal as the ground runs"""
 
 
 def middle_reserve(
@@ -146,7 +166,12 @@ def middle_reserve(
 ) -> list[dict[str, Any]]:
     """THE WHOLE WILD MIDDLE, as dry plots the coarse-grain top-up may clear (feature 287, W36; 0011): the hem's
     columns along the canal's run above the toe, laid out to the canvas edge, less any plot on the fan's own paddy or on a
-    dry plot already drawn - ordered nearest the toe first (down the fall first), the top-up's order, a GUESS."""
+    dry plot already drawn - ordered nearest the toe first (down the fall first), the top-up's order, a GUESS.
+
+    Research:
+        the wild middle as reserve - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: hem columns along the canal above the toe, off the paddy and the drawn hem
+        clearing order - GUESS: nearest the toe first
+    """
     cut = toe_cut(F, fork, paddies)
     run = middle_stretch(F, a_pts, cut) if cut is not None else []
     if len(run) < 2:

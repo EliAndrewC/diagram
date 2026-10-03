@@ -1,6 +1,8 @@
 """Water carried for transport and irrigation rather than defense, and the farmland ring it feeds.
 
 Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -22,7 +24,14 @@ class CanalsMixin:
         a water gate; the trunk river never does - the Kaifeng lesson). A middle tier on the
         water-width ladder: clearly heavier than an irrigation hairline, clearly lighter than the
         moat/river. Drawn through the shared water block (it merges with the moat/river/dock and
-        passes UNDER the rampart at the gate); records M['canals'] + a no-build corridor."""
+        passes UNDER the rampart at the gate); records M['canals'] + a no-build corridor.
+
+        Research:
+            canal width - research/questions/0178-city-canals-horikawa.drawing.html: a 36 ft poling barge canal
+            place on the width ladder - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: heavier than a ditch, lighter than the moat
+            canal stroke and sheen - CONVENTION
+            no-build corridor - UNRESEARCHED: half the width plus 16 px kept clear of buildings
+        """
         if width is None:
             width = self.px(36)  # a poling barge canal ~36 ft
         dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in pts)
@@ -50,7 +59,13 @@ class CanalsMixin:
 
         Drawn deliberately UNLIKE a road: no roadbed fill, no dashed centerline, one hairline at
         the linework floor. Records M['towpaths'] (a list) and reserves a narrow corridor so the
-        packs keep off the bank."""
+        packs keep off the bank.
+
+        Research:
+            towpath width - research/questions/0089-towpaths-along-a-river-qiandao.drawing.html: 8 ft, floored at 2.4 px
+            one hairline, no roadbed - research/questions/0089-towpaths-along-a-river-qiandao.drawing.html
+            clear strip beside it - research/questions/0089-towpaths-along-a-river-qiandao.drawing.html: half the width plus 8 px
+        """
         if width is None:
             width = max(self.px(8), 2.4)  # an 8 ft beaten path, floored at the linework floor
         dd = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
@@ -71,7 +86,14 @@ class CanalsMixin:
 
         The cropland boxes are snapshotted ONCE - rebuilding them per candidate is the
         per-candidate scan of unchanging geometry this skill's CLAUDE.md warns about, and it took a
-        gen from 11 seconds to over ten minutes."""
+        gen from 11 seconds to over ten minutes.
+
+        Research:
+            no farmstead below the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the downslope-facing perimeter skipped, and seats below the drain refused
+            farmstead beside its cropland - UNRESEARCHED: no seat within 18 px of a plot's box
+            seat pitch along the edge - UNRESEARCHED: one candidate every 26 px at each standoff
+            drain berth - UNRESEARCHED: 22% of the field's span, between 18 and 64 px
+        """
         boxes = [(min(q[0] for q in pp), min(q[1] for q in pp), max(q[0] for q in pp), max(q[1] for q in pp)) for f in self.M.get("fields") or [] for pp in (f.get("plot_polys") or ())] + [
             (min(q[0] for q in pp), min(q[1] for q in pp), max(q[0] for q in pp), max(q[1] for q in pp))
             for d in self.M.get("dry_plots") or []
@@ -150,7 +172,17 @@ class CanalsMixin:
 
         A field whose ground cannot carry a fan is WITHDRAWN WHOLE: comb_field records the field
         before its water is declared, so a half-built one would sit on the map with no source, no
-        drain and no farmhouses - drawn, recorded, and invisible to every rule that reads water."""
+        drain and no farmhouses - drawn, recorded, and invisible to every rule that reads water.
+
+        Research:
+            farmland rings the city - research/questions/0010-farmland-around-towns-and-cities.drawing.html: a comb field per spec, each a full irrigation system
+            sluice standoff - UNRESEARCHED: 30 px outward from the city center
+            tap swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
+            tap at the nearest vertex - NONE: the pool's fields were sited against the vertex
+            farmhouses around each field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: rings of (26 seats, 15 px) and (20, 40), or the upslope walk
+            withdrawn field - NONE: a field whose fan fails is removed whole
+            placement bound widened - NONE: 260 px around the field while seating
+        """
         out: list[Any] = []
         for name, hint, down_deg, seed, fall, canal_a, canal_b, offtakes, src in specs:
             wpts = water(src)

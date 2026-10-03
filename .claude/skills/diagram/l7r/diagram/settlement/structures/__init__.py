@@ -17,6 +17,8 @@ of the other six call into it and it calls out to none of them.
 
 The base order below is source order and is behaviorally irrelevant - no name is defined twice, which
 is what the composed-surface guard's second assertion exists to keep true.
+
+Research: plumbing - NONE: the composed mixin surface
 """
 
 from .captions import CaptionProbesMixin

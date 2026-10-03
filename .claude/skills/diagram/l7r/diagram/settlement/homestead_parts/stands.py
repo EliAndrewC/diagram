@@ -1,4 +1,6 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE"""
 
 import math
 from collections.abc import Callable, Sequence
@@ -49,7 +51,9 @@ def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
 
 
 BELT_BEARING_MAX_DEG = 45.0  # the belt's center within this of the wind's quarter, seen from the cluster's center
+"""Research: belt on the windward side - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: its center within 45 degrees of the wind's quarter"""
 BELT_SUBTENSE_MAX_DEG = 200.0  # ...and its crowns round the cluster on one or two sides: a hook, never a ring
+"""Research: belt never a ring - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: at most 200 degrees round the cluster"""
 
 
 def belt_bearing_and_subtense(clumps: Any, houses: Any, wind: tuple[float, float]) -> tuple[float, float]:
@@ -79,7 +83,9 @@ def trim_to_the_wind(clumps: list[tuple[float, float]], houses: Any, wind: tuple
     ...AND WHERE THAT CONVERGES OFF THE WIND, NO BELT (feature 287, woods W18): the crown nearest the wind's bearing is never
     the end taken off (the other end lies farther round), so the one crown the loop can converge on is that one - and where
     even it bears more than `BELT_BEARING_MAX_DEG` off, no crown stands in the wind's quarter at all. It was returned as it
-    stood, the one way the trim left the rule broken; a belt with nothing on the wind is no windbreak, so none is kept."""
+    stood, the one way the trim left the rule broken; a belt with nothing on the wind is no windbreak, so none is kept.
+
+    Research: belt trimmed to a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: end crowns off, or no belt"""
     if not houses:
         return list(clumps)
     out = _trim_ends(clumps, houses, wind)
@@ -110,7 +116,9 @@ def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
     """The marsh deeper than its reed margin: each ring inset by `margin` (feature 287, woods W06). Woody cover stands on
     the dry ground above the marsh and its reed MARGIN carries alder (research/contents.json#vegetation, Reed beds and the marsh's edge), so a
     grove clump may be based in the margin - drawn as alder - and never deeper. A ring the inset empties has no deep
-    ground; a ring the inset splits gives each piece."""
+    ground; a ring the inset splits gives each piece.
+
+    Research: belt no deeper than the reed margin - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: alder in the margin only"""
     from shapely.geometry import Polygon
 
     out: list[list[tuple[float, float]]] = []
@@ -135,7 +143,9 @@ def reserved_seat_keepouts(seats: Sequence[tuple[float, float]], clump: float, b
 def grove_stocked(clumps: Any, w: float, h: float, floor: float = 1.5) -> bool:
     """THE ONE PREDICATE of `test_every_recorded_grove_holds_trees` (feature 287, woods W15): a recorded grove holds at least
     `floor` clumps per 100,000 sq px of its recorded w x h - a grove that declares an extent and draws almost nothing in it
-    leaves the dooryards it should have greened bare."""
+    leaves the dooryards it should have greened bare.
+
+    Research: a recorded grove is stocked - UNRESEARCHED: at least 1.5 clumps per 100,000 sq px of its extent"""
     return w * h <= 0 or len(clumps) * 1e5 / (w * h) >= floor
 
 
@@ -227,7 +237,9 @@ class StandsMixin:
         yellow-green, on a jittered grid dense enough to read as one block at fit zoom - laid once in the bamboo tile and the
         stand's ring filled with it (feature 298); no solid fill, per the no-solid-fill rule for cover. `role` is "homestead" (a strip beside a farmstead that keeps one) or
         "thicket" (the take-yabu behind the back row). Recorded in M['bamboo_stands'] (bbox + role + poly);
-        the marks are decoration keyed to the stand (positional randomness)."""
+        the marks are decoration keyed to the stand (positional randomness).
+
+        Research: bamboo stand glyph - research/questions/0075-bamboo-groves-chikurin.drawing.html: area to scale, culm marks a convention on a 7 bscale grid"""
         pts = [(float(a), float(b)) for a, b in poly]
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -312,7 +324,18 @@ class StandsMixin:
         seat as planted and again of any re-seat, where `near` is the siting's (feature 287, woods W02 and W25: the
         reservation reserved it within reach, and a seat moved round another grove's crown is asked again rather than
         trusted); `keep_off` are those seats for a grove that must leave them free (`reserved_seat_keepouts`). Returns the
-        count."""
+        count.
+
+        Research:
+            three groves - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove, the water-mouth grove and the dooryard copse
+            clump grid - UNRESEARCHED: a 20 or 32 bscale step, clumps 28 or 22 bscale units
+            clump off buildings, wells and shrines - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: half the diagonal plus the clump's radius and 2 px
+            off the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the south strip, the west lane and every crown's sun ground
+            belt off the deep marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: based in the reed margin at most
+            copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by a crown
+            copse filled to the homesteads' wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: reserved seats first, then the grid
+            belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter
+            belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over 30 ft filled, thin stretches deepened"""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)

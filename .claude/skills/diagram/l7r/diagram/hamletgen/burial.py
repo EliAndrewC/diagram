@@ -21,6 +21,7 @@ from l7r.diagram.settlement import Settlement
 from .plan import SitePlan
 
 BURIAL_FORMS = ("village_ground",)  # the one attested form (feature 280 M68): the hamlet's dead lie in the village's ground
+"""Research: hamlet burial forms - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: one value, the village's ground"""
 
 
 def stage_burial(s: Settlement, plan: SitePlan) -> None:
@@ -32,6 +33,10 @@ def stage_burial(s: Settlement, plan: SitePlan) -> None:
 
     Steps:
         l7r.diagram.hamletgen.burial.stage_burial
+
+    Research:
+        where the dead lie - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: the village's ground, off the map
+        no hamlet ground drawn - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: own ground attested only in modern records
     """
     if not s.M.get("houses") or s.M["meta"].get("scale") != "hamlet":
         return

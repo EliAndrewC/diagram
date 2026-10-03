@@ -12,6 +12,8 @@ them. A drawing page alone in its stem is either a second drawing page of anothe
 `<!-- about: NNNN-<slug> -->`, and inherits that question's tags - or a drawing-only question that states its own.
 
 Nothing here guesses. A file it does not recognize is a refusal naming it, and a run gathers every refusal.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

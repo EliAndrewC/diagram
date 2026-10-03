@@ -11,6 +11,8 @@ fragment at assembly, so it can never drift from what the section says. The `why
 what made the pair confusable); it is not shown.
 
 A pair naming a section that does not exist is a refusal, not a silently missing list.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

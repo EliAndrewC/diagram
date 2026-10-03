@@ -4,7 +4,10 @@ partition's lattice is drawn between (`partition.py`, feature 302) - then `_dry_
 
 Feature 302 retired the plot carve that lived here (`_carve`, one `_carve_sector` per thread pair and its supply-bank and drain
 guards, `sector_rows.py`, the `_hem_pass`): the plots are laid as a partition of the planted region, so nothing cuts quads and
-leaves ground for a repair."""
+leaves ground for a repair.
+
+Research: sector bounds - NONE: where a thread runs at a given fall, and its root fall
+"""
 
 import math
 import random
@@ -67,7 +70,17 @@ def _dry_fields(
 
     FURROWS run along the CONTOUR (perpendicular to the fall), the traditional ridge-along-contour that dams
     rain and checks runoff - or down to the outfall, set TRACT BY TRACT (`tract_ways`); `theta` per plot, and `tract`
-    numbered from `tract0`, so a caller laying a second band keeps its tracts apart from the first."""
+    numbered from `tract0`, so a caller laying a second band keeps its tracts apart from the first.
+
+    Research:
+        dry plot size - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 46 grain px along the canal (x0.9-1.25) by 36 grain px a row, about 92 by 72 ft on a village map
+        squared to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot a rectangle square to the canal, neighbors sharing every seam
+        behind a bare bank - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the hem starts CANAL_BERM_FT past the stroke's local bank
+        hem depth - UNRESEARCHED: a ragged outer edge, each column `band` px deep from the canal line
+        crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops, keeping the last crop with a 55% chance
+        row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each column's tract heading, each plot turned up to TRACT_PLOT_TURN_RAD
+        off the water and the frame - NONE: a cell on a canal's bank, in a keep-out or within 12 px of the frame is dropped
+    """
     plots = []
     plot = plot * g  # the along-canal parcel width and the 36px row depth below are REAL-FEET
     # quantities tuned at the village grain (1px = 2ft; ~1 mu strips per Buck) - unscaled at a
@@ -265,6 +278,7 @@ def _dry_fields(
 
 
 MIN_BEADS_PER_RUN = 2
+"""Research: two beads at least - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a stretch of bund that carries beans shows at least two beads"""
 # A BEADED BUND SEGMENT SHOWS AT LEAST TWO BEADS (GM 2026-09-14, feature 247: "On any segment of earthen
 # bunds which has bund beans, I would like at least 2 glyphs. I currently see some segments with only 1
 # glyph."). A rendering convention only - the beans are sub-pixel and the beads stand for them - so the
@@ -279,7 +293,10 @@ def bead_runs(line: Poly, alive: Callable[[Pt], bool]) -> list[Poly]:
     recorded-ditch drops. A part left with a single bead loses it: nothing can be laid where the drop was
     (that ground is painted over or under water), so on that segment the rule is met only by removal.
     SPLIT rather than counted, because a dropped MIDDLE bead leaves one bead each side of a painted-over
-    stretch - two segments of one glyph each, which is exactly what the GM saw."""
+    stretch - two segments of one glyph each, which is exactly what the GM saw.
+
+    Research: bead runs - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a run left with one bead loses it
+    """
     runs: list[Poly] = []
     part: Poly = []
     for q in line:
@@ -314,7 +331,13 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
     `channels` extends the same honesty to the ditch net (GM 2026-08-15, second pass): the net's
     strokes draw LATE - over every plot and bead - so a bead within a stroke's local half-width
     (tapering w -> w_tail along the run) + tol is buried under water paint and dropped. Pond
-    burial is filtered at the draw site (draw_comb_field), where the pond geometry lives."""
+    burial is filtered at the draw site (draw_comb_field), where the pond geometry lives.
+
+    Research:
+        beaded bunds - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a single row of beads along one or two edges of about `frac` of the plots
+        bead spacing - UNRESEARCHED: 9.5 px apart, an edge of two to three spacings carrying two beads at its thirds
+        buried beads dropped - CONVENTION: a bead under a later plot's paint or a ditch's stroke is not drawn
+    """
     runs: list[Poly] = []
     boxes = [(min(q[0] for q in p["poly"]), min(q[1] for q in p["poly"]), max(q[0] for q in p["poly"]), max(q[1] for q in p["poly"])) for p in plots]
 

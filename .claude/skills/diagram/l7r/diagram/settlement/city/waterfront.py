@@ -1,6 +1,8 @@
 """Where the city meets navigable water: quay, aqueduct, docks, jetties, the log boom.
 
 Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -37,7 +39,17 @@ class WaterfrontMixin:
         poking into an otherwise natural riverbank.
 
         `pts` is the bank line, `steps` how many landings are notched into it. Records M['quays']
-        and reserves a shallow corridor so nothing packs onto the working face."""
+        and reserves a shallow corridor so nothing packs onto the working face.
+
+        Research:
+            faced bank with stepped landings - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html
+            face width - UNRESEARCHED: 10 ft, floored at 2.6 px
+            four treads to a flight - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
+            landing size - UNRESEARCHED: 20 ft tread, 22 ft run
+            mooring posts along the top - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: steps plus two, 3 ft landward
+            face and coursing line - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
+            corridor - UNRESEARCHED: half the width plus 6 px
+        """
         if width is None:
             width = max(self.px(10), 2.6)
         dd = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
@@ -106,7 +118,16 @@ class WaterfrontMixin:
         and a lifted board) so it reads as engineered water rather than a stray stream. Records
         M['aqueducts'] (a list, with intake and terminus); the shared crossing source
         (bridge_crossed_waters) reads it, so any way crossing the cut demands a deck like any
-        other watercourse."""
+        other watercourse.
+
+        Research:
+            open cut, no arcade - research/questions/0141-the-capitals-aqueduct-josui.drawing.html, research/questions/0141-the-capitals-aqueduct-josui.html
+            channel width - research/questions/0141-the-capitals-aqueduct-josui.drawing.html: 10 ft
+            banks darker and wider than life - research/questions/0141-the-capitals-aqueduct-josui.drawing.html
+            intake as a sluice - research/questions/0141-the-capitals-aqueduct-josui.drawing.html: head-posts about 3 ft square
+            terminal basin - research/questions/0141-the-capitals-aqueduct-josui.drawing.html: about 16 ft square
+            corridor - UNRESEARCHED: half the width plus 10 px
+        """
         if width is None:
             width = max(self.px(10), 3.0)  # a ~10 ft supply cut - far below the 36 ft cargo canal
         dd = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
@@ -150,7 +171,13 @@ class WaterfrontMixin:
     def dock(self: Settlement, cx: float, cy: float, w: float, h: float) -> Pt:  # type: ignore[misc]
         """An in-city DOCK BASIN at the head of the cargo canal - a rectangular cut of open water
         with a stone quay lip, where the barges tie up (the Jiangnan water-city pattern). Records
-        M['docks']; blocks placement so the merchant rows leave the quay clear."""
+        M['docks']; blocks placement so the merchant rows leave the quay clear.
+
+        Research:
+            dock basin at the canal head - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: the caller's size
+            stone lip - CONVENTION
+            quay kept clear - UNRESEARCHED: 14 px added to the placed box
+        """
         self._water(
             f'<rect x="{cx - w / 2:.0f}" y="{cy - h / 2:.0f}" width="{w}" height="{h}" rx="3" fill="#9CB4C8"/>',
             {},
@@ -164,7 +191,13 @@ class WaterfrontMixin:
     def jetty(self: Settlement, x: float, y: float, rot: float = 0.0, length: float | None = None) -> int:  # type: ignore[misc]
         """A timber JETTY - a planked finger running out from the riverbank into the water, where
         the river craft moor (the wharf suburb outside a river city's water-side gate). Drawn in
-        the TOP layer over the water; records M['jetties']."""
+        the TOP layer over the water; records M['jetties'].
+
+        Research:
+            planked finger off the bank - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
+            jetty length - UNRESEARCHED: 60 ft
+            deck width and seams - CONVENTION: 6.4 px, a seam every 9 px
+        """
         if length is None:
             length = self.px(60)
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
@@ -210,7 +243,16 @@ class WaterfrontMixin:
         log_boom_serves_the_lumber_yard) derive the pen quad from the recorded x/y/rot/len/pen_w
         under this same convention. Drawn in the TOP layer OVER the water, like a jetty deck - it
         floats, so overlapping the river is the whole point (OVERLAP_CLASS FIXTURE,
-        _OVERLAP_EXEMPT). Records M['log_booms']."""
+        _OVERLAP_EXEMPT). Records M['log_booms'].
+
+        Research:
+            boom pen against the bank - research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: a cabled chain of logs closing a pen on the shore
+            pen length - UNRESEARCHED: 330 ft
+            pen width - research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: 40 ft, about a third of a 120 ft channel
+            stock packed solid - research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: outlined raft strips
+            anchorage - UNRESEARCHED: posts at the bank corners, piles at the chain
+            caption - CONVENTION: 9 pt italic
+        """
         if length is None:
             length = self.px(330)
         if width is None:

@@ -12,6 +12,8 @@ NO DUCK PEN (269 B32, the GM 2026-09-28: "We should eliminate anything which is 
 includes the duck pen"). The fenced dry-and-wet-run pen is read only in a modern fish-cum-duck manual
 (FAO/NACA, `fao-ac264e`); the premodern delta's ducks were herded in the rice fields, not penned at the
 fish ponds (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html), so the stage draws sties only.
+
+Research: pond-bank geometry - NONE: centroids and bank seat ranking
 """
 
 from __future__ import annotations
@@ -28,7 +30,9 @@ from .plan import SitePlan
 
 # The per-hamlet share band, as a fraction of households - a GUESS (see the module docstring).
 STY_SHARE = (0.25, 0.50)
+"""Research: share of households keeping a sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half, rolled per hamlet"""
 BANK_INSET_FT = DIKEPOND_WATER_INSET / 2  # half the bank between the parcel edge (the canal) and the water inset (feature 280 M58)
+"""Research: sty on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: halfway between the parcel edge and the water"""
 
 
 def _centroid(poly: list[Any]) -> Pt:
@@ -71,20 +75,25 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
 def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -> bool:
     """THE RULE (feature 287, water W51; specs/233 research R7): a pig sty stands no further from the house cluster's
     centroid `hc` than its pond's own parcel center - on the side of the water the households are on. The placer and
-    its test read this one predicate; the placer asks it `margin` stricter, since the sty is recorded rounded to 0.1."""
+    its test read this one predicate; the placer asks it `margin` stricter, since the sty is recorded rounded to 0.1.
+
+    Research: sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: no farther from the houses than the pond's middle"""
     return math.dist(seat, hc) + margin <= math.dist(_centroid(parcel), hc)
 
 
 def sty_in_reach(s: Settlement, seat: Pt, houses: list[Any]) -> bool:
     """THE RULE (feature 280, settlement-review of Kuwabata; carried into feature 287's placer): a sty stands within
     `STY_HOUSE_REACH_FT` of a farmhouse - it is a household's. The placer and its test read this one predicate; the
-    reservation asks it of the seat's center, before the houses stand."""
+    reservation asks it of the seat's center, before the houses stand.
+
+    Research: sty within a household's reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft of a farmhouse"""
     return any(math.dist(seat, (float(h["x"]), float(h["y"]))) <= s.px(STY_HOUSE_REACH_FT) for h in houses)
 
 
 STY_RESERVE_REACH_FT = (
     24.0  # the largest footprint's half-diagonal a reserved sty seat is held clear of - a farmhouse of about 40 x 28 ft; a GUESS at the envelope, not a researched figure (feature 287, water W50)
 )
+"""Research: reserved sty disc - GUESS: 24 ft, the largest footprint's half-diagonal"""
 
 
 def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | None:
@@ -96,7 +105,12 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
     half-diagonal (`STY_RESERVE_REACH_FT`) - goes into `block_polys`, which every homestead placer refuses. Recorded on
     the settlement for `stage_pond_stock`; returns (seat, rotation, pond), or None where the hamlet keeps no grow-out pond
     (no sty is owed). A hamlet with grow-out ponds and no seat on any of them is refused, naming it (`StyRefused`, feature
-    287 wave 5): the sty it owes could never be seated, and nothing after this may emit a dike-pond hamlet without one."""
+    287 wave 5): the sty it owes could never be seated, and nothing after this may emit a dike-pond hamlet without one.
+
+    Research:
+        at least one sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a dike-pond hamlet with a grow-out pond keeps one
+        nearest pond first - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: grow-out ponds walked nearest the seat
+        seat reserved before the houses - NONE: placement order, the sty's rules unchanged"""
     ponds = s.M.get("dikeponds") or []
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not plan.seat:
         return None
@@ -127,13 +141,17 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
 class StyRefused(ValueError):
     """A dike-pond hamlet whose sty cannot be seated within its rules (feature 287 wave 5, water W50/W51): it owes at least
     one (feature 150 A3) on the near half of a grow-out pond (`sty_on_near_half`), and no seat fits. Refused, naming it,
-    as `SeatRefused` and `SiteRefused` refuse theirs - never a hamlet drawn with none."""
+    as `SeatRefused` and `SiteRefused` refuse theirs - never a hamlet drawn with none.
+
+    Research: refusal - NONE"""
 
 
 STY_HOUSE_REACH_FT = 320.0
 """How far from a farmhouse a sty may stand: the farthest main drew (feature 233's sties, 155-320 ft). A sty is a household's,
 and once feature 280's fry village took the smaller ponds the grow-out ponds left lay out to the block's far end - sties
-480-1,235 ft from any house (settlement-review of Kuwabata); a household with no grow-out pond in reach keeps none."""
+480-1,235 ft from any house (settlement-review of Kuwabata); a household with no grow-out pond in reach keeps none.
+
+Research: sty reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft"""
 
 
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
@@ -152,6 +170,14 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.pondstock._bank_seats
         l7r.diagram.settlement.Settlement.pond_fixture_fits
         l7r.diagram.settlement.Settlement.pig_sty
+
+    Research:
+        sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the pig as the dike-pond district's animal
+        no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern
+        sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households, at least one
+        one sty per pond, nursery ponds none - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: nearest the houses first
+        sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html
+        sty within reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft of a farmhouse
     """
     ponds = s.M.get("dikeponds") or []
     houses = s.M.get("houses") or []

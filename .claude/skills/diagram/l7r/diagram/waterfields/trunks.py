@@ -6,6 +6,8 @@ lowest point (`test_a_collector_discharges_at_its_lowest_point`), it never turns
 (`test_no_watercourse_end_dangles_in_bare_ground`). Each is a property the comb builder DECIDES, so each is written once
 here, as the predicate the builder is held to (`comb.py`) and the test calls. Split out of `comb.py`, which sits at the
 1,000-line bar, rather than grown past it.
+
+Research: trunk geometry - NONE: distances, turn measures and join tolerances
 """
 
 from __future__ import annotations
@@ -25,15 +27,24 @@ Two bounds set the figure, both by construction rather than by luck. THE TURN (W
 a leg's slope lies within +/-12/84 of the fitted line's, so no two legs meet at more than ~40 deg, far under the 100 the
 rule forbids. THE FALL (W13): a sample this far short of the outfall sits at least 0.06 x 84 = 5.04 px up the fitted line
 from it, more than its 6 px jitter less the 1 px slack - so EVERY point of the collector, not only its head, lies no more
-than 1 px below the outfall, and the rule still holds if `trunks.anchor_trunk_ends` has to walk the head back."""
+than 1 px below the outfall, and the rule still holds if `trunks.anchor_trunk_ends` has to walk the head back.
+
+Research: last leg into the outfall - NONE: a construction bound that keeps the sampled collector off a hook, deciding no form
+"""
 
 SHARP_TURN_DEG = 100.0
 """The collector turns at a hard corner at or past this: the water would pile against the far bank rather than take it
-(`drainage_junction_smooth`)."""
+(`drainage_junction_smooth`).
+
+Research: no hard corner on the collector - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a turn of 100 deg or more is refused
+"""
 
 UPHILL_SLACK = 1.0
 """How far the outfall may sit up the fall from the head, px: a collector runs cross-slope, so its ends may sit at nearly
-one height; what is forbidden is an outfall measurably UPHILL (`drain_flows_downhill`)."""
+one height; what is forbidden is an outfall measurably UPHILL (`drain_flows_downhill`).
+
+Research: outfall not uphill - research/questions/0060-field-drains-akusuiro.drawing.html: the outfall may sit no more than 1 px up the fall from the head
+"""
 
 JOIN_TOL = 14.0
 """How near a trunk end must come to another course to count as joining it (`watercourse_ends_reach_water`)."""
@@ -59,7 +70,10 @@ def _poly_dist(p: Pt, poly: Sequence[Pt]) -> float:
 
 def outfall_rise(pts: Sequence[Sequence[float]], down_deg: float) -> float:
     """How far the collector's outfall (`pts[-1]`) sits DOWN the fall from its head (`pts[0]`), px - negative where it
-    sits uphill. The rule (W13) is `outfall_rise(...) >= -UPHILL_SLACK`."""
+    sits uphill. The rule (W13) is `outfall_rise(...) >= -UPHILL_SLACK`.
+
+    Research: water only moves downhill - research/questions/0060-field-drains-akusuiro.drawing.html: the outfall's rise down the fall from the head
+    """
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))
     return (float(pts[-1][0]) - float(pts[0][0])) * dx + (float(pts[-1][1]) - float(pts[0][1])) * dy
 
@@ -81,7 +95,10 @@ def sharpest_turn(pts: Sequence[Sequence[float]]) -> float:
 def end_anchored(end: Pt, crops: Sequence[Sequence[Pt]], others: Sequence[Sequence[Pt]], W: float, H: float) -> bool:
     """Whether a trunk end has somewhere for its water to go (W15): off the frame, at or inside a crop it feeds, or
     within `JOIN_TOL` of another course. (The finished-map test also passes an end in the source pond; the comb cannot
-    see the pond, and the one end that meets it - the head race's sluice - is anchored by the source drawn there.)"""
+    see the pond, and the one end that meets it - the head race's sluice - is anchored by the source drawn there.)
+
+    Research: an end reaches water or crop - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: off the map, at the crop it feeds, or joining another course
+    """
     if end[0] <= FRAME_TOL or end[1] <= FRAME_TOL or end[0] >= W - FRAME_TOL or end[1] >= H - FRAME_TOL:
         return True
     if any(_pip(end[0], end[1], list(ring)) or _poly_dist(end, [*ring, ring[0]]) <= CROP_TOL for ring in crops if len(ring) >= 3):
@@ -110,7 +127,10 @@ def anchor_trunk_ends(channels: list[dict[str, Any]], envelope: Poly, W: float, 
     Two ends are the business of what lies beyond the comb and are left alone: the head race's first point, the sluice
     the source is drawn at (`draw_comb_field` puts the tameike or the feeder brook there), and the collector's outfall,
     which the sink continues (`hamletgen/sink.py`, water W10-W12). A trunk no point of which is anchored carries water
-    from nowhere to nowhere and is dropped - never drawn dangling."""
+    from nowhere to nowhere and is dropped - never drawn dangling.
+
+    Research: no trunk dangles - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: an unanchored end clipped back to the crop, a course, or the frame; an unanchored trunk dropped
+    """
     crops = [envelope]
     drop: list[int] = []
     for k, c in enumerate(channels):
@@ -138,14 +158,20 @@ STUB_MIN_RUN = 8.0
 """The shortest canal piece drawn, px (feature 287, water W56's other half). Cutting the supply canals at the fork and at
 each offtake leaves a remainder wherever a cut lands near a piece's own end - Inashiro shipped a 3.2 ft stroke of `main`
 with its own hover region (settlement-review, feature 230 pass 12). The remainder was kept only because it held ground
-a garden then took; the bundle fit now keeps every garden bed off every ditch itself (`rolling/fit.py`, water W56)."""
+a garden then took; the bundle fit now keeps every garden bed off every ditch itself (`rolling/fit.py`, water W56).
+
+Research: shortest canal piece - CONVENTION: a remainder under 8 px is not drawn as a stroke of its own
+"""
 
 
 def drop_stub_pieces(pieces: list[dict[str, Any]], min_run: float = STUB_MIN_RUN) -> list[dict[str, Any]]:
     """The canal `pieces` without the sub-stride remainders (`STUB_MIN_RUN`). A piece the canal runs on through - one whose
     end is the next piece's start - gives its start to that next piece, so the canal stays joined at the fork; a piece at
     the canal's far end is dropped, the canal ending at its last offtake. The survivors are returned as the same records,
-    in order (a successor's `pts` is replaced, never edited in place)."""
+    in order (a successor's `pts` is replaced, never edited in place).
+
+    Research: canal ends at its last offtake - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a stub past the last cut is dropped, the canal stopping at the junction
+    """
     out = list(pieces)
     k = 0
     while k < len(out):

@@ -12,6 +12,8 @@ reading the other thirty.
 
 What is here: `split` takes a page apart, `assemble` puts it back, and the two are inverses - which is
 what lets one test hold the property over the real record rather than over a fixture.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

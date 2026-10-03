@@ -2,6 +2,8 @@
 
 Split from `hamletgen/water.py` by feature 230 (constitution X clause 13); bodies verbatim.
 See `CLAUDE.md` in this directory.
+
+Research: size search - NONE: the multiplier bracket, the aspect order, the carve scoring and the refusal plumbing
 """
 
 from __future__ import annotations
@@ -32,6 +34,12 @@ from ..plan import SitePlan, _roll
 # heartlands cleared their fans early. Two attested forms, so a knob; "wild" keeps the dry band on the toe (`fan_toe_hem`,
 # waterfields/comb.py). The record calls wild ground the usual case without a figure, so the 3:1 weighting is a GUESS.
 FAN_MIDDLE = register_knob(Knob("fan_middle", ["wild", "cleared"], default="wild", weights={"wild": 0.75, "cleared": 0.25}))
+"""Where a fan's dry middle lies: left wild, or cleared and hemmed.
+
+Research:
+    fan middle forms - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: wild or cleared, rolled per map
+    wild weighting - GUESS: wild three times in four
+"""
 
 
 def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], tolerance: float = 0.06, rounds: int = 9, fan_middle: str = "cleared") -> dict[str, Any]:
@@ -61,7 +69,12 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     a small change can add or drop a whole plot row, so the curve has small flats. Each round predicts the
     multiplier from the carves so far (a power law) within a narrowing bracket; the search stops at the first legal
     fan within `tolerance` (6%), or once the bracket is narrower than one plot row (0.03). The cost is the carves
-    (specs/220 research R2 has the measured figure)."""
+    (specs/220 research R2 has the measured figure).
+
+    Research:
+        fan acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the fan solved to the households' acreage, refused outside FIELD_ACRE_BAND
+        size and aspect search - NONE
+    """
     best: tuple[tuple[bool, float], CombCarve] | None = None
     # THE ASPECT IS PART OF THE SEARCH, not just a roll. A fan's legality - whether its supply canal
     # dies among the plots, whether its collector folds back on itself - depends on its SHAPE as much
@@ -125,7 +138,9 @@ def _finish_first_admissible(found: list[tuple[tuple[bool, float], CombCarve]], 
 
 FIELD_ACRE_BAND = 0.15
 """How far a comb fan's drawn paddy may land from the acreage its households need (research/contents.json#fields 'Acreage from
-population'; the band the household ratchet has always read). The search aims at `tolerance` (6%) inside it."""
+population'; the band the household ratchet has always read). The search aims at `tolerance` (6%) inside it.
+
+Research: acreage band - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the drawn paddy within 15% of the households' need"""
 
 
 class FieldRefused(ValueError):
@@ -134,12 +149,18 @@ class FieldRefused(ValueError):
 
 
 def field_acres_in_band(acres: float, target: float, band: float = FIELD_ACRE_BAND) -> bool:
-    """Does a fan's drawn acreage land within `band` of the target? The ONE predicate the fit decides by and a test reads."""
+    """Does a fan's drawn acreage land within `band` of the target? The ONE predicate the fit decides by and a test reads.
+
+    Research: acreage band - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: within FIELD_ACRE_BAND of the target
+    """
     return abs(acres - target) / target < band
 
 
 def fan_legal(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0) -> bool:
-    """Is a fan's water legal: no supply tail dangling, no hairpin, both flanks commanded (water W32)?"""
+    """Is a fan's water legal: no supply tail dangling, no hairpin, both flanks commanded (water W32)?
+
+    Research: fan legality - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: no dangling supply tail, no hairpin, both flanks commanded
+    """
     return not (tail_dangles(net) or net_bends_acutely(net) or not flanks_commanded(net, down_deg, ftpx))
 
 
@@ -164,7 +185,12 @@ def _fit_at_aspect(
     against 19.5 at four of its five aspects, and burned nine carves at each proving it) and the
     search stops after those two carves, keeping the better. `fit_field` re-runs the best aspect
     with `probe=False` when no aspect lands the target, so the refinement is never lost on the map
-    that needs it."""
+    that needs it.
+
+    Research:
+        fan cut away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook-side supply canal BROOK_FAN_TRIM (0.72) short
+        size search - NONE: the multiplier bracketed and predicted
+    """
     lo, hi = 0.35, 2.2
     best: tuple[tuple[bool, float], CombCarve] | None = None
     # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 145, GM 2026-08-28: "maps are now allowed to
@@ -292,6 +318,7 @@ def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: flo
 
 
 HEAD_OFFSETS: tuple[tuple[str, float], ...] = (("head_left", -0.24), ("head_center", -0.05), ("head_center", 0.05), ("head_right", 0.24))
+"""Research: intake offset on the head margin - UNRESEARCHED: left, center or right, at -0.24, +/-0.05 or +0.24 of the field span across the fall"""
 
 
 def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
@@ -308,7 +335,13 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
     acreage the household count needs. That was the first real bug in this experiment and it is the
     kind a map-by-map author never meets, because they pick the number that makes the picture work.
     Anchoring on the fall axis instead makes the intake a consequence of the slope, which is what it
-    is in the world."""
+    is in the world.
+
+    Research:
+        intake at the field's high head - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the sluice on the fall axis upslope of the field
+        head set-back - UNRESEARCHED: 0.36 of the field span upslope of the canvas center
+        intake offset - UNRESEARCHED: rolled from HEAD_OFFSETS
+    """
     dx, dy = plan.fall
     cx, cy = plan.W / 2.0, plan.H / 2.0
     px, py = -dy, dx  # across the fall
@@ -318,7 +351,10 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
 
 
 def tail_dangles(net: Mapping[str, Any], margin: float = 18.0) -> bool:
-    """Does any supply-canal end fall outside the fan's planted extent? See `fit_field`."""
+    """Does any supply-canal end fall outside the fan's planted extent? See `fit_field`.
+
+    Research: supply tail dies in the crop - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no free supply end more than 18 px outside the plots
+    """
     xs = [v[0] for p in net["plots"] for v in p["poly"]]
     ys = [v[1] for p in net["plots"] for v in p["poly"]]
     if not xs:
@@ -341,16 +377,24 @@ def tail_dangles(net: Mapping[str, Any], margin: float = 18.0) -> bool:
 
 FLANK_REACH_FLOOR_FT = 80.0
 """The least supply reach a flank of the fork is owed, in feet, whatever its extent (GM 2026-08-16,
-`comb_supply_commands_both_flanks`): with `FLANK_REACH_SHARE`, the finished-map test's own figures."""
+`comb_supply_commands_both_flanks`): with `FLANK_REACH_SHARE`, the finished-map test's own figures.
+
+Research: flank reach floor - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: 80 ft"""
 FLANK_REACH_SHARE = 0.3
+"""Research: flank reach share - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: 30% of the flank's planted extent"""
 FLANK_MIN_EXTENT_FT = 150.0
-"""A flank narrower than this is not a flank the rule judges (the test's own non-vacuity bar)."""
+"""A flank narrower than this is not a flank the rule judges (the test's own non-vacuity bar).
+
+Research: judged flank - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a flank over 150 ft across the fall"""
 
 
 def flanks_commanded(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0) -> bool:
     """Does the supply reach both flanks of the fork (feature 287, water W32)? Each side of the fork, measured across the
     fall, is owed supply-ditch reach of at least max(80 ft, 30% of that flank's planted extent); a fan planted on one side
-    only commands no second flank. The ONE predicate the fit's legality reads and the finished-map test reads."""
+    only commands no second flank. The ONE predicate the fit's legality reads and the finished-map test reads.
+
+    Research: both flanks commanded - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply reach at least max(80 ft, 30% of the flank), and a fan with a flank of 150 ft or less refused
+    """
     fork = net.get("fork")
     if fork is None:
         return True
@@ -380,7 +424,10 @@ def net_bends_acutely(net: Mapping[str, Any]) -> bool:
     `water_channels_obtuse_turns` forbids it - a dug ditch does not make a hairpin - and the fan's
     own collector occasionally produces one at a particular size. Disqualifying the candidate is far
     cheaper than trying to repair the geometry afterwards, and `fit_field` has eight other fans to
-    choose from."""
+    choose from.
+
+    Research: no hairpin ditch - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a channel turning back through under 90 degrees refuses the fan
+    """
     for c in net["channels"]:
         pts = c["pts"]
         for i in range(1, len(pts) - 1):

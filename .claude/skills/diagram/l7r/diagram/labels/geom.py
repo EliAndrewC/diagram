@@ -1,4 +1,7 @@
-"""Plain geometry for the placer (feature 266) - convex polygons and segments as tuples, owned by neither mode."""
+"""Plain geometry for the placer (feature 266) - convex polygons and segments as tuples, owned by neither mode.
+
+Research: geometry - NONE: polygon and segment measures
+"""
 
 from __future__ import annotations
 

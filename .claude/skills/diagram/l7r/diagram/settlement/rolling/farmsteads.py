@@ -1,6 +1,8 @@
 """The deferred farmstead flush: what actually gets DRAWN, and in what order. This is the module the DRAW ORDER contract is about.
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
+
+Research: draw-order and footprint plumbing - NONE
 """
 
 import math
@@ -30,7 +32,10 @@ class FarmsteadFlushMixin:
     def _farm_rolls_bamboo(self: Settlement, hx: float, hy: float) -> bool:  # type: ignore[misc]
         """Does the farm at (hx, hy) keep a household bamboo stand (feature 291)? The same positional roll the household
         bamboo pass makes (`hamletgen/homesteads/bamboo.py`), under the settlement's `bamboo` knob as the generator sets
-        it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before."""
+        it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before.
+
+        Research: farms keeping their own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: about three in five, rolled per position, under the settlement's bamboo knob
+        """
         on = getattr(self, "_household_bamboo", None)
         return True if on is None else bool(on) and self._hjit(hx, hy, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE
 
@@ -40,7 +45,15 @@ class FarmsteadFlushMixin:
         this pass is pure drawing. Abandoned ruins (no bundle) draw as a lone house. Call LAST. Returns the
         farmhouse count.
         Two sub-passes so the garden EAST-shade nudge can see every neighbor's grove: (1) draw all per-house
-        GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top."""
+        GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top.
+
+        Research:
+            no tree over a building - CONVENTION: the grove bands drawn last, thinning off the walls
+            thin band's lesser trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: fruit and flowering broadleaf, no conifer (the mix labeled a GUESS)
+            band drawn at one density - CONVENTION: cut into clumps of the clump cap
+            canopy edge at the band's inner edge - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the drawn band gives up one crown radius on the house's side, keeping the service strip clear
+            bamboo patch in the windward bands - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft on the house side of each windward band
+        """
         survivors: list[Any] = []
         bundled: list[Any] = []
         arms: list[tuple[float, float, float, float, tuple[int, int], str, bool]] = []
@@ -101,7 +114,10 @@ class FarmsteadFlushMixin:
     def _east_trees(self: Settlement, gx1: float, own: Any) -> list[Any]:  # type: ignore[misc]
         """The y-intervals (y0, y1) of every per-house grove arm standing hard against a garden's EAST - west
         edge within a shade band east of the garden's east edge `gx1`. `own` is the garden's OWN grove arms
-        (which sit N/W, never east), excluded. The garden's x is fixed as it shifts S, so this set is stable."""
+        (which sit N/W, never east), excluded. The garden's x is fixed as it shifts S, so this set is stable.
+
+        Research: east shade band - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a neighbor's grove within 22 px (`bscale`) of a garden's east edge
+        """
         band = 22 * self.bscale
         out: list[Any] = []
         for tx, ty, tw, th in self.grove_rects:
@@ -133,7 +149,10 @@ class FarmsteadFlushMixin:
         once every yashikirin is drawn, a garden left with a NEIGHBOR'S grove hard against its EAST loses the
         morning sun. Where there is open ground, nudge that garden a little SOUTH so the tree falls to its NE
         and the eastern sky opens - the GM's 'move it a bit south' remedy. Best-effort: a garden boxed in to the
-        south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'."""
+        south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'.
+
+        Research: east-shaded garden nudged south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: best effort, 4 px steps up to the bed's height plus the house's plus 6 px
+        """
         step = 4 * self.bscale
 
         def footprints(exclude: int) -> list[Any]:
@@ -195,7 +214,10 @@ class FarmsteadFlushMixin:
         yet. But by the flush every appurtenance IS drawn, so the side can simply be CHOSEN here,
         with no placement change and so no reflow of the belt. If both walls are fouled the west
         stands and the overlap matrix reports it - the engine does not get to hide a homestead with
-        no room for its own storehouse."""
+        no room for its own storehouse.
+
+        Research: legacy storehouse wall - research/questions/0040-farm-storehouses-kura.drawing.html: the west wall, else the north where the west is fouled
+        """
         th = math.radians(rec.get("rot", 0))
         ca, sa = math.cos(th), math.sin(th)
         # the two kura footprints, in the house's local frame - `kura_rect`, the table house() draws from (feature 280 M18's
@@ -217,7 +239,14 @@ class FarmsteadFlushMixin:
         kitchen GARDEN (a sunny side, preferring the east) - both were universal to a farmstead, so every
         farmhouse has one of each. Find spots for both; if they don't fit, nudge the house a little; draw
         garden + yard then the house so the house wins any abutment. A house that cannot host BOTH anywhere
-        nearby is dropped (rare) so the 100% invariants hold. Call LAST in the gen. Returns the count."""
+        nearby is dropped (rare) so the 100% invariants hold. Call LAST in the gen. Returns the count.
+
+        Research:
+            every farm keeps a yard and a garden - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: a farm with no room for both is dropped
+            wealth size of the drawn house - UNRESEARCHED: the glyph drawn at the wealth factor (0.9-1.12), the reservation at the base
+            grove at every farm - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: near-universal (`grove_prevalence`), planted after the yards and gardens
+            no grove inside a city wall - UNRESEARCHED: an intramural farm keeps no tree belt unless the map asks
+        """
         survivors: list[Any] = []
         for rec in self._pending_farmsteads:
             spot = self._solve_homestead(rec)  # shift the homestead to fit yard+garden+grove-room

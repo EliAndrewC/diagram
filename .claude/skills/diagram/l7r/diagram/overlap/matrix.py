@@ -1,4 +1,7 @@
-"""The overlap MATRIX (was: shared gate helpers, overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, forest_reveal_x, torii_halfbox, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py)."""
+"""The overlap MATRIX (was: shared gate helpers, overlap policy): matrix_violations, check_ring_road_clear, matrix_extents, GridIndex, forest_reveal_x, torii_halfbox, FOREST_REVEAL_FT, CANOPY_STRUCT_KEYS, ... - bodies verbatim from check_village.py (feature 024 package split; SCC-packed, see split_package.py).
+
+Research: matrix plumbing - NONE: extraction, indexing and pair tests over the taxonomy
+"""
 
 import math
 from collections.abc import Mapping
@@ -125,7 +128,10 @@ def forest_reveal_x(forest: Poly, edge: Any, reveal: float, w: float) -> list[fl
     contributes to the frame. The wood is drawn to the canvas edge, but the crop reveals only the
     tree line plus `reveal` px of canopy behind it - deeper in it is identical crowns, and holding
     the frame open for them is wasted image. This is the crop rule, so crop_hugs_content (which
-    gates how tight the crop is) has to measure by exactly the same rule."""
+    gates how tight the crop is) has to measure by exactly the same rule.
+
+    Research: forest crop - CONVENTION: the frame shows the tree line and a strip of canopy behind it
+    """
     if not edge:
         return [min(max(p[0], 0), w) for p in forest]
     ex = [min(max(p[0], 0), w) for p in edge]
@@ -133,6 +139,7 @@ def forest_reveal_x(forest: Poly, edge: Any, reveal: float, w: float) -> list[fl
 
 
 FOREST_REVEAL_FT = 110.0  # mirrors settlement.FOREST_REVEAL_FT - how deep the crop reveals a canvas-filling wood
+"""Research: forest reveal - CONVENTION: 110 ft of canopy behind the tree line"""
 
 # Mirrors settlement._CANOPY_STRUCT_KEYS (keep in sync): every ROOFED structure a tree may not be drawn on.
 CANOPY_STRUCT_KEYS = (
@@ -164,6 +171,7 @@ CANOPY_STRUCT_KEYS = (
     "martial_halls",
     "dojos",
 )
+"""Research: no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a clump stands against a building, never on it"""
 
 # Martial training in a provincial city (GM 2026-07-25). The first two mirror
 # settlement.DOJO_SAMURAI_FRAC / DOJO_PER_SAMURAI - keep in sync, they are the roll the gate holds
@@ -171,12 +179,16 @@ CANOPY_STRUCT_KEYS = (
 # lane the Mode A azuchi already uses. QUARTER_PX is "in or against the samurai neighborhood" at the
 # city rung (3 ft/px -> ~780 real ft, about a quarter's width), not a precise siting rule.
 DOJO_SAMURAI_FRAC = 0.10
+"""Research: dojo samurai share - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 0.10, mirrored from the settlement"""
 
 DOJO_PER_SAMURAI = 200
+"""Research: private dojo count - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one for every 200 resident samurai"""
 
 DOJO_RANGE_FT = 90.0
+"""Research: archery lane - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.drawing.html: 90 ft, the 28 m kyudo shot rounded down"""
 
 DOJO_QUARTER_PX = 260.0
+"""Research: dojo near the samurai quarter - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: within 260 px, about 780 ft at the city rung"""
 
 
 def poly_gap(a: Poly, b: Poly) -> float:

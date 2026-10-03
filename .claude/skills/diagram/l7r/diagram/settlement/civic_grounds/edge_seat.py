@@ -16,6 +16,8 @@ stage's own test, feature 273).
 Everything a candidate is measured against is built ONCE, before the first candidate (constitution X clause 15): the
 houses' and wells' footprints, the watercourses in a `PointGrid`, the paddy and marsh rings and the dry plots in
 `PointGrid`s of ring indexes.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -34,7 +36,9 @@ Pt = tuple[float, float]
 Rect = tuple[float, float, float, float]  # (cx, cy, w, h)
 
 ANGLES = (0, 30, -30, 60, -60, 90, -90, 120, -120, 150, -150, 180)  # off the fall line, nearest first
+"""Research: bearing order - NONE: 30 deg steps off the fall line"""
 STEP_FT = 10.0
+"""Research: search step - NONE: 10 ft"""
 
 
 def rect_gap(a: Rect, b: Rect) -> float:
@@ -98,7 +102,15 @@ class EdgeGround:
         self.dry: PointGrid = boxed_grid(boxed_rings([d["poly"] for d in s.M.get("dry_plots", []) if len(d.get("poly") or []) >= 3], 3.0))
 
     def clear(self, s: Settlement, cx: float, cy: float, w: float, h: float) -> bool:
-        """May a w x h ground stand at (cx, cy)? The engine's own fit, then the ground's distances."""
+        """May a w x h ground stand at (cx, cy)? The engine's own fit, then the ground's distances.
+
+        Research:
+            beyond the last house - research/questions/0235-village-burial-grounds-bochi.drawing.html: outside the houses' hull
+            clear of houses and wells - NONE: the caller's clear_px
+            out of the water - research/questions/0235-village-burial-grounds-bochi.drawing.html: the caller's stream and ditch margins
+            never in a paddy or marsh - research/questions/0235-village-burial-grounds-bochi.drawing.html: the caller's field_px
+            off the dry plots - UNRESEARCHED: 3 px
+        """
         if not (s._fits(cx, cy, w, h) and s._footprint_clear(cx, cy, w, h)):
             return False
         # ...and the registry of what stands admits it as `cemetery` records it (feature 287 M8: the overlap matrix and the
@@ -119,7 +131,12 @@ class EdgeGround:
 
 def edge_seat(s: Settlement, down_deg: float, w: float, h: float, ground: EdgeGround, reach_px: float, step_px: float) -> Pt | None:
     """The nearest seat out from the middle of the houses that `ground` clears, and among seats equally near the one
-    nearest the fall line. None when nothing within `reach_px` clears."""
+    nearest the fall line. None when nothing within `reach_px` clears.
+
+    Research:
+        as near the houses as the ground allows - research/questions/0235-village-burial-grounds-bochi.drawing.html: rings out from the houses' mean
+        downslope first among equals - research/questions/0235-village-burial-grounds-bochi.drawing.html: ANGLES from the fall line
+    """
     houses = s.M.get("houses") or []
     if not houses:
         return None

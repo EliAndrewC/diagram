@@ -9,6 +9,8 @@ reach to its east, its west or its south, from the plot's north edge down; a tre
 from it. Measured as a rectangle, the record's knowing simplification of the wedge the moving sun sweeps
 (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). Bamboo is not held (the GM's "maybe bamboo"), nor the
 coppiced mulberry and the clipped tea hedge, which are not canopy (spec 310's Decisions).
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
@@ -21,6 +23,7 @@ from typing import Any
 #: 9 am shadow mirrors it west - held as the windbreak's lane is, a rectangle from the plot's north edge to 50 ft below its
 #: south edge, on both sides and below. A GUESS for the height (the record's least; taller trees would reach further).
 CANOPY_SHADE_FT = 50.0
+"""Research: canopy shade reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft east, west and south of a plot"""
 
 Box = Sequence[float]  # (center x, center y, width, height), +y south
 
@@ -34,7 +37,12 @@ def crown_shades(cx: float, cy: float, r: float, plot: Box, reach: float) -> boo
 def sun_ground(plot: Box, reach: float) -> tuple[float, float, float, float]:
     """`plot`'s sun ground as `(x0, x1, y0, y1)`: the plot widened by `reach` east and west and deepened by `reach` to the south,
     from its north edge. Taken once per plot by a caller asking many crowns of the same plots (feature 314: the persimmon's
-    seat asked it of every plot at every rake for every pace, a tenth of the homesteads stage)."""
+    seat asked it of every plot at every rake for every pace, a tenth of the homesteads stage).
+
+    Research:
+        sun ground as a rectangle - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: from the plot's
+            north edge, widened east and west and deepened south by the reach
+    """
     px, py, pw, ph = (float(v) for v in plot[:4])
     return px - pw / 2 - reach, px + pw / 2 + reach, py - ph / 2, py + ph / 2 + reach
 
@@ -68,7 +76,12 @@ def plot_box(o: Mapping[str, Any]) -> tuple[float, float, float, float] | None:
 
 def map_trees(M: Mapping[str, Any]) -> list[tuple[str, float, float, float]]:
     """Every canopy tree the map records, as (kind, x, y, r): the crowns (`tree_crowns`, the persimmon's among them), the
-    scrub's pines (`scrub_pines`) and the planted dikes' trees (`planted_trees`, each run's kept trees)."""
+    scrub's pines (`scrub_pines`) and the planted dikes' trees (`planted_trees`, each run's kept trees).
+
+    Research:
+        which trees are canopy - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: crowns, scrub pines
+            and dike trees; bamboo, mulberry and tea not held
+    """
     tc = M.get("tree_crowns") or []
     out = [("crown", float(tc[i]), float(tc[i + 1]), float(tc[i + 2])) for i in range(0, len(tc) - 2, 3)]
     out += [("pine", float(t[0]), float(t[1]), float(t[2])) for t in M.get("scrub_pines") or ()]

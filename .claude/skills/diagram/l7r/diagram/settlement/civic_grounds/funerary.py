@@ -1,6 +1,8 @@
 """Ground given over to the dead: where a settlement buries, entombs, burns and stores its bones.
 
 Split from settlement/civic_grounds.py by feature 115 - see settlement/civic_grounds/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -22,11 +24,20 @@ if TYPE_CHECKING:
 # open-air to the end of Edo, the four-post roofed bed and the snow-country hut coming in around mid-Edo. How many were
 # roofed no page says - a GUESS, rolled off the ground's own seat.
 ROOFED_SHARE = 0.25
+"""The share of cremation grounds whose fire bed is roofed.
+
+Research:
+    roofed bed the minority - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html
+    the share - GUESS: 0.25
+"""
 
 
 def cremation_outline(cx: float, cy: float, rx: float, ry: float, n: int, jitter: float, rnd: random.Random) -> str:
     """An SVG points string for a worn, ragged oval: n vertices round (cx, cy), each radius scaled by a factor
-    drawn from 1 +/- jitter - the cremation ground's cleared edge, its burned ground and its ash bed (feature 272)."""
+    drawn from 1 +/- jitter - the cremation ground's cleared edge, its burned ground and its ash bed (feature 272).
+
+    Research: worn ragged outline - CONVENTION
+    """
     pts = []
     for k in range(n):
         a = 2 * math.pi * k / n
@@ -65,7 +76,18 @@ class FuneraryGroundsMixin:
         defaults to the Japanese mode (GM decision). The recorded bbox + the no-build block stay the
         w x h rectangle either way, so the placement/clearance checks are unaffected - only the DRAWN
         ground and the markers within it follow the blob. Records M['cemeteries'] and blocks placement.
-        label_above puts the label over the plot (for a cramped intramural ground whose label would otherwise spill onto its temple)."""
+        label_above puts the label over the plot (for a cramped intramural ground whose label would otherwise spill onto its temple).
+
+        Research:
+            unplotted ground for a common burial ground - research/questions/0235-village-burial-grounds-bochi.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: organic unless parish
+            parish plot ruled - UNRESEARCHED: a rectangle in the temple precinct
+            rows of low markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: 9 px apart, each wholly inside the ground
+            marker heights - CONVENTION: 6 to 8 px
+            a taller memorial stone or two - research/questions/0235-village-burial-grounds-bochi.drawing.html: two stupas
+            no cleared band round the ground - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html
+            keep-clear margin - UNRESEARCHED: 8 px
+            caption - CONVENTION
+        """
         if organic is None:
             organic = not parish
         st = random.getstate()
@@ -121,7 +143,10 @@ class FuneraryGroundsMixin:
         """If the axis-aligned wall segment a-b runs ALONG a neighborhood (ward) fence, re-stamp the
         fence stroke over it so the FENCE renders ON TOP - the compound's own wall runs underneath, and
         the fence IS that side of the compound (no doubled, clashing parallel walls). Mirrors how a
-        ward's own ends run under the city rampart. Returns the cap's z if it stamped one, else None."""
+        ward's own ends run under the city rampart. Returns the cap's z if it stamped one, else None.
+
+        Research: fence drawn over the compound wall - CONVENTION
+        """
         ax, ay = a
         bx, by = b
         horiz = abs(ax - bx) >= abs(ay - by)
@@ -156,7 +181,17 @@ class FuneraryGroundsMixin:
         interred in crypts and stone monuments after cremation. A prestige ground sited by the SAMURAI /
         government quarter (ancestor veneration is central to samurai identity), religiously staffed but a
         martial-clan monument distinct from the commoner temple graveyards. A walled court (like a manor)
-        holding a stone crypt hall and a few tall memorial stupas. Records M['mausoleums']; blocks placement."""
+        holding a stone crypt hall and a few tall memorial stupas. Records M['mausoleums']; blocks placement.
+
+        Research:
+            clan mausoleum by the samurai quarter - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: the caller's seat
+            walled court with a crypt hall and stupas - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.html
+            gate opening - UNRESEARCHED: 12 ft
+            precinct wall - UNRESEARCHED: 2 ft, floored at 2 px
+            crypt hall size - UNRESEARCHED: 0.42 x 0.34 of the court, at most 86 x 52 px
+            keep-clear margin - UNRESEARCHED: 30 px at the grain
+            caption - CONVENTION: the hall caption size
+        """
         x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
         self.add(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{w}" height="{h}" fill="#E7DDC4"/>')  # the swept precinct court
         wall = '#3A352C'
@@ -207,7 +242,18 @@ class FuneraryGroundsMixin:
         most grounds open-air to the end of Edo. So the roof is the minority (`ROOFED_SHARE`, a GUESS), and no raised stone
         pyre platform or officiants' hut is drawn: neither is attested. A roof stands on four posts a few feet out from the
         bed, about 11 ft square. SIX JIZO (`jizo`) stand at a BURIAL ground's entrance (feature 280 M71, 700): a caller
-        passes them only for a cremation ground beside a burial ground; one standing on its own has none."""
+        passes them only for a cremation ground beside a burial ground; one standing on its own has none.
+
+        Research:
+            cleared ground size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: 75 ft at a village or town, 130 ft at a city
+            fire bed - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: a stone-framed trench about 12 x 8 ft
+            roofed bed the minority - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: ROOFED_SHARE off the seat
+            roof size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about 11 ft square on four posts
+            six jizo at a burial ground's entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html, research/questions/0235-village-burial-grounds-bochi.html
+            jizo drawn size - CONVENTION: at least 2.4 x 3.2 px
+            ragged outline, bed off center - CONVENTION
+            keep-clear margin - UNRESEARCHED: 8 px
+        """
         # TO SCALE (GM 2026-07-19; anchors in research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
         # city (Edo's Yoyogi crematory, 900 tsubo, ~180 ft square, the one premodern extent); the fire bed ~12x8 ft. The old
@@ -257,7 +303,14 @@ class FuneraryGroundsMixin:
         """A PAUPER OSSUARY MOUND - a communal earthen mound where the bones of the poor and the
         'unconnected dead' (muenbotoke - those with no family or temple to inter them) are gathered, by
         the cremation ground outside the walls. A low rounded mound with a single weathered marker stupa.
-        Records M['ossuaries']; blocks placement."""
+        Records M['ossuaries']; blocks placement.
+
+        Research:
+            pauper mound - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html, research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: one mound by the cremation ground
+            mound size - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: 22 ft, floored at 4.5 px
+            marker stupa - UNRESEARCHED: one
+            keep-clear margin - UNRESEARCHED: 8 px
+        """
         # TO SCALE (GM 2026-07-19, tightened 2026-07-21): a muenzuka is a 10-30 real-ft mound
         # (cremated, consolidated bone takes almost no volume; Kyoto's monumental Mimizuka, a state
         # monument, is ~50 ft at the base). Drawn at ~22 ft, mid-band. History of this constant: the

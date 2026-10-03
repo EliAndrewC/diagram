@@ -20,6 +20,8 @@ caller: `hinterland` composes `commons` (its own) with `toe_band` and `marsh` (w
 
 The base order below is source order and is behaviorally irrelevant - no name is defined twice,
 which is what the composed-surface guard's second assertion exists to keep true.
+
+Research: package composition - NONE: the land mixins composed
 """
 
 from .cover import GroundCoverMixin

@@ -11,7 +11,10 @@ their water over them, as the comb already does where a delivery would sprout at
 
 ONE PREDICATE (`twin_run_ft`), asked by the comb as it draws (`comb._comb_canal_pieces`) and by the gate over the shipped
 maps (`tests/gate/test_review_rules_294.py`). The band and the run are GUESSES (no source gives one): the band is the
-reviewer's recorded observation, the run one sixth of the shortest comb branch."""
+reviewer's recorded observation, the run one sixth of the shortest comb branch.
+
+Research: twin geometry - NONE: polyline sampling, nearest-leg distances and box prefilters
+"""
 
 from __future__ import annotations
 
@@ -19,10 +22,15 @@ from collections.abc import Sequence
 from typing import Any
 
 TWIN_LO_FT = 12.0  # nearer than this the two are one course or a junction, not twins (the recorded band's floor)
+"""Research: twin band floor - GUESS: 12 ft, the floor of the spacing the reviews measured between side-by-side pairs"""
 TWIN_HI_FT = 32.0  # the recorded band's ceiling
+"""Research: twin band ceiling - GUESS: 32 ft, the ceiling of the spacing the reviews measured"""
 TWIN_DEG = 15.0  # running the same way
+"""Research: running the same way - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: within 15 deg of the other's bearing"""
 TWIN_RUN_FT = 60.0  # longer than this side by side is a twin
+"""Research: twin run - GUESS: more than 60 ft side by side, a sixth of the shortest delivery"""
 TWIN_JOIN_FT = 60.0  # the reach from where one course leaves the other, where running close is the junction itself
+"""Research: junction reach - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: running close within 60 ft of where one course leaves the other is the junction"""
 _STEP_FT = 5.0
 
 
@@ -63,7 +71,10 @@ def twin_run_ft(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], ftpx
     joins it). Sampled every five feet along `a`; the bearing at a sample is the leg's it lies on.
 
     IN NUMPY, NOT SHAPELY (feature 294's own perf bookend): a shapely `interpolate`/`project`/`distance` per five-foot sample
-    made this 7.6 s of seed 25's 10.9 s field stage (cProfile, 2026-10-01) - every pair of a comb's courses, both ways round."""
+    made this 7.6 s of seed 25's 10.9 s field stage (cProfile, 2026-10-01) - every pair of a comb's courses, both ways round.
+
+    Research: twin run measure - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: the longest stretch within the band, the same way, past the junction reach
+    """
     import numpy as np
 
     pa, pb = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
@@ -94,7 +105,10 @@ def _apart(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], gap: floa
 
 def twins(courses: Sequence[Sequence[Sequence[float]]], ftpx: float) -> list[tuple[int, int, float]]:
     """(i, j, ft) for every pair of courses that run side by side longer than `TWIN_RUN_FT`, either way round. A pair whose
-    boxes stand further apart than `TWIN_HI_FT` is not measured."""
+    boxes stand further apart than `TWIN_HI_FT` is not measured.
+
+    Research: twin pairs - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: every pair running side by side longer than the twin run
+    """
     out = []
     for i in range(len(courses)):
         for j in range(i + 1, len(courses)):
@@ -116,7 +130,12 @@ def leaves_from(child: Sequence[Sequence[float]], parent: Sequence[Sequence[floa
 def drop_twin_deliveries(channels: list[dict[str, Any]], first: int, ftpx: float) -> list[dict[str, Any]]:
     """Take out of `channels[first:]` every delivery (`role` branch) that would run beside another course as a twin: the one
     that leaves the other, else the shorter of two deliveries. A supply canal (`role` main) is never taken out. Returns the
-    deliveries taken out."""
+    deliveries taken out.
+
+    Research:
+        twin delivery dropped - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: the delivery that would run as a twin is not drawn, its plots watered over the bund
+        which one goes - UNRESEARCHED: the delivery that leaves the other, else the shorter; a supply canal never
+    """
     from shapely.geometry import LineString
 
     mine = list(range(first, len(channels)))

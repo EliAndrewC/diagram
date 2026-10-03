@@ -7,6 +7,8 @@ ORDER (a gapped numeric prefix) and what the entry IS (the heading's own id, or 
 
 The prefixes are GAPPED, counting by ten, on the GM's decision of 2026-09-20: *"Gapped (`010-`, `020-`) so inserting a
 question doesn't renumber the directory"* - four digits for the registry's entries.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

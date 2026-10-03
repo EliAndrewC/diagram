@@ -17,6 +17,8 @@ stable_yard._stable_yard.
 
 The base order below is source order and is behaviorally irrelevant - no name is defined twice, which
 is what the composed-surface guard's second assertion exists to keep true.
+
+Research: mixin composition - NONE: the base list of the composed civic-grounds surface
 """
 
 from .civic import CivicWorksMixin

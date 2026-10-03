@@ -7,6 +7,8 @@ Cached on the settlement and rebuilt when any source list changes length, exactl
 the filing inflates each segment by its half-width plus `SLACK`, the largest probe the engine makes
 (a fixture's half-diagonal - the kosatsuba's is ~20 px). A probe larger than the slack falls back to
 the full scan, so the answer is never wrong, only slower.
+
+Research: watercourse index - NONE: files recorded water segments by their drawn half-widths
 """
 
 from __future__ import annotations
@@ -68,7 +70,9 @@ def crosses_a_stream(house: Pt, part: Pt, streams: Any) -> bool:
     `Settlement._parts_across_stream` for the homestead's yard, gardens and shed, and `across_the_brook` for the farm
     fixtures and persimmons - and a third time by the finished-map test; all three now call this. The two engine
     copies measured the same thing (a house-to-seat line against every stream segment), so no reading had to be chosen.
-    That the parts share the house's bank is a GUESS recorded in `research/contents.json#homesteads` (the farmstead's layout)."""
+    That the parts share the house's bank is a GUESS recorded in `research/contents.json#homesteads` (the farmstead's layout).
+
+    Research: farmstead parts on the house's bank - GUESS: no part across a stream from its house"""
     for rec in streams:
         poly = rec.get("poly") or ()
         for k in range(len(poly) - 1):

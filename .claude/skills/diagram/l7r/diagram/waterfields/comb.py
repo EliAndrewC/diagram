@@ -1,4 +1,7 @@
-"""build_comb - the water-first comb field builder (pond sluice, head-race, supply canals, delivery-ditch threads, carved paddies)."""
+"""build_comb - the water-first comb field builder (pond sluice, head-race, supply canals, delivery-ditch threads, carved paddies).
+
+Research: comb plumbing - NONE: the carve/finish record, thread construction and stage hand-offs
+"""
 
 import math
 import random
@@ -107,7 +110,12 @@ def carve_comb(
     """The CARVE half of `build_comb` (feature 220): everything up to the planted plots and the
     envelope, before the seams are closed - what `fit_field`'s search measures. Returns a
     `CombCarve`; `finish_comb` turns it into the net `build_comb` returns. ONE body: `build_comb`
-    is `finish_comb(carve_comb(...))`, so every other caller is unchanged."""
+    is `finish_comb(carve_comb(...))`, so every other caller is unchanged.
+
+    Research:
+        water first - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the head race, canals, ditch threads and drain laid before any plot, the paddies cut between them
+        bends swept before clearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every continuation rounded before any ground is cleared against it
+    """
     R = random.Random(seed)
     F = _Frame(down_deg)
     DOWN = F.down
@@ -179,7 +187,13 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
     """The FINISH half of `build_comb` (feature 220): tile the planted region with plots, hold them to the ring rules, mark the
     low ground and its tint, measure the acreage, lay the dry plots and the bund beans, and assemble the net. Consumes the
     carve's own random generator from where the carve left it - each build seeds its own `R`, so a carve kept during a search
-    and finished later sees the state an inline finish would have seen."""
+    and finished later sees the state an inline finish would have seen.
+
+    Research:
+        plots by partition - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the planted region tiled with shared bunds and held to the ring rules
+        one rice green - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: every plot drawn from RICE_GREENS
+        furrows vary - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: neighboring dry plots owe a seam only where the spread is 0.3 rad or more
+    """
     R, F, channels, envelope, a_pts, dpts, grain = c.R, c.F, c.channels, c.envelope, c.a_pts, c.dpts, c.grain
     W, H, down_deg, plot_across, row_step, fork, bc, threads, brook = c.W, c.H, c.down_deg, c.plot_across, c.row_step, c.fork, c.bc, c.threads, c.brook
     dry_keepout, dry_band, bean_frac, furrow_spread, grain_drift = c.dry_keepout, c.dry_band, c.bean_frac, c.furrow_spread, c.grain_drift
@@ -305,7 +319,12 @@ def build_comb(
     holes inside the fan - the white-spots bug the villages fixed once (canal-side closers,
     the closing rank) and the cities then re-exposed at their coarser grain (2026-07-21).
     The canal/thread/drain SKELETON is deliberately NOT scaled here: its lengths arrive
-    pre-scaled from the caller, and the map-edge margins (8px) are canvas facts, not feet."""
+    pre-scaled from the caller, and the map-edge margins (8px) are canvas facts, not feet.
+
+    Research:
+        comb layout - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a head race forking into two supply canals on the high margins, deliveries down the slope, one collector on the low line
+        water passes plot to plot - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: below each delivery's end the plots take their water over the bunds
+    """
     return finish_comb(
         carve_comb(
             W=W,
@@ -338,7 +357,10 @@ def _canal_ft(tier: tuple[float, float], i: int, n: int) -> float:
     thread past the last one. Shared by the drawing pass and by `_comb_threads`, which needs the
     parent's width AT a takeoff to size the delivery leaving there (`DELIVERY_PARENT_FRAC`); the
     two used to be one formula written out and one written nowhere, which is how a delivery came to
-    be drawn wider than the canal feeding it."""
+    be drawn wider than the canal feeding it.
+
+    Research: canal narrows at each offtake - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: head to tail tier in equal linear steps, one per cut
+    """
     return tier[0] - (tier[0] - tier[1]) * i / n
 
 
@@ -381,7 +403,14 @@ def _comb_skeleton(
     record's offtake rule) over a distance derived from the fan rather than pinned. The default -
     no bearing, 90 px - is the shape every other caller has drawn since this builder was written:
     straight down the fall from a sluice, which is right for a pond's outlet and for a city fan
-    tapping a moat, neither of which has a brook to leave."""
+    tapping a moat, neither of which has a brook to leave.
+
+    Research:
+        head race - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: from the intake on the caller's bearing, or straight down the fall, `head_len` px to the fork
+        head race width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: HEAD_RACE_FT
+        supply along the high margin - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal A dug cross-slope from the fork
+        canal A heading - UNRESEARCHED: 42 deg off the fall, a dug polyline of 95-125 px segments
+    """
     # head-race: the intake -> the division point (bunsuiguchi), on the caller's bearing or down the fall.
     # Every width below goes through `chan_px`, which converts a TRUE width in feet to pixels at
     # this map's scale (and floors it at the visibility minimum) - so the net is to scale, and the
@@ -411,7 +440,17 @@ def _comb_threads(
     offtakes_b: Sequence[float],
     plot_across: float,
 ) -> tuple[list[_Thread], _Thread, list[list[Any]]]:
-    """Boundary + delivery threads off the two canals, and the spawn events for mid-march offtakes."""
+    """Boundary + delivery threads off the two canals, and the spawn events for mid-march offtakes.
+
+    Research:
+        second supply canal - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B down the other flank, feeding at least one delivery
+        canal B heading - UNRESEARCHED: 58 deg off the fall
+        offtake spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an offtake within two plot widths of another, or of canal B, is skipped
+        delivery takeoff - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each delivery heads down the fall, -0.15 to +0.1 rad, off a canal running 42 deg off it
+        delivery length - UNRESEARCHED: 420-620 px off canal A, 340-560 off canal B
+        sub-ditches - UNRESEARCHED: each interior delivery splits once, high on its run, diverging 0.5-0.66 rad
+        delivery widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at DELIVERY_PARENT_FRAC of the canal there, a sub at SUB_PARENT_FRAC of its delivery's head
+    """
     # canal B is itself the far-side boundary thread (its dug prefix IS the canal)
     bc = _mk_thread(F, DOWN, fork[0], fork[1], DOWN + math.radians(58), R.uniform(*canal_b_len), decay=170.0)
     bc.head_ft = CANAL_B_FT[0]  # bc is a SUPPLY canal, not a delivery - it carries its own tier
@@ -470,7 +509,12 @@ def _comb_threads(
 
 
 def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread], spawns: list[list[Any]], W: float, H: float, field_fall: float | None) -> None:
-    """The lockstep march (no thread may cross another or pinch under GAP), spawning children mid-march."""
+    """The lockstep march (no thread may cross another or pinch under GAP), spawning children mid-march.
+
+    Research:
+        no channel crosses another - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: threads marched in lockstep, never crossing
+        field depth - research/questions/0010-farmland-around-towns-and-cities.html: capped at `field_fall` so the field sits inside the frame with a margin for the outfall
+    """
     for t in threads:
         t.pts = [F.to_xy(t.u0, t.f0)]
     f = min(t.f0 for t in threads)
@@ -510,7 +554,15 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
     """DRAIN (akusui): the collector is DUG along the fields' low boundary, so its route
     is the ENVELOPE of the delivery ditches' dug ends (each column drains just below where
     its ditch stops) - a u-sorted polyline through (u_bot, f_bot + margin), smoothed, and
-    extended past both ends so the whole system empties off the map."""
+    extended past both ends so the whole system empties off the map.
+
+    Research:
+        collector on the low line - research/questions/0060-field-drains-akusuiro.drawing.html: dug below the deepest delivery ends, starting at the first delivery's bottom
+        across the slope - research/questions/0060-field-drains-akusuiro.drawing.html: a fitted line falling 0.06-0.35 per unit along the contour toward its outfall
+        set below the ditch ends - UNRESEARCHED: 32-48 px below the deepest end, the outfall 40 px past the last
+        wandering line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: sampled every 120-170 px with up to 6 px of jitter
+        drain widens - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: DRAIN_FT, a thread at its head, full at the outfall
+    """
     bots = []
     for t in threads:
         if t.ditch_f <= t.f0 + 10:
@@ -578,7 +630,13 @@ def _comb_brook(R: random.Random, F: _Frame, dpts: Poly, W: float, H: float) -> 
     river). Water IN (the pond feeder) and water OUT (this brook). BUT a brook is only added when
     the outfall sits INSIDE the frame - if the field itself already runs to the map edge, the drain
     discharges off-map directly (a brook grown from there would just run back through the field, as
-    the streams_avoid_fields check correctly flags). A field bounded within the frame gets the brook."""
+    the streams_avoid_fields check correctly flags). A field bounded within the frame gets the brook.
+
+    Research:
+        a brook from the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a brook grown from an outfall inside the frame, none where the drain reaches the edge
+        brook curves out of the collector - research/questions/0060-field-drains-akusuiro.drawing.html: from the drain's exit heading toward pure downhill over four steps
+        brook course - UNRESEARCHED: 88 px steps, then 72-105 px down the fall with -22 to +40 across, until it leaves the map
+    """
     outfall = dpts[-1]  # the drain's downhill (highest-u) end
     brook = []
     if 14 < outfall[0] < W - 14 and 14 < outfall[1] < H - 14:
@@ -604,7 +662,12 @@ def _comb_brook(R: random.Random, F: _Frame, dpts: Poly, W: float, H: float) -> 
 
 
 def _comb_clip_and_cap(R: random.Random, F: _Frame, threads: list[_Thread], dpts: Poly, drain_bank: Callable[[float], float]) -> None:
-    """Clip every thread to the drain's BANK, then cap each column's cascade tail."""
+    """Clip every thread to the drain's BANK, then cap each column's cascade tail.
+
+    Research:
+        threads end at the bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a thread clipped at the collector's bank, never its centerline
+        cascade length - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a delivery extended to end 250-330 px, and at least 55, above the collector
+    """
     for t in threads:  # clip every thread to the drain
         clipped = [t.pts[0]]
         for i in range(len(t.pts) - 1):
@@ -647,7 +710,14 @@ def _comb_canal_pieces(F: _Frame, threads: list[_Thread], bc: _Thread, a_pts: Po
     flow into the offtakes and plots along its run, so past the last offtake it carries almost
     nothing and "slowly disappears" exactly like the delivery ditches - the old stepped 6.2 -> 4.0
     taper left the top channel reading near-constant beside the dwindling ditches. Each piece now
-    carries w -> w_tail so the narrowing is continuous within pieces, not a stair of blunt steps."""
+    carries w -> w_tail so the narrowing is continuous within pieces, not a stair of blunt steps.
+
+    Research:
+        supply canals narrow to a thread - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canals A and B step down at each offtake and dwindle past the last
+        no delivery at the fork - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a delivery starting within 40 px of the fork is not drawn
+        delivery narrows - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: from its capped head to DELIVERY_FT's tail
+        no twin deliveries - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: a delivery running beside another course is dropped
+    """
     first = len(channels)
     cuts = [0.0] + list(offtakes_a) + [1.0]
     n_a = len(cuts) - 1
@@ -718,7 +788,10 @@ def _comb_canal_pieces(F: _Frame, threads: list[_Thread], bc: _Thread, a_pts: Po
 
 
 def _comb_envelope(threads: list[_Thread], a_pts: Poly, dpts: Poly, F: _Frame) -> Poly:
-    """The fan's envelope - the canal, the outer threads, the drain - its floor trimmed to the command area."""
+    """The fan's envelope - the canal, the outer threads, the drain - its floor trimmed to the command area.
+
+    Research: floor ends at the collector - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the envelope's vertices past the level-extended drain line pulled back onto it
+    """
     envelope = [p for p in a_pts] + [p for p in threads[-1].pts] + list(reversed(dpts)) + list(reversed(threads[0].pts))
 
     # TRIM THE FLOOR TO THE COMMAND AREA (known-open ledger 2026-08-16, Mizuguchi's SE needle -

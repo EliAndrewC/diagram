@@ -1,4 +1,7 @@
-"""Layer-0 frame math for the water-first field engine: the contour(u)/fall(f) frame, warp-thread state, and pure geometry helpers (segment/polygon predicates, polyline sampling)."""
+"""Layer-0 frame math for the water-first field engine: the contour(u)/fall(f) frame, warp-thread state, and pure geometry helpers (segment/polygon predicates, polyline sampling).
+
+Research: frame geometry - NONE: the contour/fall frame, point and segment predicates, areas and polyline sampling
+"""
 
 import math
 import random
@@ -8,7 +11,9 @@ Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
 
 DF = 30.0  # fall step of the lockstep march (px)
+"""Research: march step - NONE: the fall step the threads advance by"""
 GAP = 26.0  # threads never pinch closer than this - a plot must fit between them
+"""Research: least spacing between ditch threads - UNRESEARCHED: 26 px, a plot's width"""
 
 # THE CHANNEL LADDER, IN TRUE FEET (GM 2026-08-17: "update the net to be actual size").
 #
@@ -33,12 +38,17 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # - never chain drawn widths down from the source). It also has a real referent: a sluice-fed
 # head-race genuinely is wider and slower than the water feeding it, ponding above the weir.
 HEAD_RACE_FT = 6.0
+"""Research: head race width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6.0 ft, a small main canal"""
 CANAL_A_FT = (4.5, 1.5)  # the high-margin supply canal: head -> the thread it dies as
+"""Research: upper-edge supply canal width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.5 ft dwindling to 1.5"""
 CANAL_B_FT = (4.0, 1.5)  # the far-margin arm, commanding the smaller flank
+"""Research: far-edge supply canal width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.0 ft dwindling to 1.5"""
 DELIVERY_FT = (2.5, 1.2)  # a delivery ditch: head at its takeoff -> the terminal field-ditch tier
+"""Research: delivery ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 ft dwindling to 1.2"""
 DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the outfall. Drainage
 # EXCEEDS supply at the outfall (it passes drawdown plus storm, not just the irrigation duty), which
 # is why the drain's tail is wider than the head-race that fed the same ground.
+"""Research: drain width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: 1.2 ft at its head gathering to 5.5 at the outfall"""
 
 # A DELIVERY IS NEVER DRAWN WIDER THAN THE CANAL FEEDING IT (settlement-review 2026-08-17: the flat
 # delivery head read 7.96 px against a parent tapered to 5.73, inverting the rank read low in the
@@ -51,6 +61,7 @@ DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the
 # (drawn width is RANK, not discharge; do not chain widths down from the source) - it is the weaker
 # and sufficient guarantee that a child reads as subordinate to its parent.
 DELIVERY_PARENT_FRAC = 0.8
+"""Research: delivery never wider than its canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: its head capped at 0.8 of the canal's local width"""
 # A mid-block sub-ditch against the HEAD of the delivery it branches off - not that delivery's local
 # width at the junction, which is what a delivery itself uses against its canal. The asymmetry is
 # deliberate and was measured: at true scale a delivery is ~2.2 ft a third of the way down, so 0.75
@@ -58,6 +69,7 @@ DELIVERY_PARENT_FRAC = 0.8
 # taper in - and `delivery_ditches_taper` rejected exactly that on 22 of 24 cohort maps. A ditch that
 # cannot taper should not be drawn claiming to.
 SUB_PARENT_FRAC = 0.75
+"""Research: sub-ditch cap - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 0.75 of its delivery ditch's head"""
 
 # THE VISIBILITY FLOOR, and the one place map SCALE enters the ladder. True widths are honest at
 # hamlet/village resolution (1-2 ft/px) and vanish above it: at a provincial city's 3 ft/px the
@@ -82,6 +94,7 @@ SUB_PARENT_FRAC = 0.75
 # (a plain aze ran ~1-2 ft), so there is room to take the BUND to 1.3 and leave the water alone -
 # which changes only a stroke width and touches no clearance. That was not attempted here.
 MIN_CHANNEL_PX = 1.5
+"""Research: visibility floor - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: no stroke drawn under 1.5 px, 1.5 ft on a hamlet map"""
 
 # THE CANAL BERM: bare ground between a supply canal's BANK and the dry-crop hem above it, in feet.
 # Measured from the bank, never from the centerline - the hem's stand-off used to be a flat `8 * g`
@@ -95,6 +108,7 @@ MIN_CHANNEL_PX = 1.5
 # The old effective figure was ~10 ft of bare ground, which was never chosen - it is what 16 ft from
 # the centerline left once a 12.4 px canal was subtracted, i.e. an artifact of the inflation.
 CANAL_BERM_FT = 5.0
+"""Research: bank beside a supply canal - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5 ft of bare earth past the stroke's edge"""
 
 # A FARMER STEPS OVER A DITCH THIS NARROW RATHER THAN DECKING IT (settlement-review 2026-08-17).
 # The footplank rule used to be about LENGTH only - any ditch over ~140 px got a plank about midway -
@@ -112,6 +126,7 @@ CANAL_BERM_FT = 5.0
 # ruled on the map: they are not too narrow. At 2.0 the standard farm ditch earns a board and only
 # the ~1.2-1.5 ft tails are stepped over. Full record: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html.
 FOOTPLANK_MIN_FT = 2.0
+"""Research: water worth a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 2 ft or more"""
 
 
 def worth_planking(w_px: float, w_tail_px: float, ftpx: float) -> bool:
@@ -127,7 +142,10 @@ def worth_planking(w_px: float, w_tail_px: float, ftpx: float) -> bool:
     what the placer must ask at each candidate seat: a tapering run can qualify on its head and still
     put a board over 2.4 ft if the seat is chosen by arc fraction alone, which is what shipped and
     what a review caught (2026-08-17). The placer now tests both - the ditch to decide whether to
-    look at all, then each seat as it slides - so the board lands where the water earns it."""
+    look at all, then each seat as it slides - so the board lands where the water earns it.
+
+    Research: planked only over water too wide to step - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the widest drawn width at least FOOTPLANK_MIN_FT
+    """
     return max(w_px, w_tail_px) * ftpx >= FOOTPLANK_MIN_FT
 
 
@@ -141,7 +159,10 @@ def chan_px(ft: float, grain: float) -> float:
 
     The floor is applied to each END of a taper independently, because it is a floor on the DRAWN
     stroke, not on the taper: a run whose true head clears the floor and whose true tail does not
-    should still narrow, just less far than the truth would take it."""
+    should still narrow, just less far than the truth would take it.
+
+    Research: true width or the floor - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: feet at the map's scale, floored at MIN_CHANNEL_PX
+    """
     return max(MIN_CHANNEL_PX, ft * grain / 2.0)
 
 
@@ -198,7 +219,10 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     clearances the gate shares, the seam buffer, the carve's burial filter, and the channel keep-out
     corridor. A taper law re-derived per call site is the "one measurement, not several" trap in the
     diagram CLAUDE.md: the bunds are laid against the bank this returns and the checks read the same
-    number, so two formulas here means a bund drawn inside the water."""
+    number, so two formulas here means a bund drawn inside the water.
+
+    Research: square-root taper - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: the width squared runs linearly along the run
+    """
     return math.sqrt(max(0.0, w0 * w0 + (w1 * w1 - w0 * w0) * t))
 
 
@@ -246,6 +270,7 @@ class _Thread:
         self.head_ft: float = DELIVERY_FT[0]
 
     def step(self, f: float, R: random.Random) -> float:
+        """Research: thread wander - UNRESEARCHED: the takeoff heading relaxing over `decay` px of fall, +/-0.1 of the fall step of jitter a step"""
         k = math.exp(-max(0.0, f - self.f0) / self.decay)
         return self.u + (self.drift * k + R.uniform(-0.10, 0.10)) * DF
 
@@ -321,7 +346,10 @@ def _drain_bank(F: _Frame, dpts: Poly, g: float) -> Callable[[float], float]:
         FALL. The fit clamps `b` to <= 0.35, so this is <= 6% - small, but free to be exact.
 
     The extra `0.75 * g` is half the drawn bund stroke (`aze_w`, ~1.5 real ft), so the bund and the
-    ditch ABUT at the bank rather than overlapping by half a line width."""
+    ditch ABUT at the bank rather than overlapping by half a line width.
+
+    Research: bunds clear a widening drain - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half the drain's local width plus half a bund, converted to fall on the local segment
+    """
     uf = [F.to_uf(*p) for p in dpts]
     us = [q[0] for q in uf]
     u_lo, u_hi = min(us), max(us)
@@ -346,6 +374,7 @@ def _drain_bank(F: _Frame, dpts: Poly, g: float) -> Callable[[float], float]:
 
 
 BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund and ditch ABUT rather than overlap
+"""Research: bund and ditch abut - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half a bund's width past the stroke's edge"""
 
 
 def _seg_d(px: float, py: float, a: Pt, b: Pt) -> float:
@@ -404,7 +433,10 @@ def _dug_polyline(
     W: float,
     H: float,
 ) -> Poly:
-    """A hand-dug canal: few long segments, tiny heading changes (obtuse only)."""
+    """A hand-dug canal: few long segments, tiny heading changes (obtuse only).
+
+    Research: dug canal course - UNRESEARCHED: long straight segments with a small random heading change at each, kept 25 px off the frame
+    """
     pts = [(x, y)]
     trav = 0.0
     while trav < length:
@@ -445,7 +477,10 @@ def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
     concave one, ~bend-angle x depth px wide at the ragged edge (the worst Inashiro pair lapped
     245 sq ft; 7 pairs overlapped outright, and every scripted hamlet had some). Offsetting each
     boundary point along ONE shared vector makes every seam a single straight line both quads lie
-    on - gated by dry_plot_seams_shared."""
+    on - gated by dry_plot_seams_shared.
+
+    Research: dry plots abut along the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one shared offset per boundary, so neighbors share each seam, nothing sheared or stepped
+    """
     # A BOUNDARY WITH NO CHORD HAS NO NORMAL (feature 146, and this raised rather than returning).
     # `bpts` comes from the hem's column boundaries, and a fan whose hem is one boundary wide - measured
     # on a down_deg=210 fan sluiced at the west edge, where the dry band is clipped to a single column -

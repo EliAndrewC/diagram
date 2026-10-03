@@ -12,6 +12,8 @@ a section the order is level, then identity number. Nothing about grouping or or
 builder holds no list of groups (spec FR-009).
 
 Every refusal names the file and the problem, and a run gathers them all.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations

@@ -6,6 +6,8 @@ STRIP (`settlement/rolling/access.py`), and the field's corridor from the tree t
 lanes when each corridor is admitted, and drawn where the web owes it (`tree.py`). A TREE LANE (`is_tree`: the connector,
 the exit strip, a corridor, a way target's spur, the field way) is never cut by a settle repair; an ordinary lane that breaks
 a rule against one is cut instead (`tree.settle_defer`), and one the map no longer needs is pruned (`tree.prune_the_tree`).
+
+Research: roles and indexing - NONE
 """
 
 from __future__ import annotations
@@ -33,7 +35,9 @@ ON_TREE_PX = 1.5
 every point to 0.1 px, and a target is the exact foot on its host, so this is rounding room and nothing more."""
 
 ACCESS_WIDTH = 3.0
-"""A drawn corridor's tread, in ft: a footpath, the width `settle_the_web`'s door paths are drawn at."""
+"""A drawn corridor's tread, in ft: a footpath, the width `settle_the_web`'s door paths are drawn at.
+
+Research: footpath width - research/questions/0081-village-lanes.drawing.html: 3 ft"""
 
 TARGET_ROLE = "way target"
 """The `role` of a spur drawn to a way target (`meta.way_targets`: a burial ground's near edge) - a tree lane."""
@@ -59,7 +63,13 @@ def is_tree(ln: Mapping[str, Any]) -> bool:
     a row's planned streets and each farm's own way to its street are its tree, laid for its farms as a nucleated seat's
     corridors are (feature 291 on 287). Cut as ordinary lanes, a farm's short path read as a fragment the street reached
     past, and the street's tail as a dangling end, so the settle trimmed Mizuguchi's street back farm by farm and left four
-    farms unreached."""
+    farms unreached.
+
+    Research:
+        the access tree kept - research/questions/0081-village-lanes.drawing.html: every farmhouse served, the track out
+            and the field way kept whole
+        a row's streets kept - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in a row
+            village the road comes before the houses"""
     return bool(ln.get("connector")) or ln.get("role") in TREE_ROLES or bool(ln.get("street")) or bool(ln.get("serves"))
 
 
@@ -83,7 +93,11 @@ def strands_only_ordinary(M: Mapping[str, Any], i: int) -> bool:
     after it (`serve.lay_door_paths`, a tree lane bound for its own street) ran 204 ft within 30 ft of it, and the squared
     ford at the path's head made a Z across its joint with the link. The link was the only way joining the path, so it
     stayed - a doubled band the settle could see and not mend. Refusing the link where it would shadow was tried first and
-    could not fire: the door path it doubles is laid after it."""
+    could not fire: the door path it doubles is laid after it.
+
+    Research:
+        one network - research/questions/0081-village-lanes.drawing.html: lanes stranded off the connector's network
+            dropped where no farmhouse loses its way"""
     lanes = M.get("lanes") or []
     before = _on_the_connector(lanes, range(len(lanes)))
     lost = before - _on_the_connector(lanes, [k for k in range(len(lanes)) if k != i]) - {i}
@@ -120,7 +134,9 @@ def building_quads(M: Mapping[str, Any]) -> list[Poly]:
 def through_a_building(run: Poly, quads: Sequence[Poly]) -> bool:
     """Does any leg of `run` cross a building's wall, or stand inside one? `house_hit` asks only whether a building's
     CORNERS or center come near the tread, so a leg passing clean through a house between its corners reads as clear (a
-    gable carry through a neighbor's house did, measured on a constructed pair) - a tree lane is asked this as well."""
+    gable carry through a neighbor's house did, measured on a constructed pair) - a tree lane is asked this as well.
+
+    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no leg through a building"""
     for quad in quads:
         if any(point_in_poly(p[0], p[1], quad) for p in run):
             return True
@@ -186,7 +202,9 @@ class GroundIndex:
 GABLE_MARGIN_FT = 6.0
 """How far off its gable wall a path carried round a house runs (`round_the_gable`): clear of the eaves by more than a
 tread's half-width and the house-hit margin (`house_hit`: 1.5 + 2 ft), and inside the dooryard reach (12 ft) at the front
-corner, so the carried end reaches the dooryard (`reaches_dooryard`). A map drawing convention."""
+corner, so the carried end reaches the dooryard (`reaches_dooryard`). A map drawing convention.
+
+Research: gable margin - UNRESEARCHED: 6 ft off the gable wall, labeled a drawing convention here"""
 
 
 def round_the_gable(pts: Poly, house: Mapping[str, Any], far: bool = False, keep_end: bool = False) -> Poly:
@@ -196,7 +214,11 @@ def round_the_gable(pts: Poly, house: Mapping[str, Any], far: bool = False, keep
     a run from behind the house to its mid-gable cuts the back corner (cohort seeds 42, 43, 55 and 60, measured: every such
     run fouled its own house). The gable taken is the one on the side the end stands (the side the lane came from, on a
     tie); `far` takes the other, where a neighbor's garden stands along the nearer (cohort seed 55). `keep_end` keeps the
-    last point and runs on from it instead - the stretch before it may carry other ways' junctions (cohort seed 31)."""
+    last point and runs on from it instead - the stretch before it may carry other ways' junctions (cohort seed 31).
+
+    Research:
+        a path reaches the front - research/questions/0081-village-lanes.drawing.html: a lane ends at the dooryard
+        round the nearer gable by its back corner - UNRESEARCHED"""
     th = math.radians(float(house.get("rot") or 0.0))
     c, sn = math.cos(th), math.sin(th)
     hx, hy, hw, hh = float(house["x"]), float(house["y"]), float(house["w"]) / 2, float(house["h"]) / 2
@@ -224,7 +246,9 @@ def samples_along(segs: Sequence[tuple[Pt, Pt]], step: float = BRANCH_STEP_FT) -
 
 def spur_runs(segs: Sequence[tuple[Pt, Pt]], target: Pt, limit: int = SPUR_TRIES) -> list[Poly]:
     """The straight spurs from the network `segs` to `target`, shortest first, at most `limit` - the candidates the web
-    lays to a way target (a burial ground's edge) until one keeps the law."""
+    lays to a way target (a burial ground's edge) until one keeps the law.
+
+    Research: shortest straight spur - research/questions/0081-village-lanes.drawing.html: a worn path takes the shortest way"""
     pts = sorted(samples_along(segs), key=lambda q: math.dist(q, target))
     return [[q, target] for q in pts[:limit] if math.dist(q, target) > 1.0]
 
@@ -234,7 +258,14 @@ def field_runs(segs: Sequence[tuple[Pt, Pt]], grounds: Sequence[WorkedGround], h
     the point where it runs on to the worked ground's edge (`run_on_target`) - straight, or, where the straight run crosses
     the brook, over it square at the ford that makes the walk shortest (`ford_crossing`, the landings `bridges()` decks)
     and on to the bund from the far landing. The paddy's first and then the dry hem's, at most `limit` per ground, each
-    ground's shortest first."""
+    ground's shortest first.
+
+    Research:
+        field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: from the network on to
+            the paddy's edge, shortest first
+        over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square,
+            at the ford that makes the walk shortest
+        dry hem after the paddy - UNRESEARCHED: the dry plots' edge offered only after the paddy's"""
     out: list[Poly] = []
     pts = samples_along(segs)
     for ground in grounds:
@@ -267,7 +298,13 @@ def routed_field_runs(
     """Field ways threaded by the web's router (`route`, `route._route` over the steadings and the hard ground): from the
     network to the near landing of each of the `limit` fords nearest it, over the ford square, and on from the far landing
     to the bund - or, with no brook, from the network point nearest the ground straight to its run-on target, threaded.
-    Legs the router finds no way for are left out."""
+    Legs the router finds no way for are left out.
+
+    Research:
+        field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: threaded round the
+            steadings when no straight run keeps the law
+        over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the
+            fords nearest the network, crossed square"""
     pts = samples_along(segs)
     if not pts:
         return []
@@ -300,7 +337,14 @@ FORD_LANDING_FT = 22.0
 def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
     """The web's router (`route._route`) as a field way threads it: walled by the steadings' built ground (not the commons
     or the groves - a path crosses ground cover), hard against the field, the dry hem and the marsh, and kept off the brook
-    but at its fords (the terms the straggler footpaths kept until feature 287 dropped them)."""
+    but at its fords (the terms the straggler footpaths kept until feature 287 dropped them).
+
+    Research:
+        off the crop and marsh - research/questions/0081-village-lanes.drawing.html: the field, the dry hem and the marsh hard
+        across ground cover - UNRESEARCHED: the commons and the groves are not walls to a path
+        the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
+        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: every steading part a wall but the
+            path's own dooryard"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
@@ -335,4 +379,6 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
 FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
 """How far the routed field way keeps off the steadings: the field path's half-tread and the 2 ft `house_hit` pads a tread
 by, and a foot to spare - at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law
-(`fouled_segment`) refused it."""
+(`fouled_segment`) refused it.
+
+Research: field way off the steadings - research/questions/0081-village-lanes.drawing.html: 5.5 ft, the half-tread and 3 ft"""

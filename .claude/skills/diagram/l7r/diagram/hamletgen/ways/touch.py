@@ -1,4 +1,6 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: junction plumbing - NONE"""
 
 from __future__ import annotations
 
@@ -34,6 +36,10 @@ def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, 
     three routable targets, and the reach that ends it, are the branches that decide how much routing
     a stranded piece costs, and reaching them through a whole hamlet roll meant they were reachable
     only on a seed that happened to strand a way at the right distance.
+
+    Research:
+        detour link directness - research/questions/0081-village-lanes.html: up to 8 times the straight gap
+        shortest route wins - research/questions/0081-village-lanes.html: of three routable targets, the shortest walk is drawn
     """
     found: list[tuple[float, Pt, Poly]] = []
     for d, v, q in cands:
@@ -121,7 +127,13 @@ def _touch_junctions(
 
     Straight when the last stretch is clear, routed when it is not; the lane's record and its ink are
     rewritten together (`reink_lane`). Ends that stop at a house or leave the map are left alone - a
-    door path ends at its door. `lanes_form_one_network` holds the line. Returns the ends closed."""
+    door path ends at its door. `lanes_form_one_network` holds the line. Returns the ends closed.
+
+    Research:
+        ends touch the way they near - research/questions/0081-village-lanes.drawing.html: one network, joined where treads meet
+        end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
+        orphan piece dropped - research/questions/0081-village-lanes.drawing.html: unless it is a farmhouse's only way
+        connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
     # Every rung here tests the LINK it is about to draw, and none of them looks at the lane that comes
     # out - so a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another
@@ -515,8 +527,10 @@ def _clear_within(run: Poly, verts: PointGrid, cap: float) -> float:
 
 
 _ORPHAN_REACH = 150.0  # ft: how far a stranded piece may be linked back to the network before it is left as it is
+"""Research: orphan link reach - research/questions/0081-village-lanes.drawing.html: a stranded piece within 150 ft is linked to the network"""
 _SHORTEST_OF = 3  # the detour rung compares this many routable targets by route length before drawing one
 _DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the straight gap (a 29 ft gap -> a 230 ft way round)
+"""Research: detour directness - research/questions/0081-village-lanes.html: up to 8 times the straight gap"""
 # AIMING ALONG A WAY, ON A FINER LATTICE - the rung below the detour (feature 134 T50, 2026-08-28).
 # Two things kept the joiner from a route that plainly exists, measured on tripwire seed 27 by grid
 # search over that map's own footprints:

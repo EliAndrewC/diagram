@@ -1,6 +1,8 @@
 """The draft-animal byre (ox / water-buffalo shed) standing among the homesteads.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -21,6 +23,7 @@ if TYPE_CHECKING:
 
 
 _BORROW_REACH = 120.0  # a neighbor this close can walk over and borrow the team (see draft_byres)
+"""Research: borrowing distance - UNRESEARCHED: 120 px"""
 
 # HOW MANY HOUSEHOLDS KEEP A BEAST, on the two household forms (269 B16, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html): "from the early
 # eighteenth century only about half the farm households of Bizen kept an ox or a horse at all - the same share as in
@@ -28,11 +31,14 @@ _BORROW_REACH = 120.0  # a neighbor this close can walk over and borrow the team
 # half the record reads, its bottom the "fewer" after it (how many fewer no page gives - 0.35 is calibrated liberty).
 # The commons form keeps the caller's `fraction`: a shared shed serves several households, so its count is not this.
 BYRE_KEEPER_SHARE = (0.35, 0.50)
+"""Research: share of households keeping a beast - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: rolled between 0.35 and 0.50"""
 HOUSEHOLD_FORMS = ("courtyard", "yard_shed")
+"""Research: inner and outer stable - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html"""
 # THE OUTER STABLE'S SEAT (269 B16): "the outer stable standing on its own" (kotobank-umaya) - no page gives how far
 # from the house, so one ken off the wall, and a second ken out when that is taken, is a GUESS; it keeps the shed
 # distinct from the inner stable's arm, which stands a 3 ft drip line off the same wall.
 YARD_SHED_GAP_FT = (6.0, 12.0)
+"""Research: outer stable off the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: a ken, then two"""
 
 # HOW FAR A COURTYARD-FORM BYRE MAY STAND FROM THE HOUSE IT BELONGS TO. In that form the shed is the
 # homestead's own stable wing, not common property, so it gets its owner's yard and no more: the
@@ -40,6 +46,7 @@ YARD_SHED_GAP_FT = (6.0, 12.0)
 # Exported because `byres_stand_in_their_declared_form` measures the same span - the placer and its
 # check read ONE source, which is the standing rule here.
 COURTYARD_REACH = 18.0
+"""Research: courtyard byre search reach - UNRESEARCHED: 18 px"""
 
 
 def courtyard_annex_span(hw: float, hh: float, bh: float) -> float:
@@ -48,13 +55,19 @@ def courtyard_annex_span(hw: float, hh: float, bh: float) -> float:
     `max(hw, hh) / 2` is the house's own half-extent on its longest side (the spiral is circular, so
     it must clear the worst case), `bh * 0.55` steps just past the byre's own half-depth, and
     `COURTYARD_REACH` is the search budget past that. A byre farther out than this is not an annex of
-    anybody's homestead, whatever the manifest declares."""
+    anybody's homestead, whatever the manifest declares.
+
+    Research: annex span - NONE: the house's half-extent, the byre's half-depth and COURTYARD_REACH
+    """
     return max(hw, hh) / 2 + bh * 0.55 + COURTYARD_REACH
 
 
 def byre_keeper_share(seed: int) -> float:
     """The share of households that keep a beast on a household form, rolled once per settlement within
-    `BYRE_KEEPER_SHARE` - one roll read by the seat's lots (feature 287, homes H06) and by `draft_byres`."""
+    `BYRE_KEEPER_SHARE` - one roll read by the seat's lots (feature 287, homes H06) and by `draft_byres`.
+
+    Research: keeper share rolled per settlement - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html
+    """
     lo, hi = BYRE_KEEPER_SHARE
     return round(lo + knob_rng(seed, "byre_share").random() * (hi - lo), 3)
 
@@ -62,7 +75,12 @@ def byre_keeper_share(seed: int) -> float:
 def household_byre_form(s: Any) -> tuple[str | None, float]:
     """`(form, keeper share)` for a seating that lays each keeper's byre in its bundle (feature 287, homes H06): the
     settlement's `byre_form` where it is a household form on a nucleated seating, else `(None, 0.0)` - the shared shed
-    on the commons (`detached_commons`) is no household's part and keeps its own pass."""
+    on the commons (`detached_commons`) is no household's part and keeps its own pass.
+
+    Research:
+        byre form knob - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: byre_form
+        household forms only on a nucleated seating - UNRESEARCHED
+    """
     if not getattr(s, "_nucleated", False):
         return None, 0.0
     form = s.resolve("byre_form")
@@ -71,17 +89,24 @@ def household_byre_form(s: Any) -> tuple[str | None, float]:
 
 #: The byre's footprint in feet (a stall for one or two beasts and their fodder, ~15 sq m): the glyph's own size.
 BYRE_FT = (16.12, 10.92)
+"""Research: byre footprint - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: 16.12 x 10.92 ft"""
 
 #: THE SHARED SHED'S COUNT AND SPACING (`detached_commons`, a labeled GUESS): about one shed to four or five households,
 #: sheds at least 60 px apart - the figures `stage_appurtenances` has always asked `draft_byres` for.
 COMMONS_BYRE_FRACTION = 0.22
+"""Research: one shared shed to four or five households - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: 0.22"""
 COMMONS_BYRE_GAP = 60.0
+"""Research: shared sheds apart - GUESS: 60 px"""
 #: How far the seat band is widened, round by round, when its core holds no free pocket (homes H06).
 _POCKET_WIDENING = (0.8, 1.0, 1.5, 2.0)
+"""Research: pocket band widening - NONE: search rounds"""
 
 
 def commons_byre_target(households: int, fraction: float = COMMONS_BYRE_FRACTION) -> int:
-    """How many shared sheds a settlement of `households` asks for: one at least (`draft_byres`'s own count)."""
+    """How many shared sheds a settlement of `households` asks for: one at least (`draft_byres`'s own count).
+
+    Research: shared shed count - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the fraction of the households, at least one
+    """
     return max(1, round(households * fraction))
 
 
@@ -91,7 +116,14 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
     at relative to the house. On the flank AWAY from the garden (the garden takes its side of the house first): the
     inner stable's arm (`courtyard`) abuts that wall a 3 ft drip line off, reaching toward the court as
     `_courtyard_byre_seat` sets it; the outer stable (`yard_shed`) stands a ken (`YARD_SHED_GAP_FT[0]`, `gap`) off it. Its
-    long side runs along the wall either way, so its footprint is `bh` across the frame and `bw` along it."""
+    long side runs along the wall either way, so its footprint is `bh` across the frame and `bw` along it.
+
+    Research:
+        inner stable against the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: a 3 ft drip line off the wall, reaching toward the court
+        outer stable off the wall - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the caller's gap
+        flank away from the garden - UNRESEARCHED
+        long side along the wall - UNRESEARCHED
+    """
     sx = -1.0 if garden_side in ("E", "SE") else 1.0
     if form == "courtyard":
         return sx * (hw / 2.0 + bh / 2.0 + 3.0), max(0.0, hh / 2.0 - bw / 2.0), bh, bw, (90.0 if sx < 0 else -90.0)
@@ -102,6 +134,7 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
 #: (`BUNDLE_PITCH`, 100 ft) - every household's corridor comes to the exit strip, so the ground either side of it is
 #: its approach, not a shed's (feature 287 M8). A map drawing convention.
 POCKET_TREE_CLEAR_FT = 50.0
+"""Research: shed pocket off the access strips - UNRESEARCHED: 50 ft past their half-width"""
 
 
 def paddy_index(polys: Any) -> PointGrid:
@@ -129,7 +162,13 @@ class DraftByresMixin:
         its pocket stands - the count asked is the count drawn, never a spiral that finds the courtyards full. Spread as
         the drawing spread them (farthest from the pockets already laid), first nearest the band's middle; offered over
         the band's core first, then the band widened round by round (`_POCKET_WIDENING`). Records `_byre_pockets` and
-        returns them; fewer than asked only where the band has no free ground, which the caller refuses."""
+        returns them; fewer than asked only where the band has no free ground, which the caller refuses.
+
+        Research:
+            shared sheds among the houses - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: commons_byre_target pockets in the seat band
+            spread farthest-first - UNRESEARCHED: the first nearest the band's middle
+            pocket margin - NONE: 3 px round the shed's box
+        """
         bw, bh = round(self.px(BYRE_FT[0]), 1), round(self.px(BYRE_FT[1]), 1)
         target = commons_byre_target(households)
         cx, cy = float(seat["cx"]), float(seat["cy"])
@@ -163,7 +202,13 @@ class DraftByresMixin:
     def _commons_pocket_clear(self: Settlement, x: float, y: float, bw: float, bh: float, pockets: list[Pt], paddies: PointGrid | None = None) -> bool:  # type: ignore[misc]
         """May a shared shed's pocket stand at (x, y)? The fit test at its box plus 3 px round, off the paddy by a stall's
         depth, and `COMMONS_BYRE_GAP` from every pocket laid. `paddies` is `paddy_index(self.field_polys)` where the caller
-        asks many candidates (`reserve_commons_byres`)."""
+        asks many candidates (`reserve_commons_byres`).
+
+        Research:
+            sheds apart - GUESS: COMMONS_BYRE_GAP
+            off the paddy - UNRESEARCHED: a stall's depth
+            off the access strips - UNRESEARCHED: POCKET_TREE_CLEAR_FT
+        """
         if any(math.hypot(x - p[0], y - p[1]) <= COMMONS_BYRE_GAP for p in pockets):
             return False
         if beside_a_paddy(x, y, bh, self.field_polys, paddies):
@@ -208,7 +253,13 @@ class DraftByresMixin:
 
         Returns `(x, y, rot, aabb_w, aabb_h)` or None if neither wall is free - the caller then falls
         back to the shared form's spiral rather than dropping the byre, because a byre in the wrong
-        place still beats a hamlet that plows without one."""
+        place still beats a hamlet that plows without one.
+
+        Research:
+            stable arm abutting the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html: the magariya's wing, raked with the house
+            drip-line gap - UNRESEARCHED: 3 ft
+            a side wall, toward the work yard - UNRESEARCHED
+        """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
         th = math.radians(rot)
         # WHICH WAY THE HOMESTEAD FACES, derived rather than assumed: the sign of the local-y offset
@@ -244,7 +295,12 @@ class DraftByresMixin:
         """The OUTER stable's seat (269 B16): a shed standing on its own in its owner's homestead, a ken off the back
         wall or a flank (a second ken out when those are taken), raked with the house - its long side along the wall it
         faces. Which wall is tried first turns with the homestead's own hash, so the sheds of one hamlet do not all
-        stand at the same bearing. Returns `(x, y, rot, aabb_w, aabb_h)` or None."""
+        stand at the same bearing. Returns `(x, y, rot, aabb_w, aabb_h)` or None.
+
+        Research:
+            outer stable a ken off the back wall or a flank - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: YARD_SHED_GAP_FT
+            first wall turned per homestead - NONE: hashed from the seat
+        """
         hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
         hx, hy = float(h["x"]), float(h["y"])
         th = math.radians(rot)
@@ -283,7 +339,14 @@ class DraftByresMixin:
         appurtenance records are tested individually: its own house is exempt (the arm joins that
         wall), everything else is not. Those tests are AABB rather than the center-distance circles
         `_garden_fits` uses, because a circle round a 100 x 52 bundle reserves ground the bundle does
-        not occupy, and this engine's standing rule is that gap verdicts read footprints."""
+        not occupy, and this engine's standing rule is that gap verdicts read footprints.
+
+        Research:
+            on its house's bank - UNRESEARCHED
+            on dry ground off the paddies - UNRESEARCHED
+            no roof under a yard persimmon - UNRESEARCHED
+            clear of the homestead's other parts - NONE: overlap
+        """
         hx, hy = float(h["x"]), float(h["y"])
         if self._in_blocked(cx, cy) or self._near_corridor(cx, cy):
             return False
@@ -314,7 +377,10 @@ class DraftByresMixin:
 
     def _draw_byre(self: Settlement, cx: float, cy: float, w: float, h: float, rot: float = 0) -> None:  # type: ignore[misc]
         """A small OPEN-FRONTED draft-animal shed (ox / water-buffalo byre): a plank-and-thatch roof with a
-        dark stall mouth along the front, distinct from the solid gray kura storehouse and from a dwelling."""
+        dark stall mouth along the front, distinct from the solid gray kura storehouse and from a dwelling.
+
+        Research: open-fronted shed - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: plank roof, shaded stall mouth, two posts
+        """
         g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-w / 2:.1f}" y="{-h / 2:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1.6" fill="#B0905E" stroke="#59431F" stroke-width="1.1"/>')  # thatch/plank roof
         # THE STALL MOUTH IS SHADE, NOT A BOARD (settlement-review x2, 2026-08-18 round 2). At
@@ -346,7 +412,17 @@ class DraftByresMixin:
         and the next one asked. WHERE THE HOUSEHOLDS WERE SEATED WITH THEIR LOTS (every scripted hamlet, feature 287), nothing
         is sought: each stall the seating reserved in a keeper's bundle, or each shared shed's pocket reserved before the
         houses, is drawn where it stands; the search above is the path of a settlement seated without lots. Call AFTER
-        farmsteads() (homesteads fixed) and BEFORE the grove (which then skips the byres). Records M['byres']."""
+        farmsteads() (homesteads fixed) and BEFORE the grove (which then skips the byres). Records M['byres'].
+
+        Research:
+            byre form knob - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: byre_form
+            keepers on the household forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: byre_keeper_share
+            shared sheds on the commons form - GUESS: the caller's fraction, default 0.2, gap 64 px
+            byre size - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: 16.12 x 10.92 ft, 15.5 x 10.5 x bscale on the legacy tiers
+            owners ranked by wealth, then footprint - UNRESEARCHED
+            shared sheds spread, with borrowers in reach - UNRESEARCHED: minimax, _BORROW_REACH
+            spiral reach - UNRESEARCHED: 18 px for a household form, 70 px for a shared shed
+        """
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->
         # ~16 x 11 ft ~ 15 m2, well under the ~120 m2 farmhouse. To-scale tiers carry it in FEET (drawn at ftpx);

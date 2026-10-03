@@ -1,6 +1,8 @@
 """The general 'where can a w x h feature stand?' API, asked of the real _fits at the moment of placement.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math

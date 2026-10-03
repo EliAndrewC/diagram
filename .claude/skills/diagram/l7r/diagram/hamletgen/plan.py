@@ -1,6 +1,8 @@
 """The spec a caller writes, and the site plan derived from it.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: spec and plan plumbing - NONE: fields, unit vectors, positional draws and canvas sizing
 """
 
 from __future__ import annotations
@@ -136,6 +138,14 @@ class HamletSpec:
     pins: Mapping[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Refuse a spec outside what the generator draws.
+
+        Research:
+            hamlet household band - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 10 to 20 households
+            pond layout values - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only
+            water sink values - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot or off the map
+            knob values - NONE: each table carries its own claim in consts
+        """
         if self.field_archetype is not None and self.field_archetype not in FIELD_ARCHETYPES:
             raise ValueError(f"field_archetype {self.field_archetype!r} is not one this generator draws: {sorted(FIELD_ARCHETYPES)}")
         if self.dike_crop is not None and self.dike_crop not in DIKE_CROPS:
@@ -290,7 +300,11 @@ class SitePlan:
         An offtake leaves its parent pointing downstream at an acute angle, so the race turns off the
         brook's own downstream heading - which is the land's fall, the brook running downhill - by the
         offtake angle, and it turns AWAY from the flank the brook takes, so that the two never run
-        alongside one another."""
+        alongside one another.
+
+        Research:
+            head race leaves leaning downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: OFFTAKE_DEG off the fall
+            turned away from the brook's flank - UNRESEARCHED"""
         return self.down_deg - self.brook_side * OFFTAKE_DEG
 
     @property
@@ -308,7 +322,9 @@ def _roll(seed: int, knob: str, choices: Sequence[Any]) -> Any:
 
 
 def offtakes_for(households: int) -> tuple[tuple[float, ...], tuple[float, ...]]:
-    """The delivery-ditch fractions for a hamlet of this size - see `OFFTAKE_LADDER`."""
+    """The delivery-ditch fractions for a hamlet of this size - see `OFFTAKE_LADDER`.
+
+    Research: delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one"""
     for ceiling, a, b in OFFTAKE_LADDER:
         if households < ceiling:
             return a, b
@@ -317,7 +333,9 @@ def offtakes_for(households: int) -> tuple[tuple[float, ...], tuple[float, ...]]
 
 LINEAR_CANVAS = 1.0
 """A linear or dispersed hamlet's canvas over `canvas_for`'s: room for grove farms (feature 291 plan D14) - a map drawing
-convention, sized so a twenty-farm row finds its streets on the sheet, and twenty dispersed farms their frames."""
+convention, sized so a twenty-farm row finds its streets on the sheet, and twenty dispersed farms their frames.
+
+Research: linear and dispersed canvas - CONVENTION: 1.0 times the clustered canvas"""
 
 
 def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
@@ -349,7 +367,12 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
 def band_extent(households: int, shape: str | None, ground: float | None = None) -> tuple[float, float]:
     """The seat band's half-depth and length, `(dep, lat)`, from the household count and the cluster shape - the ONE
     derivation `seat_cluster` seats with and `seat_room` sizes the canvas with (feature 287, homes H31). Area is held
-    (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect."""
+    (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect.
+
+    Research:
+        band area - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: households times HOMESTEAD_GROUND_FT squared
+        band aspect by shape - UNRESEARCHED: CLUSTER_BAND_ASPECT
+        band floors and caps - UNRESEARCHED: depth 112 to 300 ft, length 240 to 1,100 ft"""
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
     g = HOMESTEAD_GROUND_FT if ground is None else ground
     dep = max(112.0, min(math.sqrt(households * (g**2) / (asp * math.pi)), 300.0))
@@ -358,9 +381,13 @@ def band_extent(households: int, shape: str | None, ground: float | None = None)
 
 
 SEAT_STANDOFF = 12.0
-"""px from the field margin to the seat band's near edge (`cluster._seat_frame`'s standoff)."""
+"""px from the field margin to the seat band's near edge (`cluster._seat_frame`'s standoff).
+
+Research: standoff from the field - UNRESEARCHED: 12 ft"""
 BELT_REACH = 146.0
-"""px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146)."""
+"""px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146).
+
+Research: belt's far row - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: 146 ft upwind of the fringe"""
 
 
 FAN_OVERHANG = 0.22
@@ -399,12 +426,29 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
     corner stands clear of the toe depends on the field the fit draws: 16 of 17 such cohort maps had one, cohort seed
     24 had none (measured 2026-09-29, on the canvas `seat_room` grows). A rolled fall is rolled over the falls this
     admits, so the seat's back to the wind holds by construction; it is also 背山面水 read whole - the back to the
-    hill AND to the wind, the high side and the windward side being one side (`seat_cluster`)."""
+    hill AND to the wind, the high side and the windward side being one side (`seat_cluster`).
+
+    Research:
+        high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin
+        fall square to or away from the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html"""
     return _fall_into_wind(down_deg, windward) <= 1e-9
 
 
 def plan_site(spec: HamletSpec) -> SitePlan:
-    """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream."""
+    """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream.
+
+    Research:
+        polder on the survey grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: falls from the four cardinals
+        dike-pond knobs only on a dike-pond - NONE
+        regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: DEFAULT_WINDWARD unless declared
+        rolled fall backs the wind - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: only falls leaving a windward margin
+        water flow follows the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: unless declared
+        flood-prone ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a polder's farms
+        paddy by households - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: GROSS_ACRES_PER_HOUSEHOLD each
+        row on the edge on flood ground - research/questions/0033-row-villages-resson.drawing.html
+        woodland patches - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: 2 to 4, rolled
+        knob rolls - NONE: each table carries its own claim in consts
+        canvas - NONE: the field's square, the fan's overhang and the seat's room, cropped later"""
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
     # rather than the eight compass points. This is not a workaround for `polder_fills_its_bbox`
     # (which a diagonal block fails, correctly - a rotated rectangle cannot fill an axis-aligned

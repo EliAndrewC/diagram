@@ -2,6 +2,11 @@
 
 The GM's wrap rule (research/contents.json#map-conventions, "Labels on maps (cartographic label placement)"): one line if that
 clears the sheet, else the first of two or three lines that does. The placer asks it at every seat, one line first.
+
+Research:
+    wrap order - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: one line, then two, then three
+    line cut - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: between words, the shortest
+        longest line, ties to even lengths, no word of three letters or fewer alone
 """
 
 from __future__ import annotations

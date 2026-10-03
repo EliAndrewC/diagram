@@ -2,6 +2,8 @@
 
 Split from hamletgen.py by feature 111 (bodies verbatim), moved out of hamletgen/ into the shared
 sitegen/ by feature 119 when the GM ruled that tiers share a library. See sitegen/CLAUDE.md.
+
+Research: geometry - NONE: polygon measures and predicates
 """
 
 from __future__ import annotations
@@ -58,7 +60,13 @@ def pull_clear(pt: Pt, toward: Pt, obstacles: Sequence[Poly], margin: float, ste
     than shrinking it uniformly: a fengshui grove hugs the land it is planted on and wraps whatever
     is in its way, so a belt that bends around a hem plot reads MORE like a real grove than a
     rectangle would, and it keeps its length (the gate wants a belt that embraces the cluster, and
-    a uniformly-shrunk belt stops embracing before it stops overlapping)."""
+    a uniformly-shrunk belt stops embracing before it stops overlapping).
+
+    Research:
+        grove belt bends round the crop - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            the belt is deformed point by point around obstacles, keeping its length, not shrunk
+        walk step and tries - NONE: 12 px a step, 24 steps, a search bound
+    """
     x, y = pt
     for _ in range(tries):
         if not any(point_in_poly(x, y, list(o)) or min(seg_dist(x, y, o[i], o[(i + 1) % len(o)]) for i in range(len(o))) < margin for o in obstacles):

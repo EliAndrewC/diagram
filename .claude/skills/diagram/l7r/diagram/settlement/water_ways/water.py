@@ -1,4 +1,7 @@
-"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/water_ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: watercourse records - NONE
+"""
 
 import math
 import re
@@ -21,6 +24,7 @@ if TYPE_CHECKING:
 #: `frm` anchor for a channel - so class and color cannot disagree (the wet-paddy precedent, feature 159). A ditch
 #: stroke with no record at all (the pond's feeder curve) is an irrigation ditch: a feed into a reservoir is supply.
 SUPPLY_HUE = "#6C9CBE"
+"""Research: supply ditch hue - CONVENTION"""
 #: THE DRAIN IS DARKER AND SILTIER, not merely grayer (settlement-review, feature 230 pass 10) - AND IT IS STILL
 #: WATER (pass 12, where three reviewers of five said so independently). Three hues, and the middle one is why this
 #: comment is long. #7C9EB0 rendered at (130,164,172) against the supply's (117,162,184): the classes were right in
@@ -36,6 +40,7 @@ SUPPLY_HUE = "#6C9CBE"
 #: clear of the brook's bed (#9CB4C8) and of the flooded tint (#93B7AC) - and it is blue. A map drawing convention,
 #: not a finding: the record gives no color for either ditch.
 DRAIN_HUE = "#4F7186"
+"""Research: drain hue - CONVENTION: darker and siltier than the supply, still blue"""
 IRRIGATION_DITCH = "irrigation ditch"
 DRAINAGE_DITCH = "drainage ditch"
 #: A DIKE-POND'S CANALS ARE NEITHER (settlement-review, feature 230 pass 10). On Kuwabata 25 of the 26 pond DRAIN sluices open
@@ -44,12 +49,18 @@ DRAINAGE_DITCH = "drainage ditch"
 #: conveyance-and-drainage network the ponds exchange water with" (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html). So on that archetype every non-drain ditch is one class; the ring drain stays a drainage ditch, and
 #: a rice polder's laterals, which do only supply, stay irrigation ditches.
 POND_CANAL = "pond canal"
+"""Research: dike-pond canal class - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: the ponds' canals convey and drain, they do not irrigate"""
 DIKE_POND_ARCHETYPE = "mulberry_dike_fishpond"
 
 
 def ditch_style(role: str | None, archetype: str | None = None) -> tuple[str, str]:
     """(color, class) for a field-ditch record by its role, and on a dike-pond field by its archetype: the drain's pair, the
-    dike-pond canal's, or the supply's."""
+    dike-pond canal's, or the supply's.
+
+    Research:
+        ditch colors - CONVENTION: the drain's hue, else the supply's
+        dike-pond canals one class - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: every non-drain ditch of a dike-pond field is a pond canal
+    """
     if role == "drain":
         return (DRAIN_HUE, DRAINAGE_DITCH)
     return (SUPPLY_HUE, POND_CANAL) if archetype == DIKE_POND_ARCHETYPE else (SUPPLY_HUE, IRRIGATION_DITCH)
@@ -68,7 +79,12 @@ class WaterBodiesMixin:
         convention (the same one `down_deg` uses: 0 = east, 90 = south, y-down screen space). The
         net vector, not the last segment, because a winding stream's local heading says nothing
         about where its water is going - and every rule that cares ("is the tannery downstream of
-        the town?") is about the net journey."""
+        the town?") is about the net journey.
+
+        Research:
+            flow direction recorded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: the net upstream-to-downstream bearing
+            a level canal has no bearing - UNRESEARCHED: a navigable cut is dug level with the water it joins
+        """
         if flow not in ("forward", "reverse", "level"):
             raise ValueError(f"watercourse flow must be 'forward', 'reverse' or 'level', got {flow!r}")
         if flow == "level":
@@ -102,7 +118,14 @@ class WaterBodiesMixin:
         `river=` already relied on. `flow="reverse"` marks a polyline stored the other way round
         (reversing point order renders identically, so the tag is for the rare case where the
         drawing code wants the other order). The derived bearing is recorded as `flow_deg`, so
-        checks read ONE number rather than re-deriving direction from anchor semantics."""
+        checks read ONE number rather than re-deriving direction from anchor semantics.
+
+        Research:
+            every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: authored upstream-first
+            stream width - NONE: the caller's width, 9 px by default
+            bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
+            houses kept off the stream - UNRESEARCHED: a no-build corridor of max(30, half-width + 20) px
+        """
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         # always recorded so the gate can check it (anchors optional - only some streams connect things)
         rec = {"poly": [[x, y] for x, y in pts], "frm": frm, "to": to, "w": width}
@@ -139,7 +162,9 @@ class WaterBodiesMixin:
         kept as `stations`: the rounding adds vertices along its segments, and a reservation that read the vertices beside a
         field would take in ground it had never been predicted to (Kashikawa's view reached 6 ft past its scatter frame).
         The corridor `stream` registered on the first course follows the rounded one, so a house is kept off the water the
-        map draws."""
+        map draws.
+
+        Research: a stream turns on a curve - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the brook is redrawn on its rounded course"""
         pts = [(float(x), float(y)) for x, y in rec["poly"]]
         out = [(float(x), float(y)) for x, y in course]
         # THE ROUNDED COURSE IS ASKED OF THE REGISTRY BEFORE IT IS WRITTEN, AND RECORDED AGAIN ONCE IT IS (feature 287, water
@@ -168,7 +193,12 @@ class WaterBodiesMixin:
         the moat taps it upstream and returns downstream, and the river itself serves as the
         water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/questions/0175-cities-on-rivers.html).
         Drawn as a wide stream (off-map to off-map) and recorded in M['river'] so the checks
-        that compare watercourse weights know this one legitimately outweighs the dug moat."""
+        that compare watercourse weights know this one legitimately outweighs the dug moat.
+
+        Research:
+            a city on its river - research/questions/0175-cities-on-rivers.html: drawn off-map to off-map
+            river width - UNRESEARCHED: 120 ft across by default
+        """
         if width is None:
             width = self.px(120)  # a serious provincial river ~120 ft across
         self.stream(pts, frm={"kind": "offmap"}, to={"kind": "offmap"}, width=width, flow=flow)
@@ -185,7 +215,13 @@ class WaterBodiesMixin:
         for culverts routed by hand (a drain outfall reaching its stream confluence, a field-to-field
         cascade connector) whose waypoints are load-bearing; drawing through THIS method (not a flat
         field_channel stroke) is what puts the bed in the shared water group at the standard bed hue,
-        so the mouth merges into the receiving stream like any confluence (GM, Hirameki 2026-07)."""
+        so the mouth merges into the receiving stream like any confluence (GM, Hirameki 2026-07).
+
+        Research:
+            ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: 2.5 px by default, the legibility floor
+            ditch class - NONE: drainage when it leaves a drain, else irrigation
+            houses kept off the channel - UNRESEARCHED: a 33 px no-build corridor
+        """
         poly = [(p[0], p[1]) for p in pts] if pts else winding(start, end, amp=amp)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in poly)
         rec = {"poly": [[x, y] for x, y in poly], "frm": frm, "to": to, "w": width}

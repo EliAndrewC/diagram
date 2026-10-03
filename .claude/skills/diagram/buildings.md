@@ -6,6 +6,16 @@ This file is the Mode A half of the /diagram skill: interior plan views of manor
 
 ## Scale
 
+<!-- Research: plan scale - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama -->
+<!-- Research: scale bar - CONVENTION: 90 px bar labeled 30 ft near the bottom of the sheet -->
+<!-- Research: caption placement - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: captions declared, placed by the one placer -->
+<!-- Research: true size for every footprint - CONVENTION: point glyphs included, only stroke floors and location markers diverge -->
+<!-- Research: well location marker - research/questions/0196-communal-wells-ido.drawing.html: ~22 px curb glyph marks a ~3-4 ft curb -->
+<!-- Research: salt ward marker - research/questions/0240-salt-heaps-at-doorways-morijio.drawing.html: r2.5 glyph for a ~0.3-0.7 ft heap -->
+<!-- Research: buildings at true size - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: cell, kura, granary, kitchen, shrine audited at true size, with a proportion sweep -->
+<!-- Research: main gate passage width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: one bay, ~10-13 ft, ~40 px -->
+<!-- Research: residence wing length - research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html: hand sheets' 180-200 ft wings kept, larger than the record's 49-67 tsubo houses, called a GUESS -->
+
 Compound plans are drawn at **3 px = 1 ft** - the most-zoomed rung of the scale ladder in SKILL.md. Declare it on every sheet with a **scale bar**: a 90 px bar with end ticks and a midpoint tick, labeled `30 ft` with `(3 px = 1 ft)` beneath, placed on open parchment near the bottom of the sheet. Sanity-check every new feature in real feet before placing it - a 10×8 px room is a 3.3×2.7 ft closet, and a 300 px building is a 100 ft hall; both should be deliberate, not accidents.
 
 **Captions are declared, never placed - the pipeline places them by the one placer (feature 266, GM 2026-09-27: *"adopt this standard into our project ... one placer for all labels"*; feature 286, GM 2026-09-28: *"There is no point in having an automated check run against an automated process"*).** A hand sheet is the drawing and, for each caption, its declaration: a `<text>` with its words, face, size and fill, and NO `x`, `y`, `text-anchor` or `transform`, and no leader drawn. What it names: the drawn shapes of the tagged group it stands in, when it is that group's one caption; otherwise `data-names="<id> ..."`, naming shapes (or a group) by their `data-id`. A text marked `data-cont="1"` is the next line of the caption before it (a name over its gloss, a note's lines). Each sheet's gen renders its picture and its page from `labels.hand_sheet.placed(svg)`, which puts every caption where the cartographic standard does (research/contents.json#map-conventions, "Where does a caption sit") - inside what it names when it fits, else beside it at the first free ranked position, turned with it, with a leader only when it cannot stand directly beside it - and `make sheet-render SHEET=<svg> OUT=<png>` renders one to look at. Nothing checks where a caption stands: the placer's unit tests do (`tests/labels/`). A caption that declares nothing it can name stops the render with the fix.
@@ -13,6 +23,8 @@ Compound plans are drawn at **3 px = 1 ft** - the most-zoomed rung of the scale 
 **The ~2x point-glyph doctrine is RETIRED (GM ruling 2026-07-21): everything with a real footprint draws at TRUE size, point glyphs included** - at 3 px = 1 ft even a 3 ft kneeling mat is a visible 9 px, so Mode A never needs a size bump. Kneeling marks, the gate notice board, salt wards, fire-water tubs, hearth marks, and threshold stones were all re-drawn true-size on both pool manors the same day. The ONE sanctioned divergence is the **stroke convention** (same doctrine as Mode B, see SKILL.md "to scale"): linework floors (lattice-bar lines, dashed dividers, wall strokes at true thickness) and **location markers** for sub-glyph features - the WELLS, whose ~22 px curb glyph marks the well's to-scale location without claiming a real ~3-4 ft curb's pixels (GM-confirmed marker status 2026-07-21), and the SALT WARDS, whose r2.5 glyph (~1.7 ft) marks a morijio heap that is truly ~0.3-0.7 ft - sub-glyph at any render, so a marker, per the size-audit's re-derivation (do NOT call r2.5 'true size'). Two hard limits survive from the old doctrine's history (size-audit, 2026-07): **(1) a stroke floor is LINEAR (a line width), never an AREA license.** **(2) Buildings are not glyphs** - the cell, the tax kura, the granary, the kitchen, and even a deliberately grand shrine are audited at TRUE size, not waved through as "the X glyph." A note that a feature is an *intentional divergence* (a grand hall, the "Ochiba slot") fixes its DIRECTION, not its MAGNITUDE: "grand" still has a ceiling, re-derive it. A cautionary tale about tolerances: the template originally carried a "~27 ft main-gate opening" as a tolerated stretch, justified by "a Chinese county gate ran three bays" - but three bays describes the gate STRUCTURE; the actual passage is one bay, ~10-13 ft. The size-audit agent caught the laundering (2026-07); gates are now drawn at passage width (~40 px). A later run (2026-07) caught four more laundered sizes - a 53 ft kitchen, a 53 ft shrine hall, a 53 ft-wide stable, a 45 ft-deep granary, all propagated from this file's own vocabulary values below - which is why those values were re-derived and a **proportion/hierarchy sweep** added (see grounding). The residence-wing lengths (Ochiba ~200 ft, Hayakawa ~180 ft) were once audited as validated, but the record does not support them: research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html measures a samurai's MAIN HOUSE at about 49 tsubo (~1,740 sq ft) for the Yokota house of a 150-koku district magistrate and about 67 tsubo (~2,380 sq ft) for a retainer of 500-1,000 koku - wings of 180-200 ft are larger than either, a GUESS until a sheet is redrawn to the record (the placer's example draws the 49-tsubo house).
 
 ## Design notes and the review gate
+
+<!-- Research: review workflow - NONE -->
 
 Every Mode A diagram saves a **design-notes file** alongside its SVG/PNG: `pool/<subject>.notes.md`. It records what the SVG cannot: the intent. Sections: subject + program type; **knob settings** (every knob, even the ones left at default); the subject's particulars; **deliberate choices and tolerated stretches** (so a reviewer does not "fix" them); and a **Review log** of applied and overruled findings. Write it at design time, before the review - it is the reviewer's second source, letting it check intent-vs-execution instead of guessing.
 
@@ -34,9 +46,20 @@ This is the Mode A instance of the project-wide subagent-check TDD rule in [the 
 
 ## Building vocabulary
 
+<!-- Research: vocabulary index - NONE -->
+
 Standard features with rough SVG conventions. New diagrams should reuse this vocabulary; new features should be added here as they're invented.
 
 ### Walls and gates
+
+<!-- Research: compound wall stroke - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: 3 ft heavy stroke, each side its own line -->
+<!-- Research: main gate forms - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: yakuimon 6-8.5 ft or nagaya-mon ~12 ft, rolled per plan -->
+<!-- Research: opening ink width - CONVENTION: flanking endpoints pulled back half a stroke -->
+<!-- Research: threshold stones - UNRESEARCHED: the setting's own invention, ~3.3x4.7 ft at Ochiba, a pair flanking the road outside the opening, never in the passage -->
+<!-- Research: divider wall - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft stroke with its own gate -->
+<!-- Research: structures abut walls - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft off a compound wall, ~1.5 ft off a divider, privies and curbs included -->
+<!-- Research: gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: freestanding 18 x 12 ft beside the opening, or in the gate range -->
+<!-- Research: threshold wards - research/questions/0240-salt-heaps-at-doorways-morijio.html: a pair outside each opening -->
 
 - **Compound wall** - 4-segment heavy stroke in `#2D2A24`. Draw each side as its own `<line>` so gate-openings are gaps. Don't use a single `<rect>`.
 - **Main gate** - one of the two attested forms, rolled per plan (research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html): a **one-bay gate (yakuimon)** with a passage of ~18-26 px (6-8.5 ft) in the south wall, beside a freestanding gatehouse; or a **gate range (nagaya-mon)** standing in the wall line, its ~36 px (~12 ft, two ken) passage running through the range with a room each side. Draw the **gate posts** as a `main gate` group, one on each cut end of the wall, so the passage between them is the width the audit reads (`main_gate_passage_ft`). Never draw the opening wider than the passage: the old 80 px opening confused structure width with passage width (size-audit, 2026-07); the 13 ft carriage-gate opening this bullet once gave is neither form.
@@ -49,6 +72,19 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 
 ### Outer court (administrative / public)
 
+<!-- Research: office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: ~120 x 28 ft block backing the divider, day office and study behind, dais band in front, courtroom a room of it -->
+<!-- Research: hearing court - research/questions/0099-the-hearing-court-shirasu.html: roofed, white gravel or river cobbles, south of the dais, size a guess -->
+<!-- Research: hearing mats - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: accused at center ~6x3 ft, plaintiff and village officials behind -->
+<!-- Research: tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: sealed kura ~32-36 ft, larger than the ~450 sq ft records store the drawing page caps it at -->
+<!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
+<!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
+<!-- Research: stable below barracks - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: stable drawn smaller than the barracks -->
+<!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span -->
+<!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide -->
+<!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
+<!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.html: swept ground beside the watch's lodging, weapon rack and striking posts, ~90-135 sq ft per samurai, no dojo -->
+<!-- Research: archery bank - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: optional azuchi with a ~90 ft lane -->
+
 - **Office hall (with dais band)** - the working block (~360×84) along the north edge of the outer court, backing onto the divider wall. Rear rooms behind a dashed screen-line: the **day office** (tax and case business) and the **official study** (the magistrate's working desk). Front band on the court face: the magistrate's tatami dais centered, two clerk positions flanking. The courtroom is a room OF the office block, not a freestanding stage (see grounding).
 - **Hearing court** - a ROOFED court immediately south of the office hall's dais band (research/questions/0099-the-hearing-court-shirasu.html - the open white court is the period-drama image; Takayama's is river cobbles under a roof): its floor white gravel or the local river cobbles (a knob), drawn with a solid outline and posts along its open side, leaving a cart-passable slot (~25-30 px) between its south edge and anything at the wall. Its size is a guess - no roofed court's measurements were found. Straw mats on the floor ('Who sat where at a hearing, and on what?'): the accused's at the center (~6×3 ft), the plaintiff's behind to one side, the village officials' behind to the other.
 - **Tax archive** - sealed-kura storehouse (~100-108 px wide, ~32-36 ft): white-plaster fill `#F2EFE4`, heavy `#4A3318` stroke, small dark door mark - visually distinct from the *vented* granary slats. It holds the ledgers (the county's tax base - fireproof walls, see grounding) AND doubles as the strongroom for tax-in-kind valuables and the coin the county holds; that combined records-plus-strongroom role is what carries it to the top of the kura range. A PURE document store trends smaller (~18-24 ft); do not push this past ~36 ft - a paper archive is not a rice kura.
@@ -59,6 +95,17 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 - **Practice ground** - swept-earth patch (`keiko-earth` pattern - lighter than court-earth, faint broom lines - with a thin dashed border) in the outer court beside where the watch lodges (the barracks or the retainers' quarters), labeled `practice ground`. Every magistracy trains daily, but the venue is multi-use open ground, never a dedicated dojo building by default (a dojo is a city institution - see grounding; a true dojo is an Ochiba-slot particular). What makes the ground read as ESTABLISHED is the durable equipment practice leaves behind: a **weapon rack** (~8×2 ft rect) flush against the adjacent building's wall, and 1-2 **striking posts** (the kenjutsu *tategi* standing post, ~1 ft dia - NOT "makiwara", which properly names the Okinawan karate punching post / kyudo straw target; sub-glyph, so r2 location markers under the stroke convention), labeled `striking posts`. Size honestly at ~90-135 sqft per samurai actually drilling: ~1,200-2,000 sqft (a ~30-40 ft block or an equivalent strip) where the full platoon lives on-grounds (staff-housing option a), ~700-800 sqft for a duty-watch-only compound (option c). Time-sharing the ground with another yard use (cart staging, assembly muster) is period-honest; when the sharing is part of the county's story it takes an instance note (Hayakawa's bale yard). A garrison-emphasis manor may add an **azuchi** - an earthen archery target bank against a perimeter wall with a clear ~90 ft shooting lane.
 
 ### Inner court (private / sacred)
+
+<!-- Research: residence massing - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: one block two rows deep, or halls in echelon only for accretion -->
+<!-- Research: reception at one end - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html: zashiki and alcove at the formal end -->
+<!-- Research: formal reception room - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: zashiki kept even beside an office hall -->
+<!-- Research: senior retainers housed apart - research/questions/0106-the-chief-retainers-house-karo-yashiki.html: karo in a separate house -->
+<!-- Research: suites as labeled zones - CONVENTION: each labeled area compresses several rooms -->
+<!-- Research: engawa - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html: ~8 px strip along the garden-facing south face -->
+<!-- Research: genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: on the office hall or none with a roji path, a knob; other blocks by informal doors -->
+<!-- Research: kitchen - research/questions/0107-kitchens-daidokoro.html, research/questions/0107-kitchens-daidokoro.drawing.html: part of the house ~40x33 ft, kamado range, smaller than a living block -->
+<!-- Research: bath - research/questions/0105-baths-furo.html: a room or small addition on the service side by kitchen and well, 12-15 ft a guess -->
+<!-- Research: inner garden - research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: central stipple with optional pond and lanterns -->
 
 - **Residence** - the lord's family dwelling along the north range, with internal soft-divisions (dashed lines) separating rooms. The historical rules the interior-audit added (2026-07), as feature 267's research revised them:
   - **Never one long bar, one room deep** - a single long rectangle reads as a nagaya (barracks) or honjin guest range. Two massings are attested (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html): ONE BLOCK under one roof, two rows of rooms front and back (the Kuchiba house's six-room plan) - the ordinary form below a daimyo's scale; or halls in ECHELON (gankō, "flying geese") joined by corridors - the great house's form, or a house added to hall by hall over generations. Draw echelon only where the sheet's story is accretion.
@@ -73,6 +120,12 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 
 ### Wells
 
+<!-- Research: well count - UNRESEARCHED: 2-4 wells for ~50 inhabitants and horses -->
+<!-- Research: kitchen well - research/questions/0107-kitchens-daidokoro.html: inside or beside the kitchen -->
+<!-- Research: garden well - UNRESEARCHED: in the inner garden -->
+<!-- Research: stables well - research/questions/0108-stables-umaya.drawing.html: just outside the stables for watering -->
+<!-- Research: bath-area well - research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath -->
+
 A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
 - **Kitchen well** (busiest) - small stone-curb rect (~22×22) with dark well-mouth circle, inside or immediately adjacent to the kitchen building.
@@ -81,6 +134,13 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 - **Bath-area well** (optional fourth) - only for very large compounds; usually the kitchen well serves the bath by carry.
 
 ### Fire-water tubs
+
+<!-- Research: tub glyph - CONVENTION: r5 water-blue circle distinct from square wells -->
+<!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs -->
+<!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
+<!-- Research: tub against its wall - UNRESEARCHED: gutter-fed at an eaves corner, within ~3.5 ft of the building -->
+<!-- Research: tub clear of the footprint - UNRESEARCHED: ~2 ft outside the wall face for downspout and bucket line -->
+<!-- Research: no tub at the plaster kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: none at the kura, one may stand at a wooden granary -->
 
 Standing fire-water (rain-fed water tubs; the Edo *tensuioke*, "heaven-water tubs") kept as first-response fire reserve. Draw as small tub glyphs (~r5 circles, water-blue `#8FB0C6` / rim `#3A5060`, distinct from the square-curb wells), DISTRIBUTED across the compound, not a token pair in one corner:
 
@@ -97,6 +157,14 @@ See the "Fire discipline" grounding entry for the why.
 
 ### Latrines and the rear service strip
 
+<!-- Research: privy count - research/questions/0101-privies-setchin.html: one per functional zone, ~3-4 -->
+<!-- Research: residence privy attached - research/questions/0101-privies-setchin.html: at a back corner of the house, cesspit toward a service edge -->
+<!-- Research: outer privies by service gates - research/questions/0101-privies-setchin.drawing.html: against service walls near a gate for the night-soil cart -->
+<!-- Research: servants in the rear strip - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: nagaya for ~10 servants behind the residence -->
+<!-- Research: rear kitchen garden by the sun - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: only where it gets six hours -->
+<!-- Research: named rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: open working ground with storehouses beyond, the Higuchi house -->
+<!-- Research: rear service alley - UNRESEARCHED: ~6-10 ft alley when little goes behind -->
+
 Very small gray rects (~14-20 px square), labeled `latrine`, away from food prep and water sources. Count and placement follow how households and night-soil actually worked (building-review sanitation sweep, 2026-07):
 
 - **Count scales with occupancy** - roughly one privy per functional zone (residence/servants, the garrison/barracks, the administrative or stable yard), not a token one or two for the whole compound. A ~40-60-person magistracy runs ~3-4.
@@ -106,6 +174,20 @@ Very small gray rects (~14-20 px square), labeled `latrine`, away from food prep
 A **rear service strip** organizes all of this: the residence's formal garden sits on its SUNNY (south) side, so the shady REAR (north, between the residence and the rear wall) is the household's SERVICE zone, not empty ground. Fill it - **servants' quarters** (a nagaya; ~10 servants live on-grounds at a county manor), the household's storehouses (dozo), a kitchen/vegetable garden only where it gets its six hours of sun (the sheet audit's `garden_sun`; behind a house it seldom does), the attached family privy - or leave it a named rear yard, open working ground with the storehouses beyond it, as the Higuchi house kept (research buildings 230) - or, if little goes there, narrow the setback to a working service alley (~6-10 ft) hugging the wall. A wide (~20-30 ft) band of blank earth behind the residence is internal dead space, the interior counterpart of an over-loose crop (building-review internal-dead-space sweep, 2026-07).
 
 ### Sacred features
+
+<!-- Research: modest compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html: small hall with a torii nearby, shared approach torii allowed -->
+<!-- Research: hall shrine ceiling - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: at most ~36x30 ft, under half a residence block -->
+<!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
+<!-- Research: sanctuary - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: one-bay honden ~6 ft square at the back on the approach axis -->
+<!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof, hall end toward the arch, dwelling with kitchen, writing room and privy behind -->
+<!-- Research: arch in plan - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 15 ft beam, 1.2 ft posts, 10.3 ft clear, 12 ft pitch -->
+<!-- Research: approach width - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: gravel strip ~10 ft wide -->
+<!-- Research: precinct unenclosed - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: no fence or hedge round the precinct -->
+<!-- Research: bare precinct earth - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: plain fill, no rake lines -->
+<!-- Research: grave markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: rows of ~2x1 ft markers outside the fence -->
+<!-- Research: burial ground beside the precinct - DEVIATION research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html -->
+<!-- Research: grove - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: the wood is the precinct, small clearing at the hall, roped sacred tree by the approach -->
+<!-- Research: grove crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html: crowns 13-20 ft, overlapping -->
 
 - **Modest shrine (standalone)** - small wooden structure with torii silhouette nearby (adjacent modest shrines may share one approach torii). May carry thin vermillion edging; the hall-class shrine below is distinguished by SIZE and internal altar rails, not by edging alone. For routine rural Inari shrines and the like.
 - **Hall shrine (L5R-style, e.g., Fox lands)** - full building with vermillion edging (`#A03020` strips at top and bottom). Internal rail division for multiple altars; identifiers like torii silhouette (east) or straw-doll silhouette (west) for distinct altar aspects. **SIZE CEILING:** even a deliberately grand hall stays SUBORDINATE to the lord's residence - draw it at ~110×90 px (~36×30 ft) at most (a real substantial haiden is ~24-30 ft; the honden proper stays tiny, 1-3 ken). It must be ≤ ~half a residence block, and the whole sacred complex (hall + any workshop) ≤ ~2/3 of the residence. The divergence licenses a *grand hall*, not a hall that out-measures the magistrate's own house (the old 53×53 ft square did both; size-audit direction-vs-magnitude, 2026-07).
@@ -120,12 +202,26 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 
 ### Approaches and surroundings
 
+<!-- Research: road to gate - CONVENTION: stacked paths running off the viewBox, no direction caption -->
+<!-- Research: empty surroundings - CONVENTION -->
+<!-- Research: sheet follows its map - NONE: consistency with the drawn settlement map -->
+<!-- Research: subject sized from the record - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: the record's bands, not the map glyph -->
+<!-- Research: canopy glyph - CONVENTION: canopy-green circles on open ground only, touching at most -->
+
 - **Road to gate** - two stacked paths (solid translucent + dashed darker) for ~150 px into the gate from the appropriate cardinal direction, running OFF the viewBox edge. NO direction caption: every manor road leads to town and thence the Imperial road, so `to the Imperial road` / `to the town's main street` is always-true clutter - the road glyph leaving the map already says a road departs here.
 - **Town / surroundings outside walls** - by default, leave the surrounding parchment empty. Only add exterior buildings if the surrounding context is itself part of the diagram's subject.
 - **A subject a settlement map already draws follows the map** (the GM, 2026-09-20, feature 257): the sheet is a close-up of a place the GM has already drawn, so it declares the map in its notes - `**On map**: <manifest path> - <manifest key> at (<x>, <y>) = <sheet id>` - and shows what the map shows at the subject and nothing the map does not, program items included: a grove, a burial ground, a well, an arch, water, a lane or another building stands on the sheet only where the map has it, at the map's place. **The subject's size is the research's, not the map glyph's** (feature 270, the GM 2026-09-27: a dimension the GM did not give is "NOT a real measurement" by default): a building on a sheet is sized from the record's bands unless the GM gave its dimensions, and where the map's glyph differs the map is edited to the sheet, so the two still match. The map is the canon for the site; where the program's research says otherwise, the notes say which items the map overrode and why. Checked in both directions by `matches_map` (`tools/pack_audit/mapmatch.py`, the classes in `specs/257-sheet-matches-map/contracts/on-map.md`); the frame is cropped to the ink like any other sheet's (feature 268, the GM 2026-09-27: "whatever kind of cropping we are doing is not working very well"), and `matches_map` holds every map feature inside that frame. A program item that a map can record is declared a SITE item (`site` in `types.json`) and is asked for only where the declared map shows its class inside the frame.
 - **Trees** - a canopy is a circle in the canopy green `#7A8C5C` (its own fill or its group's, or any circle in a `<g id="trees">`), and it stands on open ground and on nothing else: not on a building, a fence or wall line, a well, a tub, a label or another canopy - two may touch, no more (the GM, 2026-09-20; checked by `trees_overlap`).
 
 ## Composition: perimeter buildings + a named court-spine
+
+<!-- Research: office front, residence rear - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: outer office court, inner residence court behind a divider -->
+<!-- Research: buildings ring the edges - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: court centers held open, ~60% open -->
+<!-- Research: named court spine - research/questions/0099-the-hearing-court-shirasu.html: forecourt, oshirasu, inner garden -->
+<!-- Research: perimeter-first placement order - UNRESEARCHED: N/S rows own the corners, then E/W, then the divider hall -->
+<!-- Research: second rank - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: rear rank behind the wall row for servants and stores -->
+<!-- Research: coverage band - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42% -->
+<!-- Research: few large masses - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: rooms gathered into a few connected buildings -->
 
 The historical Mode A layout is NOT "buildings scattered inside the walls with bare space left over." It is a **composed courtyard grammar**, and the automated checks reward composing it right - NOT minimizing empty space (a jin'ya is ~60% open BY DESIGN; see the packing grounding). This is the Mode A counterpart of the Mode B water-first layout order.
 
@@ -139,9 +235,13 @@ The historical Mode A layout is NOT "buildings scattered inside the walls with b
 
 ## Compound programs
 
+<!-- Research: catalog pointer - NONE -->
+
 A building TYPE with a documented program has it recorded in [`buildings/programs.md`](buildings/programs.md) - load that file when the subject matches one. Today the catalog holds the **county magistrate's manor** (the 8-knob generic program, its Japan-first interior doctrine, and the heimen-clerk budget cascade) and the **country shrine** (a village district's shrine, where the country monk lives). Each type's required items are DECLARED ONCE in [`l7r/diagram/buildings/types.json`](l7r/diagram/buildings/types.json) - the label a check finds each by, its size band, its class and why - and the catalog's tables are rendered from that declaration (`make building-programs`); the checks read the same declaration, so the reviewer's table and the gate's sweep cannot disagree. **A magistracy item names its KIND instead** (feature 262): the sheet's own `data-kind` tags find it, and its class and why are that kind's entry in the Mode A registry ([`l7r/diagram/interactive/compound_kinds/`](l7r/diagram/interactive/compound_kinds/__init__.py)) - the write-up the interactive page shows - so the classification is stated in one place for the audit, the catalog and the reader.
 
 ## Adding a building type
+
+<!-- Research: type workflow - NONE -->
 
 A type is one declaration and one folder; nothing else in the engine learns its name (the census test `tests/test_building_types.py` refuses a tier name anywhere else). In order:
 
@@ -155,6 +255,18 @@ A type is one declaration and one folder; nothing else in the engine learns its 
 The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration; `make quick` runs it.
 
 ## Checklist for a new diagram
+
+<!-- Research: labels and title block - CONVENTION: no always-true labels, no summary line, no legend, compass or staffing box -->
+<!-- Research: crop and scale bar - CONVENTION -->
+<!-- Research: guest and service doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: guest entrances feed a court or garden -->
+<!-- Research: size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: residence dominant, kitchen, stable, cell, shrine below -->
+<!-- Research: packing coverage - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42%, fire gaps ~6-8 ft, kura ~6-10 ft, apron ~15-20 ft -->
+<!-- Research: clear gateways - UNRESEARCHED: nothing stands in a passage -->
+<!-- Research: gate hierarchy - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the ceremonial main gate widest -->
+<!-- Research: structures clear of wall ink - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html -->
+<!-- Research: privies and rear strip - research/questions/0101-privies-setchin.html: ~3-4, the residence privy attached -->
+<!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
+<!-- Research: practice ground sizing - research/questions/0165-martial-training-grounds-and-dojo.html: ~90-135 sq ft per drilling samurai, no dojo -->
 
 This checklist is for **Mode A** (compound/building plans). **Mode B settlement maps** follow their own loop instead - step 5 of the workflow in [`SKILL.md`](SKILL.md): the gate's tests of the placer must be green, then a persona read of the PNG. (Note the Mode B difference: title is the place name only - no subtitle/summary line. Neither mode carries a key/legend box.)
 
@@ -188,5 +300,7 @@ Before declaring done (Mode A):
 - [ ] Historical-accuracy review offered to the GM at completion
 
 ## Historical grounding
+
+<!-- Research: grounding pointer - NONE -->
 
 The research behind every Mode A convention, size and check - what was found, the decision it drove, and each disclosed departure from literal reality - lives in [`research/contents.json#compounds`](research/contents.json#compounds). Per project policy every research-driven rule carries its reasoning; load that file before changing a convention or a magic number, not merely to draw a compound.

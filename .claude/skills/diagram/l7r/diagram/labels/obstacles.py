@@ -3,6 +3,8 @@
 Built ONCE per label phase (or tool run) and asked per candidate - the engine's standing rule for a keep-out that
 does not change during a search (constitution X clause 15). Each placed caption is added as it lands, so the next
 caption sees it. The index prunes; the exact polygon tests decide.
+
+Research: obstacle index - NONE: indexing and exact geometry
 """
 
 from __future__ import annotations
@@ -19,7 +21,10 @@ CIVIC_GROUPS = frozenset({"ministry", "governor", "temple"})
 additionally may not touch any other named civic building", because the group rule alone "would permit one ministry's
 name to sit on the next ministry". So when a caption's SUBJECT is a named civic building, every other NAMED civic
 building keeps its full weight; a caption whose subject is not - a district's, even a "temple neighborhood" - is waived
-onto its group like any other (FR-014)."""
+onto its group like any other (FR-014).
+
+Research: named civic buildings - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: ministry, governor and temple keep full weight against another civic caption
+"""
 
 ASSOCIATION_TIE = 1e-6
 """How much farther than a caption's own subject a neighbor may stand and still claim the caption (labels L6, the
@@ -120,7 +125,14 @@ class ObstacleIndex:
         `own_gap` is the block's gap to its own POINT subject (feature 287, labels L6: the standard's ASSOCIATION). An
         obstacle outside the subject standing as near the block as the subject does, or nearer, counts too: a caption
         as close to a neighbor as to what it names is not plainly its subject's. At the preferred offset this closes the
-        tie (a neighbor exactly one offset off). The placer passes it for a seat with no leader (`placer._score`)."""
+        tie (a neighbor exactly one offset off). The placer passes it for a seat with no leader (`placer._score`).
+
+        Research:
+            what a caption may cover - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: its own subject and the buildings of a group its words name, never a named
+                civic building when its subject is one
+            association - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a neighbor as near as the subject, or nearer, counts as covered
+            ways crossed - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: each way crossed adds its weight
+        """
         x0, y0, x1, y1 = bbox(block)
         level = level_rect(block)
         own_lim = own_gap + ASSOCIATION_TIE if own_gap is not None else -math.inf
@@ -252,7 +264,10 @@ def stands_nearest(block: Poly, subject: Poly, index: ObstacleIndex) -> bool:
     seat on its exact geometry; a map is judged on its RECORD, rounded to 0.1 unit, which moves each gap by up to a tenth
     of a unit - enough to turn a neighbor a hair farther than the subject into one a hair nearer (Kuwabata, feature 287:
     the board's caption 4.008 ft off a threshing yard and 4.056 ft off its board as recorded). So the notice board's
-    siter asks this of the geometry AS IT WILL BE RECORDED, and the pool test asks it of the record."""
+    siter asks this of the geometry AS IT WILL BE RECORDED, and the pool test asks it of the record.
+
+    Research: association - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: nearer its own subject than any other drawn thing, strictly
+    """
     return not index.nearer_than(block, poly_gap(block, list(subject)), subject)
 
 

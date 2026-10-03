@@ -39,7 +39,9 @@ from .route import _route, set_crossing
 
 # how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
 SPUR_REACH_FT = 60.0
+"""Research: spur reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 60 ft of its edge"""
 SPUR_WIDTH = 5  # the field spur's tread, a worn path: the web's ways are 3, the connector 6
+"""Research: field spur width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
 
 
 def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
@@ -58,7 +60,8 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
 
     Lifted out of `stage_track` under the feature-146 doctrine: the decision is a question about a
     polyline and an envelope, and inside the stage it could only be reached by rolling a whole hamlet
-    whose spur happens to fold."""
+    whose spur happens to fold.
+    Research: spur fold cut - research/questions/0081-village-lanes.drawing.html: no hairpin; drawn only while the arm reaches the field"""
     fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG), None)
     if fold is None:
         return pts, None
@@ -88,6 +91,7 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
     cloud's own extent along the seat axes and put the gateway on its DOWNSLOPE edge, clear of the last house. The fallback is the old band point, for the case where no house has been
     placed yet - which cannot happen in the shipped order, but a helper that assumes its caller is
     the failure mode this file has met repeatedly.
+    Research: track leaves downslope - research/questions/0081-village-lanes.drawing.html: from the cluster's downslope edge, or along the exit strip
     """
     hs = s.M.get("houses") or []
     if not hs:
@@ -711,7 +715,8 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
 
     The track is drawn PAST the canvas edge, not up to it: the gate wants an endpoint at the frame,
     and the crop is set later from the hard features, so a track that overshoots is trimmed by the
-    viewBox while one that stops short reads as a dead end."""
+    viewBox while one that stops short reads as a dead end.
+    Research: track out off the wet - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope, wet ground refused first, run past the frame"""
     dx, dy = plan.fall
     ox, oy = plan.seat["out"]
     base = math.degrees(math.atan2(0.55 * oy + 0.85 * dy, 0.55 * ox + 0.85 * dx))
@@ -920,7 +925,8 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
 
 
 CONNECTOR_WIDTH = 6.0
-"""The connector's tread, px: the cart track out to the wider world, drawn wider than the web's footpaths."""
+"""The connector's tread, px: the cart track out to the wider world, drawn wider than the web's footpaths.
+Research: connector width - research/questions/0081-village-lanes.drawing.html: 6 ft"""
 
 
 def _dedup_run(p: Poly) -> Poly:

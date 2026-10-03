@@ -1,4 +1,7 @@
-"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: strip geometry - NONE: frames, indexes and ground lookups; the units that decide carry their own claims
+"""
 
 from __future__ import annotations
 
@@ -33,7 +36,9 @@ from ..plan import SitePlan
 # HOUSEHOLD_BAMBOO_PREVALENCE lives with the grove drawer (settlement/homestead_parts/groves.py) since feature 291: a
 # farm with its own grove draws its bamboo in that grove, so the drawing makes the same positional roll.
 HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
+"""Research: strip size - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft"""
 _HOUSEHOLD_BAMBOO_SIDES = (("back", 0.35), ("shed", 0.25), ("wind", 0.30), ("side", 0.10))
+"""Research: strip side - research/questions/0075-bamboo-groves-chikurin.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: back 35, shed 25, wind 30, other flank 10 in 100"""
 
 
 _DIAGONAL = math.sin(math.radians(22.5))  # a wind component past this on both axes is a diagonal wind (NW, not N)
@@ -45,7 +50,10 @@ def wind_seat(wlx: float, wly: float, hw: float, hh: float, gap: float, sw: floa
     either way `gap` clear of the walls. It used to scale the half-sizes by the wind's components, which for a diagonal
     wind put the strip's center ~0.7 of the way out and its body over the house's own corner: the near seat was refused
     on every NW-wind hamlet in the pool, so the side rolled "wind" fell through to another side and raising its weight
-    moved nothing."""
+    moved nothing.
+
+    Research: windward seat - research/questions/0075-bamboo-groves-chikurin.drawing.html: the windward corner for a diagonal wind, the windward face otherwise
+    """
     if abs(wlx) > _DIAGONAL and abs(wly) > _DIAGONAL:
         return (math.copysign(hw / 2 + gap + sw / 2, wlx), math.copysign(hh / 2 + gap + sh / 2, wly), sw, sh)
     if abs(wly) >= abs(wlx):
@@ -63,7 +71,14 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     out of it (a soft keep-out, like every wood). Drawn by `stage_bamboo` with the stand glyph. Per house: presence by `HOUSEHOLD_BAMBOO_PREVALENCE`, side by the weighted roll
     above, both from the house's own position (positional randomness). A candidate that lands on a
     footprint, a lane, a paddy, the marsh or the pond is refused and the next side tried; a farmstead
-    with no room keeps none. Returns the count seated."""
+    with no room keeps none. Returns the count seated.
+
+    Research:
+        which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash
+        side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
+        a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
+        strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out
+    """
     out: list[Poly] = []
     if plan.bamboo not in ("homestead", "both") or not houses:
         return out
@@ -148,14 +163,20 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
 def across_a_lane(house: Pt, strip: Pt, lanes: Sequence[tuple[Poly, float]]) -> bool:
     """Does a lane run between a house and its bamboo strip - the line from the house's center to the strip's crossing a lane's
     centerline? The household's bamboo grows in its own grove (research/vegetation/150): the glyph check of Sawada (feature 302)
-    found a strip 6.7 ft past a 3 ft lane from its house, which the stream test (`crosses_a_stream`, homes H01) never asked."""
+    found a strip 6.7 ft past a 3 ft lane from its house, which the stream test (`crosses_a_stream`, homes H01) never asked.
+
+    Research: the strip on its house's side of a lane - research/questions/0075-bamboo-groves-chikurin.html: the household's own bamboo, no lane between
+    """
     return any(segments_cross(house, strip, a, b) for pts, _half in lanes for a, b in zip(pts, pts[1:], strict=False))
 
 
 def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: float) -> bool:
     """Does a household strip centered (cx, cy), cw x ch, reach into the windbreak belt (its center or a corner inside)? The
     stands are drawn after the belt's crowns, so a strip in the belt painted its culms over the conifers - the reverse of the
-    belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280)."""
+    belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280).
+
+    Research: no strip in the belt - CONVENTION: kept out so its culms are not painted over the belt's conifers
+    """
     if not belt or len(belt) < 3:
         return False
     pts = [(cx, cy)] + [(cx + sx * cw / 2, cy + sy * ch / 2) for sx in (-1.0, 1.0) for sy in (-1.0, 1.0)]
@@ -203,7 +224,10 @@ def _strip_blocked(
 ) -> bool:
     """Would a household bamboo strip centered here stand on something? Its own farmhouse is not something, and neither
     is a reserved box in `skip` (a caller whose parts are each registered passes the homestead BUNDLE boxes: feature 261,
-    the fixtures pass, where a steading's own bundle and a neighbor's refused the open ground of its flanks)."""
+    the fixtures pass, where a steading's own bundle and a neighbor's refused the open ground of its flanks).
+
+    Research: what a strip or fixture keeps off - UNRESEARCHED: 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+    """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True
     ft = footing or Footing(s, fields, marsh)  # a caller that tests many seats builds one and passes it (feature 218)

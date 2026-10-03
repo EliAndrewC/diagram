@@ -8,6 +8,8 @@ decide by a coarser, faster form and move maps, held to the rules (constitution 
 the GM, 2026-09-30: maps "do NOT need to remain identical in output") - `region.py` is that form.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: spatial indexes - NONE: prefilters that prune, the caller's test decides
 """
 
 from collections.abc import Callable

@@ -1,6 +1,8 @@
 """STAGE 3: where the runoff goes - the drain and the tameike it feeds.
 
 Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+
+Research: drain plumbing - NONE: reading the collector back, records, admissions, spans and the refusal type
 """
 
 from __future__ import annotations
@@ -104,7 +106,12 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
 
     RESERVE IT AS A NO-BUILD CORRIDOR. `s.channel` and `s.stream` register one; `s.field_channel` does not -
     fine for the comb's own ditches inside a blocked envelope, wrong for this one, which runs OUT of the field
-    across open margin where the placer is free to seat a homestead on it."""
+    across open margin where the placer is free to seat a homestead on it.
+
+    Research:
+        a drain is a dug ditch - research/questions/0060-field-drains-akusuiro.html, research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs
+        drain width - research/questions/0060-field-drains-akusuiro.drawing.html: the collector's own outfall width
+        no-build corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 ft each side of the centerline"""
     outfall_w = chan_px(DRAIN_FT[1], GRAIN)
     rec = drain_record(pts, to)
     refuse_unadmitted(s.M, "channels", rec)  # its route was chosen among those the registry admits (`drain_admitted`)
@@ -139,7 +146,9 @@ def edge_run(plan: SitePlan, frm: Pt) -> float:
 
 def pond_clear_of_crop(plan: SitePlan, center: Pt, prx: float, pry: float) -> bool:
     """The pond clear of the crop, on the field's envelope: no rim point inside the crop, no crop vertex inside the
-    pond (the two tests `pond_setback` walks with)."""
+    pond (the two tests `pond_setback` walks with).
+
+    Research: tameike clear of the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot"""
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
     if any(point_in_poly(center[0] + prx * ux, center[1] + pry * uy, env) for ux, uy in rim):
@@ -153,7 +162,11 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
     Walks outward in small steps and returns the first distance at which no rim point of the ellipse
     falls inside the field envelope, no envelope vertex falls inside the ellipse (`pond_clear_of_crop`'s two
     tests), and the pond's ellipse grown by 12 px clears the brook. A 12 px cushion past the first clear
-    position keeps it off the line."""
+    position keeps it off the line.
+
+    Research:
+        pond downslope of the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: the nearest seat at the field's foot
+        set-back margins - UNRESEARCHED: at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook"""
     dx, dy = plan.fall
     env = list(plan.envelope)
     rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
@@ -184,10 +197,12 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
 #: cut it, two lines leaving the map at one point rather than a tributary entering a stream. A road running
 #: off the frame implies more beyond; a junction implies nothing.
 CROP_MARGIN_PX = 48.0
+"""Research: crop margin - CONVENTION: 48 ft"""
 #: The margin `crop_to_content` adds around the hard content it crops to - so the field's box grown by it is a
 #: box the finished picture cannot fail to show, which is what a junction needs to be judged against.
 
 BROOK_JOIN_TRUNK = 150.0
+"""Research: brook below a confluence - CONVENTION: 150 ft on the canvas, so the junction reads"""
 #: How much of the run from the outfall to the confluence may lie inside the crop before the route is
 #: refused. The outfall is AT the field's edge and a comb's envelope bows out around its own collector, so
 #: the first strides of any route from it are legitimately on the crop's own ground - which is why the gate
@@ -198,6 +213,7 @@ BROOK_JOIN_LEAD = 0.3
 #: joins, and a junction level with the outfall is neither a fall nor a join; a stride of the collector's
 #: own tail width is enough to read as one on the sheet.
 BROOK_JOIN_DESCENT = 20.0
+"""Research: confluence fallen below the outfall - UNRESEARCHED: 20 ft down the fall"""
 
 
 def drawn_brook(s: Settlement, plan: SitePlan) -> Poly:
@@ -208,6 +224,7 @@ def drawn_brook(s: Settlement, plan: SitePlan) -> Poly:
 
 
 JUNCTION_TURN_MAX_DEG = 55.0
+"""Research: drain junction turn - research/questions/0060-field-drains-akusuiro.drawing.html: the run curves out of the collector, at most 55 degrees"""
 #: The most the drain's continuation may turn off the collector's own heading at the outfall (water:W12) - the placer's
 #: bar, under the 65 degrees `drainage_junction_smooth` allowed, so the route the placer takes is not one the rule tolerates.
 
@@ -218,7 +235,16 @@ def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: 
     field, or a leg through it - the first leg exempt where the outfall stands inside the field, as the gate trims it),
     downhill (`runs_downhill`), the drainage bearing (under 90 degrees off `water_flow`), the brook (`crosses_mid_run`, and
     `twin_run_ft`: not run beside it, feature 294) and the dike (`breaches_any_dike` over the recorded `dikes`: a drain crosses a dike's crest only at one of its gaps, water
-    W42)."""
+    W42).
+
+    Research:
+        junction turn - research/questions/0060-field-drains-akusuiro.drawing.html: at most JUNCTION_TURN_MAX_DEG
+        not through the rice - UNRESEARCHED: no interior vertex or leg in the field
+        runs downhill - research/questions/0060-field-drains-akusuiro.drawing.html: a fifth of the run down the fall
+        with the drainage bearing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: under 90 degrees off the water's flow
+        brook not crossed mid-run - UNRESEARCHED
+        not the brook's twin - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html
+        dike crossed only at a gap - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html"""
     lead = (route[1][0] - route[0][0], route[1][1] - route[0][1])
     ln = math.hypot(*lead) or 1.0
     turn = math.degrees(math.acos(max(-1.0, min(1.0, (heading[0] * lead[0] + heading[1] * lead[1]) / ln))))
@@ -245,7 +271,11 @@ def hull_route(plan: SitePlan, out: Pt, heading: Pt, brook: Sequence[Pt], pad: f
     straight down the fall off the canvas - lengthened until the whole run is downhill by the channel rule and within 90
     degrees of the drainage bearing. The hull is convex, so no step round it and no leg down from its lowest point can
     enter the field. Where the brook lies across it, the run ends where it meets the brook, a confluence (to "stream").
-    Returns (the route, what it ends at)."""
+    Returns (the route, what it ends at).
+
+    Research:
+        constructed route - NONE: hull geometry under route_refusals' rules
+        ends at the brook or off the map - research/questions/0060-field-drains-akusuiro.drawing.html"""
     from shapely.geometry import LineString, Point, Polygon  # noqa: PLC0415 - bound on first use
 
     fall = plan.fall
@@ -298,7 +328,9 @@ def hull_route(plan: SitePlan, out: Pt, heading: Pt, brook: Sequence[Pt], pad: f
 def join_beside(route: Poly, brook: Sequence[Pt], ftpx: float) -> tuple[Poly, str]:
     """A drain route that would run down beside the brook as its twin (feature 294 B4, `waterfields/twins.py`) JOINS it
     instead: cut where the route first comes within `TWIN_HI_FT` of the brook, and carried onto the brook's nearest point,
-    a confluence (to "stream"). A route that keeps its distance runs off the map (to "offmap")."""
+    a confluence (to "stream"). A route that keeps its distance runs off the map (to "offmap").
+
+    Research: a twin joins the brook - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: cut within TWIN_HI_FT and carried onto the brook"""
     from shapely.geometry import LineString, Point  # noqa: PLC0415 - bound on first use
 
     if twin_run_ft(list(route), list(brook), ftpx) <= TWIN_RUN_FT:
@@ -317,7 +349,9 @@ def _through_the_crop(plan: SitePlan, out: Pt, q: Pt) -> bool:
 
     Lifted out of `brook_join` so the exemption can be tested on a square (feature 146's rule). The route
     is walked from the outfall until it is clear of the envelope; leaving within `BROOK_JOIN_LEAD` of the
-    run is the field's own edge and is exempt, and the rest of the route is judged in full."""
+    run is the field's own edge and is exempt, and the rest of the route is judged in full.
+
+    Research: drain not through the rice - UNRESEARCHED: the first 0.3 of the run exempt as the field's edge"""
     lead = next((t / 20.0 for t in range(21) if not point_in_poly(out[0] + (q[0] - out[0]) * t / 20.0, out[1] + (q[1] - out[1]) * t / 20.0, plan.envelope)), 1.0)
     if lead > BROOK_JOIN_LEAD:
         return True
@@ -345,7 +379,14 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
 
     `keeps` (feature 287 wave 5): whether the brook AS DRAWN with the confluence held still keeps every rule of the brook
     (`confluence_keeps_the_brook`) - the nearest candidate that does is the confluence, so the brook the map draws round
-    its joins is the brook its placer judged."""
+    its joins is the brook its placer judged.
+
+    Research:
+        drain joins the passing brook - research/questions/0060-field-drains-akusuiro.drawing.html: drainage returned to the river
+        join reach - UNRESEARCHED: 420 ft from the outfall
+        confluence below the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: fallen BROOK_JOIN_DESCENT, the run downhill
+        trunk below the junction - CONVENTION: BROOK_JOIN_TRUNK on the canvas
+        not on a corner of the brook - CONVENTION"""
     dx, dy = plan.fall
     found: list[tuple[float, Pt]] = []
     legs = list(zip(plan.brook, plan.brook[1:], strict=False))
@@ -411,6 +452,10 @@ def pond_run(out: Pt, heading: Pt, pond: Pt, fall: Pt) -> Poly:
     straight run to it then doubles back on the collector: Mizuguchi's turned 111.6 degrees at the field's tip, an
     inverted V. So where the pond lies more than 100 degrees off the collector's own heading the run leaves ALONG that
     heading and curves round to the pond, spreading the same turn over a dozen gentle bends.
+
+    Research:
+        bowed ditch - CONVENTION: up to 10 ft off the chord, so it reads as dug earth
+        led round a pond behind - CONVENTION: a cubic past 100 degrees off the heading
     """
     tx, ty = pond[0] - out[0], pond[1] - out[1]
     dist = math.hypot(tx, ty)
@@ -468,7 +513,13 @@ def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float, heading: Pt | Non
 
     ...AND THE DITCH TO IT NEVER CROSSES THE BROOK (feature 287 wave 5, water:W08): given the collector's `heading` and the
     `brook` as drawn, a seat whose run (`pond_run`) would cross the open water mid-run is no seat - measured at HEAD on six
-    of cohort 1-60 and the pool (Mizuguchi among them), where the ditch was drawn straight over the brook."""
+    of cohort 1-60 and the pool (Mizuguchi among them), where the ditch was drawn straight over the brook.
+
+    Research:
+        pond in a pocket below the fields - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
+        sways across the fall - UNRESEARCHED: 0.9 and 1.8 long radii
+        set-back limit - UNRESEARCHED: POND_SETBACK_LIMIT
+        ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html"""
     for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
         moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
         back = pond_setback(plan, moved, prx, pry)
@@ -523,6 +574,12 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.land.wet.pond_fringe_ring
         l7r.diagram.settlement.Settlement.marsh
         l7r.diagram.hamletgen.water.brook.round_the_brooks
+
+    Research:
+        where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot, the passing brook, or off the map
+        tameike below the fields - research/questions/0061-reservoir-ponds-tameike.drawing.html
+        sink before the houses - NONE: stage order, the pond a hard feature
+        brook rounded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: bends on a radius
     """
     lay_sink(s, plan)
     round_the_brooks(s)
@@ -530,7 +587,17 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
 
 def lay_sink(s: Settlement, plan: SitePlan) -> None:
     """`stage_sink` before the brook is rounded: the drain run to its tameike, to the passing brook or off the frame. A pond
-    the canvas cannot hold re-enters `stage_sink` as an off-map sink, whose rounding is the same course again."""
+    the canvas cannot hold re-enters `stage_sink` as an off-map sink, whose rounding is the same course again.
+
+    Research:
+        brook first, then off the frame - research/questions/0060-field-drains-akusuiro.drawing.html
+        off-map route search - NONE: swings, junction distances and run lengths under route_refusals
+        pond area - research/questions/0061-reservoir-ponds-tameike.drawing.html: held below two or three tenths of its paddy
+        pond reference size - UNRESEARCHED: 116 x 74 ft radii at 15 households, scaled by the square root
+        too far below, no pond - UNRESEARCHED: past POND_SETBACK_LIMIT the field drains off the frame
+        reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore, 44 ft ring
+        no building on the water - UNRESEARCHED: 10 ft round the pond's box
+        bowed ditch - CONVENTION"""
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:

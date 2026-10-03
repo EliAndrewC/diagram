@@ -26,6 +26,13 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
 
     Steps:
         l7r.diagram.settlement.Settlement.pin_knob
+
+    Research:
+        fall and drainage declared first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the bearing and the fall recorded before anything is placed
+        no work yards on the dike-pond hamlet - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: `work_yards` false on the mulberry dike-fishpond archetype
+        house racks - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: a rack by every house where the harvest weather is changeable
+        compact bundle for the clustered form only - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a non-nucleated farm takes its own grove
+        manifest record - NONE: the rolled plan written to the manifest
     """
     # WHICH MAPS HAVE A BROOK AT ALL: the comb archetypes tap a stream (`stage_field` -> `feed_brook`), the polders
     # take their water from a reservoir at the high corner (`stage_polder`). `water_kind` stays "stream" on both and

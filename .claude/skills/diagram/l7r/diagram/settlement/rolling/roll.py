@@ -11,6 +11,8 @@ through `scope_seed`. Every main-stream draw happens inside a callee - `lane`, `
 `farmsteads`, `place_wells`, `village_grove`, `hinterland`, `bridges` - so THE SEQUENCE OF THOSE
 CALLS IS THE OUTPUT, and a stage split that preserves the sequence preserves every byte. It was
 verified that way: all 893 pool artifacts byte-identical across all 28 generators.
+
+Research: orchestration plumbing - NONE
 """
 
 import math
@@ -79,7 +81,13 @@ class RollVillageMixin:
         `s.meta(name=, scale=, ftpx=, toscale=True, ...)`. Returns the resolved knob dict. Scope: a nucleated
         HAMLET or VILLAGE (the to-scale tiers); a hamlet needs no headman/shrine/cemetery, a village adds them.
 
-        The stage calls below are in a FIXED ORDER that is the map's output - see the module docstring."""
+        The stage calls below are in a FIXED ORDER that is the map's output - see the module docstring.
+
+        Research:
+            a rolled village is clustered - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: always nucleated, behind a communal windbreak
+            plank bridges over the field ditches - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: every 300 px along the long ditches
+            notice board - research/questions/0190-notice-boards-kosatsuba.drawing.html: on a lane verge at the busiest node, every tier
+        """
         self.M["meta"]["water_kind"] = water_kind
         self.M["meta"]["down_deg"] = down_deg
         self.M["meta"]["nucleated"] = True  # a rolled village is a nucleated cluster (per-house-grove path is off; a communal windbreak is drawn below)
@@ -133,7 +141,14 @@ class RollVillageMixin:
         by a bank's margin only (feature 280 M75, research/questions/0235-village-burial-grounds-bochi.html 'Village burial grounds (bochi)': no set-back from water is attested before
         modern times, and the 90 ft cremation margin was a scaled guess), its fire bed off the shrine's approach, as near
         beyond the last houses as that allows - the scan's 650 ft is how far it looks, not a distance the record gives
-        (feature 280 M77); six stone jizo at it (530, where the village has no burial ground for them to stand at)."""
+        (feature 280 M77); six stone jizo at it (530, where the village has no burial ground for them to stand at).
+
+        Research:
+            cremation ground's seat - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: beside the burial ground or on its own at the edge, even odds
+            cremation ground's clearances - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: 120 ft off houses and wells, 6 ft off water, 30 ft off the shrine's approach, scanned to 650 ft
+            cremation ground's size - UNRESEARCHED: a 75 x 52.5 ft cleared core
+            jizo at a lone cremation ground - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: none; they stand at a burial ground
+        """
         form = self.knob_pins.get("cremation_seat") or ("beside_burial", "apart")[knob_rng(self.seed, "cremation_seat").randrange(2)]
         if form not in ("beside_burial", "apart"):
             raise ValueError(f"cremation_seat: {form!r} is not one of ('beside_burial', 'apart')")
@@ -151,7 +166,12 @@ class RollVillageMixin:
 
     def _roll_knobs(self: Settlement, down_deg: float, water_kind: str) -> dict[str, Any]:  # type: ignore[misc]
         """STAGE 1 - roll the knobs (pinned -> rolled -> default). Returns them keyed as `roll_village`
-        returns them, so the caller can splat the dict straight into its result without re-listing the names."""
+        returns them, so the caller can splat the dict straight into its result without re-listing the names.
+
+        Research:
+            water source above the fields - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: rolled among the gravity-valid positions only
+            corner intake beside a high cluster - UNRESEARCHED: a corner source preferred when the cluster holds the high margin
+        """
         cluster_position = self.resolve("cluster_position")
         cluster_shape = self.resolve("cluster_shape")
         lane_kind = self.resolve("lane_skeleton")
@@ -195,7 +215,12 @@ class RollVillageMixin:
         knobs: dict[str, Any],
     ) -> tuple[dict[str, Any], Any]:
         """STAGE 2 - the field: sluice from the water source, then the comb. Returns (net, sluice); the
-        cluster band is seated off both."""
+        cluster band is seated off both.
+
+        Research:
+            source pond and stream - UNRESEARCHED: a pond 88 x 56 px set 66 px above the sluice, or a stream 380 px long into it
+            land-use overlay - NONE: rolled by its own knob in `apply_land_use`
+        """
         from l7r.diagram.waterfields import build_comb
 
         W, H = self.W, self.H
@@ -239,7 +264,13 @@ class RollVillageMixin:
         The cluster_position gives the CHARACTER (which margin); the seat is computed constructively so it
         always abuts + rings the field and never fights the water intake: the lateral lean is forced AWAY from
         the sluice's side, and the seat sits just beyond the drawn rice's reach in that direction. This
-        replaces the earlier anchor+snap+nudge, whose post-hoc pushes destabilised placement roll-to-roll."""
+        replaces the earlier anchor+snap+nudge, whose post-hoc pushes destabilised placement roll-to-roll.
+
+        Research:
+            cluster on the dry margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the position knob's margin, leaning away from the sluice
+            band sized from the households - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: `BUNDLE_PITCH_FT` squared per household, a ~3:1 band, depth 112-240 px, length 240-1,500 px
+            band standoff from the rice - UNRESEARCHED: its center beyond the drawn rice by the band's depth plus 30 px
+        """
         env = net["envelope"]
         exs, eys = [p[0] for p in env], [p[1] for p in env]
         fb = (min(exs), min(eys), max(exs), max(eys))
@@ -306,7 +337,15 @@ class RollVillageMixin:
         cluster_shape: Any,
     ) -> tuple[dict[str, Pt], int]:
         """STAGE 4 - the lanes, the headman and the homestead seeds, then the farmstead flush. Returns the
-        skeleton's derived points and the number of homesteads that actually landed."""
+        skeleton's derived points and the number of homesteads that actually landed.
+
+        Research:
+            lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one of five shapes of our own choosing, laid before the houses
+            lane width and clearance - research/questions/0081-village-lanes.drawing.html: 5 px wide, 40 px cleared
+            lane stops at the reeds - research/questions/0081-village-lanes.drawing.html: trimmed off the marsh
+            headman at the skeleton's prime spot - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: at the junction or a ring of offsets round it
+            seed pool - NONE: households x 6 + 30 candidates
+        """
         # the lane skeleton is derived in the MARGIN FRAME too, then rotated onto the band - so its lanes run
         # along the margin and its DERIVED headman/gateway land inside the cluster at any fall direction
         layout = skeleton_layout(lane_kind, 0.0, 0.0, f.lat, f.dep)
@@ -348,7 +387,10 @@ class RollVillageMixin:
         return sk, placed
 
     def _roll_wells(self: Settlement, hs: list[Any]) -> None:  # type: ignore[misc]
-        """STAGE 5 - wells among the ACTUAL houses (BEFORE the grove, so the grove's canopy skips them)."""
+        """STAGE 5 - wells among the ACTUAL houses (BEFORE the grove, so the grove's canopy skips them).
+
+        Research: wells among the houses - research/questions/0196-communal-wells-ido.drawing.html: a grid over the houses inset 40 px, spacing 185 px, within 104 px of a house
+        """
         if hs:
             hxs, hys = [h["x"] for h in hs], [h["y"] for h in hs]
             # INSET, not grown. A well is a HARD crop feature with a ~16 px extent, so one seated
@@ -386,7 +428,12 @@ class RollVillageMixin:
         UNGUARDED against an empty `hs`, unlike `_roll_wells` above, and that asymmetry is
         PRE-EXISTING - it was the same in the single-body version and is moved rather than fixed. A
         cluster that seated no homestead at all divides by zero here. Changing it would change a
-        failure mode under a refactor whose whole claim is that it changes nothing."""
+        failure mode under a refactor whose whole claim is that it changes nothing.
+
+        Research:
+            communal windbreak behind the cluster - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: one belt on the uphill side taken as windward, spanning the houses plus 46 px
+            windbreak standoff and depth - UNRESEARCHED: centered 62 px beyond the uphill-most house, 68 px deep
+        """
         ux, uy = -dy, dx  # cross-slope
         hxs_, hys_ = [h["x"] for h in hs], [h["y"] for h in hs]
         bcx, bcy = sum(hxs_) / len(hxs_), sum(hys_) / len(hys_)
@@ -403,7 +450,13 @@ class RollVillageMixin:
         self.village_grove(belt, role="windbreak")
 
     def _roll_civic(self: Settlement, sk: dict[str, Pt], scale: Any, civic_shrine: bool, dx: float, dy: float) -> None:  # type: ignore[misc]
-        """STAGE 7 - village-only civic features (a hamlet has none)."""
+        """STAGE 7 - village-only civic features (a hamlet has none).
+
+        Research:
+            village shrine at the gateway - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html: 46 px downslope of the skeleton's gateway
+            no shrine in a hamlet - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html: civic features on a village only
+            torii count and pitch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 1, 3 or 7 on the tier's distribution, marched up the approach at `TORII_PITCH_FT`
+        """
         if scale == "village" and civic_shrine:
             gx, gy = sk["gateway"]
             sx_, sy_ = gx + dx * 46, gy + dy * 46

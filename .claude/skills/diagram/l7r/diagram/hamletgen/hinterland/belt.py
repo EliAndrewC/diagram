@@ -1,4 +1,7 @@
-"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/hinterland.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: belt geometry - NONE: wind coordinates, sampling and curve plumbing
+"""
 
 from __future__ import annotations
 
@@ -37,7 +40,10 @@ def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_
 
     Lifted out of `belt_polygon` under the feature-146 doctrine: the empty-column case is a question
     about a list of points, and inside the closure it could only be reached by rolling a hamlet whose
-    cluster happens to lie diagonally to its wind."""
+    cluster happens to lie diagonally to its wind.
+
+    Research: belt follows the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: each column stands behind the windward-most house near it
+    """
     raw: list[tuple[float, float | None]] = []
     for k in range(cols + 1):
         v = v_mid + half * span_f * (-1.0 + 2.0 * k / cols)
@@ -69,7 +75,10 @@ def trim_receding_ends(cols: Sequence[tuple[float, float]], drop: float) -> list
     the column at the belt's end leans on a house far downwind of the rest - Sawada's end column stood 766 ft behind its
     neighbor - and the band followed it into an arm lying along the wind: 500 ft of one row of trees, 35-60 ft across,
     sheltering nothing, where research/contents.json#vegetation asks a belt never thinner than 80 ft. A column that recedes more than a
-    belt's own depth is not the windward fringe any more; the belt ends at the column before it."""
+    belt's own depth is not the windward fringe any more; the belt ends at the column before it.
+
+    Research: no arm along the wind - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: an end column falling back more than the belt's depth is dropped, a belt never thinner than 80 ft
+    """
     out = list(cols)
     while len(out) > 2 and out[1][1] - out[0][1] > drop:
         out.pop(0)
@@ -79,6 +88,7 @@ def trim_receding_ends(cols: Sequence[tuple[float, float]], drop: float) -> list
 
 
 BELT_LANE_CLEAR_FT = 12.0  # ft: a belt whose band a lane runs along stands this far beyond the lane's tread
+"""Research: belt clear of a back lane - UNRESEARCHED: 12 ft beyond the tread"""
 
 
 def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[float, float]], width: float, near: float = 36.0, depth: float = 146.0, wet: Any = None) -> list[tuple[float, float]]:
@@ -88,7 +98,13 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
     keep-out took the clumps there and the belt drew a 63 ft wall where the record asks 80-120 (main's back lane ran
     outside the near face). So a column whose band holds a lane stands its near face `BELT_LANE_CLEAR_FT` beyond the
     lane, and keeps its whole depth - unless `wet(v, u)` says the moved band would stand in the marsh, where no woody cover
-    stands (Sawada's belt, pushed past its back lane, walked into the toe marsh's reeds)."""
+    stands (Sawada's belt, pushed past its back lane, walked into the toe marsh's reeds).
+
+    Research:
+        belt keeps its depth past a back lane - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: moved upwind past a lane inside the band
+        no belt in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a band the move would stand in the marsh stays put
+        lane clearance - UNRESEARCHED: BELT_LANE_CLEAR_FT
+    """
     out: list[tuple[float, float]] = []
     for v, u in cols:
         inside = [lu for lu, lv in lanes if abs(lv - v) <= width and u + near - BELT_LANE_CLEAR_FT <= lu <= u + depth]
@@ -98,6 +114,7 @@ def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[fl
 
 
 BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
+"""Research: near stand-off - UNRESEARCHED: the near face 36 ft behind the fringe"""
 # THE BAND'S DEPTH BEFORE THE RAG, near face to far, and the rag on each face. The near face is roughened along its length
 # and pushed only OUT of the band, 0-`BELT_NEAR_RAG_FT`; the far face moves up to `BELT_FAR_RAG_FT` either way. A band
 # laid 100 ft deep so draws 90-115 ft where the fringe lies square to the wind - inside the record's 80-120 ft
@@ -109,8 +126,11 @@ BELT_NEAR_FT = 36.0  # ft behind the fringe the band's near face stands
 # `round_the_houses`, and 105 then drew 17-24% of two faces past 120 where 100 draws 1-16%, at the ends and bends
 # (spec-fidelity rounds of 2026-09-28; measured every 5 ft along the near face, `m:belt-r22-depth`).
 BELT_DEPTH_FT = 100.0
+"""Research: belt depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: laid 100 ft, drawn 90-115 ft with the rag"""
 BELT_NEAR_RAG_FT = 5.0
+"""Research: near face rag - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: up to 5 ft outward, an irregular grove edge"""
 BELT_FAR_RAG_FT = 10.0
+"""Research: far face rag - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: up to 10 ft either way, an irregular grove edge"""
 
 
 BELT_PROFILE_STEP_FT = 30.0  # ft along the fringe profile between the band's samples
@@ -151,7 +171,10 @@ def round_the_houses(cols: Sequence[tuple[float, float]], uv: Sequence[tuple[flo
     westernmost farmhouse, through that house's garden, and the garden's afternoon-sun lane then took the band's trees
     there and left the belt in two pieces. So every `step` across the wind, and every 15 degrees round each house's disc of
     `reach`, a point is added where the disc stands windward of the chord; the columns are kept as they are. The face
-    goes round the house at the distance the column rule already gives it."""
+    goes round the house at the distance the column rule already gives it.
+
+    Research: near face clear of every house - UNRESEARCHED: the stand-off kept from each house all along the face
+    """
     if len(cols) < 2:
         return list(cols)
     rev = cols[-1][0] < cols[0][0]
@@ -189,7 +212,16 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     So the near face is sampled ACROSS the wind and, in each column, sits just behind whichever
     house is furthest upwind THERE. The result hugs the settlement's windward profile whatever its
     shape - which is what a back-village grove does, being planted where the houses are - and stays
-    a band of constant depth, so `village_grove` still fills it as a belt rather than a blob."""
+    a band of constant depth, so `village_grove` still fills it as a belt rather than a blob.
+
+    Research:
+        one village belt for the clustered form only - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: none where every farm carries its own grove
+        belt on the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a band hugging the cluster's windward profile, never behind its center
+        shoulder past the end houses - UNRESEARCHED: the band runs 90 ft past the outermost house across the wind
+        off the afternoon sun-lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the near face moved back by the west sun lane, scaled by the wind's westward share
+        off the crop - UNRESEARCHED: stands back 22-60 px, then shortens to 0.6 of its span
+        no belt under three houses - UNRESEARCHED
+    """
     houses = s.M.get("houses", [])
     if len(houses) < 3:
         return []

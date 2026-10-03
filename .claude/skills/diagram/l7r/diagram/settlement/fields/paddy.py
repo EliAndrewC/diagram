@@ -1,6 +1,8 @@
 """Wet and dry field bodies, and the plot geometry they quilt themselves from.
 
 Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md for the index.
+
+Research: plumbing - NONE: the water frame, ring helpers, geometry and manifest records
 """
 
 import math
@@ -66,6 +68,11 @@ def _uf_xy(u: float, f: float) -> Pt:
 # is a whole basin inside its own bunds, never a patch within one - the blighted sub-region with its red crosses this
 # replaced drew exactly that.
 PADDY_REST = register_knob(Knob("paddy_rest", ["settled", "unsettled"], default="settled", weights={"settled": 0.8, "unsettled": 0.2}))
+"""
+Research:
+    rest forms - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: settled or unsettled, rolled per settlement
+    rest weights - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: four settled to one unsettled
+"""
 # HOW MANY REST, AND HOW FAR APART - liberties the record leaves the map, kept within it:
 #   REST_COUNT        "a few plots of a hamlet's paddy", per field; the estate of 1102, with nearly a third resting, is the
 #                     record's upper bound, not a hamlet's norm. 2-4 is a GUESS.
@@ -74,8 +81,11 @@ PADDY_REST = register_knob(Knob("paddy_rest", ["settled", "unsettled"], default=
 #   REST_FAR_POWER    they favor the far end of the water's run (the record's reading of "short water", a GUESS): a
 #                     plot's chance grows as the square of how far down the fall it lies.
 REST_COUNT = (2, 4)
+"""Research: rest count - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: two to four plots a field"""
 REST_APART_SIDES = 3.0
+"""Research: rest scattered - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: three mean plot sides apart, center to center"""
 REST_FAR_POWER = 2.0
+"""Research: rest at the far end - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: chance as the square of the fall position"""
 REST_GRASS, REST_TUFT = "#C8CF92", "#8FA05E"  # the pasture's grass and tuft inks (`pasture`): a resting plot is grazed
 
 
@@ -92,7 +102,11 @@ def rest_plots(cands: Sequence[tuple[Sequence[Pt], float]], rng: random.Random, 
     """Which of `cands` - `(ring, fall position)` pairs, the plots that may rest - rest this year: `count` of them at most,
     whole basins no smaller than the median candidate (a scrap of fabric is not a holding), drawn with a chance that grows
     toward the far end of the fall (`REST_FAR_POWER`) and kept `REST_APART_SIDES` mean plot sides apart. Indices into
-    `cands`, ascending."""
+    `cands`, ascending.
+
+    Research:
+        rest weighting and spacing - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: favoring the far end of the fall, kept apart
+        rest basin floor - UNRESEARCHED: no basin smaller than the median candidate rests"""
     if not cands:
         return []
     areas = [_ring_area(r) for r, _f in cands]
@@ -132,7 +146,15 @@ class PaddyMixin:
         inside the real 130-600 m2 basin band, and the default (46 -> ~785 m2 at 2 ft/px) is within
         the real parcel range (mean ~1 mu = ~600 m2, merged holdings larger) - no legibility
         inflation is in play, and the houses are true-scale too. The bund stroke draws at near-true
-        aze width for the map scale. See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html."""
+        aze width for the map scale. See research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html.
+
+        Research:
+            plot grain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 46 px by default
+            crop mix - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: dry and soy plots inside the field, 5-29% and 3-14% rising toward its rim
+            rice stage - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one green, 6% freshly flooded and 5% ripe
+            resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: whole dry rice basins inside the outline
+            tax-free plots - research/questions/0231-temple-fields-jochi.drawing.html: scattered interior plots, never a resting one
+            field outline - CONVENTION: a tan 3.5 px edge"""
         from l7r.diagram.waterfields import AZE, aze_w
 
         bund = aze_w(self.ftpx)  # near-true-scale aze stroke (~1.5 real ft; the why lives at waterfields.AZE)
@@ -243,7 +265,11 @@ class PaddyMixin:
         the water and slope - the bunds run along the CONTOUR (NE-SW, for the default NW-uphill tilt) and down
         the FALL LINE (NW-SE), with plots mildly elongated along-contour and stepping downhill - so the paddy
         reads as ORGANIZED BY THE WATER, not randomly diced. Still irregular (jittered split fractions +
-        slightly non-parallel bunds), just coherent. Tiles the bbox; clipped to the field outline."""
+        slightly non-parallel bunds), just coherent. Tiles the bbox; clipped to the field outline.
+
+        Research:
+            bunds along contour and fall - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a patchwork split along the contour and down the fall, wobbling 0.12 rad
+            plot shape - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 0.78 of the grain across the fall, 1.7 times that along the contour, split at 0.36-0.64"""
         ux, uy = 0.7071, -0.7071  # contour (along-slope) = a plot's LONG axis
         fx, fy = 0.7071, 0.7071  # fall line (downhill SE) = a plot's SHORT axis
         aspect = 1.7
@@ -285,7 +311,9 @@ class PaddyMixin:
         return out + stack
 
     def _taxfree_plots(self: Settlement, interior: Any, taxfree: int) -> None:  # type: ignore[misc]
-        """Mark `taxfree` scattered interior paddy plots vermilion (a priestess's / temple's tax-free land)."""
+        """Mark `taxfree` scattered interior paddy plots vermilion (a priestess's / temple's tax-free land).
+
+        Research: tax-free plot ink - research/questions/0231-temple-fields-jochi.drawing.html: a vermilion tint and outline, spread across the field"""
         if not interior:
             return
         interior = sorted(interior, key=lambda t: (round(t[2] / 40), t[1]))  # spread them across the field
@@ -307,7 +335,11 @@ class PaddyMixin:
         ~pitch apart with alternate-row half-offset, +-pitch/3 jitter and ~10% dropout, so spacing lands
         irregular in the ~2/3..4/3 pitch band and no row or column ever rules through. That is the truer
         read of traditional transplanting (roughly EVEN density - density drives yield - but never ruled;
-        real hills sit ~1/sq ft, one per PIXEL at 1 ft/px, so any drawable mottle is a sample regardless)."""
+        real hills sit ~1/sq ft, one per PIXEL at 1 ft/px, so any drawable mottle is a sample regardless).
+
+        Research:
+            unruled shoots - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a sparse random scatter, or a jittered grid at `pitch`
+            flooded sheen - CONVENTION: two pale lines on a flooded plot"""
         xs = [q[0] for q in poly]
         ys = [q[1] for q in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -336,6 +368,12 @@ class PaddyMixin:
         self.add(''.join(g))
 
     def _rows(self: Settlement, quad: Poly, pts: str, crop: str) -> None:  # type: ignore[misc]
+        """
+        Research:
+            dry rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot drawn in ridged rows at a random angle per plot
+            row spacing - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 13 px
+            row ink - CONVENTION: dashed olive 0.8 stroke
+        """
         xq = [p[0] for p in quad]
         yq = [p[1] for p in quad]
         cx0, cx1, cy0, cy1 = min(xq), max(xq), min(yq), max(yq)
@@ -365,7 +403,9 @@ class PaddyMixin:
     def resting_plots(self: Settlement, field: str, cands: Sequence[tuple[Sequence[Pt], float]]) -> set[int]:  # type: ignore[misc]
         """Which of a field's candidate plots rest this year (`PADDY_REST`): none on a settled paddy, `rest_plots`' pick on
         an unsettled one, from the field's own substream so one field's pick never moves another's. The form goes in
-        `meta.paddy_rest`."""
+        `meta.paddy_rest`.
+
+        Research: rest form applied - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: none on a settled paddy, REST_COUNT basins on an unsettled one"""
         form = self.resolve("paddy_rest")
         self.M["meta"]["paddy_rest"] = form
         if form == "settled":
@@ -380,7 +420,9 @@ class PaddyMixin:
     def rest_basin(self: Settlement, poly: Sequence[Pt], bund: float, field: str = "") -> None:  # type: ignore[misc]
         """A resting paddy plot: the whole basin inside its own bunds, grass where the rice would be, a few tufts of the
         grazing on it (`PADDY_REST`). Recorded in `fallow_patches` with its ring and its `field` (`rest_record`), and counted
-        in `meta.paddy_rested`. Only a basin `resting_plots` offered - one the registry admits - is rested."""
+        in `meta.paddy_rested`. Only a basin `resting_plots` offered - one the registry admits - is rested.
+
+        Research: resting plot drawn - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a whole basin of grass with tufts of grazing"""
         from l7r.diagram.waterfields import AZE
 
         pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
@@ -408,7 +450,14 @@ class PaddyMixin:
         FOLLOWS the water (rice hugging the ditches, dry upland crops where the network doesn't reach - wide-
         strip middles and the margins); the paddy is ~ONE green (a rice field, not a color mix). Records a
         feed channel (pond->field) and a drain channel (field->drain) so the checks see the supply. See
-        research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html."""
+        research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html.
+
+        Research:
+            water-first network - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a main along the high edge, laterals down the fall, a drain at the low edge
+            lateral spacing - UNRESEARCHED: a lateral every 4-6 columns
+            dry where water fails - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: above the main, below the drain and at the margins, 62% dry grain and the rest soy
+            flooded near the ditches - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 30% of plots near the main or drain painted flooded
+            plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default"""
         if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
             bbox = tuple(shape)
             outline = organic_bbox(bbox, amp)
@@ -548,7 +597,9 @@ class PaddyMixin:
             self.field_name_label(label, (x0, y0, x1, y1))
 
     def _wf_ditch(self: Settlement, name: str, pairs: Any, w: float, role: str) -> None:  # type: ignore[misc]
-        """Draw a water-first field's ditch AND record it, so the checks can validate what was drawn."""
+        """Draw a water-first field's ditch AND record it, so the checks can validate what was drawn.
+
+        Research: ditch ink - CONVENTION: pale blue stroke at the role's width"""
         pts = " ".join(f"{px:.0f},{py:.0f}" for px, py in pairs)
         self.add(f'<polyline points="{pts}" fill="none" stroke="#9CB4C8" stroke-width="{w}" opacity="0.9" stroke-linejoin="round" stroke-linecap="round"/>')
         self.M["field_ditches"].append({"poly": [[round(px, 1), round(py, 1)] for px, py in pairs], "role": role, "field": name})
@@ -567,7 +618,9 @@ class PaddyMixin:
 
         Sampled only where the field actually exists (`_wf_bnd` returns None otherwise), so no junk
         endpoints jut outside, then smoothed to kill the acute turns a sharply bending boundary
-        would otherwise put in them."""
+        would otherwise put in them.
+
+        Research: main and drain - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: along the high and low boundaries, 0.7 of a plot inside"""
         us = [min(ous) + i * 11 for i in range(int((max(ous) - min(ous)) / 11) + 1)] + [max(ous)]
         main_pts: list[Pt] = []
         drain_pts: list[Pt] = []
@@ -587,6 +640,7 @@ class PaddyMixin:
         return smooth(main_pts), smooth(drain_pts)
 
     def fallow_field(self: Settlement, bbox: Any, name: str, amp: float = 34) -> None:  # type: ignore[misc]
+        """Research: fallow field - UNRESEARCHED: a whole field drawn fallow in a dashed organic outline"""
         outline = organic_bbox(bbox, amp)
         d = smooth_closed(outline)
         self.add(f'<path d="{d}" fill="url(#fallow)" stroke="#9C7A40" stroke-width="1.8" stroke-dasharray="6,4"/>')

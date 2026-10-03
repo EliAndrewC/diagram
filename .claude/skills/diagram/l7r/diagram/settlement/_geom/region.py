@@ -12,6 +12,8 @@ touches it), so a point or a box the region calls CLEAR is clear of every painte
 or a glyph at a margin it would once have kept, and never gains one a keep-out forbids - the rules hold, the map may move
 (constitution X clause 15, v2.27.0: a placer may decide by a faster form; the GM: maps "do NOT need to remain identical in
 output"). Ground outside the window is taken.
+
+Research: keep-out raster - NONE: paints and reads keep-outs a caller supplies
 """
 
 from __future__ import annotations

@@ -8,7 +8,9 @@ end runs on alongside another lane, whether it kinks or hooks - answered the sam
 R10's sampler). A verdict is a pure function of the lane's points and the course or lane it is asked against, so it is KEPT,
 keyed on those points, and a lane that has not changed is answered from the keeper; a lane that has is judged again when asked.
 
-Exact: the same function answers, once per distinct input. Bounded (`KEEP`), so a long cohort does not grow it without end."""
+Exact: the same function answers, once per distinct input. Bounded (`KEEP`), so a long cohort does not grow it without end.
+
+Research: verdict cache - NONE"""
 
 from __future__ import annotations
 

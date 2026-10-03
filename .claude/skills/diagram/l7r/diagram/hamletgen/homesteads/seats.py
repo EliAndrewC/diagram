@@ -1,4 +1,7 @@
-"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: seat geometry - NONE: offsets, sampling and measures; the units that decide carry their own claims
+"""
 
 from __future__ import annotations
 
@@ -18,6 +21,7 @@ from ..plan import SitePlan
 # reach per seat (`turn_the_seat`) instead of carrying it here as slack.
 STANDOFF_SLACK_PX = 3.0
 DEFAULT_HOUSE = (46.0 * 1.35, 28.0 * 1.10)  # the LARGEST nucleated house `_try_place_bundle` rolls, in px at 1 px = 1 ft; the stage passes the map's own
+"""Research: largest house - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft scaled by 1.35 and 1.10"""
 
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
 
@@ -43,7 +47,10 @@ def front_row(
     at the ends on a map whose cluster is plainly beside its paddy. (This paragraph used to rest that on
     `field_ringed` (retired, feature 141), a check feature 141 retired; the geometry is the reason, and it did not need one.)
     Following the outline also draws better - a farming hamlet's front row bends with the field edge
-    the way a real one does, rather than ruling a straight line across a curved margin."""
+    the way a real one does, rather than ruling a straight line across a curved margin.
+
+    Research: a row fronting the field - UNRESEARCHED: the first seats offered one pitch apart along the field's outline, center-out
+    """
     # THE ENVELOPE WALK IS RETIRED (feature 226, at the gate's coverage floor): every hamlet builds a site boundary
     # before this runs, so the row is always offset from its chains; the walk along the paddy's own outline (one seat
     # in two on the hem, which the pre-test now refuses before the placer is asked) was unreachable and, under feature 174, deleted
@@ -68,7 +75,12 @@ def _front_row_from_chains(
     (`_site_blocks_rect` against the containment outline), where the paddy-envelope walk this replaces landed a
     seat on the hem one time in two and left the placer to discover it.
     Sampled at one bundle pitch along the chains (the honest spacing, as `front_row` argues), confined to the
-    stretch the cluster fronts (the rolled shape's wrap, as there), ordered center-out (as there), at most 64."""
+    stretch the cluster fronts (the rolled shape's wrap, as there), ordered center-out (as there), at most 64.
+
+    Research:
+        house off the paddy - research/questions/0029-farmhouses-minka.drawing.html: the wall rule's gap plus a foot, past the homestead's reach toward the chord
+        a row fronting the field - UNRESEARCHED: seats one pitch apart along the chains within the cluster's stretch, center-out
+    """
     seat = plan.seat
     ax, ay = seat["along"]
     if reach is None:
@@ -129,7 +141,10 @@ def lane_frontage(s: Settlement, seat: Mapping[str, Any], step: float = 86.0, co
     Ordered from the cluster's center outward, so the lanes fill from their busy end. The connector
     is skipped: it is the track OUT of the settlement, and lining it with farmhouses would string the
     hamlet along the road instead of nucleating it (that is the `linear` settlement form, a
-    different archetype)."""
+    different archetype).
+
+    Research: houses front their lanes - UNRESEARCHED: seats every 86 ft on both verges of each internal lane
+    """
     out: list[Pt] = []
     off = LANE_FRONTAGE_STANDOFF
     for lane in s.M.get("lanes", []):

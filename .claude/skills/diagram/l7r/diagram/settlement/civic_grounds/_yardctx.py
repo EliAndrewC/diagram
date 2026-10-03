@@ -2,6 +2,8 @@
 
 Split out of settlement/civic_grounds/stable_yard.py by feature 115 stage 2 - see
 settlement/civic_grounds/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -104,6 +106,12 @@ class _YardCtx:
         self.troughs_box: list[float] | None = None
 
     def clear(self, px: float, py: float, pad: float = 0.0, rim: bool = True) -> bool:
+        """May yard furniture stand at (px, py)?
+
+        Research:
+            yard furniture off roads, buildings, fields, water and the rampart - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 9 px from the wall line
+            footprint margin - NONE: 3 px round each building
+        """
         if rim and (px - self.sx) ** 2 + (py - self.sy) ** 2 > (self.r - pad) ** 2:
             return False  # rim=False for the well-side watering point, which may sit at/just past the disc edge
         wallp = self.wallp
@@ -124,6 +132,8 @@ class _YardCtx:
         Called at exactly one point - after the litter scatter, before the first `take`. This is the
         yard's third and last RNG draw site; moving the call moves `random.shuffle` relative to the
         scatter's draws and changes every yard on every map. See the class docstring.
+
+        Research: furniture candidate rings - UNRESEARCHED: 12 seats on each of rings at 32, 44, 56 and 68 px
         """
         for rad in (32.0, 44.0, 56.0, 68.0):
             for i in range(12):
@@ -144,10 +154,14 @@ class _YardCtx:
 
     def rail_rec(self, cx: float, cy: float, tx: float, ty: float) -> dict[str, float]:
         """The record a rail at this seat WOULD get - built before the rail is committed so a
-        candidate can be tested at its true drawn extent (rail_quad) like everything else."""
+        candidate can be tested at its true drawn extent (rail_quad) like everything else.
+
+        Research: hitching rail length - UNRESEARCHED: 18 px with a 2.4 px post reach
+        """
         return {"x": round(cx, 1), "y": round(cy, 1), "tx": round(tx, 3), "ty": round(ty, 3), "len": 18.0, "reach": 2.4}
 
     def draw_hitch(self, cx: float, cy: float, tx: float, ty: float, nx: float, ny: float) -> None:
+        """Research: hitching rail glyph - CONVENTION: a bar with four posts across it"""
         length = 18.0
         self.rails.append(self.rail_rec(cx, cy, tx, ty))
         ex0, ey0 = cx - tx * length / 2, cy - ty * length / 2
@@ -158,6 +172,7 @@ class _YardCtx:
         self.s.add("".join(fg))
 
     def rail_clear_of_heaps(self, cx: float, cy: float, tx_: float, ty_: float) -> bool:
+        """Research: rails clear of every muck heap - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 25 px from the heap center"""
         return all(seg_dist(hx_, hy_, (cx - tx_ * 9.0, cy - ty_ * 9.0), (cx + tx_ * 9.0, cy + ty_ * 9.0)) >= 25.0 for hx_, hy_ in self.prior_heaps)
 
     def glyph_free(self, q: Poly, hug: Any = None) -> bool:
@@ -165,7 +180,10 @@ class _YardCtx:
         cluster, hitching rail). Everything `q` is measured against is inflated by
         YARD_GLYPH_SLACK - except `hug`, the one wellhead a trough cluster deliberately stands
         beside, which is tested at TRUE extent: that bucket-pour gap is a deliberate ~1.5px and
-        inflating it would shove the troughs away from the well they exist to be poured from."""
+        inflating it would shove the troughs away from the well they exist to be poured from.
+
+        Research: well, troughs and rail never overlap - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: YARD_GLYPH_SLACK, the hugged well at true extent
+        """
         if any(sat_overlap(q, wellhead_quad(w_, 0.0 if w_ is hug else YARD_GLYPH_SLACK)) for w_ in self.s.M.get("wells", []) or []):
             return False
         if any(sat_overlap(q, trough_quad(b_, YARD_GLYPH_SLACK)) for b_ in self.prior_boxes):

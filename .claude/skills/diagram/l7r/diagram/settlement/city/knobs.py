@@ -1,4 +1,7 @@
-"""City knob helpers - the machi mouths and the swept moat tap (feature 145: moved out of _knobs.py, whose knob engine every map executes)."""
+"""City knob helpers - the machi mouths and the swept moat tap (feature 145: moved out of _knobs.py, whose knob engine every map executes).
+
+Research: plumbing - NONE
+"""
 
 import math
 from typing import Any
@@ -14,7 +17,13 @@ def machi_mouths(M: Any) -> list[tuple[float, float]]:
     both the placer (Settlement.kido_mesh) and the validator (kido_close_the_machi_mouths),
     same doctrine as bridge_carried_ways. Out-wall suburb districts are skipped: the gate
     wards live outside the curfew mesh (their bar is the city gate itself). Mouths within
-    40px collapse to one (a street grazing a district corner is one entry, not two)."""
+    40px collapse to one (a street grazing a district corner is one entry, not two).
+
+    Research:
+        a gate at every ward mouth - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.html: every street entering a machi district
+        suburb wards outside the mesh - UNRESEARCHED: out-wall machi districts get no mouths
+        mouth merge radius - NONE: crossings within 40 px are one entry
+    """
     wall = M.get("wall")
     out: list[tuple[float, float]] = []
     for d in M.get("districts", []):
@@ -53,7 +62,13 @@ def moat_swept_tap(ring: Any, inlet: Pt, outlet: Pt, other: Pt, near: Pt, want_d
     ~30 px throat, which overshoots past the target into a channel running nearly parallel to the
     rim. The wanted offset is a fraction of an edge (~36 px for a 30 px throat at 40 deg), so the
     walk samples every few px and takes the FIRST point that is swept enough - the nearest such
-    point, keeping the tap close to the field it feeds."""
+    point, keeping the tap close to the field it feeds.
+
+    Research:
+        offtake swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: the rim end walks upstream until the throat is acute
+        wanted sweep angle - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: 50 deg or less
+        walk limits - NONE: 220 px upstream, 90 px for an arriving drain, sampled every 5 px
+    """
     n = len(ring)
     if n < 3:
         return near

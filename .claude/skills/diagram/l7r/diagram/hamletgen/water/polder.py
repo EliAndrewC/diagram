@@ -2,6 +2,8 @@
 
 Split from `hamletgen/water.py` by feature 230 (constitution X clause 13); bodies verbatim.
 See `CLAUDE.md` in this directory.
+
+Research: polder geometry - NONE: grid search, flank letters, binning and intersection plumbing
 """
 
 from __future__ import annotations
@@ -31,7 +33,10 @@ from ..pondstock import reserve_sty_seat
 def reservoir_clear_of_crop(pond: tuple[float, float, float, float], envelope: Sequence[Pt]) -> bool:
     """THE RULE (feature 287, water W46): no part of the reservoir's rim lies on the crop - its ellipse, as a polygon drawn
     just OUTSIDE the true ellipse, shares no ground with the envelope. Sixteen rim samples let a spike of the envelope
-    through between two of them; a polygon does not. The seat below and its test read this one predicate."""
+    through between two of them; a polygon does not. The seat below and its test read this one predicate.
+
+    Research: reservoir outside the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: no part of the rim on the crop
+    """
     from shapely.geometry import Polygon
 
     n = 96
@@ -42,7 +47,10 @@ def reservoir_clear_of_crop(pond: tuple[float, float, float, float], envelope: S
 
 def reservoir_uphill_of_field(pond: tuple[float, float, float, float], envelope: Sequence[Pt], fall: Pt) -> bool:
     """THE RULE (feature 287, water W46): the source sits ABOVE what it waters - the reservoir's center is further up the
-    fall than the field's highest point (research/contents.json#field-archetypes polder siting; the soak test's own reading)."""
+    fall than the field's highest point (research/contents.json#field-archetypes polder siting; the soak test's own reading).
+
+    Research: reservoir above what it waters - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: its center up the fall of the field's highest point
+    """
     return pond[0] * fall[0] + pond[1] * fall[1] < min(float(p[0]) * fall[0] + float(p[1]) * fall[1] for p in envelope)
 
 
@@ -56,7 +64,10 @@ def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any
     which on an envelope that needed more left the rim on the crop; and it tested 16 rim points, which a spike between
     two of them slipped through. Both predicates are asked at each step, and the steps are bounded by geometry rather
     than a count: once the rim's LOWEST point stands above the field's HIGHEST, the ellipse cannot meet the envelope and
-    the center is uphill of it, so the seat is found at or before that step. `(ux, uy)` is the unit uphill direction."""
+    the center is uphill of it, so the seat is found at or before that step. `(ux, uy)` is the unit uphill direction.
+
+    Research: reservoir seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: walked straight uphill from the ring's head until clear of the crop and above it
+    """
     fall = (-ux, -uy)
     top = min(float(p[0]) * fall[0] + float(p[1]) * fall[1] for p in envelope)
     reach = math.hypot(pond[2] * fall[0], pond[3] * fall[1])  # the ellipse's half extent along the fall
@@ -79,7 +90,10 @@ def dike_gaps_at_channels(ring: list[Any], channels: Any, sluices: Any) -> list[
     filed in a `PointGrid` by its box grown a foot - a crossing `segments_cross` finds, and the point `seg_intersect` then
     bounds to both segments, lies inside both boxes, so the foot only absorbs rounding - and a segment asks only the
     edges whose grown box meets its own, IN RING ORDER, so the gaps come out in the order the full scan found them.
-    `tests/hamletgen/test_dike_gaps_index.py` holds the full scan as the oracle."""
+    `tests/hamletgen/test_dike_gaps_index.py` holds the full scan as the oracle.
+
+    Research: gap at every crossing - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the dike cut wherever a channel crosses it, a crossing within 30 ft of a gap being that gap
+    """
     gaps = list(sluices)
     n = len(ring)
     grid = PointGrid(64.0)
@@ -108,7 +122,10 @@ def inlet_to_rim(pts: list[Any], pond: tuple[float, float, float, float], envelo
     ONLY THE STUB'S END MOVES (feature 287, water W44). Where `_polder_close` trimmed the stub away as an acute tail (a
     warped corner), the feeder's last point is a RING vertex inside the crop - and moving it to the rim dragged the ring
     off the corner the west toe had been snapped onto (Polder 12: the toe's end left 15.5 ft from any trunk). A last
-    point inside the crop is kept, and the run to the rim is added after it."""
+    point inside the crop is kept, and the run to the rim is added after it.
+
+    Research: inlet reaches the reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the feeder's stub ended on the pond's rim
+    """
     sx, sy = float(pts[-1][0]), float(pts[-1][1])
     vx, vy = pond[0] - sx, pond[1] - sy
     lo, hi = 0.0, 1.0
@@ -128,7 +145,10 @@ def gaps_for_courses(gaps: Sequence[Any], courses: Sequence[Sequence[Pt]], crest
     """`gaps` with one more wherever a course still breaches the crest (`course_breaches`) - each at the breach itself, and
     the course asked again until it breaches nowhere, so every course recorded when the dike is drawn crosses it only at
     a gap (feature 287, water W42). Asked half a foot stricter on both reaches than the rule, since the dike records its
-    crest and gaps rounded to 0.1 px."""
+    crest and gaps rounded to 0.1 px.
+
+    Research: gap at every crossing - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: every recorded course crosses the crest only at a gap
+    """
     out = list(gaps)
     for course in courses:
         while hits := course_breaches(list(course), list(crest), [(float(g[0]), float(g[1])) for g in out], CREST_REACH + 0.5, GAP_REACH - 0.5):
@@ -155,6 +175,14 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.water.polder.dike_gaps_at_channels
         l7r.diagram.settlement.Settlement.perimeter_dike
         l7r.diagram.settlement.Settlement.apply_land_use
+
+    Research:
+        header reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: outside the dike, uphill at the ring canal's head
+        reservoir size - UNRESEARCHED: an 82 x 54 px ellipse
+        dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: the block converted to fish ponds, DIKEPOND_CONVERSION or the whole of it
+        perimeter dike gapped at crossings - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: cut wherever a channel or recorded course crosses it
+        dike uncaptioned - CONVENTION: the scripted tier draws the perimeter dike without a label
+        ditch corridors - UNRESEARCHED: every ditch segment not wholly in the crop a 30 px no-build corridor
     """
     # BOTH polder archetypes come through here (feature 150): the fabric table sets the module and
     # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
@@ -311,7 +339,13 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     polder grows by taking in more of the marsh, not by drawing bigger fields.
 
     The block keeps a ~1.8:1 tall aspect (Enokida's 15x8 is 1.9), which is what a wei-tian module
-    looks like when it is diked out along a shore rather than around a bay."""
+    looks like when it is diked out along a shore rather than around a bay.
+
+    Research:
+        polder acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: the grid of modules solved to the households' acreage, refused outside POLDER_ACRE_BAND
+        module kept, grid scaled - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: the cell size never stretched, the block grown by modules
+        block aspect - UNRESEARCHED: cols about 0.55 of rows, Enokida's 15 x 8
+    """
     # THE ORIGIN IS DERIVED, NOT PINNED. `build_polder` grows its grid from the HIGH corner along the
     # fall and across it, so a fixed corner only works for one fall bearing - at down_deg=0 the same
     # corner sends the block off the top of the canvas, which is exactly what the first version did
@@ -374,11 +408,15 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
 
 PAIR_ROUNDS = 12  # the (rows, cols) refinement's builds after the bisection: each lands on the pair its measured acres per cell predicts nearest the target, and the pairs of a 1.5-2.2:1 block are dense enough that measured cohorts land in two or three
 POLDER_ACRE_BAND = 0.12  # a polder's drawn acreage is within this fraction of the households' target (feature 287, water W47): the soak's clause, with the fit's own 6% tolerance inside it
+"""Research: polder acreage band - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: within 12% of the households' target"""
 
 
 def _nearest_pair(tried: Mapping[tuple[int, int], Any], per_cell: float, miss: Any) -> tuple[int, int]:
     """The untried (rows, cols) block of the archetype's aspect band (cols 0.45-0.65 of rows, Enokida's 15x8 at 0.53)
-    whose acreage `per_cell` predicts nearest the target, the nearer to the 0.55 aspect on a tie."""
+    whose acreage `per_cell` predicts nearest the target, the nearer to the 0.55 aspect on a tie.
+
+    Research: block aspect band - UNRESEARCHED: cols 0.45-0.65 of rows, nearest 0.55 on a tie
+    """
     return min(
         ((r, c) for r in range(6, 45) for c in range(max(4, round(r * 0.45)), max(4, round(r * 0.65)) + 1) if (r, c) not in tried),
         key=lambda rc: (round(miss(per_cell * rc[0] * rc[1]), 3), abs(rc[1] / rc[0] - 0.55)),
@@ -387,13 +425,21 @@ def _nearest_pair(tried: Mapping[tuple[int, int], Any], per_cell: float, miss: A
 
 def polder_acres_in_band(acres: float, target: float, band: float = POLDER_ACRE_BAND) -> bool:
     """THE RULE (feature 287, water W47): the polder's drawn acreage lands within `band` of its target. The fit and its
-    test read this one predicate."""
+    test read this one predicate.
+
+    Research: polder acreage band - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: within POLDER_ACRE_BAND of the target
+    """
     return abs(acres - target) / target < band
 
 
 def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: float, fab: Mapping[str, Any], mosaic: float) -> dict[str, Any]:
     """One candidate block of `rows` x `cols` modules, centered on the canvas, its edge wander walked down until it reads
-    as surveyed (see `fit_polder`)."""
+    as surveyed (see `fit_polder`).
+
+    Research:
+        surveyed block - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: edge wander walked down from 0.5 until the outline fills 0.86 of its box
+        block centered - NONE: on the canvas at any bearing
+    """
     dx, dy = plan.fall
     ux, uy = -dy, dx  # across the fall
     along, across = rows * cellpx, cols * cellpx
@@ -467,7 +513,10 @@ def waterward_flanks(plan: SitePlan) -> list[str]:
     when dry ground is a few steps away), and the head flank, where the header reservoir already
     stands as the wild water. So: the foot (the outfall side, already wet) and the cross flank(s)
     the cluster does not occupy. This is the hand-authored Kuwabata's and Enokida's `["W", "S"]`
-    derived rather than declared."""
+    derived rather than declared.
+
+    Research: waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands
+    """
     f = polder_flanks(plan)
     return [q for q in (f["minus"], f["plus"], f["foot"]) if q != f["cluster"]]
 
@@ -496,7 +545,10 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 3
     and the next review measured 14 outline points in the notch bin and 0 steps on all four flanks:
     the ring's cut ENDS fill it. A rule that cannot fire looks exactly like a rule that passes, so the
     step now reads the record alone (bins beyond the ring's own span still keep the extreme - the
-    strip runs a little past the dike's ends, and there is no cut there)."""
+    strip runs a little past the dike's ends, and there is no cut there).
+
+    Research: strip at the dike's outer face - UNRESEARCHED: the reeds stop at the outermost face, stepping in through a notch
+    """
     horiz = flank in ("W", "E")
     ai, fi = (1, 0) if horiz else (0, 1)  # bin ALONG `ai`; the face is the extreme on `fi`
     outward_min = flank in ("W", "N")
@@ -561,6 +613,10 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.water.polder.dike_face
         l7r.diagram.settlement.Settlement.marsh
         l7r.diagram.hamletgen.pondstock.reserve_sty_seat
+
+    Research:
+        reed fringe on the waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a marsh strip off each water-facing flank
+        strip depth - CONVENTION: WATERWARD_DEPTH outlasts any crop, the strip running off the frame
     """
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return
@@ -607,7 +663,10 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     interior lateral, NONE on the feeder, the far toe or the drain. At the HEAD: three on the feeder, one on each toe.
     At the FOOT: two on each toe and none on the drain. `build_polder` names the +cross collector `e_toe` and the other
     `w_toe`; which is the settlement side is read off the seat, not assumed. (A valley hamlet such as the reference has
-    no polder: this and the dike gates draw nothing there.)"""
+    no polder: this and the dike gates draw nothing there.)
+
+    Research: crossings where the village lives - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: three on the collector the village abuts, one per lateral, none on the drain
+    """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:
         return {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}

@@ -7,6 +7,8 @@ predicates are computed from wall_runs(). The arch glyph, the avenue count, the 
 threshold all live in shrines_wells/torii.py and are untouched by this module.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: wall geometry - NONE: wall runs, ward closure and box-against-run tests
 """
 
 import math
@@ -27,6 +29,7 @@ from .primitives import seg_dist, segments_cross
 # explicit outliers they are, denser than the pitch. The threshold rule (the innermost arch one pitch
 # off its hall, GM 2026-07-27) holds at the new pitch.
 TORII_PITCH_FT = 12.0  # the stride of every avenue, and the gap from the innermost arch to its hall
+"""Research: torii avenue pitch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft stride and threshold"""
 
 
 def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, float, float]:
@@ -38,7 +41,12 @@ def torii_glyph_dims(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, 
     (about 1.2 ft) sit hidden under it - so the bar reads as an arch and not a plank. The drawn depth is
     the post side: at 1, 2 and 3 ft/px that is 2.6 px beside a pitch of 12, 6 and 4 px, so neighbors at the
     pitch never touch (the elevation glyph it replaces was about 10 ft deep on paper and could not stand at
-    a 12 ft pitch)."""
+    a 12 ft pitch).
+
+    Research:
+        torii span - UNRESEARCHED: 16 ft default
+        top beam width - UNRESEARCHED: 1.4 ft, floored at 1.9 px
+        posts proud of the beam - CONVENTION: 1.35x the beam, squares beside the bar"""
     s2 = (span_ft / ftpx) / 2
     beam = max(1.4 / ftpx, 1.9)
     post = beam * 1.35
@@ -63,6 +71,7 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
 # with its temple, held to it by the temple-neighborhood checks. The zoning rule this encodes:
 # research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html.
 WARD_BARRED_KINDS = frozenset({"laborer", "laborer_large", "merchant", "merchant_house", "merchant_large", "burakumin", "shop", "inn"})
+"""Research: samurai ward keeps commoners out - research/questions/0161-the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi.drawing.html: laborers, merchants, shops, inns, burakumin barred"""
 
 
 def ward_interior(fence: Poly, wall: Poly) -> Poly | None:
@@ -188,7 +197,9 @@ def _box_hits_run(box: tuple[float, float, float, float], pts: Poly, half: float
 def torii_seat_on_wall(M: Manifest, tx: float, ty: float, ftpx: float, runs: list[tuple[str, Poly, float]] | None = None) -> str | None:
     """The label of the wall an arch seated at (tx, ty) would stand in, or None if it stands clear.
     Asked of ONE candidate seat before it is drawn; `runs` caches wall_runs(M) across a sweep. The
-    arch's extent is torii_halfbox - the same true-scale glyph box the crop and frame checks use."""
+    arch's extent is torii_halfbox - the same true-scale glyph box the crop and frame checks use.
+
+    Research: torii stands clear of every wall - UNRESEARCHED: an arch's box may not reach a wall run"""
     txh, tyu, tyd = torii_halfbox(ftpx)
     for lbl, pts, half in wall_runs(M) if runs is None else runs:
         if _box_hits_run((tx - txh, ty - tyu, tx + txh, ty + tyd), pts, half):
@@ -198,7 +209,9 @@ def torii_seat_on_wall(M: Manifest, tx: float, ty: float, ftpx: float, runs: lis
 
 def torii_wall_conflicts(M: Manifest) -> list[tuple[float, float, str]]:
     """Every recorded arch standing in a wall, as [(x, y, wall label), ...] - the whole-manifest
-    form of torii_seat_on_wall, shared by the engine's post-draw guards and by check_village."""
+    form of torii_seat_on_wall, shared by the engine's post-draw guards and by check_village.
+
+    Research: torii stands clear of every wall - UNRESEARCHED: every recorded arch tested against the wall runs"""
     ftpx = float(M.get("meta", {}).get("ftpx", 1) or 1)
     runs = wall_runs(M)
     bad = []

@@ -3,6 +3,8 @@
 Split out of `houses.py` by feature 278, when the index of the hard polygons' boxes (`_hard_index`, FR-009) took that
 file past the 1,000-line bar. The methods are unchanged and still reach everything through `self.`; `HardGroundMixin` is
 one more base of `Settlement` (`core.py`).
+
+Research: footprint test and its index - NONE
 """
 
 from __future__ import annotations
@@ -25,7 +27,12 @@ class HardGroundMixin:
         and contour archetypes have their own), so the rule silently did nothing there. Reading the
         drawn record instead makes it order-independent and impossible for a gen to forget: the same
         placement-and-check-read-the-same-source doctrine the footbridges taught us. Cached on the
-        record counts, since this is called once per placement candidate."""
+        record counts, since this is called once per placement candidate.
+
+        Research:
+            marsh is no-build - research/questions/0058-ground-too-wet-to-build-on.html: every drawn marsh polygon is hard ground
+            crop and ditches are no-build - UNRESEARCHED: a footprint may not touch a dry plot, nor come within the ditch's half-width plus 2 px
+        """
         dp, fd = self.M.get("dry_plots", []) or [], self.M.get("field_ditches", []) or []
         key = (len(dp), len(fd), len(self.hard_polys), len(self.wet_polys))
         if self._hard_cache_key == key:
@@ -55,7 +62,9 @@ class HardGroundMixin:
         `_solve_homestead` NUDGES a farmstead after it has already passed `_fits`, to make room for
         its yard, garden and grove - and nothing re-tested the moved position, so a steading that
         genuinely cleared every keep-out where it was placed could be shifted onto a ditch or a hem
-        plot afterwards. That was the last root cause behind the overlap matrix's residue."""
+        plot afterwards. That was the last root cause behind the overlap matrix's residue.
+
+        Research: tilt allowance - NONE: the footprint is swept by the farmhouse's 5 degree tilt, which is decided elsewhere"""
         hard = self._hard_ground()
         if not hard:
             return True

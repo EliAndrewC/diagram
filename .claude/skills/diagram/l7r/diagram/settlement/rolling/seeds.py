@@ -1,6 +1,8 @@
 """Where the candidate house seats COME FROM - the settlement-form seed generators and the perimeter ring.
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
+
+Research: seed plumbing - NONE
 """
 
 import math
@@ -20,7 +22,10 @@ class SeedFormsMixin:
         structural difference between two same-region villages (research.md D5; a levee, a valley-edge track,
         or a canal bank strings the houses out). Distributes `n` seeds along the segment `p0`->`p1` (uniform
         along its length) with a perpendicular jitter up to +/-`half_band`; the bundle solver then hugs each
-        homestead to the field edge as usual. Records `meta.settlement_form` when `record=True`."""
+        homestead to the field edge as usual. Records `meta.settlement_form` when `record=True`.
+
+        Research: farms strung along a line - research/questions/0033-row-villages-resson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: seeds uniform along the segment, jittered up to +-half_band across it
+        """
         if record:
             self.M["meta"]["settlement_form"] = form
         (x0, y0), (x1, y1) = p0, p1
@@ -40,7 +45,10 @@ class SeedFormsMixin:
         nucleus - the kainyo / Tonami dispersed-farmstead pattern of the well-watered plains. Area-uniform
         over the ellipse so the farms spread out; `try_place`'s field-adjacency + no-build blockers then
         filter them onto the dry margins, leaving them dotted along the field edges instead of clumped.
-        Records `meta.settlement_form`. Pair with `s._nucleated = False` so each farm draws its OWN grove."""
+        Records `meta.settlement_form`. Pair with `s._nucleated = False` so each farm draws its OWN grove.
+
+        Research: scattered farmsteads - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: area-uniform over an ellipse, then filtered onto the dry margins
+        """
         if record:
             self.M["meta"]["settlement_form"] = form
         out: list[Pt] = []
@@ -55,7 +63,10 @@ class SeedFormsMixin:
         Jiangnan-style water town where the houses FRONT the water, offset `offset` px to either side of the
         canal polyline. Records `meta.settlement_form`. (Per GM canon canals are a Lion-lands feature, so this
         form is typing-gated to Lion lands / a declared canal.) `try_place` then keeps each seed field-adjacent
-        and off blockers, so the row packs cleanly along the waterfront."""
+        and off blockers, so the row packs cleanly along the waterfront.
+
+        Research: water town fronting a canal - UNRESEARCHED: houses on alternate banks at a fixed offset, evenly spaced along the canal
+        """
         if record:
             self.M["meta"]["settlement_form"] = form
         segs = [(canal[i], canal[i + 1]) for i in range(len(canal) - 1)]
@@ -77,6 +88,7 @@ class SeedFormsMixin:
         return out
 
     def _perim_bbox(self: Settlement, bbox: Any, n: int, gap: float) -> list[Pt]:  # type: ignore[misc]
+        """Research: ring seats round a field box - UNRESEARCHED: evenly spaced round the perimeter, standing off gap + 4 to 0.85 gap with +-10 px jitter"""
         x0, y0, x1, y1 = bbox
         bw, bh = x1 - x0, y1 - y0
         per = 2 * (bw + bh)
@@ -96,6 +108,7 @@ class SeedFormsMixin:
         return pts
 
     def _perim_poly(self: Settlement, poly: Any, n: int, gap: float) -> list[Pt]:  # type: ignore[misc]
+        """Research: ring seats round a field outline - UNRESEARCHED: evenly spaced round the outline, standing off gap + 4 to 0.85 gap with +-10 px jitter"""
         area = _signed_area(poly)
         seglen = [math.hypot(poly[(i + 1) % len(poly)][0] - poly[i][0], poly[(i + 1) % len(poly)][1] - poly[i][1]) for i in range(len(poly))]
         per = sum(seglen)
@@ -119,7 +132,13 @@ class SeedFormsMixin:
         return pts
 
     def ring(self: Settlement, shape: Any, n: int, gap: float, kinds: Any, max_big: int = 4) -> None:  # type: ignore[misc]
-        """Ring a field with houses. shape: bbox tuple, or ('poly', smoothed_outline)."""
+        """Ring a field with houses. shape: bbox tuple, or ('poly', smoothed_outline).
+
+        Research:
+            farms ring their field - research/questions/0124-farmsteads-at-a-town.drawing.html: a town's farmsteads stand round the paddies
+            no road between farm and field - UNRESEARCHED: a ring seat whose way to the field crosses a road is dropped
+            big houses capped - UNRESEARCHED: at most `max_big` (4) big farmhouses, the kind rolled per position
+        """
         # SCOPED (2026-08-08): _perim_bbox / _perim_poly jitter the ring's candidate SEATS from the
         # stream, so an upstream change moved every farmhouse a town rings its fields with - and the
         # yards, gardens, sheds and groves that hang off them. Keyed on the shape being ringed.

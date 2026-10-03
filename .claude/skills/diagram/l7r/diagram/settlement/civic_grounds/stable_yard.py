@@ -6,6 +6,8 @@ Split from settlement/civic_grounds.py by feature 115 - see settlement/civic_gro
 decomposed it into `_YardCtx` (the shared state and the predicates every stage tests against, in
 `_yardctx.py`) plus one method per stage. The stage ORDER in `_stable_yard` is the RNG order - read
 the RNG contract on `_YardCtx` before moving anything here.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -35,7 +37,13 @@ class StableYardMixin:
         stables so `stables_have_yards` can gate that no gate stables reverts to blank parchment.
 
         The stage order below IS the RNG order (feature 115): `_YardCtx(...)` draws nothing,
-        `_yard_litter` draws, `seat_init` shuffles, and nothing after it draws at all."""
+        `_yard_litter` draws, `seat_init` shuffles, and nothing after it draws at all.
+
+        Research:
+            beaten-earth yard, no paddock, no animals - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
+            yard radius - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: r, default 72 px
+            seeded scatter - NONE: the global stream seeded from the seat and restored
+        """
         st = random.getstate()
         random.seed(int(abs(sx) * 11 + abs(sy) * 7 + round(r)))
         ctx = _YardCtx(self, sx, sy, r)
@@ -62,6 +70,12 @@ class StableYardMixin:
         random.setstate(st)
 
     def _yard_litter(self: Settlement, ctx: _YardCtx) -> None:  # type: ignore[misc]
+        """The beaten earth and its litter.
+
+        Research:
+            earth and straw scatter - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: feathered over the open ground
+            scatter density and feather - CONVENTION: one mark per 46 sq px, feathered over 22 px
+        """
         # 1. BEATEN-EARTH scuff + STRAW litter: a feathered scatter so the ground reads TRODDEN, not blank
         sx, sy, r = ctx.sx, ctx.sy, ctx.r
         g: list[str] = []
@@ -101,6 +115,13 @@ class StableYardMixin:
     # these maps render no humans, so they render no animals either; the rail itself plus
     # the beaten-earth litter carry the "in active use" signal).
     def _yard_road_rail(self: Settlement, ctx: _YardCtx) -> None:  # type: ignore[misc]
+        """The rail along the road.
+
+        Research:
+            first rail along the nearest road - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
+            setback from the road - UNRESEARCHED: half the road width plus 11 px
+            no rail tip on a road or the rampart - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
+        """
         # (1) the ROAD-PARALLEL edge rail: nearest road/street segment, rail set back into the yard
         sx, sy, r = ctx.sx, ctx.sy, ctx.r
         best_seg: Any = None
@@ -125,6 +146,13 @@ class StableYardMixin:
                 ctx.used.append((rcx, rcy))
 
     def _yard_interior_rails(self: Settlement, ctx: _YardCtx) -> None:  # type: ignore[misc]
+        """The rails inside the yard.
+
+        Research:
+            two more rails inside the yard - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: up to two, eight tries
+            rail spacing - UNRESEARCHED: 24 px apart, 10 px inside the rim
+            rail bearing - UNRESEARCHED: east-west
+        """
         # (2) one or two more rails at clear interior spots (a busy train needs the tie-up room);
         # tips probed like the road rail
         # bounded RETRIES, not two attempts: a candidate refused by the heap/glyph rules must not
@@ -143,6 +171,15 @@ class StableYardMixin:
             seated += 1
 
     def _yard_watering(self: Settlement, ctx: _YardCtx) -> None:  # type: ignore[misc]
+        """The troughs and their well.
+
+        Research:
+            troughs clustered at the nearest well - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a well within r + 40 px
+            trough count - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 3 on a ground of r 76 or more, else 2
+            trough size - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 4.6 x 2 px
+            bucket-pour offset - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: the roof's reach plus 1.5 px
+            a yard with no well digs its own - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
+        """
         # the WATERING POINT (GM 2026-07-23, researched - research/questions/0195-stable-yards-and-watering-troughs.html ('Stable yard' watering
         # paragraph): a working ox drinks ~10 gal/day, a buffalo more, so a wagon-train needs
         # 300-600 gal in one or two big sessions - one small trough is functionally undersized.
@@ -229,6 +266,14 @@ class StableYardMixin:
         ctx.wp = wp
 
     def _yard_dung_heaps(self: Settlement, ctx: _YardCtx) -> None:  # type: ignore[misc]
+        """The muck heaps.
+
+        Research:
+            one or two muck heaps - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
+            heap clear of every rail - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 25 px
+            heap size - UNRESEARCHED: 2.5 x 1.8 px
+            heap clear of other furniture - UNRESEARCHED: 16 px
+        """
         # 1-2 DUNG HEAPS - the little "someone works here" tell; the ellipse's EDGE points are
         # probed too (GM 2026-07-24: a heap must not foul the road tread or the rampart clearance),
         # and a heap keeps WELL clear of every RAIL LINE ON THE MAP (GM 2026-07-25, two rounds:

@@ -1,4 +1,23 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+
+Research:
+    settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, water_town, dike_top
+    field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
+    land_use_overlay forms - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: none, mulberry_fishpond, lotus, tea_fringe
+    kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage
+    cluster_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise
+    cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent, split
+    lane_web forms - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side alleys or a back lane, rolled evenly
+    bamboo forms - research/questions/0075-bamboo-groves-chikurin.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: none, homestead, thicket, both
+    lane_skeleton forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
+    water_source_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: four corners, mid-margin, a pond chain, or a stream entering on one of four edges
+    plot_size forms - research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: small_irregular, medium, large_block, strip
+    plot_regularity forms - research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: organic or grid
+    grain_drift range - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: -12 to 12 degrees off the fall line in 4 degree steps
+    byre_form forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the inner stable, a yard shed, a detached commons shed
+    byre_form weights - GUESS: 0.6 inner, 0.3 yard shed, 0.1 commons
+    caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html: wagon or hatago, rolled evenly
+"""
 
 import hashlib
 import math
@@ -15,7 +34,8 @@ TypingRule = Callable[[Any, Mapping[str, Any]], bool]
 
 
 def _always_typed(value: Any, context: Mapping[str, Any]) -> bool:
-    """Default typing rule: every value is allowed (a knob with no geographic constraint)."""
+    """Default typing rule: every value is allowed (a knob with no geographic constraint).
+    Research: no constraint - NONE"""
     return True
 
 
@@ -26,7 +46,8 @@ def scope_seed(seed: int, name: str, key: Sequence[Any]) -> int:
     SHA-256 for the same reason `knob_rng` uses it: Python's `hash()` is salted per process, so a
     map keyed off it would redraw differently on every run. Float keys are rounded to 0.1 px - the
     manifest's own precision - so a key derived from geometry is stable against representation
-    noise while still changing when the geometry genuinely moves."""
+    noise while still changing when the geometry genuinely moves.
+    Research: seeding - NONE"""
 
     def fmt(v: Any) -> str:
         return f"{round(float(v), 1):.1f}" if isinstance(v, (int, float)) and not isinstance(v, bool) else str(v)
@@ -40,7 +61,8 @@ def knob_rng(seed: int, knob_name: str) -> random.Random:
     name) with SHA-256 - Python's built-in hash() is salted per process (PYTHONHASHSEED), so it
     cannot give cross-run determinism - so each knob draws independently of the others and a given
     (seed, knob) pair always yields the same draw. Returns its OWN Random instance and never disturbs
-    the global random state the generators seed positionally."""
+    the global random state the generators seed positionally.
+    Research: seeding - NONE"""
     digest = hashlib.sha256(f"{seed}\x00{knob_name}".encode()).digest()
     return random.Random(int.from_bytes(digest[:8], "big"))
 
@@ -49,9 +71,11 @@ class Knob:
     """One named degree of village-layout variation: a discrete value_space, a default, and a
     typing_rule(value, context) predicate that excludes values historically invalid for the stated
     geography / already-resolved knobs. `roll` draws deterministically and independently from the
-    typing-filtered space."""
+    typing-filtered space.
+    Research: knob machinery - NONE"""
 
     def __init__(self, name: str, value_space: Sequence[Any], default: Any, typing_rule: TypingRule | None = None, weights: Mapping[Any, float] | None = None) -> None:
+        """Research: knob machinery - NONE"""
         self.name = name
         self.value_space: list[Any] = list(value_space)
         self.default = default
@@ -61,12 +85,14 @@ class Knob:
         self.weights: dict[Any, float] | None = dict(weights) if weights is not None else None
 
     def allowed(self, context: Mapping[str, Any]) -> list[Any]:
-        """value_space filtered to the values whose typing_rule holds in this context."""
+        """value_space filtered to the values whose typing_rule holds in this context.
+        Research: knob machinery - NONE"""
         return [v for v in self.value_space if self.typing_rule(v, context)]
 
     def roll(self, seed: int, context: Mapping[str, Any]) -> Any:
         """A deterministic, independent draw from the typing-filtered value space. An empty filtered
-        space is a spec error (loud), never a silent fallback (contract C2)."""
+        space is a spec error (loud), never a silent fallback (contract C2).
+        Research: knob machinery - NONE: an even draw unless the knob carries weights"""
         pool = self.allowed(context)
         if not pool:
             raise ValueError(f"knob {self.name!r}: no value in {self.value_space} satisfies its typing rule for context {dict(context)!r}")
@@ -82,11 +108,13 @@ class Knob:
 
 
 KNOBS: dict[str, Knob] = {}
+"""Research: the knob catalog - NONE"""
 
 
 def register_knob(knob: Knob) -> Knob:
     """Register a knob in the global catalog (last registration per name wins). Returns the knob so
-    a module can write `X = register_knob(Knob(...))`."""
+    a module can write `X = register_knob(Knob(...))`.
+    Research: knob machinery - NONE"""
     KNOBS[knob.name] = knob
     return knob
 
@@ -95,7 +123,8 @@ def resolve_knob(name: str, seed: int, context: Mapping[str, Any], pinned: Mappi
     """Resolve one registered knob. Order (data-model.md): pinned -> rolled -> default. A pinned value
     that is not in the value_space, or that violates the typing_rule, is a loud error - never silently
     drawn (contract C3). With do_roll=False an unpinned knob falls straight to its default (a map that
-    opts out of rolling this knob)."""
+    opts out of rolling this knob).
+    Research: knob machinery - NONE"""
     knob = KNOBS[name]
     if pinned.get(name) is not None:
         val = pinned[name]
@@ -119,7 +148,8 @@ def resolve_knob(name: str, seed: int, context: Mapping[str, Any], pinned: Mappi
 def _lane_skeleton_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     """A 'waterside' lane skeleton needs water running ALONG the cluster (a stream/canal beside it), not
     merely a valley-head pond uphill - so it is allowed only for a stream-fed village or one that
-    explicitly declares a waterside/canal site."""
+    explicitly declares a waterside/canal site.
+    Research: waterside lanes need water along the cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html"""
     if v == "waterside":
         return ctx.get("water_kind") == "stream" or bool(ctx.get("waterside_site"))
     return True
@@ -128,7 +158,8 @@ def _lane_skeleton_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 def _water_source_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     """Stream 'edge_*' entry points need a stream source; the pond positions (corner/mid_margin/chain)
     need a pond. Gravity feed (source uphill of the field intake) is a PLACEMENT concern enforced when
-    the source is drawn, not a value exclusion here."""
+    the source is drawn, not a value exclusion here.
+    Research: a stream entry needs a stream, a pond seat a pond - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html"""
     if v.startswith("edge_"):
         return ctx.get("water_kind") == "stream"
     return ctx.get("water_kind") != "stream"
@@ -137,16 +168,19 @@ def _water_source_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 # The two attested ways of making every house in a nucleated cluster reachable. Defined up here
 # rather than beside `web_cuts` because the knob catalog below registers against it at import.
 LANE_WEBS = ("alleys", "back_lane")
+"""Research: two lane webs - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side lanes between the plots or a back lane behind them"""
 
 
 def _cluster_shape_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
-    """A 'split' cluster needs room for two hamlets to read separately - a village/town, not a hamlet."""
+    """A 'split' cluster needs room for two hamlets to read separately - a village/town, not a hamlet.
+    Research: a hamlet never splits - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html"""
     return v != "split" or ctx.get("scale") in ("village", "town")
 
 
 def _plot_regularity_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     """A rectilinear 'grid' bund pattern implies a planned/surveyed field (a reclamation or allotment
-    context), not an organically-grown old one - so it is excluded unless the field origin is planned."""
+    context), not an organically-grown old one - so it is excluded unless the field origin is planned.
+    Research: a grid needs a surveyed field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.html"""
     return v != "grid" or ctx.get("field_origin") == "planned"
 
 
@@ -155,7 +189,8 @@ def _field_archetype_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     contour_terraces need HILL/upland ground; polder_grid needs LOW reclaimed/coastal-delta ground; a
     ribbon_valley needs a narrow valley floor; a mulberry_dike_fishpond is the Pearl-delta low-wet system.
     valley_paddy (the comb default) fits any ordinary valley-bottom terrain. Terrain is read from
-    `ctx['terrain']` when the spec declares it; absent a declaration, only valley_paddy is coherent."""
+    `ctx['terrain']` when the spec declares it; absent a declaration, only valley_paddy is coherent.
+    Research: field form follows terrain - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: terraces on hills, polders and dike-ponds on low ground, the ribbon on a narrow valley"""
     terrain = ctx.get("terrain")
     need = {"valley_paddy": None, "contour_terraces": "hill", "polder_grid": "low", "ribbon_valley": "narrow_valley", "mulberry_dike_fishpond": "low"}
     req = need.get(v)
@@ -164,7 +199,8 @@ def _field_archetype_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 
 def _toward(frm: Pt, to: Pt, dist: float) -> Pt:
     """A point `dist` along the way from `frm` to `to`, never past 45% of the run - so a fillet leg
-    piled onto a short plot edge still leaves that edge with a middle."""
+    piled onto a short plot edge still leaves that edge with a middle.
+    Research: geometry - NONE"""
     vx, vy = to[0] - frm[0], to[1] - frm[1]
     ln = math.hypot(vx, vy) or 1.0
     dd = min(dist, ln * 0.45)
@@ -172,7 +208,8 @@ def _toward(frm: Pt, to: Pt, dist: float) -> Pt:
 
 
 def _centroid(poly: Sequence[Pt]) -> list[float]:
-    """Rounded centroid of a plot polygon - the identity a land-use record and a wet-plot record share."""
+    """Rounded centroid of a plot polygon - the identity a land-use record and a wet-plot record share.
+    Research: geometry - NONE"""
     return [round(sum(p[0] for p in poly) / len(poly), 1), round(sum(p[1] for p in poly) / len(poly), 1)]
 
 
@@ -182,7 +219,8 @@ def _sharp_corners(poly: Sequence[Pt]) -> int:
     turn, is what survives the rule getting more honest: once corner reach is drawn from a wide spread
     some corners legitimately stay near-square (the one behind a neighbor's bund never gets walked),
     so a max is a statistic about the single least-rounded corner on the parcel and says nothing about
-    the parcel. The count does: it separates 'a few corners never rounded' from 'nothing rounded'."""
+    the parcel. The count does: it separates 'a few corners never rounded' from 'nothing rounded'.
+    Research: geometry - NONE: a corner turning more than 60 degrees counts as square"""
     n = len(poly)
     hard = 0
     for i in range(n):
@@ -209,7 +247,8 @@ def _land_use_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     both standing. Mixing them at ANY fraction depicts two seasons at once. What varies between households is
     only whether a plot is double-cropped at all, and that shows up in the SPRING picture as yellow rape
     against BARE stubble / standing water - never against green rice. Rape therefore belongs on a future
-    seasonal axis (a whole-field state), not on this per-plot land-use axis. Do not re-add it here."""
+    seasonal axis (a whole-field state), not on this per-plot land-use axis. Do not re-add it here.
+    Research: overlays are permanent uses, tea on hills - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html"""
     if v in ("none", "mulberry_fishpond", "lotus"):
         return True
     return ctx.get("terrain") == "hill" or ctx.get("field_archetype") == "contour_terraces"  # tea_fringe
@@ -219,7 +258,12 @@ def _settlement_form_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     """The SETTLEMENT FORM must suit the site: nucleated/linear/dispersed fit anywhere, but a WATER-TOWN (houses
     fronting a canal) needs a canal - and per GM setting canon artificial transport canals are a LION-lands
     feature, not the Empire-wide default (see the diagram SKILL.md China-first note), so water_town is excluded
-    unless the map declares Lion lands or a canal (`ctx['clan']=='Lion'` or `ctx['canal']`)."""
+    unless the map declares Lion lands or a canal (`ctx['clan']=='Lion'` or `ctx['canal']`).
+
+    Research:
+        dike-top needs low ground - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html
+        water town needs a canal - UNRESEARCHED: Lion lands or a declared canal, from the GM's setting canon
+    """
     if v in ("nucleated", "linear", "dispersed"):
         return True
     if v == "dike_top":  # a dike-top line stands ON a polder's perimeter dike, so it needs LOW reclaimed ground
@@ -260,7 +304,12 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     house for its official cannot put it at their gate. Note what that second one is NOT: the record
     puts the person in the hamlet - *"the headman (or in a hamlet the senior farmer answering to the
     village headman) received, copied, and relayed the circulars"* - so this is a SITING limit, not a
-    claim that a hamlet had no such official."""
+    claim that a hamlet had no such official.
+
+    Research:
+        seats a settlement can site - research/questions/0190-notice-boards-kosatsuba.drawing.html: center always, entrance with an approach, frontage with a headman's house
+        bridgehead and shrine withheld - research/questions/0190-notice-boards-kosatsuba.drawing.html: absent from the value space
+    """
     if v == "center":
         return True  # every settlement has dwellings, so the assembly ground always exists
     if v == "entrance":
@@ -339,6 +388,7 @@ register_knob(Knob("caravan_inn_form", ["wagon", "hatago"], default="wagon"))
 
 
 LANE_SKELETONS = ("spine", "T", "Y", "cross", "waterside")
+"""Research: five lane skeletons - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html"""
 
 
 def web_cuts(coords: Sequence[float], reach: float, gap: float) -> list[float]:
@@ -365,7 +415,12 @@ def web_cuts(coords: Sequence[float], reach: float, gap: float) -> list[float]:
 
     Falls back to `reach * 0.5` ahead when no gap in the window is wide enough: a lane there will be
     broken up by whatever it runs into, which is the honest outcome, and is preferable to leaving a
-    house unreachable because its neighbors are packed tight."""
+    house unreachable because its neighbors are packed tight.
+
+    Research:
+        every house within reach of a way - research/questions/0081-village-lanes.drawing.html: the fewest cuts that cover every house
+        a cut in the widest gap - research/questions/0081-village-lanes.html: never through a house; reach * 0.5 ahead when no gap fits
+    """
     xs = sorted(float(c) for c in coords)
     if not xs:
         return []
@@ -395,7 +450,13 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
     offset), which is the whole point - it is why two same-water villages stop sharing a headman position.
     Grounding (research.md D2): a nucleated village's lanes followed its site - a spine along a ridge, a T
     where a spur met the field track, a Y where two approaches merged, a cross at a small market node, a
-    waterside lane in a stream village - and the headman sat at that skeleton's focal point, not a pixel."""
+    waterside lane in a stream village - and the headman sat at that skeleton's focal point, not a pixel.
+
+    Research:
+        skeleton shapes - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
+        headman at the skeleton's focal point - UNRESEARCHED: the head, the T-junction, the fork, a quadrant by the cross, the water
+        gateway at the low foot - UNRESEARCHED: the downslope end of the skeleton
+    """
     top, bot = cy - ey, cy + ey
     if kind == "spine":  # one lane along the margin; headman at the high HEAD, gateway at the low foot
         lanes = [[(cx, top), (cx, bot)]]
@@ -429,11 +490,13 @@ TORII_WEIGHTS = {
     "city": ((1, 0.30), (3, 0.40), (7, 0.30)),
     "capital": ((1, 0.10), (3, 0.60), (7, 0.30)),
 }
+"""Research: torii counts 1, 3 or 7 by tier - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: the GM's numerology, weighted to the tier"""
 
 
 def roll_torii_count(scale: str, rng: random.Random) -> int:
     """Roll a hall's torii count for the tier: always 1, 3, or 7 (torii_count_canonical gates it),
-    weighted by TORII_WEIGHTS. Unknown scales roll the village column (the conservative tier)."""
+    weighted by TORII_WEIGHTS. Unknown scales roll the village column (the conservative tier).
+    Research: torii count - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: 1, 3 or 7, the village column by default"""
     weights = TORII_WEIGHTS.get(scale, TORII_WEIGHTS["village"])
     x = rng.random()
     acc = 0.0
@@ -460,12 +523,19 @@ MERCHANT_ESTATE_WEIGHTS: dict[str, tuple[tuple[int, float], ...]] = {
     # capital maps exist, like the torii table did for its tiers.
     "city": ((1, 0.30), (2, 0.40), (3, 0.30)),
 }
+"""Walled merchant compound counts.
+
+Research:
+    walled merchant compounds per city - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one to three, 30/40/30
+    walled merchant compounds per capital - UNRESEARCHED: four to eight, weighted to the middle
+"""
 
 
 def roll_merchant_estate_count(scale: str, rng: random.Random) -> int:
     """Roll how many walled merchant compounds a settlement carries, weighted by
     MERCHANT_ESTATE_WEIGHTS - see that table for the granted-privilege reasoning. Scales without
-    a column (villages, towns today) do not roll; callers hand-place there."""
+    a column (villages, towns today) do not roll; callers hand-place there.
+    Research: walled merchant compound count - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: rolled from the tier's weights"""
     weights = MERCHANT_ESTATE_WEIGHTS[scale]
     x = rng.random()
     acc = 0.0
@@ -490,9 +560,11 @@ WALL_DEFENSE = {
     "garrison": (328.0, 2),  # garrisoned interior city: full war-bow reach (100 m), >=2 towers everywhere
     "peaceful": (197.0, 1),  # long-peaceful city: Xi'an crossfire - spacing <= 2x60 m, so >=1 flanking tower within aimed-lethal range everywhere (midpoints get 2)
 }
+"""Research: wall defense postures - research/questions/0148-towers-along-the-city-wall-mamian.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: siege, garrison and peaceful arrow ranges and tower cover"""
 
 
 KOSATSUBA_MARKER_MIN_PX = 11.0
+"""Research: notice-board legibility floor - CONVENTION: 11 px long axis"""
 # Long-axis floor in px for the DRAWN notice-board glyph (see Settlement.kosatsuba). 11 px is the
 # size the true 12x5 ft frame already draws itself at 1 ft/px - the hamlet/town tiers, where the
 # board has always read fine - so the floor is calibrated to "as legible as it is on a town map",
@@ -501,7 +573,9 @@ KOSATSUBA_MARKER_MIN_PX = 11.0
 
 
 PUNISHMENT_SPOT_FT = (30.0, 12.0)  # the cangue frame + post + kneeling stone, true size at every tier
+"""Research: punishment ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 30 x 12 ft at every tier"""
 BOUNDARY_MARKER_FT = 3.0  # a real roadside dosojin stone (drawn as a marker - see BOUNDARY_MARKER_MIN_PX)
+"""Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 3 ft"""
 
 
 #: The scales that draw as a WALLED URBAN RING at the city grain. A domain capital is a bigger
@@ -512,6 +586,7 @@ BOUNDARY_MARKER_FT = 3.0  # a real roadside dosojin stone (drawn as a marker - s
 #: repricing shipped cities, here the shared behavior is simply the correct behavior and
 #: duplicating it would fork the drawing vocabulary.
 CITY_TIER_SCALES = ("city", "capital")
+"""Research: a capital draws as a bigger city - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.html"""
 
 
 def execution_ground_ft(scale: str) -> tuple[float, float]:
@@ -520,11 +595,13 @@ def execution_ground_ft(scale: str) -> tuple[float, float]:
 
     SHARED DATA, deliberately: Settlement.execution_ground draws from this, and site_justice.py
     sizes its trial placements from it, so a tool proposing a seat can never disagree with the
-    engine about how big the thing it is seating actually is."""
+    engine about how big the thing it is seating actually is.
+    Research: execution ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 100 x 60 ft at a city or capital, else 60 x 60 ft"""
     return (100.0, 60.0) if scale in CITY_TIER_SCALES else (60.0, 60.0)
 
 
 BOUNDARY_MARKER_MIN_PX = 7.0
+"""Research: boundary stone legibility floor - CONVENTION: 7 px long axis"""
 # Long-axis floor in px for the DRAWN dosojin stone (see Settlement.boundary_marker). A real
 # roadside boundary stone is ~3 ft, which draws 3 px at town grain and 1 px at city grain - sub-glyph
 # at EVERY tier, so this is a location marker in the wells' sense, never a size claim. 7 px is below
@@ -532,6 +609,7 @@ BOUNDARY_MARKER_MIN_PX = 7.0
 # map, because that is what it is.
 
 BOUNDARY_STONE_CLEAR_FT = 60.0
+"""Research: boundary stone off the houses - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 60 ft clear of the nearest dwelling on an unwalled map"""
 # Minimum real feet of open ground between a dosojin and the nearest dwelling on an UNWALLED map,
 # enforced by execution_ground_past_the_boundary_marker. Where there is a rampart the wall settles
 # "outside" instead and this does not apply.
@@ -546,6 +624,7 @@ BOUNDARY_STONE_CLEAR_FT = 60.0
 # on Hoshizora, which is how a borrowed constant announces itself (GM, 2026-07-27).
 
 EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
+"""Research: execution ground off the dead - DEVIATION research/questions/0191-execution-and-punishment-grounds-keijo.html: 400 ft, a legibility floor that keeps only the order"""
 # Minimum real feet between an execution ground and any funerary feature (cemetery, cremation ground,
 # ossuary, mausoleum), enforced by execution_ground_clear_of_the_dead.
 #
@@ -571,6 +650,7 @@ EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
 # WHY (full): research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html.
 
 KIDO_TOWER_KEEPCLEAR = 62.0
+"""Research: no tower at a ward-fence junction - UNRESEARCHED: 62 px of rampart kept tower-free"""
 # px of rampart kept tower-free around a `tower_skip` spot - where a ward FENCE meets the city wall
 # (its kido ward-gate stands there; a mamian's footprint would collide the junction). Placement
 # refuses towers inside this band (city_wall's even-fill), so the coverage check EXEMPTS curtain
@@ -583,7 +663,8 @@ KIDO_TOWER_KEEPCLEAR = 62.0
 def wall_tower_spacing_px(scale_px_per_ft: float, tier: str) -> float:
     """Max mural-tower spacing (px) that satisfies a wall_defense tier: the arrow range for a >=2 tier
     (so a point at any tower has a neighbor within range), or twice it for the >=1 Xi'an tier. Unknown
-    tiers fall back to 'garrison' (the moderate middle). `scale_px_per_ft` is 1/ftpx."""
+    tiers fall back to 'garrison' (the moderate middle). `scale_px_per_ft` is 1/ftpx.
+    Research: tower spacing - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the arrow range, or twice it for single cover"""
     rng_ft, mincov = WALL_DEFENSE.get(tier, WALL_DEFENSE["garrison"])
     return (rng_ft if mincov == 2 else 2 * rng_ft) * scale_px_per_ft
 
@@ -599,7 +680,8 @@ def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
     check must read the SAME manifest source" is what guarantees they cannot disagree; this is the
     case that shows it guarantees AGREEMENT, not CORRECTNESS. Re-adding the missing keys on both
     sides would have reproduced exactly the same silent symmetry the next time a key was added, so
-    the sets are derived ONCE, here, and consumed by both."""
+    the sets are derived ONCE, here, and consumed by both.
+    Research: the ways a bridge may carry - NONE: every recorded way, with fallback widths"""
     carried: list[tuple[Any, float]] = []
     if M.get("road"):
         carried.append((M["road"], M.get("road_width", 30)))
@@ -616,7 +698,8 @@ def bridge_carried_ways(M: Any) -> list[tuple[Any, float]]:
 
 def bridge_crossed_waters(M: Any) -> list[tuple[Any, float]]:
     """Every WATERCOURSE a way may have to be carried over, as (points, width). See
-    `bridge_carried_ways` for why both sides read this one function."""
+    `bridge_carried_ways` for why both sides read this one function.
+    Research: the waters a way may cross - NONE: every recorded watercourse but an undrawn conduit"""
     waters: list[tuple[Any, float]] = []
     for s in M.get("streams", []):
         waters.append((s["poly"], s.get("w", 9)))
@@ -655,7 +738,8 @@ def moat_current_at(ring: Any, inlet: Pt, outlet: Pt, pt: Pt) -> tuple[float, fl
 
     The tangent is the chord between the vertex's two NEIGHBORS, not the forward segment: taking the
     forward segment alone tilts every reading by about half the vertex's turn angle, consistently
-    enough (~8-9 deg on these rings) to misclassify a square tap as upstream-facing."""
+    enough (~8-9 deg on these rings) to misclassify a square tap as upstream-facing.
+    Research: a fed ring runs both ways to its outlet - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html"""
     n = len(ring)
     if n < 3:
         return None
@@ -674,7 +758,8 @@ def moat_current_at(ring: Any, inlet: Pt, outlet: Pt, pt: Pt) -> tuple[float, fl
 def _below_drain(x: float, y: float, drain: Any, fx: float, fy: float, berth: float = 26.0) -> bool:
     """Is (x, y) downslope of the drain COLLECTOR? Measured to the NEAREST POINT on the drain
     polyline and projected along the fall - which is what the check does. A global cut along the
-    fall axis is not the same thing and lets a farmstead sit in the toe where the drain bends."""
+    fall axis is not the same thing and lets a farmstead sit in the toe where the drain bends.
+    Research: below the drain - NONE: projected on the fall from the nearest drain point, a 26 px berth"""
     best = (float("inf"), drain[0])
     for k in range(len(drain) - 1):
         ax, ay = drain[k]
@@ -692,7 +777,8 @@ def _below_drain(x: float, y: float, drain: Any, fx: float, fy: float, berth: fl
 
 def _seg_point(pt: Pt, a: Pt, b: Pt) -> Pt:
     """The point on segment a-b nearest `pt` - so a tap is DERIVED from the watercourse rather than
-    eyeballed beside it (every hand-picked tap in the capital's first ring stood on dry ground)."""
+    eyeballed beside it (every hand-picked tap in the capital's first ring stood on dry ground).
+    Research: geometry - NONE"""
     dx, dy = b[0] - a[0], b[1] - a[1]
     ll = dx * dx + dy * dy or 1.0
     t = max(0.0, min(1.0, ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / ll))
@@ -700,6 +786,7 @@ def _seg_point(pt: Pt, a: Pt, b: Pt) -> Pt:
 
 
 def _poly_centroid(poly: Poly) -> Pt:
+    """Research: geometry - NONE"""
     return (sum(q[0] for q in poly) / len(poly), sum(q[1] for q in poly) / len(poly))
 
 
@@ -722,7 +809,8 @@ def windbreak_face(clumps: Sequence[Sequence[float]], r: float, houses: Sequence
     a belt. So the belt is binned in 25 px bands along its length, the frontmost clump of each band
     is taken, and the face is the MEDIAN of those: the typical front, which is what the eye reads
     as the belt's edge. Straightening the front row itself was priced and declined here - the
-    jitter is the recorded decision that "a grove hugs the land and is not a ruled wall"."""
+    jitter is the recorded decision that "a grove hugs the land and is not a ruled wall".
+    Research: the belt's inner face - CONVENTION: the median front clump of 25 px bands, one crown in, sets the frame"""
     if not clumps or not houses:
         return None
     bx = sum(c[0] for c in clumps) / len(clumps)
@@ -745,7 +833,9 @@ def windbreak_face(clumps: Sequence[Sequence[float]], r: float, houses: Sequence
 
 
 WINDBREAK_HOUSE_REACH_FT = 100.0  # ft: a belt clump this near a farmhouse is that house's shelter, and the frame keeps it
+"""Research: a house's shelter kept on the page - CONVENTION: belt clumps within 100 ft of a farmhouse set the frame"""
 WINDBREAK_ARM_MIN = 6  # clumps: fewer than this on one side of the houses is a belt's tip, not an arm with a face of its own
+"""Research: an arm with its own face - CONVENTION: six clumps or more"""
 
 
 def windbreak_faces(clumps: Sequence[Sequence[float]], r: float, houses: Sequence[Mapping[str, Any]]) -> list[tuple[tuple[int, int, float], list[Sequence[float]]]]:
@@ -755,7 +845,8 @@ def windbreak_faces(clumps: Sequence[Sequence[float]], r: float, houses: Sequenc
     regional northwest wind the belt wraps the houses' north AND west as an L, and its one face was the west arm's: the
     north arm had no face to set the frame, and the frame cut its front row away behind the northernmost farmhouse - a
     97 ft opening in the house's own windbreak on the page. So the clumps are split by which axis their offset from the
-    houses' middle runs along, and each arm with `WINDBREAK_ARM_MIN` clumps or more gets its own face."""
+    houses' middle runs along, and each arm with `WINDBREAK_ARM_MIN` clumps or more gets its own face.
+    Research: one face per arm - CONVENTION"""
     if not clumps or not houses:
         return []
     hx = sum(h["x"] for h in houses) / len(houses)
@@ -784,7 +875,8 @@ def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tupl
     (the recurring engine trap recorded in the dev-loop doc: placement and its check must read
     the same manifest source). The two crops take DIFFERENT sets by design - a city frames on
     its moat ring, satellites and labels while its paddy fans and farmhouses clip at the edge -
-    so the `city` flag selects which."""
+    so the `city` flag selects which.
+    Research: what sets the frame - CONVENTION: hard features, torii, row streets, fields, the pond, the belt's face and house shelter, a forest's reveal"""
     from .core import Settlement  # lazy: runtime class-attr read, import cycle otherwise
 
     out: list[tuple[float, float, float, float, str]] = []

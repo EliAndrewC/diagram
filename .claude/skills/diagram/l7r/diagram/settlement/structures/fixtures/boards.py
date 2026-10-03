@@ -1,4 +1,7 @@
-"""Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: board caption and glyph styling - CONVENTION
+"""
 
 from typing import TYPE_CHECKING, Any
 
@@ -21,7 +24,13 @@ class BoardsMixin:
         The watchman strikes the bell in a cadence that tells the town how near the fire is. Records
         M['fire_towers'] (an overlap-checked struct: it must stand clear of the wall, roads, and
         buildings) and reserves a small no-build block (it needs clear sightlines). Place it among the
-        laborer/merchant blocks. The history is research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html; the rules are research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html."""
+        laborer/merchant blocks. The history is research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html; the rules are research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html.
+
+        Research:
+            tower footprint - research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html: ~26 ft square
+            open braced frame with a bell - research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html
+            open ground around the tower - research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.drawing.html: a 16 px no-build margin
+            colors, cap and caption - CONVENTION"""
         if tw is None:
             tw = self.px(26)  # ~26 ft square, a town-calibrated glyph: no tower's footprint is on any page read (convention)
         h = tw / 2
@@ -46,7 +55,11 @@ class BoardsMixin:
     def board_record(self: Settlement, x: float, y: float, rot: float) -> dict[str, Any]:  # type: ignore[misc]
         """The `kosatsuba` record a board at (x, y) turned `rot` is written as - its TRUE w/h and its drawn marker box vw/vh
         (see `kosatsuba`) - which the siter asks the registry of what stands about before it offers the seat (feature 287,
-        water W53)."""
+        water W53).
+
+        Research:
+            board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 12 x 5 ft
+            marker floor - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored at KOSATSUBA_MARKER_MIN_PX, aspect kept"""
         w, h = self.px(12), self.px(5)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / w)  # marker floor, aspect preserved
         return {"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(w * k, 1), "vh": round(h * k, 1), "rot": round(rot, 1)}
@@ -86,7 +99,14 @@ class BoardsMixin:
 
         `placement` is the caption's seat when the siter PROVED it (feature 287, labels L4: `place_kosatsuba` keeps only
         a board whose caption the one placer seats clean, and hands that seat on): the label phase draws it verbatim
-        rather than searching again. A board posted by hand passes none, and the phase seats its caption."""
+        rather than searching again. A board posted by hand passes none, and the phase seats its caption.
+
+        Research:
+            board broadside to its way - research/questions/0190-notice-boards-kosatsuba.drawing.html: `rot` is the road's bearing
+            board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 12 x 5 ft, from `board_record`
+            location marker at coarse tiers - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored on the long axis
+            roof and ridge glyph - CONVENTION
+            no-build margin - NONE: 6 px around the drawn box"""
         rec = self.board_record(x, y, rot)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / rec["w"])  # marker floor, aspect preserved: drawn unrounded, recorded to 0.1 px
         vw, vh = rec["w"] * k, rec["h"] * k

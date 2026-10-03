@@ -11,6 +11,8 @@ where the sweep found nothing clean, so a 20 ft grid over the canvas is cheap.
 THE GRID IS THE DECISION. A cell is walkable when its center stands farther than its wall's margin (plus half its diagonal) from every wall and off
 every water line; a leg of the pulled path is kept only if every sample along it falls in a walkable cell. So the path the
 fill finds and the path it returns answer the same question, and the result is clear of every wall by construction.
+
+Research: flood fill and rasterizing - NONE
 """
 
 from __future__ import annotations
@@ -29,11 +31,15 @@ from .geom import push_out_of
 EXIT_CELL_FT = 20.0
 """The flood fill's grid - a map drawing convention: finer than any neck a track would use (a track is 6 ft; a neck under 20
 ft between two marshes is no dry exit anyone would take), coarse enough that a canvas of a few thousand feet is tens of
-thousands of cells."""
+thousands of cells.
+
+Research: narrowest dry neck - UNRESEARCHED: a neck under 20 ft is not taken"""
 
 EXIT_OVERSHOOT_FT = 400.0
 """How far past the canvas edge the returned track runs on, so the crop trims it rather than it stopping short (the
-connector's own rule: a track that overshoots is trimmed by the view, one that stops short reads as a dead end)."""
+connector's own rule: a track that overshoots is trimmed by the view, one that stops short reads as a dead end).
+
+Research: the track out runs off the map - research/questions/0081-village-lanes.drawing.html: 400 ft past the canvas"""
 
 
 def _span(lo: float, hi: float, n: int, org: float, cell: float) -> range:
@@ -117,7 +123,12 @@ def _blocked_memo(walls: tuple[tuple[tuple[Pt, ...], float], ...], lines: tuple[
 def dry_exit(start: Pt, walls: Sequence[tuple[Poly, float]], lines: Sequence[tuple[Pt, Pt]], W: float, H: float, cell: float = EXIT_CELL_FT) -> Poly | None:
     """A track from `start` off the canvas (0..W, 0..H) that stands clear of every wall - (polygon, margin) - and crosses no
     water line, or None when the start is walled in. The start's own cell is walkable whatever stands there (the gateway it
-    leaves from is the caller's)."""
+    leaves from is the caller's).
+
+    Research:
+        a track keeps off wet ground - research/questions/0081-village-lanes.drawing.html: clear of every wall's margin and
+            every water line
+        the track out runs off the map - research/questions/0081-village-lanes.drawing.html: the fill ends off the canvas"""
     x0, y0 = -2 * cell, -2 * cell
     nx, ny = int((W + 4 * cell) // cell) + 1, int((H + 4 * cell) // cell) + 1
     blocked = _blocked_memo(
@@ -179,7 +190,9 @@ def _pull(pts: Poly, blocked: Set[tuple[int, int]], x0: float, y0: float, cell: 
 
 def clear_of_bands(p: Pt, bands: Sequence[Poly], clear: float, tries: int = 4) -> Pt:
     """`p` pushed out past `clear` of every grove band it stands in or within `clear` of (`push_out_of`, a few rounds, since a
-    push off one band can land near another)."""
+    push off one band can land near another).
+
+    Research: clear of the groves - UNRESEARCHED: pushed `clear` past every grove band"""
     for _ in range(tries):
         near = next((b for b in bands if point_in_poly(p[0], p[1], b) or edge_dist(p[0], p[1], b) < clear), None)
         if near is None:

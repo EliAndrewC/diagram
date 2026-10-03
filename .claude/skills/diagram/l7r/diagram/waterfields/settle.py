@@ -15,6 +15,8 @@ or left bare"), on a tiling that is still a tiling:
 - a merge never grows a cell past the partition's own recut bound (`partition.RECUT_OVER` design cells): the settle may not
   undo the lattice's backstop (glyph check, Inashiro: three ragged cells merged into one of 4.2 design cells);
 - what neither makes lawful is LEFT BARE, as the repair left it ("the odd corner left unpaddied").
+
+Research: settle plumbing - NONE: grid snapping, polygon cleanup, union and shared-length measures, the cell index
 """
 
 from __future__ import annotations
@@ -41,7 +43,10 @@ ROUNDS = 6
 """The merge repeats until nothing merges, at most this many passes (a cluster of scraps grows one neighbor a pass)."""
 
 SIZE_ONLY = frozenset({"area", "toe", "steps"})
-"""The faults a union of two failing cells may still carry and be kept: it is growing, and only its size is short."""
+"""The faults a union of two failing cells may still carry and be kept: it is growing, and only its size is short.
+
+Research: scraps grow into a basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: two failing cells may merge while only size is short
+"""
 
 
 def ring_of(poly: Any) -> Poly:
@@ -52,7 +57,12 @@ def ring_of(poly: Any) -> Poly:
 def verdict(poly: Any, ctx: RingContext, plot_across: float, cell: float) -> set[str]:
     """Every rule the cell breaks: `ring_violations`, and "toe" for the toe discipline - too thin (twice the area over the
     perimeter under `_TOE_MIN_THICKNESS` plot widths), under `_TOE_MIN_AREA` design cells, pointed under `_TOE_MIN_APEX`, or a
-    chevron."""
+    chevron.
+
+    Research:
+        ring rules - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: every `ring_violations` rule
+        toe discipline - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: too thin, under the area floor, pointed under 25 deg, or an arrowhead
+    """
     ring = ring_of(poly)
     found = set(ring_violations(ring, ctx))
     per, area = _poly_perim(ring), _poly_area(ring)
@@ -105,7 +115,12 @@ def shared_length(a: Any, b: Any) -> float:
 def takes(union: Any, judged: Callable[[Any], set[str]], me: Any, neighbor: Any, neighbor_fails: bool, most: float = math.inf) -> set[str] | None:
     """The verdict on `union` if the merge of `me` into `neighbor` may be kept - lawful but for a staircase (split after it), or,
     where the neighbor fails too, growing with only its size short - else None. A union over `most` (the recut bound) is never
-    kept."""
+    kept.
+
+    Research:
+        merge kept when lawful - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a scrap taken into its neighbor where the union keeps the rules
+        merge bounded - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: never past the recut bound of RECUT_OVER design cells
+    """
     if union is None or union.geom_type != "Polygon" or len(union.interiors) or union.area > most:
         return None
     v = judged(union)
@@ -146,7 +161,10 @@ class Fabric:
         return k
 
     def split(self, i: int) -> None:
-        """A staircase split on its hops by the repair's own `_split_steps` (W23)."""
+        """A staircase split on its hops by the repair's own `_split_steps` (W23).
+
+        Research: staircase split - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund that steps sideways is carried straight on instead
+        """
         from .seams.close import _split_steps
 
         if not self.ctx.g or "steps" not in self.fails[i]:
@@ -176,7 +194,10 @@ class Fabric:
         return [j for _s, j in sorted(scored, reverse=True)]
 
     def merge(self, i: int) -> bool:
-        """Cell `i` merged into the first neighbor that may take it (`takes`); True if it was."""
+        """Cell `i` merged into the first neighbor that may take it (`takes`); True if it was.
+
+        Research: merge across the longest shared bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the neighbors tried longest shared bund first
+        """
         me = self.alive[i]
         for j in self.neighbors(i):
             u = opened_union(me, self.alive[j])
@@ -192,7 +213,10 @@ class Fabric:
 
 
 def settle_cells(cells: list[Any], ctx: RingContext, plot_across: float, cell: float) -> tuple[list[Any], list[Any]]:
-    """The partition's cells held to the rules: (the lawful cells, the scraps left bare). See the module docstring."""
+    """The partition's cells held to the rules: (the lawful cells, the scraps left bare). See the module docstring.
+
+    Research: unlawful scraps left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a cell no merge makes lawful is not planted
+    """
     fab = Fabric(cells, ctx, plot_across, cell)
     for _round in range(ROUNDS):
         failing = sorted((k for k in fab.alive if fab.fails[k]), key=lambda k: fab.alive[k].area)

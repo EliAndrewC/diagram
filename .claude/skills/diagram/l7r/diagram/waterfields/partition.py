@@ -33,6 +33,8 @@ sector with the contour wobble (`phase`), a sector's own row steps - and adds wh
 - A row is kept where the cell it closes reaches `ROW_CELL_SHARE` of a design cell at the sector's LOCAL width (`_rows_kept`), and
   the columns are counted at the sector's widest and thinned where it narrows - never one spacing or one count for a whole sector,
   whose width can halve where a thread rides its parent's path. A sector narrower than a plot is exempt from the row hug test.
+
+Research: partition plumbing - NONE: line extension, clipping, polygonize and point-on-surface tests
 """
 
 from __future__ import annotations
@@ -47,19 +49,31 @@ from .frame import Poly, Pt, _Frame, _Thread
 MIN_ROW = 0.45
 """A row is cut only where its sector is wider than this many plot widths (or, in a sector narrower than a plot, this share of its
 own median width): past that the tip is one basin, not a stack of slivers cut and then merged (specs/302 research R2, a map
-drawing convention)."""
+drawing convention).
+
+Research: narrow tip left one basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no row cut where the sector is under 0.45 plot widths
+"""
 
 HUG_ROW = 0.5
 """A row piece lying wholly within this many row steps of its ground's edge is not cut (research R2: Sawada's rows across a strip
-along the drain). Half the lower row step: the strip it would cut is under half a basin deep."""
+along the drain). Half the lower row step: the strip it would cut is under half a basin deep.
+
+Research: no strip too thin for a paddy - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a row within half a row step of the edge is not cut
+"""
 
 HUG_COL = 0.3
 """A column piece lying wholly within this many plot widths of its ground's edge is not cut (a column beside a thread or a ditch
-bank would cut a strip under a third of a basin wide)."""
+bank would cut a strip under a third of a basin wide).
+
+Research: no strip too thin for a paddy - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a column within 0.3 plot widths of the edge is not cut
+"""
 
 ROW_CELL_SHARE = 0.6
 """A row is cut where the cell it closes reaches this share of a design cell at the sector's local width (`_rows_kept`): every row
-on ground a plot wide or wider, fewer where it narrows - a map drawing convention, so a strip's cells are basins, not slivers."""
+on ground a plot wide or wider, fewer where it narrows - a map drawing convention, so a strip's cells are basins, not slivers.
+
+Research: basin size where the sector narrows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a row cut once its cell reaches 0.6 of the design cell
+"""
 
 CROSS = 0.5
 """A sector's bunds are clipped to its ground GROWN by this many px, so each piece crosses the ground's edge rather than ending on
@@ -69,7 +83,10 @@ cells over three design cells). The overshoot is a dangle outside the cell, whic
 
 RECUT_OVER = 2.5
 """A cell over this many design cells is cut again on a plain lattice (`recut`): the backstop under every lattice rule above, so
-no gap in a sector's lattice ships a basin several plots big (the old carve's largest: about 3.7 design cells, specs/302 R2)."""
+no gap in a sector's lattice ships a basin several plots big (the old carve's largest: about 3.7 design cells, specs/302 R2).
+
+Research: largest basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a cell over 2.5 design cells is cut again
+"""
 
 OUTER_REACH = 14
 """The outer strip's lattice reaches this many plot widths past its thread - more than any strip a pool or cohort fan carries."""
@@ -77,7 +94,12 @@ OUTER_REACH = 14
 
 def planted_region(F: _Frame, envelope: Poly, channels: list[dict[str, Any]], a_pts: Poly, dpts: Poly, g: float, bank: Any) -> Any:
     """The ground a fan plants: its envelope less its water and its banks (`seams.pockets._water`) and less the ground it cannot
-    command - below the collector's bank, above the supply canal (`_outside_command`). Its area IS the fan's planted acreage."""
+    command - below the collector's bank, above the supply canal (`_outside_command`). Its area IS the fan's planted acreage.
+
+    Research:
+        planted ground - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the envelope within the command area
+        water and banks left out - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: no paddy on a course or its bank
+    """
     from shapely.geometry import Polygon
 
     from .seams.pockets import _outside_command, _water
@@ -107,7 +129,10 @@ def _extend(pts: list[Pt], by: float) -> list[Pt]:
 
 
 class Sectors:
-    """The fan's sectors - the ground between adjacent threads - as the partition cuts them (see the module docstring)."""
+    """The fan's sectors - the ground between adjacent threads - as the partition cuts them (see the module docstring).
+
+    Research: sectors between the ditch threads - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: paddies cut between the lines of the water network
+    """
 
     def __init__(self, F: _Frame, threads: list[_Thread], region: Any, R: random.Random, RW: random.Random, plot_across: float, row_step: tuple[float, float], g: float) -> None:
         self.F, self.threads, self.region = F, threads, region
@@ -119,7 +144,10 @@ class Sectors:
         self.narrow = False
 
     def bound(self, T: _Thread, fv: float) -> Pt:
-        """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then straight down the fall from where it stopped."""
+        """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then straight down the fall from where it stopped.
+
+        Research: past a thread's end - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the column bund runs straight down the fall rather than converging along the drain
+        """
         end = T.pts[-1]
         f_end = self.F.to_uf(*end)[1]
         if fv <= f_end:
@@ -127,7 +155,10 @@ class Sectors:
         return (end[0] + self.F.d[0] * (fv - f_end), end[1] + self.F.d[1] * (fv - f_end))
 
     def thread_lines(self) -> list[Any]:
-        """Every thread, and each continued straight down the fall past its own end until it meets another thread."""
+        """Every thread, and each continued straight down the fall past its own end until it meets another thread.
+
+        Research: sector pieces - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: each thread continued straight down the fall until it meets another
+        """
         import shapely
         from shapely.geometry import LineString
 
@@ -147,7 +178,14 @@ class Sectors:
         """One sector's rows (the first `n_rows`) and columns, drawn past its ground - the caller clips them to it. `f_top`: the
         fall of the sector's ground's top, where its rows begin when that lies above its threads' takeoff (the head wedge along
         the canal - the ground the carve's canal closers cut - which rows begun at the takeoff never crossed: measured, a 34 x 526
-        px wedge on Inashiro's brief at 20 households came out one cell)."""
+        px wedge on Inashiro's brief at 20 households came out one cell).
+
+        Research:
+            row spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: rows a random `row_step` apart down the fall, the design cell's depth
+            column count - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: one column a plot width at the sector's widest
+            row wander - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each row bund drifts downhill by up to 0.13 of a row step, fading to nothing at the first and last rows
+            column wobble - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each column line bows along the contour by up to 5 px on its own phase
+        """
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g
         f_hi0 = max(F.to_uf(*A.pts[-1])[1], F.to_uf(*B.pts[-1])[1])
@@ -204,7 +242,10 @@ class Sectors:
 
     def outer_lines(self, T: _Thread, other: _Thread) -> list[list[Pt]]:
         """The strip past an OUTERMOST thread `T`: columns are `T` shifted outward a plot width at a time, rows run outward from
-        it along the contour at the sector's own row falls (call `grid_lines` for the sector first)."""
+        it along the contour at the sector's own row falls (call `grid_lines` for the sector first).
+
+        Research: strip past the outer thread - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns a plot width apart parallel to the thread, rows at the sector's falls
+        """
         F, across = self.F, self.plot_across
         f_mid = sum(self.rows) / len(self.rows)
         away = 1.0 if F.to_uf(*self.bound(T, f_mid))[0] >= F.to_uf(*self.bound(other, f_mid))[0] else -1.0
@@ -237,7 +278,10 @@ def _rows_kept(rows: list[float], widths: list[float], nsub: int, across: float,
     """The rows a sector cuts: the first, then each where the cell it closes - its column's width THERE (the sector's width over
     the columns kept there) times the fall since the last row kept - reaches `ROW_CELL_SHARE` of a design cell, and the sector is
     still wider than `tip`. Wide ground keeps every row; a strip half a plot wide keeps every other one. (A spacing set once per
-    sector, from its median width, spaced the rows three steps apart down a sector that was narrow for only half its span.)"""
+    sector, from its median width, spaced the rows three steps apart down a sector that was narrow for only half its span.)
+
+    Research: rows where the sector narrows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a row kept once its cell reaches ROW_CELL_SHARE of a design cell
+    """
     design = across * sum(row_step) / 2
     kept = {0}
     last = rows[0]
@@ -251,7 +295,10 @@ def _rows_kept(rows: list[float], widths: list[float], nsub: int, across: float,
 
 def _column_kept(width: float, nsub: int, j: int, across: float) -> bool:
     """Does column `j` of `nsub` run where its sector is `width` wide? Halved (every other column, then every fourth) while the
-    sector holds fewer than two thirds of the columns it divides - nested, so a dropped column ends in a T on a row bund."""
+    sector holds fewer than two thirds of the columns it divides - nested, so a dropped column ends in a T on a row bund.
+
+    Research: columns thin to a T - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a dropped column ends at a T-junction on a row bund
+    """
     n_here = max(1, round(width / across))
     step = 1
     while nsub / step > n_here * 1.5 and step < nsub:
@@ -265,7 +312,10 @@ def keep_rows(parts: list[Any], ground: Any, lim: float, across: float) -> list[
     hair-wide strip along the drain, whose rows would be slivers); a longer piece takes the whole-piece hug test (`keep_far`).
     (Measured on Inashiro's brief at 10 households: the strips beside its ditches lost every row to the hug test and came out
     3-4 basins long - the sector's width is measured between thread centerlines, inside the ditches, so it reads wider than the
-    strip of land and the narrow-sector exemption never applied.)"""
+    strip of land and the narrow-sector exemption never applied.)
+
+    Research: ditch-side strips keep their rows - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a short row kept where its strip is at least MIN_ROW plot widths across
+    """
     short = [q for q in parts if q.length < across]
     return [q for q in short if q.length >= MIN_ROW * across] + keep_far([q for q in parts if q.length >= across], ground, lim)
 
@@ -273,7 +323,10 @@ def keep_rows(parts: list[Any], ground: Any, lim: float, across: float) -> list[
 def keep_far(parts: list[Any], ground: Any, lim: float) -> list[Any]:
     """The bund pieces NOT lying wholly within `lim` of `ground`'s edge - every point along the piece, sampled at half the
     limit, nearer than `lim` drops it. SAMPLED, not its vertices: a straight row across a one-column sector has vertices only at
-    its two ends, which lie on the sector's sides, so a vertex test dropped every row of such a sector."""
+    its two ends, which lie on the sector's sides, so a vertex test dropped every row of such a sector.
+
+    Research: no strip too thin for a paddy - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund lying wholly within `lim` of its ground's edge is not cut
+    """
     import shapely
 
     if not parts or lim <= 0.0:
@@ -295,7 +348,10 @@ def inside(region: Any, cells: list[Any]) -> list[Any]:
 def recut(cell: Any, F: _Frame, across: float, step: float) -> list[Any]:
     """A cell the lattice left over `RECUT_OVER` design cells, cut again on a plain lattice at the fan's grain - rows along the
     contour every `step`, columns every `across`, spaced evenly over the cell's own extent in the frame - as the old seam pass
-    planted a large pocket (`_plant`). The pieces tile the cell; what is too small is the settle's to merge."""
+    planted a large pocket (`_plant`). The pieces tile the cell; what is too small is the settle's to merge.
+
+    Research: oversized cell recut - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a plain lattice at the fan's design cell
+    """
     import shapely
     from shapely.geometry import LineString
 
@@ -328,7 +384,10 @@ def _lines_in(ground: Any, lines: list[list[Pt]]) -> list[Any]:
 def cut(sec: Sectors) -> list[Any]:
     """The region tiled: divided into sector pieces by the threads, each sector's lattice clipped to its own pieces (the strip
     past an outermost thread by the outer lattice), the pieces of bund hugging their ground's edge left out, then every bund
-    noded at once and the cells `polygonize` makes inside the region kept - every bund shared by construction."""
+    noded at once and the cells `polygonize` makes inside the region kept - every bund shared by construction.
+
+    Research: one shared bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: two paddies side by side share one bund, no bare strip between them
+    """
     import shapely
 
     region = sec.region

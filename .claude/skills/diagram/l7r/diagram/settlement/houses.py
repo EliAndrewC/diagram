@@ -1,4 +1,5 @@
-"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index."""
+"""Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
+Research: placement, index and corridor plumbing - NONE"""
 
 import math
 import random
@@ -23,9 +24,11 @@ from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura
 # against the edge" as the GM expects. Real feet; `px()` scales it per tier. Held by the gate's
 # `houses_clear_of_paddies`.
 HOUSE_PADDY_GAP_FT = 6.0
+"""Research: farmhouse wall off the paddy - research/questions/0029-farmhouses-minka.drawing.html: a 6 ft minimum, bund plus path plus eave"""
 # THE STOREHOUSE ANNEX'S SHARE is `rolling/lot.py`'s `KURA_SHARE` (feature 280 M20: one farm in eight, the headman always),
 # the lots' quota and the positional roll's threshold outside the lots alike.
 STOREHOUSE_GRAY = "#9A968C"
+"""Research: storehouse color - CONVENTION: solid gray, apart from the house's roof color"""
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -34,6 +37,7 @@ if TYPE_CHECKING:
 class HousesMixin:
     # ---- houses
     def house(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "plain", rot: float = 0, shed: bool = False, shed_side: str = "W") -> None:  # type: ignore[misc]
+        """Research: farmhouse glyph - CONVENTION: wall tones by position, ridge line, door mark, the big and abandoned variants, the gray annex"""
         # POSITION-SEEDED (2026-08-08). A house's wall color is a property of the house, and this
         # was the single most-executed stream draw in the engine - one per house, on every map - so
         # it moved the whole sequence for everything drawn afterwards.
@@ -107,7 +111,8 @@ class HousesMixin:
         set-back from the seat's CENTER, so a house 28 ft deep seated 14 px off the paddy stands with
         its wall on the bund - Inashiro had one corner 0.9 ft from the outline while every other
         house stood 10-13 ft off. This tests the rotated corners against the field outlines at the
-        wall's own floor (`dev/placement.md`, "gap verdicts read footprints, never centers")."""
+        wall's own floor (`dev/placement.md`, "gap verdicts read footprints, never centers").
+        Research: farmhouse wall off the paddy - research/questions/0029-farmhouses-minka.drawing.html: every rotated corner `HOUSE_PADDY_GAP_FT` plus 1 ft of rounding slack off the field"""
         # THE PLACER HOLDS THE GATE'S FIGURE PLUS THE ROUNDING (feature 137 T06, 2026-08-28): the check tests the
         # corners of the RECORDED footprint, whose center and rake are rounded to 0.1 (see `house()`), so a
         # seat held at exactly 6.0 ft came out at 5.6-5.9 on five of 48 cohort seeds. One foot of slack.
@@ -115,6 +120,7 @@ class HousesMixin:
         return any(self._field_blocks_point(cx, cy, gap) for cx, cy in rot_rect(x, y, w, h, rot))  # the outline's chords on the house side (feature 140)
 
     def _in_blocked(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
+        """Research: seat set-back from fields, dry plots and hills - UNRESEARCHED: the center 14 px off a field, 12 px off a dry plot or a hill or pond ellipse"""
         # bbox pre-filter (cached, same idea as _rect_hits): a point outside a polygon's bbox - expanded by
         # the 14px field set-back - can neither be inside it nor within 14px of an edge, so skip the O(vertices)
         # point_in_poly / edge_dist. Matters for the one big field envelope and a city's many block polys.
@@ -256,7 +262,8 @@ class HousesMixin:
         the very substitution the paragraph above is about. It defaults to 0.0 because most callers
         seat something genuinely unrotated; a caller that knows its rake passes it, and the bundle
         placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER
-        vs FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius."""
+        vs FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
+        Research: no building corner on a lane - research/questions/0081-village-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
         if not self.treads:
             return False
         quad = rot_rect(x, y, w, h, rot)
@@ -304,6 +311,7 @@ class HousesMixin:
         rot: float | None = None,
         top: float = 88.0,
     ) -> bool:
+        """Research: building spacing - UNRESEARCHED: 4 px between collision circles (exact boxes where both are declared), a dense row's mates edge to edge"""
         if x < 55 or x > self.W - 55 or y < top or y > self.H - 26:
             return False
         if self.bound and not point_in_poly(x, y, self.bound):  # stay inside a bounding ring (city wall)
@@ -433,7 +441,11 @@ class HousesMixin:
         ground, never into the back row ahead of it - the rear row fronts the back lane/block
         interior, the real ura-dana pattern). Sits against the fronted street (skips that
         street's own corridor - pass skip=<registered poly> when fronting a sub-stretch of a
-        longer road) but respects walls, other streets, fields, and collisions."""
+        longer road) but respects walls, other streets, fields, and collisions.
+        Research:
+            shops face the street - research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html, research/questions/0159-shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana.drawing.html: rows rotated to front the way, a dense row a continuous street wall
+            rear row back to back - research/questions/0152-the-citys-street-front-continuous-rows-of-shophouses-machiya.drawing.html: a second row turned away, `rowgap` (9 px) behind the first
+            road shoulder setback - UNRESEARCHED: a row on a road stands off half its width plus 18 px, a row on a street at the curb"""
         # SCOPED (2026-08-08): the per-building rot jitter below was the LAST root cause of a town
         # re-rolling. Its seats were already stable once pack was scoped, but a different rake gives a
         # different footprint, which changes what fits beside it - and the cascade ran through every
@@ -592,7 +604,8 @@ class HousesMixin:
 
         POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
         before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/400): the common bearing and the
-        lane's turn (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
+        lane's turn (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands.
+        Research: farmhouse rake - research/questions/0029-farmhouses-minka.drawing.html: the hamlet's bearing rule, else +-5 degrees by position"""
         if self._house_bearing is None:
             return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
         return house_rot(self._hjit, cx, cy, self._house_bearing, self._bearing_follow)
@@ -610,7 +623,8 @@ class HousesMixin:
         stays straight and parallel to its frame (GM 2026-09-26, of the threshing yard: *"the northern edge
         should be parallel with the house"* - with each corner pulled on its own, the edge facing the house ran
         up to 3 degrees off the house's wall, and the gap read wider at one end). The other edges keep their
-        irregularity."""
+        irregularity.
+        Research: hand-laid plot outlines - research/questions/0029-farmhouses-minka.drawing.html: corners pulled in by position, the edge toward the house straight and parallel"""
         hw, hh = w / 2.0, h / 2.0
         pulls = [(self._hjit(cx, cy, salt + i * 0.19) * jit, self._hjit(cx, cy, salt + i * 0.19 + 0.5) * jit) for i in range(4)]  # each corner its own inward pull
         if level in ("N", "S"):
@@ -641,6 +655,10 @@ class HousesMixin:
         return self._try_place_legacy(x, y, kind, role)
 
     def _try_place_bundle(self: Settlement, x: float, y: float, kind: str, role: Any = None, size: Any = None) -> bool:  # type: ignore[misc]
+        """Seat one to-scale homestead bundle.
+        Research:
+            farmhouse size - research/questions/0029-farmhouses-minka.drawing.html: 46 x 28 ft base, by the lot's ladder or 0.85-1.35 x 0.90-1.10; dispersed 0.9 / 1.0 / 1.12 by position, big 64 x 40
+            storehouse - research/questions/0040-farm-storehouses-kura.drawing.html: one farm in eight by count (else by position), the headman always, on the north wall"""
         # a farmhouse shares the MAP'S building grain (bscale): at village/hamlet scale bscale is
         # 1.0 (full size), but a town/city compresses its urban buildings, and a peasant farmhouse
         # must not render LARGER than the samurai and merchant houses inside the walls - so it
@@ -730,6 +748,10 @@ class HousesMixin:
         return True
 
     def _try_place_legacy(self: Settlement, x: float, y: float, kind: str, role: Any = None) -> bool:  # type: ignore[misc]
+        """Seat one farmhouse on the legacy house-first path.
+        Research:
+            legacy farmhouse size - UNRESEARCHED: 44 x 29 (big 60 x 40) at `bscale`, wealth 0.9 / 1.0 / 1.12 by position
+            legacy storehouse share - research/questions/0040-farm-storehouses-kura.drawing.html: about three farms in ten, by position"""
         # a farmhouse shares the MAP'S building grain (bscale): at hamlet scale bscale is 1.0 (full size), but
         # a town/city compresses its urban buildings, and a peasant farmhouse must not render LARGER than the
         # samurai and merchant houses inside the walls - so it scales down by the same factor.
@@ -758,7 +780,8 @@ class HousesMixin:
         the manifest (meta.lane_skeleton, read by the twin-detector). Returns the DERIVED focal points -
         `headman` (place the headman house there) and `gateway` (the downslope exit; anchor the connector
         track and the tutelary shrine off it). The lanes lay their no-build corridors BEFORE the houses,
-        so the homesteads front them (same as a hand-placed lane)."""
+        so the homesteads front them (same as a hand-placed lane).
+        Research: lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one of five shapes of our own choosing, laid before the houses"""
         layout = skeleton_layout(kind, cx, cy, ex, ey)
         for pts in layout["lanes"]:
             self.lane(pts, width=width, clearance=clearance, worn=worn)
@@ -775,7 +798,8 @@ class HousesMixin:
           - `crescent`  - positions hugging a shallow arc (a field-edge crescent), concave toward the field.
           - `split`     - two sub-hamlets on either flank (two dry patches flanking the arable).
         Off the flood toe / field-adjacency are enforced downstream by `try_place` (each candidate that is not
-        field-adjacent or lands on a blocker is simply rejected), so this only has to SHAPE the seed cloud."""
+        field-adjacent or lands on a blocker is simply rejected), so this only has to SHAPE the seed cloud.
+        Research: cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent or split, with this method's proportions"""
         if shape not in ("round", "elongated", "crescent", "split"):
             raise ValueError(f"unknown cluster_shape {shape!r}; expected round / elongated / crescent / split")
         if record:
@@ -824,6 +848,7 @@ class HousesMixin:
           - `valley_mouth` - down by the low end where the valley opens, but pulled to the dry lateral shoulder
                              (NEVER straight down into the wet central toe below the drain).
           - `on_rise`      - a dry knoll off a high corner (a rise standing a little out of the plain).
+        Research: cluster position - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: six margins of the field, the cluster along the margin, depth capped at 118 px
         """
         if position not in ("high_margin", "valley_head", "mid_margin", "flank", "valley_mouth", "on_rise"):
             raise ValueError(f"unknown cluster_position {position!r}")
@@ -878,7 +903,8 @@ class HousesMixin:
         norm: `small_irregular` below it, `medium` at it, `large_block` above, `strip` at the norm's area but
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
         roll_village and the scripted hamlet's `stage_field`) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM
-        asked to leave them untouched, so recalibrating them would only reshuffle vetted maps for no gain."""
+        asked to leave them untouched, so recalibrating them would only reshuffle vetted maps for no gain.
+        Research: paddy plot size and regularity - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 0.72 / 1.0 / 1.35 of the plot norm or a strip, a grid narrowing the row spread"""
         from l7r.diagram.waterfields import PADDY_CELL_ACRES, paddy_grain
 
         if plot_size not in ("small_irregular", "medium", "large_block", "strip"):
@@ -916,7 +942,8 @@ class HousesMixin:
         corner/mid/chain set; a stream enters from a canvas edge. A source on the downhill half is excluded
         (it could not feed the field), which is the gravity typing the knob's own `typing_rule` defers to
         placement. Used by the seed roll so an unpinned water source lands somewhere water can actually flow
-        from."""
+        from.
+        Research: water source above the field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: only positions off the downhill half"""
         dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))
         # each candidate's outward direction from field center; keep those on the UPHILL half (dot with
         # downhill <= a small tolerance, so a cross-slope side counts as feedable)
@@ -950,7 +977,8 @@ class HousesMixin:
         if the resolved point is on the DOWNHILL half of the field (gravity: a source below the field cannot
         feed it) - so a historically-impossible pin is rejected here, and `water_sources_for` lists the legal
         set for a roll. Grounding: Chinese canal doctrine feeds a comb from its high end; the varied high-side
-        entry (a corner pond, a mid-margin tank, a stepped chain, a stream off one edge) is the knob."""
+        entry (a corner pond, a mid-margin tank, a stepped chain, a stream off one edge) is the knob.
+        Research: where the water comes in - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a corner, a margin or a canvas edge, `pad` (90 px) off the field, never downhill"""
         if position not in ("corner_NW", "corner_NE", "corner_SW", "corner_SE", "mid_margin", "chain", "edge_N", "edge_E", "edge_S", "edge_W"):
             raise ValueError(f"unknown water_source_position {position!r}")
         fx0, fy0, fx1, fy1 = field_bbox

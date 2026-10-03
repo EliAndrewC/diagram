@@ -1,6 +1,8 @@
 """Woods drawn as STANDS of individual trees - the floor early, the canopy deferred to crop time.
 
 Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_wells/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import random
@@ -21,7 +23,10 @@ if TYPE_CHECKING:
 def trees_off_the_treads(trees: Sequence[tuple[float, float, float, str]], lanes: Sequence[Any]) -> list[tuple[float, float, float, str]]:
     """The trees of a stand whose TRUNK stands on no lane's tread (feature 287, woods W21: `stands.trunk_on_tread`, the one
     predicate of "no tree is planted in a path") - asked only of the lanes whose box comes within a half-width of the
-    stand's, so a wood no lane reaches asks nothing."""
+    stand's, so a wood no lane reaches asks nothing.
+
+    Research: no trunk on a lane's tread - UNRESEARCHED
+    """
     from ..homestead_parts.stands import trunk_on_tread  # noqa: PLC0415 - kept beside its one use
 
     if not trees:
@@ -75,7 +80,13 @@ class TreeStandsMixin:
         the settlement is sited against it - but "no crown on a roof" can only be honored against
         buildings that already exist, and half the map is placed after the wood. Deferring the
         canopy alone (the litter floor stays down where it belongs, under everything) lets the
-        filter see the COMPLETE map. Labels are unaffected: they live in the topmost layer."""
+        filter see the COMPLETE map. Labels are unaffected: they live in the topmost layer.
+
+        Research:
+            a wood drawn as individual crowns - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+            floor inset under the canopy, no edge stroke - CONVENTION
+            canopy deferred to crop time - NONE
+        """
         # the FLOOR: shaded leaf litter and understory glimpsed between the crowns. Not a terrain
         # wash - under a closed canopy hardly any of it shows, and its outline is buried under the
         # trees whose centers stand inside it.
@@ -97,7 +108,17 @@ class TreeStandsMixin:
 
     def _draw_stand(self: Settlement, poly: Poly, seed: int, outliers: bool, cls: str | None = None) -> None:  # type: ignore[misc]
         """One queued stand's canopy: the crowns inside `poly` plus (optionally) its fringe outside,
-        each filtered so no tree is drawn on a roof or a wellhead."""
+        each filtered so no tree is drawn on a roof or a wellhead.
+
+        Research:
+            spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT, jittered 42%
+            crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.05 of it, emergents 1.05 to 1.4
+            emergent share - UNRESEARCHED: 18%
+            conifer share - UNRESEARCHED: 34%
+            no crown on a roof or a wellhead - UNRESEARCHED
+            no crown on a plot's sun ground - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: _sun_keepouts
+            no trunk on a lane - UNRESEARCHED
+        """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         step = self.px(self.CANOPY_SPACING_FT)
@@ -141,7 +162,10 @@ class TreeStandsMixin:
         another's circle - a suppressed understory stem, which the canopy layer this map draws does not
         show. Measured before the rule on Inashiro: 298 of 1,728 crowns entirely inside another
         (17%), 950 with their center more than halfway in; the 13 ft grid's +-42% jitter put two grid
-        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html; gated by `tree_crowns_not_subsumed`."""
+        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html; gated by `tree_crowns_not_subsumed`.
+
+        Research: no crown under another's - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: d >= max(r, r_other)
+        """
         return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr in crowns)
 
     def _crowns_near(self: Settlement, x0: float, y0: float, x1: float, y1: float) -> list[tuple[float, float, float]]:  # type: ignore[misc]
@@ -160,7 +184,10 @@ class TreeStandsMixin:
 
     def _canopy_seats(self: Settlement, trees: Sequence[tuple[float, float, float, str]], seated: list[tuple[float, float, float]]) -> list[tuple[float, float, float, str]]:  # type: ignore[misc]
         """The trees of `trees` that keep their seat under `_crown_seat_clear`, biggest first (the
-        dominants hold the canopy; a smaller crown yields), appended to `seated` as they are kept."""
+        dominants hold the canopy; a smaller crown yields), appended to `seated` as they are kept.
+
+        Research: dominants seat first - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+        """
         kept: list[tuple[float, float, float, str]] = []
         for t in sorted(trees, key=lambda t: -t[2]):
             if self._crown_seat_clear(t[0], t[1], t[2], seated):
@@ -173,7 +200,14 @@ class TreeStandsMixin:
         kept off every bit of ground already spoken for. Advance growth comes in THICKETS, not as an
         even sprinkle, so a coarse position-seeded mask (~5 crowns across) decides which stretches of
         the margin have seeded at all and which have been kept clear by grazing and fuel-cutting.
-        Each fringe tree becomes a block poly, so a later farmstead cannot land on it."""
+        Each fringe tree becomes a block poly, so a later farmstead cannot land on it.
+
+        Research:
+            a fringe of advance growth outside the wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html
+            fringe band and thinning - UNRESEARCHED: 2.6 steps deep, thinning with distance
+            thickets, not a sprinkle - UNRESEARCHED: a mask about five crowns across
+            fringe crown size and conifer share - UNRESEARCHED: 0.55 to 0.95 of the radius, 30% conifer
+        """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         band = step * 2.6
@@ -205,7 +239,10 @@ class TreeStandsMixin:
         with depth. One circle per tree, a conifer told by its darker fill alone (the inner "apex" disc
         was dropped, GM 2026-09-27: it read as a trunk, which a plan view cannot show) - the same crown
         the grove clumps use, so a wood and a windbreak read as the same kind of thing. Records every
-        crown it emits (M['tree_crowns'])."""
+        crown it emits (M['tree_crowns']).
+
+        Research: crown glyph - CONVENTION: one circle, conifer darker
+        """
         out: list[str] = []
         self._record_crowns([(t[0], t[1], t[2]) for t in trees])
         for tx, ty, r, kind in sorted(trees, key=lambda t: t[1]):
@@ -216,7 +253,10 @@ class TreeStandsMixin:
     def _fringe_blocked(self: Settlement, tx: float, ty: float, r: float) -> bool:  # type: ignore[misc]
         """Whether a fringe tree at (tx, ty) would land on ground already spoken for - anything
         blocking, a field or dry plot, open water, or a way. The wood's margin grows on waste
-        ground, never in the crop or on the road."""
+        ground, never in the crop or on the road.
+
+        Research: fringe on waste ground only - UNRESEARCHED: off blocks, crops, water and ways
+        """
         if any(point_in_poly(tx, ty, b) for b in self.block_polys):
             return True
         if any(point_in_poly(tx, ty, f) or edge_dist(tx, ty, f) < r for f in self.field_polys + self.dry_polys):

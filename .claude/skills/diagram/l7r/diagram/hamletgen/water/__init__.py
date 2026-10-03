@@ -12,6 +12,8 @@ the star imports below (clause 14 - a re-export `__init__` is derived, never a m
 | `brook.py` | the stream's own COURSE, its intake, or the weir glyph - feature 230's `brook_skirt`, `feed_brook`, `draw_intake` and the four helpers that keep the course off the crop and inside the frame |
 | `comb.py` | STAGE 2 itself: the fitted comb drawn, the head race taken off the brook's bank, the intake set on it |
 | `polder.py` | anything about the reclaimed block - both polder archetypes, the perimeter dike and its gaps, the flanks, and the waterward reed fringe |
+
+Research: package index - NONE: re-exports only
 """
 
 from .brook import *  # noqa: F403

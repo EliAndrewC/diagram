@@ -1,6 +1,8 @@
 """Crossings, from a single span to the footbridge net over a channel system.
 
 Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for the index.
+
+Research: plumbing - NONE
 """
 
 import math
@@ -112,6 +114,10 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     seats today seats identically. When nothing seats, the ORIGINAL span comes back and the caller draws
     it anyway - an undersized deck that `bridges_span_their_water` then fails is better than none, because
     the check names it.
+
+    Research:
+        deck grown until its corners clear - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: up to 14 steps of 12% of the span
+        skewed toward square - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: at most 7 deg, inside the 8 deg a deck may lie off its way
     """
     for grow in range(14):
         wider = span * (1.0 + 0.12 * grow)
@@ -130,7 +136,10 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
 
 
 DECK_SPAN_DEFAULT_FT = 20.0
-"""A deck that records no span is read as this long when asking whether it covers a crossing."""
+"""A deck that records no span is read as this long when asking whether it covers a crossing.
+
+Research: unrecorded span - NONE: a fallback for reading a record
+"""
 
 
 def deck_covers(deck: Any, x: float, y: float) -> bool:
@@ -142,7 +151,10 @@ def deck_covers(deck: Any, x: float, y: float) -> bool:
 def flooded_ground(M: Any) -> list[list[Pt]]:
     """The rice a deck may not land on: every field's drawn paddy plots (feature 287, ways W13). A carried deck runs
     `LANDING_FT` onto dry ground past each bank; where the bank is a bund with flooded rice just beyond it, that landing ran
-    onto the paddy (R3: the field path's canal deck, its end 7 ft into the rice)."""
+    onto the paddy (R3: the field path's canal deck, its end 7 ft into the rice).
+
+    Research: no deck lands in the rice - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: every corner on dry ground
+    """
     return [[(float(a), float(b)) for a, b in r] for f in (M.get("fields") or []) for r in (f.get("plot_rings") or []) if len(r) >= 3]
 
 
@@ -166,10 +178,16 @@ laterals (a comb's field ditches, and a polder's inner ring canal and the field 
 where a bund path meets an IRRIGATION ditch, with cultivated ground, the settlement or a walked dike on both banks; "the
 drainage ditches at a field's foot and the diagonal drains along its outer boundary" carry none. A polder's ring canal is its
 distribution canal, inside the dike with paddies beyond it (research/archetypes/110: "inner ring canal -> field ditches ->
-paddies"), so it is a supply ditch, not a drain. The collector, the drain and the feeder are not."""
+paddies"), so it is a supply ditch, not a drain. The collector, the drain and the feeder are not.
+
+Research: planks on supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html: main, branch and lateral
+"""
 
 PLANK_DITCH_FT = 24.0
-"""A footplank this near a recorded field ditch is on that ditch; farther, it crosses no recorded ditch at all."""
+"""A footplank this near a recorded field ditch is on that ditch; farther, it crosses no recorded ditch at all.
+
+Research: ditch association reach - NONE: 24 ft
+"""
 
 
 def plank_ditch(pt: Pt, ditches: Any) -> tuple[float, Any]:
@@ -188,7 +206,10 @@ def plank_ditch(pt: Pt, ditches: Any) -> tuple[float, Any]:
 def plank_on_supply(pt: Pt, ditches: Any) -> bool:
     """Is a footplank at `pt` on a supply ditch (`SUPPLY_ROLES`) - its nearest recorded ditch within `PLANK_DITCH_FT` and a
     main, a branch or a lateral? ONE predicate (feature 287, ways W14): `channel_footbridges` refuses a seat that fails it,
-    and the lane law's `plank_faults` reads it."""
+    and the lane law's `plank_faults` reads it.
+
+    Research: planks on supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+    """
     dist, role = plank_ditch(pt, ditches)
     return dist < PLANK_DITCH_FT and role in SUPPLY_ROLES
 
@@ -221,7 +242,14 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
     ...AND IT LANDS DRY (feature 287, ways W13): a deck whose corner stands in a flooded plot (`wet`, `flooded_ground`) is
     not seated as the carried form; the crossing is tried again in the footplank's form - the local width plus the short
     `PLANK_ABUTMENT`, landing at the footplank's floor - which is what a farmer lays where a bund path meets a canal
-    (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html), and failing that it is not seated at all, so the web's last pass cuts the crossing."""
+    (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html), and failing that it is not seated at all, so the web's last pass cuts the crossing.
+
+    Research:
+        oblique span solved - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: (ww + rw|cos|)/sin
+        landing past each bank - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT onto dry ground
+        near-parallel clamp - NONE: sin floored at 0.25
+        footplank form where the landing meets rice - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html: local width plus PLANK_ABUTMENT, a 2 ft corner floor
+    """
     # segments_cross is True only for a genuine (non-parallel) crossing, so seg_intersect always returns a point here
     p = cast(Pt, seg_intersect(ra, rb, wa, wb))
     rot = math.degrees(math.atan2(rb[1] - ra[1], rb[0] - ra[0]))
@@ -271,6 +299,7 @@ def deck_admitted(M: Any, p: Pt, rot: float, span: float, width: float) -> bool:
 #: How far past the water's edge each piece of a lane cut at an undeckable crossing stops, in ft - the lane ends on the
 #: bank, not in the water (`settle_the_web`'s own `CROSSING_GAP_FT`).
 CUT_GAP_FT = 2.0
+"""Research: lane end short of unbridged water - UNRESEARCHED: 2 ft past the bank"""
 
 
 def _sub_run(pts: list[Pt], s0: float, s1: float) -> list[Pt]:
@@ -306,7 +335,15 @@ def cut_at(pts: list[Pt], k: int, p: Pt, gap: float) -> list[list[Pt]]:
 # recorded box is the same for all three and only the glyph differs. `plank` is the default because it is the glyph
 # every map drew before the knob, so a settlement that resolves no form draws what it always did.
 FOOTBRIDGE_FORMS = ("log", "earthen", "plank")
+"""Research: three ditch-crossing forms - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html: a single log, logs under trodden earth, a planked deck"""
 FOOTBRIDGE_FORM = register_knob(Knob("footbridge_form", list(FOOTBRIDGE_FORMS), default="plank"))
+"""The settlement's ditch-crossing form.
+
+Research:
+    one form per settlement - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: rolled from the map's seed
+    even shares - GUESS
+    plank as the default - NONE: what a settlement that resolves no form draws
+"""
 
 
 def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form: str = "plank") -> str:
@@ -318,7 +355,12 @@ def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form:
     - `log`: one round trunk, bark brown and rounded at the ends, narrower than the box - a log bridge is a single
       trunk about a foot or so through, so it fills seven tenths of the deck's width with a highlight along its crown;
     - `earthen`: a deck of trodden earth, the earth's own color between two dark edges, the ends of the logs under it
-      ticked along each side - no seams and no rails, which is what tells it from the planked deck at a glance."""
+      ticked along each side - no seams and no rails, which is what tells it from the planked deck at a glance.
+
+    Research:
+        one glyph per form - CONVENTION: seams and rails, a rounded trunk, trodden earth with log ends
+        log at seven tenths of the deck - CONVENTION
+    """
     hl, hw = span / 2, deck_w / 2
     g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
     if form == "log":
@@ -353,7 +395,14 @@ class BridgesMixin:
         runs along `rot` (the road's bearing, degrees) for `span` px (long enough to reach both
         banks) and is `deck_w` wide (the carried road's width). Drawn on the TOP layer so it sits
         ABOVE the water and the roadbed. Records M['bridges']. `form` is the deck's glyph (`deck_glyph`): a carried
-        way's deck is always planked; `channel_footbridges` passes the settlement's rolled ditch-crossing form."""
+        way's deck is always planked; `channel_footbridges` passes the settlement's rolled ditch-crossing form.
+
+        Research:
+            one deck per crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a deck within the tolerance that covers the point stands for it
+            carried deck always planked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html, research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html
+            deck drawn over the water - CONVENTION: the top layer
+            merge tolerance - NONE: half the span, between 4 and 12 px
+        """
         # ONE DECK PER CROSSING, enforced HERE so every caller is covered (GM 2026-07-26): the
         # road-crossing pass in bridges(), the plank pass in channel_footbridges(), and any gen that
         # hand-places a deck for a crossing one of those also finds. Minami carried two decks over the
@@ -389,7 +438,14 @@ class BridgesMixin:
         the cargo CANAL was not a watercourse - so both are scanned now, and the checks
         `roads_bridge_water` re-derives the same crossings from the
         manifest. Anything this pass finds is aligned by construction; hand-place a deck only for a
-        crossing this pass genuinely cannot see, and expect the alignment check to test it."""
+        crossing this pass genuinely cannot see, and expect the alignment check to test it.
+
+        Research:
+            every crossing bridged - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: each carried way over each crossed water
+            deck along the way - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html
+            one deck per crossing place - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a covered crossing skipped, a near one merged
+            unseated crossing - NONE: raised as an engine defect
+        """
         wet = flooded_ground(self.M)
         n = 0
         for ra, rb, rw, wa, wb, ww, wpts in way_water_crossings(bridge_carried_ways(self.M), bridge_crossed_waters(self.M)):
@@ -426,7 +482,10 @@ class BridgesMixin:
         """Cut every lane at every crossing where no deck seats (`undeckable_at`, the predicate `bridges()` raises on), so a
         settlement rolled without the web's last pass (`roll_village`) never hands `bridges()` a crossing it cannot deck
         (feature 287, ways W12). Each cut takes the crossing and `CUT_GAP_FT` past each bank out of the lane - the pieces
-        either side kept, the first in place - so every cut strictly shortens the lane and the loop ends. Returns the cuts."""
+        either side kept, the first in place - so every cut strictly shortens the lane and the loop ends. Returns the cuts.
+
+        Research: a lane stops at water it cannot bridge - UNRESEARCHED: cut CUT_GAP_FT past each bank
+        """
         waters, wet = bridge_crossed_waters(self.M), flooded_ground(self.M)
         cuts = 0
         i = 0
@@ -455,7 +514,10 @@ class BridgesMixin:
 
     def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt) -> None:  # type: ignore[misc]
         """Lengthen a standing deck along its own bearing until it reaches `p` - a second crossing close enough that its own
-        deck would stand on this one (feature 287, ways W02) - and redraw it, record and ink together."""
+        deck would stand on this one (feature 287, ways W02) - and redraw it, record and ink together.
+
+        Research: two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both
+        """
         deck["span"] = round(max(float(deck["span"]), 2.0 * math.dist((float(deck["x"]), float(deck["y"])), p) + 2.0), 1)
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
@@ -476,7 +538,27 @@ class BridgesMixin:
         carries NO plank (GM 2026-07-22, Hikari no Sato: crossings into the reed marsh).
         FORM (269 B21): every crossing this lays takes the settlement's one rolled form - a single log, logs under
         earth, or a planked deck (`FOOTBRIDGE_FORM`, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html) - declared as `meta.footbridge_form` and on
-        each deck's record as `form`. The form changes the glyph only, never where or how wide a crossing is laid."""
+        each deck's record as `form`. The form changes the glyph only, never where or how wide a crossing is laid.
+
+        Research:
+            supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector, drain or feeder
+            no path leads to a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+            one near the middle, more on a long run - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one per 320 px of the run wide enough
+            short stub stepped over - UNRESEARCHED: under 140 px, no plank
+            only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking, a hard filter at the seat
+            square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+            plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 2.0 px unscaled
+            short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus PLANK_ABUTMENT
+            polder crossings by side - UNRESEARCHED: seg_caps, none on the feeder, far toe or drain
+            longer plank at a junction - UNRESEARCHED: widened to the water under it
+            obliqueness ceiling - UNRESEARCHED: no seat needing over three times the nominal span
+            off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+            off dry crops, gardens and groves - UNRESEARCHED
+            not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+            both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+            one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
+            slide resolution - NONE: max(8, length/40) px, the check's own
+        """
 
         from l7r.diagram.waterfields import taper_w, worth_planking  # local: the engine packages are peers, imported lazily
 
@@ -679,7 +761,10 @@ class BridgesMixin:
         candidate - 62,565 of Inashiro's 63,674 `quad_hits_seg` calls. `quad_hits_seg(..., 3.0)` can pass only a segment
         whose box meets the deck's box widened by those 3 px, so the index (`water_segment_index`, built once per
         footbridge pass by the caller) returns every segment the test could pass, and the test decides as before. `under`
-        is a maximum, so neither the order of the hits nor a hit met twice changes it."""
+        is a maximum, so neither the order of the hits nor a hit met twice changes it.
+
+        Research: longer plank at a junction - UNRESEARCHED: spans the widest water under it, corners 2 ft past it
+        """
         _da = math.radians(deck)
         _dux, _duy = math.cos(_da), math.sin(_da)
         under: list[float] = []
@@ -721,7 +806,10 @@ class BridgesMixin:
         Measured against `bridge_crossed_waters`, which is where the CHECK reads its geometry - the
         DRAWN, filleted polyline, not the recorded one `field_channel` was handed. Testing the
         recorded line looked right and rejected nothing, because the fillet is exactly what curves
-        back toward the corner."""
+        back toward the corner.
+
+        Research: every corner past the bank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: half the width plus 2 ft
+        """
         _seat = None
         _cw = 0.0
         for _wp, _ww in bridge_crossed_waters(self.M):
@@ -749,7 +837,12 @@ class BridgesMixin:
         or off-map serves no one - field-workers cross a ditch to reach the FIELD, not to wade into the
         bog (GM 2026-07-22, Hikari no Sato: drain-toe planks that stepped straight into the reed marsh).
         The deck spans the ditch along `deck_deg`, so its two ends ARE the two banks; each is sampled a
-        short reach past its abutment. See the footbridges_reach_useful_ground check in check_village.py."""
+        short reach past its abutment. See the footbridges_reach_useful_ground check in check_village.py.
+
+        Research:
+            both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: field, dry plot, dike crest or a dwelling
+            bank and village reach - UNRESEARCHED: PLANK_BANK_REACH past the end, PLANK_VILLAGE_REACH to a house
+        """
         a = math.radians(deck_deg)
         ux, uy = math.cos(a), math.sin(a)
         reach = span / 2 + PLANK_BANK_REACH

@@ -9,6 +9,8 @@ refuses. Every later envelope refuses to cover a corridor, so no household seate
 
 The corridor is a RESERVATION, not a way: the web draws a way along it where its lanes do not reach the house
 (WAYS' `settle_the_web`). The tree is recorded on the manifest (`access_corridors`) for the stages that follow.
+
+Research: corridor geometry, memo and search plumbing - NONE
 """
 
 from __future__ import annotations
@@ -27,6 +29,7 @@ if TYPE_CHECKING:
 #: Half the corridor's width, in feet: `WEB_FABRIC_GAP` (7 ft) either side of the tread's line - a footpath's room between
 #: two steadings, the gap the web's own fabric keeps (homes H16: "a footpath-width strip (WEB_FABRIC_GAP x 2)").
 ACCESS_HALF_FT = 7.0
+"""Research: corridor room - research/questions/0081-village-lanes.drawing.html: 7 ft either side of the tread's line, the web's fabric gap"""
 
 #: How far along a corridor its ground is sampled against the site boundary, in px: finer than the thinnest member the
 #: boundary holds a corridor off (a ditch's half-width plus its clearance).
@@ -75,7 +78,10 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 
 
 class AccessTree:
-    """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes."""
+    """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes.
+
+    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a corridor reserved from each door to the tree, no later homestead covering it
+    """
 
     __slots__ = ("_along", "_targets", "grid", "half", "routed", "segs", "tried")
 
@@ -139,7 +145,10 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
     fact): the forecourt (the yard's center, before the door), then the yard's far edge, then the dooryard's two flanks -
     at the yard's depth, beside it, carried out past the house's gable by a corridor's half-width (`half`) and a foot, so a
     corridor to a tree behind the house leaves its dooryard and passes the gable rather than crossing the house. A bundle
-    with no yard leaves by a step off its front wall."""
+    with no yard leaves by a step off its front wall.
+
+    Research: path starts in the dooryard - research/questions/0081-village-lanes.drawing.html: forecourt, then the yard's far edge, then the two flanks past the gable; never a back wall
+    """
     boxes = geom.get("boxes") or {}
     yard = boxes.get("yard") or geom.get("yard")
     hx, hy, hw, hh = boxes.get("house") or geom["house"]
@@ -164,12 +173,16 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
 #: The turns off the seat's outward bearing an exit strip is tried at, in degrees, nearest first, where the strip straight
 #: out is refused by the ground: a quarter turn either way at most, so the strip still leaves the cluster away from its field.
 EXIT_TURNS_DEG = (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0, 75.0, -75.0, 90.0, -90.0)
+"""Research: exit strip turns - UNRESEARCHED: at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
 
 
 def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None:
     """The bearing the exit strip leaves the cluster's center along: `out`, or the nearest turn off it (`EXIT_TURNS_DEG`)
     whose strip stands on lawful ground (`lawful_ground`, the corridors' own test). None where no turn does - the margin
-    has no way out and is refused."""
+    has no way out and is refused.
+
+    Research: track out leaves away from the field - research/questions/0081-village-lanes.drawing.html: the outward bearing, or the nearest turn whose strip stands on lawful ground
+    """
     for deg in EXIT_TURNS_DEG:
         c, sn = math.cos(math.radians(deg)), math.sin(math.radians(deg))
         u = (out[0] * c - out[1] * sn, out[0] * sn + out[1] * c)
@@ -181,7 +194,10 @@ def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None
 def start_tree(s: Settlement, center: Pt, out: Pt, length: float) -> AccessTree:
     """The tree's first corridor, the EXIT STRIP: from the cluster's center outward along `out` for `length` px (the
     connector starts at its outer end). Installed on the settlement for the seat pass and recorded on the manifest. The
-    caller asks `exit_bearing` for an `out` whose strip stands on lawful ground."""
+    caller asks `exit_bearing` for an `out` whose strip stands on lawful ground.
+
+    Research: exit strip from the cluster's center - research/questions/0081-village-lanes.drawing.html: the track out begins at its outer end
+    """
     tree = AccessTree(s.px(ACCESS_HALF_FT))
     s.__dict__.pop("_corridor_memo", None)  # a new tree is a new seating: nothing remembered of the last one's ground
     end = (center[0] + out[0] * length, center[1] + out[1] * length)
@@ -195,7 +211,10 @@ def start_tree(s: Settlement, center: Pt, out: Pt, length: float) -> AccessTree:
 def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     """May a corridor run a-b? Its strip clears every placed homestead box but its own (`own`, the candidate's bbox, whose
     house it may not cross either), and its line stands on ground the site boundary admits - not on the field's side of a
-    chord, not within a water course's clearance, not inside the outline of the other ground."""
+    chord, not within a water course's clearance, not inside the outline of the other ground.
+
+    Research: nothing built on a path - research/questions/0081-village-lanes.drawing.html: the strip clears every other homestead, the field side and the water's clearance
+    """
     return house_clear(a, b, own, house_gap(s)) and fixtures_clear(s, a, b, own) and parts_clear(s, a, b, own) and standing_clear(s, a, b)
 
 
@@ -205,6 +224,7 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
 #: house seating holds a house off every tread by it (`houses._on_a_tread`, which imports it from here) and a corridor holds its
 #: tread off its own house by it (`house_gap`).
 TREAD_WALL_FT = 4.0
+"""Research: tread clear of a wall - GUESS: 4 ft, on a townhouse's three-shaku eaves strip with a margin"""
 
 
 def house_clear(a: Pt, b: Pt, own: Any, gap: float = 0.5) -> bool:
@@ -225,7 +245,10 @@ def house_gap(s: Settlement) -> float:
 def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     """...NOR ITS OWN FARMSTEAD FIXTURES (feature 287, homes H32): they are parts of the homestead now, laid before the web,
     and the web draws its way along this corridor - a privy on its own path would be a lane on the privy. A persimmon is
-    held off by its trunk; the path may pass under the crown."""
+    held off by its trunk; the path may pass under the crown.
+
+    Research: path clear of its own fixtures - UNRESEARCHED: the strip off privy, stack and shed; a persimmon by its trunk alone, the crown may overhang
+    """
     half, trunk = s._access.half, s.px(4.0)
     return not any(seg_box_within(a, b, box if kind != "persimmon" else (box[0], box[1], trunk, trunk), half) for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items())
 
@@ -233,6 +256,7 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
 #: Half the tread the web draws along a corridor, in feet: the ways' `ACCESS_WIDTH` (3 ft) halved - this package cannot
 #: import the hamlet generator; `tests/settlement/test_access.py` holds the two equal.
 TREAD_HALF_FT = 1.5
+"""Research: footpath tread - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: 3 ft wide, the field road's 3 shaku"""
 
 #: How much farther than the tread's half-width a corridor's line keeps off its own homestead's parts, in feet: the lane law
 #: asks a tread of the overlap matrix `PLACER_MARGIN_PX` wider than it is drawn, and a leg is judged here before its ends
@@ -245,7 +269,10 @@ def parts_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     homestead's parts but the dooryard it arrives at, its own household's too - the web draws its way along this line, so
     a corridor across its own bed would be a lane across the bed (Inashiro's flank door ran north through its second bed).
     The tread, not the corridor's reserved strip, keeps off them: the strip is the web's room to draw in, and the line is
-    what it draws. The yard is the door's own ground; the web leaves it at its edge (`corridors.door_ends`)."""
+    what it draws. The yard is the door's own ground; the web leaves it at its edge (`corridors.door_ends`).
+
+    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread 0.5 ft clear
+    """
     boxes = own.get("boxes") or {}
     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
     parts = [boxes.get(k) for k in ("shed", "byre", "well")] + list(boxes.get("gardens") or ())
@@ -380,7 +407,10 @@ def lawful_ground(s: Settlement, a: Pt, b: Pt) -> bool:
 def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
     """Where a corridor from a dooryard flank door (`doors_of`) turns once it has passed its house: carried back along the
     gable, parallel to the house's front-to-yard axis, past the back wall by a corridor's half-width and a foot - so the
-    leg beside the house clears it and the turn stands behind its corner, not behind its wall."""
+    leg beside the house clears it and the turn stands behind its corner, not behind its wall.
+
+    Research: flank path round the gable - UNRESEARCHED: carried along the gable past the back wall by a corridor's half-width and a foot
+    """
     boxes = geom.get("boxes") or {}
     yard = boxes.get("yard") or geom.get("yard")
     hx, hy, hw, hh = boxes.get("house") or geom["house"]
@@ -402,7 +432,10 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
     the four garden sides of one seat have the same doors, the same gable and the same house, and differ only in their
     fixtures. So the candidates that clear the house and the standing ground are found once, in the search's order and
     only as far as asked (`_house_candidates`), and each homestead takes the first of them its own fixtures leave clear -
-    the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused)."""
+    the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused).
+
+    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane
+    """
     tree = getattr(s, "_access", None)
     if tree is None:
         return None
@@ -444,7 +477,10 @@ def seat_reaches_tree(s: Settlement, core: Any) -> bool:
     """Has this house and yard ANY corridor candidate to the access tree - a door whose strip clears the house and the standing
     ground (`_house_candidates`)? The seat's own question (feature 297, FR-002), asked of the house-and-yard core before any
     layout is built: the memo entry `access_corridor` keys on the same house and yard is the one created and peeked here, so a
-    layout's corridor search continues from it rather than starting again. True where no tree is installed."""
+    layout's corridor search continues from it rather than starting again. True where no tree is installed.
+
+    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane
+    """
     tree = getattr(s, "_access", None)
     if tree is None:
         return True
@@ -488,7 +524,10 @@ def past_the_yard(run: Any, yard: Any, half: float) -> list[Pt] | None:
     household's too (a path arrives at its dooryard and does not cross it), and the door stands in the yard's middle
     (`doors_of`) - an 81-mat yard 76 x 53 ft left every door end the web once trimmed to 40 ft still on it (cohort seed 39
     under feature 284's probes). The corridor leaves its yard once (`leaves_its_yard`), so the run past it is the reserved
-    ground. None where the run never comes that near the yard or ends on it."""
+    ground. None where the run never comes that near the yard or ends on it.
+
+    Research: path not drawn on its own yard - UNRESEARCHED: the drawn path starts where it leaves the threshing yard
+    """
     from shapely.geometry import LineString, Point, Polygon
 
     pts = [(float(q[0]), float(q[1])) for q in run]
@@ -525,7 +564,10 @@ def tree_admits(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> bool:
     """Would the access tree, drawn as lanes with this corridor added, keep the whole lane law among its lanes? THE WAYS' OWN
     PREDICATE (`hamletgen/ways/tree.py:tree_admits`), installed on the settlement by the hamlet's seating as `_corridor_tree`
     - the settlement package cannot import the hamlet generator. Remembered per corridor while nothing standing changes.
-    With none installed (a village roll) every corridor is admitted, as the ground test is."""
+    With none installed (a village roll) every corridor is admitted, as the ground test is.
+
+    Research: lane law over the whole tree - research/questions/0081-village-lanes.drawing.html: a corridor is admitted only where the tree drawn as lanes keeps the lane law
+    """
     judge = getattr(s, "_corridor_tree", None)
     if judge is None:
         return True
@@ -582,7 +624,10 @@ def leaves_its_yard(corridor: tuple[Pt, ...], yard: Any, gap: float, step: float
     """Does a corridor leave its own threshing yard (`(cx, cy, w, h)`, grown by `gap`) at most once, never to cross it again
     (feature 287 M8)? The door stands in or beside the dooryard and the web draws the way from where the corridor leaves it
     (`corridors.door_ends`); a corridor from a flank door back across the yard (cohort seed 48) was a way the matrix refuses
-    anywhere along the yard, so the house was left with none."""
+    anywhere along the yard, so the house was left with none.
+
+    Research: path leaves its yard once - UNRESEARCHED: a corridor that re-enters its own threshing yard is refused
+    """
     if yard is None:
         return True
     cx, cy, w, h = (float(v) for v in yard)
@@ -606,12 +651,16 @@ def leaves_its_yard(corridor: tuple[Pt, ...], yard: Any, gap: float, step: float
 #: A turn a path cannot take, in degrees off straight on: the web's own bend law (`hamletgen/ways/clearance._HAIRPIN_DEG`,
 #: "doubles back"), which this package cannot import; `tests/settlement/test_access.py` holds the two equal.
 HAIRPIN_DEG = 140.0
+"""Research: hairpin turn - research/questions/0081-village-lanes.drawing.html: a turn of 140 degrees or more, which a lane never takes"""
 
 
 def doubles_back(a: Pt, b: Pt, c: Pt) -> bool:
     """THE ONE PREDICATE of a corridor's turn (feature 287, homes wave 5): does the run a-b-c turn at b by `HAIRPIN_DEG` or
     more? A corridor carried round the gable to a tree point back in front of the house doubles back on itself, and the web
-    - which draws a way along a corridor only where its bend law admits it - left the house with no way at all."""
+    - which draws a way along a corridor only where its bend law admits it - left the house with no way at all.
+
+    Research: path never doubles back - research/questions/0081-village-lanes.drawing.html: a turn at `HAIRPIN_DEG` or more refuses the corridor
+    """
     u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
     nu, nv = math.hypot(*u), math.hypot(*v)
     if nu < 1e-9 or nv < 1e-9:

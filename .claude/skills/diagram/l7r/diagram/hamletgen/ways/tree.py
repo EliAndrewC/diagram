@@ -25,6 +25,8 @@ SO THE ORDER CHANGES, and the proof with it:
 
 So every house with a reserved corridor, and the field with a reserved corridor, is reached by construction: there is no
 fallback that ships one unreached.
+
+Research: access tree plumbing - NONE
 """
 
 from __future__ import annotations
@@ -45,7 +47,9 @@ from .geom import memo_ground, polyline_len, worked_ground
 
 CARRY_FT = 20.0
 """How far off its host a tree run's end may stand and be set on its foot there rather than carried on by a leg of its own
-(`lanes_of`, `strip_run`): past `law`'s hook leg (`_HOOK_FT`), so no leg short enough to hook is ever added."""
+(`lanes_of`, `strip_run`): past `law`'s hook leg (`_HOOK_FT`), so no leg short enough to hook is ever added.
+
+Research: end set on its host - research/questions/0081-village-lanes.drawing.html: within 20 ft, past the hook leg"""
 
 STUB_FT = 60.0
 """At seating the connector is not yet drawn; it will start on the exit strip, past every corridor hanging from it
@@ -248,7 +252,12 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     pair is asked of the new lane against each lane it meets, so the strip's inner end, where the new lane is its innermost
     attachment, is judged there too. And: no sliver of grass among the tree's lanes (`law.needle_loops`); no house
     discharging more than `law.DOORSTEP_MAX` free ends; the new house's way out along the tree crossing each brook at most once. The seating asks
-    it before it admits a corridor."""
+    it before it admits a corridor.
+
+    Research:
+        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: no hook, needle, fold, hairpin, doubled tail or dangling end among its lanes
+        way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
+        no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch"""
     recs: list[dict[str, Any]] = [*tree_records(M), {"role": role, "of": (float(house["x"]), float(house["y"])) if house is not None else None, "pts": _dedup([_pt(q) for q in run])}]
     strip = _strip(M)
     host = hosts(recs, strip)
@@ -317,7 +326,9 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
 
 
 def tree_shadows(ways: Sequence[Sequence[Pt]]) -> bool:
-    """Does the last way run beside another past a pitch, or another beside it (`serve.shadowed_by`, way against way)?"""
+    """Does the last way run beside another past a pitch, or another beside it (`serve.shadowed_by`, way against way)?
+
+    Research: no doubled band - UNRESEARCHED: a way may not run beside another past a pitch"""
     from .serve import shadowed_by  # serve reaches the web's draw; imported here, where the seating asks it
 
     last = len(ways) - 1
@@ -347,7 +358,9 @@ def _from(run: Sequence[Any], q: Pt) -> Poly:
 
 def way_out_once(M: Mapping[str, Any], chains: Sequence[Poly]) -> bool:
     """Does each way out along the tree (`chains`) cross every brook at most once (ways W08)? A tree has one way from a door
-    to its root, so that is the household's way out while the tree is all there is."""
+    to its root, so that is the household's way out while the tree is all there is.
+
+    Research: way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     return all(len(law.crossing_points(c, brook)) <= 1 for brook in law._brooks(M) for c in chains)
 
 
@@ -369,7 +382,9 @@ def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
     WHY (feature 306, Sawada): a join-orphans lane ran 105 ft within 30 ft of the exit strip - the doubled band
     `settle_shadows` takes away - but it was the one way reaching a farmhouse, so the web was not kept without it and the
     band stayed; that house had no corridor drawn only because the stray lane reached it first. Its corridor was reserved
-    and judged lawful at seating, so the band goes and the house is reached by its own way."""
+    and judged lawful at seating, so the band goes and the house is reached by its own way.
+
+    Research: every farmhouse served - research/questions/0081-village-lanes.drawing.html: a stray lane goes where the house's own corridor will reach it"""
     from .corridors import _on_the_connector
 
     lanes = M.get("lanes") or []
@@ -387,7 +402,11 @@ def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
 
 def owed(M: Mapping[str, Any]) -> list[int]:
     """The reserved runs the web owes a lane: the corridor of every farmhouse it does not reach (`unreached_houses`) and
-    the field's where no way reaches the field (`law.field_unreached`) - with every run each hangs from."""
+    the field's where no way reaches the field (`law.field_unreached`) - with every run each hangs from.
+
+    Research:
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: the corridor of each unreached house
+        field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field's corridor where no way reaches its bund"""
     recs = tree_records(M)
     host = hosts(recs, _strip(M))
     far = [(float(x), float(y)) for x, y, _d in unreached_houses(M)]
@@ -400,7 +419,9 @@ def owed(M: Mapping[str, Any]) -> list[int]:
 def settle_tree(s: Any) -> int:
     """Step 4 (ways W01, W03): the tree lanes the web owes (`owed`), drawn as the seating judged them (`lanes_of`) - each
     once, the exit strip re-laid to reach a new innermost attachment - and then the ordinary lanes that break a rule against
-    them cut (`settle_defer`). Returns the lanes drawn or re-laid."""
+    them cut (`settle_defer`). Returns the lanes drawn or re-laid.
+
+    Research: every farmhouse served - research/questions/0081-village-lanes.drawing.html: each unreached house is drawn its reserved corridor"""
     M = s.M
     need = owed(M)
     if not need:
@@ -430,7 +451,9 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
     repair the settle would otherwise make names the tree lane, or would split the web to make: its end meets an ordinary
     lane's tread as a needle, its tail runs on beside an ordinary lane, the two close a sliver of grass (`law.needle_loops`;
     `settle_needles` cuts only where nothing splits, cohort seeds 15, 27 and 36), or a house discharges more than
-    `law.DOORSTEP_MAX` free ends. The ordinary lane is cut there - it defers."""
+    `law.DOORSTEP_MAX` free ends. The ordinary lane is cut there - it defers.
+
+    Research: ordinary lane defers - NONE: which of two lanes a repair cuts"""
     lanes = M.get("lanes") or []
     out: list[tuple[int, Pt]] = []
     for i, end, k, u, v in law.needle_ends(lanes):
@@ -461,7 +484,9 @@ def tree_faults(M: Mapping[str, Any]) -> list[tuple[int, Pt]]:
 
 DEFER_GAP_FT = 30.0
 """How much of an ordinary lane a cut for deference takes out either side of the point (`settle_defer`): past a needle's
-20 ft leg and a doubled tread's 14 ft, so the stretch that met the tree lane goes with it."""
+20 ft leg and a doubled tread's 14 ft, so the stretch that met the tree lane goes with it.
+
+Research: defer cut extent - NONE: past the law's own legs"""
 
 
 def settle_defer(s: Any) -> int:
@@ -488,7 +513,11 @@ def prune_the_tree(s: Any) -> int:
     target or field newly unreached, the web in no more networks and no lane end breaking a rule it did not (`end_faults`).
     A drawn corridor goes only as a LEAF - no drawn corridor hanging from it - and the exit strip with it retracts to the
     innermost attachment still drawn, or goes (`strip_run`): the strip's inner end is that corridor's joint, and taken one
-    at a time neither could go. One a round, as a fragment: two can each be redundant only while the other stands."""
+    at a time neither could go. One a round, as a fragment: two can each be redundant only while the other stands.
+
+    Research:
+        redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs
+        street and door path never pruned - research/questions/0033-row-villages-resson.drawing.html: the way a row's farms are reached by"""
     M = s.M
     lanes = M.get("lanes") or []
     order = sorted(

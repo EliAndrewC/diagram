@@ -1,4 +1,7 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: plumbing - NONE
+"""
 
 from __future__ import annotations
 
@@ -51,7 +54,13 @@ def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     THE COURSE AS FIRST DRAWN (feature 287, M2): the brook is rounded at the end of the water stages now, before the ways,
     and a way is still routed against its `stations` - the course before the rounding - because rounding the brook before
     the ways were routed moved every way its corners had shaped (`Settlement.round_stream`). The fords (`brook_fords`) and
-    the crossing band (`set_crossing`) read the same unrounded course, `plan.brook`."""
+    the crossing band (`set_crossing`) read the same unrounded course, `plan.brook`.
+
+    Research:
+        the brook crossed only at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
+            the stream's segments gapped at each crossing place, 30 ft either side
+        ditches cross freely - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a ditch is
+            planked, not held to the deck rule"""
     courses = [st.get("stations") or st.get("poly") or [] for st in s.M.get("streams", [])]
     segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for c in courses for a, b in zip(c, c[1:], strict=False)]
     return gap_segments(segs, getattr(s, "brook_fords", ()), FORD_HALF)
@@ -61,7 +70,13 @@ def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt
     """Where the brook may be crossed: points every `spacing` along its course where it runs straight for the
     deck's length either side (the turn between the reaches `FORD_HALF` behind and ahead is under `bend_deg`),
     so a way crossing there crosses it square and the plank lands on both banks. A bend is skipped, not moved:
-    the next site along is `spacing` further on."""
+    the next site along is `spacing` further on.
+
+    Research:
+        crossing places along the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
+            every `spacing` (160 ft), a GUESS there
+        only on a straight reach - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a bend
+            skipped, so the crossing is square"""
     out: list[Pt] = []
     legs = [(a, b, math.dist(a, b)) for a, b in zip(brook, brook[1:], strict=False) if math.dist(a, b) > 0.0]
     total = sum(n for _a, _b, n in legs)
@@ -94,7 +109,12 @@ def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], 
     """The two landings of a square crossing at the ford that makes start -> ford -> end shortest, ordered from the
     start's bank - or nothing, when the straight run from `start` to `end` does not cross the brook (or there is no
     ford). A landing stands `landing` px off the brook square to its local reach: past the 14 px the router keeps off
-    water, and inside the ford's gap, so a path through the two lands on the deck `bridges()` puts there."""
+    water, and inside the ford's gap, so a path through the two lands on the deck `bridges()` puts there.
+
+    Research:
+        square at the ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford
+            that makes the walk shortest, landings square to the reach
+        landing 22 px off the brook - NONE: fitted to the router's water margin and the ford's gap"""
     legs = list(zip(brook, brook[1:], strict=False))
     if not fords or not any(segments_cross(start, end, a, b) for a, b in legs):
         return []
@@ -156,7 +176,16 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
     The pond and the brook are avoided outright rather than bridged: a way meeting water at a
     shallow angle needs a far longer deck than a square crossing, and `bridges_span_their_water`
     measures the deck the engine actually drew. Going around removes the crossing entirely, which
-    is also what a real track does - you ford a ditch where it is narrow and square."""
+    is also what a real track does - you ford a ditch where it is narrow and square.
+
+    Research:
+        pond kept off - UNRESEARCHED: 80 ft past the pond's larger half-axis
+        drain brook never crossed - UNRESEARCHED: avoided outright, not bridged
+        off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
+        square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing under
+            42 degrees
+        no deck on crop - research/questions/0081-village-lanes.drawing.html: a crossing within 14 ft of a crop polygon fouls
+        two decks too close - CONVENTION: crossings under 46 ft apart counted, decks drawn over each other"""
     bad = 0
     for i in range(len(path) - 1):
         a, b = path[i], path[i + 1]
@@ -202,6 +231,17 @@ class PathChecker:
         self.waters = _seg_grid(waters)
 
     def violations(self, path: Poly) -> int:
+        """`path_violations` for one path, asked of the indexed geometry.
+
+        Research:
+            pond kept off - UNRESEARCHED: 80 ft past the pond's larger half-axis
+            drain brook never crossed - UNRESEARCHED: avoided outright, not bridged
+            off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
+            square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing
+                under 42 degrees
+            no deck on crop - research/questions/0081-village-lanes.drawing.html: a crossing within 14 ft of a crop fouls
+            two decks too close - CONVENTION: crossings under 46 ft apart counted
+        """
         bad = 0
         hits: list[Pt] = []
         for i in range(len(path) - 1):
@@ -250,7 +290,9 @@ def crossing_lands_on_crop(a: Pt, b: Pt, p: Pt, q: Pt, crops: Sequence[Poly], pa
 
     A crossing gets a DECK, and a deck laid on a hem plot is a bridge across the barley
     (`features_do_not_overlap` reports it as a dry_plots/bridges pair). The way is free to cross the
-    same ditch a little further along where the crop stops - which is where the bund is anyway."""
+    same ditch a little further along where the crop stops - which is where the bund is anyway.
+
+    Research: no deck on crop - research/questions/0081-village-lanes.drawing.html: within 14 ft of a dry plot"""
     hit = seg_intersect(a, b, p, q)
     if hit is None:
         return False
@@ -264,7 +306,9 @@ def shallow_crossing(a: Pt, b: Pt, p: Pt, q: Pt, limit_deg: float = 42.0) -> boo
     for, and forbidding it outright would cut the field spur off from the field. What it may not do
     is cross at a slant: an oblique crossing needs a deck of (width + deck_w x |cos|) / sin plus a
     landing each side, so `bridges_span_their_water` fails it with an abutment standing in the
-    water. Steering the way to meet the ditch square is the fix a farmer would recognize."""
+    water. Steering the way to meet the ditch square is the fix a farmer would recognize.
+
+    Research: square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: under 42 deg fouls"""
     if seg_intersect(a, b, p, q) is None:
         return False
     ux, uy = unit(b[0] - a[0], b[1] - a[1])
@@ -304,7 +348,9 @@ def served_network(lanes: Sequence[Mapping[str, Any]], join: float = LANE_JOIN_F
     THE NETWORK, NOT ANY LINE ON THE GROUND. The rule this serves is that every house in a nucleated
     cluster is reached by the INTERCONNECTED system of lanes, so a house served only by an isolated stub
     is not served. The component is grown from the connector if one is drawn, else from the longest lane;
-    a check satisfiable by an island rewards drawing an island."""
+    a check satisfiable by an island rewards drawing an island.
+
+    Research: one network - research/questions/0081-village-lanes.drawing.html: grown from the connector"""
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
     seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), None)
     if seed is None and ways:
@@ -331,7 +377,12 @@ def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[
     and a DISPERSED hamlet has no internal network by definition, so the rule is not about it. A waiver
     would have been the wrong tool: a waiver says "this map breaks a rule that is true of it"; a dispersed
     hamlet does not break this rule, the rule does not apply. Defaults to nucleated so a map that declares
-    no form keeps its old treatment."""
+    no form keeps its old treatment.
+
+    Research:
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: within 100 ft of the network
+        dispersed hamlet exempt - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: no
+            lanes among its farms"""
     meta = M.get("meta") or {}
     if not meta.get("generated_by") or meta.get("settlement_form", "nucleated") == "dispersed":
         return []
@@ -351,7 +402,9 @@ FORD_SQUARE_TOL_DEG = 10.0
 """A way that crosses the brook more than this far off square is squared at the crossing (`square_crossings`). The ford
 gap lets a string-pulled way through it at up to about 40 degrees off square, and the deck takes the angle of the way it
 carries - Kashikawa drew a plank 52 degrees off square (settlement-review, feature 261). 10 degrees is a map drawing
-convention: square to the eye, and small enough that a gently angled approach is left as the router drew it."""
+convention: square to the eye, and small enough that a gently angled approach is left as the router drew it.
+
+Research: square brook crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: within 10 deg"""
 
 
 def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> list[Pt]:
@@ -368,7 +421,9 @@ def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> lis
     near the lane's own END to hold the leg is squared too - the end moves onto the leg rather than the crossing being
     "left as drawn" oblique (the elbow pass has already taken out every INTERIOR vertex that near the water, so only an end
     can be). The leg reaches `SQUARE_LEG_PAD` past `half` each side, so its own points stand clear of the elbow pass and
-    squaring a squared lane changes nothing: the web's last pass (`settle_the_web`) runs this until a round is still."""
+    squaring a squared lane changes nothing: the web's last pass (`settle_the_web`) runs this until a round is still.
+
+    Research: square brook crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     if len(pts) > 2 and len(brook) > 1:
         inner = pts[1:-1]
         far = seg_dists(inner, list(zip(brook, brook[1:], strict=False))).min(axis=1) > half if inner else []

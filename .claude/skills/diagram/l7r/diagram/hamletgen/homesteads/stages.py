@@ -1,4 +1,5 @@
-"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/homesteads.py by feature 173 - see this package's CLAUDE.md for the index.
+Research: seating plumbing - NONE: stage order, margins, reservations and bookkeeping; the rules are the callees' and the constants' own"""
 
 from __future__ import annotations
 
@@ -37,6 +38,7 @@ from .wells import place_wells
 #: settlement-review of Mizuguchi): a GUESS calibrated against main's roll of that map, whose rows spread 24 and 78 ft - a
 #: quarter pitch keeps a rank a rank while taking it off the surveyed line.
 RANK_DEPTH_JITTER = 0.25
+"""Research: rank depth jitter - GUESS: a quarter pitch, half each way, on an alleys hamlet's ranks"""
 
 FORM_BOUND: dict[str, float] = {"linear": 2.5}
 """Per-FORM override of how far from the seat center a homestead may stand, as a multiple of the
@@ -53,7 +55,8 @@ A FAILED FIX, recorded so it is not tried again (feature 126). Dispersed and lin
 fit, and fixing that fixed the count. Measured afterwards on Sawada, the dispersed pool map:
 19/19 households in 53.4s at the uniform 1.15, against 19/19 in 53.7s at 2.2 - no seats gained, no
 time lost, nothing bought. A wider search bound only permits sprawl the feature exists to prevent,
-so the honest value is no override at all."""
+so the honest value is no override at all.
+Research: a row's reach - GUESS: 2.5 seat-band diagonals for the linear form, 1.15 for every other"""
 
 
 def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_lat: float, near: float, far: float) -> float:
@@ -81,7 +84,8 @@ def face_the_houses(s: Settlement, plan: SitePlan) -> None:
     The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
     along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
     turns from it with the field margin its lanes will follow (`MarginBearing`, on the paddy's envelope and the seat's
-    own axis), plus its own by-eye spread, and one in ten a quarter turn (`Settlement._house_rot`)."""
+    own axis), plus its own by-eye spread, and one in ten a quarter turn (`Settlement._house_rot`).
+    Research: house bearing - research/questions/0029-farmhouses-minka.html, research/questions/0029-farmhouses-minka.drawing.html: a common bearing within `COMMON_BEARING_DEG` of south, turned with the field margin"""
     common = round((knob_rng(s.seed, "house_bearing").random() * 2.0 - 1.0) * COMMON_BEARING_DEG, 2)
     s._house_bearing = common
     ax, ay = plan.seat["along"]
@@ -343,7 +347,8 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     no cluster shape's band (`drawn_in_band`). The seating kept is the one pass that seated everyone - no second roll of
     anything. Past the last margin the site is refused, naming it: `SiteRefused`, raised HERE rather than at `stage_seat`
     where plan D2 places it, because a margin's capacity is known only by seating it. A margin with no dry way out is
-    skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin)."""
+    skipped unseated. `meta.seat_margin` counts the margins seated (1: the chosen margin).
+    Research: every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused"""
     want = plan.spec.households
     mark = seating_mark(s)
     placed, cloud = _seat_households(s, plan)
@@ -470,7 +475,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
     corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
     the ranks, the rescue rounds and the exhaustive pass over the legal ground within reach (homes H14), or - a row
-    village - its rows. Returns `(placed, the cloud's share)`; the boundary stays installed for the stage to take down."""
+    village - its rows. Returns `(placed, the cloud's share)`; the boundary stays installed for the stage to take down.
+    Research: a scattered hamlet's seating - UNRESEARCHED: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass"""
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.

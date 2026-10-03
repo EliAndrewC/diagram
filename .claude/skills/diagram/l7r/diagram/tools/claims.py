@@ -108,46 +108,63 @@ def parse_claim(line: str) -> Claim:
     return Claim(label.strip(), kind, tuple(parts), account.strip(), text)
 
 
+def _section_span(lines: list[str]) -> tuple[int, int, bool] | None:
+    """(header index, end index, flat) of the `Research:` section in docstring lines, or None.
+
+    Indented: each claim is a line indented under the header, and a blank or unindented line ends it. FLAT: a docstring whose
+    FIRST line is the header is dedented whole by `inspect.cleandoc` (and by `ruff format`), so its claims stand at column 0
+    under it - there the section runs to the first blank line (found by writer G11, feature 316)."""
+    for i, raw in enumerate(lines):
+        if not _SECTION_HEAD.match(raw):
+            continue
+        flat = i == 0 and len(lines) > 1 and bool(lines[1].strip()) and not lines[1].startswith(" ")
+        end = i + 1
+        while end < len(lines) and lines[end].strip() and (flat or lines[end].startswith(" ")):
+            end += 1
+        return i, end, flat
+    return None
+
+
 def section_lines(doc: str | None) -> list[str] | None:
     """The raw claim lines of a docstring's `Research:` section (continuations joined), or None when it has none.
 
     The section opens at a line `Research:` (or `Research: <one claim>`) at the docstring's own indentation; each claim is a
     line indented under it, a line indented deeper continues the claim above, and a blank line or an unindented line ends it.
+    In a FLAT section (`_section_span`) a line with no ` - ` continues the claim above.
     """
     if not doc:
         return None
     lines = doc.expandtabs().split("\n")
-    for i, raw in enumerate(lines):
-        m = _SECTION_HEAD.match(raw)
-        if m is None:
-            continue
-        out = [m.group(1).strip()] if m.group(1).strip() else []
-        base: int | None = None
-        for nxt in lines[i + 1 :]:
-            if not nxt.strip() or not nxt.startswith(" "):
-                break
-            indent = len(nxt) - len(nxt.lstrip())
-            if base is None or indent <= base:
-                base = indent if base is None else base
+    span = _section_span(lines)
+    if span is None:
+        return None
+    i, end, flat = span
+    head = _SECTION_HEAD.match(lines[i])
+    out = [head.group(1).strip()] if head and head.group(1).strip() else []
+    base: int | None = None
+    for nxt in lines[i + 1 : end]:
+        indent = len(nxt) - len(nxt.lstrip())
+        if flat:
+            if " - " in nxt or not out:
                 out.append(nxt.strip())
             else:
                 out[-1] += " " + nxt.strip()
-        return out
-    return None
+        elif base is None or indent <= base:
+            base = indent if base is None else base
+            out.append(nxt.strip())
+        else:
+            out[-1] += " " + nxt.strip()
+    return out
 
 
 def strip_section(doc: str) -> str:
     """A docstring with its `Research:` section removed - what a page renders as prose (the walk-through)."""
-    lines, out, skipping = doc.split("\n"), [], False
-    for raw in lines:
-        if _SECTION_HEAD.match(raw):
-            skipping = True
-            continue
-        if skipping and raw.strip() and raw.startswith(" "):
-            continue
-        skipping = False
-        out.append(raw)
-    return "\n".join(out).rstrip()
+    lines = doc.split("\n")
+    span = _section_span(lines)
+    if span is None:
+        return doc.rstrip()
+    i, end, _flat = span
+    return "\n".join(lines[:i] + lines[end:]).rstrip()
 
 
 def claims_of(doc: str | None) -> tuple[list[Claim], list[str]]:
@@ -265,6 +282,8 @@ def nameless_dump(node: ast.AST) -> str:
     its code intact keeps its core - the push matches it across keys (spec FR-010, plan D7). A constant is its value."""
     if isinstance(node, (ast.Assign, ast.AnnAssign)):
         return _dump(node.value) + ("" if isinstance(node, ast.Assign) else "\x1c" + _dump(node.annotation))  # type: ignore[arg-type]
+    if isinstance(node, ast.Module):  # the module unit: its import-time calls
+        return _dump(node)
     shell = _own_statements(node)
     name = shell.name  # type: ignore[attr-defined]
     shell.name = ""  # type: ignore[attr-defined]
@@ -312,6 +331,14 @@ def module_units(source: str | ast.Module, path: str, module: str = "", is_packa
         if name is not None:
             nxt = tree.body[i + 1] if i + 1 < len(tree.body) else None
             found.append((name, "constant", stmt, inspect.cleandoc(nxt.value.value) if _is_doc_literal(nxt) else None))  # type: ignore[union-attr]
+    # THE MODULE ITSELF IS A UNIT where its body CALLS something at import - a `register_knob(Knob(...))` table (found by
+    # writer G11 on `settlement/_knobs.py`, feature 316): those statements belong to no function, class or constant, and a
+    # module docstring's claims about them would otherwise fingerprint nothing. Its claims are the module's own.
+    calls = [st for st in tree.body if isinstance(st, ast.Expr) and isinstance(st.value, ast.Call)]
+    if calls and mod_claims:
+        shell = ast.Module(body=calls, type_ignores=[])
+        found.append(("<module>", "module", shell, None))
+        shell.lineno, shell.end_lineno = calls[0].lineno, calls[-1].end_lineno  # type: ignore[attr-defined]
     _strip_docstrings(tree)
 
     aliases = module_aliases(tree, table, set(constants))
@@ -338,7 +365,9 @@ def module_units(source: str | ast.Module, path: str, module: str = "", is_packa
     units: list[Unit] = []
     for qual, kind, node, doc in found:
         claims, errors = claims_of(doc)
-        inherited = not claims and not errors
+        inherited = not claims and not errors and kind != "module"
+        if kind == "module":
+            claims = list(mod_claims)
         read = node.value if isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value is not None else _own_statements(node)  # a constant names itself only as its target
         dump, (vals, names) = nameless_dump(node), values(read)
         end = node.end_lineno or node.lineno  # type: ignore[attr-defined]

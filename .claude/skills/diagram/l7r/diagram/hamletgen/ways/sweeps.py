@@ -1,4 +1,6 @@
-"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index."""
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: lane sweep plumbing - NONE"""
 
 from __future__ import annotations
 
@@ -40,21 +42,27 @@ from .route import _route
 # to join two points 77 ft apart, folded back through the windbreak. 2.0 admits a path that goes
 # properly round one steading, which is what the router draws, and still refuses a fold.
 _PATH_DIRECTNESS = 2.0
+"""Research: path directness - research/questions/0081-village-lanes.html: a path up to 2.0 times its chord"""
 
 # A LINK that joins two halves of one settlement may wander further than a door path. Going round a
 # paddy is legitimately indirect, and the thing being bought is the difference between a dozen houses
 # reachable and a dozen houses not.
 _LINK_DIRECTNESS = 4.0
+"""Research: network link directness - research/questions/0081-village-lanes.html: a link up to 4.0 times its chord"""
 
 _TREAD_TOUCH_FT = 6.0
 """The gap below which two treads are already ONE piece of ink and there is nothing to bridge.
 
 A lane's drawn tread is a few feet wide, so anything under about this reads as a join on the sheet.
 It is deliberately NOT `_LANE_JOIN_FT`: that is the gate's REACH tolerance ("is this house served"),
-and using a reach figure as an ink-continuity figure is what let 21-29 ft holes ship as connected."""
+and using a reach figure as an ink-continuity figure is what let 21-29 ft holes ship as connected.
+
+Research: treads touching - CONVENTION: under 6 ft two treads read as one ink"""
 
 _BREAK_SPAN_FT = 150.0
+"""Research: break span bridged - research/questions/0081-village-lanes.drawing.html: a gap up to 150 ft in one way is closed"""
 _BREAK_BEARING_DEG = 15.0
+"""Research: break collinearity - research/questions/0081-village-lanes.drawing.html: ends within 15 degrees of facing each other are one way"""
 
 
 _BRIDGE_DETOUR = 2.0
@@ -72,7 +80,9 @@ The discriminator is the DETOUR RATIO, not the length of either. A genuine break
 all (the walk is `None`) or one that goes right around the block, many times the gap; a redundant loop
 closure saves a fraction. Mizuguchi's was 1.41. The reviewer priced the threshold at "anywhere in
 1.5-2.5" and 2.0 sits in the middle of it; measured over the live pool, it removes that one lane and
-no other."""
+no other.
+
+Research: no loop closed - UNRESEARCHED: a bridge only where the existing walk is over 2.0 times the gap"""
 
 
 def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
@@ -90,7 +100,11 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     them are one way that was drawn in two pieces, and the fix is to draw the piece that is missing.
 
     Found by a peer session's review of Sawada, where the ends sit either side of the cluster's own
-    middle; the same shape survives on other maps and is a plain gap in the network."""
+    middle; the same shape survives on other maps and is a plain gap in the network.
+
+    Research:
+        one way drawn as two is joined - research/questions/0081-village-lanes.drawing.html: a walkable gap in one way is closed
+        no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists"""
     made = 0
     # TWELVE PASSES, not four. Each closure adds a lane whose own ends sit beside existing ones, so a
     # map with several breaks needs several rounds - and Sawada ran out at four with three breaks
@@ -240,7 +254,13 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
 
     The link is a routed path, so it threads the steadings like any other; where no route exists the
     component is left for `settle_the_web`, which drops it off the network and draws its houses a way, or refuses the
-    map (`WebRefused`)."""
+    map (`WebRefused`).
+
+    Research:
+        orphan joined to the network - research/questions/0081-village-lanes.drawing.html: one network
+        link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
+        no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
+        link width - research/questions/0081-village-lanes.drawing.html: the width of the way it joins"""
     made = 0
     for _ in range(6):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -327,15 +347,20 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
 
 
 _FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need
+"""Research: free-end stub past a kink - research/questions/0081-village-lanes.drawing.html: a last leg of 20 ft or less"""
 _KINK_DEG = 50.0  # the `lanes_bend_like_paths` turn: two of them within ...
+"""Research: kink turn - research/questions/0081-village-lanes.drawing.html: 50 degrees"""
 _KINK_RUN_FT = 40.0  # ... this run of lane read as a kink, not a bend
+"""Research: kink run - research/questions/0081-village-lanes.drawing.html: two such turns within 40 ft"""
 
 
 def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float = 6.0) -> list[Pt]:
     """`pts` without a short stub at a FREE end - an end on no other lane - where the stub's corner is the second of two
     sharp turns inside `_KINK_RUN_FT` (feature 261). Kuwabata's ring lane threaded a threshing yard and a garden to a
     door and ended 19 ft past a jog, two turns of 84 and 72 degrees inside 40 ft; the router's jog cure could not take
-    the chord through the fabric, and the lane serves the door as well from the corner. Each end is asked in turn."""
+    the chord through the fabric, and the lane serves the door as well from the corner. Each end is asked in turn.
+
+    Research: zigzag at a free end - research/questions/0081-village-lanes.drawing.html: the stub past two sharp turns within 40 ft is cut"""
 
     def turn(a: Pt, b: Pt, c: Pt) -> float:
         u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
@@ -354,6 +379,7 @@ def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float 
 
 
 _PAST_CONNECTOR_FT = 80.0  # ft: a lane's loose end this far past its crossing of the connector overran the junction
+"""Research: overrun past the connector - research/questions/0081-village-lanes.drawing.html: a loose end up to 80 ft past it"""
 
 
 def on_the_way(a: Pt, b: Pt, way: Sequence[tuple[Pt, Pt]], touch: float, step: float = 2.0) -> Pt | None:
@@ -372,7 +398,9 @@ def cut_past_connector(pts: list[Pt], connector: Sequence[tuple[Pt, Pt]], others
     (settlement-review of Mizuguchi, feature 261): a skeleton leg met the way out and ran 52 ft on past it and off the
     sheet, where the off-frame convention reads it as a second track leaving. Only the connector is asked, only a loose
     end - one on no other way - is cut, and never a tail that is some house's only way within `_SERVE_FT` (a lane that
-    crosses the way out to reach a door beyond it), so no pass here moves another lane or strands a house."""
+    crosses the way out to reach a door beyond it), so no pass here moves another lane or strands a house.
+
+    Research: overrun past the connector cut - research/questions/0081-village-lanes.drawing.html: a loose tail up to 80 ft past the crossing, never a house's only way"""
     out = list(pts)
     for _end in range(2):
         d = out[-1] if out else (0.0, 0.0)
@@ -418,6 +446,11 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     taken before the loop: a lane emptied at `i` stays a live shadowing candidate for every later `j`, so
     one drop cascades into dropping a second, legitimate lane whose only shadow was the corpse - and the
     stranding test above would clear it, because it would still see the dropped lane serving the house.
+
+    Research:
+        doubled lane dropped - CONVENTION: a lane within 8 ft of another for half its length reads as one band
+        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served
+        web kept one network - research/questions/0081-village-lanes.drawing.html
     """
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
@@ -483,6 +516,8 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     ranks: the offending end segments come off, and a lane whittled below two points is emptied for
     `_sweep_debris`'s rule to finish. A house left unserved is `farmhouses_reach_a_way`'s honest verdict; a
     tread drawn across someone's floor is a map that looks finished and is wrong.
+
+    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: an end on a farmhouse is pulled back
     """
     lanes = s.M.get("lanes") or []
     fixed = 0
@@ -515,7 +550,9 @@ def _sweep_steading_fouls(s: Settlement) -> int:
 
 def _drop_end_nubs(s: Settlement, hard: Sequence[Poly] = ()) -> int:
     """`drop_end_nubs` over the settlement's lanes, re-inking each one it changes. Runs late, beside
-    `_sweep_debris`, for the same reason: every earlier pass can leave one."""
+    `_sweep_debris`, for the same reason: every earlier pass can leave one.
+
+    Research: nub at a junction dropped - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook"""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     before = [list(w) for w in ways]
@@ -541,7 +578,9 @@ def _drop_end_nubs(s: Settlement, hard: Sequence[Poly] = ()) -> int:
 
 
 _ROUTE_MIN_W = 5.0  # a cart way; anything under this is a footpath and may legitimately neck
+"""Research: cart-width way - research/questions/0081-village-lanes.drawing.html: 5 ft and over"""
 _ROUTE_JOIN_FT = 30.0  # the same reach the toucher uses - this closes what it declined, not more
+"""Research: wide ends joined - research/questions/0081-village-lanes.drawing.html: within 30 ft"""
 
 
 def joined_at_width(q: Pt, b: Pt, ways: Sequence[Poly]) -> bool:
@@ -570,7 +609,9 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
 
     So the two wide ends are joined to each other directly, at their own width. Only where both are cart
     width, only within the toucher's own reach, and only when the direct link is clear - this closes what
-    the toucher declined rather than laying new ways of its own."""
+    the toucher declined rather than laying new ways of its own.
+
+    Research: through-route keeps its width - research/questions/0081-village-lanes.drawing.html: two wide ends meeting through a footpath are joined directly"""
     lanes = s.M.get("lanes") or []
     closed = 0
     for i, ln in enumerate(lanes):
@@ -615,7 +656,11 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     and 11: the same 5 ft link on the reference hamlet came back whenever the map moved, ending 73 ft from any way and 76
     from any house). The rule's own figure is 60 ft to a way, a house or the field, so that is what is asked here; the
     lane gives up its last vertex until an end passes, and a lane whittled under `_WEB_MIN_FT` is emptied for
-    `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design."""
+    `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
+
+    Research:
+        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves
+        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard"""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
@@ -722,7 +767,11 @@ def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[
     the dooryard and stops short of the wall (a tread on the doorstep laps the farmhouse, `features_do_not_overlap`).
     None where no house is within `reach`, or the walk reaches none of it (269 B17) - or it would enter one of `groves`, a
     farm's grove band, which no lane crosses (feature 291: an end carried straight at a house on cohort seed 3 went across
-    the thin east band of the farm it served)."""
+    the thin east band of the farm it served).
+
+    Research:
+        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: stopping short of the wall
+        grove band not crossed - research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round"""
     near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
     if not near:
         return None
@@ -754,7 +803,11 @@ def _sweep_debris(s: Settlement) -> int:
     Only a fragment that is BOTH under the minimum AND alone in its component is swept: a short spur
     that meets the web is a real lane and is left exactly as drawn. And the orphan joiner's own guard
     applies unchanged - a fragment stays, visibly broken, if a farmhouse it serves has no other way,
-    because a stranded house is the worse failure and `farmhouses_reach_a_way` should say so."""
+    because a stranded house is the worse failure and `farmhouses_reach_a_way` should say so.
+
+    Research:
+        isolated fragment dropped - research/questions/0081-village-lanes.drawing.html: one network
+        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served"""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     live = [i for i in range(len(lanes)) if len(ways[i]) >= 2]
@@ -810,9 +863,13 @@ _FINE_CELL = 3.0
 # `WEB_FABRIC_GAP + 3 * 0.71` = 9.1 ft against the 14.1 ft the coarse detour rung was asking, which
 # is what opened tripwire seed 27's corridor while keeping every lane off the steadings.
 _DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged band with a hairline down it
+"""Research: doubled treads - CONVENTION: under 8 ft two treads read as one band"""
 _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
+"""Research: doubled share - CONVENTION: half the lane's length"""
 _REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the reach a home-bank drop and a dooryard carry look within
+"""Research: end reach to a way - research/questions/0081-village-lanes.drawing.html: 60 ft"""
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
+"""Research: a way serves a house - research/questions/0081-village-lanes.drawing.html: within 100 ft"""
 
 
 from .tails import (  # noqa: E402, F401 - split out at the 1,000-line bar (feature 280); re-exported for the web and the tests

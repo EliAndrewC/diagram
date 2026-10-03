@@ -8,6 +8,8 @@ two earlier rules they superseded (the mod-90 fold of 2026-08-02, the 45-degree 
 2026-08-08) so the history is not lost.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: caption typography - CONVENTION: standoff, size and tilt of map captions
 """
 
 import math

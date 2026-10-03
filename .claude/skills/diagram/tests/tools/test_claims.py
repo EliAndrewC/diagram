@@ -60,9 +60,16 @@ def test_the_section_reads_indented_claims_continuations_and_the_one_line_form()
     doc = f"Purpose.\n\nResearch:\n    a - NONE\n    b - {Q}:\n        continued here\n    c - GUESS\n\nAfter."
     assert cl.section_lines(doc) == ["a - NONE", f"b - {Q}: continued here", "c - GUESS"]
     assert cl.section_lines("Research: one - NONE") == ["one - NONE"]
-    assert cl.section_lines("Research: one - NONE\nnot indented") == ["one - NONE"]
+    assert cl.section_lines("Research: one - NONE\n\nnot indented") == ["one - NONE"]
     assert cl.section_lines("No section.") is None
     assert cl.section_lines(None) is None
+
+
+def test_a_flat_section_is_read_where_the_header_opens_the_docstring() -> None:
+    doc = f"Research: a - NONE\nb - {Q}: long\ncontinued\n\nAfter."  # what `inspect.cleandoc` leaves of an indented section
+    assert cl.section_lines(doc) == ["a - NONE", f"b - {Q}: long continued"]
+    assert cl.section_lines("Research:\nx - GUESS") == ["x - GUESS"]
+    assert cl.strip_section(doc) == "\nAfter." and cl.strip_section("No section.  ") == "No section."
 
 
 def test_claims_of_reports_a_bad_line_and_an_empty_section() -> None:
@@ -172,6 +179,15 @@ def test_a_claims_code_fingerprint_is_the_core_plus_its_line() -> None:
     assert u.code(c) != _units(SRC.replace("Research: share", "Research: portion"))["f"].code(_units(SRC.replace("Research: share", "Research: portion"))["f"].claims[0])
 
 
+def test_a_module_that_calls_at_import_is_a_unit_of_its_own_claims() -> None:
+    src = '"""Knobs.\n\nResearch: lane form - GUESS\n"""\nregister(1)\n\n\ndef f():\n    """Research: f - NONE"""\n'
+    _m, _e, units = cl.module_units(src, "k.py")
+    mod = next(u for u in units if u.kind == "module")
+    assert (mod.qualname, [c.label for c in mod.claims], mod.inherited) == ("<module>", ["lane form"], False)
+    assert next(u for u in cl.module_units(src.replace("register(1)", "register(2)"), "k.py")[2] if u.kind == "module").core != mod.core
+    assert all(u.kind != "module" for u in cl.module_units("register(1)\n", "k.py")[2]), "no module claims, no module unit"
+
+
 def test_a_parsed_tree_is_accepted_and_an_annotated_constant_counts() -> None:
     import ast
 
@@ -244,6 +260,13 @@ def _tree(tmp: Path) -> Path:
     (tmp / "buildings.md").write_text("## Walls\n<!-- Research: w - NONE -->\n")
     (tmp / "buildings" / "programs.md").write_text("### Magistrate's manor (county magistracy)\ntext\n### Other\n")
     return tmp
+
+
+def test_a_tree_without_the_procedure_documents_reads_its_code(tmp_path: Path) -> None:
+    skill = _tree(tmp_path)
+    (skill / "buildings.md").unlink()
+    (skill / "buildings" / "programs.md").unlink()
+    assert all(u.kind != "section" for u, _e in cl.all_units(skill, ""))
 
 
 def test_the_scope_is_the_import_graph_from_the_hamlet_generator(tmp_path: Path) -> None:

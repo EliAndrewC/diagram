@@ -12,6 +12,8 @@ planned colony grew more roads (0033) - how many farms a line holds before the n
 This module is pure geometry and one seating loop: `row_streets` gives the lines, `row_seats` the frame centers along
 them, `seat_rows` asks the placer for each. The streets it planned are kept on the settlement for the web
 (`ways/web.py` `_lay_street`), which lays each as one continuous way.
+
+Research: row geometry - NONE: lines, offsets, clipping and seat arithmetic; the units that decide carry their own claims
 """
 
 from __future__ import annotations
@@ -29,17 +31,26 @@ from ..plan import SitePlan
 
 FIELD_KEEP_FT = 24.0
 """How far a row's street runs off its field's margin: the lane's room (homesteads/715) less the tread's half - a map
-drawing convention, near enough that the field reads as the row's own, clear enough that the street is not on a bund."""
+drawing convention, near enough that the field reads as the row's own, clear enough that the street is not on a bund.
+
+Research: street off the field - research/questions/0033-row-villages-resson.drawing.html: 24 ft off the field's margin
+"""
 
 STREET_HALF_FT = 3.0
-"""Half the street's drawn width (the connector's 6 ft tread; the web's lanes are 3-5), the room a row stands back from it."""
+"""Half the street's drawn width (the connector's 6 ft tread; the web's lanes are 3-5), the room a row stands back from it.
+
+Research: street width - research/questions/0033-row-villages-resson.drawing.html: drawn 6 ft, where Santome's roads were 36 ft
+"""
 
 ROW_FRONTAGE_MAX_FT = 240.0
 """The widest a farm's lot fronts its street (the GM, 2026-10-01: "we do want the spacing capped at 240 feet"): Santome's
 40 ken, the widest frontage on the planned rows measured (research/questions/0033-row-villages-resson.html, "How wide was a
 farm's frontage on a planned row?" - 54 to 240 ft). Neighbors stood one frontage apart, lot against lot (the same entry), so
 the row steps at its farm's frame or at this, whichever is narrower: a frame wider than the lot (a three- or four-sided
-grove, 261 ft with the lane's room) keeps its grove and gives up part of the lane's room between two neighbors' groves."""
+grove, 261 ft with the lane's room) keeps its grove and gives up part of the lane's room between two neighbors' groves.
+
+Research: widest frontage - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: 240 ft cap on the step
+"""
 
 STREET_TREAD_PAD_FT = 0.5
 """How far past a street's tread a farm's laid part keeps off it while the row is seated: the lane law's own pad round a
@@ -48,14 +59,20 @@ fixture (`ways/law.FIXTURE_PAD_FT`), so a part kept off here is one the drawn st
 MAX_STREETS = 6
 """The most parallel streets a row village grows (a GUESS): a twenty-farm row on open ground fills one or two, but where
 the line soon runs off the sheet each street holds a few (cohort seed 12, four-sided groves: four streets seated 13 of 17).
-A farm six streets cannot hold is reported unseated."""
+A farm six streets cannot hold is reported unseated.
+
+Research: most streets - research/questions/0033-row-villages-resson.drawing.html: six parallel streets at most
+"""
 
 
 def hard_ground(field: Poly, rings: Sequence[Sequence[Pt]] = (), water: Sequence[tuple[Pt, Pt, float]] = ()) -> Any:
     """The ground a row may not stand on, as ONE shapely geometry: the field, the site's other no-build outline (the hem,
     the marsh, the pond - `SiteCorridors.ring_pts`) and each water course at its clearance. A row's line runs off THIS, not
     the field alone: offset from the field only, Mizuguchi's first street ran between its brook and its paddy and the
-    farms stood across the water."""
+    farms stood across the water.
+
+    Research: street off all no-build ground - UNRESEARCHED: the field, the hem, marsh, pond and every water course at its clearance
+    """
     from shapely.geometry import LineString, Polygon
     from shapely.ops import unary_union
 
@@ -89,7 +106,10 @@ def street_line(hard: Any, anchor: Pt, offset: float, length: float, form: str, 
     edge - grown by `offset` - nearest `anchor`. The dry EDGE follows that ring and curves with it. A STREET laid first is
     straight: the line fitted to the same stretch of the ring (its principal axis), then set out until the whole stretch
     lies behind it, so it runs along the ground rather than off a corner of it. `slack` lengthens the line at both ends
-    without changing the stretch it is fitted to. [] where there is no hard ground."""
+    without changing the stretch it is fitted to. [] where there is no hard ground.
+
+    Research: line form - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: a street laid first straight, the dry edge curving with the field's margin
+    """
     if hard is None or length <= 0:
         return []
     from shapely.geometry import Point
@@ -135,7 +155,13 @@ def row_seats(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str,
     """The frame centers along one street, one frame apart (the frame's longer side, so a turn of the line never packs
     two frames closer) or `pitch` apart where that is narrower (the lot's frontage, `ROW_FRONTAGE_MAX_FT`), from the middle outward alternating the two ends; each on the far side of the street (away from
     the field) and, for BOTH, the near side too - as (center, side, tangent, normal), side +1 far and -1 near. `gap` is
-    the room a frame stands off the street's centerline; the street's own samples give the normal at each seat."""
+    the room a frame stands off the street's centerline; the street's own samples give the normal at each seat.
+
+    Research:
+        farm spacing - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: one frame apart (its longer side), or the lot's frontage where narrower
+        one side or both - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the far side only, or both sides of the street
+        seat order - UNRESEARCHED: from the line's middle outward, alternating ends
+    """
     if len(line) < 2:
         return []
     pts = [p for p, _n in line]
@@ -171,16 +197,26 @@ HOLDING_DEPTH_FRAMES = {"street": 3.0, "edge": 1.0}
 planned row's order, house lot then field then woodland, 0033 - its depth there 375 ken, a dry-field colony's;
 three frames here is a GUESS, a paddy row borrowing the form, not the size); on the dry edge one frame, compact and near
 the house (a dike row's holding, 0033, accurate for a dike row, carried to a levee or fan foot as this
-project's reading)."""
+project's reading).
+
+Research:
+    far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: a fixed depth behind the lot, 3 frames on a street laid first and 1 on the dry edge, every foot of it drawn dry field; the share is never rolled or set, it falls out of the geometry
+"""
 
 HOLDING_CELL_FT = 150.0
-"""The holding's plots, cut across its depth at the near ring's cell (`near_ring_dry`'s 150 ft) - a map drawing convention."""
+"""The holding's plots, cut across its depth at the near ring's cell (`near_ring_dry`'s 150 ft) - a map drawing convention.
+
+Research: holding plot depth - research/questions/0033-row-villages-resson.drawing.html: 150 ft
+"""
 
 
 def row_offsets(frame_depth: float, sides: str, streets: int, keep: float, gap: float, holding: float = 0.0) -> list[float]:
     """Each street's offset from the field's margin: the first `keep` out for ONE side (the field across the street),
     or past a near row for BOTH; each next street past the last street's far row, its holdings (`holding` deep, BOTH
-    only) and a lane's room."""
+    only) and a lane's room.
+
+    Research: next street beside, never behind - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each further street past the far row's holdings and a lane's room
+    """
     first = keep if sides == "one" else keep + frame_depth + gap
     per = frame_depth * (2 if sides == "both" else 1) + 2 * gap + keep + (holding if sides == "both" else 0.0)
     return [first + i * per for i in range(streets)]
@@ -222,12 +258,18 @@ the fraction of a foot the frame's pad differs by) - the door `door_clear` tests
 
 DOOR_ROOM_FT = 16.0
 """The room a farm's front door needs off the hard ground for a way to start from: a footpath's fabric gap and most of the
-router's cell (`WAY_IN_FT`'s measurement) - a map drawing convention."""
+router's cell (`WAY_IN_FT`'s measurement) - a map drawing convention.
+
+Research: door room - NONE: 16 ft, a routing tolerance a way needs to start (called a map drawing convention above)
+"""
 
 
 def door_clear(frame: tuple[float, float, float, float], front: Sequence[float], pad: float, hard: Any, room: float) -> bool:
     """Is a frame's front door - the middle of its FRONT edge, less its lane pad, `FOOTPATH_DOOR_OUT_FT` out - at least `room`
-    off the hard ground? The front is the page face the farm's grove leaves open, where its way in is."""
+    off the hard ground? The front is the page face the farm's grove leaves open, where its way in is.
+
+    Research: way in at the open front - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the door on the lee face the grove leaves open
+    """
     if hard is None:
         return True
     from shapely.geometry import Point
@@ -271,7 +313,12 @@ def frame_refused(fr: tuple[float, float, float, float], front: Sequence[float],
 def draw_holdings(s: Settlement) -> int:
     """Draw each reserved holding (`s._row_holdings`) as dry-field plots cut across its depth at `HOLDING_CELL_FT`, furrowed,
     recorded in `dry_plots` and registered in `dry_polys` (feature 291 plan D16). A cell on water or a lane is left undrawn;
-    the rest of the holding stands. Returns the plots drawn."""
+    the rest of the holding stands. Returns the plots drawn.
+
+    Research:
+        holding drawn as dry field - research/questions/0033-row-villages-resson.drawing.html: every cell a dry crop, none paddy
+        furrows down the strip - CONVENTION: across the street, the crops cycled from the dry palette
+    """
     from shapely.geometry import LineString, Polygon
 
     from l7r.diagram.waterfields import DRY_CROPS
@@ -331,7 +378,10 @@ def street_bend_radius_ft() -> float:
     """The radius a further street is rounded at on the inside of a corner (`parallel`): twice the radius at which one step of
     the lane law's bend run (`clearance._ZIGZAG_RUN_FT`, 40 ft - the drawn street keeps a vertex about that often) turns a
     kink's turn (`_ZIGZAG_DEG`, 50 degrees) - about 92 ft. At it a drawn vertex turns about 25 degrees, and one thinned to
-    48 ft about 30, never two kinks' turns inside a run. A MAP DRAWING CONVENTION derived from the law's figures, not a finding."""
+    48 ft about 30, never two kinks' turns inside a run. A MAP DRAWING CONVENTION derived from the law's figures, not a finding.
+
+    Research: street bend radius - CONVENTION: about 92 ft, from the lane law's bend figures
+    """
     from ..ways.clearance import _ZIGZAG_DEG, _ZIGZAG_RUN_FT  # the ways import this package's seats; read where it is used
 
     return 2.0 * _ZIGZAG_RUN_FT / math.radians(_ZIGZAG_DEG)
@@ -349,7 +399,10 @@ def parallel(line: Sequence[tuple[Pt, Pt]], d: float, radius: float = 0.0) -> li
     straight stretch and the outside of a bend where they were). An offset curve is sharp wherever the first street turns
     toward its outward side, and turns there by as much as the first street does round the corner: cohort seed 903's edge
     street ran a Z round the field, its second street came out with a 142 degree corner - a hairpin of the lane law - and a
-    street is a tree lane no settle may cut, so the web was refused (feature 306)."""
+    street is a tree lane no settle may cut, so the web was refused (feature 306).
+
+    Research: further streets parallel - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each next street a true parallel of the first
+    """
     if len(line) < 2 or d == 0.0:
         return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
     from shapely.geometry import LineString
@@ -427,7 +480,10 @@ def best_row_line(
 ) -> list[tuple[Pt, Pt]]:
     """The first street of a row village: of the lines centered on the planned seat's point of the hard ground's grown edge
     and on `samples` points of that edge within a row's length either way of it, the one holding the most clear frames
-    (`clear_frames`), the nearest the seat among equals. [] where there is no hard ground."""
+    (`clear_frames`), the nearest the seat among equals. [] where there is no hard ground.
+
+    Research: where the street runs - research/questions/0033-row-villages-resson.drawing.html: the stretch within a row's length of the seat that holds the most farms
+    """
     if hard is None:
         return []
     from shapely.geometry import Point
@@ -453,7 +509,14 @@ def best_row_line(
 def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: Any = None) -> int:
     """Seat a linear hamlet's farms in rows along its streets (`row_offsets`, `street_line`, `row_seats`), each seat
     offered once to the placer at the frame's own house offset; returns the farms seated, and keeps the streets that
-    seated any on `s._row_streets` (a list of point lists) and the line and sides on the manifest."""
+    seated any on `s._row_streets` (a list of point lists) and the line and sides on the manifest.
+
+    Research:
+        row farm faces its street - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: never turned to its street - every frame keeps the settlement's one windward orientation (grove to windward, open front to lee, `grove_faces(plan.windward, ...)`) on either side of the street, so only the grove-to-windward form is drawn and the house turned to face its road never is
+        far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each far-row farm's holding `HOLDING_DEPTH_FRAMES` frames deep and its frame's width less two gaps, all dry field; the near row and a one-sided row hold none
+        far-row farm only with its holding - research/questions/0033-row-villages-resson.drawing.html: a far-row seat whose holding does not fit clear is passed over
+        farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line on both sides, the line two lots longer than it needs, further streets set out parallel
+    """
     want = plan.spec.households
     field = [(float(x), float(y)) for x, y in (plan.envelope or [])]
     corr = getattr(s, "_site_corridors", None)

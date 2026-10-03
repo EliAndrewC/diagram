@@ -12,6 +12,8 @@ SC-008). Pure functions of the manifest, each returning what breaks its rule - e
 
 Here, not beside `grove_rules` in the settlement engine, because the door is the ways' (`ways/serve.front_door`) and the
 engine does not import the generator.
+
+Research: manifest reading - NONE: polyline distances, keys and joins; each rule function carries its own claims
 """
 
 from __future__ import annotations
@@ -67,7 +69,14 @@ def continuous(pieces: Sequence[Sequence[Sequence[float]]], tol: float = 1.5) ->
 
 def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     """Each (rule, subject) a linear map breaks; [] for another form. A linear map with no seated street breaks the first
-    rule of all - its farms stand in no row (plan D15)."""
+    rule of all - its farms stand in no row (plan D15).
+
+    Research:
+        farms on their street - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: within a frame of a street, none more than half a frame behind another on its side
+        street one continuous way - research/questions/0033-row-villages-resson.drawing.html: each planned street drawn unbroken
+        far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
+        way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: the door within reach of its street, or a door path to it
+    """
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []
     if meta.get("settlement_form") != "linear":
@@ -140,7 +149,12 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     """Each (rule, subject) a non-nucleated map's water breaks (FR-018): a dispersed farm under `farm_water` channel without
     a channel ending inside its frame (amendment 5); a dispersed farm under `well` - or a linear farm under `own` - without a
     private well inside its frame and off its way in; a linear farm under `shared` farther than the watering reach from
-    every well."""
+    every well.
+
+    Research:
+        a scattered farm's own water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: its channel ends in its frame, or its own well in its frame off its way in
+        a row's water - research/questions/0033-row-villages-resson.drawing.html: own wells, or every farm within `WATER_REACH_FT` of a shared one
+    """
     meta = M.get("meta") or {}
     form = meta.get("settlement_form")
     if form not in ("dispersed", "linear"):
@@ -175,7 +189,10 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
 
 
 def bamboo_mismatch(M: Mapping[str, Any]) -> list[tuple[str, tuple[float, float]]]:
-    """The farms whose grove draws bamboo but rolled no household stand, and the reverse (FR-019)."""
+    """The farms whose grove draws bamboo but rolled no household stand, and the reverse (FR-019).
+
+    Research: grove bamboo as rolled - research/questions/0075-bamboo-groves-chikurin.drawing.html: the grove draws bamboo exactly where the farm rolled a stand
+    """
     rolled = {_key(p) for p in (M.get("meta") or {}).get("household_bamboo_in_grove_farms") or []}
     drawing = {_key(g["of"]) for g in M.get("groves") or [] if g.get("bamboo") and g.get("of")}
     return [("draws_unrolled", k) for k in sorted(drawing - rolled)] + [("rolled_undrawn", k) for k in sorted(rolled - drawing)]

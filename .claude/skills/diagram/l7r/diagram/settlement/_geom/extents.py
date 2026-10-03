@@ -5,6 +5,8 @@ where some ink actually is, so that the placer and the check that grades it cann
 (skill CLAUDE.md, 'Placement and its check must read the SAME manifest source').
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
+
+Research: drawn-extent readers - NONE: read a recorded feature's ink back off the manifest
 """
 
 import math

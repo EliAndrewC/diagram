@@ -13,6 +13,8 @@ moves; data the engine executes on (`overlap/taxonomy.py`, the hit-region keys) 
 
 The loader is deliberately dumb: no schema, no caching beyond the module-level constants each consumer
 builds once at import. A malformed file fails at import, loudly, which `make page-check` runs.
+
+Research: plumbing - NONE
 """
 
 from __future__ import annotations
