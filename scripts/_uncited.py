@@ -719,6 +719,25 @@ def unkeep(root: pathlib.Path, raw: str, reasons: list[str], basis: str, note: s
     at.write(root, [line(raw, reasons, basis, note)], NOT_KEPT)
 
 
+def retire_cited(root: pathlib.Path, key: str, access: str, note: str) -> pathlib.Path:
+    """FR-019 (plan D14): a works-cited source no one can read, its footnotes gone, leaves the works cited - its entry
+    removed, a not-kept line (`unreadable`, its access state) and the access state recorded by hand with the reason.
+    Refused while any question still cites it: its footnotes are removed or re-sourced first."""
+    import _access_tags as tags  # noqa: PLC0415
+
+    entry = [f for f in (at.base(root) / SOURCES / "010-works-cited").glob(f"*-{key}.html") if re.fullmatch(rf"\d+-{re.escape(key)}\.html", f.name)]
+    if not entry:
+        raise ValueError(f"no works-cited entry for {key!r}")
+    citing = [f.name for f in (at.base(root) / at.RESEARCH / "questions").glob("*.html") if f"<code>{key}</code>" in f.read_text(encoding="utf-8")]
+    if citing:
+        raise ValueError(f"{key} is still cited in {', '.join(sorted(citing))} - remove or re-source those footnotes first (FR-019)")
+    raw = src._URL.findall(entry[0].read_text(encoding="utf-8"))[0].rstrip(").,;:")
+    at.write(root, [line(raw, ["unreadable"], "fr-019", f"{key}: {note}", access)], NOT_KEPT)
+    tags.set_state(root, key, access, today(), note)
+    entry[0].unlink()
+    return entry[0]
+
+
 def requeue(root: pathlib.Path, raw: str) -> str | None:
     """A page whose verdict was judged from another page's text (R5, a misfiled import confirmed by reading): its kept or
     not-kept line and its uncited entry go, so the filter judges it again from the live text. Returns the retired key."""
@@ -850,6 +869,10 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     sub.add_parser("dedupe").add_argument("--dry", action="store_true")
     sub.add_parser("requeue").add_argument("url")
     sub.add_parser("copy-verdicts")
+    rc = sub.add_parser("retire-cited")
+    rc.add_argument("key")
+    rc.add_argument("access")
+    rc.add_argument("note")
     st = sub.add_parser("stands")
     st.add_argument("url")
     st.add_argument("note")
@@ -903,6 +926,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
         gone, read = [d for d in done if " ~ " not in d], [d for d in done if " ~ " in d]
         print("\n".join([f"uncited: duplicate {verb} - {d}" for d in gone] + [f"uncited: to read - {d}" for d in read])
               + f"\nuncited: {len(gone)} duplicate(s) {verb}, {len(read)} similar pair(s) to read")
+    elif args.cmd == "retire-cited":
+        gone = retire_cited(root, args.key, args.access, args.note)
+        print(f"uncited: {args.key} left the works cited ({gone.name} removed), not kept as unreadable ({args.access}), its state recorded")
     elif args.cmd == "copy-verdicts":
         import _uncited_imports as ui  # noqa: PLC0415
 

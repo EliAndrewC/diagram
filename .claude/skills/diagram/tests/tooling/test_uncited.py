@@ -549,3 +549,23 @@ def test_copy_verdicts_lists_a_verdict_that_blames_its_saved_copy_once_the_page_
     assert len(got) == 1 and got[0].startswith("https://w.org/blog") and "unreadable" in got[0]
     ui.stands(root, "https://w.org/blog", "read: the live page is still mojibake past its frame")
     assert ui.copy_verdicts(root) == [], "a page read and found sound leaves the list"
+
+
+def test_retire_cited_takes_an_unreadable_source_out_of_the_works_cited_once_nothing_cites_it(tmp_path: pathlib.Path) -> None:
+    root = _root(tmp_path)
+    (root / un.at.RESEARCH / "questions").mkdir(parents=True)
+    (root / un.at.RESEARCH / "source-access.json").write_text(json.dumps({"states": [{"id": "gone"}, {"id": "down"}], "recorded": {}}), encoding="utf-8")
+    entry = root / un.SOURCES / "010-works-cited" / "16010-lost-page.html"
+    entry.write_text('<h3 id="lost-page"><code>lost-page</code></h3>\n<p>Lost (https://lost.org/page)</p>\n', encoding="utf-8")
+    page = root / un.at.RESEARCH / "questions" / "0114-x.notes.html"
+    page.write_text('<li data-note="lost-page"><code>lost-page</code> - quote</li>\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="still cited in 0114-x.notes.html"):
+        un.retire_cited(root, "lost-page", "gone", "HTTP 404 and no Wayback copy")
+    page.write_text("<li>re-sourced</li>\n", encoding="utf-8")
+    assert un.retire_cited(root, "lost-page", "gone", "HTTP 404 and no Wayback copy") == entry and not entry.exists()
+    (nk,) = un.at.read(root, un.NOT_KEPT)
+    assert nk["raw"] == "https://lost.org/page" and nk["reasons"] == ["unreadable"] and nk["access"] == "gone" and nk["basis"] == "fr-019"
+    rec = json.loads((root / un.at.RESEARCH / "source-access.json").read_text(encoding="utf-8"))["recorded"]["lost-page"]
+    assert rec[0]["state"] == "gone" and rec[0]["reason"] == "HTTP 404 and no Wayback copy"
+    with pytest.raises(ValueError, match="no works-cited entry"):
+        un.retire_cited(root, "lost-page", "gone", "again")
