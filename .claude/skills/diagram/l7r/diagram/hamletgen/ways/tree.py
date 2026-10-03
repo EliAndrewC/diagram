@@ -304,6 +304,12 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             # fault, and a face in a part of the tree is never thinner than the faces the whole tree made of it
             if law.needle_loops({"lanes": lanes}):
                 return False
+            # ...NOR CLOSES ONE ONCE THE WEB JOINS ITS ENDS (feature 317, plan D6): the settle carries a free end that stops
+            # short of a way onto it (`settle.settle_joins`, `law.near_misses`), and on seed 13 at 20 households a corridor's
+            # start 15 ft from another's end was carried onto it and closed a sliver with a third - lawful as judged, refused
+            # as drawn (feature 314 research R12). So the tree is asked again with its ends joined as the web will join them.
+            if law.needle_loops({"lanes": as_joined(_trial(view, lanes=[*lanes, *stub]), lanes)}):
+                return False
             if any(len(ends) > law.DOORSTEP_MAX for ends in law.fronting_ends(_trial(view, lanes=[*lanes, *stub])).values()):
                 return False
             if not way_out_once(M, [lanes_chain(recs, host, lanes, k)]):
@@ -314,6 +320,17 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             if tree_shadows([ln["pts"] for ln in lanes]):
                 return False
     return True
+
+
+def as_joined(trial: Mapping[str, Any], lanes: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """`lanes` (the first lanes of `trial`) with every end that stops short of a way carried onto it, as the settle carries it
+    (`settle.settle_joins`, which reads `law.near_misses` the same way)."""
+    out = [dict(ln) for ln in lanes]
+    for i, end, f in law.near_misses(trial):
+        if i < len(out):
+            p = [_pt(q) for q in out[i]["pts"]]
+            out[i]["pts"] = [*p, f] if end == -1 else [f, *p]
+    return out
 
 
 def tree_shadows(ways: Sequence[Sequence[Pt]]) -> bool:

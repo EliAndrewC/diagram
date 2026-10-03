@@ -372,3 +372,27 @@ def test_an_ordinary_lane_whose_drop_leaves_only_reserved_houses_unreached_is_le
     assert not tree.left_to_the_tree(_tree(lanes=[con, x, {"pts": [[0.0, -5.0], [-400.0, -5.0]], "w": 3}]), 2), "nothing left to the tree"
     apart = [con, {"pts": [[500.0, 900.0], [600.0, 900.0]], "w": 3}, {"pts": [[600.0, 900.0], [700.0, 900.0]], "w": 3}, {"pts": [[700.0, 900.0], [800.0, 900.0]], "w": 3}]
     assert not tree.left_to_the_tree(_tree(lanes=apart), 2), "it splits a piece off the connector's network in two"
+
+
+def test_the_tree_is_asked_again_with_its_ends_joined_as_the_web_joins_them() -> None:
+    """Feature 317, plan D6: a free end that stops short of a way it makes for is carried onto it (`law.near_misses`, as the
+    settle's `settle_joins` carries it) - feature 314 R12's corridor start, 15 ft from another's end, closed a sliver once
+    joined - so `admits` asks the needle of the joined tree too."""
+    lanes = [{"pts": [[0.0, 0.0], [300.0, 0.0]], "w": 3.0}, {"pts": [[150.0, 60.0], [110.0, 12.0]], "w": 3.0}]
+    trial = {"meta": dict(_GEN), "lanes": lanes, "houses": []}
+    joined = tree.as_joined(trial, lanes)
+    assert [list(q) for q in joined[0]["pts"]] == lanes[0]["pts"], "a lane whose ends make for no way is left as it was"
+    assert len(joined[1]["pts"]) == 3 and abs(joined[1]["pts"][-1][1]) < 1e-6, "the end carried onto the way it made for"
+    assert lanes[1]["pts"] == [[150.0, 60.0], [110.0, 12.0]], "the trial's own lanes untouched"
+
+
+def test_a_corridor_whose_joined_tree_closes_a_sliver_is_refused(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 317, plan D6: lawful as laid, but a sliver once the web joins the ends - refused at seating."""
+    M = _tree()
+    ok = _law(M)
+    house = _house(100.0, 100.0)
+    assert tree.admits(ok, M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "lawful as laid and as joined"
+    real = law.needle_loops
+    monkeypatch.setattr(tree, "as_joined", lambda trial, lanes: [{**ln, "joined": True} for ln in lanes])
+    monkeypatch.setattr(law, "needle_loops", lambda M_: ["sliver"] if any(ln.get("joined") for ln in M_["lanes"]) else real(M_))
+    assert not tree.admits(_law(M), M, [(100.0, 80.0), (100.0, 0.0)], ACCESS_ROLE, house), "a sliver only once joined: refused"
