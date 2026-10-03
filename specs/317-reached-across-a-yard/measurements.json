@@ -123,5 +123,14 @@
   "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47): main (38901e2df) 2.85/2.56/3.70 and 2.83/2.58/3.77; the clone as built 3.91/4.01/20.01 and 3.97/3.97/20.14; the wood reservation without the afternoon lane (WEST0) 4.08/2.77/4.89 and 4.30/2.83/5.30; the passage share at 0 (NOPASS) 3.61/3.97/4.06 and 3.74/4.02/4.20; both off 2.97/2.70/3.96 and 3.10/2.82/4.02 - with both causes removed the stage stands within 4-9% of main. Seed 39's +1.2 s is the seat fix alone (no passage); seed 25's is both, overlapping; seed 47's +16 s is their interaction: its first seating stops two households short of 40 and is thrown away (research R10)",
   "source": "control_probe.py in the session's scratchpad (WEST0=1 drops the afternoon lane from WoodShares.keepouts; NOPASS=1 sets stages.passage_share to 0), run against /tmp/main317c and the clone at ac8af8f80",
   "observed": "2026-10-03"
+ },
+ "perf-317-control-40c": {
+  "verifies": "the band-3 reading of the bookends on the engine with the passage share a ceiling (stages.seat_the_margin): 40 households total +14.6%, seed 47 +42.3%, seed 25 +13.4%; 20 households seed 25 +13.0%, seed 47 +13.2%",
+  "subject": "perf bookend, reference spec, 40 households, seeds 25, 39 and 47, the homesteads stage",
+  "value": 4.14,
+  "unit": "s, the homesteads stage's CPU at seed 47, 40 households, with the seat fix and the passage both switched off (mean of two takes)",
+  "quantity": "two alternated takes, 2026-10-03, homesteads CPU seconds at 40 households (seeds 25 / 39 / 47), every seating on its first margin: main (38901e2df) 3.01/2.74/4.00 and 2.98/2.79/3.90; the clone as built 4.18/4.34/10.13 and 4.24/4.33/9.68 (seed 47: its passage seating falls short and is seated again with the passage withheld, meta.passage_withheld); the wood reservation without the afternoon lane (WEST0) 4.33/2.82/5.02 and 4.64/3.02/5.15; the passage share at 0 (NOPASS) 3.80/4.14/4.44 and 3.88/4.21/4.47; both off 3.16/2.90/4.13 and 3.32/2.84/4.14 - within 3-11% of main",
+  "source": "control_probe.py in the session's scratchpad (WEST0=1, NOPASS=1), against /tmp/main317c and the clone at 529daac23",
+  "observed": "2026-10-03"
  }
 }
