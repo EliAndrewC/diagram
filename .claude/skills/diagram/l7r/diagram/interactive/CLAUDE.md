@@ -1,9 +1,12 @@
 # interactive/ - the HTML target (feature 134)
 
 The map as a page a player can use: hover a feature and every feature OF ITS KIND lights up; click
-it and a modal says what it is, why it stands there, whether that is historically accurate, a
-deliberate deviation (the setting differing from history), a map drawing convention (a glyph scaled or colored for the eye - feature 183) or a guess (constitution XII); "See references" lists the QUESTIONS the research
-asked about it, each linking to its answer - since feature 301 the question's own small page in the record's built site, `research/site/` (feature 180; local since feature 194 - see below).
+it and a modal opens on three TABS (feature 319, GM 2026-10-03): **About** - what the thing was, written to the guidelines in
+`dev/modals.md` (a deviation or a map drawing convention told where it applies); **Guesses** - a bulleted list of what this
+project guessed, absent when nothing was; **References** - the QUESTIONS the research asked that the write-up rests on, each
+linking to its answer, since feature 301 the question's own small page in the record's built site, `research/site/` (feature
+180; local since feature 194 - see below). A class not yet rewritten in the About form shows its old what / why / caveat on the
+About tab, with its old label lead.
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
 
@@ -58,6 +61,11 @@ with the deviation; the hearing court announces nothing and lists its questions)
 
 ## The presumption of accuracy (feature 156)
 
+**Feature 319 retires this section class by class.** An About-form class (`About:` / `Guesses:`) has no feature-level label and
+no lead: a guess is a bullet on the Guesses tab, never the modal's opening (the GM, 2026-10-03, of the garden's *"This is a
+guess"* lead: *"extremely misleading"*), and a deviation or a convention is told in the About text where it applies
+(`dev/modals.md` M11-M13). What follows is the old form's mechanism, kept until the rollout's last task deletes it.
+
 The page never tells a reader that a feature is historically accurate. The GM, 2026-08-29: *"we
 almost always say that it is historically accurate ... I want the presumption to be that things are
 always historically accurate unless stated otherwise. In other words, we should call out liberties
@@ -81,6 +89,11 @@ them so a fifth is a decision rather than an omission. Both halves stay in the r
 questions - and through them the sources - stay one click away.
 
 ## The references modal lists QUESTIONS, not sources (feature 180)
+
+**Since feature 319 the references are a TAB of the one dialog**, not a second dialog: the "See references (N)" link, the
+references dialog, its `behind` class and its "Return to <X> writeup" button are gone (the tab strip is the way back). Which
+questions are listed is `dev/modals.md` M14 - exactly those the write-up rests on - held by `modal-research`. The rows below
+that name the old dialog are history.
 
 The GM, 2026-09-05, looking at the hamlet pages: *"instead of listing individual sources on the
 references modal, we will list the questions which we asked and researched - those pages are themselves

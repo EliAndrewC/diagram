@@ -12,45 +12,45 @@ done (FR-012).
 
 ## Phase 1 - guidelines, the form, the tabs, the checks
 
-- [ ] T01 [US1] [US5] The two guideline documents, `dev/modals.md` (standardized) and `dev/modals-particular.md` (particular),
+- [x] T01 [US1] [US5] The two guideline documents, `dev/modals.md` (standardized) and `dev/modals-particular.md` (particular),
   numbered rules with their provenance; indexed from `interactive/classes/CLAUDE.md`; `research/CLAUDE.md`'s "New questions
   reach a modal only when the GM asks for them" brought in line with M14 (FR-001, FR-002, FR-003; plan D3)
       research: rendering
-      verify:
-- [ ] T02 [US2] The About form in `classes/_base.py` (`About:` paragraphs, `Guesses:` bullets, `Form:`, no `Label:`; the old
+      verify: DONE. DONE. dev/modals.md (M1-M20) and dev/modals-particular.md (P1-P8), numbered with provenance; indexed from classes/CLAUDE.md; research/CLAUDE.md's references line brought in line with M14
+- [x] T02 [US2] The About form in `classes/_base.py` (`About:` paragraphs, `Guesses:` bullets, `Form:`, no `Label:`; the old
   form still parses) and the page data (`about`, `guesses`); `tests/interactive/test_about_form.py` red then green; the
   registry snapshot test exempts an About-form class's label (FR-005; plan D1)
       research: rendering
-      verify:
-- [ ] T03 [US2] [US3] The tabbed modal - About / Guesses / References in one dialog, hidden when empty, opening on About; the
+      verify: DONE. DONE. About:/Guesses:/Form: parsed beside the old form (_base.py), about/guesses on the page data; test_about_form.py 9 cases; snapshot and completeness tests take the About form; 743 interactive tests green
+- [x] T03 [US2] [US3] The tabbed modal - About / Guesses / References in one dialog, hidden when empty, opening on About; the
   references dialog retired; `page.js`, `page.css`, `page.py`; the browser test and `test_page.py` rewritten for tabs;
   `interactive/CLAUDE.md`'s presumption-of-accuracy and references sections rewritten; `make page-check` green (FR-005,
   FR-006, FR-007; plan D2)
       research: rendering
-      verify:
-- [ ] T04 [US3] `scripts/_modal_bundle.py` and `make modal-bundle KIND= FOR=` / `make modal-prepass KIND=`: the rendered tabs,
+      verify: DONE. DONE. one dialog, tabs About/Guesses/References hidden when empty, opening on About; references dialog retired; browser test and test_page rewritten; interactive/CLAUDE.md sections updated; make page-check green 5346 passed
+- [x] T04 [US3] `scripts/_modal_bundle.py` and `make modal-bundle KIND= FOR=` / `make modal-prepass KIND=`: the rendered tabs,
   the guidelines copy, the prepass (word counts, barred phrases, bullets, Entry resolution) and the candidates - the UNION of
   any shared subject tag with the Entry pages and the kind's name or glossary variants, ranked, never cut, the whole question
   record copied for grep; a fixture test that 0004 is a farmhouse candidate (FR-008; plan D5)
       research: rendering
-      verify:
-- [ ] T05 [US3] `.claude/agents/modal-form.md` and `.claude/agents/modal-research.md` (Opus, medium, `omitClaudeMd`), their
+      verify: DONE. DONE. scripts/_modal_bundle.py + make modal-bundle / modal-prepass: rendered tabs, guidelines copy, prepass, Entry pages, UNION candidates ranked never cut, record/ for grep; test_modal_checks.py proves 0004 a farmhouse candidate
+- [x] T05 [US3] `.claude/agents/modal-form.md` and `.claude/agents/modal-research.md` (Opus, medium, `omitClaudeMd`), their
   rows in `tests/test_agent_models.py`; `modal-research` reports accuracy, references and gaps as three verdicts (FR-008; plan
   D4)
       research: rendering
-      verify:
-- [ ] T06 [US3] Owed and enforced: `scripts/_modal_owed.py` owes `modal-form:<key>`, `modal-accuracy:<key>`,
+      verify: DONE. DONE. .claude/agents/modal-form.md and modal-research.md (opus/medium, omitClaudeMd), tier rows; modal-research reports ACCURACY/REFERENCES/GAPS; check-bundle-hooks knows both
+- [x] T06 [US3] Owed and enforced: `scripts/_modal_owed.py` owes `modal-form:<key>`, `modal-accuracy:<key>`,
   `modal-references:<key>`, `modal-gaps:<key>` for an About-form class whose About, Guesses or Entry changed, and the three
   research units (not a `modal-research:<key>` - the plan review's note) when a page its Entry names changed, replacing
   entry-drift for About-form classes only; folded into `_record_owed.py`, `make record-checked`, `entry-gate.sh`; tests on
   fixture trees; the refusal message names the command (FR-008; plan D6)
       research: rendering
-      verify:
-- [ ] T07 [US3] The checks proved on the OLD text (plan D7): the current farmhouse and garden converted mechanically into
+      verify: DONE. DONE. scripts/_modal_owed.py owes modal-form + modal-accuracy/-references/-gaps; folded into _record_owed (record-owed, record-checked, entry-gate), entry-drift dropped for About-form keys; 54 tooling tests green
+- [x] T07 [US3] The checks proved on the OLD text (plan D7): the current farmhouse and garden converted mechanically into
   bundles; `modal-form` reports the farmhouse's missing materials and occupancy and the garden's guess-led opening;
   `modal-research` reports 0004 as a farmhouse gap. A check that passes the old text is fixed first. Ledger rows with cost
       research: rendering
-      verify:
+      verify: DONE. DONE. research.md R1: all four proof runs fired - modal-form flagged the farmhouse's missing materials/occupancy and the garden's guess lead; modal-research found 0004 (farmhouse G1) and the garden's accurate-not-guess (A1); bundle cut 380->140 KB
 
 ## Phase 2 - the farmhouse pilot
 

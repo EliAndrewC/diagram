@@ -52,6 +52,7 @@ class Modal:
     key: str  # the class key the page uses
     origin: str  # file:line
     tags: dict[str, str]
+    doc: str = ""  # the docstring as written, line for line - what an EDIT block quotes
 
     @property
     def prose(self) -> str:
@@ -111,7 +112,7 @@ def modals_in(source: str, path: str) -> list[Modal]:
         if "About" not in tags:
             continue
         key = next((n.value.value for n in node.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "key" for t in n.targets) and isinstance(n.value, ast.Constant)), node.name)
-        out.append(Modal(f"{pathlib.Path(path).stem}.{node.name}", str(key), f"{path}:{node.lineno}", tags))
+        out.append(Modal(f"{pathlib.Path(path).stem}.{node.name}", str(key), f"{path}:{node.lineno}", tags, doc))
     return out
 
 

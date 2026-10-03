@@ -14,43 +14,29 @@ from ._base import Kind
 # The GM's ruling: a farmhouse's work yard and garden beds always line up with their house.
 class Farmhouse(Kind):
     """
-    What: The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the
-    slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands
-    alone, its own yashikirin sheltering it.
+    About: A farmhouse (minka) was the home of one farming household and the farm's main workplace. One side of the house
+    was a wide earth floor for the farm's work, where many households seem to have worked their harvest under cover. Across much of Japan the household's ox or horse lived under the same roof, in a corner of the earth floor; in parts of the north the stable was a wing of an L-shaped house.
 
-    Why: On this map every house in a nucleated hamlet is reached by a lane, and each stands close to the paddy - up against it, but
-    never on the bund. HOW that access is delivered is not settled: alleys cut off the spine, each household
-    having made its own way to the road as this map reads it, and a laid-out back lane serving a regular row are
-    both seen in villages read, so
-    this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
-    No two farmhouses face exactly the same way. A survey of the houses of 27 Okinawan villages found most of them
-    facing within three points of the compass about their village's commonest bearing, the smaller turns where the
-    streets curve - and curving streets, which its surveyors suppose follow the contours, are seen on the land-survey maps of a village moved to its site in 1736, though which of them were laid before 1868 the paper does not say. So
-    each settlement rolls a common bearing near south, and each house turns a little with the lane and the field edge it
-    stands on, never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
-    with it: this project draws them always lined up with their house. About one farm in eight carries a storehouse
-    against its back wall, a village headman's always.
+    It was a long rectangle of timber posts under a thatched roof - hipped, gabled or a mix of the two - and thatch
+    seems to have roofed rich and poor alike. In the east the posts showed in the walls; in the west they were
+    plastered over, and some poorer houses in the south were walled with slabs of bark. Beside it rose the
+    wood-floored living rooms, with a sunken hearth. The household came and went through a big sliding
+    door about 6 ft wide, or the low wicket set into it, and the house was shut and barred at night and in bad weather.
 
-    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane is this map's rule, not the record's: no page states it, and in Japan a household with no way of its own to the road could cross a neighbor's land by custom (an 1892 edition of local customs, mostly of plots or land and partly of towns); the alleys-off-the-spine form is read in one surveyed twentieth-century Manchu village on the dry northern plain and in Enoshima, whose houses behind its street were reached by the narrowest of alleys, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
-    it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
-    are both unsourced GUESSES, and one part that is
-    read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
-    it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
-    close enough that the household works its own ground. No count of house bearings from before 1868 was found: the
-    survey is one island region's houses in 1985, and the one tenth it found turned to the right is not drawn. How far a
-    house turns with its lane, and rolling the common bearing within about 11 degrees of due south, are guesses, as is that the 1736 village's houses turned with its streets. The plain farmhouse is drawn 46 by 28 ft, the size of the well-off houses that survive and about twice the usual house of one village's count of 1885.
+    A household averaged about five: often a couple, their married heir and the heir's children. A few counted as many as
+    two dozen. The commonest house had about 700 sq ft of floor, and many under
+    360; the better-off farmers' houses that survive cover 1,100 to 1,600 sq ft. The map draws every farmhouse at that
+    better-off size, about 40 to 60 ft by 25 to 30 ft.
 
-    Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
-    10 to 13 ft, well clear of it, close enough that the household works its own ground. No count of house bearings from
-    before 1868 was found: the survey is one island region's houses in 1985, and the one tenth it found turned to the
-    right is not drawn. How far a house turns with its lane, and rolling the common bearing within about 11 degrees of
-    due south, are guesses, as is that the 1736 village's houses turned with its streets.
+    Guesses:
+    - Which way each house faces: each settlement's houses face near south, each turned up to about 30 degrees with the lane
+      it stands on. No count of farmhouse bearings from before 1868 was found; the spread is taken from a survey of
+      Okinawan villages in 1985.
 
     Name: farmhouse
     Covers: `houses` - the dwelling of each household
-    Label: accurate
-    Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0081-village-lanes.html; research/questions/0029-farmhouses-minka.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+    Sources: sakamoto-tsubaki-1985-omoya-muki, oamishirasato-choshi-kaoku
+    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0040-farm-storehouses-kura.html, research/questions/0044-baths-on-the-farm-furo.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0117-doorways-and-doors-to.html, research/questions/0029-farmhouses-minka.drawing.html
     """
 
     key = 'farmhouse'

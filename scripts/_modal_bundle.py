@@ -181,6 +181,7 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
         rows.append((name, origin, what))
 
     put("modal.md", render(root, m), m.origin, "the modal as its reader meets it - the thing you judge")
+    put("docstring.txt", m.doc + "\n", m.origin, "the class's docstring line for line - an EDIT block's old text is one of these lines (or part of one), exactly")
     guide = GUIDELINES.get(m.form, GUIDELINES["standard"])
     put("guidelines.md", (root / guide).read_text(encoding="utf-8"), str(guide), "the rules - your contract; name a rule (M#/P#) in every finding")
     put("prepass.txt", prepass(root, m), "scripts/_modal_bundle.py", "the mechanical findings - rule on each")

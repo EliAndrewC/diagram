@@ -192,10 +192,12 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
     0013, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
-    assert [q["text"][:30] for q in qs] == ["Farmhouses (minka)", "The farmstead and what stood o", "Village lanes", "How our maps draw farmhouses (", "How our maps draw the farmstea"], qs
+    # feature 319 rewrote the farmhouse's Entry to exactly what its About rests on (dev/modals.md M14): 0029 first, then 0028
+    # and 0004, though 0004 sorts first by file - the entry's order wins
+    assert [q["text"][:30] for q in qs][:3] == ["Farmhouses (minka)", "The farmstead and what stood o", "Households: how many live in a"], qs
     # feature 301: a question links its own small page in the record's site
     assert all(q["url"].startswith(SITE_PAGES + "q/") for q in qs), "flat, whatever section the question is in (feature 303)"
-    assert qs[2]["url"] == SITE_PAGES + "q/village-lanes.html"
+    assert qs[2]["url"] == SITE_PAGES + "q/households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html"
     assert qs[0]["url"].endswith("/farmhouses-minka.html")
     # file order would put the farmstead topic before the farmhouse topic; the entry's order wins (the lane entry moved to the ways page in the feature 292 sweep)
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
