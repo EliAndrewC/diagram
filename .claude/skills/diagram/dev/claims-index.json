@@ -2067,8 +2067,8 @@
   "code": "bc310722b0a258b1",
   "core": "0af192a7bd3da323",
   "date": "2026-10-03",
-  "note": "a track keeps off wet ground and runs off the map",
-  "research": "758d560b5828a167",
+  "note": "a seat refused where no track can leave it dry (\"A track keeps off wet ground\")",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain": {
@@ -2103,6 +2103,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#seat center set dep + 12 out from the field margin (the band's standoff from the field)": {
+  "code": "0af192a7bd3da323",
+  "core": "0af192a7bd3da323",
+  "date": "2026-10-03",
+  "note": "seat center set dep + 12 out from the field margin (the band's standoff from the field)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#seat on the field's margin": {
   "code": "a6fb98dd2bde471e",
   "core": "0af192a7bd3da323",
@@ -2123,8 +2131,8 @@
   "code": "6a66b3e4ecd686bb",
   "core": "c343fe7afc88d756",
   "date": "2026-10-03",
-  "note": "lanes keep to dry ground, no causeway",
-  "research": "758d560b5828a167",
+  "note": "wet ground, the field and the water lines walled off; \"Lanes keep to the bunds and dry ground\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#tameike berth": {
@@ -2299,8 +2307,8 @@
   "code": "6b5b4f731b1a24ef",
   "core": "eab5cc0df856d783",
   "date": "2026-10-03",
-  "note": "the cited page has no 4 ft figure and no \"single file\". 0081.drawing draws the footpath as one of its lanes (3 ft wide) and says \"A lane keeps 7 ft clear of a garden fence\", with no exception for footpaths. Either record a 4 ft footpath convention there or hold footpaths to 7 ft.",
-  "research": "758d560b5828a167",
+  "note": "FOOTPATH_FABRIC_GAP = 4.0 keeps a footpath 4 ft off a plot, but the page says \"A lane keeps 7 ft clear of a garden fence\", and on that page the 3 ft footpath is one of the lanes; it never mentions a 4 ft gap or \"single file\". Either the code goes to 7 or the page records 4 ft as a deviation and the claim says DEVIATION.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FRY_FORMS#fry form": {
@@ -2379,16 +2387,16 @@
   "code": "3bfa3e429fa7b995",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "nothing built on a lane; 40 ft is a calibrated setback",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane. Farmsteads front a lane\"; 40 ft is a chosen amount within that rule.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_FRONTAGE_STANDOFF#farmsteads front a lane": {
   "code": "a6a4692288514258",
   "core": "f54aea27cc963be5",
   "date": "2026-10-03",
-  "note": "\"Farmsteads front a lane\"; 70 ft is a calibrated standoff",
-  "research": "758d560b5828a167",
+  "note": "frontage seat offset; a chosen amount within \"Farmsteads front a lane\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_FRONTAGE_STANDOFF#frontage seat off the lane": {
@@ -2403,8 +2411,8 @@
   "code": "645f063c28032e38",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "treads 40 ft apart count as one network, but 0081.drawing has the network \"joined where their treads meet\" and joins ends only \"within 25 ft\". A visible break of 25-40 ft therefore passes as joined.",
-  "research": "758d560b5828a167",
+  "note": "LANE_JOIN_FT = 40.0 treats treads 40 ft apart as one network, but the page says lanes are \"joined where their treads meet\" and joins ends only within 25 ft. Either 40 ft goes to the page's figure or the page records it as a deviation (claim DEVIATION).",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_SKELETONS#lane skeleton": {
@@ -2419,8 +2427,8 @@
   "code": "d3fd3f7ea77f34ff",
   "core": "9e0ac3d3304f77b5",
   "date": "2026-10-03",
-  "note": "the two forms the page gives, rolled per map",
-  "research": "758d560b5828a167",
+  "note": "side lanes or a back lane, a knob \"chosen at random for each map\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LEFTOVER_FORMS#dike-pond leftover parcels": {
@@ -2451,8 +2459,8 @@
   "code": "ec23e548ea42663b",
   "core": "e48285a80f248b98",
   "date": "2026-10-03",
-  "note": "7 ft clearance each side plus a tread within the page's widths",
-  "research": "758d560b5828a167",
+  "note": "follows from the page's 7 ft fence clearance on both sides plus room for the tread.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size": {
@@ -2595,9 +2603,9 @@
   "code": "6dc74728af07d882",
   "core": "e558226d98ba699d",
   "date": "2026-10-03",
-  "note": "the page records \"how close counts as serving a house\" as a GUESS",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives no 12 ft and says the lane-end rule and \"how close counts as serving a house\" are a GUESS; the claim should be GUESS research/questions/0081-village-lanes.drawing.html.",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SUN_CORRIDOR_FT#clear ground south of a yard": {
   "code": "3d289a3c60f18e38",
@@ -2627,9 +2635,9 @@
   "code": "3006c0a2a830fffa",
   "core": "c0101826cceee8b7",
   "date": "2026-10-03",
-  "note": "the reach of a lane end is a GUESS on the page",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives no 60 ft and says \"the rule is a GUESS\"; the claim should be GUESS research/questions/0081-village-lanes.drawing.html.",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_CLEARANCE#web lane's no-build corridor": {
   "code": "9edccbb40f3c079f",
@@ -2643,24 +2651,24 @@
   "code": "c7b1a5ff8d3adf40",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-03",
-  "note": "7 ft, the page's convention",
-  "research": "758d560b5828a167",
+  "note": "\"A lane keeps 7 ft clear of a garden fence\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh": {
   "code": "2d68f244ce4fdec9",
   "core": "232d3ac8ac8b4b8c",
   "date": "2026-10-03",
-  "note": "keeping a web lane 8 ft off every crop edge means it can never run \"on the bund between plots\", which 0081.drawing allows (a lane \"may touch a plot's boundary\"). The claim's \"the lane on the bund\" is not what 8 ft does. Either record 8 ft as a convention clearance or let the lane take the bund.",
-  "research": "758d560b5828a167",
+  "note": "WEB_HARD_GAP = 8.0 keeps a web lane 8 ft off the crop, but the page says a lane \"runs on the bund between plots\" and \"may touch a plot's boundary\". The label says \"the lane on the bund\" while the code holds the lane off it. Either the page records the standoff as a deviation or the gap no longer applies to the field edge.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_REACH_FT#every farmhouse reached by a way": {
   "code": "aca8bf7ded289fc1",
   "core": "444f866ae8da7cd0",
   "date": "2026-10-03",
-  "note": "the page records \"how close counts as serving a house\" as a GUESS, and the passage exception is noted",
-  "research": "758d560b5828a167",
+  "note": "the page records \"how close counts as serving a house\" as a GUESS.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_SHADOW_FT#two ways read apart": {
@@ -2963,8 +2971,8 @@
   "code": "bf9518ea6b670e71",
   "core": "f53606997c7db654",
   "date": "2026-10-03",
-  "note": "stage_homesteads runs before stage_track and stage_web",
-  "research": "758d560b5828a167",
+  "note": "stage_homesteads runs before stage_track and stage_web; \"the maps seat every farmhouse before they lay any lane\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/driver.py::STAGES#labels last": {
@@ -3003,8 +3011,8 @@
   "code": "2bc77f35218c67fe",
   "core": "f53606997c7db654",
   "date": "2026-10-03",
-  "note": "lanes laid among what already stands",
-  "research": "758d560b5828a167",
+  "note": "web after appurtenances and burial; \"each lane follows the houses\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/driver.py::STAGE_PROFILE_ENV#driving the roll": {
@@ -5419,8 +5427,8 @@
   "code": "09fd65d26a499a12",
   "core": "33ed5702fb519815",
   "date": "2026-10-03",
-  "note": "90 degrees is the half-plane on the yard's side, the page's \"side of its neighbor where the neighbor's threshing yard lies\"",
-  "research": "758d560b5828a167",
+  "note": "90 degrees reads the page's \"side of its neighbor where the neighbor's threshing yard lies\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::TIGHT_GAP_PX#household against its neighbor's land": {
@@ -5435,16 +5443,16 @@
   "code": "b07e0f0c5f59dbcc",
   "core": "6f1b8dc9cc6bf543",
   "date": "2026-10-03",
-  "note": "the 2 ft is inside the page's 3 ft margin, which the page records as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "the page records \"the 2 ft the cluster's growth leaves between neighbors\" inside its GUESS margin",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::TIGHT_TREE_FT#a passage household away from a way": {
   "code": "a480128cf6f407de",
   "core": "3c46ea823e395ddc",
   "date": "2026-10-03",
-  "note": "an 80 ft calibration of the page's \"not close by a way\" convention",
-  "research": "758d560b5828a167",
+  "note": "80 ft sets how close \"not close by a way\" means; the page calls the rule a convention",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::WOOD_CLUMP_PX#growth search": {
@@ -5483,16 +5491,16 @@
   "code": "db3e34cd4ccebbb6",
   "core": "ad7202e76fa54d65",
   "date": "2026-10-03",
-  "note": "2 x 7 ft corridor plus the 2 ft parting, as the page gives them",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "`2.0 * s.px(ACCESS_HALF_FT) + TIGHT_GAP_PX` leaves 16 ft, but a 3 ft footpath kept \"7 ft clear of a garden fence\" on each side needs 17 ft (MIN_WEB_GAP counts 7+7 plus the tread); add the tread, or say the 7 ft is measured from the lane's centerline",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a neighbor's land": {
   "code": "8c935a751a1262b0",
   "core": "ecf5410b0f6a6eba",
   "date": "2026-10-03",
-  "note": "the land as the growth's footprint, which the page's adjoining rule reads",
-  "research": "758d560b5828a167",
+  "note": "the neighbor's land_box is passed on as the land the household's land must adjoin",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
@@ -5523,8 +5531,8 @@
   "code": "b40844e9724c7698",
   "core": "ecf5410b0f6a6eba",
   "date": "2026-10-03",
-  "note": "offered while the share lasts, only round crossable houses, in the same nearest-first order",
-  "research": "758d560b5828a167",
+  "note": "offered round crossable houses, on the yard's side, while the share lasts, nearest first in the same heap",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grows#growth search": {
@@ -5563,8 +5571,8 @@
   "code": "db9440ba30c0ded4",
   "core": "e631b28ad636edc8",
   "date": "2026-10-03",
-  "note": "measured to the access tree's nearest point, per the page's \"not close by a way\"",
-  "research": "758d560b5828a167",
+  "note": "the distance to the access tree's nearest point",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::next_house#growth search": {
@@ -5611,8 +5619,8 @@
   "code": "636b97baddd540e7",
   "core": "49fe9424134a7011",
   "date": "2026-10-03",
-  "note": "a plain bearing test against TIGHT_BEARING_DEG",
-  "research": "758d560b5828a167",
+  "note": "bearing within TIGHT_BEARING_DEG of the bearing to the yard",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/holds.py::hold_laid_parts#registry holds": {
@@ -6483,8 +6491,8 @@
   "code": "80be99de248f54bd",
   "core": "e8fc83c0852784b1",
   "date": "2026-10-03",
-  "note": "7 ft lane clearance each side plus a tread, the page's convention",
-  "research": "758d560b5828a167",
+  "note": "7 ft clearance each side plus a tread, within the page's conventions",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
@@ -6499,8 +6507,8 @@
   "code": "0eee5daa0511ac54",
   "core": "e8fc83c0852784b1",
   "date": "2026-10-03",
-  "note": "MIN_WEB_GAP = 7 ft fence clearance on each side plus a 4 ft tread",
-  "research": "758d560b5828a167",
+  "note": "MIN_WEB_GAP is 7+7 ft clearance plus a 4 ft tread",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
@@ -6539,8 +6547,8 @@
   "code": "2c6dfedebc04a799",
   "core": "e8fc83c0852784b1",
   "date": "2026-10-03",
-  "note": "start_tree reserves the exit strip, which is later drawn as a way, before any house is seated. 0081.drawing says \"the maps seat every farmhouse before they lay any lane, and each lane follows the houses\" and makes an exception only for an Imperial road. Either record this on the page as a deliberate deviation and relabel the claim DEVIATION, or seat the houses first.",
-  "research": "758d560b5828a167",
+  "note": "`start_tree(...)` reserves a corridor out from the seat's center before any house stands, but the page has \"the maps seat every farmhouse before they lay any lane, and each lane follows the houses\"; it should be a DEVIATION that the drawing page records",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front row across the brook": {
@@ -6603,8 +6611,8 @@
   "code": "61cde32bd6976ffc",
   "core": "e8fc83c0852784b1",
   "date": "2026-10-03",
-  "note": "rolled only where grows(plan) (clustered), zero for the other forms",
-  "research": "758d560b5828a167",
+  "note": "rolled only where grows(plan) holds, 0 on every other form",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
@@ -6651,8 +6659,8 @@
   "code": "2e52788904dd801d",
   "core": "02a72f0d697a7e4e",
   "date": "2026-10-03",
-  "note": "this DEVIATION is not recorded on the drawing page. 0081.drawing's only exception is \"An Imperial road ... may be laid before the settlement that fronts it\", and nothing there says the field way's run is reserved before the houses.",
-  "research": "758d560b5828a167",
+  "note": "a DEVIATION the drawing page does not record: the page says only \"the maps seat every farmhouse before they lay any lane\" and says nothing of reserving a run first; add the departure to 0081.drawing",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::reserve_the_seating#seating plumbing": {
@@ -6723,8 +6731,8 @@
   "code": "d9a65220e4d611ff",
   "core": "5feb923f94d5ee69",
   "date": "2026-10-03",
-  "note": "every household is seated, and its passage rechecked, before any lane is laid",
-  "research": "758d560b5828a167",
+  "note": "no lane is drawn until every household is seated",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the belt's afternoon lane": {
@@ -9291,8 +9299,8 @@
   "code": "3ee27159200d64c9",
   "core": "c9a4cab67e287326",
   "date": "2026-10-03",
-  "note": "spur to the fields 5 ft",
-  "research": "758d560b5828a167",
+  "note": "page: the spur to the fields is 5 ft",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::OVER_THE_WATER_FT#end on the far bund": {
@@ -9307,17 +9315,17 @@
   "code": "9ede87ada6f8ffbf",
   "core": "8efb7e17f36e5eeb",
   "date": "2026-10-03",
-  "note": "the page records the run-on rule as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "page records the run-on rule and how close counts as serving as a GUESS; nothing gives a reach",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RUN_ON_TURN_DEG#run-on turn limit": {
   "code": "82c49cfe7cb28ae1",
   "core": "c0101826cceee8b7",
   "date": "2026-10-03",
-  "note": "within \"none of them sharp\" and the page's 90 degree hook",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "0081.drawing records no 60 degree run-on limit (its only hook figure is \"a last leg of 12 ft or less turning 90 degrees or more\"); claim should say GUESS/UNRESEARCHED until the page records the 60",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks#plumbing": {
   "code": "911c7a526bd13577",
@@ -9339,24 +9347,24 @@
   "code": "e96d11ec2ffb2f9b",
   "core": "ee36ac806a2eac97",
   "date": "2026-10-03",
-  "note": "a lane never crosses row crops",
-  "research": "758d560b5828a167",
+  "note": "\"A lane never crosses row crops\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the steadings": {
   "code": "9499b774ea0151fa",
   "core": "ee36ac806a2eac97",
   "date": "2026-10-03",
-  "note": "nothing built on a lane",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the wet ground": {
   "code": "118a448213413f4e",
   "core": "ee36ac806a2eac97",
   "date": "2026-10-03",
-  "note": "keeps off wet ground and the reeds at the foot",
-  "research": "758d560b5828a167",
+  "note": "\"A track keeps off wet ground\", the reeds at the wet foot",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#water crossed only by plank": {
@@ -9371,16 +9379,16 @@
   "code": "56f9eb6383bc0bd2",
   "core": "3179cf3522cd0b36",
   "date": "2026-10-03",
-  "note": "never across a dry plot",
-  "research": "758d560b5828a167",
+  "note": "never across a dry plot, per \"never crosses row crops\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
   "code": "d2a616ac34fe7822",
   "core": "3179cf3522cd0b36",
   "date": "2026-10-03",
-  "note": "FOOTPATH_FABRIC_GAP keeps the run-on 4 ft off the homestead fabric, but the page says \"A lane keeps 7 ft clear of a garden fence\"; use 7 ft or record the 4 ft run-on gap on the page",
-  "research": "758d560b5828a167",
+  "note": "_crosses_fabric(..., FOOTPATH_FABRIC_GAP=4.0) against homestead fabric (gardens included), but page says \"A lane keeps 7 ft clear of a garden fence\" and records no 4 ft gap; use 7 ft or have the page record the 4 ft run-on gap",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
@@ -9388,7 +9396,7 @@
   "core": "3179cf3522cd0b36",
   "date": "2026-10-03",
   "note": "no marsh, no wet toe",
-  "research": "758d560b5828a167",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#water crossed on a plank": {
@@ -9419,8 +9427,8 @@
   "code": "87979af199f8a978",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "tail under 40 ft cut",
-  "research": "758d560b5828a167",
+  "note": "\"A tail of under 40 ft beyond a crossing is cut\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::_build_paddy_ground#plumbing": {
@@ -9467,40 +9475,32 @@
   "code": "dc44d6d91399d16d",
   "core": "ea4191bf3abd1d03",
   "date": "2026-10-03",
-  "note": "one network, meets as a T",
-  "research": "758d560b5828a167",
+  "note": "one network; the arriving lane meets the other's side as a T",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_past_the_junction#no stub past a junction": {
   "code": "d9a11555d331c35c",
   "core": "4d57c5caf10fb3f7",
   "date": "2026-10-03",
-  "note": "no stub past a crossing",
-  "research": "758d560b5828a167",
+  "note": "an end reaching nothing is pulled back; 40 ft tail",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_past_the_junction#the connector's and a street's ends never cut back": {
-  "code": "4d57c5caf10fb3f7",
-  "core": "4d57c5caf10fb3f7",
-  "date": "2026-10-03",
-  "note": "the connector's and a street's ends never cut back",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#no stub past a junction": {
   "code": "929cce10031566ce",
   "core": "b7d171c92f55a503",
   "date": "2026-10-03",
-  "note": "cut unless it reaches a house or the bund",
-  "research": "758d560b5828a167",
+  "note": "kept where it serves a house or the bund; page records \"how close counts as serving\" as a GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
   "code": "f921c0b8ce92cce9",
   "core": "bb6127752dc3baa9",
   "date": "2026-10-03",
-  "note": "nothing built on a lane",
-  "research": "758d560b5828a167",
+  "note": "nothing built on a lane; paths routed around fixtures",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::over_the_water#carried over the water": {
@@ -9523,32 +9523,24 @@
   "code": "01825a715aca7a1b",
   "core": "44836b60b1144a3d",
   "date": "2026-10-03",
-  "note": "lane stops at the paddy and joins its bund",
-  "research": "69ccfecce82377a5",
+  "note": "lane stops at the paddy; the field path joins the outer bund",
+  "research": "f12ab9f3abbb2b72",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#a row street's ends never run on to the bund": {
-  "code": "93ad02fc31023339",
-  "core": "93ad02fc31023339",
-  "date": "2026-10-03",
-  "note": "a row street's ends never run on to the bund",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#connector left alone": {
   "code": "d5ec1f5f5e1e7181",
   "core": "93ad02fc31023339",
   "date": "2026-10-03",
-  "note": "the track out runs off the map",
-  "research": "758d560b5828a167",
+  "note": "\"The track out runs off the edge of the map\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#lane end runs on to the bund": {
   "code": "0aaf033714296bfd",
   "core": "93ad02fc31023339",
   "date": "2026-10-03",
-  "note": "runs on to a bund a reader can see",
-  "research": "69ccfecce82377a5",
+  "note": "0081 \"runs on to ... a bund\"; 0014 \"the hamlet's nearest lane runs on to the bund\"",
+  "research": "f12ab9f3abbb2b72",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::run_on_target#joins at the nearest point": {
@@ -9579,8 +9571,8 @@
   "code": "62c27c2bda13bf21",
   "core": "122ea09cf724d71d",
   "date": "2026-10-03",
-  "note": "refuses a hooked run-on",
-  "research": "758d560b5828a167",
+  "note": "refuses a sharp turn (\"none of them sharp\"); the 60 degree figure is judged at RUN_ON_TURN_DEG",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::water_between#plumbing": {
@@ -9635,16 +9627,16 @@
   "code": "fc9eb3cedea93b09",
   "core": "487c406310185baf",
   "date": "2026-10-03",
-  "note": "no crossing deck on crop; 14 ft is a deck margin",
-  "research": "758d560b5828a167",
+  "note": "the 14 ft pad holds \"A lane never crosses row crops\" at a crossing",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::PathChecker.violations#off the crop": {
   "code": "797e1dd46e3d053c",
   "core": "487c406310185baf",
   "date": "2026-10-03",
-  "note": "no segment through a crop polygon",
-  "research": "758d560b5828a167",
+  "note": "no segment through an avoid polygon",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::PathChecker.violations#pond kept off": {
@@ -9715,8 +9707,8 @@
   "code": "33dd050c58d93c06",
   "core": "878194900e2193bf",
   "date": "2026-10-03",
-  "note": "no deck landing on a dry plot",
-  "research": "758d560b5828a167",
+  "note": "a crossing point inside or within 14 ft of crop",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::drawn_water_segs#plumbing": {
@@ -9755,8 +9747,8 @@
   "code": "7fc822a6b85089cc",
   "core": "ed2797f684afdb0e",
   "date": "2026-10-03",
-  "note": "LANE_JOIN_FT 40 counts two lanes 25-40 ft apart as one network, where the page joins them where their treads meet (ends within 25 ft joined at one point); judge a join where the treads touch, or record the 40 ft as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "`seg_dist(...) <= join` with LANE_JOIN_FT=40 counts lanes up to 40 ft apart as joined, where the page has lanes \"joined where their treads meet\" (and ends joined within 25 ft); the tolerance or the page must change",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::path_violations#drain brook never crossed": {
@@ -9771,16 +9763,16 @@
   "code": "e25e4d7c65b19fe3",
   "core": "997946220552bbbd",
   "date": "2026-10-03",
-  "note": "no crossing deck on crop",
-  "research": "758d560b5828a167",
+  "note": "a crossing within 14 ft of a crop polygon fouls",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::path_violations#off the crop": {
   "code": "57b4269ea8272085",
   "core": "997946220552bbbd",
   "date": "2026-10-03",
-  "note": "no segment through a crop polygon",
-  "research": "758d560b5828a167",
+  "note": "no segment through an avoid polygon",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::path_violations#pond kept off": {
@@ -9811,8 +9803,8 @@
   "code": "ec4d73e691ec130b",
   "core": "96687afa10697109",
   "date": "2026-10-03",
-  "note": "the component holding the connector",
-  "research": "758d560b5828a167",
+  "note": "the connected part grown from the connector",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::shallow_crossing#square over water": {
@@ -9859,24 +9851,24 @@
   "code": "b6439da847d6f17d",
   "core": "f04e4e3220a70720",
   "date": "2026-10-03",
-  "note": "100 ft is within the page's GUESS on how close serves; households reached by passage count as reached through their neighbor's chain",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives no figure and records \"how close counts as serving a house\" as a GUESS; the claim should read GUESS research/questions/0081-village-lanes.drawing.html (the passage exemption itself matches)",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_ARM_FT#stray tail": {
   "code": "56c62d9c631432c8",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "under 40 ft past a crossing is cut, as on the page",
-  "research": "758d560b5828a167",
+  "note": "40 ft tail past a crossing",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_HAIRPIN_DEG#hairpin": {
   "code": "77e7320e435f139b",
   "core": "3fca66fc5f29f78e",
   "date": "2026-10-03",
-  "note": "140 degrees, a drawing convention as the page records",
-  "research": "758d560b5828a167",
+  "note": "\"more than 140 degrees is a hairpin\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_LINK_EPS#plumbing": {
@@ -9923,63 +9915,63 @@
   "code": "7492d392f0612bd3",
   "core": "b55406ac40336020",
   "date": "2026-10-03",
-  "note": "50 degrees, as on the page",
-  "research": "758d560b5828a167",
+  "note": "two turns of more than 50 degrees",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_ZIGZAG_RUN_FT#zigzag run": {
   "code": "aeeb4f416d8d41de",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "40 ft, as on the page",
-  "research": "758d560b5828a167",
+  "note": "within 40 ft of path",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_bends_badly#bends like a path": {
   "code": "2dde35cfb455bf57",
   "core": "9bf02af5d1f3ebf2",
   "date": "2026-10-03",
-  "note": "delegates to kink_spans",
-  "research": "758d560b5828a167",
+  "note": "hairpin and zigzag limits via kink_spans",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the crop and wet ground": {
   "code": "7676d771d54389ad",
   "core": "2aa24e454372abbd",
   "date": "2026-10-03",
-  "note": "8 ft and 14 ft are calibrated within \"never crosses row crops\" and \"keeps off wet ground\"",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "0081.drawing records neither 8 ft off the crop nor 14 ft off water (it says a lane \"may touch a plot's boundary\"); claim should say GUESS/CONVENTION until the page records them",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the fabric": {
   "code": "cd13da92b160807f",
   "core": "2aa24e454372abbd",
   "date": "2026-10-03",
-  "note": "defaults to WEB_FABRIC_GAP, 7 ft",
-  "research": "758d560b5828a167",
+  "note": "\"A lane keeps 7 ft clear of a garden fence\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin": {
   "code": "21058a994a4a08e9",
   "core": "4068124731526b5e",
   "date": "2026-10-03",
-  "note": "the default _TOUCH_GAP of 4 ft lets a junction link pass 4 ft from a garden or house, but the page says \"A lane keeps 7 ft clear of a garden fence\"; the docstring records a deliberate departure that the page does not; record it there as a DEVIATION or hold 7",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "page records no 4 ft junction margin (its fabric figure is 7 ft off a garden fence; it only says a lane along a fence to its junction belongs to the network); record the 4 ft or label it GUESS",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::bowtie_cut#no stub past a crossing": {
   "code": "e600b8f2b8bedca2",
   "core": "d8915c0706fac6c6",
   "date": "2026-10-03",
-  "note": "a tail under 40 ft is cut",
-  "research": "758d560b5828a167",
+  "note": "tail under 40 ft cut",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#a lane keeps 14 ft off a water line (line_margin default)": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#default line_margin 14 ft off a water course": {
   "code": "5d2a5d074d928224",
   "core": "5d2a5d074d928224",
   "date": "2026-10-03",
-  "note": "a lane keeps 14 ft off a water line (line_margin default)",
+  "note": "default line_margin 14 ft off a water course",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -9987,8 +9979,8 @@
   "code": "ff53a61fec2af1b5",
   "core": "5d2a5d074d928224",
   "date": "2026-10-03",
-  "note": "the caller sets the margin",
-  "research": "758d560b5828a167",
+  "note": "crop and wet ground kept off at the caller's margin",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#shortest lane": {
@@ -10003,25 +9995,25 @@
   "code": "38f09180468d708d",
   "core": "5d2a5d074d928224",
   "date": "2026-10-03",
-  "note": "the default tight_margin is 6.0 ft (\"a hand's breadth\"), but the page says \"A lane keeps 7 ft clear of a garden fence\"; the claim should name 7 ft (WEB_FABRIC_GAP) with a matching default, or the page should record 6",
-  "research": "758d560b5828a167",
+  "note": "default tight_margin=6.0 (\"a hand's breadth\") off houses, yards, gardens and groves, but page says \"A lane keeps 7 ft clear of a garden fence\"; the default should be 7, or the page should record the 6",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#an arm stops 14 ft short of a water line (line_margin default)": {
-  "code": "6325de9290eca7c0",
-  "core": "6325de9290eca7c0",
-  "date": "2026-10-03",
-  "note": "an arm stops 14 ft short of a water line (line_margin default)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#an arm stops at the crop": {
   "code": "47f6d20cbbe010db",
   "core": "6325de9290eca7c0",
   "date": "2026-10-03",
-  "note": "the arm is cut where the crop begins",
-  "research": "758d560b5828a167",
+  "note": "the spur stops at the hem's edge; a lane stops at the flooded paddy",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#default line_margin 14 ft off a water course": {
+  "code": "6325de9290eca7c0",
+  "core": "6325de9290eca7c0",
+  "date": "2026-10-03",
+  "note": "default line_margin 14 ft off a water course",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#shortest arm": {
   "code": "64bde4aa4304a360",
@@ -10051,16 +10043,16 @@
   "code": "61fe0b8b94db0e52",
   "core": "4c3860a5f233a789",
   "date": "2026-10-03",
-  "note": "140 degrees, as on the page",
-  "research": "758d560b5828a167",
+  "note": "140 degree hairpin",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::kink_spans#no zigzag": {
   "code": "80d52cd956f68d23",
   "core": "4c3860a5f233a789",
   "date": "2026-10-03",
-  "note": "two 50 degree turns within 40 ft of summed path",
-  "research": "758d560b5828a167",
+  "note": "two 50 degree turns within 40 ft",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::link_index#plumbing": {
@@ -10083,32 +10075,32 @@
   "code": "1d6ad231c92149cf",
   "core": "ba08635693d8f63d",
   "date": "2026-10-03",
-  "note": "the bar max(4, width/2 + 2) lets a rewrite bring a lane to 4 ft of a garden, but the page says \"A lane keeps 7 ft clear of a garden fence\" and records no rewrite tolerance; record it as a DEVIATION or hold 7",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "page records no \"half the width plus 2 ft, at least 4 ft\" bar (its only fabric figure is 7 ft off a garden fence); record it or label it GUESS/CONVENTION",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no new bad bend": {
   "code": "b9fa28e8157c9e72",
   "core": "ba08635693d8f63d",
   "date": "2026-10-03",
-  "note": "no new hairpin or zigzag",
-  "research": "758d560b5828a167",
+  "note": "no hairpin or zigzag added",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no tread on the fabric": {
   "code": "3927630efe98fc4a",
   "core": "ba08635693d8f63d",
   "date": "2026-10-03",
-  "note": "the stroke may not newly hit the fabric",
-  "research": "758d560b5828a167",
+  "note": "nothing built on a lane",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::route_around#a track goes round the field": {
   "code": "8a024287387be5a4",
   "core": "a143331dd24c9b70",
   "date": "2026-10-03",
-  "note": "goes the shorter way round the outline, never across the crop",
-  "research": "758d560b5828a167",
+  "note": "never across row crops; the shorter way round fits \"takes the shortest or easiest way\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::stroke_hits#plumbing": {
@@ -10147,8 +10139,8 @@
   "code": "bb203b51d239c433",
   "core": "b1a95549b68621ae",
   "date": "2026-10-03",
-  "note": "shortest way to its target",
-  "research": "758d560b5828a167",
+  "note": "spur origin on the cloud's edge toward the field, one through-route with the track",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_gateway#gateway clear of what stands": {
@@ -10163,16 +10155,16 @@
   "code": "c43d2a3999001381",
   "core": "dc1236e88837825e",
   "date": "2026-10-03",
-  "note": "downslope, turned only where there is no dry way",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the gateway is pushed along seat[\"out\"], the margin's outward normal (seat_cluster passes (nx, ny), \"an AWAY-from-the-field unit\"). seat_cluster scores upslope margins higher (0.8), so that edge is often upslope or a flank, not downslope. The page says the track \"leaves downslope past the end of the wet ground\". Either orient the gateway down the fall or reword the claim as \"away from the field\"",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::gate_on_the_strip#connector starts off the crop": {
   "code": "808dd8fdd5c22b8a",
   "core": "fd7807398194332b",
   "date": "2026-10-03",
-  "note": "off the crop",
-  "research": "758d560b5828a167",
+  "note": "\"A lane never crosses row crops\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::gate_on_the_strip#setback from the field": {
@@ -10187,8 +10179,8 @@
   "code": "3e75996528c3b381",
   "core": "fd7807398194332b",
   "date": "2026-10-03",
-  "note": "the end loses its hook",
-  "research": "758d560b5828a167",
+  "note": "\"A lane's end loses its hook\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::ACCESS_ROLE#roles and indexing": {
@@ -10203,8 +10195,8 @@
   "code": "32bc5612f02a72cb",
   "core": "7a33414bed51de7b",
   "date": "2026-10-03",
-  "note": "footpath 3 ft, as the page says",
-  "research": "758d560b5828a167",
+  "note": "\"a footpath is drawn 3 ft wide\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROLE#roles and indexing": {
@@ -10219,8 +10211,8 @@
   "code": "e68cd98609429b84",
   "core": "aebd33c74b3e6fff",
   "date": "2026-10-03",
-  "note": "the field way keeps 5.5 ft off the steadings, garden beds included, but the page says \"A lane keeps 7 ft clear of a garden fence\" and gives no 5.5 ft; record the field way's own gap on the drawing page or route it at 7 ft",
-  "research": "758d560b5828a167",
+  "note": "the field way is routed with gap=5.5 ft off the steadings, and those include the garden beds, but the page says \"A lane keeps 7 ft clear of a garden fence\" and gives no 5.5 ft. Either the code goes to 7 ft or the page records 5.5 ft as a deviation (claim DEVIATION).",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FORD_LANDING_FT#ford landing": {
@@ -10411,17 +10403,17 @@
   "code": "9603a9b1bd1811a5",
   "core": "d8d591037fafe257",
   "date": "2026-10-03",
-  "note": "every built part is a wall except the path's own dooryard",
-  "research": "758d560b5828a167",
+  "note": "every steading part walled except the path's own dooryard; nothing built on a lane.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::field_router#off the crop and marsh": {
   "code": "137a69ef8b5fdb24",
   "core": "d8d591037fafe257",
   "date": "2026-10-03",
-  "note": "marshes with role == \"defense\" are left out of the hard set; need to know whether the overlap matrix (st.forbidding(\"lanes\")) walls them, since the page says \"A track keeps off wet ground\"",
-  "research": "758d560b5828a167",
-  "verdict": "CANNOT-TELL"
+  "note": "\"never crosses row crops\", \"keeps off wet ground\".",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::field_router#the brook at its fords": {
   "code": "fa6d7e1cf3c0a211",
@@ -10435,8 +10427,8 @@
   "code": "bd3cc68563e0996e",
   "core": "778ee23a407c3115",
   "date": "2026-10-03",
-  "note": "the spur stops at the hem's edge and the hem's runs come after the paddy's",
-  "research": "758d560b5828a167",
+  "note": "\"the spur to the fields stops at the hem's edge\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::field_runs#field path to the bund": {
@@ -10467,16 +10459,16 @@
   "code": "0e23b61d49db10a4",
   "core": "1c7ecfc84bfb5a19",
   "date": "2026-10-03",
-  "note": "tree roles, streets and door paths are kept whole",
-  "research": "758d560b5828a167",
+  "note": "every farmhouse served; the track out and the field spur are one through-route.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::round_the_gable#a path reaches the front": {
   "code": "99264597f6056bc8",
   "core": "d6261c5f1607c914",
   "date": "2026-10-03",
-  "note": "the path ends in the dooryard band before the front",
-  "research": "758d560b5828a167",
+  "note": "\"a lane ends at the dooryard\"; the page now also names a path \"carried round its house's gable\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::round_the_gable#round the nearer gable by its back corner": {
@@ -10515,24 +10507,24 @@
   "code": "c0e5e10442a475e7",
   "core": "24aae5932748ebcc",
   "date": "2026-10-03",
-  "note": "straight spurs, shortest first",
-  "research": "758d560b5828a167",
+  "note": "\"A worn path takes the shortest or easiest way\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::strands_only_ordinary#one network": {
   "code": "2cab5a313db85e7a",
   "core": "16b0a4d0f1c8faeb",
   "date": "2026-10-03",
-  "note": "one network, no house loses its way",
-  "research": "758d560b5828a167",
+  "note": "one network reaching every farmhouse \"but the few reached across a neighbor's land\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::through_a_building#nothing built on a lane": {
   "code": "a72c59a7c983bff2",
   "core": "4dd110a0ce479154",
   "date": "2026-10-03",
-  "note": "no leg crosses or stands inside a building",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/dry_exit.py::EXIT_CELL_FT#narrowest dry neck": {
@@ -10547,8 +10539,8 @@
   "code": "1f7d034ed93251df",
   "core": "d9c30efcc65b2e12",
   "date": "2026-10-03",
-  "note": "an overshoot past the frame, cropped from view",
-  "research": "758d560b5828a167",
+  "note": "overshoot trimmed by the crop; \"never stops in open country\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/dry_exit.py::GROVE_EXIT_CELL_FT#flood fill and rasterizing": {
@@ -10611,25 +10603,17 @@
   "code": "4b398faa04031213",
   "core": "68e6198ad2339783",
   "date": "2026-10-03",
-  "note": "clear of the walls and the water lines",
-  "research": "758d560b5828a167",
+  "note": "walls and water lines blocked",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/dry_exit.py::dry_exit#the track out runs off the map": {
   "code": "5754b6393d2df58f",
   "core": "68e6198ad2339783",
   "date": "2026-10-03",
-  "note": "ends off the canvas",
-  "research": "758d560b5828a167",
+  "note": "the fill's goal is off the canvas",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/dry_exit.py::dry_exit#way out by the shortest dry path off the frame, in any direction (the page: \"It leaves downslope past the end of the wet ground\")": {
-  "code": "68e6198ad2339783",
-  "core": "68e6198ad2339783",
-  "date": "2026-10-03",
-  "note": "way out by the shortest dry path off the frame, in any direction (the page: \"It leaves downslope past the end of the wet ground\")",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_LANE_JOIN_FT#join tolerance": {
   "code": "2d9a9301e4dc696b",
@@ -10667,8 +10651,8 @@
   "code": "7897154b6a50e63d",
   "core": "0a8a74c90d0ccf39",
   "date": "2026-10-03",
-  "note": "nothing built on a lane",
-  "research": "758d560b5828a167",
+  "note": "a join link that hits a steading is refused",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#shortest way": {
@@ -10683,16 +10667,16 @@
   "code": "6b210b412035f5d1",
   "core": "0a8a74c90d0ccf39",
   "date": "2026-10-03",
-  "note": "the page records no no-build corridor beside a lane, and no 28 ft figure (WEB_CLEARANCE); its only gap is 7 ft from a garden fence. The claim should be UNRESEARCHED/GUESS until recorded, or NONE if nothing placed after the web reads the corridor",
-  "research": "758d560b5828a167",
+  "note": "the page says only \"Nothing is built on a lane\" and 7 ft off a fence; nothing bears on a 28 ft no-build strip (WEB_CLEARANCE); it should say UNRESEARCHED or GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lanes seat no house": {
   "code": "43ca522eade2283a",
   "core": "0a8a74c90d0ccf39",
   "date": "2026-10-03",
-  "note": "houses placed first, lanes after",
-  "research": "758d560b5828a167",
+  "note": "web lanes are flagged so no seat is offered along them",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_fabric_hits#plumbing and geometry": {
@@ -10707,8 +10691,8 @@
   "code": "a711898a63192dd4",
   "core": "0031d0fe1522c47a",
   "date": "2026-10-03",
-  "note": "no corner on the tread",
-  "research": "758d560b5828a167",
+  "note": "delegates to house_hit (half width + 2 ft)",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard": {
@@ -10731,9 +10715,17 @@
   "code": "f1cfa1fa6ca15b71",
   "core": "1447f2649822c87b",
   "date": "2026-10-03",
-  "note": "all built ground is fabric",
-  "research": "758d560b5828a167",
+  "note": "houses, yards, beds, sheds, wells and fixtures are all fabric",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#village groves and commons as fabric a lane keeps off": {
+  "code": "1447f2649822c87b",
+  "core": "1447f2649822c87b",
+  "date": "2026-10-03",
+  "note": "village groves and commons as fabric a lane keeps off",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_margin_frame#plumbing and geometry": {
   "code": "bd59477e72a7825b",
@@ -10787,24 +10779,24 @@
   "code": "5c647462a907ca16",
   "core": "447c8668b93d7c6b",
   "date": "2026-10-03",
-  "note": "the inner end touches the way it joins",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "an inner end that finds nothing to reach \"is LEFT ALONE\" in open ground (Kashikawa), against the page's \"It never stops in open country\"",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track out runs off the map": {
   "code": "1736c421fde01743",
   "core": "447c8668b93d7c6b",
   "date": "2026-10-03",
-  "note": "the off-canvas end is left as it is",
-  "research": "758d560b5828a167",
+  "note": "the off-canvas end is skipped",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread": {
   "code": "8b4308c9a63270fe",
   "core": "20bb8b5e781702f9",
   "date": "2026-10-03",
-  "note": "no corner on the tread, with a close margin",
-  "research": "758d560b5828a167",
+  "note": "corners and center probed at w/2 + 2",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::poly_box#plumbing and geometry": {
@@ -10827,8 +10819,8 @@
   "code": "98c4ca3a210905cf",
   "core": "835a1af6eff5f02b",
   "date": "2026-10-03",
-  "note": "the start kept off footprints",
-  "research": "758d560b5828a167",
+  "note": "half the tread off every footprint; \"no corner of a house stands on its tread\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::gateway_track#a walled-in gateway": {
@@ -10843,8 +10835,8 @@
   "code": "443f981c7e602b57",
   "core": "f32ef1878fbf5c3a",
   "date": "2026-10-03",
-  "note": "swept to the frame",
-  "research": "758d560b5828a167",
+  "note": "swept from the gateway off the map",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::track_from_the_strip_end#out along the exit strip": {
@@ -10923,24 +10915,24 @@
   "code": "f981422171fee000",
   "core": "33ed5702fb519815",
   "date": "2026-10-03",
-  "note": "90 degrees or more",
-  "research": "758d560b5828a167",
+  "note": "page: \"turning 90 degrees or more\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_HOOK_FT#hook leg": {
   "code": "a249c38c081981b2",
   "core": "e558226d98ba699d",
   "date": "2026-10-03",
-  "note": "12 ft or less",
-  "research": "758d560b5828a167",
+  "note": "page: \"a last leg of 12 ft or less\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_TOUCH_GAP#a junction link may brush a fence": {
   "code": "40bd5aae2769a9fa",
   "core": "eab5cc0df856d783",
   "date": "2026-10-03",
-  "note": "\"A lane that runs along a garden fence to reach its junction belongs to the network\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"a lane that runs along a garden fence to reach its junction belongs to the network\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_aim_off#geometry": {
@@ -11003,32 +10995,32 @@
   "code": "6b166e8120994f6b",
   "core": "48f71ee4e3da104f",
   "date": "2026-10-03",
-  "note": "\"pulled back to the last house it serves\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"pulled back to the last house it serves\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_stop_at_network#no stub past a junction": {
   "code": "b4f3c39f97bdab91",
   "core": "16df75eeda9cfdb3",
   "date": "2026-10-03",
-  "note": "no stub past a crossing",
-  "research": "758d560b5828a167",
+  "note": "page: no stub run on past a crossing",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": {
   "code": "f6532cc29ac1dfd5",
   "core": "4d4eff0970305e1a",
   "date": "2026-10-03",
-  "note": "it keeps a house's only way and adds none, so it agrees with the reached-across exception",
-  "research": "758d560b5828a167",
+  "note": "page records how close counts as serving as a GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#pulled back to the last house served": {
   "code": "e22cc2edafaa1861",
   "core": "4d4eff0970305e1a",
   "date": "2026-10-03",
-  "note": "\"pulled back to the last house it serves\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"pulled back to the last house it serves\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_turn_deg#geometry": {
@@ -11043,32 +11035,32 @@
   "code": "647c80f9ed309d3c",
   "core": "3816186ca549d2ed",
   "date": "2026-10-03",
-  "note": "\"never doubling back on itself\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"never doubling back on itself\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::door_unhooked#a lane's end loses its hook": {
   "code": "a704c2334cec5cff",
   "core": "7d25d5d400e9fac2",
   "date": "2026-10-03",
-  "note": "12 ft and 90 degrees, at the door",
-  "research": "758d560b5828a167",
+  "note": "the 12 ft / 90 degree hook rule, applied at the door",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::end_serves#an end reaches something seen": {
   "code": "85c1541b98aede40",
   "core": "b327dfcd3d7c859c",
   "date": "2026-10-03",
-  "note": "seg_dist(...) <= WAY_END_REACH_FT counts an end up to 60 ft short of a way as arrived, but the page says an end \"runs on to ... a bund or another way\" (the bund clause is 6 ft); hold the way clause to a touch distance, or have the page record 60 ft to a way as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "`seg_dist(...) <= WAY_END_REACH_FT` counts an end up to 60 ft short of another way as served, but the page has a lane \"run on to ... another way\" or be \"pulled back to the last house it serves\"; its GUESS covers only \"how close counts as serving a house\". The way clause should require the end to reach the way, or be labeled GUESS on a drawing page that records it",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::end_serves#arrived at a steading": {
   "code": "7babc706a54f67f2",
   "core": "b327dfcd3d7c859c",
   "date": "2026-10-03",
-  "note": "ends at the dooryard; the page records how close counts as serving as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "page: \"a lane ends at the dooryard\"; the distance is the page's recorded GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::end_serves#reached on the bund": {
@@ -11099,8 +11091,8 @@
   "code": "8e94a709ae2856b4",
   "core": "442a9f080ba66473",
   "date": "2026-10-03",
-  "note": "every farmhouse but those reached across a yard",
-  "research": "758d560b5828a167",
+  "note": "excludes `reached_across` households, as the page says",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::memo_ground#geometry": {
@@ -11131,8 +11123,8 @@
   "code": "62bbfd16855eca81",
   "core": "c60742f5b709559f",
   "date": "2026-10-03",
-  "note": "\"Nothing is built on a lane\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"nothing is built on a lane\"; the step walk is plumbing",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::push_out_of#geometry": {
@@ -11179,8 +11171,8 @@
   "code": "155110d91239eb32",
   "core": "f942bfa12fa3ca32",
   "date": "2026-10-03",
-  "note": "the buildings, the yard and the garden as the dooryard",
-  "research": "758d560b5828a167",
+  "note": "buildings, yard and garden as the dooryard",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::steading_footprints#ground cover is no destination": {
@@ -11211,8 +11203,8 @@
   "code": "acc71abaa8f36d38",
   "core": "61f61a7e0d4751ce",
   "date": "2026-10-03",
-  "note": "\"stops at the hem's edge\" and \"stops at the flooded paddy\"",
-  "research": "758d560b5828a167",
+  "note": "page: the spur stops at the hem's edge or at the paddy",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_JOINT_FT#plumbing": {
@@ -11227,8 +11219,8 @@
   "code": "477188c9cc51844a",
   "core": "fdd030125e446842",
   "date": "2026-10-03",
-  "note": "_MEET_FT = 11.5 but the page says \"Ends within 25 ft of one another are joined at a single point\"; the page should record 11.5 ft for end-to-end joins, or the figure should change to match",
-  "research": "758d560b5828a167",
+  "note": "`_MEET_FT = 11.5`, but the page says \"Ends within 25 ft of one another are joined at a single point\". Either the constant moves to 25 or the page records 11.5 for this end-to-end join",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_ON_LINE_FT#plumbing": {
@@ -11251,32 +11243,32 @@
   "code": "8300da165b61dab0",
   "core": "f766badc28942cbe",
   "date": "2026-10-03",
-  "note": "the Z across a joint is mended, as \"A lane does not zigzag\" asks",
-  "research": "758d560b5828a167",
+  "note": "page: \"A lane does not zigzag\"; joints read as one way",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_hook#a lane's end loses its hook": {
   "code": "e1087298de65a02f",
   "core": "0ae8c2c327b540f0",
   "date": "2026-10-03",
-  "note": "the hook rule; reading the connector at its web end only fits \"runs off the edge of the map\"",
-  "research": "758d560b5828a167",
+  "note": "the hook rule, connector's web end included",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T": {
   "code": "abfdcb8d7953f504",
   "core": "734e3ebe8339ee49",
   "date": "2026-10-03",
-  "note": "\"the arriving lane meets the other's side as a T\"; 140 degrees matches",
-  "research": "758d560b5828a167",
+  "note": "page: \"the arriving lane meets the other's side as a T\"; the 140 degree hairpin matches",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
   "code": "d5d77092540ede8e",
   "core": "734e3ebe8339ee49",
   "date": "2026-10-03",
-  "note": "string-pulled, with the 6 ft of the old line the page gives",
-  "research": "758d560b5828a167",
+  "note": "page: string-pulled, \"stays within 6 ft of the old one\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
@@ -11331,8 +11323,8 @@
   "code": "c5f360d910ba9914",
   "core": "866d91e6cd3697cc",
   "date": "2026-10-03",
-  "note": "\"never doubles back in a hairpin\", met as a T",
-  "research": "758d560b5828a167",
+  "note": "page: no hairpin, where lanes meet a T",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::hairpin_over_a_short_leg#no hairpin": {
@@ -11355,24 +11347,24 @@
   "code": "b60282fe8677fb03",
   "core": "898946af8e0cc5fd",
   "date": "2026-10-03",
-  "note": "a no-loss rule that adds no lane, so it agrees with the reached-across exception; the page records the serving distance as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "a rewrite never loses a served house; 100 ft is the page's serving GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::keeps_the_web#one network": {
   "code": "6342ca1e6c774f69",
   "core": "898946af8e0cc5fd",
   "date": "2026-10-03",
-  "note": "\"the lanes form one network\"",
-  "research": "758d560b5828a167",
+  "note": "page: lanes form one network",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined": {
   "code": "a3e0fb6f615a5ad6",
   "core": "40b078a9101e2aa3",
   "date": "2026-10-03",
-  "note": "it joins only ends within _MEET_FT 11.5 ft, but the page says \"Ends within 25 ft of one another are joined at a single point\"; the page and the code should agree on one figure",
-  "research": "758d560b5828a167",
+  "note": "joins only ends `_TOUCH_GAP < d <= _MEET_FT` (11.5 ft), but the page says \"Ends within 25 ft of one another are joined at a single point\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::moved_back#plumbing": {
@@ -11411,32 +11403,32 @@
   "code": "e1022d52d9a366a8",
   "core": "528906090b0d60c5",
   "date": "2026-10-03",
-  "note": "runs the hook pass",
-  "research": "758d560b5828a167",
+  "note": "runs `_one_hook",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::straighten_joints#lanes met end to end are one": {
   "code": "4a052e30715014d8",
   "core": "528906090b0d60c5",
   "date": "2026-10-03",
-  "note": "\"Two lanes that meet end to end are read as one\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"Two lanes that meet end to end are read as one\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::tee#a fold at a joint becomes a T": {
   "code": "09f440ad5755bd9c",
   "core": "245b19b55d0c794c",
   "date": "2026-10-03",
-  "note": "\"meets the other's side as a T\"",
-  "research": "758d560b5828a167",
+  "note": "meets the other's side as a T",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::unhooked#a lane's end loses its hook": {
   "code": "8925237f83bb2265",
   "core": "66dd98235a234725",
   "date": "2026-10-03",
-  "note": "12 ft or less and 90 degrees or more, as the page gives",
-  "research": "758d560b5828a167",
+  "note": "12 ft, 90 degrees, as the page says",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/keeper.py::KEEP#verdict cache": {
@@ -11555,8 +11547,8 @@
   "code": "6c8fcc2e68a573d9",
   "core": "4c774ad5376f765d",
   "date": "2026-10-03",
-  "note": "matches the page's exception and chain",
-  "research": "758d560b5828a167",
+  "note": "\"reaching every farmhouse but the few reached across a neighbor's land\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#the field reached": {
@@ -11579,17 +11571,17 @@
   "code": "f3b0f42af55c9759",
   "core": "2b132c76836cf1ca",
   "date": "2026-10-03",
-  "note": "40 ft, as the page's \"within 40 ft of path\"",
-  "research": "758d560b5828a167",
+  "note": "40 ft matches \"Two turns of more than 50 degrees within 40 ft of path\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::BREAK_SPAN_FT#no tread through a building": {
   "code": "c2d7c54a49bc4c99",
   "core": "c0101826cceee8b7",
   "date": "2026-10-03",
-  "note": "a detector span for \"nothing is built on a lane\"",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page says \"no corner of a house stands on its tread\" with no length limit; the 60 ft cutoff (shorter segments through a box pass unflagged) is not on it, so record it there or label the figure GUESS/UNRESEARCHED",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::CONNECTOR_START_FT#plumbing and wrappers": {
   "code": "669b5408842e8cb3",
@@ -11627,8 +11619,8 @@
   "code": "bb516bd083805280",
   "core": "a1f2374bde67748c",
   "date": "2026-10-03",
-  "note": "140 degrees, as the page says",
-  "research": "758d560b5828a167",
+  "note": "\"A turn of more than 140 degrees is a hairpin\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a way reaches the field": {
@@ -11659,8 +11651,8 @@
   "code": "a00d6f7cb48e1fe2",
   "core": "bf4156f990ecc5ab",
   "date": "2026-10-03",
-  "note": "the page joins \"Ends within 25 ft of one another\". The code reaches 30 ft (_LANE_JOIN_FT) from an end to any way's side. The page records neither the 30 ft figure nor an end-to-side join: record them there or reach 25 ft",
-  "research": "758d560b5828a167",
+  "note": "the page joins near ends at \"Ends within 25 ft of one another\"; the code's reach is 30 ft (_LANE_JOIN_FT) and the page has no 30 ft figure",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::JOIN_TOL#plumbing and wrappers": {
@@ -11675,8 +11667,8 @@
   "code": "ed291f3c494a9e12",
   "core": "dd0b7ba2b27ebdfc",
   "date": "2026-10-03",
-  "note": "50 degrees, as the page says",
-  "research": "758d560b5828a167",
+  "note": "50 degrees as the page gives it",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::LAW#plumbing and wrappers": {
@@ -11827,16 +11819,16 @@
   "code": "f68e1ec37da6015b",
   "core": "c1b7de3e9c4a9fa9",
   "date": "2026-10-03",
-  "note": "no leg through a building's box",
-  "research": "758d560b5828a167",
+  "note": "the predicate is the page's rule; the cutoff it uses is judged on BREAK_SPAN_FT",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track": {
   "code": "70673aa8f64b0115",
   "core": "069afa67a48d5c0a",
   "date": "2026-10-03",
-  "note": "at a hairpin the page cuts \"a returning leg under 40 ft\". This rule flags only a last leg under 25 ft (by its claim; the figure is in hairpin_over_a_short_leg), so a fold of 25 to 40 ft back onto the track passes. Use 40 ft or record the 25 ft",
-  "research": "758d560b5828a167",
+  "note": "the claim's \"a leg under 25 ft\" disagrees with the page's \"a returning leg under 40 ft is cut\"; use 40 ft, or record 25 ft on the page",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::connector_hairpins#plumbing and wrappers": {
@@ -11867,8 +11859,8 @@
   "code": "d56436dc76bebf58",
   "core": "c52fb57ec726ad5f",
   "date": "2026-10-03",
-  "note": "an end reaches a house, a way or a seen target",
-  "research": "758d560b5828a167",
+  "note": "an end must reach a house, way, bund or target (\"runs on to something a reader can see\")",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::deck_seats#a deck's corners on dry ground": {
@@ -11899,8 +11891,8 @@
   "code": "2bf7589c6338aa5d",
   "core": "65a53c943d33b85f",
   "date": "2026-10-03",
-  "note": "an end behind the house is not at its dooryard",
-  "research": "758d560b5828a167",
+  "note": "follows from \"a lane ends at the dooryard\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::field_reach_ft#plumbing and wrappers": {
@@ -11931,8 +11923,8 @@
   "code": "37848a6383adf390",
   "core": "9c425e210c5d4627",
   "date": "2026-10-03",
-  "note": "no turn-back at an end-to-end joint",
-  "research": "758d560b5828a167",
+  "note": "\"where the one would turn back into the other ... meets the other's side as a T\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::folded_joints#plumbing and wrappers": {
@@ -11947,8 +11939,8 @@
   "code": "f9cee3479e15a499",
   "core": "50383a6e9daecfc1",
   "date": "2026-10-03",
-  "note": "a door path is exempt from its own steading's gardens (owner != own also drops kind \"gardens\"). The page says a path that would cross \"its own garden beds or fixtures\" is routed around them; _homestead_polys' unowed claim \"a path leaves its own yard\" carries the same bed exemption. Also, 4 ft off another household's bed is under the page's \"A lane keeps 7 ft clear of a garden fence\"",
-  "research": "758d560b5828a167",
+  "note": "the code keeps _TOUCH_GAP 4 ft off another household's yard or garden; the page says \"A lane keeps 7 ft clear of a garden fence\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::free_end#plumbing and wrappers": {
@@ -11979,8 +11971,8 @@
   "code": "9d1bc4af0e5d5548",
   "core": "836e730e9d5275bf",
   "date": "2026-10-03",
-  "note": "12 ft and 90 degrees, as the page says",
-  "research": "758d560b5828a167",
+  "note": "12 ft and 90 degrees as the page gives them",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::hooked_ends#plumbing and wrappers": {
@@ -12011,16 +12003,16 @@
   "code": "fd8511b4fca8bef0",
   "core": "a8f5927b79579945",
   "date": "2026-10-03",
-  "note": "the hairpin and zigzag limits as the page gives them",
-  "research": "758d560b5828a167",
+  "note": "the hairpin and zigzag rules of the page",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::lane_networks#one network": {
   "code": "bcde5b970e54d49e",
   "core": "4a3ee3d36b2023b2",
   "date": "2026-10-03",
-  "note": "one network, joined where the treads meet",
-  "research": "758d560b5828a167",
+  "note": "\"one network, joined where their treads meet\"; a 4 ft ink tolerance is a calibration of that",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::lane_pts#plumbing and wrappers": {
@@ -12043,8 +12035,8 @@
   "code": "dc631752240a7b6d",
   "core": "f584d81f60766504",
   "date": "2026-10-03",
-  "note": "the connector is exempt (if not ln.get(\"connector\")). The page holds every lane to \"A lane does not zigzag\", and the 6 ft track out is one of its lanes; it records no exemption. Record the exemption as a deviation or check the connector too",
-  "research": "758d560b5828a167",
+  "note": "the code exempts the connector (`if not ln.get(\"connector\")`), but the page applies \"A lane does not zigzag\" to every lane, the 6 ft track out included, and records no exemption; record one as a DEVIATION or apply the rule to it",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::meets_clean#plumbing and wrappers": {
@@ -12059,17 +12051,25 @@
   "code": "8492c6e42b4b93ce",
   "core": "5dcb296015a02cd4",
   "date": "2026-10-03",
-  "note": "the page joins \"Ends within 25 ft of one another\" at a single point. The code joins an end to any way's side within 30 ft, aimed within 60 degrees, and the page records neither the figure nor that form: record them or use 25 ft",
-  "research": "758d560b5828a167",
+  "note": "JOIN_REACH_FT 30 ft against the page's \"Ends within 25 ft of one another are joined\"; the AIM_DEG 60 aim test is not on the page either",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::needle_ends#a lane meets another as a T": {
   "code": "274c977727bcc969",
   "core": "284115600ee63376",
   "date": "2026-10-03",
-  "note": "meets the other's side as a T",
-  "research": "758d560b5828a167",
+  "note": "a needle is the sharp turn the page forbids (\"none of them sharp\", \"meets the other's side as a T\")",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::needle_ends#needle thresholds: an end leg over 20 ft, under 20 degrees off the tread": {
+  "code": "284115600ee63376",
+  "core": "284115600ee63376",
+  "date": "2026-10-03",
+  "note": "needle thresholds: an end leg over 20 ft, under 20 degrees off the tread",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::needle_joins#plumbing and wrappers": {
   "code": "9553bdb1ddffdd41",
@@ -12139,8 +12139,8 @@
   "code": "dbff424bef950357",
   "core": "3f408ca3aff12409",
   "date": "2026-10-03",
-  "note": "no fixture on a tread",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane\"; the path is routed around its own fixtures",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::over_and_back#over and back": {
@@ -12195,9 +12195,9 @@
   "code": "9c8f19533b2b464b",
   "core": "ddaf9dacc0b883dd",
   "date": "2026-10-03",
-  "note": "off water, crop, marsh, houses and yards; a join may run along a fence",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the span keeps _TOUCH_GAP 4 ft off yards and gardens where the page says \"A lane keeps 7 ft clear of a garden fence\"",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::unbridged_crossings#every crossing decked": {
   "code": "e6e675c3308deccb",
@@ -12267,8 +12267,8 @@
   "code": "4c24db82d9521fc6",
   "core": "c15fb3959208a946",
   "date": "2026-10-03",
-  "note": "lanes met end to end are one path",
-  "research": "758d560b5828a167",
+  "note": "lanes met end to end \"are one path\", so one width",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::ROUTE_CELL#routing machinery": {
@@ -12307,17 +12307,9 @@
   "code": "d7877a66f8c5e4fa",
   "core": "91cfce02cc418445",
   "date": "2026-10-03",
-  "note": "no hairpin over 140",
-  "research": "758d560b5828a167",
+  "note": "candidates at 140 degrees or more refused, the apex's side tried first",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_ease_corner#eased corner legs at the touch gap, moved up to 24 ft off the chord": {
-  "code": "91cfce02cc418445",
-  "core": "91cfce02cc418445",
-  "date": "2026-10-03",
-  "note": "eased corner legs at the touch gap, moved up to 24 ft off the chord",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_new_crossing#routing machinery": {
   "code": "73b593eca36c94ec",
@@ -12327,29 +12319,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#a brook crossing charged in the search, and no string-pull adds one": {
-  "code": "b313812fbbe4dd30",
-  "core": "b313812fbbe4dd30",
-  "date": "2026-10-03",
-  "note": "a brook crossing charged in the search, and no string-pull adds one",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#a worn path takes the shortest way": {
   "code": "b42e2d4d3cd54bb6",
   "core": "b313812fbbe4dd30",
   "date": "2026-10-03",
-  "note": "shortest way, pulled taut",
-  "research": "758d560b5828a167",
+  "note": "Dijkstra then string-pulled; \"pulled taut like a string\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#clear of the fabric": {
   "code": "0e1a94e319216dd2",
   "core": "b313812fbbe4dd30",
   "date": "2026-10-03",
-  "note": "7 ft matches, but WEB_HARD_GAP's 8 ft off the crop is not on the page, which lets a lane \"touch a plot's boundary\"; record the 8 ft there as a convention or GUESS",
-  "research": "758d560b5828a167",
-  "verdict": "MISLABELED"
+  "note": "the 7 ft gap matches \"7 ft clear of a garden fence\", but WEB_HARD_GAP holds lanes 8 ft off the paddy/crop where the page says a lane \"may touch a plot's boundary\" (it runs on the bund). Make the 8 ft UNRESEARCHED or CONVENTION, or let the hard gap reach the boundary",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#lattice off the water": {
   "code": "2307c1c88c2189a1",
@@ -12359,28 +12343,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_unjog#a chord or knee taken at the 4 ft touch gap off fences and buildings, with no 6 ft bound on how far the line moves": {
-  "code": "e250110dc9bba98c",
-  "core": "e250110dc9bba98c",
-  "date": "2026-10-03",
-  "note": "a chord or knee taken at the 4 ft touch gap off fences and buildings, with no 6 ft bound on how far the line moves",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_unjog#no hairpin": {
   "code": "ad70a09ddc4ab834",
   "core": "e250110dc9bba98c",
   "date": "2026-10-03",
-  "note": "140 degrees",
-  "research": "758d560b5828a167",
+  "note": "turns of 140 degrees or more chorded or eased",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_unjog#no zigzag": {
   "code": "bafef1387ccfa8b5",
   "core": "e250110dc9bba98c",
   "date": "2026-10-03",
-  "note": "two 50 degree turns within 40 ft",
-  "research": "758d560b5828a167",
+  "note": "two turns of 50 degrees or more within 40 ft pulled straight",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::in_brook_band#routing machinery": {
@@ -12436,15 +12412,23 @@
   "core": "548dd72a6597f1e2",
   "date": "2026-10-03",
   "note": "a tail under 40 ft is cut, as the page says",
-  "research": "758d560b5828a167",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a web lane drawn with a 3 ft tread": {
+  "code": "548dd72a6597f1e2",
+  "core": "548dd72a6597f1e2",
+  "date": "2026-10-03",
+  "note": "a web lane drawn with a 3 ft tread",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a web lane joins the network": {
   "code": "08af09f25084e569",
   "core": "548dd72a6597f1e2",
   "date": "2026-10-03",
-  "note": "a run that cannot join the network is not drawn",
-  "research": "758d560b5828a167",
+  "note": "no link, no lane",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link reach": {
@@ -12475,16 +12459,16 @@
   "code": "38b2f70be586ec94",
   "core": "951ac254d5313fde",
   "date": "2026-10-03",
-  "note": "the door is stepped along the front to clear the fixtures",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page routes a path round its own beds and fixtures; it is silent on moving the door along the front (4 ft steps, up to 32 ft); it should say UNRESEARCHED or CONVENTION",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
   "code": "01d00fc00821d4b1",
   "core": "c6667d1950d6a0af",
   "date": "2026-10-03",
-  "note": "straight where clear, otherwise routed and pulled taut",
-  "research": "758d560b5828a167",
+  "note": "straight where clear, else routed and string-pulled",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::flank_doors#a flank door as fallback": {
@@ -12531,16 +12515,16 @@
   "code": "485bdfc644865fbc",
   "core": "6c7575c173f80952",
   "date": "2026-10-03",
-  "note": "\"shows no lane of its own\"",
-  "research": "758d560b5828a167",
+  "note": "reached_across households are skipped",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#off the fixtures and grove bands": {
   "code": "8daec09b989133a2",
   "core": "6c7575c173f80952",
   "date": "2026-10-03",
-  "note": "routed round fixtures; groves wall a lane",
-  "research": "6a34283be7858e6c",
+  "note": "fixtures and grown grove bands are walls to the path",
+  "research": "f0283206783df9cb",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#round the grove to the street": {
@@ -12603,16 +12587,16 @@
   "code": "eaf38adb6c0a568a",
   "core": "a140925df065537e",
   "date": "2026-10-03",
-  "note": "how close counts as serving is the page's GUESS",
-  "research": "758d560b5828a167",
+  "note": "the page records how close counts as serving a house as a GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::to_first_arrival#a door path meets its way as a T": {
   "code": "d0234087640b7a4c",
   "core": "21a6f6e87b40a3bb",
   "date": "2026-10-03",
-  "note": "the path ends square on its way at first arrival",
-  "research": "758d560b5828a167",
+  "note": "ended square at its first arrival",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::BACK_OFF_STEP_FT#settle plumbing": {
@@ -12651,16 +12635,16 @@
   "code": "635b0fa38e4d79df",
   "core": "ad9914b35183ad1e",
   "date": "2026-10-03",
-  "note": "refuses a run that would leave an end dangling or behind a house",
-  "research": "758d560b5828a167",
+  "note": "dangling and behind-house ends refused, per \"ends at the dooryard or runs on to something a reader can see\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#lanes meet as a T": {
   "code": "4fec2c1c1035439e",
   "core": "ad9914b35183ad1e",
   "date": "2026-10-03",
-  "note": "refuses a run with a needle, fold or hairpin end",
-  "research": "758d560b5828a167",
+  "note": "needle/fold/hairpin refused, per \"meets the other's side as a T\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#no doubled tail": {
@@ -12699,8 +12683,8 @@
   "code": "1ccb9a993b9ff4a7",
   "core": "c7bb50cbdb04162c",
   "date": "2026-10-03",
-  "note": "refuses kinks and hooks",
-  "research": "758d560b5828a167",
+  "note": "hooked/kink_spans refused",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#crossings": {
@@ -12715,16 +12699,16 @@
   "code": "ef749b9507771bfc",
   "core": "c7bb50cbdb04162c",
   "date": "2026-10-03",
-  "note": "nothing built stands on the tread (the yard gap is a finding at fouled_segment)",
-  "research": "758d560b5828a167",
+  "note": "delegates to fouled_segment; that unit carries the yard-gap finding",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#off crop and marsh": {
   "code": "7ccd17059ed455bc",
   "core": "c7bb50cbdb04162c",
   "date": "2026-10-03",
-  "note": "open_ground keeps the run off fields, dry plots and marsh",
-  "research": "758d560b5828a167",
+  "note": "open_ground refusal, per \"never crosses row crops\" and \"keeps off wet ground\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.squared#settle plumbing": {
@@ -12875,8 +12859,8 @@
   "code": "0b08fdc4894a37b1",
   "core": "e019e101dc8e8e31",
   "date": "2026-10-03",
-  "note": "for a kink the code returns p[:ka+1] and p[kb:], removing the stretch between the turns and leaving two pieces; the page says such turns \"are pulled straight\". Straighten across the turns, or record the cut on the drawing page",
-  "research": "758d560b5828a167",
+  "note": "for a zigzag the code returns two disconnected pieces `[p[:ka+1], p[kb:]]`, cutting out the stretch between the turns, but the page says such turns \"are pulled straight\" (join ka to kb). For a hairpin it keeps the longer arm at any length, but the page cuts only \"a returning leg under 40 ft\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::apply_pieces#settle plumbing": {
@@ -12915,32 +12899,32 @@
   "code": "908dcb9734465776",
   "core": "8b82f6e5a2247c36",
   "date": "2026-10-03",
-  "note": "breaks_through refuses the leg",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#no tread on a farmhouse": {
   "code": "9cb1389b275f7c04",
   "core": "8b82f6e5a2247c36",
   "date": "2026-10-03",
-  "note": "house_hit refuses it",
-  "research": "758d560b5828a167",
+  "note": "\"no corner of a house stands on its tread\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden": {
   "code": "754eb170ad7bc40e",
   "core": "8b82f6e5a2247c36",
   "date": "2026-10-03",
-  "note": "the code counts a foul only within _TOUCH_GAP (4 ft) of another household's yard or garden; the page says \"A lane keeps 7 ft clear of a garden fence\" and records no 4 ft floor. Record the floor on the drawing page or relabel the claim DEVIATION",
-  "research": "758d560b5828a167",
+  "note": "`_crosses_fabric(..., _TOUCH_GAP)` refuses only within 4 ft, but the page says \"A lane keeps 7 ft clear of a garden fence\". The gap should be 7 ft (WEB_FABRIC_GAP), or the page should record the 4 ft",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off the fixtures": {
   "code": "974cda4cb2e012ff",
   "core": "8b82f6e5a2247c36",
   "date": "2026-10-03",
-  "note": "over_a_fixture applies to the lane's own household too",
-  "research": "758d560b5828a167",
+  "note": "per \"would cross its own garden beds or fixtures, the path is routed around them\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#what the overlap matrix forbids": {
@@ -12963,23 +12947,23 @@
   "code": "41465935895e5a3a",
   "core": "a41fa8926d99615f",
   "date": "2026-10-03",
-  "note": "a repair may not add networks or unreached houses (a before-and-after comparison)",
-  "research": "758d560b5828a167",
+  "note": "no new networks, no newly unreached house",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::off_the_back#a lane ends at the dooryard": {
   "code": "9ed2ede2bd482985",
   "core": "1c6139b652cd6205",
   "date": "2026-10-03",
-  "note": "the page records how close counts as serving a house as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "pulled back off the back wall, per \"pulled back to the last house it serves\"; the page records the serving distance as a GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::open_ground_rings#a defense marsh left out of the ground a lane may not cross": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::open_ground_rings#marshes with role \"defense\" left out of the ground a lane may not cross": {
   "code": "0197e75c0e2845ec",
   "core": "0197e75c0e2845ec",
   "date": "2026-10-03",
-  "note": "a defense marsh left out of the ground a lane may not cross",
+  "note": "marshes with role \"defense\" left out of the ground a lane may not cross",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -12987,16 +12971,16 @@
   "code": "9c47192d5def5b15",
   "core": "0197e75c0e2845ec",
   "date": "2026-10-03",
-  "note": "collects the outlines of fields, dry plots and marshes",
-  "research": "758d560b5828a167",
+  "note": "field outlines, dry plots and marshes collected (the defense-marsh exemption is listed below as UNCLAIMED)",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::reaimed#a lane meets another as a T": {
   "code": "26de593e522b3e62",
   "core": "f97d19934f36daa7",
   "date": "2026-10-03",
-  "note": "re-laid as a T on the tread and never made longer",
-  "research": "758d560b5828a167",
+  "note": "end re-laid onto the tread as a T",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::rewidth#settle plumbing": {
@@ -13011,24 +12995,24 @@
   "code": "725ff8b0180f00ec",
   "core": "6ab6bb411ebd6a8e",
   "date": "2026-10-03",
-  "note": "trimmed to service, and dropped if the trim cannot mend it",
-  "research": "758d560b5828a167",
+  "note": "trimmed to service",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_ends#a lane ends at the dooryard": {
   "code": "86e96c5b35e68fd6",
   "core": "eeb9ac7de5a36520",
   "date": "2026-10-03",
-  "note": "carried round the gable to the dooryard, else backed off",
-  "research": "758d560b5828a167",
+  "note": "carried round the gable into the dooryard, else backed off; consistent with the amended page",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_ends#lanes met end to end read as one": {
   "code": "8636e1496e2a03ef",
   "core": "eeb9ac7de5a36520",
   "date": "2026-10-03",
-  "note": "needles, folds and hairpins are re-aimed as a T",
-  "research": "758d560b5828a167",
+  "note": "needle/fold/hairpin re-aimed as a T",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_ends#no doubled tail": {
@@ -13046,14 +13030,6 @@
   "note": "matches the claim",
   "research": "",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_ends#two bare legs folded on each other: the shorter lane dropped": {
-  "code": "eeb9ac7de5a36520",
-  "core": "eeb9ac7de5a36520",
-  "date": "2026-10-03",
-  "note": "two bare legs folded on each other: the shorter lane dropped",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_fragments#debris": {
   "code": "a4e968ff3af7d45f",
@@ -13075,8 +13051,8 @@
   "code": "5a8502b19b456dbd",
   "core": "58ff7bd823959dbf",
   "date": "2026-10-03",
-  "note": "near_misses joins within law.JOIN_REACH_FT (_LANE_JOIN_FT, 30 ft) and the back-off uses the same reach; the page says \"Ends within 25 ft of one another are joined at a single point\". Align the figure",
-  "research": "758d560b5828a167",
+  "note": "the join reach is `law.JOIN_REACH_FT` = `_LANE_JOIN_FT` = 30 ft, but the page says \"Ends within 25 ft of one another are joined\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_needles#a sliver welded shut": {
@@ -13099,8 +13075,8 @@
   "code": "53d82fe21fc360be",
   "core": "2708112982f2c609",
   "date": "2026-10-03",
-  "note": "drops each lane outside the connector's network at the ink tolerance",
-  "research": "758d560b5828a167",
+  "note": "lanes off the connector's network dropped",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_reach#a path runs to the graves": {
@@ -13115,8 +13091,8 @@
   "code": "e2a73bf1c2e21376",
   "core": "d0ce7d157c4f96da",
   "date": "2026-10-03",
-  "note": "draws the corridors the seating reserved",
-  "research": "758d560b5828a167",
+  "note": "per \"every other farmhouse is served by a lane of its own\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_reach#the field reached": {
@@ -13139,8 +13115,8 @@
   "code": "1692e41daa25d0a7",
   "core": "0e678b0de0a526cc",
   "date": "2026-10-03",
-  "note": "re-laid as a T where it joins a way, otherwise the hook leg is cut",
-  "research": "758d560b5828a167",
+  "note": "hook re-laid as a T or its leg cut",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_shapes#crossings and fouls": {
@@ -13155,16 +13131,16 @@
   "code": "0301163c5ca55ef7",
   "core": "0e678b0de0a526cc",
   "date": "2026-10-03",
-  "note": "it cuts through _unkinked, which leaves two pieces with the stretch between the turns gone; the page says such turns \"are pulled straight\"",
-  "research": "758d560b5828a167",
+  "note": "calls `_unkinked`, which cuts out a zigzag's middle stretch where the page says \"pulled straight\", and keeps the longer hairpin arm where the page cuts only \"a returning leg under 40 ft\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_street_ends#an end reaches something seen": {
   "code": "edc6753ec3974b10",
   "core": "36be91a215f6fd03",
   "date": "2026-10-03",
-  "note": "a dangling street end is cut back to its last joint with another way",
-  "research": "758d560b5828a167",
+  "note": "dangling street end cut to its last joint",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_targets#a path runs to the graves": {
@@ -13195,17 +13171,25 @@
   "code": "693913bba626dcc6",
   "core": "9b469931245f9f32",
   "date": "2026-10-03",
-  "note": "lanes that meet end to end read as one and share one conventional width",
-  "research": "758d560b5828a167",
+  "note": "per \"two lanes that meet end to end are read as one\", with widths a drawing convention",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::theirs#a house within DOORSTEP_FT (80 ft) of a lane end counts as the lane's own steading": {
+  "code": "4405a46a6aa4b956",
+  "core": "4405a46a6aa4b956",
+  "date": "2026-10-03",
+  "note": "a house within DOORSTEP_FT (80 ft) of a lane end counts as the lane's own steading",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::theirs#a lane arrives at its own dooryard": {
   "code": "611ba5f8fccf5ef1",
   "core": "4405a46a6aa4b956",
   "date": "2026-10-03",
-  "note": "\"own\" covers every house within DOORSTEP_FT (80 ft) of either end, so a neighbor's yard and garden lose the clearance too, which matters now that a household reached across a neighbor stands against it; the claim says \"that steading alone\" and the page allows no exemption from the 7 ft fence gap. Exempt only the house the end arrives at, or record the rule",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "only the steading at the lane's own end is exempt",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::with_edits#settle plumbing": {
   "code": "f5b886a25aded7eb",
@@ -13235,25 +13219,25 @@
   "code": "ef43386bf7c2b586",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-03",
-  "note": "within 6 ft of the old line, as the page says",
-  "research": "758d560b5828a167",
+  "note": "\"within 6 ft of the old one\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_KNOT_FT#lane ends gathered": {
   "code": "0f8de3bcd21ca392",
   "core": "1956a2a68f21c5fe",
   "date": "2026-10-03",
-  "note": "ends within 25 ft join at one point",
-  "research": "758d560b5828a167",
+  "note": "\"Ends within 25 ft of one another are joined at a single point\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_LONG_ARM_FT#hairpin arm cut length": {
   "code": "f429fe28dcaa481b",
   "core": "33ed5702fb519815",
   "date": "2026-10-03",
-  "note": "the page says only \"a returning leg under 40 ft is cut\"; the measured 40-90 ft cut is not on the drawing page, so record it there or relabel",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "the page only says \"a returning leg under 40 ft is cut\" and says nothing of cutting arms of 40 to 90 ft. The claim should be UNRESEARCHED, as _smooth_web's own \"a longer hairpin arm\" claim already says.",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_STUB_REACH_FT#stub link reach": {
   "code": "1e931490d176d5a3",
@@ -13275,32 +13259,32 @@
   "code": "27947bda25a253ea",
   "core": "fc86b5e746f20f77",
   "date": "2026-10-03",
-  "note": "a tail under 40 ft past a crossing is cut",
-  "research": "758d560b5828a167",
+  "note": "\"A tail of under 40 ft beyond a crossing is cut\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#hairpin cut": {
   "code": "10093e1247588d03",
   "core": "fc86b5e746f20f77",
   "date": "2026-10-03",
-  "note": "a turn of 140 degrees or more, and an arm under 40 ft cut",
-  "research": "758d560b5828a167",
+  "note": "140 degrees, returning leg under 40 ft cut.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#knots gathered": {
   "code": "d5219d4c7180f667",
   "core": "fc86b5e746f20f77",
   "date": "2026-10-03",
-  "note": "ends within 25 ft meet at one point",
-  "research": "758d560b5828a167",
+  "note": "ends within 25 ft meet at one point.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#lane pulled taut": {
   "code": "da22322c1cab2068",
   "core": "fc86b5e746f20f77",
   "date": "2026-10-03",
-  "note": "pulled taut like a string",
-  "research": "758d560b5828a167",
+  "note": "\"pulled taut like a string\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#shadow lane dropped": {
@@ -13315,8 +13299,8 @@
   "code": "ee55cc1f1a39a55d",
   "core": "fc86b5e746f20f77",
   "date": "2026-10-03",
-  "note": "one network",
-  "research": "758d560b5828a167",
+  "note": "\"the lanes form one network\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::admits_lane#lane web plumbing": {
@@ -13331,16 +13315,16 @@
   "code": "180e32731c5f4465",
   "core": "1889b40c07f1b7ee",
   "date": "2026-10-03",
-  "note": "a rewrite that splits the web and cannot be rejoined is reverted",
-  "research": "758d560b5828a167",
+  "note": "the rewrite is undone if it splits the one network.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::string_pull_chord_ok#lane pulled taut": {
   "code": "8e3fdb9141951a2a",
   "core": "63c389943d96a757",
   "date": "2026-10-03",
-  "note": "chord taken at the web's margins, or within 6 ft of the old line",
-  "research": "758d560b5828a167",
+  "note": "usual clearance, or right up to buildings within 6 ft of the old line.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::web_pieces#lane web plumbing": {
@@ -13515,8 +13499,8 @@
   "code": "1c297c2885006d6f",
   "core": "3afff23a80093297",
   "date": "2026-10-03",
-  "note": "an end reaching nothing is pulled back",
-  "research": "758d560b5828a167",
+  "note": "an end that reaches nothing is pulled back",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::join_leg#street plumbing": {
@@ -13527,12 +13511,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::join_to#join leg routed at FOOTPATH_FABRIC_GAP 4 ft off the steadings (page: 7 ft off a garden fence)": {
+  "code": "9a4b80819091aad4",
+  "core": "9a4b80819091aad4",
+  "date": "2026-10-03",
+  "note": "join leg routed at FOOTPATH_FABRIC_GAP 4 ft off the steadings (page: 7 ft off a garden fence)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::join_to#street joined to the network": {
   "code": "4c511dfe2c961c1d",
   "core": "9a4b80819091aad4",
   "date": "2026-10-03",
-  "note": "one network",
-  "research": "758d560b5828a167",
+  "note": "the lanes form one network",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::joints_along#street plumbing": {
@@ -13563,8 +13555,8 @@
   "code": "89b60edf11186e65",
   "core": "c7c617e496273a3e",
   "date": "2026-10-03",
-  "note": "a lane's end loses its hook",
-  "research": "758d560b5828a167",
+  "note": "\"A lane's end loses its hook\", asked of both ends of the join",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width": {
@@ -13611,8 +13603,8 @@
   "code": "c472bc59a9bdf60e",
   "core": "a342c02974dc7170",
   "date": "2026-10-03",
-  "note": "runs on off the map edge",
-  "research": "d31e983f2d9c9792",
+  "note": "0033 \"The street runs on off the map as the road into it\" (a convention); 0081 the track out runs off the map",
+  "research": "a73adc81c59005a4",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::street_span#street spans its farms": {
@@ -13628,15 +13620,15 @@
   "core": "8fa039420edf63ea",
   "date": "2026-10-03",
   "note": "nothing is built on a lane",
-  "research": "758d560b5828a167",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::to_its_joints#street cut to its outermost joints": {
   "code": "c7e04bd7861b124d",
   "core": "bd486323775ab0d8",
   "date": "2026-10-03",
-  "note": "an end reaching nothing is pulled back",
-  "research": "758d560b5828a167",
+  "note": "an end that reaches nothing is pulled back",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::trim_streets#street cut to its joints": {
@@ -13644,15 +13636,15 @@
   "core": "2e25d7ac8bde745b",
   "date": "2026-10-03",
   "note": "pulled back to the last way or door it serves",
-  "research": "758d560b5828a167",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::unhooked_both#lane end loses its hook": {
   "code": "b5f7008393bf3bc4",
   "core": "595650c232b1836c",
   "date": "2026-10-03",
-  "note": "hook taken off both ends",
-  "research": "758d560b5828a167",
+  "note": "unhooks both ends; the 12 ft / 90 degree thresholds sit in geom.door_unhooked, outside this unit",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_BREAK_BEARING_DEG#break collinearity": {
@@ -13715,16 +13707,16 @@
   "code": "f74a1c97f1b1666c",
   "core": "b55406ac40336020",
   "date": "2026-10-03",
-  "note": "50 degrees, as on the page",
-  "research": "758d560b5828a167",
+  "note": "\"Two turns of more than 50 degrees\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_KINK_RUN_FT#kink run": {
   "code": "2fb6687939e46b3c",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "40 ft, as on the page",
-  "research": "758d560b5828a167",
+  "note": "\"within 40 ft of path\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_LINK_DIRECTNESS#network link directness": {
@@ -13739,8 +13731,8 @@
   "code": "275f927e71b408e1",
   "core": "3c46ea823e395ddc",
   "date": "2026-10-03",
-  "note": "the code uses 80 ft; the page says \"A tail of under 40 ft beyond a crossing is cut\". Align, or record the connector's 80 ft on the drawing page",
-  "research": "758d560b5828a167",
+  "note": "80.0 ft, but the page says \"A tail of under 40 ft beyond a crossing is cut\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_PATH_DIRECTNESS#path directness": {
@@ -13763,16 +13755,16 @@
   "code": "d85e82ad45a36805",
   "core": "f9869fee1052b437",
   "date": "2026-10-03",
-  "note": "the code uses 30 ft; the page says \"Ends within 25 ft of one another are joined\". Align the figure",
-  "research": "758d560b5828a167",
+  "note": "30.0 ft, but the page says \"Ends within 25 ft of one another are joined\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_ROUTE_MIN_W#cart-width way": {
   "code": "7e678b0d4803fce7",
   "core": "f7b8474fd73a4ae7",
   "date": "2026-10-03",
-  "note": "5 ft is the spine and spur rank, above the 3 ft footpath",
-  "research": "758d560b5828a167",
+  "note": "5 ft separates the 3 ft footpath from the 5-6 ft main lanes and track",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_SERVE_FT#a way serves a house": {
@@ -13803,16 +13795,16 @@
   "code": "60706f55357d4e4b",
   "core": "9c942275ab414a4d",
   "date": "2026-10-03",
-  "note": "the code skips the bearing test up to `_LANE_JOIN_FT` (30 ft), but the drawing page says \"Ends within 25 ft of one another are joined at a single point\", so 30 against 25 ft; it also lays a routed bridge where the page joins the ends at one point. Either the figure moves to 25 ft, or the claim should say UNRESEARCHED/GUESS for a bridge rule the page does not record",
-  "research": "758d560b5828a167",
+  "note": "closes gaps up to `_LANE_JOIN_FT` (30 ft) at any bearing, but the page joins \"Ends within 25 ft\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback": {
   "code": "d2db5089cecf1a46",
   "core": "9c942275ab414a4d",
   "date": "2026-10-03",
-  "note": "the DEVIATION is not recorded: the drawing page has no 4 ft fallback and says \"A lane keeps 7 ft clear of a garden fence\". Record the deviation on the drawing page",
-  "research": "758d560b5828a167",
+  "note": "DEVIATION not recorded: the page says only \"A lane keeps 7 ft clear of a garden fence\" and records no 4 ft (`_TOUCH_GAP`) fallback as a deliberate choice",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge width": {
@@ -13843,9 +13835,9 @@
   "code": "bf7d52bdb5f03bdc",
   "core": "bca58142c0ff6bf3",
   "date": "2026-10-03",
-  "note": "need drop_end_nubs itself: its thresholds against the page's hook (a last leg of 12 ft or less turning 90 degrees or more), and whether it cuts the last leg or drops the vertex after the end, as the comment says",
-  "research": "758d560b5828a167",
-  "verdict": "CANNOT-TELL"
+  "note": "end nub dropped only where the rewrite stays clear",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link crosses the brook at a crossing place": {
   "code": "786b48db429f8556",
@@ -13855,13 +13847,21 @@
   "research": "d47738a05844fe19",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link refused over `_LINK_DIRECTNESS` (4) times the straight distance": {
+  "code": "8a9e940e4d5fd4fb",
+  "core": "8a9e940e4d5fd4fb",
+  "date": "2026-10-03",
+  "note": "link refused over `_LINK_DIRECTNESS` (4) times the straight distance",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width": {
   "code": "1ddc5f0c49b029b2",
   "core": "8a9e940e4d5fd4fb",
   "date": "2026-10-03",
-  "note": "the link takes the network's rank, and the widths are a convention",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives widths by rank (3/5/6 ft) but says nothing of the width a joining link takes; the code uses the widest lane within 30 ft. Should be UNRESEARCHED (or CONVENTION)",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
   "code": "d9dcf54efe262ce6",
@@ -13875,17 +13875,25 @@
   "code": "bac211d46634d43a",
   "core": "8a9e940e4d5fd4fb",
   "date": "2026-10-03",
-  "note": "routed at the 7 ft fabric gap to join the one network",
-  "research": "758d560b5828a167",
+  "note": "\"lanes form one network\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width": {
   "code": "e3e7087f297ce77b",
   "core": "639677d107573c1b",
   "date": "2026-10-03",
-  "note": "the two wide ends are joined at one point (the 30 ft reach is a finding on _ROUTE_JOIN_FT)",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "joins wide ends up to `_ROUTE_JOIN_FT` 30 ft apart, but the page joins \"Ends within 25 ft\"",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house counts as served by a lane within `_SERVE_FT` (100 ft)": {
+  "code": "df8f004272294cf1",
+  "core": "df8f004272294cf1",
+  "date": "2026-10-03",
+  "note": "a house counts as served by a lane within `_SERVE_FT` (100 ft)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a whittled lane emptied": {
   "code": "ce5745642cf6b209",
@@ -13907,32 +13915,40 @@
   "code": "7cfc3cd719b31079",
   "core": "df8f004272294cf1",
   "date": "2026-10-03",
-  "note": "carried to the dooryard of a house owed a lane (lane_houses), as the page has it",
-  "research": "758d560b5828a167",
+  "note": "owed houses via lane_houses, matching the amended page",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#lane end reaches something": {
   "code": "46fccbaf9e57d097",
   "core": "df8f004272294cf1",
   "date": "2026-10-03",
-  "note": "end_serves now asks lane_houses, so a passage household does not hold an end",
-  "research": "758d560b5828a167",
+  "note": "per \"pulled back to the last house it serves\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#an isolated fragment under `_WEB_MIN_FT` (30 ft) is dropped": {
+  "code": "b2888d1c0eb05b8f",
+  "core": "b2888d1c0eb05b8f",
+  "date": "2026-10-03",
+  "note": "an isolated fragment under `_WEB_MIN_FT` (30 ft) is dropped",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#isolated fragment dropped": {
   "code": "7f69217b7ac611f6",
   "core": "b2888d1c0eb05b8f",
   "date": "2026-10-03",
   "note": "one network",
-  "research": "758d560b5828a167",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#no house stranded": {
   "code": "f6e3716eb9065a7c",
   "core": "b2888d1c0eb05b8f",
   "date": "2026-10-03",
-  "note": "asks `lane_houses",
-  "research": "758d560b5828a167",
+  "note": "lane_houses exempts households reached across a neighbor, per the page",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#doubled lane dropped": {
@@ -13947,32 +13963,24 @@
   "code": "1e0032d2cb7df95e",
   "core": "7fa8010ec15c53d0",
   "date": "2026-10-03",
-  "note": "a guard at WEB_REACH_FT",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the stranding test reads every house in `M[\"houses\"]`, not `lane_houses`, so a remnant is kept for a household the page says is \"reached across a neighbor's land\" and owed no lane",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#web kept one network": {
   "code": "edddeeffee9a8395",
   "core": "7fa8010ec15c53d0",
   "date": "2026-10-03",
-  "note": "a drop that would split the web is refused",
-  "research": "758d560b5828a167",
+  "note": "a drop that would split the network is refused",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_steading_fouls#a lane fouling a steading mid-run dropped whole": {
-  "code": "a3527972e4ce9980",
-  "core": "a3527972e4ce9980",
-  "date": "2026-10-03",
-  "note": "a lane fouling a steading mid-run dropped whole",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_steading_fouls#nothing built on a lane": {
   "code": "5446904d5efa3253",
   "core": "a3527972e4ce9980",
   "date": "2026-10-03",
-  "note": "an end that lands on a steading is pulled back",
-  "research": "758d560b5828a167",
+  "note": "end on a farmhouse pulled back",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::brook_crossings#lane sweep plumbing": {
@@ -13987,8 +13995,8 @@
   "code": "cda58c5d1ff783d9",
   "core": "6545b6d0c93b3158",
   "date": "2026-10-03",
-  "note": "the carry stops at the dooryard, short of the wall",
-  "research": "758d560b5828a167",
+  "note": "stops short of the wall, per \"ends at the dooryard\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::carry_to_dooryard#grove band not crossed": {
@@ -14003,8 +14011,8 @@
   "code": "ab9c8124c240ab28",
   "core": "a787cbfced81bd7f",
   "date": "2026-10-03",
-  "note": "the code cuts a loose tail up to _PAST_CONNECTOR_FT (80 ft) past the crossing; the page says \"A tail of under 40 ft beyond a crossing is cut\". Align, or record the 80 ft",
-  "research": "758d560b5828a167",
+  "note": "cuts a tail up to `_PAST_CONNECTOR_FT` 80 ft, but the page says \"A tail of under 40 ft beyond a crossing is cut\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::held_at#lane sweep plumbing": {
@@ -14031,13 +14039,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#a free-end stub of `_FREE_STUB_FT` (20 ft) or less is cut": {
+  "code": "b1e80c6c07dc17b1",
+  "core": "b1e80c6c07dc17b1",
+  "date": "2026-10-03",
+  "note": "a free-end stub of `_FREE_STUB_FT` (20 ft) or less is cut",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#zigzag at a free end": {
   "code": "20b6978d3d691d56",
   "core": "b1e80c6c07dc17b1",
   "date": "2026-10-03",
-  "note": "the code cuts the free end's last leg up to _FREE_STUB_FT (20 ft), a figure not on the page; the page says zigzag turns \"are pulled straight\" and cuts an end leg only as a hook (12 ft or less, turning 90 degrees or more). Record the cut and its 20 ft, or align",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "two turns over 50 degrees within 40 ft straightened at a free end",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::_ALONG_DEG#running with the way": {
   "code": "87ca0f709f080c6d",
@@ -14067,8 +14083,8 @@
   "code": "fbf15c387c8b39b6",
   "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-03",
-  "note": "tail under 40 ft past a crossing",
-  "research": "758d560b5828a167",
+  "note": "\"A tail of under 40 ft beyond a crossing is cut\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::_DOUBLED_DEG#doubled tail angle": {
@@ -14107,8 +14123,8 @@
   "code": "2104bc08bdc572e6",
   "core": "d968038d6455765f",
   "date": "2026-10-03",
-  "note": "the through-route keeps its widths",
-  "research": "758d560b5828a167",
+  "note": "connector, spur and streets never cut; the through-route keeps its width",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::along_tail#doubled tail plumbing": {
@@ -14123,16 +14139,16 @@
   "code": "6535e67257f97ff5",
   "core": "4f4340c6e3606c9c",
   "date": "2026-10-03",
-  "note": "within 40 ft",
-  "research": "758d560b5828a167",
+  "note": "ends at a crossing within 40 ft",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::cut_keeps_network#web kept one network": {
   "code": "06a3e9c9529a43fd",
   "core": "4c35a8d47ec8789d",
   "date": "2026-10-03",
-  "note": "one network",
-  "research": "758d560b5828a167",
+  "note": "\"lanes are one network\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::reseat_on_way#doubled tail plumbing": {
@@ -14251,48 +14267,48 @@
   "code": "4f0e1c81d5e31d86",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-03",
-  "note": "the track out runs off the map",
-  "research": "758d560b5828a167",
+  "note": "the track out is never deleted",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
   "code": "72a9abd263752b23",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-03",
-  "note": "two lanes meeting end to end are one",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "end-to-end joins fire within reach=_LANE_JOIN_FT (30 ft), but the page says \"Ends within 25 ft of one another are joined at a single point\". Use 25 ft, or record 30 on the page",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#ends touch the way they near": {
   "code": "370a829e2d2aeb5b",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-03",
-  "note": "joined where treads meet",
-  "research": "758d560b5828a167",
+  "note": "\"joined where their treads meet\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": {
   "code": "8dbe2e0fa0586e4e",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-03",
-  "note": "a tail under 40 ft is cut",
-  "research": "758d560b5828a167",
+  "note": "short overrun past the joined way cut",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan piece dropped": {
   "code": "0bbf827a906706fe",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-03",
-  "note": "asks `lane_houses",
-  "research": "758d560b5828a167",
+  "note": "dropped only where no farmhouse is stranded; lane_houses leaves out households reached across a neighbor's land",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::CONNECTOR_WIDTH#connector width": {
   "code": "11520353a0c32704",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-03",
-  "note": "6 ft, the page's track out",
-  "research": "758d560b5828a167",
+  "note": "\"the track out to the wider world 6 ft\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::NoDryExit#track plumbing": {
@@ -14315,8 +14331,8 @@
   "code": "94bf773c1ce296a8",
   "core": "c9a4cab67e287326",
   "date": "2026-10-03",
-  "note": "5 ft, the page's spur",
-  "research": "758d560b5828a167",
+  "note": "\"the cluster's spine and its spur to the fields 5 ft\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::STRIP_SNAP_PX#track plumbing": {
@@ -14327,12 +14343,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_connector_through#connector bent round the field at a 17 ft setback (SPUR_SETBACK)": {
+  "code": "95d50f0700108fd1",
+  "core": "95d50f0700108fd1",
+  "date": "2026-10-03",
+  "note": "connector bent round the field at a 17 ft setback (SPUR_SETBACK)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_connector_through#connector round the field and the steadings": {
   "code": "dc622113ff036202",
   "core": "95d50f0700108fd1",
   "date": "2026-10-03",
-  "note": "off the crop, the steadings and the wet",
-  "research": "758d560b5828a167",
+  "note": "keeps off the crop, the houses and the wet, and still runs off the map",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_connector_through#gives up a wood seat as last resort": {
@@ -14379,8 +14403,8 @@
   "code": "2c418cbbfca4e6b2",
   "core": "9875b889226888b8",
   "date": "2026-10-03",
-  "note": "a DEVIATION the drawing page does not record. The page gives only \"A lane keeps 7 ft clear of a garden fence\". It has no 16 ft track gap (TRACK_FABRIC_GAP) and no 4 ft footpath gap off a grove band. Record the departure on the page or relabel it GUESS/CONVENTION",
-  "research": "758d560b5828a167",
+  "note": "DEVIATION not recorded: the page states only the 7 ft garden-fence convention and says nothing of a 16 ft TRACK_FABRIC_GAP or a footpath gap off grove bands; record the departure on the drawing page or relabel CONVENTION",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
@@ -14395,8 +14419,8 @@
   "code": "7dad8b1013c25ddb",
   "core": "9875b889226888b8",
   "date": "2026-10-03",
-  "note": "nothing built on a lane, routed round",
-  "research": "758d560b5828a167",
+  "note": "nothing built on a lane, routed round (convention), never the offending run",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_water_crossings#track plumbing": {
@@ -14419,8 +14443,8 @@
   "code": "05014aa02332b5c8",
   "core": "09b986b965591009",
   "date": "2026-10-03",
-  "note": "walled by the wet ground, the steadings and the field",
-  "research": "758d560b5828a167",
+  "note": "walled by wet ground, steadings and crop, as \"A track keeps off wet ground\" and \"never crosses row crops\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#grove band gap": {
@@ -14451,16 +14475,16 @@
   "code": "38ba294658e336f2",
   "core": "9fb97f9264e626fb",
   "date": "2026-10-03",
-  "note": "nothing built on a lane",
-  "research": "758d560b5828a167",
+  "note": "\"no corner of a house stands on its tread\" (the 60 ft cutoff is judged on BREAK_SPAN_FT)",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#nothing the matrix forbids": {
   "code": "5fdab4bacbb812e0",
   "core": "9fb97f9264e626fb",
   "date": "2026-10-03",
-  "note": "no crop, no built footprint",
-  "research": "758d560b5828a167",
+  "note": "no row crop (dry plot) and nothing built on the tread",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_through#track plumbing": {
@@ -14470,14 +14494,6 @@
   "note": "plumbing",
   "research": "",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#gateway stepped 12 ft clear of the crop (pull_clear(..., 12.0))": {
-  "code": "caa4a69f1a4915b3",
-  "core": "caa4a69f1a4915b3",
-  "date": "2026-10-03",
-  "note": "gateway stepped 12 ft clear of the crop (pull_clear(..., 12.0))",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#leaning downslope": {
   "code": "9548a1b4aa3bd44d",
@@ -14491,32 +14507,32 @@
   "code": "1cc8266083e69989",
   "core": "caa4a69f1a4915b3",
   "date": "2026-10-03",
-  "note": "wet refused first, leaves downslope, runs past the frame",
-  "research": "758d560b5828a167",
+  "note": "leaves downslope, wet refused first, runs past the frame",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#track's wander": {
   "code": "78d2ed0fbe8ac900",
   "core": "caa4a69f1a4915b3",
   "date": "2026-10-03",
-  "note": "the track is drawn bowed +34/-46 px off its bearing (the px * 34 and px * 46 vertices), and no settle pass straightens the connector. The page records no wander and says \"Every lane is pulled taut like a string. It runs straight from point to point\". Record the bow as a deviation or draw the track taut",
-  "research": "758d560b5828a167",
+  "note": "the code bows the track `px * 34` / `- px * 46` off its bearing; the page says \"Every lane is pulled taut like a string. It runs straight from point to point\" and has no wander; record it or drop the bow",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#wet, then steadings, then crop": {
   "code": "b860b6da3da702f3",
   "core": "caa4a69f1a4915b3",
   "date": "2026-10-03",
-  "note": "a search order that keeps all three of the page's rules",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page ranks nothing (all three are absolute there); wet-first is the GM's ruling of 2026-08-12 (CANON), and steadings over crop should be UNRESEARCHED",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::folds_on_the_strip#no hairpin at the strip": {
   "code": "e5c57163110dfeb1",
   "core": "24aa249832349c08",
   "date": "2026-10-03",
-  "note": "the hairpin limit at the strip joint",
-  "research": "758d560b5828a167",
+  "note": "140 degrees, the page's hairpin",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::on_the_strip#track plumbing": {
@@ -14527,12 +14543,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur's arm counts as reaching the field within 60 ft (SPUR_REACH_FT)": {
+  "code": "bd05d9259d32773f",
+  "core": "bd05d9259d32773f",
+  "date": "2026-10-03",
+  "note": "a folded spur's arm counts as reaching the field within 60 ft (SPUR_REACH_FT)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#spur fold cut": {
   "code": "9d09f3ec8b3a6c09",
   "core": "bd05d9259d32773f",
   "date": "2026-10-03",
-  "note": "never doubles back; an arm that falls short is not drawn",
-  "research": "758d560b5828a167",
+  "note": "the hairpin is cut, and the spur stops at the field or is not drawn",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
@@ -14579,9 +14603,17 @@
   "code": "dc5f8528e21d9f2b",
   "core": "531cd9040eef4dcc",
   "date": "2026-10-03",
-  "note": "farmhouses first, lanes after",
-  "research": "758d560b5828a167",
+  "note": "\"The farmhouses are placed first, and the lanes are drawn among them after\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#no-build corridor of 40 ft (LANE_CLEARANCE) about the connector and the spur": {
+  "code": "531cd9040eef4dcc",
+  "core": "531cd9040eef4dcc",
+  "date": "2026-10-03",
+  "note": "no-build corridor of 40 ft (LANE_CLEARANCE) about the connector and the spur",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur": {
   "code": "c838cce5a08b598b",
@@ -14611,8 +14643,8 @@
   "code": "2ce543177b1604e9",
   "core": "531cd9040eef4dcc",
   "date": "2026-10-03",
-  "note": "spur_path bows the spur 14 px sideways at its midpoint (\"reads as walked rather than ruled\"), and the threading keeps the bow vertex. The page records no bow and says \"Every lane is pulled taut like a string\". Record it as a deviation or drop it",
-  "research": "758d560b5828a167",
+  "note": "`(_mx + ax * 14, _my + ay * 14)` swings the spur sideways at its midpoint; the page's lanes are \"pulled taut like a string\" and it attests no bow",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
@@ -14639,29 +14671,37 @@
   "research": "d47738a05844fe19",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set 17 ft (SPUR_SETBACK) off the field outline's vertex": {
+  "code": "531cd9040eef4dcc",
+  "core": "531cd9040eef4dcc",
+  "date": "2026-10-03",
+  "note": "spur tip set 17 ft (SPUR_SETBACK) off the field outline's vertex",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
   "code": "63e510ebdd512529",
   "core": "531cd9040eef4dcc",
   "date": "2026-10-03",
-  "note": "clear of the crop, stops at the hem",
-  "research": "758d560b5828a167",
+  "note": "shortest clean way, off row crops and wet ground, stopping at the hem or paddy edge",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
   "code": "4ed0cd482b2c0f01",
   "core": "531cd9040eef4dcc",
   "date": "2026-10-03",
-  "note": "out of the cluster and off the map",
-  "research": "758d560b5828a167",
+  "note": "\"The track out runs off the edge of the map\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
   "code": "f32f1e312030eb06",
   "core": "531cd9040eef4dcc",
   "date": "2026-10-03",
-  "note": "every marsh is wet ground",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "`marsh_ground(s.M, but=(\"defense\",))` leaves defensive marsh out of the wet ground; the page says \"A track keeps off wet ground ... None of these maps draws a causeway\" with no exception",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane#track plumbing": {
   "code": "32047c17c5777421",
@@ -14675,8 +14715,8 @@
   "code": "71de6e27e235b487",
   "core": "212f34fd481113bf",
   "date": "2026-10-03",
-  "note": "past the 12 ft hook leg, within the 25 ft join",
-  "research": "758d560b5828a167",
+  "note": "20 ft is past the page's 12 ft hook leg, so no hook is added.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::DEFER_GAP_FT#defer cut extent": {
@@ -14827,8 +14867,8 @@
   "code": "bb65960eda182b8d",
   "core": "a9932e46a44ac522",
   "date": "2026-10-03",
-  "note": "the page's hook, hairpin and end rules asked of every new lane",
-  "research": "758d560b5828a167",
+  "note": "hook, hairpin, doubling back and dangling-end rules as the page gives them.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
@@ -14907,8 +14947,8 @@
   "code": "0a18e3507005e3d7",
   "core": "06bf2339c501a676",
   "date": "2026-10-03",
-  "note": "the exit strip, the trunk every corridor hangs from out to the track, is drawn at ACCESS_WIDTH 3 ft, but the page draws \"the cluster's spine and its spur to the fields 5 ft\" and has no 3 ft trunk; widen the strip or record it on the page",
-  "research": "758d560b5828a167",
+  "note": "the page draws \"a footpath ... 3 ft wide, the cluster's spine and its spur to the fields 5 ft\". The code draws the exit strip, the trunk every corridor reaches the track by, at ACCESS_WIDTH (3 ft), and gives BRANCH_WIDTH (5 ft) to every role other than access, including the spur to a way target, not just the field way. The page never says \"exit strip 3 ft\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
@@ -14923,16 +14963,16 @@
   "code": "c0f5c41ac56aa9e3",
   "core": "f98f1f2f8898eaba",
   "date": "2026-10-03",
-  "note": "every farmhouse still served",
-  "research": "758d560b5828a167",
+  "note": "\"Every other farmhouse is served by a lane of its own\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::owed#every farmhouse served": {
   "code": "b6417360f18629d7",
   "core": "bf1eeb0283bf1eae",
   "date": "2026-10-03",
-  "note": "every farmhouse but the passage few, as the page says",
-  "research": "758d560b5828a167",
+  "note": "the few reached across a neighbor's land are counted reached; every other house gets its own lane.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::owed#field reached": {
@@ -14947,17 +14987,17 @@
   "code": "214917438fe1fff2",
   "core": "bf1eeb0283bf1eae",
   "date": "2026-10-03",
-  "note": "the anchor's way is always owed, as in \"whose own way is always drawn\"",
-  "research": "758d560b5828a167",
+  "note": "\"its neighbor, whose own way is always drawn\".",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::own_clear#a lane clear of its own household": {
   "code": "8344dcb3a769aefe",
   "core": "b9d0f326efe6d3c9",
   "date": "2026-10-03",
-  "note": "the household's own beds, shed, byre and well are held only at parts_clear's gap (TREAD_HALF_FT + PART_MARGIN_FT, 2 ft from the path's line, per own_parts), but the page says \"A lane keeps 7 ft clear of a garden fence\"; the page should give a household's own lane that gap past its own beds, or the leg test should keep 7 ft",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "\"the path is routed around them\".",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::passage_anchors#access tree plumbing": {
   "code": "012c53f39fd0b11f",
@@ -14987,8 +15027,8 @@
   "code": "97c557b2373912fb",
   "core": "ebb4d8912d1eb54d",
   "date": "2026-10-03",
-  "note": "the anchor's corridor is never pruned",
-  "research": "758d560b5828a167",
+  "note": "the neighbor's own way is always drawn.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::records_of#access tree plumbing": {
@@ -15011,8 +15051,8 @@
   "code": "512cacd5fac25b68",
   "core": "4e4e0e3e74f29c07",
   "date": "2026-10-03",
-  "note": "the run as laid is refused over its own parts (nothing built on a lane)",
-  "research": "758d560b5828a167",
+  "note": "nothing built on a lane; routed round its own beds and fixtures.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_law#access tree plumbing": {
@@ -15031,12 +15071,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::settle_tree#a drawn tree lane's no-build clearance (WEB_CLEARANCE, 28 ft)": {
+  "code": "6296056fd4382cb4",
+  "core": "6296056fd4382cb4",
+  "date": "2026-10-03",
+  "note": "a drawn tree lane's no-build clearance (WEB_CLEARANCE, 28 ft)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::settle_tree#every farmhouse served": {
   "code": "4891f5a3e3351d11",
   "core": "6296056fd4382cb4",
   "date": "2026-10-03",
-  "note": "reserved corridors drawn",
-  "research": "758d560b5828a167",
+  "note": "each unreached house is drawn its own lane.",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::square_run_of#access tree plumbing": {
@@ -15115,8 +15163,8 @@
   "code": "0028bf815227c0af",
   "core": "c26981eddbe1cc55",
   "date": "2026-10-03",
-  "note": "\"Nothing is built on a lane\"; clipped at 7 ft, as the page gives",
-  "research": "758d560b5828a167",
+  "note": "page: \"Nothing is built on a lane\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
@@ -15127,44 +15175,52 @@
   "research": "e67278be3121f7df",
   "verdict": "DRIFTED"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton half-extent never under half a bundle pitch (50 ft)": {
+  "code": "c26981eddbe1cc55",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-03",
+  "note": "skeleton half-extent never under half a bundle pitch (50 ft)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton laid after the houses": {
   "code": "9ad7f9a301e3d389",
   "core": "c26981eddbe1cc55",
   "date": "2026-10-03",
-  "note": "\"The farmhouses are placed first\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"The farmhouses are placed first\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton spans at least one bundle pitch (half-extent floored at 50 ft) however tight the cluster": {
-  "code": "c26981eddbe1cc55",
-  "core": "c26981eddbe1cc55",
-  "date": "2026-10-03",
-  "note": "skeleton spans at least one bundle pitch (half-extent floored at 50 ft) however tight the cluster",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton width": {
   "code": "68fc8b2486271f79",
   "core": "c26981eddbe1cc55",
   "date": "2026-10-03",
-  "note": "width=5 matches \"the cluster's spine ... 5 ft\"",
-  "research": "758d560b5828a167",
+  "note": "`width=5`; page: the spine \"5 ft\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_reachable_runs#a run is drawn only within 30 ft (`_LANE_JOIN_FT`) of the network": {
+  "code": "1b474087e5b3b206",
+  "core": "1b474087e5b3b206",
+  "date": "2026-10-03",
+  "note": "a run is drawn only within 30 ft (`_LANE_JOIN_FT`) of the network",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_reachable_runs#islands never drawn": {
   "code": "f28c192fecd34360",
   "core": "1b474087e5b3b206",
   "date": "2026-10-03",
-  "note": "one network; the 30 ft join is a candidate tolerance",
-  "research": "758d560b5828a167",
+  "note": "page: one network",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::cut_the_overruns#overrun cut": {
   "code": "584e85f181b1b57c",
   "core": "031ee80d26e75393",
   "date": "2026-10-03",
-  "note": "\"does not run on past a crossing as a stub\"",
-  "research": "758d560b5828a167",
+  "note": "page: \"does not run on past a crossing as a stub\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::kept_connector#web plumbing": {
@@ -15187,8 +15243,8 @@
   "code": "ec67b47e189d912e",
   "core": "9d6870019c860874",
   "date": "2026-10-03",
-  "note": "reruns the joint pass",
-  "research": "758d560b5828a167",
+  "note": "re-runs the joint pass",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::seat_wall_reach#web plumbing": {
@@ -15203,16 +15259,16 @@
   "code": "7f4628ccc595b5e8",
   "core": "f5fd49445db04662",
   "date": "2026-10-03",
-  "note": "\"pulled back to the last house it serves\"",
-  "research": "758d560b5828a167",
+  "note": "ends pulled back to the houses it serves",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cut's room": {
   "code": "94adffcf2cfeb46e",
   "core": "8aa914b6b5fbaa23",
   "date": "2026-10-03",
-  "note": "web_cuts spaced by MIN_WEB_GAP (7 ft clear each side plus the tread)",
-  "research": "758d560b5828a167",
+  "note": "MIN_WEB_GAP is 7 ft on each side plus the tread; page: \"keeps 7 ft clear of a garden fence\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span": {
@@ -15267,16 +15323,16 @@
   "code": "51ceec15efef3fbe",
   "core": "8aa914b6b5fbaa23",
   "date": "2026-10-03",
-  "note": "the cuts exclude households reached across a yard",
-  "research": "758d560b5828a167",
+  "note": "the cuts skip `reached_across` houses, as the page says",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lane form knob": {
   "code": "94a2c71f9525b29d",
   "core": "8aa914b6b5fbaa23",
   "date": "2026-10-03",
-  "note": "branches on the form rolled per map",
-  "research": "758d560b5828a167",
+  "note": "branches on the rolled `plan.lane_web`, alleys or back_lane",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lane runs past its last steading": {
@@ -15291,8 +15347,8 @@
   "code": "effe8937b753e9f6",
   "core": "8aa914b6b5fbaa23",
   "date": "2026-10-03",
-  "note": "houses are seated first",
-  "research": "758d560b5828a167",
+  "note": "page: houses placed first",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#row streets laid": {
@@ -15331,24 +15387,24 @@
   "code": "ee4f779b94da47f6",
   "core": "b7114611fd865b47",
   "date": "2026-10-03",
-  "note": "trimmed back to a way, a house or the bund",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "`_keep` is built from `_final_houses` (every house, `reached_across` included), so a tail is kept as the \"only way\" to a household the page says \"shows no lane of its own\". It should build `_keep` from `lane_houses(s.M)",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#lane serving nothing dropped": {
   "code": "8b5552f4297f9d8c",
   "core": "b7114611fd865b47",
   "date": "2026-10-03",
-  "note": "dropped unless it is the only link, so the web stays one network",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the nub-drop exemption reads the same `_keep`, so a nub within `WEB_REACH_FT` of a `reached_across` house is spared, against the page's \"no lane of its own\". It should use `lane_houses",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::unsplitting_drops#web kept one network": {
   "code": "607bb95953f5b09d",
   "core": "6b8ff8d889c46f6b",
   "date": "2026-10-03",
-  "note": "\"one network\"",
-  "research": "758d560b5828a167",
+  "note": "page: one network",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/weld.py::WELD_PX#a sliver, not ground": {
@@ -21347,8 +21403,8 @@
   "code": "f38d6f455a2f458a",
   "core": "932cc5ff14ec6718",
   "date": "2026-10-03",
-  "note": "built and worked ground kept off any household's corridor",
-  "research": "758d560b5828a167",
+  "note": "SOLID, ANNEX and GROUND kept off the corridor",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/reserved.py::Reservations#reservation bookkeeping": {
@@ -21411,8 +21467,8 @@
   "code": "4259524ec7791f70",
   "core": "3ed5fce5d4690e03",
   "date": "2026-10-03",
-  "note": "the corridor is kept clear; the household's own yard is where its door stands",
-  "research": "758d560b5828a167",
+  "note": "corridor kept clear except of the household's own parts (the leg tests keep the path off them)",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/reserved.py::Reservations.conflicts#wood seats": {
@@ -21563,8 +21619,8 @@
   "code": "32dcab061ec2cb56",
   "core": "353906e14bfb6594",
   "date": "2026-10-03",
-  "note": "no lane or well on a dry plot",
-  "research": "9cda568ad32139dc",
+  "note": "dry_plots GROUND against lanes WAY and wells SOLID, forbidden by default; matches 0081 \"never crosses row crops\" and 0196 \"keeps every well off a dry crop plot\"",
+  "research": "17efb2bd89a361a8",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::TEMPLE_EXCEPTIONS#temple exceptions": {
@@ -21875,8 +21931,8 @@
   "code": "a9c9b75acb0ee791",
   "core": "8fc0203d01efbabe",
   "date": "2026-10-03",
-  "note": "ways meet at junctions, one network",
-  "research": "758d560b5828a167",
+  "note": "ways meet at junctions",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_KEY_OK#arches in a row": {
@@ -23987,8 +24043,8 @@
   "code": "830812706ce047aa",
   "core": "62959f8ccbbbe70a",
   "date": "2026-10-03",
-  "note": "alleys or back_lane, unweighted",
-  "research": "f68a5722ae2f0b2b",
+  "note": "two attested forms, an unweighted knob",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#plot_regularity forms": {
@@ -24131,8 +24187,8 @@
   "code": "09f7a89e66f73ed3",
   "core": "9e0ac3d3304f77b5",
   "date": "2026-10-03",
-  "note": "side lanes or a back lane, the page's two forms",
-  "research": "f68a5722ae2f0b2b",
+  "note": "side lanes or a back lane",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::MERCHANT_ESTATE_WEIGHTS#walled merchant compounds per capital": {
@@ -24451,17 +24507,25 @@
   "code": "95474bf4c7ecb5b6",
   "core": "4dc5387c0c4cfffd",
   "date": "2026-10-03",
-  "note": "no page answers the widest gap or the fallback",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the drawing page records no widest-gap rule and no reach*0.5 fallback. The lanes-as-gaps-between-plots GUESS is in 0081-village-lanes.html (\"No page we read describes lanes as the gaps between plots\"). Point the GUESS there, or leave it as a bare GUESS",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::web_cuts#every house within reach of a way": {
   "code": "6fc26d39558728c8",
   "core": "4dc5387c0c4cfffd",
   "date": "2026-10-03",
-  "note": "covers every house it is given",
-  "research": "758d560b5828a167",
+  "note": "every house the caller gives is covered",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::web_cuts#fewest cuts: lanes kept to the minimum that covers every house (greedy), not a lane per house": {
+  "code": "4dc5387c0c4cfffd",
+  "core": "4dc5387c0c4cfffd",
+  "date": "2026-10-03",
+  "note": "fewest cuts: lanes kept to the minimum that covers every house (greedy), not a lane per house",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::windbreak_face#the belt's inner face": {
   "code": "51e5ce0a4cd3f8ee",
@@ -32647,19 +32711,27 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
-  "code": "6c5d90b30bd9d1da",
-  "core": "470a212559512d08",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants": {
+  "code": "f683c16947e47049",
+  "core": "cbdbf49efda26158",
   "date": "2026-10-03",
-  "note": "the page gives no clearance between a lane and a tree's crown, so UNRESEARCHED holds",
+  "note": "the map's west lane (50 ft on generated maps), 0 on exempt maps",
+  "research": "4c4e1b01edd744e8",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
+  "code": "618d03acaf350d51",
+  "core": "cbdbf49efda26158",
+  "date": "2026-10-03",
+  "note": "no bundle question answers it",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "ecbe69703ef7ee7f",
-  "core": "470a212559512d08",
+  "code": "8e8e1d245d9bb3e1",
+  "core": "cbdbf49efda26158",
   "date": "2026-10-03",
-  "note": "`getattr(s, \"_sun_corridor_ft\", 22.0)` uses 22 ft, but the page's sun strip is \"39 ft of clear ground to the south\" (house) and \"50 ft to its east, west and south for a tree\"; 22 ft appears there only as a ridge height (\"a ridge of about 20-22 ft\"); the default should be the page's figure, or the claim should say what 22 ft is",
+  "note": "`getattr(s, \"_sun_corridor_ft\", 22.0)`: the page gives 39 ft (house), 50 ft (tree), or no rule at all for a map that declares none; 22 ft matches none of them, so default to 0 as the west lane does",
   "research": "4c4e1b01edd744e8",
   "verdict": "DRIFTED"
  },
@@ -32712,10 +32784,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.keepouts#plumbing": {
-  "code": "714691931a455a42",
-  "core": "a96b948652216633",
+  "code": "c0c12977e906f055",
+  "core": "044b923582de9983",
   "date": "2026-10-03",
-  "note": "delegates",
+  "note": "passes straight through to copse_keepouts",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -32768,26 +32840,26 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#clump beside, never on, a building": {
-  "code": "4982e02b02ce90f0",
-  "core": "c2ca5d7c7e6aeb1f",
+  "code": "7dc7a3f4c6bd7058",
+  "core": "7aa0b687a92d28d8",
   "date": "2026-10-03",
-  "note": "circumscribing radius plus clump radius, as 0071 drawing",
+  "note": "circumscribing radius plus the clump's radius, as 0071 says",
   "research": "cfad221b65d2f113",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#copse off the wellhead": {
-  "code": "d2a92300f70dc307",
-  "core": "c2ca5d7c7e6aeb1f",
+  "code": "ac142b7c4df2d11c",
+  "core": "7aa0b687a92d28d8",
   "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+  "note": "no bundle question answers it",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "e22f5e0e73315afa",
-  "core": "c2ca5d7c7e6aeb1f",
+  "code": "4d1f27df835125c1",
+  "core": "7aa0b687a92d28d8",
   "date": "2026-10-03",
-  "note": "0038 holds trees 50 ft east, west and south of each plot; keep-outs are a south strip at sun_depth (39/22), an east lane at 24 px and no west strip",
+  "note": "the page says no crown of \"the copse\" stands \"within 50 ft east, west or south of a yard or bed\"; the code keeps the west at 50 ft but the south at sun_depth (the house's 39 ft) and the east at EAST_LANE_PX=24, and only for beds (yards get no east strip)",
   "research": "4c4e1b01edd744e8",
   "verdict": "DRIFTED"
  },
@@ -33355,9 +33427,9 @@
   "code": "22305d0f02b5c14f",
   "core": "f3f39ea3c2e0bdea",
   "date": "2026-10-03",
-  "note": "no corner on the tread; the 4 ft margin is TREAD_WALL_FT's own claim",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page attests \"no corner of a house stands on its tread\" but gives no TREAD_WALL_FT (4 ft) margin. Split the 4 ft into its own UNRESEARCHED or CONVENTION claim",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._quad#hand-laid plot outlines": {
   "code": "9a6b739818b3acf9",
@@ -35067,16 +35139,16 @@
   "code": "812c05ba4e6c1d21",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-03",
-  "note": "7 ft matches the page's 7 ft lane gap from a garden fence",
-  "research": "758d560b5828a167",
+  "note": "the page's 7 ft a lane keeps clear, a convention",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
   "code": "ba70da639a8c1240",
   "core": "df8575f355300bb7",
   "date": "2026-10-03",
-  "note": "matches \"one network reaching every farmhouse but the few reached across a neighbor's land\"",
-  "research": "f68a5722ae2f0b2b",
+  "note": "\"reaching every farmhouse but the few reached across a neighbor's land\"",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.__init__#corridor geometry, memo and search plumbing": {
@@ -35099,8 +35171,8 @@
   "code": "5c7f0a0b4907609f",
   "core": "200bdabf514dda5d",
   "date": "2026-10-03",
-  "note": "the walk is kept clear of later homesteads and never becomes a lane, as the page says",
-  "research": "758d560b5828a167",
+  "note": "\"The walk is not drawn as a lane\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree.bar#the walk's clearance": {
@@ -35155,8 +35227,8 @@
   "code": "cad46cde31a87744",
   "core": "3fca66fc5f29f78e",
   "date": "2026-10-03",
-  "note": "140 degrees, as on the page",
-  "research": "758d560b5828a167",
+  "note": "140, the page's figure (the comparison is judged at doubles_back)",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::PART_MARGIN_FT#corridor geometry, memo and search plumbing": {
@@ -35204,7 +35276,7 @@
   "core": "233bdca142f022b6",
   "date": "2026-10-03",
   "note": "3 ft footpath, the field road's 3 shaku",
-  "research": "f68a5722ae2f0b2b",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::TREAD_WALL_FT#tread clear of a wall": {
@@ -35227,8 +35299,8 @@
   "code": "4dbd3e25c2fb6f5f",
   "core": "5dd8d80d8ab41b66",
   "date": "2026-10-03",
-  "note": "straight legs come first, then two legs round the gable, then routed ones, with doubling back refused; matches \"as few turns as the plots allow ... never doubling back\"",
-  "research": "758d560b5828a167",
+  "note": "straight legs, then round the gable, then routed; \"as few turns as the plots allow\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::_house_candidates#path leaves its own yard": {
@@ -35279,20 +35351,28 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#routed where none is straight": {
-  "code": "8bb5d52f4f6e77bd",
-  "core": "d3f5b0a8f1214dfa",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#a way of its own without the routed search": {
+  "code": "fcc8b73d9df9145e",
+  "core": "a1e31bb9e5d8e5b6",
   "date": "2026-10-03",
-  "note": "routed corridors are tried after the straight and round-the-gable ones and come from the shared stream; matches \"the path is routed around them - a map drawing convention\"",
-  "research": "758d560b5828a167",
+  "note": "names the GM's ruling of 2026-10-03; routed False returns None at ROUTE_LATER",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#routed where none is straight": {
+  "code": "7d4fed719c5b011a",
+  "core": "a1e31bb9e5d8e5b6",
+  "date": "2026-10-03",
+  "note": "routed only after straight and round-the-gable, per the page's routing convention",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#seat refused without a path": {
-  "code": "e1c0a90fe4657598",
-  "core": "d3f5b0a8f1214dfa",
+  "code": "a6bc136c2af373c1",
+  "core": "a1e31bb9e5d8e5b6",
   "date": "2026-10-03",
-  "note": "returns None when no corridor is admitted; matches \"reaching every farmhouse but the few reached across a neighbor's land\"",
-  "research": "758d560b5828a167",
+  "note": "every farmhouse served but the few reached across a neighbor",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::admitted#corridor geometry, memo and search plumbing": {
@@ -35307,25 +35387,25 @@
   "code": "1ae33d203551352c",
   "core": "e0054429aaca35af",
   "date": "2026-10-03",
-  "note": "clears other homesteads, crop side and water, as the page has it",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane\", crosses no row crops, keeps off wet ground",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::doors_of#path starts in the dooryard": {
   "code": "fc84a1e006fbebb2",
   "core": "d7f6bfc30693edf3",
   "date": "2026-10-03",
-  "note": "every door is in or beside the dooryard; the order is a choice within the page's rule",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page says only that a lane ends at the dooryard; the door order (forecourt, far edge, flanks past the gable by half+1 ft, front-wall step for a bundle with no yard) is not recorded; should be UNRESEARCHED/GUESS until the drawing page records it",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::doubles_back#path never doubles back": {
   "code": "0938d51aa2d5c28e",
   "core": "f7223a0baca56331",
   "date": "2026-10-03",
-  "note": "hairpin limit as on the page",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the code refuses `>= HAIRPIN_DEG`, but the page says \"A turn of more than 140 degrees is a hairpin\"; use `>` or change the page (and HAIRPIN_DEG's claim text) to \"140 or more\" (only the boundary differs)",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::drawn_corridor#corridor geometry, memo and search plumbing": {
   "code": "e6c06d7ead8d98f6",
@@ -35339,8 +35419,8 @@
   "code": "97beb2a82f4acbf1",
   "core": "86cfb7ffbaaaa9e0",
   "date": "2026-10-03",
-  "note": "the outward bearing, or the nearest lawful turn up to 90 degrees",
-  "research": "758d560b5828a167",
+  "note": "outward, or the nearest lawful turn; keeps off wet ground",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
@@ -35411,9 +35491,9 @@
   "code": "05c0fa05da3d300b",
   "core": "2d6ddb14e47bf2b4",
   "date": "2026-10-03",
-  "note": "the tread is kept only 0.5 ft (the line 2 ft) off its own garden beds, but the page says \"A lane keeps 7 ft clear of a garden fence\" and records no exception for a household's own beds; record the exception on the drawing page or hold 7 ft",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "\"routed around [its own garden beds or fixtures]\"; the 0.5 ft is a tolerance",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::past_the_yard#path not drawn on its own yard": {
   "code": "c352511864fa3263",
@@ -35451,8 +35531,8 @@
   "code": "fa3edb13add7ecfa",
   "core": "f353ec43c9477e8d",
   "date": "2026-10-03",
-  "note": "the seat's corridor question, as claimed",
-  "research": "758d560b5828a167",
+  "note": "the custom's condition, as the page states it",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::seg_box_within#corridor geometry, memo and search plumbing": {
@@ -35500,15 +35580,15 @@
   "core": "69297d4f8928098f",
   "date": "2026-10-03",
   "note": "the track out runs on out of the cluster",
-  "research": "758d560b5828a167",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::tree_admits#lane law over the whole tree": {
   "code": "f8333dd4aa7487f9",
   "core": "6ed225836f530670",
   "date": "2026-10-03",
-  "note": "hands the judgment to the lane law",
-  "research": "758d560b5828a167",
+  "note": "delegates to the lane law",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::yard_quad#corridor geometry, memo and search plumbing": {
@@ -36295,12 +36375,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_common_fits#house, yard, shed and well held off the fields (`_rect_blocked(..., fields=True)`), and the grove off the fields by the `grove_off_field` switch": {
+  "code": "c97862942462de53",
+  "core": "c97862942462de53",
+  "date": "2026-10-03",
+  "note": "house, yard, shed and well held off the fields (`_rect_blocked(..., fields=True)`), and the grove off the fields by the `grove_off_field` switch",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_common_fits#no grove on a lane": {
   "code": "f21889b219a2e39e",
   "core": "c97862942462de53",
   "date": "2026-10-03",
-  "note": "grove bands off the tread; nothing is built on a lane",
-  "research": "758d560b5828a167",
+  "note": "groves tested with _house_on_a_tread; \"Nothing is built on a lane\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_fits#keep-out geometry, index and cache plumbing": {
@@ -36427,8 +36515,8 @@
   "code": "5f6660fafe9f2421",
   "core": "e871fb8f87933409",
   "date": "2026-10-03",
-  "note": "drawn corners at the rake kept off the tread",
-  "research": "758d560b5828a167",
+  "note": "\"no corner of a house stands on its tread\", at the house's rake",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_too_near_a_neighbor#roofs shed apart": {
@@ -36451,8 +36539,8 @@
   "code": "6bd8879ff6504388",
   "core": "2f86a472bdddfe2f",
   "date": "2026-10-03",
-  "note": "every part, now including the kura and the byre, kept off a corridor",
-  "research": "758d560b5828a167",
+  "note": "every part held off the reserved corridors",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_across_stream#a farmstead on one bank": {
@@ -36464,28 +36552,28 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#a tight seat only by passage": {
-  "code": "ca126bddc5259f1e",
-  "core": "67fabe0623191fa3",
+  "code": "90a655bc59d5f4ce",
+  "core": "a2fa614055c86b9c",
   "date": "2026-10-03",
-  "note": "walk required, and refused once any layout finds its own corridor",
-  "research": "f68a5722ae2f0b2b",
+  "note": "seated only with a walk and no straight or round-the-gable corridor; own_way judges the whole holding",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#persimmon held off the paddy by its trunk": {
-  "code": "b33e31ef408bd6b7",
-  "core": "67fabe0623191fa3",
+  "code": "11f499a8dfc7e3f6",
+  "core": "a2fa614055c86b9c",
   "date": "2026-10-03",
-  "note": "the record says nothing on a tree's trunk against the paddy",
+  "note": "nothing in the bundle answers it",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#whole farmstead off the fields": {
-  "code": "818f55fcb9965108",
-  "core": "67fabe0623191fa3",
+  "code": "99d803fc952dd093",
+  "core": "a2fa614055c86b9c",
   "date": "2026-10-03",
-  "note": "page: the whole farmstead (house, yard, garden and storehouse plot) is tested against the whole of each field; code tests only the yard and fixtures exactly against field_polys, tests the beds against ditches only, and keeps beds and kura off the paddy only at the envelope's nine points, which the code's own yard comment says a field corner can reach between (seed 31)",
+  "note": "0124 backs the yard and fixtures held off the fields (\"the whole farmstead ... tested against the whole of each field\") but says nothing of beds off ditches (`_rect_on_water`); split that half into its own claim (UNRESEARCHED, or the water question that records it)",
   "research": "b88c97a6299d41d0",
-  "verdict": "DRIFTED"
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._persimmon_shades_a_neighbor#persimmon out of a neighbor's sun": {
   "code": "9630267ee8107c2f",
@@ -37027,24 +37115,24 @@
   "code": "6860688ee81a749d",
   "core": "7276802b5dc226e3",
   "date": "2026-10-03",
-  "note": "2 ft parting plus 1 ft = the page's 3 ft, recorded as a GUESS",
-  "research": "758d560b5828a167",
+  "note": "the page records \"a foot more\" beyond the 2 ft as a GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::PASSAGE_CHAIN#chain of passages": {
   "code": "51e1872125832bd6",
   "core": "b40f355972c320f2",
   "date": "2026-10-03",
-  "note": "depth 2 at most, the page's Echigo-chain GUESS",
-  "research": "758d560b5828a167",
+  "note": "\"itself reached across another, and no farther\", GUESS on Echigo",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::PASSAGE_SHARE_BAND#share reached by passage": {
   "code": "d5a82c517d9a0918",
   "core": "90ab2547f5131d91",
   "date": "2026-10-03",
-  "note": "none to a quarter, the page's GUESS",
-  "research": "758d560b5828a167",
+  "note": "\"from none up to a quarter\", recorded as a GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::WALK_STEP_PX#walk sampling pitch": {
@@ -37083,8 +37171,8 @@
   "code": "3fc91890122a0966",
   "core": "bd969eebe17c1eaa",
   "date": "2026-10-03",
-  "note": "within the chain, with a yard to arrive on, as the page records",
-  "research": "758d560b5828a167",
+  "note": "depth < 2 and a threshing yard to arrive on",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::depth_of#passage machinery": {
@@ -37103,52 +37191,60 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::landlocked#no way of its own": {
-  "code": "68b5184e2615d24b",
-  "core": "ffb1593e07aca51b",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::landlocked#no routed search for one": {
+  "code": "541e20f2dbaaa98b",
+  "core": "faf2a417c267adb9",
   "date": "2026-10-03",
-  "note": "any layout's corridor denies the custom, judged by the whole holding as the page says",
-  "research": "f68a5722ae2f0b2b",
+  "note": "names the GM's ruling of 2026-10-03",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::landlocked#no way of its own": {
+  "code": "0a696502fbf797a9",
+  "core": "faf2a417c267adb9",
+  "date": "2026-10-03",
+  "note": "\"judged by its whole holding\": any layout with a corridor means not landlocked",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::on_their_land#walk on the two holdings": {
   "code": "ac75151b1f26aa67",
   "core": "79830825c9fbdb85",
   "date": "2026-10-03",
-  "note": "walk sampled on the two lands",
-  "research": "758d560b5828a167",
+  "note": "\"must keep to the two households' land\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::own_corridor#passage machinery": {
-  "code": "530f3d4e399352e1",
-  "core": "bd2cefae1630199f",
+  "code": "ffff5a53f5ecd72b",
+  "core": "31a978d71dc66981",
   "date": "2026-10-03",
-  "note": "asks a question and decides nothing itself",
+  "note": "choosing `routed=False` decides what counts as a way of its own on the finished map (a straight or round-the-gable path, not a routed one); should be CANON: the GM's ruling of 2026-10-03, as landlocked's claim is",
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_budget#share reached by passage": {
   "code": "9922cfb0302ed3e4",
   "core": "ae3bddb41eb85c60",
   "date": "2026-10-03",
-  "note": "rounded down, as the page says",
-  "research": "758d560b5828a167",
+  "note": "\"rounded down to whole households\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_of#passage across a neighbor's yard": {
   "code": "dcb5e86d0629e387",
   "core": "4a4ac5cb997a113b",
   "date": "2026-10-03",
-  "note": "tight seat, share, chain, adjoining land, walk from the dooryard to the neighbor's yard",
-  "research": "f68a5722ae2f0b2b",
+  "note": "adjoining land, share, chain, a walk to the threshing yard",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_share#share reached by passage": {
   "code": "8290e82f17d7b14a",
   "core": "6b961997781a49fd",
   "date": "2026-10-03",
-  "note": "seeded knob within the band",
-  "research": "758d560b5828a167",
+  "note": "rolled per settlement from the seed within the band",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#a re-laid household's garden side": {
@@ -37163,40 +37259,40 @@
   "code": "9e6407b4b9406131",
   "core": "d9ae159f34da17d9",
   "date": "2026-10-03",
-  "note": "asks the drawn layout, then every layout built at the seat, as in \"judged by its whole holding ... if any layout ... it has one\"",
-  "research": "f68a5722ae2f0b2b",
+  "note": "the whole holding asked again on the finished seating",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::relay#a household lays its beds where its way can run": {
   "code": "9e45557391e1f7be",
   "core": "470243a45bd989e6",
   "date": "2026-10-03",
-  "note": "re-seats the household with a layout that has its own corridor and fits the finished seating, and drops the passage",
-  "research": "758d560b5828a167",
+  "note": "\"if any layout ... would leave it a way of its own, it has one\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#walk not drawn as a lane": {
   "code": "455f9bca68330b2d",
   "core": "e4a3ce3c6e875d3d",
   "date": "2026-10-03",
-  "note": "the page records \"The walk is not drawn as a lane ... a GUESS\"",
-  "research": "758d560b5828a167",
+  "note": "recorded and barred, not drawn; the page's GUESS",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::walk_clear#walk crosses nothing standing": {
   "code": "39533f10614628ae",
   "core": "784391eea7e84bd2",
   "date": "2026-10-03",
-  "note": "no house, bed, shed or fixture of either household; everything else kept clear",
-  "research": "758d560b5828a167",
+  "note": "\"cross no house, garden bed, shed or fixture of either\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::walk_of#walk to the neighbor's threshing yard": {
   "code": "e0a02a8aadd3099b",
   "core": "38928b4b0fe5954e",
   "date": "2026-10-03",
-  "note": "routed on the two lands to the yard's edge",
-  "research": "758d560b5828a167",
+  "note": "dooryard to the neighbor's yard, on the two lands",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin#search and prefilter plumbing": {
@@ -37283,8 +37379,8 @@
   "code": "ed3e0b6b75105352",
   "core": "52cb7ac7202f5d71",
   "date": "2026-10-03",
-  "note": "`landlocked` asks all four layouts at the seat, as in \"seated only where it has no way of its own\" and \"judged by its whole holding\"",
-  "research": "f68a5722ae2f0b2b",
+  "note": "judged by the whole holding: \"if any layout of the homestead would leave it a way of its own, it has one\"",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#garden side chosen by the sun": {
@@ -37435,17 +37531,17 @@
   "code": "2208bfbfdf491747",
   "core": "7e06dad0e5e9c007",
   "date": "2026-10-03",
-  "note": "trimmed off the marsh; a lane does not cross the reeds",
-  "research": "758d560b5828a167",
+  "note": "trim_off_marsh; \"does not cross the reeds\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance": {
   "code": "6d7e32574daf111c",
   "core": "7e06dad0e5e9c007",
   "date": "2026-10-03",
-  "note": "lane(width=5, clearance=40) is in px: that is the page's 5 ft spine only at the hamlet's 1 ft/px, and 10 ft at a village's 2 ft/px (per _try_place_bundle's own note), past the page's 9 ft ceiling, so use s.px; the 40 px seat clearance is on no page, and it keeps seats off lanes laid before the houses, where the page now seats every farmhouse before any lane",
-  "research": "758d560b5828a167",
-  "verdict": "DRIFTED"
+  "note": "5 px matches the spine's 5 ft only at 1 ft/px; the scale is not shown, and at the village sheet's 2 ft/px (0196) it is 10 ft, over the 9 ft ceiling. The 40 px no-build clearance is nowhere on the page. Make the 40 px UNRESEARCHED and state the width in feet",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#seed pool": {
   "code": "985b80f9cba186d7",
@@ -37651,15 +37747,15 @@
   "code": "cbeba49b50f474bb",
   "core": "a1023fef9a710349",
   "date": "2026-10-03",
-  "note": "off the given parts, neighbors at half and refused ground",
-  "research": "758d560b5828a167",
+  "note": "\"Nothing is built on a lane\"; the path is routed round the household's own parts",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/route.py::_route_from#path leaves its own yard once": {
-  "code": "98acff063854e932",
-  "core": "3b154066660a7a7a",
+  "code": "4355e1ffe3ffe486",
+  "core": "b510445a812eab94",
   "date": "2026-10-03",
-  "note": "the record says nothing on a path leaving and re-crossing its own yard",
+  "note": "the page is silent on leaving the yard once; tree_in_reach is an exact prefilter",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -37667,16 +37763,16 @@
   "code": "2db44e9455087a45",
   "core": "0032fac9dfda43df",
   "date": "2026-10-03",
-  "note": "house, shed, byre, well, beds and fixtures kept off; the persimmon's trunk is held off by the leg test",
-  "research": "758d560b5828a167",
+  "note": "\"cross no house, garden bed, shed or fixture of either\"; the persimmon is held off by the leg tests",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/route.py::routed_corridors#path routed round what stands": {
   "code": "5fc19e7ffd362c46",
   "core": "c6f0307b1e005d0c",
   "date": "2026-10-03",
-  "note": "routed from the dooryard round what stands, the page's convention",
-  "research": "f68a5722ae2f0b2b",
+  "note": "lanes run among the house plots; the path is routed round what stands",
+  "research": "2276bca187bae88e",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/route.py::search#grid search plumbing": {
@@ -37691,8 +37787,16 @@
   "code": "1d0ddffd1033d221",
   "core": "a7385940dd858222",
   "date": "2026-10-03",
-  "note": "straight where it can, never doubling back",
-  "research": "758d560b5828a167",
+  "note": "\"pulled taut like a string ... never doubling back\"",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/route.py::tree_in_reach#search breadth": {
+  "code": "caff5f18ea5966e3",
+  "core": "eb1efe30ada8815b",
+  "date": "2026-10-03",
+  "note": "a necessary-condition bounding-box test, the same verdict; plumbing",
+  "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin#seed plumbing": {
@@ -41443,17 +41547,17 @@
   "code": "8f5e9d611d94a8d1",
   "core": "e558226d98ba699d",
   "date": "2026-10-03",
-  "note": "the page records how close counts as serving as a GUESS",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives no 12 ft figure and says \"how close counts as serving a house\" is a GUESS. Should read GUESS research/questions/0081-village-lanes.drawing.html",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::HOUSE_SERVE_FT#beside-the-house reach": {
   "code": "19623965e35453ad",
   "core": "c0101826cceee8b7",
   "date": "2026-10-03",
-  "note": "covered by the same GUESS on serving distance",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives no 60 ft figure and records how close counts as serving as a GUESS. Should read GUESS research/questions/0081-village-lanes.drawing.html",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::PAST_GRAIN_FT#lane geometry": {
   "code": "d2e607a2025421c9",
@@ -41499,16 +41603,16 @@
   "code": "0b0da58392f91902",
   "core": "267fb6d2ff51fbe0",
   "date": "2026-10-03",
-  "note": "keeps the shortest end that still reaches something",
-  "research": "758d560b5828a167",
+  "note": "the shortest end that still reaches something",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#trim floor": {
   "code": "1e2509ef1113e79b",
   "core": "267fb6d2ff51fbe0",
   "date": "2026-10-03",
-  "note": "a DEVIATION the drawing page does not record: the page says only \"a lane end that reaches nothing is pulled back to the last house it serves\"; record the 40% floor and the leave-whole case there",
-  "research": "758d560b5828a167",
+  "note": "the DEVIATION (a 40% floor; a lane that reaches nothing is left whole) is not recorded on the drawing page, which says only \"a lane end that reaches nothing is pulled back to the last house it serves\". Record the deviation on the page, or change the code",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::dooryard_dist#lane geometry": {
@@ -41531,8 +41635,8 @@
   "code": "f30e0bfc664f897b",
   "core": "a7b9f4043342622d",
   "date": "2026-10-03",
-  "note": "keeps the one network joined; 20 degrees is calibration",
-  "research": "758d560b5828a167",
+  "note": "the trim keeps every crossing junction; one network",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::vertex_behind#lane geometry": {
@@ -41867,32 +41971,32 @@
   "code": "88f5a79777abb574",
   "core": "6ed0c0c7d31b1123",
   "date": "2026-10-03",
-  "note": "the default worn=False draws the old wide dashed lane, but the page says every lane is \"a narrow single track ... no line down its middle - never a wide, two-lane road\"; the page records no such path",
-  "research": "f68a5722ae2f0b2b",
-  "verdict": "DRIFTED"
+  "note": "narrow, packed earth, no centerline",
+  "research": "2276bca187bae88e",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.lane#lane width": {
   "code": "233c3d0a866d8dac",
   "core": "6ed0c0c7d31b1123",
   "date": "2026-10-03",
-  "note": "the default width of 16 px (16 ft at 1 ft/px) is not on the page and is above both its 3/5/6 ft widths and its 9 ft ceiling; the claim should cite the callers' widths, and the default should be one of them",
-  "research": "758d560b5828a167",
+  "note": "the default `width: float = 16` is outside what the page attests (3, 5 and 6 ft, all under the 9 ft ceiling); the default should be one of the attested widths",
+  "research": "8d9a0f7e01993e43",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.lane#nothing built on a lane": {
   "code": "687a2954a6e009fc",
   "core": "6ed0c0c7d31b1123",
   "date": "2026-10-03",
-  "note": "the no-build corridor keeps houses off the tread",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page forbids building on the tread only; a no-build corridor half-width of 22 ft by default (40 ft as stage_track passes it) is not on it, so it should be UNRESEARCHED or GUESS",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.lane#the track out runs off the map": {
   "code": "623d4b2ebdb05ed6",
   "core": "6ed0c0c7d31b1123",
   "date": "2026-10-03",
-  "note": "the connector flag is checked to reach the frame",
-  "research": "758d560b5828a167",
+  "note": "the connector flag marks the track that must reach the frame",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.reink_lane#lane records and their ink": {
@@ -41947,8 +42051,8 @@
   "code": "7ddda67164f4a596",
   "core": "515cea92a2124e6b",
   "date": "2026-10-03",
-  "note": "pulled back to a house, way or bund it serves",
-  "research": "758d560b5828a167",
+  "note": "\"a lane end that reaches nothing is pulled back to the last house it serves\"",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
@@ -41979,9 +42083,9 @@
   "code": "7c26741dd7ff9816",
   "core": "515cea92a2124e6b",
   "date": "2026-10-03",
-  "note": "12 ft, or 60 ft not past or behind, under the page's GUESS",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page records \"how close counts as serving a house\" as a GUESS and gives no 12 ft or 60 ft figure; label it GUESS research/questions/0081-village-lanes.drawing.html",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#short lanes dropped": {
   "code": "08b90f709bf50140",
@@ -41995,8 +42099,8 @@
   "code": "4fec2a163573ee84",
   "core": "515cea92a2124e6b",
   "date": "2026-10-03",
-  "note": "the track out runs off the map; the spur is one through-route with it",
-  "research": "758d560b5828a167",
+  "note": "the track out never stops in open country; the spur is one end of the through-route",
+  "research": "8d9a0f7e01993e43",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::_house_frame#lane records and their ink": {
@@ -42011,17 +42115,17 @@
   "code": "9f3ea44e13b67ad1",
   "core": "2aaceed2a93404a0",
   "date": "2026-10-03",
-  "note": "an end behind the house is not at the dooryard",
-  "research": "758d560b5828a167",
-  "verdict": "IN-STEP"
+  "note": "the page gives no behind-the-house band (width plus depth) and records only that the serving reach is a guess; label it GUESS research/questions/0081-village-lanes.drawing.html",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard": {
   "code": "2145fe695f19ca11",
   "core": "4032346f53092479",
   "date": "2026-10-03",
-  "note": "need to know whether a seat's gardens can stand beside or behind the house (access_corridor names four garden sides); if they can, an end within 12 ft of such a bed counts as at the dooryard and overrides behind_house, but the page has the lane end \"at the dooryard\"",
-  "research": "758d560b5828a167",
-  "verdict": "CANNOT-TELL"
+  "note": "\"a lane ends at the dooryard\"",
+  "research": "8d9a0f7e01993e43",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/wards.py::WardsMixin#quarter zones and reserve kinds": {
   "code": "326be938cd6de17f",

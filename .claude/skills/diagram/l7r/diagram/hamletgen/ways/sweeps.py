@@ -454,12 +454,12 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
 
     Research:
         doubled lane dropped - CONVENTION: a lane within 8 ft of another for half its length reads as one band
-        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served
+        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
         web kept one network - research/questions/0081-village-lanes.drawing.html
     """
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
-    centers = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    centers = lane_houses(s.M)  # the houses a remnant may be kept for: a household reached across a yard is owed none (feature 317)
     dropped = 0
     gone: list[int] = []
     for i, ln in enumerate(lanes):

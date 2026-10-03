@@ -91,8 +91,10 @@ def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, wel
         clump beside, never on, a building - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             half the diagonal plus the clump's radius and 2 px
         copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
-        plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: south of each yard and bed,
-            east of each bed, and west and southwest of each yard and bed where the map declares the afternoon lane
+        plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse's own SEAT keep-outs
+            (`village_grove`): south of each yard and bed at the map's sun depth, 24 px east of each bed, and west and southwest
+            of each yard and bed at the map's afternoon lane; the page's 50 ft round every crown is held at the planting
+            (`_sun_keepouts`)
     """
     cr, m = clump / 2.0, BAR_MARGIN_PX
     circles: list[tuple[float, float, float]] = []
@@ -239,8 +241,8 @@ class WoodShares:
         """The reservations' state for one seating.
 
         Research:
-            sun strip default - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 22 ft where the map
-                declares none
+            sun strip default - CONVENTION: the copse's own 22 px where the map declares no sun corridor (`village_grove`'s
+                `_sun_depth`), so the reservation keeps what the planting keeps
             afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
                 `west_sun_lane`, none where it declares none
             seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer

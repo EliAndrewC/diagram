@@ -33,7 +33,7 @@ from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_th
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
-from .geom import _TOUCH_GAP, _components, _trim_to_service, polyline_len, steading_footprints
+from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
 from .serve import DOOR_REACH_FT, _lay_web_lane, front_door, lay_door_paths
@@ -283,8 +283,10 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back to a way, a house or the bund
         end carried on to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
         lane serving nothing dropped - research/questions/0081-village-lanes.drawing.html: unless it is the only link in the web
+        a tail kept as a house's only way - research/questions/0081-village-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
     """
     _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    _owed = lane_houses(s.M)  # the houses a lane may be kept as the only way to
     _final_steadings = steading_footprints(s.M)  # a tread that stops at a dooryard has arrived there (feature 227 D11)
     _W, _H = float((s.M.get("meta") or {}).get("W", s.W)), float((s.M.get("meta") or {}).get("H", s.H))
 
@@ -326,7 +328,8 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         # `WAY_END_REACH_FT` the gate asks of every internal end - which is how a map that refused a
         # straggler path at draw time shipped a dangling end anyway. The houses this lane is the ONLY way to
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
-        _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
+        # ...never a household reached across a neighbor's yard, which is owed no way of its own (`geom.lane_houses`, feature 317)
+        _keep = [_h for _h in _owed if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
         # ...BUT A CONNECTOR THAT STARTS ON THE EXIT STRIP STAYS THERE (feature 287 wave 6): the web draws the strip as a tree lane
         # up to the connector's start where a house or the field is owed it (`tree.strip_run`), and pulled back to service the
         # start left the strip 8 ft off on cohort seed 37 (the strip ended in a hook) and 300 ft down the track on seed 34

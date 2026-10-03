@@ -84,5 +84,35 @@
   "subject": "glyph-check--farmhouse",
   "verifies": "F7",
   "answers": "86f173b401a2"
+ },
+ "gc-fh-r3-f5-notes": {
+  "value": 1,
+  "unit": "entry",
+  "quantity": "inashiro.notes.md's feature 317 entry restated from the shipped manifest: the household reached across at (2567.7, 2117.7), 80 seats offered, a drawn aspect of 2.60, 15 lanes, 13 of them access, passage_unfit 1, the wood seats 320 of 320 planted - each matching the manifest's houses[], lanes[] and meta",
+  "source": "pool/hamlets/inashiro/inashiro.json and inashiro.notes.md at f98af88a3, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--farmhouse",
+  "verifies": "F5",
+  "answers": "5058ad6878e2"
+ },
+ "gc-vl-r3-f8-notes": {
+  "value": 1,
+  "unit": "entry",
+  "quantity": "inashiro.notes.md's feature 317 entry restated from the shipped manifest: the household reached across at (2567.7, 2117.7), 80 seats offered, a drawn aspect of 2.60, 15 lanes, 13 of them access, passage_unfit 1, the wood seats 320 of 320 planted - each matching the manifest's houses[], lanes[] and meta",
+  "source": "pool/hamlets/inashiro/inashiro.json and inashiro.notes.md at f98af88a3, read 2026-10-03",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F8",
+  "answers": "5058ad6878e2"
+ },
+ "gc-vl-r3-f5-seats": {
+  "value": 0,
+  "unit": "reserved wood seats unplanted",
+  "quantity": "the cause of the bulge removed: on the re-rolled Inashiro every household's reserved wood seat has a copse clump on it (320 of 320; 2 of house 13's, in its own yard's afternoon sun lane, had routed house 14's path round them), so no path is routed round ground the copse never plants; held for the pool by tests/gate/test_wood_shares_planted.py",
+  "source": "seats_planted.py in the session's scratchpad on pool/hamlets/inashiro/inashiro.json at f98af88a3; research R10",
+  "observed": "2026-10-03",
+  "subject": "glyph-check--village-lane",
+  "verifies": "F5",
+  "answers": "5058ad6878e2"
  }
 }
