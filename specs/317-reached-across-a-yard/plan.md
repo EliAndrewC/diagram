@@ -76,7 +76,9 @@ houses, Morse; blind alleys to the houses, the Manchu survey). A household beyon
 **D5 - The reach (FR-003).** The household's record carries `reached_across` (the neighbor's position) and no corridor; the
 ways' one predicate of reach (`checks.unreached_houses`, which the web's settle, its last resort, the tree's judge and the gate
 read) counts it reached when its chain ends at a reached household. The pool and gate tests that ask reach read the same
-predicate. Nothing else of the ways changes.
+predicate. And the household it is reached across keeps its way drawn: its corridor is owed and never pruned, however near the
+lanes its center stands (`tree.passage_anchors`; the village lane's glyph-check on Inashiro, F1 - the anchor 90 ft from a lane,
+its corridor not owed, the two farmsteads left with no way). Nothing else of the ways changes.
 
 **D6 - The corridor judged as drawn (FR-004).** Feature 314 R12's refused web, reproduced (the route's own parts switched on, seed
 13 at 20 households): three access lanes close a sliver because the web begins one at the house's door - (2939, 2606) - where the
@@ -86,16 +88,15 @@ seating's record and its judge (`tree.admits`, through `tree_records` and `lanes
 of the tree again with its ends joined as the settle will join them (`tree.as_joined`), with an exact box prefilter in
 `law.near_misses` and `law.free_end` (the same answers) that keeps its cost below the host's noise. Verified on the reproduction
 (the seed rolls), then the route's own parts re-measured: if the seating now admits only drawable corridors,
-feature 314 R12's withdrawn lever is retried by `abab.sh` and kept only if it pays (FR-006). Done (research R2, R4): the route is
-searched per garden layout round the household's own parts (feature 314's searched once per house and yard, so every layout took
-the route laid round the first one's beds), and it pays - the seats lost to the path alone 77 -> 21 and 90 -> 22, the stage -6%
-and -10% in CPU seconds. Its one regression on the cohort (seed 18: squaring a water crossing straightened a routed path across
-the household's own privy) is closed the same way as R12: the seating judge asks the household's own house, beds and fixtures of
-the path as the web will lay it (`tree.laid_run`, `own_clear`). Found and closed against main (research R8): a joint's pull is
-never taken into a kink the two lanes did not have (`joints._one_joint`, seed 47 at 20 households); a door the search round its
-house alone cannot take to the tree is searched once for a seat's four layouts (`route.house_reaches`, exact); and the route's
-search leaves the persimmon - held by the door since feature 315 - to the taut pull's leg tests (seed 39 at 40 households,
-1,084 -> 295 seats tried).
+feature 314 R12's withdrawn lever is retried by `abab.sh` and kept only if it pays (FR-006). Retried and WITHDRAWN (research R4,
+R8): searched per garden layout round the household's own parts, it paid before feature 315 merged (seats lost to the path alone
+77 -> 21 and 90 -> 22, the stage -6% and -10% in CPU seconds), and after it cost the homesteads stage 3-43% more than main's search
+round the house alone (calls, passage off, on the bookend's flagged seeds) - so the corridor's route keeps off the house alone,
+shared by a seat's layouts, as on main. Its regression on the cohort (seed 18: squaring a water crossing straightened a routed
+path across the household's own privy) showed a defect of the judge that stays closed: the seating judge asks the household's own
+house, beds and fixtures of the path as the web will lay it (`tree.laid_run`, `own_clear`). Found and closed against main
+(research R8): a joint's pull is never taken into a kink the two lanes did not have (`joints._one_joint`, seed 47 at 20
+households).
 
 **D7 - The known bugs (FR-007).** research.md lists each: the D6 defect (this feature); cohort seeds 14, 15, 906 and 22, 23 (the
 Diagram (Inashiro) session, feature 315). At close, each is fixed with its run or in progress with its owner's last word.
