@@ -76,6 +76,15 @@ def passage_share(seed: int) -> float:
     return round(lo + knob_rng(seed, "passage_share").random() * (hi - lo), 3)
 
 
+def passages_spent(s: Settlement, households: int) -> bool:
+    """Has the seating under way seated any household by passage - its budget at the share it rolled (`meta.passage_share`)
+    above what is left of it (`_passage_left`)?
+
+    Research: passage machinery - NONE: the share's bookkeeping
+    """
+    return passage_budget(float((s.M.get("meta") or {}).get("passage_share") or 0.0), households) > int(getattr(s, "_passage_left", 0))
+
+
 def passage_budget(share: float, households: int) -> int:
     """How many of a settlement's `households` may be reached by passage at its rolled `share`.
 

@@ -91,7 +91,9 @@ village whose rear households all walked through their neighbors' yards is not w
 houses, Morse; blind alleys to the houses, the Manchu survey). A household beyond the share is seated only with a corridor, as now. THE SHARE IS A CEILING (the perf-audit, 2026-10-03; research R10): a margin
 that leaves a household without a house after seating some across a yard is seated once more with the passage withheld before
 the ladder takes the next margin (`stages.seat_the_margin`, `meta.passage_withheld`) - seed 47 at 40 households had seated on its
-third margin after two seatings thrown away; withheld, its chosen margin seats all 40.
+third margin after two seatings thrown away; withheld, its chosen margin seats all 40. And a seating that has spent passages stops before the
+growth's widest level (`growth.grow_the_margin`, `passage.passages_spent`): no seating that seats everyone reached it with
+passages on the bookend's seeds, and seed 47 spent 5.7 s there on the seating thrown away (the perf-audit's second audit).
 
 **D5 - The reach (FR-003).** The household's record carries `reached_across` (the neighbor's position) and no corridor; the
 ways' one predicate of reach (`checks.unreached_houses`, which the web's settle, its last resort, the tree's judge and the gate

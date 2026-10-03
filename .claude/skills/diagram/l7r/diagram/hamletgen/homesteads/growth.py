@@ -43,7 +43,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT
 from l7r.diagram.settlement.rolling.fit import within_field_reach
 from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done
-from l7r.diagram.settlement.rolling.passage import crossable
+from l7r.diagram.settlement.rolling.passage import crossable, passages_spent
 
 from ..consts import SUN_CORRIDOR_FT, Pt
 from .capacity import DRY_SPELL, _near_a_house, free_seats, offer_seats
@@ -343,8 +343,8 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, bound: float, la
                             heapq.heappush(heap, (d, len(seen), q, ((hx, hy), reach, ang, 1.0, rec)))
             done = len(houses)
             if not heap:
-                if level + 1 >= len(GROW_LEVELS):
-                    break
+                if level + 1 >= len(GROW_LEVELS) or (level + 2 == len(GROW_LEVELS) and passages_spent(s, plan.spec.households)):
+                    break  # ...and a seating that spent passages stops before the widest level: it is seated again without them
                 level, done = level + 1, 0  # DRY: every standing house offers again, wider
                 continue
             seat, (center, reach, ang, scale, nb) = heapq.heappop(heap)[2:]

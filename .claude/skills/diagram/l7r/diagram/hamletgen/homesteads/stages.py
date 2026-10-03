@@ -19,7 +19,7 @@ from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, 
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
-from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share, recheck_passages
+from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share, passages_spent, recheck_passages
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
@@ -256,15 +256,16 @@ def seat_the_margin(s: Settlement, plan: SitePlan, mark: Any, want: int) -> tupl
     neighbor's yard, seated again with the passage withheld before the ladder takes the next margin (`meta.passage_withheld`).
 
     THE SHARE IS A CEILING, NOT A QUOTA (feature 317, research R10): households reached across a yard stand against their
-    neighbors' land, and on seed 47 at 40 households they left the chosen margin two houses short and the next one too, so
+    neighbors' land, and on seed 47 at 40 households they left the chosen margin seven houses short and the next one too, so
     the map was seated on the third margin, after two seatings thrown away (the perf-audit, 2026-10-03); with the passage
-    withheld the chosen margin seats all 40.
+    withheld the chosen margin seats all 40. A seating that has spent passages stops before the growth's widest level
+    (`growth.grow_the_margin`): no seating that seats everyone reaches it with passages (the bookend's seeds at 15, 20 and 40
+    households, research R10), and seed 47's spent 5.7 s there for a seating thrown away.
 
     Research: a share that may be reached by passage - research/questions/0081-village-lanes.drawing.html: the share is how many may be reached that way, never how many must; a margin that seats everyone without it keeps its site
     """
     placed, cloud = _seat_households(s, plan)
-    spent = int(passage_budget(float(s.M["meta"].get("passage_share") or 0.0), plan.spec.households)) > int(getattr(s, "_passage_left", 0))
-    if placed >= want or not spent:
+    if placed >= want or not passages_spent(s, plan.spec.households):
         return placed, cloud
     unseat_to(s, mark)
     s._passage_withheld = True  # type: ignore[attr-defined]

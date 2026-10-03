@@ -371,3 +371,13 @@ passage seating that falls short and is thrown away. The audit also measured the
 layout the passage makes.
 (observed 2026-10-03, method: `control_probe.py`, two takes alternated with main; the perf-audit's `pa317_margin.py`,
 `pa317_notice.py` in the session's scratchpad.)
+
+**Stopped before the widest level** (the perf-audit's second audit, 2026-10-03: inconsistent - seed 47's passage seating placed
+33 of 40, seven short, at growth level 2; not-justified - seed 47 paid +5.5 s for a map identical to the share at 0). Every
+seating of the bookend's seeds that seats everyone stays within growth level 1 (seeds 4, 25, 39, 47 at 15, 20 and 40
+households: `count_probe.py`), so a seating that has spent passages now stops before the widest level and is seated again
+without them. Seed 47 at 40 households: homesteads 8.20 / 8.26 s against main's 3.96 / 3.96 (was 9.68-10.13); seeds 25 and 39
+seat the same manifests as before (sha256 after the homesteads stage). The audit also measured the web stage at 40 households,
+seed 25, 1.64-1.69 s on main against 2.17-2.84 s on the clone, back to main's with both causes off - the passage's layout.
+(observed 2026-10-03, method: `control_probe.py` with `HASH=1`, two takes alternated with main; the perf-audit's
+`audit317c_probe.py` in the session's scratchpad.)
