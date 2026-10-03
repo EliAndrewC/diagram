@@ -47,8 +47,8 @@ seats and the crop, water and marsh 1,065, and it seated 12.
 
 A clustered hamlet seats its households as tightly as the ground allows, nearest the cluster first; when the seats near it run
 out, later households are seated further out - at the cluster's edge, as a late arrival in a real village set up beside the
-houses already there - never by moving a house already seated, and never refused for its distance from the field. Among seats
-otherwise equal, the one nearer the field is taken.
+houses already there - never by moving a house already seated, and never refused for its distance from the field. Of the seats
+the cluster offers at its edge, the one nearest the field is taken first.
 
 **Why this priority**: it is the GM's request, and the record (0004) already states it as the rule.
 
@@ -61,7 +61,8 @@ household seated on the chosen margin, the overflow beyond the old radius, no ho
    the same households on the same margin (its houses may move only where a removed rule had refused or re-laid one).
 2. **Given** a nucleated hamlet whose households overflow the old radius, **When** it is rolled, **Then** the overflow stands
    beyond that radius at the cluster's edge, and no seated house is taken back.
-3. **Given** two seats otherwise equal, **When** the next household is seated, **Then** it takes the one nearer the field.
+3. **Given** the seats a growth level offers round the standing houses, **When** the next household is seated, **Then** the
+   seat nearest the field is tried first.
 4. **Given** a site where no free ground on the whole map can hold every household, **When** it is rolled, **Then** the map is
    refused with the households it could seat named - not reseated elsewhere.
 
@@ -103,6 +104,8 @@ engine no longer keeps.
    rule they keep, and the field reach is no limit.
 2. **Given** the 0081 drawing page, **When** read, **Then** it says a passage the finished map makes unnecessary (its drawn
    layout given a way of its own) is ended in place, and nothing in it says a household is re-laid with another layout.
+3. **Given** the 0029 drawing page, **When** read, **Then** it says that of the seats the cluster offers at its edge the one
+   nearest the field is taken first, and that no distance from the field is a limit.
 
 ### Edge Cases
 
@@ -124,9 +127,17 @@ engine no longer keeps.
   condition, "seated only where it has no way of its own".
 - **FR-002**: A nucleated cluster MUST keep growing outward from its standing houses, nearest first, while households are left
   and free ground remains; the old seat radius MUST NOT refuse a seat (it may order the offers).
-- **FR-003**: No distance from the field MUST refuse a seat, on any form: the field reach (`FIELD_REACH_FT`) goes as a
-  limit. Among seats otherwise equal, the one nearer the field MUST be taken (the GM: people did not want to walk far to their
-  fields). The hard limits are the existing per-house rules: dry ground, nothing on crop or water, every rule a seat already asks.
+- **FR-003**: No distance from the field MUST refuse a seat, on any form, and the field reach (`FIELD_REACH_FT`) MUST be removed
+  (the GM: "we can get rid of these 700 feet measurement completely"). Every use MUST be deleted or re-based on something that
+  is not that figure: the predicate `within_field_reach` (the growth's seat test, the nucleated placer, the dispersed form's
+  exhaustive pass, the fit test) deleted; the seat window the growth's seat region is built over, the free-ground grid's box and
+  the manifest's `site_boundary.window` sized from the map's own extent; the placement-stages page's legend and the tests
+  pinning the figure updated. The hard limits that remain are the per-house rules: dry ground, nothing on crop or water, the
+  canvas, the reserved corridors and the standing homesteads.
+- **FR-003a**: Of the seats a nucleated growth level offers round its standing houses, the one nearest the field MUST be tried
+  first (the GM: "if we have multiple options in our placement, and one option is closer to the fields, then we should take the
+  one that is closer to the fields"); the growth still widens level by level from the cluster outward, so the cluster stays as
+  tight as its ground allows.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
   house is seated on it.
 - **FR-005**: Where no free ground on the map can hold every household, the map MUST be refused, naming the households seated
@@ -151,7 +162,10 @@ engine no longer keeps.
 
 - **SC-001** (FR-001): a test fails if the seated-house count falls during any seating; it passes on the cohort and the pool.
 - **SC-002** (FR-002, FR-003): on the reference spec at 40 households, seeds 4, 25, 39 and 47, and on cohort seed 18, every
-  household is seated on the chosen margin; no seat is refused for its distance from the field.
+  household is seated on the chosen margin; no seat is refused for its distance from the field, and no name `FIELD_REACH_FT`
+  remains in the engine.
+- **SC-002a** (FR-003a): a test fails if, of the seats one growth level offers, a seat farther from the field is tried before a
+  nearer one.
 - **SC-003** (FR-005): a constructed site with too little free ground is refused with the shortfall named.
 - **SC-004** (FR-007, FR-008): the record checks owed by the page edits answer clean; each nucleated pool map's manifest carries
   its quarter-built figure.
@@ -182,3 +196,7 @@ engine no longer keeps.
   for US3 scenario 2 says the finished map's check asks the drawn layout only.
 - Amendment (2026-10-03, the GM's rulings in `request.md`): the field reach removed as a limit on every form, nearness
   to the field a preference; cohort seed 18 grows on its first margin. The review counter restarts with this amendment.
+- Amendment round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - FR-003 left the 700 ft constant alive (every use
+  now listed and deleted or re-based; seed 18 seats on its first margin only once the window and the grid box are re-based too,
+  measured: `bound_probe.py` with the constant at 3000 ft); "otherwise equal" a tie that never occurs (FR-003a: the nearest the
+  field first among a growth level's seats, with SC-002a); 0029's statement unspecified (US3 scenario 3).
