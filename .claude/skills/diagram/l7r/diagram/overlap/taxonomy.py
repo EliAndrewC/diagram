@@ -169,6 +169,7 @@ _OVERLAP_EXEMPT = {
     "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 150 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
     "farm_fixtures": "a farmstead's small fixtures - privy, wood shed, manure heap, bath room, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
     "scrub_pines": "the scrub's hill pines as (x, y, r) records for the sun rule (feature 310): bookkeeping - their ink is the scrub's own marks, whose extents the commons already keep off every footprint",
+    "bamboo_marks": "every inked bamboo culm mark as (x, y, r) records for the sun rule (feature 315): bookkeeping - the ink is the clump's own group, ruled on there",
     "planted_trees": "the willows and fruit trees a dike's planting drew before the plots, as (x, y, r) records per planted run (feature 310): bookkeeping - their ink is the dike's planted string, on the dike's own keep-out",
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
@@ -673,7 +674,7 @@ Research:
 # in the wall (the furniture in the gap is `gate_structs`); `wall_tower_keepclears` is a reservation,
 # not ink; `forest_edge` is an envelope whose ink is `tree_crowns` and is classified RECORD above.
 _MX_NOT_GEOMETRY = frozenset(
-    {"labels", "tree_crowns", "scrub_pines", "planted_trees", "wet_plots", "flooded_plots", "bund_junctions", "footbridges", "knobs", "clearings", "gates", "wall_tower_keepclears"}
+    {"labels", "tree_crowns", "scrub_pines", "bamboo_marks", "planted_trees", "wet_plots", "flooded_plots", "bund_junctions", "footbridges", "knobs", "clearings", "gates", "wall_tower_keepclears"}
 )
 
 _MATRIX_PARENT_FIELD = {

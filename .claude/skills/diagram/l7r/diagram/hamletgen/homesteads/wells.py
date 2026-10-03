@@ -88,6 +88,32 @@ Research: watering reach - research/questions/0033-row-villages-resson.drawing.h
 """
 
 
+BEND_LOOK_FT = 40.0
+"""How far along the street, either way, a shared well's mark looks for a bend (the law's zigzag run, `law.BEND_RUN_FT`)."""
+
+BEND_WELL_DEG = 30.0
+"""The street's turn, over `BEND_LOOK_FT` either way, past which no shared well is dug at a mark (feature 315): a GUESS, the
+law's zigzag turn (50 degrees) less a margin, so a bend the street may yet be straightened through is left clear."""
+
+
+def street_turns_at(line: Sequence[Pt], arc: Sequence[float], u: float, look: float) -> float:
+    """How far, in degrees, the street `line` (its running lengths `arc`) turns on either side of the point `u` along it - the
+    larger of its turn from `look` before to `u` and from `u` to `look` after. Either side alone, not end to end: a step in
+    the street turns one way and back, and its two turns cancel between the far ends."""
+
+    def heading(at: float) -> float:
+        at = max(0.0, min(arc[-1], at))
+        k = max(0, min(len(arc) - 2, next((j for j in range(len(arc) - 1) if arc[j + 1] >= at), len(arc) - 2)))
+        a, b = line[k], line[k + 1]
+        return math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+
+    def between(p: float, q: float) -> float:
+        turn = abs(heading(q) - heading(p)) % 360.0
+        return min(turn, 360.0 - turn)
+
+    return max(between(u - look, u), between(u, u + look))
+
+
 def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets: Sequence[Sequence[Pt]]) -> int:
     """A row village that shares its water (`row_water` shared, feature 291 plan D18): along each street, wells beside the
     street, one at the middle of each equal stretch of the row no longer than 1.6 reaches (the watering rule's reach), so
@@ -137,6 +163,9 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
         for u in [us[0] + span * (j + 0.5) / stretches for j in range(stretches)]:
             for du in (0.0, frame_w / 2, -frame_w / 2, frame_w / 4, -frame_w / 4):
                 uu = max(0.0, min(arc[-1], u + du))
+                if street_turns_at(line, arc, uu, s.px(BEND_LOOK_FT)) >= BEND_WELL_DEG:
+                    continue  # ...never in the street's bend (feature 315, cohort seed 903: a well in the inside of a step in the
+                    # street held the street to its two right-angle turns, a kink on a tree lane, and the web was refused)
                 k = max(0, min(len(arc) - 2, next(j for j in range(len(arc) - 1) if arc[j + 1] >= uu)))
                 a, b = line[k], line[k + 1]
                 seg = math.dist(a, b) or 1.0

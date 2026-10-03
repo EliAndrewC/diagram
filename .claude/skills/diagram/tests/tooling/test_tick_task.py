@@ -146,3 +146,13 @@ def test_repo_root_falls_back_to_the_nearest_specs_directory(tmp_path: pathlib.P
     monkeypatch.setattr(tt.subprocess, "run", no_git)
     assert tt.repo_root(deep) == tmp_path
     assert tt.repo_root(tmp_path / "nowhere") == (tmp_path / "nowhere").resolve() or True
+
+
+def test_boxes_written_below_the_verify_line_survive_the_tick() -> None:
+    """Feature 315: the verify text ran to the block's end and was replaced whole, taking the five boxes listed one a line
+    below it - T24 and T30 lost theirs, and the gate's box test failed on the ticked tasks."""
+    text = "- [ ] T24 the persimmon\n      research: physical\n      verify: seed 23 passes\n      - [ ] research pass\n      - [x] source-reader confirmed\n- [ ] T25 next\n      verify: x\n"
+    new, _ = tt.tick(text, "T24", "it passes")
+    assert "verify: DONE. it passes\n      - [ ] research pass\n      - [x] source-reader confirmed\n- [ ] T25" in new
+    boxed, _ = tt.tick(text, "T24", "it passes", boxes=True)
+    assert "      - [x] research pass\n" in boxed

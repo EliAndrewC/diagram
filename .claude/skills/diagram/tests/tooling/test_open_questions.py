@@ -15,9 +15,9 @@ from __future__ import annotations
 import importlib.util
 import pathlib
 import re
+import resource
 import subprocess
 import sys
-import time
 
 REPO = pathlib.Path(__file__).resolve().parents[5]
 SKILL = REPO / ".claude/skills/diagram"
@@ -153,9 +153,12 @@ def test_a_fragment_without_its_heading_is_skipped(tmp_path: pathlib.Path) -> No
 
 
 def test_the_real_tree() -> None:
-    t0 = time.monotonic()
+    # ...ITS CPU TIME, NOT THE WALL CLOCK (feature 315): the gate runs it beside four other sessions under one 10 GB cap, and a
+    # 2.3 s run read 12.4 s while the machine stalled on memory - the bound is on the work, which contention does not change
+    before = resource.getrusage(resource.RUSAGE_CHILDREN)
     out = subprocess.run([sys.executable, str(REPO / "scripts/_open_questions.py"), "--root", str(REPO)], capture_output=True, text=True, check=True).stdout
-    took = time.monotonic() - t0
+    after = resource.getrusage(resource.RUSAGE_CHILDREN)
+    took = (after.ru_utime - before.ru_utime) + (after.ru_stime - before.ru_stime)
     rack = out[out.index("## How our maps draw rice-drying racks (hasa, hasagi)") :]
     rack = rack[: rack.index("\n## ")]
     assert "map features: threshing yard" in rack

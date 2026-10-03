@@ -1,7 +1,4 @@
-"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index.
-
-Research: plumbing - NONE
-"""
+"""Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
 from collections.abc import Sequence
@@ -17,11 +14,7 @@ if TYPE_CHECKING:
 class KeepoutsMixin:
     def _corridor_buffers(self: Settlement, extra: float = 0) -> list[Any]:  # type: ignore[misc]
         """Lane / town-street / road centerlines with their (half-width + `extra`) keep-out - the corridors that
-        trees, scrub, and other vegetation must not be drawn ON. Returns [(polyline, buffer), ...].
-
-        Research:
-            no vegetation on a tread - UNRESEARCHED: every lane, street, alley, ring road and road at its half-width
-        """
+        trees, scrub, and other vegetation must not be drawn ON. Returns [(polyline, buffer), ...]."""
         corr = [([tuple(p) for p in ln["pts"]], ln.get("w", 6) / 2 + extra) for ln in self.M.get("lanes", [])]
         corr += [([tuple(p) for p in s["pts"]], s.get("w", 10) / 2 + extra) for s in self.M.get("town_streets", [])]
         # alleys + the city ring road are ways too (GM 2026-07-24: yard furniture kept off "roads"
@@ -68,11 +61,7 @@ class KeepoutsMixin:
         water, the same reason it skips the lane tread and the pond. `near` is an optional
         pre-boxed accessor (boxed_grid(boxed_segs(self._watercourse_segs())).near) for callers that
         test per scatter POINT - the same hoist-the-invariant discipline as their other keep-outs
-        (fld_b / cor_b); verdicts are identical either way (the grid prunes, it never decides).
-
-        Research:
-            no ground cover on open water - UNRESEARCHED: within a watercourse's drawn half-width and a pad
-        """
+        (fld_b / cor_b); verdicts are identical either way (the grid prunes, it never decides)."""
         if near is not None:
             if boxed_seg_hit(px, py, near(px, py)):
                 return True
@@ -215,20 +204,15 @@ class KeepoutsMixin:
     _CANOPY_STRUCT_KEYS = _HALO_STRUCT_KEYS + _CANOPY_EXTRA_KEYS + _CANOPY_ROOFED_KEYS
     CEMETERY_CORE = 0.9  # the fraction of a burial ground's half-extent kept clear of crowns: the grave markers reach ~0.8-0.9 of it (cemetery's grid), and at 0.6 a crown hid a whole grave on Kuwabata (settlement-review round 2) - feature 273
 
-    def _sun_keepouts(self: Settlement, bbox: tuple[float, float, float, float]) -> list[tuple[float, float, float, float]]:  # type: ignore[misc]
+    def _sun_keepouts(self: Settlement, bbox: tuple[float, float, float, float], reach_ft: float = CANOPY_SHADE_FT) -> list[tuple[float, float, float, float]]:  # type: ignore[misc]
         """The SUN GROUND of every threshing yard and garden bed near `bbox`, as (x, y, half-w, half-h) keep-out boxes a canopy
         crown may not meet (GM 2026-10-02, feature 310: "no canopy trees should be exempt"; `tree_shade.sun_box`, the reach
         `CANOPY_SHADE_FT`) - on the map that keeps the sun corridor (the scripted path's opt-in), else none. Read from the drawn
         plots and from every placed homestead's bundle, whose plots a farm grove's arms are drawn before (the flush). Handed to
-        every crown test (`_crown_covers`) and to no bamboo mark's: bamboo is the GM's "maybe" (spec 310).
-
-        Research:
-            every canopy tree out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html:
-                each yard and bed widened by 50 ft, bamboo exempt
-        """
+        every crown test (`_crown_covers`), and at `reach_ft` = `BAMBOO_SHADE_FT` to every bamboo mark's and stand's (feature 315)."""
         if not getattr(self, "_sun_corridor_ft", 0.0):
             return []
-        reach = self.px(CANOPY_SHADE_FT)
+        reach = self.px(reach_ft)
         plots = [b for k in ("threshing_yards", "gardens") for o in self.M.get(k) or () if (b := plot_box(o)) is not None]
         for rec in self.M.get("houses") or ():
             g = rec.get("geom") or {}
@@ -250,10 +234,7 @@ class KeepoutsMixin:
 
     def thin_planted_trees(self: Settlement) -> int:  # type: ignore[misc]
         """Rewrite each planted string (`_plant_run`) without the trees that stand in a yard's or bed's sun ground
-        (`_sun_keepouts`) and record the trees it keeps; how many it took out. Called once the homesteads are seated.
-
-        Research: dike trees out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
-        """
+        (`_sun_keepouts`) and record the trees it keeps; how many it took out. Called once the homesteads are seated."""
         dropped = 0
         for k, (z, pieces, trees) in enumerate(self.__dict__.get("_planted_runs") or ()):
             seats = [t for t in trees if t is not None]
@@ -273,13 +254,7 @@ class KeepoutsMixin:
         ground-cover scatters honor: a tree may stand hard against a wall (real groves hug the eaves), it
         may only not be DRAWN ON the roof - so the halo here is zero. A rotated structure is covered
         conservatively by its half-diagonal square. Prefiltered to `bbox`, since the caller tests every
-        crown of a stand against this list.
-
-        Research:
-            no crown on a roof or a wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
-                against a wall, never on it; open-air yards exempt
-            burial ground's middle - GUESS: 0.9 of its half-extent kept clear of crowns
-        """
+        crown of a stand against this list."""
         bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []
         for k in self._CANOPY_STRUCT_KEYS:
@@ -345,11 +320,7 @@ class KeepoutsMixin:
         covered conservatively by its half-diagonal square. Prefiltered to `bbox` (the cover poly's extent) -
         a keep-out that cannot touch the scatter region would only slow the per-point loop (a to-scale town
         carries ~200 structures and each cover poly samples thousands of points). Returned as (rects,
-        circles) for the ground-cover scatters' per-point tests.
-
-        Research:
-            swept halo - UNRESEARCHED: no ground cover within 30 ft of a structure, 20 ft of a wellhead, 8 ft of a yard or bed
-        """
+        circles) for the ground-cover scatters' per-point tests."""
         bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []
         for keys, halo_ft in ((self._HALO_STRUCT_KEYS, self._HALO_STRUCT_FT), (self._HALO_PLOT_KEYS, self._HALO_PLOT_FT)):

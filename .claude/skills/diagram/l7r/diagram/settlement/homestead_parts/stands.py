@@ -944,6 +944,10 @@ class StandsMixin:
         if form == "conifer_led":
             _rows, rows_ink = self._belt_ranks(seated, clump, _wet)
             crowns["conifer"] = len(_rows)
+            # ...AND KNOWN TO EVERY LATER STAND (feature 315): a stand drawn after the belt keeps its broadleaf off a conifer it
+            # knows of (`_draw_grove`'s `_cones`), and the belt's rows were never told it - a re-seated Inashiro drew a copse crown
+            # over a belt cedar (B5b)
+            self._conifer_crowns = [*(getattr(self, "_conifer_crowns", None) or []), *((float(x), float(y), float(r)) for x, y, r in _rows)]
         for jx, jy in seated:
             # feature 150: the belt and the copse are two highlight classes; a water_mouth grove has no
             # class in the vocabulary yet and stays unclassed so the census reports it

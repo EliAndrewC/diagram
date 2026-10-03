@@ -1,5 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
+import pytest
+
 from l7r.diagram import hamletgen as hg
 
 from .._builders import SQUARE, a_plan
@@ -353,3 +355,103 @@ def test_a_point_is_pushed_clear_of_every_band_it_stands_in_or_near() -> None:
     q = clear_of_bands((100.0, 20.0), [band], 12.0)
     assert not point_in_poly(q[0], q[1], band) and edge_dist(q[0], q[1], band) >= 11.9
     assert clear_of_bands((100.0, 200.0), [band], 12.0) == (100.0, 200.0)
+
+
+def test_a_walled_in_gateway_is_left_by_the_strip_or_a_turned_bearing(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 315 (cohort seed 19): where the sweep from the gateway finds no dry way out, the track runs out along the exit
+    strip from its end (`track_from_the_strip_end`), or - with no strip - from the first gateway on a bearing turned off the
+    downslope whose sweep finds one (`turned_gateway_track`); none, and it is refused."""
+    from l7r.diagram.hamletgen.ways import gateway as tr
+
+    class _S:
+        def __init__(self, strip):  # type: ignore[no-untyped-def]
+            self.M = {"access_exit": strip}
+
+    walled = {(0.0, 0.0)}
+
+    def sweep(plan, start, **_k):  # type: ignore[no-untyped-def]
+        if tuple(start) in walled:
+            raise tr.NoDryExit("walled")
+        return [start, (start[0] + 500.0, start[1])]
+
+    monkeypatch.setattr(tr, "connector_track", sweep)
+    out = tr.track_from_the_strip_end(_S([(0.0, 0.0), (40.0, 0.0)]), None, (10.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
+    assert out == [(10.0, 0.0), (40.0, 0.0), (540.0, 0.0)], "out along the strip, then the sweep from its end"
+    assert tr.track_from_the_strip_end(_S([(0.0, 0.0), (10.0, 0.0)]), None, (10.0, 0.0), [], [], [], [])[:2] == [(10.0, 0.0), (510.0, 0.0)], "the gateway at the strip's end"  # type: ignore[arg-type]
+    with pytest.raises(tr.NoDryExit):
+        tr.track_from_the_strip_end(_S([]), None, (10.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
+
+    turns: list[float] = []
+
+    def gateway(s, seat, band, deg=0.0):  # type: ignore[no-untyped-def]
+        turns.append(deg)
+        return (0.0, 0.0) if deg != -60.0 else (5.0, 5.0)
+
+    monkeypatch.setattr(tr, "_cluster_gateway", gateway)
+    monkeypatch.setattr(tr, "gate_on_the_strip", lambda s, env, g: g)
+
+    class _P:
+        envelope: list = []
+
+    got = tr.turned_gateway_track(_S(None), _P(), {}, (0.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
+    assert got[0] == (5.0, 5.0) and turns == [30.0, -30.0, 60.0, -60.0], "the nearest turn whose sweep is dry"
+    walled.add((5.0, 5.0))
+    with pytest.raises(tr.NoDryExit):
+        tr.turned_gateway_track(_S(None), _P(), {}, (0.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
+
+
+def test_the_gateway_track_falls_back_only_when_the_sweep_is_walled(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 315: `gateway_track` - the sweep's track where it is dry; walled, the strip's end where the seating reserved a
+    strip, else a turned bearing."""
+    from l7r.diagram.hamletgen.ways import gateway as tr
+
+    class _S:
+        def __init__(self, strip):  # type: ignore[no-untyped-def]
+            self.M = {"access_exit": strip}
+
+    monkeypatch.setattr(tr, "track_from_the_strip_end", lambda *a: ["strip"])
+    monkeypatch.setattr(tr, "turned_gateway_track", lambda *a: ["turned"])
+    monkeypatch.setattr(tr, "connector_track", lambda plan, start, **k: [start])
+    assert tr.gateway_track(_S(None), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == [(1.0, 1.0)]  # type: ignore[arg-type]
+
+    def walled(plan, start, **k):  # type: ignore[no-untyped-def]
+        raise tr.NoDryExit("walled")
+
+    monkeypatch.setattr(tr, "connector_track", walled)
+    assert tr.gateway_track(_S([(0, 0), (1, 1)]), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == ["strip"]  # type: ignore[arg-type]
+    assert tr.gateway_track(_S(None), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == ["turned"]  # type: ignore[arg-type]
+
+
+def test_a_turned_gateway_leaves_the_cloud_on_its_own_bearing() -> None:
+    """Feature 315: `_cluster_gateway(..., turn_deg)` walks out on the seat's outward bearing turned by `turn_deg`: turned a
+    right angle, the gateway leaves the cloud's side, not its downslope edge."""
+    from l7r.diagram.hamletgen.ways import track as tr
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(2000, 2000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1)
+    s.M["houses"] = [{"x": 1000.0 + 60.0 * k, "y": 1000.0, "w": 40.0, "h": 28.0} for k in range(5)]
+    seat = {"along": (1.0, 0.0), "out": (0.0, 1.0)}
+    down = tr._cluster_gateway(s, seat, (0.0, 0.0))
+    side = tr._cluster_gateway(s, seat, (0.0, 0.0), 90.0)
+    assert down[1] > 1000.0 and abs(down[0] - 1120.0) < 1.0, "downslope: below the cloud's middle"
+    assert abs(side[1] - 1000.0) < 1.0 and abs(side[0] - 1120.0) > 20.0, "turned a right angle: off to the side"
+
+
+def test_a_gateway_on_a_well_is_stepped_clear_of_it() -> None:
+    """Feature 315, cohort seed 28: a gateway 9 px inside a farm's well walled every dry exit in. It is stepped out past half the
+    connector's tread from what forbids a way; a reserved wood seat is not such a footprint, and no registry leaves it be."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways import gateway
+    from l7r.diagram.hamletgen.ways.track import CONNECTOR_WIDTH
+    from l7r.diagram.settlement import edge_dist
+
+    well = [(0.0, 0.0), (20.0, 0.0), (20.0, 20.0), (0.0, 20.0)]
+    seat = [(30.0, 0.0), (60.0, 0.0), (60.0, 20.0), (30.0, 20.0)]
+    st = SimpleNamespace(forbidding=lambda key: [("wells", well), ("wood seat", seat)])
+    s = SimpleNamespace(M=SimpleNamespace(standing=st))
+    g = gateway.clear_of_what_stands(s, (10.0, 11.0))
+    assert edge_dist(g[0], g[1], well) >= CONNECTOR_WIDTH / 2.0 - 1e-6 and g != (10.0, 11.0)
+    assert gateway.clear_of_what_stands(s, (45.0, 10.0)) == (45.0, 10.0), "a wood seat the way out may take"
+    assert gateway.clear_of_what_stands(SimpleNamespace(M={}), (10.0, 11.0)) == (10.0, 11.0)

@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "8f13ae931",
+    "label": "315-start",
+    "utc": "20261002T220503Z"
+  },
+  "binding": "7ff4c62d5a9673532a6d3e112dceb1d01e2dd2f3c3686723c852388d4d38e277",
+  "end": {
+    "commit": "3a72b7e88",
+    "label": "315-end",
+    "utc": "20261003T055219Z"
+  },
+  "environment": "local",
+  "feature": "315-bamboo-in-the-sun",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ba150eae-6164-4e48-ab0e-3ebcacdf35b5",
+    "utc": "20261003T055703Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -32.3,
+          "39": -27.6,
+          "4": -40.0,
+          "47": -36.7
+        },
+        "total_pct": -34.6
+      },
+      "20": {
+        "seeds": {
+          "25": -39.1,
+          "39": -30.5,
+          "4": -19.0,
+          "47": -39.3
+        },
+        "total_pct": -32.0
+      },
+      "40": {
+        "seeds": {
+          "25": -35.3,
+          "39": -42.8,
+          "4": -30.3,
+          "47": -45.0
+        },
+        "total_pct": -37.9
+      }
+    },
+    "seeds": {
+      "25": -26.3,
+      "39": -22.0,
+      "4": -21.8,
+      "47": 5.0
+    },
+    "total_pct": -16.7
+  },
+  "note": "Rewrite matches the reviewer counterfactual (detached worktrees, 6 interleaved runs a side, seed 47 at 3a72b7e88): weld_corner is called 0 times; with the weld and kbam both off, web is unchanged (0.92 vs 0.93 s), so web +0.27 s (0.69->0.96) follows the re-rolled map (13 lanes vs 11) from the merged 314+315 seating. kbam accounts for ~0.03 s of windbreak +0.05..0.1 s and the rest is the moved map's culm marks. Total -16.7%, every other seed and leg is faster.",
+  "verdict": "consistent"
+}

@@ -14,6 +14,7 @@ from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, 
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
+from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
@@ -61,6 +62,11 @@ def wind_seat(wlx: float, wly: float, hw: float, hh: float, gap: float, sw: floa
     return (math.copysign(hw / 2 + gap + sh / 2, wlx), 0.0, sh, sw)
 
 
+def in_the_sun(cx: float, cy: float, w: float, h: float, sun: Sequence[tuple[float, float, float, float]]) -> bool:
+    """Does the `w` x `h` rect centered (`cx`, `cy`) overlap any sun box (center x, center y, half-w, half-h) in `sun`?"""
+    return any(abs(cx - bx) < w / 2 + bw and abs(cy - by) < h / 2 + bh for bx, by, bw, bh in sun)
+
+
 def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
     """Seat a small bamboo strip beside each farmstead that keeps one, per the `bamboo` knob.
 
@@ -94,6 +100,8 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)
     seats = [(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()]
+    # ...AND EVERY PLOT'S SUN GROUND at bamboo's reach (feature 315): gathered once - every plot stands by the hinterland stage
+    sun = s._sun_keepouts((-1e9, -1e9, 1e9, 1e9), BAMBOO_SHADE_FT)
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
@@ -147,6 +155,8 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 # the bamboo, feature 287 woods W25's seats planted where reserved - `stand_spares_seats`); the strip is
                 # drawn axis-aligned in (cw, ch) at (cx, cy), the rect the predicate reads
                 if not stand_spares_seats(cx, cy, cw, ch, seats, s.bscale):
+                    continue
+                if in_the_sun(cx, cy, cw, ch, sun):  # a stand throws a timber bamboo's shadow: none in a yard's or bed's sun (feature 315)
                     continue
                 # the household's strip stands on its house's bank (feature 287, homes H01) ...and on its house's side of every lane
                 # (glyph check, feature 302: Sawada's strip across a lane)

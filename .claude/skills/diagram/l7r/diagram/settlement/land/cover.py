@@ -106,6 +106,7 @@ _BARE_SKIP = frozenset(
         "pond_layer",
         "tree_crowns",
         "scrub_pines",
+        "bamboo_marks",
         "planted_trees",
         "wet_plots",
         "flooded_plots",

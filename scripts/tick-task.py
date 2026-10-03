@@ -94,8 +94,9 @@ def tick(text: str, task: str, note: str, boxes: bool = False) -> tuple[str, str
         block.append(f"{indent}verify: DONE. {note.strip()}\n")
     else:
         indent = block[verify_at][: len(block[verify_at]) - len(block[verify_at].lstrip())]
-        # the verify text runs to the block's end (it may wrap); it is replaced whole
-        block = block[: verify_at + 1]
+        # the verify text runs to the block's end (it may wrap); it is replaced whole - but NOT the research boxes below it,
+        # which are the task's own lines (feature 315: a tick cut T24's and T30's five boxes, and `BOXES=1` then found none)
+        block = block[: verify_at + 1] + [ln for ln in block[verify_at + 1 :] if _is_boxes_line(ln)]
         block[verify_at] = f"{indent}verify: DONE. {note.strip()}\n"
     block.extend(trail)
     if boxes:

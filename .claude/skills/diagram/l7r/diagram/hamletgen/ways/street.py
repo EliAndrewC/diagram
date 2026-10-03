@@ -19,7 +19,7 @@ from ..consts import BUNDLE_PITCH, FOOTPATH_FABRIC_GAP, Poly, Pt
 from . import law
 from .corridors import FORD_LANDING_FT
 from .fabric import _crosses_fabric, _draw_web
-from .route import _route
+from .route import _route, _unjog
 from .serve import door_path
 from .settle import Lawful
 
@@ -248,6 +248,11 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     n = 0
     for k, _line in enumerate(getattr(s, "_row_streets", None) or []):
         path = thread(drawn_span(s, k, houses, brook), walls, hard, water)
+        # ...WITHOUT THE JOGS ITS PLANNED LINE TAKES FROM THE FIELD'S EDGE (feature 315, cohort seed 903): an edge row's street ran
+        # south, 40 ft east along a step in the edge and south again - two turns past the law's zigzag within its run, a kink on a
+        # tree lane no settle may cut, and the web was refused; each jog is replaced by its chord where that clears (`_unjog`),
+        # which the shared wells leave room for by keeping out of the street's bends (`homesteads.wells.street_turns_at`)
+        path = _unjog(path, hard, walls, water)
         # A FURTHER STREET JOINS THE ROW'S STREETS, NOT THE ROAD: joined to the nearest of either, Mizuguchi's second street
         # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
         # (settlement-review, 2026-09-30); only the first street takes the road

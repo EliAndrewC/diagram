@@ -134,6 +134,8 @@ def test_the_tree_admits_a_lawful_corridor_and_refuses_each_rule_it_would_break(
     assert tree.admits(_law(open_), open_, [(240.0, 150.0), (340.0, 50.0), (340.0, 0.0)], ACCESS_ROLE, _house(240.0, 170.0)), "across a corridor: a crossroads"
     # the strip as the innermost attachment leaves it: from (400, 0) on, and a corridor arriving back along it folds
     assert not tree.admits(ok, M, [(330.0, 1.0), (400.0, 0.0)], ACCESS_ROLE, _house(330.0, 30.0)), "the strip folds on it"
+    # ...but a crossing that lands on the strip 12 ft past the other corridor closes a sliver with it and the strip
+    assert not tree.admits(_law(open_), open_, [(240.0, 100.0), (312.0, 0.0)], ACCESS_ROLE, _house(240.0, 120.0)), "a sliver"
 
 
 def test_the_tree_refuses_a_way_out_over_the_brook_and_back_and_a_third_end_at_a_house() -> None:

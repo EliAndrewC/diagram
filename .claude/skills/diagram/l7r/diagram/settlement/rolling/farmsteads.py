@@ -9,12 +9,23 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
+from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
+from ..homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, crown_shades
 from .fit import part_box
 from .lot import kura_rect
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def beds_sun_clear(beds: Any, crowns: Any, trees: Any, marks: Any, reach: float, bamboo_reach: float) -> bool:
+    """Is the sun ground of every bed in `beds` (drawn boxes, center x, center y, w, h) clear of every standing crown (`crowns`, the
+    flat [x, y, r, ...] run of `tree_crowns`), every tree promised a seat (`trees`, (x, y, r)) and every bamboo mark (`marks`,
+    [x, y, r]) - the trees at `reach`, the bamboo at `bamboo_reach`? (Feature 315: a garden nudged south after the groves stand
+    must not move its sun ground over a tree the sun rule already kept off its old place - cohort seed 14.)"""
+    discs = [(float(crowns[i]), float(crowns[i + 1]), float(crowns[i + 2])) for i in range(0, len(crowns) - 2, 3)] + [tuple(t) for t in trees]
+    return not any(crown_shades(x, y, r, b, reach) for b in beds for x, y, r in discs) and not any(crown_shades(float(m[0]), float(m[1]), float(m[2]), b, bamboo_reach) for b in beds for m in marks)
 
 
 class FarmsteadFlushMixin:
@@ -189,6 +200,15 @@ class FarmsteadFlushMixin:
             if not any(overlaps((gcy - gh / 2, gcy + gh / 2), t) for t in trees):
                 continue  # not currently east-shaded - nothing to do
             maxshift = gh + rec["h"] + 6  # 'a little' - stays a dooryard garden near the house
+            reach, bamboo_reach = self.px(CANOPY_SHADE_FT), self.px(BAMBOO_SHADE_FT)
+            # the trees near enough to matter, gathered once per garden: within the shift, the reach and the largest crown
+            span = maxshift + max(reach, bamboo_reach) + 3.0 * self.px(PERSIMMON_CROWN_FT)
+            bx0, bx1 = min(b[0] - b[2] / 2 for b in beds) - span, max(b[0] + b[2] / 2 for b in beds) + span
+            by0, by1 = min(b[1] - b[3] / 2 for b in beds) - span, max(b[1] + b[3] / 2 for b in beds) + span
+            tc = self.M.get("tree_crowns") or []
+            near_crowns = [v for i in range(0, len(tc) - 2, 3) if bx0 <= tc[i] <= bx1 and by0 <= tc[i + 1] <= by1 for v in tc[i : i + 3]]
+            near_marks = [m for m in self.M.get("bamboo_marks") or () if bx0 <= m[0] <= bx1 and by0 <= m[1] <= by1]
+            promised = [(t[0], t[1], self.px(PERSIMMON_CROWN_FT + 1.0)) for r in recs if (t := (r["geom"].get("fixtures") or {}).get("persimmon")) is not None]
             others = footprints(i) + [tuple(part_box(geom, "house"))] + ([tuple(part_box(geom, "yard"))] if geom.get("yard") is not None else []) + [tuple(b) for b in geom.get("groves") or ()]
             dy = step
             while dy <= maxshift:
@@ -196,7 +216,9 @@ class FarmsteadFlushMixin:
                 if not any(overlaps(lane, t) for t in trees):
                     shifted = [(b[0], b[1] + dy, b[2], b[3]) for b in beds]
                     drawn = [(b[0], b[1] + dy, b[2], b[3]) for b in part_box(geom, "gardens")]
-                    if self._garden_beds_clear(drawn, others):
+                    # ...and its new sun ground clear of every crown already drawn, every persimmon promised a seat and every bamboo
+                    # mark (feature 315; cohort seed 14: a bed nudged 8 ft south took a neighbor's persimmon into its sun)
+                    if self._garden_beds_clear(drawn, others) and beds_sun_clear(drawn, near_crowns, promised, near_marks, reach, bamboo_reach):
                         geom["gardens"] = shifted
                         if "boxes" in geom:
                             geom["boxes"]["gardens"] = drawn  # the beds' drawn boxes move with them

@@ -206,7 +206,7 @@ class FarmFixturesMixin:
             fruit dots - CONVENTION: four jittered orange dots
         """
         r = self.px(PERSIMMON_CROWN_FT)
-        g = [f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9A3E" stroke="#4E6A28" stroke-width="0.8"/>']
+        g = [f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#94A23A" stroke="#5A6A26" stroke-width="0.8"/>']
         # THE FRUIT IS NOT A STENCIL (feature 152 T11, settlement-review 2026-08-29). The four dots sat at
         # exactly (+/-0.55r, +/-0.55r) at 45/135/225/315 degrees, identical on every tree on every map: a
         # rigid mirrored 2x2 of saturated marks, which is this project's own named strongest face-read

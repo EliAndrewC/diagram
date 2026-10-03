@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T05:53:42Z",
+  "target": "perf-explain",
+  "commit": "3a72b7e88",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: a control (the same seed rolled with the bamboo keep-outs and the weld removed) was not taken: four sessions held the shared 10 GB cap during this run and memguard was killing processes; the increase is about 0.2 s on one seed of sixteen"
+}

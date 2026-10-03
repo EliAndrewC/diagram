@@ -102,6 +102,18 @@ def test_shared_row_wells_put_every_farm_within_reach() -> None:
     assert shared_row_wells(s, houses, [line[:1]]) == 0
 
 
+def test_no_shared_well_is_dug_in_the_streets_bend() -> None:
+    """Feature 315, cohort seed 903: a well in the inside of a step in the street held the street to its two right-angle
+    turns. The row's one mark falls on a 40 ft jog here, and the well is dug a lot along it instead."""
+    from l7r.diagram.hamletgen.homesteads.wells import BEND_LOOK_FT, shared_row_wells
+
+    s = _s()
+    line = [*((float(x), 700.0) for x in range(100, 701, 8)), (700.0, 740.0), *((float(x), 740.0) for x in range(708, 1301, 8))]
+    houses = [{"x": float(x), "y": (700.0 if x < 700 else 740.0) + (90.0 if i % 2 else -90.0), "geom": {"bbox": (float(x), 700.0, 200.0, 150.0)}} for i, x in enumerate(range(150, 1300, 110))]
+    assert shared_row_wells(s, houses, [line]) >= 1
+    assert all(math.dist((w["x"], w["y"]), (700.0, 720.0)) > s.px(BEND_LOOK_FT) for w in s.M["wells"]), "none at the step"
+
+
 def test_a_well_seat_in_the_scrub_or_on_blocked_ground_is_refused(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     s = _s()
     assert own_well_clear(s, 700.0, 700.0, 8.0, [])
@@ -122,3 +134,15 @@ def test_place_wells_hands_the_grove_farms_to_their_own_water_and_seats_the_rest
     plan = SimpleNamespace(settlement_form="dispersed", farm_water="channel", row_water="own")
     assert wells.place_wells(s, plan, [h]) == 0  # type: ignore[arg-type]
     assert got == [[h]]
+
+
+def test_a_streets_turn_is_measured_either_side_of_a_mark() -> None:
+    """Feature 315 (cohort seed 903): `street_turns_at` - straight, 0; at a right-angle corner, 90; past the look either way, 0."""
+    from l7r.diagram.hamletgen.homesteads.wells import street_turns_at
+
+    line = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)]
+    arc = [0.0, 100.0, 200.0]
+    assert street_turns_at(line, arc, 50.0, 20.0) == 0.0
+    assert abs(street_turns_at(line, arc, 100.0, 20.0) - 90.0) < 1e-9
+    assert street_turns_at(line, arc, 160.0, 20.0) == 0.0
+    assert abs(street_turns_at([(0.0, 0.0), (10.0, 0.0), (0.0, 0.1)], [0.0, 10.0, 20.0], 10.0, 5.0) - 179.4) < 0.1, "a turn past 180 read the short way"

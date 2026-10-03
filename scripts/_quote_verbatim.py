@@ -460,6 +460,8 @@ def wanted(spec: str) -> set[str] | None:
     ids: set[str] = set()
     for part in filter(None, (p.strip() for p in spec.split(","))):
         lo, _, hi = part.removeprefix("fn-").partition("-")
+        if not (lo.isdigit() and (hi.isdigit() or not hi)):
+            raise SystemExit(f"quote-verbatim: NOTES takes the numbers the built page shows its notes under (e.g. NOTES=9-12,14), not a note's name ({part!r}); run it with Q= alone to check every note of the page")
         ids.update(f"fn-{n}" for n in range(int(lo), int(hi or lo) + 1))
     return ids or None
 

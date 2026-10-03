@@ -1,14 +1,12 @@
 """May a bundle STAND here? Every keep-out and clearance predicate, plus the two spatial caches that make asking cheap.
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
-Research: keep-out geometry, index and cache plumbing - NONE
 """
 
 import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edge_dist, point_in_poly, seg_dist, segments_cross
-from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
 from ..farm_fixtures import PERSIMMON_CROWN_FT
@@ -20,93 +18,12 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-# ---- feature 276, FR-003: the placed houses, indexed ONCE and extended as each lands --------------------------------
-#
-# Every scan of the house records a candidate seat makes - the eave gap, the sun corridor both ways, the gardens' sun,
-# the yard-sun conflict - walked EVERY record per candidate, so a seat cost more with each house standing: at constant
-# density the placement primitive's per-house cost grew from 0.0009 s to 0.0017 s between 60 and 240 seeds on the
-# nucleated path (specs/276 research R2). Each of those rules asks whether some part of a record lies within a reach box
-# of the candidate, so a grid of each record's EXTENT - its house's circumscribed box and every part's box - asked for
-# that reach box returns every record the rule could flag; the rule's own comparison then decides, unchanged. An
-# `Indexed` house list carries its own version, so the grid is rebuilt on any change but an append, which extends it.
-# THE ONE IN-PLACE MOVE of a record (`_solve_homestead`) bumps that version itself; a record's `geom` is complete when it
-# is appended and never edited after.
-
-
-def house_extent(rec: Any) -> tuple[float, float, float, float]:
-    """The box holding everything of a house record the fit rules read: the house at any rake, and each part as drawn."""
-    r = math.hypot(rec["w"], rec["h"]) / 2
-    x0, y0, x1, y1 = rec["x"] - r, rec["y"] - r, rec["x"] + r, rec["y"] + r
-    g = rec.get("geom") or {}
-    for part in [part_box(g, key) for key in ("yard", "shed", "byre", "well")] + list(g.get("groves") or ()):
-        if part is not None:
-            x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
-            x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
-    for part in part_box(g, "gardens") or ():
-        x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
-        x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
-    tree = (g.get("fixtures") or {}).get("persimmon")  # its crown, which may stand paces out (`_persimmon_sun_conflict` reads it)
-    if tree is not None:
-        x0, y0, x1, y1 = min(x0, tree[0] - tree[2] / 2), min(y0, tree[1] - tree[2] / 2), max(x1, tree[0] + tree[2] / 2), max(y1, tree[1] + tree[2] / 2)
-    return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
-
-
-def recorded_box(r: Any, turn: float) -> tuple[float, float, float, float]:
-    """A laid fixture (x, y, w, h) as `grove_rules.fixtures_on_groves` reads its record: center and size rounded to 0.1 (the
-    drawn record's own rounding, `farm_fixtures`), turned by `turn` degrees (already rounded) - its axis-aligned box."""
-    x, y, w, h = round(float(r[0]), 1), round(float(r[1]), 1), round(float(r[2]), 1), round(float(r[3]), 1)
-    th = math.radians(turn)
-    return (x, y, abs(w * math.cos(th)) + abs(h * math.sin(th)), abs(w * math.sin(th)) + abs(h * math.cos(th)))
-
-
-def part_box(geom: Any, key: str) -> Any:
-    """A bundle part as the fit rules read it: its box AS DRAWN, turned with its house (`_bundle_geom`'s `boxes`, 269 B18);
-    the part itself where the bundle carries no boxes (a grove arm, which is drawn unturned, or a hand-built geometry)."""
-    boxes = geom.get("boxes") or {}
-    return boxes[key] if key in boxes else geom.get(key)
-
-
-def house_box(rec: Any) -> tuple[float, float, float, float]:
-    """A placed farmhouse's box AS DRAWN, turned (269 B18) - its record's own rect where it carries no bundle."""
-    box = part_box(rec.get("geom") or {}, "house")
-    return tuple(box) if box is not None else (rec["x"], rec["y"], rec["w"], rec["h"])  # type: ignore[return-value]
-
-
-def _extent_boxed(recs: Any) -> list[Any]:
-    return [(rec, *house_extent(rec)) for rec in recs]
-
-
-def houses_meeting(houses: Any, box: tuple[float, float, float, float]) -> list[Any]:
-    """The records of `houses` whose extent meets `box`, each once, in list order (the order the linear scans read)."""
-
-    def build(lst: Any) -> PointGrid:
-        grid = PointGrid()
-        grid.extend(_extent_boxed(lst))
-        return grid
-
-    def add(grid: PointGrid, tail: Any) -> None:
-        grid.extend(_extent_boxed(tail))
-
-    grid = indexed_grid(houses, "house_extents", build, add)
-    x0, y0, x1, y1 = box
-    seen: set[int] = set()
-    out = []
-    for it in grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
-        rec, bx0, by0, bx1, by1 = it
-        if id(rec) in seen or bx0 > x1 or bx1 < x0 or by0 > y1 or by1 < y0:
-            continue
-        seen.add(id(rec))
-        out.append(rec)
-    order = {id(rec): k for k, rec in enumerate(houses)} if len(out) > 1 else {}
-    return sorted(out, key=lambda rec: order.get(id(rec), 0))
+from .fit_index import _extent_boxed, drop_persimmon, house_box, house_extent, houses_meeting, part_box, recorded_box  # noqa: E402,F401 - split at the bar (feature 315)
 
 
 def stream_segment_index(streams: Any) -> PointGrid:
     """Every stream segment as `(a, b, hw, x0, y0, x1, y1)`, `hw` the stream's half-width plus 5 px and the box widened by
-    it (feature 281, FR-005).
-    Research:
-        keep-out geometry, index and cache plumbing - NONE: the segments and their widened boxes in a `PointGrid`
-        stream keep-out at half-width plus 5 px - UNRESEARCHED: `hw` = w / 2 + 5, the distance `rect_touches_stream` decides by"""
+    it (feature 281, FR-005)."""
     grid = PointGrid()
     for f in streams:
         poly = f.get("poly") or []
@@ -148,15 +65,13 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
 #: seat is held to while a hamlet's site boundary is installed, and the exhaustive seat pass scans: a map drawing
 #: convention whose figure is the record's own tolerance, not a pick.
 FIELD_REACH_FT = 700.0
-"""Research: farthest a house stands from its field - research/questions/0029-farmhouses-minka.drawing.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: 700 ft, the back-row tolerance held as a maximum"""
 
 
 def within_field_reach(s: Any, x: float, y: float) -> bool:
     """Is a house at (x, y) within `FIELD_REACH_FT` of its field (homes H03)? The ONE predicate the seat test
     (`_parts_fit`), the exhaustive seat pass and the finished-map test read. The field is its facing chains - the paddy's
     outline as the seat sees it; where none is installed (the legacy village roll, every placer after the homestead
-    stage), nothing is held.
-    Research: house within reach of its field - research/questions/0029-farmhouses-minka.drawing.html: `FIELD_REACH_FT` to the field's facing chains"""
+    stage), nothing is held."""
     chains = getattr(s, "_site_chains", None)
     if not chains:
         return True
@@ -198,8 +113,7 @@ class BundleFitMixin:
 
         Left at 165 deliberately: widening it would admit nudges the placer currently refuses and re-roll
         the pool, which is a real cost for no gain, since nothing downstream reads the figure as a norm
-        once this docstring says it is not one.
-        Research: farmland rail - GUESS: a nudge may not carry a house past 165 px of the field, an arbitrary rail; 0029 sets no maximum"""
+        once this docstring says it is not one."""
         return self._field_within(x, y, 165) if self.field_polys else True
 
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]
@@ -296,8 +210,7 @@ class BundleFitMixin:
         """Cached (poly, keep-out half-width, bbox) for every irrigation LINE a solid bundle rect must avoid -
         feeder channels, in-field/drain ditches, streams. Rebuilt only when one of the three source lists
         changes length (all are laid before the homestead solve, then static). Lets _rect_on_water skip a
-        whole course - and then an individual segment - whose neighborhood the rect cannot reach.
-        Research: water line keep-out - UNRESEARCHED: half the line's width (channel 2.5, ditch 7, stream 9 px by default) plus 5 px"""
+        whole course - and then an individual segment - whose neighborhood the rect cannot reach."""
         chans = self.M.get("channels", [])
         ditches = self.M.get("field_ditches", [])
         streams = self.M.get("streams", [])
@@ -341,8 +254,7 @@ class BundleFitMixin:
         yard in a running ditch is wrong (gardens_clear_of_channels), and this keeps the homestead solver
         off the drain outfall that threads the village margin. A hair wider than the check's keep-out so
         the solver leaves room the check then confirms. The GROVE is exempt (it may hug a bund). Bbox
-        pre-filters (per course, then per segment) skip the seg_dist / crossing math for anything far off.
-        Research: solid parts off running water - UNRESEARCHED: house, yard, garden and shed held off every irrigation line; the grove exempt"""
+        pre-filters (per course, then per segment) skip the seg_dist / crossing math for anything far off."""
         cx, cy, w, h = rect
         gc = self._rect_corners(rect)
         pts = gc + [(cx, cy)]
@@ -426,9 +338,7 @@ class BundleFitMixin:
         what stands where the tree routes); the house's wall rule against the paddy; no part across a stream; the exact
         tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
         ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its
-        share of the wood floor (`WoodShares.share`).
-        Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
-            persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang"""
+        share of the wood floor (`WoodShares.share`)."""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -527,8 +437,7 @@ class BundleFitMixin:
         its house, and none says it never was (research/contents.json#homesteads, the farmstead's layout) - kept because a plot
         split by running water reads as two holdings. Exact: the straight line from the house's center to each part's
         crosses no reach of any stream - `crosses_a_stream`, the one predicate the farm fixtures and the finished-map
-        test read too (feature 287, FR-003).
-        Research: a farmstead on one bank - GUESS: no part across a stream from its house, nor on the stream"""
+        test read too (feature 287, FR-003)."""
         streams = self.M.get("streams", [])
         if not any(len(f.get("poly") or ()) >= 2 for f in streams):
             return False
@@ -555,8 +464,7 @@ class BundleFitMixin:
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,
         irrigation lines, and (only when `fields=True`, i.e. the SOLID house/yard/garden) the flooded
         paddies. The GROVE (fields=False) may HUG a paddy bund, so it is tested against everything BUT the
-        fields and the water lines.
-        Research: grove may hug a paddy bund - UNRESEARCHED: the grove tested against everything but the fields and the water lines"""
+        fields and the water lines."""
         if self._site_chains is not None:
             return self._site_blocks_rect(rect)  # feature 226: the one outline instead of the five scans below
         if self._rect_hits(rect, self.block_polys):
@@ -600,8 +508,7 @@ class BundleFitMixin:
         are drawn axis-aligned, so for them the rect already IS the drawn footprint and the corridor
         test they get is honest. Extending a tread test to them would be a new rule about where a
         threshing yard may lie - which no check currently makes and which would re-pack every
-        nucleated map to enforce - so it is deliberately out of scope here.
-        Research: no house corner on a lane - research/questions/0081-village-lanes.drawing.html: the house as drawn, at its rake, off every tread"""
+        nucleated map to enforce - so it is deliberately out of scope here."""
         cx, cy, w, h = rect
         return self._on_a_tread(cx, cy, w, h, rot=self._house_rot(cx, cy))
 
@@ -629,8 +536,7 @@ class BundleFitMixin:
         GAP VERDICT family: real rotated corners via `eave_gap`, never centers, never a
         circumscribed radius (dev/placement.md, "CENTER vs FOOTPRINT"). The center-distance test in
         front of it is a PREFILTER - it over-states both extents, so it can only admit a pair the
-        exact test then rejects.
-        Research: roofs shed apart - UNRESEARCHED: `FARMHOUSE_EAVE_GAP_FT` (8 ft) plus 2 ft between the rotated corners of two farmhouses; 0029 gives only a 3 ft eave"""
+        exact test then rejects."""
         lim = self.px(FARMHOUSE_EAVE_GAP_FT + 2.0)
         cx, cy, w, h = rect
         cand = {"x": cx, "y": cy, "w": w, "h": h, "rot": self._house_rot(cx, cy)}  # the candidate as `eave_gap` reads a record
@@ -662,8 +568,7 @@ class BundleFitMixin:
         """Does a fixture this bundle laid, AS TURNED with its house (`boxes`), stand in a grove band - its own farm's or a
         neighbor's (`grove_rules.fixtures_on_groves`, the same boxes)? The fixtures are laid clear of the bands in the house's
         unturned frame (`_lay_fixtures`), and the house's turn carried a privy or a manure heap into its own deep band on
-        three cohort seeds (feature 291 on 287).
-        Research: no fixture in a grove band - UNRESEARCHED: its own farm's or a neighbor's, as turned and recorded"""
+        three cohort seeds (feature 291 on 287)."""
         boxes = (geom.get("boxes") or {}).get("fixtures") or {}
         if not boxes:
             return False
@@ -672,7 +577,11 @@ class BundleFitMixin:
         # cleared its farm's north band here at full precision and overlapped it in the record by 0.03 px. A margin instead
         # refused every near touch and moved the pinned seeds (four of seven failed); the record's own boxes refuse only this
         turn = round(float(geom.get("turn") or 0.0), 1)
-        fixtures = [b if k == "persimmon" else recorded_box(r, turn) for k, r in (geom.get("fixtures") or {}).items() for b in (boxes[k],)]
+        fixtures = [recorded_box(r, turn) for k, r in (geom.get("fixtures") or {}).items() if k != "persimmon"]
+        # ...ITS OWN PERSIMMON EXCEPTED, IN ITS OWN GROVE (feature 315): the traditional igune held a few fruit trees among its
+        # trees, so a grove farm's persimmon may stand in its own bands (`_lay_fixtures`); a neighbor's grove it may not
+        tree = boxes.get("persimmon")
+        own = {(round(float(b[0]), 1), round(float(b[1]), 1)) for b in geom.get("groves") or ()}
         bands = list(geom.get("groves") or ())
         cx, cy, bw, bh = geom["bbox"]
         for rec in houses_meeting(self.M["houses"], (cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2)):
@@ -680,15 +589,15 @@ class BundleFitMixin:
             if g and g is not geom:
                 bands += list(g.get("groves") or ())
         bands = [(round(float(b[0]), 1), round(float(b[1]), 1), float(b[2]), float(b[3])) for b in bands]
-        return any(abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2 for f in fixtures for b in bands)
+        meet = lambda f, b: abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2  # noqa: E731
+        return any(meet(f, b) for f in fixtures for b in bands) or (tree is not None and any(meet(tree, b) for b in bands if (b[0], b[1]) not in own))
 
     def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does any part of this bundle - its house, yard, beds, well pocket, fixtures or grove bands - stand on a corridor of
         the access tree (`rolling.access.AccessTree.covers_box`)? The nucleated placer asks it of the whole envelope
         (`_envelope_blocked`, plan M3: no later placement covers a corridor); a grove farm, seated by this path, never
         asked, and Mizuguchi's first roll on feature 287 laid a farm's fixture across the exit strip, which the registry
-        then refused at record time (feature 291 on 287).
-        Research: nothing built on a path - research/questions/0081-village-lanes.drawing.html: no part of a homestead on a reserved corridor"""
+        then refused at record time (feature 291 on 287)."""
         tree = getattr(self, "_access", None)
         if tree is None:
             return False
@@ -713,8 +622,7 @@ class BundleFitMixin:
         Both directions are tested, because a bundle is placed among bundles already standing: this
         house may not shade a yard already placed, and this yard may not be shaded by a house already
         standing. Testing only one direction leaves the defect to whichever homestead is seated
-        second.
-        Research: yard and bed sun to the south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: no house within the corridor (39 ft) plus 2 ft south of a yard or bed, both ways"""
+        second."""
         ft = getattr(self, "_sun_corridor_ft", 0.0)
         if not ft:
             return True
@@ -767,8 +675,7 @@ class BundleFitMixin:
         standing house's shadow. Lives apart from `_sun_corridor_ok` because the beds move with the
         garden side, and `_fits_any_side` tests the side-independent half once for all four sides -
         folding this in there would refuse every side for the one bed that SE puts in a shadow.
-        Same corridor and the same 2 ft placer margin as the yard (see `_sun_corridor_ok`).
-        Research: bed sun to the south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no house within the corridor plus 2 ft south of a bed"""
+        Same corridor and the same 2 ft placer margin as the yard (see `_sun_corridor_ok`)."""
         ft = getattr(self, "_sun_corridor_ft", 0.0)
         if not ft:
             return True
@@ -785,8 +692,7 @@ class BundleFitMixin:
 
     def sun_corridor(self: Settlement, feet: float) -> None:  # type: ignore[misc]
         """Ask the placer to keep `feet` of open ground SOUTH of every threshing yard (see
-        `_sun_corridor_ok`). Off by default; a generator opts in.
-        Research: hand-drawn maps exempt from the sun rule - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: off unless a generator opts in"""
+        `_sun_corridor_ok`). Off by default; a generator opts in."""
         self._sun_corridor_ft = float(feet)
 
     def west_sun_lane(self: Settlement, feet: float) -> None:  # type: ignore[misc]
@@ -794,8 +700,7 @@ class BundleFitMixin:
         and SOUTHWEST of every threshing yard and garden bed - the afternoon sun. Off by default; a
         generator opts in, exactly as with `sun_corridor` (feature 133 T10, GM 2026-08-25: "the
         windbreak forest ... is so close to the gardens ... that I do not believe that those gardens
-        would get sufficient sunlight"). The number's derivation is in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html.
-        Research: windbreak off the plots' afternoon sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `feet` clear west and southwest of every yard and bed"""
+        would get sufficient sunlight"). The number's derivation is in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html."""
         self._west_sun_ft = float(feet)
 
     def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
@@ -808,8 +713,7 @@ class BundleFitMixin:
     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
-        garden side at a given position, so it is tested once per position.
-        Research: no grove on a lane - research/questions/0081-village-lanes.drawing.html: a farm's grove bands off every drawn tread"""
+        garden side at a given position, so it is tested once per position."""
         if not self._candidate_watered(geom):
             return False
         if (
@@ -858,9 +762,7 @@ class BundleFitMixin:
         seeds (1-24) with a neighbor's windward stand across a garden's morning sun, 1 to 12 gardens a map. A farm's OWN
         bands keep the same preference by construction - its deep bands on the wind's side, its thin east band beyond the reach
         (`dispersed.canonical_farmstead`). A preference for whole bands, not the sun rule, which holds every crown where it is
-        drawn (`KeepoutsMixin._sun_keepouts`, feature 310).
-        Research: bed's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band just east of a bed, a seating preference
-            bed's morning-sun reach - UNRESEARCHED: the reach 22 px (`bscale`) east of the bed, a figure 0038 does not give"""
+        drawn (`KeepoutsMixin._sun_keepouts`, feature 310)."""
         new_groves = tuple(geom.get("groves") or ())
         if not new_groves:  # a nucleated bundle, on a map whose farms carry no grove
             return False
@@ -908,14 +810,18 @@ class BundleFitMixin:
         household's (GM 2026-10-02, `CANOPY_SHADE_FT`, `tree_shade.crown_shades`)? Its own plots are kept by its seat
         (`fixture_seats._persimmon`, at every rake the map allows), asked again here as drawn; a neighbor's are this test
         alone, in both directions, as the sun corridor is (`_sun_corridor_ok`). On the map that keeps the sun corridor.
-        Research: persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `CANOPY_SHADE_FT` and a crown's radius plus 1 ft, both ways"""
+
+        THIS HOUSEHOLD'S OWN TREE IS DROPPED, NEVER ITS SEAT (feature 315): where its persimmon would shade its own plots or a
+        neighbor's, the farm keeps no persimmon (`drop_persimmon`) and the seat is judged without it - a dooryard tree is
+        not the reason a household goes unhoused, and refusing seats for it left cohort rows unable to seat everyone. A
+        standing neighbor's persimmon in this household's sun still refuses the seat: that tree is already placed."""
         if not getattr(self, "_sun_corridor_ft", 0.0):
             return False
         reach, r = self.px(CANOPY_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)  # a foot past the crown: the map's check reads the drawn quads
         tree = (geom.get("fixtures") or {}).get("persimmon")
         plots = [p for p in (part_box(geom, "yard"), *(part_box(geom, "gardens") or ())) if p is not None]
-        if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in plots):
-            return True
+        if tree is not None and self._settle_persimmon(geom):
+            tree = None
         # FROM THE INDEX (feature 276's houses grid): a plot this crown shades meets the crown's box grown by the reach (not
         # to the south), and a neighbor's crown shading one of these plots meets a plot's sun ground grown by the crown
         boxes = [] if tree is None else [(tree[0] - r - reach, tree[1] - r - reach, tree[0] + r + reach, tree[1] + r)]
@@ -927,22 +833,43 @@ class BundleFitMixin:
                 if not g or g is geom or id(rec) in seen:
                     continue
                 seen.add(id(rec))
-                theirs = [p for p in (part_box(g, "yard"), *(part_box(g, "gardens") or ())) if p is not None]
-                if tree is not None and any(crown_shades(tree[0], tree[1], r, p, reach) for p in theirs):
-                    return True
                 other = (g.get("fixtures") or {}).get("persimmon")
                 if other is not None and any(crown_shades(other[0], other[1], r, p, reach) for p in plots):
                     return True
         return False
 
+    def _settle_persimmon(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Drop this household's persimmon where, as laid, it stands in its own yard's or beds' sun or a standing neighbor's
+        (feature 315); whether it was dropped. On the map that keeps the sun corridor."""
+        tree = (geom.get("fixtures") or {}).get("persimmon")
+        if tree is None or not getattr(self, "_sun_corridor_ft", 0.0):
+            return False
+        reach, r = self.px(CANOPY_SHADE_FT), self.px(PERSIMMON_CROWN_FT + 1.0)
+        plots = [p for p in (part_box(geom, "yard"), *(part_box(geom, "gardens") or ())) if p is not None]
+        if any(crown_shades(tree[0], tree[1], r, p, reach) for p in plots) or self._persimmon_shades_a_neighbor(geom, tree, r, reach):
+            drop_persimmon(geom)
+            return True
+        return False
+
+    def _persimmon_shades_a_neighbor(self: Settlement, geom: Any, tree: Any, r: float, reach: float) -> bool:  # type: ignore[misc]
+        """Does `tree` (this household's persimmon) stand in a standing neighbor's yard's or bed's sun? From the houses index,
+        by the crown's box grown by the reach (not to the south)."""
+        box = (tree[0] - r - reach, tree[1] - r - reach, tree[0] + r + reach, tree[1] + r)
+        for rec in houses_meeting(self.M["houses"], box):
+            g = rec.get("geom")
+            if not g or g is geom:
+                continue
+            if any(crown_shades(tree[0], tree[1], r, p, reach) for p in (part_box(g, "yard"), *(part_box(g, "gardens") or ())) if p is not None):
+                return True
+        return False
+
     def _yard_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A SEATING PREFERENCE (feature 310): a threshing yard dries rice in the southern sun, so a farm is not seated with a grove
-        BAND in the ~22px strip directly SOUTH of any yard. Tests the candidate's grove against every placed yard's sun-corridor and the
+        BAND in the ~22px strip directly
+        SOUTH of any yard. Tests the candidate's grove against every placed yard's sun-corridor and the
         candidate's yard against every placed grove, so packing never stacks a windbreak over a neighbor's
         drying ground and the bands stay whole. It is not the sun rule: every canopy crown is held out of every plot's sun ground
-        where it is drawn (`KeepoutsMixin._sun_keepouts`, `CANOPY_SHADE_FT`), whatever seat a farm takes.
-        Research: yard's drying strip - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band in the yard's southern sun, a seating preference
-            yard's drying strip width - UNRESEARCHED: the 22 px strip in `shades`, a width 0038 does not give"""
+        where it is drawn (`KeepoutsMixin._sun_keepouts`, `CANOPY_SHADE_FT`), whatever seat a farm takes."""
 
         def shades(grove: Any, yard: Any) -> bool:
             cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11
@@ -979,8 +906,7 @@ class BundleFitMixin:
     def _garden_shaded(self: Settlement, grect: Any) -> bool:  # type: ignore[misc]
         """A dooryard garden is SHADED when a farmhouse stands close to its SOUTH (the sun comes from the
         south), so a garden sandwiched with a neighbor's house just below it gets no light. Tested against
-        every placed house - the nucleated placer prefers a side with open sky to the south.
-        Research: garden shaded by a house to its south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a house within the bed's height plus 4 px south of it"""
+        every placed house - the nucleated placer prefers a side with open sky to the south."""
         gx, gy, gw, gh = grect
         # FROM THE INDEX (feature 276, found by profiling 960 seeds: the last scan of every placed house per candidate, 19%
         # of the nucleated placer there). A house this flags overlaps the garden's width and stands in the strip from 3 px
