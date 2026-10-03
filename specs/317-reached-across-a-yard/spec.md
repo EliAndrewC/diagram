@@ -155,3 +155,9 @@ owns it (the cohort failures from features 310 and 315 are the Diagram (Inashiro
 - Amendment (2026-10-03, the GM's ruling in `request.md`): FR-002 asks a way of its own of straight and round-the-house paths
   only, no routed search; FR-007 adds the wood seats reserved in the afternoon sun lane; FR-008 cuts the route search's cost inside
   this feature (amended on the measurement, research R10). The review counter restarts with this amendment.
+- Amendment round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 4 items - FR-008 rested on seed 47 alone, not the GM's seed 25;
+  FR-008 did not say the GM is told; FR-008 had no success criterion; the wood-seat bug was missing from R5. Addressed: seed 25's
+  count in R10 and FR-008, the report owed in FR-008, SC-007 with its measurement, R5's row.
+- Amendment round 2 (spec-fidelity-verify, 2026-10-03): FAITHFUL - the four items confirmed against the diff.
+- Plan, MODE 4 on the amended plan (2026-10-03): CLEAR, 30 decisions (digest 531a5cf4); D8's substitution LEGITIMATE on the GM's
+  standing instruction and R10's measurement, the 80 ft tree cut re-measured under the new test.
