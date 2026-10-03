@@ -262,9 +262,20 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     and the web draws its way along this corridor - a privy on its own path would be a lane on the privy. A persimmon is
     held off by its trunk; the path may pass under the crown.
 
-    Research: path clear of its own fixtures - UNRESEARCHED: the strip off privy, stack and shed; a persimmon by its trunk alone, the crown may overhang
+    AND ITS OWN WELL POCKET (feature 318, cohort Audit-24): the wellhead laid in the household's homestead (`geom["well"]`) is
+    drawn as a well, and the registry keeps every corridor off a well - a corridor that ran past its own pocket was reserved,
+    and the well was refused when it came to be drawn. Held off by the wellhead's box, as the registry holds it.
+
+    Research:
+        path clear of its own fixtures - UNRESEARCHED: the strip off privy, stack and shed; a persimmon by its trunk alone, the crown may overhang
+        path clear of its own well - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     """
     half, trunk = s._access.half, s.px(4.0)
+    well = own.get("well")
+    if well is not None:
+        vr = float(s._well_vr())
+        if seg_box_within(a, b, (float(well[0]), float(well[1]), 2.0 * vr, 2.0 * vr), half):
+            return False
     return not any(seg_box_within(a, b, box if kind != "persimmon" else (box[0], box[1], trunk, trunk), half) for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items())
 
 

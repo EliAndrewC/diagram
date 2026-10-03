@@ -90,23 +90,6 @@ def test_the_seatings_corridors_and_seats_are_kept_off_by_every_later_placer() -
     assert not s.well_at(400.0, 450.0), "the communal well's placer asks it"
 
 
-def test_a_households_own_well_pocket_may_stand_by_its_own_corridor_and_no_other() -> None:
-    """Feature 318 (cohort Audit-24): the registry lets a household's parts stand by its own access corridor; a well pocket now
-    names its household (`well(of=...)`, read as the record's parent), so its own corridor admits it and a neighbor's does not.
-    A well naming no household is refused on any corridor, as before."""
-    s = _hamlet()
-    s.M["access_corridors"] = [{"pts": [[100.0, 300.0], [400.0, 300.0]], "of": [100.0, 260.0]}]
-    reserve_the_seating(s)
-    on = {"x": 250.0, "y": 305.0, "r": 8, "vr": 12.4}
-    assert s.admits("wells", {**on, "of": [100.0, 260.0]}), "its own household's corridor"
-    assert not s.admits("wells", {**on, "of": [700.0, 700.0]}), "another household's corridor"
-    assert not s.admits("wells", on), "a communal well naming no household"
-    s.well(250.0, 305.0, of=(100.0, 260.0))
-    assert s.M["wells"][-1]["of"] == [100.0, 260.0]
-    s.well(600.0, 600.0)
-    assert "of" not in s.M["wells"][-1], "recorded only when given"
-
-
 def test_a_corridor_is_reserved_as_the_web_will_draw_it() -> None:
     """Feature 318 (the reference at 40 households, seed 25): squaring a water crossing drops a bend in the water, so the drawn
     tread runs where the reserved one does not. `access.reserve` bars each drawn leg the reserved run lacks and records it

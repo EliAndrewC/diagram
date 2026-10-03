@@ -358,3 +358,17 @@ def test_a_seat_whose_corridor_the_tree_cannot_take_lawfully_is_refused_at_seati
     assert access.tree_admits(s, admitted, geom) is False and len(calls) == n, "asked once while nothing standing changes"
     s._corridor_tree = None
     assert access.tree_admits(s, admitted, geom), "no judge (a village roll): admitted"
+
+
+def test_a_corridor_keeps_off_its_own_well_pocket_and_its_own_fixtures() -> None:
+    """`access.fixtures_clear` (feature 318, cohort Audit-24): the wellhead laid in the household's own homestead is drawn as a
+    well, which the registry keeps every corridor off - so the corridor is held off its own pocket by the wellhead's box,
+    as off its own privy; a household with no pocket is asked of its fixtures alone."""
+    s = _open()
+    start_tree(s, (700.0, 700.0), (1.0, 0.0), 300.0)
+    vr = float(s._well_vr())
+    own = {"well": (300.0, 300.0), "boxes": {"fixtures": {"privy": (500.0, 300.0, 10.0, 8.0)}}}
+    assert not access.fixtures_clear(s, (200.0, 300.0 + vr), (400.0, 300.0 + vr), own), "past the wellhead within the corridor's half"
+    assert access.fixtures_clear(s, (200.0, 360.0), (400.0, 360.0), own), "well clear of it"
+    assert not access.fixtures_clear(s, (450.0, 300.0), (550.0, 300.0), own), "through its own privy"
+    assert access.fixtures_clear(s, (200.0, 300.0), (400.0, 300.0), {"boxes": {}}), "no pocket, no fixtures"

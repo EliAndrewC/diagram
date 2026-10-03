@@ -123,9 +123,7 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
         out.append((k, _mx_rect({"x": o["x"], "y": o["y"], "w": bw, "h": bh, "rot": o.get("rot", o.get("deg", 0))}), (round(o["x"], 1), round(o["y"], 1)), None))
     elif k == "wells":
         r_ = float(o.get("vr") or o.get("r") or 8.0)
-        out.append(
-            (k, [(o["x"] + r_ * math.cos(i * math.pi / 6), o["y"] + r_ * math.sin(i * math.pi / 6)) for i in range(12)], (round(o["x"], 1), round(o["y"], 1)), o.get(pfield) if pfield else None)
-        )
+        out.append((k, [(o["x"] + r_ * math.cos(i * math.pi / 6), o["y"] + r_ * math.sin(i * math.pi / 6)) for i in range(12)], (round(o["x"], 1), round(o["y"], 1)), None))
     elif k == "pond":
         out.append((k, [(o[0] + o[2] * math.cos(a_), o[1] + o[3] * math.sin(a_)) for a_ in [i * math.pi / 8 for i in range(16)]], None, None))
     elif k in ("road", "moat", "ring_road", "wall", "lane"):
