@@ -33,7 +33,8 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # that path as `make check-bundle Q=NNNN`. A change of layout; nothing loosened.
 # GUARD_EDIT_OK: feature 311 - intro-check is a new bundle-reading check; added, nothing loosened.
 # GUARD_EDIT_OK: feature 316 - impl-drift is a new bundle-reading check (`make claims-bundle`); added, nothing loosened.
-CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check intro-check impl-drift"
+# GUARD_EDIT_OK: feature 319 - modal-form and modal-research are new bundle-reading checks (`make modal-bundle`); added, nothing loosened.
+CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check intro-check impl-drift modal-form modal-research"
 
 pretool() {
   local verdict kind detail reason
@@ -85,6 +86,7 @@ for path in paths:
     elif m:
         # GUARD_EDIT_OK: feature 303 - the compliant command names the question by its number (Q=), nothing loosened
         cmds.append(f"make check-bundle Q={m.group(1)}" + (f" FOR={atype}" if atype in ("record-style", "translation-check") else ""))
+cmds = ["make modal-bundle KIND=<the modal class> FOR=" + atype] if atype in ("modal-form", "modal-research") else cmds
 cmds = list(dict.fromkeys(cmds)) or ["make check-bundle Q=<question number>   (or KEY=<registry key>)"]
 print("\x1frefuse\x1f" + atype + "\x1e" + "\x1e".join(cmds))
 ' 2>/dev/null)" || exit 0

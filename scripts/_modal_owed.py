@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""Which About-form modals owe the modal checks (feature 319, plan D6) - folded into `_record_owed.py`, so `make record-owed`,
+`make record-checked` and the push's record gate (`entry-gate.sh`) treat them as they treat the record checks.
+
+WHY. The GM, 2026-10-03: the modal guidelines *"should be reviewed by subagents in more or less the same way that our research
+is ... certainly for accuracy, and consistency with the research"*. A check is owed where the words it reads changed (feature
+311), never on a whole-registry sweep:
+
+- `modal-form:<key>` - the class's About, Guesses or Entry text differs from the merge base (or the class is new to the About
+  form). `modal-form` reads only the modal and the guidelines.
+- `modal-accuracy:<key>`, `modal-references:<key>`, `modal-gaps:<key>` - the same, OR a research page its `Entry:` names
+  changed its words. All three are answered by one `modal-research` dispatch (plan D4: one agent, three verdicts).
+
+An About-form class is no longer owed `entry-drift` (`_record_owed._entry_units` drops it): `modal-accuracy` asks entry-drift's
+question and more. An old-form class keeps entry-drift until the rollout converts it.
+
+    _modal_owed.py [--root DIR]     the owed units, one a line
+"""
+
+from __future__ import annotations
+
+import argparse
+import ast
+import hashlib
+import pathlib
+import re
+import subprocess
+import sys
+from collections.abc import Sequence
+from dataclasses import dataclass
+
+HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+sys.dont_write_bytecode = True
+
+SKILL = ".claude/skills/diagram"
+MODAL_DIRS = (f"{SKILL}/l7r/diagram/interactive/classes", f"{SKILL}/l7r/diagram/interactive/compound_kinds")
+RESEARCH = f"{SKILL}/research"
+FORM_CHECK = "modal-form"
+RESEARCH_CHECKS = ("modal-accuracy", "modal-references", "modal-gaps")
+#: the defined agent that answers the three research units (plan D4)
+RESEARCH_AGENT = "modal-research"
+_TAG = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Name|Covers|Label|Sources|Entry|Form):\s?(.*)$")
+_PATH = re.compile(r"research/questions/[^\s,;]+?\.html")
+
+
+@dataclass(frozen=True)
+class Modal:
+    """One About-form modal class as its source states it - the parts the checks read."""
+
+    cls: str  # the class name, qualified by module where two modules share it
+    key: str  # the class key the page uses
+    origin: str  # file:line
+    tags: dict[str, str]
+
+    @property
+    def prose(self) -> str:
+        return "\n".join(self.tags.get(t, "") for t in ("Name", "About", "Guesses", "Form"))
+
+    @property
+    def entry(self) -> str:
+        return self.tags.get("Entry", "")
+
+    @property
+    def form(self) -> str:
+        return self.tags.get("Form", "standard") or "standard"
+
+    def entry_files(self) -> list[str]:
+        return list(dict.fromkeys(_PATH.findall(self.entry)))
+
+
+def parse_tags(doc: str) -> dict[str, str]:
+    """A class docstring's tags, each value its lines - `About:` keeps a blank line between paragraphs as `\\n\\n` and
+    `Guesses:` its bullets one to a line, as `classes/_base.py` reads them (this is tooling; it must not import the engine)."""
+    out: dict[str, list[str]] = {}
+    cur = None
+    for raw in doc.splitlines():
+        line = raw.strip()
+        m = _TAG.match(line)
+        if m:
+            cur = m.group(1)
+            out[cur] = [m.group(2)] if m.group(2) else []
+        elif cur is not None and (line or cur == "About"):
+            out[cur].append(line)
+    joined = {}
+    for tag, lines in out.items():
+        if tag == "About":
+            joined[tag] = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+            joined[tag] = "\n\n".join(" ".join(p.split()) for p in joined[tag].split("\n\n") if p.strip())
+        elif tag == "Guesses":
+            bullets: list[list[str]] = []
+            for line in lines:
+                if line.startswith("- ") or not bullets:
+                    bullets.append([line])
+                else:
+                    bullets[-1].append(line)
+            joined[tag] = "\n".join(" ".join(b) for b in bullets)
+        else:
+            joined[tag] = " ".join(lines).strip()
+    return joined
+
+
+def modals_in(source: str, path: str) -> list[Modal]:
+    """The About-form classes of one module's source."""
+    out = []
+    for node in ast.parse(source).body:
+        if not isinstance(node, ast.ClassDef):
+            continue
+        doc = ast.get_docstring(node) or ""
+        tags = parse_tags(doc)
+        if "About" not in tags:
+            continue
+        key = next((n.value.value for n in node.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "key" for t in n.targets) and isinstance(n.value, ast.Constant)), node.name)
+        out.append(Modal(f"{pathlib.Path(path).stem}.{node.name}", str(key), f"{path}:{node.lineno}", tags))
+    return out
+
+
+def _git(root: pathlib.Path, *args: str) -> str:
+    p = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, check=False)
+    return p.stdout if p.returncode == 0 else ""
+
+
+def modals_now(root: pathlib.Path) -> list[Modal]:
+    out = []
+    for d in MODAL_DIRS:
+        for p in sorted((root / d).glob("*.py")):
+            out += modals_in(p.read_text(encoding="utf-8"), str(p.relative_to(root)))
+    return out
+
+
+def modals_at(root: pathlib.Path, rev: str) -> dict[str, Modal]:
+    out = {}
+    for d in MODAL_DIRS:
+        for name in _git(root, "ls-tree", "--name-only", rev, d + "/").split():
+            if name.endswith(".py"):
+                for m in modals_in(_git(root, "show", f"{rev}:{name}"), name):
+                    out[m.key] = m
+    return out
+
+
+def find(root: pathlib.Path, kind: str) -> Modal | None:
+    """An About-form modal by class name (`Farmhouse`, or `homestead.Farmhouse`) or key (`farmhouse`)."""
+    for m in modals_now(root):
+        if kind in (m.key, m.cls, m.cls.split(".", 1)[1]):
+            return m
+    return None
+
+
+def page_words(text: str) -> str:
+    """A research page's words for a fingerprint: comments out, whitespace folded."""
+    return " ".join(re.sub(r"<!--.*?-->", "", text, flags=re.S).split())
+
+
+def digest(parts: Sequence[str]) -> str:
+    return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()[:16]
+
+
+def fingerprints(root: pathlib.Path, m: Modal) -> tuple[str, str]:
+    """(the form units' fingerprint, the research units' fingerprint): the modal's words, and those plus its Entry pages'."""
+    pages = [page_words((root / SKILL / f).read_text(encoding="utf-8")) if (root / SKILL / f).is_file() else "" for f in m.entry_files()]
+    return digest([m.key, m.prose, m.entry]), digest([m.key, m.prose, m.entry, *pages])
+
+
+def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
+    """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`."""
+    before = modals_at(root, base) if base else {}
+    changed_pages = set(_git(root, "diff", "--name-only", base, "--", f"{RESEARCH}/questions").split()) if base else set()
+    changed_pages |= set(_git(root, "ls-files", "--others", "--exclude-standard", "--", f"{RESEARCH}/questions").split())
+    rows = []
+    for m in modals_now(root):
+        was = before.get(m.key)
+        fp_form, fp_research = fingerprints(root, m)
+        moved_text = was is None or was.prose != m.prose or was.entry != m.entry
+        moved_pages = [f for f in m.entry_files() if f"{SKILL}/{f}" in changed_pages]
+        if moved_text:
+            why = "new to the About form" if was is None else "its About, Guesses or Entry changed"
+            rows.append((f"{FORM_CHECK}:{m.key}", why, fp_form))
+            rows += [(f"{c}:{m.key}", why, fp_research) for c in RESEARCH_CHECKS]
+        elif moved_pages:
+            why = f"a page its Entry names moved ({' '.join(pathlib.Path(f).name for f in moved_pages)})"
+            rows += [(f"{c}:{m.key}", why, fp_research) for c in RESEARCH_CHECKS]
+    return rows
+
+
+def about_keys(root: pathlib.Path) -> set[str]:
+    """The keys of every About-form modal - `_record_owed._entry_units` owes them no entry-drift."""
+    return {m.key for m in modals_now(root)}
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--root", default=".")
+    args = ap.parse_args(argv)
+    root = pathlib.Path(args.root).resolve()
+    import _record_owed as ro  # noqa: PLC0415
+
+    for slug, why, _fp in owed(root, ro.merge_base(root)):
+        print(f"{slug}  - {why}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
