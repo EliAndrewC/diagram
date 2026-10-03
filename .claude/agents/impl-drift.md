@@ -23,7 +23,9 @@ Use whenever `make claims-owed` names claims, at the push's refusal, and for the
 ## Read the BUNDLE you are given, and nothing under the repository
 
 Your dispatch names a bundle's `MANIFEST.md` (made by `make claims-bundle`, under `/tmp/l7r-check/`). **Read it once: it holds
-every unit's source, its claims, the constants it reads, and every cited question's page INLINE.** Do not open a file under
+every unit's source, its claims and the constants it reads INLINE, and lists the cited questions, each a file under
+`questions/` beside it (the page as its reader meets it - heading and blocks, `[intro]` marking the intro, no markup). Read
+each question a claim cites once; a question that bears on a decision no claim names may be grepped for.** Do not open a file under
 `/diagram`: an agent that reads a file there is handed every `CLAUDE.md` above it, about 28,000 tokens it does not need (feature
 250). If your dispatch names no bundle, say so on your first line and stop - guessing what was meant costs more than the
 dispatch.

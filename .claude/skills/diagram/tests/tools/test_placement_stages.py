@@ -757,8 +757,11 @@ def test_research_html_links_each_question_and_names_each_class() -> None:
 
 
 def test_every_stage_and_every_step_states_its_research_and_every_link_lands() -> None:
+    import re
+
     questions = Path(ps.SKILL, "research", "questions")
-    ids = {p.name.split("-", 1)[1].removesuffix(".html") for p in questions.glob("*.html")}
+    # the site names a page by its HEADING id (a drawing page's differs from its file's), so the ids are read off the headings
+    ids = {m.group(1) for p in questions.glob("*.html") for m in [re.search(r'<h[23] id="([^"]+)"', p.read_text(encoding="utf-8"))] if m}
     for stage in STAGES:
         items = ps.research_of(stage)
         assert items, f"{stage.__name__} states no research claim"

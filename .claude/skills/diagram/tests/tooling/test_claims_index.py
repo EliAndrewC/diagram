@@ -133,7 +133,10 @@ def test_the_bundle_holds_each_unit_its_claims_and_the_cited_pages(tmp_path: pat
     assert "return x * SHARE" in manifest and "constants it reads: `SHARE=Constant(value=0.5)`" in manifest
     assert '"""Research: dry share' in manifest, "a constant brings its claim literal"
     assert "(inherited from the module docstring)" in manifest
-    assert "Farms face the street." in manifest and "How our maps draw" in manifest and "<!-- x -->" not in manifest
+    assert "`questions/0033-row-villages-resson.html.txt` - Row villages" in manifest and "Farms face the street." not in manifest
+    q = (tmp_path / "b" / "questions" / "0033-row-villages-resson.html.txt").read_text()
+    assert q.startswith("# Row villages") and "[intro] Why asked." in q and "Farms face the street." in q
+    assert not (tmp_path / "b" / "questions" / "0033-row-villages-resson.drawing.html.txt").exists(), "only what a claim cites"
     units = json.loads((tmp_path / "b" / "units.json").read_text())
     assert set(units) == set(keys) and units[keys[0]]["code"] == cur[keys[0]].code
     cx.bundle(tmp_path, cur, keys[:1], tmp_path / "b")  # a second build replaces the first
@@ -236,3 +239,12 @@ def test_the_command_line(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[
     del idx[next(iter(idx))]
     cx.save_index(root / cx.INDEX, idx)
     assert cx.main(["--root", str(root), "gate"]) == 1 and "REFUSED owed (new)" in capsys.readouterr().out
+
+
+def test_a_class_is_shown_as_its_own_statements_and_each_method_under_its_own_heading(tmp_path: pathlib.Path) -> None:
+    skill = _tree(tmp_path, MOD + '\n\nclass Farm:\n    """Research: farm - NONE"""\n\n    SIZE = 3\n\n    def lay(self):\n        return self.SIZE * 2\n')
+    cur = cx.current(skill)
+    keys = [k for k in cur if "Farm" in k]
+    manifest = cx.bundle(tmp_path, cur, keys, tmp_path / "b").read_text()
+    head, _sep, method = manifest.partition("## UNIT .claude/skills/diagram/l7r/diagram/hamletgen/rows.py::Farm.lay")
+    assert "SIZE = 3" in head and "return self.SIZE" not in head and "return self.SIZE * 2" in method

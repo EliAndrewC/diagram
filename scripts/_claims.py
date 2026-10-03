@@ -160,17 +160,17 @@ def _source(root: Path, unit: Any) -> str:  # noqa: ANN401
     while start > 0 and lines[start - 1].lstrip().startswith(("#", "@")):
         start -= 1
     end = unit.end_lineno
+    if unit.kind == "class":  # its own statements only: each method is a unit of its own, shown under its own heading
+        indent = len(lines[unit.lineno - 1]) - len(lines[unit.lineno - 1].lstrip())
+        for k in range(unit.lineno, unit.end_lineno):
+            st = lines[k].lstrip()
+            if st.startswith(("def ", "async def ", "class ", "@")) and len(lines[k]) - len(st) > indent:
+                end = k
+                break
     if unit.kind == "constant" and end < len(lines) and lines[end].lstrip().startswith(('"""', "'''", '"', "'")):
         while end < len(lines) and lines[end].strip():  # the claim literal after it
             end += 1
     return "\n".join(lines[start:end])
-
-
-def _companions(name: str) -> list[str]:
-    """A cited question file and the page beside it: a research page brings its drawing page, and the reverse."""
-    if name.endswith(".drawing.html"):
-        return [name, name.replace(".drawing.html", ".html")]
-    return [name, name.replace(".html", ".drawing.html")]
 
 
 def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> Path:
@@ -203,14 +203,19 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> P
         parts.append(f"\n```{lang}\n{_source(root, unit)}\n```\n")
         for r in rows:
             for ptr in r.claim.pointers:
-                for name in _companions(ptr.rsplit("/", 1)[1]):
-                    if name not in cited and (qdir / name).is_file():
-                        cited.append(name)
-    parts.append("# The cited questions (HTML comments removed)\n")
+                name = ptr.rsplit("/", 1)[1]
+                if name not in cited and (qdir / name).is_file():
+                    cited.append(name)
+    # THE QUESTIONS ARE FILES BESIDE THE MANIFEST, as their reader meets them (heading and blocks, intro marked, no markup),
+    # each once however many units cite it: inline whole pages made the audit's per-file bundles 23 MB (measured 2026-10-03)
+    (out / "questions").mkdir()
+    parts.append("# The cited questions\n\nEach is a file under `questions/` beside this MANIFEST - read each one a unit cites, once:\n")
     for name in cited:
-        text = ru._COMMENT.sub("", (qdir / name).read_text(encoding="utf-8"))
-        parts.append(f"## {QUESTIONS}/{name}\n\n```html\n{text.strip()}\n```\n")
-    (out / "MANIFEST.md").write_text("\n".join(parts), encoding="utf-8")
+        page = ru.read_page((qdir / name).read_text(encoding="utf-8"))
+        body = "\n\n".join(("[intro] " if b.intro else "") + b.words for b in page.blocks)
+        (out / "questions" / f"{name}.txt").write_text(f"# {page.heading}\n({QUESTIONS}/{name})\n\n{body}\n", encoding="utf-8")
+        parts.append(f"- `questions/{name}.txt` - {page.heading}")
+    (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
     units = {k: {"code": cur[k].code, "core": cur[k].unit.core, "research": cur[k].research, "uid": cur[k].uid} for k in keys}
     (out / "units.json").write_text(json.dumps(units, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     return out / "MANIFEST.md"
