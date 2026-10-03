@@ -285,21 +285,19 @@ reserved past its beds. `passage.recheck_passages` asks every such household aga
 re-rolled Inashiro its center stands 116 ft from the nearest drawn lane.
 (observed 2026-10-03, method: the reviewer's measurement on its snapshot; the re-rolled manifest's lanes against the house.)
 
-**How many are reached across a yard, as the feature lands** (`bearing_probe.py` in the session's scratchpad, the reference
-spec; `meta.passage_reached`): at 15 households on seeds 1-16, 15 households, where the 13 settlements whose share allows one
-allow 30 together; at 40 households on seeds 2, 25, 39 and 47, 12 where the three that allow one allow 23. R8's 7 and 8 were
-measured before the per-layout route was withdrawn, when more tight seats found a way of their own; with the band at 112.5 and
-no recheck the count at 15 households was 23.
-(observed 2026-10-03, method: as the heading.)
+**By its whole holding, on the finished seating** (impl-drift round 4 DRIFTED, the plan review's MODE 4 NOT LEGITIMATE on asking
+the drawn layout only): the drawing page judges a way of its own "by its whole holding ... if any layout of the homestead would
+leave it a way of its own, it has one". The four layouts built at a tight seat - the household's lot installed, its fixtures,
+byre and well laid in each - are kept (they differ beyond the beds at 13 of 15 seats), and the recheck asks each; one with a
+corridor that fits the finished seating, judged as the placer judges a layout with the household's own record, homestead, walk
+and wood reservations set aside, re-seats it (`passage.relay`). Asked of the drawn layout alone, another layout had a way for 1
+of 15 such households at 15 households and 1 of 12 at 40 (a first probe that built the layouts without the lot counted 2 and
+3). With the re-lay: none is left with a way that no longer fits (`meta.passage_unfit` 0 on every seed below).
+(observed 2026-10-03, method: `layouts2_probe.py` - the layouts captured at `landlocked` - and `relay_probe.py`, in the session's
+scratchpad.)
 
-**An accepted limitation, for the GM: the recheck asks the drawn layout only** (impl-drift round 4, DRIFTED on
-`recheck_passages`): the drawing page judges a way of its own "by its whole holding ... if any layout of the homestead would leave
-it a way of its own, it has one". At the seat every layout is asked (`landlocked`); once all are seated, only the layout drawn.
-Of the households still reached across a yard on the finished seating, another layout at their seat would have a corridor of
-its own for 2 of 15 at 15 households (seeds 1-16) and 3 of 12 at 40 (seeds 2, 25, 47). The alternatives priced: re-lay such a
-household with that layout after seating - an in-place move of a homestead and everything recorded at its seat, which the
-engine does in one guarded place (`_solve_homestead`); or record the drawn-layout recheck on the drawing page, which re-owes the
-~300 claims that cite it. Accepted by the session for this landing, with the claim's DRIFTED verdict carried by `CLAIMS_OK`;
-put to the GM.
-(observed 2026-10-03, method: `layout_probe.py` in the session's scratchpad - after `recheck_passages`, each remaining passage
-household's other garden layouts at its seat asked `access_corridor` with its own homestead set aside.)
+**How many are reached across a yard, as the feature lands** (`relay_probe.py`, the reference spec, the recheck as built): at 15
+households on seeds 1-16, 14 households reached across a yard and 9 passages ended by the recheck (the 13 settlements whose share
+allows one allow 30); at 40 households on seeds 2, 25, 39 and 47, 11 reached and 7 ended (the three that allow one allow 23).
+R8's 7 and 8 were measured before the per-layout route was withdrawn, when more tight seats found a way of their own.
+(observed 2026-10-03, method: as the heading.)

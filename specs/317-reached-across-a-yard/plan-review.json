@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "4dc016dadaa2edc2301516dbbee6fe4812b5f25a7941abee90febf08b0204566",
+ "plan_sha256": "72d0fea7d780501f76fbe375b2afc2825bcc53c1c57a7b8a7661f056b067b6dd",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -37,10 +37,10 @@
   },
   {
    "id": "D2-tight-yard-side",
-   "summary": "Tight seats offered only within TIGHT_BEARING_DEG 112.5 of the bearing from the house to its yard (front and flanks), not behind it",
+   "summary": "Tight seats offered only within TIGHT_BEARING_DEG 90 (was 112.5) of the bearing from the house to its yard, the side its yard lies on, as the drawing page places it",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "A narrowing: the research's condition (land with no road access) says nothing of which side of the neighbor's house it lies. Legitimate on the spec's OWN rules, not on cost: FR-002 forbids the walk crossing a house, bed, shed or fixture and D2-walk keeps it on the two households' land, so from behind the house it must pass the flank clear of what stands there; measured with every bearing offered (R7): 1 walk found in 194 tries behind, 15 of 16 passages within 90 degrees. The excluded sector is all but emptied by FR-002 itself and US2's purpose is not gutted. The previous round's item (a cost sentence R7 did not support) is closed: the plan now states only what R7 measured."
+   "why": "A narrowing, ruled as before: the research's condition says nothing of which side of the neighbor's house the land lies. Legitimate on the spec's OWN rules, not on cost: FR-002 forbids the walk crossing a house, bed, shed or fixture and D2-walk keeps it on the two households' land, so the excluded sector is all but emptied by FR-002 itself (R7, every bearing offered: 15 of 16 passages within 90 degrees, 1 walk in 194 tries behind). The move from 112.5 to 90 is held to the record's own drawing page, labeled a map drawing convention, and growth.py's comment records 23 passage households at 15 households, seeds 1-16, at either value - no passage lost on the measured run. A household outside the band is still seated with its own way; US2's purpose is not gutted."
   },
   {
    "id": "D2-tree-cut",
@@ -82,6 +82,20 @@
    "why": "A narrowing of what the engine admits (R8: 13 -> 7 passages at 15 households; 20 -> 8 at 40), but not of what was asked: request.md says 'if that is what the research bears out, then we should go with it', and every Wigmore entry the spec cites conditions passage on LAND that 'cannot reach the highway without passing over' another's. A household one of whose garden layouts has a way of its own is on land with road access; admitting it because the first layout tried blocked its own path made the passage depend on evaluation order, which the research does not support. This completes D2-own-way (ruled LEGITIMATE) rather than adding a new limit, and R8 shows the 13 earlier passage households all reached the tree round their house alone (house_reaches) - none was shut in by neighbors. FR-002's 'MUST be able to seat' still holds (7 and 8 passages). Not cost-motivated."
   },
   {
+   "id": "D2-recheck",
+   "summary": "ON THE FINISHED SEATING (passage.recheck_passages): once all are seated, each passage household is asked again, its homestead set aside, whether it has a corridor of its own; one that has is seated by it and loses its passage (meta.passage_revoked)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows what the engine admits (R9: 23 -> 15 passage households at 15 households, band and recheck together), not what was asked: the GM's 'if that is what the research bears out, then we should go with it', and every Wigmore entry conditions passage on land that cannot reach the highway without passing over another's. A household with a drawn lane a few feet off (Inashiro, the farmhouse glyph check F5) is not land the custom covers. Same ground as D2-order and D2-land; FR-002's 'MUST be able to seat' still holds (15 and 12)."
+  },
+  {
+   "id": "D2-recheck-drawn-layout",
+   "summary": "Accepted limitation: the recheck asks only the layout drawn, where the seat asked every layout; another layout at the seat would give a way of its own to 2 of 15 passage households at 15 households and 3 of 12 at 40 (R9); accepted for this landing and put to the GM",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "An exception carved from the plan's own D2-land rule (ruled LEGITIMATE precisely because the research's condition is the LAND's: 'a household lays its beds where its way can run') and from FR-007 / the GM's 'I do want all known bugs to be fixed'. The impl-drift check returned it DRIFTED against the drawing page's 'if any layout of the homestead would leave it a way of its own, it has one', which the page calls historically accurate. So 2 of 15 and 3 of 12 finished maps draw the custom where the research says it does not apply - the passage going beyond 'what the research bears out', the reverse of the request's purpose. None of the legitimating grounds holds: not physically impossible (R9 itself names the fix - re-lay the household with the layout that has a way, in the engine's one guarded place, _solve_homestead - or unseat and re-seat it); not implied by the GM's words; honoring the rule serves the request's purpose rather than defeating it. The reasons given are cost: an in-place re-lay is work, and recording a drawn-layout deviation re-owes ~300 claims. 'This will be hard' is not a fidelity ground, and recording a deviation from the research for cost would not be 'go with it' either. The plan should say: on the finished seating every layout at a passage household's seat is asked, as landlocked asks at the seat; a household with a way of its own under any layout is given it (re-laid or re-seated) and loses its passage; measured 0 such households on the reference at 15 and 40. If that proves impossible, an impossibility investigation goes to the GM before landing, not after."
+  },
+  {
    "id": "D3",
    "summary": "A chain of passages ends at a corridor within PASSAGE_CHAIN = 2, a GUESS citing Echigo",
    "class": "within",
@@ -98,6 +112,12 @@
    "summary": "reached_across on the record; checks.unreached_houses counts a chain ending at a reached household",
    "class": "within",
    "why": "FR-003 as written."
+  },
+  {
+   "id": "D5-lane-houses",
+   "summary": "The ways owe a household reached across a yard no lane of its own: arm/fragment keeping, carried ends and the web's cut spacing ask geom.lane_houses (every farmhouse but those reached across a neighbor's yard); an end that merely reaches a house still counts every house",
+   "class": "within",
+   "why": "US2 as written: 'A household so reached has no lane of its own'; FR-003 is carried by the passage chain (D5). Without it the ways would build the very lane the spec says such a household lacks."
   },
   {
    "id": "D5-anchor",
@@ -130,6 +150,12 @@
    "why": "A regression this feature's tight seats exposed on a pool map (FR-005: no pool map may fail a rule it passed before) and a bug found at the gate (FR-007 joins the list). The reseat serves a tree the hamlet's count rolled to a household that rolled none; trying the other side of the house keeps the tree in its dooryard (feature 315's rule) and the count whole, and relaxes nothing the GM's request or this spec set. Not a narrowing: it admits more, not less. The tried alternative (refusing a tight seat that dropped its persimmon) would have narrowed passages and was reverted."
   },
   {
+   "id": "D7-kura-byre",
+   "summary": "A grove farm's test that no part stands on a corridor (fit._on_the_access) now includes its kura and byre",
+   "class": "within",
+   "why": "FR-007: a known bug found by the impl-drift check, fixed in the work at hand."
+  },
+  {
    "id": "verification",
    "summary": "Unit tests of tight seats, passage, chain, share, reach; SC-002 at 15 households; refusals/abab, cohort, make done, bookends",
    "class": "within",
@@ -142,5 +168,5 @@
    "why": "Constitution VI; serves FR-006."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

@@ -235,6 +235,89 @@ def test_a_household_with_a_way_of_its_own_on_the_finished_seating_loses_its_pas
     assert passage.recheck_passages(s) == 0, "no tree: nothing to ask"
 
 
+def _seated_passage(s: Settlement) -> tuple[dict, dict, dict, tuple]:
+    """The pair, the household reached across the yard seated (its box placed, its walk barred) and another layout at its seat."""
+    nb, geom, _tight = _pair(s)
+    rec = {"x": float(geom["house"][0]), "y": float(geom["house"][1]), "rot": 0.0, "geom": geom, "reached_across": [600.0, 700.0], "passage_depth": 1, "passage": [[0.0, 0.0]]}
+    s.M["houses"] = [nb, rec]
+    s.placed.append(geom["bbox"])
+    walk = ((rec["x"], 690.0), (rec["x"] + 40.0, 690.0), (590.0, 690.0))
+    for a, b in zip(walk, walk[1:], strict=False):
+        s._access.bar(a, b)
+    lay = s._bundle_geom(float(geom["house"][0]), 700.0, 46.0, 28.0, "SE", rot=0.0)
+    return nb, rec, lay, walk
+
+
+def test_a_household_another_layout_gives_a_way_is_re_laid_with_it_where_it_fits(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`relay` (the plan review, MODE 4: judged by its whole holding): judged as the placer judges a layout - its own record,
+    homestead and walk set aside - a layout that fits re-seats the household by its corridor; one that does not leaves it
+    exactly as it was."""
+    from l7r.diagram.settlement.homestead_parts.wood_share import install_wood_shares
+
+    s = _open()
+    _nb, rec, lay, walk = _seated_passage(s)
+    old = rec["geom"]
+    wood = install_wood_shares(s, 6000.0, 90.0, 7.0)
+    s._pockets = [(1.0, 2.0)]
+    rec["well_pocket"] = [1.0, 2.0]
+    seen: list[bool] = []
+
+    def judge(self: Settlement, g: dict) -> bool:
+        seen.append(all(h is not rec for h in self.M["houses"]) and all(b is not old["bbox"] for b in self.placed) and not self._access.covers_box((walk[1][0], 690.0, 2.0, 2.0)))
+        g["access"] = ((rec["x"], 680.0), (rec["x"], 450.0))
+        return len(seen) > 1
+
+    monkeypatch.setattr(Settlement, "_parts_fit", judge)
+    monkeypatch.setattr(Settlement, "_envelope_blocked", lambda self, env: None)
+    assert not passage.relay(s, rec, lay, walk), "does not fit: refused"
+    assert rec["geom"] is old and rec["reached_across"] and any(b is old["bbox"] for b in s.placed)
+    assert s._access.covers_box((walk[1][0], 690.0, 2.0, 2.0)) and s._wood is wood, "...its walk and the reservations put back"
+    assert passage.relay(s, rec, lay, walk), "fits: re-laid"
+    assert s._wood is not wood, "the reservations rebuilt without it, its new layout's filed"
+    assert seen == [True, True], "judged with its own record, homestead and walk set aside"
+    assert rec["geom"] is lay and "reached_across" not in rec and "well_pocket" not in rec and s._pockets == []
+    assert any(b is lay["bbox"] for b in s.placed) and not any(b is old["bbox"] for b in s.placed)
+    assert not s._access.covers_box((walk[1][0], 690.0, 2.0, 2.0)) and s.M["access_corridors"][-1]["of"] == [round(rec["x"], 1), 700.0]
+
+
+def test_the_recheck_asks_every_layout_and_counts_one_with_a_way_that_no_longer_fits(monkeypatch: pytest.MonkeyPatch) -> None:
+    s = _open()
+    _nb, rec, lay, walk = _seated_passage(s)
+    s.__dict__["_passage_seats"] = {id(rec): {"layouts": [rec["geom"], {"unlaid": True}, lay], "walk": walk}}
+    monkeypatch.setattr(passage, "own_corridor", lambda s, r, g: ((0.0, 0.0), (1.0, 0.0)) if g is lay else None)
+    monkeypatch.setattr(passage, "relay", lambda s, r, g, w: False)
+    assert passage.recheck_passages(s) == 0 and s.M["meta"]["passage_unfit"] == 1, "a way that no longer fits: the passage stands"
+    monkeypatch.setattr(passage, "relay", lambda s, r, g, w: r.pop("reached_across") is not None)
+    assert passage.recheck_passages(s) == 1 and s.M["meta"]["passage_unfit"] == 0
+
+
+def test_a_walk_is_taken_back_off_the_tree_and_put_back() -> None:
+    tree = start_tree(_open(), (600.0, 450.0), (1.0, 0.0), 400.0)
+    a, b, c = (0.0, 0.0), (40.0, 0.0), (40.0, 40.0)
+    tree.bar(a, b)
+    tree.bar(b, c)
+    tree.bar((900.0, 900.0), (950.0, 900.0))
+    gone = tree.unbar((a, b, c))
+    assert len(gone) == 2 and not tree.covers_box((20.0, 0.0, 2.0, 2.0)) and tree.covers_box((920.0, 900.0, 2.0, 2.0)), "only its own legs"
+    tree.rebar(gone)
+    assert tree.covers_box((20.0, 0.0, 2.0, 2.0)) and tree.covers_box((40.0, 20.0, 2.0, 2.0))
+
+
+def test_the_wood_reservations_rebuilt_without_one_household() -> None:
+    from l7r.diagram.settlement.homestead_parts.wood_share import install_wood_shares
+
+    s = _open()
+    nb, rec, _lay, _walk = _seated_passage(s)
+    wood = install_wood_shares(s, 6000.0, 90.0, 7.0)
+    nb["wood_share"] = {"seats": [[620.0, 760.0]]}
+    rec["wood_share"] = {"seats": [[400.0, 760.0]]}
+    wood.commit(nb["geom"], [(620.0, 760.0)])
+    wood.commit(rec["geom"], [(400.0, 760.0)])
+    fresh = wood.without(s, rec)
+    assert fresh.params == wood.params
+    assert list(fresh.seats.near(620.0, 760.0, 1.0)) and not list(fresh.seats.near(400.0, 760.0, 1.0)), "the other household's seat filed again, not its own"
+
+
 def test_a_passage_crosses_only_to_a_reached_household_with_a_yard() -> None:
     assert passage.crossable({"geom": {"access": ((0.0, 0.0), (1.0, 0.0)), "boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}})
     assert passage.crossable({"passage_depth": 1, "geom": {"boxes": {"yard": (0.0, 0.0, 1.0, 1.0)}}}), "within the chain"
