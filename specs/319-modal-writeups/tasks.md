@@ -75,6 +75,13 @@ done (FR-012).
       research: rendering
       verify:
 
+- [ ] T18 [US6] One file per modal (plan D12): every `Kind`'s text moved to `interactive/assets/modals/<hamlet|sheet>/<slug>.md`
+  by script, the registry field-for-field unchanged (test); `Kind.feature()` reads the file; the render fingerprint takes every
+  file under `interactive/assets/`; `_modal_owed`, `_modal_bundle`, `_entry_owed`, `_bundle_owed`, `_check_bundle`,
+  `_apply_edits` read the files; docs; `make page-check` and the tooling tests green
+      research: rendering
+      verify:
+
 ## Phase 3 - the garden pilot (and a further pilot only if needed)
 
 - [ ] T11 [US2] The garden rewritten from the (amended) guidelines - M6 settled on it - with its research pass where a

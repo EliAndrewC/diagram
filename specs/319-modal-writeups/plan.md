@@ -117,6 +117,20 @@ feature modal differs between two pool maps. (FR-004, FR-009)
 particular); each sheet's `### Features` entries are reviewed under the particular guidelines; the canon answer goes in the
 `modal-research` bundle for particulars. (FR-003, FR-011)
 
+**D12 - One file per modal (amendment, GM 2026-10-03).** Pitched by the session after the farmhouse pilot (editing one modal
+read the whole module - `homestead.py` 36 KB for 14 modals, `compound_kinds/household.py` 65 KB for 27 - and two checker rounds
+could not quote a docstring's line breaks for their EDIT blocks); the GM: *"Yes, I agree with that. So please go ahead and make
+that change now ... I believe that feature 189's reasoning has been superseded by the fact that we now cross-reference our
+implementation with our research."* Each modal's text - both forms, the same tags - moves to
+`interactive/assets/modals/<hamlet|sheet>/<slug of its key>.md`, moved by script with a test that every registry entry is
+field-for-field what it was; the `Kind` class keeps `key` (what the engine stamps) and its `#` comments, and `Kind.feature()`
+reads the file. Under `assets/` the files are page content: gate-stamp's `page` area already globs `assets/*` (fnmatch crosses
+`/`), the generation cache records the reads of a gen's child process, and the render fingerprint is widened to every file
+under `interactive/assets/` (it took only that folder's top level and `.json` elsewhere). Every reader of a modal docstring
+follows the text to its file: `_modal_owed`, `_modal_bundle`, `_entry_owed` (the old side of a delta still read from the
+docstring where no file existed at the base), `_bundle_owed`, `_check_bundle` (`kind.txt`), `_apply_edits` (the modal folder
+an allowed EDIT target).
+
 ## Constitution Check
 
 - I, II: N/A - no gm-assistant UI; the map pages are this repository's own artifact under feature 134's rules.

@@ -136,7 +136,18 @@ def test_engine_fingerprint_moves_on_a_page_asset(repo):
     assert fp2 != fp1, "a stylesheet edit changes every page and must move the fingerprint"
     with open(os.path.join(assets, "page.js"), "w") as fh:
         fh.write("// v2\n")
-    assert rc.engine_fingerprint(skill) != fp2
+    fp3 = rc.engine_fingerprint(skill)
+    assert fp3 != fp2
+    # feature 319 (plan D12): a modal is a `.md` in a SUBFOLDER of the assets - one level down was invisible to the walk
+    modal = os.path.join(assets, "modals", "hamlet")
+    os.makedirs(modal, exist_ok=True)
+    with open(os.path.join(modal, "farmhouse.md"), "w") as fh:
+        fh.write("About: a house.\n")
+    fp4 = rc.engine_fingerprint(skill)
+    assert fp4 != fp3
+    with open(os.path.join(modal, "farmhouse.md"), "w") as fh:
+        fh.write("About: a thatched house.\n")
+    assert rc.engine_fingerprint(skill) != fp4, "a reworded modal must regenerate its pages on landing"
     # the directory prunes still hold for assets: one under tests/ or a pool tree is not engine content
     fp3 = rc.engine_fingerprint(skill)
     for skipped in (os.path.join("tests", "fixture.css"), os.path.join("wip", "draft.js")):

@@ -26,7 +26,7 @@ import pathlib
 import re
 import subprocess
 import sys
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -53,6 +53,13 @@ class Modal:
     origin: str  # file:line
     tags: dict[str, str]
     doc: str = ""  # the docstring as written, line for line - what an EDIT block quotes
+
+    @property
+    def uid(self) -> str:
+        """`<hamlet|sheet>/<slug>` - the modal's file stem under its registry, and the subject of its owed units: two
+        registries may share a key (a sheet's `well`, a hamlet's `well`), never a uid."""
+        registry = "sheet" if ("/modals/sheet/" in self.origin or "compound_kinds" in self.origin) else "hamlet"
+        return f"{registry}/{re.sub(r'[^a-z0-9-]', '-', self.key.lower())}"
 
     @property
     def prose(self) -> str:
@@ -101,18 +108,43 @@ def parse_tags(doc: str) -> dict[str, str]:
     return joined
 
 
-def modals_in(source: str, path: str) -> list[Modal]:
-    """The About-form classes of one module's source."""
+#: one file per modal (plan D12): `<MODALS>/<hamlet|sheet>/<slug of the key>.md`, as `classes/_base.modal_path` places them
+MODALS = f"{SKILL}/l7r/diagram/interactive/assets/modals"
+
+
+def modal_file(py_path: str, key: str) -> str:
+    """The modal file (repository-relative) of the kind `key` defined in the module at `py_path`."""
+    registry = "sheet" if "compound_kinds" in py_path else "hamlet"
+    return f"{MODALS}/{registry}/{re.sub(r'[^a-z0-9-]', '-', key.lower())}.md"
+
+
+def kinds_in(source: str) -> list[tuple[str, str, int, str]]:
+    """(class name, key, line, docstring) of every class in a module's source that sets a string `key`."""
     out = []
     for node in ast.parse(source).body:
         if not isinstance(node, ast.ClassDef):
             continue
-        doc = ast.get_docstring(node) or ""
-        tags = parse_tags(doc)
-        if "About" not in tags:
+        key = next((n.value.value for n in node.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "key" for t in n.targets) and isinstance(n.value, ast.Constant)), None)
+        if isinstance(key, str):
+            out.append((node.name, key, node.lineno, ast.get_docstring(node) or ""))
+    return out
+
+
+def modals_in(source: str, path: str, read: Callable[[str], str | None] = lambda _f: None, about_only: bool = True) -> list[Modal]:
+    """The modals of one module's source - each kind's text from its modal file (`read` it, by repository-relative path),
+    or its docstring where it has no file (a revision before plan D12). `about_only`: only the About form's."""
+    out = []
+    for cls, key, line, doc in kinds_in(source):
+        f = modal_file(path, key)
+        text = read(f)
+        origin = f if text is not None else f"{path}:{line}"
+        text = doc if text is None else text
+        tags = parse_tags(text)
+        if about_only and "About" not in tags:
             continue
-        key = next((n.value.value for n in node.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "key" for t in n.targets) and isinstance(n.value, ast.Constant)), node.name)
-        out.append(Modal(f"{pathlib.Path(path).stem}.{node.name}", str(key), f"{path}:{node.lineno}", tags, doc))
+        if not tags:
+            continue
+        out.append(Modal(f"{pathlib.Path(path).stem}.{cls}", key, origin, tags, text))
     return out
 
 
@@ -121,11 +153,23 @@ def _git(root: pathlib.Path, *args: str) -> str:
     return p.stdout if p.returncode == 0 else ""
 
 
-def modals_now(root: pathlib.Path) -> list[Modal]:
+def _read_now(root: pathlib.Path) -> Callable[[str], str | None]:
+    return lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else None
+
+
+def _read_at(root: pathlib.Path, rev: str) -> Callable[[str], str | None]:
+    def read(f: str) -> str | None:
+        p = subprocess.run(["git", "-C", str(root), "show", f"{rev}:{f}"], capture_output=True, text=True, check=False)
+        return p.stdout if p.returncode == 0 else None
+
+    return read
+
+
+def modals_now(root: pathlib.Path, about_only: bool = True) -> list[Modal]:
     out = []
     for d in MODAL_DIRS:
         for p in sorted((root / d).glob("*.py")):
-            out += modals_in(p.read_text(encoding="utf-8"), str(p.relative_to(root)))
+            out += modals_in(p.read_text(encoding="utf-8"), str(p.relative_to(root)), _read_now(root), about_only)
     return out
 
 
@@ -134,15 +178,16 @@ def modals_at(root: pathlib.Path, rev: str) -> dict[str, Modal]:
     for d in MODAL_DIRS:
         for name in _git(root, "ls-tree", "--name-only", rev, d + "/").split():
             if name.endswith(".py"):
-                for m in modals_in(_git(root, "show", f"{rev}:{name}"), name):
-                    out[m.key] = m
+                # keyed by registry and key: a sheet's `well` and a hamlet's `well` are two modals
+                for m in modals_in(_git(root, "show", f"{rev}:{name}"), name, _read_at(root, rev)):
+                    out[m.uid] = m
     return out
 
 
 def find(root: pathlib.Path, kind: str) -> Modal | None:
     """An About-form modal by class name (`Farmhouse`, or `homestead.Farmhouse`) or key (`farmhouse`)."""
     for m in modals_now(root):
-        if kind in (m.key, m.cls, m.cls.split(".", 1)[1]):
+        if kind in (m.uid, m.key, m.cls, m.cls.split(".", 1)[1]):
             return m
     return None
 
@@ -159,7 +204,7 @@ def digest(parts: Sequence[str]) -> str:
 def fingerprints(root: pathlib.Path, m: Modal) -> tuple[str, str]:
     """(the form units' fingerprint, the research units' fingerprint): the modal's words, and those plus its Entry pages'."""
     pages = [page_words((root / SKILL / f).read_text(encoding="utf-8")) if (root / SKILL / f).is_file() else "" for f in m.entry_files()]
-    return digest([m.key, m.prose, m.entry]), digest([m.key, m.prose, m.entry, *pages])
+    return digest([m.uid, m.prose, m.entry]), digest([m.uid, m.prose, m.entry, *pages])
 
 
 def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
@@ -169,17 +214,17 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
     changed_pages |= set(_git(root, "ls-files", "--others", "--exclude-standard", "--", f"{RESEARCH}/questions").split())
     rows = []
     for m in modals_now(root):
-        was = before.get(m.key)
+        was = before.get(m.uid)
         fp_form, fp_research = fingerprints(root, m)
         moved_text = was is None or was.prose != m.prose or was.entry != m.entry
         moved_pages = [f for f in m.entry_files() if f"{SKILL}/{f}" in changed_pages]
         if moved_text:
             why = "new to the About form" if was is None else "its About, Guesses or Entry changed"
-            rows.append((f"{FORM_CHECK}:{m.key}", why, fp_form))
-            rows += [(f"{c}:{m.key}", why, fp_research) for c in RESEARCH_CHECKS]
+            rows.append((f"{FORM_CHECK}:{m.uid}", why, fp_form))
+            rows += [(f"{c}:{m.uid}", why, fp_research) for c in RESEARCH_CHECKS]
         elif moved_pages:
             why = f"a page its Entry names moved ({' '.join(pathlib.Path(f).name for f in moved_pages)})"
-            rows += [(f"{c}:{m.key}", why, fp_research) for c in RESEARCH_CHECKS]
+            rows += [(f"{c}:{m.uid}", why, fp_research) for c in RESEARCH_CHECKS]
     return rows
 
 

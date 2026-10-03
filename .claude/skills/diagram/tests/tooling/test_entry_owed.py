@@ -80,8 +80,11 @@ def test_the_class_parser_still_finds_the_registry():
     from l7r.diagram.interactive.classes import CLASSES, _base
 
     found: dict[str, str] = {}
+    repo = SKILL.parents[2]
     for path in sorted((SKILL / "l7r/diagram/interactive/classes").glob("*.py")):
-        found |= eo.classes_in(path.read_text(encoding="utf-8"), _base)
+        # feature 319 (plan D12): a kind's text is its modal file, read by repository-relative path
+        rel = str(path.relative_to(repo))
+        found |= eo.classes_in(path.read_text(encoding="utf-8"), _base, read=lambda f: (repo / f).read_text(encoding="utf-8") if (repo / f).is_file() else None, py=rel)
     assert set(found) == set(CLASSES), "the ast parser and the engine disagree about what a Kind is"
     assert len(found) > 40, f"only {len(found)} classes parsed - the surface has gone quiet"
 

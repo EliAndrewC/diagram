@@ -51,9 +51,9 @@ leave them. In particular:
 The FIRST line is the counts, e.g. `modal-form: Farmhouse - 3 findings (2 FIX, 1 NOTE)`. Then each finding:
 
     FIX M5 - <what is missing or wrong, quoting the modal's words>
-    EDIT <the origin file the MANIFEST names for modal.md - the class's module, without the :line>
+    EDIT <the origin the MANIFEST names for text.md - the modal's own file>
     <<<
-    the exact text now in the docstring (one line of it, copied character for character)
+    the exact text now in the modal's file (one line of `text.md`, or part of one, copied character for character)
     ===
     the text that should replace it
     >>>

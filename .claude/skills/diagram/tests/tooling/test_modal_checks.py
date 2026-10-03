@@ -112,7 +112,7 @@ def test_a_class_new_to_the_about_form_owes_all_four_units(tmp_path: pathlib.Pat
     root = _tree(tmp_path)
     base = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     slugs = [s for s, _w, _f in mo.owed(root, base)]
-    assert slugs == ["modal-form:farmhouse", "modal-accuracy:farmhouse", "modal-references:farmhouse", "modal-gaps:farmhouse"]
+    assert slugs == ["modal-form:hamlet/farmhouse", "modal-accuracy:hamlet/farmhouse", "modal-references:hamlet/farmhouse", "modal-gaps:hamlet/farmhouse"]
 
 
 def test_nothing_is_owed_while_nothing_moved_and_a_moved_entry_page_owes_only_the_research_units(tmp_path: pathlib.Path) -> None:
@@ -121,7 +121,7 @@ def test_nothing_is_owed_while_nothing_moved_and_a_moved_entry_page_owes_only_th
     assert mo.owed(root, base) == [], "a formatting-free delta owes nothing (feature 311)"
     (root / SKILL / "research/questions/0029-farmhouses-minka.html").write_text(Q0029.replace("one household", "one farming household"), encoding="utf-8")
     rows = mo.owed(root, base)
-    assert [s for s, _w, _f in rows] == ["modal-accuracy:farmhouse", "modal-references:farmhouse", "modal-gaps:farmhouse"]
+    assert [s for s, _w, _f in rows] == ["modal-accuracy:hamlet/farmhouse", "modal-references:hamlet/farmhouse", "modal-gaps:hamlet/farmhouse"]
     assert "0029-farmhouses-minka.html" in rows[0][1]
 
 
@@ -130,7 +130,7 @@ def test_a_reworded_about_owes_the_form_again_and_changes_its_fingerprint(tmp_pa
     base = _commit(root)
     before = mo.fingerprints(root, mo.find(root, "farmhouse"))
     (root / CLASSES / "homestead.py").write_text(FARMHOUSE.replace("It was thatched.", "It was thatched with straw."), encoding="utf-8")
-    assert [s for s, _w, _f in mo.owed(root, base)][0] == "modal-form:farmhouse"
+    assert [s for s, _w, _f in mo.owed(root, base)][0] == "modal-form:hamlet/farmhouse"
     assert mo.fingerprints(root, mo.find(root, "farmhouse")) != before
 
 
@@ -157,11 +157,30 @@ def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(tmp_path: pat
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
     assert "## `modal.md`" in manifest and "## `guidelines.md` - origin `.claude/skills/diagram/dev/modals.md`" in manifest
     assert "entry/0029-farmhouses-minka.html" in manifest and "Farmhouses (minka)" in manifest
-    assert "owed-checks: modal-research" in manifest and "unit: modal-gaps:farmhouse " in manifest and "unit: modal-form:" not in manifest
+    assert "owed-checks: modal-research" in manifest and "unit: modal-gaps:hamlet/farmhouse " in manifest and "unit: modal-form:" not in manifest
     assert (out / "record" / "0004-households.html").is_file() and (out / "cand" / "0004-households.html").is_file()
     assert mb.bundle(root, "Farmhouse", "modal-form", str(out)) == 0, "a bundle is rebuilt in place"
-    assert "unit: modal-form:farmhouse " in (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "unit: modal-form:hamlet/farmhouse " in (out / "MANIFEST.md").read_text(encoding="utf-8")
     (tmp_path / "notabundle").mkdir()
     (tmp_path / "notabundle" / "x").write_text("x", encoding="utf-8")
     assert mb.bundle(root, "Farmhouse", "modal-form", str(tmp_path / "notabundle")) == 2, "a directory we did not write is never emptied"
     assert mb.bundle(root, "Nothing", "modal-form", str(tmp_path / "c")) == 2
+
+
+def test_a_modal_in_its_own_file_is_read_from_the_file_and_owed_by_its_edits(tmp_path: pathlib.Path) -> None:
+    """Plan D12: the modal's text is `assets/modals/<hamlet|sheet>/<slug>.md`; the class keeps only its key. The file is read
+    (its origin is the file, the EDIT target), the class docstring - here absent - is not, and a file edit owes the form."""
+    root = _tree(tmp_path, "class Farmhouse(Kind):\n    key = 'farmhouse'\n")
+    f = root / mo.modal_file(str(CLASSES / "homestead.py"), "farmhouse")
+    f.parent.mkdir(parents=True)
+    doc = FARMHOUSE.split('"""')[1]
+    f.write_text("\n".join(line.strip() for line in doc.strip().splitlines()) + "\n", encoding="utf-8")
+    base = _commit(root)
+    m = mo.find(root, "hamlet/farmhouse")
+    assert m and m.origin == mo.modal_file(str(CLASSES / "homestead.py"), "farmhouse") and m.uid == "hamlet/farmhouse"
+    assert m.tags["About"].startswith("A farmhouse was") and m.doc.startswith("About:")
+    assert mo.owed(root, base) == []
+    f.write_text(f.read_text(encoding="utf-8").replace("It was thatched.", "It was thatched with straw."), encoding="utf-8")
+    assert [s for s, _w, _f in mo.owed(root, base)][0] == "modal-form:hamlet/farmhouse"
+    sheet = mo.modal_file(".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/household.py", "well")
+    assert sheet.endswith("/modals/sheet/well.md"), "a sheet's well and a hamlet's well are two files"

@@ -451,7 +451,7 @@ def test_every_key_a_modal_carries_is_scanned_for_terms_or_ruled_not_rendered() 
 
     data = explanations(set(CLASSES))
     keys = {k for d in data.values() for k in d}
-    assert NOT_RENDERED <= keys, NOT_RENDERED - keys
+    assert keys >= NOT_RENDERED, NOT_RENDERED - keys
     assert {"about", "guesses", "what", "why", "lead", "caveat", "on_this_map"} <= keys - NOT_RENDERED
     farmhouse = rendered_text(data["farmhouse"])
     assert CLASSES["farmhouse"].about[0] in farmhouse and "farmhouses-minka" not in farmhouse, "the paragraphs, not the links"

@@ -54,9 +54,9 @@ The FIRST line: `modal-research: <class> - ACCURACY <n> findings; REFERENCES <n>
 `ACCURACY`, `REFERENCES`, `GAPS`, each either `clean` or its findings, each finding naming its rule and quoting the modal and
 the page (`entry/<file>` or `record/<file>`, with the page's ORIGIN path). A finding that is a rewording ends with an EDIT block:
 
-    EDIT <the class's module, the origin the MANIFEST names for modal.md, without the :line>
+    EDIT <the origin the MANIFEST names for text.md - the modal's own file>
     <<<
-    the exact text now in the docstring (one line of it, copied character for character)
+    the exact text now in the modal's file (one line of `text.md`, or part of one, copied character for character)
     ===
     the text that should replace it
     >>>

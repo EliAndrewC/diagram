@@ -1,5 +1,13 @@
 # interactive/classes/ - the feature-class vocabulary, one class per kind of thing on the map
 
+**A MODAL'S TEXT IS ITS OWN FILE since feature 319** (plan D12, GM 2026-10-03: *"I believe that feature 189's reasoning has
+been superseded by the fact that we now cross-reference our implementation with our research"*):
+`../assets/modals/hamlet/<slug of the key>.md` (a sheet's kinds: `../assets/modals/sheet/`), in the same tagged form the
+docstring had. The class keeps `key` - what the engine stamps on the ink - and its `#` comments; `Kind.feature()` reads the
+file (`_base.modal_path`). Editing a modal reads one small file, not a module of 14; a test holds that every kind has its file,
+no class carries modal text, and no file is an orphan (`tests/interactive/test_about_form.py`). Where this page says
+"docstring" below, read "its modal file" - the form, the tags and every rule are unchanged.
+
 **The explanation IS the docstring** (feature 189, GM 2026-09-05: *"the documentation within the code is
 literally the documentation that is visible in the user interface"*). What a modal says about a farmhouse
 is the docstring of `class Farmhouse(Kind)` in `homestead.py`, and nothing else. The gate's key is the

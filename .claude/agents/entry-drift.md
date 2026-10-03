@@ -16,7 +16,7 @@ Checks whether a map modal's explanation still says what the research section it
 ## Read the BUNDLE you are given, and nothing under the repository (features 258, 250)
 
 Your dispatch names a bundle: a directory outside the repository (made by `make check-bundle`, usually
-under `/tmp/l7r-check/`) whose `MANIFEST.md` lists every file in it - copies of what you need - the question's fragment and notes, and `kind.txt`, the docstring of the modal class written from it - and beside
+under `/tmp/l7r-check/`) whose `MANIFEST.md` lists every file in it - copies of what you need - the question's fragment and notes, and `kind.txt`, the text of the modal written from it (its file since feature 319) - and beside
 each its ORIGIN, the file in the repository it was copied from. **Read the MANIFEST once: it holds every copy INLINE, each under its origin, so one read is
 the whole of your input.** The variant index and any saved pages sit beside it as files to grep, never to read whole. Name a finding by its ORIGIN path: that is the file the session will edit.
 
@@ -52,14 +52,14 @@ The session applies your report with ONE command, `make apply-edits`, which read
 your reply (measured, research R8: seven drifted modals on one page were thirteen hand edits, each a turn re-reading
 a context of up to 171,000 tokens):
 
-    EDIT <the modal's class file, as kind.txt names it - `.claude/skills/diagram/l7r/diagram/interactive/classes/<file>.py`>
+    EDIT <the modal's file, as kind.txt names it - `.claude/skills/diagram/l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<kind>.md`>
     <<<
-    the exact text now in the docstring
+    the exact text now in the modal's file
     ===
     the text that should replace it
     >>>
 
-- The old text is copied CHARACTER FOR CHARACTER from `kind.txt`, and kept WITHIN ONE LINE of the docstring (a
+- The old text is copied CHARACTER FOR CHARACTER from `kind.txt`, and kept WITHIN ONE LINE of the modal's file (a
   clause or a sentence, never across a line break - the copy in `kind.txt` may not carry the file's indentation). It
   must occur ONCE in the file; the script applies nothing else, and the session does a refused block by hand.
 - The new text is one line too, in the modal's own voice - the same register as the `What:`/`Why:`/`Note:` it sits
@@ -77,8 +77,8 @@ lookup whose result does not decide the next one.
 With a bundle, open nothing outside it. Without one, every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
 carry the entry, the class or the registry key you were sent to check.
 
-**What a modal is.** What the map says about a feature IS the docstring of its `Kind` class in
-`.claude/skills/diagram/l7r/diagram/interactive/classes/*.py` (feature 189). Its `What:` and `Why:` are
+**What a modal is.** What the map says about a feature IS its modal file,
+`.claude/skills/diagram/l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<kind>.md` (feature 319; a class docstring until then). Its `What:` and `Why:` are
 the two paragraphs a reader sees; `Note:` justifies its accuracy label; `Caveat:` is the liberty half.
 Its `Entry:` tag names the research section or sections it was written from. Only that prose is your
 subject - the data tags (`Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:`) are not.
@@ -123,4 +123,4 @@ maintenance, find the clause of the `Note:` that counts that part and ask whethe
 **What you never do.** You do not decide whether the map is right, whether a rule is good, or how a
 place was actually built - other agents and the GM do that. You do not rewrite anything. You do not
 judge the research section's own quality; `record-format` and `quote-check` do that, and neither of them
-reads a class docstring, which is why this agent exists at all. Report only.
+reads a modal, which is why this agent exists at all. Report only.

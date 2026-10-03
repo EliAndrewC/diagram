@@ -15,7 +15,6 @@ one `unit: <slug> <fingerprint>` line per unit it carries, at the content copied
 
 from __future__ import annotations
 
-import ast
 import functools
 import pathlib
 import re
@@ -139,14 +138,9 @@ def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
 @functools.cache
 def _modal_docs(root: pathlib.Path) -> tuple[tuple[str, str], ...]:
     """(class name, docstring) of every modal, parsed once a run - a batch of 24 questions parsed them 24 times."""
-    out = []
-    for d in MODAL_DIRS:
-        for path in sorted((root / d).glob("*.py")):
-            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
-                doc = ast.get_docstring(node) if isinstance(node, ast.ClassDef) else None
-                if doc:
-                    out.append((node.name, doc))
-    return tuple(out)
+    import _modal_owed as mo  # noqa: PLC0415 - feature 319 (plan D12): a modal's text is its own file
+
+    return tuple((m.cls.split(".", 1)[1], m.doc) for m in mo.modals_now(root, about_only=False))
 
 
 def modals_for(root: pathlib.Path, page: str) -> list[str]:

@@ -155,9 +155,9 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
     `make record-checked BUNDLE=` - each unit this bundle answers, at the fingerprint of the words copied."""
     fp_form, fp_research = mo.fingerprints(root, m)
     if for_ == "modal-form":
-        units = [(f"{mo.FORM_CHECK}:{m.key}", fp_form)]
+        units = [(f"{mo.FORM_CHECK}:{m.uid}", fp_form)]
     else:
-        units = [(f"{c}:{m.key}", fp_research) for c in mo.RESEARCH_CHECKS]
+        units = [(f"{c}:{m.uid}", fp_research) for c in mo.RESEARCH_CHECKS]
     return "## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
 
 
@@ -166,7 +166,7 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
     if m is None:
         print(f"modal-bundle: no About-form modal {kind!r} (a class name or key) under {', '.join(mo.MODAL_DIRS)}", file=sys.stderr)
         return 2
-    out = pathlib.Path(out_arg) if out_arg else DEFAULT_ROOT / f"modal-{re.sub(r'[^a-z0-9]+', '-', m.key)}-{for_}"
+    out = pathlib.Path(out_arg) if out_arg else DEFAULT_ROOT / f"modal-{m.uid.replace('/', '-')}-{for_}"
     if out.exists():
         if not (out / "MANIFEST.md").is_file():
             print(f"modal-bundle: {out} exists and is not a bundle - choose another OUT", file=sys.stderr)
@@ -181,7 +181,7 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
         rows.append((name, origin, what))
 
     put("modal.md", render(root, m), m.origin, "the modal as its reader meets it - the thing you judge")
-    put("docstring.txt", m.doc + "\n", m.origin, "the class's docstring line for line - an EDIT block's old text is one of these lines (or part of one), exactly")
+    put("text.md", m.doc.rstrip() + "\n", m.origin, "the modal's file line for line - an EDIT block's old text is one of these lines (or part of one), exactly, and its target is this origin")
     guide = GUIDELINES.get(m.form, GUIDELINES["standard"])
     put("guidelines.md", (root / guide).read_text(encoding="utf-8"), str(guide), "the rules - your contract; name a rule (M#/P#) in every finding")
     put("prepass.txt", prepass(root, m), "scripts/_modal_bundle.py", "the mechanical findings - rule on each")

@@ -263,7 +263,7 @@ def test_a_batch_carries_only_the_owed_units_of_its_own_notes() -> None:
 def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:
     """Feature 268: the compound kinds (feature 262) are modals too, and entry-drift could not be pointed at one."""
     found = cb.kind_docstring(REPO, "ShrineGrove")
-    assert found is not None and "compound_kinds/grounds.py" in found[0]
+    assert found is not None and found[0].endswith("modals/sheet/shrine-grove.md"), "feature 319 (plan D12): the origin is the modal file"
 
 
 def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
@@ -271,7 +271,7 @@ def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
     name, and the bare name only ever reached the first; `household.Well` reaches the sheet's."""
     bare = cb.kind_docstring(REPO, "Well")
     sheet = cb.kind_docstring(REPO, "household.Well")
-    assert bare and sheet and "classes/water_and_ways.py" in bare[0] and "compound_kinds/household.py" in sheet[0]
+    assert bare and sheet and bare[0].endswith("modals/hamlet/well.md") and sheet[0].endswith("modals/sheet/well.md")
     assert cb.kind_docstring(REPO, "nosuchmodule.Well") is None
 
 

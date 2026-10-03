@@ -41,6 +41,7 @@ Research:
 from __future__ import annotations
 
 import inspect
+import os
 import re
 from dataclasses import dataclass, field
 from typing import ClassVar, Literal, cast
@@ -240,6 +241,32 @@ def guess_bullets(text: str) -> tuple[str, ...]:
     return tuple(line[2:].strip() for line in text.splitlines() if line.strip())
 
 
+#: WHERE A MODAL'S TEXT LIVES (feature 319, plan D12, GM 2026-10-03: *"Yes, I agree with that. So please go ahead and make
+#: that change now"*): one file per kind, `assets/modals/<hamlet|sheet>/<slug of its key>.md`, in the docstring's tagged form.
+#: It was the class docstring (feature 189); editing one modal then meant reading a module of 14 to 27, and a check could not
+#: quote a docstring's line breaks. Under `assets/` the text is page content - gate-stamp's `page` area, the render
+#: fingerprint, a gen child's recorded reads - exactly as the glossary is.
+MODALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "modals")
+
+
+def modal_path(module: str, key: str) -> str:
+    """The modal file of the kind `key` defined in `module`: a Mode A sheet's kinds (`compound_kinds`) under `sheet/`, the
+    hamlet vocabulary under `hamlet/` - two registries, so a sheet's `well` and a hamlet's `well` are two files.
+    Research: modal vocabulary plumbing - NONE"""
+    registry = "sheet" if ".compound_kinds" in module else "hamlet"
+    return os.path.join(MODALS_DIR, registry, slug(key) + ".md")
+
+
+def modal_text(cls: type) -> str | None:
+    """A kind's modal text: its file, or - for a class with no file, a test's probe - its docstring.
+    Research: modal vocabulary plumbing - NONE"""
+    path = modal_path(cls.__module__, getattr(cls, "key", ""))
+    if os.path.isfile(path):
+        with open(path, encoding="utf-8") as fh:
+            return fh.read()
+    return cls.__doc__
+
+
 class Kind:
     """Base of every feature class: the DATA as class attributes, the PROSE as the docstring.
 
@@ -256,7 +283,7 @@ class Kind:
     @classmethod
     def feature(cls) -> FeatureClass:
         """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring."""
-        parts = parse_explanation(cls.__doc__, cls.__name__)
+        parts = parse_explanation(modal_text(cls), cls.__name__)
         if "About" in parts:
             return _about_feature(cls.__name__, cls.key, parts)
         for tag in _DATA_TAGS:

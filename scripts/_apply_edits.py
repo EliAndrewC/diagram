@@ -47,7 +47,9 @@ MODALS = ".claude/skills/diagram/l7r/diagram/interactive/classes/"
 # feature 262's building-plan sheets keep their modal prose in compound_kinds/, which entry-drift checks the same way
 # (feature 265: 58 owed pairs there, and every EDIT for them was refused until this)
 SHEET_MODALS = ".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/"
-ROOTS = (RECORD, MODALS, SHEET_MODALS)
+# feature 319 (plan D12): a modal's text is its own file now, one per kind - the EDIT target every modal check names
+MODAL_FILES = ".claude/skills/diagram/l7r/diagram/interactive/assets/modals/"
+ROOTS = (RECORD, MODALS, SHEET_MODALS, MODAL_FILES)
 TERMS = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/"
 
 
@@ -105,7 +107,7 @@ def resolve(root: pathlib.Path, path: str) -> pathlib.Path | None:
 def apply_edit(root: pathlib.Path, b: dict, dry: bool) -> str:
     target = resolve(root, b["path"])
     if target is None:
-        return f"REFUSED - {b['path']} is not under {RECORD}, {MODALS} or {SHEET_MODALS}"
+        return f"REFUSED - {b['path']} is not under {RECORD}, {MODAL_FILES}, {MODALS} or {SHEET_MODALS}"
     if not target.is_file():
         return f"REFUSED - no file {b['path']}"
     text = target.read_text(encoding="utf-8")

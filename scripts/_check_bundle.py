@@ -26,7 +26,6 @@ The default directory is under `/tmp/l7r-check/`, which no `CLAUDE.md` sits abov
 from __future__ import annotations
 
 import argparse
-import ast
 import datetime
 import html
 import json
@@ -83,14 +82,13 @@ def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     """(origin `file:line`, docstring) of one modal class - what `entry-drift` compares with its section.
     The class, not its file: a classes module holds a dozen modals, and the check is about one. A name two modules
     share (the map's `Well` and the sheet's, feature 265) is qualified by its module: `household.Well`."""
+    import _modal_owed as mo  # noqa: PLC0415 - feature 319 (plan D12): the text is the kind's modal file, its origin that file
+
     module, _, cls = name.rpartition(".")
-    for path in [*sorted((root / CLASSES).glob("*.py")), *sorted((root / COMPOUND_KINDS).glob("*.py"))]:
-        if module and path.stem != module:
-            continue
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.name == cls:
-                return f"{path.relative_to(root)}:{node.lineno}", ast.get_docstring(node) or ""
+    for m in mo.modals_now(root, about_only=False):
+        mod, _, here = m.cls.partition(".")
+        if here == cls and (not module or mod == module):
+            return m.origin, m.doc
     return None
 
 

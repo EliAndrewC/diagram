@@ -90,3 +90,23 @@ def test_a_guess_that_is_not_a_bullet_is_refused() -> None:
             Probe.feature()
     finally:
         Kind.registry.remove(Probe)
+
+
+def test_every_modal_is_its_own_file_and_no_class_carries_its_text() -> None:
+    """Plan D12 (GM 2026-10-03): one file per modal under `assets/modals/<hamlet|sheet>/`. Every registered kind has its
+    file, no kind's class still carries a tagged docstring (one source for the text), and no file is an orphan."""
+    import glob
+    import os
+    import re
+
+    from l7r.diagram.interactive.classes._base import MODALS_DIR, modal_path
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES  # noqa: F401 - registers the sheet kinds
+
+    kinds = [k for k in Kind.registry if k.__module__.startswith(("l7r.diagram.interactive.classes.", "l7r.diagram.interactive.compound_kinds."))]
+    assert len(kinds) >= 155
+    paths = {modal_path(k.__module__, k.key) for k in kinds}
+    assert all(os.path.isfile(p) for p in paths), sorted(p for p in paths if not os.path.isfile(p))
+    tagged = [k.__name__ for k in kinds if k.__doc__ and re.search(r"^\s*(What|About|Name):", k.__doc__, re.M)]
+    assert tagged == [], f"modal text left in a class docstring: {tagged}"
+    files = set(glob.glob(os.path.join(MODALS_DIR, "*", "*.md")))
+    assert files == paths, f"orphan modal files: {sorted(files - paths)}"
