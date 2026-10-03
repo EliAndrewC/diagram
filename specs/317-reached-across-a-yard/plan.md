@@ -33,7 +33,11 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
 - TIGHT SEATS. While the settlement's share has room (D4), each standing house of the grown cluster also offers seats at the
   distance where the two footprints part plus the 2 px parting (`grow_gap` without the path's strip): a household seated there
   stands against its neighbor's land. A tight seat is taken only by passage: a household that finds a corridor of its own there
-  is not land the custom covers and is refused the seat (the growth's ordinary seats keep a path's room).
+  is not land the custom covers and is refused the seat (the growth's ordinary seats keep a path's room). They are offered only
+  round a house a passage may cross to (reached within the chain, D3, with a yard: `passage.crossable`) and only on its yard's
+  side - within `TIGHT_BEARING_DEG` (112.5) of the bearing to its yard, its front and flanks - a search breadth MEASURED (research
+  R7): behind its house a walk to the yard was found once in 194 tries on 13 settlements, and offered there too the tight seats
+  cost the homesteads stage 12-35%. A household behind its neighbor is still seated, by the ordinary seats and a way of its own.
 - THE CUSTOM'S CONDITION AS THE REACH: the household's own ground adjoins the neighbor's - its land (the reach the growth parted
   its seat by, over every garden layout, carried with its house) within the parting and `PASSAGE_ADJOIN_FT` of the neighbor's
   footprint, a GUESS (the 2 px the parting leaves and a foot of tolerance) - never a walking distance across open ground (a long
@@ -47,7 +51,9 @@ LEGITIMATE: the spacing that kept the condition from arising was built for a lan
   found 3 passages (research R6). Kept clear of every later homestead as a corridor is; not drawn as a lane - a dooryard and a
   yard are open trodden ground, the walk across them is the custom, not a way (this record's reading, a GUESS).
 - THE ORDER AT A TIGHT SEAT: the walk asked first, then the corridor - the same verdict (both must hold), since the walk is
-  searched on the two households' land and the corridor over the whole tree (research R6).
+  searched on the two households' land and the corridor over the whole tree (research R6). And once a seat: a household that has
+  a way of its own from one garden layout at the seat is not on land the custom covers, so its other layouts there are refused
+  unasked (research R7: the corridor found at 93 of 106 searches after a walk; the tight seats' work 4.0 -> 2.15 s).
 
 Every other rule of the placer is asked as before; only the corridor's question is answered by the passage.
 

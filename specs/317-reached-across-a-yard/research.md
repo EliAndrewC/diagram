@@ -138,3 +138,28 @@ corridor searches after a walk 0.54 s (90 asked, 75 found - a household that cou
 custom's condition). By bearing from the neighbor's house against its yard's: tried 39 / 74 / 64 / 86 / 35 at 0 / 45 / 90 / 135 /
 180 degrees, seated 5 / 1 / 4 / 1 / 0.
 (observed 2026-10-03, method: as the heading.)
+
+## R7 - What the tight seats cost, and the forms tried (method: `tight_order.py`, `tight_cost.py` in the session's scratchpad; `passage_smoke.py`; `abab.sh` CPU seconds against the worktree at 94263ffe1 - per-layout routing, no passage - `t03c-*`, `t03d-*`, `t03e-*`)
+
+Every figure at 15 households on the reference spec, observed 2026-10-03 at host loads of 10-15 (other sessions' gates and a page
+session running beside), so CPU seconds moved by a fifth between runs; the per-part breakdowns (`tight_cost.py`, one process) are
+the steadier measure.
+
+| form | passage households (seeds 1-16) | settlements with one, of 13 whose share allows | homesteads stage against no passage |
+|---|---|---|---|
+| tight seats queued from every reached house, every bearing (8c8b42773) | 16 | 9 | +12% to +35% (two runs); the tight seats 1.49 of 8.1 s and 4.0 of 21.7 s |
+| a tight seat offered only behind an ordinary seat whose household found no corridor (set aside) | 3 | 3 | 22.7 -> 20.2 s: nothing measurable |
+| queued on the neighbor's yard side only (`TIGHT_BEARING_DEG` 112.5) | 12 | 8 | 6.5 -> 7.7 s (+18%) |
+| ...and one way-of-its-own verdict a seat (`own_way`, a301f4e2a) | - | - | the tight seats 2.15 of 14.1 s (15%); 18.7 -> 23.3 s alternated at load 14 |
+
+Where the passages came from, every bearing offered (13 settlements, 498 tight tries): 15 of the 16 within 90 degrees of the
+bearing from the neighbor's house to its yard (0: 6, 45: 3, 90: 6), 1 from behind the house (135 degrees) in 194 tries there; the
+tries before a passage ran from the 3rd to the 42nd, so a cap on tries would have cut passages as much as cost. The fallback form
+was cheap because, with the route kept off a household's own beds (R4), a household with no way of its own at an ordinary seat is
+rare - 21 seats at 15 households on eight seeds - so a design that waits for one seats few. The MODE 1 ruling asks the growth to
+offer the seats, and the queued form does.
+
+With `own_way`, of 208 tight seats tried: 108 walks asked, 55 found; 55 corridor searches, 43 found (refused: a way of its own);
+12 households admitted. The stage's remaining tight cost is the settles of the popped tight seats (402 popped, 0.53 s) and the
+placer's calls (1.62 s).
+(observed 2026-10-03, method: as the heading.)
