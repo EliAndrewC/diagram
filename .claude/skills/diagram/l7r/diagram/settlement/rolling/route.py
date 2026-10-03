@@ -179,10 +179,14 @@ def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> l
     from .access import PART_MARGIN_FT, TREAD_HALF_FT
 
     boxes = geom.get("boxes") or {}
-    pgap, trunk = s.px(TREAD_HALF_FT + PART_MARGIN_FT), s.px(4.0)
+    pgap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
     mine: list[tuple[Any, float]] = [(own, hgap)]
     mine += [(b, pgap) for b in [*(boxes.get(k) for k in ("shed", "byre", "well")), *(boxes.get("gardens") or ())] if b is not None]
-    mine += [(b if kind != "persimmon" else (b[0], b[1], trunk, trunk), half) for kind, b in sorted((boxes.get("fixtures") or {}).items())]
+    # ...BUT NOT THE PERSIMMON (feature 317, research R8): feature 315 holds it in the dooryard, by the door, and its trunk's keep
+    # (a corridor's half-width) left the grid no cell between it and the house - seed 39 at 40 households searched 456 routes,
+    # 112 of them finding nothing, and tried 1,084 seats where the search without it tried 295. The taut pull still keeps every
+    # leg off its trunk (`fixtures_clear`), as it did before the route kept off its own parts.
+    mine += [(b, half) for kind, b in sorted((boxes.get("fixtures") or {}).items()) if kind != "persimmon"]
     return mine
 
 

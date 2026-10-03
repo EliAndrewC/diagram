@@ -159,7 +159,7 @@ def test_a_routes_last_leg_onto_the_tree_is_judged_where_it_is_searched(monkeypa
 
 def test_the_route_keeps_off_the_household_s_own_parts_each_by_its_leg_test_s_gap() -> None:
     """Feature 317 T06: the house by the house gap, the shed, byre, well and beds by the parts' gap, the fixtures by a corridor's
-    half-width - a persimmon by its trunk."""
+    half-width - but not the persimmon, held by the door since feature 315: the taut pull keeps the legs off its trunk."""
     s = _open()
     geom = {
         "house": (0.0, 0.0, 40.0, 20.0),
@@ -169,8 +169,9 @@ def test_the_route_keeps_off_the_household_s_own_parts_each_by_its_leg_test_s_ga
     pgap = s.px(access.TREAD_HALF_FT + access.PART_MARGIN_FT)
     assert got[0] == ((0.0, 0.0, 40.0, 20.0), 12.0), "the house first, by the house gap"
     assert ((50.0, 0.0, 10.0, 10.0), pgap) in got and ((0.0, 60.0, 30.0, 20.0), pgap) in got, "the shed and the bed by the parts' gap"
-    assert ((80.0, 0.0, 6.0, 6.0), 7.0) in got and ((90.0, 40.0, s.px(4.0), s.px(4.0)), 7.0) in got, "fixtures by the half-width, the persimmon by its trunk"
-    assert len(got) == 5, "no byre or well: none listed"
+    assert ((80.0, 0.0, 6.0, 6.0), 7.0) in got, "fixtures by the half-width"
+    assert all(b[:2] != (90.0, 40.0) for b, _g in got), "...the persimmon left to the taut pull"
+    assert len(got) == 4, "no byre or well, and the persimmon: none listed"
 
 
 def test_each_layout_of_one_seat_is_routed_round_its_own_beds_and_asked_once(monkeypatch: pytest.MonkeyPatch) -> None:
