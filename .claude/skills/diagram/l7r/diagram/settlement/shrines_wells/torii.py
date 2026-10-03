@@ -241,5 +241,5 @@ class ToriiAvenueMixin:
         self.add(f'<path d="{dstr}" fill="none" stroke="#B89A6A" stroke-width="8" opacity="0.7"/>')
         self.add(f'<path d="{dstr}" fill="none" stroke="#6B4F2A" stroke-width="1" stroke-dasharray="3,5"/>')
         for i in range(count):
-            tx, ty = along(0.06 + 0.80 * i / (count - 1))
+            tx, ty = along(0.06 + 0.80 * i / max(count - 1, 1))  # one arch stands at the foot; `count - 1` divided by zero (found by the feature-316 audit)
             self._torii(tx, ty)

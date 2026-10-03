@@ -80,6 +80,12 @@ Then, per UNIT, every **physical decision its code makes that no claim of it cov
 choice between forms, a placement or ordering rule - as an UNCLAIMED line. A unit whose only claim is NONE and which decides
 something physical gets MISLABELED on that claim AND the UNCLAIMED lines for what it decides.
 
+**A mismatch you can name is a finding, never a note on a pass.** If, while judging a claim IN-STEP, you find yourself
+writing "but the code uses X where the page says Y" - a figure, a measure, a form, an order - stop: that is DRIFTED (or
+MISLABELED, if the label is what is wrong). IN-STEP means you found nothing the session should act on; a caveat in an IN-STEP
+note is the one place a drift can hide from the index. (Seeded runs, feature 316: two of three runs passed a known depth
+mismatch with exactly such a note.)
+
 **The distinction that matters most.** Most code is plumbing, and a NONE on plumbing is IN-STEP - do not invent physical meaning
 for an index tolerance, a grid cell size, a retry count or a float epsilon. A number is physical when a map reader would read it
 off the map as a fact about the place (feet between houses, the width of a lane, how many fields, what share is dry, which side
