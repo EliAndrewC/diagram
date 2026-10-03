@@ -20,17 +20,22 @@
 - [x] T02 the corridor judged as drawn: the door leg found and laid by `lanes_of`, the reproduction refused at seating or drawn lawfully (D6, FR-004)
       research: rendering
       verify: DONE. tree.admits asks needle_loops of the tree with its ends joined as the settle joins them (tree.as_joined, 4dbcf66d1), with an exact box prefilter (ea6bdb56e); the reproduction (/tmp/repro317, seed 13 at 20 households, own parts on) rolls; t06-20.log: all eight seeds at 20 households roll; the cost below the host's noise (research R2: CPU 21.6 -> 20.1 s at 15 households, 15.6 -> 16.1 s at 40)
-- [ ] T03 the passage, the chain and the share, with unit tests (D2-D4, FR-002)
+- [x] T03 the passage, the chain and the share, with unit tests (D2-D4, FR-002)
       research: rendering
-- [ ] T04 the reach predicate with passages, with unit tests (D5, FR-003)
+      verify: DONE. passage.py (the walk, the adjoining land, the chain, the share, recheck_passages and relay by the whole holding), growth.py tight seats (yard side 90, TIGHT_TREE_FT), place.py landlocked; tests/settlement/test_passage_317.py (24) and tests/hamletgen/homesteads/test_growth.py; R6-R9: 14 passages at 15 households (seeds 1-16), 11 at 40 (seeds 2, 25, 39, 47), passage_unfit 0
+- [x] T04 the reach predicate with passages, with unit tests (D5, FR-003)
       research: rendering
-- [ ] T05 the drawing page: brief R2, what the maps draw (D1, FR-001)
+      verify: DONE. checks.unreached_houses counts a household reached across a yard reached through its neighbor's chain; tree.passage_anchors keeps the anchor's corridor owed and never pruned; geom.lane_houses keeps no lane for, carries no end to and cuts no web toward such a household; tests in tests/hamletgen/ways (test_checks, test_tree, test_geom, test_sweeps); the village-lane glyph check's F1 resolved (gc-vl-f1-anchor-way)
+- [x] T05 the drawing page: brief R2, what the maps draw (D1, FR-001)
       research: rendering
-- [ ] T06 the route's own parts retried on the fixed judge, kept only if it pays (D6, FR-006)
+      verify: DONE. the drawing page (0081-village-lanes.drawing.html) says what the maps draw: the passage bullet written in brief R2 and checked in R2-R3 (record-format rounds 1-2, quote-check, entry-drift); make record-owed UNANSWERED=1: no record check is owed
+- [x] T06 the route's own parts retried on the fixed judge, kept only if it pays (D6, FR-006)
       research: rendering
+      verify: DONE. retried on the fixed judge and WITHDRAWN: the route searched per garden layout round its own parts paid before feature 315 merged and cost the homesteads stage 3-43% more after it (research R4, R8); the corridor's route keeps off the house alone, as on main; the judge defect its cohort run exposed (seed 18) stays closed (tree.laid_run, own_clear)
 - [ ] T07 timing against main at 15 and 40 households; the cohort and the pool against main (FR-005, FR-006)
       research: rendering
-- [ ] T08 the known bugs listed with their owners and states (D7, FR-007, SC-006)
+- [x] T08 the known bugs listed with their owners and states (D7, FR-007, SC-006)
       research: rendering
+      verify: DONE. research R5 lists every bug found with its owner and state: the feature's own fixed (the judge as drawn, seeds 18 and 47, the persimmon reseat, the kura and byre, the passage on the finished seating, four tooling bugs); 315's cohort seeds with the Diagram (Inashiro) session (landed in 315); the lane code's pre-existing figures against its page and the sliver joint, to a follow-up put to the GM
 - [ ] T09 `make done`, the bookends, the occasions' reviews
       research: rendering
