@@ -57,7 +57,7 @@ many it held - the standard questions for its kind of feature - in plain prose w
    occupancy as a typical figure with a low and a high one - each answered from the research, or listed as a guess, or stated
    as not found.
 2. **Given** a placement rule the map follows (how a house is turned, how far it stands from the paddy), **When** the modal is
-   read, **Then** the rule is not in the overview unless the guidelines name it as something a reader asks of that kind.
+   read, **Then** the rule is not on the About tab unless the guidelines name it as something a reader asks of that kind.
 3. **Given** the GM's review of the pilot in the clone, **When** the GM asks for changes, **Then** the guidelines change first
    and the modal is rewritten from them, so every lesson reaches every later modal.
 
@@ -164,7 +164,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 
 ### Edge Cases
 
-- A feature whose standard question has no answer in the record: the modal says so plainly in the overview ("no record of ...
+- A feature whose standard question has no answer in the record: the modal says so plainly on the About tab ("no record of ...
   was found") or lists the drawn value as a guess - never silence, never a made-up figure.
 - A feature that is not a building and not a field (a stream, a lane, a notice board): the non-building guidelines decide its
   questions; where a kind fits neither set, the guidelines grow a set for it during the rollout and the GM sees it with the
@@ -185,7 +185,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 **Guidelines**
 
 - **FR-001**: The project MUST hold written guidelines for a standardized modal: the reader it is written for, the length, the
-  order, and for each kind of feature the questions its overview answers. For a BUILDING: purpose (residence, workplace, or
+  order, and for each kind of feature the questions its About tab answers. For a BUILDING: purpose (residence, workplace, or
   both; whether animals lived inside); appearance (materials, walls, roof, whether the doorways close); and capacity (residents,
   stored goods or animals, as a typical figure with a low and a high one, not record extremes). For a non-building feature the
   questions are set by the guidelines, starting from the garden pilot.
@@ -251,7 +251,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **SC-005** (FR-010, FR-012): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts on the GM's go-ahead
   after a pilot's first rewrite is accepted with no changes.
 - **SC-006** (FR-007, FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green,
-  its browser test holding the sibling links and the glossary tooltips on every tab.
+  its browser test holding the sibling links on the About tab and the glossary tooltips on every tab.
 - **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
   first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
