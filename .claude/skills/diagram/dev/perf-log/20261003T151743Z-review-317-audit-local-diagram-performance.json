@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T145740Z"
+  },
+  "binding": "f607c6ea71637357a98d2ae1afbe3d9f216e5c533e7e80dfd8740534a8e87e26",
+  "criteria": {
+    "commensurate": "Yes, at the level of the feature, though not on the one cell taken alone. The 40-hh leg (beyond the band) goes from 58.6 to 65.8 s (+12.3%). Seed 47 adds +4.6 s of that for a map identical to the share-0 map. Without that cell the leg is about +5.8%, and seeds 25 and 39 are the defect fix's layout. That is one failed attempt in 12 scaling cells, costing one extra seating (homesteads 8.2-8.7 s against main 3.7-4.2 and passage-off 4.1-4.3). The 10- and 20-hh legs are +2.3% and +0.4%, and the 15-hh reference legs are 6.7% faster in total. The functionality is the GM-requested layout plus a defect fix, not cosmetic.",
+    "necessary": "Yes. The wood-seat fix corrects a defect (feature 287 plan D9: main reserved wood seats the copse never planted). It is most of the 40:39 cost (homesteads 2.60 to 4.1-4.5 s, no passage) and, with the passage, most of 40:25. The passage across a yard is the GM's request (20:25 passage-off total 5.97 against 7.22, 3 passages; notice 0.12 to 0.78). Seed 47 at 40 hh pays for a passage attempt that fails. The share is a ceiling (research R10), so a seating with passages has to be tried before the engine can know it falls short. After the early stop the discarded seating is productive work: 33 houses in 3.9 s, with 0.1 s after its last house.",
+    "no_way_around": "None found. The lever named in the 143844Z audit was built, and it does what was asked. Seed 47's discarded seating went from 896 to 450 placer calls and from grow_level 2 to 1 (5.5 to 3.9 s; stage 9.5-10.0 to 8.2-8.7 s), and the 40-hh maps for 25/39/47 are sha256-identical with and without it. A trace of the seatings rules out the next levers. (a) Abandoning a passage seating when it enters level 1 with passages spent would throw away successful seatings: 40:25 enters level 1 at 30 houses with 3 spent and ends at 40, and 20:47 enters at 18 with all 4 spent and ends at 20. (b) Seating without passages first reverses the ceiling, because any map that seats everyone without passages would never get them. (c) No prefix can be reused: the two seatings at 40:47 diverge before any passage is spent (level 0 runs dry at 17 houses with the passage on and at 27 with it withheld, and the first passage is at house 19). Observation, not a lever: the queued tight seats appear to cost ordinary level-0 seats. If the session finds a cause there, it could also make 40:47's passage seating succeed. Band 3 (40-hh total +12.3%, seed 47 +34.1%) still needs the GM's make perf-signoff, which this agent cannot grant."
+  },
+  "end": {
+    "commit": "e9cd4717a",
+    "label": "317-end",
+    "utc": "20261003T150117Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T151743Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -5.9,
+          "4": 0.0,
+          "47": 17.9
+        },
+        "total_pct": 2.3
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": -13.6,
+          "4": -7.8,
+          "47": 11.1
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 16.0,
+          "39": 11.6,
+          "4": -4.6,
+          "47": 34.1
+        },
+        "total_pct": 12.3
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -17.0,
+      "4": 2.0,
+      "47": -10.9
+    },
+    "total_pct": -6.7
+  },
+  "note": "",
+  "verdict": "justified"
+}

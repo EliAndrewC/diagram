@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "38901e2df",
+    "label": "317-start",
+    "utc": "20261003T145740Z"
+  },
+  "binding": "f607c6ea71637357a98d2ae1afbe3d9f216e5c533e7e80dfd8740534a8e87e26",
+  "end": {
+    "commit": "e9cd4717a",
+    "label": "317-end",
+    "utc": "20261003T150117Z"
+  },
+  "environment": "local",
+  "feature": "317-reached-across-a-yard",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T151903Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -5.9,
+          "4": 0.0,
+          "47": 17.9
+        },
+        "total_pct": 2.3
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": -13.6,
+          "4": -7.8,
+          "47": 11.1
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 16.0,
+          "39": 11.6,
+          "4": -4.6,
+          "47": 34.1
+        },
+        "total_pct": 12.3
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -17.0,
+      "4": 2.0,
+      "47": -10.9
+    },
+    "total_pct": -6.7
+  },
+  "note": "The rewrite matches the data. 40 hh: cause (1), the wood-seat fix, is the larger part. Seed 39 (homesteads +1.5-1.9 s, no passage). Seed 25, homesteads: main 2.85, clone 3.93, NOPASS 3.63, both off 3.01, so the passage is about 0.3 s. Seed 25, web: main 1.60, clone 2.02, NOPASS 1.96, both off 1.53, so the passage share is none. Seed 25's growth leaves only with both off. 20:25 is the passage: whole run main 6.02, clone 7.22, share 0 5.97; notice 0.12 / 0.78 / 0.23. Seed 47 at 40 matches perf-317-control-40d: the passage seating places 33 of 40 under the early stop (450 calls, 3.9 s), the margin is seated again with the passage withheld, homesteads 8.2 s against main 4.0, and the kept map has no passage. Both off is within 3-11% of main. Two crossing cells are not given a cause by name, but neither contradicts the two causes. 20:47 (+11.1%) is the passage (perf-317-control-nopass: share 0 0.79-0.83 against clone 1.23-1.32, main 0.75-0.80). 10:47 (+17.9%, notice/windbreak/hinterland, about +0.24 s) is joint (total main 2.69, clone 2.93, NOPASS 3.09, both off 2.65). The audit of 20261003T151743Z stands on the same binding. Band 3 still needs the GM's make perf-signoff.",
+  "verdict": "consistent"
+}
