@@ -268,7 +268,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         if h.get("well_pocket"):
             wx, wy = float(h["well_pocket"][0]), float(h["well_pocket"][1])
             release_held(s, "wells", wx, wy)  # held since the seating, so the track kept off it (`hold_laid_parts`)
-            s.well(wx, wy)
+            s.well(wx, wy, of=(float(h["x"]), float(h["y"])))  # ...naming its household, whose own corridor may pass it
             placed.append((wx, wy))
     # A WELLHEAD MAY NOT STAND IN THE SHELTER BELT (settlement-review, Inashiro 2026-08-18). The
     # belt is drawn later, but `village_grove` SKIPS any clump whose canopy would reach a wellhead

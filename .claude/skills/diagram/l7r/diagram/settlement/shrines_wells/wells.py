@@ -63,7 +63,7 @@ class WellsMixin:
         """
         return self.px(12.376) if self._toscale() else 11.9 * self.bscale
 
-    def well(self: Settlement, x: float, y: float, r: float = 8, shrine: bool = False, private: bool = False, kind: str | None = None) -> None:  # type: ignore[misc]
+    def well(self: Settlement, x: float, y: float, r: float = 8, shrine: bool = False, private: bool = False, kind: str | None = None, of: Any = None) -> None:  # type: ignore[misc]
         """A public NEIGHBORHOOD WELL (井戸) - a stone curb under an open-sided well-house roof, the
         shared draw-point and social hub (the idobata, where a tenement block's gossip happened). One
         served a courtyard / cluster of ~10-20 households. SMALLER than a house and sits in a block
@@ -97,6 +97,11 @@ class WellsMixin:
             # a josui-ido CISTERN-WELL taps the buried aqueduct main (research 021 item 4);
             # recorded only when declared, so every existing manifest stays byte-identical
             _wrec["kind"] = kind
+        if of is not None:
+            # ...AND A HOUSEHOLD'S OWN WELL POCKET NAMES ITS HOUSEHOLD (feature 318, cohort Audit-24): its own access corridor ran
+            # past the pocket, and the registry, which lets a household's parts stand by its own corridor, read a well naming
+            # no household as a stranger's on the path; recorded only when given, so every other manifest stays byte-identical
+            _wrec["of"] = [round(float(of[0]), 1), round(float(of[1]), 1)]
         self.M["wells"].append(_wrec)  # shrine=True marks an ablution (temizu) well - wells_sized_to_population counts only the communal household draw-wells
         # reserve only a TIGHT courtyard around the small wellhead (not a whole house-plot): houses ring
         # it closely, as in a real tenement court, so a well costs roughly its own footprint, not several

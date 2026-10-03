@@ -86,6 +86,8 @@ def test_a_seating_draws_a_well_at_every_pocket_it_laid() -> None:
     hg.place_wells(s, plan, s.M["houses"])
     drawn = {(round(w["x"], 1), round(w["y"], 1)) for w in s.M["wells"]}
     assert all((round(h["well_pocket"][0], 1), round(h["well_pocket"][1], 1)) in drawn for h in pockets)
+    named = {(round(w["x"], 1), round(w["y"], 1)): w.get("of") for w in s.M["wells"]}
+    assert all(named[(round(h["well_pocket"][0], 1), round(h["well_pocket"][1], 1))] == [round(h["x"], 1), round(h["y"], 1)] for h in pockets), "each pocket's well names its household (feature 318)"
 
 
 def test_a_household_bamboo_strip_stands_on_its_house_bank_and_names_its_house() -> None:

@@ -682,6 +682,7 @@ _MATRIX_PARENT_FIELD = {
     "threshing_yards": "of",
     "farm_sheds": "of",
     "farm_fixtures": "of",
+    "wells": "of",  # a household's own well pocket, drawn as a well (feature 318: its own corridor runs past it - Audit-24)
     "persimmons": "of",
     "byres": "of",
     "retirement_houses": "of",
