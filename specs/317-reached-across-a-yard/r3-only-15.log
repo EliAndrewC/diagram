@@ -1,0 +1,10 @@
+seed stage_s houses | seats seated seats_lost_to_corridor sides sides_passed sides_refused_else corridor_none corridor_only | s: corridor_none corridor_found
+   1   3.45    15 | 65 15 3 138 42 78 18 18 | 0.09 0.65
+   2   1.59    15 | 63 15 13 167 37 75 55 55 | 0.29 0.23
+   3   2.82    15 | 130 15 9 215 33 135 47 38 | 0.20 0.39
+   4   2.00    15 | 69 15 9 135 44 53 38 38 | 0.26 0.34
+   5   2.03    15 | 111 15 27 223 45 76 102 96 | 0.47 0.25
+   6   1.37    15 | 52 15 2 135 42 78 15 10 | 0.09 0.33
+   7   1.27    15 | 55 15 6 111 39 41 31 31 | 0.11 0.25
+   8   2.96    15 | 86 15 8 149 44 76 29 27 | 0.31 0.60
+ALL | seats=631 seated=120 seats_lost_to_corridor=77 sides=1273 sides_passed=326 sides_refused_else=612 corridor_none=335 corridor_only=313

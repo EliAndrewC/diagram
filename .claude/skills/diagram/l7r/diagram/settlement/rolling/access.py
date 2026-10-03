@@ -419,25 +419,39 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
         if k == len(seen):
             nxt = next(more, None)
             if nxt is None:
-                return None
+                break
             seen.append(nxt)
         corridor = seen[k]
-        if corridor is ROUTE_LATER:
-            k += 1
-            continue
-        # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
-        last = len(corridor) - 2
-        # ...and the ways' ground test of each leg the search asked, after its own fixtures and beds (`standing_ground`)
-        if all((n == last and math.dist(a, b) < 1e-6) or (fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom)) for n, (a, b) in enumerate(legs(corridor))) and all(
-            (n == last and math.dist(a, b) < 1e-6) or lawful_leg(s, a, b, memo) for n, (a, b) in enumerate(legs(corridor))
-        ):
-            # ...AS IT WILL BE DRAWN - from where it leaves its own threshing yard (`drawn_corridor`) - AND ONLY WHERE THE WHOLE
-            # TREE STAYS LAWFUL WITH IT (feature 287 wave 6, ways W01): every joint among the tree's lanes is known here, so a
-            # corridor the tree cannot take lawfully is refused now and the next tried, never found at the web's draw
-            drawn = drawn_corridor(s, corridor, geom)
-            if tree_admits(s, drawn, geom):
-                return drawn
         k += 1
+        if corridor is not ROUTE_LATER and (drawn := admitted(s, corridor, geom, memo)) is not None:
+            return drawn
+    # ...THEN THE PATH ROUTED ROUND WHAT STANDS AND ROUND THIS LAYOUT'S OWN PARTS (feature 308; feature 317 T06), searched for
+    # this layout - its beds and fixtures are its own - where the straight and round-the-gable candidates are the seat's
+    if tree.routed:
+        from .route import routed_corridors
+
+        for corridor in routed_corridors(s, tree, geom):
+            if (drawn := admitted(s, corridor, geom, memo)) is not None:
+                return drawn
+    return None
+
+
+def admitted(s: Settlement, corridor: tuple[Pt, ...], geom: Any, memo: dict[Any, Any]) -> tuple[Pt, ...] | None:
+    """The corridor as it will be drawn, where every leg clears the household's own fixtures and beds and the ways' ground test
+    and the whole tree stays lawful with it; else None (`access_corridor`'s question of each candidate)."""
+    # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
+    last = len(corridor) - 2
+    # ...and the ways' ground test of each leg the search asked, after its own fixtures and beds (`standing_ground`)
+    if all((n == last and math.dist(a, b) < 1e-6) or (fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom)) for n, (a, b) in enumerate(legs(corridor))) and all(
+        (n == last and math.dist(a, b) < 1e-6) or lawful_leg(s, a, b, memo) for n, (a, b) in enumerate(legs(corridor))
+    ):
+        # ...AS IT WILL BE DRAWN - from where it leaves its own threshing yard (`drawn_corridor`) - AND ONLY WHERE THE WHOLE
+        # TREE STAYS LAWFUL WITH IT (feature 287 wave 6, ways W01): every joint among the tree's lanes is known here, so a
+        # corridor the tree cannot take lawfully is refused now and the next tried, never found at the web's draw
+        drawn = drawn_corridor(s, corridor, geom)
+        if tree_admits(s, drawn, geom):
+            return drawn
+    return None
 
 
 def seat_reaches_tree(s: Settlement, core: Any) -> bool:
@@ -564,11 +578,8 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
             # ...never back past the house it went round (`doubles_back`): the web could not draw it (cohort seed 32)
             if math.dist(turn, q) < 1e-6 or (not doubles_back(door, turn, q) and clear(turn, q) and leaves_its_yard((door, turn, q), yard, gap)):
                 yield (door, turn, q)
-    if tree.routed:  # ...then the path routed round what stands (feature 308, plan D3; FR-005)
-        from .route import routed_corridors
-
+    if tree.routed:  # ...then the path routed round what stands (feature 308, plan D3; FR-005) - searched per layout, by `access_corridor`
         yield ROUTE_LATER  # the seat MAY be reached by a route: `seat_reaches_tree` says so without searching for one
-        yield from routed_corridors(s, tree, geom)
 
 
 #: The marker `_house_candidates` yields between its straight corridors and its routed ones (feature 308): the seat's own
