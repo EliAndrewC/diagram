@@ -193,7 +193,8 @@
     }
     showTab("about");
     dialog.setAttribute("data-k", key);
-    dialog.setAttribute("data-label", d.label);
+    // an About-form class (feature 319) has no feature-level label - its classification is per statement
+    if (d.label) dialog.setAttribute("data-label", d.label); else dialog.removeAttribute("data-label");
     // NOT showModal(): a modal dialog makes the rest of the document inert, and Chromium re-styles
     // all ~175,000 elements of the map on every open and close - measured ~1 s and ~50 MB per cycle
     // on Inashiro, enough to crash the tab in the browser test on a tight machine. A non-modal
