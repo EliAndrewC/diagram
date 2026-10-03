@@ -556,3 +556,5 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-03 | glyph-check | village lane on inashiro, feature 318 round 1 | PASS | F5 questionable: 8 of 15 houses drawn a lane of their own (main 13); F6 dip, F7 back lane 6 ft | judgment | yes | F5 to the GM; F6, F7 to the follow-up | 388 s | 1513k in (1417k cached) / 35.3k out |
 | 2026-10-03 | glyph-check | farmhouse on inashiro, feature 318 round 2 (corridors judged as drawn; manifest byte-identical) | PASS | nothing new | nothing | - | - | 83 s | 330k in (280k cached) / 6.9k out |
 | 2026-10-03 | glyph-check | village lane on inashiro, feature 318 round 2 (manifest byte-identical) | PASS | F6-F8 restated from round 1 | nothing | - | - | 102 s | 422k in (380k cached) / 9.8k out |
+| 2026-10-03 | glyph-check | farmhouse on inashiro, feature 318 round 3 (rasters windowed; manifest byte-identical) | PASS | F7 nitpick restated | nothing | - | - | 80 s | 233k in (194k cached) / 7.6k out |
+| 2026-10-03 | glyph-check | village lane on inashiro, feature 318 round 3 (manifest byte-identical) | PASS | F6-F8 restated | nothing | - | - | 65 s | 232k in (196k cached) / 6.7k out |
