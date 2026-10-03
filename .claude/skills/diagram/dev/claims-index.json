@@ -37151,13 +37151,13 @@
   "research": "758d560b5828a167",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#garden side of a re-laid household: the first layout that fits in the fixed `_NUC_SIDES` order (SE, SW, E, W), with no fewest-shaded-beds score and no left/right roll": {
-  "code": "d9ae159f34da17d9",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#a re-laid household's garden side": {
+  "code": "dd12e87da20e21c4",
   "core": "d9ae159f34da17d9",
   "date": "2026-10-03",
-  "note": "garden side of a re-laid household: the first layout that fits in the fixed `_NUC_SIDES` order (SE, SW, E, W), with no fewest-shaded-beds score and no left/right roll",
+  "note": "neither 0081 page says which garden side to use when a household is re-seated, so UNRESEARCHED is the right label; the code takes the first layout that fits and has its own way, as claimed",
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::recheck_passages#no way of its own on the finished map": {
   "code": "9e6407b4b9406131",
