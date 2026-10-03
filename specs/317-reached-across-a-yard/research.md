@@ -302,6 +302,13 @@ of 15 such households at 15 households and 1 of 12 at 40 (a first probe that bui
 (observed 2026-10-03, method: `layouts2_probe.py` - the layouts captured at `landlocked` - and `relay_probe.py`, in the session's
 scratchpad.)
 
+**The route's withdrawal finished** (the perf-audit's second confirmation): with the passage share at 0 the homesteads stage still
+stood 0.3 s (18%) over main at seed 39, 40 households. T06's withdrawal had restored the route round the house alone but left
+`access_corridor` routing again for each of a seat's four layouts, each with its own parts in the legs' tests, where main
+yields the routes in `_house_candidates`' stream, shared by the seat's layouts. Restored as on main (014cb1a20): 1.64 s against
+main's 1.57 (`perf-317-route-shared`). Kuwabata re-rolled on it.
+(observed 2026-10-03, method: `control_probe.py` in the session's scratchpad, three alternated takes.)
+
 **How many are reached across a yard, as the feature lands** (`relay_probe.py`, the reference spec, the recheck as built): at 15
 households on seeds 1-16, 14 households reached across a yard and 9 passages ended by the recheck (the 13 settlements whose share
 allows one allow 30); at 40 households on seeds 2, 25, 39 and 47, 11 reached and 7 ended (the three that allow one allow 23).
