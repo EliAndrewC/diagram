@@ -217,8 +217,33 @@ def test_a_door_shut_in_round_its_house_alone_is_not_searched_again_for_another_
     monkeypatch.setattr(route, "_route_from", lambda *a: calls.append(1) or real(*a))
     assert list(route.routed_corridors(s, s._access, geom)) == [] and len(calls) == 2
     assert list(route.routed_corridors(s, s._access, other)) == [] and len(calls) == 2, "the other layout: no search"
-    assert route.house_reaches(s, s._access, access.doors_of(geom, s._access.half)[0], geom["boxes"]["house"], s._access.half, access.house_gap(s), None, None, s._reach_index(s.placed, "placed_reach"), route.ROUTE_STEP_PX) is False
+    assert (
+        route.house_reaches(
+            s,
+            s._access,
+            access.doors_of(geom, s._access.half)[0],
+            geom["boxes"]["house"],
+            s._access.half,
+            access.house_gap(s),
+            None,
+            None,
+            s._reach_index(s.placed, "placed_reach"),
+            route.ROUTE_STEP_PX,
+        )
+        is False
+    )
     open_ = _open()
     g2 = _hemmed(open_)
     open_._access.routed = True
-    assert route.house_reaches(open_, open_._access, access.doors_of(g2, open_._access.half)[0], g2["boxes"]["house"], open_._access.half, access.house_gap(open_), None, None, open_._reach_index(open_.placed, "placed_reach"), route.ROUTE_STEP_PX)
+    assert route.house_reaches(
+        open_,
+        open_._access,
+        access.doors_of(g2, open_._access.half)[0],
+        g2["boxes"]["house"],
+        open_._access.half,
+        access.house_gap(open_),
+        None,
+        None,
+        open_._reach_index(open_.placed, "placed_reach"),
+        route.ROUTE_STEP_PX,
+    )
