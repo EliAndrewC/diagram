@@ -108,15 +108,18 @@ def notes_subset(notes_html: str, keys: set[str]) -> str:
     return "".join(m.group(0) for m in _NOTE_LI.finditer(notes_html) if m.group(1) in keys)
 
 
-def excerpt(fragment_html: str, keys: set[str]) -> str:
+def excerpt(fragment_html: str, keys: set[str], bare: bool = False) -> str:
     """The question's heading and only the blocks whose text carries a mark for one of the keys - what a
     re-check of those notes reads (feature 250, recommendation 5: the second quote-check round of the first
-    page session re-read two whole entries to confirm a handful of corrected notes)."""
+    page session re-read two whole entries to confirm a handful of corrected notes). With `bare`, every block that
+    carries no note mark too - what a check of the page's UNFOOTNOTED blocks reads (feature 314: a batched bundle owed
+    `#unfootnoted` carried only its notes' blocks, and the block the unit was owed for was in none of them)."""
     head = re.search(r"<h[23][^>]*>.*?</h[23]>", fragment_html, re.S)
     marks = tuple(f'data-note="{k}"' for k in keys)
-    blocks = [m.group(0) for m in _BLOCK.finditer(fragment_html) if any(mk in m.group(0) for mk in marks)]
+    blocks = [m.group(0) for m in _BLOCK.finditer(fragment_html) if any(mk in m.group(0) for mk in marks) or (bare and "data-note=" not in m.group(0))]
     kept = "\n".join(dict.fromkeys(blocks))
-    return (head.group(0) + "\n" if head else "") + "<!-- an EXCERPT: only the blocks carrying the named notes -->\n" + kept + "\n"
+    what = "only the blocks carrying the named notes" + (", and every block carrying none" if bare else "")
+    return (head.group(0) + "\n" if head else "") + f"<!-- an EXCERPT: {what} -->\n" + kept + "\n"
 
 
 def inline(out: pathlib.Path, rows: list[tuple[str, str, str]]) -> str:
@@ -220,7 +223,7 @@ STYLE = pathlib.Path(".claude/skills/diagram/research/STYLE.md")
 
 
 def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
-                 notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "") -> int:
+                 notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "", bare: bool = False) -> int:
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
@@ -245,8 +248,8 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
         name = copy(root / rel, out)
         if notes:
             dest, text = out / name, (root / rel).read_text(encoding="utf-8")
-            dest.write_text(notes_subset(text, set(notes)) if rel.endswith(".notes.html") else excerpt(text, set(notes)), encoding="utf-8")
-            what += f" - ONLY the notes {', '.join(sorted(notes))} and the blocks that carry them"
+            dest.write_text(notes_subset(text, set(notes)) if rel.endswith(".notes.html") else excerpt(text, set(notes), bare), encoding="utf-8")
+            what += f" - ONLY the notes {', '.join(sorted(notes))} and the blocks that carry them" + (", and every block that carries no note" if bare else "")
         rows.append((name, rel, what))
         if rel.endswith(".notes.html"):
             keys += cited_keys((out / name).read_text(encoding="utf-8"))
@@ -487,9 +490,11 @@ def main(argv: list[str] | None = None) -> int:
     out = pathlib.Path(args.out or DEFAULT_ROOT / f"q-{slug(args.q)}{'' if args.for_ == 'all' else '-' + args.for_}")
     q = args.q
     batches = [] if wanted or args.for_ != "quote-check" else note_batches(root, q)
+    # ...AND THE UNFOOTNOTED BLOCKS IN EVERY BATCH where their check is owed: a batch's excerpt keeps only its notes' blocks
+    bare = args.for_ == "quote-check" and bo.unfootnoted_owed(units)
     if len(batches) > 1:
         print(f"check-bundle: the notes are over {NOTES_BUDGET:,} bytes - {len(batches)} quote-check bundles, one agent each:")
-        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_, owed)
+        codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_, owed, bare)
                  for i, b in enumerate(batches, start=1)]
         return max(codes)
     return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed)

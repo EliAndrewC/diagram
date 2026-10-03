@@ -112,6 +112,11 @@ def manifest_lines(units: list[ru.Unit], owed_checks: str, escape: str = "") -> 
     return "\n".join(lines) + "\n"
 
 
+def unfootnoted_owed(units: list[ru.Unit]) -> bool:
+    """Is a quote-check of the page's unfootnoted blocks among the owed units (`quote-check:<stem>#unfootnoted`)?"""
+    return any(u.check == "quote-check" and u.subject.partition("#")[2] == "unfootnoted" for u in units)
+
+
 def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
     """The notes a `FOR=quote-check` bundle with no NOTES= is cut to - none (the whole question) when its unfootnoted
     reading is owed, which needs every block of the page."""

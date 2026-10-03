@@ -1089,6 +1089,7 @@ over seeds 1-16 (-5%), at 20 households 12.3 -> 11.0 s over eight seeds (-10%), 
   the settle's first position only* (R14, seed 8 at 40 households lost a margin): no gain.
 
 **What remains** (R15, at 15 households, 1.17 s a map): the growth 64% (the corridor search and the lane law about 70% of it), the
-field's corridor 13%, the site boundary 10%, the rest 13%. The levers left: the seating judging a corridor as the web will draw
-it, which would let the own-parts search back in; and laying the lanes before the houses, a change to the GM's growth, put to
-the GM.
+field's corridor 13%, the site boundary 10%, the rest 13%. The lever left: the seating judging a corridor as the web will draw
+it, which would let the own-parts search back in. Laying the lanes before the houses was DECLINED by the GM (2026-10-02): lanes
+are trodden by villagers walking between homesteads already built, and it was tried before and made the seating harder
+(`dev/placement.md`, "THE HOMESTEADS COME FIRST"). Do not offer it as a performance lever again.
