@@ -56,6 +56,7 @@ def test_the_keys_a_question_cites_are_read_off_its_links() -> None:
         ("<p>a paper (in Japanese; https://www.agrinews.co.jp/news/index/174809), 5 August 2023</p>", "https://www.agrinews.co.jp/news/index/174809"),
         ("<p>a reference answer (https://crd.ndl.go.jp/entry/index.php?id=1&amp;page=ref_view)</p>", "https://crd.ndl.go.jp/entry/index.php?id=1&page=ref_view"),
         ('<p>NDL (https://crd.ndl.go.jp/reference/entry/index.php?page=ref_view&amp;id=1000130073)</p>', "https://crd.ndl.go.jp/reference/entry/index.php?page=ref_view&id=1000130073"),
+        ("<p>an archive page (https://1073shoso.jp/www/sankyo/detail.jsp?id=18666): the survey</p>", "https://1073shoso.jp/www/sankyo/detail.jsp?id=18666"),
     ],
 )
 def test_a_registry_pointer_keeps_its_own_parenthesis_and_drops_the_wrapping_one(entry: str, want: str) -> None:

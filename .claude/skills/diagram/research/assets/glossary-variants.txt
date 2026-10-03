@@ -2249,6 +2249,7 @@ matsu	matsu
 mayasaki	mayasaki
 meander	meander
 meandering	meander
+medake	medake
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration

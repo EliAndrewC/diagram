@@ -36,32 +36,22 @@ Bamboo: no occasion - its rule refuses a mark or stand only in a plot's sun, and
 
 ## Phase 2b - the regressions feature 310 shipped (amendment; constitution XIII, XIV)
 
-- [ ] T23 D7: `beds_sun_clear` on the south nudge; the grove farm's bed south of the front wall; `clear_east_of_beds`; unit tests
+- [x] T23 D7: `beds_sun_clear` on the south nudge; the grove farm's bed south of the front wall; `clear_east_of_beds`; unit tests
       research: rendering
-      verify: cohort seeds 14, 15 and 906 pass
-- [ ] T24 D8: the persimmon's dooryard, grove seat, seat rake and settle-in-geometry; unit tests
+      verify: DONE. cohort315j: 29/30, seeds 14, 15 and 906 pass
+- [x] T24 D8: the persimmon's dooryard, grove seat, seat rake and settle-in-geometry; unit tests
       research: physical
-      verify: cohort seed 23 passes; the pool's grove farms keep their persimmons behind the house, within the dooryard
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T25 D9 and D10: the walled-in gateway's fallbacks; the shared wells off the street's bends, the row street unjogged; unit tests
+      verify: DONE. cohort315j: seed 23 passes; pool persimmons match their rolls; sendai-igune-modelplan READ, quote-check and applicability answered
+- [x] T25 D9 and D10: the walled-in gateway's fallbacks; the shared wells off the street's bends, the row street unjogged; unit tests
       research: rendering
-      verify: cohort seeds 19 and 903 pass; the cohort at 29 of 30 (seed 22 failing on main before)
+      verify: DONE. cohort315j: seeds 19 and 903 pass, 29 of 30, seed 22 the one failure (failing on main before)
 
 ## Phase 3 - the record (US2; FR-002, FR-006)
 
-- [ ] T30 [US2] D6: the sun page's bamboo bullet rewritten - held at its own reach, the heights footnoted (new registry entries), yadake
+- [x] T30 [US2] D6: the sun page's bamboo bullet rewritten - held at its own reach, the heights footnoted (new registry entries), yadake
       placed; `tree_shade.py`'s docstring and the `ksun` comment; the ThreshingYard and Garden modals; the record checks the gate owes
       research: physical
-      verify: the record gate answered; no page or modal calls bamboo exempt (grep)
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      verify: DONE. make record-owed UNANSWERED=1: no record check is owed; grep finds no page or modal calling bamboo exempt
 
 ## Phase 4 - close
 

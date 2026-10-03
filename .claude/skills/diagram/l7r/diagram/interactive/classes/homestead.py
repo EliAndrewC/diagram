@@ -218,7 +218,7 @@ class Garden(Kind):
     beans and herbs - are this project's reading. That a farm household kept a bed of its own for its table is read.
     The sun rule is worked out from the autumn sun's geometry: its season rests on daikon standing in the bed through
     autumn, its 50 ft lane to the east, west and south reckons every canopy tree at a working windbreak's 10 m (about 33 ft), a guess at the
-    height of a stand kept in use; bamboo is held to it too, reckoned at the timber bamboos' least height, the same 10 m; holding a farm's own grove to that lane and moving a bed out of a neighbor's grove's morning shade are this project's choices.
+    height of a stand kept in use; bamboo is held to it too, reckoned at the timber bamboos' least height, the same 10 m, a guess, since a grove's shorter yadake is drawn no differently; holding a farm's own grove to that lane and moving a bed out of a neighbor's grove's morning shade are this project's choices.
     The record gives the bed no proportion or row count, so those are drawn to read as a worked kitchen bed at this
     scale.
 

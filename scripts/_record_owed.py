@@ -193,8 +193,9 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         keys = list(now.cites.get(stem, {}).get(note, ())) if now else []
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
-    if check == "entry-drift":
-        return f"make check-bundle Q={q or '<its section>'} FOR=entry-drift KIND=<the class of {u.subject}>"
+    if check == "entry-drift":  # its subject is the modal's key, not a question: the section it moved under is named in the occasion
+        sec = re.search(r"\((\d{4})-", u.occasion)
+        return f"make check-bundle Q={sec.group(1) if sec else '<its section>'} FOR=entry-drift KIND=<the class of {u.subject}>  then  make record-checked CHECK=entry-drift KIND=\"{u.subject}\" RESULT=..."
     return f"make check-bundle Q={q} FOR={check}"
 
 
