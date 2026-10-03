@@ -23,3 +23,16 @@ Ah, I see. I had misunderstood about the 700 feet thing. Um, yeah, in that case,
 
 Asked which limit was meant, the GM chose: "700 ft hard, floor soft" - the 700 ft field reach stays the one hard limit; the
 quarter-built floor becomes a reported measurement that blocks nothing.
+
+## Amendment (GM, 2026-10-03, verbatim)
+
+The session found that seed 18 (cohort spec, 15 households) cannot seat everyone within 700 ft of its field on its first
+margins, offered three options, and the GM chose "overflow to the next site", adding:
+
+Let's overflow to the next site. The seven hundred feet is based on real research, but my understanding of that research is not that in literally every single farming community in all of Japan, that this was always the case 100% of the time, merely that this was the norm, this is what was expected, therefore this is what we try to do. Does that sound right? If so, then please go with that. If my understanding of the research differs from yours, then we should talk more. But otherwise, you can proceed with option A.
+
+The session then read the record and corrected itself: the 700 ft is not research. Page 0029's drawing page: "No farmhouse
+is held to a maximum distance from its fields"; page 0032's: the 700 ft is the back-row distance its own drawn villages showed,
+"which reads as the back of a compact village rather than as a stranded arc". It recommended keeping growing at the edge. The GM:
+
+Gotcha. Uh, yeah, let's just keep going at the edge then. I mean, I guess if we have multiple options in our placement, and one option is closer to the fields, then we should take the one that is closer to the fields, because people generally did not want to have to walk a long way. to get to the fields, but that is not any kind of a limit. And it sounds like we can get rid of these 700 feet measurement completely, because really what we're just talking about is how we grow the settlement. I don't know. Does that make sense? If so, then go with that. Like, do you think there's even a reason to keep the 700 feet as a measurement? If that's some kind of useful thing in our implementation, then I'm not opposed to it in principle. I just am not sure what it's even doing for us at this point, you know?
