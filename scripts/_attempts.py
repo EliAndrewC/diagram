@@ -156,11 +156,17 @@ def seed_lines(rows: list[dict], mapped: dict[str, str]) -> list[dict]:
 
 
 def seed(root: pathlib.Path, where: pathlib.Path) -> int:
-    if any(x.get("seed") == SEED for x in read(root)):
-        print("attempts: the ledger is already seeded - nothing written", file=sys.stderr)
-        return 0
+    """Every ledger row with no attempt line yet gets one - so a re-run catches up the rows sessions on code without this
+    log wrote meanwhile (three of feature 315's reads, 2026-10-02, before 312 landed). A row is matched to a line by URL,
+    day and feature: a second read of one page on one day by one feature already has its line."""
+    have = {(x["url"], x.get("date", ""), x.get("feature", "")) for x in read(root)}
     rows = [r for r in src.read(where) if r.get("url") and not src._blocked().blocked(r.get("raw") or r["url"])]
-    lines = seed_lines(rows, old_ids(root))
+    lines = [x for x in seed_lines(rows, old_ids(root)) if (x["url"], x.get("date", ""), x.get("feature", "")) not in have]
+    if not lines:
+        print("attempts: every ledger row has an attempt line - nothing written", file=sys.stderr)
+        return 0
+    new = {x["url"] for x in lines}
+    rows = [r for r in rows if src.norm(r["url"]) in new]
     write(root, lines)
     print(f"attempts: {len(lines)} line(s) seeded from {len(rows)} ledger row(s)")
     return len(lines)

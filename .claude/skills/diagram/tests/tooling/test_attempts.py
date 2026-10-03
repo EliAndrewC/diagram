@@ -98,7 +98,11 @@ def test_the_seed_maps_every_ledger_row_once(tmp_path: pathlib.Path, capsys: pyt
     assert all(x["seed"] == at.SEED and x["route"] == "ledger" for x in at.read(root))
     assert at.read(root)[0]["date"] == "2026-09-01"
     assert at.seed(root, _home()) == 0
-    assert "already seeded" in capsys.readouterr().err
+    assert "nothing written" in capsys.readouterr().err
+    with open(_home() / "sources-consulted.jsonl", "a", encoding="utf-8") as fh:  # a read by a session on code without the log
+        fh.write(json.dumps({"url": "a.org/9", "utc": "2026-10-02T21:57:16+00:00", "feature": "315", "questions": [], "outcome": "pending"}) + "\n")
+    assert at.seed(root, _home()) == 1, "a re-run catches up the rows written since"
+    assert at.read(root)[-1]["url"] == "a.org/9" and at.seed(root, _home()) == 0
 
 
 def test_the_log_lives_in_the_clone_unless_the_seam_moves_it(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:

@@ -107,3 +107,11 @@ and writing notes (span, every passage on settlements and buildings with a quota
 line of each part as proof of the whole read), and the drafter writes the entry from all the notes. The partial-read
 entries were set aside unwritten (`entries.partial-read.jsonl`). Priced: one drafter told to page through every part
 (over its context for a 1.4 MB work); write-ups that state what was read (breaks "read whole").
+
+## R7: SC-007, every ledger row has an attempt line (2026-10-02)
+
+Measured over the host's sources-consulted ledger: 8,541 rows naming 4,905 URLs; every URL has a line in
+`research/source-attempts.jsonl`. Three of them did not before a catch-up: feature 315's session read them on main's code,
+which writes no attempt line until this feature lands. `make attempts`' seed therefore now writes a line for every
+ledger row with none (matched by URL, day and feature), and the push-time re-run of it catches the rows sessions write
+between this measurement and the landing.
