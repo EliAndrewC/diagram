@@ -30,11 +30,13 @@ would get custom modals"*, with *"a different set of rules for that kind of thin
   of them; `research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html`, which answers how many
   lived in the house, is not among them.
 - A hamlet's per-map facts reach its modals through the `## Map notes` / `### Features` block of its `.notes.md` (all five pool
-  hamlets: the burial ground, the retirement-house count, the harvest weather under the threshing yard). The title card says
+  hamlets carry one, e.g. the burial ground, the retirement-house count, the harvest weather under the threshing yard, a grave
+  island; the entries differ map to map). The title card says
   where the place is, its size and its crops; it lists none of the knobs the map rolled (`settlement/_knobs.py` declares 16).
 - Magistracy and shrine sheets use a separate registry (`interactive/compound_kinds/`, five modules) in the same docstring form.
-  Some kinds are general (a well, a hearth, a genkan); some are particular to one sheet (`particulars.py`: the Ochiba
-  magistracy's two-sided Inari shrine, the vermilion workshop and its threshold stones).
+  Some kinds are general (a well, a hearth, a genkan); some are particular to one sheet (`particulars.py`: the vermilion
+  workshop and its threshold stones); per-sheet facts about general kinds (Ochiba's two-altar Inari hall on the compound
+  shrine, Hayakawa's enlarged bath, Ubame's shuttered wing) are in each sheet's `.notes.md` `### Features` block.
 - The one check on modal prose is `entry-drift`, which asks only whether a modal still agrees with the pages its `Entry:` names.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -137,7 +139,8 @@ the check for its class.
 
 1. **Given** a particular kind, **When** checked, **Then** the check holds it to the particular guidelines and to the GM's canon
    (no contradiction of the setting notes), and any real-world research it draws on is linked.
-2. **Given** a general kind, **When** checked, **Then** it is held to the standard guidelines, like a hamlet feature.
+2. **Given** a general kind, **When** checked, **Then** it is held to the standard guidelines for its general part, like a
+   hamlet feature; its per-sheet text is held to the particular guidelines.
 
 ---
 
@@ -154,7 +157,9 @@ when a rewrite is accepted with no changes are the rest rewritten.
 
 1. **Given** a pilot rewrite, **When** it is ready, **Then** the session regenerates the pilot hamlet's page in the clone, gives
    the GM its path, and waits for the GM's verdict; nothing lands on main before the feature closes (except this spec claim).
-2. **Given** a pilot the GM accepts with no changes, **When** the rollout runs, **Then** every hamlet class, every knob value
+2. **Given** a pilot whose first rewrite the GM asks to change, **When** it is settled, **Then** a further feature is piloted the
+   same way before any rollout.
+3. **Given** a pilot whose first rewrite the GM accepts with no changes and the GM's go-ahead, **When** the rollout runs, **Then** every hamlet class, every knob value
    and every sheet kind is rewritten and checked.
 
 ### Edge Cases
@@ -187,7 +192,8 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **FR-002**: The guidelines MUST say how a guess, a deliberate deviation and a map drawing convention appear (FR-005), and that
   nothing is announced as historically accurate (the presumption of accuracy, feature 156, stands).
 - **FR-003**: The project MUST hold separate guidelines for a PARTICULAR modal - a kind particular to one sheet or to the setting
-  on a magistracy, shrine or estate sheet: what it explains, how canon is used, how real-world research it draws on is linked,
+  on a magistracy, shrine or estate sheet - and for the particular part of a general kind's modal on such a sheet (its
+  `### Features` text), which stays on that sheet's modal: what it explains, how canon is used, how real-world research it draws on is linked,
   and the lighter checking it gets.
 - **FR-004**: Every standardized modal on a settlement map MUST be the same on every map: no per-map text in a feature modal.
   A settlement's own facts and choices go on its title card (FR-009).
@@ -198,7 +204,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
   "Guesses" tab with a bulleted list of what was guessed - shown only when there is a guess - and a "References" tab, shown
   only when there is a reference. A modal MUST NOT open with "This is a guess" because one of its details is guessed; a guess is
   a property of a statement, not of the feature. A deliberate deviation is said in the write-up where it applies; a map drawing
-  convention is said in the write-up's appearance part ("drawn larger than true scale so it reads"), with the true figure.
+  convention is said in the write-up's appearance part (a colored or symbolic mark explained as a mark), with the true figure.
 - **FR-006**: The References tab MUST list exactly the research questions the modal's statements rest on (US3).
 - **FR-007**: The sibling distinction ("Not to be confused with ...") and the glossary tooltips MUST keep working in the new
   form.
@@ -220,12 +226,17 @@ when a rewrite is accepted with no changes are the rest rewritten.
 **Process and scope**
 
 - **FR-010**: The work MUST run in the GM's order: guidelines and checks; the farmhouse rewritten and iterated with the GM; a
-  second feature (the garden, the GM's non-building example) iterated; the rest only after the GM accepts a rewrite with no
-  changes. Every change the GM asks of a pilot MUST be made in the guidelines (and the checks where they apply) before the
+  second feature (the garden, the GM's non-building example) rewritten from the guidelines and iterated. If the GM asks for
+  changes on a pilot's first rewrite, a further feature is piloted the same way, one at a time. The rollout starts only on the
+  GM's go-ahead after a feature's first rewrite is accepted with no changes. Every change the GM asks of a pilot MUST be made in the guidelines (and the checks where they apply) before the
   modal.
-- **FR-011**: The rollout MUST cover every hamlet class (56), every knob value's modal, every general sheet kind, and every
-  particular sheet kind on the pool's magistracy and shrine sheets (reviewed under FR-003).
+- **FR-011**: The rollout MUST cover every hamlet class (56), every knob value's modal, every general sheet kind, every
+  particular sheet kind and every per-sheet `### Features` entry on the pool's magistracy and shrine sheets (reviewed under
+  FR-003).
 - **FR-012**: Nothing but this spec claim lands on main until the rollout is done; the GM reviews pilots in the clone.
+- **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
+  them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
+  the pilot before the rollout starts.
 
 ## Success Criteria *(mandatory)*
 
@@ -237,8 +248,8 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **SC-003** (FR-006, FR-008): every rewritten modal has passed the three checks, recorded in the review ledger with cost.
 - **SC-004** (FR-009): every pool hamlet's title card lists its choices; each value opens its modal; no hamlet feature modal
   differs between two pool maps.
-- **SC-005** (FR-010): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts after a no-changes
-  verdict.
+- **SC-005** (FR-010): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts on the GM's go-ahead
+  after a pilot's first rewrite is accepted with no changes.
 - **SC-006** (FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
@@ -248,13 +259,18 @@ when a rewrite is accepted with no changes are the rest rewritten.
 | A guess is a property of a statement, listed on a guesses tab; the feature-level guess lead goes | presentation (the four classes of constitution XII are kept, per statement) | the GM: the garden's lead *"is extremely misleading"* | this spec; the guidelines; `interactive/CLAUDE.md` |
 | Per-settlement facts move from the feature modals to the title card | presentation | the GM: settlement maps *"all pull from a standardized set of modals ... not ... customized modals. For anything"* | this spec; the guidelines |
 | A drawing convention is told in the write-up's appearance part, not the guesses tab | presentation | a convention is not a guess, and the reader needs it where they read about the look | this spec; the guidelines |
-| Working tab name "Overview" until the GM chooses | presentation | the GM asked for suggestions; the name is one string | this spec |
+| Working tab name "Overview", pending the GM's choice under FR-013 | presentation | the GM asked for suggestions; the name is one string | this spec |
 
 ## Assumptions
 
 - No map drawing changes; only what the pages say and how the modal is laid out.
-- The research record is not rewritten by this feature; where a check finds the record short (a standard question it never
-  asked), the gap is a guess on the modal and an entry in `make open-questions`, not new research here.
+- Where the record does not answer a standard question, the research pass (constitution XII) runs before the answer is
+  listed as a guess; what it finds is recorded and cited in the record as usual, and only a question still unanswered becomes a
+  guess and an `open-questions` entry.
 - The country estate sheets do not exist yet; FR-003's guidelines cover them when they are drawn.
 
 ## Review history
+
+- Round 1 (spec-fidelity, 2026-10-03): REVISE - the tab-name pitch required (FR-013); a further pilot when the garden needs
+  changes (FR-010, US6, SC-005); per-sheet facts on general kinds held to the particular guidelines (Context, FR-003, US5,
+  FR-011); the research pass before a guess (Assumptions). All four applied.
