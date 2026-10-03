@@ -309,8 +309,10 @@ yields the routes in `_house_candidates`' stream, shared by the seat's layouts. 
 main's 1.57 (`perf-317-route-shared`). Kuwabata re-rolled on it.
 (observed 2026-10-03, method: `control_probe.py` in the session's scratchpad, three alternated takes.)
 
-**How many are reached across a yard, as the feature lands** (`relay_probe.py`, the reference spec, the recheck as built): at 15
-households on seeds 1-16, 14 households reached across a yard and 9 passages ended by the recheck (the 13 settlements whose share
-allows one allow 30); at 40 households on seeds 2, 25, 39 and 47, 11 reached and 7 ended (the three that allow one allow 23).
-R8's 7 and 8 were measured before the per-layout route was withdrawn, when more tight seats found a way of their own.
+**How many are reached across a yard, as the feature lands** (`relay_probe.py`, the reference spec, the engine as it lands -
+the routes shared by a seat's layouts): at 15 households on seeds 1-16, 13 households reached across a yard and 9 passages ended
+by the recheck (the 13 settlements whose share allows one allow 30); at 40 households on seeds 2, 25, 39 and 47, 5 reached and 9
+ended (the three that allow one allow 23) - seed 25 seats 5 by passage and keeps 1. With the routes shared more tight seats pass
+the seat's test and are seated by passage, and a later corridor ends most of them at 40 households; the tight seats tried for
+them are the bookends' band 3 (`perf-317-control-40`). R8's 7 and 8 were measured before the per-layout route was withdrawn.
 (observed 2026-10-03, method: as the heading.)
