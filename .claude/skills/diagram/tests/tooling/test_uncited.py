@@ -323,6 +323,8 @@ def test_an_imported_copy_is_checked_against_the_live_page(tmp_path: pathlib.Pat
     src.put(_home(), "https://w.org/gbk", village, origin="import:/tmp/x")
     got = un.verify(root, ["https://w.org/gbk"], Stand({"https://w.org/gbk": _page("https://w.org/gbk", body="\ufffd\ufffd mis-decoded " * 40)}))
     assert got["unread"] == 1 and un.imported(_home(), "https://w.org/gbk") is not None, "a garbled read never replaces the copy"
+    assert un.worse_read("x" * 1000, "y" * 400) and not un.worse_read("x" * 1000, "y" * 600)
+    assert un.worse_read("大阪の日本橋" * 50, "Nippombashi bridge in Osaka " * 50) and not un.worse_read("大阪の日本橋" * 50, "大阪の日本橋 Osaka" * 50)
     assert un.garbled("\ufffd" * 2 + "x" * 98) and not un.garbled("\ufffd" + "x" * 99) and not un.garbled("\ufffd")
 
 

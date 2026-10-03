@@ -429,6 +429,19 @@ def garbled(text: str) -> bool:
     return len(text) >= EMPTY and text.count("�") > len(text) / 100
 
 
+_CJK = re.compile(r"[぀-ヿ㐀-鿿]")
+
+
+def worse_read(old: str, live: str) -> bool:
+    """A live read that is less than the copy it would replace: under half its length (Adachi's page came back as a
+    machine-translation notice), or a Chinese or Japanese page come back mostly in Latin script (Osaka Info's English
+    edition) - observed 2026-10-02."""
+    def cjk(t: str) -> float:
+        return len(_CJK.findall(t)) / max(len(t), 1)
+
+    return len(live) * 2 < len(old) or (cjk(old) > 0.2 and cjk(live) < cjk(old) / 4)
+
+
 def same_page(a: str, b: str) -> bool:
     """Two texts of one page: their character 4-grams over the first 5,000 characters overlap by a third or more (a page
     re-fetched later differs by its edits and its navigation, never by its subject)."""
@@ -448,7 +461,7 @@ def verify(root: pathlib.Path, urls: list[str], browser) -> dict[str, int]:  # n
             continue
         got = ar.fetch(browser, u)
         live = got.text.strip() if got.text and not got.error and got.status and got.status < 400 else ""
-        live = "" if garbled(live) else live  # a mis-decoded read never replaces a copy (zj.cnr.cn's GBK page, 2026-10-02)
+        live = "" if garbled(live) or worse_read(old, live) else live  # a mis-decoded, cut or translated read never replaces a copy (2026-10-02)
         result = "unread" if len(live) < EMPTY else ("same" if same_page(old, live) else "misfiled")
         if result == "misfiled":  # kept beside the live text: the 4-gram measure flags a skin change as readily as another page (R5), so a flag is confirmed by reading before `requeue`
             d = src.entry_dir(where, u)

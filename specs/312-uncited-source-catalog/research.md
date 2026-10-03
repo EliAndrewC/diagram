@@ -110,6 +110,14 @@ readable; each is read, then requeued or marked `DO=stands URL= NOTE=`. Of the 1
 written up, the essay ruled unreliable-kind on its own text), 7 stand (5 Kotobank URLs that serve the entry judged, the
 Tonami bulletin still font mojibake past its frame, the Palace Museum page still a viewer shell).
 
+**A third: the live read can be the worse copy.** Adachi's glossary page came back as a machine-translation notice (356
+characters against the copy's 1,043) and Osaka Info's Nihonbashi page as its English edition, while the write-ups
+describe the Japanese pages; both copies, and zj.cnr.cn's, were restored from `imported.txt` (`restored` rows in
+`import-check.jsonl`). `_uncited.worse_read` now keeps a copy against a read under half its length or one that turned
+from Chinese or Japanese to Latin script. Accepted limit: a page the measure called `same` kept no copy, so a worse read
+of one of those cannot be undone - the run's first half replaced 850-odd copies before this guard; a check bundle built
+from one shows a write-up that no longer matches its page, which `source-applicability` reports.
+
 ## R6: a long work is read whole by several readers (2026-10-02)
 
 **Found:** the Read tool returns about 60,000 characters of a file, and the drafting parts were cut at 20,000 estimated
