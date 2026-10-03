@@ -47,7 +47,7 @@ taken in RINGS `TIE_RING_FT` (20 ft, a GUESS: about the parting between neighbor
 facing chains (`field_distance`) breaking ties within a ring, then the exact distance, then the insertion order. One growth
 step offers its seats within about a ring, so the preference fires among the seats a step offers and never pulls the growth
 past a nearer ring. Unit tests pin both halves (SC-002a): a farther ring is never tried first, and within one ring the nearer
-the field is.
+the field is; the seating counts the seats the tie-break reordered (`seat_search.tie_reordered`), read on the cohort and the pool.
 
 WITHDRAWN: one level of sixteen directions at rings 1.0, 1.5 and 2.0, the nearest the field first (the first amendment). It
 kept the cluster near the field (research R1) but tried and refused near-field seats hemmed in by the field (seed 4: 281 seats
@@ -65,8 +65,7 @@ and is not held to it"), and no hamlet code enforces it; the seating records it 
 (`meta.built_share`: the area of houses, yards, gardens and homestead groves inside the houses' outline - the convex hull of the
 homestead boxes - over the outline's area), refusing nothing.
 
-**D7 - The record (FR-008).** 0029's drawing page: of the seats the cluster offers at its edge the nearest the field is taken
-first; no distance from the field is a limit (the GM's ruling, canon). 0032's: the 700 ft is no limit (its back-row sentence
+**D7 - The record (FR-008).** 0029's drawing page (amended by D14): nearer the field, all else being equal; no distance from the field is a limit (the GM's ruling, canon). 0032's: the 700 ft is no limit (its back-row sentence
 kept as what the drawn villages showed), and the maps report the built share. 0081's: a passage the finished map makes
 unnecessary (its drawn layout given a way of its own) is ended in place; no re-lay. 0004 already states the rule. Every claim
 citing the reach goes with its code; claims of changed units re-checked by impl-drift.

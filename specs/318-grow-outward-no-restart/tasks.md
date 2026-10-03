@@ -4,7 +4,7 @@
 
 ## Occasions
 
-- placement-changed: farmhouse - a nucleated cluster grows at its edge with no radius or field-reach wall, the seat nearest the field first, and no seating is thrown away (plan D1-D4)
+- placement-changed: farmhouse - a nucleated cluster grows at its edge with no radius or field-reach wall, nearer the field all else being equal, neighbors a lane's threading gap apart, and no seating is thrown away (plan D1-D4, D9)
 - placement-changed: village lane - the ways are laid in the gaps between homesteads once every house stands (plan D9-D13)
 
 ## Tasks
@@ -20,7 +20,7 @@
       verify: DONE. FIELD_REACH_FT and within_field_reach deleted with every use; windows on the canvas; test_no_distance_from_the_field_refuses_a_seat green; ways/law.py's own reach untouched
 - [x] T04 the growth keeps widening, the seat nearest the field first; the order test (D2, D4, FR-002, FR-003a, SC-002a)
       research: rendering
-      verify: DONE. one level of 16 directions x 1.0/1.5/2.0 nearest the field first, widening past the table; test_of_a_levels_seats_the_nearest_the_field_is_tried_first green; spread in research.md R1
+      verify: DONE. one level of 16 directions x 1.0/1.5/2.0 nearest the field first, widening past the table; test_of_a_levels_seats_the_nearest_the_field_is_tried_first green; spread in research.md R1. SUPERSEDED by T08 (Amendments 2 and 3): main's levels, the field a tie-break within a ring
 - [x] T05 the built share reported (D6, FR-007)
       research: rendering
       verify: DONE. meta.built_share recorded on every nucleated map; test_the_built_share_is_the_homesteads_over_their_outline green

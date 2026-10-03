@@ -48,7 +48,7 @@ seats and the crop, water and marsh 1,065, and it seated 12.
 A clustered hamlet seats its households as tightly as the ground allows, nearest the cluster first; when the seats near it run
 out, later households are seated further out - at the cluster's edge, as a late arrival in a real village set up beside the
 houses already there - never by moving a house already seated, and never refused for its distance from the field. All else
-being equal - of seats in the same ring of distance from the cluster - the one nearer the field is taken first. Neighbors stand a
+being equal - of seats in the same ring of distance from the margin's seat center - the one nearer the field is taken first. Neighbors stand a
 lane's threading gap apart, and once every house stands the lanes are laid in the gaps between them.
 
 **Why this priority**: it is the GM's request, and the record (0004) already states it as the rule.
@@ -65,9 +65,9 @@ household seated on the chosen margin, the overflow beyond the old radius, no ho
 3. **Given** two seats a growth level offers in the same ring of distance from the cluster's seat, **When** the next household is
    seated, **Then** the one nearer the field is tried first; a seat in a nearer ring is tried before either, however near the
    field it lies.
-5. **Given** a seated nucleated cluster, **When** its ways are laid, **Then** each runs from its dooryard out into the gap
+4. **Given** a seated nucleated cluster, **When** its ways are laid, **Then** each runs from its dooryard out into the gap
    beside its homestead and along the gaps to the way out or to another household's way, joining it at a T.
-4. **Given** a site where no free ground on the whole map can hold every household, **When** it is rolled, **Then** the map is
+5. **Given** a site where no free ground on the whole map can hold every household, **When** it is rolled, **Then** the map is
    refused with the households it could seat named - not reseated elsewhere.
 
 ---
@@ -160,8 +160,9 @@ engine no longer keeps.
   connected to the way out - ground a lane can pass at its width (the standing homesteads held off by a corridor's half-width,
   the site's taken ground, the households' wood seats), flooded from the exit strip and the field's corridor, a raster asked by
   lookup and kept current as houses stand.
-- **FR-013** (Amendment 2): The seating MUST search no path for a household - no access corridor is searched for, judged against
-  the lane law, or reserved per house ("This does let us drop the search entirely"). Once per map, the exit strip and the
+- **FR-013** (Amendment 2): WHILE HOUSES ARE SEATED the seating MUST search no path for a household - no access corridor is
+  searched for, judged against the lane law, or reserved per house ("This does let us drop the search entirely"); FR-014's single
+  pass, after the last household stands, is the one place a household's way is laid, judged and kept clear. Once per map, the exit strip and the
   field's corridor stay. Feature 317's condition for a tight seat - the household has no way of its own - is asked of FR-012's
   predicate: a way of its own is a yard opening onto lane ground connected to the way out, so one predicate admits an ordinary
   seat and refuses a tight one. FR-001's end-in-place check runs after the ways are laid (FR-014), against the tree they make.
@@ -203,11 +204,13 @@ engine no longer keeps.
   `settlement/rolling/fit.py` and nothing imports it; the ways law's own reach of a way to the field (`ways/law.py`'s `FIELD_REACH_FT`) is unchanged.
 - **SC-002a** (FR-003a): a test fails if field distance outranks the ring (a seat in a farther ring tried before one in a nearer
   ring for being nearer the field), or if, of two seats in one ring, the farther from the field is tried first; and the
-  growth's breadth equals main's (`GROW_LEVELS`).
+  growth's breadth equals main's (`GROW_LEVELS`). On the cohort and the pool, the number of seats the tie-break tried in another
+  order than the distance alone would (`seat_search.tie_reordered`) is recorded and is greater than zero; zero sends the ring's
+  width back to the GM.
 - **SC-007** (FR-011): a test fails if two homesteads the growth seats (neither reached across the other) stand closer than the
   threading gap; measured on the cohort and the pool.
-- **SC-008** (FR-012, FR-013): a test fails if the seating searches, judges or reserves a path for a household (the per-house
-  corridor search is not called during the homesteads stage).
+- **SC-008** (FR-012, FR-013): a test fails if a path is searched, judged or reserved for a household before the last household
+  stands (no corridor search is called while houses are seated); FR-014's pass after it is the only caller.
 - **SC-009** (FR-014): the cohort and the pool reach every household by a way or across a neighbor's yard, and no map is
   refused for want of a way.
 - **SC-010** (FR-010, FR-015): the bookends against main recorded with the spread and the house-to-field distances, the perf records owed
