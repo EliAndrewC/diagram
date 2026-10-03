@@ -105,20 +105,26 @@ svg#map[data-mode="raster"] g.f.on.f-bund-beans :is(path, circle):not([fill="non
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */
 #shade { position: fixed; inset: 0; background: rgba(45, 42, 36, 0.45); z-index: 9; }
-dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; z-index: 10; max-width: 42rem; max-height: 90vh; overflow: auto; border: 2px solid var(--rule); border-radius: 8px; background: var(--card); color: var(--ink); padding: 1rem 1.4rem; font-family: inherit; }
-dialog h2 { margin: 0 0 0.2rem; font-size: 1.3rem; }
+/* THE MODALS ARE SET FOR READING (GM 2026-10-03, feature 319: "my eyes are not great ... I end up using my browser's resize to
+   blow everything up to 150%"): the dialog's text is 1.5rem and every size inside it is in em, so the heading, the tabs,
+   the captions and the buttons all grow with it; the width grows to keep the same line length, capped to the screen.
+   Centered by auto margins between left 0 and right 0, not by left 50% and a -50% shift: a fixed box set at left 50%
+   may only shrink-to-fit into the right half of the screen, which held the dialog to 650 px of a 1,300 px window.
+   The map's own labels and glyphs are unchanged. */
+dialog { font-size: 1.5rem; position: fixed; top: 50%; left: 0; right: 0; transform: translateY(-50%); margin: 0 auto; width: fit-content; z-index: 10; max-width: min(63rem, calc(100vw - 2rem)); max-height: 90vh; overflow: auto; border: 2px solid var(--rule); border-radius: 8px; background: var(--card); color: var(--ink); padding: 1.5rem 2.1rem; font-family: inherit; }
+dialog h2 { margin: 0 0 0.2em; font-size: 1.3em; }
 dialog .label { font-style: italic; color: var(--muted); margin: 0 0 0.8rem; }
 dialog .label[hidden] { display: none; }  /* an accurate class announces nothing (feature 156) */
 /* The caveat: the liberty an accurate class's own record discloses, set quieter than the
    explanation and BELOW it - it qualifies the drawing, it does not introduce the feature. */
-dialog .caveat { font-size: 0.9rem; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 0.7rem; }
+dialog .caveat { font-size: 0.9em; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 0.7rem; }
 /* "On this map": a fact authored for THIS settlement in its own notes file, headed so it cannot be
    mistaken for something true of the kind everywhere (feature 156). */
 dialog .onmap::before { content: "On this map: "; font-variant: small-caps; letter-spacing: 0.03em; color: var(--muted); }
 dialog .onmap { background: rgba(140, 122, 85, 0.10); border-radius: 5px; padding: 0.5rem 0.7rem; }
 dialog section { margin: 0 0 0.7rem; line-height: 1.45; }
 dialog section p { margin: 0 0 0.5rem; }
-dialog footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid #BCAA7E; padding-top: 0.5rem; }
+dialog footer { font-size: 0.85em; color: var(--muted); border-top: 1px solid #BCAA7E; padding-top: 0.5rem; }
 dialog footer p { margin: 0 0 0.3rem; }
 dialog button { margin-top: 0.4rem; font: inherit; padding: 0.3rem 0.9rem; cursor: pointer; }
 /* the glossary (GM 2026-08-28): a dotted underline marks a defined term; hovering it shows the definition */
@@ -127,9 +133,9 @@ dialog button { margin-top: 0.4rem; font: inherit; padding: 0.3rem 0.9rem; curso
    viewport coordinates. It used to be a ::after box on the word, and the dialog's overflow clipped it at
    the dialog's edge and grew a horizontal scroll bar; a fixed box inside the dialog could not escape either,
    because the dialog's centering transform makes it the containing block. Above both dialogs (11); it takes
-   no pointer events, so it never steals the hover that shows it. The width is the old 22rem; page.js caps
+   no pointer events, so it never steals the hover that shows it. The width is 33rem - the old 22rem at the modals' 1.5x reading size (feature 319); page.js caps
    max-width to the viewport less the margins. */
-#tip { position: fixed; z-index: 30; width: 22rem; padding: 0.5rem 0.7rem; background: var(--ink); color: var(--card); font-size: 0.85rem; line-height: 1.35; border-radius: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); white-space: normal; font-style: normal; pointer-events: none; box-sizing: border-box; }
+#tip { position: fixed; z-index: 30; width: 33rem; padding: 0.75rem 1.05rem; background: var(--ink); color: var(--card); font-size: 1.275rem; line-height: 1.35; border-radius: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); white-space: normal; font-style: normal; pointer-events: none; box-sizing: border-box; }
 #tip[hidden] { display: none; }
 /* a sibling link: hover lights that class on the map, click opens its modal in place of this one.
    NO UNDERLINE on any of the page's links (feature 186, GM 2026-09-05: "I don't think I like the dotted
@@ -140,7 +146,7 @@ a.sib:hover { color: var(--hl-stroke); }
 /* THE TABS (feature 319, GM 2026-10-03): About, Guesses, References along the head of the one dialog; a tab with nothing
    to show is not drawn. The chosen tab is underlined in the rule color, the rest muted - the look of the page's links. */
 #x-tabs { display: flex; gap: 0.2rem; margin: 0.4rem 0 0.8rem; border-bottom: 1px solid #BCAA7E; }
-#x-tabs button { margin: 0; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); padding: 0.3rem 0.8rem; font-size: 0.95rem; }
+#x-tabs button { margin: 0; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); padding: 0.3em 0.8em; font-size: 0.95em; }
 #x-tabs button.on { color: var(--ink); border-bottom-color: var(--rule); font-weight: 600; }
 /* the dialog focuses its first button when it opens, which drew a focus box round About whatever tab was chosen: the
    chosen tab is marked by its rule and weight, so a tab shows no focus box (seen on the farmhouse pilot, feature 319) */
@@ -157,7 +163,7 @@ a.sib:hover { color: var(--hl-stroke); }
 #p-guesses ul { margin: 0 0 0.7rem; padding-left: 1.2rem; line-height: 1.45; }
 #p-guesses li { margin: 0 0 0.5rem; }
 /* the references tab: one line per QUESTION, each a link to its answer in the record (feature 180) */
-#p-refs p { margin: 0 0 0.6rem; font-size: 0.95rem; line-height: 1.4; }
-#p-refs p.intro { color: var(--muted); font-size: 0.9rem; margin: 0 0 0.9rem; }
+#p-refs p { margin: 0 0 0.6em; font-size: 0.95em; line-height: 1.4; }
+#p-refs p.intro { color: var(--muted); font-size: 0.9em; margin: 0 0 0.9em; }
 a.q { color: #5A3F1E; text-decoration: none; }
 a.q:hover { color: var(--hl-stroke); }

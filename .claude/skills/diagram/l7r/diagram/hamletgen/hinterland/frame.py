@@ -10,6 +10,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement.finish import placard_height
 
 from ..plan import SitePlan
 
@@ -69,10 +70,12 @@ def brook_beside_the_field(s: Settlement) -> list[tuple[float, float, float, flo
 #: allowance below. The breach record, the pool test, the cohort and the report line say so if a later placer breaks this.
 SCATTER_PAD = 40.0
 #: ...and the TITLE BAND on the north side (feature 224, the 48-map cohort): a sheet with no room for its name grows a
-#: band above the map sized to the placard (`Settlement.title`, 30 * 1.2 + 46 + 24 + 32 = 138 px) AFTER the crop, and
+#: band above the map sized to the placard (`Settlement._title_band`: the placard's height + 32) AFTER the crop, and
 #: on four of 48 seeds it reached 6 px past the pad - so the prediction's top edge carries the band's full height too, and
 #: since feature 287 the decided view's bottom edge as well (the band goes under the map when the one above is crossed).
-TITLE_BAND_ALLOWANCE = 140.0
+#: DERIVED from the placard since feature 319 (it was the literal 140 for a 106 px card; the card's text grew 1.5x and a
+#: south band then breached the frame - `test_a_scatter_frame_of_the_decided_view_holds_the_title_band_on_either_side`).
+TITLE_BAND_ALLOWANCE = placard_height() + 32 + 2
 
 
 def scatter_frame_for(view: Sequence[float]) -> tuple[float, float, float, float]:
@@ -81,12 +84,12 @@ def scatter_frame_for(view: Sequence[float]) -> tuple[float, float, float, float
     after the crop above the map, or UNDER it when every seat above is crossed (`Settlement._title_band`; cohort seed 8's
     south band reached 98 px past a pad that allowed only for the north) - so whichever side the band takes, the view it
     grows stays inside this frame: the finish's overhang (`scatter_overhang`) is negative by construction for any band
-    under `SCATTER_PAD + TITLE_BAND_ALLOWANCE` (the hamlet's placard makes one of 138 px)."""
+    under `SCATTER_PAD + TITLE_BAND_ALLOWANCE` (a band is the placard's height + 32, `placard_height`)."""
     vx, vy, vw, vh = (float(v) for v in view)
     return (vx - SCATTER_PAD, vy - SCATTER_PAD - TITLE_BAND_ALLOWANCE, vx + vw + SCATTER_PAD, vy + vh + SCATTER_PAD + TITLE_BAND_ALLOWANCE)
 
 
-TITLE_POCKET_RISE = 30 * 1.2 + 46 + 24 + 12 + 8 + 48  # ft: the pocket's height (`title_pocket`'s placard) with its 8 ft gap and 48 ft of step-out
+TITLE_POCKET_RISE = placard_height() + 12 + 8 + 48  # ft: the pocket's height (`title_pocket`'s placard + 12) with its 8 ft gap and 48 ft of step-out
 
 
 def frame_extras(s: Settlement, plan: SitePlan) -> list[tuple[float, float, float, float]]:
@@ -304,7 +307,8 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
 
     So one pocket of the map's content is reserved before the coppice is sited: the first blank box the scan
     `title()` runs (top to bottom, left to right) finds clear of every title obstacle and `TITLE_POCKET_CLEAR_FT`
-    (40 ft) from every feature glyph - 300 x 190 first, then 210 x 120 - and where neither fits inside the content, a
+    (40 ft) from every feature glyph - 300 x 190 first (or the placard plus a margin, if larger), then the placard's own
+    size plus a margin (`Settlement.placard_size`) - and where neither fits inside the content, a
     placard-sized box just outside it: above-left, above-right, below-left, then below-right. It is a reservation, not
     a placement: `title()` still does its own search and may well sit somewhere else."""
     # RESERVED ONCE (feature 150, Kuwabata seed 21): four callers ask for the pocket at four stages, and each
@@ -314,6 +318,10 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     # first answer is the reservation; every later caller gets the same rectangle.
     if plan.title_pocket is not None:
         return plan.title_pocket
+    # never smaller than the placard itself plus a margin (feature 319: the placard's text grew 1.5x; a long name's card
+    # could otherwise outgrow the 300 x 190 first ask)
+    _pw, _ph = s.placard_size(plan.spec.name)[2:4]
+    w, h = max(w, _pw + 15.0), max(h, _ph + 14.0)
     x0, y0, x1, y1 = content_box(s, plan, pad=30.0)
     # ASK THE ENGINE WHICH GROUND IS ACTUALLY BLANK, rather than assuming a corner is.
     #
@@ -336,7 +344,10 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         # coppice took the last blank corner, and `title()` - finding no clear box either - fell back to
         # that corner ON the grove (`title_clear_of_features`). The placard itself is ~195 x 106, so a
         # 210 x 120 pocket is still a real reservation; only when even that fails is nothing reserved.
-        w, h = 210.0, 120.0
+        # (feature 319: the placard's text grew 1.5x, so the smaller pocket is the placard's own size plus a margin, asked of
+        # `placard_size` - the 210 x 120 it was fitted a ~195 x 106 card)
+        _pw, _ph = s.placard_size(plan.spec.name)[2:4]
+        w, h = _pw + 15.0, _ph + 14.0
         spot = clear_pocket_spot(s, (x0, y0, x1 - x0, y1 - y0), w, h, _planned, _clear)
     if spot is None:
         # THE SHEET HAS NO ROOM FOR ITS NAME (feature 150 T50 fallout, Kuwabata seed 21): with the cluster
@@ -351,8 +362,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         # below-left, below-right; the first that clears every title obstacle (a connector leaving the
         # sheet, a marsh, the field) is the reservation. Each try is recorded in the manifest.
         _cx0, _cy0, _cx1, _cy1 = content_box(s, plan, pad=0.0)
-        _bw = max(s._text_width(plan.spec.name, 30) + 4, 100.0) + 24 + 12  # the placard's own size (settlement.title) + 6 px each side
-        _bh = 30 * 1.2 + 46 + 24 + 12
+        _bw, _bh = (v + 12 for v in s.placard_size(plan.spec.name)[2:4])  # the placard's own size (settlement.title) + 6 px each side
         _obs = s._title_obstacles(planned=_planned)
         _tries: list[list[float]] = []
         # ...stepping outward up to 48 px per corner: the content box is the field's envelope, and a house

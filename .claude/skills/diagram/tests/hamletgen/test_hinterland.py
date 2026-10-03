@@ -162,13 +162,15 @@ def test_the_title_pocket_is_reserved_once_and_shrinks_before_it_gives_up() -> N
     """Feature 150 (Kuwabata seed 21): four callers ask for the pocket at four stages and each ask used to
     re-run the search against ITS moment's obstacles, so the belt was dented around one answer and the
     frame got another. The first answer is the reservation. And a sheet with no 300 x 190 blank still
-    reserves a 210 x 120 one (the placard is ~195 x 106) before reserving nothing."""
+    reserves the placard's own size plus a margin (`Settlement.placard_size`; a 210 x 120 box until feature 319 grew the
+    placard's text 1.5x) before reserving nothing."""
     plan = a_plan()
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
-    # columns 270 apart (224 ft clear), rows 160 apart (132 ft clear) down the whole square: a 210 x 120 box fits, a 300 x 190 does not
+    # columns 270 apart (224 ft clear), rows 160 apart (132 ft clear) down the whole square: a 300 x 190 box does not fit
     s.M["houses"] = [{"x": x, "y": y, "w": 46.0, "h": 28.0} for x in (400.0, 670.0, 940.0) for y in (400.0, 560.0, 720.0, 880.0)]
     tp = hinterland.title_pocket(s, plan)
-    assert (tp[2] - tp[0], tp[3] - tp[1]) == (210.0, 120.0)
+    pw, ph = s.placard_size(plan.spec.name)[2:4]
+    assert (tp[2] - tp[0], tp[3] - tp[1]) == (pw + 15.0, ph + 14.0)
     assert plan.title_pocket == tp and plan.title_pocket_outside is False
     s.M["houses"].append({"x": tp[0] + 100.0, "y": tp[1] + 60.0, "w": 46.0, "h": 28.0})  # a house INTO the pocket...
     assert hinterland.title_pocket(s, plan) == tp  # ...changes nothing: the reservation stands

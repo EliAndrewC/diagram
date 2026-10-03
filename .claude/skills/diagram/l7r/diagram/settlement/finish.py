@@ -174,6 +174,26 @@ def fold_element_opacity(s: str) -> str:
     return _ELEMENT_OPACITY.sub(fold, s) if " opacity=" in s else s
 
 
+#: THE PLACARD'S TEXT IS SET FOR READING (GM 2026-10-03, feature 319: *"my eyes are not great ... I end up using my browser's
+#: resize to blow everything up to 150% ... I think we could probably do the same thing with the title card as well. At least
+#: the text on it - obviously the map scale of one pixel per foot will not change"*). The name and the scale bar's two captions
+#: are drawn 1.5 times the size they were (30, 12 and 10 px); the card grows around them, and the bar keeps its 100 map-px.
+PLACARD_TEXT_SCALE = 1.5
+"""Research: placard text size - CONVENTION: map furniture sized for the GM's reading; the scale bar's length is unchanged"""
+#: the placard's padding around its text block, before the text scale (it scales with it, so the card keeps its proportions)
+PLACARD_PAD = 12.0
+"""Research: placard padding - CONVENTION: map furniture"""
+
+
+def placard_height(fs: float = 30) -> float:
+    """The title placard's height for a name drawn at `fs` before `PLACARD_TEXT_SCALE` - the name's line, the scale bar with its
+    two captions, and the padding. It does not depend on the name; the width does (`FinishMixin.placard_size`). The hamlet's
+    title band allowance and pocket rise are derived from it (`hamletgen/hinterland/frame.py`), so the card cannot outgrow them.
+    Research: placard size - CONVENTION: map furniture, sized from its measured text"""
+    k = PLACARD_TEXT_SCALE
+    return fs * k * 1.2 + 46 * k + 2 * PLACARD_PAD * k
+
+
 class FinishMixin:
     # ---- annotation
 
@@ -362,6 +382,17 @@ class FinishMixin:
         except Exception:  # PIL / font absent: the engine stays standalone on a generous estimate
             return len(s) * fs * 0.62
 
+    def placard_size(self: Settlement, name: str, fs: float = 30) -> tuple[float, float, float, float, float]:  # type: ignore[misc]
+        """(text width, text height, card width, card height, padding) of the title placard for `name` - THE one statement of
+        its size, which `title()` draws and the hamlet's title pocket reserves (`hamletgen/hinterland/frame.py`). The pocket
+        restated the formula by hand until feature 319, so a change to the card's text size would have left the two apart.
+        `fs` is the name's size before `PLACARD_TEXT_SCALE`.
+        Research: placard size - CONVENTION: map furniture, sized from its measured text"""
+        k = PLACARD_TEXT_SCALE
+        tw, th = self._text_width(name, fs * k) + 4, fs * k * 1.2  # MEASURED text box (+4 breathing room) - see _text_width
+        pad = PLACARD_PAD * k
+        return tw, th, max(tw, 100.0) + 2 * pad, placard_height(fs), pad
+
     def title(self: Settlement, name: str, fs: float = 30, prefer: tuple[float, float, float, float] | None = None) -> None:  # type: ignore[misc]
         """Place the map title (the bold place name plus a scale bar under it) over BLANK space: scan the
         rendered window for a spot where the box clears every feature (buildings, fields, water, groves,
@@ -383,10 +414,10 @@ class FinishMixin:
         scrub speckle nearly everywhere a title can sit, and ink-on-scrub was hard to read). The
         searched and recorded box is the PLACARD's extent, so the clearance check gates the whole
         card; `title_has_placard` gates its presence (a manifest without one predates the card)."""
-        tw, th = self._text_width(name, fs) + 4, fs * 1.2  # MEASURED text box (+4 breathing room) - see _text_width; symmetric placard padding follows for free
+        k = PLACARD_TEXT_SCALE  # the name and the bar's captions drawn for reading (GM 2026-10-03); the bar stays 100 map-px
+        tw, th, bw, bh, PAD = self.placard_size(name, fs)  # the searched box: the whole placard
+        fs = fs * k
         bar_px, bar_ft = 100.0, round(100 * self.ftpx)
-        PAD = 12  # placard padding around the text block
-        bw, bh = max(tw, bar_px) + 2 * PAD, th + 46 + 2 * PAD  # the searched box: the whole placard
         vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
         # THE RESERVED POCKET FIRST (feature 150): the scripted tier holds a pocket of blank ground for the
         # title before the coppice and the belt are seated, and DENTS the windbreak around it - so a title
@@ -442,7 +473,7 @@ class FinishMixin:
             cls=PLACE,
         )
         self.add_label(f'<text x="{pcx:.0f}" y="{y + fs:.0f}" text-anchor="middle" font-size="{fs}" font-weight="bold" fill="#2D2A24">{name}</text>', cls=PLACE)
-        bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12  # bar CENTERED under the name, on the placard's axis
+        bx0, bx1, by = pcx - bar_px / 2, pcx + bar_px / 2, y + th + 12 * k  # bar CENTERED under the name, on the placard's axis
         # THE BOX IS THE INK, not the placard's foot (settlement-review 2026-08-29, Kashikawa). The bottom
         # was `y + bh` - the placard's own base - which over-claimed 26 px, 41% of the box's height, and
         # reached 12 px BELOW the placard that contains it. Nothing keeps out of this box (the two checks
@@ -450,7 +481,7 @@ class FinishMixin:
         # over-claim bought nothing and cost the interactive map, which highlights the recorded box. The
         # last ink is the "(1 px = N ft)" caption at baseline `by + 31`, 10 pt, so its descender ends ~2 px
         # under that.
-        self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(by + 33, 1)]}
+        self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(by + 33 * k, 1)]}
         self.add_label(
             # `class="scale"` is a NAME for the page's stylesheet, not a hover target (feature 203, GM 2026-09-07: the
             # lit scrub was painting over the card in raster mode): the placard is vector in both modes, its card
@@ -463,8 +494,10 @@ class FinishMixin:
             f'</g>',
             cls="-",
         )
-        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
-        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
+        self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17 * k:.0f}" text-anchor="middle" font-size="{12 * k:g}" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
+        self.add_label(
+            f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31 * k:.0f}" text-anchor="middle" font-size="{10 * k:g}" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-"
+        )
 
     def _title_band(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, bw: float, bh: float, obs: BoxObstacles) -> Pt:  # type: ignore[misc]
         """THE TITLE BAND, the last rung (feature 137 T06; feature 287, labels L14): every corner hides a plot (seed 13's
