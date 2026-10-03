@@ -1,0 +1,6 @@
+{
+  "utc": "20261003T152216Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "re-gate after a docs-only merge from main; the owed reviews passed on this engine key"
+}
