@@ -98,11 +98,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`
 
 ## Phase 6 - the high-risk sources (US7; FR-021) - waits on the GM's downloads
 
-- [ ] T50 [US7] each of the 22 ingested or reported not found; `source-reader` and `quote-check` on each; corrections
+- [x] T50 [US7] each of the 22 ingested or reported not found; `source-reader` and `quote-check` on each; corrections
       applied or the source removed (T42's procedure); SC-009 holds
       research: rendering
+      verify: DONE. the GM marked all 22 (2026-10-03); 21 ingested, H21's double mark awaits the GM but its file was read; 9 claim-carrying downloads read whole by source-reader against the GM's copies with quote-check, record-format, source-applicability, translation-check and entry-drift on every touched question (two rounds); H19 and H20 unreadable: re-sourced or removed under FR-019 and retired from the works cited; H22 verbatim on its archived page; no record check owed (research.md R8)
 
 ## Phase 7 - close
 
-- [ ] T60 `make done` green; the record gate answered; memory and docs updated
+- [x] T60 `make done` green; the record gate answered; memory and docs updated
       research: rendering
+      verify: DONE. make done green (already verified at this engine content), make hooks-test green, make record CHECK=1 builds cleanly, the record gate answered (make record-owed: none), memory and research.md R5-R8 updated

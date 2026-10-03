@@ -139,3 +139,29 @@ Measured over the host's sources-consulted ledger: 8,541 rows naming 4,905 URLs;
 which writes no attempt line until this feature lands. `make attempts`' seed therefore now writes a line for every
 ledger row with none (matched by URL, day and feature), and the push-time re-run of it catches the rows sessions write
 between this measurement and the landing.
+
+## R8: FR-021, the 22 high-risk sources (2026-10-03)
+
+The GM marked all 22 on 2026-10-03 and said "ingest". `make downloads-ingest` recorded 21 marks; H21 (`conghua-2026-design`)
+carried both downloaded and not found, which the tool will not guess at, so its mark waits on the GM - but its file was in
+the inbox and is the report its URL names, so it was read like the other downloads. 29 files were archived against their
+entries (`archive inbox --match <file>=H<n>`).
+
+**What rests on them, and what was done** (from each entry's "Rests on it" line):
+- **Nine downloads that carry claims** (H1-H7, H17, H21) were read whole by `source-reader` from the GM's copy - the live
+  pages refuse a fetch, so the copy's text was put into each bundle - then `quote-check`, `record-format`,
+  `source-applicability`, `translation-check` and `entry-drift` on every question they touched, two rounds. Every footnote
+  quotation matched the copy, apart from straight quote marks in one Chinese original. 43 corrections followed. The
+  substantive ones: the IRRI drying floor is a parboiling mill's floor, not a farmer's yard (0037); the Sensoji chronology
+  entry is one the paper's own note 9 says a historian doubted (0227); the Wujing zongyao was compiled 1043-1047, not in
+  1044 (0148); the Conghua widths are designed, not built, and its grade is given two ways (0068); the PLOS region is
+  bounded by an isotherm and named mountains, not by isohyets (0196); two entries claimed "peer-reviewed", which neither
+  paper states.
+- **Ten carry no claim** (H8-H16, H18): named in an absence note or nowhere; their marks are recorded and nothing rests on
+  them.
+- **Three not found but cited** (H19, H20, H22). H22's page is still readable from its archived copy, and its four
+  footnotes are verbatim there, so it stays. H19 (Tabiiro, HTTP 404) and H20 (Chen 2016, the host gone) have no readable copy
+  anywhere - the Wayback Machine holds none and a search found no mirror - so FR-019 removed them: Takayama's grounds were
+  re-sourced to the Gifu prefecture report already cited, which gives the site area exactly (9,807.42 m2, nearly 3,000
+  tsubo, not "over 3,000"); the Song-dynasty yamen axis sentence went, the Qing evidence carrying the axis. Both left the
+  works cited through `make uncited DO=retire-cited`, each with a not-kept line and a hand-recorded access state.
