@@ -159,6 +159,10 @@ was cheap because, with the route kept off a household's own beds (R4), a househ
 rare - 21 seats at 15 households on eight seeds - so a design that waits for one seats few. The MODE 1 ruling asks the growth to
 offer the seats, and the queued form does.
 
+On the yard side, before `own_way` (`tight_cost.py`, one run, a 21.7 s stage at load 13): the tight seats 4.0 s - their settles
+0.78 s (405 popped), their placer calls 3.24 s (207 tried), of which the walks 0.98 s (169 asked, 106 found) and the corridor
+searches after a walk 1.75 s (106 asked, 93 found: a way of its own, the seat refused).
+
 With `own_way`, of 208 tight seats tried: 108 walks asked, 55 found; 55 corridor searches, 43 found (refused: a way of its own);
 12 households admitted. The stage's remaining tight cost is the settles of the popped tight seats (402 popped, 0.53 s) and the
 placer's calls (1.62 s).

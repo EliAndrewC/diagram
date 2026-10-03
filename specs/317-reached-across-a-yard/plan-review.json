@@ -1,6 +1,6 @@
 {
  "feature": "317-reached-across-a-yard",
- "plan_sha256": "b52198dc7010697500f00f25a07bb4b314077f3212a59bc2777c014aba140f70",
+ "plan_sha256": "b29a79cca46a9ad5362fe3263d0037cfe69ae5aa65aee30e89d51eeb1ca6685d",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,86 +8,106 @@
    "id": "D1",
    "summary": "The record first: the village-lanes entry rewritten from what was read (brief R1); the drawing page (brief R2) once D2-D4 land",
    "class": "within",
-   "why": "FR-001 and US1 as written; the GM's question is answered from the research before the engine moves."
+   "why": "FR-001 and US1 as written."
   },
   {
    "id": "D2-order",
    "summary": "A household asks for a corridor first; only where access_corridor finds none may it be reached by passage",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-002 puts no such condition on the passage, so this narrows when it applies. Implied by the GM's own words, 'if that is what the research bears out, then we should go with it': every Wigmore passage-to-the-road entry the record reads is conditioned on land that 'cannot reach the highway without passing over' another's (or pouch-land); none attests a household with its own access crossing a neighbor's. Purpose test: the GM's purpose is that no unresearched requirement be imposed, and this condition is the research's own, not an added one. Unchanged from the previous record's ruling; the amendment no longer lets it gut the feature, because tight seats (D2-tight) now make the condition arise."
+   "why": "Unchanged ruling: implied by the GM's 'if that is what the research bears out, then we should go with it' - every Wigmore entry conditions passage on land that 'cannot reach the highway without passing over' another's; no unresearched requirement is added."
   },
   {
    "id": "D2-tight",
-   "summary": "While the share has room, each standing house of the grown cluster also offers tight seats at the footprints' parting plus 2 px, without the path's strip",
+   "summary": "While the share has room, standing houses offer tight seats at the footprints' parting plus 2 px, without the path's strip",
    "class": "within",
-   "why": "This is what the MODE 1 ruling of 2026-10-03 required: the growth's path-strip spacing (grow_gap) was built for a lane to every house and kept the custom's condition from ever arising (research R3: the first build seated no household). Tight seats are the mechanism by which FR-002's 'MUST be able to seat a household reached across a neighbor's dooryard' can actually happen; bounded by D4's share, which FR-002 asks for."
+   "why": "The mechanism the MODE 1 ruling of 2026-10-03 required so that FR-002's 'MUST be able to seat' can happen; bounded by D4's share."
   },
   {
    "id": "D2-tight-refusal",
-   "summary": "A tight seat is taken only by passage: a household that finds its own corridor there is refused the seat; ordinary seats keep a path's room",
+   "summary": "A tight seat is taken only by passage; a household finding its own corridor there is refused it; ordinary seats keep a path's room",
    "class": "within",
-   "why": "Narrows nothing the request or spec asked for: no household that could be reached across a yard is excluded by it. It keeps lane households on the spacing they have now, which the spec does not ask to change; letting lane households pack tighter would be new behavior the GM did not request. It is D2-order applied at the tight seat (land with its own access is not land the custom covers)."
+   "why": "Excludes no household that could be reached across a yard; lane households keep the spacing the spec does not ask to change. D2-order applied at the tight seat."
+  },
+  {
+   "id": "D2-tight-crossable",
+   "summary": "Tight seats offered only round a house a passage may cross to: reached within D3's chain and with a yard (passage.crossable)",
+   "class": "within",
+   "why": "A tight seat is taken only by passage (D2-tight-refusal), and a passage must end at a neighbor's yard whose house reaches the tree within PASSAGE_CHAIN (D2-walk, D3). A tight seat round any other house could seat no one, so the filter removes only seats that could never be taken; no household FR-002 allows is excluded."
+  },
+  {
+   "id": "D2-tight-yard-side",
+   "summary": "Tight seats offered only within TIGHT_BEARING_DEG 112.5 of the bearing from the house to its yard (front and flanks), not behind it",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A narrowing: the research's condition (land with no road access) says nothing of which side of the neighbor's house it lies, so a household behind its neighbor's house can no longer be the one reached by passage. Legitimate on the spec's OWN rules, not on cost: FR-002 requires the walk never cross a house, bed, shed or fixture, and D2-walk keeps it on the two households' land, so from behind the house it must pass the house's flank clear of the beds and fixtures that stand there. Measured with every bearing offered (research R7, observed 2026-10-03): 1 walk to the yard found in 194 tries behind against 15 of 16 passages from within 90 degrees. The excluded sector is all but emptied by FR-002 itself; the restriction carries no historical claim (labeled a search breadth); a household behind its neighbor that finds a way of its own is not land the custom covers (D2-order); and 12 passage households on 8 of 13 settlements remain, so the purpose of US2 is not gutted. Cost is NOT the ground: the plan's 'offered there too the tight seats cost the homesteads stage 12-35%' is the whole every-bearing form against no passage (R7 row 1), and the yard-side form alone measured +18%, inside that range - the behind sector's own cost is not shown. That sentence must be restated as what R7 measured (the tries and the yield)."
+  },
+  {
+   "id": "D2-own-way",
+   "summary": "Once one garden layout at a tight seat finds a corridor, the seat's other layouts are refused unasked",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrower than a per-layout verdict: a layout whose beds block its own way, with a walk, is refused because another layout at the seat has a way. Legitimate on the same ground as D2-order: Wigmore's condition is the LAND's - land that cannot reach the highway without passing over another's - and the plan's land is the seat's reach over every garden layout (D2-adjoin). A seat from which a way of its own exists is land with road access; a garden arrangement that blocks one's own path does not make the land landlocked. Note: the plan's and fit.py's '93 of 106 corridor searches after a walk' appears nowhere in research R7 (R7: 55 asked, 43 found; R6: 90 asked, 75 found); record it or correct it."
   },
   {
    "id": "D2-adjoin",
-   "summary": "The reach is the custom's condition: the household's land - the reach its seat was parted by (settled_seat's allotted reach, over every garden layout, carried with its house) - within the parting and PASSAGE_ADJOIN_FT (GUESS: the 2 px parting plus a foot) of the neighbor's footprint, not a walking distance",
+   "summary": "The reach is the custom's condition: the household's land (the reach its seat was parted by, over every layout) within the parting and PASSAGE_ADJOIN_FT of the neighbor's footprint, a GUESS",
    "class": "within",
-   "why": "Still the spec's 'across a neighbor's dooryard' and the record's 'passing over' another's land, read literally: land against land, never open ground. The amendment changes which ground counts as the household's own - the ground the growth actually reserved for it when parting its seat, rather than one layout's box - which is the household's land in the model (no other homestead may stand on it). It narrows nothing asked: research R6 measured the old measure refusing all but one household at 3-36 px back from the parting (observed 2026-10-03), so the change makes FR-002's 'MUST be able to seat' reachable rather than restricting it."
+   "why": "Unchanged: land against land, the spec's 'across a neighbor's dooryard' read literally; makes FR-002 reachable rather than restricting it (R6)."
   },
   {
    "id": "D2-walk",
-   "summary": "The walk from one of the household's dooryard doors to the neighbor's threshing yard, wholly on the two households' land, clear of both households' houses, beds, sheds, byres, well pockets and fixtures, of every other placed homestead, the refused-ground grid and reserved wood seats - ROUTED round them on the map's own router (route.search, route.taut); kept clear of later homesteads; not drawn as a lane (GUESS)",
+   "summary": "The walk from a dooryard door to the neighbor's threshing yard, on the two households' land, clear of houses, beds, sheds, byres, well pockets, fixtures, other homesteads, refused ground and wood seats, routed; not drawn as a lane (GUESS)",
    "class": "within",
-   "why": "FR-002 'never across a house, a garden bed, a shed or a fixture'; US2 'has no lane of its own' and 'the neighbor's yard is not built over'. Every clearance of the previous version is kept; routing replaces the straight leg, which removes a restriction the request never asked for (R6: the straight leg was blocked on 95 of 109 tight-seat layouts and found 3 passages; routed, 16 households on 9 of 13 settlements whose share allowed one, observed 2026-10-03). Staying on the two lands keeps a third household's land for the chain (D3). Within."
+   "why": "Unchanged: FR-002's clearances and US2's 'no lane of its own'; routing removes a restriction the request never asked for (R6)."
   },
   {
    "id": "D2-walk-order",
-   "summary": "At a tight seat the walk is asked first, then the corridor; both must hold (a walk exists and no corridor of its own), so the verdict is the same",
+   "summary": "At a tight seat the walk is asked first, then the corridor; the same verdict",
    "class": "within",
-   "why": "An evaluation order with the identical verdict as D2-order and D2-tight-refusal: no household is seated or refused differently. A construction choice, not a narrowing of what was asked."
+   "why": "Unchanged: evaluation order with an identical verdict."
   },
   {
    "id": "D3",
-   "summary": "A chain of passages ends at a corridor within PASSAGE_CHAIN = 2 households, a GUESS citing Wigmore's Echigo entry",
+   "summary": "A chain of passages ends at a corridor within PASSAGE_CHAIN = 2, a GUESS citing Echigo",
    "class": "within",
-   "why": "The spec's edge case and FR-002 delegate any chain limit to the plan as a labeled GUESS citing Echigo; C over both B's plot and A's is two plots, the longest chain read."
+   "why": "Unchanged: the spec delegates any chain limit to the plan as a labeled GUESS citing Echigo."
   },
   {
    "id": "D4",
-   "summary": "PASSAGE_SHARE_BAND = (0.0, 0.25) rolled per nucleated settlement from the seed, a GUESS; beyond the share a household is seated only with a corridor",
+   "summary": "PASSAGE_SHARE_BAND = (0.0, 0.25) rolled per nucleated settlement, a GUESS; beyond the share only with a corridor",
    "class": "within",
-   "why": "FR-002 asks for a share rolled per settlement within a band the record supports or labels as a guess; labeled, its upper bound reasoned from the record's alleys to rear houses (Morse; the Manchu survey). Calibrated liberty, not a strict rule."
+   "why": "Unchanged: FR-002's rolled share within a band labeled as a guess."
   },
   {
    "id": "D5",
-   "summary": "reached_across on the household record; the one reach predicate (checks.unreached_houses) counts a chain ending at a reached household; nothing else of the ways changes",
+   "summary": "reached_across on the record; checks.unreached_houses counts a chain ending at a reached household",
    "class": "within",
    "why": "FR-003 as written."
   },
   {
    "id": "D6",
-   "summary": "The corridor judged as drawn, as found: tree.admits asks the needle of the tree with its free ends joined as the web's settle will join them (tree.as_joined, settle.settle_joins / law.near_misses), with an exact box prefilter in law.near_misses and law.free_end (same answers); the route searched per garden layout round the household's own parts, kept because it pays (R4); seed 18's regression closed by tree.laid_run / own_clear",
+   "summary": "The corridor judged as drawn (tree.as_joined, the box prefilter); the route per layout round its own parts, kept because it pays; seed 18 closed by tree.laid_run / own_clear",
    "class": "within",
-   "why": "FR-004 and SC-003: the seating admits a corridor only in the form the web will draw it, now including the settle's join that research R2 found actually closed feature 314 R12's sliver. The prefilter is a cost measure with identical answers, not a scope change. FR-005 (seed 18), FR-006 and the GM's concern about disregarding optimizations that work: the withdrawn lever retried and kept only on measurement."
+   "why": "Unchanged: FR-004, SC-003, FR-005, FR-006."
   },
   {
    "id": "D7",
-   "summary": "Known bugs listed with owners: D6's defect here; cohort seeds 14, 15, 906, 22, 23 with the Diagram (Inashiro) session; tooling bugs found on the way, fixed here",
+   "summary": "Known bugs listed with owners: D6 here; cohort seeds 14, 15, 906, 22, 23 with the Diagram (Inashiro) session",
    "class": "within",
-   "why": "FR-007 and SC-006, matching 'coordinate with that other session' and 'I do want all known bugs to be fixed'."
+   "why": "FR-007, SC-006."
   },
   {
    "id": "verification",
-   "summary": "Unit tests of tight seats, passage, chain, share and reach; SC-002 at 15 households seeds 1-16 with meta.passage_share / passage_reached; refusals/abab at 15 and 40 households, the cohort against main, make done, bookends",
+   "summary": "Unit tests of tight seats, passage, chain, share, reach; SC-002 at 15 households; refusals/abab, cohort, make done, bookends",
    "class": "within",
-   "why": "Enforces FR-002, FR-003, FR-005, FR-006 and SC-002 as written; checks that the requested behavior happens, not new behavior."
+   "why": "Enforces FR-002, FR-003, FR-005, FR-006, SC-002."
   },
   {
    "id": "bookends",
-   "summary": "Performance bookends 317-start / 317-end back to back in a worktree at origin/main",
+   "summary": "Performance bookends 317-start / 317-end back to back at origin/main",
    "class": "within",
-   "why": "Constitution VI procedure; serves FR-006's timing against the base."
+   "why": "Constitution VI; serves FR-006."
   }
  ],
  "verdict": "CLEAR"
