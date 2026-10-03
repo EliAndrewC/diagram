@@ -9,6 +9,15 @@
   "verifies": "F1",
   "answers": "86f173b401a2"
  },
+ "perf-317-control-nopass": {
+  "verifies": "the band-2 readings of 317-end against 317-start at 20 households, seeds 25 (+17.1%) and 47 (+12.5%), homesteads +0.4 and +0.5 s",
+  "subject": "perf bookend, reference spec, seeds 25 and 47, 20 households, the homesteads stage",
+  "value": 0.75,
+  "unit": "s, the homesteads stage's CPU with the passage share at 0, seed 25 (median of three)",
+  "quantity": "three alternated takes each, 2026-10-03, homesteads stage CPU seconds: main (/tmp/main317c, 38901e2df) seed 25 0.68/0.71/0.67, seed 47 0.75/0.76/0.80; the clone (2ba1f3cf) 1.08/1.10/1.21 and 1.24/1.23/1.32 (1 and 3 passages); the clone with the passage share at 0 0.73/0.75/0.75 and 0.79/0.82/0.83 - with the cause removed the stage stands within 8-10% of main, so the passage accounts for 0.35-0.42 s of the 0.42-0.48 s it grew",
+  "source": "control_probe.py in the session's scratchpad (NOPASS=1 sets stages.passage_share to 0), run against both trees",
+  "observed": "2026-10-03"
+ },
  "gc-fh-r2-f5-recheck": {
   "value": 94.8,
   "unit": "ft",
