@@ -172,7 +172,7 @@ engine no longer keeps.
   homesteads' other parts are placed, they are kept clear of what is placed after, as the seating's corridors were. A household
   no lawful way reaches MUST be reached across a neighbor's yard (canon, the GM: "it's okay for people to cut through
   neighbors' yards in a pinch") rather than the map refused for want of a way.
-- **FR-015** (Amendment 3): The cost is accepted. Option A measured slower than the seating it replaces (homesteads stage +45%, a one-shot observation 2026-10-03, method: the
+- **FR-015** (Amendment 3): The cost is accepted. Option A measured slower than the seating it replaces (homesteads stage +45%, observed 2026-10-03, method: the
   scratch prototype timed per stage on nine nucleated seeds); the GM chose it for the map's shape, and the tie-break (FR-003a) for the speed. FR-010's measurement
   is still owed, and the band it reaches still owes its records.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
