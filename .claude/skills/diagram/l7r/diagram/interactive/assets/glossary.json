@@ -6957,7 +6957,8 @@
  "dozo-zukuri": {
   "def": "Plastered-storehouse construction: thick earth-and-plaster walls and plaster-faced doors, used for storehouses and, in Edo after the Kyoho era, spread by order to townhouses for fire prevention.",
   "variants": [
-   "dozo-zukuri"
+   "dozo-zukuri",
+   "storehouse style"
   ]
  },
  "yamen-god": {
@@ -7658,7 +7659,8 @@
  "susuki": {
   "def": "A tall grass-family perennial, the plant most used for Japanese thatch, cut every year from thatch fields kept for it.",
   "variants": [
-   "susuki"
+   "susuki",
+   "miscanthus"
   ]
  },
  "kasasuge": {
@@ -15381,6 +15383,62 @@
   "def": "In old Japan, a province, the largest division of the country, as Idzumi kuni, the province of Izumi.",
   "variants": [
    "kuni"
+  ]
+ },
+ "shinkabe": {
+  "def": "A wall built between the posts of a Japanese house so that the posts show on its face; the commoner farmhouse wall in eastern Japan.",
+  "variants": [
+   "shinkabe"
+  ]
+ },
+ "okabe": {
+  "def": "A wall that covers the posts of a Japanese house, plastered over them so that none shows; the commoner farmhouse wall in western Japan.",
+  "variants": [
+   "okabe",
+   "ōkabe"
+  ]
+ },
+ "konnyaku": {
+  "def": "A starchy flour ground from the root of the konjac (devil's-tongue) plant; mixed with sand and water, it made the coat laid on an earth wall before a lime-plaster finish.",
+  "variants": [
+   "konnyaku"
+  ]
+ },
+ "Meiji teens": {
+  "def": "The years Meiji 10 to 19, 1877 to 1886, the second decade of the Meiji era.",
+  "variants": [
+   "Meiji teens"
+  ]
+ },
+ "rizi-pisciculture": {
+  "def": "The raising of fish in flooded rice fields alongside the rice crop.",
+  "variants": [
+   "rizi-pisciculture"
+  ]
+ },
+ "pivot-hung": {
+  "def": "Of a door leaf: turning on pins set into its top and bottom edges, rather than on hinges fixed along its side - the earlier way a storehouse's plastered leaves were hung.",
+  "variants": [
+   "pivot-hung"
+  ]
+ },
+ "main range": {
+  "def": "One long building block under its own roof, forming one side of a Chinese court house; the main range stands at the back (the north), with side ranges as wings and, in a full courtyard house, a front range across the south.",
+  "variants": [
+   "main range",
+   "front range",
+   "side range",
+   "side ranges",
+   "single range",
+   "single straight range"
+  ]
+ },
+ "Chinese-leaning village": {
+  "def": "A settlement our maps draw after Chinese rather than Japanese building, so its farmhouses take the Chinese plans, such as the three-sided court, and tile roofs.",
+  "variants": [
+   "Chinese-leaning village",
+   "Chinese-leaning",
+   "Chinese-leaning villages"
   ]
  },
  "Hidetada": {
