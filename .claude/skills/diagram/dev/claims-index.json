@@ -5544,12 +5544,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
-  "code": "3ca7a2fc5bcba85a",
+  "code": "35166a983b3ec121",
   "core": "6eb3a52d029ee1b7",
   "date": "2026-10-03",
-  "note": "0081 backs only the parting (\"parts every two homesteads by a lane's room\"); neither page gives the up-to-12% distance jitter (GROW_JITTER_FRAC), nearest-the-seat-first order or the nearer-field tiebreak, so split those out as UNRESEARCHED; also check whether grow_gap rolls between 0031's two attested forms (\"dense... side by side\" vs \"houses set well apart\") - not visible here",
+  "note": "an irregular lump grown house by house (0031 \"houses gathered irregularly in a lump\"), each seat parted by the lane's room `grow_gap` (0081 \"parts every two homesteads by a lane's room\")",
   "research": "da540ff75d9310ed",
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
   "code": "d87770a195c92455",
@@ -5559,11 +5559,35 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties": {
+  "code": "13d677ae5c35777e",
+  "core": "6eb3a52d029ee1b7",
+  "date": "2026-10-03",
+  "note": "the queue is ordered (ring, field distance, distance, n), so nearness to the field orders seats only within a ring; neither cited question says how a cluster grows toward its field; the account names the GM's ruling as the GUESS's source",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
   "code": "60f8b5454829911e",
   "core": "6eb3a52d029ee1b7",
   "date": "2026-10-03",
   "note": "search breadth",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the order of growth": {
+  "code": "684717fba8ee7e6c",
+  "core": "6eb3a52d029ee1b7",
+  "date": "2026-10-03",
+  "note": "neither 0031 (lump grows \"irregularly\") nor 0081 (lane's room parting) says in what order houses were added, so GUESS fits.",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the spacing jitter": {
+  "code": "868a26c948811c5b",
+  "core": "6eb3a52d029ee1b7",
+  "date": "2026-10-03",
+  "note": "0031 says there is \"no fixed measure\" of how far apart houses stood and 0081 sets only the lane's-room parting as a convention, so up to 12% farther plus a jittered direction is a GUESS the record is silent on.",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -23455,6 +23479,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py::chain_violated_many#plumbing": {
+  "code": "a7714ac229d5d1a9",
+  "core": "8befb7297fea0a33",
+  "date": "2026-10-03",
+  "note": "vectorized point-to-chord geometry, decides nothing physical",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py::convex_hull#coordinate math": {
   "code": "3f96ae20e1da3e5a",
   "core": "f85689df8929724b",
@@ -37096,12 +37128,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lane_layers#lane ground": {
-  "code": "9ac5e564ea4abfe7",
-  "core": "165561b7f1319ce7",
+  "code": "50d5bafb7cde4996",
+  "core": "6df2847c6606618b",
   "date": "2026-10-03",
-  "note": "each cell center (the way's line) is kept `half` = 7 ft off a homestead box, so the tread's edge stands 5.5 ft off, where the page says \"A lane keeps 7 ft clear of a garden fence\"; fix with ACCESS_HALF_FT",
+  "note": "homesteads padded by `half`, ground the site refuses marked (chords at gap 0, then corridors), wood-seat gap left UNRESEARCHED; matches 0081's \"7 ft clear of a garden fence\"",
   "research": "10d6e651e3fb0112",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a household no way reaches is pinched across its nearest reached neighbor's yard": {
   "code": "47ed83e1e2e5efee",
