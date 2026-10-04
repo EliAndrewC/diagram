@@ -342,7 +342,8 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
     Nothing where no access tree stands (a form that builds none).
 
     Research:
-        each household's way laid once every house stands - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps between the house plots, worn after the houses; the corridor's own tests and the tree's lane law admit each
+        each household's way laid once every house stands - research/questions/0081-village-lanes.drawing.html: the homesteads built first and the lanes after; the corridor's own tests and the tree's lane law admit each
+        laid in the gaps between the house plots - GUESS research/questions/0081-village-lanes.drawing.html: the record's own reading, that the lanes are the gaps left between the plots
         households' ways laid in order, nearest the way out first - GUESS: a search order, so a nearer household's way is there for a farther one to join
         a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0081-village-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
         a passage a laid way makes unnecessary is ended - research/questions/0081-village-lanes.drawing.html: one that a way reaches is given it and is no longer reached across its neighbor
