@@ -141,6 +141,7 @@ def test_a_roll_clears_the_clearance_memo_and_trims_the_heap_whether_it_ends_wel
     assert clearance._MEMO == {} and trims == [True, True], "the scope's exit runs on failure too"
 
 
+@pytest.mark.xdist_group("engine_ast")  # one worker holds the parsed engine, not five (tests/_heap.py)
 def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
     """Feature 210 FR-005, a static test over the engine's source as an AST: every `for` loop under `l7r/`
     whose iterable references `STAGES` and whose body calls the loop's own stage variable - `for stage in

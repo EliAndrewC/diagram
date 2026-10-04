@@ -775,6 +775,7 @@ def test_dropping_a_lane_that_is_not_the_last_keeps_every_other_lane_on_its_own_
     assert not any(s.ground[z].get(part) for z in first_ink for part in ("edge", "bed", "top")), "the dropped lane draws nothing"
 
 
+@pytest.mark.xdist_group("engine_ast")  # one worker holds the parsed engine, not five (tests/_heap.py)
 def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
     """The static half of the same rule: a `del` on the lane records anywhere but `drop_lanes` is the defect
     returning, whatever the comment beside it says - five comments said 'the husk goes with the ink' over code

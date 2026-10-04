@@ -174,6 +174,7 @@ def _resolves_to_converted(token: str, containing_rel: str) -> bool:
     return False
 
 
+@pytest.mark.xdist_group("record_texts")  # one worker holds every tracked file, not three (tests/_heap.py)
 def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
     """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/.
     `scripts/fixtures/` is out too (feature 209, found red on main after feature 204 landed): a guard's replay corpus
@@ -203,6 +204,7 @@ def md_token_hits(texts: dict[str, str]) -> list[str]:
     return hits
 
 
+@pytest.mark.xdist_group("record_texts")  # one worker holds every tracked file, not three (tests/_heap.py)
 def test_md_tokens_equal_the_whole_text_scan() -> None:
     """Feature 276: the per-run scan yields exactly the whole-text `finditer`'s tokens - over the boundaries the pattern
     names (a path before it, a word character after it, a non-ASCII word character either side, the text's ends, two
@@ -299,6 +301,7 @@ def retired_rule_file_hits(files: dict[str, str], exists: set[str]) -> list[str]
     return hits
 
 
+@pytest.mark.xdist_group("record_texts")  # one worker holds every tracked file, not three (tests/_heap.py)
 def test_no_tracked_file_names_a_retired_rule_file() -> None:
     """Feature 229: the `settlements/` rule files are gone and nothing points at them - by path or by bare basename."""
     root = _repo_root()

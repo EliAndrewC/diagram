@@ -9,6 +9,17 @@ containers share. With `gc.collect()` + `malloc_trim(0)` after any test that gre
 the trims themselves cost nothing measurable. The roll does the same when it ends (`l7r/diagram/_memory.py`,
 feature 210); this is that courtesy for the tests that are not rolls.
 
+A TRIM CANNOT LOWER A PEAK THAT IS SEVERAL WORKERS BUILDING THE SAME THING AT ONCE, so the three shared builds are
+grouped onto one worker each (`xdist_group`, which the gate's `--dist loadgroup` honors): the record's site
+(`test_record_site.py`, 230-480 MB a build, built on 7-8 workers), every tracked file read (`test_record.py`'s
+`tracked_texts`, ~100 MB, on 3) and the parsed engine (`_engine_ast`, 170-290 MB, on 4-5). Measured 2026-10-04, two
+`make test-full` runs each way, alternating: peak 5.07 / 5.03 -> 4.47 / 4.51 GB, p90 4.08 / 3.99 -> 3.38 / 3.47 GB,
+samples over 4 GB 98 / 41 -> 9 / 7; the grouped worker's span is 33-38 s at the start of a ~210 s run, so it is not
+the tail, and wall and summed test time both fell (pytest 245 / 230 -> 230 / 225 s; the site is built once,
+not eight times). The median rose ~0.25 GB (2.85 -> 3.1): the groups run first, while the others are still warm.
+An `xdist_group` was REVERTED once before, where it serialized a file into the tail (`test_incremental_gate.py`);
+a new group is measured the same way before it lands.
+
 THE GATE IS GROWTH, NOT EVERY TEST: a trim after each of 11k tests would cost a collection each; growth past
 16 MB is rare (the 21) and is exactly where the freed memory is.
 
