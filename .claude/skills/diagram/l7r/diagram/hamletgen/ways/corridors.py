@@ -1,10 +1,10 @@
-"""The access tree's roles and the runs the seating reserves (feature 287, plan M3; ways W01, W03).
+"""The access tree's roles and the runs the web lays for it (feature 287, plan M3; ways W01, W03; feature 320).
 
-The seating reserves, for every house it admits, a corridor a footpath wide from its door to a tree rooted at the EXIT
-STRIP (`settlement/rolling/access.py`), and the field's corridor from the tree to the bund (`field_runs`,
-`routed_field_runs`, threaded by `field_router`); no homestead seated after may cover one. The tree is judged whole as
-lanes when each corridor is admitted, and drawn where the web owes it (`tree.py`). A TREE LANE (`is_tree`: the connector,
-the exit strip, a corridor, a way target's spur, the field way) is never cut by a settle repair; an ordinary lane that breaks
+Once the last house stands, each household's way is laid in the gaps to the track out's first leg (`settlement/rolling/
+gap_ways.py`) and judged whole as lanes (`tree.py`); where no way reaches the field, the settle draws the field way from
+the network to the bund (`field_runs`, `routed_field_runs`, threaded by `field_router`; `settle.settle_field`). Nothing is
+reserved for a way before the houses (feature 320). A TREE LANE (`is_tree`: the connector, a household's way, a way
+target's spur, the field way) is never cut by a settle repair; an ordinary lane that breaks
 a rule against one is cut instead (`tree.settle_defer`), and one the map no longer needs is pruned (`tree.prune_the_tree`).
 
 Research: roles and indexing - NONE
@@ -42,7 +42,11 @@ Research: footpath width - research/questions/0081-village-lanes.drawing.html: 3
 TARGET_ROLE = "way target"
 """The `role` of a spur drawn to a way target (`meta.way_targets`: a burial ground's near edge) - a tree lane."""
 
-TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE)
+FIELD_ROLE = "field way"
+"""The `role` of the field way the settle draws where no way reaches the field (`settle.settle_field`) - a tree lane, drawn
+once the houses stand (feature 320: no longer reserved before them)."""
+
+TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE, FIELD_ROLE)
 
 SPUR_TRIES = 120
 """How many spurs, shortest first, are offered to a way target or the field before the web says it has none: they leave

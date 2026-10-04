@@ -80,7 +80,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes.
 
-    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: the exit strip and the field's corridor while houses are seated, then each household's way laid in the gaps once the last house stands (`gap_ways.lay_the_ways`), no later homestead covering it - but for the few households reached across a neighbor's yard
+    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: no way while houses are seated; once the last house stands, each household's way laid in the gaps to the track out's first leg (`gap_ways.lay_the_ways`), no later homestead covering it - but for the few households reached across a neighbor's yard
     """
 
     __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
@@ -186,17 +186,17 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
 
 
 #: The turns off the seat's outward bearing an exit strip is tried at, in degrees, nearest first, where the strip straight
-#: out is refused by the ground: a quarter turn either way at most, so the strip still leaves the cluster away from its field.
+#: out is refused by the ground: a quarter turn either way at most, so the way out still leaves the cluster away from its field.
 EXIT_TURNS_DEG = (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0, 75.0, -75.0, 90.0, -90.0)
-"""Research: exit strip turns - UNRESEARCHED: at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
+"""Research: bearing out turns - UNRESEARCHED: at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
 
 
 def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None:
-    """The bearing the exit strip leaves the cluster's center along: `out`, or the nearest turn off it (`EXIT_TURNS_DEG`)
-    whose strip stands on lawful ground (`lawful_ground`, the corridors' own test). None where no turn does - the margin
-    has no way out and is refused.
+    """The bearing the way out leaves the cluster's center along: `out`, or the nearest turn off it (`EXIT_TURNS_DEG`) whose
+    line `length` out stands on lawful ground (`lawful_ground`, the corridors' own test) - a test of the ground, nothing
+    reserved (feature 320). None where no turn does - the margin has no way out and is refused.
 
-    Research: track out leaves away from the field - research/questions/0081-village-lanes.drawing.html: the outward bearing, or the nearest turn whose strip stands on lawful ground
+    Research: track out leaves away from the field - research/questions/0081-village-lanes.drawing.html: the outward bearing, or the nearest turn whose line out stands on lawful ground
     """
     for deg in EXIT_TURNS_DEG:
         c, sn = math.cos(math.radians(deg)), math.sin(math.radians(deg))
@@ -211,7 +211,7 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     house it may not cross either), and its line stands on ground the site boundary admits - not on the field's side of a
     chord, not within a water course's clearance, not inside the outline of the other ground.
 
-    Research: nothing built on a path - research/questions/0081-village-lanes.drawing.html: the strip clears every other homestead, the field side and the water's clearance
+    Research: nothing built on a path - research/questions/0081-village-lanes.drawing.html: the corridor clears every other homestead, the field side and the water's clearance
     """
     return house_clear(a, b, own, house_gap(s)) and fixtures_clear(s, a, b, own) and parts_clear(s, a, b, own) and standing_clear(s, a, b)
 
@@ -250,7 +250,7 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     and the well was refused when it came to be drawn. Held off by the wellhead's box, as the registry holds it.
 
     Research:
-        path clear of its own fixtures - research/questions/0081-village-lanes.drawing.html: routed round its own garden beds and fixtures - the strip off privy, stack and shed
+        path clear of its own fixtures - research/questions/0081-village-lanes.drawing.html: routed round its own garden beds and fixtures - the corridor off privy, stack and shed
         a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path
         path clear of its own well - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     """

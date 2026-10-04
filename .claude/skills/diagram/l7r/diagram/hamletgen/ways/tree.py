@@ -126,7 +126,7 @@ def lanes_of(
 ) -> list[dict[str, Any]]:
     """The tree lanes for the runs `chosen` (their chains' closure taken by the caller), squared at their water crossings as
     the web draws every lane (`settle.square_run`, or `square` - the seating's `Lawful.squared`, the same answer asked only
-    where water comes near, and remembered per run), the exit strip first. `laid`, where given, is the whole of that - a run
+    where water comes near, and remembered per run). `laid`, where given, is the whole of that - a run
     rejoined (`rejoined`) and squared - as the seating remembers it per run (`admits`).
 
     Research:
@@ -185,11 +185,9 @@ def _trial(M: Mapping[str, Any], **over: Any) -> _Standing:
 def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, house: Mapping[str, Any] | None = None, yard: Mapping[str, Any] | None = None) -> bool:
     """THE ONE PREDICATE OF THE TREE (feature 287 wave 6): would the access tree on `M`, with `run` added as a corridor of
     `role` (a house's, `house` its record-to-be and `yard` its threshing yard's), keep the lane law among
-    its lanes? `base` (a `settle.Lawful` over `M`) is asked of the new lane against the rest, with the connector stood in
-    for by `STUB_FT` on from the strip's end - in the whole tree, and in the tree the web draws for this corridor alone (its
-    chain, the strip from the chain's attachment: `lanes_of`), since the web draws only the chains it owes - every rule of a
-    pair is asked of the new lane against each lane it meets, so the strip's inner end, where the new lane is its innermost
-    attachment, is judged there too. And: no sliver of grass among the tree's lanes (`law.needle_loops`); no house
+    its lanes? `base` (a `settle.Lawful` over `M`) is asked of the new lane against the rest, with the track out's root
+    (`_root`) among them - in the whole tree, and in the tree the web draws for this corridor alone (its chain: `lanes_of`),
+    since the web draws only the chains it owes - every rule of a pair is asked of the new lane against each lane it meets. And: no sliver of grass among the tree's lanes (`law.needle_loops`); no house
     discharging more than `law.DOORSTEP_MAX` free ends; the new house's way out along the tree crossing each brook at most once. The gap pass
     asks it of each household's way once the last house stands (`gap_ways`, feature 318), before it admits the way.
 
@@ -398,7 +396,7 @@ def passage_anchors(M: Mapping[str, Any]) -> list[Pt]:
 
 def settle_tree(s: Any) -> int:
     """Step 4 (ways W01, W03): the tree lanes the web owes (`owed`), drawn as the gap pass judged them (`lanes_of`) - each
-    once, the exit strip re-laid to reach a new innermost attachment - and then the ordinary lanes that break a rule against
+    once - and then the ordinary lanes that break a rule against
     them cut (`settle_defer`). Returns the lanes drawn or re-laid.
 
     Research: every farmhouse served - research/questions/0081-village-lanes.drawing.html: every household's way, laid in the gaps once the last house stands, drawn as a lane of its own"""
@@ -527,9 +525,7 @@ def settle_defer(s: Any) -> int:
 def prune_the_tree(s: Any) -> int:
     """A tree lane the map no longer needs goes (homes H40): the first, longest first, whose removal leaves no farmhouse, way
     target or field newly unreached, the web in no more networks and no lane end breaking a rule it did not (`end_faults`).
-    A drawn corridor goes only as a LEAF - no drawn corridor hanging from it - and the exit strip with it retracts to the
-    innermost attachment still drawn, or goes (`strip_run`): the strip's inner end is that corridor's joint, and taken one
-    at a time neither could go. One a round, as a fragment: two can each be redundant only while the other stands.
+    A drawn corridor goes only as a LEAF - no drawn corridor hanging from it. One a round, as a fragment: two can each be redundant only while the other stands.
 
     Research:
         redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs; never a household's own way (research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own)
@@ -742,7 +738,7 @@ def others_clear(s: Any, run: Poly) -> bool:
     """Does every leg of `run` clear the homesteads already standing, by the corridor's own test of them
     (`access.standing_clear`) - the leg onto the tree passing unasked where it has no length?
 
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the strip clears every other homestead, as the web will lay it
+    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: a way clears every other homestead, as the web will lay it
     """
     from l7r.diagram.settlement.rolling import access as A
 

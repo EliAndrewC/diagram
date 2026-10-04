@@ -365,7 +365,6 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         a footpath's room off the outline - research/questions/0081-village-lanes.drawing.html: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 px of tread, conventions
         a row village's rows - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the rows take every household, stepped at a farmstead's width capped at `ROW_FRONTAGE_MAX_FT`, never ranks behind
         a household's wood share - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated only where it reserves `HOMESTEAD_WOOD_FT2` of copse within `COPSE_HOUSE_REACH_FT`
-        exit strip before any house - research/questions/0081-village-lanes.drawing.html: on a nucleated hamlet the strip runs from the seat's center before a house stands
         rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
         shared byre pockets - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: reserved in the seat band before any house
         seats kept apart - UNRESEARCHED: a seat within half a pitch (0.3 in the rescue) of another seat or a house is not offered

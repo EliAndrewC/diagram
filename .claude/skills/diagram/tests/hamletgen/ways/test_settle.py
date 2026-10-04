@@ -601,6 +601,48 @@ def test_a_field_way_no_straight_run_keeps_is_threaded_round_the_steadings() -> 
     assert runs and len(runs[0]) > 2 and not co.through_a_building(runs[0], co.building_quads(s.M)), "threaded round the house"
 
 
+def _field_across_the_brook() -> _S:
+    """A connector west of the brook at x = 100 and a paddy east of it: no way of the hamlet's own reaches the field."""
+    field = [[300.0, -300.0], [500.0, -300.0], [500.0, 300.0], [300.0, 300.0]]
+    return _S([CONN], meta={**_GEN, "brook_fords": [[100.0, 0.0]]}, streams=[BROOK], fields=[{"outline": field}])
+
+
+def test_the_field_no_way_reaches_gets_the_field_way_drawn_once() -> None:
+    """Feature 320 (FR-004): nothing reserved before the houses, the settle draws the field way where no way reaches the field
+    - over the brook at its ford, a tree lane - and draws it once."""
+    s = _field_across_the_brook()
+    assert law.field_unreached(s.M)
+    assert settle.settle_field(s, settle.Lawful(s, tree=True)) == 1
+    assert not law.field_unreached(s.M) and s.M["lanes"][-1]["role"] == co.FIELD_ROLE and co.is_tree(s.M["lanes"][-1])
+    assert settle.settle_field(s, settle.Lawful(s, tree=True)) == 0, "reached: nothing more drawn"
+
+
+def test_a_field_no_lawful_run_reaches_draws_nothing_and_the_web_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """FR-005: no candidate keeps the law, so nothing least-bad is drawn; and with no ground or no network, none is sought."""
+    s = _field_across_the_brook()
+    assert settle.settle_field(s, lambda run, width, skip=None: False) == 0 and not any(ln.get("role") == co.FIELD_ROLE for ln in s.M["lanes"])
+    monkeypatch.setattr(settle.Lawful, "__call__", lambda self, run, width, skip=None: False)
+    with pytest.raises(WebRefused, match="the field is reached by no way"):
+        settle.settle_the_web(_field_across_the_brook())
+    bare = _S([CONN], meta=dict(_GEN), streams=[BROOK])
+    assert law.field_unreached(bare.M) and settle.settle_field(bare, settle.Lawful(bare)) == 0, "no field: no ground to reach"
+    lone = _field_across_the_brook()
+    lone.M["lanes"] = []
+    assert settle.settle_field(lone, settle.Lawful(lone)) == 0, "no network to leave from"
+
+
+def test_a_routed_field_way_is_drawn_where_no_straight_run_keeps_the_law() -> None:
+    """The router's runs are offered after the straight ones (`routed_field_runs`): the first lawful of them is drawn."""
+    s = _field_across_the_brook()
+    calls = []
+
+    def law_(run, width, skip=None):
+        calls.append(len(run))
+        return len(calls) > 120
+
+    assert settle.settle_field(s, law_) == 1 and len(calls) > 120, "every straight run refused, a routed one drawn"
+
+
 def test_a_repair_that_would_split_the_web_is_known_before_it_is_made() -> None:
     """`keeps_the_network` (cohort seed 31: a backbone's end carried round a gable took the tread three lanes stood on and
     nine fell off the network), asked of the web as this round's earlier repairs leave it (`with_edits`)."""

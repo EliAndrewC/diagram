@@ -24,7 +24,7 @@ def gateway_track(
 ) -> Poly:
     """The connector's track from `gate`, swept (`connector_track`); and where that finds no dry way out - A GATEWAY WALLED IN
     (feature 315, cohort seed 19: walked out clear of every steading, it stopped in the corner of a farm's own grove, and every
-    way out of the pocket was narrower than a track's gap) - out along the exit strip where the seating reserved one, else from
+    way out of the pocket was narrower than a track's gap) - from
     the cloud's edge on a bearing turned off the downslope, the nearest turn first. The gateway is first stepped clear of what
     stands that a way may not run on (`clear_of_what_stands`).
 
