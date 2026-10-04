@@ -30,16 +30,21 @@
 - [x] T07 `make done`, the cohort and the pool against main, the bookends with the spread, the occasions' reviews and the claims (FR-009, FR-010, SC-005, SC-006)
       research: rendering
       verify: DONE. make done green (cc146e2cd, 55 s incremental after full runs); cohort 30/30 against main's 30/30 (make cohort N=24); pool hamlets byte-identical through the perf fixes; 318-end bookend +11.9% band 3, perf-audit consistent and justified (20261003T203450Z / T203500Z); glyph-check farmhouse and village lane PASS round 5 on a3ada499; claims-owed none
-- [ ] T08 the tie-break: main's levels, rings of `TIE_RING_FT`, the field nearer within a ring; the order tests (D4, FR-003a, SC-002a)
+- [x] T08 the tie-break: main's levels, rings of `TIE_RING_FT`, the field nearer within a ring; the order tests (D4, FR-003a, SC-002a)
       research: rendering
-- [ ] T09 the threading gap, pairwise for a tight seat; the gap test (D9, FR-011, SC-007)
+      verify: DONE. DONE. GROW_LEVELS restored, TIE_RING_FT 20 ft rings, grow_key (ring, field distance, distance); test_growth ring tie-break + tie_reordered green; tie_reordered 19-123 a map; impl-drift IN-STEP (the tie-break a GUESS naming the GM's ruling)
+- [x] T09 the threading gap, pairwise for a tight seat; the gap test (D9, FR-011, SC-007)
       research: rendering
-- [ ] T10 lane ground and its one predicate; no per-seat search; the no-search test (D10, D11, FR-012, FR-013, SC-008)
+      verify: DONE. DONE. grow_gap = MIN_WEB_GAP + TIGHT_GAP_PX (20 ft), keeps_every_gap pairwise exempt for a tight seat's neighbor; test_growth gap tests green; claims IN-STEP
+- [x] T10 lane ground and its one predicate; no per-seat search; the no-search test (D10, D11, FR-012, FR-013, SC-008)
       research: rendering
-- [ ] T11 the gap pass and the pinch; their unit tests on constructed sites (D12, D13, FR-014, SC-009)
+      verify: DONE. DONE. SeatRegion lane raster + LaneGround + opens(), the one predicate in fit/place/passage; no per-seat search (seat_reaches_tree only on a roll with no seat region, recorded as 0081's deviation); test_seat_region_297 + test_passage_317 green
+- [x] T11 the gap pass and the pinch; their unit tests on constructed sites (D12, D13, FR-014, SC-009)
       research: rendering
-- [ ] T12 the record: 0081 and 0029's drawing pages, the claims, their checks (D14, FR-008, SC-004)
+      verify: DONE. DONE. gap_ways.lay_the_ways (flood, way_out, trace, mark_laid, pinch), every household's way owed and kept by the web; tests/settlement/test_gap_ways.py 12 green, 100% coverage; chord test vectorized and list reads, byte-identical
+- [x] T12 the record: 0081 and 0029's drawing pages, the claims, their checks (D14, FR-008, SC-004)
       research: rendering
+      verify: DONE. DONE. 0081/0029/0032 drawing pages; every record check answered (make record-owed UNANSWERED=1: 0); claims checked in five rounds; 5 pre-existing figure drifts and 0029/0081 wording points filed in claims-followup.md, 0029-followup.md, 0081-followup.md
 - [ ] T13 `make done`, the cohort and the pool against main, the bookends (FR-010, FR-015, SC-005, SC-009, SC-010), the occasions' reviews
       research: rendering
 
