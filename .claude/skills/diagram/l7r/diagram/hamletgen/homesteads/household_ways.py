@@ -126,30 +126,6 @@ def way_out_gate(s: Settlement, plan: SitePlan, bearing: Pt) -> Pt:
     return on_the_canvas(s, gate_out_of_the_field(plan.envelope, clear_of_the_seats(gate, (ux, uy), s.px(ROOT_FT), seats, seat_reach)))
 
 
-TRACK_OUT_WEIGHT = 0.55
-"""The weight of the bearing out in the track out's ideal bearing (`track_bearing`), as `track.connector_track` weighs it.
-
-Research: leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope"""
-
-TRACK_FALL_WEIGHT = 0.85
-"""The weight of the fall in the track out's ideal bearing (`track_bearing`), as `track.connector_track` weighs it.
-
-Research: leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope"""
-
-
-def track_bearing(plan: SitePlan) -> Pt:
-    """The bearing the track out will leave by: away from the field leaning downslope, the ideal `track.connector_track`
-    sweeps from - so the first leg the ways join runs the way the track goes on (feature 320, glyph-check of Inashiro: a
-    first leg on the seating's bearing out, 79 degrees off the track's own, met a household's way in a 164 degree hairpin).
-
-    Research: track out off the wet - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope"""
-    dx, dy = plan.fall
-    ox, oy = plan.seat["out"]
-    x, y = TRACK_OUT_WEIGHT * ox + TRACK_FALL_WEIGHT * dx, TRACK_OUT_WEIGHT * oy + TRACK_FALL_WEIGHT * dy
-    n = math.hypot(x, y) or 1.0
-    return (x / n, y / n)
-
-
 def root_at_the_gate(s: Settlement, gate: Pt, bearing: Pt) -> tuple[Pt, Pt]:
     """The stretch of the way out the households' ways join: `ROOT_FT` from the gate along `bearing`.
 

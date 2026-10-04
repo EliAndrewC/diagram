@@ -29,7 +29,7 @@ from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, u
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
-from .household_ways import root_at_the_gate, track_bearing, way_out_gate
+from .household_ways import root_at_the_gate, way_out_gate
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
 from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
@@ -210,14 +210,13 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
     # THE WAY OUT'S GATE, DECIDED NOW THE LAST HOUSE STANDS, AND EVERY HOUSEHOLD'S WAY LAID TO IT IN THE GAPS (feature 320,
     # plan D2; feature 318, FR-014, `settlement/rolling/gap_ways.py`): nothing of a way stood while the houses were seated; the
-    # gate is on the cluster's edge on the bearing the track out will take (`track_bearing`), the track out is drawn from it
+    # gate is on the cluster's edge on the bearing out the seating found lawful, the track out is drawn from it
     # (`stage_track`), and the ways reach it before any farmstead is drawn. A passage the laid ways make unnecessary is ended
     # in place, and a household no way reaches is reached across the nearest neighbor's yard - the pinch
     if getattr(s, "_access", None) is not None and getattr(s, "_way_out_bearing", None) is not None:
-        out = track_bearing(plan)  # ...on the bearing the track out will take, so its first leg runs on into it
-        gate = way_out_gate(s, plan, out)
+        gate = way_out_gate(s, plan, s._way_out_bearing)
         s.M["way_out_gate"] = [round(gate[0], 1), round(gate[1], 1)]
-        root = root_at_the_gate(s, gate, out)
+        root = root_at_the_gate(s, gate, s._way_out_bearing)
         s.M["way_out_root"] = [[round(q[0], 1), round(q[1], 1)] for q in root]
         s._access.add(*root)
     s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
