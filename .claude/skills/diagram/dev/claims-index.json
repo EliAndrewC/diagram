@@ -6819,10 +6819,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::near_the_cluster#plumbing": {
-  "code": "54cebca0c7c08c03",
-  "core": "56fe88c5de241104",
+  "code": "052c5b2eff793bc7",
+  "core": "f2488ceaccc86967",
   "date": "2026-10-04",
-  "note": "the search window only",
+  "note": "the margin comes in as a parameter; the window is a clip box, so this unit decides nothing physical (the 45 ft reach is the caller's decision, see UNCLAIMED)",
   "pages": {},
   "research": "",
   "rests": [],
@@ -8299,56 +8299,58 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a grove farm's own bamboo": {
-  "code": "eef599cccd9ced92",
-  "core": "b37a9217a1a303fe",
+  "code": "ddec5bd872985590",
+  "core": "48d4891b645e94a3",
   "date": "2026-10-04",
-  "note": "drawn where the knob is homestead or both",
+  "note": "bamboo drawn where the knob is homestead or both",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "bc675938aae67039"
   },
   "research": "0511f4b8f09dd539",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93",
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7",
    "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a yard's south sun": {
-  "code": "57a116145be26916",
-  "core": "b37a9217a1a303fe",
+  "code": "e7737f3e6b531d0a",
+  "core": "48d4891b645e94a3",
   "date": "2026-10-04",
-  "note": "39 ft south of each yard and bed",
+  "note": "39 ft south of yard and bed, as the page sets it",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
   "research": "4c4e1b01edd744e8",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:bb2acd2b2da1f7af",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:bb2acd2b2da1f7af"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#houses before lanes": {
-  "code": "da41076b97548317",
-  "core": "b37a9217a1a303fe",
+  "code": "9cd51f00dfca0e85",
+  "core": "48d4891b645e94a3",
   "date": "2026-10-04",
-  "note": "every house is seated before any way; the track out and the households' ways come after the last house",
+  "note": "every house is seated first, then the track out is chosen once and each household's way is laid to it",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
   "research": "28eb27d8637b4dbb",
   "rests": [
    "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7",
+   "0081-village-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the belt's afternoon lane": {
-  "code": "cd75c7fb8aa25a2a",
-  "core": "b37a9217a1a303fe",
+  "code": "cd06903e8772be38",
+  "core": "48d4891b645e94a3",
   "date": "2026-10-04",
-  "note": "50 ft west and southwest",
+  "note": "50 ft west and southwest of a plot",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
@@ -8360,13 +8362,26 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
-  "code": "903c54382f201395",
-  "core": "b37a9217a1a303fe",
+  "code": "b3509f1cb834a831",
+  "core": "48d4891b645e94a3",
   "date": "2026-10-04",
-  "note": "the bundle is silent",
+  "note": "no cited question in the bundle answers the cluster's shape",
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the track's stretch the ways join": {
+  "code": "7055a22e5a63e34f",
+  "core": "48d4891b645e94a3",
+  "date": "2026-10-04",
+  "note": "the page says ways join the track out at a T from its start on the cluster's edge, but nothing on how far along; the 45 ft reach is unanswered",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic": {
@@ -47332,15 +47347,38 @@
   "research": "348847d2a9750e4b",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#entrance is the handover": {
-  "code": "5ed8ae302a6d7d18",
-  "core": "e383b70d7cee366a",
-  "date": "2026-10-03",
-  "note": "as claimed",
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
+  "code": "23f7d5861d74033f",
+  "core": "eef055892eabb003",
+  "date": "2026-10-04",
+  "note": "the code returns the lane end that meets the through track nearest the houses' middle, which is the crossroads where the village's ways reach the road out. The page attests boards at entrances and crossroads where people passed. The choice between center and entrance is rolled per settlement outside this function, so this anchor is a calibrated choice within the \"entrance\" form.",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#entrance is the handover": {
+  "code": "65317823c0590267",
+  "core": "eef055892eabb003",
+  "date": "2026-10-04",
+  "note": "with a recorded gate, the board goes at the first join walked in from the outer end: the entrance, on the road, where the most traffic passes",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::outermost_join#board-siting plumbing": {

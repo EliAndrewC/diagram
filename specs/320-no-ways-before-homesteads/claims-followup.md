@@ -28,3 +28,12 @@ CLAIMS_OK naming this file.
   it - keep only the yard's exemption, or record a DEVIATION; and the village groves and the commons kept off are unclaimed
 - `l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow` (DRIFTED): the field spur's 14 ft bow along the seat axis; 0081
   pulls every lane taut - drop the bow or record it
+
+## Open from the village-lane glyph check (round 4 PASS; questionable, no norm broken)
+
+- Jogs where a household's way meets another at a T (Inashiro: lane 4 onto lane 2's corner by the notice board, and three
+  more): page 0081's zigzag rule ("two turns of more than 50 degrees within 40 ft ... pulled straight") names only lanes met
+  end to end. Either the page extends it across a T and the gap pass pulls a way's last legs taut through the T, or it is
+  left as drawn.
+- The route from the field to the track changes width (field way, households' ways, track): with the 5 ft strip gone, the
+  through-route page 0081 calls one route is drawn at the households' footpath width between them.

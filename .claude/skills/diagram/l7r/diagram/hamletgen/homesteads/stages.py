@@ -141,7 +141,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     Research:
         a yard's south sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `SUN_CORRIDOR_FT` (39 ft) clear south of every yard and bed
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
-        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the way out's gate decided once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
+        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the track out chosen once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
+        the track's stretch the ways join - UNRESEARCHED: within `JOIN_FAR_FT` of the homesteads' extent and the track's start, so no way joins it past the frame
         the declared cluster shape - GUESS: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """

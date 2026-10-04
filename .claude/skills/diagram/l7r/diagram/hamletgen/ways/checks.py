@@ -106,6 +106,14 @@ def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt
     return out
 
 
+@functools.lru_cache(maxsize=64)
+def brook_boxes(brook: tuple[Pt, ...]) -> tuple[tuple[Pt, Pt, float, float, float, float], ...]:
+    """Each leg of the brook with its bounding box (x0, x1, y0, y1) - built once a brook (`ford_crossing`'s prefilter).
+
+    Research: plumbing - NONE: a memo of the legs' boxes"""
+    return tuple((a, b, min(a[0], b[0]), max(a[0], b[0]), min(a[1], b[1]), max(a[1], b[1])) for a, b in zip(brook, brook[1:], strict=False))
+
+
 @functools.lru_cache(maxsize=256)
 def ford_leg(f: Pt, brook: tuple[Pt, ...]) -> tuple[Pt, Pt]:
     """The brook's segment nearest the ford `f` - asked once a ford (feature 320, perf-audit: `settle_field` asked it of
@@ -125,8 +133,12 @@ def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], 
         square at the ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford
             that makes the walk shortest, landings square to the reach
         landing 22 px off the brook - NONE: fitted to the router's water margin and the ford's gap"""
-    legs = list(zip(brook, brook[1:], strict=False))
-    if not fords or not any(segments_cross(start, end, a, b) for a, b in legs):
+    if not fords:
+        return []
+    x0, x1, y0, y1 = min(start[0], end[0]), max(start[0], end[0]), min(start[1], end[1]), max(start[1], end[1])
+    # ...ASKED ONLY OF THE LEGS WHOSE BOX MEETS THE RUN'S (`brook_boxes`, once a brook): a leg whose box misses the run's
+    # cannot cross it (feature 320, perf-audit: 484k crossing tests a seed against a brook that never changes)
+    if not any(segments_cross(start, end, a, b) for a, b, bx0, bx1, by0, by1 in brook_boxes(brook if isinstance(brook, tuple) else tuple(brook)) if bx0 <= x1 and bx1 >= x0 and by0 <= y1 and by1 >= y0):
         return []
     f = min(fords, key=lambda c: math.dist(start, c) + math.dist(c, end))
     a, b = ford_leg((float(f[0]), float(f[1])), brook if isinstance(brook, tuple) else tuple(brook))

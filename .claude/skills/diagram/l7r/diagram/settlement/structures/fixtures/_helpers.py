@@ -162,7 +162,9 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
     """Where a hamlet's connector hands over to its lanes - the connector's end nearest the dwellings, when another way
     meets it there - or None (no connector, no dwellings, or a connector that runs on through the houses meeting none).
 
-    Research: entrance is the handover - research/questions/0190-notice-boards-kosatsuba.html: the board at the village entrance, read as the last join on the way out"""
+    Research:
+        entrance is the handover - research/questions/0190-notice-boards-kosatsuba.html: the board at the village entrance, read as the last join on the way out
+        a through track's handover - research/questions/0190-notice-boards-kosatsuba.html: the entrance placement's anchor (the center or the entrance is rolled per settlement by the `kosatsuba_seat` knob, `board_seat.resolve_seat`) - where both its ends are off the sheet, the lane end joining it nearest the houses' middle"""
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses:
         return None

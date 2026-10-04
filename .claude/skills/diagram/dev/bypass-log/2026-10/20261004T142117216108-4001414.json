@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T14:21:17Z",
+  "target": "perf-explain",
+  "commit": "356ccaf8c",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: settle_field cannot be switched off without the field going unreached (the audit's control: 11 of 16 refused); its time was measured by the audit directly"
+}

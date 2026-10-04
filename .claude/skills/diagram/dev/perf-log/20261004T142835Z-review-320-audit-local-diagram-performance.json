@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "c817f9387",
+    "label": "320-start",
+    "utc": "20261004T043603Z"
+  },
+  "binding": "9a5cde479832cf59f18f5cc653723905f6ac471e67eb18efffa797787573bafa",
+  "criteria": {
+    "commensurate": "Yes, overall. Summed over 16 runs the end is faster (bookend 112.0 -> 107.8 s; homesteads, notice and the main leg all down), and the entrance boards are back on 16 of 16. One seed crosses: 20 hh seed 25 at +11.1%, serial 6.39 -> 6.8-7.0 s.",
+    "necessary": "Yes. The GM ordered the pre-seating ways removed (amendment 2), so the field way has to be searched after the houses (settle_field). Disabled at 356ccaf8c, 20/25 refuses with the field unreached. The rest of 20/25's web growth (+0.6 s) is the skeleton and tree routing round this seed's new house layout. Summed over 16 runs it nets about +0.7 s (web minus settle_field 13.4 -> 14.1 s), so it swings with the layout and is not new work.",
+    "no_way_around": "No. A cheap, output-identical fix exists for the larger part of settle_field. checks.ford_crossing is called 2,408 times from corridors.field_runs on 20/25. Each call tests the straight run against every brook leg (484k segments_cross), and the brook does not change during the scan. Filtering the legs by bounding box first is exact, because segments_cross needs overlapping boxes; cache the legs and boxes on the hashable brook tuple. Prototyped as a monkeypatch: 16 of 16 maps hash-identical, 20/25 settle_field 0.33 -> 0.13 s, web 1.28 -> 1.08 s, total about 6.77 -> 6.57 s against the start's 6.39 s. The last audit recommended this without blocking on it; on the seed that crossed it is 60% of settle_field. Apply it and re-bookend."
+  },
+  "end": {
+    "commit": "356ccaf8c",
+    "label": "320-end",
+    "utc": "20261004T141909Z"
+  },
+  "environment": "local",
+  "feature": "320-no-ways-before-homesteads",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T142835Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.7,
+          "39": 6.7,
+          "4": 0.0,
+          "47": -3.1
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 11.1,
+          "39": 0.0,
+          "4": -3.0,
+          "47": -13.2
+        },
+        "total_pct": -1.6
+      },
+      "40": {
+        "seeds": {
+          "25": 5.0,
+          "39": -6.7,
+          "4": 2.6,
+          "47": -16.6
+        },
+        "total_pct": -4.1
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -5.0,
+      "4": -15.0,
+      "47": -6.8
+    },
+    "total_pct": -7.1
+  },
+  "note": "",
+  "verdict": "not-justified"
+}

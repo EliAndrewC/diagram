@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "c817f9387",
+    "label": "320-start",
+    "utc": "20261004T043603Z"
+  },
+  "binding": "9a5cde479832cf59f18f5cc653723905f6ac471e67eb18efffa797787573bafa",
+  "end": {
+    "commit": "356ccaf8c",
+    "label": "320-end",
+    "utc": "20261004T141909Z"
+  },
+  "environment": "local",
+  "feature": "320-no-ways-before-homesteads",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T142829Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.7,
+          "39": 6.7,
+          "4": 0.0,
+          "47": -3.1
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 11.1,
+          "39": 0.0,
+          "4": -3.0,
+          "47": -13.2
+        },
+        "total_pct": -1.6
+      },
+      "40": {
+        "seeds": {
+          "25": 5.0,
+          "39": -6.7,
+          "4": 2.6,
+          "47": -16.6
+        },
+        "total_pct": -4.1
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -5.0,
+      "4": -15.0,
+      "47": -6.8
+    },
+    "total_pct": -7.1
+  },
+  "note": "Summed stages and the entrance boards check out (entrance seated on 16 of 16 at 356ccaf8c, as at c817f9387). The band-2 seed does not. The explanation says 20 hh seed 25's web +0.9 s is all settle_field's and that the audit measured it so. The last audit measured 0.33 s settle_field plus non-field web work. Reviewer's control, detached worktrees, serial x4: web 0.40 s at start, 1.33 s at end, settle_field 0.33 s; with settle_field disabled, end web is still 0.94 s. So about 0.6 s of the 0.93 s is not the field way. The profile puts it in the skeleton arms' routing on this seed's new house layout (_lay_skeleton 0.22 -> 0.78 s profiled, lattice_search 2 -> 5 calls) and in settle_reach's tree passes (settle_tree 2 -> 4).",
+  "verdict": "inconsistent"
+}
