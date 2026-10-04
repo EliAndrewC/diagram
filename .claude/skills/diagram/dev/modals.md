@@ -126,8 +126,9 @@ do NOT present the single form as deliberate: leave it unsaid here, and the drif
 **D4. What varies by settlement.** One clause at most, pointing to the title card, where a settlement's choices are told (M9).
 (inferred)
 
-**D5. The drawing pages, linked.** The tab ends with the "how our maps draw it" pages the modal's Depiction rests on - every
-one of them, and no other - as links (the `Drawing:` list). (GM: *"things which are currently linked on the References tab which
+**D5. The drawing pages, linked.** The tab ends with the "how our maps draw it" pages the modal and its kind rest on - every
+one of them, and no other - as links (the `Drawing:` list). A kind's drawing page is usually the one beside a research question
+the modal cites; leaving it off is a finding, not an option. (GM: *"things which are currently linked on the References tab which
 are about how something is drawn would be moved to this tab"*)
 
 **D6. Links alone, or no tab.** With nothing notable to explain, the tab is the links alone; with no drawing page and nothing to

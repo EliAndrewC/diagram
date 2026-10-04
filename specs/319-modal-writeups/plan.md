@@ -147,7 +147,10 @@ the glyph on a pool page (`interactive/assets` page screenshot at a fixed zoom a
 bundle script with the browser the page tests already use; a kind on no pool map is bundled without a crop and says so). It reports
 COVERAGE (every convention and standardization the glyph shows is told, with the real counterpart), TRUTH (nothing told that the
 crop and the pages do not show; nothing presented as deliberate that a claim calls DRIFTED), LINKS (exactly the drawing pages the
-tab rests on). Owed unit `modal-depiction:<uid>`, on ANY change to an About-form modal (new to the form, its About, Guesses, Entry, Depiction
+modal and its KIND rest on - FR-014's words). So that a conversion leaving `Drawing:` empty is still judged (the plan review,
+round 2), the bundle also carries each CANDIDATE drawing page - the one beside each research question under `Entry:` (231 of the
+237 drawing pages sit beside a question page, measured 2026-10-04) and any drawing page the modal's file listed at the merge
+base - marked apart from the listed ones; a candidate that holds how the map draws the kind and is not linked is a finding. Owed unit `modal-depiction:<uid>`, on ANY change to an About-form modal (new to the form, its About, Guesses, Entry, Depiction
 or Drawing) and when a page under `Drawing:` changed - whether or not the modal has the tab, so a conversion that drops its
 drawing pages and writes no Depiction is still checked (the plan review, 2026-10-04);
 `modal-research` no longer reads the drawing pages (its Entry is research questions only). The farmhouse is rewritten into the

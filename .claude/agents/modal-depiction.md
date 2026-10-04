@@ -20,8 +20,10 @@ KIND=<class> FOR=modal-depiction` builds. Opus at medium effort (it judges).
 
 Your dispatch names a bundle's `MANIFEST.md`, outside the repository. Inline in it: `modal.md` (the modal tab by tab - About,
 Guesses, Depiction, References), `text.md` (the modal's file line for line), `guidelines.md` (the rules: the "Depiction" section
-D1-D6 is your contract, with M9, M13 and M16-M19), `drawing/` (each "how our maps draw it" page the modal's `Drawing:` names, whole),
-`claims.md` (the engine's research claims that cite those pages, each `verdict | unit | note`) and `glyph.txt`. Beside it, NOT
+D1-D6 is your contract, with M9, M13 and M16-M19), `drawing/` (the "how our maps draw it" pages, whole, each
+marked LISTED - on the modal's `Drawing:` - or CANDIDATE - its kind's, beside a question the modal cites or listed before this
+change, but not on `Drawing:`), `claims.md` (the engine's research claims that cite any of those pages, each `verdict | unit |
+note`) and `glyph.txt`. Beside it, NOT
 inlined: `glyph.png`, a crop of the kind's first glyph on a pool map - Read it as an image. Do not open a file under `/diagram`
 (feature 250). If your dispatch names no bundle, say so on the first line and stop.
 
@@ -39,8 +41,10 @@ is a drift for the claims report, and the tab says nothing of it (the GM, 2026-1
 deliberate convention"*). A per-settlement variation is one clause pointing to the title card at most (D4). Record talk is barred
 as in About (M16).
 
-**LINKS** (D5, D6). The tab's links are exactly the drawing pages its words rest on - every one, no other. With nothing notable to
-say, the links alone is right; a tab with neither words nor pages should not exist.
+**LINKS** (D5, D6). The links are exactly the drawing pages the modal and its KIND rest on - every one, no other. A CANDIDATE page
+that holds how the map draws this kind is owed a link: its absence is a finding (with the `Drawing:` line to add), and so is a
+Depiction tab left out while such a page exists. A LISTED page that holds nothing about this kind should go. With nothing notable to
+say, the links alone is right; only a kind with no drawing page and nothing to explain has no tab.
 
 ## Your report: counts first, then only what to act on
 

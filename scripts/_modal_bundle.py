@@ -223,14 +223,38 @@ def glyph_crop(page: pathlib.Path, key: str, out: pathlib.Path) -> bool:
     return got.returncode == 0 and out.is_file()
 
 
+def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
+    """The drawing pages the modal's KIND may rest on beyond its own `Drawing:` list (the plan review of D13, round 2: a
+    conversion that leaves `Drawing:` empty must still be judged against the pages its kind has): the "how our maps draw it"
+    page beside each research question its `Entry:` names, and any drawing page its file listed at the merge base."""
+    import _record_owed as ro  # noqa: PLC0415
+
+    out: list[str] = []
+    for f in m.entry_files():
+        if f.endswith(".html") and not f.endswith(".drawing.html"):
+            sibling = f[: -len(".html")] + ".drawing.html"
+            if (root / SKILL / sibling).is_file():
+                out.append(sibling)
+    base = ro.merge_base(root)
+    was = mo.modals_at(root, base).get(m.uid) if base else None
+    if was is not None:
+        out += [f for f in (*was.entry_files(), *was.drawing_files()) if f.endswith(".drawing.html")]
+    listed = set(m.drawing_files())
+    return [f for f in dict.fromkeys(out) if f not in listed and (root / SKILL / f).is_file()]
+
+
 def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, grep_targets: list[str]) -> None:  # noqa: ANN001
-    """What `modal-depiction` reads beyond the modal and the rules: each drawing page whole, the claims citing them, and the
-    glyph's crop (plan D13)."""
+    """What `modal-depiction` reads beyond the modal and the rules: each drawing page its `Drawing:` lists and each CANDIDATE
+    its kind has (`drawing_candidates`), whole; the claims citing any of them; and the glyph's crop (plan D13)."""
     for f in m.drawing_files():
         p = root / SKILL / f
         if p.is_file():
-            put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "a page the modal's Drawing: names - how our maps draw it")
-    rows = claims_citing(root, m.drawing_files())
+            put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "LISTED - a page the modal's Drawing: names - how our maps draw it")
+    candidates = drawing_candidates(root, m)
+    for f in candidates:
+        p = root / SKILL / f
+        put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")
+    rows = claims_citing(root, [*m.drawing_files(), *candidates])
     put("claims.md", "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
         str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
     page = pool_page_with(root, m.key)

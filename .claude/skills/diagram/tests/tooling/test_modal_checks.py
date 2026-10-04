@@ -206,3 +206,18 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
     assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped" in manifest
     assert "## Depiction" in manifest and "The map draws every house alike." in manifest and "no crop" in manifest, "no pool page in the fixture"
     assert "unit: modal-depiction:hamlet/farmhouse " in manifest and "owed-checks: modal-depiction" in manifest
+
+
+def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_a_candidate(tmp_path: pathlib.Path) -> None:
+    """The plan review of D13, round 2: a conversion that leaves `Drawing:` empty must still be judged against the drawing page
+    its kind has - the one beside a question its Entry: names - so the bundle carries it, marked CANDIDATE, with the claims."""
+    root = _tree(tmp_path)
+    q = root / SKILL / "research" / "questions"
+    (q / "0029-farmhouses-minka.drawing.html").write_text('<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>Drawn bold.</p>\n', encoding="utf-8")
+    _commit(root)
+    m = mo.find(root, "farmhouse")
+    assert m.drawing_files() == [] and mb.drawing_candidates(root, m) == ["research/questions/0029-farmhouses-minka.drawing.html"]
+    out = tmp_path / "dep"
+    assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 0
+    manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "CANDIDATE - NOT on the modal's Drawing: list" in manifest
