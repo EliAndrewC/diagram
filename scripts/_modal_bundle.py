@@ -159,8 +159,10 @@ def prepass(root: pathlib.Path, m: mo.Modal) -> str:
 
 
 CLAIMS_INDEX = SKILL / "dev" / "claims-index.json"
-#: the pool pages a glyph is cropped from, hamlets first (the standardized kinds), then the sheets (feature 319 plan D13)
-POOL_PAGES = (SKILL / "pool" / "hamlets", SKILL / "pool" / "magistracies", SKILL / "pool" / "country-shrines")
+#: where the pool pages a glyph is cropped from live; the hamlets are searched first (the standardized kinds), then every other
+#: pool tree - read off the directory, never named here (a building type is named only in its declaration, `buildings/types.json`)
+POOL = SKILL / "pool"
+HAMLETS = "hamlets"
 
 
 def claims_citing(root: pathlib.Path, files: Sequence[str]) -> list[str]:
@@ -182,8 +184,9 @@ def claims_citing(root: pathlib.Path, files: Sequence[str]) -> list[str]:
 def pool_page_with(root: pathlib.Path, key: str) -> pathlib.Path | None:
     """The first pool page that draws the kind `key` (its page carries `data-k="<key>"`), hamlets first."""
     mark = f'data-k="{key}"'
-    for d in POOL_PAGES:
-        for page in sorted((root / d).glob("*/*.html")):
+    trees = sorted((p for p in (root / POOL).iterdir() if p.is_dir()), key=lambda p: (p.name != HAMLETS, p.name)) if (root / POOL).is_dir() else []
+    for d in trees:
+        for page in sorted(d.glob("*/*.html")):
             with open(page, encoding="utf-8", errors="replace") as fh:
                 if mark in fh.read():
                     return page
