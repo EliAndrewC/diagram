@@ -3,6 +3,7 @@
 #
 #   container-scripts/setup-dev-env.sh          install anything missing, then verify
 #   container-scripts/setup-dev-env.sh --check  verify only (fast, no network), exit 1 if anything is missing
+#   container-scripts/setup-dev-env.sh --ensure install once per container, then a no-op (the SessionStart hook)
 #
 # Run this on a fresh container, and any time something that used to work stops working with a
 # "command not found" / "No module named" / "resvg not found" error. A container rebuild does NOT
@@ -19,6 +20,8 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CHECK_ONLY=0
 [ "${1:-}" = "--check" ] && CHECK_ONLY=1
+ENSURE=0
+[ "${1:-}" = "--ensure" ] && ENSURE=1
 # The CodeBuild image (Dockerfile.ci, feature 130) installs the same apt set and the same lockfiles
 # by its own RUN lines - through a uv venv, because system pip on ubuntu 26.04 refuses to replace
 # Debian-packaged dependencies (build b3617f0d). An `--image` mode of this script was tried first
@@ -26,6 +29,45 @@ CHECK_ONLY=0
 SUDO=sudo; [ "$(id -u)" = 0 ] && SUDO=""
 
 in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ]; }
+
+# ---- --ensure: provision once per container, a no-op every time after --------------------------
+# WHY (2026-10-04): a fresh container ran `make _reference` red with "No module named 'shapely'"
+# because nothing ran this script - it waited on a session to remember. The SessionStart hook in
+# .claude/settings.json now runs `--ensure` on every session start. The STAMP lives in ~/.cache,
+# which a container rebuild wipes along with the pip and apt state it vouches for (only the repo and
+# ~/.claude are bind-mounted), and it holds a hash of this script and the lockfiles, so a re-lock or
+# a new check here provisions again. The fast path is two file reads and a sha256 - milliseconds.
+# A flock serializes the sessions that start together in a fresh container. Never fails the hook:
+# a failed install prints its log's tail and the command to re-run, then exits 0.
+STAMP_DIR="${SETUP_STAMP_DIR:-$HOME/.cache}"
+STAMP="$STAMP_DIR/l7r-dev-env.stamp"
+SKILL_DIR="$REPO/.claude/skills/diagram"
+env_key() {
+    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" "$SKILL_DIR/requirements-ci.txt" 2>/dev/null | sha256sum | cut -d' ' -f1
+}
+if [ "$ENSURE" = 1 ]; then
+    in_container || exit 0
+    KEY=$(env_key)
+    [ "$(cat "$STAMP" 2>/dev/null)" = "$KEY" ] && exit 0
+    if [ -n "${SETUP_ENSURE_DRY:-}" ]; then
+        echo "setup-dev-env: would provision this container (stamp missing or stale)"
+        exit 0
+    fi
+    mkdir -p "$STAMP_DIR"
+    exec 9>"$STAMP_DIR/l7r-dev-env.lock"
+    flock 9
+    [ "$(cat "$STAMP" 2>/dev/null)" = "$KEY" ] && exit 0  # another session provisioned it while this one waited
+    LOG="$STAMP_DIR/l7r-dev-env.log"
+    if bash "${BASH_SOURCE[0]}" >"$LOG" 2>&1; then
+        printf '%s\n' "$KEY" >"$STAMP"
+        echo "setup-dev-env: this container was provisioned (fresh container, or the lockfiles moved); log: $LOG"
+    else
+        echo "setup-dev-env: PROVISIONING FAILED - the dev environment is incomplete. Last lines of $LOG:"
+        tail -8 "$LOG"
+        echo "Fix it with: bash $REPO/container-scripts/setup-dev-env.sh   (passwordless sudo is available)"
+    fi
+    exit 0
+fi
 
 if ! in_container && [ "${SETUP_ALLOW_HOST:-}" != 1 ]; then
     echo "ERROR: this installs system packages and is meant to run INSIDE the dev container."

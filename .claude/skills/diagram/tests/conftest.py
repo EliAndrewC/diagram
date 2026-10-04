@@ -46,6 +46,10 @@ pytest_plugins = ["pytester"]
 # names the file. Re-exported so pytest finds the hooks here; the body is in `tests/_gate_failures.py`.
 from tests._gate_failures import pytest_collectreport, pytest_runtest_logreport  # noqa: E402, F401
 
+# A worker's freed heap goes back to the kernel after a test that grew it (2026-10-04): the body and the measurement
+# are in `tests/_heap.py`.
+from tests._heap import pytest_runtest_protocol  # noqa: E402, F401
+
 TIERS = ("hamlet", "village", "town", "city", "capital")
 
 

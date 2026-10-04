@@ -3,6 +3,18 @@
     "frontend-design@claude-plugins-official": true
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "s=/diagram/container-scripts/setup-dev-env.sh; [ -f \"$s\" ] || s=\"$CLAUDE_PROJECT_DIR/container-scripts/setup-dev-env.sh\"; bash \"$s\" --ensure  # GUARD_EDIT_OK: a NEW hook, not a relaxed guard (2026-10-04, the GM: a fresh container's setup built into our procedures as a quick no-op) - provisions a fresh container once, 30 ms after",
+            "timeout": 900,
+            "statusMessage": "Checking the dev container's dependencies..."
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
