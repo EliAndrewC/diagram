@@ -135,6 +135,27 @@ the nearest support for houses first and paths worn after - added to the questio
 passage); the pinch. 0029's: nearer the field all else being equal. `Research:` claims of every changed unit re-checked by
 impl-drift (`make claims-owed`).
 
+**D15 - A re-check scoped to the blocks a claim rests on (FR-016, Amendment 4).** `scripts/_claims.py`:
+1. The bundle numbers every non-intro block of the cited questions across the bundle (`[§N]` in each question file) and asks each
+   VERDICT note to end with the blocks it rests on (`[§3, §12]`, `[§]` when the questions are silent); `blocks.json` maps each
+   number to `page:digest` and holds each page's block digests. `record` keeps per row `rests` (those digests) and `pages` (each
+   cited page's findings digest at the check), and adds the snapshots to `dev/claims-pages.json` (findings digest -> its block
+   digests; ~116 KB after the backfill).
+2. `owed`: a claim whose research moved is `rests changed` (a block it rests on no longer stands - `impl-drift` in full), else
+   `triage` when its row has `pages` with snapshots, else `research changed` (in full, as before). `bundle --owed` takes every
+   owed claim but the triage ones; the push refuses all of them alike (a triage is owed until recorded).
+3. `triage` writes one bundle: per cited page the new or changed blocks (a block whose digest the snapshot lacks) AND the removed
+   ones (a snapshot digest no longer standing - a row with no `rests` may rest on it, and a deleted caveat bears on a claim that
+   did not name it), their words read back from the page's own git history; a removed block no version yields makes every claim
+   citing that page owed in full (`forced`, never cleared by the reply). Then the claims citing it with their last verdict. ONE agent,
+   ad hoc on `model: opus` (it judges relevance), replies `TOUCHES <key> - <why>` for each claim a block could bear on.
+   `triaged` marks those `triage: touched` (owed `impl-drift`) and records every other claim at today's pages, verdict and rests
+   kept.
+4. `backfill` (once, at this amendment): every row whose research fingerprint matches today's gets its `pages`, snapshotted;
+   a row whose research moved stays owed in full. Rows without `rests` are triaged on their next page change.
+Measured on this session's 0081 edits: ~12 of ~370 claims bore on the edited blocks. Tests: `tests/tooling/test_claims_scoping.py`
+(SC-011).
+
 ## Verification
 
 Unit tests for D1-D6 and D9-D13 (SC-007's gap between every two homesteads but a tight pair; SC-008's no-search test: the

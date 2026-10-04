@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 #: Half the corridor's width, in feet: `WEB_FABRIC_GAP` (7 ft) either side of the tread's line - a footpath's room between
 #: two steadings, the gap the web's own fabric keeps (homes H16: "a footpath-width strip (WEB_FABRIC_GAP x 2)").
 ACCESS_HALF_FT = 7.0
-"""Research: corridor room - GUESS: 7 ft either side of the way's line; the page's 7 ft off a garden fence is to the tread, so a 3 ft tread's edge stands 5.5 ft off"""
+"""Research: corridor room - DEVIATION research/questions/0081-village-lanes.drawing.html: 7 ft either side of the way's line, so a 3 ft tread's edge may pass 5.5 ft off a fence"""
 
 #: How far along a corridor its ground is sampled against the site boundary, in px: finer than the thinnest member the
 #: boundary holds a corridor off (a ditch's half-width plus its clearance).

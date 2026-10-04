@@ -134,7 +134,7 @@ def lane_layers(s: Settlement, boxes: Sequence[Any], segs: Sequence[tuple[Pt, Pt
 
     Research:
         lane ground - research/questions/0081-village-lanes.drawing.html: a way keeps the corridor's half-width off every homestead and to ground the site admits; the lane gap off the woodlots' seats is UNRESEARCHED
-        the half-width from the way's line - GUESS: 7 ft from the way's line, so a 3 ft tread's edge stands 5.5 ft off a fence the page holds 7 ft clear
+        the half-width from the way's line - DEVIATION research/questions/0081-village-lanes.drawing.html: lane ground held 7 ft from the way's line, so a footpath's edge may pass 5.5 ft off a fence
     """
     import numpy as np
 

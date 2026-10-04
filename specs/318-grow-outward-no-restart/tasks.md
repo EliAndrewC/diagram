@@ -47,4 +47,7 @@
       verify: DONE. DONE. 0081/0029/0032 drawing pages; every record check answered (make record-owed UNANSWERED=1: 0); claims checked in five rounds; 5 pre-existing figure drifts and 0029/0081 wording points filed in claims-followup.md, 0029-followup.md, 0081-followup.md
 - [ ] T13 `make done`, the cohort and the pool against main, the bookends (FR-010, FR-015, SC-005, SC-009, SC-010), the occasions' reviews
       research: rendering
-
+- [ ] T14 re-checks scoped to the blocks a claim rests on: numbered blocks, rests and pages per row, page snapshots, the triage, the backfill; their tests (D15, FR-016, SC-011)
+      research: rendering
+- [ ] T15 the 0081 follow-ups through the scoped re-check: the four figures recorded as deviations and the two wording points, then `make claims-triage` and `impl-drift` on what it sends on (D14, D15, FR-008, FR-016)
+      research: rendering

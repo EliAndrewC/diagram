@@ -143,7 +143,7 @@ def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
     ways in the touch pass - never the piece's own component: a piece is often several lanes, and
     cutting at one of them left the reference hamlet's web in pieces on the first try.
 
-    Research: no stub past a junction - UNRESEARCHED: a join link ends where it first meets the network, whatever the length past it"""
+    Research: no stub past a junction - DEVIATION research/questions/0081-village-lanes.drawing.html: a joining link ends where it first meets a lane, whatever the tail"""
     if not others or len(link) < 2:
         return list(link)
     out = [link[0]]

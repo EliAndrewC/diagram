@@ -194,6 +194,14 @@ engine no longer keeps.
   its class, and every code claim citing the field reach as a researched maximum MUST be corrected or removed with it.
 - **FR-009**: No pool map or cohort seed may fail a rule it passed before or seat fewer households; maps may move within the rules
   (GM 2026-09-30, feature 297).
+- **FR-016** (Amendment 4): A claim's re-check MUST be scoped to the research it rests on. Each verdict names the blocks of
+  the cited questions it rests on (the bundle numbers them); the index keeps those blocks' digests per row and each cited page's
+  block digests at the check. After a page edit, a claim is owed a re-check when a block it rests on changed or was removed;
+  a claim whose blocks all stand is owed only a TRIAGE: one cheap check of the new, changed and removed blocks against the
+  claims citing that page, which names the claims a change could bear on. Those go to `impl-drift`; the rest are recorded as
+  cleared at the new page without a re-judge. A row checked before this rule (no blocks recorded) is triaged the same way once
+  its page snapshot exists; the existing index is backfilled with snapshots of today's pages for rows whose
+  recorded research fingerprint matches today's; a row that does not stays owed in full.
 - **FR-010**: The homesteads stage MUST be timed against main at 15 and 40 households, alternated per seed, and recorded; the
   larger maps' spread MUST be measured (the farthest house from the cluster's first house and from the field, and the
   quarter-built figure).
@@ -220,6 +228,8 @@ engine no longer keeps.
   refused for want of a way.
 - **SC-010** (FR-010, FR-015): the bookends against main recorded with the spread and the house-to-field distances, the perf records owed
   by the band the change reaches.
+- **SC-011** (FR-016): on a constructed tree, an edit to one block re-owes only the claims resting on it, sends the claims
+  whose blocks stand to triage, and a triage reply clears the claims it does not name; a row with no recorded blocks is triaged.
 - **SC-003** (FR-005): a constructed site with too little free ground is refused with the shortfall named.
 - **SC-003a** (FR-004): a test fails if a margin that seated no house is not followed by the next, or a margin with no dry way out
   is seated.
@@ -281,3 +291,7 @@ engine no longer keeps.
   round is owed on these three.
 - Verify round on the three (2026-10-03): CHANGES REQUIRED - FR-003's old window clause removed, FR-012's lane ground worded as
   clear of the blocked ground; applied.
+- Amendment 4 (the GM, 2026-10-04, `request.md`): claim re-checks scoped to the blocks a claim rests on, with a triage for
+  the rest (FR-016, SC-011). The review counter restarts.
+- Amendment round 1 (spec-fidelity-verify, 2026-10-04): CHANGES REQUIRED - FR-017 (a flipped verdict unconfirmed) cut as not
+  asked for, to be raised with the GM; FR-016's backfill limited to rows whose research still matches.

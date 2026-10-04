@@ -1184,6 +1184,17 @@ claims-coverage: ## [project] every unit with no research claim, a malformed cla
 claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" report
 
+# GUARD_EDIT_OK: feature 318 amendment 4 - three operations scoping a re-check to the blocks a claim rests on; the push's refusal is unchanged (claims-gate.sh).
+claims-triage: ## [project] the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=<dir>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" triage $(if $(OUT),--out "$(abspath $(OUT))",)
+
+claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) is owed impl-drift, every other claim of the bundle is cleared   BUNDLE=<dir> REPLY=<file>
+	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" triaged --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
+
+claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
+
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)

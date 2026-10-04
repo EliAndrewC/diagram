@@ -69,3 +69,18 @@ as a tie-break alone 9.96 s, option A 14.38 s (+45%), eight of nine maps reachin
 alone and dropping A. The GM:
 
 Yes, I still want A for how it shapes the map, based on that research finding.  But yes please also implement the tie-break thing for the real speedup.
+
+## Amendment 4 (GM, 2026-10-04, verbatim)
+
+The session reported that every edit to a research page re-owes every claim citing it (about 370 for 0081's drawing page),
+whatever part of the page the claim rests on; that its own 0081 edits bore on about a dozen of those claims; that between two
+full re-check rounds 49 of 363 verdicts changed, 25-29 of them with nothing relevant changed (three of the four findings then
+blocking the push among them); and proposed (1) re-owing a claim only when a block it relies on changes, with a cheap triage
+of new or changed blocks against the claims citing the page, and (2) a verdict that flips with nothing changed counting as
+unconfirmed until a second check agrees. The GM asked first:
+
+Whoa, 370 claims need to be re-checked because of every single edit to that page?  Yikes.  Do we think that should be how it works?  Or are your edits minor enough to not need those re-checks?
+
+and then:
+
+Go ahead and fix that as part of 318 so that you can have it be done prior to doing the rechecks to ensure the rechecks are appropriately scoped.
