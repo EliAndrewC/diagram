@@ -920,18 +920,14 @@ def settle_targets(s: Any, lawful: Lawful) -> int:
 
 
 def settle_reach(s: Any) -> int:
-    """Step 4: the reach the web owes - the access tree's lanes to every household (its way, laid in the gaps once the last
-    house stands, `gap_ways`, feature 318) and to the field where no way reaches it, drawn as the gap pass judged them and the ordinary lanes deferring to them (`tree.settle_tree`), and a
-    spur to each way target (`settle_targets`).
+    """Step 4: the reach the web owes - every household's way (laid in the gaps, `gap_ways`, feature 318) and the field's where
+    no way reaches it, drawn as the gap pass judged them (`tree.settle_tree`), and a spur to each way target (`settle_targets`).
 
     Research:
         every farmhouse served - research/questions/0081-village-lanes.drawing.html: every household's way, laid once the last house stands, drawn as a lane of its own
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field's corridor drawn
         a path runs to the graves - UNRESEARCHED: claimed at `settle_targets`"""
-    # EVERY HOUSEHOLD'S WAY IS OWED, REACHED OR NOT (feature 318, `tree.owed`): the tree's lanes are laid whenever one is not yet
-    # drawn - asked only where a house was unreached, a map whose lanes came within reach of every house left its households'
-    # own ways undrawn - and each is drawn once (`settle_tree`), so a later round asks nothing
-    drawn = settle_tree(s)
+    drawn = settle_tree(s)  # every household's way, reached or not (feature 318, `tree.owed`); each drawn once
     if not (unreached_houses(s.M) or law.unreached_targets(s.M) or law.field_unreached(s.M)):
         return drawn
     return drawn + settle_tree(s) + settle_targets(s, Lawful(s, tree=True))

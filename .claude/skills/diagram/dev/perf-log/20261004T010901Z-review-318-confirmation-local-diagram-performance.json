@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "a608fa56c95c9e8670a51f33015c305cfa9cdf56fbf668cadb58c5bcc959546e",
+  "end": {
+    "commit": "8606058c5",
+    "label": "318-end",
+    "utc": "20261004T003755Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T010901Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.3,
+          "39": 3.2,
+          "4": 5.7,
+          "47": 13.3
+        },
+        "total_pct": 6.3
+      },
+      "20": {
+        "seeds": {
+          "25": -2.7,
+          "39": 12.7,
+          "4": 3.0,
+          "47": 24.1
+        },
+        "total_pct": 8.2
+      },
+      "40": {
+        "seeds": {
+          "25": 3.5,
+          "39": 22.2,
+          "4": 7.4,
+          "47": -2.3
+        },
+        "total_pct": 7.0
+      }
+    },
+    "seeds": {
+      "25": 12.8,
+      "39": 10.5,
+      "4": 23.5,
+      "47": -2.0
+    },
+    "total_pct": 11.3
+  },
+  "note": "The reference's homesteads growth IS the gap pass - counterfactual at 8606058c5 with lay_the_ways disabled, seeds 4/25/39/47, medians of 3: homesteads 0.89/0.74/0.67/0.81 s vs main 1.34/1.01/0.88/1.25 s, the pass alone 0.82/0.94/0.69/0.79 s. But the explanation is silent on the 40-household leg, which crossed band 3 on its own: there the web grew +5.0 s summed (+1.83/+0.84/+0.68/+1.64 s) while homesteads FELL 1.75 s (seed 47 -2.83 s). Cause: in settle_the_web, prune_the_tree drops one gap-laid household way (role access, of set) a round, runs all 8 rounds on seeds 4/39/47 and enters last_resort (0.83-0.93 s, drops nothing); main takes 3-6 rounds and never enters last_resort. Notice (+1.8 s 40/39, +1.5 s 40/47, +0.7 s 20/47) is layout: siting, board_seat and houses are untouched, the board search takes a third attempt on the moved map, and notice falls as often as it rises (20/25 -0.69 s, 15/47 -0.51 s).",
+  "verdict": "inconsistent"
+}
