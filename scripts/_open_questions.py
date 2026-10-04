@@ -22,6 +22,7 @@ Usage: _open_questions.py --root <repo>
 from __future__ import annotations
 
 import argparse
+import bisect
 import re
 import subprocess
 import sys
@@ -191,9 +192,59 @@ def code_citations(sources: dict[str, str], q: Question, heading_key: str) -> li
     return out
 
 
+_RUN = re.compile(r"[A-Za-z0-9_-]+")
+
+
+def _hits(blob: str, starts: list[int], needle: str) -> set[int]:
+    """The indexes of the `starts`-delimited records of `blob` that hold `needle`."""
+    out, i = set(), blob.find(needle)
+    while i >= 0:
+        out.add(bisect.bisect_right(starts, i) - 1)
+        i = blob.find(needle, i + 1)
+    return out
+
+
+def _joined(records: list[str]) -> tuple[str, list[int]]:
+    starts, pos = [], 0
+    for r in records:
+        starts.append(pos)
+        pos += len(r) + 1
+    return "\n".join(records), starts
+
+
+def cite_all(sources: dict[str, str], qs: Iterable[Question], keys: dict[str, str]) -> dict[str, list[str]]:
+    """`code_citations` of every question, without scanning the whole engine once per question (feature 321, 2026-10-04:
+    that scan, 7 MB twice for each of 425 questions, is memory-bound, and under other sessions' gates it took the target past
+    its 10 s bound - specs/321-clone-backup-branches/research.md R1). Exact: an anchor of identifier characters can only occur
+    inside a maximal run of them, so the files that may quote it are found in the engine's distinct runs; any occurrence of a
+    heading key holds the key's longest run, so the files holding THAT word are the only ones that may quote the key.
+    `code_citations` makes the exact test, on those files only; a needle with no run in it is looked for in every file."""
+    run_files: dict[str, list[str]] = {}
+    for p, t in sources.items():
+        for r in set(_RUN.findall(t)):
+            run_files.setdefault(r, []).append(p)
+    runs = list(run_files)
+    run_blob, run_starts = _joined(runs)
+
+    def may_hold(needle: str) -> set[str]:
+        words = _RUN.findall(needle)
+        if not words:
+            return set(sources)
+        return {p for i in _hits(run_blob, run_starts, max(words, key=len)) for p in run_files[runs[i]]}
+
+    out = {}
+    for q in qs:
+        key = keys[q.anchor]
+        files = may_hold(q.anchor) | (may_hold(key) if key else set())
+        out[q.anchor] = code_citations({p: t for p, t in sources.items() if p in files}, q, key)
+    return out
+
+
 def outside_guesses(files: dict[str, str]) -> list[tuple[str, int, str]]:
     out = []
     for path, text in sorted(files.items()):
+        if not _GUESS.search(text):  # most files hold no label: one search instead of one per line
+            continue
         for n, line in enumerate(text.splitlines(), 1):
             if _GUESS.search(line):
                 out.append((path, n, line.strip()))
@@ -284,7 +335,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     routes = class_routes(entries, qs)
     names = tracked(root)
     engine = {rel: (root / SKILL / rel).read_text(encoding="utf-8") for rel in names if rel.startswith("l7r/") and rel.endswith(".py")}
-    cites = {q.anchor: code_citations(engine, q, heading_key(question_text(q.heading))) for q in qs if q.items}
+    open_qs = [q for q in qs if q.items]
+    cites = cite_all(engine, open_qs, {q.anchor: heading_key(question_text(q.heading)) for q in open_qs})
     sys.stdout.write(report(qs, routes, cites, outside_guesses(outside_files(root, names))))
     return 0
 

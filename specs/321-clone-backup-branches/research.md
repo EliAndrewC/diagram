@@ -24,6 +24,14 @@ Priced and withdrawn:
   without the profiler showed ~10% (3.36/3.94/3.86 s old vs 3.05/3.71 s new, one new run at 6.64 s) - not worth the code.
 - **Scaling the bound by a reference loop measured beside it**: the reference does not inflate (table above).
 
-Left for the GM: the target needs ~3.5 s of CPU on a quiet host, a third of its bound, and exceeds the bound only when the
+**Fixed (later the same day): an exact index over the engine's identifier runs** (`cite_all`). The headings are topic
+titles now, not questions, so a `?`-line filter never applies; instead every occurrence of an anchor or a heading key holds
+the key's longest identifier word, and the files holding that word are found once in the deduplicated runs (316 KB, not
+7 MB); `code_citations` makes the exact test on those files only. `outside_guesses` skips a file with no label in one
+search. Output byte-identical to the old target; interleaved A/B at the same load: old 8.72 / 6.51 / 6.72 s, new 4.84 /
+4.01 / 3.92 s (about 40% less CPU). Tests: `cite_all` equals `code_citations` per question, a quote starting mid-word
+included.
+
+Left for the GM, superseded by the fix above: the target needs ~3.5 s of CPU on a quiet host, a third of its bound, and exceeds the bound only when the
 host is saturated. The choices are a faster target (a real index that avoids the substring scans), a looser bound, or
 running this one timing assertion outside the parallel gate. The bound is the GM's SC-003, so it is not changed here.
