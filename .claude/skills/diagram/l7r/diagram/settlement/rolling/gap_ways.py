@@ -25,7 +25,9 @@ stands this module lays every household's way ONCE, in the gaps:
 
 A household seated at a tight seat (feature 317) is tried too: a way laid for it ends its passage where it stands (FR-001).
 
-Research: the ways laid in the gaps - GUESS research/questions/0081-village-lanes.html: "if the lanes are the gaps left between the house plots", the record's own reading, no page stating it
+Research:
+    the ways laid in the gaps - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps left between the house plots, the record's own reading, no page stating it
+    raster, flood and search plumbing - NONE: the cells, steps and marks the passes above are built from
 """
 
 from __future__ import annotations
@@ -66,7 +68,7 @@ GAP_TRIES = 6
 """Research: ways out tried - NONE: a search breadth, measured (research R4)"""
 #: The most legs a way may take (`route.taut`): a gap way bends at plot corners, more often than a straight path does.
 GAP_LEGS = 12
-"""Research: a way bends at plot corners - GUESS research/questions/0081-village-lanes.html: "a lane runs straight between plot corners and bends at one"; at most twelve bends"""
+"""Research: a way bends at plot corners - GUESS research/questions/0081-village-lanes.drawing.html: "a lane runs straight between plot corners and bends at one"; at most twelve bends"""
 #: A way coming within this of a way already laid joins it there, at a T, rather than running beside it: under the shadow rule's
 #: 30 ft (`WEB_SHADOW_FT`, a way beside another past a pitch), MEASURED (research R4: 10 of 14 refusals were the doubled band).
 JOIN_FT = 25.0
@@ -160,7 +162,7 @@ def flood(L: Layers, segs: Sequence[tuple[Pt, Pt]], rings: Sequence[tuple[int, i
     no diagonal cutting a blocked corner, each step dearer beside blocked ground (`CENTER_WEIGHT`); stopped `FLOOD_PAST_PX` past
     the first time every ring (a homestead's cell span) has been reached.
 
-    Research: a way keeps to the middle of its gap - GUESS research/questions/0081-village-lanes.html: a worn path takes the shortest or easiest way; the open middle of the ground between plots
+    Research: a way keeps to the middle of its gap - GUESS research/questions/0081-village-lanes.drawing.html: a worn path takes the shortest or easiest way; the open middle of the ground between plots
     """
     import numpy as np
 
@@ -303,7 +305,7 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
     """Lay every household's way in the gaps, once every house stands (the module's account). Returns (passages ended, pinches).
     Nothing where no access tree stands (a form that builds none).
 
-    Research: each household's way laid once every house stands - GUESS research/questions/0081-village-lanes.html: the lanes as the gaps between the house plots, worn after the houses; the corridor's own tests and the tree's lane law admit each
+    Research: each household's way laid once every house stands - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps between the house plots, worn after the houses; the corridor's own tests and the tree's lane law admit each
     """
     tree = getattr(s, "_access", None)
     houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
