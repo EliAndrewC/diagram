@@ -266,6 +266,7 @@ broadcast sowing	broadcast sowing
 brush cutter	brush cutter
 brush cutters	brush cutter
 bu	bu
+bu nongshu	Bu nongshu
 budget model	budget model
 bugyosho	machi-bugyosho
 buke	bushi
@@ -3543,6 +3544,7 @@ superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
+supplement to the farm manual	Bu nongshu
 surveillance commissioner	surveillance commissioner
 surveillance commissioners	surveillance commissioner
 survey register	kenchicho

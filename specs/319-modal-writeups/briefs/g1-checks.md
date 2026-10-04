@@ -1,0 +1,6 @@
+- round 1, quote-check 0039: batch 1 SUPPORTS 13, PARTIAL 3 ('some gathered wild' and 'what to plant' cut, the seed lists now the list of seasonal crops, -4 cited for the buildings and yard), DIFFERS 1 (a reference marker only); batch 2 SUPPORTS 7, 'rice-growing south' cut and Zhejiang cited, 'scholar-farmer' cut; the who-and-yield absence note's Ehime claim now cited to ehime-kenshi-seiryoki-3
+- round 1, record-format 0039: VOCABULARY 7 - acanthopanax, trifoliate orange, shakushina, oona, nebuka, kujuna glossed; water dropwort a variant of seri
+- round 1, translation-check 0039: FAITHFUL 35, LOOSE 3 (bunongshu-2 'must keep', -4 'a supplement to', -5 'whatever comes to hand') applied; 'onions' in the prose now 'green onions'
+- round 1, source-reader 0039 (seiryoki-3, bunongshu, bunongshu-6): READ 7; 'in Iyo district' not on the page, now 'on the Dogo plain'; Zhang's verdict against his district's separate garden and the Huzhou one-ground practice added (bunongshu-6 #2, #3)
+- round 1, source-applicability: seven write-ups APPLICABLE-WITH-LIMITS, limits added or corrected; kind=scholarship on the three Ehime/Miyashiro histories
+- round 1, entry-drift garden: DRIFTED - not applied (feature 319 rewrites assets/modals/hamlet/garden.md); answered by record-checked with REASON
