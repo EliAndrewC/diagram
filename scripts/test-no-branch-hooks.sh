@@ -40,6 +40,12 @@ expect_allow 'git branch --list'
 expect_allow 'git checkout -- somefile.py'
 expect_allow 'git log --oneline -5'
 
+# --- allowed: the remote-only backup branch sync-with-main.sh pushes and deletes (feature 321) - no local branch
+# GUARD_EDIT_OK: feature 321 FR-005 - test cases only, the guard is unchanged
+expect_allow 'git -C /diagram/.clones/x push origin HEAD:refs/heads/backup/x'
+expect_allow 'git -C /diagram/.clones/x push origin --delete backup/x'
+expect_allow 'git -C /diagram/.clones/x push origin :refs/heads/backup/x'
+
 # --- allowed: the visible escape hatch, and other repos
 expect_allow 'git checkout -b bisect-tmp   # NO_BRANCH_OK throwaway bisect'
 expect_allow 'git -C /host-l7r-repo checkout -b whatever'

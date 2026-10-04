@@ -553,13 +553,79 @@ render_sync_runner() {
   echo "ok $(date -Is) at $tip" > "$RENDER_STATUS"
 }
 
+# UNLANDED WORK IS BACKED UP TO GITHUB AT EVERY STOP (feature 321, GM 2026-10-04; GUARD_EDIT_OK: a new step after the
+# push, nothing refused is loosened). Until it lands, a clone's work existed only on the host's disk - a feature with
+# open tasks cannot land, and on 2026-10-04 feature 319 held 34 commits nowhere else. So every stop (`done` or `push`,
+# landed or refused) pushes HEAD to the remote-only branch backup/<clone-name>, and a branch whose tip main already
+# holds is deleted: the GM's *"deleted after their contents have been merged into main, just to keep the branches that
+# are visible manageable"*. At the stop only, never at sync-in: *"we shouldn't take the time to do a GitHub push like
+# literally every time that we save a change"*.
+#
+# AN EXIT TRAP, NOT `( push_cmd ) || rc=$?`: bash ignores `set -e` inside a `||` context, so push_cmd's failed
+# `flock ... git push` would fall through silently. The trap runs on every exit push_cmd takes and hands the code on
+# unchanged. NOTHING HERE IS FATAL OR FORCED: a failure is one line, the backup push is fast-forward only, and a delete
+# is a compare-and-delete (`--force-with-lease=<ref>:<tip judged contained>` - git's only conditional delete; it
+# overwrites nothing) so a backup pushed between the fetch and the delete is kept.
+backup_last() { # git's reason in one line: what the remote said and the rejection, without the boilerplate around them
+  printf '%s\n' "$1" | grep -v -e '^\s*$' -e '^To ' -e 'failed to push some refs' -e '^hint:' \
+    | sed -e 's/^\(error\|fatal\|remote\): *//' -e 's/^ *! *//' | paste -sd ';' | sed 's/;/; /g'
+}
+
+backup_delete() { # <branch> <tip judged contained in origin/main>
+  local out
+  # The lease here is a compare-and-DELETE, not a force: it only adds the condition "the remote still holds the tip
+  # judged contained in main". Never copy it to a push that writes a tip - repo-safety-hooks.sh refuses that, rightly.
+  if out=$(git push -q --force-with-lease="refs/heads/$1:$2" origin ":refs/heads/$1" 2>&1); then
+    echo "sync-with-main: deleted $1 on GitHub - its work is on main"
+  else
+    echo "sync-with-main: $1 NOT deleted: $(backup_last "$out")" >&2
+  fi
+}
+
+backup_step() {
+  local name br tip head out b t
+  name=$(basename "$ROOT"); br=backup/$name
+  if ! out=$(git fetch -q --prune origin 2>&1); then
+    echo "sync-with-main: backup NOT checked - cannot reach origin: $(backup_last "$out")" >&2; return 0
+  fi
+  git rev-parse -q --verify refs/remotes/origin/main >/dev/null || { echo "sync-with-main: backup NOT checked - origin has no main" >&2; return 0; }
+  head=$(git rev-parse HEAD) || return 0
+  tip=$(git rev-parse -q --verify "refs/remotes/origin/$br" || true)
+  if git merge-base --is-ancestor HEAD refs/remotes/origin/main; then
+    if [ -n "$tip" ] && git merge-base --is-ancestor "$tip" refs/remotes/origin/main; then backup_delete "$br" "$tip"
+    elif [ -n "$tip" ]; then echo "sync-with-main: $br on GitHub holds commits main lacks - kept (only a branch main contains is deleted)" >&2
+    fi
+  elif [ "$tip" = "$head" ]; then :
+  elif [ -n "$tip" ] && ! git merge-base --is-ancestor "$tip" HEAD; then
+    echo "sync-with-main: this clone's HEAD is NOT backed up - $br on GitHub holds commits HEAD lacks (a clone rebuilt under this name?); nothing was forced. The command below merges that backup's commits into this clone's HEAD, so they land on main with this clone's work - it is the GM's decision, never run by a session unasked:" >&2
+    echo "  git -C $ROOT fetch origin refs/heads/$br && git -C $ROOT merge --no-edit FETCH_HEAD && git -C $ROOT push origin HEAD:refs/heads/$br" >&2
+  elif out=$(git push -q --no-follow-tags origin "HEAD:refs/heads/$br" 2>&1); then
+    echo "sync-with-main: backed up HEAD $(git rev-parse --short HEAD) to $br on GitHub (deleted once it lands on main)"
+  else
+    echo "sync-with-main: backup NOT pushed to $br: $(backup_last "$out")" >&2
+  fi
+  # THE SWEEP (FR-009): every other backup/* whose tip main holds - a clone abandoned after its work landed.
+  while read -r b t; do
+    b=${b#refs/remotes/origin/}
+    [ "$b" = "$br" ] && continue
+    git merge-base --is-ancestor "$t" refs/remotes/origin/main 2>/dev/null && backup_delete "$b" "$t"
+  done < <(git for-each-ref --format='%(refname) %(objectname)' refs/remotes/origin/backup/)
+  return 0
+}
+
+backup_on_exit() { # <the exit code the stop was leaving with>
+  trap - EXIT; set +e
+  backup_step
+  exit "$1"
+}
+
 # `done FULL=1` / `push FULL=1`: the full sweep on CodeBuild, its prompt answered locally first
 for arg in "$@"; do case "$arg" in FULL=1) export FULL=1 ;; esac; done
 case "${1:-}" in
   sync-in)     shift; sync_in "$@" ;;
-  push)        push_cmd ;;
+  push)        trap 'backup_on_exit $?' EXIT; push_cmd ;;
   render-sync) render_sync ;;
   render-sync-runner) render_sync_runner ;;
-  done)        push_cmd; render_sync ;;
+  done)        trap 'backup_on_exit $?' EXIT; push_cmd; render_sync ;;
   *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] | push | render-sync | done" ;;
 esac

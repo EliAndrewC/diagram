@@ -103,6 +103,11 @@ def test_a_question_reaches_its_map_features_three_ways(tmp_path: pathlib.Path) 
     assert key == "How long was a rice-drying rack?"
     assert oq.heading_key("A castle has TWO gates") == "A castle has TWO gates", "no length floor: a short heading is cited too"
     assert oq.code_citations(engine, qs[0], key) == ["l7r/yards.py:2", "l7r/other.py:1"]
+    # the index finds what the per-file scan finds (feature 321: the target's time), a quote inside a longer word included
+    wide = {**engine, "l7r/none.py": "y = 2\n", "l7r/edge.py": "s = 'xHow long was a rice-drying rack?'\n"}
+    assert oq.cite_all(wide, qs, {q.anchor: oq.heading_key(q.heading) for q in qs}) == {q.anchor: oq.code_citations(wide, q, oq.heading_key(q.heading)) for q in qs}
+    assert oq.cite_all(wide, qs[:1], {qs[0].anchor: "?!"}) == {qs[0].anchor: ["l7r/other.py:1"]}, "a key with no word: every file"
+    assert oq.cite_all({"l7r/q.py": "a ?! b\n"}, qs[:1], {qs[0].anchor: "?!"}) == {qs[0].anchor: ["l7r/q.py:1"]}
     unreached = oq.Question("homesteads", "x", "X", "p", items=[oq.Item("guess", "a GUESS")])
     text = oq.report([qs[0], unreached], routes, {"how-long-was-a-rack": ["l7r/yards.py:2"]}, [])
     assert "map features: farmhouse; threshing yard (through" in text and "l7r/yards.py:2" in text

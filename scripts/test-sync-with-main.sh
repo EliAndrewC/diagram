@@ -269,5 +269,85 @@ kill "$HOLDER" 2>/dev/null; wait "$HOLDER" 2>/dev/null
 OUT=$(syncmain "$D" sync-in --background-render); check "a mirror commit -> refused on the hook's path" 1 $?
 expect_out "cannot fast-forward"
 
+# GUARD_EDIT_OK: feature 321 - new cases for the backup step at the stop; nothing existing loosened.
+yes_() { PASS=$((PASS+1)); }
+no_() { echo "FAIL  $1"; FAIL=$((FAIL+1)); }
+rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
+in_progress() { # $1 = topology dir: a feature with an open task plus an unrelated file, so a stop is refused
+  ( cd "$1/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md \
+    && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md \
+    && echo "${2:-docs}" > note.md && git add -A && git commit -qm "feature plus docs ${2:-}" )
+}
+
+echo "11. a REFUSED stop backs the clone's HEAD up to backup/<clone-name>, and nothing else (feature 321, SC-001, SC-002)"
+D=$(topology bk)
+git -C "$D/github.git" config core.logAllRefUpdates always
+in_progress "$D"
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a refused done keeps its exit code" 1 $?
+expect_out "IN PROGRESS"; expect_out "backed up HEAD"
+[ "$(rref "$D" backup/c)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "backup/c is not the clone's HEAD"
+[ "$(git -C "$D/main/.clones/c" for-each-ref --format='%(refname)' refs/heads)" = "refs/heads/main" ] && yes_ || no_ "the clone has a local branch beside main"
+[ "$(git -C "$D/github.git" for-each-ref --format='%(refname)' | tr '\n' ' ')" = "refs/heads/backup/c refs/heads/main " ] && yes_ || no_ "the remote carries refs beyond main and backup/c: $(git -C "$D/github.git" for-each-ref --format='%(refname)')"
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a second refused done, nothing new" 1 $?
+case "$OUT" in *"backed up HEAD"*) no_ "a second stop with nothing new pushed again" ;; *) yes_ ;; esac
+[ "$(git -C "$D/github.git" reflog show refs/heads/backup/c | wc -l)" = 1 ] && yes_ || no_ "the backup ref moved more than once"
+bk_before=$(rref "$D" backup/c)
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+( cd "$D/main/.clones/c" && echo again > note2.md && git add -A && git commit -qm "more work" )
+OUT=$(syncmain "$D" sync-in); check "sync-in after more work" 0 $?
+[ "$(rref "$D" backup/c)" = "$bk_before" ] && yes_ || no_ "sync-in moved the backup"
+OUT=$(syncmain "$D" push); check "push (the stop without the render) is refused too" 1 $?
+[ "$(rref "$D" backup/c)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "push did not back up the new HEAD"
+
+echo "12. a DIVERGED backup is never forced; the message says HEAD is NOT backed up and prints the GM's merge (SC-003)"
+D=$(topology bd)
+( cd "$D/seed" && echo old > lost && git add -A && git commit -qm "a dead clone's work" && git push -q "$D/github.git" HEAD:refs/heads/backup/c )
+old=$(rref "$D" backup/c)
+in_progress "$D"
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a refused done with a diverged backup" 1 $?
+expect_out "IN PROGRESS"; expect_out "HEAD is NOT backed up"; expect_out "merges that backup's commits into this clone's HEAD, so they land on main"
+[ "$(rref "$D" backup/c)" = "$old" ] && yes_ || no_ "the diverged backup was overwritten"
+FIX=$(printf '%s\n' "$OUT" | grep '^  git -C .* fetch origin refs/heads/backup/c && ' || true)
+[ -n "$FIX" ] && yes_ || no_ "no resolving command printed"
+case "$FIX" in *--force*|*" +"*|*--delete*|*" :refs"*) no_ "the command forces or deletes: $FIX" ;; *merge*push\ origin\ HEAD:refs/heads/backup/c) yes_ ;; *) no_ "the command is not fetch, merge, push: $FIX" ;; esac
+head=$(git -C "$D/main/.clones/c" rev-parse HEAD)
+( export CLONE_GITHUB=; eval "$FIX" ) >/dev/null 2>&1 && yes_ || no_ "the printed command failed"
+new=$(rref "$D" backup/c)
+git -C "$D/github.git" merge-base --is-ancestor "$old" "$new" && git -C "$D/github.git" merge-base --is-ancestor "$head" "$new" && yes_ || no_ "the resolved backup does not hold both the old tip and HEAD"
+
+echo "13. a remote that refuses or cannot be reached changes nothing about the stop (SC-004)"
+D=$(topology bu)
+printf '#!/bin/sh\nwhile read o n r; do case "$r" in refs/heads/backup/*) echo "backups refused here"; exit 1 ;; esac; done\n' > "$D/github.git/hooks/pre-receive"; chmod +x "$D/github.git/hooks/pre-receive"
+in_progress "$D"
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a refused done whose backup push is rejected" 1 $?
+expect_out "IN PROGRESS"; expect_out "backup NOT pushed to backup/c: "; expect_out "backups refused here"
+[ "$(printf '%s\n' "$OUT" | grep -c 'backup NOT')" = 1 ] && yes_ || no_ "the failure is not one line"
+mv "$D/github.git" "$D/github.gone"
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "an unreachable remote: the stop fails as it would anyway" 1 $?
+mv "$D/github.gone" "$D/github.git"
+expect_out "backup NOT checked - cannot reach origin"
+[ "$(printf '%s\n' "$OUT" | grep -c 'backup NOT')" = 1 ] && yes_ || no_ "the failure is not one line"
+D=$(topology bv)
+( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs && git push -q origin HEAD:refs/heads/backup/c )
+printf '#!/bin/sh\nwhile read o n r; do case "$r" in refs/heads/backup/*) echo "backups refused here"; exit 1 ;; esac; done\n' > "$D/github.git/hooks/pre-receive"; chmod +x "$D/github.git/hooks/pre-receive"
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a landing whose backup delete is rejected still lands" 0 $?
+expect_out "backup/c NOT deleted"
+[ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
+
+echo "14. landing deletes the clone's backup; the sweep deletes exactly the backups main contains (SC-006)"
+D=$(topology bl)
+( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a refused stop (perf review) backs up" 1 $?
+[ -n "$(rref "$D" backup/c)" ] && yes_ || no_ "no backup after the refused stop"
+( cd "$D/seed" && git push -q "$D/github.git" HEAD:refs/heads/backup/old && echo ahead > ahead && git add -A && git commit -qm ahead && git push -q "$D/github.git" HEAD:refs/heads/backup/ahead )
+OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "the stop that lands" 0 $?
+expect_out "deleted backup/c on GitHub"
+[ -z "$(rref "$D" backup/c)" ] && yes_ || no_ "the landed clone's backup is still there"
+[ -z "$(rref "$D" backup/old)" ] && yes_ || no_ "the sweep kept a backup main contains"
+[ -n "$(rref "$D" backup/ahead)" ] && yes_ || no_ "the sweep deleted a backup ahead of main"
+( cd "$D/main/.clones/c" && echo more > note.md && git add -A && git commit -qm more && git push -q origin HEAD:refs/heads/backup/c )
+OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a stop with the backup already at HEAD" 1 $?
+case "$OUT" in *"backed up HEAD"*) no_ "pushed a backup that was already at HEAD" ;; *) yes_ ;; esac
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

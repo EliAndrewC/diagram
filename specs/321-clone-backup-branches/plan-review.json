@@ -1,0 +1,57 @@
+{
+ "feature": "321-clone-backup-branches",
+ "plan_sha256": "002950212a8cc42038bf82fd5b4314e30fcba21de426e67e9b911dba2df8352d",
+ "reviewed": "2026-10-04",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "The backup step runs from an EXIT trap set in both the done and push arms of the dispatch, so it runs on every exit of push_cmd; sync-in, render-sync and the runner never set it.",
+   "class": "within",
+   "why": "The GM tied the push to 'if we're running sync with main ... any time we are finishing work'; the script itself documents `push` as the stop-work push and `done` as push + render-sync, so covering `push` widens nothing beyond FR-002's purpose (no push per file save, none at sync-in). The trap keeps every refusal and exit code unchanged (FR-001 'landed or refused', FR-006)."
+  },
+  {
+   "id": "D2",
+   "summary": "The step order: fetch --prune; own branch pushed fast-forward (no force, no +, --no-follow-tags) only when HEAD has commits origin/main lacks and the branch does not already hold HEAD; own branch deleted when HEAD and its tip are in origin/main, kept with a note when its tip is not; diverged case goes to the FR-003 message; fetch or push failure is one line.",
+   "class": "within",
+   "why": "Each branch is FR-001, FR-003, FR-004, FR-006, FR-007, FR-008 or the spec's edge cases as written; no requirement is narrowed."
+  },
+  {
+   "id": "D3",
+   "summary": "The FR-009 sweep runs at the stop-work step from the same fetch, deleting every other backup/* whose tip is an ancestor of origin/main.",
+   "class": "within",
+   "why": "FR-009 leaves the place to the plan; the stop-work step is the GM's own occasion ('any time we are finishing work') and deletes exactly the contained branches and no other."
+  },
+  {
+   "id": "D4",
+   "summary": "Every delete is a compare-and-delete, `git push --force-with-lease=refs/heads/<b>:<T> origin :refs/heads/<b>`, deleting only if the remote still holds the tip judged contained; the backup push carries no lease and no force.",
+   "class": "within",
+   "why": "A plain delete needs no force; the lease only adds a precondition, so it overwrites nothing and can delete only a tip already in origin/main. It serves the spec's edge case ('never deleted or overwritten, by any step') against a push landing between the fetch and the delete, and FR-003's 'never forced' governs the backup push, which stays unforced. It does not narrow FR-008/FR-009: a moved tip is not a judged-contained one."
+  },
+  {
+   "id": "D5",
+   "summary": "The diverged message: says HEAD is NOT backed up, that the printed fetch/merge/fast-forward-push command merges the backup's commits into HEAD so they land on main, and that it is the GM's decision.",
+   "class": "within",
+   "why": "FR-003 and SC-003 verbatim in substance; no delete, no force."
+  },
+  {
+   "id": "D6",
+   "summary": "No guard changes; three expect_allow cases in test-no-branch-hooks.sh and three ok rows in test_hooks_cases.py for the plain push and delete forms.",
+   "class": "within",
+   "why": "FR-005 asks only that neither guard refuse the backup push or its delete and that tests pin both as permitted; the guards refuse neither today (measured in the plan)."
+  },
+  {
+   "id": "D7",
+   "summary": "The no-branch rows of CLAUDE.md and docs/guards.md name the backup branches; one sentence added to docs/session-clones.md's stop-work section.",
+   "class": "within",
+   "why": "FR-010; the extra sentence documents the requested behavior where the stop-work procedure is described and adds no behavior."
+  },
+  {
+   "id": "D8",
+   "summary": "The fixture cases in test-sync-with-main.sh for SC-001 to SC-004 and SC-006.",
+   "class": "within",
+   "why": "Each case enforces a requirement the spec carries; tests that enforce the request are not scope."
+  }
+ ],
+ "verdict": "CLEAR"
+}

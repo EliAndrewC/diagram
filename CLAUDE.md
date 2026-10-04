@@ -229,7 +229,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
 | `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost | `LEDGER_LINT_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
-| `no-branch-hooks.sh` | no branches | `NO_BRANCH_OK` |
+| `no-branch-hooks.sh` | no local branches. The remote-only `backup/<clone-name>` branches on GitHub are not local branches: `sync-with-main.sh` pushes the clone's HEAD there (fast-forward, never forced) at every `done`/`push`, landed or refused, and deletes each once `main` contains it - its own at landing, any other by the sweep at the same step (feature 321) | `NO_BRANCH_OK` |
 | `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |
 | `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
 | `measure-hooks.sh` | a second expensive run with nothing changed between | `MEASURE_OK` |

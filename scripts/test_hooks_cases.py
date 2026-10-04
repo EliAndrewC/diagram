@@ -47,6 +47,10 @@ REPO_SAFETY = [
     ("flag before the verb", cmd("git --force push origin main"), "blocked"),
     ("an ordinary push", cmd("git -C /gm-assistant/.clones/x push origin HEAD:main"), "ok"),
     ("the stop-work procedure", cmd("./scripts/sync-with-main.sh done"), "ok"),
+    # feature 321 FR-005: the remote-only backup branch, its push and its delete
+    ("the backup push", cmd("git -C /diagram/.clones/x push origin HEAD:refs/heads/backup/x"), "ok"),
+    ("the backup delete", cmd("git -C /diagram/.clones/x push origin --delete backup/x"), "ok"),
+    ("the backup delete, refspec form", cmd("git -C /diagram/.clones/x push origin :refs/heads/backup/x"), "ok"),
     # the seventh mention-versus-invocation case: a message ABOUT the rule
     ("a commit message quoting the rule", cmd('git commit -m "never git push --force here"'), "ok"),
     ("a heredoc message quoting it", cmd("git commit -F - <<MSG\nblocks git push --force\nMSG"), "ok"),
