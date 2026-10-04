@@ -274,3 +274,18 @@ def _plank_bed(bend=False):
             {"name": f"plank-{y0:.0f}", "kind": "paddy", "outline": [[150.0, y0], [1250.0, y0], [1250.0, y1], [150.0, y1]], "bbox": [150.0, y0, 1250.0, y1], "vis_bbox": [150.0, y0, 1250.0, y1]}
         )
     return s
+
+
+def seed_tree(s, center, out, length):  # noqa: ANN001, ANN201
+    """An access tree with one leg from `center` along `out` for `length` px, installed on `s` - the tree the corridor tests
+    hang corridors from (what `access.start_tree` set up before feature 320 removed the exit strip), recorded as the root the
+    tree's ways are judged against (`way_out_root`), with the empty list of corridors."""
+    from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, AccessTree
+
+    end = (center[0] + out[0] * length, center[1] + out[1] * length)
+    tree = AccessTree(s.px(ACCESS_HALF_FT))
+    tree.add(center, end)
+    s._access = tree
+    s.M["access_corridors"] = []
+    s.M["way_out_root"] = [list(center), list(end)]  # the tree's root before the track out is drawn (`tree._root`)
+    return tree

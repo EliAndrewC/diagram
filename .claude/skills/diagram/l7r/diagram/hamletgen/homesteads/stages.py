@@ -353,8 +353,6 @@ def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
     return ground
 
 
-
-
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
     corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
@@ -510,11 +508,12 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         # (`stage_household_ways`), and the region's reach flooded from the open ground past the seat band on the way-out side -
         # the ANCHOR, ground the region alone reads, never a corridor, never buildable ground taken, never on the manifest
         s._access = AccessTree(s.px(ACCESS_HALF_FT))
+        s.__dict__.pop("_corridor_memo", None)  # a new seating is a new tree: nothing remembered of the last one's ground
         s._access.routed = grows(plan)  # a way laid by the gap pass may be routed (308 D3, 318)
         s.M["access_corridors"] = []  # each household's way, recorded as the gap pass lays it (`access.reserve`)
         _c = (float(seat["cx"]), float(seat["cy"]))
         s._way_out_bearing = _out  # type: ignore[attr-defined]
-        s._way_out_anchor = ((_c[0] + _out[0] * bound, _c[1] + _out[1] * bound), (_c[0] + _out[0] * _length, _c[1] + _out[1] * _length))
+        s._way_out_anchor = (_c, (_c[0] + _out[0] * bound, _c[1] + _out[1] * bound), (_c[0] + _out[0] * _length, _c[1] + _out[1] * _length))
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
     # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
     s._seat_region = SeatRegion(s, seating_window(s, (float(seat["cx"]), float(seat["cy"])), plan.spec.households)) if getattr(s, "_nucleated", False) else None

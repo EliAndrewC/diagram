@@ -414,13 +414,18 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
     ax, ay = plan.seat["along"]
     ox, oy = plan.seat["out"]
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
-    back = [
-        (cx + ox * 40 - ax * 5000, cy + oy * 40 - ay * 5000),
-        (cx + ox * 40 + ax * 5000, cy + oy * 40 + ay * 5000),
-        (cx + ox * 5000 + ax * 5000, cy + oy * 5000 + ay * 5000),
-        (cx + ox * 5000 - ax * 5000, cy + oy * 5000 - ay * 5000),
-    ]
-    s.block_polys.append(back)
+    # ...LEAVING A SLOT OPEN ALONG THE BEARING OUT (feature 320): the way out's side is open ground, as on every real map - the
+    # seating's reach is seeded there (`_way_out_anchor`), and a back blocked across it seeds none, so no front-row dooryard opens
+    slot = 20.0
+    for a0, a1 in ((-5000.0, -slot), (slot, 5000.0)):
+        s.block_polys.append(
+            [
+                (cx + ox * 40 + ax * a0, cy + oy * 40 + ay * a0),
+                (cx + ox * 40 + ax * a1, cy + oy * 40 + ay * a1),
+                (cx + ox * 5000 + ax * a1, cy + oy * 5000 + ay * a1),
+                (cx + ox * 5000 + ax * a0, cy + oy * 5000 + ay * a0),
+            ]
+        )
     # ...AND A STRIP THAT CANNOT HOLD THE QUOTA IS REFUSED, NAMED (feature 287, homes H14 and H32: every household with its
     # fixtures, or the site refused) - asserted, not suppressed: the ends were offered and taken before the refusal
     plan.seat["ladder"] = []

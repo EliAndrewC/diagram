@@ -20,8 +20,9 @@ from l7r.diagram.settlement.homestead_parts.wood_share import (
     well_keepout,
     within_reach,
 )
-from l7r.diagram.settlement.rolling.access import corridor_clear, start_tree
+from l7r.diagram.settlement.rolling.access import corridor_clear
 from l7r.diagram.settlement.rolling.lot import record_parts
+from tests.settlement._builders import seed_tree
 
 FLOOR, REACH = HOMESTEAD_WOOD_FT2[0], 90.0
 
@@ -187,7 +188,7 @@ def test_a_later_homestead_may_not_stand_over_a_reserved_seat_nor_share_its_grou
 
 def test_a_corridor_through_reserved_seats_is_refused() -> None:
     s = _open()
-    start_tree(s, (300.0, 300.0), (1.0, 0.0), 50.0)
+    seed_tree(s, (300.0, 300.0), (1.0, 0.0), 50.0)
     wood = install_wood_shares(s, FLOOR, REACH, 7.0)
     geom = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
     seats = wood.share(geom, 0.0, [])
@@ -276,7 +277,7 @@ def test_a_homestead_over_a_reserved_seat_or_out_of_the_sun_is_refused_before_it
 
     s = _open()
     wood = install_wood_shares(s, FLOOR, REACH, 7.0)
-    start_tree(s, (720.0, 300.0), (0.0, -1.0), 100.0)
+    seed_tree(s, (720.0, 300.0), (0.0, -1.0), 100.0)
     first = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
     seats = wood.share(first, 0.0, [])
     assert seats is not None and wood.commit(first, seats) >= FLOOR
@@ -310,7 +311,7 @@ def test_a_corridor_admitted_over_the_households_own_seats_sends_its_share_to_be
 
     s = _open()
     wood = install_wood_shares(s, FLOOR, REACH, 7.0)
-    start_tree(s, (720.0, 300.0), (0.0, -1.0), 100.0)
+    seed_tree(s, (720.0, 300.0), (0.0, -1.0), 100.0)
     asked: list[int] = []
     real = ws.WoodShares.share
 

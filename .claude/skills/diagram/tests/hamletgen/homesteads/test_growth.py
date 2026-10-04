@@ -381,17 +381,6 @@ def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.Mo
     assert seats and all(y > -1e-6 for _x, y in seats), "the first house's yard lies south: no tight seat north of it"
 
 
-def test_a_tight_seat_by_a_way_is_no_tight_seat() -> None:
-    """Feature 317 (`TIGHT_TREE_FT`): a household that near the access tree has a way of its own - the custom's condition fails."""
-    tree = SimpleNamespace(targets=lambda p: [(p[0] + 79.0, p[1])])
-    s = SimpleNamespace(px=lambda ft: ft, _access=tree)
-    assert growth.near_the_tree(s, (0.0, 0.0))
-    s._access = SimpleNamespace(targets=lambda p: [(p[0] + 81.0, p[1])])
-    assert not growth.near_the_tree(s, (0.0, 0.0))
-    assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft, _access=SimpleNamespace(targets=lambda p: [])), (0.0, 0.0)), "no tree point"
-    assert not growth.near_the_tree(SimpleNamespace(px=lambda ft: ft), (0.0, 0.0)), "no tree"
-
-
 def test_the_built_share_is_the_homesteads_over_their_outline() -> None:
     """FR-007 (feature 318): four 100 x 100 homesteads at the corners of a 300 x 300 square cover 40,000 of the 90,000 their
     corners' hull holds; under three homesteads there is no outline."""

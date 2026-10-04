@@ -11,7 +11,7 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import gap_ways as gw
-from l7r.diagram.settlement.rolling.access import start_tree
+from tests.settlement._builders import seed_tree
 
 
 def _site(xs: tuple[float, ...] = (600.0, 900.0)) -> tuple[Settlement, list[dict]]:
@@ -19,7 +19,7 @@ def _site(xs: tuple[float, ...] = (600.0, 900.0)) -> tuple[Settlement, list[dict
     s = Settlement(1400.0, 1400.0, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=len(xs), down_deg=90, water_flow=90, nucleated=True)
     s._nucleated = True
-    start_tree(s, (300.0, 450.0), (1.0, 0.0), 900.0)
+    seed_tree(s, (300.0, 450.0), (1.0, 0.0), 900.0)
     houses = []
     for x in xs:
         geom = s._bundle_geom(x, 700.0, 46.0, 28.0, "SE", rot=0.0)

@@ -117,7 +117,8 @@ class SeatRegion:
             # ...FROM THE WAY OUT'S SIDE (feature 320 D1): the tree has no legs while houses are seated, so the open ground past
             # the seat band on the bearing out (`_way_out_anchor`) is where reachable ground starts - a seed, nothing reserved
             anchor = getattr(self.s, "_way_out_anchor", None)
-            segs = list(tree.segs) if tree is not None and tree.segs else ([anchor] if anchor is not None else [])
+            seed = anchor_in_window(anchor, self.window, self.cell) if anchor is not None else None
+            segs = list(tree.segs) if tree is not None and tree.segs else ([seed] if seed is not None else [])
             # ...AND NOT FROM THE WINDOW'S EDGE (feature 318): seeded there, ground that might reach the tree round the outside of
             # the window was counted reached - an over-count the seat's corridor search once settled. With no search while houses
             # are seated, it admitted a group of households beyond a brook that no way then reached (cohort seed 13: four of
@@ -225,6 +226,45 @@ def smallest_sides(s: Settlement) -> tuple[list[tuple[float, float, float, float
         return sides, yard
     finally:
         s.__dict__.update(saved)
+
+
+def _clip(a: Pt, b: Pt, box: tuple[float, float, float, float]) -> tuple[float, float] | None:
+    """The span (t0, t1) of the segment a-b, as fractions of it, inside `box` (Liang-Barsky); None where it misses."""
+    t0, t1 = 0.0, 1.0
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    for p, q in ((-dx, a[0] - box[0]), (dx, box[2] - a[0]), (-dy, a[1] - box[1]), (dy, box[3] - a[1])):
+        if p == 0.0:
+            if q < 0.0:
+                return None
+            continue
+        r = q / p
+        if p < 0.0:
+            t0 = max(t0, r)
+        else:
+            t1 = min(t1, r)
+    return (t0, t1) if t0 <= t1 else None
+
+
+def anchor_in_window(anchor: Any, window: tuple[float, float, float, float], cell: float) -> tuple[Pt, Pt] | None:
+    """The seating's reach seed (`_way_out_anchor`: the seat's center, the band's bound and the far end, on the bearing out)
+    as it lies in the region's `window`, inset a cell: the stretch past the band's bound where it is inside; where none of it
+    is (a seat by the canvas's edge, the window clipped there), the last two cells of the bearing out inside the window -
+    the open ground on the way out's side at its edge (feature 320: an anchor wholly off the canvas seeded nothing, and no
+    seat counted open). None where the bearing out never enters the window.
+
+    Research: a way of its own decided on lane ground - research/questions/0081-village-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, on the way out's side"""
+    c, near, far = ((float(q[0]), float(q[1])) for q in anchor)
+    box = (window[0] + cell, window[1] + cell, window[2] - cell, window[3] - cell)
+    span = _clip(near, far, box)
+    if span is not None and span[1] > span[0]:
+        return (near[0] + (far[0] - near[0]) * span[0], near[1] + (far[1] - near[1]) * span[0]), (near[0] + (far[0] - near[0]) * span[1], near[1] + (far[1] - near[1]) * span[1])
+    span = _clip(c, far, box)
+    if span is None or span[1] <= span[0]:
+        return None
+    d = math.dist(c, far) or 1.0
+    t1 = span[1]
+    t0 = max(span[0], t1 - 2.0 * cell / d)
+    return (c[0] + (far[0] - c[0]) * t0, c[1] + (far[1] - c[1]) * t0), (c[0] + (far[0] - c[0]) * t1, c[1] + (far[1] - c[1]) * t1)
 
 
 def flood_from(region: Region | LaneGround, segs: Sequence[tuple[Pt, Pt]], half: float) -> Any:

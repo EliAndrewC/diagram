@@ -21,10 +21,8 @@ too (fold, ruled run along the frame and on the page, the screen axis): `hamletg
 candidate, the routes round the field included, on the course as drawn (`drawn_course`) and refuses the site past the last
 (`BrookRefused`), and the sink judges each confluence it adds with the brook as drawn (`sink.confluence_keeps_the_brook`),
 on the violating cases in `tests/hamletgen/test_brook.py` and `test_sink.py`. Wave 5 retired a way reaching the field,
-with the pool's brook non-vacuity that served it: the seating reserves the field's corridor with the exit strip, or seats no
-one on the margin (`homesteads/stages.py:reserve_field_corridor`), and the web draws it first where no way reaches the field
-(`ways/settle.py:settle_field`), on the violating cases in `tests/hamletgen/test_homesteads_287.py` and
-`tests/hamletgen/ways/test_settle.py`. What is left is KEPT because no placer guarantees it yet, and each test says why:
+with the pool's brook non-vacuity that served it: on a brook map a field no way reaches is refused (`ways/last_resort.py`),
+on the violating cases in `tests/hamletgen/ways/test_last_resort.py`. What is left is KEPT because no placer guarantees it yet, and each test says why:
 - the board caption off the roofs, nearest its board and off the crowns: a PREFERENCE since the GM's ruling on plan D12
   (2026-09-30: *"It should sit clean when possible but it is okay for it to not sit clean"*). The siter takes a clean
   seat wherever one exists, and every pool map has one, so these hold of the pool; a map whose every roadside seat fouls

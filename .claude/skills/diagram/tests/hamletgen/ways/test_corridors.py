@@ -12,8 +12,8 @@ def _house(x, y, rot=180.0, w=40.0, h=28.0):
 
 
 def test_the_tree_is_the_connector_and_the_lanes_the_web_draws_for_what_it_owes() -> None:
-    assert co.is_tree({"connector": True}) and co.is_tree({"role": co.ACCESS_ROLE}) and co.is_tree({"role": co.FIELD_ROLE})
-    assert co.is_tree({"role": co.TARGET_ROLE}) and co.is_tree({"role": co.STRIP_ROLE}) and not co.is_tree({"role": "straggler"}) and not co.is_tree({})
+    assert co.is_tree({"connector": True}) and co.is_tree({"role": co.ACCESS_ROLE})
+    assert co.is_tree({"role": co.TARGET_ROLE}) and not co.is_tree({"role": "field way"}) and not co.is_tree({"role": "straggler"}) and not co.is_tree({})
 
 
 def test_an_end_behind_a_house_is_carried_round_the_nearer_gable_into_the_dooryard() -> None:

@@ -19,6 +19,7 @@ from l7r.diagram.settlement.rolling import access
 from l7r.diagram.settlement.rolling.bundle import BundleGeomMixin, PocketUnlaid, box_gap, boxes_meet, pocket_clear_of_beds, pocket_keeps_its_dwelling
 from l7r.diagram.settlement.rolling.lot import bundle_admitted, bundle_records, held_part_records
 from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+from tests.settlement._builders import seed_tree
 
 from ._builders import _crop_settlement
 
@@ -110,7 +111,7 @@ def test_crown_reach_is_the_reach_the_grove_draws() -> None:
 
 def test_a_shared_sheds_pocket_keeps_off_the_access_tree() -> None:
     s = _hamlet()
-    access.start_tree(s, (700.0, 700.0), (1.0, 0.0), 400.0)
+    seed_tree(s, (700.0, 700.0), (1.0, 0.0), 400.0)
     assert not s._commons_pocket_clear(900.0, 740.0, 16.0, 11.0, []), "beside the exit strip: its approach"
     assert s._commons_pocket_clear(900.0, 900.0, 16.0, 11.0, [])
 

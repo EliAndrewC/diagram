@@ -8,7 +8,7 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import passage
-from l7r.diagram.settlement.rolling.access import start_tree
+from tests.settlement._builders import seed_tree
 
 
 def test_the_share_is_rolled_from_the_seed_within_its_band_and_the_budget_floors_it() -> None:
@@ -48,7 +48,7 @@ def _pair(s: Settlement, gap: float = 2.0) -> tuple[dict, dict, dict]:
     """A neighbor seated at (600, 700) with a corridor of its own and its bed to the east of its yard, and a household laid
     against its land to the WEST, `gap` px off it, its own bed on its far side - so the two yards face each other across the
     parting - with the tight seat's word on the two (`_tight_of`)."""
-    start_tree(s, (600.0, 450.0), (1.0, 0.0), 400.0)
+    seed_tree(s, (600.0, 450.0), (1.0, 0.0), 400.0)
     nb_geom = s._bundle_geom(600.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
     nb_geom["access"] = ((600.0, 680.0), (600.0, 450.0))
     nb = {"x": 600.0, "y": 700.0, "geom": nb_geom}

@@ -7,8 +7,9 @@ import pytest
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import access
-from l7r.diagram.settlement.rolling.access import AccessTree, _seg_box_gap, access_corridor, corridor_clear, doors_of, reserve, start_tree
+from l7r.diagram.settlement.rolling.access import AccessTree, _seg_box_gap, access_corridor, corridor_clear, doors_of, reserve
 from tests.hamletgen._builders import a_plan
+from tests.settlement._builders import seed_tree
 
 
 def _open(W: float = 1400.0) -> Settlement:
@@ -64,11 +65,10 @@ def test_a_turned_yards_far_edge_door_stands_on_its_drawn_edge_not_its_box() -> 
     assert math.dist(doors_of(geom)[1], yard[:2]) > 20.0, "the box alone overstates it"
 
 
-def test_the_exit_strip_starts_the_tree_and_the_manifest_records_it() -> None:
+def test_a_reserved_corridor_joins_the_tree_and_the_manifest_records_it() -> None:
     s = _open()
-    tree = start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
-    assert s._access is tree and tree.segs == [((100.0, 100.0), (100.0, 150.0))]
-    assert s.M["access_exit"] == [[100.0, 100.0], [100.0, 150.0]] and s.M["access_corridors"] == []
+    tree = seed_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
+    assert s._access is tree and tree.segs == [((100.0, 100.0), (100.0, 150.0))] and s.M["access_corridors"] == []
     reserve(s, ((0.0, 0.0), (100.0, 100.0)))
     assert len(tree.segs) == 2 and s.M["access_corridors"] == [{"pts": [[0.0, 0.0], [100.0, 100.0]]}]
     reserve(s, ((1.0, 1.0), (2.0, 2.0)), of=(5.0, 5.0))
@@ -81,7 +81,7 @@ def test_a_corridor_through_another_homestead_or_its_own_house_is_refused(monkey
     # `test_a_corridor_over_its_own_bed_or_well_pocket_is_refused`'s (feature 287 M8)
     monkeypatch.setattr(access, "parts_clear", lambda *a: True)
     s = _open()
-    start_tree(s, (700.0, 300.0), (1.0, 0.0), 300.0)
+    seed_tree(s, (700.0, 300.0), (1.0, 0.0), 300.0)
     s.placed.append((700.0, 500.0, 120.0, 60.0))  # a neighbor square across the direct run to the strip
     blocked = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
     assert not corridor_clear(s, doors_of(blocked)[0], (700.0, 300.0), blocked)
@@ -108,7 +108,7 @@ def test_a_corridor_over_ground_the_boundary_refuses_is_refused() -> None:
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
     s.block_polys.append([(cx + 150.0, cy - 40.0), (cx + 250.0, cy - 40.0), (cx + 250.0, cy + 40.0), (cx + 150.0, cy + 40.0)])  # no-build ground
     hg.homesteads.boundary.install_site_boundary(s, plan)
-    start_tree(s, (cx, cy), plan.seat["out"], 100.0)
+    seed_tree(s, (cx, cy), plan.seat["out"], 100.0)
     geom = s._bundle_geom(cx, cy, 46.0, 28.0, "SE", rot=0.0)
     assert not corridor_clear(s, (cx, cy + 40.0), (700.0, 700.0), geom), "into the paddy: the field side of a chord"
     assert not corridor_clear(s, (cx + 60.0, cy), (cx + 300.0, cy), geom), "through the outline of the other ground"
@@ -128,7 +128,7 @@ def test_the_placer_admits_a_seat_only_with_its_corridor_and_reserves_it() -> No
     `try_place` reserves the corridor, and the envelope of a later homestead on the corridor is refused."""
     s = _open()
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
-    start_tree(s, (700.0, 300.0), (0.0, -1.0), 200.0)
+    seed_tree(s, (700.0, 300.0), (0.0, -1.0), 200.0)
     assert s.try_place(700.0, 520.0, "plain")
     assert len(s.M["access_corridors"]) == 1 and len(s._access.segs) == 2
     a, b = s._access.segs[1]
@@ -145,7 +145,7 @@ def test_a_corridor_the_ways_ground_test_refuses_is_refused_and_the_exit_strip_t
     though the site boundary admits it; the exit strip is held to it, turned off its bearing where refused straight out,
     and a margin whose every turn is refused has no way out."""
     s = _open()
-    start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
+    seed_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
     geom = s._bundle_geom(1000.0, 1000.0, 46.0, 28.0, "SE", rot=0.0)
     assert corridor_clear(s, (500.0, 500.0), (500.0, 300.0), geom), "no test installed (a village roll): the boundary's alone"
     s._corridor_ground = lambda run: run[-1][0] <= 500.0  # a stand-in: ground east of x = 500 is unlawful
@@ -162,7 +162,7 @@ def test_a_tree_behind_the_house_is_reached_round_the_gable_from_the_dooryard() 
     """No straight run from the dooryard reaches a tree behind the house past its neighbors; a flank door carried back
     along the gable does, in two legs - and each leg is its own record, the first naming the house."""
     s = _open()
-    start_tree(s, (720.0, 470.0), (0.0, -1.0), 20.0)  # the tree starts just behind the back wall: every straight run crosses the house
+    seed_tree(s, (720.0, 470.0), (0.0, -1.0), 20.0)  # the tree starts just behind the back wall: every straight run crosses the house
     geom = s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0)
     got = access_corridor(s, geom)
     assert got is not None and len(got) == 3, "round the gable"
@@ -199,7 +199,7 @@ def test_a_corridor_round_the_gable_never_doubles_back_to_a_tree_in_front(monkey
     def search(tree_at: tuple[float, float], out: tuple[float, float]) -> tuple[tuple[float, float], ...] | None:
         s = _open()
         turns.clear()
-        start_tree(s, tree_at, out, 60.0)
+        seed_tree(s, tree_at, out, 60.0)
         return access_corridor(s, s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0))
 
     assert search((820.0, 750.0), (1.0, 0.0)) is None, "the tree in front, beside the house: only a hairpin reaches it"
@@ -211,7 +211,7 @@ def test_a_corridor_round_the_gable_never_doubles_back_to_a_tree_in_front(monkey
 
 def test_what_stands_is_asked_once_while_nothing_of_it_changes() -> None:
     s = _open()
-    start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
+    seed_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
     calls: list[int] = []
     s._corridor_ground = lambda run: calls.append(1) or True
     geom = s._bundle_geom(1000.0, 1000.0, 46.0, 28.0, "SE", rot=0.0)
@@ -219,8 +219,6 @@ def test_what_stands_is_asked_once_while_nothing_of_it_changes() -> None:
     assert len(calls) == 1, "remembered"
     s.placed.append((900.0, 900.0, 10.0, 10.0))
     assert corridor_clear(s, (500.0, 500.0), (500.0, 300.0), geom) and len(calls) == 2, "a box placed since: asked again"
-    start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
-    assert "_corridor_memo" not in s.__dict__, "a new seating forgets"
 
 
 def test_the_bounded_gap_test_gives_the_exact_gaps_verdict() -> None:
@@ -270,7 +268,7 @@ def test_the_homesteads_of_one_house_and_yard_share_the_search_and_each_gets_its
     got = []
     for center, tree_at, out in (((720.0, 520.0), (720.0, 470.0), (0.0, -1.0)), ((700.0, 700.0), (700.0, 300.0), (1.0, 0.0)), ((700.0, 700.0), (700.0, 735.0), (1.0, 0.0))):
         s = _open()
-        start_tree(s, tree_at, out, 300.0 if out[0] else 20.0)
+        seed_tree(s, tree_at, out, 300.0 if out[0] else 20.0)
         base = s._bundle_geom(center[0], center[1], 46.0, 28.0, "SE", rot=0.0)
         for _ in range(12):
             geom = {**base, "boxes": {**base["boxes"], "fixtures": {f"f{k}": (center[0] + rng.uniform(-60, 60), center[1] + rng.uniform(-60, 60), 8.0, 8.0) for k in range(rng.randint(0, 3))}}}
@@ -343,7 +341,7 @@ def test_a_seat_whose_corridor_the_tree_cannot_take_lawfully_is_refused_at_seati
 
     s = _open()
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
-    start_tree(s, (700.0, 300.0), (0.0, -1.0), 200.0)
+    seed_tree(s, (700.0, 300.0), (0.0, -1.0), 200.0)
     geom = s._bundle_geom(700.0, 520.0, 46.0, 28.0, "SE", rot=0.0)
     admitted = access_corridor(s, geom)
     assert admitted is not None, "no tree judge installed: the strip is reached"
@@ -365,7 +363,7 @@ def test_a_corridor_keeps_off_its_own_well_pocket_and_its_own_fixtures() -> None
     well, which the registry keeps every corridor off - so the corridor is held off its own pocket by the wellhead's box,
     as off its own privy; a household with no pocket is asked of its fixtures alone."""
     s = _open()
-    start_tree(s, (700.0, 700.0), (1.0, 0.0), 300.0)
+    seed_tree(s, (700.0, 700.0), (1.0, 0.0), 300.0)
     vr = float(s._well_vr())
     own = {"well": (300.0, 300.0), "boxes": {"fixtures": {"privy": (500.0, 300.0, 10.0, 8.0)}}}
     assert not access.fixtures_clear(s, (200.0, 300.0 + vr), (400.0, 300.0 + vr), own), "past the wellhead within the corridor's half"
@@ -380,7 +378,7 @@ def test_the_site_raster_is_asked_of_a_searchs_lines_at_once_and_each_line_once(
     from types import SimpleNamespace
 
     s = _open()
-    start_tree(s, (600.0, 450.0), (1.0, 0.0), 400.0)
+    seed_tree(s, (600.0, 450.0), (1.0, 0.0), 400.0)
     access.prime_site(s, [((0.0, 0.0), (10.0, 0.0))])  # no raster: a no-op
     calls: list[int] = []
     s._free_ground = SimpleNamespace(lines_edge_points=lambda lines: calls.append(len(lines)) or [None] * len(lines))

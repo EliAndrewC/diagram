@@ -76,16 +76,15 @@ def test_the_view_takes_in_every_households_reserved_wood() -> None:
 
 def test_the_seatings_corridors_and_seats_are_kept_off_by_every_later_placer() -> None:
     s = _hamlet()
-    s.M["access_corridors"] = [{"pts": [[100.0, 300.0], [400.0, 300.0]], "of": [100.0, 260.0]}, {"pts": [[400.0, 300.0], [400.0, 600.0]]}, {"pts": [[400.0, 600.0], [600.0, 600.0]], "field": True}]
-    s.M["access_exit"] = [[600.0, 600.0], [900.0, 600.0]]
+    s.M["access_corridors"] = [{"pts": [[100.0, 300.0], [400.0, 300.0]], "of": [100.0, 260.0]}, {"pts": [[400.0, 300.0], [400.0, 600.0]]}, {"pts": [[400.0, 600.0], [600.0, 600.0]]}]
     s.M["houses"].append({"x": 100.0, "y": 260.0, "w": 40.0, "h": 28.0, "rot": 0.0, "wood_share": {"seats": [[900.0, 900.0]], "r": 11.0}})
     reserve_the_seating(s)
     res = s.standing.reserved
-    assert len(res.corridors) == 4 and res.corridors[1][3] == [100.0, 260.0] and res.corridors[2][3] is None and res.seats == [(900.0, 900.0)]
+    assert len(res.corridors) == 3 and all(c[3] == [100.0, 260.0] for c in res.corridors) and res.seats == [(900.0, 900.0)]
     well = {"x": 400.0, "y": 450.0, "r": 8, "vr": 12.4}
     assert not s.admits("wells", well), "a wellhead on the tree's second leg"
     assert s.admits("wells", dict(well, x=500.0))
-    assert not s.admits("byres", {"x": 750.0, "y": 600.0, "w": 16.0, "h": 11.0, "rot": 0.0}), "a shared shed on the exit strip"
+    assert not s.admits("byres", {"x": 500.0, "y": 600.0, "w": 16.0, "h": 11.0, "rot": 0.0}), "a shared shed on the field's way"
     assert not s.admits("lanes", {"pts": [[850.0, 910.0], [950.0, 910.0]], "w": 3}), "a lane over a household's wood seat"
     assert not s.well_at(400.0, 450.0), "the communal well's placer asks it"
 
@@ -142,44 +141,30 @@ def test_the_parts_laid_at_seating_stand_until_drawn() -> None:
 # ---- the connector's last resorts --------------------------------------------------------------------------------------
 
 
-def test_a_gateway_walled_in_by_reserved_seats_leaves_along_the_exit_strip_then_over_a_seat(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The dry exit is walled by the seats; where that walls the gateway in, the connector runs out along the exit strip the
-    seating reserved and the fill starts at its end; where even that fails, the way out takes the seats in its path and the
+def test_a_gateway_walled_in_by_reserved_seats_leaves_over_a_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The dry exit is walled by the seats; where that walls the gateway in, the way out takes the seats in its path and the
     manifest names them (`meta.wood_seats_to_the_connector`) - never no connector."""
     s = _hamlet()
     plan = a_plan()
     s.standing.reserved.reserve_seats([(-100.0, 0.0), (500.0, 500.0)], 22.0, 15.0)
-    s.M["access_exit"] = [[50.0, 50.0], [300.0, 50.0]]
-    monkeypatch.setattr(track, "route_around", lambda *a: None)  # ...so no swept track, from the gateway or the strip, is drawn
-    monkeypatch.setattr(track, "connector_track", lambda plan_, start, **kw: [tuple(start), (-900.0, float(start[1]))])
+    monkeypatch.setattr(track, "route_around", lambda *a: None)  # ...so no swept track is drawn
     calls: list[tuple[float, float]] = []
-
-    def dry(plan_: Any, start: Any, avoid: Any, *a: Any) -> list[tuple[float, float]]:
-        calls.append(tuple(start))
-        if len(calls) == 1:
-            raise track.NoDryExit("walled in by the seats")
-        return [tuple(start), (float(start[0]) - 400.0, float(start[1]))]
-
-    monkeypatch.setattr(track, "connector_dry_exit", dry)
-    run = track.connector_through(s, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], [])
-    assert calls == [(60.0, 60.0), (300.0, 50.0)] and run[2] == (300.0, 50.0)
-    assert run[0] == (60.0, 50.0), "its start set back on the strip it stood 10 ft off (`track.on_the_strip`)"
-    assert "wood_seats_to_the_connector" not in s.M["meta"]
-    calls.clear()
 
     def walled(plan_: Any, start: Any, avoid: Any, *a: Any) -> list[tuple[float, float]]:
         calls.append(tuple(start))
-        if len(calls) < 3:
+        if len(calls) < 2:
             raise track.NoDryExit("walled")
         return [(60.0, 0.0), (-400.0, 0.0)]
 
     monkeypatch.setattr(track, "connector_dry_exit", walled)
     run = track.connector_through(s, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], [])
+    assert calls == [(60.0, 60.0), (60.0, 60.0)], "walled by the seats, then over them, from the same gateway"
     assert run == [(60.0, 0.0), (-400.0, 0.0)] and s.M["meta"]["wood_seats_to_the_connector"] == [[-100.0, 0.0]]
     assert s.standing.reserved.seats == [(500.0, 500.0)], "the seat the way out took is given up; the other stands"
     s2 = _hamlet()
     monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(60.0, 0.0), (-400.0, 0.0)])
     assert track.connector_through(s2, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], []) == [(60.0, 0.0), (-400.0, 0.0)]
+    assert "wood_seats_to_the_connector" not in s2.M["meta"], "the dry exit clear of the seats gives none up"
 
 
 def test_a_spur_the_registry_refuses_is_recorded_dropped(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -205,20 +190,3 @@ def test_the_title_pocket_is_never_reserved_over_a_households_wood_or_a_corridor
     assert not hframe.pocket_clear_of_features((400.0, 400.0, 489.5, 600.0), s.M, 0.0), "a seat within a crown of its edge"
     assert hframe.pocket_clear_of_features((400.0, 400.0, 480.0, 600.0), s.M, 0.0)
     assert not hframe.pocket_clear_of_features((150.0, 850.0, 250.0, 950.0), s.M, 0.0), "a corridor through it"
-
-
-def test_a_connector_swept_over_a_reserved_seat_runs_out_along_the_exit_strip_first(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Cohort seeds 3, 12 and 17: the track swept from the gateway ran its first leg over a household's reserved seat. Before
-    any flood fill, the track is swept again from the exit strip's outer end - the strip every seat keeps off - and drawn from
-    the gateway along the strip."""
-    s = _hamlet()
-    plan = a_plan()
-    s.standing.reserved.reserve_seats([(20.0, 60.0)], 22.0, 15.0)
-    s.M["access_exit"] = [[60.0, 200.0], [60.0, 400.0]]
-    monkeypatch.setattr(track, "route_around", lambda poly, path, margin: path)
-    monkeypatch.setattr(track, "_thread_the_fabric", lambda s_, plan_, run: run)
-    monkeypatch.setattr(track, "connector_track", lambda plan_, start, **kw: [tuple(start), (float(start[0]), 2000.0)])
-    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: pytest.fail("no flood fill is needed"))
-    run = track.connector_through(s, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], [])
-    assert run[0] == (60.0, 60.0) and (60.0, 400.0) in run and run[-1] == (60.0, 2000.0)
-    assert track._dedup_run([(0.0, 0.0), (0.0, 0.0), (1.0, 0.0)]) == [(0.0, 0.0), (1.0, 0.0)]

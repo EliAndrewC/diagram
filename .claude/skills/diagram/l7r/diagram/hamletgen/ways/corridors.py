@@ -42,10 +42,7 @@ Research: footpath width - research/questions/0081-village-lanes.drawing.html: 3
 TARGET_ROLE = "way target"
 """The `role` of a spur drawn to a way target (`meta.way_targets`: a burial ground's near edge) - a tree lane."""
 
-FIELD_ROLE = "field way"
-"""The `role` of the field's reserved corridor drawn where no way of the hamlet's reaches the field - a tree lane."""
-
-TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE, FIELD_ROLE)
+TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE)
 
 SPUR_TRIES = 120
 """How many spurs, shortest first, are offered to a way target or the field before the web says it has none: they leave

@@ -322,9 +322,8 @@ def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path, monkey
         "holes": [],
         "water": [[[20.0, 250.0], [280.0, 250.0], 5.0]],
         "corridors": [],
-        # feature 287: the seating's reservations - an access corridor, the exit strip, a wood-share seat
+        # feature 287: the seating's reservations - an access corridor, a wood-share seat (no exit strip since feature 320)
         "access": [[[160.0, 20.0], [160.0, 130.0]]],
-        "exit": [[200.0, 170.0], [290.0, 170.0]],
         "access_half": 7.0,
         "wood": [[240.0, 60.0, 20.0]],
     }
@@ -332,13 +331,12 @@ def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path, monkey
     with Image.open(tmp_path / img) as im:
         rgb = im.convert("RGB")
         px = list(rgb.get_flattened_data())
-        corridor, strip = rgb.getpixel((160, 75)), rgb.getpixel((245, 170))
+        corridor = rgb.getpixel((160, 75))
         seat = max((rgb.getpixel((x, 60)) for x in range(254, 262)), key=lambda c: c[1] - c[0])  # the ring's thin edge, however it resampled
     assert any(r > 150 and g < 90 and b < 90 for r, g, b in px), "a red ring"
     assert any(b > 150 and r < 90 for r, g, b in px), "a blue chord"
     assert any(g > 110 and b > 110 and r < 80 for r, g, b in px), "a teal corridor"
     assert corridor[0] > corridor[1] > corridor[2] + 30, f"an orange access corridor, the map showing through: {corridor}"
-    assert max(strip) < 150 and abs(strip[0] - strip[1]) < 30, f"a dark gray exit strip, nothing a reader takes for red: {strip}"
     assert seat[1] > seat[0] + 40 and seat[1] > seat[2] + 40, f"a dark green wood-share ring: {seat}"
 
 
@@ -356,22 +354,21 @@ def test_a_plate_is_finished_from_a_copy_that_leaves_the_rolls_memos_behind() ->
 
 
 def test_the_homesteads_overlay_carries_the_seatings_reservations() -> None:
-    """Feature 287: the homesteads plate draws what the seating reserved - every access corridor at its half-width, the
-    exit strip and every household's wood-share seats at their reserved radius - beside the site boundary; a manifest
+    """Feature 287: the homesteads plate draws what the seating reserved - every access corridor at its half-width and
+    every household's wood-share seats at their reserved radius - beside the site boundary; a manifest
     with none of them draws none."""
     from l7r.diagram.settlement import Settlement
 
     s = Settlement(W=300, H=300, seed=1)
     s.M["site_boundary"] = {"chords": [], "rings": [], "holes": [], "water": [], "corridors": []}
     s.M["access_corridors"] = [{"pts": [[1.0, 2.0], [3.0, 4.0]], "of": [1.0, 1.0]}, {"pts": [[5.0, 6.0]]}]
-    s.M["access_exit"] = [[0.0, 0.0], [9.0, 0.0]]
     s.M["houses"] = [{"x": 1, "y": 1, "wood_share": {"seats": [[10, 11], [12, 13]], "r": 14.0}}, {"x": 5, "y": 5}]
     got = ps.homestead_overlay(s)
     assert got["access"] == [[[1.0, 2.0], [3.0, 4.0]]], "a leg with one point is no corridor"
-    assert got["exit"] == [[0.0, 0.0], [9.0, 0.0]] and got["access_half"] == s.px(7.0)
+    assert "exit" not in got and got["access_half"] == s.px(7.0), "no exit strip (feature 320)"
     assert got["wood"] == [[10.0, 11.0, 14.0], [12.0, 13.0, 14.0]] and "chords" in got
     bare = ps.homestead_overlay(Settlement(W=300, H=300, seed=1))
-    assert bare["access"] == [] and bare["exit"] is None and bare["wood"] == []
+    assert bare["access"] == [] and bare["wood"] == []
 
 
 def test_the_page_renders_each_stages_steps_and_the_homesteads_legend(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

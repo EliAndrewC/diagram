@@ -65,7 +65,7 @@ def test_a_way_out_only_the_tree_carries_after_the_last_resort_is_refused_not_dr
     s = _over_and_back_on_the_tree()
     _no_steps(monkeypatch)
     tree = [dict(ln) for ln in s.M["lanes"]]
-    with pytest.raises(lr.WebRefused, match="way out crosses the brook and back on lanes 1 \\(way target\\), 2 \\(field way\\)"):
+    with pytest.raises(lr.WebRefused, match="way out crosses the brook and back on lanes 1 \\(way target\\), 2 \\(way target\\)"):
         settle.settle_the_web(s, rounds=0)
     assert s.M["lanes"] == tree, "no tree lane dropped"
 
@@ -126,35 +126,38 @@ def test_a_settled_web_that_leaves_a_farmhouse_unreached_is_refused() -> None:
     lr.refuse_unreached({**s.M, "houses": [{"x": 0.0, "y": 30.0, "w": 40.0, "h": 28.0}]})  # a reached house passes
 
 
-def test_the_reserved_field_left_unreached_is_refused_and_an_unreserved_one_is_not() -> None:
-    """Ways W03: the field the seating reserved a corridor to is refused unreached; with no reservation the seating has
-    already refused the margin (`homesteads.stages.reserve_field_corridor`), and this rule does not name it."""
+def test_a_brook_maps_field_no_way_reaches_is_refused_and_one_a_lane_reaches_is_not() -> None:
+    """Ways W03, as feature 320 leaves it (nothing reserved for the field): on a brook map a field no way reaches is refused,
+    and one a lane reaches is not."""
     field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
     M = {"lanes": [{"pts": [[0.0, 300.0], [0.0, 1000.0]], "connector": True}], "houses": [], "meta": dict(_GEN), "streams": [BROOK], "fields": [{"outline": field}]}
     assert law.field_unreached(M)
-    lr.refuse_unreached(M)
-    with pytest.raises(lr.WebRefused, match="the field its reserved corridor runs to is reached by no way"):
-        lr.refuse_unreached({**M, "access_corridors": [{"pts": [[195.0, 150.0], [0.0, 150.0]], "field": True}]})
+    with pytest.raises(lr.WebRefused, match="the field is reached by no way"):
+        lr.refuse_unreached(M)
+    reached = {**M, "lanes": [*M["lanes"], {"pts": [[195.0, 150.0], [0.0, 150.0], [0.0, 300.0]], "w": 3}]}
+    assert not law.field_unreached(reached)
+    lr.refuse_unreached(reached)
 
 
 # ---- the settle's exit is a guarantee: a still round is asked the whole law ------------------------------------------
 
 
 def _strip_doubled_on_the_connector() -> _S:
-    """Cohort seed 14 with the straggler footpaths off, in small: the connector's start carried 41 ft off the strip, its first
-    leg back through the strip's foot, and the exit strip drawn on along that leg to the start - a doubled tail and a needle
-    join between two TREE lanes, which no repair cuts, so a round changes nothing with both standing."""
-    s = _S([_c((1.0, -41.0), (0.0, 0.0), (-1000.0, 0.0))], meta=dict(_GEN))
-    s.M["lanes"].append({"pts": [[300.0, 0.0], [1.0, 0.0], [1.0, -41.0]], "w": 3, "worn": True, "role": co.STRIP_ROLE})
+    """Cohort seed 14 with the straggler footpaths off, in small (the exit strip then; an owed way target's spur since feature
+    320 removed the strip): the connector's start carried 41 ft off the tree lane, its first leg back through the lane's foot,
+    and the lane drawn on along that leg to the start - a doubled tail and a needle join between two TREE lanes, which no
+    repair cuts, so a round changes nothing with both standing."""
+    s = _S([_c((1.0, -41.0), (0.0, 0.0), (-1000.0, 0.0))], meta={**_GEN, "way_targets": [{"kind": "burial ground", "at": [300.0, 0.0]}]})
+    s.M["lanes"].append({"pts": [[300.0, 0.0], [1.0, 0.0], [1.0, -41.0]], "w": 3, "worn": True, "role": co.TARGET_ROLE})
     return s
 
 
 def test_a_web_gone_still_with_a_rule_only_the_tree_breaks_is_refused_by_name_never_shipped(monkeypatch: pytest.MonkeyPatch) -> None:
     s = _strip_doubled_on_the_connector()
     assert {"doubled_tails", "needle_joins"} <= set(settle.unsettled(s.M)), "the violating case, the whole law asked"
-    with pytest.raises(lr.WebRefused, match="lanes 1 \\(exit strip\\) still break a rule.*the web still breaks .*doubled_tails, needle_joins"):
+    with pytest.raises(lr.WebRefused, match="lanes 1 \\(way target\\) still break a rule.*the web still breaks .*doubled_tails, needle_joins"):
         settle.settle_the_web(s)
-    assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.STRIP_ROLE], "no tree lane dropped"
+    assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.TARGET_ROLE], "no tree lane dropped"
     # ...and without the exit's question the still round shipped it: the hole this closes
     shipped = _strip_doubled_on_the_connector()
     monkeypatch.setattr(settle, "unsettled", lambda M, ground=None: {})

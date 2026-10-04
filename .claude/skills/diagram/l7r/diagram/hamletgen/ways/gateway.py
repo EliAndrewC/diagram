@@ -58,7 +58,6 @@ def turned_gateway_track(
     raise NoDryExit("no dry way out of the frame from a gateway on any bearing off the cluster")
 
 
-
 def clear_of_what_stands(s: Settlement, gate: Pt) -> Pt:
     """`gate` stepped out past half the connector's tread from every footprint the registry of what stands forbids a way on
     (feature 315, cohort seed 28: the gateway fell 9 px inside a farm's well, so every dry exit the fill sought started walled

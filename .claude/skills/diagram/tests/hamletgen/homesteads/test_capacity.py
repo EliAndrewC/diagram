@@ -55,14 +55,14 @@ def test_with_a_seat_region_a_homestead_is_admitted_only_where_its_yard_opens_on
     predicate admits the seat, and marks the household as having a way of its own (`opens`)."""
     from types import SimpleNamespace
 
-    from l7r.diagram.settlement.rolling.access import start_tree
+    from tests.settlement._builders import seed_tree
 
     s, plan = _toy(10)
     hg.homesteads.boundary.install_site_boundary(s, plan)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
     ax, ay = plan.seat["anchor"]
     ox, oy = plan.seat["out"]
-    start_tree(s, (ax, ay), (ox, oy), 100.0)
+    seed_tree(s, (ax, ay), (ox, oy), 100.0)
     near = s._bundle_geom(ax + ox * 150.0, ay + oy * 150.0, 46.0, 28.0, "SE")
     s._seat_region = SimpleNamespace(opens=lambda g: False)
     assert not s._parts_fit(near), "its yard closed off from the way out"

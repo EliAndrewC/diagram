@@ -202,16 +202,17 @@ def test_a_connector_fold_whose_new_first_leg_runs_through_a_building_is_refused
     assert fold_the_connector_hairpin(s) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
 
 
-def test_a_connector_starting_on_the_exit_strip_is_not_moved_off_it_by_a_hairpin_fold() -> None:
-    """Feature 287 wave 6 (cohort seed 37): the web draws the exit strip as a tree lane up to the connector's start, and the
-    fold that started the connector at a lane's vertex left the strip ending in a hook - where a strip is reserved the
-    connector stands, and the settle re-aims the lane's end instead (`law.connector_hairpin_ends`)."""
+def test_a_connector_starting_at_the_way_outs_gate_is_not_moved_off_it_by_a_hairpin_fold() -> None:
+    """Feature 287 wave 6 (cohort seed 37), as feature 320 keeps it: the households' ways reach the root at the connector's
+    start, and a fold that started the connector at a lane's vertex would leave them ending off it - where the homesteads
+    stage recorded the way out's gate the connector stands, and the settle re-aims the lane's end instead
+    (`law.connector_hairpin_ends`)."""
     from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin
 
     from ._builders import _StubSettlement
 
     s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
-    s.M["access_exit"] = [[2300.0, 25.3], [2055.3, 25.3]]
+    s.M["way_out_gate"] = [2055.3, 25.3]
     assert fold_the_connector_hairpin(s) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
 
 

@@ -324,13 +324,27 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         s.field_face = (float(plan.seat["cx"]), float(plan.seat["cy"]))
 
 
-def recorded_gate(s: Settlement) -> Pt | None:
-    """The way out's gate the homesteads stage decided once the last house stood (`household_ways.way_out_gate`, feature 320),
-    where every household's way reaches the track out - None on a form that records none.
+def recorded_root(s: Settlement) -> Poly | None:
+    """The track out's first leg the homesteads stage decided once the last house stood (`household_ways.root_at_the_gate`,
+    feature 320) - the stretch every household's way reaches - None on a form that records none.
 
     Research: the track out from the gate - research/questions/0081-village-lanes.drawing.html: each household's way joins the track out"""
-    g = s.M.get("way_out_gate")
-    return (float(g[0]), float(g[1])) if g else None
+    r = s.M.get("way_out_root")
+    return [(float(q[0]), float(q[1])) for q in r] if r and len(r) >= 2 else None
+
+
+def with_the_root(M: Mapping[str, Any], root: Poly | None, run: Poly) -> Poly:
+    """The connector `run` (swept from the root's far end) with the root before it: the gate, then on along the root. A run
+    the sweep started elsewhere (a walled-in end, a turned gateway) is joined to the root's end by a leg of its own; the whole
+    is kept only where it keeps the connector's law (`connector_keeps_the_law`), else the run as it came.
+
+    Research: the track out from the gate - research/questions/0081-village-lanes.drawing.html: each household's way joins the track out"""
+    if not root or len(run) < 2:
+        return run
+    end = (round(root[-1][0], 1), round(root[-1][1], 1))
+    head = [(round(root[0][0], 1), round(root[0][1], 1)), end]
+    whole = [*head, *(run[1:] if math.dist(run[0], end) < 0.5 else run)]
+    return whole if connector_keeps_the_law(M, whole) else run
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:
@@ -449,10 +463,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         toe = s.toe_band()
         drawn_wet = marsh_ground(s.M, but=("defense",))
         _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
-        gate_pt = recorded_gate(s) or gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, _band_gate))
+        root = recorded_root(s)  # ...from the root the households' ways reach (feature 320)
+        gate_pt = root[-1] if root else gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, _band_gate))
         track = connector_track(plan, gate_pt, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
         s.lane(
-            connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
+            with_the_root(s.M, root, connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric)),
             width=CONNECTOR_WIDTH,
             clearance=LANE_CLEARANCE,
             worn=True,
@@ -600,7 +615,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
     _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
-    gate = recorded_gate(s) or gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, _band_gate))  # ...from the gate the households' ways reach (feature 320)
+    root = recorded_root(s)  # ...from the root the households' ways reach, swept on from its far end (feature 320)
+    gate = root[-1] if root else gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, _band_gate))
     # THE TRACK LEAVES CLEAR OF THE WET TOE (GM 2026-08-12: "there's supposed to be a rule that
     # paths don't pass through marshland"). The marsh is not drawn until `stage_hinterland`, long
     # after this, so the router asks the ENGINE where it will be - `toe_band` is the same derivation
@@ -616,7 +632,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
 
     track = gateway_track(s, plan, seat, _band_gate, gate, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, drawn_water_segs(s), fabric)
     s.lane(
-        connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
+        with_the_root(s.M, root, connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric)),
         width=CONNECTOR_WIDTH,
         clearance=LANE_CLEARANCE,
         worn=True,
@@ -772,8 +788,6 @@ def connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequenc
     # ...AT THE RECORD'S 0.1 FT, as every other lane is written (`reshape_lane`): a start left unrounded stood a hair off the
     # rounded copies of it the web's lanes end on, and they closed a face of no area (cohort seed 20)
     return [(round(x, 1), round(y, 1)) for x, y in run]
-
-
 
 
 def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
