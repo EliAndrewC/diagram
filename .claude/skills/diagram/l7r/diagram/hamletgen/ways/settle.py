@@ -50,21 +50,15 @@ from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_doorya
 from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
-from .checks import served_network, square_crossings, unreached_houses
+from .checks import square_crossings, unreached_houses
 from .clearance import kink_spans
 from .corridors import (
     ACCESS_WIDTH,
-    FIELD_ROLE,
-    TARGET_ROLE,
     GroundIndex,
     _poly_box,
     building_quads,
-    field_router,
-    field_runs,
     is_tree,
     round_the_gable,
-    routed_field_runs,
-    spur_runs,
     strands_only_ordinary,
     through_a_building,
 )
@@ -72,6 +66,7 @@ from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
+from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .serve import shadowed_by
 from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
@@ -895,72 +890,6 @@ def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = AC
 
     ix = lawful or Lawful(types.SimpleNamespace(M=M))
     return ix.on_lawful_ground(ix.squared(run), width)  # `squared`: `square_run`, skipped where no water comes near the run
-
-
-def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) -> None:
-    s.lane(_rounded(run), width=width, clearance=WEB_CLEARANCE, worn=True)
-    s.M["lanes"][-1].update({"role": role, **extra})
-
-
-def settle_targets(s: Any, lawful: Lawful) -> int:
-    """Step 4b (homes H36): a spur from the network to every way target it does not reach (`law.unreached_targets` - a
-    burial ground's near edge), the shortest straight run that keeps the law (`Lawful`), drawn as a tree lane, once. A
-    target no such run reaches stays unreached - never drawn to by a least-bad spur (FR-005) - and the settle's report
-    names it.
-
-    Research: a path runs to the graves - UNRESEARCHED: the shortest lawful straight spur from the network, once"""
-    M = s.M
-    done = {tuple(ln["to"]) for ln in M.get("lanes") or [] if ln.get("role") == TARGET_ROLE and ln.get("to")}
-    n = 0
-    for t in law.unreached_targets(M):
-        key = (round(t[0], 1), round(t[1], 1))
-        if key in done:
-            continue
-        run = next((r for r in spur_runs(served_network(M.get("lanes") or []), t) if lawful(r, ACCESS_WIDTH)), None)
-        if run is not None:
-            _draw_tree_lane(s, run, ACCESS_WIDTH, TARGET_ROLE, to=list(key))
-            n += 1
-    return n
-
-
-def settle_field(s: Any, lawful: Lawful) -> int:
-    """Step 4c: THE FIELD WAY, where no way of the hamlet's own reaches the field on a brook map (`law.field_unreached`): the
-    first run from the network on to the bund that keeps the law (`Lawful`, as a tree lane) - straight, or over the brook
-    square at a ford (`field_runs`), then threaded round the steadings by the web's router (`routed_field_runs`,
-    `field_router`), the paddy's ground first and then the worked ground's - drawn as a tree lane (`FIELD_ROLE`), so no
-    repair cuts it. Returns 1 where one is drawn, else 0, and the settle refuses a field left unreached
-    (`last_resort.refuse_unreached`).
-
-    WHY HERE (feature 320, FR-004): the same search used to reserve the field's corridor before any house stood; with nothing
-    reserved, the web's own straight field path (`bund.a_way_onto_the_bund`) can be left off the network and dropped
-    (`settle_network`; Sawada: its field path stood apart from the lanes, and the nearest way ended 167 ft from the field).
-
-    Research:
-        the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
-        over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square, at the ford that makes the walk shortest"""
-    from .bund import BRANCH_WIDTH, paddy_ground  # bund.py reads this module's neighbors; imported where it is used
-
-    M = s.M
-    if not law.field_unreached(M):
-        return 0
-    brook = next(iter(law._brooks(M)), [])
-    grounds = [g for g in (paddy_ground(s), memo_ground(s, "worked", worked_ground)) if g.edge is not None]
-    segs = served_network(M.get("lanes") or [])
-    if not grounds or not segs:
-        return 0
-    fords = [(float(x), float(y)) for x, y in (M.get("meta") or {}).get("brook_fords") or []]
-
-    def candidates() -> Any:
-        yield from field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
-        route = field_router(s, brook)
-        for ground in grounds:
-            yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)
-
-    run = next((r for r in candidates() if len(r) >= 2 and lawful(r, BRANCH_WIDTH)), None)
-    if run is None:
-        return 0
-    _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
-    return 1
 
 
 def settle_reach(s: Any) -> int:
