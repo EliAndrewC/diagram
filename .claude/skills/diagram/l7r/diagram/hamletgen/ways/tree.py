@@ -525,7 +525,7 @@ def settle_defer(s: Any) -> int:
 def prune_the_tree(s: Any) -> int:
     """A tree lane the map no longer needs goes (homes H40): the first, longest first, whose removal leaves no farmhouse, way
     target or field newly unreached, the web in no more networks and no lane end breaking a rule it did not (`end_faults`).
-    A drawn corridor goes only as a LEAF - no drawn corridor hanging from it. One a round, as a fragment: two can each be redundant only while the other stands.
+    A household's own way never goes (feature 318), so what may is a way target's spur or the field way, which nothing hangs from. One a round, as a fragment: two can each be redundant only while the other stands.
 
     Research:
         redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs; never a household's own way (research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own)
@@ -551,17 +551,10 @@ def prune_the_tree(s: Any) -> int:
     )
     if not order:
         return 0
-    recs = tree_records(M)
-    host = hosts(recs, _root(M))
-    run_of = {_key({"role": r["role"], "of": r["of"]}): k for k, r in enumerate(recs)}
-    drawn = {run_of[k]: i for i, ln in enumerate(lanes) if (k := _key(ln)) in run_of}
     ground = memo_ground(s, "worked", worked_ground)
     reached, nets, targets, field = len(unreached_houses(M)), law.lane_networks(M), len(law.unreached_targets(M)), law.field_unreached(M)
     ends = end_faults(M, ground)
     for i in order:
-        r = next((k for k, j in drawn.items() if j == i), None)
-        if r is not None and any(host[k] == r for k in drawn):
-            continue  # a corridor another drawn corridor hangs from: not a leaf
         without = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i and len(ln.get("pts") or []) >= 2]}
         if (
             len(unreached_houses(without)) <= reached

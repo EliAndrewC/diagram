@@ -13,16 +13,24 @@ _GEN = {"ftpx": 1.0, "generated_by": "hamletgen"}
 
 
 class _S(AdmitsAll):
-    """What the tree touches on a Settlement: the manifest, `lane()`, `reink_lane()` and `drop_lanes()`."""
+    """What the tree touches on a Settlement: the manifest, `lane()`, `reshape_lane()`, `reink_lane()` and `drop_lanes()`."""
 
-    def __init__(self, M):
+    def __init__(self, M, refuse=False):
         self.M = M
+        self.refuse = refuse  # `reshape_lane` refuses every rewrite, as the overlap matrix may
+        self.reinked: list[int] = []
+
+    def reshape_lane(self, ln, pts):
+        if self.refuse:
+            return False
+        ln["pts"] = [[float(x), float(y)] for x, y in pts]
+        return True
 
     def lane(self, pts, width=3, clearance=0, worn=True, connector=False, spur=False):
         self.M["lanes"].append({"pts": [list(q) for q in pts], "w": width, "worn": worn, "connector": connector, "spur": spur})
 
     def reink_lane(self, i):
-        pass
+        self.reinked.append(i)
 
     def drop_lanes(self, idxs):
         for i in sorted(set(idxs), reverse=True):
@@ -184,6 +192,20 @@ def test_the_web_draws_every_owed_chain_once() -> None:
     M["lanes"] = M["lanes"][:2]  # B's corridor gone: B and the new house are owed
     assert tree.settle_tree(s) == 2, "two corridors, hung from the track out and from A's"
     assert M["lanes"][-1]["pts"][-1] == [390.0, 0.0]
+
+
+def test_a_drawn_way_off_its_judged_form_is_reshaped_and_reinked_unless_the_rewrite_is_refused() -> None:
+    """`settle_tree` (feature 320): a household's way already drawn whose points differ from the form the gap pass judged is
+    rewritten to it in place (`reshape_lane`) and re-inked, and counted; a refused rewrite leaves it as drawn, uncounted."""
+    for refuse, want in ((False, 1), (True, 0)):
+        M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
+        s = _S(M, refuse=refuse)
+        assert tree.settle_tree(s) == 1 and len(M["lanes"]) == 2
+        judged = [list(q) for q in M["lanes"][1]["pts"]]
+        M["lanes"][1]["pts"] = [[310.0, 80.0], [310.0, 0.0]]  # moved off its judged form
+        assert tree.settle_tree(s) == want and len(M["lanes"]) == 2, "rewritten in place, never drawn twice"
+        assert M["lanes"][1]["pts"] == (judged if not refuse else [[310.0, 80.0], [310.0, 0.0]])
+        assert s.reinked == ([1] if not refuse else [])
 
 
 def test_an_ordinary_lane_breaking_a_rule_against_a_tree_lane_is_cut_never_the_tree() -> None:

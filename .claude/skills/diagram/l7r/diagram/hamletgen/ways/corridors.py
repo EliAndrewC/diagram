@@ -106,16 +106,6 @@ def strands_only_ordinary(M: Mapping[str, Any], i: int) -> bool:
     return len(unreached_houses(trial)) <= len(unreached_houses(M))
 
 
-def _pt(q: Sequence[float]) -> Pt:
-    return (float(q[0]), float(q[1]))
-
-
-def connector_start(M: Mapping[str, Any]) -> Pt | None:
-    """Where the connector begins - the root the exit strip leads to."""
-    con = next((ln for ln in M.get("lanes") or [] if ln.get("connector") and len(ln.get("pts") or []) >= 2), None)
-    return None if con is None else _pt(con["pts"][0])
-
-
 def _dedup(run: Poly) -> Poly:
     return [p for j, p in enumerate(run) if j == 0 or math.dist(p, run[j - 1]) > 1e-6]
 

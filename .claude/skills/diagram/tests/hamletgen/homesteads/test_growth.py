@@ -413,3 +413,22 @@ def test_the_direction_jitter_scales_with_the_step_so_neighbors_never_cross() ->
     """`grow_jitter` (feature 318): 12 degrees either way at eight directions, 6 at sixteen - always under half the step."""
     assert growth.grow_jitter(8) == growth.GROW_JITTER_DEG and growth.grow_jitter(16) == growth.GROW_JITTER_DEG / 2.0
     assert all(2.0 * growth.grow_jitter(n) < 360.0 / n for n in (8, 12, 16))
+
+
+def test_a_tight_seat_queued_while_the_share_had_room_is_passed_over_once_it_is_spent(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 320: a tight seat is queued only while the passage share has room, but the share may be spent before the seat
+    is popped - by any household seated in between. Popped then, it is no seat: no way stands while houses are seated to be
+    near, so the household is never told a neighbor."""
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+
+    class _Spends(_Tight):
+        def try_place(self, x: float, y: float, _kind: str) -> bool:
+            ok = super().try_place(x, y, _kind)
+            if ok and len(self.M["houses"]) == 2:
+                self._passage_left = 0  # type: ignore[attr-defined]  # the share spent by the second house, seated loose
+            return ok
+
+    s = _Spends(room=30.0)
+    s._passage_left = 1  # type: ignore[attr-defined]
+    grow_the_margin(s, _plan(6), 0, (46.0, 28.0))  # type: ignore[arg-type]
+    assert len(s.M["houses"]) > 2 and all(t is None for t in s.told), "the tight seats queued by the first house were passed over"

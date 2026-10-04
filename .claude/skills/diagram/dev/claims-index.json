@@ -2912,9 +2912,9 @@
   "date": "2026-10-03",
   "note": "LANE_JOIN_FT = 40.0 counts treads 40 ft apart as one network; the page says lanes are \"joined where their treads meet\" and joins ends only \"within 25 ft\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -2935,9 +2935,9 @@
   "date": "2026-10-03",
   "note": "two attested forms, rolled per map",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -3164,9 +3164,9 @@
   "date": "2026-10-03",
   "note": "the page records \"how close counts as serving a house\" as a GUESS; claim should read GUESS research/questions/0081-village-lanes.drawing.html: within 12 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -3203,9 +3203,9 @@
   "date": "2026-10-03",
   "note": "the page records the lane-end rule as a GUESS; claim should read GUESS research/questions/0081-village-lanes.drawing.html: within 60 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -3239,9 +3239,9 @@
   "date": "2026-10-03",
   "note": "WEB_HARD_GAP = 8.0 holds the lane 8 ft off the crop; the page has it run on the bund and \"may touch a plot's boundary\"; the 8 ft off toe/marsh is not on the page - claim it as a CONVENTION/GUESS figure or record it on the page",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -3251,9 +3251,9 @@
   "date": "2026-10-03",
   "note": "serving distance is a recorded GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -4285,9 +4285,10 @@
   "date": "2026-10-03",
   "note": "the code keeps the moved band out of the marsh because \"no woody cover stands\" there, but 0074 drawing says \"A shelter belt's trees in the marsh are drawn as alder\"; cite the alder rule and allow the move, or label this a DEVIATION the drawing page records",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#near face clear of every house": {
@@ -11032,9 +11033,9 @@
   "date": "2026-10-03",
   "note": "spur to the fields 5 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11055,9 +11056,9 @@
   "date": "2026-10-03",
   "note": "a recorded GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11067,9 +11068,9 @@
   "date": "2026-10-03",
   "note": "60 degrees, recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
@@ -11099,9 +11100,9 @@
   "date": "2026-10-03",
   "note": "never crosses row crops",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11111,9 +11112,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11123,9 +11124,9 @@
   "date": "2026-10-03",
   "note": "track keeps off wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11146,9 +11147,9 @@
   "date": "2026-10-03",
   "note": "tread never on a dry plot",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11174,9 +11175,9 @@
   "date": "2026-10-03",
   "note": "no marsh, no wet toe",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11289,9 +11290,9 @@
   "date": "2026-10-03",
   "note": "one network, joined as a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
@@ -11337,9 +11338,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11372,9 +11373,9 @@
   "note": "lane stops at the paddy; path ends on the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21",
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "dc871717d78c78c2",
+  "research": "f5f001b558d6cbc3",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11384,9 +11385,9 @@
   "date": "2026-10-03",
   "note": "track out runs off the map",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11397,9 +11398,9 @@
   "note": "an end reaching nothing runs on to the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21",
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "dc871717d78c78c2",
+  "research": "f5f001b558d6cbc3",
   "rests": [
    "0081-village-lanes.drawing.html:bd66b84c6bda826f"
   ],
@@ -11445,9 +11446,9 @@
   "date": "2026-10-03",
   "note": "page records the 60 degree limit on a run-on to a bund as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
@@ -11520,9 +11521,9 @@
   "date": "2026-10-03",
   "note": "\"A lane never crosses row crops\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11648,9 +11649,9 @@
   "date": "2026-10-03",
   "note": "the page says lanes are \"joined where their treads meet\" (ends join within 25 ft); counting treads 40 ft apart as joined (LANE_JOIN_FT) is recorded nowhere",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -11676,9 +11677,9 @@
   "date": "2026-10-03",
   "note": "never crosses row crops",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11791,9 +11792,9 @@
   "date": "2026-10-03",
   "note": "the page records the 100 ft reach only as a guess (\"so is how close counts as serving a house\"); should read GUESS research/questions/0081-village-lanes.drawing.html",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -11819,9 +11820,9 @@
   "date": "2026-10-03",
   "note": "140 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
   ],
@@ -11874,9 +11875,9 @@
   "date": "2026-10-03",
   "note": "50 deg",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11886,9 +11887,9 @@
   "date": "2026-10-03",
   "note": "40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -11898,9 +11899,9 @@
   "date": "2026-10-03",
   "note": "hairpin and zigzag limits",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -11914,9 +11915,9 @@
   "date": "2026-10-03",
   "note": "WEB_HARD_GAP 8 ft off the crop and 14 ft off water are recorded nowhere, and the page says a lane \"may touch a plot's boundary\"; record the margins or relabel GUESS/CONVENTION",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -11973,9 +11974,9 @@
   "date": "2026-10-03",
   "note": "keeps off the crop at the caller's margin",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12008,9 +12009,9 @@
   "date": "2026-10-03",
   "note": "\"A lane stops at the flooded paddy\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12052,9 +12053,9 @@
   "date": "2026-10-03",
   "note": "140 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -12068,9 +12069,9 @@
   "date": "2026-10-03",
   "note": "two 50 deg turns within 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12113,9 +12114,9 @@
   "date": "2026-10-03",
   "note": "no hairpin or zigzag added",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -12129,9 +12130,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12141,9 +12142,9 @@
   "date": "2026-10-03",
   "note": "never crosses crops; shortest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12429,9 +12430,9 @@
   "date": "2026-10-03",
   "note": "every steading part a wall",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12441,9 +12442,9 @@
   "date": "2026-10-03",
   "note": "crops, hem and wet ground kept off",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12464,9 +12465,9 @@
   "date": "2026-10-03",
   "note": "runs to the hem's edge, never across a plot",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
@@ -12526,9 +12527,9 @@
   "date": "2026-10-03",
   "note": "way leaves its dooryard",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12576,9 +12577,9 @@
   "date": "2026-10-03",
   "note": "shortest or easiest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12588,9 +12589,9 @@
   "date": "2026-10-03",
   "note": "one network bar those reached across a neighbor",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12600,9 +12601,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12620,9 +12621,9 @@
   "date": "2026-10-03",
   "note": "overshoot is trimmed by the view",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12688,9 +12689,9 @@
   "date": "2026-10-03",
   "note": "\"A track keeps off wet ground\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12700,9 +12701,9 @@
   "date": "2026-10-03",
   "note": "ends off the canvas",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12744,9 +12745,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12802,9 +12803,9 @@
   "date": "2026-10-03",
   "note": "delegates to house_hit at half plus 2 ft; \"no corner of a house stands on its tread\" (the docstring's \"no tolerance either way\" is stale)",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12830,9 +12831,9 @@
   "date": "2026-10-03",
   "note": "houses, yards, beds, sheds, wells and fixtures are all fabric",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12911,9 +12912,9 @@
   "date": "2026-10-03",
   "note": "an end outside the canvas is skipped",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -12923,9 +12924,9 @@
   "date": "2026-10-03",
   "note": "corners and center at w/2+2",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13059,9 +13060,9 @@
   "date": "2026-10-03",
   "note": "90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -13074,9 +13075,9 @@
   "date": "2026-10-03",
   "note": "12 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -13153,9 +13154,9 @@
   "date": "2026-10-03",
   "note": "\"pulled back to the last house it serves\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13181,9 +13182,9 @@
   "date": "2026-10-03",
   "note": "page records \"how close counts as serving a house\" as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13193,9 +13194,9 @@
   "date": "2026-10-03",
   "note": "4 ft walk to the first point that serves",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13213,9 +13214,9 @@
   "date": "2026-10-03",
   "note": "out-and-back collapsed",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:b2d689a290fad644"
@@ -13229,9 +13230,9 @@
   "date": "2026-10-03",
   "note": "12 ft, 90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -13244,9 +13245,9 @@
   "date": "2026-10-03",
   "note": "the page gives no 60 ft and calls \"how close counts as serving a house\" a GUESS; should read GUESS research/questions/0081-village-lanes.drawing.html: 60 ft to a way or farmhouse",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -13256,9 +13257,9 @@
   "date": "2026-10-03",
   "note": "ends at the dooryard; the 12 ft is recorded as a guess",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13295,9 +13296,9 @@
   "date": "2026-10-03",
   "note": "excludes reached_across, \"but the few reached across a neighbor's land\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13384,9 +13385,9 @@
   "date": "2026-10-03",
   "note": "buildings, yard and garden as the dooryard",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13420,9 +13421,9 @@
   "date": "2026-10-03",
   "note": "paddy outlines plus dry-hem plots",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13440,9 +13441,9 @@
   "date": "2026-10-03",
   "note": "_MEET_FT = 11.5 but page says \"Ends within 25 ft of one another are joined at a single point\"; set 25 or change the page",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -13468,9 +13469,9 @@
   "date": "2026-10-03",
   "note": "mends a Z, \"A lane does not zigzag\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13480,9 +13481,9 @@
   "date": "2026-10-03",
   "note": "hook rule, connector's web end too",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -13495,9 +13496,9 @@
   "date": "2026-10-03",
   "note": "end-to-end read as one, fold made a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -13511,9 +13512,9 @@
   "date": "2026-10-03",
   "note": "6 ft matches \"within 6 ft of the old one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13555,9 +13556,9 @@
   "date": "2026-10-03",
   "note": "\"read as one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13615,9 +13616,9 @@
   "date": "2026-10-03",
   "note": "100 ft serving bar; the page records serving distance as a guess",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13627,9 +13628,9 @@
   "date": "2026-10-03",
   "note": "web_pieces must not grow",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13639,9 +13640,9 @@
   "date": "2026-10-03",
   "note": "joins only ends within _MEET_FT 11.5 ft; page says \"Ends within 25 ft of one another are joined\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -13683,9 +13684,9 @@
   "date": "2026-10-03",
   "note": "runs _one_hook",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13695,9 +13696,9 @@
   "date": "2026-10-03",
   "note": "fold to T, jog pulled straight",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13707,9 +13708,9 @@
   "date": "2026-10-03",
   "note": "meets y's first leg at its foot",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13719,9 +13720,9 @@
   "date": "2026-10-03",
   "note": "12 ft, 90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -13880,9 +13881,9 @@
   "date": "2026-10-03",
   "note": "40 ft matches",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -13892,9 +13893,9 @@
   "date": "2026-10-03",
   "note": "60 ft is the detector's minimum segment length, not a figure on the page or a fact a reader reads off the map; should be NONE",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -13936,9 +13937,9 @@
   "date": "2026-10-03",
   "note": "140 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
   ],
@@ -13978,9 +13979,9 @@
   "date": "2026-10-03",
   "note": "the page gives 25 ft only for ends meeting ends and nothing for an end short of another way's side; 30 ft should be GUESS/UNRESEARCHED until answered",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
@@ -13998,9 +13999,9 @@
   "date": "2026-10-03",
   "note": "50 deg matches",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14157,9 +14158,9 @@
   "date": "2026-10-03",
   "note": "\"Nothing is built on a lane\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14169,9 +14170,9 @@
   "date": "2026-10-03",
   "note": "the claim's \"leg under 25 ft\" against the page's \"a returning leg under 40 ft is cut\"; 25 ft is the page's knot figure, not a leg",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
@@ -14209,9 +14210,9 @@
   "date": "2026-10-03",
   "note": "walked-toward test on end_serves",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14248,9 +14249,9 @@
   "date": "2026-10-03",
   "note": "an end behind the house is not the dooryard",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14287,9 +14288,9 @@
   "date": "2026-10-03",
   "note": "140 deg at the joint",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14348,9 +14349,9 @@
   "date": "2026-10-03",
   "note": "12 ft, 90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -14387,9 +14388,9 @@
   "date": "2026-10-03",
   "note": "hairpin and zigzag",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -14403,9 +14404,9 @@
   "date": "2026-10-03",
   "note": "\"one network, joined where their treads meet\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14431,9 +14432,9 @@
   "date": "2026-10-03",
   "note": "`if not ln.get(\"connector\")` exempts the track out, but the page holds every lane, the track out included, to \"never doubling back\" and \"does not zigzag\"; record the exemption as a deviation or drop it",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:91a5765af6230403",
@@ -14457,9 +14458,9 @@
   "date": "2026-10-03",
   "note": "JOIN_REACH_FT=_LANE_JOIN_FT=30 ft, but the page says \"Ends within 25 ft of one another are joined at a single point\"; make the reach 25, or record 30 on the page",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -14469,9 +14470,9 @@
   "date": "2026-10-03",
   "note": "\"meets the other's side as a T\"; 20 ft and 20 degrees are within the page's convention limits",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14554,9 +14555,9 @@
   "date": "2026-10-03",
   "note": "\"Nothing is built on a lane\"; the 0.5 ft pad is a convention",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14599,9 +14600,9 @@
   "date": "2026-10-03",
   "note": "lanes marked \"of\" are exempt; \"served by a lane of its own\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14635,9 +14636,9 @@
   "date": "2026-10-03",
   "note": "off water, crop, marsh, houses and yards",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:4ed077ab6fed558d",
@@ -14723,9 +14724,9 @@
   "date": "2026-10-03",
   "note": "\"Two lanes that meet end to end are read as one\"; widths are a convention",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14767,9 +14768,9 @@
   "date": "2026-10-03",
   "note": "140 degree hairpin bound; apex side kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14787,9 +14788,9 @@
   "date": "2026-10-03",
   "note": "least-cost lattice, then string-pulled (\"pulled taut like a string\")",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14836,9 +14837,9 @@
   "date": "2026-10-03",
   "note": "a turn of 140 degrees or more is chorded or eased",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
   ],
@@ -14851,9 +14852,9 @@
   "date": "2026-10-03",
   "note": "two turns of 50 degrees or more within 40 ft are chorded",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14929,9 +14930,9 @@
   "date": "2026-10-03",
   "note": "a run that cannot be joined is not drawn",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14968,9 +14969,9 @@
   "date": "2026-10-03",
   "note": "\"leaves its dooryard round its own garden beds and fixtures\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -14980,9 +14981,9 @@
   "date": "2026-10-03",
   "note": "straight where clear, else routed and pulled taut",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15038,9 +15039,9 @@
   "date": "2026-10-03",
   "note": "reached_across is skipped; \"shows no lane of its own\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15051,9 +15052,9 @@
   "note": "fixtures and bands are added to the walls; 0081 says \"round its own ... fixtures\", 0036 says the way in is the front break",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "fa55884105eea879",
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "d8ac8c8bf4b8c9aa",
+  "research": "74ca7192227546ef",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15125,9 +15126,9 @@
   "date": "2026-10-03",
   "note": "the page records \"how close counts as serving a house\" as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15185,9 +15186,9 @@
   "date": "2026-10-03",
   "note": "\"ends at the dooryard or runs on to something a reader can see\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15197,9 +15198,9 @@
   "date": "2026-10-03",
   "note": "needle, fold and hairpin are refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15244,9 +15245,9 @@
   "date": "2026-10-03",
   "note": "hook and kink are refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15267,9 +15268,9 @@
   "date": "2026-10-03",
   "note": "\"Nothing is built on a lane\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15279,9 +15280,9 @@
   "date": "2026-10-03",
   "note": "\"never crosses row crops\", \"keeps off wet ground\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15448,9 +15449,9 @@
   "date": "2026-10-03",
   "note": "`max(head, tail, key=polyline_len)` cuts the shorter arm at any length, where the page cuts \"a returning leg under 40 ft\"; and a zigzag's middle is cut out, splitting the lane, where the page says such turns \"are pulled straight\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -15499,9 +15500,9 @@
   "date": "2026-10-03",
   "note": "\"Nothing is built on a lane\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15511,9 +15512,9 @@
   "date": "2026-10-03",
   "note": "\"no corner of a house stands on its tread\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15540,9 +15541,9 @@
   "date": "2026-10-03",
   "note": "\"round its own garden beds and fixtures\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15568,9 +15569,9 @@
   "date": "2026-10-03",
   "note": "the network is kept whole and no farmhouse is stranded",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15580,9 +15581,9 @@
   "date": "2026-10-03",
   "note": "\"ends at the dooryard\"; the 60 ft serving reach is a recorded GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15592,9 +15593,9 @@
   "date": "2026-10-03",
   "note": "field outlines, dry plots and marsh",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15604,9 +15605,9 @@
   "date": "2026-10-03",
   "note": "\"meets the other's side as a T\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15624,9 +15625,9 @@
   "date": "2026-10-03",
   "note": "\"pulled back to the last house it serves\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15636,9 +15637,9 @@
   "date": "2026-10-03",
   "note": "carried round the gable, else backed off",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15648,9 +15649,9 @@
   "date": "2026-10-03",
   "note": "needle, fold and hairpin are re-laid as a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15700,9 +15701,9 @@
   "date": "2026-10-03",
   "note": "carried onto the way; the reach drift is reported at near_misses",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15728,9 +15729,9 @@
   "date": "2026-10-03",
   "note": "a lane off the connector's network is dropped",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15780,9 +15781,9 @@
   "date": "2026-10-03",
   "note": "re-laid as a T, else the hook cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
@@ -15804,9 +15805,9 @@
   "date": "2026-10-03",
   "note": "uses `_unkinked`, so the same faults: any-length arm cut against \"a returning leg under 40 ft\", and a zigzag cut out against \"pulled straight\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
@@ -15820,9 +15821,9 @@
   "date": "2026-10-03",
   "note": "a dangling end is cut back to its last joint",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15851,9 +15852,9 @@
   "date": "2026-10-03",
   "note": "one width per chain; widths are a convention",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15863,9 +15864,9 @@
   "date": "2026-10-03",
   "note": "its way leaves its own dooryard",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:9e1e79eae13bac58"
   ],
@@ -15910,9 +15911,9 @@
   "date": "2026-10-03",
   "note": "\"within 6 ft of the old one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15922,9 +15923,9 @@
   "date": "2026-10-03",
   "note": "\"Ends within 25 ft\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -15934,9 +15935,9 @@
   "date": "2026-10-03",
   "note": "the page cuts a returning leg \"under 40 ft\" and says nothing about arms of 40-90 ft; should be UNRESEARCHED, as `_smooth_web`'s own claim already says",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
   ],
@@ -15980,9 +15981,9 @@
   "date": "2026-10-03",
   "note": "turn past 140 degrees, returning arm under 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2"
   ],
@@ -15995,9 +15996,9 @@
   "date": "2026-10-03",
   "note": "25 ft single node",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16007,9 +16008,9 @@
   "date": "2026-10-03",
   "note": "string-pulled",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16027,9 +16028,9 @@
   "date": "2026-10-03",
   "note": "\"one network\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16047,9 +16048,9 @@
   "date": "2026-10-03",
   "note": "split refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16059,9 +16060,9 @@
   "date": "2026-10-03",
   "note": "clearance or within 6 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16257,9 +16258,9 @@
   "date": "2026-10-03",
   "note": "end reaching nothing pulled back",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16277,9 +16278,9 @@
   "date": "2026-10-03",
   "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16316,9 +16317,9 @@
   "date": "2026-10-03",
   "note": "end hook rule applied",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16372,9 +16373,9 @@
   "note": "runs off the map as the road",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "107b2068b7b88bb1",
+  "research": "0ade5b5ab87bc1ae",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16404,9 +16405,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16416,9 +16417,9 @@
   "date": "2026-10-03",
   "note": "pulled back",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16428,9 +16429,9 @@
   "date": "2026-10-03",
   "note": "pulled back to what it serves",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16440,9 +16441,9 @@
   "date": "2026-10-03",
   "note": "hook rule at both ends",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
   ],
@@ -16511,9 +16512,9 @@
   "date": "2026-10-03",
   "note": "50 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16523,9 +16524,9 @@
   "date": "2026-10-03",
   "note": "40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16574,9 +16575,9 @@
   "date": "2026-10-03",
   "note": "_ROUTE_JOIN_FT = 30.0 against 0081's \"Ends within 25 ft of one another are joined\"; use 25 or relabel",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -16586,9 +16587,9 @@
   "date": "2026-10-03",
   "note": "5 ft spine and up, 3 ft footpath below",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16622,9 +16623,9 @@
   "date": "2026-10-03",
   "note": "`gap > _LANE_JOIN_FT` (30 ft) sets the any-bearing band, but 0081 joins ends \"within 25 ft\"; use 25 or relabel",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -16698,9 +16699,9 @@
   "date": "2026-10-03",
   "note": "0081 sets widths by rank (3/5/6 ft) and says nothing of a link inheriting the width of the way it joins; should be UNRESEARCHED (or CONVENTION)",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
@@ -16734,9 +16735,9 @@
   "date": "2026-10-03",
   "note": "0081 names the through-route but is silent on two wide ends that meet through a footpath being joined directly; should be UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
@@ -16762,9 +16763,9 @@
   "date": "2026-10-03",
   "note": "\"ends at the dooryard\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16774,9 +16775,9 @@
   "date": "2026-10-03",
   "note": "end reaching nothing pulled back",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16786,9 +16787,9 @@
   "date": "2026-10-03",
   "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16798,9 +16799,9 @@
   "date": "2026-10-03",
   "note": "all but the few reached across",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16818,9 +16819,9 @@
   "date": "2026-10-03",
   "note": "lane_houses",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16830,9 +16831,9 @@
   "date": "2026-10-03",
   "note": "split refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16842,9 +16843,9 @@
   "date": "2026-10-03",
   "note": "no house on a tread",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16862,9 +16863,9 @@
   "date": "2026-10-03",
   "note": "ends at dooryard, short of wall",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -16932,9 +16933,9 @@
   "date": "2026-10-03",
   "note": "50 deg, 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17177,9 +17178,9 @@
   "date": "2026-10-03",
   "note": "track out runs off the map",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17189,9 +17190,9 @@
   "date": "2026-10-03",
   "note": "read as one",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17241,9 +17242,9 @@
   "date": "2026-10-03",
   "note": "lane_houses exemption",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17253,9 +17254,9 @@
   "date": "2026-10-03",
   "note": "6 ft is the page's width for the track out",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17284,9 +17285,9 @@
   "date": "2026-10-03",
   "note": "5 ft is the page's width for the spur to the fields",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17361,9 +17362,9 @@
   "date": "2026-10-03",
   "note": "\"Nothing is built on a lane\"; the code routes round, else clips, else draws none",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17392,9 +17393,9 @@
   "date": "2026-10-03",
   "note": "walled by the wet ground, the steadings and the field",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17484,9 +17485,9 @@
   "date": "2026-10-03",
   "note": "the page says \"Every lane is pulled taut like a string. It runs straight from point to point\" and attests no bow; the code bows the drawn track 34 px and 46 px off the bearing (`+ px * 34`, `- px * 46`) with no obstacle as the reason. Drop the bow or relabel GUESS/DEVIATION and record it",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -17496,9 +17497,9 @@
   "date": "2026-10-03",
   "note": "the page says each rule (wet, built-on, row crops) holds but never ranks them, so the lexicographic order is unattested; should read UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
@@ -17520,9 +17521,9 @@
   "date": "2026-10-03",
   "note": "page records the fold cut as a DEVIATION; _HAIRPIN_DEG 140 matches \"A turn of more than 140 degrees is a hairpin\"; drawing it only if it reaches the field fits the rule that a lane end reaching nothing is pulled back",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
@@ -17726,9 +17727,9 @@
   "date": "2026-10-03",
   "note": "20 ft, past the page's 12 ft hook leg",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -17990,9 +17991,9 @@
   "date": "2026-10-03",
   "note": "\"round its own garden beds and fixtures\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18194,9 +18195,9 @@
   "date": "2026-10-03",
   "note": "laid after the houses, nothing built on it",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:4ed077ab6fed558d",
    "0081-village-lanes.drawing.html:d6c0546677319ff7"
@@ -18234,9 +18235,9 @@
   "date": "2026-10-03",
   "note": "5 ft spine",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18254,9 +18255,9 @@
   "date": "2026-10-03",
   "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18298,9 +18299,9 @@
   "date": "2026-10-03",
   "note": "\"Two lanes that meet end to end are read as one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18326,9 +18327,9 @@
   "date": "2026-10-03",
   "note": "\"pulled back to the last house it serves\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18415,9 +18416,9 @@
   "date": "2026-10-03",
   "note": "reached-across houses are excluded from the cuts",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18427,9 +18428,9 @@
   "date": "2026-10-03",
   "note": "alleys or a back lane, rolled per map",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -18542,9 +18543,9 @@
   "date": "2026-10-03",
   "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -24945,10 +24946,10 @@
   "date": "2026-10-03",
   "note": "dry_plots GROUND matches \"A lane never crosses row crops\" and a well \"never out in the fields\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0196-communal-wells-ido.drawing.html": "7dc3e7f717aadfc9"
   },
-  "research": "631e7fc41c74c07c",
+  "research": "5a322443d2cfd1e3",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -25354,9 +25355,9 @@
   "date": "2026-10-03",
   "note": "\"one network, joined where their treads meet\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -27623,10 +27624,10 @@
   "date": "2026-10-03",
   "note": "two forms, rolled evenly",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "70b93addef1411c3",
+  "research": "38136343f1ec2e63",
   "rests": [
    "0081-village-lanes.html:7a53482e165741aa",
    "0081-village-lanes.html:96dca7c9e0b90cca"
@@ -27810,10 +27811,10 @@
   "date": "2026-10-03",
   "note": "alleys or a back lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "70b93addef1411c3",
+  "research": "38136343f1ec2e63",
   "rests": [
    "0081-village-lanes.html:7a53482e165741aa",
    "0081-village-lanes.html:96dca7c9e0b90cca"
@@ -28213,9 +28214,9 @@
   "date": "2026-10-03",
   "note": "one network reaching every farmhouse but the few",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -36435,9 +36436,10 @@
   "date": "2026-10-03",
   "note": "0074 records the blue-gray green as a convention",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::BAMBOO_CULM#culm color": {
@@ -36574,9 +36576,10 @@
   "date": "2026-10-03",
   "note": "the belt is alder in the marsh, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
@@ -36585,9 +36588,10 @@
   "date": "2026-10-03",
   "note": "alder mix, blue-gray convention, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
@@ -37384,9 +37388,10 @@
   "date": "2026-10-03",
   "note": "0074 runs the belt into the marsh as alder but sets no limit; \"based in the reed margin at most\" (MARSH_FEATHER_BS 46) is on no page - label UNRESEARCHED/GUESS or record it",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#canopy kept 0.9 clump off shrines, torii and ponds": {
@@ -37536,9 +37541,10 @@
   "date": "2026-10-03",
   "note": "alder at the reed edge, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::grove_extent#plumbing": {
@@ -38076,9 +38082,10 @@
   "date": "2026-10-03",
   "note": "no dry-ground planting inside the marsh, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::in_keepouts#plumbing": {
@@ -39145,9 +39152,10 @@
   "date": "2026-10-03",
   "note": "0074 attests two forms of edge (cut and open, or an uncut alder-and-willow wet wood) and says \"Each settlement should take one or the other\"; the code draws only the cut edge on every map (the page itself calls it \"a shortfall\"), so the form should be a seeded knob",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#no crown in a yard's sun": {
@@ -40057,9 +40065,10 @@
   "date": "2026-10-03",
   "note": "per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/tiles.py::CLUMP_RADIUS_FT#cover tiles": {
@@ -40100,9 +40109,10 @@
   "date": "2026-10-03",
   "note": "mixed band convention, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/tiles.py::GRASS_DOT_SHARE#cover tiles": {
@@ -40266,9 +40276,10 @@
   "date": "2026-10-03",
   "note": "half densities plus haze, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/tiles.py::grass_overlay_tile#cover tiles": {
@@ -40301,9 +40312,10 @@
   "date": "2026-10-03",
   "note": "denser, darker, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/tiles.py::reed_overlay_tile#cover tiles": {
@@ -40328,9 +40340,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::MARSH_TINT_R#tint radius": {
@@ -40377,6 +40390,7 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
   },
   "research": "bb62a76db940eb93",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh roles": {
@@ -40456,9 +40470,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
   },
-  "research": "bb62a76db940eb93",
+  "research": "38f7e4e8962c2cfe",
+  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#tread keep-out width": {
@@ -40745,9 +40760,9 @@
   "date": "2026-10-03",
   "note": "\"The walk is not drawn as a lane\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40781,9 +40796,9 @@
   "date": "2026-10-03",
   "note": "matches the page's 140-degree hairpin limit; the claim discloses that exactly 140 is also refused, and no map can show that difference",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:65ad16eace199d92"
@@ -40867,9 +40882,9 @@
   "date": "2026-10-03",
   "note": "\"as few turns as the plots allow\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40984,9 +40999,9 @@
   "date": "2026-10-03",
   "note": "\"Its way leaves its dooryard\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40996,9 +41011,9 @@
   "date": "2026-10-03",
   "note": "a lane never doubles back; a turn at the limit is refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:b2d689a290fad644"
@@ -41052,9 +41067,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane; 0196 puts the wellhead clear of the tread",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -41120,9 +41135,9 @@
   "date": "2026-10-03",
   "note": "the lane never crosses row crops; the margin is marked UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -42171,9 +42186,9 @@
   "date": "2026-10-03",
   "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -42315,9 +42330,9 @@
   "date": "2026-10-03",
   "note": "\"no corner of a house stands on its tread\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -42917,6 +42932,7 @@
    "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
   },
   "research": "091c6542079d20d9",
+  "triage": "touched",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -42934,9 +42950,9 @@
   "date": "2026-10-03",
   "note": "matches \"is given it and is no longer reached across its neighbor\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43394,6 +43410,7 @@
    "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
   },
   "research": "091c6542079d20d9",
+  "triage": "touched",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43403,9 +43420,9 @@
   "date": "2026-10-03",
   "note": "two links, \"and no farther\", recorded as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43415,9 +43432,9 @@
   "date": "2026-10-03",
   "note": "\"from none up to a quarter\", recorded as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43463,9 +43480,9 @@
   "date": "2026-10-03",
   "note": "depth under the chain limit and the neighbor's threshing yard required",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43521,9 +43538,9 @@
   "date": "2026-10-03",
   "note": "\"keep to the two households' land\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43561,9 +43578,9 @@
   "date": "2026-10-03",
   "note": "floor, \"rounded down to whole households\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43589,9 +43606,9 @@
   "date": "2026-10-03",
   "note": "rolled per seed within the band",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43623,9 +43640,9 @@
   "date": "2026-10-03",
   "note": "the walk is recorded and barred but never inked; \"not drawn as a lane\", a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43635,9 +43652,9 @@
   "date": "2026-10-03",
   "note": "\"cross no house, garden bed, shed or fixture of either\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43647,9 +43664,9 @@
   "date": "2026-10-03",
   "note": "from the dooryard to the neighbor's yard on the two lands",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -43978,9 +43995,9 @@
   "date": "2026-10-03",
   "note": "`trim_off_marsh`; \"does not cross the reeds\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -44248,9 +44265,9 @@
   "date": "2026-10-03",
   "note": "the search is kept off the house, the placed homesteads, refused ground and the wood seats; \"Nothing is built on a lane\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -44268,9 +44285,9 @@
   "date": "2026-10-03",
   "note": "the persimmon's trunk is still held off by `fixtures_clear` in every leg test",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -44303,9 +44320,9 @@
   "date": "2026-10-03",
   "note": "\"pulled taut like a string\", no doubling back",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -48668,9 +48685,9 @@
   "date": "2026-10-03",
   "note": "the page gives no 12 ft figure and records \"how close counts as serving a house\" as a GUESS; the claim should be GUESS research/questions/0081-village-lanes.drawing.html",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -48680,9 +48697,9 @@
   "date": "2026-10-03",
   "note": "the page gives no 60 ft figure; serving distance is a recorded GUESS; the claim should be GUESS research/questions/0081-village-lanes.drawing.html",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -48732,9 +48749,9 @@
   "date": "2026-10-03",
   "note": "keeps the shortest end that still reaches something",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -48744,9 +48761,9 @@
   "date": "2026-10-03",
   "note": "a DEVIATION the drawing page does not record: the page says only \"a lane end that reaches nothing is pulled back to the last house it serves\", with no 40% floor and no lane left whole; record it on page 0081's drawing page or change the code",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -48780,9 +48797,9 @@
   "date": "2026-10-03",
   "note": "protects up to the last crossing, as in \"one network\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49188,10 +49205,10 @@
   "date": "2026-10-03",
   "note": "narrow bare earth, no centerline",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "70b93addef1411c3",
+  "research": "38136343f1ec2e63",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49209,9 +49226,9 @@
   "date": "2026-10-03",
   "note": "the lane is recorded as a no-build corridor",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49221,9 +49238,9 @@
   "date": "2026-10-03",
   "note": "the connector flag",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49290,9 +49307,9 @@
   "date": "2026-10-03",
   "note": "pulls ends back to a house, a way or a bund, as the page says",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49329,9 +49346,9 @@
   "date": "2026-10-03",
   "note": "the 12 ft and 60 ft reaches are not on the page, which calls \"how close counts as serving a house\" a GUESS; the claim should be GUESS research/questions/0081-village-lanes.drawing.html",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "MISLABELED"
  },
@@ -49349,9 +49366,9 @@
   "date": "2026-10-03",
   "note": "the track out runs off the map, and the spur and track out are one through-route",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49369,9 +49386,9 @@
   "date": "2026-10-03",
   "note": "the back is not the dooryard; the band's size is a degree",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -49381,9 +49398,9 @@
   "date": "2026-10-03",
   "note": "the yard, the beds or the front band; \"ends at the dooryard\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
+  "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },

@@ -313,3 +313,12 @@ def test_lanes_met_end_to_end_are_walked_as_one_way() -> None:
     loop = [{"pts": [[0.0, 0.0], [100.0, 0.0], [100.0, 100.0]]}, {"pts": [[100.0, 100.0], [0.0, 100.0], [0.0, 0.0]]}]
     ways, owner = as_walked(loop)
     assert len(ways) == 2 and owner == [0, 1], "two lanes meeting at both ends are a loop, not a joint"
+
+
+def test_a_chain_met_at_its_first_lane_s_start_is_walked_back_to_its_true_first_lane() -> None:
+    """`as_walked` (feature 320): a walk starting at a lane whose START is a joint walks back along the chain to the lane
+    with a free end first, so the chain reads as ONE way from that free end, both records mapped to it."""
+    lanes = [{"pts": [[10.0, 0.0], [20.0, 0.0]]}, {"pts": [[0.0, 0.0], [10.0, 0.0]]}]
+    assert joints(lanes) == [(0, 0, 1, -1)]
+    ways, owner = as_walked(lanes)
+    assert owner == [0, 0] and ways == [[(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)]], "one way, walked from lane 1's free end"
