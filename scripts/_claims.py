@@ -501,8 +501,8 @@ def triage_bundle(
     parts = [
         "# Triage of claim re-checks (feature 318)\n",
         "owed-checks: claims-triage\n",
-        "Each page below changed since the claims under it were last judged; it lists ONLY its new or changed blocks. For each "
-        "claim, decide whether any of those blocks could change its verdict - a figure, rule, form, order, exception or recorded "
+        "Each page below changed since the claims under it were last judged; it lists ONLY its new, changed and REMOVED blocks. "
+        "For each claim, decide whether any of those blocks - a block added or reworded, or one taken away - could change its verdict - a figure, rule, form, order, exception or recorded "
         "deviation that bears on what the claim says the code does. Reply one `TOUCHES <key> - <which block, a few words>` line per "
         "such claim, and nothing for the rest: a claim you do not name is cleared without a re-check. When unsure, name it.\n",
     ]

@@ -2152,6 +2152,8 @@ lion-dogs	lion-dog
 lishe	gongxiefang
 litchi	litchi
 litchis	litchi
+litter	litter
+litters	litter
 littoral	littoral
 liubu	liubu
 liuchu	liuchu

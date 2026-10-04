@@ -1,6 +1,6 @@
 {
  "feature": "318-grow-outward-no-restart",
- "plan_sha256": "84eb934e423f47affb560e3dd33970e072a91139424b93d82db9ee1e41cfb746",
+ "plan_sha256": "baa745e6fffa2ce3f702e883c4b278e2dc91b4c2b7abb53ff8def5dedb579631",
  "reviewed": "2026-10-03",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,51 +8,50 @@
    "id": "D1-D14",
    "summary": "already reviewed decisions, unchanged",
    "class": "within",
-   "why": "Not re-opened in this round; D15 and T14-T15 are the delta under review."
+   "why": "Not re-opened; D15.3 is the delta under review."
   },
   {
    "id": "D15.1",
-   "summary": "bundle numbers the non-intro blocks; verdict ends with [§n,...] or [§] when silent; rows keep rests and pages; page snapshots in dev/claims-pages.json",
+   "summary": "numbered non-intro blocks, [§n] rests tag, rows keep rests and pages, snapshots in dev/claims-pages.json",
    "class": "within",
-   "why": "FR-016's numbered blocks, per-row block digests and per-page digests. Excluding intro blocks follows the existing research fingerprint (an intro edit already owed nothing)."
+   "why": "Unchanged from the previous round; FR-016's numbered blocks and per-row/per-page digests."
   },
   {
    "id": "D15.2",
-   "summary": "owed: rests changed (full) / triage / research changed (full, no snapshots); push refuses triage-owed claims until recorded",
+   "summary": "owed: rests changed (full) / triage / research changed (full); push refuses triage-owed until recorded",
    "class": "within",
-   "why": "FR-016's owed rule; refusing the push on an unrecorded triage enforces the requested triage."
+   "why": "Unchanged; FR-016's owed rule, a removed rested-on block included."
   },
   {
    "id": "D15.3a",
-   "summary": "the triage shows only NEW or CHANGED blocks; a REMOVED block is never shown - 'a claim resting on it is rests changed'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-016 says the triage checks 'the new, changed and removed blocks'. The stated justification holds only for rows that recorded rests; D15.4 itself leaves every backfilled row (today's whole index) without rests, and an untagged verdict also records none. For those rows a deletion of the very block a claim rests on yields an empty triage page and the claim is CLEARED unseen (record_triage clears every unit not named; test_a_page_moved_only_by_a_removal_needs_no_triage_block asserts the empty bundle). The same holds for a rests-bearing claim whose unnamed caveat or exception is deleted. This defeats the amendment's purpose ('ensure the rechecks are appropriately scoped' - a change that bears on a claim must still reach it). Fix: list removed blocks (the snapshot digests no longer standing, with their words from the store or the base page) in the triage bundle, and add a test that a removal on a no-rests row reaches the triage."
+   "summary": "the triage shows new, changed AND removed blocks, removed words read back from the page's git history; a removal no version yields forces every claim citing the page to a full re-check whatever the reply",
+   "class": "within",
+   "why": "Clears the previous NOT LEGITIMATE: FR-016's 'the new, changed and removed blocks' now all reach the triage, so a no-rests row (the whole backfilled index) cannot be cleared unseen by a deletion; where the words cannot be shown the claim is owed in full rather than cleared, which is stricter than asked and only enforces the request. Verified in scripts/_claims.py (removed_words, triage_bundle, record_triage) and by test_a_removal_reaches_the_triage_shown_from_the_pages_history and test_a_removal_the_history_cannot_show_owes_its_claims_in_full, both passing on this round's run."
   },
   {
    "id": "D15.3b",
-   "summary": "one ad-hoc opus agent replies TOUCHES lines; named claims owed impl-drift, the rest recorded cleared at today's pages",
+   "summary": "one ad-hoc opus agent replies TOUCHES lines; named and forced claims owed impl-drift, the rest cleared at today's pages",
    "class": "within",
-   "why": "FR-016: one cheap check naming the claims a change could bear on; those to impl-drift, the rest cleared without a re-judge."
+   "why": "FR-016's single cheap check; the forced addition only adds claims to impl-drift."
   },
   {
    "id": "D15.4",
-   "summary": "backfill once: rows whose research fingerprint matches today's get pages and snapshots; a moved row stays owed in full; no-rests rows triaged on next change",
+   "summary": "backfill once for rows whose research fingerprint matches today's; moved rows owed in full; no-rests rows triaged on next change",
    "class": "within",
-   "why": "FR-016's backfill clause, word for word."
+   "why": "FR-016's backfill clause; its earlier gap is closed by D15.3a."
   },
   {
    "id": "T14",
    "summary": "implement D15 with its tests (SC-011)",
    "class": "within",
-   "why": "Carries FR-016/SC-011; inherits D15.3a's finding."
+   "why": "Carries FR-016/SC-011; D15.3a's finding resolved."
   },
   {
    "id": "T15",
-   "summary": "0081 follow-ups (four figures as deviations, two wording points) then claims-triage and impl-drift on what it sends on",
+   "summary": "0081 follow-ups then claims-triage and impl-drift",
    "class": "within",
-   "why": "Amendment 4: the fix lands before the rechecks so they are scoped; FR-008 has the page state what the maps do, each value in its class."
+   "why": "Amendment 4: the fix before the rechecks."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
