@@ -70,10 +70,10 @@ done (FR-012).
   rests on; both checks green in at most two rounds; Inashiro's page regenerated in the clone (plan D9)
       research: rendering
       verify: DONE. DONE. Farmhouse in the About form: purpose, look, how many, size; no guesses; Entry 0029 0028 0004 0048 0244 0107 0117 0029.drawing; modal-form rounds 1-6 (clean), modal-research rounds 1-5 (clean bar one declined clause); all four units answered; page-check green; Inashiro regenerated in the clone
-- [ ] T10 [US6] THE GM'S VERDICT on the farmhouse - each change made in the guidelines first, then the modal, re-checked;
+- [x] T10 [US6] THE GM'S VERDICT on the farmhouse - each change made in the guidelines first, then the modal, re-checked;
   repeated until the GM is satisfied (FR-010)
       research: rendering
-      verify:
+      verify: DONE. GM 2026-10-03/04: accepted the farmhouse write-up; changes asked (Depiction tab, its name, roof left to the claims backlog) made in the guidelines first
 
 - [x] T18 [US6] One file per modal (plan D12): every `Kind`'s text moved to `interactive/assets/modals/<hamlet|sheet>/<slug>.md`
   by script, the registry field-for-field unchanged (test); `Kind.feature()` reads the file; the render fingerprint takes every
@@ -92,9 +92,9 @@ done (FR-012).
   farmhouse's current text (it must flag the missing tab and the drawing pages on References)
       research: rendering
       verify: DONE. modal-depiction agent + tier row; bundle with LISTED and CANDIDATE pages (sibling and old-form base legs), claims, glyph crop; plan review round 4 CLEAR
-- [ ] T21 [US3b] The farmhouse's Depiction tab written; all four modal checks green; Inashiro regenerated; THE GM'S VERDICT
+- [x] T21 [US3b] The farmhouse's Depiction tab written; all four modal checks green; Inashiro regenerated; THE GM'S VERDICT
       research: rendering
-      verify:
+      verify: DONE. GM 2026-10-04: 'That looks good' on the farmhouse with its Depiction tab; four checks answered; Inashiro regenerated
 
 ## Phase 3 - the garden pilot (and a further pilot only if needed)
 
