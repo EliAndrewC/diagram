@@ -129,9 +129,8 @@ def _fabric(s: Any) -> tuple[Yards, list[Mapping[str, Any]]]:
 
 
 def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: every household's but those of a house one of its ENDS
-    stands at (within `law.DOORSTEP_FT`) - a door path leaves its own dooryard, and is exempt from that steading alone
-    (`law.fouls_fabric`'s `own`).
+    """The yards and gardens a lane along `p` may not come near: every household's but those of the houses within
+    `law.DOORSTEP_FT` of one of its ENDS - the dooryards it arrives among (`law.fouls_fabric`'s `own`).
 
     Research: a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
     Research: the dooryards it arrives among - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
