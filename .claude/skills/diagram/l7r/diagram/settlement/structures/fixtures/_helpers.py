@@ -173,7 +173,11 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
             continue
         inner = min((pts[0], pts[-1]), key=lambda q: min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses))
         # a way meets it at a shared vertex or anywhere along a segment - the router joins at either
-        if any(seg_dist(inner[0], inner[1], a, b) <= KOSATSUBA_HANDOVER_PX for o in _others for a, b in zip(o, o[1:], strict=False)):
+        # ...OR THE TRACK STARTS AT THE GATE THE HOUSEHOLDS' WAYS WERE LAID TO (feature 320, `way_out_gate`): they join it along
+        # its stretch by the cluster, none need meet its inner end, and the through-track branch below then took the join
+        # nearest the houses - the innermost, which the ways joining farther out never pass (11 of 16 bookend runs lost
+        # their entrance board, perf-audit 2026-10-04)
+        if M.get("way_out_gate") or any(seg_dist(inner[0], inner[1], a, b) <= KOSATSUBA_HANDOVER_PX for o in _others for a, b in zip(o, o[1:], strict=False)):
             # ...AND THE ENTRANCE IS THE LAST JOIN ON THE WAY OUT, not the inner end (settlement-review of Inashiro, feature
             # 261): a household's own short lane met the track 190 ft below the inner end, so it left without passing a board
             # seated there. Walked in from the outer end, the first point a way meets is where every departure has joined
