@@ -163,7 +163,8 @@ a.sib:hover { color: var(--hl-stroke); }
 #p-guesses ul { margin: 0 0 0.7rem; padding-left: 1.2rem; line-height: 1.45; }
 #p-guesses li { margin: 0 0 0.5rem; }
 /* the references tab: one line per QUESTION, each a link to its answer in the record (feature 180) */
-#p-refs p { margin: 0 0 0.6em; font-size: 0.95em; line-height: 1.4; }
+#p-refs p, #d-list p { margin: 0 0 0.6em; font-size: 0.95em; line-height: 1.4; }
+#x-depiction p { margin: 0 0 0.5em; line-height: 1.45; }
 #p-refs p.intro { color: var(--muted); font-size: 0.9em; margin: 0 0 0.9em; }
 a.q { color: #5A3F1E; text-decoration: none; }
 a.q:hover { color: var(--hl-stroke); }

@@ -123,3 +123,27 @@ def test_an_about_form_without_a_data_tag_fails_loudly_naming_the_class(missing:
         assert "Probe" in str(e.value)
     finally:
         Kind.registry.remove(Probe)
+
+
+def test_the_depiction_tab_has_its_paragraphs_and_its_drawing_pages() -> None:
+    """Plan D13 (GM 2026-10-04: "I want 'How we draw it' things on its own tab"): `Depiction:` keeps its paragraphs as About
+    does, and `Drawing:` names the "how our maps draw it" pages, which leave `Entry:`."""
+    Probe = _probe(
+        "About: a.\n\nDepiction: The map draws it bold.\n\nIt was pale.\n\n"
+        + _DATA
+        + "Drawing: research/questions/0001-x.drawing.html\n"
+    )
+    try:
+        fc = Probe.feature()
+        assert fc.depiction == ("The map draws it bold.", "It was pale.") and fc.drawing == "research/questions/0001-x.drawing.html"
+    finally:
+        Kind.registry.remove(Probe)
+
+
+def test_a_drawing_page_under_entry_is_refused_with_the_tag_it_belongs_under() -> None:
+    Probe = _probe("About: a.\n\n" + _DATA.replace("research/none.md", "research/questions/0001-x.drawing.html"))
+    try:
+        with pytest.raises(ValueError, match="belongs under Drawing:"):
+            Probe.feature()
+    finally:
+        Kind.registry.remove(Probe)

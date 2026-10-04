@@ -117,6 +117,10 @@ class FeatureClass:
     about: tuple[str, ...] = ()
     guesses: tuple[str, ...] = ()
     form: str = "standard"
+    # THE DEPICTION TAB (feature 319 plan D13, GM 2026-10-04): how the map draws the thing - its paragraphs, and the "how our
+    # maps draw it" pages it rests on (`Drawing:`, in the form `Entry:` takes), which leave the References tab
+    depiction: tuple[str, ...] = ()
+    drawing: str = ""
 
 
 _LABEL_WORDS: dict[Label, str] = {cast(Label, label): words for label, words in _TEXT["label_words"].items()}
@@ -163,9 +167,11 @@ def slug(key: str) -> str:
 #: from class attributes into the docstring, so a relabeling or a repointed research entry is a page-content
 #: edit like any rewording - `make page-check`, not the gate; only `key` stays code, being what the engine
 #: writes on the ink and what the stylesheet matches).
-_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "About", "Guesses", "Name", "Covers", "Label", "Sources", "Entry", "Form")
-_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Name|Covers|Label|Sources|Entry|Form):\s?(.*)$")
-_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Label", "Sources", "Entry", "Form")
+_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "About", "Guesses", "Depiction", "Name", "Covers", "Label", "Sources", "Entry", "Drawing", "Form")
+_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Depiction|Name|Covers|Label|Sources|Entry|Drawing|Form):\s?(.*)$")
+_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Label", "Sources", "Entry", "Drawing", "Form")
+#: the tags whose blank lines are paragraph breaks (the About and Depiction tabs)
+_PARAGRAPHED: frozenset[str] = frozenset({"About", "Depiction"})
 #: The About form's data tags: `Label:` goes (a guess is a bullet, not the feature's label - `dev/modals.md` M11) and `Form:`
 #: is optional (default `standard`).
 _ABOUT_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Sources", "Entry")
@@ -192,7 +198,7 @@ def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
             out[cur] = [m.group(2)] if m.group(2) else []
             continue
         if not line:
-            if cur == "About" and out[cur]:
+            if cur in _PARAGRAPHED and out[cur]:
                 out[cur].append("")  # a paragraph break, kept for the About tab
             continue
         if cur is None:
@@ -210,7 +216,7 @@ def _join(tag: str, lines: list[str]) -> str:
     """One tag's value: wrapped lines joined with one space; `About:` keeps its paragraph breaks and `Guesses:` its
     bullets, one to a line.
     Research: modal vocabulary plumbing - NONE"""
-    if tag == "About":
+    if tag in _PARAGRAPHED:
         paras: list[list[str]] = [[]]
         for line in lines:
             if line:
@@ -287,7 +293,7 @@ class Kind:
         if "About" in parts:
             return _about_feature(cls.__name__, cls.key, parts)
         for tag in _DATA_TAGS:
-            if tag == "Form":
+            if tag in ("Form", "Drawing"):  # optional: Form defaults to standard; Drawing is the About form's (plan D13)
                 continue
             if not parts.get(tag):
                 raise ValueError(f"{cls.__name__}: the docstring has no {tag}: section")
@@ -322,6 +328,8 @@ def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
     form = parts.get("Form", "standard")
     if form not in FORMS:
         raise ValueError(f"{name}: Form: {form!r} is not one of {sorted(FORMS)}")
+    if ".drawing.html" in parts["Entry"]:
+        raise ValueError(f"{name}: a 'how our maps draw it' page belongs under Drawing:, not Entry: (the Depiction tab - dev/modals.md D-rules)")
     raw_guesses = parts.get("Guesses", "")
     if raw_guesses and not all(line.startswith("- ") for line in raw_guesses.splitlines()):
         raise ValueError(f"{name}: each guess is a bullet - start every line under Guesses: with '- '")
@@ -336,6 +344,8 @@ def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
         sources=tuple(s.strip() for s in parts["Sources"].split(",") if s.strip()),
         entry=parts["Entry"],
         about=about_paragraphs(parts["About"]),
+        depiction=about_paragraphs(parts.get("Depiction", "")),
+        drawing=parts.get("Drawing", ""),
         guesses=guess_bullets(raw_guesses),
         form=form,
     )

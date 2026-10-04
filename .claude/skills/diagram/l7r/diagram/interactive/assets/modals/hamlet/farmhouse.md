@@ -17,4 +17,5 @@ farmhouses at about that better-off size, varied from house to house.
 Name: farmhouse
 Covers: `houses` - the dwelling of each household
 Sources: kotobank-minka, morse-1886-homes, miyoshi-kurashi-mingu-1998, oamishirasato-choshi-kaoku
-Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0244-farmhouse-walls.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0117-doorways-and-doors-to.html, research/questions/0029-farmhouses-minka.drawing.html
+Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0244-farmhouse-walls.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0117-doorways-and-doors-to.html
+Drawing: research/questions/0029-farmhouses-minka.drawing.html

@@ -225,8 +225,8 @@ def test_the_page_carries_the_questions_and_no_record_line() -> None:
     assert not {"sources", "refs", "entry"} & set(farmhouse)
     # feature 319: the modal is TABS - About, Guesses, References - in one dialog; the references dialog, its return button
     # and the "See references (N)" link are gone (they were features 180 and 181's), and a tab with nothing to show is hidden
-    assert '<nav id="x-tabs" role="tablist">' in markup and all(f'id="t-{t}"' in markup for t in ("about", "guesses", "refs"))
-    assert [m for m in re.findall(r'role="tab" id="t-\w+" data-tab="\w+" aria-controls="p-\w+">(\w+)<', markup)] == ["About", "Guesses", "References"]
+    assert '<nav id="x-tabs" role="tablist">' in markup and all(f'id="t-{t}"' in markup for t in ("about", "guesses", "depict", "refs"))
+    assert [m for m in re.findall(r'role="tab" id="t-\w+" data-tab="\w+" aria-controls="p-\w+">(\w+)<', markup)] == ["About", "Guesses", "Depiction", "References"]
     assert 'id="references"' not in markup and "r-close" not in html_text and "See references" not in html_text
     assert "behind" not in html_text.split("<style>")[1].split("</style>")[0], "no stylesheet rule hides the explanation any more"
     assert 'document.getElementById("t-guesses").hidden = !(d.guesses && d.guesses.length)' in html_text

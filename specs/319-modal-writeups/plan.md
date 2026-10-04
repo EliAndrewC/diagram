@@ -131,6 +131,26 @@ follows the text to its file: `_modal_owed`, `_modal_bundle`, `_entry_owed` (the
 docstring where no file existed at the base), `_bundle_owed`, `_check_bundle` (`kind.txt`), `_apply_edits` (the modal folder
 an allowed EDIT target).
 
+**D13 - The Depiction tab (amendment, GM 2026-10-04; spec FR-014).** The modal file gains `Depiction:` (paragraphs, as
+`About:`) and `Drawing:` (the "how our maps draw it" pages, `research/questions/NNNN-<id>.drawing.html`, comma-separated);
+`Entry:` keeps the research questions alone, and a `.drawing.html` listed under `Entry:` is refused at parse with the message
+naming `Drawing:`. The page draws a fourth tab, "Depiction", between Guesses and References, holding the `Depiction:`
+paragraphs and then the drawing pages as links (the `research_questions` resolver, unchanged); it is absent when both are
+empty, and joins the grid cell the other panels share (one size for every tab). The guidelines gain the tab's rules (`dev/modals.md`
+section "Depiction", rules D1-D6: what goes there - conventions with the real figure, standardizations with why, the links;
+links alone when nothing is notable; absent when neither; a single form is written as deliberate only where a drawing page records
+it as a convention, never where the research makes it a knob the code does not roll; and M13 amended - a convention leaves About).
+A new defined agent `modal-depiction` (Opus, medium, `omitClaudeMd`) reads a bundle (`make modal-bundle KIND= FOR=modal-depiction`):
+the modal's Depiction and About text, the guidelines, the kind's drawing pages whole, the claims-index rows whose cited pages
+include any of them (key, verdict, note - so a DRIFTED claim such as the farmhouse's single roof is in front of it), and a crop of
+the glyph on a pool page (`interactive/assets` page screenshot at a fixed zoom around the first element of the kind, written by the
+bundle script with the browser the page tests already use; a kind on no pool map is bundled without a crop and says so). It reports
+COVERAGE (every convention and standardization the glyph shows is told, with the real counterpart), TRUTH (nothing told that the
+crop and the pages do not show; nothing presented as deliberate that a claim calls DRIFTED), LINKS (exactly the drawing pages the
+tab rests on). Owed unit `modal-depiction:<uid>`, when the modal's Depiction or Drawing changed or a page under `Drawing:` changed;
+`modal-research` no longer reads the drawing pages (its Entry is research questions only). The farmhouse is rewritten into the
+form as the tab's first example and goes back to the GM.
+
 ## Constitution Check
 
 - I, II: N/A - no gm-assistant UI; the map pages are this repository's own artifact under feature 134's rules.

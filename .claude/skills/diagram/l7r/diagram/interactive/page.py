@@ -516,6 +516,9 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             # class, which page.js shows in its About tab as before (lead, what, why, caveat)
             "about": list(fc.about),
             "guesses": list(fc.guesses),
+            # THE DEPICTION TAB (plan D13): how the map draws it, and the "how our maps draw it" pages, as links
+            "depiction": list(fc.depiction),
+            "drawing": research_questions(fc.drawing) if fc.drawing else [],
             # `lead` is empty for an `accurate` class (feature 156) - see `classes.lead_sentence`.
             # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
             # classification is still readable on the page (`data-label`), per constitution XII.
@@ -553,6 +556,8 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             "why": "",
             "about": [],
             "guesses": [],
+            "depiction": [],
+            "drawing": [],
             "label": "guess",
             # the stub follows the same contract as a real entry, so its announcement survives
             # (settlement-review nitpick, 2026-08-29: it still carried the pre-154 keys, which
@@ -857,6 +862,7 @@ def render_page(
         '<header><h2 id="x-name"></h2><nav id="x-tabs" role="tablist">'
         '<button type="button" role="tab" id="t-about" data-tab="about" aria-controls="p-about">About</button>'
         '<button type="button" role="tab" id="t-guesses" data-tab="guesses" aria-controls="p-guesses">Guesses</button>'
+        '<button type="button" role="tab" id="t-depict" data-tab="depict" aria-controls="p-depict">Depiction</button>'
         '<button type="button" role="tab" id="t-refs" data-tab="refs" aria-controls="p-refs">References</button></nav></header>'
         # THE PANELS SHARE ONE GRID CELL (GM 2026-10-03: *"I would like for the tabs to keep the modal the same size because
         # it is disorienting to see it resized when clicking between tabs"*): a hidden panel keeps its place, invisible, so
@@ -866,6 +872,9 @@ def render_page(
         '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
         '<section id="x-siblings"></section></div>'
         '<div id="p-guesses" role="tabpanel" aria-labelledby="t-guesses" hidden><ul id="x-guesses"></ul></div>'
+        # THE DEPICTION TAB (plan D13, GM 2026-10-04: "I want 'How we draw it' things on its own tab"): how the map draws the
+        # thing, then the "how our maps draw it" pages, which leave the References tab
+        '<div id="p-depict" role="tabpanel" aria-labelledby="t-depict" hidden><section id="x-depiction"></section><section id="d-list"></section></div>'
         # NO "Record:" LINE (feature 180, GM 2026-09-05) - the references tab lists the QUESTIONS the entry names.
         f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><p id="r-intro" class="intro">{REFERENCES_LEAD}</p><section id="r-list"></section></div></div>'
         '<footer><button id="x-close" type="button">Close</button></footer>'

@@ -146,7 +146,13 @@
     (d.guesses || []).forEach(function (g) { var li = document.createElement("li"); fillText(li, g); guesses.appendChild(li); });
     document.getElementById("t-guesses").hidden = !(d.guesses && d.guesses.length);
     document.getElementById("t-refs").hidden = !d.questions.length;
-    fillRefs(d);
+    fillLinks("r-list", d.questions);
+    // THE DEPICTION TAB (feature 319 plan D13): its paragraphs, then the "how our maps draw it" pages; absent when both are empty
+    var dep = document.getElementById("x-depiction");
+    dep.textContent = "";
+    (d.depiction || []).forEach(function (para) { var p = document.createElement("p"); fillText(p, para); dep.appendChild(p); });
+    fillLinks("d-list", d.drawing || []);
+    document.getElementById("t-depict").hidden = !((d.depiction && d.depiction.length) || (d.drawing && d.drawing.length));
     // THE PRESUMPTION OF ACCURACY (feature 156, GM 2026-08-29). `lead` is empty for everything the
     // record calls accurate, so the modal opens with what the feature IS; a deviation, a convention or a guess
     // still leads with its liberty, because that is the case worth a reader's attention. The
@@ -213,8 +219,8 @@
   // THE TABS (feature 319, GM 2026-10-03): About, Guesses, References in ONE dialog. A tab with nothing to show is not
   // drawn; the dialog opens on About every time. The references used to be a second dialog that replaced this one
   // (features 180, 181) with a "Return to <X> writeup" button; the tab strip is the way back now.
-  var tabs = { about: "t-about", guesses: "t-guesses", refs: "t-refs" };
-  var panels = { about: "p-about", guesses: "p-guesses", refs: "p-refs" };
+  var tabs = { about: "t-about", guesses: "t-guesses", depict: "t-depict", refs: "t-refs" };
+  var panels = { about: "p-about", guesses: "p-guesses", depict: "p-depict", refs: "p-refs" };
   function showTab(name) {
     Object.keys(tabs).forEach(function (t) {
       var on = t === name;
@@ -230,10 +236,10 @@
   });
   // THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): one link per research question the class was written
   // from, opening its answer in the record's site in a new tab; the sources are one click further, on that page.
-  function fillRefs(d) {
-    var list = document.getElementById("r-list");
+  function fillLinks(id, qs) {
+    var list = document.getElementById(id);
     list.textContent = "";
-    d.questions.forEach(function (q) {
+    qs.forEach(function (q) {
       var p = document.createElement("p");
       var a = document.createElement("a");
       a.href = q.url; a.target = "_blank"; a.rel = "noopener"; a.className = "q";

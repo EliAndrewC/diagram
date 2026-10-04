@@ -298,7 +298,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 |---|---|---|---|
 | A guess is a property of a statement, listed on a guesses tab; the feature-level guess lead goes | presentation (the four classes of constitution XII are kept, per statement) | the GM: the garden's lead *"is extremely misleading"* | this spec; the guidelines; `interactive/CLAUDE.md` |
 | Per-settlement facts move from the feature modals to the title card | presentation | the GM: settlement maps *"all pull from a standardized set of modals ... not ... customized modals. For anything"* | this spec; the guidelines |
-| A drawing convention is told in the write-up's appearance part, not the guesses tab | presentation | a convention is not a guess, and the reader needs it where they read about the look | this spec; the guidelines |
+| A drawing convention is told on the Depiction tab with its real counterpart, not in the write-up and not on the guesses tab | presentation | a convention is not a guess; the GM, 2026-10-04: *"I think I want 'How we draw it' things on its own tab"* (until 2026-10-04 it was told in the write-up's appearance part) | this spec; the guidelines |
 | The how-it-is-drawn tab is "Depiction" | presentation | the GM, 2026-10-04: *"For the name I do like 'Depiction' so let's use that"* | this spec; the guidelines |
 | The farmhouse's single roof is not presented as a convention | presentation; the drift itself stays in the claims report (DRIFTED, `houses.py` `HousesMixin.house`) | the GM, 2026-10-04: *"The single roof is NOT a deliberate convention"*, to be fixed with the other recorded drifts later | this spec; the claims report |
 | The first tab is "About" | presentation | pitched About / Overview / At a glance / What it was; the GM, 2026-10-03: *"I like 'About' better than overview. So about guesses and references does seem pretty good"* | this spec; the guidelines |
@@ -317,4 +317,4 @@ when a rewrite is accepted with no changes are the rest rewritten.
   changes (FR-010, US6, SC-005); per-sheet facts on general kinds held to the particular guidelines (Context, FR-003, US5,
   FR-011); the research pass before a guess (Assumptions). All four applied.
 - Round 2 (spec-fidelity, 2026-10-03): ACCEPT (FAITHFUL) - all four round-1 changes confirmed against the diff.
-- Amendment 2026-10-04 (the GM's Depiction tab): FR-005, FR-006 amended, FR-014, US3b, SC-008 and two Decisions added.
+- Amendment 2026-10-04 (the GM's Depiction tab): FR-005, FR-006 amended, FR-014, US3b, SC-008 and two Decisions added; one Decisions row amended (the convention's place).
