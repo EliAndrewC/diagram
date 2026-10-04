@@ -13,3 +13,5 @@
 - round 3, quote-check 0039: SUPPORTS 21, PARTIAL 2 - the house-lot sentence scoped to beds by the house; ihns-bunongshu cited where Zhejiang's farm book is first named
 - round 3, record-format 0039: clean; translation-check: FAITHFUL 43, LOOSE 1 - Masaki's 生鮮 now 'fresh [fish] too' (the page's preceding sentences are about fish); source-reader: READ 14, absence held, 'recollections' now 'accounts' (prose and registry)
 - round 3, source-applicability: bunongshu HONEST; chinese-units, seiryoki, kateisaien, sato one clause or tag each fixed (sato's period tag)
+- round 4, quote-check 0039: SUPPORTS 22, PARTIAL 1 - the Ehime hillside account is of a settlement, not one house (two sentences); the sato scan read as images, verbatim
+- round 4, record-format clean (the surveyor's passage is the fourth of yashikidori-4, not the second - fixed); translation-check FAITHFUL 43, LOOSE 1 ('Poultry-keeping and vegetable ground are slight'); source-reader READ 6; applicability chinese-units and kateisaien HONEST, seiryoki ('reported accounts') and sato (the post-war work sheds; several districts) fixed
