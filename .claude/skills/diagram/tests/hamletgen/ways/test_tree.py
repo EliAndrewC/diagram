@@ -205,7 +205,7 @@ def test_the_web_draws_every_owed_chain_once_and_the_strip_again_for_a_new_inner
     assert tree.owed(M) == [0, 1], "B hangs from A: both owed"
     assert tree.settle_tree(s) == 3
     assert [ln.get("role") for ln in M["lanes"]] == [None, STRIP_ROLE, ACCESS_ROLE, ACCESS_ROLE]
-    assert law.unreached_houses(M) == [] and tree.owed(M) == [] and tree.settle_tree(s) == 0
+    assert law.unreached_houses(M) == [] and tree.owed(M) == [0, 1] and tree.settle_tree(s) == 0, "every household's way owed (feature 318), each drawn once"
     M["houses"].append(_house(390.0, 250.0))
     M["access_corridors"].append({"pts": [[390.0, 230.0], [390.0, 0.0]], "of": [390.0, 250.0]})
     M["lanes"] = M["lanes"][:3]  # B's corridor gone: B and the new house are owed
@@ -260,8 +260,12 @@ def test_a_tree_lane_the_map_no_longer_needs_is_pruned_and_one_it_needs_is_kept(
     M["lanes"].append({"pts": [[0.0, 0.0], [260.0, 60.0]], "w": 3})  # an ordinary lane now reaches the house
     assert tree.prune_the_tree(s) == 0, "no record of the corridor: it goes alone or not at all, and alone its strip dangles"
     M["access_corridors"] = [{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}]
-    assert tree.prune_the_tree(s) == 1 and [ln.get("role") for ln in M["lanes"]] == [None, None], "the leaf, and the strip with it"
-    assert tree.prune_the_tree(s) == 0 and tree.prune_the_tree(_S({"lanes": []})) == 0
+    assert tree.prune_the_tree(s) == 0, "a household's own way is never pruned, an ordinary lane reaching its house or not (feature 318)"
+    # ...a tree lane that is no household's way (the field's) goes when the map no longer needs it, the strip with it
+    M["access_corridors"] = [{"pts": [[300.0, 80.0], [300.0, 0.0]], "field": True}]
+    M["lanes"][-2] = {"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": FIELD_ROLE}
+    assert tree.prune_the_tree(s) == 1
+    assert tree.prune_the_tree(_S({"lanes": []})) == 0
 
 
 def test_an_end_off_its_host_as_drawn_is_set_on_it_or_carried_on_to_it() -> None:
@@ -296,6 +300,29 @@ def test_an_ordinary_lane_closing_a_sliver_with_a_tree_lane_defers() -> None:
     assert law.needle_loops(M) and {i for i, _q in tree.tree_faults(M)} == {2}
 
 
+def test_a_field_way_another_hangs_from_stays_and_a_field_leaf_retracts_the_strip() -> None:
+    """`prune_the_tree` on the tree lanes that are no household's way (feature 318): a field way a household's way hangs from is
+    no leaf and stays; a field leaf goes and the strip retracts to the innermost attachment still drawn."""
+    field = {"pts": [[300.0, 80.0], [300.0, 0.0]], "field": True}
+    own = {"pts": [[100.0, 80.0], [100.0, 0.0]], "of": [100.0, 100.0]}
+    hung = {"pts": [[200.0, 180.0], [300.0, 50.0]], "of": [200.0, 200.0]}
+    M = _tree(houses=[_house(100.0, 100.0), _house(200.0, 200.0)], access_corridors=[field, own, hung])
+    M["lanes"] += [
+        {"pts": [[300.0, 0.0], [0.0, 0.0]], "w": 3, "role": STRIP_ROLE},
+        {"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": FIELD_ROLE},
+        {"pts": [[100.0, 80.0], [100.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [100.0, 100.0]},
+        {"pts": [[200.0, 180.0], [300.0, 50.0]], "w": 3, "role": ACCESS_ROLE, "of": [200.0, 200.0]},
+    ]
+    assert tree.prune_the_tree(_S(M)) == 0, "a household's way hangs from the field way: no leaf; the rest are households' ways"
+    leaf = _tree(houses=[_house(100.0, 100.0)], access_corridors=[field, own])
+    leaf["lanes"] += [
+        {"pts": [[300.0, 0.0], [0.0, 0.0]], "w": 3, "role": STRIP_ROLE},
+        {"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": FIELD_ROLE},
+        {"pts": [[100.0, 80.0], [100.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [100.0, 100.0]},
+    ]
+    assert tree.prune_the_tree(_S(leaf)) == 1 and leaf["lanes"][1]["pts"][0] == [100.0, 0.0], "the leaf gone, the strip retracted"
+
+
 def test_a_corridor_another_hangs_from_is_not_pruned_and_a_leaf_retracts_the_strip() -> None:
     M = _tree(
         houses=[_house(300.0, 100.0), _house(100.0, 100.0)],
@@ -304,7 +331,7 @@ def test_a_corridor_another_hangs_from_is_not_pruned_and_a_leaf_retracts_the_str
     s = _S(M)
     assert tree.settle_tree(s) >= 3 and M["lanes"][1]["pts"][0] == [300.0, 0.0]
     M["lanes"].append({"pts": [[0.0, 0.0], [240.0, 120.0]], "w": 3})  # an ordinary lane now reaches house A from the connector
-    assert tree.prune_the_tree(s) == 1 and M["lanes"][1]["role"] == STRIP_ROLE and M["lanes"][1]["pts"][0] == [100.0, 0.0], "A's leaf gone, the strip retracted to B's"
+    assert tree.prune_the_tree(s) == 0 and M["lanes"][1]["pts"][0] == [300.0, 0.0], "A's way stays though a lane reaches A (feature 318)"
     chain = _tree(houses=[_house(300.0, 100.0), _house(200.0, 200.0)])
     c = _S(chain)
     tree.settle_tree(c)
@@ -444,9 +471,9 @@ def test_a_house_another_is_reached_across_is_owed_its_way_and_never_pruned_of_i
     neighbor's way, so the neighbor's corridor is owed however near the lanes its center stands, and never pruned."""
     M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
     M["lanes"] += [{"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 3, "role": STRIP_ROLE}, {"pts": [[0.0, 0.0], [260.0, 60.0]], "w": 3}]
-    assert tree.owed(M) == [], "the house is reached by an ordinary lane: its corridor is not owed"
+    assert tree.owed(M) == [0], "every household's way is owed, an ordinary lane reaching its house or not (feature 318)"
     M["houses"].append({**_house(300.0, 400.0), "reached_across": [300.0, 100.0], "passage_depth": 1})
-    assert tree.passage_anchors(M) == [(300.0, 100.0)] and tree.owed(M) == [0], "...until another household is reached across it"
+    assert tree.passage_anchors(M) == [(300.0, 100.0)] and tree.owed(M) == [0], "...and still when another household is reached across it"
     M["lanes"].append({"pts": [[300.0, 80.0], [300.0, 0.0]], "w": 3, "role": ACCESS_ROLE, "of": [300.0, 100.0]})
     assert tree.prune_the_tree(_S(M)) == 0 and any(ln.get("role") == ACCESS_ROLE for ln in M["lanes"]), "its way is not pruned"
 

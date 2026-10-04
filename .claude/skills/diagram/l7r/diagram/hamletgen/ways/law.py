@@ -378,6 +378,8 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
         for end, q, b in ((-1, p[-1], p[-2]), (0, p[0], p[1])):
             if not free_end(ways, i, q, boxes) or math.dist(q, b) < 1e-6:
                 continue
+            if end == 0 and ln.get("of"):  # ...a household's own way's DOOR end serves its house (feature 318): not a join that stops short
+                continue
             head = ((q[0] - b[0]) / math.dist(q, b), (q[1] - b[1]) / math.dist(q, b))
             best: tuple[float, int, Pt] | None = None
             for k, o in enumerate(ways):
