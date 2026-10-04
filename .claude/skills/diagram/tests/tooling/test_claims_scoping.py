@@ -12,6 +12,7 @@ import json
 import pathlib
 
 import pytest
+
 from tests.tooling.test_claims_index import MOD, _commit, _repo, _tree, cx
 
 PAGE = '<h2 id="row-villages-resson">Row villages</h2>\n<p class="intro">Why asked.</p>\n<p>Farms face the street.</p>\n<p>Each lane is 5 ft.</p>\n'

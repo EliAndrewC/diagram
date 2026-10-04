@@ -38,7 +38,7 @@ class Farmhouse(Kind):
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
     close enough that the household works its own ground. No count of house bearings from before 1868 was found: the
     survey is one island region's houses in 1985, and the one tenth it found turned to the right is not drawn. How far a
-    house turns with the field edge it stands near, and rolling the common bearing within about 11 degrees of due south, are guesses, and that it turns with the field edge, its lane not yet laid, is a deviation of this map's, as is a village-scale map's finding each house's path as it seats it; as is that the 1736 village's houses turned with its streets. The plain farmhouse is drawn 46 by 28 ft, the size of the well-off houses that survive and about twice the usual house of one village's count of 1885.
+    house turns with the field edge it stands near (that it turns with the field edge, its lane not yet laid, is a deviation of this map's, as is a village-scale map's finding each house's path as it seats it), and rolling the common bearing within about 11 degrees of due south, are guesses, as is that the 1736 village's houses turned with its streets. The plain farmhouse is drawn 46 by 28 ft, the size of the well-off houses that survive and about twice the usual house of one village's count of 1885.
 
     Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
     10 to 13 ft, well clear of it, close enough that the household works its own ground. No count of house bearings from
