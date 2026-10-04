@@ -37240,12 +37240,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::way_out#a way leaves its own homestead from its dooryard": {
-  "code": "78fb85fd06222d66",
+  "code": "e8ea29858246b944",
   "core": "c6fd9626d100f842",
   "date": "2026-10-03",
-  "note": "the code matches \"leaves its dooryard round its own garden beds and fixtures\", but the drawing page never names the forecourt, the yard's far edge or the flanks past the gable that the claim lists; need the research page 0081-village-lanes.html or the code that picks the doors",
+  "note": "the drawing page records \"Its way leaves its dooryard round its own garden beds and fixtures - a map drawing convention\"; the code searches from the doors it is given, over only the cells open_here admits, out to the lane ground, cheapest exit first",
   "research": "10d6e651e3fb0112",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/lot.py::BUNDLE_PART_KEYS#quota, record and registry plumbing": {
   "code": "a94714d47790c95e",
