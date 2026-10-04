@@ -97,8 +97,9 @@ def opens(s: Settlement, geom: Any) -> bool:
     region's one predicate, `SeatRegion.opens`, feature 318 FR-013) - or, on a roll with no seat region, a straight or
     round-the-gable corridor (`access.access_corridor`, `routed` False)?
 
-    Research: a way of its own - research/questions/0081-village-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
-    Research: the village roll's corridor - DEVIATION research/questions/0081-village-lanes.drawing.html: a roll with no seat region seeks a corridor while it seats (`access_corridor`)
+    Research:
+        a way of its own - research/questions/0081-village-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
+        the village roll's corridor - DEVIATION research/questions/0081-village-lanes.drawing.html: a roll with no seat region seeks a corridor while it seats (`access_corridor`)
     """
     region = getattr(s, "_seat_region", None)
     if region is not None:
@@ -310,8 +311,9 @@ def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
     (`AccessTree.bar`), counted against the settlement's share, and recorded on `rec`: whom it is reached across, the chain's
     depth and the walk.
 
-    Research: walk not drawn as a lane - GUESS research/questions/0081-village-lanes.drawing.html: the walk is recorded and kept clear, never drawn
-    Research: the corridor reserved as it is seated - UNRESEARCHED: the walk and the household's corridor reserved as no-build ground while the houses are seated, so later houses keep off them
+    Research:
+        walk not drawn as a lane - GUESS research/questions/0081-village-lanes.drawing.html: the walk is recorded and kept clear, never drawn
+        the corridor reserved as it is seated - UNRESEARCHED: the walk and the household's corridor reserved as no-build ground while the houses are seated, so later houses keep off them
     """
     if geom.get("access") is not None:
         reserve(s, geom["access"], at)

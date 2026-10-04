@@ -129,11 +129,11 @@ def _fabric(s: Any) -> tuple[Yards, list[Mapping[str, Any]]]:
 
 
 def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: every household's but those of the houses within
-    `law.DOORSTEP_FT` of one of its ENDS - the dooryards it arrives among (`law.fouls_fabric`'s `own`).
+    """The yards and gardens a lane along `p` may not come near: all but those within `law.DOORSTEP_FT` of one of its ENDS.
 
-    Research: a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
-    Research: the dooryards it arrives among - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
+    Research:
+        a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
+        the dooryards it arrives among - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
     own = [(float(h["x"]), float(h["y"])) for h in houses if min(math.dist(p[0], (float(h["x"]), float(h["y"]))), math.dist(p[-1], (float(h["x"]), float(h["y"])))) <= law.DOORSTEP_FT]
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 

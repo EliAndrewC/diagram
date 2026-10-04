@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "a3b12e7389f8b2d6458ad2dc81fdbb8b6ab9e09b572414a7365e792291a9fd0d",
+  "criteria": {
+    "commensurate": "Yes, for the design, if the pass is built the cheap way. The bookend is +7.9 pct total (17.7 to 19.1 s). Homesteads at 15 hh are inside the +45 pct the GM accepted for the map shape. 40 hh is -10.7 pct. Seed 4 +21.6 pct is mostly layout (web +0.44, hinterland +0.26 s), and the main-gap control returns both to main.",
+    "necessary": "Yes, unchanged from round 3. The 20 ft gap (grow_gap, FR-011) and the gap pass (gap_ways.lay_the_ways, FR-014) are option A, which the GM chose in Amendment 3 for how it shapes the map. The control (perf-318-control-gap-pass) puts the whole rise on them: the pass costs 0.62-0.85 s a map at 12614b777 (pass timer, 15 hh seeds 4/25/39/47), and the 20 ft gap moves the layout, which accounts for the web, hinterland and notice swings.",
+    "no_way_around": "No: a cheaper, byte-identical form of the pass largest single part was measured. The flood (gap_ways.flood) is 0.32-0.42 s a map, about half the pass, and 1.06 s at 40/39. It is a heapq Dijkstra whose inner loop indexes numpy arrays one scalar at a time (blocked[u, v], float(weight[u, v]), dist[u, v], pred[u, v] = ...). The same loop over blocked.tolist(), weight.tolist(), a list-of-lists dist and a dict pred gives identical dist and pred arrays (np.array_equal on 15/4, 15/25, 15/39, 15/47, 40/39). Times go from 0.356/0.421/0.345/0.369 to 0.212/0.251/0.202/0.219 s at 15 hh and 1.06 to 0.66 s at 40/39 (scratchpad pa318flood.py). That is about 0.6 s off the 15 hh bookend total (about 3 points) and 0.15 s off seed 4, which then sits below 20 pct on paper. To reach justified: apply that change to flood, and the same list reads to way_out and trace, which index dist, pred and laid per cell. Then re-take the bookends and re-explain. The per-cell corridor loop in lane_layers is 0.075-0.107 s a map (25-35k hit_points calls). The 0.0-bounded box-and-segment test vectorizes as a mask method beside hit_points, so the any-answer API is no obstacle. It is recommended, but I will not hold the verdict on it alone."
+  },
+  "end": {
+    "commit": "12614b777",
+    "label": "318-end",
+    "utc": "20261004T014912Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T015434Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 8.6,
+          "47": 13.3
+        },
+        "total_pct": 5.6
+      },
+      "20": {
+        "seeds": {
+          "25": -13.3,
+          "39": 5.5,
+          "4": 0.0,
+          "47": 19.0
+        },
+        "total_pct": 1.6
+      },
+      "40": {
+        "seeds": {
+          "25": -12.7,
+          "39": 0.7,
+          "4": -10.3,
+          "47": -18.3
+        },
+        "total_pct": -10.7
+      }
+    },
+    "seeds": {
+      "25": 12.8,
+      "39": 5.3,
+      "4": 21.6,
+      "47": -8.2
+    },
+    "total_pct": 7.9
+  },
+  "note": "Reviewer runs at 12614b777 and ddb924e01 in detached worktrees (wt-end moved to 12614b777): pa318split3.py for the pass split, pa318flood.py for the flood identity and timing. Band 3 still stands on seed 4 +21.6 pct > 20 pct (and total +7.9 pct > 5 pct): the GM sign-off (make perf-signoff, at a terminal) is owed and is outside what this agent can grant.",
+  "verdict": "not-justified"
+}
