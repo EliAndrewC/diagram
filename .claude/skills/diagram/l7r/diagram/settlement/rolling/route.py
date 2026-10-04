@@ -153,7 +153,7 @@ def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tup
     Asked only through `access.access_corridor` on a tree that routes; the hamlet's seating no longer asks it while houses are
     seated (feature 318: its ways are laid by `gap_ways` once the last house stands).
 
-    Research: path routed round what stands - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a house no straight path reaches gets one bending between the homesteads, from its dooryard; never sought while a house is seated
+    Research: path routed round what stands - DEVIATION research/questions/0081-village-lanes.drawing.html: a house no straight path reaches gets one bending between the homesteads, from its dooryard; asked while it seats a house only on the village roll, which keeps the older way
     """
     from . import access as A
 

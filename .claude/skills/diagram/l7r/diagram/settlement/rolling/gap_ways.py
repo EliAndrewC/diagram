@@ -326,6 +326,8 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
         households' ways laid in order, nearest the way out first - GUESS: a search order, so a nearer household's way is there for a farther one to join
         a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0081-village-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
         a passage a laid way makes unnecessary is ended - research/questions/0081-village-lanes.drawing.html: one that a way reaches is given it and is no longer reached across its neighbor
+        a later way's join reach - UNRESEARCHED: an earlier way within `JOIN_FT` (25 ft), then `JOIN_FAR_FT` (45 ft)
+        a way's search ring - NONE: each way sought within the corridor's half-width and `RING_CELLS` cells round its homestead, a bound on the search
     """
     tree = getattr(s, "_access", None)
     houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]

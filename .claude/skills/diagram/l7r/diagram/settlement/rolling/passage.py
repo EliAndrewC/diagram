@@ -98,6 +98,7 @@ def opens(s: Settlement, geom: Any) -> bool:
     round-the-gable corridor (`access.access_corridor`, `routed` False)?
 
     Research: a way of its own - research/questions/0081-village-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
+    Research: the village roll's corridor - DEVIATION research/questions/0081-village-lanes.drawing.html: a roll with no seat region seeks a corridor while it seats (`access_corridor`)
     """
     region = getattr(s, "_seat_region", None)
     if region is not None:
@@ -257,7 +258,7 @@ def landlocked(s: Settlement, layouts: Any) -> bool:
 
     Research:
         no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a yard opening onto lane ground under none
-        no routed search for one - research/questions/0081-village-lanes.drawing.html: no path is looked for while it is seated; a long way round is not counted as a way of its own
+        no routed search for one - research/questions/0081-village-lanes.drawing.html: no path is looked for while it is seated; any lane ground its dooryard opens onto counts, however far round
     """
     lays = [g for g in layouts if g is not None and not g.get("unlaid")]
     if any(opens(s, g) for g in lays):
