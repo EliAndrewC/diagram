@@ -27,6 +27,7 @@ def fresh(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(_engine_ast, "PARSES", 0)
 
 
+@pytest.mark.xdist_group("engine_ast")  # one worker holds the parsed engine, not five (tests/_heap.py)
 def test_the_four_scans_parse_each_file_once(fresh: None, monkeypatch: pytest.MonkeyPatch) -> None:
     reads = []
     real = _engine_ast.engine_modules
