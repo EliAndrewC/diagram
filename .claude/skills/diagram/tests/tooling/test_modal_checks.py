@@ -221,3 +221,18 @@ def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_
     assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
     assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "CANDIDATE - NOT on the modal's Drawing: list" in manifest
+
+
+def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the_conversion(tmp_path: pathlib.Path) -> None:
+    """The plan review of D13, round 3: FR-012 keeps every conversion off main, so at the merge base every kind is in the OLD
+    form, its drawing pages under its `Entry:` - the 0038 shape, a page whose sibling question the class does not cite. The
+    converted head lists no `Drawing:`; the page the old form named is still handed over, marked CANDIDATE."""
+    old = FARMHOUSE.replace("Farmhouse(Kind)", "Farmhouse(Kind)").split('"""')
+    old_doc = "\n    What: old form.\n    Why: old form.\n    Name: farmhouse\n    Covers: houses\n    Label: accurate\n    Sources: not recorded\n    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0038-yards.drawing.html\n    "
+    root = _tree(tmp_path, old[0] + '"""' + old_doc + '"""' + '"""'.join(old[2:]))
+    (root / SKILL / "research" / "questions" / "0038-yards.drawing.html").write_text('<h2 id="how-our-maps-draw-yards">How our maps draw yards</h2>\n<p>Each house drawn turned.</p>\n', encoding="utf-8")
+    _commit(root)
+    assert mo.find(root, "farmhouse") is None, "the base holds the old form only"
+    (root / CLASSES / "homestead.py").write_text(FARMHOUSE, encoding="utf-8")
+    m = mo.find(root, "farmhouse")
+    assert m.drawing_files() == [] and "research/questions/0038-yards.drawing.html" in mb.drawing_candidates(root, m)

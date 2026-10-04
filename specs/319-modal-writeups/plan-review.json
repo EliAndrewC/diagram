@@ -1,6 +1,6 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "ea443c31625d852732881287afc016817ea362216b43acfa34f130ac2a0d6e72",
+ "plan_sha256": "1276d2d536d949efa919b33c1864bcfa75c045d26bebb077ac985131cc8daa00",
  "reviewed": "2026-10-04",
  "declared": "spec-fidelity",
  "decisions": [
@@ -123,21 +123,20 @@
    "id": "D13-research-scope",
    "summary": "modal-research no longer reads the drawing pages; its Entry is research questions only",
    "class": "within",
-   "why": "Follows FR-006: References holds research questions alone. Round 1's housekeeping note is applied (modal-research.md now says a drawing page is never listed on References and one under Entry: is a finding). Not a narrowing in itself; the coverage it hands to modal-depiction is only complete if D13-links is fixed."
+   "why": "Follows FR-006: References holds research questions alone; modal-research.md says a drawing page is never listed on References. Not a narrowing in itself; the coverage it hands to modal-depiction is complete only once D13-links reaches what it states."
   },
   {
    "id": "D13-owed",
    "summary": "modal-depiction owed on ANY change to an About-form modal (new to the form, About, Guesses, Entry, Depiction, Drawing) and when a page under Drawing: changed, whether or not the modal has the tab",
    "class": "within",
-   "why": "Round 1's required change, applied as written. FR-014: 'owed by a changed modal or drawing page'. Confirmed in scripts/_modal_owed.py:251-255: the m.depiction.strip() gate is gone; `moved_text or was.depiction != m.depiction` (moved_text is True for was None, so the short-circuit is safe) owes the unit, else a moved Drawing: page does; Modal.depiction covers Depiction and Drawing. test_a_class_new_to_the_about_form_owes_all_four_units now asserts modal-depiction is owed for a modal new to the About form with no tab. modal-research.md line 42 no longer lists drawing pages on References. The trigger is faithful; whether the check it dispatches can see what a conversion dropped is D13-links below."
+   "why": "Unchanged since round 2 and confirmed then: owed on ANY change to an About-form modal, tab or not, and on a changed Drawing: page (scripts/_modal_owed.py:251-255). FR-014: 'owed by a changed modal or drawing page'."
   },
   {
    "id": "D13-links",
-   "summary": "modal-depiction's LINKS judged against 'exactly the drawing pages the TAB rests on'; its bundle carries only the pages the modal's Drawing: list names (scripts/_modal_bundle.py:229-233, modal-depiction.md 'drawing/ (each page the modal's Drawing: names)', guideline D5 '(the Drawing: list)')",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-014 says the links are 'exactly the drawing pages the MODAL rests on' and SC-008 binds 'every rewritten modal whose KIND has a drawing page'; the GM: 'in cases where no such sections exist we would omit the tab' - whether such sections exist is a fact about the kind, not about what the author chose to list. The plan's 'the tab rests on' makes the criterion circular, and the bundle makes it blind: on the very case D13-owed now cites as its purpose ('a conversion that drops its drawing pages and writes no Depiction is still checked'), Drawing: is empty, so drawing/ is empty, claims.md is '(none)' (claims_citing of no pages), and the contract's own rule ('a tab with neither words nor pages should not exist') returns LINKS clean and COVERAGE has only a crop to go on. The round-1 failure - the modal lands with no Depiction tab, its drawing pages silently gone, every check green - is now owed but still undetectable; T20's proof ('it must flag the missing tab') would pass on the farmhouse only because its Drawing: already names 0029.drawing.html. Not physically impossible, measured this round: 231 of the 237 .drawing.html pages sit beside a question stem of the same name (the 6 without are map-sheet and label convention pages), so the kind's candidate drawing pages are derivable from the sibling of every question its Entry: names, plus any .drawing.html the modal's file listed at the merge base (a conversion's old Entry:), plus claims-index rows for the kind's own code units. Not implied by the GM's words, and the literal reading defeats nothing. Required change: D13 (and guideline D5, the agent's LINKS and COVERAGE text, the bundle) must judge LINKS against the drawing pages the MODAL/KIND rests on, and the bundle must carry those candidates beyond Drawing: (at least the sibling drawing page of each Entry question and any drawing page the base revision's file listed), so that a kind with a drawing page and no Depiction tab, or a drawing page missing from Drawing:, is a finding; T20's proof must include a modal whose Drawing: is empty while its kind has a drawing page."
+   "summary": "LINKS judged against 'the drawing pages the modal and its KIND rest on'; the bundle carries CANDIDATE drawing pages beyond Drawing: - (a) the sibling of each Entry question and (b) any drawing page the modal listed at the merge base (scripts/_modal_bundle.py drawing_candidates)",
+   "class": "within",
+   "why": "Round 3's required change, applied and confirmed in round 4. scripts/_modal_owed.py modals_at gains about_only (default True) and passes it to modals_in; scripts/_modal_bundle.py drawing_candidates now reads the base with modals_at(root, base, about_only=False), so an old-form docstring at the merge base is read and every .drawing.html under its Entry: (or Drawing:) becomes a candidate - leg (b) is live for the conversion case FR-012 makes universal. Both legs now reach what the decision states: (a) the sibling drawing page of each Entry question, (b) any drawing page the base listed in either form. test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the_conversion isolates leg (b): the base is an old-form Farmhouse listing 0038-yards.drawing.html, the head cites only 0029 (whose drawing page does not exist in the fixture tree) with no Drawing:, so the candidate can come from the base read alone, and with about_only=True it would be skipped. Re-run in round 4: make test-file green, 10,989 passed. LINKS is judged against the drawing pages the modal and its KIND rest on (FR-014, SC-008, the GM: 'in cases where no such sections exist we would omit the tab'). No narrowing remains."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

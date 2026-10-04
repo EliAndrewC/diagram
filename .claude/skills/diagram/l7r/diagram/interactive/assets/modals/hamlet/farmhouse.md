@@ -20,8 +20,8 @@ Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-th
 Depiction: The map draws one farmhouse for each household, each turned a little from its neighbors so a row of them
 reads as built rather than surveyed. Its roof is drawn in two shades, one for each slope, with a pale line along the ridge, so
 its pitch reads from above; the thatch on both slopes was alike. Each house's length and depth vary a little, so no two
-farmsteads are copies. Where a household keeps its ox or horse indoors, the map draws the stall as a small arm against the
-house, since a stall under the house's own roof cannot be seen from above; the beast really lived inside, in a corner of the
+farmsteads are copies. Where a household keeps its ox or horse indoors, the map draws the stall as a shed of about 16 by 11 ft
+set against the house, since a stall under the house's own roof cannot be seen from above; the beast really lived inside, in a corner of the
 earth floor.
 
 Drawing: research/questions/0029-farmhouses-minka.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

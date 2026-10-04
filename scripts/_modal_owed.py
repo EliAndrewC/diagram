@@ -184,13 +184,14 @@ def modals_now(root: pathlib.Path, about_only: bool = True) -> list[Modal]:
     return out
 
 
-def modals_at(root: pathlib.Path, rev: str) -> dict[str, Modal]:
+def modals_at(root: pathlib.Path, rev: str, about_only: bool = True) -> dict[str, Modal]:
+    """The modals at `rev`, keyed by uid; `about_only=False` takes the old form's too (the drawing pages a docstring listed)."""
     out = {}
     for d in MODAL_DIRS:
         for name in _git(root, "ls-tree", "--name-only", rev, d + "/").split():
             if name.endswith(".py"):
                 # keyed by registry and key: a sheet's `well` and a hamlet's `well` are two modals
-                for m in modals_in(_git(root, "show", f"{rev}:{name}"), name, _read_at(root, rev)):
+                for m in modals_in(_git(root, "show", f"{rev}:{name}"), name, _read_at(root, rev), about_only):
                     out[m.uid] = m
     return out
 

@@ -239,7 +239,9 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
             if (root / SKILL / sibling).is_file():
                 out.append(sibling)
     base = ro.merge_base(root)
-    was = mo.modals_at(root, base).get(m.uid) if base else None
+    # in EITHER form: FR-012 keeps every conversion off main, so at the base a kind is in the old form and its drawing pages
+    # sit under its `Entry:` (plan review of D13, round 3: the About-only read made this leg blind for every modal)
+    was = mo.modals_at(root, base, about_only=False).get(m.uid) if base else None
     if was is not None:
         out += [f for f in (*was.entry_files(), *was.drawing_files()) if f.endswith(".drawing.html")]
     listed = set(m.drawing_files())

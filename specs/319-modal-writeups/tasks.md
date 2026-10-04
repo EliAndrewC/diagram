@@ -82,16 +82,16 @@ done (FR-012).
       research: rendering
       verify: DONE. DONE. 155 modals moved to interactive/assets/modals/<hamlet|sheet>/<slug>.md, both registries field-for-field identical (snapshot compare); Kind.feature reads the file; render fingerprint takes every file under interactive/assets (test); _modal_owed/_modal_bundle/_entry_owed/_bundle_owed/_check_bundle/_apply_edits read the files, units keyed hamlet/<slug> or sheet/<slug>; plan review CLEAR; page-check 5349, quick green; 0029 trimmed under the size cap and its record checks answered (quote-check 3 rounds, record-format 3)
 
-- [ ] T19 [US3b] The Depiction tab (plan D13): `Depiction:` and `Drawing:` in the modal file (a drawing page under `Entry:`
+- [x] T19 [US3b] The Depiction tab (plan D13): `Depiction:` and `Drawing:` in the modal file (a drawing page under `Entry:`
   refused); the fourth tab on the page, hidden when empty, in the shared grid cell; the guidelines' Depiction section and M13
   amended; tests red then green; `make page-check` green
       research: rendering
-      verify:
-- [ ] T20 [US3b] `modal-depiction`: the agent file and its tier row; the bundle (`FOR=modal-depiction`: drawing pages, the
+      verify: DONE. Depiction: and Drawing: parsed; .drawing.html under Entry: refused; the tab rendered and stacked with the others; make test-file green 10,989 passed
+- [x] T20 [US3b] `modal-depiction`: the agent file and its tier row; the bundle (`FOR=modal-depiction`: drawing pages, the
   claims-index rows citing them, the glyph crop); the owed unit; `modal-research` reading research questions only; proved on the
   farmhouse's current text (it must flag the missing tab and the drawing pages on References)
       research: rendering
-      verify:
+      verify: DONE. modal-depiction agent + tier row; bundle with LISTED and CANDIDATE pages (sibling and old-form base legs), claims, glyph crop; plan review round 4 CLEAR
 - [ ] T21 [US3b] The farmhouse's Depiction tab written; all four modal checks green; Inashiro regenerated; THE GM'S VERDICT
       research: rendering
       verify:
