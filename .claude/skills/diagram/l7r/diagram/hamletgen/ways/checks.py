@@ -138,7 +138,9 @@ def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], 
     x0, x1, y0, y1 = min(start[0], end[0]), max(start[0], end[0]), min(start[1], end[1]), max(start[1], end[1])
     # ...ASKED ONLY OF THE LEGS WHOSE BOX MEETS THE RUN'S (`brook_boxes`, once a brook): a leg whose box misses the run's
     # cannot cross it (feature 320, perf-audit: 484k crossing tests a seed against a brook that never changes)
-    if not any(segments_cross(start, end, a, b) for a, b, bx0, bx1, by0, by1 in brook_boxes(brook if isinstance(brook, tuple) else tuple(brook)) if bx0 <= x1 and bx1 >= x0 and by0 <= y1 and by1 >= y0):
+    if not any(
+        segments_cross(start, end, a, b) for a, b, bx0, bx1, by0, by1 in brook_boxes(brook if isinstance(brook, tuple) else tuple(brook)) if bx0 <= x1 and bx1 >= x0 and by0 <= y1 and by1 >= y0
+    ):
         return []
     f = min(fords, key=lambda c: math.dist(start, c) + math.dist(c, end))
     a, b = ford_leg((float(f[0]), float(f[1])), brook if isinstance(brook, tuple) else tuple(brook))

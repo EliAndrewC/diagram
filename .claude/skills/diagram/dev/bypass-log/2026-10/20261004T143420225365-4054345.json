@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T14:34:20Z",
+  "target": "perf-explain",
+  "commit": "0e445be1b",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: settle_field cannot be switched off without the field going unreached; the audit timed it directly and found the remaining web time in the skeleton's routing, which moves with the house layout"
+}

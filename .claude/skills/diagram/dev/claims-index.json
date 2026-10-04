@@ -11901,6 +11901,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::brook_boxes#plumbing": {
+  "code": "9332b0e1874ad1fe",
+  "core": "d7ad90bc4d69ae96",
+  "date": "2026-10-04",
+  "note": "a memo of each leg's bounding box; it decides nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::brook_fords#crossing places along the brook": {
   "code": "c2a1002bccc5cbde",
   "core": "edf7b3d95a854cc0",
@@ -11940,20 +11950,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::ford_crossing#landing 22 px off the brook": {
-  "code": "dde03f8fbd4218fa",
-  "core": "be091c4b4af2e11a",
+  "code": "9b591c6b40a7389c",
+  "core": "0196473a00c27a5a",
   "date": "2026-10-04",
-  "note": "a routing waypoint fitted to the router's margin; the deck itself is drawn by bridges()",
+  "note": "routing geometry fitted to the router's 14 px water margin and the ford's gap; bridges() draws the deck, so this figure is not one a reader takes off the map",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::ford_crossing#square at the ford": {
-  "code": "5f53f380a4183dc9",
-  "core": "be091c4b4af2e11a",
+  "code": "ecdf0e76991883be",
+  "core": "0196473a00c27a5a",
   "date": "2026-10-04",
-  "note": "square to the reach, at the ford with the shortest walk",
+  "note": "landings are set on the normal to the ford's leg (\"cross the brook squarely\"); the ford that makes the walk shortest is picked only when the run crosses the brook, which fits the crossing charged as extra walk; the bounding-box prefilter leaves the answer unchanged",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },

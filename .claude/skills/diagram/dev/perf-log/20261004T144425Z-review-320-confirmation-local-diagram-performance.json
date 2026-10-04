@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "c817f9387",
+    "label": "320-start",
+    "utc": "20261004T043603Z"
+  },
+  "binding": "a059efc0a5e6ba42105295a8e82201a2fe85d95e4193554d6c8adef5c3d0df1c",
+  "end": {
+    "commit": "0e445be1b",
+    "label": "320-end",
+    "utc": "20261004T143228Z"
+  },
+  "environment": "local",
+  "feature": "320-no-ways-before-homesteads",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T144425Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -7.4,
+          "39": 0.0,
+          "4": -2.8,
+          "47": -9.4
+        },
+        "total_pct": -4.8
+      },
+      "20": {
+        "seeds": {
+          "25": 4.8,
+          "39": -3.5,
+          "4": -6.0,
+          "47": -17.6
+        },
+        "total_pct": -5.9
+      },
+      "40": {
+        "seeds": {
+          "25": 6.7,
+          "39": -9.0,
+          "4": 1.3,
+          "47": -17.2
+        },
+        "total_pct": -4.9
+      }
+    },
+    "seeds": {
+      "25": -2.5,
+      "39": -10.0,
+      "4": -18.3,
+      "47": -4.5
+    },
+    "total_pct": -9.8
+  },
+  "note": "40/25 homesteads checks out (reviewer's control, detached worktrees c817f9387 vs 0e445be1b, x3, stopped at homesteads): homesteads 4.04 -> 4.40 s; _way_for 0.84 -> 2.01 s, taut 0.17 -> 1.20 s (leg_ok 4.4k -> 50.9k calls; mean trace into taut 49 -> 130 points, 281 -> 774 px; 69 -> 247 taut calls); lay_the_ways 1.81 -> 2.31 s; seating 2.05 -> 1.84 s. So the growth is the longer household ways pulled taut, partly offset by faster seating, as stated. The new door filter costs nothing: reverted, the run is identical (4.40 s, same counts). No windbreak or hinterland code is in the diff, so its +0.14 s following the moved houses is plausible. The 20/25 and 40/4 clauses are as confirmed before.",
+  "verdict": "consistent"
+}
