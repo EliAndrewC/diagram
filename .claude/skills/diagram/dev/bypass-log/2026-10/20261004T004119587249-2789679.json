@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T00:41:19Z",
+  "target": "perf-explain",
+  "commit": "8606058c5",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no recorded control can remove the cause: without the gap pass the seating searches no path and the web leaves houses unreached (WebRefused on 8 of 9 maps in research R4), so the counterfactual is the scratch prototype's per-stage A/B (tie-break alone vs option A, research R4), not a perf-harness run"
+}
