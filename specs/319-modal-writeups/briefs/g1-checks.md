@@ -4,3 +4,12 @@
 - round 1, source-reader 0039 (seiryoki-3, bunongshu, bunongshu-6): READ 7; 'in Iyo district' not on the page, now 'on the Dogo plain'; Zhang's verdict against his district's separate garden and the Huzhou one-ground practice added (bunongshu-6 #2, #3)
 - round 1, source-applicability: seven write-ups APPLICABLE-WITH-LIMITS, limits added or corrected; kind=scholarship on the three Ehime/Miyashiro histories
 - round 1, entry-drift garden: DRIFTED - not applied (feature 319 rewrites assets/modals/hamlet/garden.md); answered by record-checked with REASON
+- round 2, quote-check 0039: SUPPORTS 21, PARTIAL 2 - the Seiryoki's warlord now placed by his castle at Mima (no 'Iyo in Shikoku' in the quote); the ancients' one-ground practice and Zhang's call to follow it quoted on bunongshu-6 (#4, #5); sato PDF unfetchable this round (read and verbatim in round 1)
+- round 2, record-format 0039: VOCABULARY 2 - 'Republican' now the Republic of China, (T)/(S) explained; Bu nongshu glossed so 'nongshu' does not take the other book's tooltip
+- round 2, translation-check 0039: FAITHFUL 39, LOOSE 1 - bunongshu-6 #2 'fails to use the land's strength to the full'
+- round 2, source-reader 0039: READ 10, CONTRADICTED 2 - Masaki's account dates itself (bought fresh fish, end of Meiji into Taisho) and places its soybeans on the paddy bunds, both quoted; 'all the book reports of actual practice' rewritten (the hibiscus hedge too, and more than one layout); registry 'Matsumae' corrected to Masaki; absence holds
+- round 2, source-applicability: miyashiro and yashikidori HONEST; sato, chinese-units, kateisaien, bunongshu, seiryoki one clause each fixed
+- round 2, entry-drift garden: answered by REASON again (the modal is 319's to rewrite)
+- round 3, quote-check 0039: SUPPORTS 21, PARTIAL 2 - the house-lot sentence scoped to beds by the house; ihns-bunongshu cited where Zhejiang's farm book is first named
+- round 3, record-format 0039: clean; translation-check: FAITHFUL 43, LOOSE 1 - Masaki's 生鮮 now 'fresh [fish] too' (the page's preceding sentences are about fish); source-reader: READ 14, absence held, 'recollections' now 'accounts' (prose and registry)
+- round 3, source-applicability: bunongshu HONEST; chinese-units, seiryoki, kateisaien, sato one clause or tag each fixed (sato's period tag)

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-04T23:30:42Z",
+  "target": "record-checked",
+  "commit": "9f17f6b2a",
+  "why": "entry-drift on entry-drift:garden: feature 319 is rewriting the garden modal (assets/modals/hamlet/garden.md); this session does not edit it, per the G1 check brief"
+}
