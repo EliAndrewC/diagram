@@ -265,7 +265,7 @@ def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric
     required to fix itself either, because the pass that is moving it is not the pass that owns it.
 
     Research:
-        no nearer the fabric - research/questions/0081-village-lanes.drawing.html: half the width plus 2 ft, at least 4 ft
+        no nearer the fabric - UNRESEARCHED: half the width plus 2 ft, at least 4 ft, off the fabric (the web's own 7 ft is held where its gap is cut)
         no tread on the fabric - research/questions/0081-village-lanes.drawing.html: nothing built on a lane
         no new bad bend - research/questions/0081-village-lanes.drawing.html: no hairpin or zigzag added
     """
@@ -319,7 +319,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     put there by a string-pull that tested its own chord and passed. Deriving it leaves the common 3 ft
     lane untouched (3.5 is below the default) and tightens only the wide ways.
 
-    Research: junction link margin - research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric, or the caller's"""
+    Research: junction link margin - UNRESEARCHED: 4 ft off the fabric, or the caller's"""
     span = math.dist(a, b)
     if span < 1.0:
         return True

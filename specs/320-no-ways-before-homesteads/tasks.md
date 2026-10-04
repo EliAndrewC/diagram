@@ -5,6 +5,7 @@
 ## Occasions
 
 - placement-changed: village lane - no way is reserved before the houses; the track out is laid first once they stand, then each household's way in the gaps, joined to it (plan D1-D3)
+- glyph-redrawn: marsh - a short ripple (60-90 ft) added to the waved outline so no stretch runs straight past what a visible edge may (the GM, 2026-10-04: "Fix marsh ends first")
 
 ## Tasks
 

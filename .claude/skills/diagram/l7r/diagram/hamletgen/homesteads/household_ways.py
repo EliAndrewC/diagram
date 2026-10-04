@@ -69,7 +69,7 @@ def seat_walls(s: Settlement) -> tuple[list[Pt], float]:
     """Every household's reserved wood seats and the reach a lane keeps off each: the buffer the registry reserves them with
     (`stages.reserve_the_seating`) and half the track's tread.
 
-    Research: the track off the wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a household's copse seats kept for its planting"""
+    Research: the track off the wood seats - UNRESEARCHED: a lane kept off a household's copse seat by the crown's reach (or 0.45 of the clump and 4 ft) and 4 ft more; the record keeps the copse off the main road, not the reverse"""
     clump = COPSE_CLUMP_BS * s.bscale
     reach = max(clump * 0.45 + 4, crown_reach(clump, 0.0, lift=crown_lift(s.bscale))) + 4.0
     seats = [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
@@ -80,7 +80,7 @@ def clear_of_the_seats(gate: Pt, bearing: Pt, length: float, seats: Sequence[Pt]
     """`gate` walked out along `bearing` until its first leg (`length` on along the bearing) passes no wood seat within `reach`;
     at most `GATE_STEPS` steps of `GATE_STEP_PX`, then the last point tried.
 
-    Research: the track off the wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a lane is never laid on a household's copse seat"""
+    Research: the track off the wood seats - UNRESEARCHED: the gate walked out until the track's first leg clears every copse seat; the record keeps the copse off the main road, not the reverse"""
     n = math.hypot(*bearing) or 1.0
     ux, uy = bearing[0] / n, bearing[1] / n
     g = gate
@@ -124,6 +124,30 @@ def way_out_gate(s: Settlement, plan: SitePlan, bearing: Pt) -> Pt:
     gate = push_clear_of_fabric((cx, cy), (ux, uy), reach + s.px(GATE_CLEAR_FT), [box_poly(b) for b in boxes])
     seats, seat_reach = seat_walls(s)
     return on_the_canvas(s, gate_out_of_the_field(plan.envelope, clear_of_the_seats(gate, (ux, uy), s.px(ROOT_FT), seats, seat_reach)))
+
+
+TRACK_OUT_WEIGHT = 0.55
+"""The weight of the bearing out in the track out's ideal bearing (`track_bearing`), as `track.connector_track` weighs it.
+
+Research: leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope"""
+
+TRACK_FALL_WEIGHT = 0.85
+"""The weight of the fall in the track out's ideal bearing (`track_bearing`), as `track.connector_track` weighs it.
+
+Research: leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope"""
+
+
+def track_bearing(plan: SitePlan) -> Pt:
+    """The bearing the track out will leave by: away from the field leaning downslope, the ideal `track.connector_track`
+    sweeps from - so the first leg the ways join runs the way the track goes on (feature 320, glyph-check of Inashiro: a
+    first leg on the seating's bearing out, 79 degrees off the track's own, met a household's way in a 164 degree hairpin).
+
+    Research: track out off the wet - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope"""
+    dx, dy = plan.fall
+    ox, oy = plan.seat["out"]
+    x, y = TRACK_OUT_WEIGHT * ox + TRACK_FALL_WEIGHT * dx, TRACK_OUT_WEIGHT * oy + TRACK_FALL_WEIGHT * dy
+    n = math.hypot(x, y) or 1.0
+    return (x / n, y / n)
 
 
 def root_at_the_gate(s: Settlement, gate: Pt, bearing: Pt) -> tuple[Pt, Pt]:

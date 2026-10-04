@@ -723,7 +723,9 @@ def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], f
     """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another
     household's threshing yard or garden (`_crosses_fabric`)? `fabric` is `_homestead_polys`' (polygon, owner, kind); a door
     path is exempt only from its OWN steading's yard and garden (`own`, its house's center).
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: 4 ft off another's yard or bed"""
+    Research:
+        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no tread on another household's yard or bed
+        foul margin - UNRESEARCHED: within 4 ft of another's yard or bed"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]

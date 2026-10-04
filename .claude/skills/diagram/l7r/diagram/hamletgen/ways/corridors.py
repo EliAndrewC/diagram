@@ -257,6 +257,7 @@ def field_runs(segs: Sequence[tuple[Pt, Pt]], grounds: Sequence[WorkedGround], h
         dry hem after the paddy - research/questions/0081-village-lanes.drawing.html: the spur stops at the hem's edge, offered only after the paddy's"""
     out: list[Poly] = []
     pts = samples_along(segs)
+    brook = tuple((float(x), float(y)) for x, y in brook)  # hashable: `ford_crossing` finds each ford's segment once
     for ground in grounds:
         runs: list[Poly] = []
         for q in pts:
@@ -317,7 +318,8 @@ def routed_field_runs(
         field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: threaded round the
             steadings when no straight run keeps the law
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the
-            fords nearest the network, crossed square"""
+            fords nearest the network, crossed square
+        ford landing - UNRESEARCHED: 22 ft each side of the brook (`FORD_LANDING_FT`)"""
     pts = samples_along(segs)
     if not pts:
         return []

@@ -421,7 +421,11 @@ def _way_for(
         def leg_ok(a: Pt, b: Pt) -> bool:
             return house_clear(a, b, geom, hgap) and fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom) and standing_ground(s, a, b, memo)
 
-        exits, back = way_out(L, dist, doors_of(geom, half), area, open_here)
+        # ...FROM A DOOR A WAY CAN LEAVE: one inside its own fixtures' or beds' keep-out starts no leg `taut` admits, and every
+        # exit led back to it (feature 320, glyph-check of Inashiro: a household's nine exits all stuck at a forecourt door by
+        # its own fixture, and it was left with no way)
+        doors = [d for d in doors_of(geom, half) if fixtures_clear(s, d, d, geom) and parts_clear(s, d, d, geom)]
+        exits, back = way_out(L, dist, doors, area, open_here)
         picked: list[tuple[int, int]] = []
         for _, i, j in exits:
             if len(picked) >= GAP_TRIES:

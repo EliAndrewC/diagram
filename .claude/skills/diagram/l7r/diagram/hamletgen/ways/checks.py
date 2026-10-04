@@ -5,6 +5,7 @@ Research: plumbing - NONE
 
 from __future__ import annotations
 
+import functools
 import math
 from collections.abc import Mapping, Sequence
 from typing import Any
@@ -105,6 +106,15 @@ def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt
     return out
 
 
+@functools.lru_cache(maxsize=256)
+def ford_leg(f: Pt, brook: tuple[Pt, ...]) -> tuple[Pt, Pt]:
+    """The brook's segment nearest the ford `f` - asked once a ford (feature 320, perf-audit: `settle_field` asked it of
+    every network point, 703k `seg_dist` calls on cohort seed 39 at 10 households, half the step's time).
+
+    Research: plumbing - NONE: a memo of the nearest segment"""
+    return min(zip(brook, brook[1:], strict=False), key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
+
+
 def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], landing: float = 22.0) -> list[Pt]:
     """The two landings of a square crossing at the ford that makes start -> ford -> end shortest, ordered from the
     start's bank - or nothing, when the straight run from `start` to `end` does not cross the brook (or there is no
@@ -119,7 +129,7 @@ def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], 
     if not fords or not any(segments_cross(start, end, a, b) for a, b in legs):
         return []
     f = min(fords, key=lambda c: math.dist(start, c) + math.dist(c, end))
-    a, b = min(legs, key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
+    a, b = ford_leg((float(f[0]), float(f[1])), brook if isinstance(brook, tuple) else tuple(brook))
     ux, uy = unit(b[0] - a[0], b[1] - a[1])
     nx, ny = -uy, ux  # square to the reach
     p1, p2 = (f[0] + nx * landing, f[1] + ny * landing), (f[0] - nx * landing, f[1] - ny * landing)

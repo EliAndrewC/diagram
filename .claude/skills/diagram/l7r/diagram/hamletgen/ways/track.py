@@ -392,7 +392,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         lanes after the farmhouses - research/questions/0081-village-lanes.drawing.html: connector and spur drawn after every house
-        polder has no spur - UNRESEARCHED: the connector alone, the way in taken to be over the dike
+        polder has no spur - GUESS: the connector alone, the way into the fields taken to be over the dike's crest where the record runs a field path on to the outer bund
         spur to the field - research/questions/0081-village-lanes.drawing.html: the outline point whose path crosses least, then
             the shortest, clipped off the dry plots and the marsh
         spur bow - research/questions/0081-village-lanes.drawing.html: a 14 px sideways swing at the midpoint

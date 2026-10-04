@@ -135,7 +135,7 @@ class Reservations:
         seat", x, y).
 
         Research:
-            access corridor - research/questions/0081-village-lanes.drawing.html: a household's strip to the lanes kept clear, but its own parts
+            access corridor - research/questions/0081-village-lanes.drawing.html: a household's way kept clear, but its own parts - every one placed before the ways are reserved (feature 320), and its way laid round them
             wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a reserved copse seat kept off occupied ground and a lane's buffer
         """
         if not self:

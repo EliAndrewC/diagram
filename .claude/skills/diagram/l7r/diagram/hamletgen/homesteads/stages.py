@@ -29,7 +29,7 @@ from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, u
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
-from .household_ways import root_at_the_gate, way_out_gate
+from .household_ways import root_at_the_gate, track_bearing, way_out_gate
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
 from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
@@ -142,7 +142,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         a yard's south sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `SUN_CORRIDOR_FT` (39 ft) clear south of every yard and bed
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
         houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the way out's gate decided once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
-        the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the knob as the drawing resolves it, written to the manifest and the plan
+        the declared cluster shape - GUESS: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
@@ -210,13 +210,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
     # THE WAY OUT'S GATE, DECIDED NOW THE LAST HOUSE STANDS, AND EVERY HOUSEHOLD'S WAY LAID TO IT IN THE GAPS (feature 320,
     # plan D2; feature 318, FR-014, `settlement/rolling/gap_ways.py`): nothing of a way stood while the houses were seated; the
-    # gate is on the cluster's edge on the bearing out the seating found lawful, the track out is drawn from it
+    # gate is on the cluster's edge on the bearing the track out will take (`track_bearing`), the track out is drawn from it
     # (`stage_track`), and the ways reach it before any farmstead is drawn. A passage the laid ways make unnecessary is ended
     # in place, and a household no way reaches is reached across the nearest neighbor's yard - the pinch
     if getattr(s, "_access", None) is not None and getattr(s, "_way_out_bearing", None) is not None:
-        gate = way_out_gate(s, plan, s._way_out_bearing)
+        out = track_bearing(plan)  # ...on the bearing the track out will take, so its first leg runs on into it
+        gate = way_out_gate(s, plan, out)
         s.M["way_out_gate"] = [round(gate[0], 1), round(gate[1], 1)]
-        root = root_at_the_gate(s, gate, s._way_out_bearing)
+        root = root_at_the_gate(s, gate, out)
         s.M["way_out_root"] = [[round(q[0], 1), round(q[1], 1)] for q in root]
         s._access.add(*root)
     s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
@@ -322,6 +323,7 @@ def reserve_the_seating(s: Settlement) -> None:
     Research:
         a lane to every house - research/questions/0081-village-lanes.drawing.html: nothing built on a laid way
         wood seats reserved - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a household's copse seats kept for its planting
+        a lane's buffer about a copse seat - UNRESEARCHED: the crown's reach at the drawn lift, at least 0.45 of the clump and 4 ft
     """
     res = s.standing.reserved
     half = s.px(ACCESS_HALF_FT)
@@ -362,7 +364,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     Research:
         a scattered hamlet's seating - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass
         front row across the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_ground_push` (`water_push`) moves a front seat onto the brook's far bank, fronting its field across the water
-        a footpath's room off the outline - research/questions/0081-village-lanes.drawing.html: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 px of tread, conventions
+        a footpath's room off the outline - UNRESEARCHED: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 ft of tread off the outline
         a row village's rows - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the rows take every household, stepped at a farmstead's width capped at `ROW_FRONTAGE_MAX_FT`, never ranks behind
         a household's wood share - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated only where it reserves `HOMESTEAD_WOOD_FT2` of copse within `COPSE_HOUSE_REACH_FT`
         rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
@@ -376,7 +378,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
         the step between ranks - UNRESEARCHED: an envelope's depth
-        a lane's room between ranks - UNRESEARCHED: `MIN_WEB_GAP` between the dispersed form's ranks (a dispersed hamlet has no lanes between its farmhouses, research/questions/0081-village-lanes.drawing.html)
+        a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there
+        rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
+        a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch behind
         a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more where the ranks climb north
     """
     seat = plan.seat

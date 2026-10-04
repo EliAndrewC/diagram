@@ -148,7 +148,7 @@ def fouled_segment(
 
     Research:
         no tread on a farmhouse - research/questions/0081-village-lanes.drawing.html
-        off another household's yard or garden - research/questions/0081-village-lanes.drawing.html: within `_TOUCH_GAP`, 4 ft
+        off another household's yard or garden - UNRESEARCHED: within `_TOUCH_GAP`, 4 ft
         no long leg through a building - research/questions/0081-village-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0081-village-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""

@@ -2475,14 +2475,17 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#dry way out": {
   "code": "bc310722b0a258b1",
   "core": "0af192a7bd3da323",
-  "date": "2026-10-03",
-  "note": "track keeps off wet ground; walled-in head refused",
+  "date": "2026-10-04",
+  "note": "a walled-in seat refused; lanes keep to dry ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain": {
@@ -2545,14 +2548,17 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#dry way out of the seat": {
   "code": "6a66b3e4ecd686bb",
   "core": "c343fe7afc88d756",
-  "date": "2026-10-03",
-  "note": "lanes keep to dry ground",
+  "date": "2026-10-04",
+  "note": "dry ground, off the wet, out to the map's edge",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#tameike berth": {
@@ -2776,17 +2782,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
   "code": "6b5b4f731b1a24ef",
   "core": "eab5cc0df856d783",
-  "date": "2026-10-03",
-  "note": "4 ft off the fabric, but the page says \"A lane keeps 7 ft clear of a garden fence\" and counts the footpath as a lane; the 4 ft is not recorded as a deviation",
+  "date": "2026-10-04",
+  "note": "`FOOTPATH_FABRIC_GAP = 4.0` holds a path's line 4 ft off a plot, but the page says \"A lane keeps 7 ft clear of a garden fence\" (measured to the lane's middle) and records no closer figure for a footpath. Either the page records a 4 ft footpath DEVIATION, or the code holds 7",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
+   "0081-village-lanes.drawing.html:8648abc7a601036d",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FRY_FORMS#fry form": {
@@ -2974,16 +2979,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::MIN_WEB_GAP#least gap a lane threads": {
   "code": "102b2130e4c22f18",
   "core": "e48285a80f248b98",
-  "date": "2026-10-03",
-  "note": "2x7 ft plus a 4 ft tread is the page's lane's room; the 4 ft tread lies between the page's 3 ft footpath and 5 ft spine",
+  "date": "2026-10-04",
+  "note": "18 ft as the page gives it",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:8648abc7a601036d",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
@@ -3220,17 +3225,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_FABRIC_GAP#web lane off a plot": {
   "code": "a8ac24a474b19ad2",
   "core": "2c48ea6cfc2004e2",
-  "date": "2026-10-03",
-  "note": "the page records 7 ft from the line, with an edge 5.5 ft off, as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "the DEVIATION is recorded",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh": {
@@ -3613,16 +3616,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/driver.py::STAGES#homesteads before lanes": {
   "code": "bf9518ea6b670e71",
   "core": "f53606997c7db654",
-  "date": "2026-10-03",
-  "note": "stage_homesteads runs before stage_track and stage_web",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/driver.py::STAGES#labels last": {
@@ -3667,14 +3669,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/driver.py::STAGES#web after everything that reserves ground": {
   "code": "48234f51930906b0",
   "core": "f53606997c7db654",
-  "date": "2026-10-03",
-  "note": "lanes drawn among what stands",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/driver.py::STAGE_PROFILE_ENV#driving the roll": {
@@ -4285,9 +4289,9 @@
   "date": "2026-10-03",
   "note": "the code keeps the moved band out of the marsh because \"no woody cover stands\" there, but 0074 drawing says \"A shelter belt's trees in the marsh are drawn as alder\"; cite the alder rule and allow the move, or label this a DEVIATION the drawing page records",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -6404,14 +6408,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::TIGHT_BEARING_DEG#a passage household on its neighbor's yard side": {
   "code": "09fd65d26a499a12",
   "core": "33ed5702fb519815",
-  "date": "2026-10-03",
-  "note": "the yard's side, a convention",
+  "date": "2026-10-04",
+  "note": "the yard's side",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::TIGHT_GAP_PX#household against its neighbor's land": {
@@ -6429,14 +6434,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::TIGHT_GAP_PX#the parting": {
   "code": "7121b852b10c5722",
   "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-03",
-  "note": "2 ft parting",
+  "date": "2026-10-04",
+  "note": "2 ft at 1 ft to the pixel",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "0c4b942d6c45b30d",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::WOOD_CLUMP_PX#growth search": {
@@ -6499,14 +6506,14 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_gap#a lane's room between homesteads": {
   "code": "b96d995c8dc4b482",
   "core": "f3cd671cf60e77bc",
-  "date": "2026-10-03",
-  "note": "MIN_WEB_GAP plus the 2 ft parting",
+  "date": "2026-10-04",
+  "note": "20 ft in all",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -6535,80 +6542,99 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a neighbor's land": {
-  "code": "f3903da1b3c48cfe",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "footprint as parted",
+  "code": "f18b04130d303f76",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
-  "code": "35166a983b3ec121",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "an irregular lump grown house by house (0031 \"houses gathered irregularly in a lump\"), each seat parted by the lane's room `grow_gap` (0081 \"parts every two homesteads by a lane's room\")",
+  "code": "5b66115de66dfd37",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "an irregular lump at a lane's room",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "4d5471c1b78f3a2c",
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "d04f03cfc1d1b16d",
-  "triaged": "2026-10-03",
+  "research": "adbde7dbdf74252b",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
-  "code": "d87770a195c92455",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "no bundle question places the first house",
+  "code": "21f5790e3ed4bc58",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties": {
-  "code": "13d677ae5c35777e",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "the queue is ordered (ring, field distance, distance, n), so nearness to the field orders seats only within a ring; neither cited question says how a cluster grows toward its field; the account names the GM's ruling as the GUESS's source",
+  "code": "07c01e7a532184e6",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "the account names a GM ruling (2026-10-03, feature 318 amendment 3), so the label should be CANON, not UNRESEARCHED; the heap key does put field distance before distance within a ring, as claimed",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
-  "code": "60f8b5454829911e",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "search breadth",
+  "code": "d4b9a1739a5a312e",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the order of growth": {
-  "code": "684717fba8ee7e6c",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "neither 0031 (lump grows \"irregularly\") nor 0081 (lane's room parting) says in what order houses were added, so GUESS fits.",
+  "code": "2047175b1f1bc1a3",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the spacing jitter": {
-  "code": "868a26c948811c5b",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "0031 says there is \"no fixed measure\" of how far apart houses stood and 0081 sets only the lane's-room parting as a convention, so up to 12% farther plus a jittered direction is a GUESS the record is silent on.",
+  "code": "771a2818043e4e97",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#tight seats for a passage household": {
-  "code": "9b95f4dd2762dc6a",
-  "core": "6eb3a52d029ee1b7",
-  "date": "2026-10-03",
-  "note": "share-bounded, beside the ordinary seats",
+  "code": "b36ea9a5099100b1",
+  "core": "97ae2e753552fb72",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grows#growth search": {
@@ -6630,14 +6656,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::keeps_every_gap#every two homesteads a lane's gap apart": {
   "code": "209230b24744b9ad",
   "core": "f50ee597ea7f6142",
-  "date": "2026-10-03",
-  "note": "pairwise 2 ft exemption as the page says",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "0c4b942d6c45b30d",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::keeps_its_distance#growth search": {
@@ -6715,14 +6743,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::yard_side#a passage household on its neighbor's yard side": {
   "code": "636b97baddd540e7",
   "core": "49fe9424134a7011",
-  "date": "2026-10-03",
-  "note": "yard-side bearing test",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/holds.py::hold_laid_parts#registry holds": {
@@ -6739,6 +6768,134 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::CANVAS_INSET_PX#plumbing": {
+  "code": "a5a955385569fa47",
+  "core": "e558226d98ba699d",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::GATE_CLEAR_FT#gate clear of the homesteads": {
+  "code": "ce835ea281ecae6e",
+  "core": "ffee4490a92ad90e",
+  "date": "2026-10-04",
+  "note": "the page gives no distance",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::GATE_STEPS#plumbing": {
+  "code": "e4b79c379957638c",
+  "core": "bc7ded00d0f7d2b4",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::GATE_STEP_PX#plumbing": {
+  "code": "0055ef5b12bb47d4",
+  "core": "5efeb905b7d48b3f",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::ROOT_FT#the ways gather at the gate": {
+  "code": "361e5844424d16de",
+  "core": "4f6abb3ccbbe5fc1",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::box_poly#plumbing": {
+  "code": "f75e11c6932fc11f",
+  "core": "eeda40b64eb42fb6",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::clear_of_the_seats#the track off the wood seats": {
+  "code": "3824c860e248b630",
+  "core": "e60dbe5bee6414dd",
+  "date": "2026-10-04",
+  "note": "record keeps copse off the road only; the reverse is unresearched",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::on_the_canvas#plumbing": {
+  "code": "ed1f7aac50539e2a",
+  "core": "c6fae513fac7dcd6",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::root_at_the_gate#the ways gather at the gate": {
+  "code": "19e1541bfe2b4764",
+  "core": "91ebb71349125617",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::seat_walls#the track off the wood seats": {
+  "code": "1d3babe30a2708f6",
+  "core": "2dc324db46b4fad2",
+  "date": "2026-10-04",
+  "note": "figures match code; record silent on a lane's gap off a copse seat",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::way_out_gate#the gate on the cluster's edge": {
+  "code": "7fa238beec72334e",
+  "core": "7b54dc6eac0c6ca1",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::_turned#plumbing": {
@@ -6851,15 +7008,14 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion.__init__#a way of its own decided on lane ground": {
   "code": "dd70db0e75e06d3c",
   "core": "c619f066c4a50f41",
-  "date": "2026-10-03",
-  "note": "the lane-ground raster the dooryard test reads",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
@@ -6871,38 +7027,47 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion._reached#seat region": {
-  "code": "1a11b9a164ac1686",
-  "core": "b2b1bf92ca86836d",
-  "date": "2026-10-03",
-  "note": "flood plumbing",
-  "research": "",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion._reached#a way of its own decided on lane ground": {
+  "code": "9154389fbbd4894d",
+  "core": "261647fb7507a4d4",
+  "date": "2026-10-04",
+  "note": "flooded from the open ground on the way-out side",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion.offer#a way of its own": {
   "code": "baec27dcaf654c3e",
   "core": "c57da947c85cd371",
-  "date": "2026-10-03",
-  "note": "yard touching connected lane ground",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion.opens#a way of its own": {
   "code": "fe428caf7910581a",
   "core": "c32bee3d70efae78",
-  "date": "2026-10-03",
-  "note": "any connected lane ground counts, however far round",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion.sync#reserved wood seats bar lane ground": {
@@ -6911,6 +7076,30 @@
   "date": "2026-10-03",
   "note": "the bundle's pages are silent on it",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::_clip#seat region": {
+  "code": "e76cf0f03974c9e7",
+  "core": "4066b0ff20bdd17e",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::anchor_in_window#a way of its own decided on lane ground": {
+  "code": "7996282a270a028f",
+  "core": "1e548e3307d187ed",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::flood_from#seat region": {
@@ -7756,179 +7945,254 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline": {
-  "code": "616afdd7e3558520",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "7 ft clearance on each side plus a 6 ft tread, inside the page's widths",
-  "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
-  },
-  "research": "26b63ce298cf6585",
+  "code": "f35c54d6e29e61a3",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "record silent on a lane's room off a dike or outline",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-03",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
-  "code": "792fe151cc8b84dc",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "the floor (6,000 sq ft, the smallest homestead wood on record) is reserved within the 90 ft dooryard reach",
+  "code": "98abd3c64339cce0",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "the floor of the range, within 90 ft",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "fa55884105eea879"
   },
   "research": "b7996ceb3c608c18",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:56bf66b98afe5452",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ccde3c4c44be3d3c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks": {
-  "code": "9d9e936632d8a0fe",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "UNRESEARCHED; ranks run only on the dispersed form, which the page gives no spacing",
+  "code": "5cd1dd044cb3542d",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "dispersed ranks lay no lane; the 18 ft is spacing only",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:71315c33d0ad6f37"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
-  "code": "4faaf78db6c85dbb",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "quarter pitch either way; nothing in the bundle answers it",
+  "code": "4394577b3e906c2c",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a rank grown along the field": {
+  "code": "d3b6ad1425d1ba28",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "the label is right (no bundle question answers it) and the trigger matches the loop exit (rounds 0-3, a round that seats no one behind), but the account misstates where the half-seats go: the code puts them half a pitch OUT along the field at the rank's depth, `_seat_at(_us[0] - BUNDLE_PITCH/2)`, and in the rescue at pitch/2 along plus `_rank_step` out, not \"half a pitch behind\"; reword to \"half-seats half a pitch out, a rank behind\"",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
-  "code": "740b36f3ab316913",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "seat_rows takes every household, the pitch is min(the frame, 240 ft) and _rows_seated bars ranks and the exhaustive pass (\"never a second line of farms behind the first\")",
+  "code": "6fbbd03c99df96fa",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
   },
   "research": "176369f54d3c9e23",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
+   "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
-  "code": "8ff711d60f8baf72",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "for a dispersed hamlet the code caps the front row at front_cap and seats the rest in brick ranks a _rank_step behind it, but 0031.drawing says each scattered farm \"fronts its own fields\", \"the whole line is hugged to the field edge in single file\"; the \"off the line only on an alleys hamlet\" clause also has no meaning for a form 0081 gives no lanes (finding from earlier rounds)",
+  "code": "af88d24b6ba3510d",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "the dispersed form seats ranks behind the front row in a brick pattern, plus a rescue cloud. The page says a scattered farm \"stands in the middle of its own fields\" and the line is \"hugged to the field edge in single file\", and it attests no ranks. Either the page records the ranks or the dispersed form drops them",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "9d834160357b24a0"
   },
   "research": "e67278be3121f7df",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1266a1756ce04df1",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": {
-  "code": "81a9b2cbd1771817",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "adds max(0,-oy)*39 ft where the ranks climb north, the page's 39 ft of clear ground south of a yard",
+  "code": "810591a5cc181798",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
   "research": "4c4e1b01edd744e8",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3e8abcab30e5886"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front row across the brook": {
-  "code": "fb7af6fe6b0f9948",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "both banks are attested at a stream's size and the form follows the site; the envelope is pushed whole onto one bank",
+  "code": "7708a739beb088d1",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c",
    "0035-villages-beside-their-stream-one-bank-or-both.html": "6844f31c4c8de3cc"
   },
   "research": "959a226b0633f853",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter": {
+  "code": "0d18f6e21e7de26b",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "`(hjit-0.5)*PITCH*RANK_DEPTH_JITTER` moves a seat up to 1/8 pitch either way, only while `attempt < 4`, not on the along-the-field offer, and only when `lane_web == \"alleys\"`; the exact seat is the fallback; the ranks run only on a dispersed hamlet, which §220 gives no lanes, so 0081's planned-or-grown reading does not answer this gate and the amplitude is unresearched",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:71315c33d0ad6f37",
+   "0081-village-lanes.drawing.html:cce52f0d8448b12b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank jitter and the cloud's lean": {
-  "code": "9de20a22cff0e6d5",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "±0.1 pitch and 0.75, as claimed; the record is silent",
+  "code": "0d4c512ed3fcdec3",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart": {
-  "code": "d3a69667ab677f75",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "0.5 pitch (0.3 in the rescue), as claimed",
+  "code": "699006701189afc5",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
-  "code": "857355c404f357bd",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "on the detached_commons form, sheds on common ground among the houses are reserved first",
+  "code": "87ae906ee184cd05",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "df5121c1f35471ed"
   },
   "research": "99c9b1245f0b5c96",
+  "rests": [
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:07a2093ef0a87808",
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:98546aed8457f1f5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's gaps and the rescue's widening": {
-  "code": "9396c3120986dfd6",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "1.45, 22% and 16%, as claimed",
+  "code": "f3c9d5eb602f9de7",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's offer": {
-  "code": "ec306eac16e49e9d",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "min(households, 12) off the linear form",
+  "code": "d32fddb7a2ef314a",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
-  "code": "b8d07014e1fd4b3a",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "max(6, round(sqrt(N*(lo+hi)))), capped at N",
+  "code": "6e0eacd96c69c6a6",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the passage share": {
-  "code": "817be34e04a1de11",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "clustered settlements only, rolled per seed",
+  "code": "04a7b5de97f67384",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "clustered only",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
-  "code": "0d33d4a089d84471",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "SEATING_GROUND_FT per household; no cited page gives a band",
+  "code": "c0fcdf4a8aa6ed92",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach": {
-  "code": "ec4fe68af0a5847d",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "FORM_BOUND (1.15 by default, 2.5 linear) times hypot(lat, dep), and 1.3 times that for the front row",
+  "code": "726312637b296470",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": {
-  "code": "1ebc8e9ba84eb455",
-  "core": "c0337e3db3bbe778",
-  "date": "2026-10-03",
-  "note": "0038.drawing, in the bundle, answers it (\"Rows are set 92 ft apart, and a house (28 ft deep), its yard (about 26 ft) and 39 ft of sun come to about 93 ft\"); cite 0038.drawing, not UNRESEARCHED, and check whether the envelope depth plus MIN_WEB_GAP, with no sun allowance when the ranks run south, meets that spacing (finding from earlier rounds)",
+  "code": "d90ab0cf87ff41d8",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "the record answers this: 0038's drawing page says \"Rows are set 92 ft apart\" (house, yard and 39 ft of sun). The claim should cite research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, not UNRESEARCHED",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3e8abcab30e5886"
+  ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::corridor_ground#seating plumbing": {
@@ -7950,6 +8214,51 @@
   },
   "research": "d8bcb454e9a17012",
   "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::reserve_the_seating#a lane to every house": {
+  "code": "1a154672610f3455",
+  "core": "7884d7e6a7ec6627",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::reserve_the_seating#a lane's buffer about a copse seat": {
+  "code": "05293b12dc5c6238",
+  "core": "7884d7e6a7ec6627",
+  "date": "2026-10-04",
+  "note": "`max(clump*0.45 + 4, crown_reach(clump, 0, lift=crown_lift))` matches; the unscaled +4 is 4 ft at the hamlet's 1 ft to the pixel; no bundle question gives a lane buffer about a dooryard-copse seat (0036 §168 and §170 are about grove rings and grove gaps)",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d29b90e1874b90f4",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::reserve_the_seating#wood seats reserved": {
+  "code": "198f0db07b367e4e",
+  "core": "7884d7e6a7ec6627",
+  "date": "2026-10-04",
+  "note": "",
+  "pages": {
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "1c5b985bcc29d366"
+  },
+  "research": "cfad221b65d2f113",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:10376dfba50ac770",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d29b90e1874b90f4"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::seat_every_household#every household drawn": {
   "code": "65edc567dd52bdb5",
@@ -8002,63 +8311,78 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a grove farm's own bamboo": {
-  "code": "e8ddd7efe46bf643",
-  "core": "b23be0097d7dc5b7",
-  "date": "2026-10-03",
-  "note": "drawn on the homestead or both values of the knob",
+  "code": "975bdeba32a80b52",
+  "core": "898cb85c933388b9",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "bc675938aae67039"
   },
   "research": "0511f4b8f09dd539",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7",
+   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a yard's south sun": {
-  "code": "1e57de09c7cb25a6",
-  "core": "b23be0097d7dc5b7",
-  "date": "2026-10-03",
-  "note": "39 ft, as the page says",
+  "code": "0b331919a3c24a32",
+  "core": "898cb85c933388b9",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
   "research": "4c4e1b01edd744e8",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:bb2acd2b2da1f7af",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#houses before lanes": {
-  "code": "54330242797be99e",
-  "core": "b23be0097d7dc5b7",
-  "date": "2026-10-03",
-  "note": "nothing drawn before seating; lay_the_ways runs after the last house stands",
+  "code": "711923ac99c746cf",
+  "core": "898cb85c933388b9",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
    "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the belt's afternoon lane": {
-  "code": "631d84e2d42fa4b7",
-  "core": "b23be0097d7dc5b7",
-  "date": "2026-10-03",
-  "note": "50 ft west and southwest, as the page says",
+  "code": "cdab7bf8435d8331",
+  "core": "898cb85c933388b9",
+  "date": "2026-10-04",
+  "note": "",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
   "research": "4c4e1b01edd744e8",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:6adf00fbeef19f5c",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
-  "code": "8c3870f8e2518893",
-  "core": "b23be0097d7dc5b7",
-  "date": "2026-10-03",
-  "note": "the shape is declared from what the map draws",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "9d834160357b24a0"
-  },
-  "research": "e67278be3121f7df",
-  "verdict": "IN-STEP"
+  "code": "4d2aa3d4cb701783",
+  "core": "898cb85c933388b9",
+  "date": "2026-10-04",
+  "note": "the record is not silent: 0031 drawing says a cluster takes \"the shape of its dry ground\" and \"A hamlet leaves none of these to chance\"; rolling it as a knob is a departure, so the label should be DEVIATION 0031 drawing, and the page must record it or the code drifts",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:48f61ba4c0f57e55",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic": {
   "code": "542d37c64c9cc3e7",
@@ -11156,17 +11480,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
   "code": "d2a616ac34fe7822",
   "core": "3179cf3522cd0b36",
-  "date": "2026-10-03",
-  "note": "`_crosses_fabric(..., FOOTPATH_FABRIC_GAP)` holds the run-on 4 ft off the fabric where the page says 7 ft clear of a fence; not recorded as a deviation",
+  "date": "2026-10-04",
+  "note": "FOOTPATH_FABRIC_GAP 4 ft off the fabric, but the page's figure is \"A lane keeps 7 ft clear of a garden fence\" (centerline) and gives no 4 ft gap; use 7 ft, or have the page record 4 ft as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:4ed077ab6fed558d",
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
@@ -11214,17 +11537,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::_PAST_JUNCTION_FT#stub past a junction": {
   "code": "87979af199f8a978",
   "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "40 ft",
+  "date": "2026-10-04",
+  "note": "40 ft tail",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:dbd3da5e4c292741",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::_build_paddy_ground#plumbing": {
@@ -11303,33 +11624,31 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_past_the_junction#no stub past a junction": {
   "code": "d9a11555d331c35c",
   "core": "4d57c5caf10fb3f7",
-  "date": "2026-10-03",
-  "note": "free end's short run cut back",
+  "date": "2026-10-04",
+  "note": "short free end cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:dbd3da5e4c292741",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8",
+   "0081-village-lanes.drawing.html:dbd3da5e4c292741"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#no stub past a junction": {
   "code": "929cce10031566ce",
   "core": "b7d171c92f55a503",
-  "date": "2026-10-03",
-  "note": "kept where it serves a house or the bund (the house reach is a GUESS)",
+  "date": "2026-10-04",
+  "note": "kept where it serves a house or the bund",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:dbd3da5e4c292741",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8",
+   "0081-village-lanes.drawing.html:dbd3da5e4c292741"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
@@ -11713,14 +12032,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::served_network#one network": {
   "code": "ec4d73e691ec130b",
   "core": "96687afa10697109",
-  "date": "2026-10-03",
-  "note": "one network, each way laid to the track out or an earlier way",
+  "date": "2026-10-04",
+  "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::shallow_crossing#square over water": {
@@ -11801,17 +12122,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_ARM_FT#stray tail": {
   "code": "56c62d9c631432c8",
   "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "under 40 ft",
+  "date": "2026-10-04",
+  "note": "40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_HAIRPIN_DEG#hairpin": {
@@ -11924,48 +12243,42 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the fabric": {
   "code": "195d0d3c19448be0",
   "core": "2aa24e454372abbd",
-  "date": "2026-10-03",
-  "note": "default gap WEB_FABRIC_GAP, 7 ft from the line, recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "7 ft centerline, a recorded DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin": {
-  "code": "21058a994a4a08e9",
+  "code": "744f3c6f05a6f812",
   "core": "4068124731526b5e",
-  "date": "2026-10-03",
-  "note": "a joining lane may run along a fence",
-  "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
-  },
-  "research": "df99b71bd322a92f",
+  "date": "2026-10-04",
+  "note": "0081 drawing answers lane-to-fence clearance (\"A lane keeps 7 ft clear of a garden fence\"; closer only when pulled taut within 6 ft); the 4 ft link margin departs from it, so the label should be DEVIATION 0081 drawing with the 4 ft recorded on the page",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-04",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::bowtie_cut#no stub past a crossing": {
   "code": "e600b8f2b8bedca2",
   "core": "d8915c0706fac6c6",
-  "date": "2026-10-03",
-  "note": "tail under 40 ft cut",
+  "date": "2026-10-04",
+  "note": "under 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#off the crop and wet ground": {
@@ -11991,16 +12304,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#threads between steadings": {
   "code": "38f09180468d708d",
   "core": "5d2a5d074d928224",
-  "date": "2026-10-03",
-  "note": "default `tight_margin: float = 6.0` against the page's 7 ft clear of a fence, and \"a hand's breadth\" names no figure on the page; it should default to 7 ft or record a deviation",
+  "date": "2026-10-04",
+  "note": "the default tight_margin=6.0 is under the page's \"7 ft clear of a garden fence\"; set the default to WEB_FABRIC_GAP, or name the figure in the claim and record it",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#an arm stops at the crop": {
@@ -12092,21 +12404,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no nearer the fabric": {
-  "code": "1d6ad231c92149cf",
+  "code": "f628830fae8029ac",
   "core": "ba08635693d8f63d",
-  "date": "2026-10-03",
-  "note": "a floor no worse than before, within \"right up to the buildings\"",
-  "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
-  },
-  "research": "df99b71bd322a92f",
+  "date": "2026-10-04",
+  "note": "the same decision 0081 drawing answers at 7 ft from the fence; the bar of half the width + 2 ft (at least 4 ft) should be DEVIATION 0081 drawing, recorded on the page",
+  "pages": {},
+  "research": "",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-04",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no new bad bend": {
   "code": "b9fa28e8157c9e72",
@@ -12178,34 +12486,67 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#spur starts facing the field": {
   "code": "bb203b51d239c433",
   "core": "b1a95549b68621ae",
-  "date": "2026-10-03",
-  "note": "spur is the through-route's field end",
+  "date": "2026-10-04",
+  "note": "spur toward the fields, shortest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:b2d689a290fad644",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_gateway#gateway clear of what stands": {
-  "code": "789e4e3b00ce0884",
-  "core": "dc1236e88837825e",
-  "date": "2026-10-03",
-  "note": "unattested",
+  "code": "53424d53a75e67f7",
+  "core": "14db24208ee9d6bd",
+  "date": "2026-10-04",
+  "note": "page silent on the figure",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_gateway#track leaves downslope": {
-  "code": "c43d2a3999001381",
-  "core": "dc1236e88837825e",
-  "date": "2026-10-03",
-  "note": "\"leaves downslope ... on the flank the cluster already sits on\"",
+  "code": "877644e76d30a9aa",
+  "core": "14db24208ee9d6bd",
+  "date": "2026-10-04",
+  "note": "downslope edge of the cluster",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::gate_out_of_the_field#connector starts off the crop": {
+  "code": "62cb05ffed276fe5",
+  "core": "5bdc67dcfacfbd5f",
+  "date": "2026-10-04",
+  "note": "never across crops",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::gate_out_of_the_field#setback from the field": {
+  "code": "78460d6396a26302",
+  "core": "5bdc67dcfacfbd5f",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::ACCESS_ROLE#roles and indexing": {
@@ -12219,30 +12560,41 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::ACCESS_WIDTH#footpath width": {
   "code": "32bc5612f02a72cb",
   "core": "7a33414bed51de7b",
-  "date": "2026-10-03",
-  "note": "footpath 3 ft",
+  "date": "2026-10-04",
+  "note": "3 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "0c4b942d6c45b30d",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROLE#roles and indexing": {
+  "code": "8289f749d56e3e25",
+  "core": "0281e16f934044f1",
+  "date": "2026-10-04",
+  "note": "a role tag",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROUTE_GAP_FT#field way off the steadings": {
   "code": "e68cd98609429b84",
   "core": "aebd33c74b3e6fff",
-  "date": "2026-10-03",
-  "note": "line held 5.5 ft off (tread edge 3 ft) where the page says 7 ft clear of fences and buildings; not recorded as a deviation",
+  "date": "2026-10-04",
+  "note": "the page's 5.5 ft is a 3 ft footpath's EDGE when the centerline is 7 ft off; here 5.5 ft is the centerline of a 5 ft field way, so its edge passes 3 ft from a fence; should be 7 ft centerline, or the page should record a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FORD_LANDING_FT#ford landing": {
@@ -12328,12 +12680,32 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::ROUTED_FIELD_STARTS#field path from the network": {
+  "code": "2e03610757ac43c6",
+  "core": "3e65c247a0c8f861",
+  "date": "2026-10-04",
+  "note": "a search breadth",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::ROUTED_FIELD_TRIES#roles and indexing": {
   "code": "ebbfd5c76aa7bdd5",
   "core": "163efc716a01606a",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::ROUTED_START_GAP_FT#field path from the network": {
+  "code": "6cbab585ec5907a7",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-04",
+  "note": "a search breadth",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::SPUR_TRIES#roles and indexing": {
@@ -12353,11 +12725,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::TREE_ROLES#roles and indexing": {
-  "code": "e6dcb410e468653b",
-  "core": "3f12f7170e9ba6e5",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "code": "7ee4c1463f1eb234",
+  "core": "2306e4e00d6f78fe",
+  "date": "2026-10-04",
+  "note": "role tags",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::_dedup#roles and indexing": {
@@ -12392,25 +12766,9 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::_pt#roles and indexing": {
-  "code": "0f24e6a1fa615efd",
-  "core": "72f20ca90540e8ce",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::building_quads#roles and indexing": {
   "code": "fc31fccb07aa44f3",
   "core": "39b28771fcff27a8",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::connector_start#roles and indexing": {
-  "code": "9759ef93c8aad83d",
-  "core": "84c3e311af259cbb",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "research": "",
@@ -12499,26 +12857,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::is_tree#a row's streets kept": {
-  "code": "fbb7a544c78c03ee",
-  "core": "1c7ecfc84bfb5a19",
-  "date": "2026-10-03",
-  "note": "row road laid before houses, as 0031",
+  "code": "a966aa721b250c9a",
+  "core": "039f6a16eb392ea0",
+  "date": "2026-10-04",
+  "note": "road before houses",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "9d834160357b24a0"
   },
   "research": "e67278be3121f7df",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2b715651d89e6207"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::is_tree#the access tree kept": {
-  "code": "0e23b61d49db10a4",
-  "core": "1c7ecfc84bfb5a19",
-  "date": "2026-10-03",
-  "note": "every farmhouse served, track out kept",
+  "code": "ca7c710362141d42",
+  "core": "039f6a16eb392ea0",
+  "date": "2026-10-04",
+  "note": "track out, field way, household ways",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::round_the_gable#a path reaches the front": {
@@ -12542,25 +12908,45 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund": {
-  "code": "30afd2076ac318fc",
-  "core": "cac79f6cc2b86c8d",
-  "date": "2026-10-03",
-  "note": "path joins the bund",
+  "code": "1287b8e78d58a9cd",
+  "core": "7c508ad148726b01",
+  "date": "2026-10-04",
+  "note": "runs on to the outer bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#ford landing": {
+  "code": "df0b4032dfb35afd",
+  "core": "7c508ad148726b01",
+  "date": "2026-10-04",
+  "note": "record gives no landing distance",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#over the brook at a ford": {
-  "code": "c1f03f2e946c17ae",
-  "core": "cac79f6cc2b86c8d",
-  "date": "2026-10-03",
-  "note": "crossed square",
+  "code": "69dd8efe85a11e2a",
+  "core": "7c508ad148726b01",
+  "date": "2026-10-04",
+  "note": "crossed square at a crossing place",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::samples_along#roles and indexing": {
@@ -12762,31 +13148,29 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor": {
   "code": "6b210b412035f5d1",
   "core": "0a8a74c90d0ccf39",
-  "date": "2026-10-03",
-  "note": "the page gives no 28 ft corridor beside a lane; should be UNRESEARCHED",
+  "date": "2026-10-04",
+  "note": "WEB_CLEARANCE 28 ft is not on the page, whose lane room is \"18 ft - 7 ft at each garden fence and a 4 ft tread between\"; use 18 ft, or record 28 ft as a DEVIATION or GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "0c4b942d6c45b30d",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
-   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-04",
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lanes seat no house": {
   "code": "43ca522eade2283a",
   "core": "0a8a74c90d0ccf39",
-  "date": "2026-10-03",
-  "note": "farmhouses placed first, lanes after",
+  "date": "2026-10-04",
+  "note": "web lanes flagged so no house fronts them",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_fabric_hits#plumbing and geometry": {
@@ -12896,14 +13280,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes": {
   "code": "5c647462a907ca16",
   "core": "447c8668b93d7c6b",
-  "date": "2026-10-03",
-  "note": "inner end snapped onto the way it joins",
+  "date": "2026-10-04",
+  "note": "never stops in open country",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track out runs off the map": {
@@ -12946,53 +13331,57 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::clear_of_what_stands#a reserved wood seat is not a footprint the gateway is stepped off": {
-  "code": "835a1af6eff5f02b",
-  "core": "835a1af6eff5f02b",
-  "date": "2026-10-03",
-  "note": "a reserved wood seat is not a footprint the gateway is stepped off",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::clear_of_what_stands#nothing built on a lane": {
   "code": "98c4ca3a210905cf",
   "core": "835a1af6eff5f02b",
-  "date": "2026-10-03",
-  "note": "stepped CONNECTOR_WIDTH/2 off forbidden footprints",
+  "date": "2026-10-04",
+  "note": "half the 6 ft track",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::gateway_track#a walled-in gateway": {
-  "code": "fe4bca33cb1abb03",
-  "core": "f32ef1878fbf5c3a",
-  "date": "2026-10-03",
-  "note": "unattested",
+  "code": "d78ae3ad7d8273fc",
+  "core": "df9ce83c1d7286fd",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::gateway_track#track off the map": {
-  "code": "443f981c7e602b57",
-  "core": "f32ef1878fbf5c3a",
-  "date": "2026-10-03",
-  "note": "swept from the gateway (connector_track)",
+  "code": "9e0a6218e571b7c5",
+  "core": "df9ce83c1d7286fd",
+  "date": "2026-10-04",
+  "note": "runs off the map",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/gateway.py::turned_gateway_track#the nearest turn first": {
-  "code": "4c8a0790c5bd542d",
-  "core": "7d5204165e49ceed",
-  "date": "2026-10-03",
-  "note": "unattested",
+  "code": "7b190fb5e4a2a2ca",
+  "core": "f2c7f2ac634f5d54",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::WorkedGround#the bund a way arrives on": {
@@ -13163,17 +13552,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_stop_at_network#no stub past a junction": {
   "code": "9a749db9aa21d075",
   "core": "16df75eeda9cfdb3",
-  "date": "2026-10-03",
-  "note": "page records that a joining link ends where it first meets a lane, whatever the tail, as a DEVIATION; _TOUCH_GAP (4 ft) is the web's join tolerance, plumbing",
+  "date": "2026-10-04",
+  "note": "a recorded DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": {
@@ -13329,14 +13716,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#track gateway off the fabric": {
   "code": "62bbfd16855eca81",
   "core": "c60742f5b709559f",
-  "date": "2026-10-03",
-  "note": "walked out until clear",
+  "date": "2026-10-04",
+  "note": "nothing on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::push_out_of#geometry": {
@@ -13579,19 +13967,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::fold_the_connector_hairpin#a hairpin at the track becomes a T": {
-  "code": "c5f360d910ba9914",
-  "core": "866d91e6cd3697cc",
-  "date": "2026-10-03",
-  "note": "hairpin made a T",
+  "code": "43fd3363583fa281",
+  "core": "9f5f0761da199493",
+  "date": "2026-10-04",
+  "note": "meets as a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
   ],
-  "triaged": "2026-10-03",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::hairpin_over_a_short_leg#no hairpin": {
@@ -13845,26 +14232,32 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#every farmhouse served": {
-  "code": "6c8fcc2e68a573d9",
-  "core": "4c774ad5376f765d",
-  "date": "2026-10-03",
-  "note": "\"reaching every farmhouse but the few reached across a neighbor's land\"",
+  "code": "fb245de85f3b7fd0",
+  "core": "eaef4465b249fe58",
+  "date": "2026-10-04",
+  "note": "all but those reached across a neighbor",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#the field reached": {
-  "code": "7f8f1484168535c7",
-  "core": "4c774ad5376f765d",
-  "date": "2026-10-03",
+  "code": "d8300f0b2adafd87",
+  "core": "eaef4465b249fe58",
+  "date": "2026-10-04",
   "note": "path joins the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::AIM_DEG#making for a way": {
@@ -14302,21 +14695,32 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#nothing built on a lane": {
-  "code": "f9cee3479e15a499",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin": {
+  "code": "226f64e9ac374fb2",
   "core": "50383a6e9daecfc1",
-  "date": "2026-10-03",
-  "note": "no ink on a house, 4 ft floor off others' yards",
+  "date": "2026-10-04",
+  "note": "0081 drawing sets 7 ft off a garden fence; the law's 4 ft (`_TOUCH_GAP`) off another household's yard or bed departs from it and should be DEVIATION 0081 drawing, recorded on the page",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#nothing built on a lane": {
+  "code": "d6ff6f9204d67de9",
+  "core": "50383a6e9daecfc1",
+  "date": "2026-10-04",
+  "note": "no ink on a house; another household's yard and bed kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:4ed077ab6fed558d",
    "0081-village-lanes.drawing.html:9e1e79eae13bac58"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::free_end#plumbing and wrappers": {
@@ -14730,6 +15134,79 @@
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#a tree lane's no-build corridor": {
+  "code": "c7cf797ed6284c57",
+  "core": "5f252f86c7028998",
+  "date": "2026-10-04",
+  "note": "record silent beyond nothing built on the tread",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#worn look": {
+  "code": "431669ad7f3df4bc",
+  "core": "5f252f86c7028998",
+  "date": "2026-10-04",
+  "note": "drawing convention",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::_rounded#the reach drawn as tree lanes": {
+  "code": "5cbc293a5d6adc55",
+  "core": "3f0109ab27d2d6be",
+  "date": "2026-10-04",
+  "note": "plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::settle_field#over the brook at a ford": {
+  "code": "eab200bddb13f1cc",
+  "core": "1cfc4f1e9fcbb0a9",
+  "date": "2026-10-04",
+  "note": "square, crossing charged",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::settle_field#the field reached": {
+  "code": "dc0319bad3649de0",
+  "core": "1cfc4f1e9fcbb0a9",
+  "date": "2026-10-04",
+  "note": "network to the bund",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
+  },
+  "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::settle_targets#a path runs to the graves": {
+  "code": "7c89f84558820334",
+  "core": "8d15fee00e8ba62a",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::ROUTE_CELL#routing machinery": {
   "code": "faf69e116a70f40c",
   "core": "e3bbe3a7edb35017",
@@ -14810,17 +15287,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#clear of the fabric": {
   "code": "1564edefbbd376ce",
   "core": "b313812fbbe4dd30",
-  "date": "2026-10-03",
-  "note": "string-pull at gap=7 ft from the line, recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "7 ft centerline, a recorded DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#lattice off the water": {
@@ -14912,16 +15387,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
   "code": "b5f768941d5b13ee",
   "core": "548dd72a6597f1e2",
-  "date": "2026-10-03",
-  "note": "tail under 40 ft cut",
+  "date": "2026-10-04",
+  "note": "under 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a web lane joins the network": {
@@ -15133,18 +15607,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::to_first_arrival#a door path meets its way as a T": {
-  "code": "344466a2a38f8f62",
+  "code": "899558915d3dc6ff",
   "core": "21a6f6e87b40a3bb",
-  "date": "2026-10-03",
-  "note": "ends at first arrival, square on as a T; ending at first arrival is recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "ended square at its first arrival",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
   "verdict": "IN-STEP"
  },
@@ -15519,21 +15993,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden": {
-  "code": "754eb170ad7bc40e",
+  "code": "50926f5687b02411",
   "core": "8b82f6e5a2247c36",
-  "date": "2026-10-03",
-  "note": "4 ft floor; nothing built on a lane",
-  "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
-  },
-  "research": "df99b71bd322a92f",
+  "date": "2026-10-04",
+  "note": "as with `fouls_fabric`: the 4 ft `_TOUCH_GAP` departs from the page's 7 ft; the label should be DEVIATION 0081 drawing, recorded on the page",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
-   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-04",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off the fixtures": {
   "code": "974cda4cb2e012ff",
@@ -15736,35 +16206,42 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_reach#a path runs to the graves": {
-  "code": "d5ab1ff7e9c71139",
-  "core": "2006e5b92b7391b9",
-  "date": "2026-10-03",
-  "note": "UNRESEARCHED; nothing in the bundle answers it",
+  "code": "4a7cc6f71b830f89",
+  "core": "366116f92aca794b",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_reach#every farmhouse served": {
-  "code": "64f2922427765ec6",
-  "core": "2006e5b92b7391b9",
-  "date": "2026-10-03",
-  "note": "ways laid once the last house stands, each a lane of its own",
+  "code": "a774a7b5d2f04d55",
+  "core": "366116f92aca794b",
+  "date": "2026-10-04",
+  "note": "ways laid once the last house stands",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_reach#the field reached": {
-  "code": "ab33e8eb87d1de05",
-  "core": "2006e5b92b7391b9",
-  "date": "2026-10-03",
-  "note": "field path runs to the outer bund",
+  "code": "61dc3b5e227a460e",
+  "core": "366116f92aca794b",
+  "date": "2026-10-04",
+  "note": "runs to the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_shadows#no doubled band": {
@@ -15963,16 +16440,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#bow-tie tail cut": {
   "code": "27947bda25a253ea",
   "core": "fc86b5e746f20f77",
-  "date": "2026-10-03",
-  "note": "tail under 40 ft past a crossing",
+  "date": "2026-10-04",
+  "note": "under 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#hairpin cut": {
@@ -16541,16 +17017,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_PAST_CONNECTOR_FT#overrun past the connector": {
   "code": "275f927e71b408e1",
   "core": "3c46ea823e395ddc",
-  "date": "2026-10-03",
-  "note": "a tail cut up to 80 ft past the crossing, where the page says \"A tail of under 40 ft beyond a crossing is cut\"; not recorded as a deviation",
+  "date": "2026-10-04",
+  "note": "80 ft, where the page says \"A tail of under 40 ft beyond a crossing is cut\"; use 40 ft, or have the page record 80 ft past the track out as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_PATH_DIRECTNESS#path directness": {
@@ -16632,17 +17107,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback": {
   "code": "d2db5089cecf1a46",
   "core": "9c942275ab414a4d",
-  "date": "2026-10-03",
-  "note": "the claim says DEVIATION, but the page records no 4 ft fallback (§26's only deviation is the line held at 7 ft)",
+  "date": "2026-10-04",
+  "note": "DEVIATION claimed, but the page records only the 5.5 ft footpath-edge deviation, not a 4 ft fallback route where 7 ft fails; the page should record it, or the claim should say UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge width": {
@@ -16672,14 +17145,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped": {
   "code": "bf7d52bdb5f03bdc",
   "core": "bca58142c0ff6bf3",
-  "date": "2026-10-03",
-  "note": "hook rule applied",
+  "date": "2026-10-04",
+  "note": "the end hook dropped",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link crosses the brook at a crossing place": {
@@ -16719,14 +17193,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#orphan joined to the network": {
   "code": "bac211d46634d43a",
   "core": "8a9e940e4d5fd4fb",
-  "date": "2026-10-03",
+  "date": "2026-10-04",
   "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width": {
@@ -16883,16 +17359,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut": {
   "code": "ab9c8124c240ab28",
   "core": "a787cbfced81bd7f",
-  "date": "2026-10-03",
-  "note": "`_PAST_CONNECTOR_FT` 80 ft against the page's \"under 40 ft\" tail cut",
+  "date": "2026-10-04",
+  "note": "cuts a loose tail up to _PAST_CONNECTOR_FT of 80 ft, against the page's under 40 ft past a crossing; the 80 ft is not recorded",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::held_at#lane sweep plumbing": {
@@ -16966,17 +17441,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::_CROSS_BACK_FT#tail ends at the crossing it overran": {
   "code": "fbf15c387c8b39b6",
   "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "within 40 ft",
+  "date": "2026-10-04",
+  "note": "40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::_DOUBLED_DEG#doubled tail angle": {
@@ -17030,30 +17503,31 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::cut_at_tail#tail ends at the crossing it overran": {
   "code": "6535e67257f97ff5",
   "core": "4f4340c6e3606c9c",
-  "date": "2026-10-03",
-  "note": "ended at the crossing",
+  "date": "2026-10-04",
+  "note": "cut at a crossing within 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::cut_keeps_network#web kept one network": {
   "code": "06a3e9c9529a43fd",
   "core": "4c35a8d47ec8789d",
-  "date": "2026-10-03",
+  "date": "2026-10-04",
   "note": "one network",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::reseat_on_way#doubled tail plumbing": {
@@ -17199,40 +17673,37 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#ends touch the way they near": {
   "code": "370a829e2d2aeb5b",
   "core": "b3fe12c6036486e0",
-  "date": "2026-10-03",
-  "note": "one network, joined where the treads meet",
+  "date": "2026-10-04",
+  "note": "joined where treads meet",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:048ef93cf5c5c59f"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": {
   "code": "8dbe2e0fa0586e4e",
   "core": "b3fe12c6036486e0",
-  "date": "2026-10-03",
-  "note": "a 6-40 ft tail cut",
+  "date": "2026-10-04",
+  "note": "tail under 40 ft cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#joining link ended at its first meeting with the network (`_stop_at_network`), §32's recorded DEVIATION": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#how far a lane end reaches to touch a way: `_LANE_JOIN_FT` 30 ft, `_STUB_REACH_FT` 48 ft on the final pass": {
   "code": "b3fe12c6036486e0",
   "core": "b3fe12c6036486e0",
-  "date": "2026-10-03",
-  "note": "joining link ended at its first meeting with the network (`_stop_at_network`), §32's recorded DEVIATION",
+  "date": "2026-10-04",
+  "note": "how far a lane end reaches to touch a way: `_LANE_JOIN_FT` 30 ft, `_STUB_REACH_FT` 48 ft on the final pass",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -17292,26 +17763,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_connector_through#connector round the field and the steadings": {
-  "code": "dc622113ff036202",
-  "core": "95d50f0700108fd1",
-  "date": "2026-10-03",
-  "note": "keeps off the crop, the steadings and the wet, as the page requires",
+  "code": "17ad361307624f3f",
+  "core": "74800c63d50ab983",
+  "date": "2026-10-04",
+  "note": "off crops, wet and buildings, runs off the map",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_connector_through#gives up a wood seat as last resort": {
-  "code": "b01783973112bc23",
-  "core": "95d50f0700108fd1",
-  "date": "2026-10-03",
-  "note": "0071: copse and groves kept off the main road",
+  "code": "e8472dfa63117a71",
+  "core": "74800c63d50ab983",
+  "date": "2026-10-04",
+  "note": "copse kept off the main road",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "1c5b985bcc29d366"
   },
   "research": "cfad221b65d2f113",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_out_of_bands#track plumbing": {
@@ -17333,16 +17812,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings": {
   "code": "2c418cbbfca4e6b2",
   "core": "9875b889226888b8",
-  "date": "2026-10-03",
-  "note": "the claim says DEVIATION, but the page records neither the 16 ft `TRACK_FABRIC_GAP` nor the 4 ft footpath gap off a grove band as a deviation",
+  "date": "2026-10-04",
+  "note": "this is labelled a DEVIATION, but the drawing page records no 16 ft track gap off footprints and no 4 ft gap off grove bands. It gives only the lane's 7 ft off a garden fence and the 3 ft footpath's edge deviation. Either record both gaps on the page or relabel them GUESS/CONVENTION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
@@ -17416,46 +17895,57 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#each brook crossed at most once": {
-  "code": "f77aba536f4b4b00",
-  "core": "9fb97f9264e626fb",
-  "date": "2026-10-03",
-  "note": "0035: keep to own bank unless crossing pays",
+  "code": "8154f52136a21f47",
+  "core": "ba0a955147c768f1",
+  "date": "2026-10-04",
+  "note": "a way keeps to its own bank, square crossings",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#no building on the connector": {
-  "code": "38ba294658e336f2",
-  "core": "9fb97f9264e626fb",
-  "date": "2026-10-03",
-  "note": "\"no corner of a house stands on its tread\"",
+  "code": "a934f718fc38741d",
+  "core": "ba0a955147c768f1",
+  "date": "2026-10-04",
+  "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#nothing the matrix forbids": {
-  "code": "5fdab4bacbb812e0",
-  "core": "9fb97f9264e626fb",
-  "date": "2026-10-03",
-  "note": "no row crops and nothing built on the tread",
+  "code": "9d597a7a56c52eb7",
+  "core": "ba0a955147c768f1",
+  "date": "2026-10-04",
+  "note": "no row crops, nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_through#track plumbing": {
-  "code": "64c94b7ee42182c7",
-  "core": "7ea640277fc7cea7",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "143bacf166c3775e",
+  "core": "73fb772e7a127d8d",
+  "date": "2026-10-04",
+  "note": "rounding only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#leaning downslope": {
@@ -17469,14 +17959,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#track out off the wet": {
   "code": "1cc8266083e69989",
   "core": "caa4a69f1a4915b3",
-  "date": "2026-10-03",
-  "note": "\"leaves downslope past the end of the wet ground\", wet refused, runs off the edge of the map",
+  "date": "2026-10-04",
+  "note": "wet ranked first, downslope, past the frame",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#track's wander": {
@@ -17502,6 +17994,20 @@
   "research": "a7766bfa3807e78c",
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::recorded_root#the track out from the gate": {
+  "code": "b8d8da0f65c2d5ab",
+  "core": "f3e60445963b7fb9",
+  "date": "2026-10-04",
+  "note": "the ways join the track out",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur's reach": {
   "code": "0b747352fe39f374",
@@ -17577,140 +18083,173 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
-  "code": "128b340cc8b4f8b1",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "tip_onto_the_bund twice; 0014 \"runs ... to the paddy's outer bund and joins it\"",
+  "code": "075f4dd949675467",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "joins the outer bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
-  "code": "dc5f8528e21d9f2b",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "\"The farmhouses are placed first\"",
+  "code": "0b1b2470425e445b",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "houses first",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur": {
-  "code": "c838cce5a08b598b",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "no bundled question says how a polder hamlet reaches its plots",
+  "code": "971382e3c7679ffb",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "not a GUESS: 0014 drawing says \"the field path runs from the hamlet to the paddy's outer bund\", and where no path is left, \"the hamlet's nearest lane runs on to the bund\"; dropping the spur on a polder should be DEVIATION 0014 drawing, and the page must record the polder exception",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road": {
-  "code": "d19563f3cc402f97",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "0033 \"the street runs on off the map as the road into it\"; ford crossing per 0035",
+  "code": "8dd72e55141cfcc1",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "street runs on off the map",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
-  "code": "1aa0b97b1a5622b1",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "width=6; 0033 \"Each street is drawn 6 ft wide\"",
+  "code": "42f99de919efaa88",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "6 ft",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:64088e4ad721724e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow": {
-  "code": "2ce543177b1604e9",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "the midpoint is swung 14 px sideways (`_mx + ax * 14`) where the page has every lane \"pulled taut like a string\" and attests no bow; drop it or relabel GUESS/DEVIATION and record it",
+  "code": "ba83f1f56b61b2bd",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "`(_mx + ax * 14, _my + ay * 14)` bows the spur 14 ft so it \"reads as walked rather than ruled\", but the cited page says the opposite: \"Every lane is pulled taut like a string\", \"as few turns as the plots allow\". The page does not back the bow, so either drop it or relabel it UNRESEARCHED/GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:b2d689a290fad644"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "96f63a6fbbced501",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "0081 answers this: a lane \"may touch a plot's boundary\" and the spur \"stops at the hem's edge\", so 12 ft off the dry plots is not unresearched; cite 0081, and 12.0 then departs from it (keep UNRESEARCHED only for the toe band part)",
+  "code": "77e1732f74544a5d",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "this is labelled UNRESEARCHED, but 0081 answers it: a lane \"may touch a plot's boundary\" and the spur \"stops at the hem's edge\". Clipping the spur 12 ft off the dry plots departs from that, so it should be a DEVIATION recorded on 0081, or a CONVENTION/GUESS stated there",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
+   "0081-village-lanes.drawing.html:f2368e271306e3c2"
+  ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
-  "code": "541695bae114c57c",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "floor is SPUR_WIDTH (5 ft); 0014 \"however short that leaves the path\"",
+  "code": "0cb9a04ce29b3953",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "\"however short\", floor at the 5 ft tread",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur over the brook at a ford": {
-  "code": "ea6ee2458354337d",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "square crossing at a set crossing place, decked by bridges(), as 0035 has it",
+  "code": "b45cd526d0ee1326",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "crossed square at a crossing place",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
-  "code": "63e510ebdd512529",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "off the crop, the hem and the wet ground",
+  "code": "70ce75ce5d1323ab",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "off crops and wet, stops at the paddy",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
-   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
-   "0081-village-lanes.drawing.html:f2368e271306e3c2"
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f"
   ],
-  "triaged": "2026-10-03",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
-  "code": "4ed0cd482b2c0f01",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "\"runs on out of the cluster and off the map\"",
+  "code": "3bba36ef4d34b6e0",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "runs off the map from the gate",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
-  "code": "f32f1e312030eb06",
-  "core": "531cd9040eef4dcc",
-  "date": "2026-10-03",
-  "note": "\"A track keeps off wet ground\"",
+  "code": "ab70ed76c4b41d89",
+  "core": "26e765afe6e1d9c7",
+  "date": "2026-10-04",
+  "note": "keeps off wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane#track plumbing": {
@@ -17719,6 +18258,20 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::with_the_root#the track out from the gate": {
+  "code": "5a76dd16d6dd5dab",
+  "core": "762cf92f6999aa22",
+  "date": "2026-10-04",
+  "note": "the ways join the track out",
+  "pages": {
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+  },
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::CARRY_FT#end set on its host": {
@@ -17782,11 +18335,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::_key#access tree plumbing": {
-  "code": "5247976be932d3fe",
-  "core": "4718efafa4d302a8",
-  "date": "2026-10-03",
+  "code": "94cafe529218d6af",
+  "core": "88a8d5175b7d93a5",
+  "date": "2026-10-04",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::_on#access tree plumbing": {
@@ -17803,6 +18358,16 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::_root#access tree plumbing": {
+  "code": "6066e0bd2fbd4974",
+  "core": "8b42a47967de439f",
+  "date": "2026-10-04",
+  "note": "plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::_rounded#access tree plumbing": {
@@ -17822,50 +18387,68 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
-  "code": "43de5b11f2024189",
-  "core": "4b36351287e2a14c",
-  "date": "2026-10-03",
-  "note": "DOORSTEP_MAX 2; the record is silent",
+  "code": "e154b07a157a7e86",
+  "core": "92c77771287305a5",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
-  "code": "3bfa885ef39b9684",
-  "core": "4b36351287e2a14c",
-  "date": "2026-10-03",
-  "note": "tree_shadows and walked_shadows; the record is silent on parallel lanes",
+  "code": "9b278fc02b661d8b",
+  "core": "92c77771287305a5",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
-  "code": "53d203aa582dbc1c",
-  "core": "4b36351287e2a14c",
-  "date": "2026-10-03",
-  "note": "needle_loops on the whole tree and on as_joined; the record is silent",
+  "code": "ca69fda9e7b6002f",
+  "core": "92c77771287305a5",
+  "date": "2026-10-04",
+  "note": "page silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
-  "code": "3a7d2805e77a5487",
-  "core": "4b36351287e2a14c",
-  "date": "2026-10-03",
-  "note": "each way laid once the last house stands and judged by the lane rules",
+  "code": "542e96c741f9e64f",
+  "core": "92c77771287305a5",
+  "date": "2026-10-04",
+  "note": "ways laid once the last house stands, lane law kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:5db549c04f876fc8",
+   "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c",
+   "0081-village-lanes.drawing.html:b2d689a290fad644",
+   "0081-village-lanes.drawing.html:d30e15716180fbf5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
-  "code": "9c88cef9aa50fb77",
-  "core": "4b36351287e2a14c",
-  "date": "2026-10-03",
-  "note": "way_out_once; 0035 charges each crossing about 150 ft and has a way keep to its own bank",
+  "code": "d954c5b6103120af",
+  "core": "92c77771287305a5",
+  "date": "2026-10-04",
+  "note": "keeps to its own bank",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::as_joined#access tree plumbing": {
@@ -17893,11 +18476,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::hosts#access tree plumbing": {
-  "code": "d54b445597ba1898",
-  "core": "b419fbed9ce304e5",
-  "date": "2026-10-03",
+  "code": "9ee35e2287a5d9ce",
+  "core": "78d86d36c6414a9c",
+  "date": "2026-10-04",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::laid_run#access tree plumbing": {
@@ -17909,80 +18494,95 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::lanes_chain#access tree plumbing": {
-  "code": "678eeea6e3389cc3",
-  "core": "3478b63f8b500ce5",
-  "date": "2026-10-03",
+  "code": "b0e9e1316af3ea1d",
+  "core": "dc6587448ff5110b",
+  "date": "2026-10-04",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lane tread by role": {
-  "code": "0a18e3507005e3d7",
-  "core": "06bf2339c501a676",
-  "date": "2026-10-03",
-  "note": "footpath 3 ft, spur to the fields 5 ft",
+  "code": "ef528ad866b585a6",
+  "core": "24383a6ffa1fe441",
+  "date": "2026-10-04",
+  "note": "3 ft footpath, 5 ft lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
-  "code": "9e89e6e0fb5d2d0e",
-  "core": "06bf2339c501a676",
-  "date": "2026-10-03",
-  "note": "squaring and carrying onto the host is plumbing; widths are covered above",
+  "code": "1f2d6406b00f2d07",
+  "core": "24383a6ffa1fe441",
+  "date": "2026-10-04",
+  "note": "plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::left_to_the_tree#every farmhouse served": {
   "code": "d2b7067474a3312b",
   "core": "f98f1f2f8898eaba",
-  "date": "2026-10-03",
-  "note": "removal is allowed only where the house's own laid way reaches it",
+  "date": "2026-10-04",
+  "note": "a lane of its own",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::others_clear#nothing built on a lane": {
-  "code": "ba0077a140463545",
+  "code": "3575892d06827dee",
   "core": "afe1400d6216c0f6",
-  "date": "2026-10-03",
-  "note": "checks every other standing homestead",
+  "date": "2026-10-04",
+  "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::owed#every farmhouse served": {
-  "code": "452836512c2cf561",
-  "core": "79fdcab82a84b346",
-  "date": "2026-10-03",
-  "note": "every household's way is owed; a household reached across has none",
+  "code": "a4767649f59484f0",
+  "core": "3e82598be42a79c8",
+  "date": "2026-10-04",
+  "note": "a lane of its own",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::owed#the way of a household another is reached across": {
-  "code": "9af9117ecd104ae0",
-  "core": "79fdcab82a84b346",
-  "date": "2026-10-03",
+  "code": "4a159cfef08aa05b",
+  "core": "3e82598be42a79c8",
+  "date": "2026-10-04",
   "note": "\"whose own way is always drawn\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::own_clear#a lane clear of its own household": {
@@ -18006,34 +18606,44 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#redundant tree lane pruned": {
-  "code": "6cfce960b9658962",
-  "core": "654f63a8b39e332a",
-  "date": "2026-10-03",
-  "note": "silent in the record; a household's own way is exempt",
+  "code": "cac9e36eff9e1be8",
+  "core": "be660904c909f501",
+  "date": "2026-10-04",
+  "note": "a household's own way is never pruned",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#street and door path never pruned": {
-  "code": "cad37b1b5e761f4d",
-  "core": "654f63a8b39e332a",
-  "date": "2026-10-03",
-  "note": "0033: the street and the path round the grove",
+  "code": "71f916734467bc44",
+  "core": "be660904c909f501",
+  "date": "2026-10-04",
+  "note": "the street and the path round the grove",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496",
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#the way of a household another is reached across": {
-  "code": "7e40c84b7851b967",
-  "core": "654f63a8b39e332a",
-  "date": "2026-10-03",
-  "note": "a household's own way is never pruned",
+  "code": "fe1dcdfd5c284353",
+  "core": "be660904c909f501",
+  "date": "2026-10-04",
+  "note": "always drawn",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::records_of#access tree plumbing": {
@@ -18055,27 +18665,32 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_drawn#a corridor kept clear as the web will lay it": {
   "code": "25a79618ff321072",
   "core": "df9c9cf9400fcf78",
-  "date": "2026-10-03",
-  "note": "reserved once the last house stands",
+  "date": "2026-10-04",
+  "note": "laid once the last house stands",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_judge#a corridor judged as the web will lay it": {
   "code": "7cd255daf1e09a0c",
   "core": "e513bd6eb9ea81d2",
-  "date": "2026-10-03",
-  "note": "the squared run is checked against its own and other homesteads",
+  "date": "2026-10-04",
+  "note": "goes round its own beds and fixtures",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::seating_law#access tree plumbing": {
@@ -18095,15 +18710,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::settle_tree#every farmhouse served": {
-  "code": "62f8160e3996e71c",
-  "core": "6296056fd4382cb4",
-  "date": "2026-10-03",
-  "note": "every owed way is drawn as a lane of its own",
+  "code": "c533082bcb37f410",
+  "core": "38476e50777d833b",
+  "date": "2026-10-04",
+  "note": "drawn as a lane of its own",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::square_run_of#access tree plumbing": {
@@ -18131,11 +18749,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_records#access tree plumbing": {
-  "code": "e447a8562aca5b81",
-  "core": "4ebbc0f24ba7cb32",
-  "date": "2026-10-03",
+  "code": "7ee61809f0fa9802",
+  "core": "3b9819fdc269a1a9",
+  "date": "2026-10-04",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::tree_shadow_cuts#no doubled band": {
@@ -18219,14 +18839,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton laid after the houses": {
   "code": "9ad7f9a301e3d389",
   "core": "c26981eddbe1cc55",
-  "date": "2026-10-03",
-  "note": "fitted to the placed houses",
+  "date": "2026-10-04",
+  "note": "houses first",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton width": {
@@ -18264,17 +18885,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::cut_the_overruns#overrun cut": {
   "code": "584e85f181b1b57c",
   "core": "031ee80d26e75393",
-  "date": "2026-10-03",
-  "note": "delegates; its 80 ft figure is flagged at `cut_past_connector`",
+  "date": "2026-10-04",
+  "note": "tail past a crossing cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:dbd3da5e4c292741",
-   "0081-village-lanes.drawing.html:ed47927aabbf9da2"
+   "0081-village-lanes.drawing.html:5db549c04f876fc8"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::kept_connector#web plumbing": {
@@ -18336,16 +18955,16 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cut's room": {
   "code": "9a38f4cb4804b097",
   "core": "8aa914b6b5fbaa23",
-  "date": "2026-10-03",
-  "note": "web_cuts spaced at MIN_WEB_GAP, the lane's room",
+  "date": "2026-10-04",
+  "note": "2x7+4 = 18 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:8648abc7a601036d",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
@@ -18445,14 +19064,15 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lanes after the houses": {
   "code": "effe8937b753e9f6",
   "core": "8aa914b6b5fbaa23",
-  "date": "2026-10-03",
-  "note": "the web is laid after every house",
+  "date": "2026-10-04",
+  "note": "houses first",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#row streets laid": {
@@ -18482,59 +19102,63 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#a house within WEB_REACH_FT 100 ft counts as served; a trimmed lane under 30 ft is dropped": {
-  "code": "0e39e889e62f6fa7",
-  "core": "0e39e889e62f6fa7",
-  "date": "2026-10-03",
-  "note": "a house within WEB_REACH_FT 100 ft counts as served; a trimmed lane under 30 ft is dropped",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#a tail kept as a house's only way": {
-  "code": "e214d17c7b3aafd8",
-  "core": "0e39e889e62f6fa7",
-  "date": "2026-10-03",
-  "note": "`lane_houses` excludes reached-across households",
+  "code": "600d34e30b48d182",
+  "core": "9071f8c7dae2e70e",
+  "date": "2026-10-04",
+  "note": "none for a household reached across its neighbor",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#end carried on to the bund": {
-  "code": "a02a62831c0ed8bc",
-  "core": "0e39e889e62f6fa7",
-  "date": "2026-10-03",
-  "note": "run_lanes_on_to_the_bund matches \"the hamlet's nearest lane runs on to the bund\"",
+  "code": "8cd051030ca220c3",
+  "core": "9071f8c7dae2e70e",
+  "date": "2026-10-04",
+  "note": "runs on to the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#lane end reaches something": {
-  "code": "ab38c1936bafb595",
-  "core": "0e39e889e62f6fa7",
-  "date": "2026-10-03",
-  "note": "pulled back to a way, a house or the bund",
+  "code": "e1a71517c2b4cb94",
+  "core": "9071f8c7dae2e70e",
+  "date": "2026-10-04",
+  "note": "pulled back to the last house it serves",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:dbd3da5e4c292741"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#lane serving nothing dropped": {
-  "code": "1189302d452a3fe9",
-  "core": "0e39e889e62f6fa7",
-  "date": "2026-10-03",
-  "note": "dropped unless it is the only link in the web",
+  "code": "c622511d901522dc",
+  "core": "9071f8c7dae2e70e",
+  "date": "2026-10-04",
+  "note": "one network kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0081-village-lanes.drawing.html:dbd3da5e4c292741"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::unsplitting_drops#web kept one network": {
@@ -24701,14 +25325,17 @@
  ".claude/skills/diagram/l7r/diagram/overlap/reserved.py::CORRIDOR_KEEPERS#a lane to every house": {
   "code": "adb1713ef0cb2da9",
   "core": "932cc5ff14ec6718",
-  "date": "2026-10-03",
-  "note": "built and worked ground keeps off a corridor",
+  "date": "2026-10-04",
+  "note": "nothing built on a lane, off the crops",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/reserved.py::Reservations#reservation bookkeeping": {
@@ -24768,16 +25395,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/reserved.py::Reservations.conflicts#access corridor": {
-  "code": "4259524ec7791f70",
+  "code": "8e1a0070073a93d5",
   "core": "3ed5fce5d4690e03",
-  "date": "2026-10-03",
-  "note": "corridor kept clear; own parts exempt, `own_clear` decides those",
+  "date": "2026-10-04",
+  "note": "nothing built on a way; its own parts exempt",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/reserved.py::Reservations.conflicts#wood seats": {
@@ -28198,14 +28828,16 @@
  ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::web_cuts#a cut in the widest gap": {
   "code": "95474bf4c7ecb5b6",
   "core": "4dc5387c0c4cfffd",
-  "date": "2026-10-03",
-  "note": "the gaps reading is recorded as a GUESS; the 0.5 x reach fallback falls under that GUESS",
+  "date": "2026-10-04",
+  "note": "the page records lanes-as-gaps as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "0c4b942d6c45b30d",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:cce52f0d8448b12b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::web_cuts#every house within reach of a way": {
@@ -36436,9 +37068,9 @@
   "date": "2026-10-03",
   "note": "0074 records the blue-gray green as a convention",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -36576,9 +37208,9 @@
   "date": "2026-10-03",
   "note": "the belt is alder in the marsh, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -36588,9 +37220,9 @@
   "date": "2026-10-03",
   "note": "alder mix, blue-gray convention, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -37388,9 +38020,9 @@
   "date": "2026-10-03",
   "note": "0074 runs the belt into the marsh as alder but sets no limit; \"based in the reed margin at most\" (MARSH_FEATHER_BS 46) is on no page - label UNRESEARCHED/GUESS or record it",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
@@ -37541,9 +38173,9 @@
   "date": "2026-10-03",
   "note": "alder at the reed edge, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -38082,9 +38714,9 @@
   "date": "2026-10-03",
   "note": "no dry-ground planting inside the marsh, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -38683,15 +39315,17 @@
  ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane": {
   "code": "22305d0f02b5c14f",
   "core": "f3f39ea3c2e0bdea",
-  "date": "2026-10-03",
-  "note": "the rule is on the page (\"no corner of a house stands on its tread\") but TREAD_WALL_FT=4.0 is not, and the page lets a lane \"come right up to the buildings\"; label the 4 ft GUESS or CONVENTION, or record it on the page",
+  "date": "2026-10-04",
+  "note": "no corner on a tread",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "0c4b942d6c45b30d",
-  "triage": "touched",
-  "triaged": "2026-10-04",
-  "verdict": "NEEDS-RESEARCH"
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._quad#hand-laid plot outlines": {
   "code": "9a6b739818b3acf9",
@@ -39152,9 +39786,9 @@
   "date": "2026-10-03",
   "note": "0074 attests two forms of edge (cut and open, or an uncut alder-and-willow wet wood) and says \"Each settlement should take one or the other\"; the code draws only the cut edge on every map (the page itself calls it \"a shortfall\"), so the form should be a seeded knob",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
@@ -39921,91 +40555,129 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::ROUND_FT#marsh edge shape": {
-  "code": "a002ae75a3f7e2ed",
+  "code": "f8ebf926aae4c681",
   "core": "c0101826cceee8b7",
-  "date": "2026-10-03",
-  "note": "rounded edge convention, per 0074",
+  "date": "2026-10-04",
+  "note": "rounded corners, a drawing convention",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::ROUND_KEEP#marsh edge shape": {
-  "code": "f2fd1b2699b56032",
+  "code": "0fd24e784b23057b",
   "core": "13a60bd68a444539",
-  "date": "2026-10-03",
-  "note": "per 0074",
+  "date": "2026-10-04",
+  "note": "limits the rounding",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::SIMPLIFY_FT#marsh edge shape": {
-  "code": "d088b2afb7bcdd53",
+  "code": "58b782e92162c5d6",
   "core": "7276802b5dc226e3",
-  "date": "2026-10-03",
-  "note": "tolerance for the same shape",
+  "date": "2026-10-04",
+  "note": "outline tolerance",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::WAVE_DEPTH_FT#marsh edge shape": {
-  "code": "20ecb4c4e311b955",
+  "code": "84eec724b06ff3eb",
   "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "waving edge convention, per 0074",
+  "date": "2026-10-04",
+  "note": "waves 0 to 40 ft inward, a drawing convention",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::WAVE_LEAD_FT#marsh edge shape": {
-  "code": "1b4c93c31a3e872f",
+  "code": "3e24ad225fd0c678",
   "core": "355b1644706ce9b7",
-  "date": "2026-10-03",
-  "note": "per 0074",
+  "date": "2026-10-04",
+  "note": "gentle waving along the edge",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::WAVE_LENGTH_FT#marsh edge shape": {
-  "code": "14c3dec759e26079",
+  "code": "7b8fadccc5e0a9a4",
   "core": "f81b8dcc62db0ef7",
-  "date": "2026-10-03",
-  "note": "per 0074",
+  "date": "2026-10-04",
+  "note": "slow waves",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::WAVE_SHORT_FT#marsh edge shape": {
+  "code": "64b38cace463ace0",
+  "core": "39714774392b6fe6",
+  "date": "2026-10-04",
+  "note": "the small ripple, so no stretch runs straight at a strip's short end",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::WAVE_STEP_FT#marsh edge shape": {
-  "code": "1889f0ccf40bf5ca",
+  "code": "a531347cee008cdf",
   "core": "588c8e4f50bc3927",
-  "date": "2026-10-03",
-  "note": "sampling for the same shape",
+  "date": "2026-10-04",
+  "note": "sampling pitch of the wave",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::WAVE_WEIGHTS#marsh edge shape": {
-  "code": "a2d23b959c911399",
-  "core": "e36bfc27ed26357b",
-  "date": "2026-10-03",
-  "note": "per 0074",
+  "code": "ee18d0dc12e8c8c0",
+  "core": "26074092cf422b24",
+  "date": "2026-10-04",
+  "note": "wave mix including the ripple",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::_largest#largest piece": {
@@ -40017,14 +40689,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/outline.py::natural_outline#marsh edge shape": {
-  "code": "e15f2a82f8bfcc10",
-  "core": "2c55262fc77741d8",
-  "date": "2026-10-03",
-  "note": "rounded and waved inside the laid band, per 0074",
+  "code": "f1c56d828ace1f06",
+  "core": "8a3a5b34ddd52572",
+  "date": "2026-10-04",
+  "note": "rounded, waved inward, kept within the laid shape",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/tiles.py::BAMBOO_ROW#cover tiles": {
@@ -40065,9 +40740,9 @@
   "date": "2026-10-03",
   "note": "per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40109,9 +40784,9 @@
   "date": "2026-10-03",
   "note": "mixed band convention, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40276,9 +40951,9 @@
   "date": "2026-10-03",
   "note": "half densities plus haze, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40312,9 +40987,9 @@
   "date": "2026-10-03",
   "note": "denser, darker, per 0074",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40340,9 +41015,9 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40384,13 +41059,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#edge shaped": {
   "code": "b59e21129fdbf141",
   "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "date": "2026-10-04",
+  "note": "strips shaped, pond fringe left as laid",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "6b8140f3a9d24b44"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "bb62a76db940eb93",
-  "triage": "touched",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh roles": {
@@ -40470,9 +41147,9 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "db4aaad40b73180a"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "38f7e4e8962c2cfe",
+  "research": "a44790630d28af23",
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
@@ -40706,34 +41383,34 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room": {
   "code": "d8a12b9633ff2282",
   "core": "2c48ea6cfc2004e2",
-  "date": "2026-10-03",
-  "note": "the page records 7 ft from the way's line, with the 3 ft footpath's edge at 5.5 ft, as a deviation",
+  "date": "2026-10-04",
+  "note": "the 7 ft to the middle is recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
-  "code": "82cc712c67b1ca0f",
+  "code": "702d78c6a90c2304",
   "core": "459a9e8adab60d5a",
-  "date": "2026-10-03",
-  "note": "one network; the few reached across a neighbor are exempt",
+  "date": "2026-10-04",
+  "note": "ways laid after the last house, passages excepted",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "257fad2da4527a5e",
+  "research": "38136343f1ec2e63",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
    "0081-village-lanes.drawing.html:9e1e79eae13bac58",
    "0081-village-lanes.drawing.html:ab698a7b15fb7e8e",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7",
    "0081-village-lanes.html:aa783ceaca676947"
   ],
   "verdict": "IN-STEP"
@@ -40788,6 +41465,16 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::EXIT_TURNS_DEG#bearing out turns": {
+  "code": "10aa57f5b700ead1",
+  "core": "633bf86848831f8b",
+  "date": "2026-10-04",
+  "note": "the record is silent on the turn steps",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::HAIRPIN_DEG#hairpin turn": {
@@ -40849,15 +41536,19 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::TREAD_HALF_FT#footpath tread": {
   "code": "42e1bd4d50b88de6",
   "core": "233bdca142f022b6",
-  "date": "2026-10-03",
-  "note": "3 ft, the field road's 3 shaku",
+  "date": "2026-10-04",
+  "note": "3 ft footpath, the field road's 3 shaku",
   "pages": {
-   "0081-village-lanes.drawing.html": "eaacbd0811f177d2",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "17674ed9eee6b09c",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "38136343f1ec2e63",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0081-village-lanes.html:5098fcbc2418aa21",
+   "0081-village-lanes.html:8640646a25b59cf4"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::TREAD_WALL_FT#tread clear of a wall": {
@@ -40947,29 +41638,28 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#routed where none is straight": {
   "code": "445a031fe182210f",
   "core": "a1e31bb9e5d8e5b6",
-  "date": "2026-10-03",
-  "note": "village roll only; path finding at seating is recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "the village map's path-while-seating is recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:9e1e79eae13bac58",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::access_corridor#seat refused without a path": {
   "code": "818ac015152fb472",
   "core": "a1e31bb9e5d8e5b6",
-  "date": "2026-10-03",
-  "note": "village-scale path finding at seating is recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION for the village map",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -40982,15 +41672,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::corridor_clear#nothing built on a path": {
-  "code": "1ae33d203551352c",
+  "code": "74dd304cfbd6bdef",
   "core": "e0054429aaca35af",
-  "date": "2026-10-03",
-  "note": "nothing built on a lane; it keeps off crops and wet ground",
+  "date": "2026-10-04",
+  "note": "off homesteads, paddy and wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::doors_of#path starts in the dooryard": {
@@ -41030,16 +41725,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::exit_bearing#track out leaves away from the field": {
-  "code": "97beb2a82f4acbf1",
+  "code": "c79eb1600308d4d5",
   "core": "86cfb7ffbaaaa9e0",
-  "date": "2026-10-03",
-  "note": "the track out keeps to lawful dry ground",
-  "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
-  },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
-  "verdict": "IN-STEP"
+  "date": "2026-10-04",
+  "note": "0081 drawing does say how the track out leaves (downslope past the wet foot, on the cluster's flank, off the map); the claim should cite it, and whether \"away from the field\" agrees with \"downslope\" needs checking against that block",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#a persimmon by its trunk alone": {
   "code": "ffaa90e87c8d5d4a",
@@ -41050,15 +41746,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own fixtures": {
-  "code": "30a952b55ae1ce77",
+  "code": "7ed172a6b7f50038",
   "core": "a29987cf79a0020b",
-  "date": "2026-10-03",
-  "note": "\"round its own garden beds and fixtures\"",
+  "date": "2026-10-04",
+  "note": "round its own beds and fixtures",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::fixtures_clear#path clear of its own well": {
@@ -41176,14 +41875,14 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::seat_reaches_tree#seat refused without a path": {
   "code": "0858e433d6d57ebc",
   "core": "f353ec43c9477e8d",
-  "date": "2026-10-03",
-  "note": "asked only with no seat region; recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION for the village map",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -41230,14 +41929,24 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::tree_admits#lane law over the whole tree": {
   "code": "7c47764724baf4e1",
   "core": "6ed225836f530670",
-  "date": "2026-10-03",
-  "note": "ways laid after the last house, held to the page's lane law",
+  "date": "2026-10-04",
+  "note": "ways laid after the houses, under the lane rules",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:048ef93cf5c5c59f",
+   "0081-village-lanes.drawing.html:06a57ca34e5b7af2",
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:5db549c04f876fc8",
+   "0081-village-lanes.drawing.html:b25f6ddf9a4cdd9c",
+   "0081-village-lanes.drawing.html:b2d689a290fad644",
+   "0081-village-lanes.drawing.html:d30e15716180fbf5",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::yard_quad#corridor geometry, memo and search plumbing": {
@@ -41344,14 +42053,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bearing.py::MarginBearing.__call__#lane turn from the margin": {
   "code": "21c3ecb08fd7772e",
   "core": "2263aae2eedf3c73",
-  "date": "2026-10-03",
-  "note": "turning with the field's edge is recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "houses face the field's edge, not a lane, recorded as a DEVIATION; lanes follow the houses",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
@@ -42165,11 +42875,13 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin#keep-out geometry, index and cache plumbing": {
-  "code": "15fe78bd1fe52acd",
-  "core": "20d3f14145028c75",
-  "date": "2026-10-03",
-  "note": "attribute defaults",
+  "code": "35417700e1b8f454",
+  "core": "2cce7028754a1fcd",
+  "date": "2026-10-04",
+  "note": "attributes only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._bundle_common_fits#house, yard, shed, well pocket and grove bands held off the fields (fields=True, grove_off_field default True)": {
@@ -42355,14 +43067,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._on_the_access#nothing built on a path": {
   "code": "6bd8879ff6504388",
   "core": "2f86a472bdddfe2f",
-  "date": "2026-10-03",
-  "note": "nothing built on a reserved way",
+  "date": "2026-10-04",
+  "note": "nothing built on a lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_across_stream#a farmstead on one bank": {
@@ -42376,15 +43089,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#a tight seat only by passage": {
   "code": "a9d9066b457ea0a1",
   "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-03",
-  "note": "a tight seat is admitted only with a walk to the neighbor's threshing yard, and refused once a yard opens onto lane ground (`opens`, `own_way`); this is the custom's own condition",
+  "date": "2026-10-04",
+  "note": "refused where its yard opens onto lane ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "257fad2da4527a5e",
+  "research": "38136343f1ec2e63",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
    "0081-village-lanes.html:aa783ceaca676947"
   ],
   "verdict": "IN-STEP"
@@ -42392,15 +43105,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#no path searched while houses are seated": {
   "code": "acef93deeaeb2550",
   "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-03",
-  "note": "region.opens is the only check",
+  "date": "2026-10-04",
+  "note": "only the region's opens check",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
@@ -42415,14 +43128,14 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#the village roll's corridor search": {
   "code": "c728fccf8cab3424",
   "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-03",
-  "note": "access_corridor with no seat region; recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -42784,18 +43497,19 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::Layers#lane ground": {
   "code": "78877b2d20fe5402",
   "core": "45d47d15b58c96af",
-  "date": "2026-10-03",
-  "note": "a record class, no figure",
+  "date": "2026-10-04",
+  "note": "off homesteads, crops and water",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
    "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::Layers.__init__#plumbing": {
@@ -42857,83 +43571,90 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way leaves its own homestead from its dooryard": {
   "code": "a6765bb04b0e6235",
   "core": "4801f1225d8f701c",
-  "date": "2026-10-03",
-  "note": "\"leaves its dooryard round its own garden beds and fixtures\"",
+  "date": "2026-10-04",
+  "note": "from its dooryard, round its own beds and fixtures",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#joined near, then far, then run on to the way out": {
   "code": "1c04433a69cc1d93",
   "core": "4801f1225d8f701c",
-  "date": "2026-10-03",
-  "note": "the page has the track out or an earlier way, joined at a T; the order is the GUESS",
+  "date": "2026-10-04",
+  "note": "to the track out or an earlier way, joined at a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
-  "triage": "touched",
-  "triaged": "2026-10-03",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::flood#a way keeps to the middle of its gap": {
   "code": "8141d08ea0873fa1",
   "core": "9089392b73ee76ea",
-  "date": "2026-10-03",
-  "note": "the page says \"keeping to their middle\" but gives no figure, so CENTER_CELLS and CENTER_WEIGHT are a fair guess",
+  "date": "2026-10-04",
+  "note": "\"along the middle of the gaps\"; the shortest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:b2d689a290fad644"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lane_layers#lane ground": {
   "code": "50d5bafb7cde4996",
   "core": "6df2847c6606618b",
-  "date": "2026-10-03",
-  "note": "half-width off each homestead box",
+  "date": "2026-10-04",
+  "note": "7 ft half-width off each homestead",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lane_layers#the half-width from the way's line": {
   "code": "f2abdec50903d1bf",
   "core": "6df2847c6606618b",
-  "date": "2026-10-03",
-  "note": "the deviation is recorded",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024"
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a household no way reaches is pinched across its nearest reached neighbor's yard": {
   "code": "4f2e5b4e274e9a58",
   "core": "a2abcb237e31a9ce",
-  "date": "2026-10-03",
-  "note": "matches \"reached across the yard of its nearest neighbor with a way\"",
+  "date": "2026-10-04",
+  "note": "nearest reached neighbor, walk not drawn",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a later way's join reach": {
@@ -42967,14 +43688,14 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#each household's way laid once every house stands": {
   "code": "368e4e589ab7e222",
   "core": "a2abcb237e31a9ce",
-  "date": "2026-10-03",
-  "note": "laid after seating, in the gaps, joined to earlier ways",
+  "date": "2026-10-04",
+  "note": "houses first, ways laid in the gaps after",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d",
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
    "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
@@ -42990,14 +43711,16 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#laid in the gaps between the house plots": {
   "code": "e147f30afe03c5fb",
   "core": "a2abcb237e31a9ce",
-  "date": "2026-10-03",
-  "note": "the page records \"lanes are the gaps left between its house plots\" as a GUESS",
+  "date": "2026-10-04",
+  "note": "the page records this as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.html:61166eef207b6a38"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::mark_laid#plumbing": {
@@ -43027,27 +43750,30 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::trace#ways join at a T": {
   "code": "7c1fd240bfde43ec",
   "core": "32b691cd9f4a0f1c",
-  "date": "2026-10-03",
-  "note": "the code joins at the nearest point on the way, which matches \"joined at a T\"",
+  "date": "2026-10-04",
+  "note": "joined at the nearest point of the way",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::way_out#a way leaves its own homestead from its dooryard": {
   "code": "e8ea29858246b944",
   "core": "c6fd9626d100f842",
-  "date": "2026-10-03",
-  "note": "the drawing page records \"Its way leaves its dooryard round its own garden beds and fixtures - a map drawing convention\"; the code searches from the doors it is given, over only the cells open_here admits, out to the lane ground, cheapest exit first",
+  "date": "2026-10-04",
+  "note": "from its doors, round its own parts",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9e1e79eae13bac58"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/lot.py::BUNDLE_PART_KEYS#quota, record and registry plumbing": {
@@ -43404,14 +44130,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::PASSAGE_ADJOIN_FT#land against land": {
   "code": "6860688ee81a749d",
   "core": "7276802b5dc226e3",
-  "date": "2026-10-03",
-  "note": "the page's \"the 2 ft parting ... and a foot more\", recorded as a GUESS",
+  "date": "2026-10-04",
+  "note": "the page records \"a foot more\" as a GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "22a7ea79886b8c23"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "091c6542079d20d9",
-  "triage": "touched",
-  "triaged": "2026-10-04",
+  "research": "a7766bfa3807e78c",
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::PASSAGE_CHAIN#chain of passages": {
@@ -43505,29 +44232,29 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::landlocked#no routed search for one": {
   "code": "c1c9380f009ccf5f",
   "core": "0b9fd352071bc6ed",
-  "date": "2026-10-03",
-  "note": "opens() only; any lane ground counts",
+  "date": "2026-10-04",
+  "note": "no path looked for while seated",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da"
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::landlocked#no way of its own": {
   "code": "920ff7e403affcfc",
   "core": "0b9fd352071bc6ed",
-  "date": "2026-10-03",
-  "note": "judged on the whole holding: any layout that opens onto lane ground refuses the seat, otherwise any layout with a walk takes it",
+  "date": "2026-10-04",
+  "note": "judged by the whole holding",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "257fad2da4527a5e",
+  "research": "38136343f1ec2e63",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
    "0081-village-lanes.html:aa783ceaca676947"
   ],
   "verdict": "IN-STEP"
@@ -43547,28 +44274,28 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::opens#a way of its own": {
   "code": "5cc77c52d78e3013",
   "core": "720e0e180b883869",
-  "date": "2026-10-03",
-  "note": "a dooryard onto lane ground connected to the track out",
+  "date": "2026-10-04",
+  "note": "yard opening onto lane ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da"
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::opens#the village roll's corridor": {
   "code": "861c854f89bba9f6",
   "core": "720e0e180b883869",
-  "date": "2026-10-03",
-  "note": "corridor sought only with no seat region; recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -43587,15 +44314,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_of#passage across a neighbor's yard": {
   "code": "dcb5e86d0629e387",
   "core": "4a4ac5cb997a113b",
-  "date": "2026-10-03",
-  "note": "the share, a chain of no more than two (`PASSAGE_CHAIN`), the 2 ft parting plus 1 ft for adjoining land, and the walk to the threshing yard all match the page",
+  "date": "2026-10-04",
+  "note": "2 ft parting + 1 ft, chain of two, walk to the threshing yard",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "257fad2da4527a5e",
+  "research": "38136343f1ec2e63",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
    "0081-village-lanes.html:aa783ceaca676947"
   ],
   "verdict": "IN-STEP"
@@ -43615,14 +44342,14 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#the corridor reserved as it is seated": {
   "code": "6eae734906adf970",
   "core": "95292eddacb0058b",
-  "date": "2026-10-03",
-  "note": "the village-scale path found at seating is recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -43756,15 +44483,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#a seat refused unless its yard opens onto lane ground": {
   "code": "e2deceb44dc6c9e3",
   "core": "cebdfd1ed30ae9ea",
-  "date": "2026-10-03",
-  "note": "region.opens, no path search",
+  "date": "2026-10-04",
+  "note": "no way sought while seated",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
@@ -43782,15 +44509,15 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#a tight seat only on landlocked land": {
   "code": "3a97edfdcd549eda",
   "core": "cebdfd1ed30ae9ea",
-  "date": "2026-10-03",
-  "note": "the tight seat is taken only where `landlocked` holds over all four layouts",
+  "date": "2026-10-04",
+  "note": "judged by the whole holding",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b",
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea",
    "0081-village-lanes.html": "b4501ecd6f390c5c"
   },
-  "research": "257fad2da4527a5e",
+  "research": "38136343f1ec2e63",
   "rests": [
-   "0081-village-lanes.drawing.html:540a6459b55d50da",
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
    "0081-village-lanes.html:aa783ceaca676947"
   ],
   "verdict": "IN-STEP"
@@ -43825,14 +44552,14 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/place.py::PlacerMixin._place_bundle_nucleated#the village roll's corridor": {
   "code": "6a3586c57093cf44",
   "core": "cebdfd1ed30ae9ea",
-  "date": "2026-10-03",
-  "note": "seat_reaches_tree only with no seat region; recorded as a DEVIATION",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },
@@ -44004,19 +44731,17 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance": {
   "code": "6d7e32574daf111c",
   "core": "7e06dad0e5e9c007",
-  "date": "2026-10-03",
-  "note": "`self.lane(..., width=5, clearance=40)`: the page gives no 40 px clearance (it holds lane ground 7 ft off a fence), and this skeleton is laid before the houses against \"seat every farmhouse before they lay any lane\"; the 5 px width matches the spine",
+  "date": "2026-10-04",
+  "note": "`width=5` matches §1's 5 ft spine only at 1 ft to the pixel, and this roll also serves villages. `clearance=40` (a soft clearance, which the code tests against a house's center) appears nowhere on the page; §26 gives 7 ft from fence to lane middle. To judge, I need this roll's feet per pixel and what `clearance` measures",
   "pages": {
-   "0081-village-lanes.drawing.html": "476903fa65919644"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "df99b71bd322a92f",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:6bb0547522eee024",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+   "0081-village-lanes.drawing.html:8648abc7a601036d",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-04",
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#seed pool": {
   "code": "985b80f9cba186d7",
@@ -44294,15 +45019,14 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/route.py::routed_corridors#path routed round what stands": {
   "code": "e2e296f1993faeeb",
   "core": "c6f0307b1e005d0c",
-  "date": "2026-10-03",
-  "note": "village roll only; path finding at seating is recorded as a DEVIATION, and the path leaves round its own beds",
+  "date": "2026-10-04",
+  "note": "recorded as a DEVIATION for the village roll",
   "pages": {
-   "0081-village-lanes.drawing.html": "0ae0689f733b5a7b"
+   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
   },
-  "research": "26b63ce298cf6585",
+  "research": "a7766bfa3807e78c",
   "rests": [
-   "0081-village-lanes.drawing.html:9e1e79eae13bac58",
-   "0081-village-lanes.drawing.html:bae1951f0e05559d"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
   "verdict": "IN-STEP"
  },

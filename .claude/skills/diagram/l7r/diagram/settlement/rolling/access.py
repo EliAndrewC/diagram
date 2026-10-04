@@ -196,7 +196,7 @@ def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None
     line `length` out stands on lawful ground (`lawful_ground`, the corridors' own test) - a test of the ground, nothing
     reserved (feature 320). None where no turn does - the margin has no way out and is refused.
 
-    Research: track out leaves away from the field - research/questions/0081-village-lanes.drawing.html: the outward bearing, or the nearest turn whose line out stands on lawful ground
+    Research: track out leaves away from the field - UNRESEARCHED: the outward bearing away from the field, or the nearest turn whose line out stands on lawful ground
     """
     for deg in EXIT_TURNS_DEG:
         c, sn = math.cos(math.radians(deg)), math.sin(math.radians(deg))
