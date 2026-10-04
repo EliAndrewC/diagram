@@ -100,7 +100,7 @@ def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
     """Would carrying `end` on to `tgt` turn the path more than `RUN_ON_TURN_DEG` off the way it was walking? A bund that
     lies behind the end is not one the path runs ON to, and the turn draws a hook (`lanes_end_in_no_hook`).
 
-    Research: no hook onto the bund - research/questions/0081-village-lanes.drawing.html: a run-on turning past the limit is refused"""
+    Research: no hook onto the bund - CONVENTION: a run-on leg turning more than `RUN_ON_TURN_DEG` is refused at any length, so none of its turns is sharp"""
     u, v = (end[0] - prev[0], end[1] - prev[1]), (tgt[0] - end[0], tgt[1] - end[1])
     nu, nv = math.hypot(*u), math.hypot(*v)
     if nu <= 1e-9 or nv <= 1e-9:

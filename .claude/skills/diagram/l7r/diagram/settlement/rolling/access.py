@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 #: Half the corridor's width, in feet: `WEB_FABRIC_GAP` (7 ft) either side of the tread's line - a footpath's room between
 #: two steadings, the gap the web's own fabric keeps (homes H16: "a footpath-width strip (WEB_FABRIC_GAP x 2)").
 ACCESS_HALF_FT = 7.0
-"""Research: corridor room - research/questions/0081-village-lanes.drawing.html: 7 ft either side of the tread's line, the web's fabric gap"""
+"""Research: corridor room - GUESS: 7 ft either side of the way's line; the page's 7 ft off a garden fence is to the tread, so a 3 ft tread's edge stands 5.5 ft off"""
 
 #: How far along a corridor its ground is sampled against the site boundary, in px: finer than the thinnest member the
 #: boundary holds a corridor off (a ditch's half-width plus its clearance).
@@ -702,7 +702,7 @@ def leaves_its_yard(corridor: tuple[Pt, ...], yard: Any, gap: float, step: float
 #: A turn a path cannot take, in degrees off straight on: the web's own bend law (`hamletgen/ways/clearance._HAIRPIN_DEG`,
 #: "doubles back"), which this package cannot import; `tests/settlement/test_access.py` holds the two equal.
 HAIRPIN_DEG = 140.0
-"""Research: hairpin turn - research/questions/0081-village-lanes.drawing.html: a turn of 140 degrees or more, which a lane never takes"""
+"""Research: hairpin turn - research/questions/0081-village-lanes.drawing.html: a turn of more than 140 degrees, which a lane never takes (`doubles_back` refuses 140 itself too)"""
 
 
 def doubles_back(a: Pt, b: Pt, c: Pt) -> bool:

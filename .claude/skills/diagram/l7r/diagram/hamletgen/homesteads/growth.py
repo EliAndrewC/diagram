@@ -382,7 +382,7 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
     `grow_took` and `grow_level` (the widening levels it needed).
 
     Research:
-        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html, research/questions/0081-village-lanes.drawing.html: each next house where two footprints part by a lane's threading gap, jittered, nearest the seat first, nearer the field breaking ties (`grow_key`)
+        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0081-village-lanes.drawing.html: each next house where two footprints part by a lane's threading gap, jittered, nearest the seat first, nearer the field breaking ties (`grow_key`)
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
         tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
         a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin

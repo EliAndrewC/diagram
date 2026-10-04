@@ -65,7 +65,7 @@ def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
     polyline and an envelope, and inside the stage it could only be reached by rolling a whole hamlet
     whose spur happens to fold.
 
-    Research: spur fold cut - research/questions/0081-village-lanes.drawing.html: no hairpin; drawn only while the arm reaches the field"""
+    Research: spur fold cut - UNRESEARCHED: a folded spur is cut at the fold whatever the returning leg's length, and drawn only while the arm reaches the field"""
     fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG), None)
     if fold is None:
         return pts, None

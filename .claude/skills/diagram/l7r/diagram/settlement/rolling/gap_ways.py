@@ -133,6 +133,7 @@ def lane_layers(s: Settlement, boxes: Sequence[Any], segs: Sequence[tuple[Pt, Pt
     """Lane ground over the homesteads `boxes` (`(cx, cy, w, h)`) and the way out `segs`, `GAP_MARGIN_PX` round them.
 
     Research: lane ground - research/questions/0081-village-lanes.drawing.html: a way keeps the corridor's half-width off every homestead and to ground the site admits; the lane gap off the woodlots' seats is UNRESEARCHED
+    Research: the half-width from the way's line - GUESS: 7 ft from the way's line, so a 3 ft tread's edge stands 5.5 ft off a fence the page holds 7 ft clear
     """
     import numpy as np
 
@@ -273,6 +274,7 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
     the point on the tree it joins.
 
     Research: ways join at a T - research/questions/0081-village-lanes.drawing.html: a lane meets another at a T, never beside it
+    Research: join reach - UNRESEARCHED: a way joins an earlier one it comes within `JOIN_FT` of
     """
     path: list[Pt] = []
     u, v = start

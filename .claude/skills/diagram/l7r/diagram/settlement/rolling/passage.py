@@ -311,6 +311,7 @@ def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
     depth and the walk.
 
     Research: walk not drawn as a lane - GUESS research/questions/0081-village-lanes.drawing.html: the walk is recorded and kept clear, never drawn
+    Research: the corridor reserved as it is seated - UNRESEARCHED: the walk and the household's corridor reserved as no-build ground while the houses are seated, so later houses keep off them
     """
     if geom.get("access") is not None:
         reserve(s, geom["access"], at)

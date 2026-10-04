@@ -175,7 +175,8 @@ def junction_floor(pts: list[Pt], lanes: Any, drop: Any, way_reach: float, me: i
     Lifted out of `trim_lane_stubs`'s closure so it can be asked with plain lists (GM 2026-08-28 on
     testability); the inner one delegates here, so there is ONE body.
 
-    Research: junction kept - research/questions/0081-village-lanes.drawing.html: a trim never cuts past the last way crossing the lane at 20 degrees or more
+    Research: junction kept - research/questions/0081-village-lanes.drawing.html: one network; a trim never cuts past a junction
+    Research: a crossing at 20 degrees - UNRESEARCHED: a way crossing the lane at 20 degrees or more counts as a junction
     """
     acc, keep = 0.0, 0.0
     for n in range(len(pts) - 1):
